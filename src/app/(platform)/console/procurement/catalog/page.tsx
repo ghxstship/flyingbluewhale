@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Approved-item catalog = every owned equipment row that's not retired.
@@ -15,6 +16,7 @@ import { money } from "@/components/detail/DetailShell";
  * would carry.
  */
 export default async function CatalogPage() {
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -35,7 +37,7 @@ export default async function CatalogPage() {
   }>;
   const grouped = new Map<string, typeof rows>();
   for (const r of rows) {
-    const key = r.category ?? "Uncategorized";
+    const key = r.category ?? t("console.procurement.catalog.uncategorized", undefined, "Uncategorized");
     const list = grouped.get(key) ?? [];
     list.push(r);
     grouped.set(key, list);
@@ -43,18 +45,31 @@ export default async function CatalogPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Approved Item Catalog"
-        subtitle={`${rows.length} Item${rows.length === 1 ? "" : "s"} across ${grouped.size} categor${grouped.size === 1 ? "y" : "ies"}`}
+        eyebrow={t("console.procurement.catalog.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.catalog.title", undefined, "Approved Item Catalog")}
+        subtitle={t(
+          "console.procurement.catalog.subtitle",
+          {
+            itemCount: rows.length,
+            itemLabel: rows.length === 1 ? "Item" : "Items",
+            categoryCount: grouped.size,
+            categoryLabel: grouped.size === 1 ? "category" : "categories",
+          },
+          `${rows.length} Item${rows.length === 1 ? "" : "s"} across ${grouped.size} categor${grouped.size === 1 ? "y" : "ies"}`,
+        )}
       />
       <div className="page-content max-w-5xl space-y-4">
         {rows.length === 0 ? (
           <EmptyState
-            title="No Items in the Catalog Yet"
-            description="Add equipment via the Production module or bulk-import through Settings → Imports. Every non-retired item appears here as a SKU."
+            title={t("console.procurement.catalog.empty.title", undefined, "No Items in the Catalog Yet")}
+            description={t(
+              "console.procurement.catalog.empty.description",
+              undefined,
+              "Add equipment via the Production module or bulk-import through Settings → Imports. Every non-retired item appears here as a SKU.",
+            )}
             action={
               <Link className="text-sm text-[var(--org-primary)]" href="/console/production/equipment">
-                Go to Equipment →
+                {t("console.procurement.catalog.empty.cta", undefined, "Go to Equipment →")}
               </Link>
             }
           />
@@ -64,16 +79,20 @@ export default async function CatalogPage() {
               <div className="border-b border-[var(--border-color)] px-5 py-3">
                 <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">{cat}</div>
                 <div className="mt-0.5 text-xs text-[var(--text-muted)]">
-                  {items.length} item{items.length === 1 ? "" : "s"}
+                  {t(
+                    "console.procurement.catalog.itemCount",
+                    { count: items.length, label: items.length === 1 ? "item" : "items" },
+                    `${items.length} item${items.length === 1 ? "" : "s"}`,
+                  )}
                 </div>
               </div>
               <table className="data-table w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Asset tag</th>
-                    <th>Daily rate</th>
-                    <th>Status</th>
+                    <th>{t("console.procurement.catalog.column.name", undefined, "Name")}</th>
+                    <th>{t("console.procurement.catalog.column.assetTag", undefined, "Asset tag")}</th>
+                    <th>{t("console.procurement.catalog.column.dailyRate", undefined, "Daily rate")}</th>
+                    <th>{t("console.procurement.catalog.column.status", undefined, "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>

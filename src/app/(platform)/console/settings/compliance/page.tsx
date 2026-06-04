@@ -5,14 +5,15 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 const PLATFORM_CONTROLS = [
-  { name: "Row-Level Security", status: "enforced", note: "Every table scoped by org_id via Postgres RLS" },
-  { name: "Audit Log", status: "enabled", note: "All mutations recorded in audit_log" },
-  { name: "Encryption in Transit", status: "enforced", note: "TLS 1.2+" },
-  { name: "Backups", status: "daily", note: "7-day retention, point-in-time on enterprise" },
+  { key: "rls", name: "Row-Level Security", status: "enforced", note: "Every table scoped by org_id via Postgres RLS" },
+  { key: "auditLog", name: "Audit Log", status: "enabled", note: "All mutations recorded in audit_log" },
+  { key: "encryptionInTransit", name: "Encryption in Transit", status: "enforced", note: "TLS 1.2+" },
+  { key: "backups", name: "Backups", status: "daily", note: "7-day retention, point-in-time on enterprise" },
 ];
 
 type ComplianceSettings = {
@@ -24,12 +25,18 @@ type ComplianceSettings = {
 };
 
 export default async function CompliancePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Compliance" />
+        <ModuleHeader
+          eyebrow={t("console.settings.compliance.eyebrow", undefined, "Settings")}
+          title={t("console.settings.compliance.title", undefined, "Compliance")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.compliance.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -41,13 +48,22 @@ export default async function CompliancePage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Compliance" />
+      <ModuleHeader
+        eyebrow={t("console.settings.compliance.eyebrow", undefined, "Settings")}
+        title={t("console.settings.compliance.workspaceSettings", undefined, "Workspace Settings")}
+        subtitle={t("console.settings.compliance.title", undefined, "Compliance")}
+      />
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Workspace Settings</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.settings.compliance.workspaceSettings", undefined, "Workspace Settings")}
+          </h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Override defaults for retention, encryption and residency. Most controls require an Enterprise plan to
-            relax.
+            {t(
+              "console.settings.compliance.overrideDescription",
+              undefined,
+              "Override defaults for retention, encryption and residency. Most controls require an Enterprise plan to relax.",
+            )}
           </p>
           <div className="mt-4">
             <ComplianceForm initial={settings} />
@@ -55,24 +71,28 @@ export default async function CompliancePage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Platform controls</h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            {t("console.settings.compliance.platformControls", undefined, "Platform controls")}
+          </h3>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Control</th>
-                  <th>Status</th>
-                  <th>Detail</th>
+                  <th>{t("console.settings.compliance.columns.control", undefined, "Control")}</th>
+                  <th>{t("console.settings.compliance.columns.status", undefined, "Status")}</th>
+                  <th>{t("console.settings.compliance.columns.detail", undefined, "Detail")}</th>
                 </tr>
               </thead>
               <tbody>
                 {PLATFORM_CONTROLS.map((c) => (
                   <tr key={c.name}>
-                    <td>{c.name}</td>
+                    <td>{t(`console.settings.compliance.controls.${c.key}.name`, undefined, c.name)}</td>
                     <td>
                       <Badge variant="success">{toTitle(c.status)}</Badge>
                     </td>
-                    <td className="text-[var(--text-secondary)]">{c.note}</td>
+                    <td className="text-[var(--text-secondary)]">
+                      {t(`console.settings.compliance.controls.${c.key}.note`, undefined, c.note)}
+                    </td>
                   </tr>
                 ))}
               </tbody>

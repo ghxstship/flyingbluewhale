@@ -8,6 +8,7 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { InvoiceStatusControls } from "./InvoiceStatusControls";
 import { deleteInvoice } from "./edit/actions";
 
@@ -19,6 +20,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
   const session = await requireSession();
   const invoice = await getOrgScoped("invoices", session.orgId, invoiceId);
   if (!invoice) notFound();
+  const { t } = await getRequestT();
 
   return (
     <>
@@ -27,41 +29,55 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
         title={invoice.title}
         subtitle={`${formatMoney(invoice.amount_cents, invoice.currency)} · ${invoice.status}`}
         breadcrumbs={[
-          { label: "Finance", href: "/console/finance/invoices" },
-          { label: "Invoices", href: "/console/finance/invoices" },
+          {
+            label: t("console.finance.invoices.breadcrumbs.finance", undefined, "Finance"),
+            href: "/console/finance/invoices",
+          },
+          {
+            label: t("console.finance.invoices.breadcrumbs.invoices", undefined, "Invoices"),
+            href: "/console/finance/invoices",
+          },
           { label: invoice.number },
         ]}
         action={
           <div className="flex items-center gap-2">
             <InvoiceStatusControls id={invoice.id} status={invoice.status} />
             <Button href={`/console/finance/invoices/${invoiceId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteInvoice.bind(null, invoiceId)}
-              confirm={`Delete invoice "${invoice.number}"? This cannot be undone.`}
+              confirm={t(
+                "console.finance.invoices.deleteConfirm",
+                { number: invoice.number },
+                `Delete invoice "${invoice.number}"? This cannot be undone.`,
+              )}
             />
           </div>
         }
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label="Status">
+          <Field label={t("console.finance.invoices.fields.status", undefined, "Status")}>
             <StatusBadge status={invoice.status} />
           </Field>
-          <Field label="Amount" mono>
+          <Field label={t("console.finance.invoices.fields.amount", undefined, "Amount")} mono>
             {formatMoney(invoice.amount_cents, invoice.currency)}
           </Field>
-          <Field label="Issued">{invoice.issued_at ?? "—"}</Field>
-          <Field label="Due">{invoice.due_at ?? "—"}</Field>
-          <Field label="Paid">{invoice.paid_at ? timeAgo(invoice.paid_at) : "—"}</Field>
-          <Field label="Stripe" mono>
+          <Field label={t("console.finance.invoices.fields.issued", undefined, "Issued")}>
+            {invoice.issued_at ?? "—"}
+          </Field>
+          <Field label={t("console.finance.invoices.fields.due", undefined, "Due")}>{invoice.due_at ?? "—"}</Field>
+          <Field label={t("console.finance.invoices.fields.paid", undefined, "Paid")}>
+            {invoice.paid_at ? timeAgo(invoice.paid_at) : "—"}
+          </Field>
+          <Field label={t("console.finance.invoices.fields.stripe", undefined, "Stripe")} mono>
             {invoice.stripe_payment_intent ?? "—"}
           </Field>
         </div>
         {invoice.notes && (
           <div className="surface p-5">
-            <h3 className="text-base font-semibold">Notes</h3>
+            <h3 className="text-base font-semibold">{t("console.finance.invoices.notes", undefined, "Notes")}</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{invoice.notes}</p>
           </div>
         )}

@@ -16,7 +16,7 @@ import {
   YAxis,
 } from "recharts";
 import { ChartShell } from "@/components/charts/ChartShell";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
 const SCOPE_COLORS: Record<string, string> = {
   "Scope 1": "#ef4444",
@@ -33,14 +33,19 @@ export function CarbonCharts({
   byScope: { scope: string; value: number }[];
   target: number;
 }) {
+  const t = useT();
   const series = byMonth.map((m) => ({ ...m, target }));
   return (
     <div className="grid gap-4 xl:grid-cols-2">
       <ChartShell
-        title="Monthly Emissions vs Target"
-        description="kg CO₂e — actual area + target line"
+        title={t("console.sustainability.carbon.charts.monthly.title", undefined, "Monthly Emissions vs Target")}
+        description={t(
+          "console.sustainability.carbon.charts.monthly.description",
+          undefined,
+          "kg CO₂e — actual area + target line",
+        )}
         empty={byMonth.length === 0}
-        emptyLabel="No measurements yet."
+        emptyLabel={t("console.sustainability.carbon.charts.monthly.empty", undefined, "No measurements yet.")}
       >
         <ResponsiveContainer width="100%" height={260}>
           <AreaChart data={series}>
@@ -57,7 +62,7 @@ export function CarbonCharts({
             <Legend wrapperStyle={{ fontSize: 10 }} />
             <Area
               dataKey="actual"
-              name="Actual"
+              name={t("console.sustainability.carbon.charts.monthly.actual", undefined, "Actual")}
               type="monotone"
               stroke="#22c55e"
               fill="url(#actual-fill)"
@@ -65,7 +70,7 @@ export function CarbonCharts({
             />
             <Line
               dataKey="target"
-              name="Target (5% reduction)"
+              name={t("console.sustainability.carbon.charts.monthly.target", undefined, "Target (5% reduction)")}
               type="monotone"
               stroke="var(--text-muted)"
               strokeDasharray="4 4"
@@ -77,10 +82,14 @@ export function CarbonCharts({
       </ChartShell>
 
       <ChartShell
-        title="Emissions by Scope"
-        description="GHG Protocol Scope 1 / 2 / 3"
+        title={t("console.sustainability.carbon.charts.scope.title", undefined, "Emissions by Scope")}
+        description={t(
+          "console.sustainability.carbon.charts.scope.description",
+          undefined,
+          "GHG Protocol Scope 1 / 2 / 3",
+        )}
         empty={byScope.length === 0}
-        emptyLabel="No scope data yet."
+        emptyLabel={t("console.sustainability.carbon.charts.scope.empty", undefined, "No scope data yet.")}
       >
         <ResponsiveContainer width="100%" height={260}>
           <PieChart>

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { Markdown } from "@/components/Markdown";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,18 +24,24 @@ type Article = {
 };
 
 function tagsOf(raw: unknown): string[] {
-  if (Array.isArray(raw)) return raw.filter((t): t is string => typeof t === "string");
+  if (Array.isArray(raw)) return raw.filter((item): item is string => typeof item === "string");
   return [];
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Knowledge" title="Article" />
+        <ModuleHeader
+          eyebrow={t("console.knowledge.eyebrow", undefined, "Knowledge")}
+          title={t("console.knowledge.article.title", undefined, "Article")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.knowledge.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -57,26 +64,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Knowledge"
+        eyebrow={t("console.knowledge.eyebrow", undefined, "Knowledge")}
         title={article.title}
         subtitle={
           <span className="font-mono text-xs">
-            /{article.slug} · v{article.version} · updated {timeAgo(article.updated_at)}
+            /{article.slug} · v{article.version} · {t("console.knowledge.article.updatedPrefix", undefined, "updated")}{" "}
+            {timeAgo(article.updated_at)}
           </span>
         }
-        breadcrumbs={[{ label: "Knowledge", href: "/console/knowledge" }, { label: article.title }]}
+        breadcrumbs={[
+          { label: t("console.knowledge.eyebrow", undefined, "Knowledge"), href: "/console/knowledge" },
+          { label: article.title },
+        ]}
         action={
           <Button href={`/console/knowledge/${article.slug}/edit`} size="sm" variant="secondary">
-            Edit
+            {t("common.edit", undefined, "Edit")}
           </Button>
         }
       />
       <div className="page-content max-w-3xl space-y-5">
         {tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
-            {tags.map((t) => (
-              <Link key={t} href={`/console/knowledge?tag=${encodeURIComponent(t)}`}>
-                <Badge variant="muted">{t}</Badge>
+            {tags.map((tag) => (
+              <Link key={tag} href={`/console/knowledge?tag=${encodeURIComponent(tag)}`}>
+                <Badge variant="muted">{tag}</Badge>
               </Link>
             ))}
           </div>

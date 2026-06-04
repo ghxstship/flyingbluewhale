@@ -6,26 +6,63 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
-  { href: "/console/production/equipment", label: "Equipment", description: "Asset register · 5-state lifecycle" },
-  { href: "/console/production/rentals", label: "Rentals", description: "Booking + handover ledger" },
-  { href: "/console/production/rentals/availability", label: "Availability", description: "7-day matrix" },
-  { href: "/m/wms", label: "Mobile Scan", description: "Pick / put-away on COMPVSS" },
-  { href: "/console/logistics/disposition", label: "Disposition", description: "Retired + maintenance" },
-  { href: "/console/logistics/services", label: "Services", description: "Waste + cleaning requests" },
-];
-
 export default async function Page() {
+  const { t } = await getRequestT();
+  const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
+    {
+      href: "/console/production/equipment",
+      label: t("console.logistics.warehouse.tiles.equipment.label", undefined, "Equipment"),
+      description: t(
+        "console.logistics.warehouse.tiles.equipment.description",
+        undefined,
+        "Asset register · 5-state lifecycle",
+      ),
+    },
+    {
+      href: "/console/production/rentals",
+      label: t("console.logistics.warehouse.tiles.rentals.label", undefined, "Rentals"),
+      description: t("console.logistics.warehouse.tiles.rentals.description", undefined, "Booking + handover ledger"),
+    },
+    {
+      href: "/console/production/rentals/availability",
+      label: t("console.logistics.warehouse.tiles.availability.label", undefined, "Availability"),
+      description: t("console.logistics.warehouse.tiles.availability.description", undefined, "7-day matrix"),
+    },
+    {
+      href: "/m/wms",
+      label: t("console.logistics.warehouse.tiles.mobileScan.label", undefined, "Mobile Scan"),
+      description: t(
+        "console.logistics.warehouse.tiles.mobileScan.description",
+        undefined,
+        "Pick / put-away on COMPVSS",
+      ),
+    },
+    {
+      href: "/console/logistics/disposition",
+      label: t("console.logistics.warehouse.tiles.disposition.label", undefined, "Disposition"),
+      description: t("console.logistics.warehouse.tiles.disposition.description", undefined, "Retired + maintenance"),
+    },
+    {
+      href: "/console/logistics/services",
+      label: t("console.logistics.warehouse.tiles.services.label", undefined, "Services"),
+      description: t("console.logistics.warehouse.tiles.services.description", undefined, "Waste + cleaning requests"),
+    },
+  ];
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Logistics" title="Warehouse" />
+        <ModuleHeader
+          eyebrow={t("console.logistics.eyebrow", undefined, "Logistics")}
+          title={t("console.logistics.warehouse.title", undefined, "Warehouse")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.common.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -54,25 +91,37 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Logistics"
-        title="Warehouse"
-        subtitle="FF&E + central + venue warehousing"
+        eyebrow={t("console.logistics.eyebrow", undefined, "Logistics")}
+        title={t("console.logistics.warehouse.title", undefined, "Warehouse")}
+        subtitle={t("console.logistics.warehouse.subtitle", undefined, "FF&E + central + venue warehousing")}
         action={
           <Button href="/m/wms" size="sm">
-            Mobile scan
+            {t("console.logistics.warehouse.mobileScanButton", undefined, "Mobile scan")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Assets" value={fmt.number(assetCount ?? 0)} accent />
-          <MetricCard label="Locations" value={fmt.number(locationCount ?? 0)} />
-          <MetricCard label="In Maintenance" value={fmt.number(maintenanceCount ?? 0)} />
+          <MetricCard
+            label={t("console.logistics.warehouse.metrics.assets", undefined, "Assets")}
+            value={fmt.number(assetCount ?? 0)}
+            accent
+          />
+          <MetricCard
+            label={t("console.logistics.warehouse.metrics.locations", undefined, "Locations")}
+            value={fmt.number(locationCount ?? 0)}
+          />
+          <MetricCard
+            label={t("console.logistics.warehouse.metrics.inMaintenance", undefined, "In Maintenance")}
+            value={fmt.number(maintenanceCount ?? 0)}
+          />
         </div>
 
         {Object.keys(buckets).length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By Status</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.logistics.warehouse.byStatus", undefined, "By Status")}
+            </h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {Object.entries(buckets)
                 .sort((a, b) => b[1] - a[1])
@@ -87,12 +136,12 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill In</h3>
+          <h3 className="text-sm font-semibold">{t("console.logistics.warehouse.drillIn", undefined, "Drill In")}</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {HUB_TILES.map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-4">
-                <div className="text-sm font-medium">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.description}</div>
+            {HUB_TILES.map((tile) => (
+              <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
+                <div className="text-sm font-medium">{tile.label}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.description}</div>
               </Link>
             ))}
           </div>

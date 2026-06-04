@@ -6,6 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteSlaPolicy, toggleSlaPolicy, upsertSlaPolicy } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -42,12 +43,18 @@ function humanMinutes(min: number): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Service SLA Policies" />
+        <ModuleHeader
+          eyebrow={t("console.settings.slaPolicies.eyebrow", undefined, "Settings")}
+          title={t("console.settings.slaPolicies.title", undefined, "Service SLA Policies")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.slaPolicies.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -66,57 +73,78 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Service SLA Policies"
-        subtitle={`${policies.length} of 4 severities configured · drive response + resolution clocks on service requests`}
-        breadcrumbs={[{ label: "Settings", href: "/console/settings" }, { label: "SLA Policies" }]}
+        eyebrow={t("console.settings.slaPolicies.eyebrow", undefined, "Settings")}
+        title={t("console.settings.slaPolicies.title", undefined, "Service SLA Policies")}
+        subtitle={t(
+          "console.settings.slaPolicies.subtitle",
+          { count: policies.length },
+          `${policies.length} of 4 severities configured · drive response + resolution clocks on service requests`,
+        )}
+        breadcrumbs={[
+          { label: t("console.settings.slaPolicies.crumb.settings", undefined, "Settings"), href: "/console/settings" },
+          { label: t("console.settings.slaPolicies.crumb.slaPolicies", undefined, "SLA Policies") },
+        ]}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
           rows={policies}
-          emptyLabel="No SLA policies configured yet"
-          emptyDescription="Service request timers stay un-tracked until each severity has a policy. Pre-seed all four below to start the clock."
+          emptyLabel={t("console.settings.slaPolicies.empty.label", undefined, "No SLA policies configured yet")}
+          emptyDescription={t(
+            "console.settings.slaPolicies.empty.description",
+            undefined,
+            "Service request timers stay un-tracked until each severity has a policy. Pre-seed all four below to start the clock.",
+          )}
           columns={[
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.settings.slaPolicies.col.severity", undefined, "Severity"),
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{r.severity}</Badge>,
               accessor: (r) => r.severity,
               filterable: true,
             },
             {
               key: "response_minutes",
-              header: "Response",
+              header: t("console.settings.slaPolicies.col.response", undefined, "Response"),
               render: (r) => <span className="font-mono text-xs">{humanMinutes(r.response_minutes)}</span>,
               accessor: (r) => r.response_minutes,
               mono: true,
             },
             {
               key: "resolution_minutes",
-              header: "Resolution",
+              header: t("console.settings.slaPolicies.col.resolution", undefined, "Resolution"),
               render: (r) => <span className="font-mono text-xs">{humanMinutes(r.resolution_minutes)}</span>,
               accessor: (r) => r.resolution_minutes,
               mono: true,
             },
             {
               key: "business_hours_only",
-              header: "Window",
+              header: t("console.settings.slaPolicies.col.window", undefined, "Window"),
               render: (r) =>
                 r.business_hours_only ? (
-                  <Badge variant="muted">Business hours</Badge>
+                  <Badge variant="muted">
+                    {t("console.settings.slaPolicies.window.businessHours", undefined, "Business hours")}
+                  </Badge>
                 ) : (
-                  <Badge variant="info">24/7</Badge>
+                  <Badge variant="info">{t("console.settings.slaPolicies.window.allHours", undefined, "24/7")}</Badge>
                 ),
             },
             {
               key: "active",
-              header: "Status",
+              header: t("console.settings.slaPolicies.col.status", undefined, "Status"),
               render: (r) => (
                 <form action={toggleSlaPolicy}>
                   <input type="hidden" name="id" value={r.id} />
                   <input type="hidden" name="active" value={String(!r.active)} />
                   <Button type="submit" variant="ghost" size="sm">
-                    {r.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Paused</Badge>}
+                    {r.active ? (
+                      <Badge variant="success">
+                        {t("console.settings.slaPolicies.status.active", undefined, "Active")}
+                      </Badge>
+                    ) : (
+                      <Badge variant="muted">
+                        {t("console.settings.slaPolicies.status.paused", undefined, "Paused")}
+                      </Badge>
+                    )}
                   </Button>
                 </form>
               ),
@@ -127,7 +155,11 @@ export default async function Page() {
               render: (r) => (
                 <DeleteForm
                   action={deleteSlaPolicy.bind(null, r.id)}
-                  confirm={`Delete ${r.severity} policy? Service requests at this severity stop tracking against an SLA until a new policy is created.`}
+                  confirm={t(
+                    "console.settings.slaPolicies.deleteConfirm",
+                    { severity: r.severity },
+                    `Delete ${r.severity} policy? Service requests at this severity stop tracking against an SLA until a new policy is created.`,
+                  )}
                 />
               ),
             },
@@ -135,19 +167,25 @@ export default async function Page() {
         />
 
         <section className="surface p-5">
-          <h2 className="text-sm font-semibold">Create / Update Policy</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.slaPolicies.upsert.heading", undefined, "Create / Update Policy")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            One active policy per severity. Submitting an existing severity updates it in place.
+            {t(
+              "console.settings.slaPolicies.upsert.help",
+              undefined,
+              "One active policy per severity. Submitting an existing severity updates it in place.",
+            )}
           </p>
           <form
             action={upsertSlaPolicy}
             className="surface-inset mt-3 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-6"
           >
             <select name="severity" required defaultValue="P2" className="input-base sm:col-span-1">
-              <option value="P1">P1 — Critical</option>
-              <option value="P2">P2 — High</option>
-              <option value="P3">P3 — Standard</option>
-              <option value="P4">P4 — Low</option>
+              <option value="P1">{t("console.settings.slaPolicies.sev.p1", undefined, "P1 — Critical")}</option>
+              <option value="P2">{t("console.settings.slaPolicies.sev.p2", undefined, "P2 — High")}</option>
+              <option value="P3">{t("console.settings.slaPolicies.sev.p3", undefined, "P3 — Standard")}</option>
+              <option value="P4">{t("console.settings.slaPolicies.sev.p4", undefined, "P4 — Low")}</option>
             </select>
             <input
               name="response_minutes"
@@ -155,7 +193,7 @@ export default async function Page() {
               required
               min="1"
               max="100000"
-              placeholder="Response (min)"
+              placeholder={t("console.settings.slaPolicies.placeholder.response", undefined, "Response (min)")}
               className="input-base sm:col-span-2"
             />
             <input
@@ -164,16 +202,16 @@ export default async function Page() {
               required
               min="1"
               max="1000000"
-              placeholder="Resolution (min)"
+              placeholder={t("console.settings.slaPolicies.placeholder.resolution", undefined, "Resolution (min)")}
               className="input-base sm:col-span-2"
             />
             <label className="flex items-center gap-2 text-xs sm:col-span-1">
               <input type="checkbox" name="business_hours_only" value="true" />
-              Bus. hours
+              {t("console.settings.slaPolicies.busHours", undefined, "Bus. hours")}
             </label>
             <div className="flex justify-end sm:col-span-6">
               <Button type="submit" size="sm" variant="secondary">
-                Save Policy
+                {t("console.settings.slaPolicies.savePolicy", undefined, "Save Policy")}
               </Button>
             </div>
           </form>
@@ -181,10 +219,15 @@ export default async function Page() {
 
         {missing.length > 0 && (
           <section className="surface p-5">
-            <h2 className="text-sm font-semibold">Suggested Defaults</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.settings.slaPolicies.defaults.heading", undefined, "Suggested Defaults")}
+            </h2>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Pre-seed the missing severities with industry-typical thresholds. Edit individually after seeding to match
-              your contracts.
+              {t(
+                "console.settings.slaPolicies.defaults.help",
+                undefined,
+                "Pre-seed the missing severities with industry-typical thresholds. Edit individually after seeding to match your contracts.",
+              )}
             </p>
             <ul className="mt-3 grid gap-2 sm:grid-cols-2">
               {missing.map((m) => (
@@ -192,7 +235,11 @@ export default async function Page() {
                   <div className="text-xs">
                     <div className="text-sm font-semibold">{m.severity}</div>
                     <span className="font-mono">
-                      respond {humanMinutes(m.response)} · resolve {humanMinutes(m.resolution)}
+                      {t(
+                        "console.settings.slaPolicies.defaults.thresholds",
+                        { response: humanMinutes(m.response), resolution: humanMinutes(m.resolution) },
+                        `respond ${humanMinutes(m.response)} · resolve ${humanMinutes(m.resolution)}`,
+                      )}
                     </span>
                   </div>
                   <form action={upsertSlaPolicy}>
@@ -200,7 +247,7 @@ export default async function Page() {
                     <input type="hidden" name="response_minutes" value={String(m.response)} />
                     <input type="hidden" name="resolution_minutes" value={String(m.resolution)} />
                     <Button type="submit" variant="secondary" size="sm">
-                      Pre-seed
+                      {t("console.settings.slaPolicies.defaults.preseed", undefined, "Pre-seed")}
                     </Button>
                   </form>
                 </li>

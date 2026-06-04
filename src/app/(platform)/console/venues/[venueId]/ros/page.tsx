@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -32,12 +32,18 @@ const STATUS_TONE: Record<string, "muted" | "warning" | "info" | "success" | "er
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Run of Show" />
+        <ModuleHeader
+          eyebrow={t("console.venues.ros.eyebrow", undefined, "Venue")}
+          title={t("console.venues.ros.title", undefined, "Run of Show")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.ros.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -90,19 +96,20 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Run of Show`}
-        subtitle={`${cues.length} cue${cues.length === 1 ? "" : "s"} across ${days.length} day${days.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.venues.ros.eyebrow", undefined, "Venue")}
+        title={`${venue.name} — ${t("console.venues.ros.title", undefined, "Run of Show")}`}
+        subtitle={`${cues.length} ${cues.length === 1 ? t("console.venues.ros.cueSingular", undefined, "cue") : t("console.venues.ros.cuePlural", undefined, "cues")} ${t("console.venues.ros.across", undefined, "across")} ${days.length} ${days.length === 1 ? t("console.venues.ros.daySingular", undefined, "day") : t("console.venues.ros.dayPlural", undefined, "days")}`}
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.ros.breadcrumbVenues", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "Run of Show" },
+          { label: t("console.venues.ros.title", undefined, "Run of Show") },
         ]}
       />
       <div className="page-content space-y-5">
         {cues.length === 0 ? (
           <div className="surface p-6 text-sm text-[var(--text-muted)]">
-            No cues scheduled at this venue yet. Authoring lives in <code>/console/production/ros</code>.
+            {t("console.venues.ros.emptyPrefix", undefined, "No cues scheduled at this venue yet. Authoring lives in")}{" "}
+            <code>/console/production/ros</code>.
           </div>
         ) : (
           <div className="space-y-6">
@@ -138,7 +145,11 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         )}
 
         <p className="text-xs text-[var(--text-muted)]">
-          Cues authored on the production ROS page appear here automatically for this venue.
+          {t(
+            "console.venues.ros.footnote",
+            undefined,
+            "Cues authored on the production ROS page appear here automatically for this venue.",
+          )}
         </p>
       </div>
     </>

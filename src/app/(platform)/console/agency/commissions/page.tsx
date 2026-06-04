@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +19,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Agency" title="Commissions" />
+        <ModuleHeader
+          eyebrow={t("console.agency.commissions.eyebrow", undefined, "Agency")}
+          title={t("console.agency.commissions.title", undefined, "Commissions")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.agency.commissions.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -43,12 +50,30 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Agency" title="Commissions" subtitle={`${rows.length} Settlements with commission`} />
+      <ModuleHeader
+        eyebrow={t("console.agency.commissions.eyebrow", undefined, "Agency")}
+        title={t("console.agency.commissions.title", undefined, "Commissions")}
+        subtitle={t(
+          "console.agency.commissions.subtitle",
+          { count: rows.length },
+          `${rows.length} Settlements with commission`,
+        )}
+      />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total Booked" value={formatMoney(total)} accent />
-          <MetricCard label="Finalized" value={formatMoney(finalized)} />
-          <MetricCard label="Pending" value={formatMoney(total - finalized)} />
+          <MetricCard
+            label={t("console.agency.commissions.totalBooked", undefined, "Total Booked")}
+            value={formatMoney(total)}
+            accent
+          />
+          <MetricCard
+            label={t("console.agency.commissions.finalized", undefined, "Finalized")}
+            value={formatMoney(finalized)}
+          />
+          <MetricCard
+            label={t("console.agency.commissions.pending", undefined, "Pending")}
+            value={formatMoney(total - finalized)}
+          />
         </div>
 
         <DataTable<Row>
@@ -58,31 +83,41 @@ export default async function Page() {
               ? `/console/bookings/deals/${r.talent_offer_id}/settlement`
               : `/console/bookings/settlements/${r.id}`
           }
-          emptyLabel="No commissions tracked yet"
-          emptyDescription="Settlements with non-zero agent_commission_cents appear here."
+          emptyLabel={t("console.agency.commissions.emptyLabel", undefined, "No commissions tracked yet")}
+          emptyDescription={t(
+            "console.agency.commissions.emptyDescription",
+            undefined,
+            "Settlements with non-zero agent_commission_cents appear here.",
+          )}
           columns={[
             {
               key: "date",
-              header: "Show",
+              header: t("console.agency.commissions.col.show", undefined, "Show"),
               render: (r) => r.show_date,
               accessor: (r) => r.show_date,
               className: "font-mono text-xs",
             },
             {
               key: "comm",
-              header: "Commission",
+              header: t("console.agency.commissions.col.commission", undefined, "Commission"),
               render: (r) => formatMoney(r.agent_commission_cents),
               accessor: (r) => Number(r.agent_commission_cents),
               className: "font-mono text-xs",
             },
             {
               key: "artist",
-              header: "Artist Payout",
+              header: t("console.agency.commissions.col.artistPayout", undefined, "Artist Payout"),
               render: (r) => formatMoney(r.artist_payout_cents),
               accessor: (r) => Number(r.artist_payout_cents),
               className: "font-mono text-xs",
             },
-            { key: "status", header: "Status", render: (r) => r.status, accessor: (r) => r.status, filterable: true },
+            {
+              key: "status",
+              header: t("console.agency.commissions.col.status", undefined, "Status"),
+              render: (r) => r.status,
+              accessor: (r) => r.status,
+              filterable: true,
+            },
           ]}
         />
       </div>

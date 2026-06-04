@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,13 +36,16 @@ const PO_COMMITTED = new Set(["sent", "acknowledged", "fulfilled"]);
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
+  const { t } = await getRequestT();
 
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="P&L" />
+        <ModuleHeader title={t("console.projects.finance.title", undefined, "P&L")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.projects.finance.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -82,9 +86,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   if (!project) {
     return (
       <>
-        <ModuleHeader title="Project Not Found" />
+        <ModuleHeader title={t("console.projects.finance.notFoundTitle", undefined, "Project Not Found")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Project not found in this workspace.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.projects.finance.notFoundBody", undefined, "Project not found in this workspace.")}
+          </div>
         </div>
       </>
     );
@@ -116,47 +122,88 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title="P&L"
-        subtitle={`${formatMoney(margin, currency)} margin · ${marginPct == null ? "—" : `${marginPct}%`}`}
+        title={t("console.projects.finance.title", undefined, "P&L")}
+        subtitle={`${formatMoney(margin, currency)} ${t("console.projects.finance.marginLabel", undefined, "margin")} · ${marginPct == null ? "—" : `${marginPct}%`}`}
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
+          {
+            label: t("console.projects.finance.breadcrumbs.projects", undefined, "Projects"),
+            href: "/console/projects",
+          },
           { label: project.name, href: `/console/projects/${projectId}` },
-          { label: "P&L" },
+          { label: t("console.projects.finance.title", undefined, "P&L") },
         ]}
       />
       <div className="page-content space-y-6">
         <div className="metric-grid-3">
-          <MetricCard label="Revenue (paid)" value={formatMoney(revenue, currency)} accent />
-          <MetricCard label="Spent (committed)" value={formatMoney(spent, currency)} />
-          <MetricCard label="Margin" value={formatMoney(margin, currency)} />
-          <MetricCard label="Outstanding Invoiced" value={formatMoney(pipeline, currency)} />
-          <MetricCard label="Expenses Committed" value={formatMoney(expensesCommitted, currency)} />
-          <MetricCard label="POs committed" value={formatMoney(poCommitted, currency)} />
+          <MetricCard
+            label={t("console.projects.finance.metrics.revenue", undefined, "Revenue (paid)")}
+            value={formatMoney(revenue, currency)}
+            accent
+          />
+          <MetricCard
+            label={t("console.projects.finance.metrics.spent", undefined, "Spent (committed)")}
+            value={formatMoney(spent, currency)}
+          />
+          <MetricCard
+            label={t("console.projects.finance.metrics.margin", undefined, "Margin")}
+            value={formatMoney(margin, currency)}
+          />
+          <MetricCard
+            label={t("console.projects.finance.metrics.outstanding", undefined, "Outstanding Invoiced")}
+            value={formatMoney(pipeline, currency)}
+          />
+          <MetricCard
+            label={t("console.projects.finance.metrics.expensesCommitted", undefined, "Expenses Committed")}
+            value={formatMoney(expensesCommitted, currency)}
+          />
+          <MetricCard
+            label={t("console.projects.finance.metrics.posCommitted", undefined, "POs committed")}
+            value={formatMoney(poCommitted, currency)}
+          />
         </div>
         <p className="text-xs text-[var(--text-muted)]">
-          Margin = revenue (paid invoices) − spent (committed expenses + committed POs).
-          {marginPct != null && ` This project is at ${marginPct}% margin against paid revenue.`} Pipeline is sent +
-          overdue invoices that haven't cleared.
+          {t(
+            "console.projects.finance.marginExplainer",
+            undefined,
+            "Margin = revenue (paid invoices) − spent (committed expenses + committed POs).",
+          )}
+          {marginPct != null &&
+            ` ${t("console.projects.finance.marginPctSentence", { pct: marginPct }, `This project is at ${marginPct}% margin against paid revenue.`)}`}{" "}
+          {t(
+            "console.projects.finance.pipelineExplainer",
+            undefined,
+            "Pipeline is sent + overdue invoices that haven't cleared.",
+          )}
         </p>
 
         {budgetTotal > 0 && (
           <section className="surface p-5">
             <header className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Budget Envelope</h3>
+              <h3 className="text-sm font-semibold">
+                {t("console.projects.finance.budget.title", undefined, "Budget Envelope")}
+              </h3>
               <Link
                 href={`/console/projects/${projectId}/budget`}
                 className="text-xs text-[var(--org-primary)] hover:underline"
               >
-                Open budget →
+                {t("console.projects.finance.budget.open", undefined, "Open budget →")}
               </Link>
             </header>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
-              {formatMoney(budgetSpent, currency)} of {formatMoney(budgetTotal, currency)} budget consumed
+              {t(
+                "console.projects.finance.budget.consumedPrefix",
+                { spent: formatMoney(budgetSpent, currency), total: formatMoney(budgetTotal, currency) },
+                `${formatMoney(budgetSpent, currency)} of ${formatMoney(budgetTotal, currency)} budget consumed`,
+              )}
               {" · "}
-              actual spent (POs + expenses) is {formatMoney(spent, currency)}
+              {t(
+                "console.projects.finance.budget.actualSpent",
+                { amount: formatMoney(spent, currency) },
+                `actual spent (POs + expenses) is ${formatMoney(spent, currency)}`,
+              )}
               {budgetTotal > 0 && spent > budgetTotal && (
                 <Badge variant="error" className="ms-2">
-                  over budget
+                  {t("console.projects.finance.budget.overBudget", undefined, "over budget")}
                 </Badge>
               )}
             </p>
@@ -165,34 +212,45 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         <section>
           <header className="mb-2 flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Invoices</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.projects.finance.invoices.title", undefined, "Invoices")}
+            </h3>
             <Link href="/console/finance/invoices" className="text-xs text-[var(--org-primary)] hover:underline">
-              All invoices →
+              {t("console.projects.finance.invoices.allLink", undefined, "All invoices →")}
             </Link>
           </header>
           <DataTable<InvoiceRow>
             rows={invList}
             rowHref={(r) => `/console/finance/invoices/${r.id}`}
-            emptyLabel="No invoices yet"
-            emptyDescription="Invoices created from this project's proposals will land here."
+            emptyLabel={t("console.projects.finance.invoices.emptyLabel", undefined, "No invoices yet")}
+            emptyDescription={t(
+              "console.projects.finance.invoices.emptyDescription",
+              undefined,
+              "Invoices created from this project's proposals will land here.",
+            )}
             columns={[
               {
                 key: "number",
-                header: "Number",
+                header: t("console.projects.finance.columns.number", undefined, "Number"),
                 render: (r) => <span className="font-mono text-xs">{r.number}</span>,
                 accessor: (r) => r.number ?? null,
               },
-              { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+              {
+                key: "title",
+                header: t("console.projects.finance.columns.title", undefined, "Title"),
+                render: (r) => r.title,
+                accessor: (r) => r.title,
+              },
               {
                 key: "amount",
-                header: "Amount",
+                header: t("console.projects.finance.columns.amount", undefined, "Amount"),
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
                 accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
                 key: "status",
-                header: "Status",
+                header: t("console.projects.finance.columns.status", undefined, "Status"),
                 render: (r) => (
                   <Badge variant={r.status === "paid" ? "success" : r.status === "overdue" ? "error" : "muted"}>
                     {r.status}
@@ -204,7 +262,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               },
               {
                 key: "due",
-                header: "Due",
+                header: t("console.projects.finance.columns.due", undefined, "Due"),
                 render: (r) => r.due_at ?? "—",
                 className: "font-mono text-xs",
                 accessor: (r) => r.due_at ?? null,
@@ -215,37 +273,48 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         <section>
           <header className="mb-2 flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Purchase Orders</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.projects.finance.purchaseOrders.title", undefined, "Purchase Orders")}
+            </h3>
             <Link
               href="/console/procurement/purchase-orders"
               className="text-xs text-[var(--org-primary)] hover:underline"
             >
-              All POs →
+              {t("console.projects.finance.purchaseOrders.allLink", undefined, "All POs →")}
             </Link>
           </header>
           <DataTable<POrow>
             rows={poList}
             rowHref={(r) => `/console/procurement/purchase-orders/${r.id}`}
-            emptyLabel="No purchase orders"
-            emptyDescription="POs raised against this project will land here."
+            emptyLabel={t("console.projects.finance.purchaseOrders.emptyLabel", undefined, "No purchase orders")}
+            emptyDescription={t(
+              "console.projects.finance.purchaseOrders.emptyDescription",
+              undefined,
+              "POs raised against this project will land here.",
+            )}
             columns={[
               {
                 key: "number",
-                header: "Number",
+                header: t("console.projects.finance.columns.number", undefined, "Number"),
                 render: (r) => <span className="font-mono text-xs">{r.number}</span>,
                 accessor: (r) => r.number ?? null,
               },
-              { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+              {
+                key: "title",
+                header: t("console.projects.finance.columns.title", undefined, "Title"),
+                render: (r) => r.title,
+                accessor: (r) => r.title,
+              },
               {
                 key: "amount",
-                header: "Amount",
+                header: t("console.projects.finance.columns.amount", undefined, "Amount"),
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
                 accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
                 key: "status",
-                header: "Status",
+                header: t("console.projects.finance.columns.status", undefined, "Status"),
                 render: (r) => r.status,
                 accessor: (r) => r.status,
                 filterable: true,
@@ -257,26 +326,32 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         <section>
           <header className="mb-2 flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Expenses</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.projects.finance.expenses.title", undefined, "Expenses")}
+            </h3>
             <Link href="/console/finance/expenses" className="text-xs text-[var(--org-primary)] hover:underline">
-              All expenses →
+              {t("console.projects.finance.expenses.allLink", undefined, "All expenses →")}
             </Link>
           </header>
           <DataTable<ExpenseRow>
             rows={expList}
             rowHref={(r) => `/console/finance/expenses/${r.id}`}
-            emptyLabel="No expenses logged"
-            emptyDescription="Expenses tagged with this project will land here."
+            emptyLabel={t("console.projects.finance.expenses.emptyLabel", undefined, "No expenses logged")}
+            emptyDescription={t(
+              "console.projects.finance.expenses.emptyDescription",
+              undefined,
+              "Expenses tagged with this project will land here.",
+            )}
             columns={[
               {
                 key: "description",
-                header: "Description",
+                header: t("console.projects.finance.columns.description", undefined, "Description"),
                 render: (r) => r.description,
                 accessor: (r) => r.description,
               },
               {
                 key: "category",
-                header: "Category",
+                header: t("console.projects.finance.columns.category", undefined, "Category"),
                 render: (r) => r.category ?? "—",
                 className: "font-mono text-xs",
                 accessor: (r) => r.category ?? null,
@@ -285,14 +360,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               },
               {
                 key: "amount",
-                header: "Amount",
+                header: t("console.projects.finance.columns.amount", undefined, "Amount"),
                 render: (r) => formatMoney(r.amount_cents, currency),
                 className: "font-mono text-xs",
                 accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
                 key: "status",
-                header: "Status",
+                header: t("console.projects.finance.columns.status", undefined, "Status"),
                 render: (r) => r.status,
                 accessor: (r) => r.status,
                 filterable: true,
@@ -300,7 +375,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               },
               {
                 key: "spent_at",
-                header: "Date",
+                header: t("console.projects.finance.columns.date", undefined, "Date"),
                 render: (r) => r.spent_at,
                 className: "font-mono text-xs",
                 accessor: (r) => r.spent_at,

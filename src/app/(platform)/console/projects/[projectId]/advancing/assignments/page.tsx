@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { CATALOG_KINDS, CATALOG_KIND_LABEL, listProjectAssignments, type CatalogKind } from "@/lib/db/assignments";
 
 export const dynamic = "force-dynamic";
@@ -23,12 +23,18 @@ export const dynamic = "force-dynamic";
  */
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Advancing" title="Individual Assignments" />
+        <ModuleHeader
+          eyebrow={t("console.projects.advancing.assignments.eyebrow", undefined, "Advancing")}
+          title={t("console.projects.advancing.assignments.title", undefined, "Individual Assignments")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.projects.advancing.assignments.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -72,15 +78,24 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const extMap = new Map<string, string>(
     ((extRes.data ?? []) as Array<{ id: string; holder_name: string | null; holder_email: string | null }>).map((e) => [
       e.id,
-      e.holder_name ?? e.holder_email ?? "Guest",
+      e.holder_name ?? e.holder_email ?? t("console.projects.advancing.assignments.guest", undefined, "Guest"),
     ]),
   );
 
   function partyLabel(r: (typeof rows)[number]): string {
-    if (r.party_kind === "user" && r.party_user_id) return userMap.get(r.party_user_id) ?? "Unknown user";
-    if (r.party_kind === "crew_member" && r.party_crew_id) return crewMap.get(r.party_crew_id) ?? "Unknown crew";
-    if (r.party_kind === "external_holder" && r.party_external_id) return extMap.get(r.party_external_id) ?? "Guest";
-    return "Unassigned";
+    if (r.party_kind === "user" && r.party_user_id)
+      return (
+        userMap.get(r.party_user_id) ??
+        t("console.projects.advancing.assignments.unknownUser", undefined, "Unknown user")
+      );
+    if (r.party_kind === "crew_member" && r.party_crew_id)
+      return (
+        crewMap.get(r.party_crew_id) ??
+        t("console.projects.advancing.assignments.unknownCrew", undefined, "Unknown crew")
+      );
+    if (r.party_kind === "external_holder" && r.party_external_id)
+      return extMap.get(r.party_external_id) ?? t("console.projects.advancing.assignments.guest", undefined, "Guest");
+    return t("console.projects.advancing.assignments.unassigned", undefined, "Unassigned");
   }
 
   const byKind = new Map<CatalogKind, typeof rows>();
@@ -94,22 +109,26 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     <>
       <ModuleHeader
         eyebrow={project.name as string}
-        title="Individual Assignments"
-        subtitle={`${rows.length} ${rows.length === 1 ? "Assignment" : "Assignments"} · Tickets, Credentials, Catering, Radios, Tools, Equipment, Uniforms, Travel, Lodging, Vehicles`}
+        title={t("console.projects.advancing.assignments.title", undefined, "Individual Assignments")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.projects.advancing.assignments.assignmentSingular", undefined, "Assignment") : t("console.projects.advancing.assignments.assignmentPlural", undefined, "Assignments")} · ${t("console.projects.advancing.assignments.subtitleKinds", undefined, "Tickets, Credentials, Catering, Radios, Tools, Equipment, Uniforms, Travel, Lodging, Vehicles")}`}
         action={
           <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
-            + New Assignment
+            {t("console.projects.advancing.assignments.newAssignment", undefined, "+ New Assignment")}
           </Button>
         }
       />
       <div className="page-content">
         {rows.length === 0 ? (
           <EmptyState
-            title="No Assignments Yet"
-            description="Whatever you assign here lands on the assignee's portal and mobile views in real time."
+            title={t("console.projects.advancing.assignments.emptyTitle", undefined, "No Assignments Yet")}
+            description={t(
+              "console.projects.advancing.assignments.emptyDescription",
+              undefined,
+              "Whatever you assign here lands on the assignee's portal and mobile views in real time.",
+            )}
             action={
               <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
-                + New Assignment
+                {t("console.projects.advancing.assignments.newAssignment", undefined, "+ New Assignment")}
               </Button>
             }
           />
@@ -125,11 +144,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   <table className="data-table mt-3 w-full text-sm">
                     <thead>
                       <tr>
-                        <th>Title</th>
-                        <th>Party</th>
-                        <th>State</th>
-                        <th>Due</th>
-                        <th>Updated</th>
+                        <th>{t("console.projects.advancing.assignments.columns.title", undefined, "Title")}</th>
+                        <th>{t("console.projects.advancing.assignments.columns.party", undefined, "Party")}</th>
+                        <th>{t("console.projects.advancing.assignments.columns.state", undefined, "State")}</th>
+                        <th>{t("console.projects.advancing.assignments.columns.due", undefined, "Due")}</th>
+                        <th>{t("console.projects.advancing.assignments.columns.updated", undefined, "Updated")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -140,7 +159,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                               className="underline-offset-2 hover:underline"
                               href={`/console/projects/${projectId}/advancing/assignments/${r.id}`}
                             >
-                              {r.title ?? "Untitled"}
+                              {r.title ?? t("console.projects.advancing.assignments.untitled", undefined, "Untitled")}
                             </a>
                           </td>
                           <td>

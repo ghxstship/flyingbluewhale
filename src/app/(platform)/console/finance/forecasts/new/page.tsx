@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createForecast } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data: projects } = await supabase
     .from("projects")
     .select("id, name")
@@ -24,25 +26,40 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="New EAC Forecast"
-        subtitle="A forecast snapshot — per-cost-code committed + incurred + forecast-to-complete rollup with variance."
+        eyebrow={t("console.finance.forecasts.new.eyebrow", undefined, "Finance")}
+        title={t("console.finance.forecasts.new.title", undefined, "New EAC Forecast")}
+        subtitle={t(
+          "console.finance.forecasts.new.subtitle",
+          undefined,
+          "A forecast snapshot — per-cost-code committed + incurred + forecast-to-complete rollup with variance.",
+        )}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createForecast} cancelHref="/console/finance/forecasts" submitLabel="Create Forecast">
+        <FormShell
+          action={createForecast}
+          cancelHref="/console/finance/forecasts"
+          submitLabel={t("console.finance.forecasts.new.submit", undefined, "Create Forecast")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.finance.forecasts.new.nameLabel", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="March close 2026" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t("console.finance.forecasts.new.namePlaceholder", undefined, "March close 2026")}
+              className={INPUT}
+            />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.finance.forecasts.new.projectLabel", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
-                <option value="">Select…</option>
+                <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>
                 {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -51,16 +68,24 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Methodology</span>
+              <span className={LBL}>
+                {t("console.finance.forecasts.new.methodologyLabel", undefined, "Methodology")}
+              </span>
               <select name="methodology" className={INPUT} defaultValue="manual">
-                <option value="manual">Manual</option>
-                <option value="earned_value">Earned Value</option>
-                <option value="automatic">Automatic</option>
+                <option value="manual">
+                  {t("console.finance.forecasts.new.methodology.manual", undefined, "Manual")}
+                </option>
+                <option value="earned_value">
+                  {t("console.finance.forecasts.new.methodology.earnedValue", undefined, "Earned Value")}
+                </option>
+                <option value="automatic">
+                  {t("console.finance.forecasts.new.methodology.automatic", undefined, "Automatic")}
+                </option>
               </select>
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.finance.forecasts.new.notesLabel", undefined, "Notes")}</span>
             <textarea name="notes" rows={3} className={INPUT} />
           </label>
         </FormShell>

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -57,6 +58,7 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data } = await supabase
     .from("opportunities")
@@ -88,7 +90,7 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
   return (
     <>
       <ModuleHeader
-        eyebrow="Pipeline"
+        eyebrow={t("console.pipeline.deal.eyebrow", undefined, "Pipeline")}
         title={deal.title}
         subtitle={
           <span className="font-mono text-xs">
@@ -97,25 +99,29 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
           </span>
         }
         breadcrumbs={[
-          { label: "Sales", href: "/console/leads" },
-          { label: "Pipeline", href: pipelineHref },
+          { label: t("console.pipeline.deal.breadcrumbs.sales", undefined, "Sales"), href: "/console/leads" },
+          { label: t("console.pipeline.deal.breadcrumbs.pipeline", undefined, "Pipeline"), href: pipelineHref },
           { label: deal.title },
         ]}
         action={deal.stage ? <Badge variant={stageTone(deal.stage)}>{deal.stage.name}</Badge> : null}
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label="Value">
+          <Field label={t("console.pipeline.deal.metrics.value", undefined, "Value")}>
             {formatMoney(deal.estimated_value_minor, deal.estimated_value_currency ?? undefined)}
           </Field>
-          <Field label="Probability">{deal.probability != null ? `${deal.probability}%` : "—"}</Field>
-          <Field label="Expected Close">{deal.expected_close ?? "—"}</Field>
-          <Field label="Source">{deal.source ?? "—"}</Field>
+          <Field label={t("console.pipeline.deal.metrics.probability", undefined, "Probability")}>
+            {deal.probability != null ? `${deal.probability}%` : "—"}
+          </Field>
+          <Field label={t("console.pipeline.deal.metrics.expectedClose", undefined, "Expected Close")}>
+            {deal.expected_close ?? "—"}
+          </Field>
+          <Field label={t("console.pipeline.deal.metrics.source", undefined, "Source")}>{deal.source ?? "—"}</Field>
         </div>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Account</h3>
+            <h3 className="text-sm font-semibold">{t("console.pipeline.deal.account.title", undefined, "Account")}</h3>
             {accountName ? (
               <div className="mt-2 space-y-1 text-sm">
                 <div>{accountName}</div>
@@ -127,24 +133,34 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
                 )}
               </div>
             ) : (
-              <p className="mt-2 text-xs text-[var(--text-muted)]">Not linked to an account.</p>
+              <p className="mt-2 text-xs text-[var(--text-muted)]">
+                {t("console.pipeline.deal.account.notLinked", undefined, "Not linked to an account.")}
+              </p>
             )}
           </section>
 
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Lifecycle</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.pipeline.deal.lifecycle.title", undefined, "Lifecycle")}
+            </h3>
             <dl className="mt-2 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-[var(--text-muted)]">Created</dt>
+                <dt className="text-[var(--text-muted)]">
+                  {t("console.pipeline.deal.lifecycle.created", undefined, "Created")}
+                </dt>
                 <dd className="font-mono text-xs">{timeAgo(deal.created_at)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-[var(--text-muted)]">Updated</dt>
+                <dt className="text-[var(--text-muted)]">
+                  {t("console.pipeline.deal.lifecycle.updated", undefined, "Updated")}
+                </dt>
                 <dd className="font-mono text-xs">{timeAgo(deal.updated_at)}</dd>
               </div>
               {deal.closed_at && (
                 <div className="flex justify-between">
-                  <dt className="text-[var(--text-muted)]">Closed</dt>
+                  <dt className="text-[var(--text-muted)]">
+                    {t("console.pipeline.deal.lifecycle.closed", undefined, "Closed")}
+                  </dt>
                   <dd className="font-mono text-xs">
                     {timeAgo(deal.closed_at)}
                     {deal.close_outcome ? ` · ${deal.close_outcome}` : ""}
@@ -156,10 +172,14 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Activity</h3>
+          <h3 className="text-sm font-semibold">{t("console.pipeline.deal.activity.title", undefined, "Activity")}</h3>
           {activities.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No logged activities yet. Calls, emails, and meetings recorded against this deal appear here.
+              {t(
+                "console.pipeline.deal.activity.empty",
+                undefined,
+                "No logged activities yet. Calls, emails, and meetings recorded against this deal appear here.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">

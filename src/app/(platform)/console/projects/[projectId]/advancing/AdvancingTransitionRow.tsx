@@ -4,26 +4,82 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/lib/hooks/useToast";
 import { toTitle } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
-const NEXT_BUTTONS: Record<string, Array<{ to: string; label: string; variant: "default" | "danger" }>> = {
+const NEXT_BUTTONS: Record<
+  string,
+  Array<{ to: string; labelKey: string; labelFallback: string; variant: "default" | "danger" }>
+> = {
   submitted: [
-    { to: "in_review", label: "Start Review", variant: "default" },
-    { to: "approved", label: "Approve", variant: "default" },
-    { to: "rejected", label: "Reject", variant: "danger" },
+    {
+      to: "in_review",
+      labelKey: "console.projects.advancing.transition.startReview",
+      labelFallback: "Start Review",
+      variant: "default",
+    },
+    {
+      to: "approved",
+      labelKey: "console.projects.advancing.transition.approve",
+      labelFallback: "Approve",
+      variant: "default",
+    },
+    {
+      to: "rejected",
+      labelKey: "console.projects.advancing.transition.reject",
+      labelFallback: "Reject",
+      variant: "danger",
+    },
   ],
   in_review: [
-    { to: "approved", label: "Approve", variant: "default" },
-    { to: "revision_requested", label: "Request Revision", variant: "default" },
-    { to: "rejected", label: "Reject", variant: "danger" },
+    {
+      to: "approved",
+      labelKey: "console.projects.advancing.transition.approve",
+      labelFallback: "Approve",
+      variant: "default",
+    },
+    {
+      to: "revision_requested",
+      labelKey: "console.projects.advancing.transition.requestRevision",
+      labelFallback: "Request Revision",
+      variant: "default",
+    },
+    {
+      to: "rejected",
+      labelKey: "console.projects.advancing.transition.reject",
+      labelFallback: "Reject",
+      variant: "danger",
+    },
   ],
-  approved: [{ to: "fulfilled", label: "Mark Fulfilled", variant: "default" }],
-  revision_requested: [{ to: "in_review", label: "Resume Review", variant: "default" }],
-  rejected: [{ to: "revision_requested", label: "Reopen", variant: "default" }],
+  approved: [
+    {
+      to: "fulfilled",
+      labelKey: "console.projects.advancing.transition.markFulfilled",
+      labelFallback: "Mark Fulfilled",
+      variant: "default",
+    },
+  ],
+  revision_requested: [
+    {
+      to: "in_review",
+      labelKey: "console.projects.advancing.transition.resumeReview",
+      labelFallback: "Resume Review",
+      variant: "default",
+    },
+  ],
+  rejected: [
+    {
+      to: "revision_requested",
+      labelKey: "console.projects.advancing.transition.reopen",
+      labelFallback: "Reopen",
+      variant: "default",
+    },
+  ],
 };
 
 export function AdvancingTransitionRow({ id, status, fulfilled }: { id: string; status: string; fulfilled: boolean }) {
   const router = useRouter();
   const toast = useToast();
+  const t = useT();
   const [pending, setPending] = React.useState<string | null>(null);
 
   const buttons = (NEXT_BUTTONS[status] ?? []).filter((b) => !(b.to === "fulfilled" && fulfilled));
@@ -43,10 +99,12 @@ export function AdvancingTransitionRow({ id, status, fulfilled }: { id: string; 
       if (!r.ok || !json.ok) {
         throw new Error(json.error?.message ?? "Transition failed");
       }
-      toast.success(`Moved to ${toTitle(to)}`);
+      toast.success(
+        t("console.projects.advancing.transition.movedToast", { state: toTitle(to) }, `Moved to ${toTitle(to)}`),
+      );
       router.refresh();
     } catch (e) {
-      toast.error("Transition failed", {
+      toast.error(t("console.projects.advancing.transition.failedToast", undefined, "Transition failed"), {
         description: e instanceof Error ? e.message : String(e),
       });
     } finally {
@@ -68,7 +126,7 @@ export function AdvancingTransitionRow({ id, status, fulfilled }: { id: string; 
               : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
           }`}
         >
-          {pending === b.to ? "…" : b.label}
+          {pending === b.to ? "…" : t(b.labelKey, undefined, b.labelFallback)}
         </button>
       ))}
     </div>

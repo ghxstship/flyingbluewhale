@@ -6,6 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteRateLimitOverride, upsertRateLimitOverride } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -19,12 +20,44 @@ type Row = {
   updated_at: string;
 };
 
-const BUCKET_HINT: Record<string, { label: string; description: string }> = {
-  ai: { label: "AI", description: "/api/v1/ai/* — Anthropic chat + tools" },
-  scan: { label: "Scan", description: "QR / barcode scanner endpoints" },
-  webhook: { label: "Webhook", description: "Inbound webhook receivers (Stripe, etc.)" },
-  auth: { label: "Auth", description: "Login / signup / password reset" },
-};
+function getBucketHint(
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+): Record<string, { label: string; description: string }> {
+  return {
+    ai: {
+      label: t("console.settings.rateLimits.bucket.ai.label", undefined, "AI"),
+      description: t(
+        "console.settings.rateLimits.bucket.ai.description",
+        undefined,
+        "/api/v1/ai/* — Anthropic chat + tools",
+      ),
+    },
+    scan: {
+      label: t("console.settings.rateLimits.bucket.scan.label", undefined, "Scan"),
+      description: t(
+        "console.settings.rateLimits.bucket.scan.description",
+        undefined,
+        "QR / barcode scanner endpoints",
+      ),
+    },
+    webhook: {
+      label: t("console.settings.rateLimits.bucket.webhook.label", undefined, "Webhook"),
+      description: t(
+        "console.settings.rateLimits.bucket.webhook.description",
+        undefined,
+        "Inbound webhook receivers (Stripe, etc.)",
+      ),
+    },
+    auth: {
+      label: t("console.settings.rateLimits.bucket.auth.label", undefined, "Auth"),
+      description: t(
+        "console.settings.rateLimits.bucket.auth.description",
+        undefined,
+        "Login / signup / password reset",
+      ),
+    },
+  };
+}
 
 function humanWindow(ms: number): string {
   if (ms < 1000) return `${ms}ms`;
@@ -39,12 +72,19 @@ function humanWindow(ms: number): string {
 const BUCKETS: Row["bucket"][] = ["ai", "scan", "webhook", "auth"];
 
 export default async function Page() {
+  const { t } = await getRequestT();
+  const BUCKET_HINT = getBucketHint(t);
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Rate-Limit Overrides" />
+        <ModuleHeader
+          eyebrow={t("console.settings.rateLimits.eyebrow", undefined, "Settings")}
+          title={t("console.settings.rateLimits.title", undefined, "Rate-Limit Overrides")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.rateLimits.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -63,20 +103,38 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Rate-Limit Overrides"
-        subtitle={`${overrides.length} of 4 buckets overridden · loosen or tighten the default limits per workspace`}
-        breadcrumbs={[{ label: "Settings", href: "/console/settings" }, { label: "Rate Limits" }]}
+        eyebrow={t("console.settings.rateLimits.eyebrow", undefined, "Settings")}
+        title={t("console.settings.rateLimits.title", undefined, "Rate-Limit Overrides")}
+        subtitle={t(
+          "console.settings.rateLimits.subtitle",
+          { count: overrides.length },
+          `${overrides.length} of 4 buckets overridden · loosen or tighten the default limits per workspace`,
+        )}
+        breadcrumbs={[
+          {
+            label: t("console.settings.rateLimits.breadcrumb.settings", undefined, "Settings"),
+            href: "/console/settings",
+          },
+          { label: t("console.settings.rateLimits.breadcrumb.rateLimits", undefined, "Rate Limits") },
+        ]}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
           rows={overrides}
-          emptyLabel="No overrides — running platform defaults"
-          emptyDescription="Each bucket has a built-in limit. Set an override here to loosen (e.g. higher AI quota) or tighten (e.g. stricter scan throttle) per workspace."
+          emptyLabel={t(
+            "console.settings.rateLimits.empty.label",
+            undefined,
+            "No overrides — running platform defaults",
+          )}
+          emptyDescription={t(
+            "console.settings.rateLimits.empty.description",
+            undefined,
+            "Each bucket has a built-in limit. Set an override here to loosen (e.g. higher AI quota) or tighten (e.g. stricter scan throttle) per workspace.",
+          )}
           columns={[
             {
               key: "bucket",
-              header: "Bucket",
+              header: t("console.settings.rateLimits.column.bucket", undefined, "Bucket"),
               render: (r) => (
                 <div>
                   <Badge variant="info">{BUCKET_HINT[r.bucket]?.label ?? r.bucket}</Badge>
@@ -91,10 +149,13 @@ export default async function Page() {
             },
             {
               key: "limit_count",
-              header: "Limit",
+              header: t("console.settings.rateLimits.column.limit", undefined, "Limit"),
               render: (r) => (
                 <span className="font-mono text-sm">
-                  {r.limit_count.toLocaleString()} <span className="text-[var(--text-muted)]">req</span>
+                  {r.limit_count.toLocaleString()}{" "}
+                  <span className="text-[var(--text-muted)]">
+                    {t("console.settings.rateLimits.unit.req", undefined, "req")}
+                  </span>
                 </span>
               ),
               accessor: (r) => r.limit_count,
@@ -102,14 +163,22 @@ export default async function Page() {
             },
             {
               key: "window_ms",
-              header: "Window",
-              render: (r) => <span className="font-mono text-sm">per {humanWindow(r.window_ms)}</span>,
+              header: t("console.settings.rateLimits.column.window", undefined, "Window"),
+              render: (r) => (
+                <span className="font-mono text-sm">
+                  {t(
+                    "console.settings.rateLimits.window.per",
+                    { window: humanWindow(r.window_ms) },
+                    `per ${humanWindow(r.window_ms)}`,
+                  )}
+                </span>
+              ),
               accessor: (r) => r.window_ms,
               mono: true,
             },
             {
               key: "rate",
-              header: "Effective Rate",
+              header: t("console.settings.rateLimits.column.effectiveRate", undefined, "Effective Rate"),
               render: (r) => {
                 const perSecond = r.limit_count / (r.window_ms / 1000);
                 return (
@@ -125,7 +194,11 @@ export default async function Page() {
               render: (r) => (
                 <DeleteForm
                   action={deleteRateLimitOverride.bind(null, r.id)}
-                  confirm={`Delete the "${r.bucket}" override? The bucket reverts to the platform default rate.`}
+                  confirm={t(
+                    "console.settings.rateLimits.deleteConfirm",
+                    { bucket: r.bucket },
+                    `Delete the "${r.bucket}" override? The bucket reverts to the platform default rate.`,
+                  )}
                 />
               ),
             },
@@ -133,9 +206,15 @@ export default async function Page() {
         />
 
         <section className="surface p-5">
-          <h2 className="text-sm font-semibold">Add / Update Override</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.rateLimits.upsert.heading", undefined, "Add / Update Override")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            One active override per bucket. Submitting an existing bucket updates it in place.
+            {t(
+              "console.settings.rateLimits.upsert.hint",
+              undefined,
+              "One active override per bucket. Submitting an existing bucket updates it in place.",
+            )}
           </p>
           <form
             action={upsertRateLimitOverride}
@@ -154,7 +233,7 @@ export default async function Page() {
               required
               min="1"
               max="1000000"
-              placeholder="Requests"
+              placeholder={t("console.settings.rateLimits.upsert.requestsPlaceholder", undefined, "Requests")}
               className="input-base sm:col-span-2"
             />
             <input
@@ -163,21 +242,27 @@ export default async function Page() {
               required
               min="1"
               max="3600"
-              placeholder="Window (sec)"
+              placeholder={t("console.settings.rateLimits.upsert.windowPlaceholder", undefined, "Window (sec)")}
               defaultValue="60"
               className="input-base sm:col-span-1"
             />
             <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
-              Save
+              {t("common.save", undefined, "Save")}
             </Button>
           </form>
         </section>
 
         {unconfigured.length > 0 && (
           <section className="surface p-5">
-            <h2 className="text-sm font-semibold">Unconfigured Buckets</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.settings.rateLimits.unconfigured.heading", undefined, "Unconfigured Buckets")}
+            </h2>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              These buckets run on platform defaults. Add an override above to change them for this workspace.
+              {t(
+                "console.settings.rateLimits.unconfigured.hint",
+                undefined,
+                "These buckets run on platform defaults. Add an override above to change them for this workspace.",
+              )}
             </p>
             <ul className="mt-3 grid gap-2 sm:grid-cols-2">
               {unconfigured.map((b) => (

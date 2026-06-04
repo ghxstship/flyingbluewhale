@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createDailyLog } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +14,7 @@ const LABEL_CLS = "text-xs font-medium text-[var(--text-secondary)]";
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: projects } = await supabase
     .from("projects")
@@ -25,15 +27,26 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Operations" title="New Daily Log" subtitle="One entry per project per day." />
+      <ModuleHeader
+        eyebrow={t("console.operations.dailyLog.new.eyebrow", undefined, "Operations")}
+        title={t("console.operations.dailyLog.new.title", undefined, "New Daily Log")}
+        subtitle={t("console.operations.dailyLog.new.subtitle", undefined, "One entry per project per day.")}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={createDailyLog} cancelHref="/console/operations/daily-log" submitLabel="Create Log">
+        <FormShell
+          action={createDailyLog}
+          cancelHref="/console/operations/daily-log"
+          submitLabel={t("console.operations.dailyLog.new.submit", undefined, "Create Log")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LABEL_CLS}>
-              Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.operations.dailyLog.new.projectLabel", undefined, "Project")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <select name="project_id" required className={INPUT_CLS}>
-              <option value="">Select a project…</option>
+              <option value="">
+                {t("console.operations.dailyLog.new.projectPlaceholder", undefined, "Select a project…")}
+              </option>
               {(projects ?? []).map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -43,30 +56,49 @@ export default async function Page() {
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LABEL_CLS}>
-              Date<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.operations.dailyLog.new.dateLabel", undefined, "Date")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input type="date" name="log_date" defaultValue={today} required className={INPUT_CLS} />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LABEL_CLS}>Weather summary</span>
-            <input name="weather_summary" placeholder="e.g. Sunny, 78°F, light breeze" className={INPUT_CLS} />
+            <span className={LABEL_CLS}>
+              {t("console.operations.dailyLog.new.weatherSummaryLabel", undefined, "Weather summary")}
+            </span>
+            <input
+              name="weather_summary"
+              placeholder={t(
+                "console.operations.dailyLog.new.weatherSummaryPlaceholder",
+                undefined,
+                "e.g. Sunny, 78°F, light breeze",
+              )}
+              className={INPUT_CLS}
+            />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LABEL_CLS}>Temp high (°F)</span>
+              <span className={LABEL_CLS}>
+                {t("console.operations.dailyLog.new.tempHighLabel", undefined, "Temp high (°F)")}
+              </span>
               <input type="number" step="any" name="weather_temp_high_f" className={INPUT_CLS} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LABEL_CLS}>Temp low (°F)</span>
+              <span className={LABEL_CLS}>
+                {t("console.operations.dailyLog.new.tempLowLabel", undefined, "Temp low (°F)")}
+              </span>
               <input type="number" step="any" name="weather_temp_low_f" className={INPUT_CLS} />
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LABEL_CLS}>Notes</span>
+            <span className={LABEL_CLS}>{t("console.operations.dailyLog.new.notesLabel", undefined, "Notes")}</span>
             <textarea
               name="notes"
               rows={4}
-              placeholder="Site narrative, deliveries, visitors, milestones reached, blockers…"
+              placeholder={t(
+                "console.operations.dailyLog.new.notesPlaceholder",
+                undefined,
+                "Site narrative, deliveries, visitors, milestones reached, blockers…",
+              )}
               className={INPUT_CLS}
             />
           </label>

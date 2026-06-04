@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { transitionPayApp, updatePayAppLine } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { toTitle } from "@/lib/format";
@@ -30,6 +31,7 @@ function fmt(d: string): string {
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -52,13 +54,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
+        eyebrow={t("console.finance.payApps.detail.eyebrow", undefined, "Finance")}
         breadcrumbs={[
-          { label: "Pay Apps", href: "/console/finance/pay-apps" },
+          {
+            label: t("console.finance.payApps.detail.breadcrumb", undefined, "Pay Apps"),
+            href: "/console/finance/pay-apps",
+          },
           { label: `#${app.application_number}` },
         ]}
-        title={`Application #${app.application_number}`}
-        subtitle={`PO ${(app.purchase_order as unknown as { number: string } | null)?.number ?? "—"} · ${(app.vendor as unknown as { name: string | null } | null)?.name ?? "—"} · ${fmt(app.period_start)} — ${fmt(app.period_end)}`}
+        title={t(
+          "console.finance.payApps.detail.title",
+          { number: app.application_number },
+          `Application #${app.application_number}`,
+        )}
+        subtitle={`${t("console.finance.payApps.detail.poLabel", undefined, "PO")} ${(app.purchase_order as unknown as { number: string } | null)?.number ?? "—"} · ${(app.vendor as unknown as { name: string | null } | null)?.name ?? "—"} · ${fmt(app.period_start)} — ${fmt(app.period_end)}`}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[app.status] ?? "muted"}>{toTitle(app.status)}</Badge>
@@ -70,19 +79,31 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               rel="noopener"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              AIA PDF
+              {t("console.finance.payApps.detail.aiaPdf", undefined, "AIA PDF")}
             </a>
             {app.status === "draft" && (
-              <StatusForm action={transitionPayApp.bind(null, id, "submitted")} label="Submit" />
+              <StatusForm
+                action={transitionPayApp.bind(null, id, "submitted")}
+                label={t("console.finance.payApps.detail.submit", undefined, "Submit")}
+              />
             )}
             {app.status === "submitted" && (
               <>
-                <StatusForm action={transitionPayApp.bind(null, id, "approved")} label="Approve" />
-                <StatusForm action={transitionPayApp.bind(null, id, "rejected")} label="Reject" />
+                <StatusForm
+                  action={transitionPayApp.bind(null, id, "approved")}
+                  label={t("console.finance.payApps.detail.approve", undefined, "Approve")}
+                />
+                <StatusForm
+                  action={transitionPayApp.bind(null, id, "rejected")}
+                  label={t("console.finance.payApps.detail.reject", undefined, "Reject")}
+                />
               </>
             )}
             {app.status === "approved" && (
-              <StatusForm action={transitionPayApp.bind(null, id, "paid")} label="Mark paid" />
+              <StatusForm
+                action={transitionPayApp.bind(null, id, "paid")}
+                label={t("console.finance.payApps.detail.markPaid", undefined, "Mark paid")}
+              />
             )}
           </div>
         }
@@ -90,33 +111,47 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-5">
         <section className="grid gap-3 md:grid-cols-4">
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">Completed</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.finance.payApps.detail.completed", undefined, "Completed")}
+            </div>
             <div className="text-lg font-semibold">{formatMoney(app.total_completed_cents)}</div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">Retention ({app.retention_pct}%)</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t(
+                "console.finance.payApps.detail.retention",
+                { pct: app.retention_pct },
+                `Retention (${app.retention_pct}%)`,
+              )}
+            </div>
             <div className="text-lg font-semibold">{formatMoney(app.total_retention_cents)}</div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">Previously paid</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.finance.payApps.detail.previouslyPaid", undefined, "Previously paid")}
+            </div>
             <div className="text-lg font-semibold">{formatMoney(app.total_previously_paid_cents)}</div>
           </div>
           <div className="surface p-3 ring-2 ring-[var(--accent)]">
-            <div className="text-xs text-[var(--text-muted)]">Due this period</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.finance.payApps.detail.dueThisPeriod", undefined, "Due this period")}
+            </div>
             <div className="text-lg font-semibold">{formatMoney(app.total_due_cents)}</div>
           </div>
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Schedule of Values</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.finance.payApps.detail.scheduleOfValues", undefined, "Schedule of Values")}
+          </h3>
           <table className="data-table mt-3">
             <thead>
               <tr>
-                <th>Description</th>
-                <th>Scheduled value</th>
-                <th>% to date</th>
-                <th>This period $</th>
-                <th>Retention $</th>
+                <th>{t("console.finance.payApps.detail.columns.description", undefined, "Description")}</th>
+                <th>{t("console.finance.payApps.detail.columns.scheduledValue", undefined, "Scheduled value")}</th>
+                <th>{t("console.finance.payApps.detail.columns.pctToDate", undefined, "% to date")}</th>
+                <th>{t("console.finance.payApps.detail.columns.thisPeriod", undefined, "This period $")}</th>
+                <th>{t("console.finance.payApps.detail.columns.retention", undefined, "Retention $")}</th>
               </tr>
             </thead>
             <tbody>
@@ -140,7 +175,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                           type="submit"
                           className="rounded border border-[var(--border-color)] px-2 py-0.5 text-[10px]"
                         >
-                          set
+                          {t("console.finance.payApps.detail.set", undefined, "set")}
                         </button>
                       </form>
                     ) : (

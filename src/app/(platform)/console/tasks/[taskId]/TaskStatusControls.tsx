@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { setTaskStatusAction } from "../actions";
 import type { TaskStatus } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 const NEXT: Partial<Record<TaskStatus, TaskStatus>> = {
   todo: "in_progress",
@@ -14,6 +15,7 @@ const NEXT: Partial<Record<TaskStatus, TaskStatus>> = {
 };
 
 export function TaskStatusControls({ id, status }: { id: string; status: TaskStatus }) {
+  const t = useT();
   const [pending, start] = useTransition();
   const next = NEXT[status];
   return (
@@ -25,11 +27,11 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
             start(async () => {
               const r = await setTaskStatusAction(id, next);
               if (r?.error) toast.error(r.error);
-              else toast.success(`Moved to ${next}`);
+              else toast.success(t("console.tasks.status.movedToast", { status: next }, `Moved to ${next}`));
             })
           }
         >
-          {pending ? "…" : `→ ${toTitle(next)}`}
+          {pending ? "…" : t("console.tasks.status.advanceLabel", { next: toTitle(next) }, `→ ${toTitle(next)}`)}
         </Button>
       )}
       {status !== "blocked" && status !== "done" && (
@@ -40,11 +42,11 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
             start(async () => {
               const r = await setTaskStatusAction(id, "blocked");
               if (r?.error) toast.error(r.error);
-              else toast.success("Blocked");
+              else toast.success(t("console.tasks.status.blockedToast", undefined, "Blocked"));
             })
           }
         >
-          Block
+          {t("console.tasks.status.block", undefined, "Block")}
         </Button>
       )}
     </div>

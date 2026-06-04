@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { acknowledgeAttendee, addAttendee, markConducted, removeAttendee } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -46,12 +47,15 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ briefingId: string }> }) {
   const { briefingId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Safety Briefing" />
+        <ModuleHeader title={t("console.safety.briefings.detail.title", undefined, "Safety Briefing")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.briefings.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -113,23 +117,23 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety · Briefings"
+        eyebrow={t("console.safety.briefings.detail.eyebrow", undefined, "Safety · Briefings")}
         title={row.topic}
         subtitle={`${fmt(row.scheduled_for)} · ${brieferName}`}
         breadcrumbs={[
-          { label: "Safety", href: "/console/safety" },
-          { label: "Briefings", href: "/console/safety/briefings" },
+          { label: t("console.safety.title", undefined, "Safety"), href: "/console/safety" },
+          { label: t("console.safety.briefings.title", undefined, "Briefings"), href: "/console/safety/briefings" },
           { label: row.topic },
         ]}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/safety/briefings" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             {row.status === "scheduled" && (
               <form action={markConducted.bind(null, briefingId)}>
                 <Button type="submit" size="sm">
-                  Mark Conducted
+                  {t("console.safety.briefings.detail.markConducted", undefined, "Mark Conducted")}
                 </Button>
               </form>
             )}
@@ -140,60 +144,104 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
         <section className="surface p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-sm font-semibold">Status</h3>
+              <h3 className="text-sm font-semibold">
+                {t("console.safety.briefings.detail.statusHeading", undefined, "Status")}
+              </h3>
               <p className="mt-1 text-xs text-[var(--text-muted)]">
                 {row.status === "scheduled"
-                  ? "Awaiting toolbox talk. Mark conducted once the briefing is complete."
+                  ? t(
+                      "console.safety.briefings.detail.statusScheduled",
+                      undefined,
+                      "Awaiting toolbox talk. Mark conducted once the briefing is complete.",
+                    )
                   : row.status === "conducted"
-                    ? `Conducted ${fmt(row.conducted_at)}.`
-                    : "Cancelled — no further action required."}
+                    ? t(
+                        "console.safety.briefings.detail.statusConducted",
+                        { date: fmt(row.conducted_at) },
+                        `Conducted ${fmt(row.conducted_at)}.`,
+                      )
+                    : t(
+                        "console.safety.briefings.detail.statusCancelled",
+                        undefined,
+                        "Cancelled — no further action required.",
+                      )}
               </p>
             </div>
-            <Badge variant={STATUS_TONE[row.status] ?? "muted"}>{STATUS_LABEL[row.status] ?? row.status}</Badge>
+            <Badge variant={STATUS_TONE[row.status] ?? "muted"}>
+              {row.status === "scheduled"
+                ? t("console.safety.briefings.status.scheduled", undefined, "Scheduled")
+                : row.status === "conducted"
+                  ? t("console.safety.briefings.status.conducted", undefined, "Conducted")
+                  : row.status === "cancelled"
+                    ? t("console.safety.briefings.status.cancelled", undefined, "Cancelled")
+                    : (STATUS_LABEL[row.status] ?? row.status)}
+            </Badge>
           </div>
         </section>
 
         <dl className="surface grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">Project</dt>
+            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+              {t("console.safety.briefings.detail.project", undefined, "Project")}
+            </dt>
             <dd className="text-sm">{row.project?.name ?? "—"}</dd>
           </div>
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">Briefer</dt>
+            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+              {t("console.safety.briefings.detail.briefer", undefined, "Briefer")}
+            </dt>
             <dd className="text-sm">{brieferName}</dd>
           </div>
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">Scheduled</dt>
+            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+              {t("console.safety.briefings.detail.scheduled", undefined, "Scheduled")}
+            </dt>
             <dd className="font-mono text-xs">{fmt(row.scheduled_for)}</dd>
           </div>
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">Conducted</dt>
+            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+              {t("console.safety.briefings.detail.conducted", undefined, "Conducted")}
+            </dt>
             <dd className="font-mono text-xs">{fmt(row.conducted_at)}</dd>
           </div>
         </dl>
 
         {row.notes && (
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Notes</h3>
+            <h3 className="text-sm font-semibold">{t("console.safety.briefings.detail.notes", undefined, "Notes")}</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{row.notes}</p>
           </section>
         )}
 
         <section className="surface p-5">
           <div className="flex items-baseline justify-between">
-            <h3 className="text-sm font-semibold">Attendance</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.safety.briefings.detail.attendance", undefined, "Attendance")}
+            </h3>
             <span className="font-mono text-xs text-[var(--text-muted)]">
-              {acknowledgedCount}/{attendees.length} acknowledged
+              {t(
+                "console.safety.briefings.detail.acknowledgedCount",
+                { acknowledged: acknowledgedCount, total: attendees.length },
+                `${acknowledgedCount}/${attendees.length} acknowledged`,
+              )}
             </span>
           </div>
           {attendees.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No attendees recorded. Add org members or crew below — they sign in by acknowledging the briefing.
+              {t(
+                "console.safety.briefings.detail.noAttendees",
+                undefined,
+                "No attendees recorded. Add org members or crew below — they sign in by acknowledging the briefing.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-subtle)] text-sm">
               {attendees.map((a) => {
-                const who = a.user?.name ?? a.user?.email ?? a.crew?.name ?? "Unknown";
+                const who =
+                  a.user?.name ??
+                  a.user?.email ??
+                  a.crew?.name ??
+                  t("console.safety.briefings.detail.unknown", undefined, "Unknown");
                 return (
                   <li key={a.id} className="flex items-center justify-between gap-3 py-2">
                     <div>
@@ -202,13 +250,19 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                     </div>
                     <div className="flex items-center gap-2">
                       {a.acknowledged_at ? (
-                        <Badge variant="success">Signed {new Date(a.acknowledged_at).toLocaleDateString()}</Badge>
+                        <Badge variant="success">
+                          {t(
+                            "console.safety.briefings.detail.signed",
+                            { date: new Date(a.acknowledged_at).toLocaleDateString() },
+                            `Signed ${new Date(a.acknowledged_at).toLocaleDateString()}`,
+                          )}
+                        </Badge>
                       ) : (
                         <form action={acknowledgeAttendee}>
                           <input type="hidden" name="briefingId" value={briefingId} />
                           <input type="hidden" name="attendeeId" value={a.id} />
                           <Button type="submit" size="sm" variant="secondary">
-                            Sign In
+                            {t("console.safety.briefings.detail.signIn", undefined, "Sign In")}
                           </Button>
                         </form>
                       )}
@@ -216,7 +270,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                         <input type="hidden" name="briefingId" value={briefingId} />
                         <input type="hidden" name="attendeeId" value={a.id} />
                         <Button type="submit" size="sm" variant="ghost">
-                          Remove
+                          {t("common.remove", undefined, "Remove")}
                         </Button>
                       </form>
                     </div>
@@ -232,7 +286,9 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
           >
             <input type="hidden" name="briefingId" value={briefingId} />
             <select name="user_id" defaultValue="" className="input-base">
-              <option value="">— Org member —</option>
+              <option value="">
+                {t("console.safety.briefings.detail.orgMemberOption", undefined, "— Org member —")}
+              </option>
               {orgMembers.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}
@@ -240,26 +296,37 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
               ))}
             </select>
             <select name="crew_member_id" defaultValue="" className="input-base">
-              <option value="">— Crew member —</option>
+              <option value="">
+                {t("console.safety.briefings.detail.crewMemberOption", undefined, "— Crew member —")}
+              </option>
               {crew.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name ?? c.id.slice(0, 8)}
                 </option>
               ))}
             </select>
-            <input name="notes" placeholder="Note (optional)" maxLength={500} className="input-base sm:col-span-2" />
+            <input
+              name="notes"
+              placeholder={t("console.safety.briefings.detail.notePlaceholder", undefined, "Note (optional)")}
+              maxLength={500}
+              className="input-base sm:col-span-2"
+            />
             <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)] sm:col-span-1">
               <input type="checkbox" name="acknowledged" value="true" />
-              Mark already acknowledged
+              {t("console.safety.briefings.detail.markAcknowledged", undefined, "Mark already acknowledged")}
             </label>
             <div className="flex justify-end sm:col-span-1">
               <Button type="submit" size="sm" variant="secondary">
-                Add Attendee
+                {t("console.safety.briefings.detail.addAttendee", undefined, "Add Attendee")}
               </Button>
             </div>
           </form>
           <p className="mt-2 text-[10px] text-[var(--text-muted)]">
-            Pick exactly one of org member or crew member — both nullable but the schema requires one to be set.
+            {t(
+              "console.safety.briefings.detail.pickOneHint",
+              undefined,
+              "Pick exactly one of org member or crew member — both nullable but the schema requires one to be set.",
+            )}
           </p>
         </section>
       </div>

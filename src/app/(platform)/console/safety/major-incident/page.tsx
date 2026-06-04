@@ -4,16 +4,23 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Major Incidents" />
+        <ModuleHeader
+          eyebrow={t("console.safety.majorIncident.eyebrowWorkspace", undefined, "Workspace")}
+          title={t("console.safety.majorIncident.title", undefined, "Major Incidents")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.majorIncident.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -26,12 +33,12 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Major Incidents"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.safety.majorIncident.eyebrow", undefined, "Safety")}
+        title={t("console.safety.majorIncident.title", undefined, "Major Incidents")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.safety.majorIncident.recordSingular", undefined, "Record") : t("console.safety.majorIncident.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/console/safety/major-incident/new" size="sm">
-            + Activate plan
+            {t("console.safety.majorIncident.activatePlan", undefined, "+ Activate plan")}
           </Button>
         }
       />
@@ -39,18 +46,27 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/safety/major-incident/${r.id}`}
-          emptyLabel="No major incidents"
-          emptyDescription="Open a record when a major-incident plan is activated; the timeline tracks decisions and status changes."
+          emptyLabel={t("console.safety.majorIncident.emptyLabel", undefined, "No major incidents")}
+          emptyDescription={t(
+            "console.safety.majorIncident.emptyDescription",
+            undefined,
+            "Open a record when a major-incident plan is activated; the timeline tracks decisions and status changes.",
+          )}
           emptyAction={
             <Button href="/console/safety/major-incident/new" size="sm">
-              + Activate plan
+              {t("console.safety.majorIncident.activatePlan", undefined, "+ Activate plan")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "name",
+              header: t("console.safety.majorIncident.columns.name", undefined, "Name"),
+              render: (r) => String(r.name ?? "—"),
+              accessor: (r) => r.name ?? null,
+            },
             {
               key: "status",
-              header: "Status",
+              header: t("console.safety.majorIncident.columns.status", undefined, "Status"),
               render: (r) => String(r.status ?? "—"),
               accessor: (r) => r.status ?? null,
               filterable: true,
@@ -58,13 +74,13 @@ export default async function Page() {
             },
             {
               key: "opened_at",
-              header: "Opened",
+              header: t("console.safety.majorIncident.columns.opened", undefined, "Opened"),
               render: (r) => <span className="font-mono text-xs">{String(r.opened_at ?? "—")}</span>,
               accessor: (r) => r.opened_at ?? null,
             },
             {
               key: "closed_at",
-              header: "Closed",
+              header: t("console.safety.majorIncident.columns.closed", undefined, "Closed"),
               render: (r) => <span className="font-mono text-xs">{String(r.closed_at ?? "—")}</span>,
               accessor: (r) => r.closed_at ?? null,
             },

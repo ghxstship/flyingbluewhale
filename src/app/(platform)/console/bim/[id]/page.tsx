@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { addBimModelLink, deleteBimModelLink, markBimModelReady } from "./actions";
 
@@ -71,6 +71,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { id } = await params;
 
   const { data: row } = await supabase
@@ -97,9 +98,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`BIM · ${m.project?.name ?? "Project"}`}
+        eyebrow={`BIM · ${m.project?.name ?? t("console.bim.detail.projectFallback", undefined, "Project")}`}
         title={m.name}
-        subtitle={`${m.source_type.toUpperCase()}${m.discipline ? ` · ${m.discipline.toUpperCase()}` : ""} · ${links.length} hot link${links.length === 1 ? "" : "s"} · ${fmtBytes(m.size_bytes)}`}
+        subtitle={`${m.source_type.toUpperCase()}${m.discipline ? ` · ${m.discipline.toUpperCase()}` : ""} · ${t("console.bim.detail.hotLinkCount", { count: links.length }, `${links.length} hot link${links.length === 1 ? "" : "s"}`)} · ${fmtBytes(m.size_bytes)}`}
         action={
           <div className="flex items-center gap-2">
             {(m.source_type === "ifc" || m.source_type === "ifc_zip") && (
@@ -107,17 +108,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 href={`/console/bim/${m.id}/view`}
                 className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
               >
-                Open 3D Viewer
+                {t("console.bim.detail.open3dViewer", undefined, "Open 3D Viewer")}
               </a>
             )}
             <a
               href={`/api/v1/bim/${m.id}/download`}
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Download {m.source_type.toUpperCase()}
+              {t(
+                "console.bim.detail.downloadFormat",
+                { format: m.source_type.toUpperCase() },
+                `Download ${m.source_type.toUpperCase()}`,
+              )}
             </a>
             <Button href="/console/bim" size="sm" variant="ghost">
-              ← All Models
+              {t("console.bim.detail.allModels", undefined, "← All Models")}
             </Button>
           </div>
         }
@@ -126,45 +131,57 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[m.model_state]}>{toTitle(m.model_state)}</Badge>
           <span className="text-[var(--text-muted)]">
-            Uploaded · {fmt.dateParts(m.uploaded_at, { year: "numeric", month: "short", day: "numeric" })}
+            {t("console.bim.detail.uploadedLabel", undefined, "Uploaded")} ·{" "}
+            {fmt.dateParts(m.uploaded_at, { year: "numeric", month: "short", day: "numeric" })}
           </span>
           {m.version_label && <span className="font-mono text-[var(--text-muted)]">{m.version_label}</span>}
           {m.forge_urn && (
-            <span className="font-mono text-[10px] text-[var(--text-muted)]">URN {m.forge_urn.slice(0, 16)}…</span>
+            <span className="font-mono text-[10px] text-[var(--text-muted)]">
+              {t("console.bim.detail.urnPrefix", undefined, "URN")} {m.forge_urn.slice(0, 16)}…
+            </span>
           )}
           {m.failed_reason && <span className="text-[var(--color-error)]">{m.failed_reason}</span>}
           {m.model_state === "uploaded" || m.model_state === "processing" ? (
             <form action={markBimModelReady} className="ms-auto">
               <input type="hidden" name="model_id" value={m.id} />
               <Button type="submit" size="sm">
-                Mark Ready
+                {t("console.bim.detail.markReady", undefined, "Mark Ready")}
               </Button>
             </form>
           ) : null}
         </div>
 
         <section className="surface space-y-2 p-4">
-          <h2 className="text-sm font-semibold">Storage</h2>
+          <h2 className="text-sm font-semibold">{t("console.bim.detail.storageHeading", undefined, "Storage")}</h2>
           <p className="font-mono text-xs text-[var(--text-secondary)]">{m.storage_path}</p>
           <p className="text-[10px] text-[var(--text-muted)]">
-            Click &ldquo;Download&rdquo; above to fetch the file via a 60-second signed URL. The web-based 3D viewer
-            (web-ifc / Forge SDK) is the next engineering pass — element-link management below works against the
-            existing metadata.
+            {t(
+              "console.bim.detail.storageBlurb",
+              undefined,
+              "Click “Download” above to fetch the file via a 60-second signed URL. The web-based 3D viewer (web-ifc / Forge SDK) is the next engineering pass — element-link management below works against the existing metadata.",
+            )}
           </p>
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold">Hot Links ({links.length})</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.bim.detail.hotLinksHeading", { count: links.length }, `Hot Links (${links.length})`)}
+          </h2>
           {links.length === 0 ? (
             <p className="text-xs text-[var(--text-muted)]">
-              No element links yet. Add one below to anchor an RFI / submittal / punch / inspection / transmittal to a
-              specific element GlobalId.
+              {t(
+                "console.bim.detail.noLinksHint",
+                undefined,
+                "No element links yet. Add one below to anchor an RFI / submittal / punch / inspection / transmittal to a specific element GlobalId.",
+              )}
             </p>
           ) : (
             <ul className="space-y-1">
               {links.map((l) => (
                 <li key={l.id} className="surface flex items-center gap-3 p-2 text-xs">
-                  <Badge variant="info">{LINK_TYPE_LABEL[l.link_type]}</Badge>
+                  <Badge variant="info">
+                    {t(`console.bim.detail.linkBadge.${l.link_type}`, undefined, LINK_TYPE_LABEL[l.link_type])}
+                  </Badge>
                   <span className="font-mono text-[var(--text-muted)]">{l.element_global_id}</span>
                   <span className="text-[var(--text-secondary)]">→ {l.target_id.slice(0, 8)}…</span>
                   {l.note && <span className="text-[var(--text-secondary)]">— {l.note}</span>}
@@ -172,7 +189,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <input type="hidden" name="link_id" value={l.id} />
                     <input type="hidden" name="model_id" value={m.id} />
                     <Button type="submit" size="sm" variant="ghost">
-                      Remove
+                      {t("common.remove", undefined, "Remove")}
                     </Button>
                   </form>
                 </li>
@@ -186,23 +203,38 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           >
             <input type="hidden" name="model_id" value={m.id} />
             <select name="link_type" required className={`${INPUT} text-xs`} defaultValue="rfi">
-              <option value="rfi">RFI</option>
-              <option value="submittal">Submittal</option>
-              <option value="issue">Issue</option>
-              <option value="punch_item">Punch Item</option>
-              <option value="inspection">Inspection</option>
-              <option value="transmittal_item">Transmittal</option>
+              <option value="rfi">{t("console.bim.detail.linkType.rfi", undefined, "RFI")}</option>
+              <option value="submittal">{t("console.bim.detail.linkType.submittal", undefined, "Submittal")}</option>
+              <option value="issue">{t("console.bim.detail.linkType.issue", undefined, "Issue")}</option>
+              <option value="punch_item">{t("console.bim.detail.linkType.punchItem", undefined, "Punch Item")}</option>
+              <option value="inspection">{t("console.bim.detail.linkType.inspection", undefined, "Inspection")}</option>
+              <option value="transmittal_item">
+                {t("console.bim.detail.linkType.transmittal", undefined, "Transmittal")}
+              </option>
             </select>
             <input
               name="element_global_id"
               required
-              placeholder="IfcRoot GlobalId or Forge dbId"
+              placeholder={t(
+                "console.bim.detail.placeholder.elementGlobalId",
+                undefined,
+                "IfcRoot GlobalId or Forge dbId",
+              )}
               className={`${INPUT} font-mono text-xs`}
             />
-            <input name="target_id" required placeholder="Target UUID" className={`${INPUT} font-mono text-xs`} />
-            <input name="note" placeholder="Note (optional)" className={`${INPUT} text-xs`} />
+            <input
+              name="target_id"
+              required
+              placeholder={t("console.bim.detail.placeholder.targetUuid", undefined, "Target UUID")}
+              className={`${INPUT} font-mono text-xs`}
+            />
+            <input
+              name="note"
+              placeholder={t("console.bim.detail.placeholder.note", undefined, "Note (optional)")}
+              className={`${INPUT} text-xs`}
+            />
             <Button type="submit" size="sm" variant="secondary">
-              + Add Link
+              {t("console.bim.detail.addLink", undefined, "+ Add Link")}
             </Button>
           </form>
         </section>

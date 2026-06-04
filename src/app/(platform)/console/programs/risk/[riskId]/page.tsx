@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteRisk } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ riskId: string }> }) {
   const p = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.programs.risk.detail.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.risk.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.programs.risk.detail.eyebrow", undefined, "Record")}
         title={title ?? p.riskId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/programs/risk" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/programs/risk/${p.riskId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteRisk.bind(null, p.riskId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.programs.risk.detail.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -48,12 +48,18 @@ function fieldCount(schema: Json): number {
 
 export default async function Page({ params }: { params: Promise<{ formId: string }> }) {
   const { formId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Forms" title="Form" />
+        <ModuleHeader
+          eyebrow={t("console.forms.eyebrow", undefined, "Forms")}
+          title={t("console.forms.detail.fallbackTitle", undefined, "Form")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.forms.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -78,19 +84,23 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Forms"
+        eyebrow={t("console.forms.eyebrow", undefined, "Forms")}
         title={form.title}
         subtitle={
           <span className="font-mono text-xs">
-            /{form.slug} · updated {fmt(form.updated_at)}
+            /{form.slug} ·{" "}
+            {t("console.forms.detail.updatedAt", { date: fmt(form.updated_at) }, `updated ${fmt(form.updated_at)}`)}
           </span>
         }
-        breadcrumbs={[{ label: "Forms", href: "/console/forms" }, { label: form.title }]}
+        breadcrumbs={[
+          { label: t("console.forms.eyebrow", undefined, "Forms"), href: "/console/forms" },
+          { label: form.title },
+        ]}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={tone}>{toTitle(form.status)}</Badge>
             <Button href={`/console/forms/${form.id}/edit`} variant="secondary" size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
           </div>
         }
@@ -99,36 +109,48 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
         {form.description && <p className="text-sm text-[var(--text-secondary)]">{form.description}</p>}
 
         <div className="metric-grid-3">
-          <MetricCard label="Fields" value={fmtIntl.number(fields)} />
-          <MetricCard label="Status" value={form.status} />
-          <MetricCard label="Created" value={form.created_at.slice(0, 10)} />
+          <MetricCard
+            label={t("console.forms.detail.metric.fields", undefined, "Fields")}
+            value={fmtIntl.number(fields)}
+          />
+          <MetricCard label={t("console.forms.detail.metric.status", undefined, "Status")} value={form.status} />
+          <MetricCard
+            label={t("console.forms.detail.metric.created", undefined, "Created")}
+            value={form.created_at.slice(0, 10)}
+          />
         </div>
 
         <section className="surface p-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Public Response URL</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.forms.detail.publicResponseUrl", undefined, "Public Response URL")}
+            </h3>
             <Link
               href={`/forms/${form.slug}`}
               target="_blank"
               rel="noopener"
               className="text-xs text-[var(--org-primary)]"
             >
-              Open ↗
+              {t("console.forms.detail.openLink", undefined, "Open ↗")}
             </Link>
           </div>
           <code className="mt-2 block rounded bg-[var(--bg-secondary)] p-2 font-mono text-xs break-all">
             /forms/{form.slug}
           </code>
           <p className="mt-2 text-xs text-[var(--text-muted)]">
-            Share this URL to collect submissions. Authoring lives in the editor — schema is stored as JSON.
+            {t(
+              "console.forms.detail.shareUrlHint",
+              undefined,
+              "Share this URL to collect submissions. Authoring lives in the editor — schema is stored as JSON.",
+            )}
           </p>
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Schema</h3>
+          <h3 className="text-sm font-semibold">{t("console.forms.detail.schemaHeading", undefined, "Schema")}</h3>
           {fields === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No fields defined yet. Open the editor to add fields.
+              {t("console.forms.detail.noFields", undefined, "No fields defined yet. Open the editor to add fields.")}
             </p>
           ) : (
             <pre className="mt-3 max-h-96 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">

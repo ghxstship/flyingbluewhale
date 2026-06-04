@@ -3,12 +3,13 @@
 import * as React from "react";
 import dynamic from "next/dynamic";
 import type { MapMarker, MapRoute } from "@/components/charts/MapShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 // MapShell pulls in maplibre-gl + its CSS, ~280kb gzipped. The dispatch
 // route is a tab inside the production console; lazy-loading the map chunk
 // keeps the parent route's initial JS small for users who never click here.
 // SSR off because maplibre-gl touches `window` at module load.
-const MapShell = dynamic(() => import("@/components/charts/MapShell").then((m) => ({ default: m.MapShell })), {
+const MapShell = dynamic(() => import("@/components/charts/MapShell").then((mod) => ({ default: mod.MapShell })), {
   ssr: false,
   loading: () => (
     <div className="surface skeleton w-full" style={{ height: 420 }} aria-busy="true" aria-label="Loading live map" />
@@ -28,6 +29,7 @@ export type DispatchPoint = {
 };
 
 export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
+  const t = useT();
   const markers: MapMarker[] = [];
   const routes: MapRoute[] = [];
 
@@ -60,8 +62,12 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
 
   return (
     <MapShell
-      title="Live Map"
-      description="Origin → destination per active run"
+      title={t("console.production.dispatch.live.map.title", undefined, "Live Map")}
+      description={t(
+        "console.production.dispatch.live.map.description",
+        undefined,
+        "Origin → destination per active run",
+      )}
       markers={markers}
       routes={routes}
       empty={points.length === 0}

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo, toTitle } from "@/lib/format";
 import { awardToInvite, inviteVendor, removeInvite, transitionBroadcast } from "./actions";
 
@@ -55,7 +56,11 @@ type Invite = {
 
 export default async function Page({ params }: { params: Promise<{ broadcastId: string }> }) {
   const { broadcastId } = await params;
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -98,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement · Broadcast"
+        eyebrow={t("console.procurement.woBroadcasts.detail.eyebrow", undefined, "Procurement · Broadcast")}
         title={`${broadcast.code} — ${broadcast.title}`}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
@@ -106,13 +111,22 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             {broadcast.category && <Badge variant="muted">{broadcast.category}</Badge>}
             {broadcast.project?.name && <Badge variant="muted">{broadcast.project.name}</Badge>}
             {broadcast.needed_by && (
-              <span className="font-mono text-xs">needed by {new Date(broadcast.needed_by).toLocaleString()}</span>
+              <span className="font-mono text-xs">
+                {t(
+                  "console.procurement.woBroadcasts.detail.neededBy",
+                  { when: new Date(broadcast.needed_by).toLocaleString() },
+                  `needed by ${new Date(broadcast.needed_by).toLocaleString()}`,
+                )}
+              </span>
             )}
           </span>
         }
         breadcrumbs={[
-          { label: "Procurement", href: "/console/procurement" },
-          { label: "Broadcasts", href: "/console/procurement/wo-broadcasts" },
+          { label: t("console.procurement.title", undefined, "Procurement"), href: "/console/procurement" },
+          {
+            label: t("console.procurement.woBroadcasts.title", undefined, "Broadcasts"),
+            href: "/console/procurement/wo-broadcasts",
+          },
           { label: broadcast.code },
         ]}
         action={
@@ -122,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                 <input type="hidden" name="broadcastId" value={broadcastId} />
                 <input type="hidden" name="status" value="open" />
                 <Button type="submit" size="sm">
-                  Open Broadcast
+                  {t("console.procurement.woBroadcasts.detail.openBroadcast", undefined, "Open Broadcast")}
                 </Button>
               </form>
             )}
@@ -131,7 +145,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                 <input type="hidden" name="broadcastId" value={broadcastId} />
                 <input type="hidden" name="status" value="closed" />
                 <Button type="submit" size="sm" variant="ghost">
-                  Close
+                  {t("common.close", undefined, "Close")}
                 </Button>
               </form>
             )}
@@ -140,12 +154,12 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                 <input type="hidden" name="broadcastId" value={broadcastId} />
                 <input type="hidden" name="status" value="cancelled" />
                 <Button type="submit" size="sm" variant="ghost">
-                  Cancel
+                  {t("common.cancel", undefined, "Cancel")}
                 </Button>
               </form>
             )}
             <Button href="/console/procurement/wo-broadcasts" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
           </div>
         }
@@ -153,16 +167,25 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label="Budget"
+            label={t("console.procurement.woBroadcasts.detail.budget", undefined, "Budget")}
             value={broadcast.budget_cents != null ? formatMoney(broadcast.budget_cents) : "—"}
           />
-          <MetricCard label="Invited" value={String(invites.length)} />
-          <MetricCard label="Responded" value={`${responded}/${invites.length}`} accent={accepted > 0} />
+          <MetricCard
+            label={t("console.procurement.woBroadcasts.detail.invited", undefined, "Invited")}
+            value={String(invites.length)}
+          />
+          <MetricCard
+            label={t("console.procurement.woBroadcasts.detail.responded", undefined, "Responded")}
+            value={`${responded}/${invites.length}`}
+            accent={accepted > 0}
+          />
         </div>
 
         {broadcast.description && (
           <section className="surface p-4">
-            <h2 className="text-sm font-semibold">Scope</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.procurement.woBroadcasts.detail.scope", undefined, "Scope")}
+            </h2>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{broadcast.description}</p>
           </section>
         )}
@@ -170,7 +193,9 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
         {broadcast.status === "awarded" && broadcast.awarded_to?.name && (
           <section className="surface p-4">
             <div className="flex items-baseline justify-between">
-              <h2 className="text-sm font-semibold">Awarded</h2>
+              <h2 className="text-sm font-semibold">
+                {t("console.procurement.woBroadcasts.detail.awarded", undefined, "Awarded")}
+              </h2>
               <span className="font-mono text-xs text-[var(--text-muted)]">
                 {broadcast.awarded_at && timeAgo(broadcast.awarded_at)}
               </span>
@@ -183,23 +208,41 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
 
         <section className="surface p-5">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold tracking-wide uppercase">Invitees</h2>
+            <h2 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.procurement.woBroadcasts.detail.invitees", undefined, "Invitees")}
+            </h2>
             <span className="font-mono text-xs text-[var(--text-muted)]">
-              {invites.length} invited · {responded} responded
+              {t(
+                "console.procurement.woBroadcasts.detail.invitedRespondedCount",
+                { invited: invites.length, responded },
+                `${invites.length} invited · ${responded} responded`,
+              )}
             </span>
           </div>
           {invites.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No vendors invited yet. Pick from the dropdown below to ping a vendor.
+              {t(
+                "console.procurement.woBroadcasts.detail.noVendorsInvited",
+                undefined,
+                "No vendors invited yet. Pick from the dropdown below to ping a vendor.",
+              )}
             </p>
           ) : (
             <table className="data-table mt-3 w-full">
               <thead>
                 <tr>
-                  <th className="text-start">Vendor</th>
-                  <th className="text-start">State</th>
-                  <th className="text-start">Responded</th>
-                  <th className="text-start">Notes</th>
+                  <th className="text-start">
+                    {t("console.procurement.woBroadcasts.detail.vendor", undefined, "Vendor")}
+                  </th>
+                  <th className="text-start">
+                    {t("console.procurement.woBroadcasts.detail.state", undefined, "State")}
+                  </th>
+                  <th className="text-start">
+                    {t("console.procurement.woBroadcasts.detail.responded", undefined, "Responded")}
+                  </th>
+                  <th className="text-start">
+                    {t("console.procurement.woBroadcasts.detail.notes", undefined, "Notes")}
+                  </th>
                   {editable && <th />}
                 </tr>
               </thead>
@@ -227,7 +270,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                               <input type="hidden" name="broadcastId" value={broadcastId} />
                               <input type="hidden" name="inviteId" value={i.id} />
                               <Button type="submit" size="sm" variant="secondary">
-                                Award
+                                {t("console.procurement.woBroadcasts.detail.award", undefined, "Award")}
                               </Button>
                             </form>
                           )}
@@ -235,7 +278,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                             <input type="hidden" name="broadcastId" value={broadcastId} />
                             <input type="hidden" name="inviteId" value={i.id} />
                             <Button type="submit" size="sm" variant="ghost">
-                              Remove
+                              {t("common.remove", undefined, "Remove")}
                             </Button>
                           </form>
                         </div>
@@ -252,7 +295,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
               <input type="hidden" name="broadcastId" value={broadcastId} />
               <select name="vendor_id" required defaultValue="" className="input-base min-w-[14rem] flex-1">
                 <option value="" disabled>
-                  — Add vendor —
+                  {t("console.procurement.woBroadcasts.detail.addVendorPlaceholder", undefined, "— Add vendor —")}
                 </option>
                 {candidateVendors.map((v) => (
                   <option key={v.id} value={v.id}>
@@ -261,16 +304,26 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                 ))}
               </select>
               <Button type="submit" size="sm" variant="secondary">
-                Invite Vendor
+                {t("console.procurement.woBroadcasts.detail.inviteVendor", undefined, "Invite Vendor")}
               </Button>
             </form>
           )}
           {editable && candidateVendors.length === 0 && invites.length > 0 && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">All org vendors are already on this broadcast.</p>
+            <p className="mt-3 text-xs text-[var(--text-muted)]">
+              {t(
+                "console.procurement.woBroadcasts.detail.allVendorsInvited",
+                undefined,
+                "All org vendors are already on this broadcast.",
+              )}
+            </p>
           )}
           {!editable && (
             <p className="mt-3 text-xs text-[var(--text-muted)]">
-              Invitee list is locked once the broadcast is awarded / closed / cancelled.
+              {t(
+                "console.procurement.woBroadcasts.detail.inviteeListLocked",
+                undefined,
+                "Invitee list is locked once the broadcast is awarded / closed / cancelled.",
+              )}
             </p>
           )}
         </section>

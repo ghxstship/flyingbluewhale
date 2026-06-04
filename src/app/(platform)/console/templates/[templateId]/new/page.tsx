@@ -4,6 +4,7 @@ import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { getRequestT } from "@/lib/i18n/request";
 import { applyTemplateAction } from "./actions";
 
 /**
@@ -19,6 +20,7 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
   const { templateId } = await params;
   const tpl = await getProjectTemplate({ id: templateId });
   if (!tpl) notFound();
+  const { t } = await getRequestT();
 
   async function action(formData: FormData) {
     "use server";
@@ -36,30 +38,42 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
     <main className="mx-auto w-full max-w-2xl px-6 py-8">
       <header className="border-ink mb-6 border-b-3 pb-4">
         <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
-          New Project from Template
+          {t("console.templates.new.eyebrow", undefined, "New Project from Template")}
         </div>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight uppercase">{tpl.name}</h1>
         {tpl.tagline ? <p className="mt-1 text-xs text-[var(--text-secondary)] italic">{tpl.tagline}</p> : null}
       </header>
 
       <Card>
-        <CardHeader title="Project Details" />
+        <CardHeader title={t("console.templates.new.cardTitle", undefined, "Project Details")} />
         <CardBody>
           <form action={action} className="space-y-4">
-            <Input label="Project Name" name="name" required placeholder="MMW26 Hialeah" maxLength={120} />
             <Input
-              label="Slug"
+              label={t("console.templates.new.projectNameLabel", undefined, "Project Name")}
+              name="name"
+              required
+              placeholder="MMW26 Hialeah"
+              maxLength={120}
+            />
+            <Input
+              label={t("console.templates.new.slugLabel", undefined, "Slug")}
               name="slug"
               required
               placeholder="mmw26-hialeah"
-              hint="Used in URLs. Lowercase letters, numbers, and dashes only."
+              hint={t(
+                "console.templates.new.slugHint",
+                undefined,
+                "Used in URLs. Lowercase letters, numbers, and dashes only.",
+              )}
               pattern="[a-z0-9-]+"
               maxLength={64}
             />
 
             {tpl.blueprint.project.modules.length ? (
               <div>
-                <label className="text-xs font-medium text-[var(--text-secondary)]">Modules to enable</label>
+                <label className="text-xs font-medium text-[var(--text-secondary)]">
+                  {t("console.templates.new.modulesLabel", undefined, "Modules to enable")}
+                </label>
                 <div className="mt-1.5 flex flex-wrap gap-1.5">
                   {tpl.blueprint.project.modules.map((m) => (
                     <Badge key={m} variant="muted">
@@ -72,7 +86,9 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
 
             {tpl.blueprint.deliverables?.length ? (
               <div>
-                <label className="text-xs font-medium text-[var(--text-secondary)]">Will be created</label>
+                <label className="text-xs font-medium text-[var(--text-secondary)]">
+                  {t("console.templates.new.willBeCreatedLabel", undefined, "Will be created")}
+                </label>
                 <ul className="mt-1.5 list-disc ps-5 text-sm text-[var(--text-secondary)]">
                   {tpl.blueprint.deliverables.map((d, i) => (
                     <li key={i}>
@@ -86,7 +102,9 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
             ) : null}
 
             <div className="flex justify-end pt-2">
-              <Button type="submit">Create Project</Button>
+              <Button type="submit">
+                {t("console.templates.new.createProjectButton", undefined, "Create Project")}
+              </Button>
             </div>
           </form>
         </CardBody>

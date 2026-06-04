@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   addMemberAction,
   deleteTeamAction,
@@ -28,24 +29,37 @@ function EditTeam({
   defaultName: string;
   defaultDescription: string;
 }) {
+  const t = useT();
   const bound = updateTeamAction.bind(null, teamId);
   return (
-    <FormShell action={bound} submitLabel="Save Changes" dirtyGuard>
-      <Input label="Name" name="name" defaultValue={defaultName} required autoComplete="off" />
-      <Input label="Description" name="description" defaultValue={defaultDescription} autoComplete="off" />
+    <FormShell action={bound} submitLabel={t("common.saveChanges", undefined, "Save Changes")} dirtyGuard>
+      <Input
+        label={t("console.people.teams.edit.name", undefined, "Name")}
+        name="name"
+        defaultValue={defaultName}
+        required
+        autoComplete="off"
+      />
+      <Input
+        label={t("console.people.teams.edit.description", undefined, "Description")}
+        name="description"
+        defaultValue={defaultDescription}
+        autoComplete="off"
+      />
     </FormShell>
   );
 }
 
 function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: string; label: string }[] }) {
+  const t = useT();
   const bound = addMemberAction.bind(null, teamId);
   return (
-    <FormShell action={bound} submitLabel="Add Member">
+    <FormShell action={bound} submitLabel={t("console.people.teams.addMember.submit", undefined, "Add Member")}>
       <label className="block text-xs font-medium">
-        <span className="mb-1 block">Member</span>
+        <span className="mb-1 block">{t("console.people.teams.addMember.memberLabel", undefined, "Member")}</span>
         <select name="user_id" className="input-base focus-ring w-full" required defaultValue="">
           <option value="" disabled>
-            Select an org member…
+            {t("console.people.teams.addMember.selectPlaceholder", undefined, "Select an org member…")}
           </option>
           {eligible.map((e) => (
             <option key={e.id} value={e.id}>
@@ -55,10 +69,12 @@ function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: strin
         </select>
       </label>
       <label className="block text-xs font-medium">
-        <span className="mb-1 block">Team role</span>
+        <span className="mb-1 block">{t("console.people.teams.addMember.teamRoleLabel", undefined, "Team role")}</span>
         <select name="role" className="input-base focus-ring w-full" defaultValue="member">
-          <option value="member">Member</option>
-          <option value="admin">Admin (can manage this team&apos;s members)</option>
+          <option value="member">{t("console.people.teams.roles.member", undefined, "Member")}</option>
+          <option value="admin">
+            {t("console.people.teams.addMember.adminOption", undefined, "Admin (can manage this team's members)")}
+          </option>
         </select>
       </label>
     </FormShell>
@@ -74,6 +90,7 @@ function UpdateMemberRole({
   userId: string;
   defaultRole: "admin" | "member";
 }) {
+  const t = useT();
   const bound = updateMemberRoleAction.bind(null, teamId);
   const [state, formAction, pending] = useActionState<State, FormData>(bound, null);
   return (
@@ -86,8 +103,8 @@ function UpdateMemberRole({
         disabled={pending}
         onChange={(e) => e.currentTarget.form?.requestSubmit()}
       >
-        <option value="member">Member</option>
-        <option value="admin">Admin</option>
+        <option value="member">{t("console.people.teams.roles.member", undefined, "Member")}</option>
+        <option value="admin">{t("console.people.teams.roles.admin", undefined, "Admin")}</option>
       </select>
       {state?.error && (
         <span role="alert" className="text-[10px] text-[var(--color-error)]">
@@ -99,22 +116,25 @@ function UpdateMemberRole({
 }
 
 function RemoveMember({ teamId, userId }: { teamId: string; userId: string }) {
+  const t = useT();
   return (
     <Button
       type="button"
       variant="ghost"
       size="sm"
       onClick={async () => {
-        if (!confirm("Remove this member from the team?")) return;
+        if (!confirm(t("console.people.teams.removeMember.confirm", undefined, "Remove this member from the team?")))
+          return;
         await removeMemberAction(teamId, userId);
       }}
     >
-      Remove
+      {t("common.remove", undefined, "Remove")}
     </Button>
   );
 }
 
 function DeleteTeam({ teamId }: { teamId: string }) {
+  const t = useT();
   return (
     <Button
       type="button"
@@ -123,7 +143,11 @@ function DeleteTeam({ teamId }: { teamId: string }) {
       onClick={async () => {
         if (
           !confirm(
-            "Delete this team? Members will be detached and any team-scoped record grants will be revoked. This cannot be undone.",
+            t(
+              "console.people.teams.deleteTeam.confirm",
+              undefined,
+              "Delete this team? Members will be detached and any team-scoped record grants will be revoked. This cannot be undone.",
+            ),
           )
         ) {
           return;
@@ -131,7 +155,7 @@ function DeleteTeam({ teamId }: { teamId: string }) {
         await deleteTeamAction(teamId);
       }}
     >
-      Delete Team
+      {t("console.people.teams.deleteTeam.action", undefined, "Delete Team")}
     </Button>
   );
 }

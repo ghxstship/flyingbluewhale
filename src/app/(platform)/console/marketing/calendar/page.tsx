@@ -5,18 +5,25 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 type Row = { id: string; kind: string; occurs_at: string; label: string | null; visibility: string };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Marketing" title="Calendar" />
+        <ModuleHeader
+          eyebrow={t("console.marketing.eyebrow", undefined, "Marketing")}
+          title={t("console.marketing.calendar.title", undefined, "Calendar")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.marketing.calendar.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -43,13 +50,24 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Marketing"
-        title="Calendar"
-        subtitle={`${rows.length} milestone${rows.length === 1 ? "" : "s"} across ${days.length} day${days.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.marketing.eyebrow", undefined, "Marketing")}
+        title={t("console.marketing.calendar.title", undefined, "Calendar")}
+        subtitle={t(
+          "console.marketing.calendar.subtitle",
+          {
+            milestones: rows.length,
+            milestoneSuffix: rows.length === 1 ? "" : "s",
+            days: days.length,
+            daySuffix: days.length === 1 ? "" : "s",
+          },
+          `${rows.length} milestone${rows.length === 1 ? "" : "s"} across ${days.length} day${days.length === 1 ? "" : "s"}`,
+        )}
       />
       <div className="page-content space-y-4">
         {days.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No milestones in the next two weeks.</div>
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+            {t("console.marketing.calendar.empty", undefined, "No milestones in the next two weeks.")}
+          </div>
         ) : (
           days.map((d) => (
             <section key={d} className="surface p-4">

@@ -13,9 +13,11 @@ import {
   DialogDescription,
 } from "@/components/ui/Dialog";
 import { useToast } from "@/lib/hooks/useToast";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createApiKeyAction, type CreateState } from "./actions";
 
 export function CreateApiKeyForm() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<CreateState, FormData>(createApiKeyAction, null);
   const [open, setOpen] = React.useState(false);
   const toast = useToast();
@@ -26,7 +28,7 @@ export function CreateApiKeyForm() {
   function copy() {
     if (!secret) return;
     void navigator.clipboard.writeText(secret).then(() => {
-      toast.success("Copied to clipboard");
+      toast.success(t("console.settings.api.copiedToast", undefined, "Copied to clipboard"));
     });
   }
 
@@ -34,13 +36,19 @@ export function CreateApiKeyForm() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" size="sm">
-          + New Key
+          {t("console.settings.api.newKey", undefined, "+ New Key")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create API key</DialogTitle>
-          <DialogDescription>We will show the secret exactly once — store it somewhere safe.</DialogDescription>
+          <DialogTitle>{t("console.settings.api.createTitle", undefined, "Create API key")}</DialogTitle>
+          <DialogDescription>
+            {t(
+              "console.settings.api.createDescription",
+              undefined,
+              "We will show the secret exactly once — store it somewhere safe.",
+            )}
+          </DialogDescription>
         </DialogHeader>
         {secret ? (
           <div className="space-y-3">
@@ -49,36 +57,53 @@ export function CreateApiKeyForm() {
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="secondary" onClick={copy}>
-                Copy
+                {t("common.copy", undefined, "Copy")}
               </Button>
               <Button type="button" onClick={() => setOpen(false)}>
-                Done
+                {t("common.done", undefined, "Done")}
               </Button>
             </div>
           </div>
         ) : (
           <form action={formAction} className="space-y-3">
-            <Input label="Name" name="name" required maxLength={120} placeholder="e.g. CI bot" />
             <Input
-              label="Scopes"
+              label={t("common.name", undefined, "Name")}
+              name="name"
+              required
+              maxLength={120}
+              placeholder={t("console.settings.api.namePlaceholder", undefined, "e.g. CI bot")}
+            />
+            <Input
+              label={t("console.settings.api.scopesLabel", undefined, "Scopes")}
               name="scopes"
-              hint="Comma-separated; leave blank for full access. Capability strings — projects:read, projects:write, tasks:write, deliverables:read, invoices:read, etc."
+              hint={t(
+                "console.settings.api.scopesHint",
+                undefined,
+                "Comma-separated; leave blank for full access. Capability strings — projects:read, projects:write, tasks:write, deliverables:read, invoices:read, etc.",
+              )}
             />
             <details className="rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-2 text-xs">
-              <summary className="cursor-pointer text-[var(--text-muted)]">Common scope sets</summary>
+              <summary className="cursor-pointer text-[var(--text-muted)]">
+                {t("console.settings.api.commonScopeSets", undefined, "Common scope sets")}
+              </summary>
               <ul className="mt-2 space-y-1 font-mono">
                 <li>
-                  <code className="text-[var(--text-secondary)]">projects:read, tasks:read</code> — read-only reporter
+                  <code className="text-[var(--text-secondary)]">projects:read, tasks:read</code>{" "}
+                  {t("console.settings.api.scopeReadOnly", undefined, "— read-only reporter")}
                 </li>
                 <li>
-                  <code className="text-[var(--text-secondary)]">tasks:write, time:write</code> — field clock-in
+                  <code className="text-[var(--text-secondary)]">tasks:write, time:write</code>{" "}
+                  {t("console.settings.api.scopeFieldClockIn", undefined, "— field clock-in")}
                 </li>
                 <li>
-                  <code className="text-[var(--text-secondary)]">deliverables:read, deliverables:write</code> —
-                  advancing pipeline
+                  <code className="text-[var(--text-secondary)]">deliverables:read, deliverables:write</code>{" "}
+                  {t("console.settings.api.scopeAdvancing", undefined, "— advancing pipeline")}
                 </li>
                 <li>
-                  <code className="text-[var(--text-secondary)]">(blank)</code> — full access of the issuing user
+                  <code className="text-[var(--text-secondary)]">
+                    {t("console.settings.api.scopeBlank", undefined, "(blank)")}
+                  </code>{" "}
+                  {t("console.settings.api.scopeFullAccess", undefined, "— full access of the issuing user")}
                 </li>
               </ul>
             </details>
@@ -87,10 +112,10 @@ export function CreateApiKeyForm() {
             )}
             <div className="flex justify-end gap-2">
               <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
-                Cancel
+                {t("common.cancel", undefined, "Cancel")}
               </Button>
               <Button type="submit" loading={pending}>
-                Generate key
+                {t("console.settings.api.generateKey", undefined, "Generate key")}
               </Button>
             </div>
           </form>

@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
   const { invoiceId } = await params;
   if (!hasSupabase) return null;
   await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
     .from("invoice_line_items")
@@ -35,29 +37,44 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
   return (
     <>
       <ModuleHeader
-        eyebrow="Invoice"
-        title="Line Items"
+        eyebrow={t("console.finance.invoices.lineItems.eyebrow", undefined, "Invoice")}
+        title={t("console.finance.invoices.lineItems.title", undefined, "Line Items")}
         subtitle={
           rows.length > 0
-            ? `${rows.length} line${rows.length === 1 ? "" : "s"} · ${formatMoney(total)} total`
-            : "Itemized breakdown of this invoice."
+            ? t(
+                "console.finance.invoices.lineItems.subtitleCount",
+                {
+                  count: rows.length,
+                  lineLabel:
+                    rows.length === 1
+                      ? t("console.finance.invoices.lineItems.lineSingular", undefined, "line")
+                      : t("console.finance.invoices.lineItems.linePlural", undefined, "lines"),
+                  total: formatMoney(total),
+                },
+                `${rows.length} line${rows.length === 1 ? "" : "s"} · ${formatMoney(total)} total`,
+              )
+            : t("console.finance.invoices.lineItems.subtitleEmpty", undefined, "Itemized breakdown of this invoice.")
         }
       />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No Line Items"
-          emptyDescription="This invoice has no line items. Edit the invoice to add itemized lines."
+          emptyLabel={t("console.finance.invoices.lineItems.emptyLabel", undefined, "No Line Items")}
+          emptyDescription={t(
+            "console.finance.invoices.lineItems.emptyDescription",
+            undefined,
+            "This invoice has no line items. Edit the invoice to add itemized lines.",
+          )}
           columns={[
             {
               key: "description",
-              header: "Description",
+              header: t("console.finance.invoices.lineItems.columns.description", undefined, "Description"),
               render: (r) => r.description,
               accessor: (r) => r.description,
             },
             {
               key: "quantity",
-              header: "Qty",
+              header: t("console.finance.invoices.lineItems.columns.qty", undefined, "Qty"),
               render: (r) => r.quantity,
               accessor: (r) => r.quantity,
               tabular: true,
@@ -67,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
             },
             {
               key: "unit_price_cents",
-              header: "Unit Price",
+              header: t("console.finance.invoices.lineItems.columns.unitPrice", undefined, "Unit Price"),
               render: (r) => (r.unit_price_cents != null ? formatMoney(r.unit_price_cents) : "—"),
               accessor: (r) => r.unit_price_cents ?? 0,
               tabular: true,
@@ -77,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
             },
             {
               key: "amount",
-              header: "Amount",
+              header: t("console.finance.invoices.lineItems.columns.amount", undefined, "Amount"),
               render: (r) => formatMoney(lineAmount(r)),
               accessor: (r) => lineAmount(r),
               tabular: true,

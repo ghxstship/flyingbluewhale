@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +25,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Account Managers" />
+        <ModuleHeader
+          eyebrow={t("console.settings.accountManagers.eyebrow", undefined, "Settings")}
+          title={t("console.settings.accountManagers.title", undefined, "Account Managers")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.accountManagers.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -91,12 +98,24 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Account Managers"
-        subtitle={`${hydrated.length} Assignment${hydrated.length === 1 ? "" : "s"} · who handles which portal user across personas`}
+        eyebrow={t("console.settings.accountManagers.eyebrow", undefined, "Settings")}
+        title={t("console.settings.accountManagers.title", undefined, "Account Managers")}
+        subtitle={
+          hydrated.length === 1
+            ? t(
+                "console.settings.accountManagers.subtitleOne",
+                { count: hydrated.length },
+                `${hydrated.length} Assignment · who handles which portal user across personas`,
+              )
+            : t(
+                "console.settings.accountManagers.subtitleOther",
+                { count: hydrated.length },
+                `${hydrated.length} Assignments · who handles which portal user across personas`,
+              )
+        }
         action={
           <Button href="/console/settings/account-managers/new" size="sm">
-            + New Assignment
+            {t("console.settings.accountManagers.newAssignment", undefined, "+ New Assignment")}
           </Button>
         }
       />
@@ -104,36 +123,48 @@ export default async function Page() {
         <DataTable<Row>
           rows={hydrated}
           rowHref={(r) => `/console/settings/account-managers/${r.id}`}
-          emptyLabel="No account-manager assignments yet"
-          emptyDescription="Pair a portal user (vendor, sponsor, delegation contact, etc.) with the org-side manager who handles their thread."
+          emptyLabel={t("console.settings.accountManagers.emptyLabel", undefined, "No account-manager assignments yet")}
+          emptyDescription={t(
+            "console.settings.accountManagers.emptyDescription",
+            undefined,
+            "Pair a portal user (vendor, sponsor, delegation contact, etc.) with the org-side manager who handles their thread.",
+          )}
           columns={[
             {
               key: "portal_email",
-              header: "Portal user",
+              header: t("console.settings.accountManagers.columns.portalUser", undefined, "Portal user"),
               render: (r) => r.portal_email ?? r.portal_user_id.slice(0, 8),
               mono: true,
             },
             {
               key: "persona",
-              header: "Persona",
+              header: t("console.settings.accountManagers.columns.persona", undefined, "Persona"),
               render: (r) => <Badge variant="muted">{toTitle(r.persona)}</Badge>,
             },
             {
               key: "manager_email",
-              header: "Account manager",
+              header: t("console.settings.accountManagers.columns.accountManager", undefined, "Account manager"),
               render: (r) => r.manager_email ?? r.manager_user_id.slice(0, 8),
               mono: true,
             },
             {
               key: "project_name",
-              header: "Project",
-              render: (r) => r.project_name ?? "Org-wide",
+              header: t("console.settings.accountManagers.columns.project", undefined, "Project"),
+              render: (r) => r.project_name ?? t("console.settings.accountManagers.orgWide", undefined, "Org-wide"),
             },
             {
               key: "active",
-              header: "Status",
+              header: t("console.settings.accountManagers.columns.status", undefined, "Status"),
               render: (r) =>
-                r.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Inactive</Badge>,
+                r.active ? (
+                  <Badge variant="success">
+                    {t("console.settings.accountManagers.statusActive", undefined, "Active")}
+                  </Badge>
+                ) : (
+                  <Badge variant="muted">
+                    {t("console.settings.accountManagers.statusInactive", undefined, "Inactive")}
+                  </Badge>
+                ),
             },
           ]}
         />

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
+import { getRequestT } from "@/lib/i18n/request";
 import { updatePerson, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params }: { params: Promise<{ personId: string }> }) {
   const p = await params;
   if (!hasSupabase) return notFound();
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data: row } = await supabase
@@ -33,13 +35,28 @@ export default async function Page({ params }: { params: Promise<{ personId: str
   const action = updatePerson.bind(null, p.personId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Member" title={`Edit ${typed.users?.name ?? typed.users?.email ?? "member"}`} />
+      <ModuleHeader
+        eyebrow={t("console.people.edit.eyebrow", undefined, "Member")}
+        title={t(
+          "console.people.edit.title",
+          {
+            name: typed.users?.name ?? typed.users?.email ?? t("console.people.edit.fallbackName", undefined, "member"),
+          },
+          `Edit ${typed.users?.name ?? typed.users?.email ?? "member"}`,
+        )}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/people/${p.personId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/people/${p.personId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={typed.updated_at} />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Platform role</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.people.edit.platformRole", undefined, "Platform role")}
+            </span>
             <select name="role" defaultValue={typed.role} required className="input-base focus-ring w-full">
               {PLATFORM_ROLES.map((r) => (
                 <option key={r} value={r}>
@@ -51,14 +68,22 @@ export default async function Page({ params }: { params: Promise<{ personId: str
           <label className="flex items-start gap-2 text-sm">
             <input type="checkbox" name="is_developer" defaultChecked={typed.is_developer} className="mt-1 h-4 w-4" />
             <span>
-              <span className="font-medium">Developer</span>
+              <span className="font-medium">{t("console.people.edit.developer", undefined, "Developer")}</span>
               <span className="block text-xs text-[var(--text-muted)]">
-                Grants API keys, webhooks, and audit access. Orthogonal to platform role.
+                {t(
+                  "console.people.edit.developerHint",
+                  undefined,
+                  "Grants API keys, webhooks, and audit access. Orthogonal to platform role.",
+                )}
               </span>
             </span>
           </label>
           <p className="text-xs text-[var(--text-muted)]">
-            Profile fields (name, email) are managed by the user. Project-level access is managed on each project.
+            {t(
+              "console.people.edit.profileHint",
+              undefined,
+              "Profile fields (name, email) are managed by the user. Project-level access is managed on each project.",
+            )}
           </p>
         </FormShell>
       </div>

@@ -6,11 +6,13 @@ import { DetailShell } from "@/components/detail/DetailShell";
 import { fmtDateTime } from "@/components/detail/DetailShell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteTimeEntry } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ entryId: string }> }) {
   const { entryId } = await params;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("time_entries")
@@ -21,25 +23,37 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
   return (
     <DetailShell
       row={row}
-      eyebrow="Finance"
-      title={(r) => r.description ?? "Time entry"}
+      eyebrow={t("console.finance.time.entry.eyebrow", undefined, "Finance")}
+      title={(r) => r.description ?? t("console.finance.time.entry.fallbackTitle", undefined, "Time entry")}
       subtitle={(r) => (r.duration_minutes ? `${Math.round((r.duration_minutes / 60) * 10) / 10} hr` : null)}
       breadcrumbs={[
-        { label: "Finance", href: "/console/finance" },
-        { label: "Time", href: "/console/finance/time" },
-        { label: row?.description ?? "Entry" },
+        { label: t("console.finance.time.entry.breadcrumbs.finance", undefined, "Finance"), href: "/console/finance" },
+        { label: t("console.finance.time.entry.breadcrumbs.time", undefined, "Time"), href: "/console/finance/time" },
+        { label: row?.description ?? t("console.finance.time.entry.breadcrumbs.entry", undefined, "Entry") },
       ]}
       fields={
         row
           ? [
-              { label: "Started", value: fmtDateTime(row.started_at) },
-              { label: "Ended", value: fmtDateTime(row.ended_at) },
               {
-                label: "Duration",
+                label: t("console.finance.time.entry.fields.started", undefined, "Started"),
+                value: fmtDateTime(row.started_at),
+              },
+              {
+                label: t("console.finance.time.entry.fields.ended", undefined, "Ended"),
+                value: fmtDateTime(row.ended_at),
+              },
+              {
+                label: t("console.finance.time.entry.fields.duration", undefined, "Duration"),
                 value: row.duration_minutes != null ? `${Math.round((row.duration_minutes / 60) * 100) / 100} hr` : "—",
               },
-              { label: "Billable", value: row.billable ? "Yes" : "No" },
-              { label: "Description", value: row.description ?? "—" },
+              {
+                label: t("console.finance.time.entry.fields.billable", undefined, "Billable"),
+                value: row.billable ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No"),
+              },
+              {
+                label: t("console.finance.time.entry.fields.description", undefined, "Description"),
+                value: row.description ?? "—",
+              },
             ]
           : undefined
       }
@@ -47,11 +61,15 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
         row ? (
           <div className="flex items-center gap-2">
             <Button href={`/console/finance/time/${entryId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteTimeEntry.bind(null, entryId)}
-              confirm={`Delete this time entry? This cannot be undone.`}
+              confirm={t(
+                "console.finance.time.entry.deleteConfirm",
+                undefined,
+                "Delete this time entry? This cannot be undone.",
+              )}
             />
           </div>
         ) : undefined

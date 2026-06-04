@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { createAssignment } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,13 @@ const PERSONAS = [
 ] as const;
 
 export default async function Page() {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.settings.accountManagers.new.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -54,11 +61,20 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="New Account-Manager Assignment" />
+      <ModuleHeader
+        eyebrow={t("console.settings.accountManagers.new.eyebrow", undefined, "Settings")}
+        title={t("console.settings.accountManagers.new.title", undefined, "New Account-Manager Assignment")}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={createAssignment} cancelHref="/console/settings/account-managers" submitLabel="Create">
+        <FormShell
+          action={createAssignment}
+          cancelHref="/console/settings/account-managers"
+          submitLabel={t("common.create", undefined, "Create")}
+        >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Portal user</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.accountManagers.new.portalUserLabel", undefined, "Portal user")}
+            </label>
             <select name="portal_user_id" required className="input-base mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -67,11 +83,17 @@ export default async function Page() {
               ))}
             </select>
             <p className="mt-1 text-[10px] text-[var(--text-muted)]">
-              The portal-side user — vendor, sponsor, delegation contact, etc.
+              {t(
+                "console.settings.accountManagers.new.portalUserHint",
+                undefined,
+                "The portal-side user — vendor, sponsor, delegation contact, etc.",
+              )}
             </p>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Persona</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.accountManagers.new.personaLabel", undefined, "Persona")}
+            </label>
             <select name="persona" required className="input-base mt-1.5 w-full" defaultValue="vendor">
               {PERSONAS.map((p) => (
                 <option key={p} value={p}>
@@ -81,7 +103,9 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Account manager</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.accountManagers.new.managerLabel", undefined, "Account manager")}
+            </label>
             <select name="manager_user_id" required className="input-base mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -91,9 +115,13 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Project (optional)</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.accountManagers.new.projectLabel", undefined, "Project (optional)")}
+            </label>
             <select name="project_id" className="input-base mt-1.5 w-full" defaultValue="">
-              <option value="">Org-wide (any project)</option>
+              <option value="">
+                {t("console.settings.accountManagers.new.projectOrgWide", undefined, "Org-wide (any project)")}
+              </option>
               {projectList.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -101,7 +129,11 @@ export default async function Page() {
               ))}
             </select>
             <p className="mt-1 text-[10px] text-[var(--text-muted)]">
-              Same portal user can have different AMs per project + persona.
+              {t(
+                "console.settings.accountManagers.new.projectHint",
+                undefined,
+                "Same portal user can have different AMs per project + persona.",
+              )}
             </p>
           </div>
         </FormShell>

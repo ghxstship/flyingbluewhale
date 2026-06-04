@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -39,12 +39,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Master Schedule" />
+        <ModuleHeader
+          eyebrow={t("console.programs.schedule.eyebrow", undefined, "Programs")}
+          title={t("console.programs.schedule.title", undefined, "Master Schedule")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.schedule.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -71,57 +77,76 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Programs"
-        title="Master Schedule"
-        subtitle={`${rows.length} Event${rows.length === 1 ? "" : "s"} · ${upcoming} Upcoming · ${live} Live`}
+        eyebrow={t("console.programs.schedule.eyebrow", undefined, "Programs")}
+        title={t("console.programs.schedule.title", undefined, "Master Schedule")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.programs.schedule.eventSingular", undefined, "Event") : t("console.programs.schedule.eventPlural", undefined, "Events")} · ${upcoming} ${t("console.programs.schedule.upcoming", undefined, "Upcoming")} · ${live} ${t("console.programs.schedule.live", undefined, "Live")}`}
         action={
           <Button href="/console/events/new" size="sm">
-            + New Event
+            {t("console.programs.schedule.newEvent", undefined, "+ New Event")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total" value={fmtIntl.number(rows.length)} accent />
-          <MetricCard label="Upcoming" value={fmtIntl.number(upcoming)} />
-          <MetricCard label="Live Now" value={fmtIntl.number(live)} />
+          <MetricCard
+            label={t("console.programs.schedule.metricTotal", undefined, "Total")}
+            value={fmtIntl.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.programs.schedule.metricUpcoming", undefined, "Upcoming")}
+            value={fmtIntl.number(upcoming)}
+          />
+          <MetricCard
+            label={t("console.programs.schedule.metricLiveNow", undefined, "Live Now")}
+            value={fmtIntl.number(live)}
+          />
         </div>
 
         <DataTable<EventRow>
           rows={rows}
           rowHref={(r) => `/console/events/${r.id}`}
-          emptyLabel="No events in window"
-          emptyDescription="Author events under Console → Events. The master schedule rolls up the next 90 days across all projects."
+          emptyLabel={t("console.programs.schedule.emptyLabel", undefined, "No events in window")}
+          emptyDescription={t(
+            "console.programs.schedule.emptyDescription",
+            undefined,
+            "Author events under Console → Events. The master schedule rolls up the next 90 days across all projects.",
+          )}
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New Event
+              {t("console.programs.schedule.newEvent", undefined, "+ New Event")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Event", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.programs.schedule.colEvent", undefined, "Event"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "starts",
-              header: "Starts",
+              header: t("console.programs.schedule.colStarts", undefined, "Starts"),
               render: (r) => fmt(r.starts_at),
               className: "font-mono text-xs",
               accessor: (r) => r.starts_at ?? null,
             },
             {
               key: "ends",
-              header: "Ends",
+              header: t("console.programs.schedule.colEnds", undefined, "Ends"),
               render: (r) => fmt(r.ends_at),
               className: "font-mono text-xs",
               accessor: (r) => r.ends_at ?? null,
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.programs.schedule.colProject", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.programs.schedule.colStatus", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,

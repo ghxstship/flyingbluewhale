@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { OfferControls } from "./OfferControls";
@@ -31,6 +32,7 @@ type Offer = {
 export default async function Page({ params }: { params: Promise<{ offerId: string }> }) {
   const { offerId } = await params;
   if (!hasSupabase) return notFound();
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -55,8 +57,8 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Marketplace · Offer"
-        title={talent?.act_name ?? "Offer"}
+        eyebrow={t("console.marketplace.offers.detail.eyebrow", undefined, "Marketplace · Offer")}
+        title={talent?.act_name ?? t("console.marketplace.offers.detail.fallbackTitle", undefined, "Offer")}
         subtitle={`${o.performance_date} · ${formatMoney(o.fee_cents)}`}
         action={<Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>}
       />
@@ -65,31 +67,61 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="surface p-5">
-            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Terms</h2>
+            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+              {t("console.marketplace.offers.detail.termsHeading", undefined, "Terms")}
+            </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">Fee</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.offers.detail.feeLabel", undefined, "Fee")}
+              </dt>
               <dd className="font-mono">{formatMoney(o.fee_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">Deposit</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.offers.detail.depositLabel", undefined, "Deposit")}
+              </dt>
               <dd className="font-mono">
                 {o.deposit_pct}% · {formatMoney(depositCents)}
               </dd>
-              <dt className="text-[var(--text-secondary)]">Balance</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.offers.detail.balanceLabel", undefined, "Balance")}
+              </dt>
               <dd className="font-mono">
-                {formatMoney(balanceCents)} on {toTitle(o.balance_terms)}
+                {t(
+                  "console.marketplace.offers.detail.balanceOn",
+                  { amount: formatMoney(balanceCents), terms: toTitle(o.balance_terms) },
+                  `${formatMoney(balanceCents)} on ${toTitle(o.balance_terms)}`,
+                )}
               </dd>
-              <dt className="text-[var(--text-secondary)]">Slot</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.offers.detail.slotLabel", undefined, "Slot")}
+              </dt>
               <dd>{o.slot_start ? `${new Date(o.slot_start).toLocaleString()}` : "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">Project</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.offers.detail.projectLabel", undefined, "Project")}
+              </dt>
               <dd>{o.project_id ?? "—"}</dd>
             </dl>
           </div>
           <div className="surface p-5">
-            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Timeline</h2>
+            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+              {t("console.marketplace.offers.detail.timelineHeading", undefined, "Timeline")}
+            </h2>
             <ul className="space-y-1.5 text-sm">
-              <li>Created · {/* via created_at */} —</li>
-              <li>Sent · {o.sent_at ? new Date(o.sent_at).toLocaleString() : "—"}</li>
-              <li>Accepted · {o.accepted_at ? new Date(o.accepted_at).toLocaleString() : "—"}</li>
-              <li>Contracted · {o.contracted_at ? new Date(o.contracted_at).toLocaleString() : "—"}</li>
+              <li>
+                {t("console.marketplace.offers.detail.timelineCreated", undefined, "Created")} · {/* via created_at */}{" "}
+                —
+              </li>
+              <li>
+                {t("console.marketplace.offers.detail.timelineSent", undefined, "Sent")} ·{" "}
+                {o.sent_at ? new Date(o.sent_at).toLocaleString() : "—"}
+              </li>
+              <li>
+                {t("console.marketplace.offers.detail.timelineAccepted", undefined, "Accepted")} ·{" "}
+                {o.accepted_at ? new Date(o.accepted_at).toLocaleString() : "—"}
+              </li>
+              <li>
+                {t("console.marketplace.offers.detail.timelineContracted", undefined, "Contracted")} ·{" "}
+                {o.contracted_at ? new Date(o.contracted_at).toLocaleString() : "—"}
+              </li>
             </ul>
           </div>
         </section>

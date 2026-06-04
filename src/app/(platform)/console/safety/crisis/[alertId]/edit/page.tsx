@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateAlert, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -17,22 +18,32 @@ export default async function Page({ params }: { params: Promise<{ alertId: stri
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   const action = updateAlert.bind(null, alertId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Safety · Crisis" title="Edit Alert" />
+      <ModuleHeader
+        eyebrow={t("console.safety.crisis.edit.eyebrow", undefined, "Safety · Crisis")}
+        title={t("console.safety.crisis.edit.title", undefined, "Edit Alert")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/safety/crisis/${alertId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/safety/crisis/${alertId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <Input
-            label="Title"
+            label={t("console.safety.crisis.edit.titleLabel", undefined, "Title")}
             name="title"
             maxLength={200}
             defaultValue={(r.title as string | undefined) ?? ""}
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Body</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.crisis.edit.bodyLabel", undefined, "Body")}
+            </label>
             <textarea
               name="body"
               rows={5}
@@ -43,20 +54,26 @@ export default async function Page({ params }: { params: Promise<{ alertId: stri
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Severity</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.crisis.edit.severityLabel", undefined, "Severity")}
+            </label>
             <select
               name="severity"
               defaultValue={(r.severity as string | undefined) ?? "info"}
               className="input-base mt-1.5 w-full"
             >
-              <option value="info">Info</option>
-              <option value="advisory">Advisory</option>
-              <option value="warning">Warning</option>
-              <option value="emergency">Emergency</option>
+              <option value="info">{t("console.safety.crisis.edit.severityInfo", undefined, "Info")}</option>
+              <option value="advisory">
+                {t("console.safety.crisis.edit.severityAdvisory", undefined, "Advisory")}
+              </option>
+              <option value="warning">{t("console.safety.crisis.edit.severityWarning", undefined, "Warning")}</option>
+              <option value="emergency">
+                {t("console.safety.crisis.edit.severityEmergency", undefined, "Emergency")}
+              </option>
             </select>
           </div>
           <Input
-            label="Scheduled At"
+            label={t("console.safety.crisis.edit.scheduledAtLabel", undefined, "Scheduled At")}
             name="scheduled_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(r.scheduled_at)}

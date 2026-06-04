@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
   const { clientId } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
     .from("invoices")
@@ -47,33 +49,47 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Client"
-        title="Invoices"
+        eyebrow={t("console.clients.invoices.eyebrow", undefined, "Client")}
+        title={t("console.clients.invoices.title", undefined, "Invoices")}
         subtitle={
           rows.length > 0
-            ? `${formatMoney(paid)} paid · ${formatMoney(total - paid)} outstanding`
-            : "Invoices issued to this client."
+            ? t(
+                "console.clients.invoices.subtitle.summary",
+                { paid: formatMoney(paid), outstanding: formatMoney(total - paid) },
+                `${formatMoney(paid)} paid · ${formatMoney(total - paid)} outstanding`,
+              )
+            : t("console.clients.invoices.subtitle.empty", undefined, "Invoices issued to this client.")
         }
       />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/finance/invoices/${r.id}`}
-          emptyLabel="No Invoices"
-          emptyDescription="No invoices issued to this client yet."
+          emptyLabel={t("console.clients.invoices.emptyLabel", undefined, "No Invoices")}
+          emptyDescription={t(
+            "console.clients.invoices.emptyDescription",
+            undefined,
+            "No invoices issued to this client yet.",
+          )}
           columns={[
             {
               key: "number",
-              header: "Number",
+              header: t("console.clients.invoices.columns.number", undefined, "Number"),
               render: (r) => r.number,
               accessor: (r) => r.number,
               mono: true,
               sortable: true,
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title, sortable: true },
+            {
+              key: "title",
+              header: t("console.clients.invoices.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+              sortable: true,
+            },
             {
               key: "status",
-              header: "Status",
+              header: t("console.clients.invoices.columns.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
@@ -81,7 +97,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
             },
             {
               key: "issued_at",
-              header: "Issued",
+              header: t("console.clients.invoices.columns.issued", undefined, "Issued"),
               render: (r) => (r.issued_at ? formatDate(r.issued_at) : "—"),
               accessor: (r) => r.issued_at ?? "",
               mono: true,
@@ -89,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
             },
             {
               key: "due_at",
-              header: "Due",
+              header: t("console.clients.invoices.columns.due", undefined, "Due"),
               render: (r) => (r.due_at ? formatDate(r.due_at) : "—"),
               accessor: (r) => r.due_at ?? "",
               mono: true,
@@ -97,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
             },
             {
               key: "amount_cents",
-              header: "Amount",
+              header: t("console.clients.invoices.columns.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents),
               accessor: (r) => r.amount_cents,
               tabular: true,

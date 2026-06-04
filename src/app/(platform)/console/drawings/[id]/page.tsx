@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { addVersion, addMember, publishVersion, supersedeVersion } from "./actions";
 
@@ -63,6 +63,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { id } = await params;
 
   const { data: setRow } = await supabase
@@ -121,16 +122,28 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`Drawings · ${sheetSet.project?.name ?? "Project"}`}
+        eyebrow={t(
+          "console.drawings.detail.eyebrow",
+          { project: sheetSet.project?.name ?? t("console.drawings.detail.projectFallback", undefined, "Project") },
+          `Drawings · ${sheetSet.project?.name ?? "Project"}`,
+        )}
         title={sheetSet.name}
         subtitle={
           sheetSet.discipline
-            ? `${sheetSet.discipline.toUpperCase()} · ${memberRows.length} sheets in active version`
-            : `${memberRows.length} sheets in active version`
+            ? t(
+                "console.drawings.detail.subtitleWithDiscipline",
+                { discipline: sheetSet.discipline.toUpperCase(), count: memberRows.length },
+                `${sheetSet.discipline.toUpperCase()} · ${memberRows.length} sheets in active version`,
+              )
+            : t(
+                "console.drawings.detail.subtitle",
+                { count: memberRows.length },
+                `${memberRows.length} sheets in active version`,
+              )
         }
         action={
           <Button href="/console/drawings" size="sm" variant="ghost">
-            ← All Sheet Sets
+            {t("console.drawings.detail.allSheetSets", undefined, "← All Sheet Sets")}
           </Button>
         }
       />
@@ -142,15 +155,26 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {/* ── Versions panel ─────────────────────────────────────────────── */}
         <section className="surface space-y-3 p-4">
           <header className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">Versions</h2>
+            <h2 className="text-sm font-semibold">{t("console.drawings.detail.versions", undefined, "Versions")}</h2>
             <span className="text-xs text-[var(--text-muted)]">
-              {versionRows.length} total ·{" "}
-              {activeVersion ? `active: ${activeVersion.version_label}` : "no active version"}
+              {t("console.drawings.detail.versionsCount", { count: versionRows.length }, `${versionRows.length} total`)}{" "}
+              ·{" "}
+              {activeVersion
+                ? t(
+                    "console.drawings.detail.activeVersion",
+                    { label: activeVersion.version_label },
+                    `active: ${activeVersion.version_label}`,
+                  )
+                : t("console.drawings.detail.noActiveVersion", undefined, "no active version")}
             </span>
           </header>
           {versionRows.length === 0 ? (
             <p className="text-xs text-[var(--text-muted)]">
-              No versions yet. Add one below to start collecting sheets.
+              {t(
+                "console.drawings.detail.noVersionsEmpty",
+                undefined,
+                "No versions yet. Add one below to start collecting sheets.",
+              )}
             </p>
           ) : (
             <ul className="space-y-1.5">
@@ -159,7 +183,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span className="font-mono">
                     {v.version_label}
                     {sheetSet.current_version_id === v.id && (
-                      <span className="ms-2 text-[10px] text-[var(--color-success)] uppercase">active</span>
+                      <span className="ms-2 text-[10px] text-[var(--color-success)] uppercase">
+                        {t("console.drawings.detail.active", undefined, "active")}
+                      </span>
                     )}
                   </span>
                   <span className="flex items-center gap-2">
@@ -179,18 +205,26 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <input
               name="version_label"
               required
-              placeholder="Rev 1, 100% CD, 2026-06-01…"
+              placeholder={t(
+                "console.drawings.detail.versionLabelPlaceholder",
+                undefined,
+                "Rev 1, 100% CD, 2026-06-01…",
+              )}
               className={`${INPUT} text-xs`}
             />
             <Button type="submit" size="sm" variant="secondary">
-              + Add Version
+              {t("console.drawings.detail.addVersion", undefined, "+ Add Version")}
             </Button>
           </form>
           {activeVersion && activeVersion.set_state !== "published" && (
             <form action={publishVersion}>
               <input type="hidden" name="version_id" value={activeVersion.id} />
               <Button type="submit" size="sm">
-                Publish {activeVersion.version_label}
+                {t(
+                  "console.drawings.detail.publishVersion",
+                  { label: activeVersion.version_label },
+                  `Publish ${activeVersion.version_label}`,
+                )}
               </Button>
             </form>
           )}
@@ -198,7 +232,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={supersedeVersion}>
               <input type="hidden" name="version_id" value={activeVersion.id} />
               <Button type="submit" size="sm" variant="ghost">
-                Mark Superseded
+                {t("console.drawings.detail.markSuperseded", undefined, "Mark Superseded")}
               </Button>
             </form>
           )}
@@ -208,17 +242,33 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="space-y-3">
           <header className="flex items-center justify-between">
             <h2 className="text-sm font-semibold">
-              Sheets in {activeVersion ? activeVersion.version_label : "(no active version)"}
+              {t(
+                "console.drawings.detail.sheetsIn",
+                {
+                  label: activeVersion
+                    ? activeVersion.version_label
+                    : t("console.drawings.detail.noActiveVersionParen", undefined, "(no active version)"),
+                },
+                `Sheets in ${activeVersion ? activeVersion.version_label : "(no active version)"}`,
+              )}
             </h2>
             <span className="text-xs text-[var(--text-muted)]">
-              {memberRows.length} of {planChoices.length} project sheets
+              {t(
+                "console.drawings.detail.sheetsCount",
+                { count: memberRows.length, total: planChoices.length },
+                `${memberRows.length} of ${planChoices.length} project sheets`,
+              )}
             </span>
           </header>
           <DataTable<Member>
             rows={memberRows}
             rowHref={(m) => (m.site_plan ? `/console/site-plans/${m.site_plan.id}` : "#")}
-            emptyLabel="No sheets in this version yet"
-            emptyDescription="Add sheets from the project's site_plans below to assemble the published set."
+            emptyLabel={t("console.drawings.detail.emptyLabel", undefined, "No sheets in this version yet")}
+            emptyDescription={t(
+              "console.drawings.detail.emptyDescription",
+              undefined,
+              "Add sheets from the project's site_plans below to assemble the published set.",
+            )}
             columns={[
               {
                 key: "ordinal",
@@ -229,20 +279,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 key: "code",
-                header: "Code",
+                header: t("console.drawings.detail.columnCode", undefined, "Code"),
                 render: (m) => m.site_plan?.code ?? "—",
                 accessor: (m) => m.site_plan?.code ?? null,
                 className: "font-mono text-xs",
               },
               {
                 key: "title",
-                header: "Title",
+                header: t("console.drawings.detail.columnTitle", undefined, "Title"),
                 render: (m) => m.site_plan?.title ?? "—",
                 accessor: (m) => m.site_plan?.title ?? null,
               },
               {
                 key: "type",
-                header: "Type",
+                header: t("console.drawings.detail.columnType", undefined, "Type"),
                 render: (m) => m.site_plan?.sheet_type ?? "—",
                 accessor: (m) => m.site_plan?.sheet_type ?? null,
                 filterable: true,
@@ -251,14 +301,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 key: "rev",
-                header: "Rev (at publish)",
+                header: t("console.drawings.detail.columnRev", undefined, "Rev (at publish)"),
                 render: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? "—",
                 accessor: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? null,
                 className: "font-mono text-xs",
               },
               {
                 key: "doc_state",
-                header: "Doc State",
+                header: t("console.drawings.detail.columnDocState", undefined, "Doc State"),
                 render: (m) =>
                   m.site_plan ? <Badge variant="muted">{toTitle(m.site_plan.document_state)}</Badge> : "—",
                 accessor: (m) => m.site_plan?.document_state ?? null,
@@ -270,25 +320,40 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {/* ── Add sheet to active version ────────────────────────────────── */}
         {activeVersion && activeVersion.set_state !== "published" && addablePlans.length > 0 && (
           <section className="surface space-y-3 p-4">
-            <h2 className="text-sm font-semibold">Add sheet to {activeVersion.version_label}</h2>
+            <h2 className="text-sm font-semibold">
+              {t(
+                "console.drawings.detail.addSheetTo",
+                { label: activeVersion.version_label },
+                `Add sheet to ${activeVersion.version_label}`,
+              )}
+            </h2>
             <form action={addMember} className="grid grid-cols-[1fr_auto] gap-2">
               <input type="hidden" name="version_id" value={activeVersion.id} />
               <select name="site_plan_id" required className={`${INPUT} text-xs`}>
-                <option value="">Select a sheet…</option>
+                <option value="">{t("console.drawings.detail.selectSheet", undefined, "Select a sheet…")}</option>
                 {addablePlans.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.code} · {p.title}
-                    {p.revision_letter ? ` (Rev ${p.revision_letter})` : ""}
+                    {p.revision_letter
+                      ? t(
+                          "console.drawings.detail.revSuffix",
+                          { letter: p.revision_letter },
+                          ` (Rev ${p.revision_letter})`,
+                        )
+                      : ""}
                   </option>
                 ))}
               </select>
               <Button type="submit" size="sm" variant="secondary">
-                + Add Sheet
+                {t("console.drawings.detail.addSheet", undefined, "+ Add Sheet")}
               </Button>
             </form>
             <p className="text-[10px] text-[var(--text-muted)]">
-              The sheet&apos;s revision letter is captured at add-time. Once the version publishes, the membership row
-              is immutable.
+              {t(
+                "console.drawings.detail.revisionImmutableNote",
+                undefined,
+                "The sheet's revision letter is captured at add-time. Once the version publishes, the membership row is immutable.",
+              )}
             </p>
           </section>
         )}

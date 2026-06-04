@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -37,12 +37,18 @@ function fmtDate(iso: string): string {
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Design" />
+        <ModuleHeader
+          eyebrow={t("console.venues.design.eyebrow", undefined, "Venue")}
+          title={t("console.venues.design.title", undefined, "Design")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.design.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -75,25 +81,49 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Design`}
-        subtitle={`${specs.length} Spec${specs.length === 1 ? "" : "s"} · ${approved} Approved`}
+        eyebrow={t("console.venues.design.eyebrow", undefined, "Venue")}
+        title={t("console.venues.design.headerTitle", { name: venue.name }, `${venue.name} — Design`)}
+        subtitle={
+          specs.length === 1
+            ? t(
+                "console.venues.design.subtitleSingular",
+                { count: specs.length, approved },
+                `${specs.length} Spec · ${approved} Approved`,
+              )
+            : t(
+                "console.venues.design.subtitlePlural",
+                { count: specs.length, approved },
+                `${specs.length} Specs · ${approved} Approved`,
+              )
+        }
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.breadcrumb", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "Design" },
+          { label: t("console.venues.design.title", undefined, "Design") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={fmt.number(approved)} accent />
-          <MetricCard label="In Review" value={fmt.number(inReview)} />
-          <MetricCard label="Total" value={fmt.number(specs.length)} />
+          <MetricCard
+            label={t("console.venues.design.metric.approved", undefined, "Approved")}
+            value={fmt.number(approved)}
+            accent
+          />
+          <MetricCard
+            label={t("console.venues.design.metric.inReview", undefined, "In Review")}
+            value={fmt.number(inReview)}
+          />
+          <MetricCard
+            label={t("console.venues.design.metric.total", undefined, "Total")}
+            value={fmt.number(specs.length)}
+          />
         </div>
 
         {Object.keys(byDiscipline).length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By Discipline</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.venues.design.byDiscipline", undefined, "By Discipline")}
+            </h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {Object.entries(byDiscipline).map(([d, n]) => (
                 <li key={d} className="flex items-center justify-between text-sm">
@@ -107,13 +137,22 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
 
         <DataTable<SpecRow>
           rows={specs}
-          emptyLabel="No design specs uploaded"
-          emptyDescription="Author overlay, seating, signage, broadcast, and rigging specs here. Each row can link to a Bill-of-Materials requisition."
+          emptyLabel={t("console.venues.design.emptyLabel", undefined, "No design specs uploaded")}
+          emptyDescription={t(
+            "console.venues.design.emptyDescription",
+            undefined,
+            "Author overlay, seating, signage, broadcast, and rigging specs here. Each row can link to a Bill-of-Materials requisition.",
+          )}
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.venues.design.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "discipline",
-              header: "Discipline",
+              header: t("console.venues.design.col.discipline", undefined, "Discipline"),
               render: (r) => <Badge variant="muted">{r.discipline}</Badge>,
               accessor: (r) => r.discipline ?? null,
               filterable: true,
@@ -121,22 +160,24 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             },
             {
               key: "revision",
-              header: "Rev",
+              header: t("console.venues.design.col.rev", undefined, "Rev"),
               render: (r) => <span className="font-mono text-xs">{r.revision}</span>,
               accessor: (r) => r.revision ?? null,
             },
             {
               key: "updated",
-              header: "Updated",
+              header: t("console.venues.design.col.updated", undefined, "Updated"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.updated_at)}</span>,
               accessor: (r) => r.updated_at ?? null,
             },
             {
               key: "bom",
-              header: "BOM",
+              header: t("console.venues.design.col.bom", undefined, "BOM"),
               render: (r) =>
                 r.bom_requisition_id ? (
-                  <span className="font-mono text-[10px] text-[var(--org-primary)]">linked</span>
+                  <span className="font-mono text-[10px] text-[var(--org-primary)]">
+                    {t("console.venues.design.bom.linked", undefined, "linked")}
+                  </span>
                 ) : (
                   <span className="text-[var(--text-muted)]">—</span>
                 ),
@@ -144,7 +185,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.venues.design.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
@@ -154,8 +195,11 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Specs flow into procurement: link a spec to a requisition and the bill of materials is auto-derived for
-          tendering.
+          {t(
+            "console.venues.design.footnote",
+            undefined,
+            "Specs flow into procurement: link a spec to a requisition and the bill of materials is auto-derived for tendering.",
+          )}
         </p>
       </div>
     </>

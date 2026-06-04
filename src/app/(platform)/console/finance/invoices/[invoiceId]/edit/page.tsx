@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateInvoice, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -20,27 +21,65 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
   const session = await requireSession();
   const row = await getOrgScoped("invoices", session.orgId, p.invoiceId);
   if (!row) notFound();
+  const { t } = await getRequestT();
   const action = updateInvoice.bind(null, p.invoiceId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Invoice" title={`Edit ${row.title}`} />
+      <ModuleHeader
+        eyebrow={t("console.finance.invoices.edit.eyebrow", undefined, "Invoice")}
+        title={t("console.finance.invoices.edit.title", { title: row.title }, `Edit ${row.title}`)}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/finance/invoices/${p.invoiceId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/finance/invoices/${p.invoiceId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
-          <Input label="Number" name="number" defaultValue={row.number} required maxLength={80} />
           <Input
-            label="Amount (cents)"
+            label={t("console.finance.invoices.edit.fields.title", undefined, "Title")}
+            name="title"
+            defaultValue={row.title}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.finance.invoices.edit.fields.number", undefined, "Number")}
+            name="number"
+            defaultValue={row.number}
+            required
+            maxLength={80}
+          />
+          <Input
+            label={t("console.finance.invoices.edit.fields.amountCents", undefined, "Amount (cents)")}
             name="amount_cents"
             type="number"
             defaultValue={String(row.amount_cents ?? 0)}
           />
-          <Input label="Currency" name="currency" defaultValue={row.currency ?? "USD"} required maxLength={3} />
-          <Input label="Issued" name="issued_at" type="date" defaultValue={dateOnly(row.issued_at)} />
-          <Input label="Due" name="due_at" type="date" defaultValue={dateOnly(row.due_at)} />
+          <Input
+            label={t("console.finance.invoices.edit.fields.currency", undefined, "Currency")}
+            name="currency"
+            defaultValue={row.currency ?? "USD"}
+            required
+            maxLength={3}
+          />
+          <Input
+            label={t("console.finance.invoices.edit.fields.issued", undefined, "Issued")}
+            name="issued_at"
+            type="date"
+            defaultValue={dateOnly(row.issued_at)}
+          />
+          <Input
+            label={t("console.finance.invoices.edit.fields.due", undefined, "Due")}
+            name="due_at"
+            type="date"
+            defaultValue={dateOnly(row.due_at)}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Notes</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.finance.invoices.edit.fields.notes", undefined, "Notes")}
+            </span>
             <textarea
               name="notes"
               defaultValue={row.notes ?? ""}
@@ -49,7 +88,13 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
               className="input-base focus-ring w-full"
             />
           </label>
-          <p className="text-xs text-[var(--text-muted)]">Status transitions are managed from the detail page.</p>
+          <p className="text-xs text-[var(--text-muted)]">
+            {t(
+              "console.finance.invoices.edit.statusHint",
+              undefined,
+              "Status transitions are managed from the detail page.",
+            )}
+          </p>
         </FormShell>
       </div>
     </>

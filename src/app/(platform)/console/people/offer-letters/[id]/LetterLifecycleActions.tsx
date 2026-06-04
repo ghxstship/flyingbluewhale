@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { OfferLetterStatus } from "@/lib/offer-letters/types";
 import { sendLetter, withdrawLetter, rotateLetterCode } from "./actions";
 
@@ -18,6 +19,7 @@ export function LetterLifecycleActions({
   hasMsa?: boolean;
   msaIssueHref?: string;
 }) {
+  const t = useT();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -40,23 +42,28 @@ export function LetterLifecycleActions({
 
   return (
     <section className="surface space-y-3 p-5">
-      <h3 className="text-sm font-semibold tracking-wider uppercase">Lifecycle</h3>
+      <h3 className="text-sm font-semibold tracking-wider uppercase">
+        {t("console.people.offerLetters.lifecycle.title", undefined, "Lifecycle")}
+      </h3>
       <div className="flex flex-col gap-2">
         {status === "draft" && (
           <>
             <Button onClick={send} loading={pending} disabled={sendDisabled}>
-              Mark Sent — Activate Public Link
+              {t("console.people.offerLetters.lifecycle.markSent", undefined, "Mark Sent — Activate Public Link")}
             </Button>
             {sendDisabled && (
               <div className="rounded border border-[var(--color-warning)]/40 bg-[var(--color-warning)]/10 p-3 text-xs leading-relaxed">
                 <div className="mb-1 font-medium tracking-wider text-[var(--text-secondary)] uppercase">
-                  MSA Required Before Send
+                  {t("console.people.offerLetters.lifecycle.msaRequired", undefined, "MSA Required Before Send")}
                 </div>
                 <p>
-                  No Master Services Agreement on file for this contractor. Issue an MSA first; the recipient&rsquo;s
-                  engagement letter references it.{" "}
+                  {t(
+                    "console.people.offerLetters.lifecycle.msaRequiredBody",
+                    undefined,
+                    "No Master Services Agreement on file for this contractor. Issue an MSA first; the recipient’s engagement letter references it.",
+                  )}{" "}
                   <Link className="text-[var(--org-primary)] hover:underline" href={msaIssueHref}>
-                    Issue MSA →
+                    {t("console.people.offerLetters.lifecycle.issueMsa", undefined, "Issue MSA →")}
                   </Link>
                 </p>
               </div>
@@ -65,12 +72,12 @@ export function LetterLifecycleActions({
         )}
         {status !== "draft" && status !== "withdrawn" && status !== "accepted" && status !== "declined" && (
           <Button variant="secondary" onClick={withdraw} loading={pending}>
-            Withdraw Letter
+            {t("console.people.offerLetters.lifecycle.withdraw", undefined, "Withdraw Letter")}
           </Button>
         )}
         {status !== "accepted" && status !== "declined" && status !== "withdrawn" && (
           <Button variant="ghost" size="sm" onClick={rotate} loading={pending}>
-            Rotate Access Code
+            {t("console.people.offerLetters.lifecycle.rotateCode", undefined, "Rotate Access Code")}
           </Button>
         )}
       </div>
@@ -80,7 +87,11 @@ export function LetterLifecycleActions({
         </p>
       )}
       <p className="text-xs text-[var(--text-muted)]">
-        Once accepted or declined, the letter is locked and the recipient&apos;s decision is binding.
+        {t(
+          "console.people.offerLetters.lifecycle.lockedNote",
+          undefined,
+          "Once accepted or declined, the letter is locked and the recipient’s decision is binding.",
+        )}
       </p>
     </section>
   );

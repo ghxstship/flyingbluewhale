@@ -2,11 +2,13 @@
 
 import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { uploadAndExtract, type UploadState } from "./actions";
 
 const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
 
 export function UploadInvoiceClient() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<UploadState, FormData>(uploadAndExtract, null);
   const [fileBase64, setFileBase64] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
@@ -35,20 +37,34 @@ export function UploadInvoiceClient() {
       <div className="flex items-center gap-2">
         <input type="file" accept="application/pdf" onChange={onFile} className={`${INPUT} text-xs`} />
         <Button type="submit" size="sm" disabled={!fileBase64 || pending}>
-          {pending ? "Extracting…" : "Upload + Extract"}
+          {pending
+            ? t("console.finance.apOcr.upload.extracting", undefined, "Extracting…")
+            : t("console.finance.apOcr.upload.submit", undefined, "Upload + Extract")}
         </Button>
       </div>
       {fileName && (
         <p className="text-[10px] text-[var(--text-muted)]">
-          Selected: <span className="font-mono">{fileName}</span> · {(fileSize / 1024).toFixed(1)} KB
+          {t("console.finance.apOcr.upload.selectedLabel", undefined, "Selected:")}{" "}
+          <span className="font-mono">{fileName}</span> · {(fileSize / 1024).toFixed(1)}{" "}
+          {t("console.finance.apOcr.upload.kb", undefined, "KB")}
         </p>
       )}
       {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
       {state?.success && (
         <p className="text-xs text-[var(--color-success)]">
-          Extracted. Confidence: {(state.success.confidence * 100).toFixed(0)}%.{" "}
+          {t(
+            "console.finance.apOcr.upload.extractedConfidence",
+            { pct: (state.success.confidence * 100).toFixed(0) },
+            "Extracted. Confidence: {pct}%.",
+          )}{" "}
           {state.success.vendor_name && (
-            <span className="text-[var(--text-secondary)]">Vendor: {state.success.vendor_name}.</span>
+            <span className="text-[var(--text-secondary)]">
+              {t(
+                "console.finance.apOcr.upload.vendorLabel",
+                { vendor: state.success.vendor_name },
+                "Vendor: {vendor}.",
+              )}
+            </span>
           )}
         </p>
       )}

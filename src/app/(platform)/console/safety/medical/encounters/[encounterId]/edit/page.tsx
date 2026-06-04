@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateEncounter, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -16,39 +17,55 @@ export default async function Page({ params }: { params: Promise<{ encounterId: 
   const row = await getOrgScoped("medical_encounters", session.orgId, encounterId);
   if (!row) notFound();
   const r = row as Record<string, unknown>;
+  const { t } = await getRequestT();
   const action = updateEncounter.bind(null, encounterId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Medical · Encounter" title="Edit Encounter" />
+      <ModuleHeader
+        eyebrow={t("console.safety.medical.encounters.edit.eyebrow", undefined, "Medical · Encounter")}
+        title={t("console.safety.medical.encounters.edit.title", undefined, "Edit Encounter")}
+      />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/safety/medical/encounters/${encounterId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Triage</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.medical.encounters.edit.triageLabel", undefined, "Triage")}
+            </label>
             <select
               name="triage"
               defaultValue={(r.triage as string | undefined) ?? "green"}
               className="input-base mt-1.5 w-full"
             >
-              <option value="green">Green (minor)</option>
-              <option value="yellow">Yellow (urgent)</option>
-              <option value="red">Red (immediate)</option>
-              <option value="black">Black (deceased)</option>
+              <option value="green">
+                {t("console.safety.medical.encounters.edit.triageGreen", undefined, "Green (minor)")}
+              </option>
+              <option value="yellow">
+                {t("console.safety.medical.encounters.edit.triageYellow", undefined, "Yellow (urgent)")}
+              </option>
+              <option value="red">
+                {t("console.safety.medical.encounters.edit.triageRed", undefined, "Red (immediate)")}
+              </option>
+              <option value="black">
+                {t("console.safety.medical.encounters.edit.triageBlack", undefined, "Black (deceased)")}
+              </option>
             </select>
           </div>
           <Input
-            label="Patient Reference"
+            label={t("console.safety.medical.encounters.edit.patientRefLabel", undefined, "Patient Reference")}
             name="patient_ref"
             maxLength={120}
             defaultValue={(r.patient_ref as string | undefined) ?? ""}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Chief Complaint</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.medical.encounters.edit.chiefComplaintLabel", undefined, "Chief Complaint")}
+            </label>
             <textarea
               name="chief_complaint"
               rows={3}
@@ -58,7 +75,7 @@ export default async function Page({ params }: { params: Promise<{ encounterId: 
             />
           </div>
           <Input
-            label="Disposition"
+            label={t("console.safety.medical.encounters.edit.dispositionLabel", undefined, "Disposition")}
             name="disposition"
             maxLength={120}
             defaultValue={(r.disposition as string | undefined) ?? ""}

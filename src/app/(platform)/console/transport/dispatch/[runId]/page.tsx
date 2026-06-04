@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteDispatchRun } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ runId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.transport.dispatch.detail.recordTitle", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.transport.dispatch.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ runId: string
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.transport.dispatch.detail.eyebrow", undefined, "Record")}
         title={title ?? p.runId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/transport/dispatch" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/transport/dispatch/${p.runId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteDispatchRun.bind(null, p.runId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.transport.dispatch.detail.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

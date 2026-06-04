@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,7 @@ type Row = { id: string; code: string; name: string; description: string | null;
 
 export default async function Page() {
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -24,15 +26,18 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
+        eyebrow={t("console.procurement.eyebrow", undefined, "Procurement")}
         breadcrumbs={[
-          { label: "Prequalification", href: "/console/procurement/prequalification" },
-          { label: "Questionnaires" },
+          {
+            label: t("console.procurement.prequalification.breadcrumb", undefined, "Prequalification"),
+            href: "/console/procurement/prequalification",
+          },
+          { label: t("console.procurement.prequalification.questionnaires.breadcrumb", undefined, "Questionnaires") },
         ]}
-        title="Prequal Questionnaires"
+        title={t("console.procurement.prequalification.questionnaires.title", undefined, "Prequal Questionnaires")}
         action={
           <Button href="/console/procurement/prequalification/questionnaires/new" size="sm">
-            + New Questionnaire
+            {t("console.procurement.prequalification.questionnaires.newAction", undefined, "+ New Questionnaire")}
           </Button>
         }
       />
@@ -40,31 +45,46 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/procurement/prequalification/questionnaires/${r.id}`}
-          emptyLabel="No questionnaires"
+          emptyLabel={t("console.procurement.prequalification.questionnaires.empty", undefined, "No questionnaires")}
           emptyAction={
             <Button href="/console/procurement/prequalification/questionnaires/new" size="sm">
-              + New Questionnaire
+              {t("console.procurement.prequalification.questionnaires.newAction", undefined, "+ New Questionnaire")}
             </Button>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.procurement.prequalification.questionnaires.columns.code", undefined, "Code"),
               render: (r) => r.code,
               className: "font-mono text-xs",
               accessor: (r) => r.code,
             },
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.procurement.prequalification.questionnaires.columns.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "desc",
-              header: "Description",
+              header: t(
+                "console.procurement.prequalification.questionnaires.columns.description",
+                undefined,
+                "Description",
+              ),
               render: (r) => r.description ?? "—",
               accessor: (r) => r.description ?? null,
             },
             {
               key: "active",
-              header: "Status",
-              render: (r) => <Badge variant={r.active ? "success" : "muted"}>{r.active ? "active" : "archived"}</Badge>,
+              header: t("console.procurement.prequalification.questionnaires.columns.status", undefined, "Status"),
+              render: (r) => (
+                <Badge variant={r.active ? "success" : "muted"}>
+                  {r.active
+                    ? t("console.procurement.prequalification.questionnaires.statusActive", undefined, "active")
+                    : t("console.procurement.prequalification.questionnaires.statusArchived", undefined, "archived")}
+                </Badge>
+              ),
               accessor: (r) => r.active ?? null,
             },
           ]}

@@ -5,6 +5,7 @@ import { deleteCustomRole } from "./actions";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +25,18 @@ const PROJECT_ROLES_INFO: { role: string; description: string }[] = [
 ];
 
 export default async function RolesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="People" title="Role Matrix" />
+        <ModuleHeader
+          eyebrow={t("console.people.roles.eyebrow", undefined, "People")}
+          title={t("console.people.roles.title", undefined, "Role Matrix")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.people.roles.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -45,22 +52,30 @@ export default async function RolesPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="People"
-        title="Role Matrix"
-        subtitle="Platform roles (billing) · project roles (operations) · custom overlays"
+        eyebrow={t("console.people.roles.eyebrow", undefined, "People")}
+        title={t("console.people.roles.title", undefined, "Role Matrix")}
+        subtitle={t(
+          "console.people.roles.subtitle",
+          undefined,
+          "Platform roles (billing) · project roles (operations) · custom overlays",
+        )}
       />
       <div className="page-content max-w-5xl space-y-6">
         <section>
           <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
-            Platform roles — org-level, govern billing & access
+            {t(
+              "console.people.roles.platformHeading",
+              undefined,
+              "Platform roles — org-level, govern billing & access",
+            )}
           </h3>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Role</th>
-                  <th>Tier</th>
-                  <th>Capabilities</th>
+                  <th>{t("console.people.roles.col.role", undefined, "Role")}</th>
+                  <th>{t("console.people.roles.col.tier", undefined, "Tier")}</th>
+                  <th>{t("console.people.roles.col.capabilities", undefined, "Capabilities")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -80,14 +95,18 @@ export default async function RolesPage() {
 
         <section>
           <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
-            Project roles — per-project, govern operational access
+            {t(
+              "console.people.roles.projectHeading",
+              undefined,
+              "Project roles — per-project, govern operational access",
+            )}
           </h3>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Role</th>
-                  <th>Capabilities</th>
+                  <th>{t("console.people.roles.col.role", undefined, "Role")}</th>
+                  <th>{t("console.people.roles.col.capabilities", undefined, "Capabilities")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,27 +122,43 @@ export default async function RolesPage() {
             </table>
           </div>
           <p className="mt-2 text-xs text-[var(--text-muted)]">
-            Platform <code>owner</code>, <code>admin</code>, and <code>manager</code> auto-bypass project_members and
-            act as project <code>lead</code> on every project in the org.
+            {t("console.people.roles.bypassNote.prefix", undefined, "Platform ")}
+            <code>owner</code>
+            {t("console.people.roles.bypassNote.comma1", undefined, ", ")}
+            <code>admin</code>
+            {t("console.people.roles.bypassNote.and", undefined, ", and ")}
+            <code>manager</code>
+            {t("console.people.roles.bypassNote.middle", undefined, " auto-bypass project_members and act as project ")}
+            <code>lead</code>
+            {t("console.people.roles.bypassNote.suffix", undefined, " on every project in the org.")}
           </p>
         </section>
 
         <section className="surface p-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Custom Roles</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.people.roles.custom.heading", undefined, "Custom Roles")}
+            </h3>
             <CustomRoleForm />
           </div>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Custom roles layer on top of platform roles. Use them to scope a specific permission set per team (e.g.{" "}
-            <code>finance-reader</code>, <code>safety-officer</code>).
+            {t(
+              "console.people.roles.custom.intro",
+              undefined,
+              "Custom roles layer on top of platform roles. Use them to scope a specific permission set per team (e.g. ",
+            )}
+            <code>finance-reader</code>
+            {t("console.people.roles.custom.intro.comma", undefined, ", ")}
+            <code>safety-officer</code>
+            {t("console.people.roles.custom.intro.suffix", undefined, ").")}
           </p>
           <table className="data-table mt-4 w-full text-sm">
             <thead>
               <tr>
-                <th>Slug</th>
-                <th>Label</th>
-                <th>Description</th>
-                <th>Permissions</th>
+                <th>{t("console.people.roles.col.slug", undefined, "Slug")}</th>
+                <th>{t("console.people.roles.col.label", undefined, "Label")}</th>
+                <th>{t("console.people.roles.col.description", undefined, "Description")}</th>
+                <th>{t("console.people.roles.col.permissions", undefined, "Permissions")}</th>
                 <th></th>
               </tr>
             </thead>
@@ -131,7 +166,7 @@ export default async function RolesPage() {
               {(customRoles ?? []).length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-6 text-center text-[var(--text-muted)]">
-                    No custom roles yet.
+                    {t("console.people.roles.empty", undefined, "No custom roles yet.")}
                   </td>
                 </tr>
               ) : (
@@ -146,7 +181,7 @@ export default async function RolesPage() {
                         <form action={deleteCustomRole}>
                           <input type="hidden" name="id" value={r.id} />
                           <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
-                            Delete
+                            {t("common.delete", undefined, "Delete")}
                           </button>
                         </form>
                       )}

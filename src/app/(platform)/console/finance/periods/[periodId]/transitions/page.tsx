@@ -5,6 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { getAccountingPeriod, listAccountingPeriodTransitions } from "@/lib/accounting-periods";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export default async function AccountingPeriodTransitionsPage({ params }: { para
   const period = await getAccountingPeriod(session.orgId, periodId);
   if (!period) notFound();
   const transitions = await listAccountingPeriodTransitions(session.orgId, periodId);
+  const { t } = await getRequestT();
 
   return (
     <>
@@ -26,35 +28,44 @@ export default async function AccountingPeriodTransitionsPage({ params }: { para
             </Link>
           ) as unknown as string
         }
-        title="State Transitions"
-        subtitle={`${transitions.length} append-only entries`}
+        title={t("console.finance.periods.transitions.title", undefined, "State Transitions")}
+        subtitle={t(
+          "console.finance.periods.transitions.subtitle",
+          { count: transitions.length },
+          `${transitions.length} append-only entries`,
+        )}
       />
       <div className="page-content">
         <div className="surface overflow-hidden">
           <table className="data-table">
             <thead>
               <tr>
-                <th>When</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Reason</th>
-                <th>By</th>
+                <th>{t("console.finance.periods.transitions.col.when", undefined, "When")}</th>
+                <th>{t("console.finance.periods.transitions.col.from", undefined, "From")}</th>
+                <th>{t("console.finance.periods.transitions.col.to", undefined, "To")}</th>
+                <th>{t("console.finance.periods.transitions.col.reason", undefined, "Reason")}</th>
+                <th>{t("console.finance.periods.transitions.col.by", undefined, "By")}</th>
               </tr>
             </thead>
             <tbody>
-              {transitions.map((t) => (
-                <tr key={t.id}>
-                  <td className="font-mono text-xs">{new Date(t.transitioned_at).toLocaleString()}</td>
-                  <td className="font-mono text-xs">{t.from_state ?? "(initial)"}</td>
-                  <td className="font-mono text-xs font-bold">{t.to_state}</td>
-                  <td>{t.reason ?? "—"}</td>
-                  <td className="font-mono text-xs">{t.transitioned_by ?? "—"}</td>
+              {transitions.map((row) => (
+                <tr key={row.id}>
+                  <td className="font-mono text-xs">{new Date(row.transitioned_at).toLocaleString()}</td>
+                  <td className="font-mono text-xs">
+                    {row.from_state ?? t("console.finance.periods.transitions.initial", undefined, "(initial)")}
+                  </td>
+                  <td className="font-mono text-xs font-bold">{row.to_state}</td>
+                  <td>{row.reason ?? "—"}</td>
+                  <td className="font-mono text-xs">{row.transitioned_by ?? "—"}</td>
                 </tr>
               ))}
               {transitions.length === 0 && (
                 <tr>
                   <td colSpan={5} className="py-6 text-center">
-                    <EmptyState size="compact" title="No transitions yet" />
+                    <EmptyState
+                      size="compact"
+                      title={t("console.finance.periods.transitions.empty", undefined, "No transitions yet")}
+                    />
                   </td>
                 </tr>
               )}

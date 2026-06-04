@@ -8,6 +8,7 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { deleteSponsorEntitlement } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,13 +25,19 @@ function fmtDate(v: unknown): string {
 }
 
 export default async function Page({ params }: { params: Promise<{ sponsorId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Commercial · Sponsors" title="Entitlement" />
+        <ModuleHeader
+          eyebrow={t("console.commercial.sponsors.detail.eyebrow", undefined, "Commercial · Sponsors")}
+          title={t("console.commercial.sponsors.detail.title", undefined, "Entitlement")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.commercial.sponsors.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -48,29 +55,49 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
   return (
     <>
       <ModuleHeader
-        eyebrow="Commercial · Sponsor Entitlements"
+        eyebrow={t("console.commercial.sponsors.detail.eyebrowFull", undefined, "Commercial · Sponsor Entitlements")}
         title={title}
         subtitle={
           quantity != null
-            ? `Qty ${quantity}${dueBy ? ` · Due ${fmtDate(dueBy)}` : ""}`
+            ? t(
+                "console.commercial.sponsors.detail.subtitleQtyDue",
+                {
+                  quantity,
+                  due: dueBy
+                    ? t(
+                        "console.commercial.sponsors.detail.dueSuffix",
+                        { date: fmtDate(dueBy) },
+                        ` · Due ${fmtDate(dueBy)}`,
+                      )
+                    : "",
+                },
+                `Qty ${quantity}${dueBy ? ` · Due ${fmtDate(dueBy)}` : ""}`,
+              )
             : dueBy
-              ? `Due ${fmtDate(dueBy)}`
+              ? t("console.commercial.sponsors.detail.subtitleDue", { date: fmtDate(dueBy) }, `Due ${fmtDate(dueBy)}`)
               : undefined
         }
         breadcrumbs={[
-          { label: "Commercial", href: "/console" },
-          { label: "Sponsors", href: "/console/commercial/sponsors" },
+          { label: t("console.commercial.breadcrumb", undefined, "Commercial"), href: "/console" },
+          {
+            label: t("console.commercial.sponsors.breadcrumb", undefined, "Sponsors"),
+            href: "/console/commercial/sponsors",
+          },
           { label: title },
         ]}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[status] ?? "muted"}>{toTitle(status)}</Badge>
             <Button href={`/console/commercial/sponsors/${p.sponsorId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteSponsorEntitlement.bind(null, p.sponsorId)}
-              confirm="Delete this entitlement? This cannot be undone."
+              confirm={t(
+                "console.commercial.sponsors.detail.deleteConfirm",
+                undefined,
+                "Delete this entitlement? This cannot be undone.",
+              )}
             />
           </div>
         }
@@ -78,17 +105,25 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
       <div className="page-content space-y-4">
         <section className="surface p-6">
           <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
-            Entitlement
+            {t("console.commercial.sponsors.detail.sectionEntitlement", undefined, "Entitlement")}
           </h2>
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field label="Title">{title}</Field>
-            <Field label="Status">{toTitle(status)}</Field>
-            <Field label="Quantity">{quantity ?? "—"}</Field>
-            <Field label="Due By">{fmtDate(dueBy)}</Field>
+            <Field label={t("console.commercial.sponsors.detail.fieldTitle", undefined, "Title")}>{title}</Field>
+            <Field label={t("console.commercial.sponsors.detail.fieldStatus", undefined, "Status")}>
+              {toTitle(status)}
+            </Field>
+            <Field label={t("console.commercial.sponsors.detail.fieldQuantity", undefined, "Quantity")}>
+              {quantity ?? "—"}
+            </Field>
+            <Field label={t("console.commercial.sponsors.detail.fieldDueBy", undefined, "Due By")}>
+              {fmtDate(dueBy)}
+            </Field>
           </dl>
           {notes && (
             <div className="mt-4">
-              <div className="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">Notes</div>
+              <div className="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+                {t("console.commercial.sponsors.detail.notesLabel", undefined, "Notes")}
+              </div>
               <p className="mt-2 text-sm whitespace-pre-wrap">{notes}</p>
             </div>
           )}

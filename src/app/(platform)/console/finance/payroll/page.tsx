@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -48,12 +48,18 @@ const AGENCY_LABEL: Record<AgencyReport, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="Certified Payroll" />
+        <ModuleHeader
+          eyebrow={t("console.finance.payroll.eyebrow", undefined, "Finance")}
+          title={t("console.finance.payroll.title", undefined, "Certified Payroll")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.payroll.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -82,42 +88,74 @@ export default async function Page() {
     return fmt.money(Math.round(n * 100));
   }
 
+  const subtitle = t(
+    "console.finance.payroll.subtitle",
+    {
+      runs: rows.length,
+      runLabel:
+        rows.length === 1
+          ? t("console.finance.payroll.runSingular", undefined, "run")
+          : t("console.finance.payroll.runPlural", undefined, "runs"),
+      outstanding: outstandingCount,
+      submitted: submittedCount,
+      gross: fmtMoney(totalGross),
+    },
+    `${rows.length} run${rows.length === 1 ? "" : "s"} · ${outstandingCount} outstanding · ${submittedCount} submitted · ${fmtMoney(totalGross)} gross YTD`,
+  );
+
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="Certified Payroll"
-        subtitle={`${rows.length} run${rows.length === 1 ? "" : "s"} · ${outstandingCount} outstanding · ${submittedCount} submitted · ${fmtMoney(totalGross)} gross YTD`}
+        eyebrow={t("console.finance.payroll.eyebrow", undefined, "Finance")}
+        title={t("console.finance.payroll.title", undefined, "Certified Payroll")}
+        subtitle={subtitle}
         action={
           <Button href="/console/finance/payroll/new" size="sm">
-            + New Payroll Run
+            {t("console.finance.payroll.newRun", undefined, "+ New Payroll Run")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Outstanding" value={fmt.number(outstandingCount)} accent />
-          <MetricCard label="Submitted" value={fmt.number(submittedCount)} />
-          <MetricCard label="Gross YTD" value={fmtMoney(totalGross)} />
+          <MetricCard
+            label={t("console.finance.payroll.metrics.outstanding", undefined, "Outstanding")}
+            value={fmt.number(outstandingCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.payroll.metrics.submitted", undefined, "Submitted")}
+            value={fmt.number(submittedCount)}
+          />
+          <MetricCard
+            label={t("console.finance.payroll.metrics.grossYTD", undefined, "Gross YTD")}
+            value={fmtMoney(totalGross)}
+          />
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Davis-Bacon (WH-347), CA DIR, NY PWA, WA L&I supported via agency_report_type. PDF generator + state XML
-          exporters are separate tickets; schema, RLS, and admin view are live.
+          {t(
+            "console.finance.payroll.compliance",
+            undefined,
+            "Davis-Bacon (WH-347), CA DIR, NY PWA, WA L&I supported via agency_report_type. PDF generator + state XML exporters are separate tickets; schema, RLS, and admin view are live.",
+          )}
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/api/v1/payroll-runs/${r.id}/pdf`}
-          emptyLabel="No payroll runs yet"
-          emptyDescription="A payroll run is one week-ending per project. Lines hold per-employee hours by classification + wage determination."
+          emptyLabel={t("console.finance.payroll.emptyLabel", undefined, "No payroll runs yet")}
+          emptyDescription={t(
+            "console.finance.payroll.emptyDescription",
+            undefined,
+            "A payroll run is one week-ending per project. Lines hold per-employee hours by classification + wage determination.",
+          )}
           emptyAction={
             <Button href="/console/finance/payroll/new" size="sm">
-              + New Payroll Run
+              {t("console.finance.payroll.newRun", undefined, "+ New Payroll Run")}
             </Button>
           }
           columns={[
             {
               key: "week",
-              header: "Week Ending",
+              header: t("console.finance.payroll.columns.weekEnding", undefined, "Week Ending"),
               render: (r) =>
                 fmt.dateParts(r.week_ending + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.week_ending,
@@ -125,7 +163,7 @@ export default async function Page() {
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.finance.payroll.columns.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -133,7 +171,7 @@ export default async function Page() {
             },
             {
               key: "agency",
-              header: "Agency",
+              header: t("console.finance.payroll.columns.agency", undefined, "Agency"),
               render: (r) => AGENCY_LABEL[r.agency_report_type],
               accessor: (r) => r.agency_report_type,
               filterable: true,
@@ -142,7 +180,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.finance.payroll.columns.state", undefined, "State"),
               render: (r) => r.state_code ?? "—",
               accessor: (r) => r.state_code,
               filterable: true,
@@ -151,21 +189,21 @@ export default async function Page() {
             },
             {
               key: "hours",
-              header: "Hours",
+              header: t("console.finance.payroll.columns.hours", undefined, "Hours"),
               render: (r) => Number(r.total_hours).toFixed(1),
               accessor: (r) => Number(r.total_hours),
               className: "font-mono text-xs text-right",
             },
             {
               key: "gross",
-              header: "Gross",
+              header: t("console.finance.payroll.columns.gross", undefined, "Gross"),
               render: (r) => fmtMoney(Number(r.total_gross)),
               accessor: (r) => Number(r.total_gross),
               className: "font-mono text-xs text-right",
             },
             {
               key: "run_state",
-              header: "State",
+              header: t("console.finance.payroll.columns.runState", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.run_state]}>{toTitle(r.run_state)}</Badge>,
               accessor: (r) => r.run_state,
               filterable: true,

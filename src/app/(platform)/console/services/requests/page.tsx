@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -28,32 +28,43 @@ const STATUS_TONE: Record<ServiceRequest["status"], StatusTone> = {
   cancelled: "muted",
 };
 
-function slaChip(due: string | null, now: number, breached: boolean) {
+function slaChip(
+  due: string | null,
+  now: number,
+  breached: boolean,
+  translate: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+) {
   if (!due) return null;
   const ms = new Date(due).getTime() - now;
   const min = Math.round(ms / 60000);
   if (breached || ms < 0)
     return (
       <Badge variant="error" className="ms-2">
-        SLA breached
+        {translate("console.services.requests.slaBreached", undefined, "SLA breached")}
       </Badge>
     );
   if (min < 15)
     return (
       <Badge variant="warning" className="ms-2">
-        {min}m left
+        {translate("console.services.requests.minutesLeft", { min }, `${min}m left`)}
       </Badge>
     );
   return null;
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Services" title="Service Requests" />
+        <ModuleHeader
+          eyebrow={t("console.services.requests.eyebrow", undefined, "Services")}
+          title={t("console.services.requests.title", undefined, "Service Requests")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.services.requests.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -91,12 +102,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Services"
-        title="Service Requests"
-        subtitle={`${open} Open  · ${breached} SLA breached · ${rows.length} Total`}
+        eyebrow={t("console.services.requests.eyebrow", undefined, "Services")}
+        title={t("console.services.requests.title", undefined, "Service Requests")}
+        subtitle={t(
+          "console.services.requests.subtitle",
+          { open, breached, total: rows.length },
+          `${open} Open  · ${breached} SLA breached · ${rows.length} Total`,
+        )}
         action={
           <Button href="/console/services/requests/new" size="sm">
-            + Open request
+            {t("console.services.requests.openRequest", undefined, "+ Open request")}
           </Button>
         }
       />
@@ -104,17 +119,21 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/services/requests/${r.id}`}
-          emptyLabel="No service requests"
-          emptyDescription="Triage queue for live-event service tickets — AV breakdowns, cleaning, repairs, hospitality, IT, security. P1 unacknowledged past the response SLA escalates to a crisis alert."
+          emptyLabel={t("console.services.requests.emptyLabel", undefined, "No service requests")}
+          emptyDescription={t(
+            "console.services.requests.emptyDescription",
+            undefined,
+            "Triage queue for live-event service tickets — AV breakdowns, cleaning, repairs, hospitality, IT, security. P1 unacknowledged past the response SLA escalates to a crisis alert.",
+          )}
           emptyAction={
             <Button href="/console/services/requests/new" size="sm">
-              + Open request
+              {t("console.services.requests.openRequest", undefined, "+ Open request")}
             </Button>
           }
           columns={[
             {
               key: "severity",
-              header: "Sev",
+              header: t("console.services.requests.columns.severity", undefined, "Sev"),
               render: (r) => (
                 <Badge variant={SEV_TONE[r.severity as ServiceRequest["severity"]]}>{String(r.severity)}</Badge>
               ),
@@ -124,7 +143,7 @@ export default async function Page() {
             },
             {
               key: "category",
-              header: "Category",
+              header: t("console.services.requests.columns.category", undefined, "Category"),
               render: (r) => <span className="font-mono text-xs">{String(r.category)}</span>,
               filterable: true,
               groupable: true,
@@ -132,13 +151,13 @@ export default async function Page() {
             },
             {
               key: "summary",
-              header: "Summary",
+              header: t("console.services.requests.columns.summary", undefined, "Summary"),
               render: (r) => String(r.summary ?? "—"),
               accessor: (r) => r.summary ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.services.requests.columns.status", undefined, "Status"),
               render: (r) => (
                 <span className="flex items-center">
                   <Badge variant={STATUS_TONE[r.status as ServiceRequest["status"]]}>{toTitle(String(r.status))}</Badge>
@@ -147,6 +166,7 @@ export default async function Page() {
                       (r.status === "open" ? r.sla_response_due : r.sla_resolution_due) as string | null,
                       now,
                       Boolean(r.status === "open" ? r.sla_response_breached : r.sla_resolution_breached),
+                      t,
                     )}
                 </span>
               ),
@@ -156,7 +176,7 @@ export default async function Page() {
             },
             {
               key: "opened",
-              header: "Opened",
+              header: t("console.services.requests.columns.opened", undefined, "Opened"),
               render: (r) => <span className="font-mono text-xs">{fmt.dateTime(String(r.opened_at))}</span>,
               accessor: (r) => r.opened_at ?? null,
             },

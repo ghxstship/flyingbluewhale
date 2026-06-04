@@ -6,6 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteSsoProvider, toggleSsoProvider, upsertSsoProvider } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -28,12 +29,18 @@ const TYPE_TONE: Record<string, "muted" | "info"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Single Sign-On" />
+        <ModuleHeader
+          eyebrow={t("console.settings.sso.eyebrow", undefined, "Settings")}
+          title={t("console.settings.sso.title", undefined, "Single Sign-On")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.sso.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -51,26 +58,37 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Single Sign-On"
-        subtitle={`${providers.length} configured · ${enabledCount} enabled · users with a matching email domain SSO-redirect at login`}
-        breadcrumbs={[{ label: "Settings", href: "/console/settings" }, { label: "SSO" }]}
+        eyebrow={t("console.settings.sso.eyebrow", undefined, "Settings")}
+        title={t("console.settings.sso.title", undefined, "Single Sign-On")}
+        subtitle={t(
+          "console.settings.sso.subtitle",
+          { count: providers.length, enabled: enabledCount },
+          `${providers.length} configured · ${enabledCount} enabled · users with a matching email domain SSO-redirect at login`,
+        )}
+        breadcrumbs={[
+          { label: t("console.settings.sso.breadcrumbSettings", undefined, "Settings"), href: "/console/settings" },
+          { label: t("console.settings.sso.breadcrumbSso", undefined, "SSO") },
+        ]}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
           rows={providers}
-          emptyLabel="No SSO providers"
-          emptyDescription="Add your IdP below. Once enabled, anyone signing in with one of the listed email domains gets bounced to your IdP instead of password auth."
+          emptyLabel={t("console.settings.sso.emptyLabel", undefined, "No SSO providers")}
+          emptyDescription={t(
+            "console.settings.sso.emptyDescription",
+            undefined,
+            "Add your IdP below. Once enabled, anyone signing in with one of the listed email domains gets bounced to your IdP instead of password auth.",
+          )}
           columns={[
             {
               key: "name",
-              header: "Name",
+              header: t("console.settings.sso.col.name", undefined, "Name"),
               render: (r) => <span className="font-semibold">{r.name}</span>,
               accessor: (r) => r.name,
             },
             {
               key: "provider_type",
-              header: "Protocol",
+              header: t("console.settings.sso.col.protocol", undefined, "Protocol"),
               render: (r) => (
                 <Badge variant={TYPE_TONE[r.provider_type] ?? "muted"}>{r.provider_type.toUpperCase()}</Badge>
               ),
@@ -80,7 +98,7 @@ export default async function Page() {
             },
             {
               key: "email_domains",
-              header: "Email domains",
+              header: t("console.settings.sso.col.emailDomains", undefined, "Email domains"),
               render: (r) =>
                 r.email_domains.length === 0 ? (
                   <span className="text-xs text-[var(--text-muted)]">—</span>
@@ -97,24 +115,30 @@ export default async function Page() {
             },
             {
               key: "supabase_id",
-              header: "Supabase ID",
+              header: t("console.settings.sso.col.supabaseId", undefined, "Supabase ID"),
               render: (r) =>
                 r.supabase_id ? (
                   <code className="font-mono text-xs">{r.supabase_id}</code>
                 ) : (
-                  <span className="text-xs text-[var(--text-muted)]">unlinked</span>
+                  <span className="text-xs text-[var(--text-muted)]">
+                    {t("console.settings.sso.unlinked", undefined, "unlinked")}
+                  </span>
                 ),
               accessor: (r) => r.supabase_id ?? "",
             },
             {
               key: "enabled",
-              header: "State",
+              header: t("console.settings.sso.col.state", undefined, "State"),
               render: (r) => (
                 <form action={toggleSsoProvider}>
                   <input type="hidden" name="id" value={r.id} />
                   <input type="hidden" name="enabled" value={String(!r.enabled)} />
                   <Button type="submit" variant="ghost" size="sm">
-                    {r.enabled ? <Badge variant="success">Enabled</Badge> : <Badge variant="muted">Disabled</Badge>}
+                    {r.enabled ? (
+                      <Badge variant="success">{t("console.settings.sso.enabled", undefined, "Enabled")}</Badge>
+                    ) : (
+                      <Badge variant="muted">{t("console.settings.sso.disabled", undefined, "Disabled")}</Badge>
+                    )}
                   </Button>
                 </form>
               ),
@@ -125,7 +149,11 @@ export default async function Page() {
               render: (r) => (
                 <DeleteForm
                   action={deleteSsoProvider.bind(null, r.id)}
-                  confirm={`Delete the "${r.name}" SSO provider? Users with email domains routed through it will fall back to password auth.`}
+                  confirm={t(
+                    "console.settings.sso.deleteConfirm",
+                    { name: r.name },
+                    `Delete the "${r.name}" SSO provider? Users with email domains routed through it will fall back to password auth.`,
+                  )}
                 />
               ),
             },
@@ -133,10 +161,15 @@ export default async function Page() {
         />
 
         <section className="surface p-5">
-          <h2 className="text-sm font-semibold">Add / Update Provider</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.sso.addUpdate.title", undefined, "Add / Update Provider")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            The Supabase ID links this provider row to the underlying Supabase Auth SSO config (created via the Supabase
-            dashboard or admin API). Leave blank if you want to draft a provider before linking the IdP.
+            {t(
+              "console.settings.sso.addUpdate.description",
+              undefined,
+              "The Supabase ID links this provider row to the underlying Supabase Auth SSO config (created via the Supabase dashboard or admin API). Leave blank if you want to draft a provider before linking the IdP.",
+            )}
           </p>
           <form
             action={upsertSsoProvider}
@@ -146,44 +179,68 @@ export default async function Page() {
               name="name"
               required
               maxLength={120}
-              placeholder='Display name (e.g. "Okta — Production")'
+              placeholder={t(
+                "console.settings.sso.form.namePlaceholder",
+                undefined,
+                'Display name (e.g. "Okta — Production")',
+              )}
               className="input-base sm:col-span-3"
             />
             <select name="provider_type" required defaultValue="saml" className="input-base sm:col-span-1">
-              <option value="saml">SAML</option>
-              <option value="oidc">OIDC</option>
+              <option value="saml">{t("console.settings.sso.form.saml", undefined, "SAML")}</option>
+              <option value="oidc">{t("console.settings.sso.form.oidc", undefined, "OIDC")}</option>
             </select>
             <input
               name="email_domains"
               maxLength={500}
-              placeholder="acme.com, contractors.acme.com"
+              placeholder={t(
+                "console.settings.sso.form.emailDomainsPlaceholder",
+                undefined,
+                "acme.com, contractors.acme.com",
+              )}
               className="input-base sm:col-span-2"
             />
             <input
               name="supabase_id"
               maxLength={120}
-              placeholder="Supabase Auth SSO provider ID (optional)"
+              placeholder={t(
+                "console.settings.sso.form.supabaseIdPlaceholder",
+                undefined,
+                "Supabase Auth SSO provider ID (optional)",
+              )}
               className="input-base sm:col-span-3"
             />
             <input
               name="logout_url"
               type="url"
               maxLength={500}
-              placeholder="Single-logout URL (optional)"
+              placeholder={t(
+                "console.settings.sso.form.logoutUrlPlaceholder",
+                undefined,
+                "Single-logout URL (optional)",
+              )}
               className="input-base sm:col-span-3"
             />
             <label className="flex items-center gap-2 text-xs sm:col-span-3">
               <input type="checkbox" name="enabled" value="true" defaultChecked />
-              Enabled on save (uncheck to draft without activating)
+              {t(
+                "console.settings.sso.form.enabledLabel",
+                undefined,
+                "Enabled on save (uncheck to draft without activating)",
+              )}
             </label>
             <div className="flex justify-end sm:col-span-6">
               <Button type="submit" size="sm" variant="secondary">
-                Save Provider
+                {t("console.settings.sso.form.save", undefined, "Save Provider")}
               </Button>
             </div>
           </form>
           <p className="mt-2 text-[10px] text-[var(--text-muted)]">
-            Email domains: comma-separated, no <code>@</code>. Lowercased on save.
+            {t(
+              "console.settings.sso.form.emailDomainsHint",
+              undefined,
+              "Email domains: comma-separated, no @. Lowercased on save.",
+            )}
           </p>
         </section>
       </div>

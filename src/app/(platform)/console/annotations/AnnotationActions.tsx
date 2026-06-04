@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { acknowledgeAction, confirmAction, dismissAction, resolveAction, replyAction } from "./actions";
 import type { Annotation } from "@/lib/db/annotations";
 
@@ -17,6 +18,7 @@ export function AnnotationActions({
   confirmationRequired: boolean;
   confirmedAt: string | null;
 }) {
+  const t = useT();
   const [pending, start] = useTransition();
   const isOpen = status === "open";
   const isClosed = status === "resolved" || status === "dismissed";
@@ -32,8 +34,12 @@ export function AnnotationActions({
   return (
     <div className="flex flex-wrap items-center gap-2">
       {needsConfirmation && (
-        <Button size="sm" disabled={pending} onClick={run("Confirmed", () => confirmAction(id))}>
-          {pending ? "…" : "Confirm"}
+        <Button
+          size="sm"
+          disabled={pending}
+          onClick={run(t("console.annotations.confirmedToast", undefined, "Confirmed"), () => confirmAction(id))}
+        >
+          {pending ? "…" : t("console.annotations.confirm", undefined, "Confirm")}
         </Button>
       )}
       {isOpen && (
@@ -41,15 +47,22 @@ export function AnnotationActions({
           size="sm"
           variant="secondary"
           disabled={pending}
-          onClick={run("Acknowledged", () => acknowledgeAction(id))}
+          onClick={run(t("console.annotations.acknowledgedToast", undefined, "Acknowledged"), () =>
+            acknowledgeAction(id),
+          )}
         >
-          {pending ? "…" : "Acknowledge"}
+          {pending ? "…" : t("console.annotations.acknowledge", undefined, "Acknowledge")}
         </Button>
       )}
       {!isClosed && <ResolveButton id={id} pending={pending} start={start} />}
       {!isClosed && (
-        <Button size="sm" variant="secondary" disabled={pending} onClick={run("Dismissed", () => dismissAction(id))}>
-          {pending ? "…" : "Dismiss"}
+        <Button
+          size="sm"
+          variant="secondary"
+          disabled={pending}
+          onClick={run(t("console.annotations.dismissedToast", undefined, "Dismissed"), () => dismissAction(id))}
+        >
+          {pending ? "…" : t("console.annotations.dismiss", undefined, "Dismiss")}
         </Button>
       )}
     </div>
@@ -65,25 +78,29 @@ function ResolveButton({
   pending: boolean;
   start: (cb: () => Promise<void> | void) => void;
 }) {
+  const t = useT();
   return (
     <Button
       size="sm"
       disabled={pending}
       onClick={() =>
         start(async () => {
-          const note = window.prompt("Resolution note (optional):") ?? undefined;
+          const note =
+            window.prompt(t("console.annotations.resolutionNotePrompt", undefined, "Resolution note (optional):")) ??
+            undefined;
           const r = await resolveAction(id, note);
           if (r?.error) toast.error(r.error);
-          else toast.success("Resolved");
+          else toast.success(t("console.annotations.resolvedToast", undefined, "Resolved"));
         })
       }
     >
-      {pending ? "…" : "Resolve"}
+      {pending ? "…" : t("console.annotations.resolve", undefined, "Resolve")}
     </Button>
   );
 }
 
 export function ReplyForm({ parentId }: { parentId: string }) {
+  const t = useT();
   const [body, setBody] = useState("");
   const [pending, start] = useTransition();
   return (
@@ -95,7 +112,7 @@ export function ReplyForm({ parentId }: { parentId: string }) {
           const r = await replyAction(parentId, body);
           if (r?.error) toast.error(r.error);
           else {
-            toast.success("Reply posted");
+            toast.success(t("console.annotations.replyPostedToast", undefined, "Reply posted"));
             setBody("");
           }
         });
@@ -104,14 +121,14 @@ export function ReplyForm({ parentId }: { parentId: string }) {
     >
       <textarea
         className="surface min-h-24 w-full p-3 text-sm"
-        placeholder="Reply to this annotation…"
+        placeholder={t("console.annotations.replyPlaceholder", undefined, "Reply to this annotation…")}
         value={body}
         onChange={(e) => setBody(e.target.value)}
         disabled={pending}
       />
       <div>
         <Button type="submit" size="sm" disabled={pending || !body.trim()}>
-          {pending ? "…" : "Post reply"}
+          {pending ? "…" : t("console.annotations.postReply", undefined, "Post reply")}
         </Button>
       </div>
     </form>

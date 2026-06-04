@@ -5,17 +5,23 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CueForm, CueRow } from "./CueForm";
 import type { Cue } from "@/lib/supabase/types";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function RunOfShowPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Run of Show" />
+        <ModuleHeader
+          eyebrow={t("console.production.ros.eyebrow", undefined, "Production")}
+          title={t("console.production.ros.title", undefined, "Run of Show")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.ros.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -42,15 +48,23 @@ export default async function RunOfShowPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
-        title="Run of Show"
-        subtitle={`${rows.length} cue${rows.length === 1 ? "" : "s"} on the show plan`}
+        eyebrow={t("console.production.ros.eyebrow", undefined, "Production")}
+        title={t("console.production.ros.title", undefined, "Run of Show")}
+        subtitle={
+          rows.length === 1
+            ? t("console.production.ros.subtitleOne", { count: rows.length }, `${rows.length} cue on the show plan`)
+            : t("console.production.ros.subtitleOther", { count: rows.length }, `${rows.length} cues on the show plan`)
+        }
       />
       <div className="page-content max-w-5xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Add a Cue</h3>
+          <h3 className="text-sm font-semibold">{t("console.production.ros.addCue", undefined, "Add a Cue")}</h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Cues live across departments. Status flows Pending → Standby → Live → Done.
+            {t(
+              "console.production.ros.addCueHint",
+              undefined,
+              "Cues live across departments. Status flows Pending → Standby → Live → Done.",
+            )}
           </p>
           <div className="mt-4">
             <CueForm />
@@ -59,7 +73,7 @@ export default async function RunOfShowPage() {
 
         {grouped.size === 0 ? (
           <section className="surface p-8 text-center text-sm text-[var(--text-muted)]">
-            No cues yet — author one above.
+            {t("console.production.ros.empty", undefined, "No cues yet — author one above.")}
           </section>
         ) : (
           Array.from(grouped.entries()).map(([day, cues]) => (
@@ -74,17 +88,19 @@ export default async function RunOfShowPage() {
                   })}
                 </h3>
                 <Badge variant="muted">
-                  {cues.length} cue{cues.length === 1 ? "" : "s"}
+                  {cues.length === 1
+                    ? t("console.production.ros.countOne", { count: cues.length }, `${cues.length} cue`)
+                    : t("console.production.ros.countOther", { count: cues.length }, `${cues.length} cues`)}
                 </Badge>
               </header>
               <table className="data-table w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Time</th>
-                    <th>Lane</th>
-                    <th>Cue</th>
-                    <th>Status</th>
-                    <th className="text-end">Actions</th>
+                    <th>{t("console.production.ros.col.time", undefined, "Time")}</th>
+                    <th>{t("console.production.ros.col.lane", undefined, "Lane")}</th>
+                    <th>{t("console.production.ros.col.cue", undefined, "Cue")}</th>
+                    <th>{t("console.production.ros.col.status", undefined, "Status")}</th>
+                    <th className="text-end">{t("console.production.ros.col.actions", undefined, "Actions")}</th>
                   </tr>
                 </thead>
                 <tbody>

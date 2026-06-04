@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateFormDefAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -21,12 +22,18 @@ const STARTER_SCHEMA: Json = {
 
 export default async function Page({ params }: { params: Promise<{ formId: string }> }) {
   const { formId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Forms" title="Edit Form" />
+        <ModuleHeader
+          eyebrow={t("console.forms.eyebrow", undefined, "Forms")}
+          title={t("console.forms.edit.title", undefined, "Edit Form")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.forms.edit.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -61,20 +68,20 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Forms"
-        title={`Edit · ${form.title}`}
-        subtitle="Update title, slug, status, and the JSON schema."
+        eyebrow={t("console.forms.eyebrow", undefined, "Forms")}
+        title={t("console.forms.edit.headerTitle", { title: form.title }, `Edit · ${form.title}`)}
+        subtitle={t("console.forms.edit.subtitle", undefined, "Update title, slug, status, and the JSON schema.")}
         breadcrumbs={[
-          { label: "Forms", href: "/console/forms" },
+          { label: t("console.forms.eyebrow", undefined, "Forms"), href: "/console/forms" },
           { label: form.title, href: `/console/forms/${form.id}` },
-          { label: "Edit" },
+          { label: t("console.forms.edit.breadcrumb", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-3xl">
         <FormShell
           action={updateFormDefAction}
           cancelHref={`/console/forms/${form.id}`}
-          submitLabel="Save Form"
+          submitLabel={t("console.forms.edit.submit", undefined, "Save Form")}
           dirtyGuard
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
@@ -82,19 +89,31 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
           <input type="hidden" name="formId" value={form.id} />
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <Input label="Title" name="title" defaultValue={form.title} required maxLength={200} />
             <Input
-              label="Slug"
+              label={t("console.forms.edit.fields.title", undefined, "Title")}
+              name="title"
+              defaultValue={form.title}
+              required
+              maxLength={200}
+            />
+            <Input
+              label={t("console.forms.edit.fields.slug", undefined, "Slug")}
               name="slug"
               defaultValue={form.slug}
               required
               maxLength={120}
-              hint="Lowercase, dashes ok. Public form lives at /forms/<slug>."
+              hint={t(
+                "console.forms.edit.fields.slugHint",
+                undefined,
+                "Lowercase, dashes ok. Public form lives at /forms/<slug>.",
+              )}
             />
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.forms.edit.fields.description", undefined, "Description")}
+            </label>
             <textarea
               name="description"
               defaultValue={form.description ?? ""}
@@ -105,7 +124,9 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Status</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.forms.edit.fields.status", undefined, "Status")}
+            </label>
             <div className="mt-1.5 grid grid-cols-3 gap-1.5">
               {(["draft", "published", "archived"] as const).map((s) => (
                 <label key={s} className="surface hover-lift flex cursor-pointer items-center gap-2 px-3 py-2 text-sm">
@@ -124,7 +145,8 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
 
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              Schema (JSON) <span className="text-[var(--color-error)]">*</span>
+              {t("console.forms.edit.fields.schemaJson", undefined, "Schema (JSON)")}{" "}
+              <span className="text-[var(--color-error)]">*</span>
             </label>
             <textarea
               name="schema_json"
@@ -135,9 +157,13 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
               className="input-base mt-1.5 w-full font-mono text-xs"
             />
             <p className="mt-1 text-[11px] text-[var(--text-muted)]">
-              Shape:{" "}
-              <code>{`{ "fields": [{ "key", "label", "type", "required"?, "placeholder"?, "options"? }] }`}</code>.
-              Field types: text, textarea, email, url, number, date, select, checkbox.
+              {t("console.forms.edit.fields.schemaShapeLabel", undefined, "Shape:")}{" "}
+              <code>{`{ "fields": [{ "key", "label", "type", "required"?, "placeholder"?, "options"? }] }`}</code>.{" "}
+              {t(
+                "console.forms.edit.fields.schemaFieldTypes",
+                undefined,
+                "Field types: text, textarea, email, url, number, date, select, checkbox.",
+              )}
             </p>
           </div>
         </FormShell>

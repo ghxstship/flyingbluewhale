@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +29,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const { t } = await getRequestT();
   let q = supabase
     .from("project_photos")
     .select("id, album, file_path, caption, taken_at, project:project_id(name)")
@@ -45,21 +46,28 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Project Photos"
-        subtitle={`${photos.length} photos${sp.album ? ` · album "${sp.album}"` : ""}`}
+        eyebrow={t("console.photos.eyebrow", undefined, "Operations")}
+        title={t("console.photos.title", undefined, "Project Photos")}
+        subtitle={`${photos.length} ${t("console.photos.photosLabel", undefined, "photos")}${sp.album ? ` · ${t("console.photos.albumLabel", undefined, "album")} "${sp.album}"` : ""}`}
         action={
           <Button href="/console/photos/upload" size="sm">
-            + Upload
+            {t("console.photos.upload", undefined, "+ Upload")}
           </Button>
         }
       />
       <div className="page-content space-y-4">
         <div className="metric-grid-3">
-          <MetricCard label="Photos" value={fmtIntl.number(photos.length)} accent />
-          <MetricCard label="Albums" value={fmtIntl.number(albums.length)} />
           <MetricCard
-            label="Projects Covered"
+            label={t("console.photos.metrics.photos", undefined, "Photos")}
+            value={fmtIntl.number(photos.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.photos.metrics.albums", undefined, "Albums")}
+            value={fmtIntl.number(albums.length)}
+          />
+          <MetricCard
+            label={t("console.photos.metrics.projectsCovered", undefined, "Projects Covered")}
             value={String(new Set(photos.map((p) => p.project?.name).filter(Boolean)).size)}
           />
         </div>
@@ -70,7 +78,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
                 href="/console/photos"
                 className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-xs"
               >
-                All
+                {t("console.photos.albums.all", undefined, "All")}
               </a>
               {albums.map((a) => (
                 <a
@@ -88,8 +96,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
           <div className="surface">
             <EmptyState
               size="compact"
-              title="No photos yet"
-              description="Upload via mobile or console to populate the gallery."
+              title={t("console.photos.empty.title", undefined, "No photos yet")}
+              description={t(
+                "console.photos.empty.description",
+                undefined,
+                "Upload via mobile or console to populate the gallery.",
+              )}
             />
           </div>
         ) : (
@@ -101,7 +113,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
                 <div className="p-2 text-[11px]">
                   <div className="truncate font-medium">{p.caption ?? "—"}</div>
                   <div className="text-[var(--text-muted)]">
-                    {p.album ?? "Unalbumed"} · {fmt(p.taken_at)}
+                    {p.album ?? t("console.photos.unalbumed", undefined, "Unalbumed")} · {fmt(p.taken_at)}
                   </div>
                 </div>
               </li>

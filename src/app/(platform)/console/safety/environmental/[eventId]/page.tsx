@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteEnvEvent } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ eventId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Environmental Event" />
+        <ModuleHeader title={t("console.safety.environmental.detail.title", undefined, "Environmental Event")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.environmental.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety · Environmental"
+        eyebrow={t("console.safety.environmental.detail.eyebrow", undefined, "Safety · Environmental")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/safety/environmental" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/safety/environmental/${p.eventId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteEnvEvent.bind(null, p.eventId)}
-              confirm={`Delete environmental event "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.safety.environmental.detail.deleteConfirm",
+                { title },
+                `Delete environmental event "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }
@@ -52,7 +60,11 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
             <div key={k} className="flex flex-col gap-1">
               <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">{toTitle(k)}</dt>
               <dd className="font-mono text-xs break-all">
-                {v === null || v === undefined ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v)}
+                {v === null || v === undefined
+                  ? t("common.emDash", undefined, "—")
+                  : typeof v === "object"
+                    ? JSON.stringify(v)
+                    : String(v)}
               </dd>
             </div>
           ))}

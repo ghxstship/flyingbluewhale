@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +20,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Agency" title="Roster" />
+        <ModuleHeader
+          eyebrow={t("console.agency.roster.eyebrow", undefined, "Agency")}
+          title={t("console.agency.roster.title", undefined, "Roster")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.agency.roster.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -45,40 +52,55 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Agency"
-        title="Roster"
-        subtitle={`${rows.length} Active  artist${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.agency.roster.eyebrow", undefined, "Agency")}
+        title={t("console.agency.roster.title", undefined, "Roster")}
+        subtitle={
+          rows.length === 1
+            ? t("console.agency.roster.subtitleOne", { count: rows.length }, `${rows.length} Active  artist`)
+            : t("console.agency.roster.subtitleOther", { count: rows.length }, `${rows.length} Active  artists`)
+        }
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/agency/roster/${r.id}`}
-          emptyLabel="No roster yet"
-          emptyDescription="Add an active agency_artist row to put a talent_profile on this agency's roster."
+          emptyLabel={t("console.agency.roster.emptyLabel", undefined, "No roster yet")}
+          emptyDescription={t(
+            "console.agency.roster.emptyDescription",
+            undefined,
+            "Add an active agency_artist row to put a talent_profile on this agency's roster.",
+          )}
           columns={[
             {
               key: "act",
-              header: "Act",
+              header: t("console.agency.roster.column.act", undefined, "Act"),
               render: (r) => r.talent?.act_name ?? "—",
               accessor: (r) => r.talent?.act_name ?? null,
             },
             {
               key: "comm",
-              header: "Commission",
-              render: (r) => (r.commission_bps != null ? `${(r.commission_bps / 100).toFixed(2)}%` : "default"),
+              header: t("console.agency.roster.column.commission", undefined, "Commission"),
+              render: (r) =>
+                r.commission_bps != null
+                  ? `${(r.commission_bps / 100).toFixed(2)}%`
+                  : t("console.agency.roster.commissionDefault", undefined, "default"),
               accessor: (r) => Number(r.commission_bps ?? 0),
               className: "font-mono text-xs",
             },
             {
               key: "exclusive",
-              header: "Exclusive",
-              render: (r) => <Badge variant={r.exclusive ? "success" : "muted"}>{r.exclusive ? "yes" : "no"}</Badge>,
+              header: t("console.agency.roster.column.exclusive", undefined, "Exclusive"),
+              render: (r) => (
+                <Badge variant={r.exclusive ? "success" : "muted"}>
+                  {r.exclusive ? t("common.yes", undefined, "yes") : t("common.no", undefined, "no")}
+                </Badge>
+              ),
               accessor: (r) => (r.exclusive ? 1 : 0),
               filterable: true,
             },
             {
               key: "signed",
-              header: "Signed",
+              header: t("console.agency.roster.column.signed", undefined, "Signed"),
               render: (r) => r.signed_at ?? "—",
               accessor: (r) => r.signed_at,
               className: "font-mono text-xs",

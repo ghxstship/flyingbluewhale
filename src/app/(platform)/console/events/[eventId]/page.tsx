@@ -8,10 +8,12 @@ import { fmtDateTime } from "@/components/detail/DetailShell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteEvent } from "./edit/actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ eventId: string }> }) {
   const { eventId } = await params;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("events")
@@ -22,21 +24,30 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
   return (
     <DetailShell
       row={row}
-      eyebrow="Operations"
+      eyebrow={t("console.events.detail.eyebrow", undefined, "Operations")}
       title={(r) => r.name}
       subtitle={(r) => r.description}
       breadcrumbs={[
-        { label: "Operations" },
-        { label: "Events", href: "/console/events" },
-        { label: row?.name ?? "Event" },
+        { label: t("console.events.detail.breadcrumbs.operations", undefined, "Operations") },
+        { label: t("console.events.detail.breadcrumbs.events", undefined, "Events"), href: "/console/events" },
+        { label: row?.name ?? t("console.events.detail.breadcrumbs.fallback", undefined, "Event") },
       ]}
       fields={
         row
           ? [
-              { label: "Status", value: <StatusBadge status={row.status ?? "draft"} /> },
-              { label: "Starts", value: fmtDateTime(row.starts_at) },
-              { label: "Ends", value: fmtDateTime(row.ends_at) },
-              { label: "Description", value: row.description ?? "—" },
+              {
+                label: t("console.events.detail.fields.status", undefined, "Status"),
+                value: <StatusBadge status={row.status ?? "draft"} />,
+              },
+              {
+                label: t("console.events.detail.fields.starts", undefined, "Starts"),
+                value: fmtDateTime(row.starts_at),
+              },
+              { label: t("console.events.detail.fields.ends", undefined, "Ends"), value: fmtDateTime(row.ends_at) },
+              {
+                label: t("console.events.detail.fields.description", undefined, "Description"),
+                value: row.description ?? "—",
+              },
             ]
           : undefined
       }
@@ -44,11 +55,15 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
         row ? (
           <div className="flex items-center gap-2">
             <Button href={`/console/events/${eventId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteEvent.bind(null, eventId)}
-              confirm={`Delete event "${row.name}"? This cannot be undone.`}
+              confirm={t(
+                "console.events.detail.deleteConfirm",
+                { name: row.name },
+                `Delete event "${row.name}"? This cannot be undone.`,
+              )}
             />
           </div>
         ) : undefined

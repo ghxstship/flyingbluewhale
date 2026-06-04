@@ -5,12 +5,14 @@ import { usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { settingsNav } from "@/lib/nav";
 import { matchRoute } from "@/lib/hooks/useActiveRoute";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function SettingsSidebar() {
   const pathname = usePathname();
+  const t = useT();
   return (
     <aside
-      aria-label="Settings"
+      aria-label={t("console.settings.sidebar.ariaLabel", undefined, "Settings")}
       className="w-full shrink-0 border-e border-[var(--border-color)] bg-[var(--bg-secondary)] lg:w-[240px]"
     >
       <div className="flex h-full flex-col">
@@ -20,9 +22,11 @@ export function SettingsSidebar() {
             className="inline-flex items-center gap-1 text-[10px] font-semibold tracking-[0.28em] text-[var(--text-muted)] uppercase hover:text-[var(--text-primary)]"
           >
             <ChevronLeft size={12} aria-hidden="true" />
-            Back to Workspace
+            {t("console.settings.sidebar.backToWorkspace", undefined, "Back to Workspace")}
           </Link>
-          <div className="mt-2 text-sm font-semibold text-[var(--text-primary)]">Settings</div>
+          <div className="mt-2 text-sm font-semibold text-[var(--text-primary)]">
+            {t("console.settings.sidebar.title", undefined, "Settings")}
+          </div>
         </div>
         <nav className="flex-1 overflow-y-auto p-2">
           {settingsNav.map((g) => (

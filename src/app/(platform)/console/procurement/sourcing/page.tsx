@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -47,12 +47,18 @@ const PO_STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | 
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Procurement" title="Sourcing" />
+        <ModuleHeader
+          eyebrow={t("console.procurement.sourcing.eyebrow", undefined, "Procurement")}
+          title={t("console.procurement.sourcing.title", undefined, "Sourcing")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.sourcing.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -85,32 +91,48 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Sourcing"
-        subtitle={`${reqs.length} Requisition${reqs.length === 1 ? "" : "s"} · ${pos.length} Active  PO${pos.length === 1 ? "" : "s"}${conversionRate != null ? ` · ${conversionRate}% converted` : ""}`}
+        eyebrow={t("console.procurement.sourcing.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.sourcing.title", undefined, "Sourcing")}
+        subtitle={`${reqs.length} ${reqs.length === 1 ? t("console.procurement.sourcing.requisitionSingular", undefined, "Requisition") : t("console.procurement.sourcing.requisitionPlural", undefined, "Requisitions")} · ${pos.length} ${pos.length === 1 ? t("console.procurement.sourcing.activePoSingular", undefined, "Active PO") : t("console.procurement.sourcing.activePoPlural", undefined, "Active POs")}${conversionRate != null ? ` · ${t("console.procurement.sourcing.percentConverted", { pct: conversionRate }, `${conversionRate}% converted`)}` : ""}`}
         action={
           <Button href="/console/procurement/requisitions/new" size="sm">
-            + New Requisition
+            {t("console.procurement.sourcing.newRequisition", undefined, "+ New Requisition")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open Requisitions" value={fmt.number(open)} accent />
-          <MetricCard label="Active POs" value={fmt.number(pos.length)} />
-          <MetricCard label="Converted" value={fmt.number(converted)} />
+          <MetricCard
+            label={t("console.procurement.sourcing.metric.openRequisitions", undefined, "Open Requisitions")}
+            value={fmt.number(open)}
+            accent
+          />
+          <MetricCard
+            label={t("console.procurement.sourcing.metric.activePOs", undefined, "Active POs")}
+            value={fmt.number(pos.length)}
+          />
+          <MetricCard
+            label={t("console.procurement.sourcing.metric.converted", undefined, "Converted")}
+            value={fmt.number(converted)}
+          />
         </div>
 
         <section>
-          <h3 className="text-sm font-semibold">Requisition Pipeline</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.procurement.sourcing.requisitionPipeline", undefined, "Requisition Pipeline")}
+          </h3>
           {reqs.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No Requisitions"
-              description="Sourcing pulls from open requisitions. Author one to start the funnel."
+              title={t("console.procurement.sourcing.empty.noRequisitions.title", undefined, "No Requisitions")}
+              description={t(
+                "console.procurement.sourcing.empty.noRequisitions.description",
+                undefined,
+                "Sourcing pulls from open requisitions. Author one to start the funnel.",
+              )}
               action={
                 <Link href="/console/procurement/requisitions/new" className="btn btn-secondary btn-sm">
-                  + New Requisition
+                  {t("console.procurement.sourcing.newRequisition", undefined, "+ New Requisition")}
                 </Link>
               }
             />
@@ -137,9 +159,14 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Recent Purchase Orders</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.procurement.sourcing.recentPurchaseOrders", undefined, "Recent Purchase Orders")}
+          </h3>
           {pos.length === 0 ? (
-            <EmptyState size="compact" title="No POs Issued Yet" />
+            <EmptyState
+              size="compact"
+              title={t("console.procurement.sourcing.empty.noPOs.title", undefined, "No POs Issued Yet")}
+            />
           ) : (
             <ul className="mt-3 space-y-2">
               {pos.map((p) => (
@@ -153,7 +180,8 @@ export default async function Page() {
                         <span className="font-mono text-xs">{p.number}</span> · {p.title}
                       </div>
                       <div className="text-xs text-[var(--text-muted)]">
-                        {p.vendor?.name ?? "No vendor"} · {formatMoney(p.amount_cents)}
+                        {p.vendor?.name ?? t("console.procurement.sourcing.noVendor", undefined, "No vendor")} ·{" "}
+                        {formatMoney(p.amount_cents)}
                       </div>
                     </div>
                     <Badge variant={PO_STATUS_TONE[p.status] ?? "muted"}>{toTitle(p.status)}</Badge>

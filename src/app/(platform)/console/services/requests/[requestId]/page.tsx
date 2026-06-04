@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest, ServiceRequestEvent } from "@/lib/supabase/types";
 import { transitionRequest } from "../actions";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -55,12 +55,15 @@ const NEXT_STATES: Record<
 
 export default async function Page({ params }: { params: Promise<{ requestId: string }> }) {
   const { requestId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Service Request" />
+        <ModuleHeader title={t("console.services.requests.detail.title", undefined, "Service Request")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.services.requests.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -90,11 +93,11 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
   return (
     <>
       <ModuleHeader
-        eyebrow="Services · Request"
+        eyebrow={t("console.services.requests.detail.eyebrow", undefined, "Services · Request")}
         title={r.summary}
         action={
           <Button href="/console/services/requests" variant="ghost" size="sm">
-            Back
+            {t("common.back", undefined, "Back")}
           </Button>
         }
       />
@@ -110,33 +113,41 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
           )}
           <dl className="mt-5 grid grid-cols-2 gap-3 text-xs">
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Opened</dt>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+                {t("console.services.requests.detail.opened", undefined, "Opened")}
+              </dt>
               <dd className="font-mono">{fmt.dateTime(r.opened_at)}</dd>
             </div>
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Response SLA</dt>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+                {t("console.services.requests.detail.responseSla", undefined, "Response SLA")}
+              </dt>
               <dd className="font-mono">
                 {r.sla_response_due ? fmt.dateTime(r.sla_response_due) : "—"}
                 {r.sla_response_breached && (
                   <Badge variant="error" className="ms-2">
-                    breached
+                    {t("console.services.requests.detail.breached", undefined, "breached")}
                   </Badge>
                 )}
               </dd>
             </div>
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Resolution SLA</dt>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+                {t("console.services.requests.detail.resolutionSla", undefined, "Resolution SLA")}
+              </dt>
               <dd className="font-mono">
                 {r.sla_resolution_due ? fmt.dateTime(r.sla_resolution_due) : "—"}
                 {r.sla_resolution_breached && (
                   <Badge variant="error" className="ms-2">
-                    breached
+                    {t("console.services.requests.detail.breached", undefined, "breached")}
                   </Badge>
                 )}
               </dd>
             </div>
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">Acknowledged</dt>
+              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+                {t("console.services.requests.detail.acknowledged", undefined, "Acknowledged")}
+              </dt>
               <dd className="font-mono">{r.acknowledged_at ? fmt.dateTime(r.acknowledged_at) : "—"}</dd>
             </div>
           </dl>
@@ -144,21 +155,27 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
 
         {transitions.length > 0 && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Transition</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.services.requests.detail.transition", undefined, "Transition")}
+            </h3>
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              {transitions.map((t) => (
-                <form key={t.value} action={transitionRequest.bind(null, requestId)}>
-                  <input type="hidden" name="to" value={t.value} />
-                  {t.value === "resolved" && (
+              {transitions.map((tr) => (
+                <form key={tr.value} action={transitionRequest.bind(null, requestId)}>
+                  <input type="hidden" name="to" value={tr.value} />
+                  {tr.value === "resolved" && (
                     <input
                       name="note"
-                      placeholder="Resolution note (optional)"
+                      placeholder={t(
+                        "console.services.requests.detail.resolutionNotePlaceholder",
+                        undefined,
+                        "Resolution note (optional)",
+                      )}
                       maxLength={2000}
                       className="input-base me-2 inline-block w-64 align-middle"
                     />
                   )}
-                  <Button type="submit" variant={t.variant ?? "secondary"} size="sm">
-                    {t.label}
+                  <Button type="submit" variant={tr.variant ?? "secondary"} size="sm">
+                    {t(`console.services.requests.detail.action.${tr.value}`, undefined, tr.label)}
                   </Button>
                 </form>
               ))}
@@ -167,10 +184,14 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
         )}
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Timeline</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.services.requests.detail.timeline", undefined, "Timeline")}
+          </h3>
           <ol className="mt-3 space-y-3 text-xs">
             {events.length === 0 ? (
-              <li className="text-[var(--text-muted)]">No events yet.</li>
+              <li className="text-[var(--text-muted)]">
+                {t("console.services.requests.detail.noEvents", undefined, "No events yet.")}
+              </li>
             ) : (
               events.map((e) => {
                 const p = e.payload as Record<string, unknown> | null;

@@ -9,6 +9,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getDashboard } from "@/lib/db/dashboards";
 import { getViewConfig } from "@/lib/db/view-configs";
+import { getRequestT } from "@/lib/i18n/request";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { createClient } from "@/lib/supabase/server";
 import type { ChartWidget, SavedViewWidget } from "@/lib/dashboards/types";
@@ -25,12 +26,15 @@ export const dynamic = "force-dynamic";
  */
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Dashboard" />
+        <ModuleHeader title={t("console.dashboards.detail.title", undefined, "Dashboard")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.dashboards.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -45,16 +49,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Dashboard"
+        eyebrow={t("console.dashboards.detail.eyebrow", undefined, "Dashboard")}
         title={dashboard.name}
         subtitle={dashboard.description ?? undefined}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/dashboards" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/dashboards/${id}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
           </div>
         }

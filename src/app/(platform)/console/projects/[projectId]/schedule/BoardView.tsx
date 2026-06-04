@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type BoardCard = {
   id: string;
@@ -17,9 +18,14 @@ export type BoardCard = {
  * so empty columns don't waste horizontal space.
  */
 export function BoardView({ cards }: { cards: BoardCard[] }) {
+  const t = useT();
   const statuses = Array.from(new Set(cards.map((c) => c.status))).sort();
   if (statuses.length === 0) {
-    return <div className="surface p-6 text-sm text-[var(--text-muted)]">Nothing To Board.</div>;
+    return (
+      <div className="surface p-6 text-sm text-[var(--text-muted)]">
+        {t("console.projects.schedule.board.empty", undefined, "Nothing To Board.")}
+      </div>
+    );
   }
   const byStatus = new Map<string, BoardCard[]>();
   for (const c of cards) {
@@ -47,7 +53,9 @@ export function BoardView({ cards }: { cards: BoardCard[] }) {
                     <div className="flex items-start justify-between gap-2">
                       <div className="font-medium">{c.title}</div>
                       <span className="font-mono text-[10px] text-[var(--text-muted)] uppercase">
-                        {c.kind === "task" ? "T" : "E"}
+                        {c.kind === "task"
+                          ? t("console.projects.schedule.board.kindTask", undefined, "T")
+                          : t("console.projects.schedule.board.kindEvent", undefined, "E")}
                       </span>
                     </div>
                     {c.due && <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">{c.due}</div>}

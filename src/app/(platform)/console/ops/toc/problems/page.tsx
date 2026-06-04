@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -49,12 +49,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Problems" />
+        <ModuleHeader
+          eyebrow={t("console.ops.toc.problems.eyebrow", undefined, "Operations")}
+          title={t("console.ops.toc.problems.title", undefined, "Problems")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.ops.toc.problems.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -80,43 +86,59 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Problems"
-        subtitle={`${rows.length} problem record${rows.length === 1 ? "" : "s"} · ${open} Open  · ${knownErrors} known errors${p1 ? ` · ${p1} P1` : ""}`}
+        eyebrow={t("console.ops.toc.problems.eyebrow", undefined, "Operations")}
+        title={t("console.ops.toc.problems.title", undefined, "Problems")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.ops.toc.problems.recordSingular", undefined, "problem record") : t("console.ops.toc.problems.recordPlural", undefined, "problem records")} · ${open} ${t("console.ops.toc.problems.openLabel", undefined, "Open")}  · ${knownErrors} ${t("console.ops.toc.problems.knownErrorsLabel", undefined, "known errors")}${p1 ? ` · ${p1} ${t("console.ops.toc.problems.p1Label", undefined, "P1")}` : ""}`}
         action={
           <Button href="/console/ops/toc/problems/new" size="sm">
-            + New Problem
+            {t("console.ops.toc.problems.newProblem", undefined, "+ New Problem")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmtIntl.number(open)} accent />
-          <MetricCard label="Known Errors" value={fmtIntl.number(knownErrors)} />
-          <MetricCard label="P1" value={fmtIntl.number(p1)} />
+          <MetricCard
+            label={t("console.ops.toc.problems.metric.open", undefined, "Open")}
+            value={fmtIntl.number(open)}
+            accent
+          />
+          <MetricCard
+            label={t("console.ops.toc.problems.metric.knownErrors", undefined, "Known Errors")}
+            value={fmtIntl.number(knownErrors)}
+          />
+          <MetricCard label={t("console.ops.toc.problems.metric.p1", undefined, "P1")} value={fmtIntl.number(p1)} />
         </div>
 
         <DataTable<ProblemRow>
           rows={rows}
           rowHref={(r) => `/console/ops/toc/problems/${r.id}`}
-          emptyLabel="No problems registered"
-          emptyDescription="ITIL problem management — record root-cause investigations triggered by incidents. Link incidents and the change(s) that resolve them."
+          emptyLabel={t("console.ops.toc.problems.emptyLabel", undefined, "No problems registered")}
+          emptyDescription={t(
+            "console.ops.toc.problems.emptyDescription",
+            undefined,
+            "ITIL problem management — record root-cause investigations triggered by incidents. Link incidents and the change(s) that resolve them.",
+          )}
           emptyAction={
             <Link href="/console/ops/toc/problems/new" className="btn btn-primary btn-sm">
-              + New Problem
+              {t("console.ops.toc.problems.newProblem", undefined, "+ New Problem")}
             </Link>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.ops.toc.problems.col.code", undefined, "Code"),
               render: (r) => <span className="font-mono text-xs">{r.code}</span>,
               accessor: (r) => r.code ?? null,
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.ops.toc.problems.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "priority",
-              header: "Priority",
+              header: t("console.ops.toc.problems.col.priority", undefined, "Priority"),
               render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{toTitle(r.priority)}</Badge>,
               accessor: (r) => r.priority ?? null,
               filterable: true,
@@ -124,14 +146,14 @@ export default async function Page() {
             },
             {
               key: "detected",
-              header: "Detected",
+              header: t("console.ops.toc.problems.col.detected", undefined, "Detected"),
               render: (r) => fmt(r.detected_at),
               className: "font-mono text-xs",
               accessor: (r) => r.detected_at ?? null,
             },
             {
               key: "owner",
-              header: "Owner",
+              header: t("console.ops.toc.problems.col.owner", undefined, "Owner"),
               render: (r) => r.assigned?.name ?? r.assigned?.email ?? "—",
               filterable: true,
               groupable: true,
@@ -139,7 +161,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.ops.toc.problems.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
@@ -149,8 +171,11 @@ export default async function Page() {
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Problem records are the SSOT for known errors and root-cause investigations. Link incidents (cause) and
-          changes (fix) to close the loop.
+          {t(
+            "console.ops.toc.problems.footnote",
+            undefined,
+            "Problem records are the SSOT for known errors and root-cause investigations. Link incidents (cause) and changes (fix) to close the loop.",
+          )}
         </p>
       </div>
     </>

@@ -4,15 +4,22 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createTourAction } from "./actions";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Agency" title="New Tour" />
+        <ModuleHeader
+          eyebrow={t("console.agency.eyebrow", undefined, "Agency")}
+          title={t("console.agency.tours.new.title", undefined, "New Tour")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.common.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -38,24 +45,43 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Agency" title="New Tour" subtitle="Multi-date routing container." />
+      <ModuleHeader
+        eyebrow={t("console.agency.eyebrow", undefined, "Agency")}
+        title={t("console.agency.tours.new.title", undefined, "New Tour")}
+        subtitle={t("console.agency.tours.new.subtitle", undefined, "Multi-date routing container.")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createTourAction} cancelHref="/console/agency/tours" submitLabel="Create Tour">
-          <Input label="Tour Name" name="name" required maxLength={200} />
+        <FormShell
+          action={createTourAction}
+          cancelHref="/console/agency/tours"
+          submitLabel={t("console.agency.tours.new.submit", undefined, "Create Tour")}
+        >
+          <Input
+            label={t("console.agency.tours.new.fields.name", undefined, "Tour Name")}
+            name="name"
+            required
+            maxLength={200}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Talent</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.agency.tours.new.fields.talent", undefined, "Talent")}
+            </label>
             <select name="talent_profile_id" required className="input-base mt-1.5 w-full">
-              <option value="">Select an act…</option>
-              {talents.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.act_name}
+              <option value="">
+                {t("console.agency.tours.new.fields.talentPlaceholder", undefined, "Select an act…")}
+              </option>
+              {talents.map((talent) => (
+                <option key={talent.id} value={talent.id}>
+                  {talent.act_name}
                 </option>
               ))}
             </select>
           </div>
           {agencies.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Agency (optional)</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.agency.tours.new.fields.agencyOptional", undefined, "Agency (optional)")}
+              </label>
               <select name="agency_id" className="input-base mt-1.5 w-full">
                 <option value="">—</option>
                 {agencies.map((a) => (
@@ -67,11 +93,17 @@ export default async function Page() {
             </div>
           )}
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Starts" name="starts_on" type="date" />
-            <Input label="Ends" name="ends_on" type="date" />
+            <Input
+              label={t("console.agency.tours.new.fields.starts", undefined, "Starts")}
+              name="starts_on"
+              type="date"
+            />
+            <Input label={t("console.agency.tours.new.fields.ends", undefined, "Ends")} name="ends_on" type="date" />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.agency.tours.new.fields.description", undefined, "Description")}
+            </label>
             <textarea name="description" rows={4} maxLength={4000} className="input-base mt-1.5 w-full" />
           </div>
         </FormShell>

@@ -2,11 +2,13 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { NewPoForm } from "./NewPoForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewPOPage() {
+  const { t } = await getRequestT();
   let vendors: { id: string; name: string }[] = [];
   let projects: { id: string; name: string }[] = [];
   if (hasSupabase) {
@@ -20,7 +22,10 @@ export default async function NewPOPage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Procurement" title="New Purchase Order" />
+      <ModuleHeader
+        eyebrow={t("console.procurement.purchaseOrders.new.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.purchaseOrders.new.title", undefined, "New Purchase Order")}
+      />
       <div className="page-content max-w-xl">
         <NewPoForm vendors={vendors} projects={projects} />
       </div>

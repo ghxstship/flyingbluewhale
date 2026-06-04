@@ -5,34 +5,23 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
-  {
-    href: "/console/production/warehouse/inventory",
-    label: "Inventory",
-    description: "Every asset across all locations",
-  },
-  {
-    href: "/console/production/warehouse/locations",
-    label: "Locations",
-    description: "Bins, bays, depots, venue back-of-house",
-  },
-  { href: "/console/production/equipment", label: "Equipment", description: "Asset register · 5-state lifecycle" },
-  { href: "/console/production/rentals", label: "Rentals", description: "Bookings + handover tracking" },
-  { href: "/console/production/rentals/availability", label: "Availability", description: "7-day matrix" },
-  { href: "/m/inventory/scan", label: "Mobile Scan", description: "Receive / put-away / pick" },
-];
-
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Warehouse" />
+        <ModuleHeader
+          eyebrow={t("console.production.eyebrow", undefined, "Production")}
+          title={t("console.production.warehouse.title", undefined, "Warehouse")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.warehouse.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -41,6 +30,59 @@ export default async function Page() {
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+
+  const hubTiles: Array<{ href: string; label: string; description: string }> = [
+    {
+      href: "/console/production/warehouse/inventory",
+      label: t("console.production.warehouse.tiles.inventory.label", undefined, "Inventory"),
+      description: t(
+        "console.production.warehouse.tiles.inventory.description",
+        undefined,
+        "Every asset across all locations",
+      ),
+    },
+    {
+      href: "/console/production/warehouse/locations",
+      label: t("console.production.warehouse.tiles.locations.label", undefined, "Locations"),
+      description: t(
+        "console.production.warehouse.tiles.locations.description",
+        undefined,
+        "Bins, bays, depots, venue back-of-house",
+      ),
+    },
+    {
+      href: "/console/production/equipment",
+      label: t("console.production.warehouse.tiles.equipment.label", undefined, "Equipment"),
+      description: t(
+        "console.production.warehouse.tiles.equipment.description",
+        undefined,
+        "Asset register · 5-state lifecycle",
+      ),
+    },
+    {
+      href: "/console/production/rentals",
+      label: t("console.production.warehouse.tiles.rentals.label", undefined, "Rentals"),
+      description: t(
+        "console.production.warehouse.tiles.rentals.description",
+        undefined,
+        "Bookings + handover tracking",
+      ),
+    },
+    {
+      href: "/console/production/rentals/availability",
+      label: t("console.production.warehouse.tiles.availability.label", undefined, "Availability"),
+      description: t("console.production.warehouse.tiles.availability.description", undefined, "7-day matrix"),
+    },
+    {
+      href: "/m/inventory/scan",
+      label: t("console.production.warehouse.tiles.mobileScan.label", undefined, "Mobile Scan"),
+      description: t(
+        "console.production.warehouse.tiles.mobileScan.description",
+        undefined,
+        "Receive / put-away / pick",
+      ),
+    },
+  ];
   const [{ count: assetCount }, { count: locationCount }, { data: rentalsData }, { data: equipmentByStatus }] =
     await Promise.all([
       supabase
@@ -69,17 +111,33 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Production" title="Warehouse" subtitle="Central + venue warehousing hub" />
+      <ModuleHeader
+        eyebrow={t("console.production.eyebrow", undefined, "Production")}
+        title={t("console.production.warehouse.title", undefined, "Warehouse")}
+        subtitle={t("console.production.warehouse.subtitle", undefined, "Central + venue warehousing hub")}
+      />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Assets" value={fmt.number(assetCount ?? 0)} accent />
-          <MetricCard label="Locations" value={fmt.number(locationCount ?? 0)} />
-          <MetricCard label="Active Rentals" value={fmt.number(activeRentals)} />
+          <MetricCard
+            label={t("console.production.warehouse.metrics.assets", undefined, "Assets")}
+            value={fmt.number(assetCount ?? 0)}
+            accent
+          />
+          <MetricCard
+            label={t("console.production.warehouse.metrics.locations", undefined, "Locations")}
+            value={fmt.number(locationCount ?? 0)}
+          />
+          <MetricCard
+            label={t("console.production.warehouse.metrics.activeRentals", undefined, "Active Rentals")}
+            value={fmt.number(activeRentals)}
+          />
         </div>
 
         {Object.keys(statusBuckets).length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By Status</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.production.warehouse.byStatus", undefined, "By Status")}
+            </h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {Object.entries(statusBuckets)
                 .sort((a, b) => b[1] - a[1])
@@ -94,12 +152,12 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill In</h3>
+          <h3 className="text-sm font-semibold">{t("console.production.warehouse.drillIn", undefined, "Drill In")}</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {HUB_TILES.map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-4">
-                <div className="text-sm font-medium">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.description}</div>
+            {hubTiles.map((tile) => (
+              <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
+                <div className="text-sm font-medium">{tile.label}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.description}</div>
               </Link>
             ))}
           </div>

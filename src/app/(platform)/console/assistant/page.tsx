@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -29,12 +29,18 @@ type ConversationRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="AI" title="Assistant" />
+        <ModuleHeader
+          eyebrow={t("console.assistant.eyebrow", undefined, "AI")}
+          title={t("console.assistant.title", undefined, "Assistant")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.assistant.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -89,23 +95,38 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="AI"
-        title="Assistant"
-        subtitle={`${fmt.number(totalChunks)} chunks indexed across ${corpusRows.length} source type${corpusRows.length === 1 ? "" : "s"} · ${conversationRows.length} conversation${conversationRows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.assistant.eyebrow", undefined, "AI")}
+        title={t("console.assistant.title", undefined, "Assistant")}
+        subtitle={`${fmt.number(totalChunks)} ${t("console.assistant.chunksIndexedAcross", undefined, "chunks indexed across")} ${corpusRows.length} ${corpusRows.length === 1 ? t("console.assistant.sourceType", undefined, "source type") : t("console.assistant.sourceTypes", undefined, "source types")} · ${conversationRows.length} ${conversationRows.length === 1 ? t("console.assistant.conversation", undefined, "conversation") : t("console.assistant.conversations", undefined, "conversations")}`}
       />
       <div className="page-content space-y-6">
         <div className="metric-grid-3">
-          <MetricCard label="Chunks Indexed" value={fmt.number(totalChunks)} accent />
-          <MetricCard label="Source Types" value={fmt.number(corpusRows.length)} />
-          <MetricCard label="Conversations" value={fmt.number(conversationRows.length)} />
+          <MetricCard
+            label={t("console.assistant.metrics.chunksIndexed", undefined, "Chunks Indexed")}
+            value={fmt.number(totalChunks)}
+            accent
+          />
+          <MetricCard
+            label={t("console.assistant.metrics.sourceTypes", undefined, "Source Types")}
+            value={fmt.number(corpusRows.length)}
+          />
+          <MetricCard
+            label={t("console.assistant.metrics.conversations", undefined, "Conversations")}
+            value={fmt.number(conversationRows.length)}
+          />
         </div>
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold">Corpus snapshot</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.assistant.corpusSnapshot", undefined, "Corpus snapshot")}
+          </h2>
           {corpusRows.length === 0 ? (
             <p className="text-xs text-[var(--text-muted)]">
-              No chunks indexed yet. The embedding worker (separate ticket) walks deliverables, submittals, RFIs, daily
-              logs, spec sections, and drawings to build the RAG index.
+              {t(
+                "console.assistant.emptyCorpus",
+                undefined,
+                "No chunks indexed yet. The embedding worker (separate ticket) walks deliverables, submittals, RFIs, daily logs, spec sections, and drawings to build the RAG index.",
+              )}
             </p>
           ) : (
             <DataTable<ChunkRow>
@@ -113,21 +134,21 @@ export default async function Page() {
               columns={[
                 {
                   key: "source_type",
-                  header: "Source",
+                  header: t("console.assistant.columns.source", undefined, "Source"),
                   render: (r) => toTitle(r.source_type.replace(/_/g, " ")),
                   accessor: (r) => r.source_type,
                   filterable: true,
                 },
                 {
                   key: "count",
-                  header: "Chunks",
+                  header: t("console.assistant.columns.chunks", undefined, "Chunks"),
                   render: (r) => fmt.number(r.count),
                   accessor: (r) => r.count,
                   className: "font-mono text-xs text-right",
                 },
                 {
                   key: "refreshed",
-                  header: "Last Refreshed",
+                  header: t("console.assistant.columns.lastRefreshed", undefined, "Last Refreshed"),
                   render: (r) =>
                     r.refreshed_at
                       ? fmt.dateParts(r.refreshed_at, { month: "short", day: "numeric", year: "2-digit" })
@@ -142,21 +163,32 @@ export default async function Page() {
 
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">Recent Conversations</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.assistant.recentConversations", undefined, "Recent Conversations")}
+            </h2>
             <Button href="/console/assistant/new" size="sm">
-              + New Conversation
+              {t("console.assistant.newConversation", undefined, "+ New Conversation")}
             </Button>
           </div>
           <DataTable<ConversationRow>
             rows={conversationRows}
             rowHref={(r) => `/console/assistant/${r.id}`}
-            emptyLabel="No conversations yet"
-            emptyDescription="The assistant grounds answers on the project corpus — every claim cites the source it came from."
+            emptyLabel={t("console.assistant.emptyConversations", undefined, "No conversations yet")}
+            emptyDescription={t(
+              "console.assistant.emptyConversationsDescription",
+              undefined,
+              "The assistant grounds answers on the project corpus — every claim cites the source it came from.",
+            )}
             columns={[
-              { key: "title", header: "Title", render: (r) => r.title ?? "(untitled)", accessor: (r) => r.title },
+              {
+                key: "title",
+                header: t("console.assistant.columns.title", undefined, "Title"),
+                render: (r) => r.title ?? t("console.assistant.untitled", undefined, "(untitled)"),
+                accessor: (r) => r.title,
+              },
               {
                 key: "project",
-                header: "Project",
+                header: t("console.assistant.columns.project", undefined, "Project"),
                 render: (r) => r.project?.name ?? "—",
                 accessor: (r) => r.project?.name ?? null,
                 filterable: true,
@@ -164,12 +196,12 @@ export default async function Page() {
               },
               {
                 key: "scope",
-                header: "Scope",
+                header: t("console.assistant.columns.scope", undefined, "Scope"),
                 render: (r) =>
                   r.ai_scope ? (
                     <Badge variant="info">{toTitle(r.ai_scope)}</Badge>
                   ) : (
-                    <Badge variant="muted">Global</Badge>
+                    <Badge variant="muted">{t("console.assistant.scope.global", undefined, "Global")}</Badge>
                   ),
                 accessor: (r) => r.ai_scope ?? "global",
                 filterable: true,
@@ -177,14 +209,14 @@ export default async function Page() {
               },
               {
                 key: "messages",
-                header: "Msgs",
+                header: t("console.assistant.columns.msgs", undefined, "Msgs"),
                 render: (r) => fmt.number(r.message_count),
                 accessor: (r) => r.message_count,
                 className: "font-mono text-xs text-right",
               },
               {
                 key: "created",
-                header: "Created",
+                header: t("console.assistant.columns.created", undefined, "Created"),
                 render: (r) => fmt.dateParts(r.created_at, { month: "short", day: "numeric", year: "2-digit" }),
                 accessor: (r) => r.created_at,
                 className: "font-mono text-xs",

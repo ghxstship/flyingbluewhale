@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteMetric } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ metricId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Carbon Metric" />
+        <ModuleHeader title={t("console.sustainability.carbon.detail.title", undefined, "Carbon Metric")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.sustainability.carbon.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ metricId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Sustainability · Metric"
+        eyebrow={t("console.sustainability.carbon.detail.eyebrow", undefined, "Sustainability · Metric")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/sustainability/carbon" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/sustainability/carbon/${p.metricId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteMetric.bind(null, p.metricId)}
-              confirm={`Delete measurement "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.sustainability.carbon.detail.deleteConfirm",
+                { title },
+                `Delete measurement "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

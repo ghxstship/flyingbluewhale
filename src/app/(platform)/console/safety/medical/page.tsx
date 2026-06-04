@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -43,12 +43,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Medical" />
+        <ModuleHeader
+          eyebrow={t("console.safety.medical.eyebrow", undefined, "Safety")}
+          title={t("console.safety.medical.title", undefined, "Medical")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.medical.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -84,31 +90,45 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Medical"
-        subtitle="Encounters · medical plan · environmental response"
+        eyebrow={t("console.safety.medical.eyebrow", undefined, "Safety")}
+        title={t("console.safety.medical.title", undefined, "Medical")}
+        subtitle={t("console.safety.medical.subtitle", undefined, "Encounters · medical plan · environmental response")}
         action={
           <Button href="/console/safety/medical/encounters/new" size="sm">
-            + Encounter
+            {t("console.safety.medical.newEncounter", undefined, "+ Encounter")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Encounters · 24h" value={fmtIntl.number(enc24 ?? 0)} accent />
-          <MetricCard label="Encounters · 7d" value={fmtIntl.number(enc7 ?? 0)} />
-          <MetricCard label="Active Env. Events" value={fmtIntl.number(env.length)} />
+          <MetricCard
+            label={t("console.safety.medical.metrics.encounters24h", undefined, "Encounters · 24h")}
+            value={fmtIntl.number(enc24 ?? 0)}
+            accent
+          />
+          <MetricCard
+            label={t("console.safety.medical.metrics.encounters7d", undefined, "Encounters · 7d")}
+            value={fmtIntl.number(enc7 ?? 0)}
+          />
+          <MetricCard
+            label={t("console.safety.medical.metrics.activeEnvEvents", undefined, "Active Env. Events")}
+            value={fmtIntl.number(env.length)}
+          />
         </div>
 
         {env.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Open Environmental Events</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.safety.medical.openEnvEvents", undefined, "Open Environmental Events")}
+            </h3>
             <ul className="mt-3 space-y-1.5">
               {env.map((e) => (
                 <li key={e.id} className="flex items-center justify-between text-sm">
                   <div>
                     <span className="font-medium">{toTitle(e.kind)}</span>{" "}
-                    <span className="font-mono text-xs text-[var(--text-muted)]">since {fmt(e.started_at)}</span>
+                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                      {t("console.safety.medical.sincePrefix", undefined, "since")} {fmt(e.started_at)}
+                    </span>
                   </div>
                   <Badge variant={SEVERITY_TONE[e.severity] ?? "muted"}>{toTitle(e.severity)}</Badge>
                 </li>
@@ -118,12 +138,16 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill In</h3>
+          <h3 className="text-sm font-semibold">{t("console.safety.medical.drillIn", undefined, "Drill In")}</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {HUB_TILES.map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-4">
-                <div className="text-sm font-medium">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.description}</div>
+            {HUB_TILES.map((tile) => (
+              <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
+                <div className="text-sm font-medium">
+                  {t(`console.safety.medical.tiles.${tile.href}.label`, undefined, tile.label)}
+                </div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                  {t(`console.safety.medical.tiles.${tile.href}.description`, undefined, tile.description)}
+                </div>
               </Link>
             ))}
           </div>

@@ -4,15 +4,22 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createOfferAction } from "./actions";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Marketplace" title="New Offer" />
+        <ModuleHeader
+          eyebrow={t("console.marketplace.eyebrow", undefined, "Marketplace")}
+          title={t("console.marketplace.offers.new.title", undefined, "New Offer")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.marketplace.offers.new.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -33,22 +40,36 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Marketplace" title="New Offer" subtitle="Default 60/40, balance on load-in." />
+      <ModuleHeader
+        eyebrow={t("console.marketplace.eyebrow", undefined, "Marketplace")}
+        title={t("console.marketplace.offers.new.title", undefined, "New Offer")}
+        subtitle={t("console.marketplace.offers.new.subtitle", undefined, "Default 60/40, balance on load-in.")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createOfferAction} cancelHref="/console/marketplace/offers" submitLabel="Save Draft">
+        <FormShell
+          action={createOfferAction}
+          cancelHref="/console/marketplace/offers"
+          submitLabel={t("console.marketplace.offers.new.submit", undefined, "Save Draft")}
+        >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Talent</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.marketplace.offers.new.talentLabel", undefined, "Talent")}
+            </label>
             <select name="talent_profile_id" required className="input-base mt-1.5 w-full">
-              <option value="">Select a talent profile…</option>
-              {talents.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.act_name}
+              <option value="">
+                {t("console.marketplace.offers.new.talentPlaceholder", undefined, "Select a talent profile…")}
+              </option>
+              {talents.map((talent) => (
+                <option key={talent.id} value={talent.id}>
+                  {talent.act_name}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Project (optional)</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.marketplace.offers.new.projectLabel", undefined, "Project (optional)")}
+            </label>
             <select name="project_id" className="input-base mt-1.5 w-full">
               <option value="">—</option>
               {projects.map((p) => (
@@ -58,22 +79,60 @@ export default async function Page() {
               ))}
             </select>
           </div>
-          <Input label="Performance Date" name="performance_date" type="date" required />
+          <Input
+            label={t("console.marketplace.offers.new.performanceDate", undefined, "Performance Date")}
+            name="performance_date"
+            type="date"
+            required
+          />
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Slot Start" name="slot_start" type="datetime-local" />
-            <Input label="Slot End" name="slot_end" type="datetime-local" />
+            <Input
+              label={t("console.marketplace.offers.new.slotStart", undefined, "Slot Start")}
+              name="slot_start"
+              type="datetime-local"
+            />
+            <Input
+              label={t("console.marketplace.offers.new.slotEnd", undefined, "Slot End")}
+              name="slot_end"
+              type="datetime-local"
+            />
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <Input label="Fee" name="fee" required placeholder="5000" />
-            <Input label="Currency" name="currency" maxLength={3} defaultValue="USD" />
-            <Input label="Deposit %" name="deposit_pct" type="number" defaultValue="60" min={0} max={100} />
+            <Input
+              label={t("console.marketplace.offers.new.fee", undefined, "Fee")}
+              name="fee"
+              required
+              placeholder="5000"
+            />
+            <Input
+              label={t("console.marketplace.offers.new.currency", undefined, "Currency")}
+              name="currency"
+              maxLength={3}
+              defaultValue="USD"
+            />
+            <Input
+              label={t("console.marketplace.offers.new.depositPct", undefined, "Deposit %")}
+              name="deposit_pct"
+              type="number"
+              defaultValue="60"
+              min={0}
+              max={100}
+            />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Balance Terms</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.marketplace.offers.new.balanceTermsLabel", undefined, "Balance Terms")}
+            </label>
             <select name="balance_terms" className="input-base mt-1.5 w-full" defaultValue="load_in">
-              <option value="load_in">On Load-In</option>
-              <option value="show_day">On Show Day</option>
-              <option value="net_30">Net 30 Post-Show</option>
+              <option value="load_in">
+                {t("console.marketplace.offers.new.balanceTerms.loadIn", undefined, "On Load-In")}
+              </option>
+              <option value="show_day">
+                {t("console.marketplace.offers.new.balanceTerms.showDay", undefined, "On Show Day")}
+              </option>
+              <option value="net_30">
+                {t("console.marketplace.offers.new.balanceTerms.net30", undefined, "Net 30 Post-Show")}
+              </option>
             </select>
           </div>
         </FormShell>

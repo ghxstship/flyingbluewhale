@@ -5,11 +5,13 @@ import { createClient } from "@/lib/supabase/server";
 import { DetailShell, money, fmtDate } from "@/components/detail/DetailShell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteMileage } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ mileageId: string }> }) {
   const { mileageId } = await params;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("mileage_logs")
@@ -20,22 +22,32 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
   return (
     <DetailShell
       row={row}
-      eyebrow="Finance"
+      eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
       title={(r) => `${r.origin} → ${r.destination}`}
       subtitle={(r) => `${r.miles} mi`}
       breadcrumbs={[
-        { label: "Finance", href: "/console/finance" },
-        { label: "Mileage", href: "/console/finance/mileage" },
-        { label: row ? `${row.origin} → ${row.destination}` : "Mileage" },
+        { label: t("console.finance.breadcrumb", undefined, "Finance"), href: "/console/finance" },
+        { label: t("console.finance.mileage.breadcrumb", undefined, "Mileage"), href: "/console/finance/mileage" },
+        {
+          label: row
+            ? `${row.origin} → ${row.destination}`
+            : t("console.finance.mileage.breadcrumb", undefined, "Mileage"),
+        },
       ]}
       fields={
         row
           ? [
-              { label: "Miles", value: `${row.miles}` },
-              { label: "Rate", value: money(row.rate_cents) },
-              { label: "Total", value: money(Math.round(row.miles * row.rate_cents)) },
-              { label: "Logged On", value: fmtDate(row.logged_on) },
-              { label: "Notes", value: row.notes ?? "—" },
+              { label: t("console.finance.mileage.detail.miles", undefined, "Miles"), value: `${row.miles}` },
+              { label: t("console.finance.mileage.detail.rate", undefined, "Rate"), value: money(row.rate_cents) },
+              {
+                label: t("console.finance.mileage.detail.total", undefined, "Total"),
+                value: money(Math.round(row.miles * row.rate_cents)),
+              },
+              {
+                label: t("console.finance.mileage.detail.loggedOn", undefined, "Logged On"),
+                value: fmtDate(row.logged_on),
+              },
+              { label: t("console.finance.mileage.detail.notes", undefined, "Notes"), value: row.notes ?? "—" },
             ]
           : undefined
       }
@@ -43,11 +55,15 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
         row ? (
           <div className="flex items-center gap-2">
             <Button href={`/console/finance/mileage/${mileageId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteMileage.bind(null, mileageId)}
-              confirm={`Delete this mileage log? This cannot be undone.`}
+              confirm={t(
+                "console.finance.mileage.detail.deleteConfirm",
+                undefined,
+                "Delete this mileage log? This cannot be undone.",
+              )}
             />
           </div>
         ) : undefined

@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -55,12 +55,18 @@ function fmt(iso: string | null): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Changes" />
+        <ModuleHeader
+          eyebrow={t("console.ops.toc.changes.eyebrow", undefined, "Operations")}
+          title={t("console.ops.toc.changes.title", undefined, "Changes")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.ops.toc.changes.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -86,43 +92,62 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Changes"
-        subtitle={`${rows.length} Change Record${rows.length === 1 ? "" : "s"} · ${open} Open${emergency ? ` · ${emergency} Emergency` : ""}${failed ? ` · ${failed} Failed` : ""}`}
+        eyebrow={t("console.ops.toc.changes.eyebrow", undefined, "Operations")}
+        title={t("console.ops.toc.changes.title", undefined, "Changes")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.ops.toc.changes.subtitle.recordOne", undefined, "Change Record") : t("console.ops.toc.changes.subtitle.recordMany", undefined, "Change Records")} · ${open} ${t("console.ops.toc.changes.subtitle.open", undefined, "Open")}${emergency ? ` · ${emergency} ${t("console.ops.toc.changes.subtitle.emergency", undefined, "Emergency")}` : ""}${failed ? ` · ${failed} ${t("console.ops.toc.changes.subtitle.failed", undefined, "Failed")}` : ""}`}
         action={
           <Button href="/console/ops/toc/changes/new" size="sm">
-            + New Change
+            {t("console.ops.toc.changes.newChange", undefined, "+ New Change")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmtIntl.number(open)} accent />
-          <MetricCard label="Emergency" value={fmtIntl.number(emergency)} />
-          <MetricCard label="Failed" value={fmtIntl.number(failed)} />
+          <MetricCard
+            label={t("console.ops.toc.changes.metric.open", undefined, "Open")}
+            value={fmtIntl.number(open)}
+            accent
+          />
+          <MetricCard
+            label={t("console.ops.toc.changes.metric.emergency", undefined, "Emergency")}
+            value={fmtIntl.number(emergency)}
+          />
+          <MetricCard
+            label={t("console.ops.toc.changes.metric.failed", undefined, "Failed")}
+            value={fmtIntl.number(failed)}
+          />
         </div>
 
         <DataTable<ChangeRow>
           rows={rows}
           rowHref={(r) => `/console/ops/toc/changes/${r.id}`}
-          emptyLabel="No change records"
-          emptyDescription="ITIL change management — author records for non-trivial changes during live ops (rigging swap, generator hot-swap, software patch on the timing box). Each record carries risk, impact, planned window, and a backout plan."
+          emptyLabel={t("console.ops.toc.changes.empty.label", undefined, "No change records")}
+          emptyDescription={t(
+            "console.ops.toc.changes.empty.description",
+            undefined,
+            "ITIL change management — author records for non-trivial changes during live ops (rigging swap, generator hot-swap, software patch on the timing box). Each record carries risk, impact, planned window, and a backout plan.",
+          )}
           emptyAction={
             <Link href="/console/ops/toc/changes/new" className="btn btn-primary btn-sm">
-              + New Change
+              {t("console.ops.toc.changes.newChange", undefined, "+ New Change")}
             </Link>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.ops.toc.changes.col.code", undefined, "Code"),
               render: (r) => <span className="font-mono text-xs">{r.code}</span>,
               accessor: (r) => r.code ?? null,
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.ops.toc.changes.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "type",
-              header: "Type",
+              header: t("console.ops.toc.changes.col.type", undefined, "Type"),
               render: (r) => <Badge variant="muted">{toTitle(r.type)}</Badge>,
               accessor: (r) => r.type ?? null,
               filterable: true,
@@ -130,20 +155,20 @@ export default async function Page() {
             },
             {
               key: "risk",
-              header: "Risk",
+              header: t("console.ops.toc.changes.col.risk", undefined, "Risk"),
               render: (r) => <Badge variant={RISK_TONE[r.risk] ?? "muted"}>{r.risk}</Badge>,
               accessor: (r) => r.risk ?? null,
             },
             {
               key: "window",
-              header: "Window",
+              header: t("console.ops.toc.changes.col.window", undefined, "Window"),
               render: (r) => `${fmt(r.planned_start)} → ${fmt(r.planned_end)}`,
               className: "font-mono text-xs",
               accessor: (r) => r.planned_start ?? null,
             },
             {
               key: "owner",
-              header: "Owner",
+              header: t("console.ops.toc.changes.col.owner", undefined, "Owner"),
               render: (r) => r.assigned?.name ?? r.assigned?.email ?? "—",
               filterable: true,
               groupable: true,
@@ -151,7 +176,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.ops.toc.changes.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
@@ -161,8 +186,11 @@ export default async function Page() {
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Operational telemetry (which rows changed, who edited what) lives in the audit log; the change register here
-          is the human-curated ITIL record of intentional changes.
+          {t(
+            "console.ops.toc.changes.footer",
+            undefined,
+            "Operational telemetry (which rows changed, who edited what) lives in the audit log; the change register here is the human-curated ITIL record of intentional changes.",
+          )}
         </p>
       </div>
     </>

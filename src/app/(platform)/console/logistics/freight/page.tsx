@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -57,12 +57,18 @@ function fmt(iso: string | null): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Logistics" title="Freight" />
+        <ModuleHeader
+          eyebrow={t("console.logistics.freight.eyebrow", undefined, "Logistics")}
+          title={t("console.logistics.freight.title", undefined, "Freight")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.logistics.freight.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -104,32 +110,48 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Logistics"
-        title="Freight"
-        subtitle={`${manifests.length} manifest${manifests.length === 1 ? "" : "s"} · ${upcoming.length} Upcoming · ${orders.length} rate-card order${orders.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.logistics.freight.eyebrow", undefined, "Logistics")}
+        title={t("console.logistics.freight.title", undefined, "Freight")}
+        subtitle={`${manifests.length} ${manifests.length === 1 ? t("console.logistics.freight.subtitle.manifest", undefined, "manifest") : t("console.logistics.freight.subtitle.manifests", undefined, "manifests")} · ${upcoming.length} ${t("console.logistics.freight.subtitle.upcoming", undefined, "Upcoming")} · ${orders.length} ${orders.length === 1 ? t("console.logistics.freight.subtitle.rateCardOrder", undefined, "rate-card order") : t("console.logistics.freight.subtitle.rateCardOrders", undefined, "rate-card orders")}`}
         action={
           <Button href="/console/logistics/ratecard" size="sm">
-            Rate card
+            {t("console.logistics.freight.rateCard", undefined, "Rate card")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming · 30d" value={fmtIntl.number(upcoming.length)} accent />
-          <MetricCard label="Cleared" value={fmtIntl.number(cleared)} />
-          <MetricCard label="Order Spend" value={formatMoney(totalSpend)} />
+          <MetricCard
+            label={t("console.logistics.freight.metrics.upcoming30d", undefined, "Upcoming · 30d")}
+            value={fmtIntl.number(upcoming.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.logistics.freight.metrics.cleared", undefined, "Cleared")}
+            value={fmtIntl.number(cleared)}
+          />
+          <MetricCard
+            label={t("console.logistics.freight.metrics.orderSpend", undefined, "Order Spend")}
+            value={formatMoney(totalSpend)}
+          />
         </div>
 
         <section>
-          <h3 className="text-sm font-semibold">Arrival / departure manifests</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.logistics.freight.manifests.heading", undefined, "Arrival / departure manifests")}
+          </h3>
           {manifests.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No A&D manifests on file"
-              description="Customs + bonded warehouse routing flows through ad_manifests. Capture flight refs and carriers as runs land."
+              title={t("console.logistics.freight.manifests.emptyTitle", undefined, "No A&D manifests on file")}
+              description={t(
+                "console.logistics.freight.manifests.emptyDescription",
+                undefined,
+                "Customs + bonded warehouse routing flows through ad_manifests. Capture flight refs and carriers as runs land.",
+              )}
               action={
                 <Link href="/console/transport/ad" className="btn btn-secondary btn-sm">
-                  Open A&D
+                  {t("console.logistics.freight.manifests.openAd", undefined, "Open A&D")}
                 </Link>
               }
             />
@@ -138,13 +160,15 @@ export default async function Page() {
               <table className="data-table w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Kind</th>
-                    <th>Flight</th>
-                    <th>Carrier</th>
-                    <th>Scheduled</th>
-                    <th>Actual</th>
-                    <th className="text-end">Party</th>
-                    <th>Status</th>
+                    <th>{t("console.logistics.freight.manifests.col.kind", undefined, "Kind")}</th>
+                    <th>{t("console.logistics.freight.manifests.col.flight", undefined, "Flight")}</th>
+                    <th>{t("console.logistics.freight.manifests.col.carrier", undefined, "Carrier")}</th>
+                    <th>{t("console.logistics.freight.manifests.col.scheduled", undefined, "Scheduled")}</th>
+                    <th>{t("console.logistics.freight.manifests.col.actual", undefined, "Actual")}</th>
+                    <th className="text-end">
+                      {t("console.logistics.freight.manifests.col.party", undefined, "Party")}
+                    </th>
+                    <th>{t("console.logistics.freight.manifests.col.status", undefined, "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -170,12 +194,18 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Rate-card orders</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.logistics.freight.orders.heading", undefined, "Rate-card orders")}
+          </h3>
           {orders.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No Rate-Card Orders"
-              description="Authorize freight services off the rate card; line-items book against the catalog."
+              title={t("console.logistics.freight.orders.emptyTitle", undefined, "No Rate-Card Orders")}
+              description={t(
+                "console.logistics.freight.orders.emptyDescription",
+                undefined,
+                "Authorize freight services off the rate card; line-items book against the catalog.",
+              )}
             />
           ) : (
             <ul className="mt-3 space-y-2">
@@ -195,9 +225,13 @@ export default async function Page() {
         </section>
 
         <p className="text-xs text-[var(--text-muted)]">
-          Customs holds, bonded-warehouse routing, and TMS feeds (Flexport, project44) install via{" "}
+          {t(
+            "console.logistics.freight.integrationsHint",
+            undefined,
+            "Customs holds, bonded-warehouse routing, and TMS feeds (Flexport, project44) install via",
+          )}{" "}
           <Link href="/console/settings/integrations" className="text-[var(--org-primary)]">
-            Settings → Integrations
+            {t("console.logistics.freight.integrationsLink", undefined, "Settings → Integrations")}
           </Link>
           .
         </p>

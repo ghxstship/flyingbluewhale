@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { issueSection, supersedeSection } from "./actions";
 
@@ -44,6 +44,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { id } = await params;
 
   const { data: row } = await supabase
@@ -81,7 +82,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`Specs · ${section.project?.name ?? "Project"}`}
+        eyebrow={`${t("console.specs.detail.eyebrow", undefined, "Specs")} · ${section.project?.name ?? t("console.specs.detail.projectFallback", undefined, "Project")}`}
         title={`${section.section_number} — ${section.title}`}
         subtitle={
           section.division
@@ -90,17 +91,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           <Button href="/console/specs" size="sm" variant="ghost">
-            ← All Sections
+            {t("console.specs.detail.allSections", undefined, "← All Sections")}
           </Button>
         }
       />
       <div className="page-content space-y-6">
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[section.section_state]}>{toTitle(section.section_state)}</Badge>
-          <span className="text-[var(--text-muted)]">Format · {section.format}</span>
+          <span className="text-[var(--text-muted)]">
+            {t("console.specs.detail.formatLabel", undefined, "Format")} · {section.format}
+          </span>
           {section.issued_at && (
             <span className="font-mono text-[var(--text-muted)]">
-              Issued · {fmt.dateParts(section.issued_at, { year: "numeric", month: "short", day: "numeric" })}
+              {t("console.specs.detail.issuedLabel", undefined, "Issued")} ·{" "}
+              {fmt.dateParts(section.issued_at, { year: "numeric", month: "short", day: "numeric" })}
             </span>
           )}
           <span className="ms-auto flex gap-2">
@@ -108,7 +112,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <form action={issueSection}>
                 <input type="hidden" name="section_id" value={section.id} />
                 <Button type="submit" size="sm">
-                  Issue
+                  {t("console.specs.detail.issueAction", undefined, "Issue")}
                 </Button>
               </form>
             )}
@@ -116,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <form action={supersedeSection}>
                 <input type="hidden" name="section_id" value={section.id} />
                 <Button type="submit" size="sm" variant="ghost">
-                  Mark Superseded
+                  {t("console.specs.detail.markSupersededAction", undefined, "Mark Superseded")}
                 </Button>
               </form>
             )}
@@ -125,15 +129,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {section.body_md && (
           <section className="surface space-y-2 p-4">
-            <h2 className="text-sm font-semibold">Body</h2>
+            <h2 className="text-sm font-semibold">{t("console.specs.detail.bodyHeading", undefined, "Body")}</h2>
             <pre className="font-mono text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{section.body_md}</pre>
           </section>
         )}
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold">Linked RFIs ({rfis.length})</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.specs.detail.linkedRfisHeading", { count: rfis.length }, "Linked RFIs")} ({rfis.length})
+          </h2>
           {rfis.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">No RFIs linked to this section yet.</p>
+            <p className="text-xs text-[var(--text-muted)]">
+              {t("console.specs.detail.noRfisLinked", undefined, "No RFIs linked to this section yet.")}
+            </p>
           ) : (
             <ul className="space-y-1">
               {rfis.map((r) => (
@@ -149,9 +157,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold">Linked Submittals ({submittals.length})</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.specs.detail.linkedSubmittalsHeading", { count: submittals.length }, "Linked Submittals")} (
+            {submittals.length})
+          </h2>
           {submittals.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">No submittals linked to this section yet.</p>
+            <p className="text-xs text-[var(--text-muted)]">
+              {t("console.specs.detail.noSubmittalsLinked", undefined, "No submittals linked to this section yet.")}
+            </p>
           ) : (
             <ul className="space-y-1">
               {submittals.map((s) => (

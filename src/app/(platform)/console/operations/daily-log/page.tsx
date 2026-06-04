@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -27,12 +27,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Daily Log" />
+        <ModuleHeader
+          eyebrow={t("console.operations.dailyLog.eyebrow", undefined, "Operations")}
+          title={t("console.operations.dailyLog.title", undefined, "Daily Log")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.operations.dailyLog.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -64,55 +70,73 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Daily Log"
-        subtitle={`${rows.length} logs in last 30 days · ${drafts} Draft  · ${submitted} submitted · ${approved} Approved`}
+        eyebrow={t("console.operations.dailyLog.eyebrow", undefined, "Operations")}
+        title={t("console.operations.dailyLog.title", undefined, "Daily Log")}
+        subtitle={t(
+          "console.operations.dailyLog.subtitle",
+          { count: rows.length, drafts, submitted, approved },
+          `${rows.length} logs in last 30 days · ${drafts} Draft  · ${submitted} submitted · ${approved} Approved`,
+        )}
         action={
           <Button href="/console/operations/daily-log/new" size="sm">
-            + New Log
+            {t("console.operations.dailyLog.newLog", undefined, "+ New Log")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Logs · 30d" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Pending Review" value={fmt.number(submitted)} />
-          <MetricCard label="Approved" value={fmt.number(approved)} />
+          <MetricCard
+            label={t("console.operations.dailyLog.metric.logs30d", undefined, "Logs · 30d")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.operations.dailyLog.metric.pendingReview", undefined, "Pending Review")}
+            value={fmt.number(submitted)}
+          />
+          <MetricCard
+            label={t("console.operations.dailyLog.metric.approved", undefined, "Approved")}
+            value={fmt.number(approved)}
+          />
         </div>
 
         <DataTable<LogRow>
           rows={rows}
           rowHref={(r) => `/console/operations/daily-log/${r.id}`}
-          emptyLabel="No daily logs yet"
-          emptyDescription="Daily logs capture weather, manpower, equipment, deliveries, and notes per project per day."
+          emptyLabel={t("console.operations.dailyLog.emptyLabel", undefined, "No daily logs yet")}
+          emptyDescription={t(
+            "console.operations.dailyLog.emptyDescription",
+            undefined,
+            "Daily logs capture weather, manpower, equipment, deliveries, and notes per project per day.",
+          )}
           emptyAction={
             <Button href="/console/operations/daily-log/new" size="sm">
-              + New Log
+              {t("console.operations.dailyLog.newLog", undefined, "+ New Log")}
             </Button>
           }
           columns={[
             {
               key: "date",
-              header: "Date",
+              header: t("console.operations.dailyLog.col.date", undefined, "Date"),
               render: (r) => fmtDate(r.log_date),
               className: "font-mono text-xs",
               accessor: (r) => r.log_date ?? null,
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.operations.dailyLog.col.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
             },
             {
               key: "weather",
-              header: "Weather",
+              header: t("console.operations.dailyLog.col.weather", undefined, "Weather"),
               render: (r) => r.weather_summary ?? "—",
               accessor: (r) => r.weather_summary ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.operations.dailyLog.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,

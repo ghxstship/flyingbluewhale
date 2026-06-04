@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { listMsas } from "@/lib/msa/queries";
 import { MSA_STATUS_LABEL, MSA_STATUS_VARIANT } from "@/lib/msa/types";
 import type { IndependentContractorMsaResolved } from "@/lib/msa/types";
@@ -12,12 +13,19 @@ import type { IndependentContractorMsaResolved } from "@/lib/msa/types";
 export const dynamic = "force-dynamic";
 
 export default async function MsasPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="People" title="Contracts" subtitle="Master Services Agreements" />
+        <ModuleHeader
+          eyebrow={t("console.people.msas.eyebrowShort", undefined, "People")}
+          title={t("console.people.msas.titleShort", undefined, "Contracts")}
+          subtitle={t("console.people.msas.subtitleShort", undefined, "Master Services Agreements")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.people.msas.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -33,12 +41,16 @@ export default async function MsasPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="People · Contracts"
-        title="Master Services Agreements"
-        subtitle={`${rows.length} On File · ${counts["signed"] ?? 0} Signed · ${counts["draft"] ?? 0} Draft`}
+        eyebrow={t("console.people.msas.eyebrow", undefined, "People · Contracts")}
+        title={t("console.people.msas.title", undefined, "Master Services Agreements")}
+        subtitle={t(
+          "console.people.msas.subtitleCounts",
+          { total: rows.length, signed: counts["signed"] ?? 0, draft: counts["draft"] ?? 0 },
+          `${rows.length} On File · ${counts["signed"] ?? 0} Signed · ${counts["draft"] ?? 0} Draft`,
+        )}
         action={
           <Button href="/console/people/msas/new" size="sm">
-            + New Contract
+            {t("console.people.msas.newContract", undefined, "+ New Contract")}
           </Button>
         }
       />
@@ -46,12 +58,16 @@ export default async function MsasPage() {
         <DataTable<IndependentContractorMsaResolved>
           rows={rows}
           rowHref={(r) => `/console/people/msas/${r.id}`}
-          emptyLabel="No MSAs yet"
-          emptyDescription="Issue an MSA to a crew member before sending their first engagement letter."
+          emptyLabel={t("console.people.msas.emptyLabel", undefined, "No MSAs yet")}
+          emptyDescription={t(
+            "console.people.msas.emptyDescription",
+            undefined,
+            "Issue an MSA to a crew member before sending their first engagement letter.",
+          )}
           columns={[
             {
               key: "contractor",
-              header: "Contractor",
+              header: t("console.people.msas.col.contractor", undefined, "Contractor"),
               render: (r) => (
                 <div>
                   <div className="text-sm font-medium">{r.crew_member_name}</div>
@@ -62,7 +78,7 @@ export default async function MsasPage() {
             },
             {
               key: "role",
-              header: "Role",
+              header: t("console.people.msas.col.role", undefined, "Role"),
               render: (r) => <span className="text-xs">{r.crew_member_role ?? "—"}</span>,
               filterable: true,
               groupable: true,
@@ -70,13 +86,13 @@ export default async function MsasPage() {
             },
             {
               key: "version",
-              header: "Version",
+              header: t("console.people.msas.col.version", undefined, "Version"),
               render: (r) => <span className="font-mono text-xs">v{r.version}</span>,
               accessor: (r) => r.version ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.people.msas.col.status", undefined, "Status"),
               render: (r) => <Badge variant={MSA_STATUS_VARIANT[r.msa_state]}>{MSA_STATUS_LABEL[r.msa_state]}</Badge>,
               filterable: true,
               groupable: true,
@@ -84,7 +100,7 @@ export default async function MsasPage() {
             },
             {
               key: "signed_at",
-              header: "Signed",
+              header: t("console.people.msas.col.signed", undefined, "Signed"),
               render: (r) =>
                 r.signed_at ? (
                   <span className="font-mono text-xs">{new Date(r.signed_at).toLocaleDateString()}</span>
@@ -95,7 +111,7 @@ export default async function MsasPage() {
             },
             {
               key: "code",
-              header: "Code",
+              header: t("console.people.msas.col.code", undefined, "Code"),
               render: (r) => <span className="font-mono text-xs tracking-wider">{r.access_code}</span>,
               accessor: (r) => r.access_code ?? null,
             },
@@ -107,7 +123,7 @@ export default async function MsasPage() {
                   href={`/console/people/msas/${r.id}`}
                   className="text-xs text-[var(--text-muted)] hover:text-[var(--org-primary)]"
                 >
-                  Open →
+                  {t("common.openArrow", undefined, "Open →")}
                 </Link>
               ),
               className: "text-end",

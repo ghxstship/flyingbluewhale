@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +45,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
   const supabase = await createClient();
 
   const fmtIntl = await getRequestFormatters();
+  const { t } = await getRequestT();
   const year = sp.year ? Number(sp.year) : new Date().getFullYear();
   const start = new Date(`${year}-01-01T00:00:00Z`).toISOString();
   const end = new Date(`${year + 1}-01-01T00:00:00Z`).toISOString();
@@ -68,9 +69,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title={`OSHA 300 — ${year}`}
-        subtitle="OSHA-recordable incidents per 29 CFR 1904."
+        eyebrow={t("console.safety.osha.eyebrow", undefined, "Safety")}
+        title={t("console.safety.osha.title", { year }, `OSHA 300 — ${year}`)}
+        subtitle={t("console.safety.osha.subtitle", undefined, "OSHA-recordable incidents per 29 CFR 1904.")}
         action={
           <div className="flex items-center gap-2">
             <Button href={`/console/safety/osha?year=${year - 1}`} size="sm" variant="ghost">
@@ -80,41 +81,59 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
               {year + 1} →
             </Button>
             <Button href={`/api/v1/exports/osha?year=${year}`} size="sm">
-              Export 300/300A/301 (CSV)
+              {t("console.safety.osha.exportCsv", undefined, "Export 300/300A/301 (CSV)")}
             </Button>
           </div>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Recordables" value={fmtIntl.number(rows.length)} accent />
-          <MetricCard label="Days Away" value={fmtIntl.number(totalDaysAway)} />
-          <MetricCard label="Days Restricted" value={fmtIntl.number(totalDaysRestricted)} />
+          <MetricCard
+            label={t("console.safety.osha.metrics.recordables", undefined, "Recordables")}
+            value={fmtIntl.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.safety.osha.metrics.daysAway", undefined, "Days Away")}
+            value={fmtIntl.number(totalDaysAway)}
+          />
+          <MetricCard
+            label={t("console.safety.osha.metrics.daysRestricted", undefined, "Days Restricted")}
+            value={fmtIntl.number(totalDaysRestricted)}
+          />
         </div>
         {fatalities > 0 && (
           <div className="surface p-4 ring-2 ring-[var(--color-error)]">
             <strong>
-              {fatalities} fatality record{fatalities === 1 ? "" : "s"}
+              {fatalities}{" "}
+              {fatalities === 1
+                ? t("console.safety.osha.fatalityRecord", undefined, "fatality record")
+                : t("console.safety.osha.fatalityRecords", undefined, "fatality records")}
             </strong>{" "}
-            · OSHA notification required within 8 hours.
+            · {t("console.safety.osha.fatalityNotice", undefined, "OSHA notification required within 8 hours.")}
           </div>
         )}
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/safety/incidents/${r.id}`}
-          emptyLabel={`No recordable incidents for ${year}.`}
+          emptyLabel={t("console.safety.osha.emptyLabel", { year }, `No recordable incidents for ${year}.`)}
           columns={[
             {
               key: "date",
-              header: "Date",
+              header: t("console.safety.osha.columns.date", undefined, "Date"),
               render: (r) => fmt(r.occurred_at),
               className: "font-mono text-xs",
               accessor: (r) => r.occurred_at ?? null,
             },
-            { key: "summary", header: "Description", render: (r) => r.summary, accessor: (r) => r.summary },
+            {
+              key: "summary",
+              header: t("console.safety.osha.columns.description", undefined, "Description"),
+              render: (r) => r.summary,
+              accessor: (r) => r.summary,
+            },
             {
               key: "class",
-              header: "Classification",
+              header: t("console.safety.osha.columns.classification", undefined, "Classification"),
               render: (r) => (
                 <Badge variant={CLASS_TONE[r.osha_classification] ?? "muted"}>{toTitle(r.osha_classification)}</Badge>
               ),
@@ -124,13 +143,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
             },
             {
               key: "body",
-              header: "Body Part",
+              header: t("console.safety.osha.columns.bodyPart", undefined, "Body Part"),
               render: (r) => r.body_part ?? "—",
               accessor: (r) => r.body_part ?? null,
             },
             {
               key: "type",
-              header: "Injury Type",
+              header: t("console.safety.osha.columns.injuryType", undefined, "Injury Type"),
               render: (r) => r.injury_type ?? "—",
               accessor: (r) => r.injury_type ?? null,
               filterable: true,
@@ -138,14 +157,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
             },
             {
               key: "away",
-              header: "Days Away",
+              header: t("console.safety.osha.columns.daysAway", undefined, "Days Away"),
               render: (r) => r.days_away.toString(),
               className: "font-mono text-xs",
               accessor: (r) => r.days_away.toString ?? null,
             },
             {
               key: "rest",
-              header: "Days Restr.",
+              header: t("console.safety.osha.columns.daysRestricted", undefined, "Days Restr."),
               render: (r) => r.days_restricted.toString(),
               className: "font-mono text-xs",
               accessor: (r) => r.days_restricted.toString ?? null,

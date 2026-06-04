@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -36,12 +36,18 @@ const KIND_TONE: Record<string, "muted" | "info" | "warning"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="BC / DR" />
+        <ModuleHeader
+          eyebrow={t("console.safety.bcdr.eyebrow", undefined, "Safety")}
+          title={t("console.safety.bcdr.title", undefined, "BC / DR")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.bcdr.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -52,7 +58,7 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
 
   function fmtDate(iso: string | null): string {
-    if (!iso) return "TBD";
+    if (!iso) return t("console.safety.bcdr.tbd", undefined, "TBD");
     return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   }
   const [{ data: exData }, { data: pbData }] = await Promise.all([
@@ -79,34 +85,50 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="BC / DR"
-        subtitle="Continuity runbooks + exercises."
+        eyebrow={t("console.safety.bcdr.eyebrow", undefined, "Safety")}
+        title={t("console.safety.bcdr.title", undefined, "BC / DR")}
+        subtitle={t("console.safety.bcdr.subtitle", undefined, "Continuity runbooks + exercises.")}
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
-            + New Runbook
+            {t("console.safety.bcdr.newRunbook", undefined, "+ New Runbook")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Crisis Runbooks" value={fmt.number(playbooks.length)} accent />
-          <MetricCard label="Published" value={fmt.number(published)} />
-          <MetricCard label="Exercises Scheduled" value={fmt.number(upcoming.length)} />
+          <MetricCard
+            label={t("console.safety.bcdr.metric.crisisRunbooks", undefined, "Crisis Runbooks")}
+            value={fmt.number(playbooks.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.safety.bcdr.metric.published", undefined, "Published")}
+            value={fmt.number(published)}
+          />
+          <MetricCard
+            label={t("console.safety.bcdr.metric.exercisesScheduled", undefined, "Exercises Scheduled")}
+            value={fmt.number(upcoming.length)}
+          />
         </div>
 
         <section>
-          <h3 className="text-sm font-semibold">Crisis Runbooks</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.safety.bcdr.section.crisisRunbooks", undefined, "Crisis Runbooks")}
+          </h3>
           <ul className="mt-3 space-y-2">
             {playbooks.length === 0 ? (
               <li>
                 <EmptyState
                   size="compact"
-                  title="No Crisis Runbooks Yet"
-                  description="Author crisis-tagged playbooks (evac, weather hold, IT outage) — they appear here."
+                  title={t("console.safety.bcdr.empty.runbooks.title", undefined, "No Crisis Runbooks Yet")}
+                  description={t(
+                    "console.safety.bcdr.empty.runbooks.description",
+                    undefined,
+                    "Author crisis-tagged playbooks (evac, weather hold, IT outage) — they appear here.",
+                  )}
                   action={
                     <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
-                      + New Runbook
+                      {t("console.safety.bcdr.newRunbook", undefined, "+ New Runbook")}
                     </Link>
                   }
                 />
@@ -131,17 +153,23 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Exercises</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.safety.bcdr.section.exercises", undefined, "Exercises")}
+          </h3>
           <ul className="mt-3 space-y-2">
             {exercises.length === 0 ? (
               <li>
                 <EmptyState
                   size="compact"
-                  title="No Exercises Scheduled"
-                  description="TTX, drills, full-scale exercises live in Programs → Readiness."
+                  title={t("console.safety.bcdr.empty.exercises.title", undefined, "No Exercises Scheduled")}
+                  description={t(
+                    "console.safety.bcdr.empty.exercises.description",
+                    undefined,
+                    "TTX, drills, full-scale exercises live in Programs → Readiness.",
+                  )}
                   action={
                     <Link href="/console/programs/readiness" className="btn btn-secondary btn-sm">
-                      Open Readiness
+                      {t("console.safety.bcdr.openReadiness", undefined, "Open Readiness")}
                     </Link>
                   }
                 />

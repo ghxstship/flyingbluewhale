@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 const EVENT_OPTIONS = [
   "*",
@@ -25,6 +26,7 @@ const EVENT_OPTIONS = [
 ];
 
 export function WebhookEndpointForm() {
+  const t = useT();
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
@@ -43,11 +45,11 @@ export function WebhookEndpointForm() {
 
   function submit() {
     if (!url.startsWith("https://")) {
-      toast.error("URL must start with https://");
+      toast.error(t("console.settings.webhooks.new.urlMustBeHttps", undefined, "URL must start with https://"));
       return;
     }
     if (events.size === 0) {
-      toast.error("Pick at least one event");
+      toast.error(t("console.settings.webhooks.new.pickAtLeastOneEvent", undefined, "Pick at least one event"));
       return;
     }
     startTransition(async () => {
@@ -62,20 +64,28 @@ export function WebhookEndpointForm() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok || !body.ok) {
-        toast.error(body?.error?.message ?? "Create failed");
+        toast.error(
+          body?.error?.message ?? t("console.settings.webhooks.new.createFailed", undefined, "Create failed"),
+        );
         return;
       }
       setCreatedSecret(body.data.secret as string);
-      toast.success("Endpoint registered");
+      toast.success(t("console.settings.webhooks.new.endpointRegistered", undefined, "Endpoint registered"));
     });
   }
 
   if (createdSecret) {
     return (
       <div className="surface p-5">
-        <h3 className="text-sm font-semibold">Signing Secret</h3>
+        <h3 className="text-sm font-semibold">
+          {t("console.settings.webhooks.new.signingSecret", undefined, "Signing Secret")}
+        </h3>
         <p className="mt-2 text-xs text-[var(--text-muted)]">
-          Copy this now. It's shown once and never surfaces again.
+          {t(
+            "console.settings.webhooks.new.copyNowHint",
+            undefined,
+            "Copy this now. It's shown once and never surfaces again.",
+          )}
         </p>
         <div className="mt-3 flex gap-2">
           <pre className="flex-1 overflow-x-auto rounded bg-[var(--surface-inset)] p-3 font-mono text-xs">
@@ -85,18 +95,23 @@ export function WebhookEndpointForm() {
             type="button"
             onClick={async () => {
               await navigator.clipboard.writeText(createdSecret);
-              toast.success("Copied");
+              toast.success(t("console.settings.webhooks.new.copiedToast", undefined, "Copied"));
             }}
           >
-            Copy
+            {t("common.copy", undefined, "Copy")}
           </Button>
         </div>
         <p className="mt-4 text-xs text-[var(--text-muted)]">
-          Every delivery carries <code className="font-mono">x-atlvs-signature: t=&lt;ms&gt;,v1=&lt;hex&gt;</code> where{" "}
-          <code className="font-mono">hex = HMAC-SHA256(t + "." + body, secret)</code>. Stripe-style.
+          {t("console.settings.webhooks.new.signaturePrefix", undefined, "Every delivery carries")}{" "}
+          <code className="font-mono">x-atlvs-signature: t=&lt;ms&gt;,v1=&lt;hex&gt;</code>{" "}
+          {t("console.settings.webhooks.new.signatureWhere", undefined, "where")}{" "}
+          <code className="font-mono">hex = HMAC-SHA256(t + "." + body, secret)</code>.{" "}
+          {t("console.settings.webhooks.new.signatureStripeStyle", undefined, "Stripe-style.")}
         </p>
         <div className="mt-4 flex justify-end">
-          <Button onClick={() => router.push("/console/settings/webhooks")}>Done</Button>
+          <Button onClick={() => router.push("/console/settings/webhooks")}>
+            {t("common.done", undefined, "Done")}
+          </Button>
         </div>
       </div>
     );
@@ -105,7 +120,7 @@ export function WebhookEndpointForm() {
   return (
     <div className="space-y-4">
       <Input
-        label="Endpoint URL"
+        label={t("console.settings.webhooks.new.endpointUrlLabel", undefined, "Endpoint URL")}
         type="url"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
@@ -113,13 +128,19 @@ export function WebhookEndpointForm() {
         required
       />
       <Input
-        label="Description (optional)"
+        label={t("console.settings.webhooks.new.descriptionLabel", undefined, "Description (optional)")}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Production — routes to PagerDuty on incidents"
+        placeholder={t(
+          "console.settings.webhooks.new.descriptionPlaceholder",
+          undefined,
+          "Production — routes to PagerDuty on incidents",
+        )}
       />
       <div>
-        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Events</label>
+        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+          {t("console.settings.webhooks.new.eventsLabel", undefined, "Events")}
+        </label>
         <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           {EVENT_OPTIONS.map((ev) => (
             <label
@@ -136,10 +157,12 @@ export function WebhookEndpointForm() {
       </div>
       <div className="flex justify-end gap-2">
         <Button variant="secondary" href="/console/settings/webhooks">
-          Cancel
+          {t("common.cancel", undefined, "Cancel")}
         </Button>
         <Button type="button" onClick={submit} disabled={isPending}>
-          {isPending ? "Registering…" : "Register endpoint"}
+          {isPending
+            ? t("console.settings.webhooks.new.registering", undefined, "Registering…")
+            : t("console.settings.webhooks.new.registerEndpoint", undefined, "Register endpoint")}
         </Button>
       </div>
     </div>

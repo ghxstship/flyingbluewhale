@@ -6,6 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { formatSequencePreview } from "@/lib/sequences";
 import { resetSequence, upsertSequence } from "./actions";
 
@@ -37,12 +38,18 @@ const SCOPE_HINTS: Array<{ scope: string; label: string; suggested: string }> = 
 ];
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Auto-Number Sequences" />
+        <ModuleHeader
+          eyebrow={t("console.settings.sequences.eyebrow", undefined, "Settings")}
+          title={t("console.settings.sequences.title", undefined, "Auto-Number Sequences")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.sequences.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -66,17 +73,39 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Auto-Number Sequences"
-        subtitle={`${existing.length} active sequence${existing.length === 1 ? "" : "s"} · format strings drive every invoice / PO / proposal identifier`}
-        breadcrumbs={[{ label: "Settings", href: "/console/settings" }, { label: "Sequences" }]}
+        eyebrow={t("console.settings.sequences.eyebrow", undefined, "Settings")}
+        title={t("console.settings.sequences.title", undefined, "Auto-Number Sequences")}
+        subtitle={
+          existing.length === 1
+            ? t(
+                "console.settings.sequences.subtitleOne",
+                { count: existing.length },
+                `${existing.length} active sequence · format strings drive every invoice / PO / proposal identifier`,
+              )
+            : t(
+                "console.settings.sequences.subtitleOther",
+                { count: existing.length },
+                `${existing.length} active sequences · format strings drive every invoice / PO / proposal identifier`,
+              )
+        }
+        breadcrumbs={[
+          { label: t("console.settings.sequences.crumbSettings", undefined, "Settings"), href: "/console/settings" },
+          { label: t("console.settings.sequences.crumbSequences", undefined, "Sequences") },
+        ]}
       />
       <div className="page-content space-y-5">
         <section className="surface p-5">
-          <h2 className="text-sm font-semibold">Active Sequences</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.sequences.activeHeading", undefined, "Active Sequences")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Each scope is a monotonic counter scoped to your org. The format string is templated when{" "}
-            <code className="font-mono">nextSequence()</code> fires — tokens:{" "}
+            {t(
+              "console.settings.sequences.activeIntroPrefix",
+              undefined,
+              "Each scope is a monotonic counter scoped to your org. The format string is templated when",
+            )}{" "}
+            <code className="font-mono">nextSequence()</code>{" "}
+            {t("console.settings.sequences.activeIntroFiresTokens", undefined, "fires — tokens:")}{" "}
             <code className="font-mono">{"{seq}"}</code>, <code className="font-mono">{"{seq:N}"}</code>,{" "}
             <code className="font-mono">{"{YYYY}"}</code>, <code className="font-mono">{"{YY}"}</code>,{" "}
             <code className="font-mono">{"{MM}"}</code>, <code className="font-mono">{"{DD}"}</code>,{" "}
@@ -84,24 +113,32 @@ export default async function Page() {
           </p>
           <DataTable<Row>
             rows={existing}
-            emptyLabel="No sequences allocated yet"
-            emptyDescription="A row appears the first time something asks for a number (invoice creation, PO submit, etc.). You can pre-seed any of the suggested scopes below to lock the format in advance."
+            emptyLabel={t("console.settings.sequences.emptyLabel", undefined, "No sequences allocated yet")}
+            emptyDescription={t(
+              "console.settings.sequences.emptyDescription",
+              undefined,
+              "A row appears the first time something asks for a number (invoice creation, PO submit, etc.). You can pre-seed any of the suggested scopes below to lock the format in advance.",
+            )}
             columns={[
-              { key: "scope", header: "Scope", render: (r) => <code className="font-mono text-xs">{r.scope}</code> },
+              {
+                key: "scope",
+                header: t("console.settings.sequences.columnScope", undefined, "Scope"),
+                render: (r) => <code className="font-mono text-xs">{r.scope}</code>,
+              },
               {
                 key: "format",
-                header: "Format",
+                header: t("console.settings.sequences.columnFormat", undefined, "Format"),
                 render: (r) => <code className="font-mono text-xs">{r.format}</code>,
               },
               {
                 key: "current_val",
-                header: "Current",
+                header: t("console.settings.sequences.columnCurrent", undefined, "Current"),
                 render: (r) => <span className="font-mono text-xs">{r.current_val.toLocaleString()}</span>,
                 accessor: (r) => r.current_val,
               },
               {
                 key: "next",
-                header: "Next identifier",
+                header: t("console.settings.sequences.columnNext", undefined, "Next identifier"),
                 render: (r) => (
                   <span className="font-mono text-xs">
                     {formatSequencePreview(r.format, { seq: r.current_val + 1, orgSlug })}
@@ -114,9 +151,13 @@ export default async function Page() {
                 render: (r) => (
                   <DeleteForm
                     action={resetSequence.bind(null, r.scope)}
-                    label="Reset"
-                    title="Reset sequence"
-                    confirm={`Reset "${r.scope}" counter to 0? Future identifiers restart from the beginning of the format.`}
+                    label={t("console.settings.sequences.resetLabel", undefined, "Reset")}
+                    title={t("console.settings.sequences.resetTitle", undefined, "Reset sequence")}
+                    confirm={t(
+                      "console.settings.sequences.resetConfirm",
+                      { scope: r.scope },
+                      `Reset "${r.scope}" counter to 0? Future identifiers restart from the beginning of the format.`,
+                    )}
                   />
                 ),
               },
@@ -125,10 +166,15 @@ export default async function Page() {
         </section>
 
         <section className="surface p-5">
-          <h2 className="text-sm font-semibold">Edit / Pre-Seed</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.sequences.editHeading", undefined, "Edit / Pre-Seed")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Upsert a scope — set its format and (optionally) jump the counter forward to align with a legacy numbering
-            scheme.
+            {t(
+              "console.settings.sequences.editIntro",
+              undefined,
+              "Upsert a scope — set its format and (optionally) jump the counter forward to align with a legacy numbering scheme.",
+            )}
           </p>
           <form
             action={upsertSequence}
@@ -138,9 +184,9 @@ export default async function Page() {
               name="scope"
               required
               maxLength={64}
-              placeholder="invoice"
+              placeholder={t("console.settings.sequences.scopePlaceholder", undefined, "invoice")}
               pattern="[a-z0-9_]+"
-              title="Lowercase letters, digits, underscore"
+              title={t("console.settings.sequences.scopeTitle", undefined, "Lowercase letters, digits, underscore")}
               className="input-base sm:col-span-2"
             />
             <input
@@ -156,12 +202,12 @@ export default async function Page() {
               type="number"
               min="0"
               max="9999999999"
-              placeholder="Seed"
+              placeholder={t("console.settings.sequences.seedPlaceholder", undefined, "Seed")}
               className="input-base sm:col-span-1"
             />
             <div className="flex justify-end sm:col-span-6">
               <Button type="submit" size="sm" variant="secondary">
-                Save Sequence
+                {t("console.settings.sequences.saveButton", undefined, "Save Sequence")}
               </Button>
             </div>
           </form>
@@ -169,16 +215,24 @@ export default async function Page() {
 
         {unconfiguredHints.length > 0 && (
           <section className="surface p-5">
-            <h2 className="text-sm font-semibold">Suggested Scopes</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.settings.sequences.suggestedHeading", undefined, "Suggested Scopes")}
+            </h2>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Common identifier scopes not yet configured. Pre-seeding now locks the format so the first
-              invoice/PO/proposal numbers don&rsquo;t come out as bare <code className="font-mono">0001</code>.
+              {t(
+                "console.settings.sequences.suggestedIntroPrefix",
+                undefined,
+                "Common identifier scopes not yet configured. Pre-seeding now locks the format so the first invoice/PO/proposal numbers don’t come out as bare",
+              )}{" "}
+              <code className="font-mono">0001</code>.
             </p>
             <ul className="mt-3 grid gap-2 sm:grid-cols-2">
               {unconfiguredHints.map((h) => (
                 <li key={h.scope} className="surface-inset flex items-center justify-between gap-3 rounded-md p-3">
                   <div>
-                    <div className="text-sm font-semibold">{h.label}</div>
+                    <div className="text-sm font-semibold">
+                      {t(`console.settings.sequences.scopeLabel.${h.scope}`, undefined, h.label)}
+                    </div>
                     <code className="font-mono text-xs text-[var(--text-muted)]">{h.suggested}</code>
                   </div>
                   <form action={upsertSequence}>
@@ -186,7 +240,7 @@ export default async function Page() {
                     <input type="hidden" name="format" value={h.suggested} />
                     <Button type="submit" variant="secondary" size="sm">
                       <Badge variant="muted">{h.scope}</Badge>
-                      <span className="ms-2">Pre-seed</span>
+                      <span className="ms-2">{t("console.settings.sequences.preSeed", undefined, "Pre-seed")}</span>
                     </Button>
                   </form>
                 </li>

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo } from "@/lib/format";
 import { LeadStageMover } from "./LeadStageMover";
 import { deleteLead } from "./edit/actions";
@@ -19,38 +20,47 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
   const session = await requireSession();
   const lead = await getOrgScoped("leads", session.orgId, leadId);
   if (!lead) notFound();
+  const { t } = await getRequestT();
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Lead"
+        eyebrow={t("console.leads.detail.eyebrow", undefined, "Lead")}
         title={lead.name}
-        subtitle={lead.email ?? "No email"}
+        subtitle={lead.email ?? t("console.leads.detail.noEmail", undefined, "No email")}
         action={
           <div className="flex items-center gap-2">
             <LeadStageMover leadId={lead.id} stage={lead.stage} />
             <Button href={`/console/leads/${leadId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteLead.bind(null, leadId)}
-              confirm={`Delete lead "${lead.name}"? This cannot be undone.`}
+              confirm={t(
+                "console.leads.detail.deleteConfirm",
+                { name: lead.name },
+                `Delete lead "${lead.name}"? This cannot be undone.`,
+              )}
             />
           </div>
         }
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label="Stage">
+          <Field label={t("console.leads.detail.fields.stage", undefined, "Stage")}>
             <StatusBadge status={lead.stage} />
           </Field>
-          <Field label="Value">{formatMoney(lead.estimated_value_cents)}</Field>
-          <Field label="Source">{lead.source ?? "—"}</Field>
-          <Field label="Updated">{timeAgo(lead.updated_at)}</Field>
+          <Field label={t("console.leads.detail.fields.value", undefined, "Value")}>
+            {formatMoney(lead.estimated_value_cents)}
+          </Field>
+          <Field label={t("console.leads.detail.fields.source", undefined, "Source")}>{lead.source ?? "—"}</Field>
+          <Field label={t("console.leads.detail.fields.updated", undefined, "Updated")}>
+            {timeAgo(lead.updated_at)}
+          </Field>
         </div>
         {lead.notes && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Notes</h3>
+            <h3 className="text-sm font-semibold">{t("console.leads.detail.notesHeading", undefined, "Notes")}</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{lead.notes}</p>
           </div>
         )}

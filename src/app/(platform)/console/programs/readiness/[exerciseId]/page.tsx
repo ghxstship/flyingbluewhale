@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteReadinessExercise } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ exerciseId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.programs.readiness.detail.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.readiness.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ exerciseId: s
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.programs.readiness.detail.eyebrow", undefined, "Record")}
         title={title ?? p.exerciseId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/programs/readiness" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/programs/readiness/${p.exerciseId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteReadinessExercise.bind(null, p.exerciseId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.programs.readiness.detail.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

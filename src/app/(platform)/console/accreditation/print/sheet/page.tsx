@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,12 +23,15 @@ type Row = {
  * Operator hits ⌘P → tray-loaded blank PVC cards.
  */
 export default async function PrintSheetPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Print Sheet" />
+        <ModuleHeader title={t("console.accreditation.print.sheet.title", undefined, "Print Sheet")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.accreditation.print.sheet.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -57,13 +61,17 @@ export default async function PrintSheetPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation · Print"
-        title="Badge Sheet"
-        subtitle={`${cards.length} card${cards.length === 1 ? "" : "s"} · ⌘P to print`}
+        eyebrow={t("console.accreditation.print.sheet.eyebrow", undefined, "Accreditation · Print")}
+        title={t("console.accreditation.print.sheet.badgeSheetTitle", undefined, "Badge Sheet")}
+        subtitle={t(
+          "console.accreditation.print.sheet.subtitle",
+          { count: cards.length, plural: cards.length === 1 ? "" : "s" },
+          `${cards.length} card${cards.length === 1 ? "" : "s"} · ⌘P to print`,
+        )}
         action={
           <div className="flex items-center gap-2 print:hidden">
             <Button href="/console/accreditation/print" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
           </div>
         }
@@ -71,7 +79,9 @@ export default async function PrintSheetPage() {
       <div className="page-content">
         <div className="grid grid-cols-2 gap-4 print:gap-2">
           {cards.length === 0 ? (
-            <div className="surface col-span-2 p-6 text-sm text-[var(--text-muted)]">No approved badges queued.</div>
+            <div className="surface col-span-2 p-6 text-sm text-[var(--text-muted)]">
+              {t("console.accreditation.print.sheet.empty", undefined, "No approved badges queued.")}
+            </div>
           ) : (
             cards.map((c) => (
               <div
@@ -83,7 +93,9 @@ export default async function PrintSheetPage() {
                   <div className="flex items-start justify-between">
                     <div>
                       <div className="text-[8px] font-semibold tracking-[0.2em] text-black/60 uppercase">
-                        {c.delegation?.code ?? c.delegation?.name ?? "Org"}
+                        {c.delegation?.code ??
+                          c.delegation?.name ??
+                          t("console.accreditation.print.sheet.orgFallback", undefined, "Org")}
                       </div>
                       <div className="mt-1 text-base leading-tight font-bold">{c.person_name}</div>
                       {c.category && (
@@ -101,7 +113,8 @@ export default async function PrintSheetPage() {
                     <span className="font-mono">{c.card_barcode ?? c.id.slice(0, 12)}</span>
                     {c.valid_to && (
                       <span>
-                        Valid to <span className="font-mono">{c.valid_to.slice(0, 10)}</span>
+                        {t("console.accreditation.print.sheet.validTo", undefined, "Valid to")}{" "}
+                        <span className="font-mono">{c.valid_to.slice(0, 10)}</span>
                       </span>
                     )}
                   </div>

@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { recordManualRunAction, toggleAutomationAction, type State } from "./actions";
 
 export function AutomationControls({
@@ -13,6 +14,7 @@ export function AutomationControls({
   enabled: boolean;
   isManual: boolean;
 }) {
+  const t = useT();
   const toggleAction = toggleAutomationAction.bind(null, automationId, !enabled);
   const runAction = recordManualRunAction.bind(null, automationId);
 
@@ -26,13 +28,19 @@ export function AutomationControls({
       <div className="flex items-center gap-2">
         <form action={toggleSubmit}>
           <Button type="submit" disabled={togglePending} variant={enabled ? "secondary" : "primary"} size="sm">
-            {togglePending ? "Saving…" : enabled ? "Disable" : "Enable"}
+            {togglePending
+              ? t("common.saving", undefined, "Saving…")
+              : enabled
+                ? t("console.ai.automations.controls.disable", undefined, "Disable")
+                : t("console.ai.automations.controls.enable", undefined, "Enable")}
           </Button>
         </form>
         {isManual && (
           <form action={runSubmit}>
             <Button type="submit" disabled={runPending || !enabled} variant="primary" size="sm">
-              {runPending ? "Running…" : "Run now"}
+              {runPending
+                ? t("console.ai.automations.controls.running", undefined, "Running…")
+                : t("console.ai.automations.controls.runNow", undefined, "Run now")}
             </Button>
           </form>
         )}

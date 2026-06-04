@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +41,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [pnlResp, legsResp] = await Promise.all([
     supabase.from("tour_p_and_l").select("*").eq("tour_id", tourId).eq("org_id", session.orgId).maybeSingle(),
@@ -57,29 +59,54 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Agency · Tour"
+        eyebrow={t("console.agency.tours.detail.eyebrow", undefined, "Agency · Tour")}
         title={pnl.name}
-        subtitle={`${pnl.starts_on ?? "—"} → ${pnl.ends_on ?? "—"} · ${pnl.leg_count} legs`}
+        subtitle={t(
+          "console.agency.tours.detail.subtitle",
+          { starts: pnl.starts_on ?? "—", ends: pnl.ends_on ?? "—", count: pnl.leg_count },
+          `${pnl.starts_on ?? "—"} → ${pnl.ends_on ?? "—"} · ${pnl.leg_count} legs`,
+        )}
         action={<Badge variant={STATUS_TONE[pnl.status] ?? "muted"}>{toTitle(pnl.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard label="GBOR" value={formatMoney(pnl.gross_box_office_cents)} accent />
-          <MetricCard label="NBOR" value={formatMoney(pnl.nbor_cents)} />
-          <MetricCard label="Artist Payout" value={formatMoney(pnl.artist_payout_cents)} />
-          <MetricCard label="Ancillary" value={formatMoney(pnl.ancillary_revenue_cents)} />
+          <MetricCard
+            label={t("console.agency.tours.detail.metrics.gbor", undefined, "GBOR")}
+            value={formatMoney(pnl.gross_box_office_cents)}
+            accent
+          />
+          <MetricCard
+            label={t("console.agency.tours.detail.metrics.nbor", undefined, "NBOR")}
+            value={formatMoney(pnl.nbor_cents)}
+          />
+          <MetricCard
+            label={t("console.agency.tours.detail.metrics.artistPayout", undefined, "Artist Payout")}
+            value={formatMoney(pnl.artist_payout_cents)}
+          />
+          <MetricCard
+            label={t("console.agency.tours.detail.metrics.ancillary", undefined, "Ancillary")}
+            value={formatMoney(pnl.ancillary_revenue_cents)}
+          />
         </div>
 
         <section className="surface p-5">
-          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Legs</h2>
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.agency.tours.detail.legs.heading", undefined, "Legs")}
+          </h2>
           {legs.length === 0 ? (
             <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-[var(--text-secondary)]">
-              <span>No legs linked yet. Each performance offer is a leg.</span>
+              <span>
+                {t(
+                  "console.agency.tours.detail.legs.empty",
+                  undefined,
+                  "No legs linked yet. Each performance offer is a leg.",
+                )}
+              </span>
               <Link
                 href={`/console/marketplace/offers?tour=${pnl.tour_id}`}
                 className="text-xs text-[var(--brand-color)] underline-offset-2 hover:underline"
               >
-                Link An Offer →
+                {t("console.agency.tours.detail.legs.linkOffer", undefined, "Link An Offer →")}
               </Link>
             </div>
           ) : (
@@ -94,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
                     <span className="font-mono text-xs">{formatMoney(l.fee_cents)}</span>
                     <Badge variant={STATUS_TONE[l.status] ?? "muted"}>{toTitle(l.status)}</Badge>
                     <Link href={`/console/bookings/deals/${l.id}`} className="text-xs text-[var(--brand-color)]">
-                      Open →
+                      {t("console.agency.tours.detail.legs.open", undefined, "Open →")}
                     </Link>
                   </div>
                 </li>

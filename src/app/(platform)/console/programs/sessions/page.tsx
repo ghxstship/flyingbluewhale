@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -38,12 +39,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Sessions" />
+        <ModuleHeader
+          eyebrow={t("console.programs.sessions.eyebrow", undefined, "Programs")}
+          title={t("console.programs.sessions.title", undefined, "Sessions")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.sessions.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -66,12 +73,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Programs"
-        title="Sessions"
-        subtitle={`${rows.length} session${rows.length === 1 ? "" : "s"} — heats, rounds, medal sessions`}
+        eyebrow={t("console.programs.sessions.eyebrow", undefined, "Programs")}
+        title={t("console.programs.sessions.title", undefined, "Sessions")}
+        subtitle={t(
+          "console.programs.sessions.subtitle",
+          { count: rows.length, plural: rows.length === 1 ? "" : "s" },
+          `${rows.length} session${rows.length === 1 ? "" : "s"} — heats, rounds, medal sessions`,
+        )}
         action={
           <Button href="/console/events/new" size="sm">
-            + New Event
+            {t("console.programs.sessions.newEvent", undefined, "+ New Event")}
           </Button>
         }
       />
@@ -79,38 +90,47 @@ export default async function Page() {
         <DataTable<EventRow>
           rows={rows}
           rowHref={(r) => `/console/events/${r.id}`}
-          emptyLabel="No sessions"
-          emptyDescription="Sessions live as Events with names like 'Heat 3 · 100m', 'Semi-final', 'Medal session'. This view filters automatically."
+          emptyLabel={t("console.programs.sessions.emptyLabel", undefined, "No sessions")}
+          emptyDescription={t(
+            "console.programs.sessions.emptyDescription",
+            undefined,
+            "Sessions live as Events with names like 'Heat 3 · 100m', 'Semi-final', 'Medal session'. This view filters automatically.",
+          )}
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New Event
+              {t("console.programs.sessions.newEvent", undefined, "+ New Event")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Session", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.programs.sessions.col.session", undefined, "Session"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "starts",
-              header: "Starts",
+              header: t("console.programs.sessions.col.starts", undefined, "Starts"),
               render: (r) => fmt(r.starts_at),
               className: "font-mono text-xs",
               accessor: (r) => r.starts_at ?? null,
             },
             {
               key: "ends",
-              header: "Ends",
+              header: t("console.programs.sessions.col.ends", undefined, "Ends"),
               render: (r) => fmt(r.ends_at),
               className: "font-mono text-xs",
               accessor: (r) => r.ends_at ?? null,
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.programs.sessions.col.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.programs.sessions.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,

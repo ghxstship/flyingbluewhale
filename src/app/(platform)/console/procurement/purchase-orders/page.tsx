@@ -7,17 +7,21 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { PurchaseOrder } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function POsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Purchase Orders" />
+        <ModuleHeader title={t("console.procurement.purchaseOrders.title", undefined, "Purchase Orders")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.purchaseOrders.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,10 +33,18 @@ export default async function POsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Purchase Orders"
-        subtitle={`${rows.length} POs · ${formatMoney(committed)} committed`}
-        action={<Button href="/console/procurement/purchase-orders/new">+ New PO</Button>}
+        eyebrow={t("console.procurement.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.purchaseOrders.title", undefined, "Purchase Orders")}
+        subtitle={t(
+          "console.procurement.purchaseOrders.subtitle",
+          { count: rows.length, amount: formatMoney(committed) },
+          `${rows.length} POs · ${formatMoney(committed)} committed`,
+        )}
+        action={
+          <Button href="/console/procurement/purchase-orders/new">
+            {t("console.procurement.purchaseOrders.newPo", undefined, "+ New PO")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<PurchaseOrder>
@@ -41,21 +53,26 @@ export default async function POsPage() {
           columns={[
             {
               key: "number",
-              header: "Number",
+              header: t("console.procurement.purchaseOrders.col.number", undefined, "Number"),
               render: (r) => <span className="font-mono text-xs">{r.number}</span>,
               accessor: (r) => r.number ?? null,
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.procurement.purchaseOrders.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "amount",
-              header: "Amount",
+              header: t("console.procurement.purchaseOrders.col.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents, r.currency),
               className: "font-mono text-xs",
               accessor: (r) => r.amount_cents ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.procurement.purchaseOrders.col.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.status} />,
               accessor: (r) => r.status,
               filterable: true,
@@ -63,7 +80,7 @@ export default async function POsPage() {
             },
             {
               key: "created",
-              header: "Created",
+              header: t("console.procurement.purchaseOrders.col.created", undefined, "Created"),
               render: (r) => timeAgo(r.created_at),
               className: "font-mono text-xs",
               accessor: (r) => r.created_at,

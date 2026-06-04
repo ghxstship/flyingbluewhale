@@ -7,17 +7,21 @@ import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateOrgName } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function OrgSettingsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Organization" />
+        <ModuleHeader title={t("console.settings.organization.title", undefined, "Organization")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.organization.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -28,9 +32,11 @@ export default async function OrgSettingsPage() {
   if (!org)
     return (
       <>
-        <ModuleHeader title="Organization" />
+        <ModuleHeader title={t("console.settings.organization.title", undefined, "Organization")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Organization not found.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.organization.notFound", undefined, "Organization not found.")}
+          </div>
         </div>
       </>
     );
@@ -56,21 +62,31 @@ export default async function OrgSettingsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
+        eyebrow={t("console.settings.organization.eyebrow", undefined, "Settings")}
         title={org.name}
-        subtitle={`${members ?? 0} member${members === 1 ? "" : "s"} · ${org.tier}`}
+        subtitle={`${members ?? 0} ${members === 1 ? t("console.settings.organization.memberSingular", undefined, "member") : t("console.settings.organization.memberPlural", undefined, "members")} · ${org.tier}`}
       />
       <div className="page-content max-w-4xl space-y-6">
         <div className="metric-grid-4">
-          <MetricCard label="Members" value={members ?? 0} accent />
-          <MetricCard label="Pending invites" value={invites ?? 0} />
-          <MetricCard label="Projects" value={projects ?? 0} />
-          <MetricCard label="Tier" value={org.tier} />
+          <MetricCard
+            label={t("console.settings.organization.metricMembers", undefined, "Members")}
+            value={members ?? 0}
+            accent
+          />
+          <MetricCard
+            label={t("console.settings.organization.metricPendingInvites", undefined, "Pending invites")}
+            value={invites ?? 0}
+          />
+          <MetricCard
+            label={t("console.settings.organization.metricProjects", undefined, "Projects")}
+            value={projects ?? 0}
+          />
+          <MetricCard label={t("console.settings.organization.metricTier", undefined, "Tier")} value={org.tier} />
         </div>
 
         <div className="surface space-y-4 p-5">
           <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            Organization profile
+            {t("console.settings.organization.profileHeading", undefined, "Organization profile")}
           </h3>
           {isAdmin ? (
             <form action={updateOrgName} className="grid gap-3 sm:grid-cols-[1fr_auto]">
@@ -83,88 +99,107 @@ export default async function OrgSettingsPage() {
                 className="rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
               />
               <Button type="submit" size="sm">
-                Save
+                {t("common.save", undefined, "Save")}
               </Button>
             </form>
           ) : (
-            <Field label="Name" value={org.name} />
+            <Field label={t("console.settings.organization.fieldName", undefined, "Name")} value={org.name} />
           )}
-          <Field label="Slug" value={org.slug} mono />
-          <Field label="Tier" value={<Badge variant="brand">{org.tier}</Badge>} />
-          <Field label="Default currency" value={org.default_currency} mono />
-          <Field label="Default timezone" value={org.default_timezone} mono />
-          <Field label="Created" value={formatDate(org.created_at, "medium")} mono />
+          <Field label={t("console.settings.organization.fieldSlug", undefined, "Slug")} value={org.slug} mono />
+          <Field
+            label={t("console.settings.organization.fieldTier", undefined, "Tier")}
+            value={<Badge variant="brand">{org.tier}</Badge>}
+          />
+          <Field
+            label={t("console.settings.organization.fieldDefaultCurrency", undefined, "Default currency")}
+            value={org.default_currency}
+            mono
+          />
+          <Field
+            label={t("console.settings.organization.fieldDefaultTimezone", undefined, "Default timezone")}
+            value={org.default_timezone}
+            mono
+          />
+          <Field
+            label={t("console.settings.organization.fieldCreated", undefined, "Created")}
+            value={formatDate(org.created_at, "medium")}
+            mono
+          />
         </div>
 
         <div className="surface space-y-3 p-5">
           <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            Member management
+            {t("console.settings.organization.memberMgmtHeading", undefined, "Member management")}
           </h3>
           <p className="text-xs text-[var(--text-secondary)]">
-            Member directory + role transitions live under People. Invites land under People · Invites.
+            {t(
+              "console.settings.organization.memberMgmtBlurb",
+              undefined,
+              "Member directory + role transitions live under People. Invites land under People · Invites.",
+            )}
           </p>
           <div className="flex flex-wrap gap-2">
             <Link
               href="/console/people"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Member directory →
+              {t("console.settings.organization.linkMemberDirectory", undefined, "Member directory →")}
             </Link>
             <Link
               href="/console/people/invites"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Invites ({invites ?? 0} pending) →
+              {t("console.settings.organization.linkInvites", { count: invites ?? 0 }, "Invites ({count} pending) →")}
             </Link>
             <Link
               href="/console/people/teams"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Teams →
+              {t("console.settings.organization.linkTeams", undefined, "Teams →")}
             </Link>
             <Link
               href="/console/people/roles"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Roles →
+              {t("console.settings.organization.linkRoles", undefined, "Roles →")}
             </Link>
           </div>
         </div>
 
         <div className="surface space-y-3 p-5">
           <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            Workspace settings
+            {t("console.settings.organization.workspaceHeading", undefined, "Workspace settings")}
           </h3>
           <div className="flex flex-wrap gap-2">
             <Link
               href="/console/settings/branding"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Branding →
+              {t("console.settings.organization.linkBranding", undefined, "Branding →")}
             </Link>
             <Link
               href="/console/settings/domains"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Domains →
+              {t("console.settings.organization.linkDomains", undefined, "Domains →")}
             </Link>
             <Link
               href="/console/settings/billing"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Billing →
+              {t("console.settings.organization.linkBilling", undefined, "Billing →")}
             </Link>
             <Link
               href="/console/settings/integrations"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Integrations →
+              {t("console.settings.organization.linkIntegrations", undefined, "Integrations →")}
             </Link>
             <Link
               href="/console/settings/audit"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Audit log →
+              {t("console.settings.organization.linkAudit", undefined, "Audit log →")}
             </Link>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { registerBimModel } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -10,32 +11,10 @@ export const dynamic = "force-dynamic";
 const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
 const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 
-const SOURCE_TYPES = [
-  { value: "ifc", label: "IFC" },
-  { value: "ifc_zip", label: "IFC (zipped)" },
-  { value: "rvt", label: "Revit (RVT)" },
-  { value: "nwd", label: "Navisworks (NWD)" },
-  { value: "nwc", label: "Navisworks Cache (NWC)" },
-  { value: "glb", label: "glTF binary (GLB)" },
-  { value: "gltf", label: "glTF" },
-  { value: "fbx", label: "FBX" },
-  { value: "dwg", label: "AutoCAD (DWG)" },
-];
-
-const DISCIPLINES = [
-  { value: "multi", label: "Multi-discipline" },
-  { value: "A", label: "Architectural" },
-  { value: "S", label: "Structural" },
-  { value: "M", label: "Mechanical" },
-  { value: "E", label: "Electrical" },
-  { value: "P", label: "Plumbing" },
-  { value: "FP", label: "Fire Protection" },
-  { value: "CIV", label: "Civil" },
-];
-
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: projects } = await supabase
     .from("projects")
@@ -44,28 +23,66 @@ export default async function Page() {
     .is("deleted_at", null)
     .order("name");
 
+  const SOURCE_TYPES = [
+    { value: "ifc", label: t("console.bim.new.sourceType.ifc", undefined, "IFC") },
+    { value: "ifc_zip", label: t("console.bim.new.sourceType.ifcZip", undefined, "IFC (zipped)") },
+    { value: "rvt", label: t("console.bim.new.sourceType.rvt", undefined, "Revit (RVT)") },
+    { value: "nwd", label: t("console.bim.new.sourceType.nwd", undefined, "Navisworks (NWD)") },
+    { value: "nwc", label: t("console.bim.new.sourceType.nwc", undefined, "Navisworks Cache (NWC)") },
+    { value: "glb", label: t("console.bim.new.sourceType.glb", undefined, "glTF binary (GLB)") },
+    { value: "gltf", label: t("console.bim.new.sourceType.gltf", undefined, "glTF") },
+    { value: "fbx", label: t("console.bim.new.sourceType.fbx", undefined, "FBX") },
+    { value: "dwg", label: t("console.bim.new.sourceType.dwg", undefined, "AutoCAD (DWG)") },
+  ];
+
+  const DISCIPLINES = [
+    { value: "multi", label: t("console.bim.new.discipline.multi", undefined, "Multi-discipline") },
+    { value: "A", label: t("console.bim.new.discipline.architectural", undefined, "Architectural") },
+    { value: "S", label: t("console.bim.new.discipline.structural", undefined, "Structural") },
+    { value: "M", label: t("console.bim.new.discipline.mechanical", undefined, "Mechanical") },
+    { value: "E", label: t("console.bim.new.discipline.electrical", undefined, "Electrical") },
+    { value: "P", label: t("console.bim.new.discipline.plumbing", undefined, "Plumbing") },
+    { value: "FP", label: t("console.bim.new.discipline.fireProtection", undefined, "Fire Protection") },
+    { value: "CIV", label: t("console.bim.new.discipline.civil", undefined, "Civil") },
+  ];
+
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative"
-        title="Register BIM Model"
-        subtitle="Register a model file. Upload through the 'bim' storage bucket separately; this row is the metadata anchor."
+        eyebrow={t("console.bim.new.eyebrow", undefined, "Creative")}
+        title={t("console.bim.new.title", undefined, "Register BIM Model")}
+        subtitle={t(
+          "console.bim.new.subtitle",
+          undefined,
+          "Register a model file. Upload through the 'bim' storage bucket separately; this row is the metadata anchor.",
+        )}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={registerBimModel} cancelHref="/console/bim" submitLabel="Register Model">
+        <FormShell
+          action={registerBimModel}
+          cancelHref="/console/bim"
+          submitLabel={t("console.bim.new.submit", undefined, "Register Model")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.bim.new.field.name", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="Tower-A Architectural — Level 03" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t("console.bim.new.placeholder.name", undefined, "Tower-A Architectural — Level 03")}
+              className={INPUT}
+            />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.bim.new.field.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
-                <option value="">Select…</option>
+                <option value="">{t("console.bim.new.selectProject", undefined, "Select…")}</option>
                 {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -74,7 +91,7 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Discipline</span>
+              <span className={LBL}>{t("console.bim.new.field.discipline", undefined, "Discipline")}</span>
               <select name="discipline" className={INPUT} defaultValue="multi">
                 {DISCIPLINES.map((d) => (
                   <option key={d.value} value={d.value}>
@@ -87,7 +104,8 @@ export default async function Page() {
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Source type<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.bim.new.field.sourceType", undefined, "Source type")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="source_type" required className={INPUT} defaultValue="ifc">
                 {SOURCE_TYPES.map((s) => (
@@ -98,13 +116,18 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Version label</span>
-              <input name="version_label" placeholder="Rev 0, 50% DD" className={INPUT} />
+              <span className={LBL}>{t("console.bim.new.field.versionLabel", undefined, "Version label")}</span>
+              <input
+                name="version_label"
+                placeholder={t("console.bim.new.placeholder.versionLabel", undefined, "Rev 0, 50% DD")}
+                className={INPUT}
+              />
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Storage path<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.bim.new.field.storagePath", undefined, "Storage path")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input
               name="storage_path"
@@ -113,7 +136,11 @@ export default async function Page() {
               className={`${INPUT} font-mono text-xs`}
             />
             <span className="text-[10px] text-[var(--text-muted)]">
-              Object key inside the &apos;bim&apos; storage bucket. Upload separately; this row references it.
+              {t(
+                "console.bim.new.storagePathHint",
+                undefined,
+                "Object key inside the 'bim' storage bucket. Upload separately; this row references it.",
+              )}
             </span>
           </label>
         </FormShell>

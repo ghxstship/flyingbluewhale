@@ -9,7 +9,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { listDashboards } from "@/lib/db/dashboards";
 import { createDashboardAction } from "./actions";
 import type { DashboardRow } from "@/lib/dashboards/types";
@@ -17,11 +17,13 @@ import type { DashboardRow } from "@/lib/dashboards/types";
 export const dynamic = "force-dynamic";
 
 // Mirrors src/app/(platform)/console/page.tsx — keep in sync.
-const DASHBOARD_TABS = [
-  { label: "Overview", href: "/console" },
-  { label: "Portfolio", href: "/console/dashboards" },
-  { label: "Action Items", href: "/console/action-items" },
-];
+function buildDashboardTabs(t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string) {
+  return [
+    { label: t("console.dashboards.tabs.overview", undefined, "Overview"), href: "/console" },
+    { label: t("console.dashboards.tabs.portfolio", undefined, "Portfolio"), href: "/console/dashboards" },
+    { label: t("console.dashboards.tabs.actionItems", undefined, "Action Items"), href: "/console/action-items" },
+  ];
+}
 
 type ProjectKpi = {
   id: string;
@@ -40,6 +42,8 @@ export default async function Page() {
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
+  const DASHBOARD_TABS = buildDashboardTabs(t);
 
   // ── User-created dashboards (Phase 3.6c) ────────────────────────────
   // RLS gates this — caller sees private dashboards they own + org/public
@@ -124,21 +128,39 @@ export default async function Page() {
     portfolio = (
       <section className="space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open RFIs" value={fmt.number(totals.rfis)} accent />
-          <MetricCard label="Open Punch" value={fmt.number(totals.punch)} />
-          <MetricCard label="OSHA recordables · 30d" value={fmt.number(totals.recordable)} />
+          <MetricCard
+            label={t("console.dashboards.metrics.openRfis", undefined, "Open RFIs")}
+            value={fmt.number(totals.rfis)}
+            accent
+          />
+          <MetricCard
+            label={t("console.dashboards.metrics.openPunch", undefined, "Open Punch")}
+            value={fmt.number(totals.punch)}
+          />
+          <MetricCard
+            label={t("console.dashboards.metrics.oshaRecordables30d", undefined, "OSHA recordables · 30d")}
+            value={fmt.number(totals.recordable)}
+          />
         </div>
         <section>
-          <h3 className="pb-3 text-base font-semibold">Per-Project KPIs</h3>
+          <h3 className="pb-3 text-base font-semibold">
+            {t("console.dashboards.perProjectKpis", undefined, "Per-Project KPIs")}
+          </h3>
           <DataTable<ProjectKpi>
             rows={kpis}
             rowHref={(k) => `/console/projects/${k.id}`}
-            emptyLabel="No Active Projects"
+            emptyLabel={t("console.dashboards.empty.noActiveProjects", undefined, "No Active Projects")}
             columns={[
-              { key: "name", header: "Project", render: (k) => k.name, accessor: (k) => k.name, sortable: true },
+              {
+                key: "name",
+                header: t("console.dashboards.columns.project", undefined, "Project"),
+                render: (k) => k.name,
+                accessor: (k) => k.name,
+                sortable: true,
+              },
               {
                 key: "open_rfis",
-                header: "Open RFIs",
+                header: t("console.dashboards.columns.openRfis", undefined, "Open RFIs"),
                 render: (k) => k.open_rfis,
                 accessor: (k) => k.open_rfis,
                 tabular: true,
@@ -148,7 +170,7 @@ export default async function Page() {
               },
               {
                 key: "open_punch",
-                header: "Open Punch",
+                header: t("console.dashboards.columns.openPunch", undefined, "Open Punch"),
                 render: (k) => k.open_punch,
                 accessor: (k) => k.open_punch,
                 tabular: true,
@@ -158,7 +180,7 @@ export default async function Page() {
               },
               {
                 key: "open_inspections",
-                header: "Open Inspections",
+                header: t("console.dashboards.columns.openInspections", undefined, "Open Inspections"),
                 render: (k) => k.open_inspections,
                 accessor: (k) => k.open_inspections,
                 tabular: true,
@@ -168,7 +190,7 @@ export default async function Page() {
               },
               {
                 key: "recordable_30d",
-                header: "Recordables (30d)",
+                header: t("console.dashboards.columns.recordables30d", undefined, "Recordables (30d)"),
                 render: (k) => k.recordable_30d,
                 accessor: (k) => k.recordable_30d,
                 tabular: true,
@@ -178,7 +200,7 @@ export default async function Page() {
               },
               {
                 key: "budget_cents",
-                header: "Budget",
+                header: t("console.dashboards.columns.budget", undefined, "Budget"),
                 render: (k) => formatMoney(k.budget_cents),
                 accessor: (k) => k.budget_cents,
                 tabular: true,
@@ -188,7 +210,7 @@ export default async function Page() {
               },
               {
                 key: "spent_cents",
-                header: "Spent",
+                header: t("console.dashboards.columns.spent", undefined, "Spent"),
                 render: (k) => formatMoney(k.spent_cents),
                 accessor: (k) => k.spent_cents,
                 tabular: true,
@@ -206,14 +228,26 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workspace"
-        title="Portfolio Dashboard"
-        subtitle={`${dashboards.length} custom dashboard${dashboards.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.dashboards.eyebrow", undefined, "Workspace")}
+        title={t("console.dashboards.title", undefined, "Portfolio Dashboard")}
+        subtitle={
+          dashboards.length === 1
+            ? t(
+                "console.dashboards.subtitle.one",
+                { count: dashboards.length },
+                `${dashboards.length} custom dashboard`,
+              )
+            : t(
+                "console.dashboards.subtitle.other",
+                { count: dashboards.length },
+                `${dashboards.length} custom dashboards`,
+              )
+        }
         tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
         action={
           <form action={createDashboardAction}>
             <Button type="submit" size="sm">
-              New Dashboard
+              {t("console.dashboards.actions.newDashboard", undefined, "New Dashboard")}
             </Button>
           </form>
         }
@@ -221,11 +255,13 @@ export default async function Page() {
       <div className="page-content space-y-6">
         {dashboards.length > 0 && (
           <section>
-            <h2 className="pb-3 text-base font-semibold">Custom Dashboards</h2>
+            <h2 className="pb-3 text-base font-semibold">
+              {t("console.dashboards.sections.customDashboards", undefined, "Custom Dashboards")}
+            </h2>
             <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
               {dashboards.map((d) => (
                 <li key={d.id}>
-                  <DashboardCard dashboard={d} />
+                  <DashboardCard dashboard={d} t={t} />
                 </li>
               ))}
             </ul>
@@ -233,9 +269,15 @@ export default async function Page() {
         )}
         {portfolio ?? (
           <section>
-            <h2 className="pb-3 text-base font-semibold">Portfolio Snapshot</h2>
+            <h2 className="pb-3 text-base font-semibold">
+              {t("console.dashboards.sections.portfolioSnapshot", undefined, "Portfolio Snapshot")}
+            </h2>
             <div className="surface p-6 text-sm text-[var(--text-muted)]">
-              No active projects yet — once a project moves to active status its KPIs roll up here.
+              {t(
+                "console.dashboards.empty.noActiveProjectsHint",
+                undefined,
+                "No active projects yet — once a project moves to active status its KPIs roll up here.",
+              )}
             </div>
           </section>
         )}
@@ -244,17 +286,31 @@ export default async function Page() {
   );
 }
 
-function DashboardCard({ dashboard }: { dashboard: DashboardRow }): React.ReactElement {
+function DashboardCard({
+  dashboard,
+  t,
+}: {
+  dashboard: DashboardRow;
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+}): React.ReactElement {
   const widgetCount = dashboard.layout.widgets.length;
+  const scopeLabel =
+    dashboard.scope === "private"
+      ? t("console.dashboards.scope.private", undefined, "Private")
+      : dashboard.scope === "org"
+        ? t("console.dashboards.scope.shared", undefined, "Shared")
+        : t("console.dashboards.scope.public", undefined, "Public");
+  const widgetLabel =
+    widgetCount === 1
+      ? t("console.dashboards.widgetCount.one", { count: widgetCount }, `${widgetCount} widget`)
+      : t("console.dashboards.widgetCount.other", { count: widgetCount }, `${widgetCount} widgets`);
   return (
     <Link href={`/console/dashboards/${dashboard.id}`} className="surface hover-lift block p-4">
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          {dashboard.scope === "private" ? "Private" : dashboard.scope === "org" ? "Shared" : "Public"}
+          {scopeLabel}
         </span>
-        <span className="text-[10px] text-[var(--text-muted)]">
-          {widgetCount} {widgetCount === 1 ? "widget" : "widgets"}
-        </span>
+        <span className="text-[10px] text-[var(--text-muted)]">{widgetLabel}</span>
       </div>
       <div className="mt-2 text-base font-semibold tracking-tight text-[var(--foreground)]">{dashboard.name}</div>
       {dashboard.description && (

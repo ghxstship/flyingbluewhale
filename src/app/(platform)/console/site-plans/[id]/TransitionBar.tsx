@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import type { SitePlanTransition } from "@/lib/siteplan/types";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { transitionSheet, type State } from "./actions";
 
 type Props = {
@@ -11,18 +12,23 @@ type Props = {
 };
 
 export function TransitionBar({ sheetId, transitions, labels }: Props) {
+  const t = useT();
   if (transitions.length === 0) {
     return (
       <section className="surface-inset flex items-center justify-between p-3 text-xs">
-        <span className="text-[var(--text-muted)]">Terminal state — no transitions available.</span>
+        <span className="text-[var(--text-muted)]">
+          {t("console.sitePlans.transitionBar.terminal", undefined, "Terminal state — no transitions available.")}
+        </span>
       </section>
     );
   }
   return (
     <section className="surface-inset flex flex-wrap items-center gap-2 p-3">
-      <span className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">Lifecycle</span>
-      {transitions.map((t) => (
-        <TransitionButton key={t} sheetId={sheetId} transition={t} label={labels[t]} />
+      <span className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+        {t("console.sitePlans.transitionBar.lifecycle", undefined, "Lifecycle")}
+      </span>
+      {transitions.map((tr) => (
+        <TransitionButton key={tr} sheetId={sheetId} transition={tr} label={labels[tr]} />
       ))}
     </section>
   );

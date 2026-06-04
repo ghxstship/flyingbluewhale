@@ -8,6 +8,7 @@ import { getProject } from "@/lib/db/projects";
 import { listGuides, PERSONA_TIERS } from "@/lib/db/guides";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { GuidePersona } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -21,12 +22,17 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
   const project = await getProject(session.orgId, projectId);
   if (!project) notFound();
   const guides = await listGuides(session.orgId, projectId);
+  const { t } = await getRequestT();
 
   const byPersona = new Map(guides.map((g) => [g.persona, g]));
 
   return (
     <>
-      <ModuleHeader eyebrow={project.name} title="Event Guides" subtitle="Per-role know-before-you-go." />
+      <ModuleHeader
+        eyebrow={project.name}
+        title={t("console.projects.guides.title", undefined, "Event Guides")}
+        subtitle={t("console.projects.guides.subtitle", undefined, "Per-role know-before-you-go.")}
+      />
       <div className="page-content space-y-4">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {ALL_PERSONAS.map((p) => {
@@ -37,15 +43,19 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">{toTitle(p)}</div>
                   {existing?.published ? (
-                    <Badge variant="success">Live</Badge>
+                    <Badge variant="success">{t("console.projects.guides.statusLive", undefined, "Live")}</Badge>
                   ) : existing ? (
-                    <Badge variant="muted">Draft</Badge>
+                    <Badge variant="muted">{t("console.projects.guides.statusDraft", undefined, "Draft")}</Badge>
                   ) : (
-                    <Badge variant="muted">None</Badge>
+                    <Badge variant="muted">{t("console.projects.guides.statusNone", undefined, "None")}</Badge>
                   )}
                 </div>
                 <div className="mt-2 text-xs text-[var(--text-muted)]">
-                  Tier {tierInfo.tier} · {tierInfo.classification}
+                  {t(
+                    "console.projects.guides.tierLine",
+                    { tier: tierInfo.tier, classification: tierInfo.classification },
+                    `Tier ${tierInfo.tier} · ${tierInfo.classification}`,
+                  )}
                 </div>
                 {existing?.title && <div className="mt-2 text-sm">{existing.title}</div>}
               </Link>
@@ -53,13 +63,19 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
           })}
         </div>
         <div className="surface-inset p-5 text-sm text-[var(--text-muted)]">
-          <div className="text-sm font-semibold text-[var(--foreground)]">Custom Guide</div>
+          <div className="text-sm font-semibold text-[var(--foreground)]">
+            {t("console.projects.guides.customHeading", undefined, "Custom Guide")}
+          </div>
           <p className="mt-2">
-            Build a guide for a role that isn&apos;t on the standard list. Same renderer, your fields.
+            {t(
+              "console.projects.guides.customDescription",
+              undefined,
+              "Build a guide for a role that isn't on the standard list. Same renderer, your fields.",
+            )}
           </p>
           <div className="mt-3">
             <Button href={`/console/projects/${projectId}/guides/custom`} variant="secondary">
-              Start Custom Guide
+              {t("console.projects.guides.startCustom", undefined, "Start Custom Guide")}
             </Button>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { updateProjectAction } from "../actions";
 import type { ProjectState } from "@/lib/supabase/types";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 const NEXT_STATE: Partial<Record<ProjectState, ProjectState>> = {
   draft: "active",
@@ -15,6 +16,7 @@ const NEXT_STATE: Partial<Record<ProjectState, ProjectState>> = {
 };
 
 export function ProjectStatusToggle({ projectId, projectState }: { projectId: string; projectState: ProjectState }) {
+  const t = useT();
   const [pending, start] = useTransition();
   const next = NEXT_STATE[projectState];
   if (!next) return null;
@@ -29,11 +31,13 @@ export function ProjectStatusToggle({ projectId, projectState }: { projectId: st
           fd.set("project_state", next);
           const res = await updateProjectAction(projectId, fd);
           if (res?.error) toast.error(res.error);
-          else toast.success(`Marked ${next}`);
+          else toast.success(t("console.projects.statusToggle.markedToast", { state: next }, `Marked ${next}`));
         })
       }
     >
-      {pending ? "Updating…" : `Mark ${next}`}
+      {pending
+        ? t("console.projects.statusToggle.updating", undefined, "Updating…")
+        : t("console.projects.statusToggle.markAction", { state: next }, `Mark ${next}`)}
     </Button>
   );
 }

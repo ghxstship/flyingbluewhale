@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createAnnouncementAction, type State } from "./actions";
 
 /**
@@ -25,35 +26,57 @@ export function NewAnnouncementForm({
   projects: Array<{ id: string; name: string }>;
   teams: Array<{ id: string; name: string }>;
 }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(createAnnouncementAction, null);
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">
-      <Input label="Title" name="title" required maxLength={200} />
+      <Input
+        label={t("console.comms.announcements.new.title", undefined, "Title")}
+        name="title"
+        required
+        maxLength={200}
+      />
       <label className="flex flex-col gap-1.5">
-        <span className="text-xs font-medium text-[var(--text-secondary)]">Body</span>
+        <span className="text-xs font-medium text-[var(--text-secondary)]">
+          {t("console.comms.announcements.new.body", undefined, "Body")}
+        </span>
         <textarea name="body" rows={6} required maxLength={8000} className="input-base focus-ring w-full" />
       </label>
 
       <fieldset className="space-y-3 rounded-md border border-[var(--border-color)] p-3">
         <legend className="px-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] uppercase">
-          Audience
+          {t("console.comms.announcements.new.audience", undefined, "Audience")}
         </legend>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Role Band</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.comms.announcements.new.roleBand", undefined, "Role Band")}
+            </span>
             <select name="audience" className="input-base focus-ring w-full" defaultValue="all">
-              <option value="all">Everyone</option>
-              <option value="crew">Crew</option>
-              <option value="contractors">Contractors</option>
-              <option value="vendors">Vendors</option>
-              <option value="admins">Admins</option>
+              <option value="all">
+                {t("console.comms.announcements.new.roleBand.everyone", undefined, "Everyone")}
+              </option>
+              <option value="crew">{t("console.comms.announcements.new.roleBand.crew", undefined, "Crew")}</option>
+              <option value="contractors">
+                {t("console.comms.announcements.new.roleBand.contractors", undefined, "Contractors")}
+              </option>
+              <option value="vendors">
+                {t("console.comms.announcements.new.roleBand.vendors", undefined, "Vendors")}
+              </option>
+              <option value="admins">
+                {t("console.comms.announcements.new.roleBand.admins", undefined, "Admins")}
+              </option>
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Project</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.comms.announcements.new.project", undefined, "Project")}
+            </span>
             <select name="project_id" className="input-base focus-ring w-full" defaultValue="">
-              <option value="">Org-wide (any project)</option>
+              <option value="">
+                {t("console.comms.announcements.new.project.any", undefined, "Org-wide (any project)")}
+              </option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -62,36 +85,46 @@ export function NewAnnouncementForm({
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Team</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.comms.announcements.new.team", undefined, "Team")}
+            </span>
             <select name="team_id" className="input-base focus-ring w-full" defaultValue="">
-              <option value="">Any team</option>
-              {teams.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
+              <option value="">{t("console.comms.announcements.new.team.any", undefined, "Any team")}</option>
+              {teams.map((team) => (
+                <option key={team.id} value={team.id}>
+                  {team.name}
                 </option>
               ))}
             </select>
           </label>
         </div>
         <p className="text-[11px] text-[var(--text-muted)]">
-          Filters AND together — recipients must match every populated filter. Leave Project + Team blank to reach the
-          full role band.
+          {t(
+            "console.comms.announcements.new.filtersHint",
+            undefined,
+            "Filters AND together — recipients must match every populated filter. Leave Project + Team blank to reach the full role band.",
+          )}
         </p>
       </fieldset>
 
       <label className="flex items-center gap-2 text-xs">
-        <input type="checkbox" name="pinned" /> Pin To Top Of Feed
+        <input type="checkbox" name="pinned" />{" "}
+        {t("console.comms.announcements.new.pinToTop", undefined, "Pin To Top Of Feed")}
       </label>
       {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
       <div className="flex items-center justify-end gap-2">
         <Button href="/console/comms/announcements" variant="ghost">
-          Cancel
+          {t("common.cancel", undefined, "Cancel")}
         </Button>
         <Button type="submit" variant="secondary" disabled={pending}>
-          {pending ? "Saving…" : "Save Draft"}
+          {pending
+            ? t("console.comms.announcements.new.saving", undefined, "Saving…")
+            : t("console.comms.announcements.new.saveDraft", undefined, "Save Draft")}
         </Button>
         <Button type="submit" name="publish_now" value="on" disabled={pending}>
-          {pending ? "Publishing…" : "Publish Now"}
+          {pending
+            ? t("console.comms.announcements.new.publishing", undefined, "Publishing…")
+            : t("console.comms.announcements.new.publishNow", undefined, "Publish Now")}
         </Button>
       </div>
     </form>

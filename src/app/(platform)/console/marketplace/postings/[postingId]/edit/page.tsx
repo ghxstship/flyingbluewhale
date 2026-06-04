@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { updatePostingAction } from "./actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 type Posting = {
   id: string;
@@ -42,20 +43,32 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
     .maybeSingle();
   if (!data) return notFound();
   const p = data as Posting;
+  const { t } = await getRequestT();
 
   return (
     <>
-      <ModuleHeader eyebrow="Marketplace · Posting" title={`Edit · ${p.title}`} />
+      <ModuleHeader
+        eyebrow={t("console.marketplace.postings.edit.eyebrow", undefined, "Marketplace · Posting")}
+        title={t("console.marketplace.postings.edit.title", { title: p.title }, `Edit · ${p.title}`)}
+      />
       <div className="page-content max-w-2xl">
         <FormShell
           action={updatePostingAction}
           cancelHref={`/console/marketplace/postings/${p.id}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           <input type="hidden" name="posting_id" value={p.id} />
-          <Input label="Title" name="title" required maxLength={200} defaultValue={p.title} />
+          <Input
+            label={t("console.marketplace.postings.edit.fields.title", undefined, "Title")}
+            name="title"
+            required
+            maxLength={200}
+            defaultValue={p.title}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.marketplace.postings.edit.fields.description", undefined, "Description")}
+            </label>
             <textarea
               name="description"
               rows={6}
@@ -66,46 +79,109 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Posting Type</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.marketplace.postings.edit.fields.postingType", undefined, "Posting Type")}
+              </label>
               <select name="posting_type" className="input-base mt-1.5 w-full" defaultValue={p.posting_type}>
-                <option value="single">Single</option>
-                <option value="tour">Tour Leg</option>
-                <option value="recurring">Recurring</option>
+                <option value="single">
+                  {t("console.marketplace.postings.edit.postingType.single", undefined, "Single")}
+                </option>
+                <option value="tour">
+                  {t("console.marketplace.postings.edit.postingType.tour", undefined, "Tour Leg")}
+                </option>
+                <option value="recurring">
+                  {t("console.marketplace.postings.edit.postingType.recurring", undefined, "Recurring")}
+                </option>
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Employment</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.marketplace.postings.edit.fields.employment", undefined, "Employment")}
+              </label>
               <select name="employment_type" className="input-base mt-1.5 w-full" defaultValue={p.employment_type}>
-                <option value="1099">1099 Contractor</option>
-                <option value="w2">W-2 Crew</option>
-                <option value="contract">Contract</option>
-                <option value="volunteer">Volunteer</option>
+                <option value="1099">
+                  {t("console.marketplace.postings.edit.employment.1099", undefined, "1099 Contractor")}
+                </option>
+                <option value="w2">
+                  {t("console.marketplace.postings.edit.employment.w2", undefined, "W-2 Crew")}
+                </option>
+                <option value="contract">
+                  {t("console.marketplace.postings.edit.employment.contract", undefined, "Contract")}
+                </option>
+                <option value="volunteer">
+                  {t("console.marketplace.postings.edit.employment.volunteer", undefined, "Volunteer")}
+                </option>
               </select>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <Input label="City" name="city" maxLength={80} defaultValue={p.city ?? ""} />
-            <Input label="Region/State" name="region" maxLength={80} defaultValue={p.region ?? ""} />
-            <Input label="Country" name="country" maxLength={80} defaultValue={p.country ?? ""} />
+            <Input
+              label={t("console.marketplace.postings.edit.fields.city", undefined, "City")}
+              name="city"
+              maxLength={80}
+              defaultValue={p.city ?? ""}
+            />
+            <Input
+              label={t("console.marketplace.postings.edit.fields.region", undefined, "Region/State")}
+              name="region"
+              maxLength={80}
+              defaultValue={p.region ?? ""}
+            />
+            <Input
+              label={t("console.marketplace.postings.edit.fields.country", undefined, "Country")}
+              name="country"
+              maxLength={80}
+              defaultValue={p.country ?? ""}
+            />
           </div>
-          <Input label="Roles" name="role_taxonomy" defaultValue={p.role_taxonomy.join(", ")} />
-          <Input label="Certifications" name="certs_required" defaultValue={p.certs_required.join(", ")} />
-          <Input label="Unions" name="union_required" defaultValue={p.union_required.join(", ")} />
+          <Input
+            label={t("console.marketplace.postings.edit.fields.roles", undefined, "Roles")}
+            name="role_taxonomy"
+            defaultValue={p.role_taxonomy.join(", ")}
+          />
+          <Input
+            label={t("console.marketplace.postings.edit.fields.certifications", undefined, "Certifications")}
+            name="certs_required"
+            defaultValue={p.certs_required.join(", ")}
+          />
+          <Input
+            label={t("console.marketplace.postings.edit.fields.unions", undefined, "Unions")}
+            name="union_required"
+            defaultValue={p.union_required.join(", ")}
+          />
           <div className="grid grid-cols-3 gap-3">
-            <Input label="Day Rate Min" name="day_rate_min" defaultValue={dollars(p.day_rate_min_cents)} />
-            <Input label="Day Rate Max" name="day_rate_max" defaultValue={dollars(p.day_rate_max_cents)} />
-            <Input label="Currency" name="currency" maxLength={3} defaultValue={p.currency} />
+            <Input
+              label={t("console.marketplace.postings.edit.fields.dayRateMin", undefined, "Day Rate Min")}
+              name="day_rate_min"
+              defaultValue={dollars(p.day_rate_min_cents)}
+            />
+            <Input
+              label={t("console.marketplace.postings.edit.fields.dayRateMax", undefined, "Day Rate Max")}
+              name="day_rate_max"
+              defaultValue={dollars(p.day_rate_max_cents)}
+            />
+            <Input
+              label={t("console.marketplace.postings.edit.fields.currency", undefined, "Currency")}
+              name="currency"
+              maxLength={3}
+              defaultValue={p.currency}
+            />
           </div>
           <fieldset className="surface-inset flex flex-col gap-2 p-3">
-            <legend className="text-xs font-medium tracking-wide uppercase">Provided</legend>
+            <legend className="text-xs font-medium tracking-wide uppercase">
+              {t("console.marketplace.postings.edit.provided.legend", undefined, "Provided")}
+            </legend>
             <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="travel_paid" defaultChecked={p.travel_paid} /> Travel paid
+              <input type="checkbox" name="travel_paid" defaultChecked={p.travel_paid} />{" "}
+              {t("console.marketplace.postings.edit.provided.travelPaid", undefined, "Travel paid")}
             </label>
             <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="lodging_provided" defaultChecked={p.lodging_provided} /> Lodging provided
+              <input type="checkbox" name="lodging_provided" defaultChecked={p.lodging_provided} />{" "}
+              {t("console.marketplace.postings.edit.provided.lodgingProvided", undefined, "Lodging provided")}
             </label>
             <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="vetted_only" defaultChecked={p.vetted_only} /> Vetted-only
+              <input type="checkbox" name="vetted_only" defaultChecked={p.vetted_only} />{" "}
+              {t("console.marketplace.postings.edit.provided.vettedOnly", undefined, "Vetted-only")}
             </label>
           </fieldset>
         </FormShell>

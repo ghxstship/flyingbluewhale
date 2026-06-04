@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Email-template editor with merge-tag autocomplete.
@@ -51,6 +52,7 @@ function renderPreview(body: string): string {
 }
 
 export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
+  const t = useT();
   const [templates, setTemplates] = useState<Template[]>(initial);
   const [mode, setMode] = useState<"list" | "new" | { edit: string }>("list");
   const [form, setForm] = useState<Partial<Template>>({
@@ -67,15 +69,17 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
     if (mode === "new") {
       setForm({ slug: "", name: "", subject: "", body_html: "", body_text: "" });
     } else if (active) {
-      const t = templates.find((x) => x.id === active);
-      if (t) setForm({ ...t });
+      const tpl = templates.find((x) => x.id === active);
+      if (tpl) setForm({ ...tpl });
     }
   }, [mode, active, templates]);
 
   const save = useCallback(() => {
     if (mode === "new") {
       if (!form.slug || !form.name || !form.subject || !form.body_html) {
-        toast.error("Slug, name, subject, and body are required");
+        toast.error(
+          t("console.settings.emailTemplates.requiredToast", undefined, "Slug, name, subject, and body are required"),
+        );
         return;
       }
       startTransition(async () => {
@@ -92,13 +96,15 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         });
         const body = await r.json().catch(() => ({}));
         if (!r.ok || body.ok === false) {
-          toast.error(body.error?.message ?? "Create failed");
+          toast.error(
+            body.error?.message ?? t("console.settings.emailTemplates.createFailedToast", undefined, "Create failed"),
+          );
           return;
         }
         if (body.data?.template) {
           setTemplates((ts) => [body.data.template, ...ts]);
           setMode("list");
-          toast.success("Template created");
+          toast.success(t("console.settings.emailTemplates.createdToast", undefined, "Template created"));
         }
       });
     } else if (active) {
@@ -116,13 +122,15 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         });
         const body = await r.json().catch(() => ({}));
         if (!r.ok || body.ok === false) {
-          toast.error(body.error?.message ?? "Save failed");
+          toast.error(
+            body.error?.message ?? t("console.settings.emailTemplates.saveFailedToast", undefined, "Save failed"),
+          );
           return;
         }
         if (body.data?.template) {
-          setTemplates((ts) => ts.map((t) => (t.id === active ? body.data.template : t)));
+          setTemplates((ts) => ts.map((tpl) => (tpl.id === active ? body.data.template : tpl)));
           setMode("list");
-          toast.success("Template saved");
+          toast.success(t("console.settings.emailTemplates.savedToast", undefined, "Template saved"));
         }
       });
     }
@@ -133,19 +141,33 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <p className="text-sm text-[var(--text-muted)]">
-            {templates.length} template{templates.length === 1 ? "" : "s"}
+            {templates.length === 1
+              ? t(
+                  "console.settings.emailTemplates.countOne",
+                  { count: templates.length },
+                  `${templates.length} template`,
+                )
+              : t(
+                  "console.settings.emailTemplates.countOther",
+                  { count: templates.length },
+                  `${templates.length} templates`,
+                )}
           </p>
           <Button type="button" onClick={() => setMode("new")}>
-            New template
+            {t("console.settings.emailTemplates.newTemplate", undefined, "New template")}
           </Button>
         </div>
         {templates.length === 0 ? (
           <EmptyState
-            title="No Templates Yet"
-            description="Transactional email shapes for proposals, invoices, and notifications."
+            title={t("console.settings.emailTemplates.emptyTitle", undefined, "No Templates Yet")}
+            description={t(
+              "console.settings.emailTemplates.emptyDescription",
+              undefined,
+              "Transactional email shapes for proposals, invoices, and notifications.",
+            )}
             action={
               <Button type="button" onClick={() => setMode("new")}>
-                New template
+                {t("console.settings.emailTemplates.newTemplate", undefined, "New template")}
               </Button>
             }
           />
@@ -153,29 +175,29 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>Slug</th>
-                <th>Name</th>
-                <th>Subject</th>
-                <th>Active</th>
-                <th>Updated</th>
+                <th>{t("console.settings.emailTemplates.colSlug", undefined, "Slug")}</th>
+                <th>{t("console.settings.emailTemplates.colName", undefined, "Name")}</th>
+                <th>{t("console.settings.emailTemplates.colSubject", undefined, "Subject")}</th>
+                <th>{t("console.settings.emailTemplates.colActive", undefined, "Active")}</th>
+                <th>{t("console.settings.emailTemplates.colUpdated", undefined, "Updated")}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {templates.map((t) => (
-                <tr key={t.id}>
-                  <td className="font-mono text-xs">{t.slug}</td>
-                  <td>{t.name}</td>
-                  <td className="text-[var(--text-muted)]">{t.subject}</td>
-                  <td>{t.is_active ? "Yes" : "No"}</td>
-                  <td className="font-mono text-xs">{new Date(t.updated_at).toLocaleDateString()}</td>
+              {templates.map((tpl) => (
+                <tr key={tpl.id}>
+                  <td className="font-mono text-xs">{tpl.slug}</td>
+                  <td>{tpl.name}</td>
+                  <td className="text-[var(--text-muted)]">{tpl.subject}</td>
+                  <td>{tpl.is_active ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</td>
+                  <td className="font-mono text-xs">{new Date(tpl.updated_at).toLocaleDateString()}</td>
                   <td>
                     <button
                       type="button"
-                      onClick={() => setMode({ edit: t.id })}
+                      onClick={() => setMode({ edit: tpl.id })}
                       className="text-xs text-[var(--org-primary)] hover:underline"
                     >
-                      Edit
+                      {t("common.edit", undefined, "Edit")}
                     </button>
                   </td>
                 </tr>
@@ -190,41 +212,45 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
   return (
     <div className="surface space-y-3 p-5">
       <div className="flex items-center justify-between">
-        <div className="text-sm font-semibold">{mode === "new" ? "New template" : "Edit template"}</div>
+        <div className="text-sm font-semibold">
+          {mode === "new"
+            ? t("console.settings.emailTemplates.newTemplate", undefined, "New template")
+            : t("console.settings.emailTemplates.editTemplate", undefined, "Edit template")}
+        </div>
         <button
           type="button"
           onClick={() => setMode("list")}
           className="text-xs text-[var(--text-muted)] hover:underline"
         >
-          Cancel
+          {t("common.cancel", undefined, "Cancel")}
         </button>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Input
-          label="Slug"
+          label={t("console.settings.emailTemplates.colSlug", undefined, "Slug")}
           value={form.slug ?? ""}
           onChange={(e) => setForm({ ...form, slug: e.target.value })}
           placeholder="proposal.share"
           disabled={mode !== "new"}
         />
         <Input
-          label="Name"
+          label={t("console.settings.emailTemplates.colName", undefined, "Name")}
           value={form.name ?? ""}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          placeholder="Proposal share"
+          placeholder={t("console.settings.emailTemplates.namePlaceholder", undefined, "Proposal share")}
         />
       </div>
 
       <MergeTagField
-        label="Subject"
+        label={t("console.settings.emailTemplates.colSubject", undefined, "Subject")}
         value={form.subject ?? ""}
         onChange={(v) => setForm({ ...form, subject: v })}
         singleLine
       />
 
       <MergeTagField
-        label="Body HTML"
+        label={t("console.settings.emailTemplates.bodyHtml", undefined, "Body HTML")}
         value={form.body_html ?? ""}
         onChange={(v) => setForm({ ...form, body_html: v })}
       />
@@ -236,18 +262,24 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
             checked={form.is_active ?? true}
             onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
           />
-          <span>Active</span>
+          <span>{t("console.settings.emailTemplates.colActive", undefined, "Active")}</span>
         </label>
       )}
 
       <div className="mt-4 grid gap-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-3 text-xs">
-        <div className="font-semibold tracking-wider text-[var(--text-muted)] uppercase">Preview</div>
+        <div className="font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          {t("console.settings.emailTemplates.preview", undefined, "Preview")}
+        </div>
         <div>
-          <div className="text-[10px] text-[var(--text-muted)]">Subject</div>
+          <div className="text-[10px] text-[var(--text-muted)]">
+            {t("console.settings.emailTemplates.colSubject", undefined, "Subject")}
+          </div>
           <div className="mt-0.5 text-[var(--text-primary)]">{renderPreview(form.subject ?? "")}</div>
         </div>
         <div>
-          <div className="text-[10px] text-[var(--text-muted)]">Body</div>
+          <div className="text-[10px] text-[var(--text-muted)]">
+            {t("console.settings.emailTemplates.body", undefined, "Body")}
+          </div>
           <div
             className="prose prose-sm mt-1 max-w-none rounded bg-[var(--white)] p-3 text-[var(--text-inverted)]"
             dangerouslySetInnerHTML={{ __html: sanitizeHtml(renderPreview(form.body_html ?? "")) }}
@@ -259,7 +291,9 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
 
       <div className="flex justify-end gap-2">
         <Button type="button" onClick={save} disabled={isPending}>
-          {isPending ? "Saving…" : "Save template"}
+          {isPending
+            ? t("common.saving", undefined, "Saving…")
+            : t("console.settings.emailTemplates.saveTemplate", undefined, "Save template")}
         </Button>
       </div>
     </div>
@@ -267,17 +301,24 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
 }
 
 function MergeTagCatalog() {
+  const t = useT();
   return (
     <details className="rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] text-xs">
       <summary className="cursor-pointer px-3 py-2 font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-        Available merge tags ({MERGE_TAGS.length})
+        {t(
+          "console.settings.emailTemplates.availableMergeTags",
+          { count: MERGE_TAGS.length },
+          `Available merge tags (${MERGE_TAGS.length})`,
+        )}
       </summary>
       <div className="max-h-56 overflow-y-auto px-3 py-2">
         <ul className="divide-y divide-[var(--border-color)]">
           {MERGE_TAGS.map((m) => (
             <li key={m.tag} className="flex items-center justify-between gap-3 py-1.5">
               <code className="font-mono text-[11px] text-[var(--org-primary)]">{`{{${m.tag}}}`}</code>
-              <span className="flex-1 text-[var(--text-muted)]">{m.description}</span>
+              <span className="flex-1 text-[var(--text-muted)]">
+                {t(`console.settings.emailTemplates.mergeTag.${m.tag}.description`, undefined, m.description)}
+              </span>
               <span className="text-[var(--text-muted)]">{m.sample}</span>
             </li>
           ))}
@@ -303,6 +344,7 @@ function MergeTagField({
   onChange: (v: string) => void;
   singleLine?: boolean;
 }) {
+  const t = useT();
   const ref = useRef<HTMLTextAreaElement | HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -368,7 +410,9 @@ function MergeTagField({
               className="flex w-full items-center justify-between gap-3 px-3 py-1.5 text-start text-xs hover:bg-[var(--surface-inset)]"
             >
               <code className="font-mono text-[var(--org-primary)]">{`{{${m.tag}}}`}</code>
-              <span className="truncate text-[var(--text-muted)]">{m.description}</span>
+              <span className="truncate text-[var(--text-muted)]">
+                {t(`console.settings.emailTemplates.mergeTag.${m.tag}.description`, undefined, m.description)}
+              </span>
             </button>
           ))}
         </div>

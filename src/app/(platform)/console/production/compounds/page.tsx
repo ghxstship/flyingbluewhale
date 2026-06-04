@@ -5,7 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,12 +26,18 @@ const KIND_LABEL: Record<string, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Compounds" />
+        <ModuleHeader
+          eyebrow={t("console.production.compounds.eyebrow", undefined, "Production")}
+          title={t("console.production.compounds.title", undefined, "Compounds")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.compounds.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -57,19 +63,19 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
-        title="Compounds"
-        subtitle={`${rows.length} compound${rows.length === 1 ? "" : "s"} (${COMPOUND_KINDS.map((k) => `${byKind[k] ?? 0} ${k.toUpperCase()}`).join(" · ")})`}
+        eyebrow={t("console.production.compounds.eyebrow", undefined, "Production")}
+        title={t("console.production.compounds.title", undefined, "Compounds")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.production.compounds.compound", undefined, "compound") : t("console.production.compounds.compounds", undefined, "compounds")} (${COMPOUND_KINDS.map((k) => `${byKind[k] ?? 0} ${k.toUpperCase()}`).join(" · ")})`}
         action={
           <Button href="/console/venues/new" size="sm">
-            + New Venue
+            {t("console.production.compounds.newVenue", undefined, "+ New Venue")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {Object.keys(byKind).length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By Kind</h3>
+            <h3 className="text-sm font-semibold">{t("console.production.compounds.byKind", undefined, "By Kind")}</h3>
             <ul className="mt-3 space-y-1.5">
               {COMPOUND_KINDS.map((k) => (
                 <li key={k} className="flex items-center justify-between text-sm">
@@ -84,28 +90,42 @@ export default async function Page() {
         <DataTable<VenueRow>
           rows={rows}
           rowHref={(r) => `/console/venues/${r.id}`}
-          emptyLabel="No broadcast compounds"
-          emptyDescription="Broadcast compounds (IBC + MPC) are venues with kind 'ibc' or 'mpc'. Author one through Venues → New, then set its kind."
+          emptyLabel={t("console.production.compounds.emptyLabel", undefined, "No broadcast compounds")}
+          emptyDescription={t(
+            "console.production.compounds.emptyDescription",
+            undefined,
+            "Broadcast compounds (IBC + MPC) are venues with kind 'ibc' or 'mpc'. Author one through Venues → New, then set its kind.",
+          )}
           emptyAction={
             <Button href="/console/venues/new" size="sm">
-              + New Venue
+              {t("console.production.compounds.newVenue", undefined, "+ New Venue")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.production.compounds.col.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.production.compounds.col.kind", undefined, "Kind"),
               render: (r) => r.kind.toUpperCase(),
               className: "font-mono text-xs",
               filterable: true,
               groupable: true,
               accessor: (r) => r.kind.toUpperCase ?? null,
             },
-            { key: "cluster", header: "Cluster", render: (r) => r.cluster ?? "—", accessor: (r) => r.cluster ?? null },
+            {
+              key: "cluster",
+              header: t("console.production.compounds.col.cluster", undefined, "Cluster"),
+              render: (r) => r.cluster ?? "—",
+              accessor: (r) => r.cluster ?? null,
+            },
             {
               key: "capacity",
-              header: "Capacity",
+              header: t("console.production.compounds.col.capacity", undefined, "Capacity"),
               render: (r) => (
                 <span className="font-mono text-xs">{r.capacity != null ? fmt.number(r.capacity) : "—"}</span>
               ),
@@ -113,7 +133,7 @@ export default async function Page() {
             },
             {
               key: "handover",
-              header: "Handover",
+              header: t("console.production.compounds.col.handover", undefined, "Handover"),
               render: (r) => <StatusBadge status={r.handover_state} />,
               accessor: (r) => r.handover_state,
             },
@@ -121,8 +141,11 @@ export default async function Page() {
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Cable plant + signal flow diagrams attach to each venue's stage-plot record. Open a compound to author its
-          rigging plan and rights-holder allocation.
+          {t(
+            "console.production.compounds.footerNote",
+            undefined,
+            "Cable plant + signal flow diagrams attach to each venue's stage-plot record. Open a compound to author its rigging plan and rights-holder allocation.",
+          )}
         </p>
       </div>
     </>

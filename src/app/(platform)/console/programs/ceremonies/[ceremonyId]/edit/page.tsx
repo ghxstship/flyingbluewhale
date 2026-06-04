@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateCeremony, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -22,24 +23,36 @@ export default async function Page({ params }: { params: Promise<{ ceremonyId: s
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
+  const { t } = await getRequestT();
   const action = updateCeremony.bind(null, p.ceremonyId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const ceremonyName =
+    ((row as Record<string, unknown>)["name"] as string | undefined) ??
+    t("console.programs.ceremonies.edit.fallbackName", undefined, "Ceremony");
   return (
     <>
       <ModuleHeader
-        eyebrow="Ceremony"
-        title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Ceremony"}`}
+        eyebrow={t("console.programs.ceremonies.edit.eyebrow", undefined, "Ceremony")}
+        title={t("console.programs.ceremonies.edit.title", { name: ceremonyName }, `Edit ${ceremonyName}`)}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/programs/ceremonies/${p.ceremonyId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
+          <Input
+            label={t("console.programs.ceremonies.edit.fields.title", undefined, "Title")}
+            name="name"
+            defaultValue={row.name ?? ""}
+            required
+            maxLength={200}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.ceremonies.edit.fields.description", undefined, "Description")}
+            </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
@@ -48,27 +61,35 @@ export default async function Page({ params }: { params: Promise<{ ceremonyId: s
             />
           </label>
           <Input
-            label="Starts At"
+            label={t("console.programs.ceremonies.edit.fields.startsAt", undefined, "Starts At")}
             name="starts_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.starts_at)}
             required
           />
           <Input
-            label="Ends At"
+            label={t("console.programs.ceremonies.edit.fields.endsAt", undefined, "Ends At")}
             name="ends_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.ends_at)}
             required
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.ceremonies.edit.fields.status", undefined, "Status")}
+            </span>
             <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
-              <option value="draft">draft</option>
-              <option value="scheduled">scheduled</option>
-              <option value="live">live</option>
-              <option value="complete">complete</option>
-              <option value="cancelled">cancelled</option>
+              <option value="draft">{t("console.programs.ceremonies.edit.status.draft", undefined, "draft")}</option>
+              <option value="scheduled">
+                {t("console.programs.ceremonies.edit.status.scheduled", undefined, "scheduled")}
+              </option>
+              <option value="live">{t("console.programs.ceremonies.edit.status.live", undefined, "live")}</option>
+              <option value="complete">
+                {t("console.programs.ceremonies.edit.status.complete", undefined, "complete")}
+              </option>
+              <option value="cancelled">
+                {t("console.programs.ceremonies.edit.status.cancelled", undefined, "cancelled")}
+              </option>
             </select>
           </label>
         </FormShell>

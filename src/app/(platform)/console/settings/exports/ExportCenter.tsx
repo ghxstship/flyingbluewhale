@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusChip } from "@/components/ui/StatusChip";
 import { Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Spinner } from "@/components/ui/Spinner";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 import { toTitle } from "@/lib/format";
 
 /**
@@ -34,22 +34,24 @@ type Run = {
   last_error: string | null;
 };
 
-const TABLES = [
-  { value: "projects", label: "Projects" },
-  { value: "deliverables", label: "Deliverables" },
-  { value: "invoices", label: "Invoices" },
-  { value: "tasks", label: "Tasks" },
-  { value: "tickets", label: "Tickets" },
-  { value: "crew_members", label: "Crew Roster" },
-  { value: "vendors", label: "Vendors" },
-  { value: "audit_log", label: "Audit Log" },
+type TableOption = { value: string; labelKey: string; defaultLabel: string };
+const TABLES: TableOption[] = [
+  { value: "projects", labelKey: "console.settings.exports.tables.projects", defaultLabel: "Projects" },
+  { value: "deliverables", labelKey: "console.settings.exports.tables.deliverables", defaultLabel: "Deliverables" },
+  { value: "invoices", labelKey: "console.settings.exports.tables.invoices", defaultLabel: "Invoices" },
+  { value: "tasks", labelKey: "console.settings.exports.tables.tasks", defaultLabel: "Tasks" },
+  { value: "tickets", labelKey: "console.settings.exports.tables.tickets", defaultLabel: "Tickets" },
+  { value: "crew_members", labelKey: "console.settings.exports.tables.crewMembers", defaultLabel: "Crew Roster" },
+  { value: "vendors", labelKey: "console.settings.exports.tables.vendors", defaultLabel: "Vendors" },
+  { value: "audit_log", labelKey: "console.settings.exports.tables.auditLog", defaultLabel: "Audit Log" },
 ];
 
-const KINDS = [
-  { value: "csv", label: "CSV" },
-  { value: "json", label: "JSON" },
-  { value: "xlsx", label: "Excel (XLSX)" },
-  { value: "zip", label: "ZIP (CSV + JSON)" },
+type KindOption = { value: string; labelKey: string; defaultLabel: string };
+const KINDS: KindOption[] = [
+  { value: "csv", labelKey: "console.settings.exports.kinds.csv", defaultLabel: "CSV" },
+  { value: "json", labelKey: "console.settings.exports.kinds.json", defaultLabel: "JSON" },
+  { value: "xlsx", labelKey: "console.settings.exports.kinds.xlsx", defaultLabel: "Excel (XLSX)" },
+  { value: "zip", labelKey: "console.settings.exports.kinds.zip", defaultLabel: "ZIP (CSV + JSON)" },
 ];
 
 type StatusIcon = React.ComponentType<{ size?: number; className?: string }>;
@@ -62,6 +64,7 @@ const STATUS_TONES: Record<Run["status"], { tone: "neutral" | "info" | "success"
 
 export function ExportCenter({ initial }: { initial: Run[] }) {
   const fmt = useFormatters();
+  const t = useT();
   const [runs, setRuns] = useState<Run[]>(initial);
   const [kind, setKind] = useState("csv");
   const [table, setTable] = useState("projects");
@@ -98,13 +101,13 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
       });
       const body = await r.json().catch(() => ({}));
       if (!r.ok || body.ok === false) {
-        toast.error(body.error?.message ?? "Export failed");
+        toast.error(body.error?.message ?? t("console.settings.exports.toast.failed", undefined, "Export failed"));
         return;
       }
       if (body.data?.queued) {
-        toast.success("Export queued — polling for completion");
+        toast.success(t("console.settings.exports.toast.queued", undefined, "Export queued — polling for completion"));
       } else {
-        toast.success("Export complete");
+        toast.success(t("console.settings.exports.toast.complete", undefined, "Export complete"));
         if (body.data?.signedUrl) {
           window.open(body.data.signedUrl, "_blank");
         }
@@ -120,7 +123,9 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
       if (body?.ok && body.data?.signedUrl) {
         window.open(body.data.signedUrl, "_blank");
       } else {
-        toast.error(body?.error?.message ?? "Download failed");
+        toast.error(
+          body?.error?.message ?? t("console.settings.exports.toast.downloadFailed", undefined, "Download failed"),
+        );
       }
     } catch (err) {
       toast.error((err as Error).message);
@@ -130,35 +135,43 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
   return (
     <div className="space-y-8">
       <section className="surface p-5">
-        <h2 className="mb-3 text-sm font-semibold">New Export</h2>
+        <h2 className="mb-3 text-sm font-semibold">
+          {t("console.settings.exports.newExport", undefined, "New Export")}
+        </h2>
         <div className="flex flex-wrap items-end gap-3">
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Format</span>
+            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+              {t("console.settings.exports.format", undefined, "Format")}
+            </span>
             <select value={kind} onChange={(e) => setKind(e.target.value)} className="input-base w-40">
               {KINDS.map((k) => (
                 <option key={k.value} value={k.value}>
-                  {k.label}
+                  {t(k.labelKey, undefined, k.defaultLabel)}
                 </option>
               ))}
             </select>
           </label>
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Table</span>
+            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+              {t("console.settings.exports.table", undefined, "Table")}
+            </span>
             <select value={table} onChange={(e) => setTable(e.target.value)} className="input-base w-52">
-              {TABLES.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
+              {TABLES.map((tbl) => (
+                <option key={tbl.value} value={tbl.value}>
+                  {t(tbl.labelKey, undefined, tbl.defaultLabel)}
                 </option>
               ))}
             </select>
           </label>
           <Button type="button" onClick={submit} disabled={isPending}>
-            {isPending ? "Generating…" : "Run export"}
+            {isPending
+              ? t("console.settings.exports.generating", undefined, "Generating…")
+              : t("console.settings.exports.runExport", undefined, "Run export")}
           </Button>
           {(kind === "csv" || kind === "json") && (
             <label className="ms-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
               <input type="checkbox" checked={asyncMode} onChange={(e) => setAsyncMode(e.target.checked)} />
-              Queue in background
+              {t("console.settings.exports.queueInBackground", undefined, "Queue in background")}
             </label>
           )}
         </div>
@@ -166,30 +179,36 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
 
       <section className="surface p-5">
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Recent Runs</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.exports.recentRuns", undefined, "Recent Runs")}
+          </h2>
           {anyBusy && (
             <span className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)]">
               <Spinner size="sm" />
-              Auto-refreshing while runs are in flight
+              {t("console.settings.exports.autoRefreshing", undefined, "Auto-refreshing while runs are in flight")}
             </span>
           )}
         </div>
         {runs.length === 0 ? (
           <EmptyState
             size="compact"
-            title="No Exports Yet"
-            description="Run one above and it will appear here with status, size, and row count."
+            title={t("console.settings.exports.empty.title", undefined, "No Exports Yet")}
+            description={t(
+              "console.settings.exports.empty.description",
+              undefined,
+              "Run one above and it will appear here with status, size, and row count.",
+            )}
           />
         ) : (
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>When</th>
-                <th>Kind</th>
-                <th>Table</th>
-                <th>Rows</th>
-                <th>Size</th>
-                <th>Status</th>
+                <th>{t("console.settings.exports.col.when", undefined, "When")}</th>
+                <th>{t("console.settings.exports.col.kind", undefined, "Kind")}</th>
+                <th>{t("console.settings.exports.col.table", undefined, "Table")}</th>
+                <th>{t("console.settings.exports.col.rows", undefined, "Rows")}</th>
+                <th>{t("console.settings.exports.col.size", undefined, "Size")}</th>
+                <th>{t("console.settings.exports.col.status", undefined, "Status")}</th>
                 <th></th>
               </tr>
             </thead>
@@ -226,10 +245,10 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                         <button
                           type="button"
                           onClick={() => redownload(r)}
-                          aria-label="Download Again"
+                          aria-label={t("console.settings.exports.downloadAgain", undefined, "Download Again")}
                           className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-[10px] hover:bg-[var(--surface-inset)]"
                         >
-                          <Download size={10} /> Download
+                          <Download size={10} /> {t("console.settings.exports.download", undefined, "Download")}
                         </button>
                       )}
                     </td>

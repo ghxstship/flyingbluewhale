@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateVenue, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -17,20 +18,36 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
+  const { t } = await getRequestT();
   const action = updateVenue.bind(null, p.venueId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const venueName =
+    ((row as Record<string, unknown>)["name"] as string | undefined) ??
+    t("console.venues.edit.fallbackName", undefined, "Venue");
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Venue"}`}
+        eyebrow={t("console.venues.edit.eyebrow", undefined, "Venue")}
+        title={t("console.venues.edit.title", { name: venueName }, `Edit ${venueName}`)}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/venues/${p.venueId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/venues/${p.venueId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
+          <Input
+            label={t("console.venues.edit.fields.name", undefined, "Name")}
+            name="name"
+            defaultValue={row.name ?? ""}
+            required
+            maxLength={200}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Kind</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.venues.edit.fields.kind", undefined, "Kind")}
+            </span>
             <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
               <option value="competition">competition</option>
               <option value="training">training</option>
@@ -41,15 +58,22 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               <option value="support">support</option>
             </select>
           </label>
-          <Input label="Cluster" name="cluster" defaultValue={row.cluster ?? ""} maxLength={120} />
           <Input
-            label="Capacity"
+            label={t("console.venues.edit.fields.cluster", undefined, "Cluster")}
+            name="cluster"
+            defaultValue={row.cluster ?? ""}
+            maxLength={120}
+          />
+          <Input
+            label={t("console.venues.edit.fields.capacity", undefined, "Capacity")}
             name="capacity"
             type="number"
             defaultValue={row.capacity != null ? String(row.capacity) : ""}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Handover state</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.venues.edit.fields.handoverState", undefined, "Handover state")}
+            </span>
             <select
               name="handover_state"
               defaultValue={row.handover_state ?? ""}

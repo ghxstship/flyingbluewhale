@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { activateBaseline, archiveBaseline, runCpm } from "./actions";
 import { ImportScheduleClient } from "./import-client";
@@ -51,6 +51,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { id } = await params;
 
   const { data: row } = await supabase
@@ -83,9 +84,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`Schedule · ${baseline.project?.name ?? "Project"}`}
+        eyebrow={t(
+          "console.schedule.baselines.detail.eyebrow",
+          {
+            project:
+              baseline.project?.name ?? t("console.schedule.baselines.detail.projectFallback", undefined, "Project"),
+          },
+          `Schedule · ${baseline.project?.name ?? "Project"}`,
+        )}
         title={baseline.name}
-        subtitle={`${totalCount} activities · ${criticalCount} critical · ${totalDuration.toFixed(1)} cumulative days`}
+        subtitle={t(
+          "console.schedule.baselines.detail.subtitle",
+          { total: totalCount, critical: criticalCount, days: totalDuration.toFixed(1) },
+          `${totalCount} activities · ${criticalCount} critical · ${totalDuration.toFixed(1)} cumulative days`,
+        )}
         action={
           <div className="flex items-center gap-2">
             {activities.length > 0 && (
@@ -93,11 +105,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 href={`/console/schedule/baselines/${baseline.id}/gantt`}
                 className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
               >
-                Open Gantt
+                {t("console.schedule.baselines.detail.openGantt", undefined, "Open Gantt")}
               </a>
             )}
             <Button href="/console/schedule/baselines" size="sm" variant="ghost">
-              ← All Baselines
+              {t("console.schedule.baselines.detail.allBaselines", undefined, "← All Baselines")}
             </Button>
           </div>
         }
@@ -106,11 +118,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[baseline.baseline_state]}>{toTitle(baseline.baseline_state)}</Badge>
           {baseline.imported_from && (
-            <span className="font-mono text-[var(--text-muted)]">Imported from {baseline.imported_from}</span>
+            <span className="font-mono text-[var(--text-muted)]">
+              {t(
+                "console.schedule.baselines.detail.importedFrom",
+                { source: baseline.imported_from },
+                `Imported from ${baseline.imported_from}`,
+              )}
+            </span>
           )}
           {baseline.snapshot_at && (
             <span className="font-mono text-[var(--text-muted)]">
-              Snapshot · {fmt.dateParts(baseline.snapshot_at, { year: "numeric", month: "short", day: "numeric" })}
+              {t("console.schedule.baselines.detail.snapshotLabel", undefined, "Snapshot")} ·{" "}
+              {fmt.dateParts(baseline.snapshot_at, { year: "numeric", month: "short", day: "numeric" })}
             </span>
           )}
           <span className="ms-auto flex gap-2">
@@ -118,7 +137,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <form action={runCpm}>
                 <input type="hidden" name="baseline_id" value={baseline.id} />
                 <Button type="submit" size="sm" variant="secondary">
-                  Re-run CPM
+                  {t("console.schedule.baselines.detail.rerunCpm", undefined, "Re-run CPM")}
                 </Button>
               </form>
             )}
@@ -126,7 +145,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <form action={activateBaseline}>
                 <input type="hidden" name="baseline_id" value={baseline.id} />
                 <Button type="submit" size="sm">
-                  Activate
+                  {t("console.schedule.baselines.detail.activate", undefined, "Activate")}
                 </Button>
               </form>
             )}
@@ -134,7 +153,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <form action={archiveBaseline}>
                 <input type="hidden" name="baseline_id" value={baseline.id} />
                 <Button type="submit" size="sm" variant="ghost">
-                  Archive
+                  {t("console.schedule.baselines.detail.archive", undefined, "Archive")}
                 </Button>
               </form>
             )}
@@ -142,17 +161,32 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </div>
 
         <div className="metric-grid-3">
-          <MetricCard label="Activities" value={fmt.number(totalCount)} accent />
-          <MetricCard label="On Critical Path" value={fmt.number(criticalCount)} />
-          <MetricCard label="Cumulative Days" value={totalDuration.toFixed(1)} />
+          <MetricCard
+            label={t("console.schedule.baselines.detail.metrics.activities", undefined, "Activities")}
+            value={fmt.number(totalCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.schedule.baselines.detail.metrics.criticalPath", undefined, "On Critical Path")}
+            value={fmt.number(criticalCount)}
+          />
+          <MetricCard
+            label={t("console.schedule.baselines.detail.metrics.cumulativeDays", undefined, "Cumulative Days")}
+            value={totalDuration.toFixed(1)}
+          />
         </div>
 
         {activities.length === 0 && (
           <section className="surface space-y-3 p-4">
-            <h2 className="text-sm font-semibold">Import from P6 / MSP / Asta</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.schedule.baselines.detail.import.title", undefined, "Import from P6 / MSP / Asta")}
+            </h2>
             <p className="text-xs text-[var(--text-muted)]">
-              Paste or upload an XER (P6) or XML (P6 / Microsoft Project / Asta Powerproject) export to populate
-              activities + dependencies in this baseline. Re-imports overwrite the current activity set.
+              {t(
+                "console.schedule.baselines.detail.import.description",
+                undefined,
+                "Paste or upload an XER (P6) or XML (P6 / Microsoft Project / Asta Powerproject) export to populate activities + dependencies in this baseline. Re-imports overwrite the current activity set.",
+              )}
             </p>
             <ImportScheduleClient baselineId={baseline.id} />
           </section>
@@ -160,55 +194,68 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         <DataTable<Activity>
           rows={activities}
-          emptyLabel="No activities in this baseline yet"
-          emptyDescription="Import an XER/XML file or add activities manually to build out the schedule."
+          emptyLabel={t(
+            "console.schedule.baselines.detail.table.emptyLabel",
+            undefined,
+            "No activities in this baseline yet",
+          )}
+          emptyDescription={t(
+            "console.schedule.baselines.detail.table.emptyDescription",
+            undefined,
+            "Import an XER/XML file or add activities manually to build out the schedule.",
+          )}
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.schedule.baselines.detail.table.code", undefined, "Code"),
               render: (a) => a.code,
               accessor: (a) => a.code,
               className: "font-mono text-xs",
             },
-            { key: "name", header: "Activity", render: (a) => a.name, accessor: (a) => a.name },
+            {
+              key: "name",
+              header: t("console.schedule.baselines.detail.table.activity", undefined, "Activity"),
+              render: (a) => a.name,
+              accessor: (a) => a.name,
+            },
             {
               key: "start",
-              header: "Start",
+              header: t("console.schedule.baselines.detail.table.start", undefined, "Start"),
               render: (a) => fmt.dateParts(a.start_planned, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (a) => a.start_planned,
               className: "font-mono text-xs",
             },
             {
               key: "finish",
-              header: "Finish",
+              header: t("console.schedule.baselines.detail.table.finish", undefined, "Finish"),
               render: (a) => fmt.dateParts(a.finish_planned, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (a) => a.finish_planned,
               className: "font-mono text-xs",
             },
             {
               key: "duration",
-              header: "Dur (d)",
+              header: t("console.schedule.baselines.detail.table.duration", undefined, "Dur (d)"),
               render: (a) => Number(a.duration_days).toFixed(1),
               accessor: (a) => Number(a.duration_days),
               className: "font-mono text-xs text-right",
             },
             {
               key: "float",
-              header: "Float (d)",
+              header: t("console.schedule.baselines.detail.table.float", undefined, "Float (d)"),
               render: (a) => (a.total_float_days != null ? Number(a.total_float_days).toFixed(1) : "—"),
               accessor: (a) => a.total_float_days,
               className: "font-mono text-xs text-right",
             },
             {
               key: "critical",
-              header: "Critical",
+              header: t("console.schedule.baselines.detail.table.critical", undefined, "Critical"),
               render: (a) => (a.is_critical ? <Badge variant="error">CP</Badge> : "—"),
               accessor: (a) => (a.is_critical ? "yes" : "no"),
               filterable: true,
             },
             {
               key: "progress",
-              header: "%",
+              header: t("console.schedule.baselines.detail.table.percent", undefined, "%"),
               render: (a) => `${Number(a.percent_complete).toFixed(0)}%`,
               accessor: (a) => Number(a.percent_complete),
               className: "font-mono text-xs text-right",

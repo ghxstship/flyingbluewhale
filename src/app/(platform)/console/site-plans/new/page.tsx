@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { SITEPLAN_SHEET_TYPES, SITEPLAN_SHELL_TYPES } from "@/lib/siteplan/types";
 import { PRESETS } from "@/lib/siteplan/presets";
+import { getRequestT } from "@/lib/i18n/request";
 import { createSitePlanSheet } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +38,7 @@ const TIERS = [
 
 export default async function Page() {
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const [{ data: projects }, { data: venues }, { data: events }] = await Promise.all([
@@ -50,15 +52,24 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative · Site Plans"
-        title="New Sheet"
-        breadcrumbs={[{ label: "Site Plans", href: "/console/site-plans" }, { label: "New" }]}
+        eyebrow={t("console.sitePlans.new.eyebrow", undefined, "Creative · Site Plans")}
+        title={t("console.sitePlans.new.title", undefined, "New Sheet")}
+        breadcrumbs={[
+          { label: t("console.sitePlans.breadcrumb", undefined, "Site Plans"), href: "/console/site-plans" },
+          { label: t("console.sitePlans.new.breadcrumb", undefined, "New") },
+        ]}
       />
       <div className="page-content max-w-3xl">
-        <FormShell action={createSitePlanSheet} cancelHref="/console/site-plans" submitLabel="Create Sheet">
+        <FormShell
+          action={createSitePlanSheet}
+          cancelHref="/console/site-plans"
+          submitLabel={t("console.sitePlans.new.submit", undefined, "Create Sheet")}
+        >
           {/* ATOM-ID SEGMENTS */}
           <section className="space-y-3">
-            <h3 className="text-sm font-semibold tracking-wide uppercase">Atom ID</h3>
+            <h3 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.sitePlans.new.section.atomId", undefined, "Atom ID")}
+            </h3>
             <div className="grid grid-cols-5 gap-3">
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
@@ -97,11 +108,11 @@ export default async function Page() {
             </div>
             <div className="grid grid-cols-3 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>SEQ</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.seq", undefined, "SEQ")}</span>
                 <input name="seq" type="number" min={1} max={999} defaultValue={1} className={INPUT} />
               </label>
               <label className="col-span-2 flex flex-col gap-1.5">
-                <span className={LBL}>Revision</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.revision", undefined, "Revision")}</span>
                 <input value="A" readOnly className={`${MONO} opacity-60`} />
               </label>
             </div>
@@ -109,41 +120,51 @@ export default async function Page() {
 
           {/* STRUCTURAL */}
           <section className="space-y-3">
-            <h3 className="text-sm font-semibold tracking-wide uppercase">Sheet</h3>
+            <h3 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.sitePlans.new.section.sheet", undefined, "Sheet")}
+            </h3>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Title<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.sitePlans.new.label.title", undefined, "Title")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input
                 name="title"
                 required
                 maxLength={200}
                 className={INPUT}
-                placeholder="Salvage City — Kitchen Perp Tent"
+                placeholder={t(
+                  "console.sitePlans.new.placeholder.title",
+                  undefined,
+                  "Salvage City — Kitchen Perp Tent",
+                )}
               />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Sheet Code<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.sitePlans.new.label.sheetCode", undefined, "Sheet Code")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input name="code" required maxLength={40} className={INPUT} placeholder="K-101" />
             </label>
             <div className="grid grid-cols-3 gap-3">
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  Sheet Type<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  {t("console.sitePlans.new.label.sheetType", undefined, "Sheet Type")}
+                  <span className="ms-0.5 text-[var(--color-error)]">*</span>
                 </span>
                 <select name="sheet_type" required defaultValue="floor_plan" className={INPUT}>
-                  {SITEPLAN_SHEET_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
+                  {SITEPLAN_SHEET_TYPES.map((sheetType) => (
+                    <option key={sheetType} value={sheetType}>
+                      {sheetType}
                     </option>
                   ))}
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  XPMS Class<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  {t("console.sitePlans.new.label.xpmsClass", undefined, "XPMS Class")}
+                  <span className="ms-0.5 text-[var(--color-error)]">*</span>
                 </span>
                 <select name="primary_class" required defaultValue="8" className={INPUT}>
                   {XPMS_CLASSES.map((c) => (
@@ -154,12 +175,12 @@ export default async function Page() {
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Tier</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.tier", undefined, "Tier")}</span>
                 <select name="tier_primary" defaultValue="" className={INPUT}>
                   <option value="">—</option>
-                  {TIERS.map((t) => (
-                    <option key={t.value} value={t.value}>
-                      {t.label}
+                  {TIERS.map((tier) => (
+                    <option key={tier.value} value={tier.value}>
+                      {tier.label}
                     </option>
                   ))}
                 </select>
@@ -169,10 +190,12 @@ export default async function Page() {
 
           {/* SHELL */}
           <section className="space-y-3">
-            <h3 className="text-sm font-semibold tracking-wide uppercase">Shell</h3>
+            <h3 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.sitePlans.new.section.shell", undefined, "Shell")}
+            </h3>
             <div className="grid grid-cols-2 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Shell Type</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.shellType", undefined, "Shell Type")}</span>
                 <select name="shell_type" defaultValue="tent" className={INPUT}>
                   <option value="">—</option>
                   {SITEPLAN_SHELL_TYPES.map((s) => (
@@ -183,25 +206,27 @@ export default async function Page() {
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Orientation (° true-north)</span>
+                <span className={LBL}>
+                  {t("console.sitePlans.new.label.orientation", undefined, "Orientation (° true-north)")}
+                </span>
                 <input name="orientation_deg" type="number" min={0} max={359} defaultValue={0} className={INPUT} />
               </label>
             </div>
             <div className="grid grid-cols-4 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Length (in)</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.lengthIn", undefined, "Length (in)")}</span>
                 <input name="shell_length_in" type="number" min={1} className={INPUT} placeholder="480" />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Width (in)</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.widthIn", undefined, "Width (in)")}</span>
                 <input name="shell_width_in" type="number" min={1} className={INPUT} placeholder="120" />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Height (in)</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.heightIn", undefined, "Height (in)")}</span>
                 <input name="shell_height_in" type="number" min={0} className={INPUT} placeholder="120" />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Scale</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.scale", undefined, "Scale")}</span>
                 <input name="scale" maxLength={40} className={INPUT} placeholder={`1/4" = 1'-0"`} />
               </label>
             </div>
@@ -209,11 +234,15 @@ export default async function Page() {
 
           {/* PRESET */}
           <section className="space-y-3">
-            <h3 className="text-sm font-semibold tracking-wide uppercase">Preset</h3>
+            <h3 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.sitePlans.new.section.preset", undefined, "Preset")}
+            </h3>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Instantiate from preset (optional)</span>
+              <span className={LBL}>
+                {t("console.sitePlans.new.label.preset", undefined, "Instantiate from preset (optional)")}
+              </span>
               <select name="preset_code" defaultValue="" className={INPUT}>
-                <option value="">— None —</option>
+                <option value="">{t("console.sitePlans.new.option.none", undefined, "— None —")}</option>
                 {PRESETS.map((p) => (
                   <option key={p.code} value={p.code}>
                     {p.code} · {p.label}
@@ -225,10 +254,12 @@ export default async function Page() {
 
           {/* CONTEXT */}
           <section className="space-y-3">
-            <h3 className="text-sm font-semibold tracking-wide uppercase">Context</h3>
+            <h3 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.sitePlans.new.section.context", undefined, "Context")}
+            </h3>
             <div className="grid grid-cols-3 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Project</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.project", undefined, "Project")}</span>
                 <select name="project_id" defaultValue="" className={INPUT}>
                   <option value="">—</option>
                   {(projects ?? []).map((p) => (
@@ -239,7 +270,7 @@ export default async function Page() {
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Event</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.event", undefined, "Event")}</span>
                 <select name="event_id" defaultValue="" className={INPUT}>
                   <option value="">—</option>
                   {(events ?? []).map((e) => (
@@ -250,7 +281,7 @@ export default async function Page() {
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>Venue</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.venue", undefined, "Venue")}</span>
                 <select name="venue_id" defaultValue="" className={INPUT}>
                   <option value="">—</option>
                   {(venues ?? []).map((v) => (
@@ -262,7 +293,7 @@ export default async function Page() {
               </label>
             </div>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Notes</span>
+              <span className={LBL}>{t("console.sitePlans.new.label.notes", undefined, "Notes")}</span>
               <textarea name="notes" rows={3} maxLength={2000} className={INPUT} />
             </label>
           </section>

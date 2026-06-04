@@ -8,6 +8,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { transitionTier } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -46,6 +47,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return null;
   const { id } = await params;
   await requireSession();
+  const { t } = await getRequestT();
   let supabase: LooseSupabase;
   try {
     supabase = createServiceClient() as unknown as LooseSupabase;
@@ -70,19 +72,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`Submissions · ${r.slug}`}
+        eyebrow={`${t("console.settings.integrations.submissions.detail.eyebrow", undefined, "Submissions")} · ${r.slug}`}
         title={r.name}
         subtitle={`${r.partner_org_name} · ${toTitle(r.category)}`}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={TIER_TONE[r.certification_tier]}>{toTitle(r.certification_tier)}</Badge>
-            {isLive ? <Badge variant="success">Live</Badge> : null}
+            {isLive ? (
+              <Badge variant="success">
+                {t("console.settings.integrations.submissions.detail.live", undefined, "Live")}
+              </Badge>
+            ) : null}
           </div>
         }
       />
       <div className="page-content max-w-3xl space-y-5">
         <div className="surface p-5">
-          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">Description</h3>
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+            {t("console.settings.integrations.submissions.detail.description", undefined, "Description")}
+          </h3>
           <p className="mt-2 text-sm">{r.short_description}</p>
           {r.long_description ? (
             <p className="mt-3 text-sm text-[var(--text-secondary)]">{r.long_description}</p>
@@ -92,7 +100,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {r.capabilities.length > 0 ? (
           <div className="surface p-5">
             <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-              Capabilities
+              {t("console.settings.integrations.submissions.detail.capabilities", undefined, "Capabilities")}
             </h3>
             <ul className="mt-2 list-disc space-y-1 ps-5 text-sm">
               {r.capabilities.map((c) => (
@@ -104,21 +112,27 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         <div className="surface p-5">
           <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            Partner contact
+            {t("console.settings.integrations.submissions.detail.partnerContact", undefined, "Partner contact")}
           </h3>
           <div className="mt-2 grid grid-cols-2 gap-3 text-sm">
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Name</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.settings.integrations.submissions.detail.name", undefined, "Name")}
+              </div>
               <div>{r.partner_contact_name ?? "—"}</div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Email</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.settings.integrations.submissions.detail.email", undefined, "Email")}
+              </div>
               <a className="font-mono underline" href={`mailto:${r.partner_contact_email}`}>
                 {r.partner_contact_email}
               </a>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Homepage</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.settings.integrations.submissions.detail.homepage", undefined, "Homepage")}
+              </div>
               <div className="font-mono text-xs">
                 {r.homepage_url ? (
                   <a href={r.homepage_url} className="underline" target="_blank" rel="noreferrer">
@@ -130,7 +144,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Docs</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.settings.integrations.submissions.detail.docs", undefined, "Docs")}
+              </div>
               <div className="font-mono text-xs">
                 {r.docs_url ? (
                   <a href={r.docs_url} className="underline" target="_blank" rel="noreferrer">
@@ -147,7 +163,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {r.certification_tier === "rejected" && r.rejection_reason ? (
           <div className="surface border-s-4 border-s-[var(--color-error)] p-5">
             <h3 className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
-              Rejection reason
+              {t("console.settings.integrations.submissions.detail.rejectionReason", undefined, "Rejection reason")}
             </h3>
             <p className="mt-2 text-sm">{r.rejection_reason}</p>
           </div>
@@ -155,53 +171,91 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         <div className="surface p-5">
           <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            Certification queue
+            {t("console.settings.integrations.submissions.detail.certificationQueue", undefined, "Certification queue")}
           </h3>
           <p className="mt-2 text-xs text-[var(--text-secondary)]">
-            Tier transitions: submitted → reviewing → verified → certified. Reject from any tier with a reason.
-            Publishing flips <code className="font-mono">published_at</code> to now (verified + certified rows go public
-            on the{" "}
+            {t(
+              "console.settings.integrations.submissions.detail.queueIntro",
+              undefined,
+              "Tier transitions: submitted → reviewing → verified → certified. Reject from any tier with a reason. Publishing flips",
+            )}{" "}
+            <code className="font-mono">published_at</code>{" "}
+            {t(
+              "console.settings.integrations.submissions.detail.queueIntroMid",
+              undefined,
+              "to now (verified + certified rows go public on the",
+            )}{" "}
             <Link href="/integrations/partners" className="underline">
               /integrations/partners
             </Link>{" "}
-            directory).
+            {t("console.settings.integrations.submissions.detail.queueIntroEnd", undefined, "directory).")}
           </p>
           <form action={transitionTier} className="mt-4 grid gap-3">
             <input type="hidden" name="id" value={r.id} />
             <div className="grid grid-cols-2 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-[var(--text-secondary)]">Next Tier</span>
+                <span className="text-xs font-medium text-[var(--text-secondary)]">
+                  {t("console.settings.integrations.submissions.detail.nextTier", undefined, "Next Tier")}
+                </span>
                 <select
                   name="next_tier"
                   defaultValue={r.certification_tier}
                   className="w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
                 >
-                  {(["submitted", "reviewing", "verified", "certified", "rejected"] as Tier[]).map((t) => (
-                    <option key={t} value={t}>
-                      {toTitle(t)}
+                  {(["submitted", "reviewing", "verified", "certified", "rejected"] as Tier[]).map((tier) => (
+                    <option key={tier} value={tier}>
+                      {toTitle(tier)}
                     </option>
                   ))}
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className="text-xs font-medium text-[var(--text-secondary)]">
-                  Publish (live on /integrations/partners)
+                  {t(
+                    "console.settings.integrations.submissions.detail.publishLabel",
+                    undefined,
+                    "Publish (live on /integrations/partners)",
+                  )}
                 </span>
                 <select
                   name="publish"
                   defaultValue={r.published_at ? "keep" : "no"}
                   className="w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
                 >
-                  <option value="no">Do not publish</option>
-                  <option value="now">Publish now</option>
-                  <option value="unpublish">Unpublish</option>
-                  <option value="keep">Keep current</option>
+                  <option value="no">
+                    {t(
+                      "console.settings.integrations.submissions.detail.publishOptions.no",
+                      undefined,
+                      "Do not publish",
+                    )}
+                  </option>
+                  <option value="now">
+                    {t("console.settings.integrations.submissions.detail.publishOptions.now", undefined, "Publish now")}
+                  </option>
+                  <option value="unpublish">
+                    {t(
+                      "console.settings.integrations.submissions.detail.publishOptions.unpublish",
+                      undefined,
+                      "Unpublish",
+                    )}
+                  </option>
+                  <option value="keep">
+                    {t(
+                      "console.settings.integrations.submissions.detail.publishOptions.keep",
+                      undefined,
+                      "Keep current",
+                    )}
+                  </option>
                 </select>
               </label>
             </div>
             <label className="flex flex-col gap-1.5">
               <span className="text-xs font-medium text-[var(--text-secondary)]">
-                Rejection reason (only if Rejected)
+                {t(
+                  "console.settings.integrations.submissions.detail.rejectionReasonLabel",
+                  undefined,
+                  "Rejection reason (only if Rejected)",
+                )}
               </span>
               <textarea
                 name="rejection_reason"
@@ -212,13 +266,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               />
             </label>
             <div className="flex justify-end">
-              <Button type="submit">Apply transition</Button>
+              <Button type="submit">
+                {t("console.settings.integrations.submissions.detail.applyTransition", undefined, "Apply transition")}
+              </Button>
             </div>
           </form>
         </div>
 
         <Button href="/console/settings/integrations/submissions" variant="ghost">
-          Back to queue
+          {t("console.settings.integrations.submissions.detail.backToQueue", undefined, "Back to queue")}
         </Button>
       </div>
     </>

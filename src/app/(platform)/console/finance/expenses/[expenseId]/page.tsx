@@ -6,11 +6,13 @@ import { DetailShell, money, fmtDate } from "@/components/detail/DetailShell";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteExpense } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ expenseId: string }> }) {
   const { expenseId } = await params;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("expenses")
@@ -21,23 +23,45 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
   return (
     <DetailShell
       row={row}
-      eyebrow="Finance"
+      eyebrow={t("console.finance.expenses.detail.eyebrow", undefined, "Finance")}
       title={(r) => r.description}
-      subtitle={(r) => `${money(r.amount_cents)} · ${r.category ?? "uncategorized"}`}
+      subtitle={(r) =>
+        `${money(r.amount_cents)} · ${r.category ?? t("console.finance.expenses.detail.uncategorized", undefined, "uncategorized")}`
+      }
       breadcrumbs={[
-        { label: "Finance", href: "/console/finance" },
-        { label: "Expenses", href: "/console/finance/expenses" },
-        { label: row?.description ?? "Expense" },
+        { label: t("console.finance.breadcrumb", undefined, "Finance"), href: "/console/finance" },
+        { label: t("console.finance.expenses.breadcrumb", undefined, "Expenses"), href: "/console/finance/expenses" },
+        { label: row?.description ?? t("console.finance.expenses.detail.fallbackTitle", undefined, "Expense") },
       ]}
       fields={
         row
           ? [
-              { label: "Status", value: <StatusBadge status={row.status ?? "pending"} /> },
-              { label: "Amount", value: money(row.amount_cents) },
-              { label: "Currency", value: row.currency },
-              { label: "Category", value: row.category ?? "—" },
-              { label: "Spent On", value: fmtDate(row.spent_at) },
-              { label: "Receipt", value: row.receipt_path ? "Attached" : "None" },
+              {
+                label: t("console.finance.expenses.detail.fields.status", undefined, "Status"),
+                value: <StatusBadge status={row.status ?? "pending"} />,
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.amount", undefined, "Amount"),
+                value: money(row.amount_cents),
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.currency", undefined, "Currency"),
+                value: row.currency,
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.category", undefined, "Category"),
+                value: row.category ?? "—",
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.spentOn", undefined, "Spent On"),
+                value: fmtDate(row.spent_at),
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.receipt", undefined, "Receipt"),
+                value: row.receipt_path
+                  ? t("console.finance.expenses.detail.receipt.attached", undefined, "Attached")
+                  : t("console.finance.expenses.detail.receipt.none", undefined, "None"),
+              },
             ]
           : undefined
       }
@@ -45,11 +69,15 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
         row ? (
           <div className="flex items-center gap-2">
             <Button href={`/console/finance/expenses/${expenseId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteExpense.bind(null, expenseId)}
-              confirm={`Delete expense "${row.description}"? This cannot be undone.`}
+              confirm={t(
+                "console.finance.expenses.detail.deleteConfirm",
+                { description: row.description },
+                `Delete expense "${row.description}"? This cannot be undone.`,
+              )}
             />
           </div>
         ) : undefined

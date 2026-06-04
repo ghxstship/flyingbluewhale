@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateRisk, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -17,25 +18,41 @@ function dateOnly(v: unknown): string {
 export default async function Page({ params }: { params: Promise<{ riskId: string }> }) {
   const p = await params;
   if (!hasSupabase) return notFound();
+  const { t } = await getRequestT();
   const session = await requireSession();
   const row = await getOrgScoped("risks", session.orgId, p.riskId);
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
   const action = updateRisk.bind(null, p.riskId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const rowTitle =
+    ((row as Record<string, unknown>)["title"] as string | undefined) ??
+    t("console.programs.risk.edit.fallbackTitle", undefined, "Risk");
   return (
     <>
       <ModuleHeader
-        eyebrow="Risk"
-        title={`Edit ${((row as Record<string, unknown>)["title"] as string | undefined) ?? "Risk"}`}
+        eyebrow={t("console.programs.risk.edit.eyebrow", undefined, "Risk")}
+        title={t("console.programs.risk.edit.title", { name: rowTitle }, `Edit ${rowTitle}`)}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/programs/risk/${p.riskId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/programs/risk/${p.riskId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
+          <Input
+            label={t("console.programs.risk.edit.fields.title", undefined, "Title")}
+            name="title"
+            defaultValue={row.title ?? ""}
+            required
+            maxLength={200}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.risk.edit.fields.description", undefined, "Description")}
+            </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
@@ -44,7 +61,9 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Kind</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.risk.edit.fields.kind", undefined, "Kind")}
+            </span>
             <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
               <option value="risk">risk</option>
               <option value="assumption">assumption</option>
@@ -53,7 +72,9 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Likelihood</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.risk.edit.fields.likelihood", undefined, "Likelihood")}
+            </span>
             <select
               name="likelihood"
               defaultValue={row.likelihood ?? ""}
@@ -68,7 +89,9 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Impact</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.risk.edit.fields.impact", undefined, "Impact")}
+            </span>
             <select name="impact" defaultValue={row.impact ?? ""} required className="input-base focus-ring w-full">
               <option value="insignificant">insignificant</option>
               <option value="minor">minor</option>
@@ -78,7 +101,9 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.risk.edit.fields.status", undefined, "Status")}
+            </span>
             <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
               <option value="open">open</option>
               <option value="mitigating">mitigating</option>
@@ -86,9 +111,16 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
               <option value="closed">closed</option>
             </select>
           </label>
-          <Input label="Due On" name="due_on" type="date" defaultValue={dateOnly(row.due_on)} />
+          <Input
+            label={t("console.programs.risk.edit.fields.dueOn", undefined, "Due On")}
+            name="due_on"
+            type="date"
+            defaultValue={dateOnly(row.due_on)}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Treatment</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.programs.risk.edit.fields.treatment", undefined, "Treatment")}
+            </span>
             <textarea
               name="treatment"
               defaultValue={row.treatment ?? ""}

@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -31,12 +31,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Procurement" title="RFQs" />
+        <ModuleHeader
+          eyebrow={t("console.procurement.rfqs.eyebrow", undefined, "Procurement")}
+          title={t("console.procurement.rfqs.title", undefined, "RFQs")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.rfqs.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -62,57 +68,80 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="RFQs"
-        subtitle={`${rows.length} Open  · ${submitted} submitted · ${approved} Approved`}
+        eyebrow={t("console.procurement.rfqs.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.rfqs.title", undefined, "RFQs")}
+        subtitle={t(
+          "console.procurement.rfqs.subtitle",
+          { open: rows.length, submitted, approved },
+          `${rows.length} Open  · ${submitted} submitted · ${approved} Approved`,
+        )}
         action={
           <Button href="/console/procurement/requisitions/new" size="sm">
-            + New RFQ
+            {t("console.procurement.rfqs.newRfq", undefined, "+ New RFQ")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open RFQs" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Submitted" value={fmt.number(submitted)} />
-          <MetricCard label="Total Estimate" value={formatMoney(totalEstimate)} />
+          <MetricCard
+            label={t("console.procurement.rfqs.metric.openRfqs", undefined, "Open RFQs")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.procurement.rfqs.metric.submitted", undefined, "Submitted")}
+            value={fmt.number(submitted)}
+          />
+          <MetricCard
+            label={t("console.procurement.rfqs.metric.totalEstimate", undefined, "Total Estimate")}
+            value={formatMoney(totalEstimate)}
+          />
         </div>
 
         <DataTable<RfqRow>
           rows={rows}
           rowHref={(r) => `/console/procurement/requisitions/${r.id}`}
-          emptyLabel="No open RFQs"
-          emptyDescription="RFQs are submitted/approved requisitions awaiting vendor quotes. Author one via Procurement → Requisitions."
+          emptyLabel={t("console.procurement.rfqs.emptyLabel", undefined, "No open RFQs")}
+          emptyDescription={t(
+            "console.procurement.rfqs.emptyDescription",
+            undefined,
+            "RFQs are submitted/approved requisitions awaiting vendor quotes. Author one via Procurement → Requisitions.",
+          )}
           emptyAction={
             <Button href="/console/procurement/requisitions/new" size="sm">
-              + New RFQ
+              {t("console.procurement.rfqs.newRfq", undefined, "+ New RFQ")}
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.procurement.rfqs.column.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.procurement.rfqs.column.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
             },
             {
               key: "estimate",
-              header: "Estimate",
+              header: t("console.procurement.rfqs.column.estimate", undefined, "Estimate"),
               render: (r) => formatMoney(r.estimated_cents ?? 0),
               className: "font-mono text-xs",
               accessor: (r) => Number(r.estimated_cents ?? 0),
             },
             {
               key: "created",
-              header: "Created",
+              header: t("console.procurement.rfqs.column.created", undefined, "Created"),
               render: (r) => fmtDate(r.created_at),
               className: "font-mono text-xs",
               accessor: (r) => r.created_at ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.procurement.rfqs.column.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,

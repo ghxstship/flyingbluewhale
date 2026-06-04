@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { IMPORT_RESOURCE_LABEL, type ImportJob } from "@/lib/import/types";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Import Center — Phase 6.4 of the SmartSuite parity roadmap.
@@ -30,10 +31,14 @@ const STATE_TONE: Record<string, "info" | "success" | "warning" | "error" | "mut
 
 export default async function ImportPage() {
   const session = await requireSession();
+  const { t } = await getRequestT();
   if (!session.orgId) {
     return (
       <main className="mx-auto w-full max-w-4xl px-6 py-8">
-        <EmptyState title="No organization" description="Switch to an org to view import jobs." />
+        <EmptyState
+          title={t("console.import.noOrg.title", undefined, "No organization")}
+          description={t("console.import.noOrg.description", undefined, "Switch to an org to view import jobs.")}
+        />
       </main>
     );
   }
@@ -50,10 +55,18 @@ export default async function ImportPage() {
       <header className="border-ink mb-8 border-b-3 pb-6">
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Import</div>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">IMPORT CENTER</h1>
+            <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+              {t("console.import.eyebrow", undefined, "Import")}
+            </div>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight">
+              {t("console.import.title", undefined, "IMPORT CENTER")}
+            </h1>
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
-              Bulk-load crew, tasks, vendors, and projects from CSV. Async — close the tab and the import keeps running.
+              {t(
+                "console.import.description",
+                undefined,
+                "Bulk-load crew, tasks, vendors, and projects from CSV. Async — close the tab and the import keeps running.",
+              )}
             </p>
           </div>
           <div className="flex gap-2">
@@ -61,7 +74,7 @@ export default async function ImportPage() {
               href="/console/settings/imports"
               className="hover-lift surface inline-flex items-center gap-2 px-4 py-2 text-sm font-medium"
             >
-              New Import
+              {t("console.import.newImport", undefined, "New Import")}
             </Link>
           </div>
         </div>
@@ -69,8 +82,12 @@ export default async function ImportPage() {
 
       {jobs.length === 0 ? (
         <EmptyState
-          title="No imports yet"
-          description="Click an import button above to get started. Each import runs async and you'll see it here with row-level progress."
+          title={t("console.import.empty.title", undefined, "No imports yet")}
+          description={t(
+            "console.import.empty.description",
+            undefined,
+            "Click an import button above to get started. Each import runs async and you'll see it here with row-level progress.",
+          )}
         />
       ) : (
         <ul className="space-y-3">
@@ -88,17 +105,23 @@ export default async function ImportPage() {
                   <CardBody>
                     <div className="grid grid-cols-3 gap-4 text-xs">
                       <div>
-                        <div className="text-[var(--text-muted)]">Total</div>
+                        <div className="text-[var(--text-muted)]">
+                          {t("console.import.stats.total", undefined, "Total")}
+                        </div>
                         <div className="text-lg font-semibold tabular-nums">{j.rowsTotal}</div>
                       </div>
                       <div>
-                        <div className="text-[var(--text-muted)]">Succeeded</div>
+                        <div className="text-[var(--text-muted)]">
+                          {t("console.import.stats.succeeded", undefined, "Succeeded")}
+                        </div>
                         <div className="text-lg font-semibold text-[var(--color-success)] tabular-nums">
                           {j.rowsSucceeded}
                         </div>
                       </div>
                       <div>
-                        <div className="text-[var(--text-muted)]">Failed</div>
+                        <div className="text-[var(--text-muted)]">
+                          {t("console.import.stats.failed", undefined, "Failed")}
+                        </div>
                         <div className="text-lg font-semibold text-[var(--color-error)] tabular-nums">
                           {j.rowsFailed}
                         </div>
@@ -113,12 +136,22 @@ export default async function ImportPage() {
                     {j.errors.length > 0 ? (
                       <details className="mt-3 text-xs">
                         <summary className="cursor-pointer text-[var(--text-muted)]">
-                          {j.errors.length} error{j.errors.length === 1 ? "" : "s"} — show details
+                          {j.errors.length === 1
+                            ? t(
+                                "console.import.errors.summaryOne",
+                                { count: j.errors.length },
+                                `${j.errors.length} error — show details`,
+                              )
+                            : t(
+                                "console.import.errors.summaryOther",
+                                { count: j.errors.length },
+                                `${j.errors.length} errors — show details`,
+                              )}
                         </summary>
                         <ul className="mt-2 space-y-1 font-mono text-[11px]">
                           {j.errors.slice(0, 20).map((e, i) => (
                             <li key={i}>
-                              Row {e.row}: {e.message}
+                              {t("console.import.errors.rowPrefix", { row: e.row }, `Row ${e.row}`)}: {e.message}
                             </li>
                           ))}
                         </ul>

@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createWarranty } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: projects }, { data: vendors }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
     supabase.from("vendors").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
@@ -21,22 +23,36 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Closeout" title="New Warranty" />
+      <ModuleHeader
+        eyebrow={t("console.warranties.new.eyebrow", undefined, "Closeout")}
+        title={t("console.warranties.new.title", undefined, "New Warranty")}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={createWarranty} cancelHref="/console/warranties" submitLabel="Create Warranty">
+        <FormShell
+          action={createWarranty}
+          cancelHref="/console/warranties"
+          submitLabel={t("console.warranties.new.submit", undefined, "Create Warranty")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Coverage name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.warranties.new.fields.name", undefined, "Coverage name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="HVAC system — Trane RT-3" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t("console.warranties.new.fields.namePlaceholder", undefined, "HVAC system — Trane RT-3")}
+              className={INPUT}
+            />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.warranties.new.fields.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
-                <option value="">Select…</option>
+                <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>
                 {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -45,7 +61,7 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Vendor / Warrantor</span>
+              <span className={LBL}>{t("console.warranties.new.fields.vendor", undefined, "Vendor / Warrantor")}</span>
               <select name="vendor_id" className={INPUT}>
                 <option value="">—</option>
                 {((vendors ?? []) as Array<{ id: string; name: string }>).map((v) => (
@@ -59,33 +75,41 @@ export default async function Page() {
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Start<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.warranties.new.fields.start", undefined, "Start")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input type="date" name="start_date" required className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                End<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.warranties.new.fields.end", undefined, "End")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input type="date" name="end_date" required className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Duration (months)</span>
+              <span className={LBL}>{t("console.warranties.new.fields.duration", undefined, "Duration (months)")}</span>
               <input type="number" min="1" name="duration_months" className={INPUT} />
             </label>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Warrantor email</span>
+              <span className={LBL}>
+                {t("console.warranties.new.fields.warrantorEmail", undefined, "Warrantor email")}
+              </span>
               <input type="email" name="warrantor_email" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Warrantor phone</span>
+              <span className={LBL}>
+                {t("console.warranties.new.fields.warrantorPhone", undefined, "Warrantor phone")}
+              </span>
               <input name="warrantor_phone" className={INPUT} />
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Coverage summary (Markdown)</span>
+            <span className={LBL}>
+              {t("console.warranties.new.fields.coverageSummary", undefined, "Coverage summary (Markdown)")}
+            </span>
             <textarea name="coverage_summary_md" rows={4} className={INPUT} />
           </label>
         </FormShell>

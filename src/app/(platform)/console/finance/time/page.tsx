@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { TimeEntry } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -18,12 +19,15 @@ function fmtMinutes(m: number | null) {
 }
 
 export default async function TimePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Time Tracking" />
+        <ModuleHeader title={t("console.finance.time.title", undefined, "Time Tracking")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.time.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -33,45 +37,62 @@ export default async function TimePage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="Time Tracking"
-        subtitle={`${rows.length} Entries  · ${fmtMinutes(totalMin)} logged`}
-        action={<Button href="/console/finance/time/new">+ New Entry</Button>}
+        eyebrow={t("console.finance.time.eyebrow", undefined, "Finance")}
+        title={t("console.finance.time.title", undefined, "Time Tracking")}
+        subtitle={t(
+          "console.finance.time.subtitle",
+          { count: rows.length, duration: fmtMinutes(totalMin) },
+          `${rows.length} Entries  · ${fmtMinutes(totalMin)} logged`,
+        )}
+        action={
+          <Button href="/console/finance/time/new">
+            {t("console.finance.time.newEntry", undefined, "+ New Entry")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<TimeEntry>
           rows={rows}
           rowHref={(r) => `/console/finance/time/${r.id}`}
-          emptyLabel="No time entries"
-          emptyDescription="Track billable + non-billable work for invoices and labour cost reporting."
+          emptyLabel={t("console.finance.time.emptyLabel", undefined, "No time entries")}
+          emptyDescription={t(
+            "console.finance.time.emptyDescription",
+            undefined,
+            "Track billable + non-billable work for invoices and labour cost reporting.",
+          )}
           emptyAction={
             <Button href="/console/finance/time/new" size="sm">
-              + New Entry
+              {t("console.finance.time.newEntry", undefined, "+ New Entry")}
             </Button>
           }
           columns={[
             {
               key: "description",
-              header: "Description",
+              header: t("console.finance.time.columns.description", undefined, "Description"),
               render: (r) => r.description ?? "—",
               accessor: (r) => r.description ?? null,
             },
             {
               key: "duration",
-              header: "Duration",
+              header: t("console.finance.time.columns.duration", undefined, "Duration"),
               render: (r) => fmtMinutes(r.duration_minutes),
               className: "font-mono text-xs",
               accessor: (r) => r.duration_minutes ?? null,
             },
             {
               key: "billable",
-              header: "Billable",
-              render: (r) => (r.billable ? <Badge variant="success">Yes</Badge> : <Badge variant="muted">No</Badge>),
+              header: t("console.finance.time.columns.billable", undefined, "Billable"),
+              render: (r) =>
+                r.billable ? (
+                  <Badge variant="success">{t("common.yes", undefined, "Yes")}</Badge>
+                ) : (
+                  <Badge variant="muted">{t("common.no", undefined, "No")}</Badge>
+                ),
               accessor: (r) => r.billable ?? null,
             },
             {
               key: "started",
-              header: "Started",
+              header: t("console.finance.time.columns.started", undefined, "Started"),
               render: (r) => timeAgo(r.started_at),
               className: "font-mono text-xs",
               accessor: (r) => r.started_at,

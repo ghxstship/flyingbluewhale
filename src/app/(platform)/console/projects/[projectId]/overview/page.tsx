@@ -7,11 +7,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { money, fmtDate } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: project }, { count: taskCount }, { count: eventCount }, { data: budgets }, { data: deliverables }] =
     await Promise.all([
       supabase
@@ -37,11 +39,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title="Overview"
+        title={t("console.projects.overview.title", undefined, "Overview")}
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
+          { label: t("console.projects.breadcrumb", undefined, "Projects"), href: "/console/projects" },
           { label: project.name, href: `/console/projects/${projectId}` },
-          { label: "Overview" },
+          { label: t("console.projects.overview.title", undefined, "Overview") },
         ]}
       />
       <div className="page-content max-w-5xl space-y-4">
@@ -58,31 +60,45 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           </div>
           <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Starts</dt>
+              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                {t("console.projects.overview.starts", undefined, "Starts")}
+              </dt>
               <dd className="mt-1 text-sm">{fmtDate(project.start_date)}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Ends</dt>
+              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                {t("console.projects.overview.ends", undefined, "Ends")}
+              </dt>
               <dd className="mt-1 text-sm">{fmtDate(project.end_date)}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Tasks</dt>
+              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                {t("console.projects.overview.tasks", undefined, "Tasks")}
+              </dt>
               <dd className="mt-1 text-sm">{taskCount ?? 0}</dd>
             </div>
             <div>
-              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Events</dt>
+              <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                {t("console.projects.overview.events", undefined, "Events")}
+              </dt>
               <dd className="mt-1 text-sm">{eventCount ?? 0}</dd>
             </div>
           </dl>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
           <Link href={`/console/projects/${projectId}/budget`} className="surface hover-lift p-5">
-            <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Budget</div>
+            <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              {t("console.projects.overview.budget", undefined, "Budget")}
+            </div>
             <div className="mt-2 text-2xl font-semibold">{money(totalBudget)}</div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">Spent: {money(totalSpent)}</div>
+            <div className="mt-1 text-xs text-[var(--text-muted)]">
+              {t("console.projects.overview.spent", undefined, "Spent")}: {money(totalSpent)}
+            </div>
           </Link>
           <Link href={`/console/projects/${projectId}/advancing`} className="surface hover-lift p-5">
-            <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Deliverables</div>
+            <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              {t("console.projects.overview.deliverables", undefined, "Deliverables")}
+            </div>
             <div className="mt-2 text-2xl font-semibold">
               {(deliverables ? 0 : null) ??
                 (

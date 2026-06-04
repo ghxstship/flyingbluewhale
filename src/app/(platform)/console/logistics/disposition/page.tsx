@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -32,12 +32,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 const DISPOSITION_KINDS = ["maintenance", "retired"] as const;
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Logistics" title="Disposition" />
+        <ModuleHeader
+          eyebrow={t("console.logistics.disposition.eyebrow", undefined, "Logistics")}
+          title={t("console.logistics.disposition.title", undefined, "Disposition")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.logistics.disposition.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -65,39 +71,68 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Logistics"
-        title="Disposition"
-        subtitle={`${rows.length} of ${totalAssets ?? 0} Asset${totalAssets === 1 ? "" : "s"} Pending · ${retired} Retired · ${maintenance} Maintenance`}
+        eyebrow={t("console.logistics.disposition.eyebrow", undefined, "Logistics")}
+        title={t("console.logistics.disposition.title", undefined, "Disposition")}
+        subtitle={t(
+          "console.logistics.disposition.subtitle",
+          {
+            count: rows.length,
+            total: totalAssets ?? 0,
+            assetWord: totalAssets === 1 ? "Asset" : "Assets",
+            retired,
+            maintenance,
+          },
+          `${rows.length} of ${totalAssets ?? 0} Asset${totalAssets === 1 ? "" : "s"} Pending · ${retired} Retired · ${maintenance} Maintenance`,
+        )}
         action={
           <Button href="/console/production/equipment" size="sm">
-            All equipment
+            {t("console.logistics.disposition.allEquipment", undefined, "All equipment")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending Disposition" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Retired" value={fmt.number(retired)} />
-          <MetricCard label="Replacement Value (Est.)" value={formatMoney(totalReplaceable)} />
+          <MetricCard
+            label={t("console.logistics.disposition.metric.pending", undefined, "Pending Disposition")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.logistics.disposition.metric.retired", undefined, "Retired")}
+            value={fmt.number(retired)}
+          />
+          <MetricCard
+            label={t("console.logistics.disposition.metric.replacementValue", undefined, "Replacement Value (Est.)")}
+            value={formatMoney(totalReplaceable)}
+          />
         </div>
 
         <DataTable<AssetRow>
           rows={rows}
           rowHref={(r) => `/console/production/equipment/${r.id}`}
-          emptyLabel="Nothing pending disposition"
-          emptyDescription="Equipment moves into disposition when its status flips to maintenance or retired. Update an asset's status to surface it here for sale, donation, or recycling."
+          emptyLabel={t("console.logistics.disposition.empty.label", undefined, "Nothing pending disposition")}
+          emptyDescription={t(
+            "console.logistics.disposition.empty.description",
+            undefined,
+            "Equipment moves into disposition when its status flips to maintenance or retired. Update an asset's status to surface it here for sale, donation, or recycling.",
+          )}
           columns={[
-            { key: "name", header: "Asset", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.logistics.disposition.col.asset", undefined, "Asset"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "tag",
-              header: "Tag",
+              header: t("console.logistics.disposition.col.tag", undefined, "Tag"),
               render: (r) => r.asset_tag ?? "—",
               className: "font-mono text-xs",
               accessor: (r) => r.asset_tag ?? null,
             },
             {
               key: "category",
-              header: "Category",
+              header: t("console.logistics.disposition.col.category", undefined, "Category"),
               render: (r) => r.category ?? "—",
               accessor: (r) => r.category ?? null,
               filterable: true,
@@ -105,14 +140,14 @@ export default async function Page() {
             },
             {
               key: "rate",
-              header: "Daily Rate",
+              header: t("console.logistics.disposition.col.dailyRate", undefined, "Daily Rate"),
               render: (r) => (r.daily_rate_cents != null ? formatMoney(r.daily_rate_cents) : "—"),
               className: "font-mono text-xs",
               accessor: (r) => Number(r.daily_rate_cents ?? 0),
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.logistics.disposition.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
@@ -122,8 +157,11 @@ export default async function Page() {
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Circularity workflow: maintenance → repair / sell / recycle → retired. Track outcomes in the asset's notes
-          field; aggregate disposition KPIs ship with the next sustainability migration.
+          {t(
+            "console.logistics.disposition.footnote",
+            undefined,
+            "Circularity workflow: maintenance → repair / sell / recycle → retired. Track outcomes in the asset's notes field; aggregate disposition KPIs ship with the next sustainability migration.",
+          )}
         </p>
       </div>
     </>

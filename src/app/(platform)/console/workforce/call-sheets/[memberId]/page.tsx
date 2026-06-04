@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +52,7 @@ export default async function Page({
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { data: m } = await supabase
     .from("workforce_members")
     .select("id, full_name, role, email, phone")

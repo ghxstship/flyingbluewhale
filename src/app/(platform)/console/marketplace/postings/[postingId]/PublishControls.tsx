@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { publishPostingAction, closePostingAction } from "../new/actions";
 
 export function PublishControls({
@@ -16,15 +17,18 @@ export function PublishControls({
   publicSlug: string;
   expiresAt: string | null;
 }) {
+  const t = useT();
   const [pending, startTransition] = useTransition();
 
   return (
     <section className="surface p-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold tracking-wide uppercase">Visibility</h2>
+          <h2 className="text-sm font-semibold tracking-wide uppercase">
+            {t("console.marketplace.postings.publish.visibility", undefined, "Visibility")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-secondary)]">
-            Public URL{" "}
+            {t("console.marketplace.postings.publish.publicUrl", undefined, "Public URL")}{" "}
             <a className="font-mono text-[var(--org-primary)]" href={`/marketplace/gigs/${publicSlug}`}>
               /marketplace/gigs/{publicSlug}
             </a>
@@ -41,9 +45,14 @@ export function PublishControls({
               className="flex items-end gap-2"
             >
               <input type="hidden" name="posting_id" value={postingId} />
-              <Input label="Expires" name="expires_at" type="datetime-local" defaultValue={expiresAt ?? ""} />
+              <Input
+                label={t("console.marketplace.postings.publish.expiresLabel", undefined, "Expires")}
+                name="expires_at"
+                type="datetime-local"
+                defaultValue={expiresAt ?? ""}
+              />
               <Button type="submit" size="sm" loading={pending}>
-                Publish
+                {t("console.marketplace.postings.publish.publish", undefined, "Publish")}
               </Button>
             </form>
           )}
@@ -57,7 +66,7 @@ export function PublishControls({
             >
               <input type="hidden" name="posting_id" value={postingId} />
               <Button type="submit" size="sm" variant="ghost" loading={pending}>
-                Close Posting
+                {t("console.marketplace.postings.publish.closePosting", undefined, "Close Posting")}
               </Button>
             </form>
           )}

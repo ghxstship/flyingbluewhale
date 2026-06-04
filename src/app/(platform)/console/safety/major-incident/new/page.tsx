@@ -1,22 +1,49 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { getRequestT } from "@/lib/i18n/request";
 import { createMajorIncident } from "./actions";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Safety · Major Incident" title="Activate Plan" />
+      <ModuleHeader
+        eyebrow={t("console.safety.majorIncident.new.eyebrow", undefined, "Safety · Major Incident")}
+        title={t("console.safety.majorIncident.new.title", undefined, "Activate Plan")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createMajorIncident} cancelHref="/console/safety/major-incident" submitLabel="Activate">
-          <Input label="Name" name="name" maxLength={200} placeholder="e.g. Stand collapse — Stadium A" required />
+        <FormShell
+          action={createMajorIncident}
+          cancelHref="/console/safety/major-incident"
+          submitLabel={t("console.safety.majorIncident.new.submit", undefined, "Activate")}
+        >
+          <Input
+            label={t("console.safety.majorIncident.new.nameLabel", undefined, "Name")}
+            name="name"
+            maxLength={200}
+            placeholder={t(
+              "console.safety.majorIncident.new.namePlaceholder",
+              undefined,
+              "e.g. Stand collapse — Stadium A",
+            )}
+            required
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Status</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.majorIncident.new.statusLabel", undefined, "Status")}
+            </label>
             <select name="status" defaultValue="activated" className="input-base mt-1.5 w-full">
-              <option value="activated">Activated</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="recovery">Recovery</option>
-              <option value="closed">Closed</option>
+              <option value="activated">
+                {t("console.safety.majorIncident.new.statusActivated", undefined, "Activated")}
+              </option>
+              <option value="ongoing">
+                {t("console.safety.majorIncident.new.statusOngoing", undefined, "Ongoing")}
+              </option>
+              <option value="recovery">
+                {t("console.safety.majorIncident.new.statusRecovery", undefined, "Recovery")}
+              </option>
+              <option value="closed">{t("console.safety.majorIncident.new.statusClosed", undefined, "Closed")}</option>
             </select>
           </div>
         </FormShell>

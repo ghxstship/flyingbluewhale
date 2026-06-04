@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { Combobox, type ComboboxOption } from "@/components/ui/Combobox";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function LocationPickerDemo() {
+  const t = useT();
   const [value, setValue] = React.useState<string | null>(null);
 
   const loader = React.useCallback(async (query: string): Promise<ComboboxOption[]> => {
@@ -22,17 +24,20 @@ export function LocationPickerDemo() {
 
   return (
     <div className="surface space-y-2 p-5">
-      <div className="text-xs font-medium tracking-[0.18em] text-[var(--text-muted)] uppercase">Try it</div>
+      <div className="text-xs font-medium tracking-[0.18em] text-[var(--text-muted)] uppercase">
+        {t("console.locations.picker.tryIt", undefined, "Try it")}
+      </div>
       <Combobox
         optionsLoader={loader}
         value={value}
         onChange={setValue}
-        placeholder="Search locations…"
-        searchPlaceholder="Type to search…"
+        placeholder={t("console.locations.picker.searchPlaceholder", undefined, "Search locations…")}
+        searchPlaceholder={t("console.locations.picker.typeToSearch", undefined, "Type to search…")}
       />
       {value && (
         <div className="text-xs text-[var(--text-muted)]">
-          Selected: <span className="font-mono">{value}</span>
+          {t("console.locations.picker.selectedLabel", undefined, "Selected:")}{" "}
+          <span className="font-mono">{value}</span>
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { addQuestion, publishSurvey, closeSurvey } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,11 @@ export const dynamic = "force-dynamic";
 type Q = { id: string; ordinal: number; prompt: string; question_kind: string; options: unknown; required: boolean };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -82,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Survey"
+        eyebrow={t("console.comms.surveys.detail.eyebrow", undefined, "Survey")}
         title={s.title}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
@@ -92,8 +97,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {s.publish_state}
             </Badge>
             <Badge variant="muted">{toTitle(s.audience)}</Badge>
-            {s.anonymous && <Badge variant="info">Anonymous</Badge>}
-            <span className="font-mono text-xs">{responseCount ?? 0} responses</span>
+            {s.anonymous && (
+              <Badge variant="info">{t("console.comms.surveys.detail.anonymous", undefined, "Anonymous")}</Badge>
+            )}
+            <span className="font-mono text-xs">
+              {t(
+                "console.comms.surveys.detail.responsesCount",
+                { count: responseCount ?? 0 },
+                `${responseCount ?? 0} responses`,
+              )}
+            </span>
           </span>
         }
         action={
@@ -102,7 +115,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <form action={publishSurvey}>
                 <input type="hidden" name="id" value={s.id} />
                 <button type="submit" className="btn btn-primary btn-sm">
-                  Publish
+                  {t("console.comms.surveys.detail.publish", undefined, "Publish")}
                 </button>
               </form>
             )}
@@ -110,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <form action={closeSurvey}>
                 <input type="hidden" name="id" value={s.id} />
                 <button type="submit" className="btn btn-secondary btn-sm">
-                  Close
+                  {t("console.comms.surveys.detail.close", undefined, "Close")}
                 </button>
               </form>
             )}
@@ -120,7 +133,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-3xl space-y-4">
         {s.description && <div className="surface p-4 text-sm text-[var(--text-secondary)]">{s.description}</div>}
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Questions</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.comms.surveys.detail.questions", undefined, "Questions")}
+          </h2>
           <ol className="mt-3 space-y-2">
             {qs.map((q) => {
               const tally = tallies[q.id] ?? new Map<string, number>();
@@ -141,7 +156,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                           &ldquo;{s}&rdquo;
                         </li>
                       ))}
-                      {(textSamples[q.id] ?? []).length === 0 && <li>No text responses yet.</li>}
+                      {(textSamples[q.id] ?? []).length === 0 && (
+                        <li>
+                          {t("console.comms.surveys.detail.noTextResponses", undefined, "No text responses yet.")}
+                        </li>
+                      )}
                     </ul>
                   ) : (
                     <ul className="mt-2 space-y-1.5">
@@ -177,26 +196,34 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <input
                 type="text"
                 name="prompt"
-                placeholder="Question prompt"
+                placeholder={t("console.comms.surveys.detail.promptPlaceholder", undefined, "Question prompt")}
                 required
                 maxLength={400}
                 className="input-base w-full"
               />
               <select name="question_kind" className="input-base w-full" defaultValue="single_choice">
-                <option value="single_choice">Single choice</option>
-                <option value="multi_choice">Multiple choice</option>
-                <option value="scale">Scale</option>
-                <option value="text">Text</option>
-                <option value="boolean">Yes/No</option>
+                <option value="single_choice">
+                  {t("console.comms.surveys.detail.kind.singleChoice", undefined, "Single choice")}
+                </option>
+                <option value="multi_choice">
+                  {t("console.comms.surveys.detail.kind.multiChoice", undefined, "Multiple choice")}
+                </option>
+                <option value="scale">{t("console.comms.surveys.detail.kind.scale", undefined, "Scale")}</option>
+                <option value="text">{t("console.comms.surveys.detail.kind.text", undefined, "Text")}</option>
+                <option value="boolean">{t("console.comms.surveys.detail.kind.boolean", undefined, "Yes/No")}</option>
               </select>
               <textarea
                 name="options"
                 rows={3}
-                placeholder="Options (one per line) — only for choice/scale"
+                placeholder={t(
+                  "console.comms.surveys.detail.optionsPlaceholder",
+                  undefined,
+                  "Options (one per line) — only for choice/scale",
+                )}
                 className="input-base w-full"
               />
               <button type="submit" className="btn btn-secondary btn-sm">
-                + Add Question
+                {t("console.comms.surveys.detail.addQuestion", undefined, "+ Add Question")}
               </button>
             </form>
           )}

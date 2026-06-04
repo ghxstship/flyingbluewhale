@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { updatePunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -36,6 +37,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [{ data }, { data: projects }, { data: vendors }, { data: users }, { data: sitePlans }] = await Promise.all([
     supabase
@@ -58,20 +60,27 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title={`Edit Punch Item · ${item.code ?? item.id.slice(0, 8)}`}
-        subtitle="Edit punch item."
+        eyebrow={t("console.punch.edit.eyebrow", undefined, "Operations")}
+        title={t(
+          "console.punch.edit.title",
+          { code: item.code ?? item.id.slice(0, 8) },
+          `Edit Punch Item · ${item.code ?? item.id.slice(0, 8)}`,
+        )}
+        subtitle={t("console.punch.edit.subtitle", undefined, "Edit punch item.")}
         breadcrumbs={[
-          { label: "Punch List", href: "/console/punch" },
-          { label: item.code ?? "Item", href: `/console/punch/${item.id}` },
-          { label: "Edit" },
+          { label: t("console.punch.breadcrumb", undefined, "Punch List"), href: "/console/punch" },
+          {
+            label: item.code ?? t("console.punch.edit.itemBreadcrumb", undefined, "Item"),
+            href: `/console/punch/${item.id}`,
+          },
+          { label: t("common.edit", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">
         <FormShell
           action={updatePunchItem}
           cancelHref={`/console/punch/${item.id}`}
-          submitLabel="Save Punch Item"
+          submitLabel={t("console.punch.edit.submit", undefined, "Save Punch Item")}
           dirtyGuard
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
@@ -80,13 +89,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Title<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.punch.fields.title", undefined, "Title")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input name="title" required defaultValue={item.title} maxLength={200} className={INPUT} />
           </label>
 
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Description</span>
+            <span className={LBL}>{t("console.punch.fields.description", undefined, "Description")}</span>
             <textarea
               name="description"
               rows={3}
@@ -99,7 +109,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.punch.fields.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required defaultValue={item.project_id} className={INPUT}>
                 {(projects ?? []).map((p) => (
@@ -110,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Site plan pin</span>
+              <span className={LBL}>{t("console.punch.fields.sitePlan", undefined, "Site plan pin")}</span>
               <select name="site_plan_id" defaultValue={item.site_plan_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(sitePlans ?? []).map((sp) => (
@@ -124,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Priority</span>
+              <span className={LBL}>{t("console.punch.fields.priority", undefined, "Priority")}</span>
               <select name="priority" defaultValue={item.priority} className={INPUT}>
                 {PRIORITIES.map((p) => (
                   <option key={p} value={p}>
@@ -134,7 +145,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Status</span>
+              <span className={LBL}>{t("console.punch.fields.status", undefined, "Status")}</span>
               <select name="status" defaultValue={item.status} className={INPUT}>
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -144,7 +155,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Due by</span>
+              <span className={LBL}>{t("console.punch.fields.dueBy", undefined, "Due by")}</span>
               <input
                 type="date"
                 name="due_at"
@@ -156,7 +167,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Assignee</span>
+              <span className={LBL}>{t("console.punch.fields.assignee", undefined, "Assignee")}</span>
               <select name="assignee_id" defaultValue={item.assignee_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(users ?? []).map((u) => (
@@ -167,7 +178,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Vendor</span>
+              <span className={LBL}>{t("console.punch.fields.vendor", undefined, "Vendor")}</span>
               <select name="vendor_id" defaultValue={item.vendor_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(vendors ?? []).map((v) => (
@@ -188,9 +199,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               className="mt-0.5 accent-[var(--org-primary)]"
             />
             <div>
-              <div className="font-medium">Show-ready gate</div>
+              <div className="font-medium">{t("console.punch.fields.showReadyGate", undefined, "Show-ready gate")}</div>
               <div className="text-[11px] text-[var(--text-muted)]">
-                If checked, doors-open is blocked until this item closes.
+                {t(
+                  "console.punch.fields.showReadyGateHint",
+                  undefined,
+                  "If checked, doors-open is blocked until this item closes.",
+                )}
               </div>
             </div>
           </label>

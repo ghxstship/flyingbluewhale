@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateMajorIncident, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -22,24 +23,35 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
+  const { t } = await getRequestT();
   const action = updateMajorIncident.bind(null, p.eventId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const fallbackName = t("console.safety.majorIncident.edit.fallbackName", undefined, "Major incident");
+  const incidentName = ((row as Record<string, unknown>)["name"] as string | undefined) ?? fallbackName;
   return (
     <>
       <ModuleHeader
-        eyebrow="Major Incident"
-        title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Major incident"}`}
+        eyebrow={t("console.safety.majorIncident.edit.eyebrow", undefined, "Major Incident")}
+        title={t("console.safety.majorIncident.edit.title", { name: incidentName }, `Edit ${incidentName}`)}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/safety/major-incident/${p.eventId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
+          <Input
+            label={t("console.safety.majorIncident.edit.nameLabel", undefined, "Name")}
+            name="name"
+            defaultValue={row.name ?? ""}
+            required
+            maxLength={200}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.majorIncident.edit.statusLabel", undefined, "Status")}
+            </span>
             <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
               <option value="active">active</option>
               <option value="contained">contained</option>
@@ -48,13 +60,18 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
             </select>
           </label>
           <Input
-            label="Opened At"
+            label={t("console.safety.majorIncident.edit.openedAtLabel", undefined, "Opened At")}
             name="opened_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.opened_at)}
             required
           />
-          <Input label="Closed At" name="closed_at" type="datetime-local" defaultValue={dateTimeLocal(row.closed_at)} />
+          <Input
+            label={t("console.safety.majorIncident.edit.closedAtLabel", undefined, "Closed At")}
+            name="closed_at"
+            type="datetime-local"
+            defaultValue={dateTimeLocal(row.closed_at)}
+          />
         </FormShell>
       </div>
     </>

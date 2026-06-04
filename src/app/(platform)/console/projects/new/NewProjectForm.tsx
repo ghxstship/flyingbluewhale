@@ -4,29 +4,40 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createProjectAction, type CreateProjectState } from "../actions";
 
 type Option = { id: string; name: string };
 
 export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option[]; venues?: Option[] }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<CreateProjectState, FormData>(createProjectAction, null);
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">
-      <Input label="Project Name" name="name" required maxLength={120} />
+      <Input
+        label={t("console.projects.new.projectName", undefined, "Project Name")}
+        name="name"
+        required
+        maxLength={120}
+      />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">
+          {t("console.projects.new.description", undefined, "Description")}
+        </label>
         <textarea name="description" rows={4} maxLength={2000} className="input-base mt-1.5 w-full" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Start Date" name="startDate" type="date" />
-        <Input label="End Date" name="endDate" type="date" />
+        <Input label={t("console.projects.new.startDate", undefined, "Start Date")} name="startDate" type="date" />
+        <Input label={t("console.projects.new.endDate", undefined, "End Date")} name="endDate" type="date" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Client</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            {t("console.projects.new.client", undefined, "Client")}
+          </label>
           <select name="clientId" className="input-base mt-1.5 w-full" defaultValue="">
-            <option value="">— None —</option>
+            <option value="">{t("console.projects.new.none", undefined, "— None —")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -35,9 +46,11 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Primary Venue</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            {t("console.projects.new.primaryVenue", undefined, "Primary Venue")}
+          </label>
           <select name="primaryVenueId" className="input-base mt-1.5 w-full" defaultValue="">
-            <option value="">— None —</option>
+            <option value="">{t("console.projects.new.none", undefined, "— None —")}</option>
             {venues.map((v) => (
               <option key={v.id} value={v.id}>
                 {v.name}
@@ -46,47 +59,68 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
           </select>
         </div>
       </div>
-      <Input label="Budget (USD)" name="budget" type="number" min="0" step="0.01" placeholder="e.g. 1500000" />
+      <Input
+        label={t("console.projects.new.budgetUsd", undefined, "Budget (USD)")}
+        name="budget"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder={t("console.projects.new.budgetPlaceholder", undefined, "e.g. 1500000")}
+      />
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Geographic Scope</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            {t("console.projects.new.geographicScope", undefined, "Geographic Scope")}
+          </label>
           <select name="geographicScope" className="input-base mt-1.5 w-full" defaultValue="">
             <option value="">—</option>
-            <option value="local">Local</option>
-            <option value="regional">Regional</option>
-            <option value="national">National</option>
-            <option value="international">International</option>
+            <option value="local">{t("console.projects.new.scope.local", undefined, "Local")}</option>
+            <option value="regional">{t("console.projects.new.scope.regional", undefined, "Regional")}</option>
+            <option value="national">{t("console.projects.new.scope.national", undefined, "National")}</option>
+            <option value="international">
+              {t("console.projects.new.scope.international", undefined, "International")}
+            </option>
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Tour Structure</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            {t("console.projects.new.tourStructure", undefined, "Tour Structure")}
+          </label>
           <select name="tourStructure" className="input-base mt-1.5 w-full" defaultValue="">
             <option value="">—</option>
-            <option value="single_stop">Single Stop</option>
-            <option value="multi_stop_sequential">Multi-Stop Sequential</option>
-            <option value="simultaneous_multi_city">Simultaneous Multi-City</option>
+            <option value="single_stop">{t("console.projects.new.tour.singleStop", undefined, "Single Stop")}</option>
+            <option value="multi_stop_sequential">
+              {t("console.projects.new.tour.multiStopSequential", undefined, "Multi-Stop Sequential")}
+            </option>
+            <option value="simultaneous_multi_city">
+              {t("console.projects.new.tour.simultaneousMultiCity", undefined, "Simultaneous Multi-City")}
+            </option>
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Production Style</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            {t("console.projects.new.productionStyle", undefined, "Production Style")}
+          </label>
           <select name="productionStyle" className="input-base mt-1.5 w-full" defaultValue="">
             <option value="">—</option>
-            <option value="editorial">Editorial</option>
-            <option value="documentary">Documentary</option>
-            <option value="narrative">Narrative</option>
-            <option value="spectacle">Spectacle</option>
-            <option value="intimate">Intimate</option>
-            <option value="brutalist">Brutalist</option>
+            <option value="editorial">{t("console.projects.new.style.editorial", undefined, "Editorial")}</option>
+            <option value="documentary">{t("console.projects.new.style.documentary", undefined, "Documentary")}</option>
+            <option value="narrative">{t("console.projects.new.style.narrative", undefined, "Narrative")}</option>
+            <option value="spectacle">{t("console.projects.new.style.spectacle", undefined, "Spectacle")}</option>
+            <option value="intimate">{t("console.projects.new.style.intimate", undefined, "Intimate")}</option>
+            <option value="brutalist">{t("console.projects.new.style.brutalist", undefined, "Brutalist")}</option>
           </select>
         </div>
       </div>
       {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
       <div className="flex justify-end gap-2">
         <Button href="/console/projects" variant="ghost">
-          Cancel
+          {t("common.cancel", undefined, "Cancel")}
         </Button>
         <Button type="submit" disabled={pending}>
-          {pending ? "Creating…" : "Create project"}
+          {pending
+            ? t("console.projects.new.creating", undefined, "Creating…")
+            : t("console.projects.new.createProject", undefined, "Create project")}
         </Button>
       </div>
     </form>

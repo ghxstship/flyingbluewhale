@@ -6,16 +6,20 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listAccountingPeriods, type AccountingPeriod } from "@/lib/accounting-periods";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function FinancePeriodsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Accounting Periods" />
+        <ModuleHeader title={t("console.finance.periods.title", undefined, "Accounting Periods")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.periods.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -28,40 +32,57 @@ export default async function FinancePeriodsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="Accounting Periods"
-        subtitle={`${rows.length} Total · ${open} Open  · ${closed} closed/audited`}
-        action={<Button href="/console/finance/periods/new">+ New Period</Button>}
+        eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
+        title={t("console.finance.periods.title", undefined, "Accounting Periods")}
+        subtitle={t(
+          "console.finance.periods.subtitle",
+          { total: rows.length, open, closed },
+          `${rows.length} Total · ${open} Open  · ${closed} closed/audited`,
+        )}
+        action={
+          <Button href="/console/finance/periods/new">
+            {t("console.finance.periods.newCta", undefined, "+ New Period")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<AccountingPeriod>
           rows={rows}
           rowHref={(r) => `/console/finance/periods/${r.id}`}
           columns={[
-            { key: "label", header: "Label", render: (r) => r.period_label, accessor: (r) => r.period_label },
+            {
+              key: "label",
+              header: t("console.finance.periods.cols.label", undefined, "Label"),
+              render: (r) => r.period_label,
+              accessor: (r) => r.period_label,
+            },
             {
               key: "range",
-              header: "Range",
+              header: t("console.finance.periods.cols.range", undefined, "Range"),
               render: (r) => `${r.starts_on} → ${r.ends_on}`,
               className: "font-mono text-xs",
               accessor: (r) => r.starts_on,
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.finance.periods.cols.state", undefined, "State"),
               render: (r) => <Badge variant={badgeVariantForState(r.state)}>{toTitle(r.state)}</Badge>,
               accessor: (r) => r.state,
             },
             {
               key: "closed",
-              header: "Closed",
+              header: t("console.finance.periods.cols.closed", undefined, "Closed"),
               render: (r) => (r.closed_at ? new Date(r.closed_at).toLocaleDateString() : "—"),
               className: "text-xs text-[var(--text-secondary)]",
               accessor: (r) => r.closed_at,
             },
           ]}
-          emptyLabel="No accounting periods yet"
-          emptyDescription="Open a monthly, quarterly, or fiscal period to track revenue + expense recognition. Closing freezes the period."
+          emptyLabel={t("console.finance.periods.empty.label", undefined, "No accounting periods yet")}
+          emptyDescription={t(
+            "console.finance.periods.empty.description",
+            undefined,
+            "Open a monthly, quarterly, or fiscal period to track revenue + expense recognition. Closing freezes the period.",
+          )}
         />
       </div>
     </>

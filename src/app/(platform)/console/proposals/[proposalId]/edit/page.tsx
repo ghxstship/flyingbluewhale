@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { timeAgo, toTitle } from "@/lib/format";
 import type { Proposal, ProposalShareLink } from "@/lib/supabase/types";
 import { mintProposalShareUrlToken } from "@/lib/proposals/share";
+import { getRequestT } from "@/lib/i18n/request";
 import { ProposalEditor } from "./ProposalEditor";
 import { ShareLinkPanel } from "./ShareLinkPanel";
 import { SAMPLE_PROPOSAL_BLOCKS } from "./sample";
@@ -19,6 +20,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
   if (!hasSupabase) notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data: proposal } = await supabase
     .from("proposals")
@@ -40,13 +42,13 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
   return (
     <>
       <ModuleHeader
-        eyebrow="Proposal"
-        title={`Edit · ${proposal.title}`}
+        eyebrow={t("console.proposals.edit.eyebrow", undefined, "Proposal")}
+        title={t("console.proposals.edit.title", { title: proposal.title }, `Edit · ${proposal.title}`)}
         subtitle={`v${proposal.version} · ${proposal.status}`}
         action={
           <div className="flex items-center gap-2">
             <Link href={`/console/proposals/${proposalId}`} className="btn btn-ghost btn-sm">
-              Back to detail
+              {t("console.proposals.edit.backToDetail", undefined, "Back to detail")}
             </Link>
           </div>
         }
@@ -70,9 +72,15 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
         <section className="surface">
           <div className="flex items-center justify-between border-b border-[var(--border-color)] p-5">
             <div>
-              <div className="text-sm font-semibold">Share links</div>
+              <div className="text-sm font-semibold">
+                {t("console.proposals.edit.shareLinks", undefined, "Share links")}
+              </div>
               <div className="text-xs text-[var(--text-muted)]">
-                Signed URLs clients use to view and sign this proposal.
+                {t(
+                  "console.proposals.edit.shareLinksDescription",
+                  undefined,
+                  "Signed URLs clients use to view and sign this proposal.",
+                )}
               </div>
             </div>
           </div>
@@ -98,12 +106,23 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
                     <li key={l.id} className="surface-inset flex flex-wrap items-center justify-between gap-2 p-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          {revoked ? <Badge variant="muted">Revoked</Badge> : <Badge variant="success">Active</Badge>}
+                          {revoked ? (
+                            <Badge variant="muted">{t("console.proposals.edit.revoked", undefined, "Revoked")}</Badge>
+                          ) : (
+                            <Badge variant="success">{t("console.proposals.edit.active", undefined, "Active")}</Badge>
+                          )}
                           {l.audience && <Badge variant="brand">{toTitle(l.audience)}</Badge>}
-                          <span className="text-xs text-[var(--text-muted)]">· {l.view_count} views</span>
+                          <span className="text-xs text-[var(--text-muted)]">
+                            · {t("console.proposals.edit.viewsCount", { count: l.view_count }, `${l.view_count} views`)}
+                          </span>
                           {l.last_viewed_at && (
                             <span className="text-xs text-[var(--text-muted)]">
-                              · last seen {timeAgo(l.last_viewed_at)}
+                              ·{" "}
+                              {t(
+                                "console.proposals.edit.lastSeen",
+                                { time: timeAgo(l.last_viewed_at) },
+                                `last seen ${timeAgo(l.last_viewed_at)}`,
+                              )}
                             </span>
                           )}
                         </div>
@@ -122,23 +141,33 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
               </ul>
             ) : (
               <p className="mt-3 text-sm text-[var(--text-muted)]">
-                No share links yet — generate one to send the proposal to a client.
+                {t(
+                  "console.proposals.edit.noShareLinks",
+                  undefined,
+                  "No share links yet — generate one to send the proposal to a client.",
+                )}
               </p>
             )}
           </div>
         </section>
 
-        <ProposalPreviewLink proposal={proposal as unknown as Proposal} />
+        <ProposalPreviewLink
+          proposal={proposal as unknown as Proposal}
+          tip={t(
+            "console.proposals.edit.previewTip",
+            undefined,
+            "Tip · Save, then open a share link to view the fully rendered proposal (including scroll-spy nav, phase accordions, and signature capture).",
+          )}
+        />
       </div>
     </>
   );
 }
 
-function ProposalPreviewLink({ proposal }: { proposal: Proposal }) {
+function ProposalPreviewLink({ proposal, tip }: { proposal: Proposal; tip: string }) {
   return (
     <div className="surface p-4 text-xs text-[var(--text-muted)]">
-      Tip · Save, then open a share link to view the fully rendered proposal (including scroll-spy nav, phase
-      accordions, and signature capture).
+      {tip}
       <span className="ms-2 font-mono">{proposal.id.slice(0, 8)}</span>
     </div>
   );

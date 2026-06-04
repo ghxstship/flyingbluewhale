@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { listAnnotations, type Annotation } from "@/lib/db/annotations";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo } from "@/lib/format";
 import { AnnotationActions, ReplyForm } from "../AnnotationActions";
 
@@ -22,6 +23,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
   if (!hasSupabase) return notFound();
   const { id } = await params;
   const session = await requireSession();
+  const { t } = await getRequestT();
 
   const all = await listAnnotations({ orgId: session.orgId });
   const root = all.find((a) => a.id === id && a.parent_id === null);
@@ -33,7 +35,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
       <ModuleHeader
         eyebrow={root.kind.toUpperCase()}
         title={root.title ?? root.body.slice(0, 80)}
-        subtitle={`${root.severity} · ${root.status}${root.due_at ? ` · due ${formatDate(root.due_at, "medium")}` : ""}`}
+        subtitle={`${root.severity} · ${root.status}${root.due_at ? ` · ${t("console.annotations.detail.dueLabel", undefined, "due")} ${formatDate(root.due_at, "medium")}` : ""}`}
         action={
           <AnnotationActions
             id={root.id}
@@ -45,25 +47,25 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label="Severity">
+          <Field label={t("console.annotations.detail.severity", undefined, "Severity")}>
             <Badge variant={SEVERITY_VARIANT[root.severity]} className="uppercase">
               {root.severity}
             </Badge>
           </Field>
-          <Field label="Status">
+          <Field label={t("console.annotations.detail.status", undefined, "Status")}>
             <StatusBadge status={root.status} />
           </Field>
-          <Field label="Target">
+          <Field label={t("console.annotations.detail.target", undefined, "Target")}>
             <span className="font-mono text-xs">
               {root.target_table}/{root.target_id.slice(0, 8)}
             </span>
           </Field>
-          <Field label="Confirmation">
+          <Field label={t("console.annotations.detail.confirmation", undefined, "Confirmation")}>
             {root.confirmation_required ? (
               root.confirmed_at ? (
-                <Badge variant="success">Confirmed</Badge>
+                <Badge variant="success">{t("console.annotations.detail.confirmed", undefined, "Confirmed")}</Badge>
               ) : (
-                <Badge variant="warning">Required</Badge>
+                <Badge variant="warning">{t("console.annotations.detail.required", undefined, "Required")}</Badge>
               )
             ) : (
               <span className="text-[var(--text-subtle)]">—</span>
@@ -72,13 +74,13 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
         </div>
 
         <div className="surface p-5">
-          <h3 className="text-sm font-semibold">Body</h3>
+          <h3 className="text-sm font-semibold">{t("console.annotations.detail.body", undefined, "Body")}</h3>
           <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{root.body}</p>
           {root.tags.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-1.5">
-              {root.tags.map((t) => (
-                <span key={t} className="rounded-md bg-(--surface-inset) px-2 py-0.5 font-mono text-xs">
-                  #{t}
+              {root.tags.map((tag) => (
+                <span key={tag} className="rounded-md bg-(--surface-inset) px-2 py-0.5 font-mono text-xs">
+                  #{tag}
                 </span>
               ))}
             </div>
@@ -87,17 +89,25 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
 
         {root.resolution_note ? (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Resolution note</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.annotations.detail.resolutionNote", undefined, "Resolution note")}
+            </h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{root.resolution_note}</p>
             {root.resolved_at ? (
-              <p className="mt-2 text-xs text-[var(--text-subtle)]">Resolved {timeAgo(root.resolved_at)}</p>
+              <p className="mt-2 text-xs text-[var(--text-subtle)]">
+                {t(
+                  "console.annotations.detail.resolvedAgo",
+                  { ago: timeAgo(root.resolved_at) },
+                  `Resolved ${timeAgo(root.resolved_at)}`,
+                )}
+              </p>
             ) : null}
           </div>
         ) : null}
 
         {Object.keys(root.metadata).length > 0 ? (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Metadata</h3>
+            <h3 className="text-sm font-semibold">{t("console.annotations.detail.metadata", undefined, "Metadata")}</h3>
             <pre className="mt-2 overflow-x-auto rounded-md bg-(--surface-inset) p-3 font-mono text-xs">
               {JSON.stringify(root.metadata, null, 2)}
             </pre>
@@ -105,7 +115,9 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
         ) : null}
 
         <div className="surface p-5">
-          <h3 className="text-sm font-semibold">Replies ({replies.length})</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.annotations.detail.repliesCount", { count: replies.length }, `Replies (${replies.length})`)}
+          </h3>
           <ul className="mt-3 space-y-3">
             {replies.map((r) => (
               <li key={r.id} className="border-s-2 border-(--ink) ps-3 text-sm">
@@ -113,7 +125,11 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
                 <p className="mt-1 font-mono text-xs text-[var(--text-subtle)]">{timeAgo(r.created_at)}</p>
               </li>
             ))}
-            {replies.length === 0 ? <li className="text-sm text-[var(--text-subtle)]">No replies yet.</li> : null}
+            {replies.length === 0 ? (
+              <li className="text-sm text-[var(--text-subtle)]">
+                {t("console.annotations.detail.noReplies", undefined, "No replies yet.")}
+              </li>
+            ) : null}
           </ul>
           <div className="mt-4">
             <ReplyForm parentId={root.id} />
@@ -121,7 +137,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
         </div>
 
         <Link href="/console/annotations" className="inline-block text-xs text-[var(--text-subtle)] underline">
-          ← Back to all annotations
+          {t("console.annotations.detail.backToAll", undefined, "← Back to all annotations")}
         </Link>
       </div>
     </>

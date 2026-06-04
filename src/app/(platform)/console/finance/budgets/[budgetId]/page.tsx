@@ -10,9 +10,11 @@ import { reconcileBudget, computeBudgetSpend } from "./actions";
 import { deleteBudget } from "./edit/actions";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ budgetId: string }> }) {
   const { budgetId } = await params;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data: budget } = await supabase
@@ -25,9 +27,14 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
   if (!budget) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="Budget" />
+        <ModuleHeader
+          eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
+          title={t("console.finance.budgets.detail.title", undefined, "Budget")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">Not found.</div>
+          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+            {t("console.finance.budgets.detail.notFound", undefined, "Not found.")}
+          </div>
         </div>
       </>
     );
@@ -62,12 +69,12 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
+        eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
         title={budget.name}
         subtitle={budget.category ?? undefined}
         breadcrumbs={[
-          { label: "Finance", href: "/console/finance" },
-          { label: "Budgets", href: "/console/finance/budgets" },
+          { label: t("console.finance.eyebrow", undefined, "Finance"), href: "/console/finance" },
+          { label: t("console.finance.budgets.breadcrumb", undefined, "Budgets"), href: "/console/finance/budgets" },
           { label: budget.name },
         ]}
         action={
@@ -78,15 +85,19 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
                 type="submit"
                 className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
               >
-                Reconcile to actuals
+                {t("console.finance.budgets.detail.reconcileToActuals", undefined, "Reconcile to actuals")}
               </button>
             </form>
             <Button href={`/console/finance/budgets/${budget.id}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteBudget.bind(null, budget.id)}
-              confirm={`Delete budget "${budget.name}"? This cannot be undone.`}
+              confirm={t(
+                "console.finance.budgets.detail.deleteConfirm",
+                { name: budget.name },
+                `Delete budget "${budget.name}"? This cannot be undone.`,
+              )}
             />
           </div>
         }
@@ -95,16 +106,28 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Budget</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+                {t("console.finance.budgets.detail.budget", undefined, "Budget")}
+              </div>
               <div className="mt-1 text-lg font-semibold">{money(budget.amount_cents)}</div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Computed actual</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+                {t("console.finance.budgets.detail.computedActual", undefined, "Computed actual")}
+              </div>
               <div className="mt-1 text-lg font-semibold">{money(recomputed)}</div>
-              <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">Stored: {money(budget.spent_cents)}</div>
+              <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
+                {t(
+                  "console.finance.budgets.detail.storedLabel",
+                  { amount: money(budget.spent_cents) },
+                  `Stored: ${money(budget.spent_cents)}`,
+                )}
+              </div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Remaining</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+                {t("console.finance.budgets.detail.remaining", undefined, "Remaining")}
+              </div>
               <div
                 className={`mt-1 text-lg font-semibold ${
                   remaining >= 0 ? "text-[var(--text-primary)]" : "text-[var(--color-error)]"
@@ -114,7 +137,9 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               </div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">Variance vs stored</div>
+              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+                {t("console.finance.budgets.detail.varianceVsStored", undefined, "Variance vs stored")}
+              </div>
               <div
                 className={`mt-1 text-lg font-semibold ${
                   variance === 0
@@ -126,7 +151,11 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               >
                 {variance === 0 ? "—" : `${variance > 0 ? "+" : ""}${money(variance)}`}
               </div>
-              {variance !== 0 && <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">Reconcile to clear</div>}
+              {variance !== 0 && (
+                <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
+                  {t("console.finance.budgets.detail.reconcileToClear", undefined, "Reconcile to clear")}
+                </div>
+              )}
             </div>
           </div>
           <div className="mt-4">
@@ -137,24 +166,36 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         <div className="grid gap-4 lg:grid-cols-2">
           <section className="surface">
             <header className="border-b border-[var(--border-color)] px-4 py-2.5">
-              <h3 className="text-sm font-semibold">Expenses</h3>
+              <h3 className="text-sm font-semibold">
+                {t("console.finance.budgets.detail.expensesHeader", undefined, "Expenses")}
+              </h3>
               <p className="mt-0.5 text-xs text-[var(--text-muted)]">
-                {(expenses ?? []).length} entr{(expenses ?? []).length === 1 ? "y" : "ies"} matching project + category
+                {(expenses ?? []).length === 1
+                  ? t(
+                      "console.finance.budgets.detail.expensesCountOne",
+                      { count: (expenses ?? []).length },
+                      `${(expenses ?? []).length} entry matching project + category`,
+                    )
+                  : t(
+                      "console.finance.budgets.detail.expensesCountMany",
+                      { count: (expenses ?? []).length },
+                      `${(expenses ?? []).length} entries matching project + category`,
+                    )}
               </p>
             </header>
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>When</th>
-                  <th>Description</th>
-                  <th className="text-end">Amount</th>
+                  <th>{t("console.finance.budgets.detail.col.when", undefined, "When")}</th>
+                  <th>{t("console.finance.budgets.detail.col.description", undefined, "Description")}</th>
+                  <th className="text-end">{t("console.finance.budgets.detail.col.amount", undefined, "Amount")}</th>
                 </tr>
               </thead>
               <tbody>
                 {(expenses ?? []).length === 0 ? (
                   <tr>
                     <td colSpan={3} className="py-6 text-center text-[var(--text-muted)]">
-                      No matching expenses.
+                      {t("console.finance.budgets.detail.noExpenses", undefined, "No matching expenses.")}
                     </td>
                   </tr>
                 ) : (
@@ -172,22 +213,34 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
 
           <section className="surface">
             <header className="border-b border-[var(--border-color)] px-4 py-2.5">
-              <h3 className="text-sm font-semibold">Paid Invoices</h3>
-              <p className="mt-0.5 text-xs text-[var(--text-muted)]">{(invoices ?? []).length} matching project</p>
+              <h3 className="text-sm font-semibold">
+                {t("console.finance.budgets.detail.paidInvoicesHeader", undefined, "Paid Invoices")}
+              </h3>
+              <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+                {t(
+                  "console.finance.budgets.detail.invoicesCount",
+                  { count: (invoices ?? []).length },
+                  `${(invoices ?? []).length} matching project`,
+                )}
+              </p>
             </header>
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Paid</th>
-                  <th>Invoice</th>
-                  <th className="text-end">Amount</th>
+                  <th>{t("console.finance.budgets.detail.col.paid", undefined, "Paid")}</th>
+                  <th>{t("console.finance.budgets.detail.col.invoice", undefined, "Invoice")}</th>
+                  <th className="text-end">{t("console.finance.budgets.detail.col.amount", undefined, "Amount")}</th>
                 </tr>
               </thead>
               <tbody>
                 {(invoices ?? []).length === 0 ? (
                   <tr>
                     <td colSpan={3} className="py-6 text-center text-[var(--text-muted)]">
-                      No paid invoices on this project.
+                      {t(
+                        "console.finance.budgets.detail.noPaidInvoices",
+                        undefined,
+                        "No paid invoices on this project.",
+                      )}
                     </td>
                   </tr>
                 ) : (
@@ -205,7 +258,8 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         </div>
 
         <section className="surface p-4 text-xs text-[var(--text-muted)]">
-          <Badge variant="muted">Created</Badge> <span className="font-mono">{fmtDate(budget.created_at)}</span>
+          <Badge variant="muted">{t("console.finance.budgets.detail.createdBadge", undefined, "Created")}</Badge>{" "}
+          <span className="font-mono">{fmtDate(budget.created_at)}</span>
         </section>
       </div>
     </>

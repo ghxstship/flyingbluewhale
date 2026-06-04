@@ -4,12 +4,17 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { archiveZone, reactivateZone } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -45,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Time-Clock Zone"
+        eyebrow={t("console.settings.timeClockZones.detail.eyebrow", undefined, "Time-Clock Zone")}
         title={z.name}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
@@ -60,14 +65,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={archiveZone}>
               <input type="hidden" name="id" value={z.id} />
               <button type="submit" className="btn btn-secondary btn-sm">
-                Archive
+                {t("common.archive", undefined, "Archive")}
               </button>
             </form>
           ) : (
             <form action={reactivateZone}>
               <input type="hidden" name="id" value={z.id} />
               <button type="submit" className="btn btn-primary btn-sm">
-                Reactivate
+                {t("common.reactivate", undefined, "Reactivate")}
               </button>
             </form>
           )
@@ -75,7 +80,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content max-w-3xl space-y-4">
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Recent Punches</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.timeClockZones.detail.recentPunches", undefined, "Recent Punches")}
+          </h2>
           {(
             (punches ?? []) as Array<{
               id: string;
@@ -86,7 +93,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               punch_lng: number | null;
             }>
           ).length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No punches recorded yet.</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("console.settings.timeClockZones.detail.noPunches", undefined, "No punches recorded yet.")}
+            </p>
           ) : (
             <ul className="mt-3 space-y-2">
               {(

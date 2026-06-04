@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -56,12 +56,18 @@ const SOURCE_LABEL: Record<Source, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Field" title="Reality Captures" />
+        <ModuleHeader
+          eyebrow={t("console.captures.eyebrow", undefined, "Field")}
+          title={t("console.captures.title", undefined, "Reality Captures")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.captures.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -89,36 +95,56 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Field"
-        title="Reality Captures"
-        subtitle={`${rows.length} captures · ${readyCount} ready · ${processingCount} processing · ${fmt.number(totalPanos)} panoramas`}
+        eyebrow={t("console.captures.eyebrow", undefined, "Field")}
+        title={t("console.captures.title", undefined, "Reality Captures")}
+        subtitle={t(
+          "console.captures.subtitle",
+          { count: rows.length, ready: readyCount, processing: processingCount, panos: fmt.number(totalPanos) },
+          `${rows.length} captures · ${readyCount} ready · ${processingCount} processing · ${fmt.number(totalPanos)} panoramas`,
+        )}
         action={
           <Button href="/console/captures/new" size="sm">
-            + Register Capture
+            {t("console.captures.registerCapture", undefined, "+ Register Capture")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Ready" value={fmt.number(readyCount)} />
-          <MetricCard label="Processing" value={fmt.number(processingCount)} />
+          <MetricCard
+            label={t("console.captures.metrics.total", undefined, "Total")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard label={t("console.captures.metrics.ready", undefined, "Ready")} value={fmt.number(readyCount)} />
+          <MetricCard
+            label={t("console.captures.metrics.processing", undefined, "Processing")}
+            value={fmt.number(processingCount)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/captures/${r.id}`}
-          emptyLabel="No captures registered yet"
-          emptyDescription="Register OpenSpace / DroneDeploy / Matterport / 360° walks. Heavy assets live with the partner; rows here anchor them to projects + sheets for cross-ref."
+          emptyLabel={t("console.captures.emptyLabel", undefined, "No captures registered yet")}
+          emptyDescription={t(
+            "console.captures.emptyDescription",
+            undefined,
+            "Register OpenSpace / DroneDeploy / Matterport / 360° walks. Heavy assets live with the partner; rows here anchor them to projects + sheets for cross-ref.",
+          )}
           emptyAction={
             <Button href="/console/captures/new" size="sm">
-              + Register Capture
+              {t("console.captures.registerCapture", undefined, "+ Register Capture")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.captures.columns.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.captures.columns.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -126,7 +152,7 @@ export default async function Page() {
             },
             {
               key: "source",
-              header: "Source",
+              header: t("console.captures.columns.source", undefined, "Source"),
               render: (r) => SOURCE_LABEL[r.source],
               accessor: (r) => r.source,
               filterable: true,
@@ -135,7 +161,7 @@ export default async function Page() {
             },
             {
               key: "date",
-              header: "Captured",
+              header: t("console.captures.columns.captured", undefined, "Captured"),
               render: (r) =>
                 r.capture_date
                   ? fmt.dateParts(r.capture_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" })
@@ -145,21 +171,21 @@ export default async function Page() {
             },
             {
               key: "panos",
-              header: "Panos",
+              header: t("console.captures.columns.panos", undefined, "Panos"),
               render: (r) => (r.panorama_count != null ? fmt.number(r.panorama_count) : "—"),
               accessor: (r) => r.panorama_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "sqft",
-              header: "Sq Ft",
+              header: t("console.captures.columns.sqft", undefined, "Sq Ft"),
               render: (r) => (r.approximate_sqft != null ? fmt.number(r.approximate_sqft) : "—"),
               accessor: (r) => r.approximate_sqft,
               className: "font-mono text-xs text-right",
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.captures.columns.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.capture_state]}>{toTitle(r.capture_state)}</Badge>,
               accessor: (r) => r.capture_state,
               filterable: true,

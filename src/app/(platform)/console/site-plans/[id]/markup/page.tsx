@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 import MarkupLoader from "../markup-loader";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { id } = await params;
+  const { t } = await getRequestT();
 
   const { data: row } = await supabase
     .from("site_plans")
@@ -39,12 +41,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Drawings"
-        title={`${sheet.code} · Markup`}
+        eyebrow={t("console.sitePlans.markup.eyebrow", undefined, "Drawings")}
+        title={t("console.sitePlans.markup.title", { code: sheet.code }, `${sheet.code} · Markup`)}
         subtitle={sheet.title}
         action={
           <Button href={`/console/site-plans/${sheet.id}`} size="sm" variant="ghost">
-            ← Back to Sheet
+            {t("console.sitePlans.markup.backToSheet", undefined, "← Back to Sheet")}
           </Button>
         }
       />
@@ -57,11 +59,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           />
         ) : (
           <div className="surface p-6 text-sm">
-            No PDF attached to this sheet yet. Upload one to the &lsquo;site-plans&rsquo; bucket at path{" "}
+            {t(
+              "console.sitePlans.markup.noPdfIntro",
+              undefined,
+              "No PDF attached to this sheet yet. Upload one to the ‘site-plans’ bucket at path",
+            )}{" "}
             <code className="font-mono text-xs">
               site-plans/{session.orgId}/{sheet.id}.pdf
             </code>{" "}
-            and set <code className="font-mono text-xs">site_plans.storage_path</code> to that key.
+            {t("console.sitePlans.markup.noPdfAndSet", undefined, "and set")}{" "}
+            <code className="font-mono text-xs">site_plans.storage_path</code>{" "}
+            {t("console.sitePlans.markup.noPdfToKey", undefined, "to that key.")}
           </div>
         )}
       </div>

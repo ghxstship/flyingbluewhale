@@ -6,12 +6,14 @@ import { StatusChip } from "@/components/ui/StatusChip";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDateTime } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 import { WebhookEditor } from "./WebhookEditor";
 
 export default async function Page({ params }: { params: Promise<{ webhookId: string }> }) {
   const { webhookId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: endpoint }, { data: deliveries }] = await Promise.all([
     supabase
       .from("webhook_endpoints")
@@ -42,12 +44,12 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings · Webhooks"
+        eyebrow={t("console.settings.webhooks.detail.eyebrow", undefined, "Settings · Webhooks")}
         title={endpoint.url}
         subtitle={endpoint.description ?? undefined}
         breadcrumbs={[
-          { label: "Settings" },
-          { label: "Webhooks", href: "/console/settings/webhooks" },
+          { label: t("console.settings.title", undefined, "Settings") },
+          { label: t("console.settings.webhooks.title", undefined, "Webhooks"), href: "/console/settings/webhooks" },
           { label: endpoint.url },
         ]}
       />
@@ -62,21 +64,27 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
 
         <section className="surface">
           <div className="border-b border-[var(--border-color)] px-5 py-3">
-            <h3 className="text-sm font-semibold">Recent Deliveries</h3>
-            <p className="mt-0.5 text-xs text-[var(--text-muted)]">Last 25 attempts</p>
+            <h3 className="text-sm font-semibold">
+              {t("console.settings.webhooks.detail.recentDeliveries", undefined, "Recent Deliveries")}
+            </h3>
+            <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+              {t("console.settings.webhooks.detail.last25", undefined, "Last 25 attempts")}
+            </p>
           </div>
           {rows.length === 0 ? (
-            <div className="p-5 text-sm text-[var(--text-muted)]">No deliveries recorded yet.</div>
+            <div className="p-5 text-sm text-[var(--text-muted)]">
+              {t("console.settings.webhooks.detail.empty", undefined, "No deliveries recorded yet.")}
+            </div>
           ) : (
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>When</th>
-                  <th>Event</th>
-                  <th>State</th>
-                  <th>HTTP</th>
-                  <th>Attempts</th>
-                  <th>Error</th>
+                  <th>{t("console.settings.webhooks.detail.col.when", undefined, "When")}</th>
+                  <th>{t("console.settings.webhooks.detail.col.event", undefined, "Event")}</th>
+                  <th>{t("console.settings.webhooks.detail.col.state", undefined, "State")}</th>
+                  <th>{t("console.settings.webhooks.detail.col.http", undefined, "HTTP")}</th>
+                  <th>{t("console.settings.webhooks.detail.col.attempts", undefined, "Attempts")}</th>
+                  <th>{t("console.settings.webhooks.detail.col.error", undefined, "Error")}</th>
                 </tr>
               </thead>
               <tbody>

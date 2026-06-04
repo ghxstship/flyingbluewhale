@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteVisaCase } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ caseId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.participants.visa.detail.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.participants.visa.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ caseId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.participants.visa.detail.eyebrow", undefined, "Record")}
         title={title ?? p.caseId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/participants/visa" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/participants/visa/${p.caseId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteVisaCase.bind(null, p.caseId)}
-              confirm={`Delete this record? This cannot be undone.`}
+              confirm={t(
+                "console.participants.visa.detail.deleteConfirm",
+                undefined,
+                "Delete this record? This cannot be undone.",
+              )}
             />
           </div>
         }

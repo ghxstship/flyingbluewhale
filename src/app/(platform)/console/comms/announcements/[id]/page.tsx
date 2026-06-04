@@ -8,11 +8,18 @@ import { toTitle } from "@/lib/format";
 import Link from "next/link";
 import { publishAnnouncement, archiveAnnouncement, deleteAnnouncement } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.comms.announcements.detail.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -41,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Announcement"
+        eyebrow={t("console.comms.announcements.detail.eyebrow", undefined, "Announcement")}
         title={a.title}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
@@ -51,8 +58,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {a.publish_state}
             </Badge>
             <Badge variant="muted">{toTitle(a.audience)}</Badge>
-            {a.pinned && <Badge variant="warning">Pinned</Badge>}
-            <span className="font-mono text-xs">{readCount ?? 0} read</span>
+            {a.pinned && (
+              <Badge variant="warning">{t("console.comms.announcements.detail.pinned", undefined, "Pinned")}</Badge>
+            )}
+            <span className="font-mono text-xs">
+              {t("console.comms.announcements.detail.readCount", { count: readCount ?? 0 }, `${readCount ?? 0} read`)}
+            </span>
           </span>
         }
       />
@@ -60,13 +71,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <article className="surface p-6 text-sm whitespace-pre-wrap">{a.body}</article>
         <div className="flex flex-wrap gap-2">
           <Link href={`/console/comms/announcements/${a.id}/edit`} className="btn btn-secondary">
-            Edit
+            {t("common.edit", undefined, "Edit")}
           </Link>
           {a.publish_state === "draft" && (
             <form action={publishAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
               <button type="submit" className="btn btn-primary">
-                Publish
+                {t("console.comms.announcements.detail.publish", undefined, "Publish")}
               </button>
             </form>
           )}
@@ -74,13 +85,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={archiveAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
               <button type="submit" className="btn btn-secondary">
-                Archive
+                {t("console.comms.announcements.detail.archive", undefined, "Archive")}
               </button>
             </form>
           )}
           <DeleteForm
             action={deleteAnnouncement.bind(null, a.id)}
-            confirm="Soft-delete this announcement? It will stop appearing in /m/feed."
+            confirm={t(
+              "console.comms.announcements.detail.deleteConfirm",
+              undefined,
+              "Soft-delete this announcement? It will stop appearing in /m/feed.",
+            )}
           />
         </div>
       </div>

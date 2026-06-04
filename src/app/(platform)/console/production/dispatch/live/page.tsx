@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { LiveDispatchMap, type DispatchPoint } from "./LiveDispatchMap";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -14,12 +15,18 @@ export const dynamic = "force-dynamic";
  * MVP; the moment a vehicle gets a GPS device it streams here.
  */
 export default async function LiveDispatchPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Live Dispatch" />
+        <ModuleHeader
+          eyebrow={t("console.production.dispatch.live.eyebrow", undefined, "Production")}
+          title={t("console.production.dispatch.live.title", undefined, "Live Dispatch")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.dispatch.live.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -86,31 +93,49 @@ export default async function LiveDispatchPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
-        title="Live Dispatch"
-        subtitle={`${points.length} Run${points.length === 1 ? "" : "s"} With A Fix`}
+        eyebrow={t("console.production.dispatch.live.eyebrow", undefined, "Production")}
+        title={t("console.production.dispatch.live.title", undefined, "Live Dispatch")}
+        subtitle={
+          points.length === 1
+            ? t(
+                "console.production.dispatch.live.subtitleSingular",
+                { count: points.length },
+                `${points.length} Run With A Fix`,
+              )
+            : t(
+                "console.production.dispatch.live.subtitlePlural",
+                { count: points.length },
+                `${points.length} Runs With A Fix`,
+              )
+        }
       />
       <div className="page-content space-y-5">
         <LiveDispatchMap points={points} />
 
         <section className="overflow-x-auto">
           <header className="border-b border-[var(--border-color)] px-4 py-2.5">
-            <h3 className="text-sm font-semibold">Active Runs</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.production.dispatch.live.activeRuns", undefined, "Active Runs")}
+            </h3>
           </header>
           {points.length === 0 ? (
             <p className="px-4 py-6 text-center text-xs text-[var(--text-muted)]">
-              No dispatch runs with origin/destination coordinates. Add lat/lng on venues to see them here.
+              {t(
+                "console.production.dispatch.live.emptyState",
+                undefined,
+                "No dispatch runs with origin/destination coordinates. Add lat/lng on venues to see them here.",
+              )}
             </p>
           ) : (
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Vehicle</th>
-                  <th>From</th>
-                  <th>To</th>
-                  <th>Status</th>
-                  <th>Departed</th>
-                  <th>Arrived</th>
+                  <th>{t("console.production.dispatch.live.col.vehicle", undefined, "Vehicle")}</th>
+                  <th>{t("console.production.dispatch.live.col.from", undefined, "From")}</th>
+                  <th>{t("console.production.dispatch.live.col.to", undefined, "To")}</th>
+                  <th>{t("console.production.dispatch.live.col.status", undefined, "Status")}</th>
+                  <th>{t("console.production.dispatch.live.col.departed", undefined, "Departed")}</th>
+                  <th>{t("console.production.dispatch.live.col.arrived", undefined, "Arrived")}</th>
                 </tr>
               </thead>
               <tbody>

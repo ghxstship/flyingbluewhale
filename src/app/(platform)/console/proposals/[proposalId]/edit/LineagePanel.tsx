@@ -1,5 +1,6 @@
 "use client";
 
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { CatalogKind, DocDeliverableType, ProposalBlock } from "@/lib/proposals/types";
 
 // Inline lineage editor for phase + investment_table blocks. Surfaces
@@ -43,6 +44,7 @@ const DELIVERABLE_TYPES: DocDeliverableType[] = [
 type AnyBlock = ProposalBlock & { _dragId?: string };
 
 export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (next: AnyBlock) => void }) {
+  const t = useT();
   if (block.type === "phase") {
     const deliverables = block.deliverables ?? [];
     type PhaseItem = NonNullable<(typeof block)["items"]>[number];
@@ -51,10 +53,16 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
       <div className="surface-inset mt-2 space-y-3 p-3">
         <div>
           <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Deliverables · seeded into public.deliverables
+            {t(
+              "console.proposals.edit.lineage.deliverablesHeader",
+              undefined,
+              "Deliverables · seeded into public.deliverables",
+            )}
           </div>
           {deliverables.length === 0 ? (
-            <div className="mt-1 text-xs text-[var(--text-muted)]">No deliverables.</div>
+            <div className="mt-1 text-xs text-[var(--text-muted)]">
+              {t("console.proposals.edit.lineage.noDeliverables", undefined, "No deliverables.")}
+            </div>
           ) : (
             <div className="mt-1.5 space-y-1.5">
               {deliverables.map((d, i) => (
@@ -67,7 +75,11 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                       next[i] = { ...next[i], label: e.target.value };
                       onChange({ ...block, deliverables: next });
                     }}
-                    placeholder="Deliverable label"
+                    placeholder={t(
+                      "console.proposals.edit.lineage.deliverableLabelPlaceholder",
+                      undefined,
+                      "Deliverable label",
+                    )}
                   />
                   <select
                     className="input-base text-xs"
@@ -82,10 +94,12 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                       onChange({ ...block, deliverables: next });
                     }}
                   >
-                    <option value="">— no type (won't seed) —</option>
-                    {DELIVERABLE_TYPES.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
+                    <option value="">
+                      {t("console.proposals.edit.lineage.noTypeOption", undefined, "— no type (won't seed) —")}
+                    </option>
+                    {DELIVERABLE_TYPES.map((dt) => (
+                      <option key={dt} value={dt}>
+                        {dt}
                       </option>
                     ))}
                   </select>
@@ -96,10 +110,16 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
         </div>
         <div>
           <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Catalog items · seeded into public.master_catalog_items
+            {t(
+              "console.proposals.edit.lineage.catalogItemsHeader",
+              undefined,
+              "Catalog items · seeded into public.master_catalog_items",
+            )}
           </div>
           {items.length === 0 ? (
-            <div className="mt-1 text-xs text-[var(--text-muted)]">No items.</div>
+            <div className="mt-1 text-xs text-[var(--text-muted)]">
+              {t("console.proposals.edit.lineage.noItems", undefined, "No items.")}
+            </div>
           ) : (
             <div className="mt-1.5 space-y-1.5">
               {items.map((it, i) => (
@@ -112,7 +132,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                       next[i] = { ...next[i], label: e.target.value };
                       onChange({ ...block, items: next });
                     }}
-                    placeholder="Item label"
+                    placeholder={t("console.proposals.edit.lineage.itemLabelPlaceholder", undefined, "Item label")}
                   />
                   <input
                     className="input-base font-mono text-xs"
@@ -122,7 +142,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                       next[i] = { ...next[i], catalogCode: e.target.value || undefined };
                       onChange({ ...block, items: next });
                     }}
-                    placeholder="CODE"
+                    placeholder={t("console.proposals.edit.lineage.codePlaceholder", undefined, "CODE")}
                   />
                   <select
                     className="input-base text-xs"
@@ -137,7 +157,9 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                       onChange({ ...block, items: next });
                     }}
                   >
-                    <option value="">— no kind (won't seed) —</option>
+                    <option value="">
+                      {t("console.proposals.edit.lineage.noKindOption", undefined, "— no kind (won't seed) —")}
+                    </option>
                     {CATALOG_KINDS.map((k) => (
                       <option key={k} value={k}>
                         {k}
@@ -157,7 +179,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
     return (
       <div className="surface-inset mt-2 space-y-2 p-3">
         <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Groups · seeded into public.budgets
+          {t("console.proposals.edit.lineage.groupsHeader", undefined, "Groups · seeded into public.budgets")}
         </div>
         {block.groups.map((g, i) => (
           <div key={i} className="grid grid-cols-[1fr_1fr] gap-2">
@@ -169,7 +191,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                 next[i] = { ...next[i], label: e.target.value };
                 onChange({ ...block, groups: next });
               }}
-              placeholder="Group label"
+              placeholder={t("console.proposals.edit.lineage.groupLabelPlaceholder", undefined, "Group label")}
             />
             <input
               className="input-base text-xs"
@@ -179,7 +201,11 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                 next[i] = { ...next[i], budgetCategory: e.target.value || undefined };
                 onChange({ ...block, groups: next });
               }}
-              placeholder="Budget category (defaults to label)"
+              placeholder={t(
+                "console.proposals.edit.lineage.budgetCategoryPlaceholder",
+                undefined,
+                "Budget category (defaults to label)",
+              )}
             />
           </div>
         ))}
@@ -191,4 +217,4 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
 }
 
 export const LINEAGE_BLOCK_TYPES = ["phase", "investment_table"] as const;
-export const isLineageBlock = (t: string) => (LINEAGE_BLOCK_TYPES as readonly string[]).includes(t);
+export const isLineageBlock = (blockType: string) => (LINEAGE_BLOCK_TYPES as readonly string[]).includes(blockType);

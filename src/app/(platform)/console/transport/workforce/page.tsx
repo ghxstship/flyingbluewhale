@@ -5,7 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -30,12 +30,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Transport" title="Workforce Shuttles" />
+        <ModuleHeader
+          eyebrow={t("console.transport.workforce.eyebrow", undefined, "Transport")}
+          title={t("console.transport.workforce.title", undefined, "Workforce Shuttles")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.transport.workforce.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -76,23 +82,39 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Transport"
-        title="Workforce Shuttles"
-        subtitle={`${runs.length} Run${runs.length === 1 ? "" : "s"} Across Workforce + T3 + spectator fleets, next 3 days`}
+        eyebrow={t("console.transport.workforce.eyebrow", undefined, "Transport")}
+        title={t("console.transport.workforce.title", undefined, "Workforce Shuttles")}
+        subtitle={
+          runs.length === 1
+            ? t(
+                "console.transport.workforce.subtitleOne",
+                { count: runs.length },
+                `${runs.length} Run Across Workforce + T3 + spectator fleets, next 3 days`,
+              )
+            : t(
+                "console.transport.workforce.subtitleOther",
+                { count: runs.length },
+                `${runs.length} Runs Across Workforce + T3 + spectator fleets, next 3 days`,
+              )
+        }
         action={
           <Button href="/console/transport/dispatch/new" size="sm">
-            + Schedule run
+            {t("console.transport.workforce.scheduleRun", undefined, "+ Schedule run")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {days.length === 0 ? (
           <EmptyState
-            title="No Workforce Shuttles Scheduled"
-            description="Workforce shuttles are dispatch_runs with fleet ∈ {workforce, t3, spectator}. Schedule a run from /console/transport/dispatch."
+            title={t("console.transport.workforce.empty.title", undefined, "No Workforce Shuttles Scheduled")}
+            description={t(
+              "console.transport.workforce.empty.description",
+              undefined,
+              "Workforce shuttles are dispatch_runs with fleet ∈ {workforce, t3, spectator}. Schedule a run from /console/transport/dispatch.",
+            )}
             action={
               <Button href="/console/transport/dispatch/new" size="sm">
-                + Schedule run
+                {t("console.transport.workforce.scheduleRun", undefined, "+ Schedule run")}
               </Button>
             }
           />
@@ -102,19 +124,25 @@ export default async function Page() {
               <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-3">
                 <h3 className="text-sm font-semibold">{fmtDay(new Date(day))}</h3>
                 <Badge variant="muted">
-                  {dayRuns.length} run{dayRuns.length === 1 ? "" : "s"}
+                  {dayRuns.length === 1
+                    ? t("console.transport.workforce.runCountOne", { count: dayRuns.length }, `${dayRuns.length} run`)
+                    : t(
+                        "console.transport.workforce.runCountOther",
+                        { count: dayRuns.length },
+                        `${dayRuns.length} runs`,
+                      )}
                 </Badge>
               </header>
               <table className="data-table w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Depart</th>
-                    <th>Arrive</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Fleet</th>
-                    <th>Vehicle</th>
-                    <th>Status</th>
+                    <th>{t("console.transport.workforce.col.depart", undefined, "Depart")}</th>
+                    <th>{t("console.transport.workforce.col.arrive", undefined, "Arrive")}</th>
+                    <th>{t("console.transport.workforce.col.from", undefined, "From")}</th>
+                    <th>{t("console.transport.workforce.col.to", undefined, "To")}</th>
+                    <th>{t("console.transport.workforce.col.fleet", undefined, "Fleet")}</th>
+                    <th>{t("console.transport.workforce.col.vehicle", undefined, "Vehicle")}</th>
+                    <th>{t("console.transport.workforce.col.status", undefined, "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>

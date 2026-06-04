@@ -3,9 +3,11 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createShareLinkAction } from "./actions";
 
 export function ShareLinkPanel({ proposalId }: { proposalId: string }) {
+  const t = useT();
   const [pending, start] = useTransition();
 
   const generate = (audience: string | null) =>
@@ -23,20 +25,20 @@ export function ShareLinkPanel({ proposalId }: { proposalId: string }) {
           // blocked the API. Best-effort copy; the toast still confirms
           // the link was created server-side.
         }
-        toast.success("Share link copied to clipboard");
+        toast.success(t("console.proposals.edit.shareLink.copiedToast", undefined, "Share link copied to clipboard"));
       }
     });
 
   return (
     <div className="flex flex-wrap gap-2">
       <Button size="sm" onClick={() => generate("client")} disabled={pending}>
-        + Client link
+        {t("console.proposals.edit.shareLink.client", undefined, "+ Client link")}
       </Button>
       <Button size="sm" variant="secondary" onClick={() => generate("internal")} disabled={pending}>
-        + Internal review link
+        {t("console.proposals.edit.shareLink.internal", undefined, "+ Internal review link")}
       </Button>
       <Button size="sm" variant="ghost" onClick={() => generate(null)} disabled={pending}>
-        + Generic link
+        {t("console.proposals.edit.shareLink.generic", undefined, "+ Generic link")}
       </Button>
     </div>
   );

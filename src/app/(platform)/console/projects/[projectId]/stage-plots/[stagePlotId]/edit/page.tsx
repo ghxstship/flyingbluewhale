@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateStagePlot, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,7 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params }: { params: Promise<{ projectId: string; stagePlotId: string }> }) {
   const { projectId, stagePlotId } = await params;
   if (!hasSupabase) return notFound();
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data: row } = await supabase
@@ -29,26 +31,35 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   ) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Stage Plot" title={`Edit ${row.name}`} />
+      <ModuleHeader
+        eyebrow={t("console.projects.stagePlots.edit.eyebrow", undefined, "Stage Plot")}
+        title={t("console.projects.stagePlots.edit.title", { name: row.name }, `Edit ${row.name}`)}
+      />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/projects/${projectId}/stage-plots/${stagePlotId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Name" name="name" defaultValue={row.name} required maxLength={200} />
+          <Input
+            label={t("console.projects.stagePlots.edit.nameLabel", undefined, "Name")}
+            name="name"
+            defaultValue={row.name}
+            required
+            maxLength={200}
+          />
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label="Width (ft)"
+              label={t("console.projects.stagePlots.edit.widthLabel", undefined, "Width (ft)")}
               name="width_ft"
               type="number"
               step="any"
               defaultValue={row.width_ft != null ? String(row.width_ft) : ""}
             />
             <Input
-              label="Depth (ft)"
+              label={t("console.projects.stagePlots.edit.depthLabel", undefined, "Depth (ft)")}
               name="depth_ft"
               type="number"
               step="any"
@@ -56,7 +67,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             />
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Notes</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.projects.stagePlots.edit.notesLabel", undefined, "Notes")}
+            </span>
             <textarea
               name="notes"
               defaultValue={row.notes ?? ""}
@@ -66,7 +79,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             />
           </label>
           <p className="text-xs text-[var(--text-muted)]">
-            Element placement is edited via the canvas on the detail page.
+            {t(
+              "console.projects.stagePlots.edit.canvasHint",
+              undefined,
+              "Element placement is edited via the canvas on the detail page.",
+            )}
           </p>
         </FormShell>
       </div>

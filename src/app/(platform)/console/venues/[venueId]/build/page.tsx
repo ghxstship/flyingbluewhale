@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +25,18 @@ function photoCount(raw: unknown): number {
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Build" />
+        <ModuleHeader
+          eyebrow={t("console.venues.build.eyebrow", undefined, "Venue")}
+          title={t("console.venues.build.title", undefined, "Build")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.build.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -62,26 +68,42 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Build`}
-        subtitle={`${logs.length} log entr${logs.length === 1 ? "y" : "ies"}`}
+        eyebrow={t("console.venues.build.eyebrow", undefined, "Venue")}
+        title={t("console.venues.build.titleWithName", { name: venue.name }, `${venue.name} — Build`)}
+        subtitle={
+          logs.length === 1
+            ? t("console.venues.build.subtitleOne", { count: logs.length }, `${logs.length} log entry`)
+            : t("console.venues.build.subtitleOther", { count: logs.length }, `${logs.length} log entries`)
+        }
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.build.breadcrumbVenues", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "Build" },
+          { label: t("console.venues.build.breadcrumbBuild", undefined, "Build") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Days Logged" value={fmt.number(logs.length)} />
-          <MetricCard label="Avg Trades/Day" value={fmt.number(avgTrades)} />
-          <MetricCard label="Days w/ Blockers" value={fmt.number(blockers)} />
+          <MetricCard
+            label={t("console.venues.build.metric.daysLogged", undefined, "Days Logged")}
+            value={fmt.number(logs.length)}
+          />
+          <MetricCard
+            label={t("console.venues.build.metric.avgTradesDay", undefined, "Avg Trades/Day")}
+            value={fmt.number(avgTrades)}
+          />
+          <MetricCard
+            label={t("console.venues.build.metric.daysWithBlockers", undefined, "Days w/ Blockers")}
+            value={fmt.number(blockers)}
+          />
         </div>
 
         {logs.length === 0 ? (
           <div className="surface p-6 text-sm text-[var(--text-muted)]">
-            No build-log entries yet. The construction lead should add a daily entry summarising trades on site,
-            progress, and blockers — these feed the project's burndown.
+            {t(
+              "console.venues.build.emptyState",
+              undefined,
+              "No build-log entries yet. The construction lead should add a daily entry summarising trades on site, progress, and blockers — these feed the project's burndown.",
+            )}
           </div>
         ) : (
           <ul className="divide-y divide-[var(--border-color)]">
@@ -100,15 +122,29 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                           aria-hidden="true"
                         />
                         <span>
-                          <span className="sr-only">Blocker: </span>
+                          <span className="sr-only">
+                            {t("console.venues.build.blockerSrLabel", undefined, "Blocker: ")}
+                          </span>
                           {l.blockers}
                         </span>
                       </p>
                     )}
                   </div>
                   <div className="flex flex-col items-end gap-1 font-mono text-[10px] text-[var(--text-muted)]">
-                    {l.trades_onsite != null && <span>{l.trades_onsite} trades</span>}
-                    {photoCount(l.photos) > 0 && <span>{photoCount(l.photos)} photo(s)</span>}
+                    {l.trades_onsite != null && (
+                      <span>
+                        {t("console.venues.build.tradesCount", { count: l.trades_onsite }, `${l.trades_onsite} trades`)}
+                      </span>
+                    )}
+                    {photoCount(l.photos) > 0 && (
+                      <span>
+                        {t(
+                          "console.venues.build.photosCount",
+                          { count: photoCount(l.photos) },
+                          `${photoCount(l.photos)} photo(s)`,
+                        )}
+                      </span>
+                    )}
                   </div>
                 </div>
               </li>

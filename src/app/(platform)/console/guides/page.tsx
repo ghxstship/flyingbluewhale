@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,12 +17,18 @@ export const dynamic = "force-dynamic";
  * `/console/projects/[projectId]/guides`.
  */
 export default async function GuidesIndex() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Knowledge" title="Guides" />
+        <ModuleHeader
+          eyebrow={t("console.guides.eyebrow", undefined, "Knowledge")}
+          title={t("console.guides.title", undefined, "Guides")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.guides.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -44,18 +51,26 @@ export default async function GuidesIndex() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Knowledge"
-        title="Guides"
-        subtitle={`${rows.length} Guide${rows.length === 1 ? "" : "s"} across your projects`}
+        eyebrow={t("console.guides.eyebrow", undefined, "Knowledge")}
+        title={t("console.guides.title", undefined, "Guides")}
+        subtitle={
+          rows.length === 1
+            ? t("console.guides.subtitleSingular", { count: rows.length }, `${rows.length} Guide across your projects`)
+            : t("console.guides.subtitlePlural", { count: rows.length }, `${rows.length} Guides across your projects`)
+        }
       />
       <div className="page-content">
         {rows.length === 0 ? (
           <EmptyState
-            title="No Event Guides Yet"
-            description="Per-persona event guides — the Boarding Pass for crew, artists, vendors, sponsors, and guests — are authored from each project's detail page."
+            title={t("console.guides.empty.title", undefined, "No Event Guides Yet")}
+            description={t(
+              "console.guides.empty.description",
+              undefined,
+              "Per-persona event guides — the Boarding Pass for crew, artists, vendors, sponsors, and guests — are authored from each project's detail page.",
+            )}
             action={
               <Link className="text-sm text-[var(--org-primary)]" href="/console/projects">
-                Open Projects →
+                {t("console.guides.empty.openProjects", undefined, "Open Projects →")}
               </Link>
             }
           />
@@ -64,9 +79,9 @@ export default async function GuidesIndex() {
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Project</th>
-                  <th>Persona</th>
-                  <th>Updated</th>
+                  <th>{t("console.guides.table.project", undefined, "Project")}</th>
+                  <th>{t("console.guides.table.persona", undefined, "Persona")}</th>
+                  <th>{t("console.guides.table.updated", undefined, "Updated")}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -85,7 +100,7 @@ export default async function GuidesIndex() {
                         href={`/console/projects/${g.project_id}/guides/${g.persona}`}
                         className="text-[var(--org-primary)] hover:underline"
                       >
-                        Edit →
+                        {t("console.guides.editLink", undefined, "Edit →")}
                       </Link>
                     </td>
                   </tr>

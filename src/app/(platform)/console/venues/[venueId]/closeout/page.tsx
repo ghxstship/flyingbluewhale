@@ -7,7 +7,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -33,12 +33,18 @@ const ITEM_TONE: Record<string, "muted" | "info" | "warning" | "success"> = {
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Closeout" />
+        <ModuleHeader
+          eyebrow={t("console.venues.closeout.eyebrow", undefined, "Venue")}
+          title={t("console.venues.closeout.title", undefined, "Closeout")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.closeout.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -83,26 +89,39 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Closeout`}
-        subtitle={`${items.length} Item${items.length === 1 ? "" : "s"} · ${complete} Done`}
+        eyebrow={t("console.venues.closeout.eyebrow", undefined, "Venue")}
+        title={t("console.venues.closeout.headerTitle", { name: venue.name }, `${venue.name} — Closeout`)}
+        subtitle={t(
+          "console.venues.closeout.subtitle",
+          { count: items.length, itemWord: items.length === 1 ? "Item" : "Items", done: complete },
+          `${items.length} Item${items.length === 1 ? "" : "s"} · ${complete} Done`,
+        )}
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.breadcrumb", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "Closeout" },
+          { label: t("console.venues.closeout.title", undefined, "Closeout") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Complete" value={fmt.number(complete)} accent />
-          <MetricCard label="Open" value={fmt.number(open)} />
-          <MetricCard label="Total" value={fmt.number(items.length)} />
+          <MetricCard
+            label={t("console.venues.closeout.metric.complete", undefined, "Complete")}
+            value={fmt.number(complete)}
+            accent
+          />
+          <MetricCard label={t("console.venues.closeout.metric.open", undefined, "Open")} value={fmt.number(open)} />
+          <MetricCard
+            label={t("console.venues.closeout.metric.total", undefined, "Total")}
+            value={fmt.number(items.length)}
+          />
         </div>
 
         {items.length > 0 && (
           <section className="surface p-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Closeout Progress</h3>
+              <h3 className="text-sm font-semibold">
+                {t("console.venues.closeout.progress", undefined, "Closeout Progress")}
+              </h3>
               <span className="font-mono text-xs">{pct}%</span>
             </div>
             <ProgressBar value={pct} className="mt-3" />
@@ -124,33 +143,42 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
 
         <DataTable<ItemRow>
           rows={items}
-          emptyLabel="No closeout items yet"
-          emptyDescription="Demob, reinstatement, asset return, damage, waste, documentation, and financial reconciliation. Author each item with an owner and due date."
+          emptyLabel={t("console.venues.closeout.emptyLabel", undefined, "No closeout items yet")}
+          emptyDescription={t(
+            "console.venues.closeout.emptyDescription",
+            undefined,
+            "Demob, reinstatement, asset return, damage, waste, documentation, and financial reconciliation. Author each item with an owner and due date.",
+          )}
           columns={[
             {
               key: "category",
-              header: "Category",
+              header: t("console.venues.closeout.column.category", undefined, "Category"),
               render: (r) => <Badge variant="muted">{toTitle(r.category)}</Badge>,
               accessor: (r) => r.category ?? null,
               filterable: true,
               groupable: true,
             },
-            { key: "desc", header: "Item", render: (r) => r.description, accessor: (r) => r.description },
+            {
+              key: "desc",
+              header: t("console.venues.closeout.column.item", undefined, "Item"),
+              render: (r) => r.description,
+              accessor: (r) => r.description,
+            },
             {
               key: "due",
-              header: "Due",
+              header: t("console.venues.closeout.column.due", undefined, "Due"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_at)}</span>,
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "completed",
-              header: "Completed",
+              header: t("console.venues.closeout.column.completed", undefined, "Completed"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.completed_at)}</span>,
               accessor: (r) => r.completed_at ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.venues.closeout.column.status", undefined, "Status"),
               render: (r) => <Badge variant={ITEM_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

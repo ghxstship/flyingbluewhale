@@ -3,11 +3,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { NewTaskForm, type AtomOptionWithProject } from "./NewTaskForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewTaskPage() {
+  const { t } = await getRequestT();
   let projects: { id: string; name: string }[] = [];
   let atoms: AtomOptionWithProject[] = [];
   if (hasSupabase) {
@@ -41,7 +43,10 @@ export default async function NewTaskPage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Work" title="New Task" />
+      <ModuleHeader
+        eyebrow={t("console.tasks.new.eyebrow", undefined, "Work")}
+        title={t("console.tasks.new.title", undefined, "New Task")}
+      />
       <div className="page-content max-w-xl">
         <NewTaskForm projects={projects} atoms={atoms} />
       </div>

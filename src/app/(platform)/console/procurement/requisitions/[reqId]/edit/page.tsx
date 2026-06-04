@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateRequisition, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -15,21 +16,33 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
   const session = await requireSession();
   const row = await getOrgScoped("requisitions", session.orgId, p.reqId);
   if (!row) notFound();
+  const { t } = await getRequestT();
   const action = updateRequisition.bind(null, p.reqId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Requisition" title={`Edit ${row.title}`} />
+      <ModuleHeader
+        eyebrow={t("console.procurement.requisitions.edit.eyebrow", undefined, "Requisition")}
+        title={t("console.procurement.requisitions.edit.title", { title: row.title }, `Edit ${row.title}`)}
+      />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/procurement/requisitions/${p.reqId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("console.procurement.requisitions.edit.submit", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
+          <Input
+            label={t("console.procurement.requisitions.edit.fields.title", undefined, "Title")}
+            name="title"
+            defaultValue={row.title}
+            required
+            maxLength={200}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.procurement.requisitions.edit.fields.description", undefined, "Description")}
+            </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
@@ -39,13 +52,15 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             />
           </label>
           <Input
-            label="Estimated (cents)"
+            label={t("console.procurement.requisitions.edit.fields.estimatedCents", undefined, "Estimated (cents)")}
             name="estimated_cents"
             type="number"
             defaultValue={row.estimated_cents != null ? String(row.estimated_cents) : ""}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.procurement.requisitions.edit.fields.status", undefined, "Status")}
+            </span>
             <select name="status" defaultValue={row.status} required className="input-base focus-ring w-full">
               <option value="draft">draft</option>
               <option value="submitted">submitted</option>

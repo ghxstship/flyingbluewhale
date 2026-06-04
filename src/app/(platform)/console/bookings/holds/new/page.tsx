@@ -4,17 +4,24 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createTieredHoldAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Bookings" title="New Hold" />
+        <ModuleHeader
+          eyebrow={t("console.bookings.holds.new.eyebrow", undefined, "Bookings")}
+          title={t("console.bookings.holds.new.title", undefined, "New Hold")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.bookings.holds.new.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -28,30 +35,61 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Bookings" title="New Hold" subtitle="Tier 1 = first refusal." />
+      <ModuleHeader
+        eyebrow={t("console.bookings.holds.new.eyebrow", undefined, "Bookings")}
+        title={t("console.bookings.holds.new.title", undefined, "New Hold")}
+        subtitle={t("console.bookings.holds.new.subtitle", undefined, "Tier 1 = first refusal.")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createTieredHoldAction} cancelHref="/console/bookings/holds" submitLabel="Place Hold">
+        <FormShell
+          action={createTieredHoldAction}
+          cancelHref="/console/bookings/holds"
+          submitLabel={t("console.bookings.holds.new.submitLabel", undefined, "Place Hold")}
+        >
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Tier</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.bookings.holds.new.tierLabel", undefined, "Tier")}
+              </label>
               <select name="tier" className="input-base mt-1.5 w-full" defaultValue="1">
-                <option value="1">Tier 1 (first refusal)</option>
-                <option value="2">Tier 2</option>
-                <option value="3">Tier 3</option>
-                <option value="4">Tier 4</option>
-                <option value="5">Tier 5</option>
+                <option value="1">{t("console.bookings.holds.new.tier1", undefined, "Tier 1 (first refusal)")}</option>
+                <option value="2">{t("console.bookings.holds.new.tier2", undefined, "Tier 2")}</option>
+                <option value="3">{t("console.bookings.holds.new.tier3", undefined, "Tier 3")}</option>
+                <option value="4">{t("console.bookings.holds.new.tier4", undefined, "Tier 4")}</option>
+                <option value="5">{t("console.bookings.holds.new.tier5", undefined, "Tier 5")}</option>
               </select>
             </div>
-            <Input label="Label" name="label" placeholder="MMW26 mainstage" maxLength={200} />
+            <Input
+              label={t("console.bookings.holds.new.labelLabel", undefined, "Label")}
+              name="label"
+              placeholder={t("console.bookings.holds.new.labelPlaceholder", undefined, "MMW26 mainstage")}
+              maxLength={200}
+            />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Starts" name="starts_at" type="datetime-local" required />
-            <Input label="Ends" name="ends_at" type="datetime-local" required />
+            <Input
+              label={t("console.bookings.holds.new.startsLabel", undefined, "Starts")}
+              name="starts_at"
+              type="datetime-local"
+              required
+            />
+            <Input
+              label={t("console.bookings.holds.new.endsLabel", undefined, "Ends")}
+              name="ends_at"
+              type="datetime-local"
+              required
+            />
           </div>
-          <Input label="Auto-release on" name="auto_release_on" type="datetime-local" />
+          <Input
+            label={t("console.bookings.holds.new.autoReleaseLabel", undefined, "Auto-release on")}
+            name="auto_release_on"
+            type="datetime-local"
+          />
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Venue (optional)</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.bookings.holds.new.venueLabel", undefined, "Venue (optional)")}
+              </label>
               <select name="venue_id" className="input-base mt-1.5 w-full" defaultValue="">
                 <option value="">—</option>
                 {(venues ?? []).map((v) => (
@@ -62,12 +100,14 @@ export default async function Page() {
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Talent (optional)</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.bookings.holds.new.talentLabel", undefined, "Talent (optional)")}
+              </label>
               <select name="talent_profile_id" className="input-base mt-1.5 w-full" defaultValue="">
                 <option value="">—</option>
-                {(talent ?? []).map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.act_name}
+                {(talent ?? []).map((row) => (
+                  <option key={row.id} value={row.id}>
+                    {row.act_name}
                   </option>
                 ))}
               </select>

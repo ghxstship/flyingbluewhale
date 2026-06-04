@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   const { equipmentId } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
     .from("maintenance_jobs")
@@ -39,17 +41,35 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
 
   return (
     <>
-      <ModuleHeader eyebrow="Equipment" title="Maintenance" subtitle="Scheduled inspection + service jobs." />
+      <ModuleHeader
+        eyebrow={t("console.production.equipment.maintenance.eyebrow", undefined, "Equipment")}
+        title={t("console.production.equipment.maintenance.title", undefined, "Maintenance")}
+        subtitle={t(
+          "console.production.equipment.maintenance.subtitle",
+          undefined,
+          "Scheduled inspection + service jobs.",
+        )}
+      />
       <div className="page-content space-y-4">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No Maintenance Jobs"
-          emptyDescription="No maintenance jobs scheduled for this equipment yet. Schedule one from the Maintenance module."
+          emptyLabel={t("console.production.equipment.maintenance.emptyLabel", undefined, "No Maintenance Jobs")}
+          emptyDescription={t(
+            "console.production.equipment.maintenance.emptyDescription",
+            undefined,
+            "No maintenance jobs scheduled for this equipment yet. Schedule one from the Maintenance module.",
+          )}
           columns={[
-            { key: "kind", header: "Kind", render: (r) => r.kind, accessor: (r) => r.kind, filterable: true },
+            {
+              key: "kind",
+              header: t("console.production.equipment.maintenance.columns.kind", undefined, "Kind"),
+              render: (r) => r.kind,
+              accessor: (r) => r.kind,
+              filterable: true,
+            },
             {
               key: "due_at",
-              header: "Due",
+              header: t("console.production.equipment.maintenance.columns.due", undefined, "Due"),
               render: (r) => formatDate(r.due_at),
               accessor: (r) => r.due_at,
               mono: true,
@@ -57,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             },
             {
               key: "completed_at",
-              header: "Completed",
+              header: t("console.production.equipment.maintenance.columns.completed", undefined, "Completed"),
               render: (r) => (r.completed_at ? formatDate(r.completed_at) : "—"),
               accessor: (r) => r.completed_at ?? "",
               mono: true,
@@ -65,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             },
             {
               key: "outcome",
-              header: "Outcome",
+              header: t("console.production.equipment.maintenance.columns.outcome", undefined, "Outcome"),
               render: (r) =>
                 r.outcome ? <Badge variant={OUTCOME_VARIANT[r.outcome] ?? "default"}>{r.outcome}</Badge> : "—",
               accessor: (r) => r.outcome ?? "",
@@ -74,9 +94,9 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
           ]}
         />
         <p className="text-xs text-[var(--text-muted)]">
-          Schedule jobs from the{" "}
+          {t("console.production.equipment.maintenance.scheduleHintPrefix", undefined, "Schedule jobs from the")}{" "}
           <Link href="/console/operations/maintenance" className="underline">
-            Maintenance module
+            {t("console.production.equipment.maintenance.maintenanceModuleLink", undefined, "Maintenance module")}
           </Link>
           .
         </p>

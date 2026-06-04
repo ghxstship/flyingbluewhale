@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { recordSalesSnapshotAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -34,6 +35,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [connResp, snapshotsResp] = await Promise.all([
     supabase
@@ -58,50 +60,120 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
   return (
     <>
       <ModuleHeader
-        eyebrow={`Ticketing · ${c.provider}`}
-        title={c.label ?? c.external_event_id ?? "Connection"}
-        subtitle={c.last_synced_at ? `Last sync ${new Date(c.last_synced_at).toLocaleString()}` : "Never synced"}
-        action={<Badge variant={c.is_active ? "success" : "muted"}>{c.is_active ? "active" : "inactive"}</Badge>}
+        eyebrow={t(
+          "console.settings.integrations.ticketing.connection.eyebrow",
+          { provider: c.provider },
+          `Ticketing · ${c.provider}`,
+        )}
+        title={
+          c.label ??
+          c.external_event_id ??
+          t("console.settings.integrations.ticketing.connection.fallbackTitle", undefined, "Connection")
+        }
+        subtitle={
+          c.last_synced_at
+            ? t(
+                "console.settings.integrations.ticketing.connection.lastSync",
+                { time: new Date(c.last_synced_at).toLocaleString() },
+                `Last sync ${new Date(c.last_synced_at).toLocaleString()}`,
+              )
+            : t("console.settings.integrations.ticketing.connection.neverSynced", undefined, "Never synced")
+        }
+        action={
+          <Badge variant={c.is_active ? "success" : "muted"}>
+            {c.is_active
+              ? t("console.settings.integrations.ticketing.connection.active", undefined, "active")
+              : t("console.settings.integrations.ticketing.connection.inactive", undefined, "inactive")}
+          </Badge>
+        }
       />
       <div className="page-content max-w-3xl space-y-5">
         {latest && (
           <section className="surface p-5">
-            <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Latest Snapshot</h2>
+            <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+              {t("console.settings.integrations.ticketing.connection.latestSnapshot", undefined, "Latest Snapshot")}
+            </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">Sold</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.settings.integrations.ticketing.connection.sold", undefined, "Sold")}
+              </dt>
               <dd className="font-mono">
                 {latest.total_sold}
                 {latest.total_capacity ? ` / ${latest.total_capacity}` : ""}
               </dd>
-              <dt className="text-[var(--text-secondary)]">Gross</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.settings.integrations.ticketing.connection.gross", undefined, "Gross")}
+              </dt>
               <dd className="font-mono">{formatMoney(latest.total_gross_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">As of</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.settings.integrations.ticketing.connection.asOf", undefined, "As of")}
+              </dt>
               <dd className="font-mono">{new Date(latest.snapshot_at).toLocaleString()}</dd>
             </dl>
           </section>
         )}
 
         <section className="surface p-5">
-          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Record Snapshot</h2>
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.settings.integrations.ticketing.connection.recordSnapshot", undefined, "Record Snapshot")}
+          </h2>
           <p className="mb-3 text-xs text-[var(--text-secondary)]">
-            Manual entry. Once API webhooks land per provider, snapshots will auto-ingest.
+            {t(
+              "console.settings.integrations.ticketing.connection.manualEntryHelp",
+              undefined,
+              "Manual entry. Once API webhooks land per provider, snapshots will auto-ingest.",
+            )}
           </p>
-          <FormShell action={recordSalesSnapshotAction} submitLabel="Record Snapshot">
+          <FormShell
+            action={recordSalesSnapshotAction}
+            submitLabel={t(
+              "console.settings.integrations.ticketing.connection.recordSnapshot",
+              undefined,
+              "Record Snapshot",
+            )}
+          >
             <input type="hidden" name="connection_id" value={c.id} />
             <div className="grid grid-cols-2 gap-3">
-              <Input label="Tickets Sold" name="total_sold" type="number" min={0} required />
-              <Input label="Total Capacity" name="total_capacity" type="number" min={0} />
+              <Input
+                label={t("console.settings.integrations.ticketing.connection.ticketsSold", undefined, "Tickets Sold")}
+                name="total_sold"
+                type="number"
+                min={0}
+                required
+              />
+              <Input
+                label={t(
+                  "console.settings.integrations.ticketing.connection.totalCapacity",
+                  undefined,
+                  "Total Capacity",
+                )}
+                name="total_capacity"
+                type="number"
+                min={0}
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <Input label="Gross Revenue" name="total_gross" required placeholder="12500" />
-              <Input label="Currency" name="currency" maxLength={3} defaultValue="USD" />
+              <Input
+                label={t("console.settings.integrations.ticketing.connection.grossRevenue", undefined, "Gross Revenue")}
+                name="total_gross"
+                required
+                placeholder="12500"
+              />
+              <Input
+                label={t("console.settings.integrations.ticketing.connection.currency", undefined, "Currency")}
+                name="currency"
+                maxLength={3}
+                defaultValue="USD"
+              />
             </div>
           </FormShell>
         </section>
 
         {snapshots.length > 1 && (
           <section className="surface p-5">
-            <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">History</h2>
+            <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+              {t("console.settings.integrations.ticketing.connection.history", undefined, "History")}
+            </h2>
             <ul className="divide-y divide-[var(--border-subtle)]">
               {snapshots.map((s) => (
                 <li key={s.id} className="flex items-center justify-between py-2 text-sm">
@@ -109,7 +181,11 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
                     {new Date(s.snapshot_at).toLocaleString()}
                   </span>
                   <span className="font-mono text-xs">
-                    {s.total_sold} sold · {formatMoney(s.total_gross_cents)}
+                    {t(
+                      "console.settings.integrations.ticketing.connection.soldGross",
+                      { sold: s.total_sold, gross: formatMoney(s.total_gross_cents) },
+                      `${s.total_sold} sold · ${formatMoney(s.total_gross_cents)}`,
+                    )}
                   </span>
                 </li>
               ))}

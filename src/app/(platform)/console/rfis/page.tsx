@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,18 @@ const PRIORITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="RFIs" />
+        <ModuleHeader
+          eyebrow={t("console.rfis.eyebrow", undefined, "Operations")}
+          title={t("console.rfis.title", undefined, "RFIs")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.rfis.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -75,62 +81,71 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="RFIs"
-        subtitle="Production queries with binding answers."
+        eyebrow={t("console.rfis.eyebrow", undefined, "Operations")}
+        title={t("console.rfis.title", undefined, "RFIs")}
+        subtitle={t("console.rfis.subtitle", undefined, "Production queries with binding answers.")}
         action={
           <Button href="/console/rfis/new" size="sm">
-            + New RFI
+            {t("console.rfis.newRfi", undefined, "+ New RFI")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmt.number(open)} accent />
-          <MetricCard label="Overdue" value={fmt.number(overdue)} />
-          <MetricCard label="Answered" value={fmt.number(answered)} />
+          <MetricCard label={t("console.rfis.metric.open", undefined, "Open")} value={fmt.number(open)} accent />
+          <MetricCard label={t("console.rfis.metric.overdue", undefined, "Overdue")} value={fmt.number(overdue)} />
+          <MetricCard label={t("console.rfis.metric.answered", undefined, "Answered")} value={fmt.number(answered)} />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/rfis/${r.id}`}
-          emptyLabel="No RFIs yet"
-          emptyDescription="Vendors and talent need binding answers on rigging weights, power, brand approvals, etc. Track them here."
+          emptyLabel={t("console.rfis.emptyLabel", undefined, "No RFIs yet")}
+          emptyDescription={t(
+            "console.rfis.emptyDescription",
+            undefined,
+            "Vendors and talent need binding answers on rigging weights, power, brand approvals, etc. Track them here.",
+          )}
           emptyAction={
             <Button href="/console/rfis/new" size="sm">
-              + New RFI
+              {t("console.rfis.newRfi", undefined, "+ New RFI")}
             </Button>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.rfis.column.code", undefined, "Code"),
               render: (r) => r.code,
               className: "font-mono text-xs",
               accessor: (r) => r.code,
             },
-            { key: "subject", header: "Subject", render: (r) => r.subject, accessor: (r) => r.subject },
+            {
+              key: "subject",
+              header: t("console.rfis.column.subject", undefined, "Subject"),
+              render: (r) => r.subject,
+              accessor: (r) => r.subject,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.rfis.column.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
             },
             {
               key: "ball",
-              header: "Ball in Court",
+              header: t("console.rfis.column.ballInCourt", undefined, "Ball in Court"),
               render: (r) => r.ball_in_court?.name ?? r.ball_in_court?.email ?? "—",
               accessor: (r) => r.ball_in_court?.name ?? r.ball_in_court?.email ?? null,
             },
             {
               key: "due",
-              header: "Due",
+              header: t("console.rfis.column.due", undefined, "Due"),
               render: (r) => fmtDate(r.due_at),
               className: "font-mono text-xs",
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "priority",
-              header: "Priority",
+              header: t("console.rfis.column.priority", undefined, "Priority"),
               render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{toTitle(r.priority)}</Badge>,
               accessor: (r) => r.priority ?? null,
               filterable: true,
@@ -138,7 +153,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.rfis.column.status", undefined, "Status"),
               render: (r) => (
                 <span className="inline-flex items-center gap-2">
                   <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

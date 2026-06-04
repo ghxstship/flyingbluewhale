@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/Button";
 import { DataViewSwitcher } from "@/components/views/DataViewSwitcher";
 import { resolveDataView } from "@/components/views/resolveDataView";
 import type { DataViewKind } from "@/components/views/DataViewKind";
+import { getRequestT } from "@/lib/i18n/request";
 
 // Schedule supports six views — data shape powers all of them:
 //   tasks have due_at, status            → timeline, calendar, list, board, table
@@ -48,6 +49,7 @@ export default async function Page({
   const sp = await searchParams;
   const view = resolveDataView<View>(sp, SCHEDULE_VIEWS, "timeline");
   const monthParam = sp.month;
+  const { t } = await getRequestT();
 
   const session = await requireSession();
   const supabase = await createClient();
@@ -84,21 +86,33 @@ export default async function Page({
   const hasAnything = taskRows.length > 0 || eventRows.length > 0;
 
   const subtitle = hasAnything
-    ? `${taskRows.length} Task${taskRows.length === 1 ? "" : "s"} · ${eventRows.length} Event${
-        eventRows.length === 1 ? "" : "s"
+    ? `${taskRows.length} ${
+        taskRows.length === 1
+          ? t("console.projects.schedule.taskSingular", undefined, "Task")
+          : t("console.projects.schedule.taskPlural", undefined, "Tasks")
+      } · ${eventRows.length} ${
+        eventRows.length === 1
+          ? t("console.projects.schedule.eventSingular", undefined, "Event")
+          : t("console.projects.schedule.eventPlural", undefined, "Events")
       }`
-    : "Nothing Scheduled";
+    : t("console.projects.schedule.nothingScheduled", undefined, "Nothing Scheduled");
 
   return (
     <>
       <ModuleHeader
-        eyebrow={project?.name ?? "Project"}
-        title="Schedule"
+        eyebrow={project?.name ?? t("console.projects.schedule.projectEyebrow", undefined, "Project")}
+        title={t("console.projects.schedule.title", undefined, "Schedule")}
         subtitle={subtitle}
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
-          { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Schedule" },
+          {
+            label: t("console.projects.schedule.breadcrumbProjects", undefined, "Projects"),
+            href: "/console/projects",
+          },
+          {
+            label: project?.name ?? t("console.projects.schedule.projectEyebrow", undefined, "Project"),
+            href: `/console/projects/${projectId}`,
+          },
+          { label: t("console.projects.schedule.title", undefined, "Schedule") },
         ]}
         action={
           <div className="flex items-center gap-3">
@@ -106,10 +120,10 @@ export default async function Page({
               current={view}
               allowed={SCHEDULE_VIEWS}
               defaultView="timeline"
-              ariaLabel="Schedule View"
+              ariaLabel={t("console.projects.schedule.viewSwitcherAria", undefined, "Schedule View")}
             />
             <Button href={`/console/events/new?project_id=${projectId}`} size="sm">
-              + New Event
+              {t("console.projects.schedule.newEvent", undefined, "+ New Event")}
             </Button>
           </div>
         }
@@ -117,14 +131,18 @@ export default async function Page({
       <div className="page-content max-w-6xl">
         {!hasAnything ? (
           <EmptyState
-            title="Nothing Scheduled Yet"
-            description="Tasks and events for this project show up here. Add the first one to start."
+            title={t("console.projects.schedule.emptyTitle", undefined, "Nothing Scheduled Yet")}
+            description={t(
+              "console.projects.schedule.emptyDescription",
+              undefined,
+              "Tasks and events for this project show up here. Add the first one to start.",
+            )}
             action={
               <Link
                 className="text-sm font-medium text-[var(--org-primary)]"
                 href={`/console/events/new?project_id=${projectId}`}
               >
-                Schedule First Event →
+                {t("console.projects.schedule.scheduleFirstEvent", undefined, "Schedule First Event →")}
               </Link>
             }
           />
@@ -143,23 +161,23 @@ export default async function Page({
               ends_at: e.ends_at,
               status: e.status,
             }))}
-            tasks={taskRows.map((t) => ({
-              id: t.id,
-              title: t.title,
-              due_at: t.due_at,
-              status: t.status,
+            tasks={taskRows.map((task) => ({
+              id: task.id,
+              title: task.title,
+              due_at: task.due_at,
+              status: task.status,
             }))}
             initialMonth={monthParam || defaultMonth(project?.start_date)}
           />
         ) : view === "board" ? (
           <BoardView
             cards={[
-              ...taskRows.map((t) => ({
-                id: t.id,
+              ...taskRows.map((task) => ({
+                id: task.id,
                 kind: "task" as const,
-                title: t.title,
-                status: t.status ?? "open",
-                due: t.due_at,
+                title: task.title,
+                status: task.status ?? "open",
+                due: task.due_at,
               })),
               ...eventRows.map((e) => ({
                 id: e.id,
@@ -182,12 +200,12 @@ export default async function Page({
         ) : view === "table" ? (
           <TableView
             rows={[
-              ...taskRows.map((t) => ({
-                id: t.id,
+              ...taskRows.map((task) => ({
+                id: task.id,
                 kind: "task" as const,
-                title: t.title,
-                status: t.status ?? "open",
-                when: t.due_at,
+                title: task.title,
+                status: task.status ?? "open",
+                when: task.due_at,
                 endsAt: null,
               })),
               ...eventRows.map((e) => ({
@@ -237,7 +255,7 @@ function defaultMonth(projectStart: string | null | undefined): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
-function ListView({
+async function ListView({
   events,
   tasks,
 }: {
@@ -251,12 +269,13 @@ function ListView({
   }>;
   tasks: Array<{ id: string; title: string; status: string | null; due_at: string | null }>;
 }) {
+  const { t } = await getRequestT();
   return (
     <div className="space-y-6">
       {events.length > 0 && (
         <section>
           <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
-            Events · {events.length}
+            {t("console.projects.schedule.list.eventsHeading", undefined, "Events")} · {events.length}
           </h2>
           <ul className="space-y-2">
             {events.map((e) => (
@@ -283,17 +302,21 @@ function ListView({
       {tasks.length > 0 && (
         <section>
           <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
-            Tasks · {tasks.length}
+            {t("console.projects.schedule.list.tasksHeading", undefined, "Tasks")} · {tasks.length}
           </h2>
           <ul className="space-y-2">
-            {tasks.map((t) => (
-              <li key={t.id}>
-                <Link href={`/console/tasks/${t.id}`} className="surface hover-lift block p-3">
+            {tasks.map((task) => (
+              <li key={task.id}>
+                <Link href={`/console/tasks/${task.id}`} className="surface hover-lift block p-3">
                   <div className="flex items-center justify-between gap-3">
-                    <div className="truncate text-sm">{t.title}</div>
+                    <div className="truncate text-sm">{task.title}</div>
                     <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
-                      <span className="font-mono">{t.due_at ? fmtDateTime(t.due_at) : "No due date"}</span>
-                      <StatusBadge status={t.status ?? "open"} />
+                      <span className="font-mono">
+                        {task.due_at
+                          ? fmtDateTime(task.due_at)
+                          : t("console.projects.schedule.list.noDueDate", undefined, "No due date")}
+                      </span>
+                      <StatusBadge status={task.status ?? "open"} />
                     </div>
                   </div>
                 </Link>

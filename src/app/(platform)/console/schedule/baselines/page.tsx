@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -34,12 +34,18 @@ const STATE_TONE: Record<BaselineState, "muted" | "info" | "success" | "warning"
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Schedule Baselines" />
+        <ModuleHeader
+          eyebrow={t("console.schedule.baselines.eyebrow", undefined, "Operations")}
+          title={t("console.schedule.baselines.title", undefined, "Schedule Baselines")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.schedule.baselines.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -77,36 +83,55 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Schedule Baselines"
-        subtitle={`${rows.length} Baseline${rows.length === 1 ? "" : "s"} · ${activeCount} Active · ${draftCount} Draft`}
+        eyebrow={t("console.schedule.baselines.eyebrow", undefined, "Operations")}
+        title={t("console.schedule.baselines.title", undefined, "Schedule Baselines")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.schedule.baselines.subtitleBaseline", undefined, "Baseline") : t("console.schedule.baselines.subtitleBaselines", undefined, "Baselines")} · ${activeCount} ${t("console.schedule.baselines.subtitleActive", undefined, "Active")} · ${draftCount} ${t("console.schedule.baselines.subtitleDraft", undefined, "Draft")}`}
         action={
           <Button href="/console/schedule/baselines/new" size="sm">
-            + New Baseline
+            {t("console.schedule.baselines.newBaseline", undefined, "+ New Baseline")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Active" value={fmt.number(activeCount)} />
-          <MetricCard label="Draft" value={fmt.number(draftCount)} />
+          <MetricCard
+            label={t("console.schedule.baselines.metricTotal", undefined, "Total")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.schedule.baselines.metricActive", undefined, "Active")}
+            value={fmt.number(activeCount)}
+          />
+          <MetricCard
+            label={t("console.schedule.baselines.metricDraft", undefined, "Draft")}
+            value={fmt.number(draftCount)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/schedule/baselines/${r.id}`}
-          emptyLabel="No schedule baselines yet"
-          emptyDescription="A baseline is a named snapshot of the project schedule. Import from P6/MSP/Asta XER or XML, or build natively."
+          emptyLabel={t("console.schedule.baselines.emptyLabel", undefined, "No schedule baselines yet")}
+          emptyDescription={t(
+            "console.schedule.baselines.emptyDescription",
+            undefined,
+            "A baseline is a named snapshot of the project schedule. Import from P6/MSP/Asta XER or XML, or build natively.",
+          )}
           emptyAction={
             <Button href="/console/schedule/baselines/new" size="sm">
-              + New Baseline
+              {t("console.schedule.baselines.newBaseline", undefined, "+ New Baseline")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.schedule.baselines.colName", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.schedule.baselines.colProject", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -114,15 +139,15 @@ export default async function Page() {
             },
             {
               key: "activities",
-              header: "Activities",
+              header: t("console.schedule.baselines.colActivities", undefined, "Activities"),
               render: (r) => fmt.number(r.activity_count),
               accessor: (r) => r.activity_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "source",
-              header: "Source",
-              render: (r) => r.imported_from ?? "Native",
+              header: t("console.schedule.baselines.colSource", undefined, "Source"),
+              render: (r) => r.imported_from ?? t("console.schedule.baselines.sourceNative", undefined, "Native"),
               accessor: (r) => r.imported_from ?? "native",
               filterable: true,
               groupable: true,
@@ -130,7 +155,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.schedule.baselines.colState", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.baseline_state]}>{toTitle(r.baseline_state)}</Badge>,
               accessor: (r) => r.baseline_state,
               filterable: true,

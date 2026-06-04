@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateShipment, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -17,21 +18,43 @@ export default async function Page({ params }: { params: Promise<{ shipmentId: s
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
+  const { t } = await getRequestT();
   const action = updateShipment.bind(null, p.shipmentId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const shipmentTitle =
+    ((row as Record<string, unknown>)["title"] as string | undefined) ??
+    t("console.logistics.freight.edit.fallbackTitle", undefined, "Shipment");
   return (
     <>
       <ModuleHeader
-        eyebrow="Shipment"
-        title={`Edit ${((row as Record<string, unknown>)["title"] as string | undefined) ?? "Shipment"}`}
+        eyebrow={t("console.logistics.freight.edit.eyebrow", undefined, "Shipment")}
+        title={t("console.logistics.freight.edit.title", { name: shipmentTitle }, `Edit ${shipmentTitle}`)}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/logistics/freight/${p.shipmentId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/logistics/freight/${p.shipmentId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="title" defaultValue={row.title ?? ""} required maxLength={200} />
-          <Input label="Number" name="number" defaultValue={row.number ?? ""} required maxLength={80} />
+          <Input
+            label={t("console.logistics.freight.edit.fields.title", undefined, "Title")}
+            name="title"
+            defaultValue={row.title ?? ""}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.logistics.freight.edit.fields.number", undefined, "Number")}
+            name="number"
+            defaultValue={row.number ?? ""}
+            required
+            maxLength={80}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.logistics.freight.edit.fields.status", undefined, "Status")}
+            </span>
             <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
               <option value="draft">draft</option>
               <option value="sent">sent</option>
@@ -41,12 +64,18 @@ export default async function Page({ params }: { params: Promise<{ shipmentId: s
             </select>
           </label>
           <Input
-            label="Amount (cents)"
+            label={t("console.logistics.freight.edit.fields.amountCents", undefined, "Amount (cents)")}
             name="amount_cents"
             type="number"
             defaultValue={row.amount_cents != null ? String(row.amount_cents) : ""}
           />
-          <Input label="Currency" name="currency" defaultValue={row.currency ?? ""} required maxLength={3} />
+          <Input
+            label={t("console.logistics.freight.edit.fields.currency", undefined, "Currency")}
+            name="currency"
+            defaultValue={row.currency ?? ""}
+            required
+            maxLength={3}
+          />
         </FormShell>
       </div>
     </>

@@ -4,16 +4,23 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Medical Encounters" />
+        <ModuleHeader
+          eyebrow={t("console.safety.medical.encounters.eyebrowWorkspace", undefined, "Workspace")}
+          title={t("console.safety.medical.encounters.titleFallback", undefined, "Medical Encounters")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.medical.encounters.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -26,12 +33,12 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Medical"
-        title="Encounters"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.safety.medical.encounters.eyebrow", undefined, "Medical")}
+        title={t("console.safety.medical.encounters.title", undefined, "Encounters")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.safety.medical.encounters.recordSingular", undefined, "Record") : t("console.safety.medical.encounters.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/console/safety/medical/encounters/new" size="sm">
-            + Log encounter
+            {t("console.safety.medical.encounters.logEncounter", undefined, "+ Log encounter")}
           </Button>
         }
       />
@@ -39,35 +46,39 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/safety/medical/encounters/${r.id}`}
-          emptyLabel="No medical encounters"
-          emptyDescription="Clinical encounters are retained per local record-law. Detail view holds triage, complaint, and disposition."
+          emptyLabel={t("console.safety.medical.encounters.emptyLabel", undefined, "No medical encounters")}
+          emptyDescription={t(
+            "console.safety.medical.encounters.emptyDescription",
+            undefined,
+            "Clinical encounters are retained per local record-law. Detail view holds triage, complaint, and disposition.",
+          )}
           emptyAction={
             <Button href="/console/safety/medical/encounters/new" size="sm">
-              + Log encounter
+              {t("console.safety.medical.encounters.logEncounter", undefined, "+ Log encounter")}
             </Button>
           }
           columns={[
             {
               key: "triage",
-              header: "Triage",
+              header: t("console.safety.medical.encounters.columns.triage", undefined, "Triage"),
               render: (r) => String(r.triage ?? "—"),
               accessor: (r) => r.triage ?? null,
             },
             {
               key: "chief_complaint",
-              header: "Complaint",
+              header: t("console.safety.medical.encounters.columns.complaint", undefined, "Complaint"),
               render: (r) => String(r.chief_complaint ?? "—"),
               accessor: (r) => r.chief_complaint ?? null,
             },
             {
               key: "disposition",
-              header: "Disposition",
+              header: t("console.safety.medical.encounters.columns.disposition", undefined, "Disposition"),
               render: (r) => String(r.disposition ?? "—"),
               accessor: (r) => r.disposition ?? null,
             },
             {
               key: "created_at",
-              header: "At",
+              header: t("console.safety.medical.encounters.columns.at", undefined, "At"),
               render: (r) => <span className="font-mono text-xs">{String(r.created_at ?? "—")}</span>,
               accessor: (r) => r.created_at ?? null,
             },

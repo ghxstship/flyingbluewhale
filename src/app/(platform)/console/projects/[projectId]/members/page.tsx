@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { isManagerPlus, requireSession } from "@/lib/auth";
+import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
 import type { ProjectRole } from "@/lib/supabase/types";
 import { AddMemberForm, MemberRow, type Candidate, type MemberRowData } from "./MembersClient";
@@ -12,6 +13,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const { projectId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data: project } = await supabase
     .from("projects")
@@ -59,33 +61,49 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title="Members"
-        subtitle={`${members.length} Project Member${members.length === 1 ? "" : "s"}`}
+        title={t("console.projects.members.title", undefined, "Members")}
+        subtitle={
+          members.length === 1
+            ? t("console.projects.members.subtitleOne", { count: members.length }, `${members.length} Project Member`)
+            : t(
+                "console.projects.members.subtitleOther",
+                { count: members.length },
+                `${members.length} Project Members`,
+              )
+        }
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
+          { label: t("console.projects.breadcrumb", undefined, "Projects"), href: "/console/projects" },
           { label: project.name, href: `/console/projects/${projectId}` },
-          { label: "Members" },
+          { label: t("console.projects.members.title", undefined, "Members") },
         ]}
       />
       <div className="page-content max-w-4xl space-y-6">
         {!isAdmin && (
           <div className="surface p-4 text-sm text-[var(--text-muted)]">
-            You can view this roster but only owners, admins, and managers can change it.
+            {t(
+              "console.projects.members.viewOnlyNotice",
+              undefined,
+              "You can view this roster but only owners, admins, and managers can change it.",
+            )}
           </div>
         )}
         {isAdmin && <AddMemberForm projectId={projectId} candidates={candidates} />}
         {members.length === 0 ? (
           <EmptyState
-            title="No Project Members"
-            description="Org admins and managers have full access by default. Add members here to grant per-project access to other org members."
+            title={t("console.projects.members.emptyTitle", undefined, "No Project Members")}
+            description={t(
+              "console.projects.members.emptyDescription",
+              undefined,
+              "Org admins and managers have full access by default. Add members here to grant per-project access to other org members.",
+            )}
           />
         ) : (
           <div className="surface overflow-hidden">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Member</th>
-                  <th className="w-40">Role</th>
+                  <th>{t("console.projects.members.colMember", undefined, "Member")}</th>
+                  <th className="w-40">{t("console.projects.members.colRole", undefined, "Role")}</th>
                   <th className="w-32 text-right"></th>
                 </tr>
               </thead>

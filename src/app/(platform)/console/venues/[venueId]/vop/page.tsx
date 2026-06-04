@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -60,12 +60,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Venue Operations Plan" />
+        <ModuleHeader
+          eyebrow={t("console.venues.vop.eyebrow", undefined, "Venue")}
+          title={t("console.venues.vop.title", undefined, "Venue Operations Plan")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.vop.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -95,20 +101,30 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Venue Operations Plan`}
-        subtitle={`${approved}/${total} sections approved`}
+        eyebrow={t("console.venues.vop.eyebrow", undefined, "Venue")}
+        title={t("console.venues.vop.headerTitle", { name: venue.name }, `${venue.name} — Venue Operations Plan`)}
+        subtitle={t("console.venues.vop.headerSubtitle", { approved, total }, `${approved}/${total} sections approved`)}
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.breadcrumb", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "VOP" },
+          { label: t("console.venues.vop.breadcrumb", undefined, "VOP") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={fmt.number(approved)} accent />
-          <MetricCard label="Drafted" value={fmt.number(sections.length)} />
-          <MetricCard label="Outstanding" value={fmt.number(total - sections.length)} />
+          <MetricCard
+            label={t("console.venues.vop.metrics.approved", undefined, "Approved")}
+            value={fmt.number(approved)}
+            accent
+          />
+          <MetricCard
+            label={t("console.venues.vop.metrics.drafted", undefined, "Drafted")}
+            value={fmt.number(sections.length)}
+          />
+          <MetricCard
+            label={t("console.venues.vop.metrics.outstanding", undefined, "Outstanding")}
+            value={fmt.number(total - sections.length)}
+          />
         </div>
 
         <div className="surface overflow-hidden">
@@ -118,16 +134,22 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               return (
                 <li key={key} className="flex items-start justify-between gap-3 px-4 py-3">
                   <div className="min-w-0">
-                    <div className="text-sm font-medium">{SECTION_LABEL[key]}</div>
+                    <div className="text-sm font-medium">
+                      {t(`console.venues.vop.sections.${key}`, undefined, SECTION_LABEL[key])}
+                    </div>
                     {s?.body && <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-secondary)]">{s.body}</p>}
                     {s?.approved_at && (
                       <p className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
-                        approved {fmtDate(s.approved_at)}
+                        {t(
+                          "console.venues.vop.approvedOn",
+                          { date: fmtDate(s.approved_at) },
+                          `approved ${fmtDate(s.approved_at)}`,
+                        )}
                       </p>
                     )}
                   </div>
                   <Badge variant={s ? (STATUS_TONE[s.status] ?? "muted") : "muted"}>
-                    {s ? toTitle(s.status) : "missing"}
+                    {s ? toTitle(s.status) : t("console.venues.vop.missing", undefined, "missing")}
                   </Badge>
                 </li>
               );
@@ -136,8 +158,13 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         </div>
 
         <p className="text-xs text-[var(--text-muted)]">
-          The Venue Operations Plan is the integrated operating manual for race-week. Each section above maps to a
-          discipline lead — every section must reach <code>approved</code> before the venue is cleared for go-live.
+          {t(
+            "console.venues.vop.footerLead",
+            undefined,
+            "The Venue Operations Plan is the integrated operating manual for race-week. Each section above maps to a discipline lead — every section must reach",
+          )}{" "}
+          <code>approved</code>{" "}
+          {t("console.venues.vop.footerTrail", undefined, "before the venue is cleared for go-live.")}
         </p>
       </div>
     </>

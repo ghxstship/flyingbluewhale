@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateSubmittal } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -42,6 +43,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [{ data }, { data: projects }, { data: vendors }, { data: users }] = await Promise.all([
     supabase
@@ -61,20 +63,26 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title={`Edit Submittal · ${sub.code ?? sub.id.slice(0, 8)}`}
-        subtitle="Update title, status, vendor, and ball-in-court."
+        eyebrow={t("console.submittals.edit.eyebrow", undefined, "Operations")}
+        title={`${t("console.submittals.edit.title", undefined, "Edit Submittal")} · ${sub.code ?? sub.id.slice(0, 8)}`}
+        subtitle={t("console.submittals.edit.subtitle", undefined, "Update title, status, vendor, and ball-in-court.")}
         breadcrumbs={[
-          { label: "Submittals", href: "/console/submittals" },
-          { label: sub.code ?? "Submittal", href: `/console/submittals/${sub.id}` },
-          { label: "Edit" },
+          {
+            label: t("console.submittals.edit.breadcrumbs.submittals", undefined, "Submittals"),
+            href: "/console/submittals",
+          },
+          {
+            label: sub.code ?? t("console.submittals.edit.breadcrumbs.submittal", undefined, "Submittal"),
+            href: `/console/submittals/${sub.id}`,
+          },
+          { label: t("console.submittals.edit.breadcrumbs.edit", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">
         <FormShell
           action={updateSubmittal}
           cancelHref={`/console/submittals/${sub.id}`}
-          submitLabel="Save Submittal"
+          submitLabel={t("console.submittals.edit.submitLabel", undefined, "Save Submittal")}
           dirtyGuard
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
@@ -83,7 +91,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Title<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.submittals.edit.fields.title", undefined, "Title")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input name="title" required defaultValue={sub.title} maxLength={200} className={INPUT} />
           </label>
@@ -91,7 +100,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.submittals.edit.fields.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required defaultValue={sub.project_id} className={INPUT}>
                 {(projects ?? []).map((p) => (
@@ -102,14 +112,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Spec Section</span>
+              <span className={LBL}>{t("console.submittals.edit.fields.specSection", undefined, "Spec Section")}</span>
               <input name="spec_section" defaultValue={sub.spec_section ?? ""} maxLength={80} className={INPUT} />
             </label>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Vendor</span>
+              <span className={LBL}>{t("console.submittals.edit.fields.vendor", undefined, "Vendor")}</span>
               <select name="vendor_id" defaultValue={sub.vendor_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(vendors ?? []).map((v) => (
@@ -120,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Ball In Court</span>
+              <span className={LBL}>{t("console.submittals.edit.fields.ballInCourt", undefined, "Ball In Court")}</span>
               <select name="ball_in_court_id" defaultValue={sub.ball_in_court_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(users ?? []).map((u) => (
@@ -134,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Status</span>
+              <span className={LBL}>{t("console.submittals.edit.fields.status", undefined, "Status")}</span>
               <select name="status" defaultValue={sub.status} className={INPUT}>
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -144,7 +154,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Due By</span>
+              <span className={LBL}>{t("console.submittals.edit.fields.dueBy", undefined, "Due By")}</span>
               <input
                 type="date"
                 name="due_at"

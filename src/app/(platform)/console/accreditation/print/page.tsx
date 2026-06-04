@@ -4,16 +4,23 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Print Queue" />
+        <ModuleHeader
+          eyebrow={t("console.accreditation.print.eyebrowWorkspace", undefined, "Workspace")}
+          title={t("console.accreditation.print.title", undefined, "Print Queue")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.accreditation.print.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,13 +34,25 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation"
-        title="Print Queue"
-        subtitle={`${rows.length} Approved Badge${rows.length === 1 ? "" : "s"} Pending Print`}
+        eyebrow={t("console.accreditation.print.eyebrow", undefined, "Accreditation")}
+        title={t("console.accreditation.print.title", undefined, "Print Queue")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "console.accreditation.print.subtitleOne",
+                { count: rows.length },
+                `${rows.length} Approved Badge Pending Print`,
+              )
+            : t(
+                "console.accreditation.print.subtitleOther",
+                { count: rows.length },
+                `${rows.length} Approved Badges Pending Print`,
+              )
+        }
         action={
           rows.length > 0 ? (
             <Button href="/console/accreditation/print/sheet" size="sm">
-              Print sheet
+              {t("console.accreditation.print.printSheet", undefined, "Print sheet")}
             </Button>
           ) : null
         }
@@ -41,24 +60,28 @@ export default async function Page() {
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
-          emptyLabel="No badges queued"
-          emptyDescription="Approve accreditations under /console/accreditation. Approved cards appear here ready for batch print."
+          emptyLabel={t("console.accreditation.print.emptyLabel", undefined, "No badges queued")}
+          emptyDescription={t(
+            "console.accreditation.print.emptyDescription",
+            undefined,
+            "Approve accreditations under /console/accreditation. Approved cards appear here ready for batch print.",
+          )}
           columns={[
             {
               key: "person_name",
-              header: "Person",
+              header: t("console.accreditation.print.columns.person", undefined, "Person"),
               render: (r) => String(r.person_name ?? "—"),
               accessor: (r) => r.person_name ?? null,
             },
             {
               key: "card_barcode",
-              header: "Barcode",
+              header: t("console.accreditation.print.columns.barcode", undefined, "Barcode"),
               render: (r) => <span className="font-mono text-xs">{String(r.card_barcode ?? "—")}</span>,
               accessor: (r) => r.card_barcode ?? null,
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.accreditation.print.columns.state", undefined, "State"),
               render: (r) => String(r.state ?? "—"),
               accessor: (r) => r.state ?? null,
               filterable: true,

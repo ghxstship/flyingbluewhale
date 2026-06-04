@@ -8,6 +8,7 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +65,9 @@ type Answer = {
 
 export default async function Page({ params }: { params: Promise<{ vendorId: string; prequalId: string }> }) {
   const { vendorId, prequalId } = await params;
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return <div className="page-content">{t("console.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -122,59 +125,112 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Vendor · Prequalification"
-        title={prequal.questionnaire?.name ?? "Questionnaire"}
+        eyebrow={t(
+          "console.procurement.vendors.prequalification.detail.eyebrow",
+          undefined,
+          "Vendor · Prequalification",
+        )}
+        title={
+          prequal.questionnaire?.name ??
+          t("console.procurement.vendors.prequalification.detail.fallbackTitle", undefined, "Questionnaire")
+        }
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <Badge variant={STATUS_VARIANT[prequal.status] ?? "default"}>{toTitle(prequal.status)}</Badge>
             {prequal.vendor?.name && <Badge variant="muted">{prequal.vendor.name}</Badge>}
             {prequal.submitted_at && (
-              <span className="font-mono text-xs">submitted {formatDate(prequal.submitted_at)}</span>
+              <span className="font-mono text-xs">
+                {t(
+                  "console.procurement.vendors.prequalification.detail.submittedAt",
+                  { date: formatDate(prequal.submitted_at) },
+                  `submitted ${formatDate(prequal.submitted_at)}`,
+                )}
+              </span>
             )}
-            {prequal.expires_at && <span className="font-mono text-xs">expires {formatDate(prequal.expires_at)}</span>}
+            {prequal.expires_at && (
+              <span className="font-mono text-xs">
+                {t(
+                  "console.procurement.vendors.prequalification.detail.expiresAt",
+                  { date: formatDate(prequal.expires_at) },
+                  `expires ${formatDate(prequal.expires_at)}`,
+                )}
+              </span>
+            )}
           </span>
         }
         breadcrumbs={[
-          { label: "Procurement", href: "/console/procurement" },
-          { label: "Vendors", href: "/console/procurement/vendors" },
-          { label: prequal.vendor?.name ?? "Vendor", href: `/console/procurement/vendors/${vendorId}` },
-          { label: "Prequalification", href: `/console/procurement/vendors/${vendorId}/prequalification` },
-          { label: prequal.questionnaire?.name ?? "Detail" },
+          { label: t("console.procurement.title", undefined, "Procurement"), href: "/console/procurement" },
+          { label: t("console.procurement.vendors.title", undefined, "Vendors"), href: "/console/procurement/vendors" },
+          {
+            label: prequal.vendor?.name ?? t("console.procurement.vendors.detail.fallbackLabel", undefined, "Vendor"),
+            href: `/console/procurement/vendors/${vendorId}`,
+          },
+          {
+            label: t("console.procurement.vendors.prequalification.title", undefined, "Prequalification"),
+            href: `/console/procurement/vendors/${vendorId}/prequalification`,
+          },
+          {
+            label:
+              prequal.questionnaire?.name ??
+              t("console.procurement.vendors.prequalification.detail.fallbackBreadcrumb", undefined, "Detail"),
+          },
         ]}
         action={
           <Button href={`/console/procurement/vendors/${vendorId}/prequalification`} variant="ghost" size="sm">
-            Back
+            {t("common.back", undefined, "Back")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Score" value={prequal.score != null ? prequal.score.toFixed(1) : "—"} />
           <MetricCard
-            label="Required Answered"
+            label={t("console.procurement.vendors.prequalification.detail.scoreLabel", undefined, "Score")}
+            value={prequal.score != null ? prequal.score.toFixed(1) : "—"}
+          />
+          <MetricCard
+            label={t(
+              "console.procurement.vendors.prequalification.detail.requiredAnsweredLabel",
+              undefined,
+              "Required Answered",
+            )}
             value={`${answeredRequired}/${requiredCount}`}
             accent={requiredCount > 0 && answeredRequired < requiredCount}
           />
-          <MetricCard label="Completion" value={`${completion}%`} />
+          <MetricCard
+            label={t("console.procurement.vendors.prequalification.detail.completionLabel", undefined, "Completion")}
+            value={`${completion}%`}
+          />
         </div>
 
         {prequal.notes && (
           <section className="surface p-4">
-            <h2 className="text-sm font-semibold">Reviewer Notes</h2>
+            <h2 className="text-sm font-semibold">
+              {t(
+                "console.procurement.vendors.prequalification.detail.reviewerNotesHeading",
+                undefined,
+                "Reviewer Notes",
+              )}
+            </h2>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{prequal.notes}</p>
           </section>
         )}
 
         <section className="surface p-5">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold tracking-wide uppercase">Responses</h2>
+            <h2 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.procurement.vendors.prequalification.detail.responsesHeading", undefined, "Responses")}
+            </h2>
             <span className="font-mono text-xs text-[var(--text-muted)]">
               {answers.length}/{questions.length}
             </span>
           </div>
           {questions.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No questions in this questionnaire — nothing to render.
+              {t(
+                "console.procurement.vendors.prequalification.detail.noQuestions",
+                undefined,
+                "No questions in this questionnaire — nothing to render.",
+              )}
             </p>
           ) : (
             <ol className="mt-3 space-y-3">
@@ -189,25 +245,57 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <div className="flex flex-wrap items-baseline gap-2">
-                        <span className="font-mono text-xs text-[var(--text-muted)]">Q{q.position}</span>
+                        <span className="font-mono text-xs text-[var(--text-muted)]">
+                          {t(
+                            "console.procurement.vendors.prequalification.detail.questionNumber",
+                            { n: q.position },
+                            `Q${q.position}`,
+                          )}
+                        </span>
                         <Badge variant={CATEGORY_TONE[q.category] ?? "muted"}>{toTitle(q.category)}</Badge>
-                        {q.required && <Badge variant="muted">Required</Badge>}
+                        {q.required && (
+                          <Badge variant="muted">
+                            {t(
+                              "console.procurement.vendors.prequalification.detail.requiredBadge",
+                              undefined,
+                              "Required",
+                            )}
+                          </Badge>
+                        )}
                       </div>
                       {a?.score != null && (
                         <span className="font-mono text-xs">
-                          score {a.score.toFixed(1)} · weight {q.scoring_weight.toFixed(2)}
+                          {t(
+                            "console.procurement.vendors.prequalification.detail.scoreWeight",
+                            { score: a.score.toFixed(1), weight: q.scoring_weight.toFixed(2) },
+                            `score ${a.score.toFixed(1)} · weight ${q.scoring_weight.toFixed(2)}`,
+                          )}
                         </span>
                       )}
                     </div>
                     <p className="mt-2 text-sm font-semibold">{q.prompt}</p>
                     {missing ? (
                       <p className="mt-2 text-xs text-[var(--text-muted)] italic">
-                        {q.required ? "No response — required answer missing." : "Not answered."}
+                        {q.required
+                          ? t(
+                              "console.procurement.vendors.prequalification.detail.requiredMissing",
+                              undefined,
+                              "No response — required answer missing.",
+                            )
+                          : t(
+                              "console.procurement.vendors.prequalification.detail.notAnswered",
+                              undefined,
+                              "Not answered.",
+                            )}
                       </p>
                     ) : (
                       <>
                         <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">
-                          {a.answer ?? <span className="text-[var(--text-muted)] italic">(no text)</span>}
+                          {a.answer ?? (
+                            <span className="text-[var(--text-muted)] italic">
+                              {t("console.procurement.vendors.prequalification.detail.noText", undefined, "(no text)")}
+                            </span>
+                          )}
                         </p>
                         {a.attachment_path && (
                           <div className="mt-2 text-xs">
@@ -222,7 +310,11 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                               </a>
                             ) : (
                               <span className="font-mono text-[var(--text-muted)]">
-                                attachment: {a.attachment_path}
+                                {t(
+                                  "console.procurement.vendors.prequalification.detail.attachmentPrefix",
+                                  { path: a.attachment_path },
+                                  `attachment: ${a.attachment_path}`,
+                                )}
                               </span>
                             )}
                           </div>

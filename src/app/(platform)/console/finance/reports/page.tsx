@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 // recharts (~100KB gzipped) stays out of the initial bundle via the
 // ReportsChartsClient wrapper, which holds the next/dynamic({ssr:false})
 // call. Next 16 disallows that option in server components, so the
@@ -21,12 +22,15 @@ export const dynamic = "force-dynamic";
  * keeps recharts out of the server bundle.
  */
 export default async function ReportsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Reports" />
+        <ModuleHeader title={t("console.finance.reports.title", undefined, "Reports")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.reports.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -48,13 +52,25 @@ export default async function ReportsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="Reports" subtitle="Live P&L from current books" />
+      <ModuleHeader
+        eyebrow={t("console.finance.reports.eyebrow", undefined, "Finance")}
+        title={t("console.finance.reports.title", undefined, "Reports")}
+        subtitle={t("console.finance.reports.subtitle", undefined, "Live P&L from current books")}
+      />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Revenue (paid)" value={formatMoney(revenue)} sparkline={sparklineRevenue} accent />
-          <MetricCard label="Expenses" value={formatMoney(costs)} />
           <MetricCard
-            label="Gross Margin"
+            label={t("console.finance.reports.metrics.revenuePaid", undefined, "Revenue (paid)")}
+            value={formatMoney(revenue)}
+            sparkline={sparklineRevenue}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.reports.metrics.expenses", undefined, "Expenses")}
+            value={formatMoney(costs)}
+          />
+          <MetricCard
+            label={t("console.finance.reports.metrics.grossMargin", undefined, "Gross Margin")}
             value={formatMoney(gross)}
             delta={{ value: `${marginPct}%`, positive: gross >= 0 }}
           />
@@ -64,15 +80,19 @@ export default async function ReportsPage() {
 
         <section className="overflow-x-auto">
           <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2.5">
-            <h3 className="text-sm font-semibold">AR aging</h3>
-            <span className="text-xs text-[var(--text-muted)]">Outstanding invoices by days overdue</span>
+            <h3 className="text-sm font-semibold">
+              {t("console.finance.reports.arAging.title", undefined, "AR aging")}
+            </h3>
+            <span className="text-xs text-[var(--text-muted)]">
+              {t("console.finance.reports.arAging.subtitle", undefined, "Outstanding invoices by days overdue")}
+            </span>
           </header>
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>Bucket</th>
-                <th>Invoices</th>
-                <th>Total</th>
+                <th>{t("console.finance.reports.arAging.col.bucket", undefined, "Bucket")}</th>
+                <th>{t("console.finance.reports.arAging.col.invoices", undefined, "Invoices")}</th>
+                <th>{t("console.finance.reports.arAging.col.total", undefined, "Total")}</th>
               </tr>
             </thead>
             <tbody>
@@ -90,7 +110,7 @@ export default async function ReportsPage() {
                               : "error"
                       }
                     >
-                      {b.bucket}
+                      {t(`console.finance.reports.arAging.bucket.${b.bucket}`, undefined, b.bucket)}
                     </Badge>
                   </td>
                   <td className="font-mono text-xs">{b.count}</td>

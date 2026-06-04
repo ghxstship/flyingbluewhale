@@ -5,18 +5,22 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteTrademark } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ markId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Record" />
+        <ModuleHeader title={t("console.legal.ip.mark.title", undefined, "Record")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.legal.ip.mark.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -27,19 +31,23 @@ export default async function Page({ params }: { params: Promise<{ markId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Record"
+        eyebrow={t("console.legal.ip.mark.eyebrow", undefined, "Record")}
         title={title ?? p.markId}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/legal/ip" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/legal/ip/${p.markId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteTrademark.bind(null, p.markId)}
-              confirm={`Delete trademark "${title ?? "this mark"}"? This cannot be undone.`}
+              confirm={t(
+                "console.legal.ip.mark.deleteConfirm",
+                { title: title ?? t("console.legal.ip.mark.thisMark", undefined, "this mark") },
+                `Delete trademark "${title ?? "this mark"}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

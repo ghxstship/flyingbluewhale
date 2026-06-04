@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { RunTimeline, type RunTimelineStep } from "@/components/automations/RunTimeline";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Run detail — single run view with per-step timeline.
@@ -86,13 +87,19 @@ function fmtDuration(ms: number | null): string {
 
 export default async function Page({ params }: { params: Promise<{ automationId: string; runId: string }> }) {
   const { automationId, runId } = await params;
+  const { t } = await getRequestT();
 
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Automations" title="Run" />
+        <ModuleHeader
+          eyebrow={t("console.ai.automations.eyebrow", undefined, "Automations")}
+          title={t("console.ai.automations.runs.run.title", undefined, "Run")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.ai.automations.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -149,37 +156,54 @@ export default async function Page({ params }: { params: Promise<{ automationId:
   return (
     <>
       <ModuleHeader
-        eyebrow="Automations"
-        title="Run Detail"
+        eyebrow={t("console.ai.automations.eyebrow", undefined, "Automations")}
+        title={t("console.ai.automations.runs.detail.title", undefined, "Run Detail")}
         subtitle={
           <span className="font-mono text-xs">
             {automation.name} · {run.trigger_kind}
           </span>
         }
         breadcrumbs={[
-          { label: "Automations", href: "/console/ai/automations" },
+          { label: t("console.ai.automations.eyebrow", undefined, "Automations"), href: "/console/ai/automations" },
           { label: automation.name, href: `/console/ai/automations/${automationId}` },
-          { label: "Runs", href: `/console/ai/automations/${automationId}/runs` },
+          {
+            label: t("console.ai.automations.runs.breadcrumb", undefined, "Runs"),
+            href: `/console/ai/automations/${automationId}/runs`,
+          },
           { label: fmt(run.started_at) },
         ]}
         action={<Badge variant={STATUS_TONE[run.status] ?? "muted"}>{toTitle(run.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Started" value={fmt(run.started_at)} />
-          <MetricCard label="Finished" value={fmt(run.finished_at)} />
-          <MetricCard label="Duration" value={runDuration} accent={run.status === "success"} />
+          <MetricCard
+            label={t("console.ai.automations.runs.detail.started", undefined, "Started")}
+            value={fmt(run.started_at)}
+          />
+          <MetricCard
+            label={t("console.ai.automations.runs.detail.finished", undefined, "Finished")}
+            value={fmt(run.finished_at)}
+          />
+          <MetricCard
+            label={t("console.ai.automations.runs.detail.duration", undefined, "Duration")}
+            value={runDuration}
+            accent={run.status === "success"}
+          />
         </div>
 
         {run.status === "failed" && run.error_summary && (
           <section className="surface rounded border border-[var(--color-error)] p-4">
-            <h3 className="text-sm font-semibold text-[var(--color-error)]">Error Summary</h3>
+            <h3 className="text-sm font-semibold text-[var(--color-error)]">
+              {t("console.ai.automations.runs.detail.errorSummary", undefined, "Error Summary")}
+            </h3>
             <pre className="mt-2 overflow-auto font-mono text-xs whitespace-pre-wrap">{run.error_summary}</pre>
           </section>
         )}
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Trigger Payload</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.ai.automations.runs.detail.triggerPayload", undefined, "Trigger Payload")}
+          </h3>
           <pre className="mt-2 max-h-60 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
             {JSON.stringify(run.trigger_payload ?? {}, null, 2)}
           </pre>
@@ -187,7 +211,8 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
         <section className="surface p-4">
           <h3 className="text-sm font-semibold">
-            Steps <span className="font-mono text-xs text-[var(--text-muted)]">({steps.length})</span>
+            {t("console.ai.automations.runs.detail.steps", undefined, "Steps")}{" "}
+            <span className="font-mono text-xs text-[var(--text-muted)]">({steps.length})</span>
           </h3>
           <div className="mt-3">
             <RunTimeline steps={steps} />
@@ -195,7 +220,13 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         </section>
 
         {inFlight && (
-          <p className="text-xs text-[var(--text-muted)]">Auto-refreshing every 5s while the run is in flight.</p>
+          <p className="text-xs text-[var(--text-muted)]">
+            {t(
+              "console.ai.automations.runs.detail.autoRefreshHint",
+              undefined,
+              "Auto-refreshing every 5s while the run is in flight.",
+            )}
+          </p>
         )}
       </div>
 

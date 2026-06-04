@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -38,12 +38,18 @@ const STATE_TONE: Record<ItbPhase, "muted" | "info" | "warning" | "success" | "e
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Procurement" title="Invitations to Bid" />
+        <ModuleHeader
+          eyebrow={t("console.procurement.itb.eyebrow", undefined, "Procurement")}
+          title={t("console.procurement.itb.title", undefined, "Invitations to Bid")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.itb.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -102,38 +108,66 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Invitations to Bid"
-        subtitle={`${rows.length} ITB${rows.length === 1 ? "" : "s"} · ${inFlightCount} in flight · ${awardedCount} awarded`}
+        eyebrow={t("console.procurement.itb.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.itb.title", undefined, "Invitations to Bid")}
+        subtitle={t(
+          "console.procurement.itb.subtitle",
+          {
+            count: rows.length,
+            itbLabel: rows.length === 1 ? "ITB" : "ITBs",
+            inFlight: inFlightCount,
+            awarded: awardedCount,
+          },
+          `${rows.length} ITB${rows.length === 1 ? "" : "s"} · ${inFlightCount} in flight · ${awardedCount} awarded`,
+        )}
         action={
           <Button href="/console/procurement/rfqs/new" size="sm">
-            + New ITB
+            {t("console.procurement.itb.newItb", undefined, "+ New ITB")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total" value={fmt.number(rows.length)} accent />
-          <MetricCard label="In Flight" value={fmt.number(inFlightCount)} />
-          <MetricCard label="Awarded" value={fmt.number(awardedCount)} />
+          <MetricCard
+            label={t("console.procurement.itb.metric.total", undefined, "Total")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.procurement.itb.metric.inFlight", undefined, "In Flight")}
+            value={fmt.number(inFlightCount)}
+          />
+          <MetricCard
+            label={t("console.procurement.itb.metric.awarded", undefined, "Awarded")}
+            value={fmt.number(awardedCount)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/procurement/rfqs/${r.id}`}
-          emptyLabel="No ITBs yet"
-          emptyDescription="Formal Invitations to Bid bundle trade packages (sheets + specs + scope) and dispatch to prequalified subs. Set the itb_phase on any RFQ to promote it."
+          emptyLabel={t("console.procurement.itb.empty.label", undefined, "No ITBs yet")}
+          emptyDescription={t(
+            "console.procurement.itb.empty.description",
+            undefined,
+            "Formal Invitations to Bid bundle trade packages (sheets + specs + scope) and dispatch to prequalified subs. Set the itb_phase on any RFQ to promote it.",
+          )}
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.procurement.itb.column.code", undefined, "Code"),
               render: (r) => r.code ?? "—",
               accessor: (r) => r.code,
               className: "font-mono text-xs",
             },
-            { key: "title", header: "Title", render: (r) => r.title ?? "—", accessor: (r) => r.title ?? null },
+            {
+              key: "title",
+              header: t("console.procurement.itb.column.title", undefined, "Title"),
+              render: (r) => r.title ?? "—",
+              accessor: (r) => r.title ?? null,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.procurement.itb.column.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -141,7 +175,7 @@ export default async function Page() {
             },
             {
               key: "phase",
-              header: "Phase",
+              header: t("console.procurement.itb.column.phase", undefined, "Phase"),
               render: (r) => <Badge variant={STATE_TONE[r.itb_phase]}>{toTitle(r.itb_phase)}</Badge>,
               accessor: (r) => r.itb_phase,
               filterable: true,
@@ -149,21 +183,21 @@ export default async function Page() {
             },
             {
               key: "packages",
-              header: "Pkgs",
+              header: t("console.procurement.itb.column.packages", undefined, "Pkgs"),
               render: (r) => fmt.number(r.package_count),
               accessor: (r) => r.package_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "invites",
-              header: "Invites",
+              header: t("console.procurement.itb.column.invites", undefined, "Invites"),
               render: (r) => `${r.bid_count} / ${r.invitation_count}`,
               accessor: (r) => r.invitation_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "due",
-              header: "Bid Due",
+              header: t("console.procurement.itb.column.bidDue", undefined, "Bid Due"),
               render: (r) =>
                 r.itb_bid_due_at
                   ? fmt.dateParts(r.itb_bid_due_at, { month: "short", day: "numeric", year: "2-digit" })

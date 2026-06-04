@@ -5,11 +5,13 @@ import { createClient } from "@/lib/supabase/server";
 import { DetailShell } from "@/components/detail/DetailShell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteLocation } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ locationId: string }> }) {
   const { locationId } = await params;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("locations")
@@ -20,23 +22,32 @@ export default async function Page({ params }: { params: Promise<{ locationId: s
   return (
     <DetailShell
       row={row}
-      eyebrow="Operations"
+      eyebrow={t("console.locations.detail.eyebrow", undefined, "Operations")}
       title={(r) => r.name}
       subtitle={(r) => r.address}
       breadcrumbs={[
-        { label: "Operations" },
-        { label: "Locations", href: "/console/locations" },
-        { label: row?.name ?? "Location" },
+        { label: t("console.locations.detail.breadcrumb.operations", undefined, "Operations") },
+        {
+          label: t("console.locations.detail.breadcrumb.locations", undefined, "Locations"),
+          href: "/console/locations",
+        },
+        { label: row?.name ?? t("console.locations.detail.breadcrumb.fallback", undefined, "Location") },
       ]}
       fields={
         row
           ? [
-              { label: "Address", value: row.address ?? "—" },
-              { label: "City", value: row.city ?? "—" },
-              { label: "Postcode", value: row.postcode ?? "—" },
-              { label: "Country", value: row.country ?? "—" },
-              { label: "Coordinates", value: row.lat != null && row.lng != null ? `${row.lat}, ${row.lng}` : "—" },
-              { label: "Notes", value: row.notes ?? "—" },
+              { label: t("console.locations.detail.fields.address", undefined, "Address"), value: row.address ?? "—" },
+              { label: t("console.locations.detail.fields.city", undefined, "City"), value: row.city ?? "—" },
+              {
+                label: t("console.locations.detail.fields.postcode", undefined, "Postcode"),
+                value: row.postcode ?? "—",
+              },
+              { label: t("console.locations.detail.fields.country", undefined, "Country"), value: row.country ?? "—" },
+              {
+                label: t("console.locations.detail.fields.coordinates", undefined, "Coordinates"),
+                value: row.lat != null && row.lng != null ? `${row.lat}, ${row.lng}` : "—",
+              },
+              { label: t("console.locations.detail.fields.notes", undefined, "Notes"), value: row.notes ?? "—" },
             ]
           : undefined
       }
@@ -44,11 +55,15 @@ export default async function Page({ params }: { params: Promise<{ locationId: s
         row ? (
           <div className="flex items-center gap-2">
             <Button href={`/console/locations/${locationId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteLocation.bind(null, locationId)}
-              confirm={`Delete location "${row.name}"? This cannot be undone.`}
+              confirm={t(
+                "console.locations.detail.deleteConfirm",
+                { name: row.name },
+                `Delete location "${row.name}"? This cannot be undone.`,
+              )}
             />
           </div>
         ) : undefined

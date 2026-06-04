@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data } = await supabase
     .from("vendor_prequalifications")
     .select("id,status,score,submitted_at,approved_at,expires_at,questionnaire_id")
@@ -46,20 +48,28 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Vendor"
-        title="Prequalification"
-        subtitle="Vendor prequalification questionnaires and outcomes."
+        eyebrow={t("console.procurement.vendors.prequalification.eyebrow", undefined, "Vendor")}
+        title={t("console.procurement.vendors.prequalification.title", undefined, "Prequalification")}
+        subtitle={t(
+          "console.procurement.vendors.prequalification.subtitle",
+          undefined,
+          "Vendor prequalification questionnaires and outcomes.",
+        )}
       />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/procurement/vendors/${vendorId}/prequalification/${r.id}`}
-          emptyLabel="No Prequalifications"
-          emptyDescription="This vendor has not completed any prequalification questionnaires."
+          emptyLabel={t("console.procurement.vendors.prequalification.emptyLabel", undefined, "No Prequalifications")}
+          emptyDescription={t(
+            "console.procurement.vendors.prequalification.emptyDescription",
+            undefined,
+            "This vendor has not completed any prequalification questionnaires.",
+          )}
           columns={[
             {
               key: "submitted_at",
-              header: "Submitted",
+              header: t("console.procurement.vendors.prequalification.columns.submitted", undefined, "Submitted"),
               render: (r) => (
                 <Link
                   href={`/console/procurement/vendors/${vendorId}/prequalification/${r.id}`}
@@ -74,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             },
             {
               key: "approved_at",
-              header: "Approved",
+              header: t("console.procurement.vendors.prequalification.columns.approved", undefined, "Approved"),
               render: (r) => (r.approved_at ? formatDate(r.approved_at) : "—"),
               accessor: (r) => r.approved_at ?? "",
               mono: true,
@@ -82,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.procurement.vendors.prequalification.columns.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
@@ -90,7 +100,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             },
             {
               key: "score",
-              header: "Score",
+              header: t("console.procurement.vendors.prequalification.columns.score", undefined, "Score"),
               render: (r) => (r.score != null ? r.score : "—"),
               accessor: (r) => r.score ?? 0,
               tabular: true,

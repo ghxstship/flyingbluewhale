@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -47,12 +47,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Cyber Incident Response" />
+        <ModuleHeader
+          eyebrow={t("console.safety.cyberIr.eyebrow", undefined, "Safety")}
+          title={t("console.safety.cyberIr.title", undefined, "Cyber Incident Response")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.cyberIr.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -80,39 +86,70 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Cyber Incident Response"
-        subtitle={`${rows.length} cyber incident${rows.length === 1 ? "" : "s"} in the last 90 days`}
+        eyebrow={t("console.safety.cyberIr.eyebrow", undefined, "Safety")}
+        title={t("console.safety.cyberIr.title", undefined, "Cyber Incident Response")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "console.safety.cyberIr.subtitleOne",
+                { count: rows.length },
+                `${rows.length} cyber incident in the last 90 days`,
+              )
+            : t(
+                "console.safety.cyberIr.subtitleOther",
+                { count: rows.length },
+                `${rows.length} cyber incidents in the last 90 days`,
+              )
+        }
         action={
           <Button href="/console/operations/incidents/new" size="sm">
-            + Report incident
+            {t("console.safety.cyberIr.reportIncident", undefined, "+ Report incident")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmtIntl.number(open)} accent />
-          <MetricCard label="In Containment" value={fmtIntl.number(containment)} />
-          <MetricCard label="Closed · 90d" value={fmtIntl.number(rows.length - open)} />
+          <MetricCard
+            label={t("console.safety.cyberIr.metricOpen", undefined, "Open")}
+            value={fmtIntl.number(open)}
+            accent
+          />
+          <MetricCard
+            label={t("console.safety.cyberIr.metricContainment", undefined, "In Containment")}
+            value={fmtIntl.number(containment)}
+          />
+          <MetricCard
+            label={t("console.safety.cyberIr.metricClosed90d", undefined, "Closed · 90d")}
+            value={fmtIntl.number(rows.length - open)}
+          />
         </div>
 
         <DataTable<IncidentRow>
           rows={rows}
           rowHref={(r) => `/console/operations/incidents/${r.id}`}
-          emptyLabel="No cyber incidents flagged"
-          emptyDescription="Cyber IR is a sub-type of incidents. Tag a report with terms like 'breach', 'phish', or 'cyber' in the summary and it appears here."
+          emptyLabel={t("console.safety.cyberIr.emptyLabel", undefined, "No cyber incidents flagged")}
+          emptyDescription={t(
+            "console.safety.cyberIr.emptyDescription",
+            undefined,
+            "Cyber IR is a sub-type of incidents. Tag a report with terms like 'breach', 'phish', or 'cyber' in the summary and it appears here.",
+          )}
           columns={[
-            { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
+            {
+              key: "summary",
+              header: t("console.safety.cyberIr.columnSummary", undefined, "Summary"),
+              render: (r) => r.summary,
+              accessor: (r) => r.summary,
+            },
             {
               key: "occurred",
-              header: "Occurred",
+              header: t("console.safety.cyberIr.columnOccurred", undefined, "Occurred"),
               render: (r) => fmt(r.occurred_at),
               className: "font-mono text-xs",
               accessor: (r) => r.occurred_at ?? null,
             },
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.safety.cyberIr.columnSeverity", undefined, "Severity"),
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
@@ -120,7 +157,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.safety.cyberIr.columnStatus", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
@@ -130,7 +167,11 @@ export default async function Page() {
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Lifecycle: detect → contain → eradicate → recover → lessons. Open the source incident to update its phase.
+          {t(
+            "console.safety.cyberIr.lifecycleNote",
+            undefined,
+            "Lifecycle: detect → contain → eradicate → recover → lessons. Open the source incident to update its phase.",
+          )}
         </p>
       </div>
     </>

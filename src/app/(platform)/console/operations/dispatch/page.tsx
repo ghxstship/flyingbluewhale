@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +23,10 @@ type Block = {
 };
 
 function asHour(iso: string, base: Date): number {
-  const t = new Date(iso);
+  const at = new Date(iso);
   // Express the time as hours-from-midnight on `base`
   const baseStart = new Date(base.getFullYear(), base.getMonth(), base.getDate()).getTime();
-  return (t.getTime() - baseStart) / 3_600_000;
+  return (at.getTime() - baseStart) / 3_600_000;
 }
 
 function dayBounds(d: Date) {
@@ -35,6 +36,7 @@ function dayBounds(d: Date) {
 }
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ date?: string }> }) {
+  const { t } = await getRequestT();
   const sp = await searchParams;
   const today = new Date();
   const dateStr = sp.date ?? today.toISOString().slice(0, 10);
@@ -43,9 +45,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Dispatch" />
+        <ModuleHeader title={t("console.operations.dispatch.title", undefined, "Dispatch")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.common.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -82,7 +86,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   // Build lanes: every venue + an "Unassigned" lane + every vehicle that ran
   const venueRows = (venues ?? []) as Array<{ id: string; name: string }>;
   const venueLanes: Lane[] = venueRows.map((v) => ({ id: `venue:${v.id}`, kind: "venue", label: v.name }));
-  venueLanes.push({ id: "venue:unassigned", kind: "venue", label: "Unassigned" });
+  venueLanes.push({
+    id: "venue:unassigned",
+    kind: "venue",
+    label: t("console.operations.dispatch.unassigned", undefined, "Unassigned"),
+  });
 
   type RunRow = {
     id: string;
@@ -110,22 +118,22 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
       laneId: s.venue_id ? `venue:${s.venue_id}` : "venue:unassigned",
       startHour: asHour(s.starts_at, focus),
       endHour: asHour(s.ends_at, focus),
-      label: s.role ?? "Shift",
+      label: s.role ?? t("console.operations.dispatch.shiftLabel", undefined, "Shift"),
       href: `/console/workforce/rosters`,
       source: "shift",
       tone: "info",
     });
   }
-  for (const t of (tasks ?? []) as Array<{ id: string; title: string; due_at: string; status: string }>) {
-    const startH = asHour(t.due_at, focus);
+  for (const task of (tasks ?? []) as Array<{ id: string; title: string; due_at: string; status: string }>) {
+    const startH = asHour(task.due_at, focus);
     blocks.push({
       laneId: "venue:unassigned",
       startHour: startH - 0.25,
       endHour: startH + 0.25,
-      label: t.title,
-      href: `/console/tasks/${t.id}`,
+      label: task.title,
+      href: `/console/tasks/${task.id}`,
       source: "task",
-      tone: t.status === "done" ? "muted" : "warning",
+      tone: task.status === "done" ? "muted" : "warning",
     });
   }
   for (const r of runRows) {
@@ -135,7 +143,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
       laneId: `vehicle:${vehicleKey(r)}`,
       startHour: dep,
       endHour: arr,
-      label: r.vehicle_ref ?? r.fleet ?? "Run",
+      label: r.vehicle_ref ?? r.fleet ?? t("console.operations.dispatch.runLabel", undefined, "Run"),
       href: `/console/transport/dispatch/${r.id}`,
       source: "dispatch",
       tone: "success",
@@ -162,9 +170,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Dispatch Matrix"
-        subtitle={`${dateStr} · ${blocks.length} blocks across ${lanes.length} lanes (read-only)`}
+        eyebrow={t("console.operations.eyebrow", undefined, "Operations")}
+        title={t("console.operations.dispatch.matrixTitle", undefined, "Dispatch Matrix")}
+        subtitle={t(
+          "console.operations.dispatch.subtitle",
+          { date: dateStr, blocks: blocks.length, lanes: lanes.length },
+          `${dateStr} · ${blocks.length} blocks across ${lanes.length} lanes (read-only)`,
+        )}
       />
       <div className="page-content space-y-4">
         <nav className="flex items-center gap-3 text-sm">
@@ -184,15 +196,15 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
           <span className="ms-auto flex items-center gap-3 text-xs">
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-sm bg-[var(--color-info)]" />
-              Shift
+              {t("console.operations.dispatch.legend.shift", undefined, "Shift")}
             </span>
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-sm bg-[var(--color-warning)]" />
-              Task
+              {t("console.operations.dispatch.legend.task", undefined, "Task")}
             </span>
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-sm bg-[var(--color-success)]" />
-              Dispatch
+              {t("console.operations.dispatch.legend.dispatch", undefined, "Dispatch")}
             </span>
           </span>
         </nav>
@@ -204,7 +216,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
               style={{ width: 180 }}
               className="shrink-0 border-e border-[var(--border-color)] px-3 py-2 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] uppercase"
             >
-              Lane
+              {t("console.operations.dispatch.laneColumn", undefined, "Lane")}
             </div>
             <div className="flex" style={{ width: colWidth * totalHours }}>
               {HOURS.map((h) => (
@@ -229,7 +241,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                   className="flex shrink-0 items-center border-e border-[var(--border-color)] px-3 text-xs"
                 >
                   <Badge variant={lane.kind === "venue" ? "muted" : "info"} className="me-2">
-                    {lane.kind}
+                    {lane.kind === "venue"
+                      ? t("console.operations.dispatch.laneKind.venue", undefined, "venue")
+                      : t("console.operations.dispatch.laneKind.vehicle", undefined, "vehicle")}
                   </Badge>
                   <span className="truncate">{lane.label}</span>
                 </div>

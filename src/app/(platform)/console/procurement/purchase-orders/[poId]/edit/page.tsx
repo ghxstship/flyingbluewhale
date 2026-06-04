@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updatePurchaseOrder, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -15,28 +16,56 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
   const session = await requireSession();
   const row = await getOrgScoped("purchase_orders", session.orgId, p.poId);
   if (!row) notFound();
+  const { t } = await getRequestT();
   const action = updatePurchaseOrder.bind(null, p.poId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Purchase Order" title={`Edit ${row.title}`} />
+      <ModuleHeader
+        eyebrow={t("console.procurement.purchaseOrders.edit.eyebrow", undefined, "Purchase Order")}
+        title={t("console.procurement.purchaseOrders.edit.title", { title: row.title }, `Edit ${row.title}`)}
+      />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/procurement/purchase-orders/${p.poId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("console.procurement.purchaseOrders.edit.submit", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
-          <Input label="Number" name="number" defaultValue={row.number} required maxLength={80} />
           <Input
-            label="Amount (cents)"
+            label={t("console.procurement.purchaseOrders.edit.titleLabel", undefined, "Title")}
+            name="title"
+            defaultValue={row.title}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.procurement.purchaseOrders.edit.numberLabel", undefined, "Number")}
+            name="number"
+            defaultValue={row.number}
+            required
+            maxLength={80}
+          />
+          <Input
+            label={t("console.procurement.purchaseOrders.edit.amountLabel", undefined, "Amount (cents)")}
             name="amount_cents"
             type="number"
             defaultValue={String(row.amount_cents ?? 0)}
           />
-          <Input label="Currency" name="currency" defaultValue={row.currency ?? "USD"} required maxLength={3} />
-          <p className="text-xs text-[var(--text-muted)]">Status transitions are managed from the detail page.</p>
+          <Input
+            label={t("console.procurement.purchaseOrders.edit.currencyLabel", undefined, "Currency")}
+            name="currency"
+            defaultValue={row.currency ?? "USD"}
+            required
+            maxLength={3}
+          />
+          <p className="text-xs text-[var(--text-muted)]">
+            {t(
+              "console.procurement.purchaseOrders.edit.statusHint",
+              undefined,
+              "Status transitions are managed from the detail page.",
+            )}
+          </p>
         </FormShell>
       </div>
     </>

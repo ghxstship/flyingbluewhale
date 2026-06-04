@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +21,18 @@ type Row = {
 };
 
 export default async function AnnouncementsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Comms" title="Announcements" />
+        <ModuleHeader
+          eyebrow={t("console.comms.announcements.eyebrow", undefined, "Comms")}
+          title={t("console.comms.announcements.title", undefined, "Announcements")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.comms.announcements.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -44,12 +51,16 @@ export default async function AnnouncementsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Comms"
-        title="Announcements"
-        subtitle={`${rows.length} announcement${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.comms.announcements.eyebrow", undefined, "Comms")}
+        title={t("console.comms.announcements.title", undefined, "Announcements")}
+        subtitle={
+          rows.length === 1
+            ? t("console.comms.announcements.subtitleOne", { count: rows.length }, `${rows.length} announcement`)
+            : t("console.comms.announcements.subtitleOther", { count: rows.length }, `${rows.length} announcements`)
+        }
         action={
           <Button href="/console/comms/announcements/new" size="sm">
-            + New
+            {t("console.comms.announcements.new", undefined, "+ New")}
           </Button>
         }
       />
@@ -57,13 +68,21 @@ export default async function AnnouncementsPage() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/comms/announcements/${r.id}`}
-          emptyLabel="No announcements yet"
-          emptyDescription="Push org-wide updates to crew, contractors, vendors, or admins. They land in COMPVSS /m/feed."
+          emptyLabel={t("console.comms.announcements.emptyLabel", undefined, "No announcements yet")}
+          emptyDescription={t(
+            "console.comms.announcements.emptyDescription",
+            undefined,
+            "Push org-wide updates to crew, contractors, vendors, or admins. They land in COMPVSS /m/feed.",
+          )}
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.comms.announcements.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+            },
             {
               key: "publish_state",
-              header: "State",
+              header: t("console.comms.announcements.columns.state", undefined, "State"),
               render: (r) => (
                 <Badge
                   variant={
@@ -76,10 +95,14 @@ export default async function AnnouncementsPage() {
             },
             {
               key: "audience",
-              header: "Audience",
+              header: t("console.comms.announcements.columns.audience", undefined, "Audience"),
               render: (r) => <Badge variant="muted">{toTitle(r.audience)}</Badge>,
             },
-            { key: "pinned", header: "Pinned", render: (r) => (r.pinned ? "Yes" : "—") },
+            {
+              key: "pinned",
+              header: t("console.comms.announcements.columns.pinned", undefined, "Pinned"),
+              render: (r) => (r.pinned ? t("common.yes", undefined, "Yes") : "—"),
+            },
           ]}
         />
       </div>

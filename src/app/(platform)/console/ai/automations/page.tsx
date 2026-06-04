@@ -7,7 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -37,23 +37,33 @@ const RUN_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
   running: "warning",
 };
 
-function relativeTime(iso: string | null): string {
+function relativeTime(
+  iso: string | null,
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+): string {
   if (!iso) return "—";
   const ms = Date.now() - new Date(iso).getTime();
   const min = Math.floor(ms / 60_000);
-  if (min < 60) return `${min}m ago`;
+  if (min < 60) return t("console.ai.automations.relativeMinutes", { value: min }, `${min}m ago`);
   const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h ago`;
-  return `${Math.floor(hr / 24)}d ago`;
+  if (hr < 24) return t("console.ai.automations.relativeHours", { value: hr }, `${hr}h ago`);
+  const days = Math.floor(hr / 24);
+  return t("console.ai.automations.relativeDays", { value: days }, `${days}d ago`);
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="AI" title="Automations" />
+        <ModuleHeader
+          eyebrow={t("console.ai.eyebrow", undefined, "AI")}
+          title={t("console.ai.automations.title", undefined, "Automations")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.ai.automations.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -75,29 +85,43 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="AI"
-        title="Automations"
-        subtitle={`${rows.length} automation${rows.length === 1 ? "" : "s"} · ${enabled} enabled${failing ? ` · ${failing} failing` : ""}`}
+        eyebrow={t("console.ai.eyebrow", undefined, "AI")}
+        title={t("console.ai.automations.title", undefined, "Automations")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.ai.automations.subtitleAutomationOne", undefined, "automation") : t("console.ai.automations.subtitleAutomationOther", undefined, "automations")} · ${enabled} ${t("console.ai.automations.subtitleEnabled", undefined, "enabled")}${failing ? ` · ${failing} ${t("console.ai.automations.subtitleFailing", undefined, "failing")}` : ""}`}
         action={
           <Button href="/console/ai/automations/new" size="sm">
-            + New Automation
+            {t("console.ai.automations.newAction", undefined, "+ New Automation")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Enabled" value={fmt.number(enabled)} accent />
-          <MetricCard label="Total" value={fmt.number(rows.length)} />
-          <MetricCard label="Failing Last Run" value={fmt.number(failing)} />
+          <MetricCard
+            label={t("console.ai.automations.metricEnabled", undefined, "Enabled")}
+            value={fmt.number(enabled)}
+            accent
+          />
+          <MetricCard
+            label={t("console.ai.automations.metricTotal", undefined, "Total")}
+            value={fmt.number(rows.length)}
+          />
+          <MetricCard
+            label={t("console.ai.automations.metricFailingLastRun", undefined, "Failing Last Run")}
+            value={fmt.number(failing)}
+          />
         </div>
 
         {rows.length === 0 ? (
           <EmptyState
-            title="No Automations Yet"
-            description="Author AI-driven automations triggered manually, on a cron schedule, by webhooks, or by domain events."
+            title={t("console.ai.automations.emptyTitle", undefined, "No Automations Yet")}
+            description={t(
+              "console.ai.automations.emptyDescription",
+              undefined,
+              "Author AI-driven automations triggered manually, on a cron schedule, by webhooks, or by domain events.",
+            )}
             action={
               <Link href="/console/ai/automations/new" className="btn btn-primary btn-sm">
-                + New Automation
+                {t("console.ai.automations.newAction", undefined, "+ New Automation")}
               </Link>
             }
           />
@@ -113,13 +137,19 @@ export default async function Page() {
                     <div className="flex items-center gap-2 text-sm font-medium">
                       {r.name}
                       <Badge variant={TRIGGER_TONE[r.trigger_kind] ?? "muted"}>{r.trigger_kind}</Badge>
-                      {!r.enabled && <Badge variant="muted">Disabled</Badge>}
+                      {!r.enabled && (
+                        <Badge variant="muted">{t("console.ai.automations.disabled", undefined, "Disabled")}</Badge>
+                      )}
                     </div>
                     {r.description && (
                       <p className="mt-0.5 line-clamp-1 text-xs text-[var(--text-muted)]">{r.description}</p>
                     )}
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
-                      Last run {relativeTime(r.last_run_at)}
+                      {t(
+                        "console.ai.automations.lastRun",
+                        { time: relativeTime(r.last_run_at, t) },
+                        `Last run ${relativeTime(r.last_run_at, t)}`,
+                      )}
                     </div>
                   </div>
                   {r.last_run_status && (

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateRateCardItem, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -17,21 +18,43 @@ export default async function Page({ params }: { params: Promise<{ itemId: strin
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
+  const { t } = await getRequestT();
   const action = updateRateCardItem.bind(null, p.itemId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const itemName =
+    ((row as Record<string, unknown>)["name"] as string | undefined) ??
+    t("console.logistics.ratecard.edit.fallbackName", undefined, "Rate card item");
   return (
     <>
       <ModuleHeader
-        eyebrow="Rate Card Item"
-        title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Rate card item"}`}
+        eyebrow={t("console.logistics.ratecard.edit.eyebrow", undefined, "Rate Card Item")}
+        title={t("console.logistics.ratecard.edit.title", { name: itemName }, `Edit ${itemName}`)}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/logistics/ratecard/${p.itemId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/logistics/ratecard/${p.itemId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
-          <Input label="SKU" name="sku" defaultValue={row.sku ?? ""} required maxLength={80} />
+          <Input
+            label={t("console.logistics.ratecard.edit.name", undefined, "Name")}
+            name="name"
+            defaultValue={row.name ?? ""}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.logistics.ratecard.edit.sku", undefined, "SKU")}
+            name="sku"
+            defaultValue={row.sku ?? ""}
+            required
+            maxLength={80}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.logistics.ratecard.edit.description", undefined, "Description")}
+            </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
@@ -40,13 +63,25 @@ export default async function Page({ params }: { params: Promise<{ itemId: strin
             />
           </label>
           <Input
-            label="Unit Price (Cents)"
+            label={t("console.logistics.ratecard.edit.unitPriceCents", undefined, "Unit Price (Cents)")}
             name="unit_price_cents"
             type="number"
             defaultValue={row.unit_price_cents != null ? String(row.unit_price_cents) : ""}
           />
-          <Input label="Currency" name="currency" defaultValue={row.currency ?? ""} required maxLength={3} />
-          <Input label="Catalog" name="catalog" defaultValue={row.catalog ?? ""} required maxLength={80} />
+          <Input
+            label={t("console.logistics.ratecard.edit.currency", undefined, "Currency")}
+            name="currency"
+            defaultValue={row.currency ?? ""}
+            required
+            maxLength={3}
+          />
+          <Input
+            label={t("console.logistics.ratecard.edit.catalog", undefined, "Catalog")}
+            name="catalog"
+            defaultValue={row.catalog ?? ""}
+            required
+            maxLength={80}
+          />
         </FormShell>
       </div>
     </>

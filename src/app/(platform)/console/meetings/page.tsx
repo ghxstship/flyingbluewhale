@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -57,12 +57,18 @@ const KIND_LABEL: Record<MeetingKind, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Coordination" title="Meetings" />
+        <ModuleHeader
+          eyebrow={t("console.meetings.eyebrow", undefined, "Coordination")}
+          title={t("console.meetings.title", undefined, "Meetings")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.meetings.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -70,6 +76,17 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+  const KIND_LABEL_I18N: Record<MeetingKind, string> = {
+    kickoff: t("console.meetings.kind.kickoff", undefined, "Kickoff"),
+    owner_architect_contractor: t("console.meetings.kind.oac", undefined, "OAC"),
+    sub_meeting: t("console.meetings.kind.subMeeting", undefined, "Sub Meeting"),
+    safety: t("console.meetings.kind.safety", undefined, "Safety"),
+    punch_walk: t("console.meetings.kind.punchWalk", undefined, "Punch Walk"),
+    design_review: t("console.meetings.kind.designReview", undefined, "Design Review"),
+    progress: t("console.meetings.kind.progress", undefined, "Progress"),
+    other: t("console.meetings.kind.other", undefined, "Other"),
+  };
+  void KIND_LABEL;
 
   const { data } = await supabase
     .from("meetings")
@@ -113,48 +130,67 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Coordination"
-        title="Meetings"
-        subtitle={`${rows.length} meeting${rows.length === 1 ? "" : "s"} · ${upcomingCount} upcoming · ${totalOpenActions} open action item${totalOpenActions === 1 ? "" : "s"}`}
+        eyebrow={t("console.meetings.eyebrow", undefined, "Coordination")}
+        title={t("console.meetings.title", undefined, "Meetings")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.meetings.subtitle.meeting", undefined, "meeting") : t("console.meetings.subtitle.meetings", undefined, "meetings")} · ${upcomingCount} ${t("console.meetings.subtitle.upcoming", undefined, "upcoming")} · ${totalOpenActions} ${totalOpenActions === 1 ? t("console.meetings.subtitle.openActionItem", undefined, "open action item") : t("console.meetings.subtitle.openActionItems", undefined, "open action items")}`}
         action={
           <Button href="/console/meetings/new" size="sm">
-            + New Meeting
+            {t("console.meetings.newMeeting", undefined, "+ New Meeting")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming" value={fmt.number(upcomingCount)} accent />
-          <MetricCard label="Open Actions" value={fmt.number(totalOpenActions)} />
-          <MetricCard label="Total" value={fmt.number(rows.length)} />
+          <MetricCard
+            label={t("console.meetings.metrics.upcoming", undefined, "Upcoming")}
+            value={fmt.number(upcomingCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.meetings.metrics.openActions", undefined, "Open Actions")}
+            value={fmt.number(totalOpenActions)}
+          />
+          <MetricCard label={t("console.meetings.metrics.total", undefined, "Total")} value={fmt.number(rows.length)} />
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Project meetings with minutes. Action items added to a meeting auto-create a task for the assignee — closure
-          is bidirectional via meeting_action_items.task_id.
+          {t(
+            "console.meetings.description",
+            undefined,
+            "Project meetings with minutes. Action items added to a meeting auto-create a task for the assignee — closure is bidirectional via meeting_action_items.task_id.",
+          )}
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/meetings/${r.id}`}
-          emptyLabel="No meetings yet"
-          emptyDescription="Schedule a meeting to capture agenda + minutes + action items in one place."
+          emptyLabel={t("console.meetings.empty.label", undefined, "No meetings yet")}
+          emptyDescription={t(
+            "console.meetings.empty.description",
+            undefined,
+            "Schedule a meeting to capture agenda + minutes + action items in one place.",
+          )}
           emptyAction={
             <Button href="/console/meetings/new" size="sm">
-              + New Meeting
+              {t("console.meetings.newMeeting", undefined, "+ New Meeting")}
             </Button>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.meetings.columns.code", undefined, "Code"),
               render: (r) => r.code,
               accessor: (r) => r.code,
               className: "font-mono text-xs",
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.meetings.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "kind",
-              header: "Kind",
-              render: (r) => KIND_LABEL[r.kind],
+              header: t("console.meetings.columns.kind", undefined, "Kind"),
+              render: (r) => KIND_LABEL_I18N[r.kind],
               accessor: (r) => r.kind,
               filterable: true,
               groupable: true,
@@ -162,7 +198,7 @@ export default async function Page() {
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.meetings.columns.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -170,7 +206,7 @@ export default async function Page() {
             },
             {
               key: "starts",
-              header: "When",
+              header: t("console.meetings.columns.when", undefined, "When"),
               render: (r) =>
                 fmt.dateParts(r.starts_at, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }),
               accessor: (r) => r.starts_at,
@@ -178,14 +214,14 @@ export default async function Page() {
             },
             {
               key: "attendees",
-              header: "People",
+              header: t("console.meetings.columns.people", undefined, "People"),
               render: (r) => fmt.number(r.attendee_count),
               accessor: (r) => r.attendee_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "actions",
-              header: "Open Acts",
+              header: t("console.meetings.columns.openActs", undefined, "Open Acts"),
               render: (r) =>
                 r.open_action_count > 0 ? (
                   <Badge variant="warning">{fmt.number(r.open_action_count)}</Badge>
@@ -197,7 +233,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.meetings.columns.state", undefined, "State"),
               render: (r) => (
                 <Badge variant={STATE_TONE[r.meeting_state]}>{toTitle(r.meeting_state.replace(/_/g, " "))}</Badge>
               ),

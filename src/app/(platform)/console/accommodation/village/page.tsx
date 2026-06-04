@@ -5,17 +5,23 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Accommodation" title="Village" />
+        <ModuleHeader
+          eyebrow={t("console.accommodation.village.eyebrow", undefined, "Accommodation")}
+          title={t("console.accommodation.village.title", undefined, "Village")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.accommodation.village.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -34,12 +40,12 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Accommodation"
-        title="Village"
-        subtitle={`${rows.length} village${rows.length === 1 ? "" : "s"} · ${fmt.number(totalCapacity)} bed${totalCapacity === 1 ? "" : "s"}`}
+        eyebrow={t("console.accommodation.village.eyebrow", undefined, "Accommodation")}
+        title={t("console.accommodation.village.title", undefined, "Village")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.accommodation.village.villageSingular", undefined, "village") : t("console.accommodation.village.villagePlural", undefined, "villages")} · ${fmt.number(totalCapacity)} ${totalCapacity === 1 ? t("console.accommodation.village.bedSingular", undefined, "bed") : t("console.accommodation.village.bedPlural", undefined, "beds")}`}
         action={
           <Button href="/console/venues/new" size="sm">
-            + New Venue
+            {t("console.accommodation.village.newVenue", undefined, "+ New Venue")}
           </Button>
         }
       />
@@ -47,24 +53,33 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/venues/${r.id}`}
-          emptyLabel="No villages"
-          emptyDescription="Residential clusters live under Venues with kind='village'. Create a venue and set its kind to surface it here."
+          emptyLabel={t("console.accommodation.village.emptyLabel", undefined, "No villages")}
+          emptyDescription={t(
+            "console.accommodation.village.emptyDescription",
+            undefined,
+            "Residential clusters live under Venues with kind='village'. Create a venue and set its kind to surface it here.",
+          )}
           emptyAction={
             <Button href="/console/venues/new" size="sm">
-              + New Venue
+              {t("console.accommodation.village.newVenue", undefined, "+ New Venue")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "name",
+              header: t("console.accommodation.village.col.name", undefined, "Name"),
+              render: (r) => String(r.name ?? "—"),
+              accessor: (r) => r.name ?? null,
+            },
             {
               key: "cluster",
-              header: "Cluster",
+              header: t("console.accommodation.village.col.cluster", undefined, "Cluster"),
               render: (r) => String(r.cluster ?? "—"),
               accessor: (r) => r.cluster ?? null,
             },
             {
               key: "capacity",
-              header: "Beds",
+              header: t("console.accommodation.village.col.beds", undefined, "Beds"),
               render: (r) => (
                 <span className="font-mono text-xs">{r.capacity != null ? fmt.number(r.capacity as number) : "—"}</span>
               ),
@@ -72,7 +87,7 @@ export default async function Page() {
             },
             {
               key: "handover",
-              header: "Handover",
+              header: t("console.accommodation.village.col.handover", undefined, "Handover"),
               render: (r) => <StatusBadge status={String(r.handover_state ?? "—")} />,
               accessor: (r) => r.handover_state ?? null,
             },

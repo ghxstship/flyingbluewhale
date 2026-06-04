@@ -7,12 +7,19 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { toggleActive, deleteItem } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.settings.catalog.detail.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -49,31 +56,47 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Catalog"
+        eyebrow={t("console.settings.catalog.detail.eyebrow", undefined, "Catalog")}
         title={item.name}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <Badge variant="muted">{toTitle(item.kind)}</Badge>
-            <Badge variant={item.active ? "success" : "muted"}>{item.active ? "Active" : "Inactive"}</Badge>
+            <Badge variant={item.active ? "success" : "muted"}>
+              {item.active
+                ? t("console.settings.catalog.detail.statusActive", undefined, "Active")
+                : t("console.settings.catalog.detail.statusInactive", undefined, "Inactive")}
+            </Badge>
             <span className="font-mono text-xs">{item.code}</span>
-            <span className="font-mono text-xs">{usageCount ?? 0} assignments</span>
+            <span className="font-mono text-xs">
+              {t(
+                "console.settings.catalog.detail.assignmentsCount",
+                { count: usageCount ?? 0 },
+                `${usageCount ?? 0} assignments`,
+              )}
+            </span>
           </span>
         }
         action={
           <div className="flex items-center gap-2">
             <Link href={`/console/settings/catalog/${item.id}/edit`} className="btn btn-secondary btn-sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Link>
             <form action={toggleActive}>
               <input type="hidden" name="id" value={item.id} />
               <input type="hidden" name="next" value={item.active ? "false" : "true"} />
               <button type="submit" className="btn btn-secondary btn-sm">
-                {item.active ? "Deactivate" : "Reactivate"}
+                {item.active
+                  ? t("console.settings.catalog.detail.deactivate", undefined, "Deactivate")
+                  : t("console.settings.catalog.detail.reactivate", undefined, "Reactivate")}
               </button>
             </form>
             <DeleteForm
               action={deleteItem.bind(null, item.id)}
-              confirm="Soft-delete this catalog item? Existing deliverable rows keep their catalog_item_id; new assignments can't pick it."
+              confirm={t(
+                "console.settings.catalog.detail.deleteConfirm",
+                undefined,
+                "Soft-delete this catalog item? Existing deliverable rows keep their catalog_item_id; new assignments can't pick it.",
+              )}
             />
           </div>
         }
@@ -82,7 +105,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {item.description && <section className="surface p-4 text-sm whitespace-pre-wrap">{item.description}</section>}
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Unit Cost</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("console.settings.catalog.detail.unitCost", undefined, "Unit Cost")}
+            </div>
             <div className="mt-1 font-mono">
               {item.unit_cost_cents != null
                 ? (item.unit_cost_cents / 100).toLocaleString("en-US", {
@@ -93,7 +118,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Inventory</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("console.settings.catalog.detail.inventory", undefined, "Inventory")}
+            </div>
             <div className="mt-1 font-mono">{item.inventory_qty ?? "—"}</div>
           </div>
         </section>

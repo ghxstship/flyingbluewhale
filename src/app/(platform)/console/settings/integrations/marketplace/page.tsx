@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { KNOWN_CONNECTORS } from "../connectors";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -48,12 +48,18 @@ const CATALOG: Array<{
 ];
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Integrations Marketplace" />
+        <ModuleHeader
+          eyebrow={t("console.settings.integrations.marketplace.eyebrow", undefined, "Settings")}
+          title={t("console.settings.integrations.marketplace.title", undefined, "Integrations Marketplace")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.integrations.marketplace.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -77,20 +83,38 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Integrations Marketplace"
-        subtitle={`${CATALOG.filter((c) => c.available).length} available · ${installedCount} installed · ${CATALOG.filter((c) => !c.available).length} coming soon`}
+        eyebrow={t("console.settings.integrations.marketplace.eyebrow", undefined, "Settings")}
+        title={t("console.settings.integrations.marketplace.title", undefined, "Integrations Marketplace")}
+        subtitle={t(
+          "console.settings.integrations.marketplace.subtitle",
+          {
+            available: CATALOG.filter((c) => c.available).length,
+            installed: installedCount,
+            comingSoon: CATALOG.filter((c) => !c.available).length,
+          },
+          `${CATALOG.filter((c) => c.available).length} available · ${installedCount} installed · ${CATALOG.filter((c) => !c.available).length} coming soon`,
+        )}
         action={
           <Button href="/console/settings/integrations" size="sm">
-            Manage installed
+            {t("console.settings.integrations.marketplace.manageInstalled", undefined, "Manage installed")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Available" value={fmt.number(CATALOG.filter((c) => c.available).length)} accent />
-          <MetricCard label="Installed" value={fmt.number(installedCount)} />
-          <MetricCard label="Coming Soon" value={fmt.number(CATALOG.filter((c) => !c.available).length)} />
+          <MetricCard
+            label={t("console.settings.integrations.marketplace.metricAvailable", undefined, "Available")}
+            value={fmt.number(CATALOG.filter((c) => c.available).length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.settings.integrations.marketplace.metricInstalled", undefined, "Installed")}
+            value={fmt.number(installedCount)}
+          />
+          <MetricCard
+            label={t("console.settings.integrations.marketplace.metricComingSoon", undefined, "Coming Soon")}
+            value={fmt.number(CATALOG.filter((c) => !c.available).length)}
+          />
         </div>
 
         {cats.map(([cat, items]) => (
@@ -108,11 +132,17 @@ export default async function Page() {
                         <p className="mt-1 text-xs text-[var(--text-muted)]">{c.desc}</p>
                       </div>
                       {isInstalled ? (
-                        <Badge variant="success">Installed</Badge>
+                        <Badge variant="success">
+                          {t("console.settings.integrations.marketplace.badgeInstalled", undefined, "Installed")}
+                        </Badge>
                       ) : c.available ? (
-                        <Badge variant="muted">Available</Badge>
+                        <Badge variant="muted">
+                          {t("console.settings.integrations.marketplace.badgeAvailable", undefined, "Available")}
+                        </Badge>
                       ) : (
-                        <Badge variant="muted">Soon</Badge>
+                        <Badge variant="muted">
+                          {t("console.settings.integrations.marketplace.badgeSoon", undefined, "Soon")}
+                        </Badge>
                       )}
                     </div>
                     <div className="mt-4">
@@ -121,11 +151,13 @@ export default async function Page() {
                           href={isInstalled ? "/console/settings/integrations" : `/console/settings/integrations`}
                           className="btn btn-secondary btn-sm w-full"
                         >
-                          {isInstalled ? "Manage" : "Install"}
+                          {isInstalled
+                            ? t("console.settings.integrations.marketplace.manage", undefined, "Manage")
+                            : t("console.settings.integrations.marketplace.install", undefined, "Install")}
                         </Link>
                       ) : (
                         <button type="button" className="btn btn-secondary btn-sm w-full" disabled>
-                          Notify me
+                          {t("console.settings.integrations.marketplace.notifyMe", undefined, "Notify me")}
                         </button>
                       )}
                     </div>

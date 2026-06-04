@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fmtDateTime } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Dispatch = today's + next-48h events, annotated with the rentals
@@ -16,6 +17,7 @@ import { fmtDateTime } from "@/components/detail/DetailShell";
 export default async function DispatchPage() {
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const now = new Date();
   const nowIso = now.toISOString();
   const in48h = new Date(now.getTime() + 48 * 3600 * 1000).toISOString();
@@ -46,15 +48,19 @@ export default async function DispatchPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
-        title="Dispatch"
-        subtitle={`${eventRows.length} Event${eventRows.length === 1 ? "" : "s"} · ${rentalCount} Active  rental${rentalCount === 1 ? "" : "s"} in the next 48h`}
+        eyebrow={t("console.production.dispatch.eyebrow", undefined, "Production")}
+        title={t("console.production.dispatch.title", undefined, "Dispatch")}
+        subtitle={`${eventRows.length} ${eventRows.length === 1 ? t("console.production.dispatch.eventSingular", undefined, "Event") : t("console.production.dispatch.eventPlural", undefined, "Events")} · ${rentalCount} ${rentalCount === 1 ? t("console.production.dispatch.activeRentalSingular", undefined, "Active rental") : t("console.production.dispatch.activeRentalPlural", undefined, "Active rentals")} ${t("console.production.dispatch.inNext48h", undefined, "in the next 48h")}`}
       />
       <div className="page-content max-w-5xl">
         {eventRows.length === 0 ? (
           <EmptyState
-            title="Nothing Dispatches in the Next 48 Hours"
-            description="Events in your window appear here as they're scheduled. Active rentals across the same window are counted alongside."
+            title={t("console.production.dispatch.empty.title", undefined, "Nothing Dispatches in the Next 48 Hours")}
+            description={t(
+              "console.production.dispatch.empty.description",
+              undefined,
+              "Events in your window appear here as they're scheduled. Active rentals across the same window are counted alongside.",
+            )}
           />
         ) : (
           <ul className="space-y-2">

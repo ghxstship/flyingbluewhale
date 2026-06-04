@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteCredential } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ credentialId: string }> }) {
   const p = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Credential" />
+        <ModuleHeader title={t("console.people.credentials.detail.title", undefined, "Credential")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.people.credentials.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ credentialId:
   return (
     <>
       <ModuleHeader
-        eyebrow="People · Credential"
+        eyebrow={t("console.people.credentials.detail.eyebrow", undefined, "People · Credential")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/people/credentials" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/people/credentials/${p.credentialId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteCredential.bind(null, p.credentialId)}
-              confirm={`Delete credential "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.people.credentials.detail.deleteConfirm",
+                { title },
+                `Delete credential "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

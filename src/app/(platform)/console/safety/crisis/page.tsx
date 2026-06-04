@@ -5,28 +5,35 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const SEVERITY_LABEL: Record<string, string> = {
-  info: "Info",
-  warn: "Warning",
-  critical: "Critical",
-};
-
-const SEVERITY_TONE: Record<string, "info" | "warning" | "error"> = {
-  info: "info",
-  warn: "warning",
-  critical: "error",
-};
-
 export default async function Page() {
+  const { t } = await getRequestT();
+  const SEVERITY_LABEL: Record<string, string> = {
+    info: t("console.safety.crisis.severity.info", undefined, "Info"),
+    warn: t("console.safety.crisis.severity.warn", undefined, "Warning"),
+    critical: t("console.safety.crisis.severity.critical", undefined, "Critical"),
+  };
+
+  const SEVERITY_TONE: Record<string, "info" | "warning" | "error"> = {
+    info: "info",
+    warn: "warning",
+    critical: "error",
+  };
+
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Crisis Alerts" />
+        <ModuleHeader
+          eyebrow={t("console.safety.crisis.eyebrow", undefined, "Workspace")}
+          title={t("console.safety.crisis.title", undefined, "Crisis Alerts")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.crisis.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -39,12 +46,12 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workspace"
-        title="Crisis Alerts"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.safety.crisis.eyebrow", undefined, "Workspace")}
+        title={t("console.safety.crisis.title", undefined, "Crisis Alerts")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.safety.crisis.recordSingular", undefined, "Record") : t("console.safety.crisis.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/console/safety/crisis/new" size="sm">
-            + Activate alert
+            {t("console.safety.crisis.activateAlert", undefined, "+ Activate alert")}
           </Button>
         }
       />
@@ -52,13 +59,22 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/safety/crisis/${r.id}`}
-          emptyLabel="No crisis alerts"
-          emptyDescription="Activated alerts page leadership and route to the major-incident plan when severity warrants."
+          emptyLabel={t("console.safety.crisis.emptyLabel", undefined, "No crisis alerts")}
+          emptyDescription={t(
+            "console.safety.crisis.emptyDescription",
+            undefined,
+            "Activated alerts page leadership and route to the major-incident plan when severity warrants.",
+          )}
           columns={[
-            { key: "title", header: "Title", render: (r) => String(r.title ?? "—"), accessor: (r) => r.title ?? null },
+            {
+              key: "title",
+              header: t("console.safety.crisis.col.title", undefined, "Title"),
+              render: (r) => String(r.title ?? "—"),
+              accessor: (r) => r.title ?? null,
+            },
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.safety.crisis.col.severity", undefined, "Severity"),
               render: (r) => {
                 const sev = String(r.severity ?? "");
                 if (!sev) return "—";
@@ -70,7 +86,7 @@ export default async function Page() {
             },
             {
               key: "sent_at",
-              header: "Sent",
+              header: t("console.safety.crisis.col.sent", undefined, "Sent"),
               render: (r) => <span className="font-mono text-xs">{String(r.sent_at ?? "—")}</span>,
               accessor: (r) => r.sent_at ?? null,
             },

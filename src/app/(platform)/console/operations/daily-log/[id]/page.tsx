@@ -13,7 +13,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { deleteDailyLogPhoto, transitionDailyLog, uploadDailyLogPhoto } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -31,6 +31,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const fmtDate = (d: string): string =>
     fmt.dateParts(d + "T00:00:00", {
       weekday: "long",
@@ -96,8 +97,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        breadcrumbs={[{ label: "Daily Log", href: "/console/operations/daily-log" }, { label: fmtDate(log.log_date) }]}
+        eyebrow={t("console.operations.dailyLog.detail.eyebrow", undefined, "Operations")}
+        breadcrumbs={[
+          {
+            label: t("console.operations.dailyLog.detail.breadcrumb", undefined, "Daily Log"),
+            href: "/console/operations/daily-log",
+          },
+          { label: fmtDate(log.log_date) },
+        ]}
         title={fmtDate(log.log_date)}
         subtitle={projectName}
         action={
@@ -105,10 +112,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <Presence targetTable="daily_logs" targetId={id} currentUser={presenceUser} />
             <Badge variant={STATUS_TONE[log.status] ?? "muted"}>{toTitle(log.status)}</Badge>
             {log.status === "draft" && (
-              <StatusForm action={transitionDailyLog.bind(null, id, "submitted")} label="Submit" />
+              <StatusForm
+                action={transitionDailyLog.bind(null, id, "submitted")}
+                label={t("common.submit", undefined, "Submit")}
+              />
             )}
             {log.status === "submitted" && (
-              <StatusForm action={transitionDailyLog.bind(null, id, "approved")} label="Approve" />
+              <StatusForm
+                action={transitionDailyLog.bind(null, id, "approved")}
+                label={t("common.approve", undefined, "Approve")}
+              />
             )}
           </div>
         }
@@ -116,49 +129,76 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-5">
         <section className="grid gap-4 md:grid-cols-3">
           <div className="surface p-4">
-            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">Weather</div>
+            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+              {t("console.operations.dailyLog.detail.weather", undefined, "Weather")}
+            </div>
             <p className="mt-2 text-sm">{log.weather_summary ?? "—"}</p>
             {(log.weather_temp_high_f != null || log.weather_temp_low_f != null) && (
               <p className="mt-1 text-xs text-[var(--text-muted)]">
-                {log.weather_temp_high_f ?? "—"}°F high / {log.weather_temp_low_f ?? "—"}°F low
+                {t(
+                  "console.operations.dailyLog.detail.tempRange",
+                  { high: log.weather_temp_high_f ?? "—", low: log.weather_temp_low_f ?? "—" },
+                  `${log.weather_temp_high_f ?? "—"}°F high / ${log.weather_temp_low_f ?? "—"}°F low`,
+                )}
               </p>
             )}
           </div>
           <div className="surface p-4">
-            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">Manpower</div>
+            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+              {t("console.operations.dailyLog.detail.manpower", undefined, "Manpower")}
+            </div>
             <p className="mt-2 text-2xl font-semibold">{totalHeadcount}</p>
             <p className="text-xs text-[var(--text-muted)]">
-              {totalHours.toFixed(1)} hrs across {(manpower ?? []).length} trades
+              {t(
+                "console.operations.dailyLog.detail.manpowerSummary",
+                { hours: totalHours.toFixed(1), trades: (manpower ?? []).length },
+                `${totalHours.toFixed(1)} hrs across ${(manpower ?? []).length} trades`,
+              )}
             </p>
           </div>
           <div className="surface p-4">
-            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">Activity</div>
+            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+              {t("console.operations.dailyLog.detail.activity", undefined, "Activity")}
+            </div>
             <p className="mt-2 text-sm">
-              {(deliveries ?? []).length} deliveries · {(visitors ?? []).length} visitors · {(equipment ?? []).length}{" "}
-              equipment entries
+              {t(
+                "console.operations.dailyLog.detail.activitySummary",
+                {
+                  deliveries: (deliveries ?? []).length,
+                  visitors: (visitors ?? []).length,
+                  equipment: (equipment ?? []).length,
+                },
+                `${(deliveries ?? []).length} deliveries · ${(visitors ?? []).length} visitors · ${(equipment ?? []).length} equipment entries`,
+              )}
             </p>
           </div>
         </section>
 
         {log.notes && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Site Narrative</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.operations.dailyLog.detail.siteNarrative", undefined, "Site Narrative")}
+            </h3>
             <p className="mt-2 text-sm whitespace-pre-wrap">{log.notes}</p>
           </section>
         )}
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Manpower</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.operations.dailyLog.detail.manpower", undefined, "Manpower")}
+          </h3>
           {(manpower ?? []).length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No manpower entries.</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("console.operations.dailyLog.detail.noManpower", undefined, "No manpower entries.")}
+            </p>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Trade</th>
-                  <th>Headcount</th>
-                  <th>Hours</th>
-                  <th>Notes</th>
+                  <th>{t("console.operations.dailyLog.detail.trade", undefined, "Trade")}</th>
+                  <th>{t("console.operations.dailyLog.detail.headcount", undefined, "Headcount")}</th>
+                  <th>{t("console.operations.dailyLog.detail.hours", undefined, "Hours")}</th>
+                  <th>{t("console.operations.dailyLog.detail.notes", undefined, "Notes")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -177,14 +217,30 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         <section className="surface p-4">
           <div className="flex items-baseline justify-between">
-            <h3 className="text-sm font-semibold">Photos</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.operations.dailyLog.detail.photos", undefined, "Photos")}
+            </h3>
             <span className="font-mono text-xs text-[var(--text-muted)]">
-              {photos.length} photo{photos.length === 1 ? "" : "s"}
+              {photos.length === 1
+                ? t(
+                    "console.operations.dailyLog.detail.photoCountOne",
+                    { count: photos.length },
+                    `${photos.length} photo`,
+                  )
+                : t(
+                    "console.operations.dailyLog.detail.photoCountOther",
+                    { count: photos.length },
+                    `${photos.length} photos`,
+                  )}
             </span>
           </div>
           {photos.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No site photos attached. Upload below — captioned photos land in the audit trail with the log.
+              {t(
+                "console.operations.dailyLog.detail.noPhotos",
+                undefined,
+                "No site photos attached. Upload below — captioned photos land in the audit trail with the log.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -194,13 +250,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
                       src={p.signed_url}
-                      alt={p.caption ?? "Daily log site photo"}
+                      alt={
+                        p.caption ?? t("console.operations.dailyLog.detail.photoAlt", undefined, "Daily log site photo")
+                      }
                       className="aspect-video w-full object-cover"
                       loading="lazy"
                     />
                   ) : (
                     <div className="aspect-video w-full bg-[var(--surface)] text-center text-xs leading-[14rem] text-[var(--text-muted)]">
-                      Preview unavailable
+                      {t("console.operations.dailyLog.detail.previewUnavailable", undefined, "Preview unavailable")}
                     </div>
                   )}
                   <div className="flex items-start justify-between gap-2 p-2 text-xs">
@@ -213,7 +271,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         <input type="hidden" name="dailyLogId" value={id} />
                         <input type="hidden" name="photoId" value={p.id} />
                         <Button type="submit" size="sm" variant="ghost">
-                          Remove
+                          {t("common.remove", undefined, "Remove")}
                         </Button>
                       </form>
                     )}
@@ -238,17 +296,27 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               />
               <input
                 name="caption"
-                placeholder="Caption (optional)"
+                placeholder={t(
+                  "console.operations.dailyLog.detail.captionPlaceholder",
+                  undefined,
+                  "Caption (optional)",
+                )}
                 maxLength={280}
                 className="input-base sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
-                Upload
+                {t("common.upload", undefined, "Upload")}
               </Button>
             </form>
           )}
           {!photosEditable && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">Photos are locked once the log is approved.</p>
+            <p className="mt-3 text-xs text-[var(--text-muted)]">
+              {t(
+                "console.operations.dailyLog.detail.photosLocked",
+                undefined,
+                "Photos are locked once the log is approved.",
+              )}
+            </p>
           )}
         </section>
 

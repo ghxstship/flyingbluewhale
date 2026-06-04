@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createPayrollRun } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +14,7 @@ const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: projects } = await supabase
     .from("projects")
@@ -24,18 +26,27 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="New Payroll Run"
-        subtitle="A weekly payroll run per project. Worker lines + WH-347 PDF generation follow on the detail page."
+        eyebrow={t("console.finance.payroll.new.eyebrow", undefined, "Finance")}
+        title={t("console.finance.payroll.new.title", undefined, "New Payroll Run")}
+        subtitle={t(
+          "console.finance.payroll.new.subtitle",
+          undefined,
+          "A weekly payroll run per project. Worker lines + WH-347 PDF generation follow on the detail page.",
+        )}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createPayrollRun} cancelHref="/console/finance/payroll" submitLabel="Create Run">
+        <FormShell
+          action={createPayrollRun}
+          cancelHref="/console/finance/payroll"
+          submitLabel={t("console.finance.payroll.new.submit", undefined, "Create Run")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.finance.payroll.new.project", undefined, "Project")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <select name="project_id" required className={INPUT}>
-              <option value="">Select…</option>
+              <option value="">{t("console.finance.payroll.new.selectPlaceholder", undefined, "Select…")}</option>
               {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -46,38 +57,48 @@ export default async function Page() {
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Week ending<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.finance.payroll.new.weekEnding", undefined, "Week ending")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input type="date" name="week_ending" required className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Period start</span>
+              <span className={LBL}>{t("console.finance.payroll.new.periodStart", undefined, "Period start")}</span>
               <input type="date" name="pay_period_start" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Period end</span>
+              <span className={LBL}>{t("console.finance.payroll.new.periodEnd", undefined, "Period end")}</span>
               <input type="date" name="pay_period_end" className={INPUT} />
             </label>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>State code</span>
-              <input name="state_code" maxLength={4} placeholder="CA, NV, TX…" className={`${INPUT} font-mono`} />
+              <span className={LBL}>{t("console.finance.payroll.new.stateCode", undefined, "State code")}</span>
+              <input
+                name="state_code"
+                maxLength={4}
+                placeholder={t("console.finance.payroll.new.stateCodePlaceholder", undefined, "CA, NV, TX…")}
+                className={`${INPUT} font-mono`}
+              />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Agency report</span>
+              <span className={LBL}>{t("console.finance.payroll.new.agencyReport", undefined, "Agency report")}</span>
               <select name="agency_report_type" className={INPUT} defaultValue="none">
-                <option value="none">None</option>
-                <option value="wh_347">WH-347 (Federal Davis-Bacon)</option>
-                <option value="ca_dir">CA DIR</option>
-                <option value="ny_pwa">NY PWA</option>
-                <option value="wa_lni">WA L&amp;I</option>
-                <option value="state_other">Other state</option>
+                <option value="none">{t("console.finance.payroll.new.agency.none", undefined, "None")}</option>
+                <option value="wh_347">
+                  {t("console.finance.payroll.new.agency.wh347", undefined, "WH-347 (Federal Davis-Bacon)")}
+                </option>
+                <option value="ca_dir">{t("console.finance.payroll.new.agency.caDir", undefined, "CA DIR")}</option>
+                <option value="ny_pwa">{t("console.finance.payroll.new.agency.nyPwa", undefined, "NY PWA")}</option>
+                <option value="wa_lni">{t("console.finance.payroll.new.agency.waLni", undefined, "WA L&I")}</option>
+                <option value="state_other">
+                  {t("console.finance.payroll.new.agency.stateOther", undefined, "Other state")}
+                </option>
               </select>
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.finance.payroll.new.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={3} className={INPUT} />
           </label>
         </FormShell>

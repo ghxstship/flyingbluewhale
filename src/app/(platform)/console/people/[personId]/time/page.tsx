@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ type Row = {
 export default async function Page({ params }: { params: Promise<{ personId: string }> }) {
   const { personId } = await params;
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -37,23 +39,34 @@ export default async function Page({ params }: { params: Promise<{ personId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Person"
-        title="Time"
+        eyebrow={t("console.people.time.eyebrow", undefined, "Person")}
+        title={t("console.people.time.title", undefined, "Time")}
         subtitle={
           rows.length > 0
-            ? `${(totalMinutes / 60).toFixed(1)}h logged · ${(billableMinutes / 60).toFixed(1)}h billable (last 100 entries)`
-            : "Time entries logged against this person."
+            ? t(
+                "console.people.time.subtitleWithTotals",
+                {
+                  total: (totalMinutes / 60).toFixed(1),
+                  billable: (billableMinutes / 60).toFixed(1),
+                },
+                `${(totalMinutes / 60).toFixed(1)}h logged · ${(billableMinutes / 60).toFixed(1)}h billable (last 100 entries)`,
+              )
+            : t("console.people.time.subtitleEmpty", undefined, "Time entries logged against this person.")
         }
       />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No Time Entries"
-          emptyDescription="This person has no logged time. Time entries are recorded against projects from the Time module."
+          emptyLabel={t("console.people.time.emptyLabel", undefined, "No Time Entries")}
+          emptyDescription={t(
+            "console.people.time.emptyDescription",
+            undefined,
+            "This person has no logged time. Time entries are recorded against projects from the Time module.",
+          )}
           columns={[
             {
               key: "started_at",
-              header: "Started",
+              header: t("console.people.time.column.started", undefined, "Started"),
               render: (r) => formatDate(r.started_at),
               accessor: (r) => r.started_at,
               mono: true,
@@ -61,13 +74,13 @@ export default async function Page({ params }: { params: Promise<{ personId: str
             },
             {
               key: "description",
-              header: "Description",
+              header: t("console.people.time.column.description", undefined, "Description"),
               render: (r) => r.description ?? "—",
               accessor: (r) => r.description ?? "",
             },
             {
               key: "duration",
-              header: "Duration",
+              header: t("console.people.time.column.duration", undefined, "Duration"),
               render: (r) => (r.duration_minutes != null ? `${(r.duration_minutes / 60).toFixed(2)}h` : "—"),
               accessor: (r) => r.duration_minutes ?? 0,
               tabular: true,
@@ -77,8 +90,8 @@ export default async function Page({ params }: { params: Promise<{ personId: str
             },
             {
               key: "billable",
-              header: "Billable",
-              render: (r) => (r.billable ? "Yes" : "—"),
+              header: t("console.people.time.column.billable", undefined, "Billable"),
+              render: (r) => (r.billable ? t("common.yes", undefined, "Yes") : "—"),
               accessor: (r) => (r.billable ? "yes" : "no"),
               filterable: true,
             },

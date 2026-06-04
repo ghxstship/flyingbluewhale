@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [talentResp, ridersResp] = await Promise.all([
     supabase
@@ -56,19 +58,31 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
   return (
     <>
       <ModuleHeader
-        eyebrow={`Talent · ${talent.act_name}`}
-        title="Riders"
-        subtitle="Tech, hospitality, input list — versioned."
+        eyebrow={t(
+          "console.marketplace.talent.riders.eyebrow",
+          { actName: talent.act_name },
+          `Talent · ${talent.act_name}`,
+        )}
+        title={t("console.marketplace.talent.riders.title", undefined, "Riders")}
+        subtitle={t(
+          "console.marketplace.talent.riders.subtitle",
+          undefined,
+          "Tech, hospitality, input list — versioned.",
+        )}
         action={
           <Button href={`/console/marketplace/talent/${talent.id}/riders/new`} size="sm">
-            + New Rider
+            {t("console.marketplace.talent.riders.newRider", undefined, "+ New Rider")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {Object.keys(byKind).length === 0 ? (
           <div className="surface p-6 text-sm text-[var(--text-secondary)]">
-            No riders attached. Add a tech, hospitality, or input-list rider.
+            {t(
+              "console.marketplace.talent.riders.empty",
+              undefined,
+              "No riders attached. Add a tech, hospitality, or input-list rider.",
+            )}
           </div>
         ) : (
           (["tech", "hospitality", "input_list"] as const).map((kind) => {
@@ -76,7 +90,9 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             if (list.length === 0) return null;
             return (
               <section key={kind} className="surface p-5">
-                <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">{toTitle(kind)}</h2>
+                <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+                  {t(`console.marketplace.talent.riders.kind.${kind}`, undefined, toTitle(kind))}
+                </h2>
                 <ul className="divide-y divide-[var(--border-subtle)]">
                   {list.map((r) => (
                     <li key={r.id} className="flex items-center justify-between py-2 text-sm">
@@ -86,7 +102,11 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
                       >
                         <span className="font-mono">v{r.version}</span>
                         <span>{r.title ?? "—"}</span>
-                        {r.is_current && <Badge variant="success">current</Badge>}
+                        {r.is_current && (
+                          <Badge variant="success">
+                            {t("console.marketplace.talent.riders.current", undefined, "current")}
+                          </Badge>
+                        )}
                       </Link>
                       <span className="font-mono text-xs text-[var(--text-secondary)]">
                         {new Date(r.created_at).toLocaleDateString()}

@@ -9,6 +9,7 @@ import { StatusChip } from "@/components/ui/StatusChip";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 const EVENTS = [
   "project.created",
@@ -30,6 +31,7 @@ const EVENTS = [
 export default async function WebhooksPage() {
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data: endpoints } = await supabase
     .from("webhook_endpoints")
     .select("id, url, description, events, is_active, last_delivery_at, last_error, failure_count, created_at")
@@ -50,18 +52,20 @@ export default async function WebhooksPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Webhooks"
-        subtitle="Outgoing event notifications to your endpoints."
+        eyebrow={t("console.settings.webhooks.eyebrow", undefined, "Settings")}
+        title={t("console.settings.webhooks.title", undefined, "Webhooks")}
+        subtitle={t("console.settings.webhooks.subtitle", undefined, "Outgoing event notifications to your endpoints.")}
         action={
           <Button href="/console/settings/webhooks/new" size="sm">
-            + New Endpoint
+            {t("console.settings.webhooks.newEndpoint", undefined, "+ New Endpoint")}
           </Button>
         }
       />
       <div className="page-content space-y-4">
         <div className="surface p-5">
-          <h3 className="text-sm font-semibold">Subscribable Events</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.settings.webhooks.subscribableEvents", undefined, "Subscribable Events")}
+          </h3>
           <div className="mt-3 flex flex-wrap gap-2">
             {EVENTS.map((e) => (
               <Badge key={e} variant="muted">
@@ -73,25 +77,31 @@ export default async function WebhooksPage() {
             </Badge>
           </div>
           <p className="mt-3 text-xs text-[var(--text-muted)]">
-            Use <span className="font-mono">*</span> to subscribe to every event.
+            {t("console.settings.webhooks.wildcardHintBefore", undefined, "Use ")}
+            <span className="font-mono">*</span>
+            {t("console.settings.webhooks.wildcardHintAfter", undefined, " to subscribe to every event.")}
           </p>
         </div>
 
         {rows.length === 0 ? (
           <EmptyState
-            title="No Endpoints Registered"
-            description="Register an endpoint to receive real-time events. Payloads are HMAC-signed with a secret shown once at creation."
+            title={t("console.settings.webhooks.emptyTitle", undefined, "No Endpoints Registered")}
+            description={t(
+              "console.settings.webhooks.emptyDescription",
+              undefined,
+              "Register an endpoint to receive real-time events. Payloads are HMAC-signed with a secret shown once at creation.",
+            )}
           />
         ) : (
           <div className="surface">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>URL</th>
-                  <th>Events</th>
-                  <th>State</th>
-                  <th>Last delivery</th>
-                  <th>Failures</th>
+                  <th>{t("console.settings.webhooks.col.url", undefined, "URL")}</th>
+                  <th>{t("console.settings.webhooks.col.events", undefined, "Events")}</th>
+                  <th>{t("console.settings.webhooks.col.state", undefined, "State")}</th>
+                  <th>{t("console.settings.webhooks.col.lastDelivery", undefined, "Last delivery")}</th>
+                  <th>{t("console.settings.webhooks.col.failures", undefined, "Failures")}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -123,14 +133,16 @@ export default async function WebhooksPage() {
                     </td>
                     <td>
                       <StatusChip tone={r.is_active ? "success" : "neutral"}>
-                        {r.is_active ? "active" : "paused"}
+                        {r.is_active
+                          ? t("console.settings.webhooks.state.active", undefined, "active")
+                          : t("console.settings.webhooks.state.paused", undefined, "paused")}
                       </StatusChip>
                     </td>
                     <td className="font-mono text-xs">{fmtDate(r.last_delivery_at)}</td>
                     <td className="font-mono text-xs">{r.failure_count}</td>
                     <td>
                       <Link href={`/console/settings/webhooks/${r.id}`} className="text-xs text-[var(--org-primary)]">
-                        Edit →
+                        {t("console.settings.webhooks.editAction", undefined, "Edit →")}
                       </Link>
                     </td>
                   </tr>

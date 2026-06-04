@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ type Article = {
 
 function tagsOf(raw: unknown): string[] {
   if (!raw) return [];
-  if (Array.isArray(raw)) return raw.filter((t): t is string => typeof t === "string");
+  if (Array.isArray(raw)) return raw.filter((tag): tag is string => typeof tag === "string");
   return [];
 }
 
@@ -38,12 +39,18 @@ function preview(body: string): string {
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ tag?: string }> }) {
   const sp = await searchParams;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Knowledge" title="Knowledge Base" />
+        <ModuleHeader
+          eyebrow={t("console.knowledge.eyebrow", undefined, "Knowledge")}
+          title={t("console.knowledge.title", undefined, "Knowledge Base")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.knowledge.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -73,16 +80,24 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
   return (
     <>
       <ModuleHeader
-        eyebrow="Knowledge"
-        title="Knowledge Base"
+        eyebrow={t("console.knowledge.eyebrow", undefined, "Knowledge")}
+        title={t("console.knowledge.title", undefined, "Knowledge Base")}
         subtitle={
           sp.tag
-            ? `${rows.length} article${rows.length === 1 ? "" : "s"} tagged "${sp.tag}"`
-            : `${rows.length} article${rows.length === 1 ? "" : "s"}`
+            ? rows.length === 1
+              ? t("console.knowledge.subtitleTaggedOne", { tag: sp.tag }, `${rows.length} article tagged "${sp.tag}"`)
+              : t(
+                  "console.knowledge.subtitleTaggedMany",
+                  { count: rows.length, tag: sp.tag },
+                  `${rows.length} articles tagged "${sp.tag}"`,
+                )
+            : rows.length === 1
+              ? t("console.knowledge.subtitleOne", undefined, `${rows.length} article`)
+              : t("console.knowledge.subtitleMany", { count: rows.length }, `${rows.length} articles`)
         }
         action={
           <Button href="/console/knowledge/new" size="sm">
-            + New Article
+            {t("console.knowledge.newArticle", undefined, "+ New Article")}
           </Button>
         }
       />
@@ -94,17 +109,17 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                 href="/console/knowledge"
                 className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-xs"
               >
-                All
+                {t("console.knowledge.filterAll", undefined, "All")}
               </Link>
-              {allTags.map((t) => (
+              {allTags.map((tag) => (
                 <Link
-                  key={t}
-                  href={`/console/knowledge?tag=${encodeURIComponent(t)}`}
+                  key={tag}
+                  href={`/console/knowledge?tag=${encodeURIComponent(tag)}`}
                   className={`hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
-                    sp.tag === t ? "bg-[var(--surface-inset)] font-semibold" : ""
+                    sp.tag === tag ? "bg-[var(--surface-inset)] font-semibold" : ""
                   }`}
                 >
-                  {t}
+                  {tag}
                 </Link>
               ))}
             </div>
@@ -115,11 +130,19 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
           <div className="surface">
             <EmptyState
               size="compact"
-              title={sp.tag ? `No articles tagged "${sp.tag}"` : "No articles yet"}
-              description="Knowledge articles render markdown bodies and can be filtered by tag. Create one to get started."
+              title={
+                sp.tag
+                  ? t("console.knowledge.emptyTitleTagged", { tag: sp.tag }, `No articles tagged "${sp.tag}"`)
+                  : t("console.knowledge.emptyTitle", undefined, "No articles yet")
+              }
+              description={t(
+                "console.knowledge.emptyDescription",
+                undefined,
+                "Knowledge articles render markdown bodies and can be filtered by tag. Create one to get started.",
+              )}
               action={
                 <Button href="/console/knowledge/new" size="sm">
-                  + Create first article
+                  {t("console.knowledge.createFirstArticle", undefined, "+ Create first article")}
                 </Button>
               }
             />
@@ -136,9 +159,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                   <p className="mt-2 line-clamp-3 text-xs text-[var(--text-secondary)]">{preview(a.body_markdown)}</p>
                   <div className="mt-3 flex items-center justify-between text-[10px] text-[var(--text-muted)]">
                     <div className="flex flex-wrap gap-1">
-                      {(a.tags ?? []).slice(0, 4).map((t) => (
-                        <Badge key={t} variant="muted">
-                          {t}
+                      {(a.tags ?? []).slice(0, 4).map((tag) => (
+                        <Badge key={tag} variant="muted">
+                          {tag}
                         </Badge>
                       ))}
                     </div>

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +18,17 @@ type RoomRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Messages" />
-        <div className="page-content text-sm">Configure Supabase.</div>
+        <ModuleHeader
+          eyebrow={t("console.inbox.eyebrow", undefined, "Workspace")}
+          title={t("console.inbox.title", undefined, "Messages")}
+        />
+        <div className="page-content text-sm">
+          {t("console.inbox.configureSupabase", undefined, "Configure Supabase.")}
+        </div>
       </>
     );
   }
@@ -67,15 +74,27 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workspace"
-        title="Messages"
-        subtitle={`${list.length} conversation${list.length === 1 ? "" : "s"}${unreadCount > 0 ? ` · ${unreadCount} unread` : ""}`}
+        eyebrow={t("console.inbox.eyebrow", undefined, "Workspace")}
+        title={t("console.inbox.title", undefined, "Messages")}
+        subtitle={`${
+          list.length === 1
+            ? t("console.inbox.conversationCount.one", { count: list.length }, `${list.length} conversation`)
+            : t("console.inbox.conversationCount.other", { count: list.length }, `${list.length} conversations`)
+        }${
+          unreadCount > 0
+            ? ` · ${t("console.inbox.unreadSuffix", { count: unreadCount }, `${unreadCount} unread`)}`
+            : ""
+        }`}
       />
       <div className="page-content">
         {list.length === 0 ? (
           <EmptyState
-            title="No Conversations"
-            description="Direct messages and channels you join appear here. Chats are created from /m/inbox or from a portal contact thread."
+            title={t("console.inbox.empty.title", undefined, "No Conversations")}
+            description={t(
+              "console.inbox.empty.description",
+              undefined,
+              "Direct messages and channels you join appear here. Chats are created from /m/inbox or from a portal contact thread.",
+            )}
           />
         ) : (
           <ul className="max-w-3xl space-y-2">
@@ -88,7 +107,9 @@ export default async function Page() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <Badge variant="muted">{toTitle(r.room_kind)}</Badge>
-                        <span className="truncate text-sm font-medium">{r.name ?? "Untitled room"}</span>
+                        <span className="truncate text-sm font-medium">
+                          {r.name ?? t("console.inbox.untitledRoom", undefined, "Untitled room")}
+                        </span>
                       </div>
                       {r.last_message_at && (
                         <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
@@ -96,7 +117,7 @@ export default async function Page() {
                         </div>
                       )}
                     </div>
-                    {unread && <Badge variant="success">New</Badge>}
+                    {unread && <Badge variant="success">{t("console.inbox.newBadge", undefined, "New")}</Badge>}
                   </Link>
                 </li>
               );

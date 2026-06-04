@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateReadinessExercise, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -22,28 +23,44 @@ export default async function Page({ params }: { params: Promise<{ exerciseId: s
   if (!row) notFound();
   const r = row as Record<string, unknown>;
   void r;
+  const { t } = await getRequestT();
   const action = updateReadinessExercise.bind(null, p.exerciseId) as unknown as (
     state: State,
     fd: FormData,
   ) => Promise<State>;
+  const exerciseName =
+    ((row as Record<string, unknown>)["name"] as string | undefined) ??
+    t("console.programs.readiness.edit.fallbackName", undefined, "Readiness exercise");
   return (
     <>
       <ModuleHeader
-        eyebrow="Readiness Exercise"
-        title={`Edit ${((row as Record<string, unknown>)["name"] as string | undefined) ?? "Readiness exercise"}`}
+        eyebrow={t("console.programs.readiness.edit.eyebrow", undefined, "Readiness Exercise")}
+        title={t("console.programs.readiness.edit.title", { name: exerciseName }, `Edit ${exerciseName}`)}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/programs/readiness/${p.exerciseId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Name" name="name" defaultValue={row.name ?? ""} required maxLength={200} />
-          <Input label="Kind" name="kind" defaultValue={row.kind ?? ""} required maxLength={80} />
           <Input
-            label="Scheduled At"
+            label={t("console.programs.readiness.edit.nameLabel", undefined, "Name")}
+            name="name"
+            defaultValue={row.name ?? ""}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.programs.readiness.edit.kindLabel", undefined, "Kind")}
+            name="kind"
+            defaultValue={row.kind ?? ""}
+            required
+            maxLength={80}
+          />
+          <Input
+            label={t("console.programs.readiness.edit.scheduledAtLabel", undefined, "Scheduled At")}
             name="scheduled_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.scheduled_at)}

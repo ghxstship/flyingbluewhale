@@ -1,21 +1,29 @@
 "use client";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createLocationAction } from "../actions";
 
 export function NewLocationForm() {
+  const t = useT();
   return (
-    <FormShell action={createLocationAction} cancelHref="/console/locations" submitLabel="Save Location">
-      <Input label="Name" name="name" required />
-      <Input label="Address" name="address" />
+    <FormShell
+      action={createLocationAction}
+      cancelHref="/console/locations"
+      submitLabel={t("console.locations.new.submit", undefined, "Save Location")}
+    >
+      <Input label={t("console.locations.new.name", undefined, "Name")} name="name" required />
+      <Input label={t("console.locations.new.address", undefined, "Address")} name="address" />
       <div className="grid gap-4 sm:grid-cols-3">
-        <Input label="City" name="city" />
-        <Input label="Region" name="region" />
-        <Input label="Postal Code" name="postcode" />
+        <Input label={t("console.locations.new.city", undefined, "City")} name="city" />
+        <Input label={t("console.locations.new.region", undefined, "Region")} name="region" />
+        <Input label={t("console.locations.new.postcode", undefined, "Postal Code")} name="postcode" />
       </div>
-      <Input label="Country" name="country" />
+      <Input label={t("console.locations.new.country", undefined, "Country")} name="country" />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Notes</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">
+          {t("console.locations.new.notes", undefined, "Notes")}
+        </label>
         <textarea name="notes" rows={2} className="input-base mt-1.5 w-full" />
       </div>
     </FormShell>

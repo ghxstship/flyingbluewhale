@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -34,12 +34,18 @@ const STATE_TONE: Record<WarrantyState, "muted" | "info" | "warning" | "success"
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Closeout" title="Warranties" />
+        <ModuleHeader
+          eyebrow={t("console.warranties.eyebrow", undefined, "Closeout")}
+          title={t("console.warranties.title", undefined, "Warranties")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.warranties.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -67,36 +73,64 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Closeout"
-        title="Warranties"
-        subtitle={`${rows.length} warranties · ${activeCount} active · ${expiringSoonCount} expiring soon · ${expiredCount} expired`}
+        eyebrow={t("console.warranties.eyebrow", undefined, "Closeout")}
+        title={t("console.warranties.title", undefined, "Warranties")}
+        subtitle={t(
+          "console.warranties.subtitle",
+          {
+            total: rows.length,
+            active: activeCount,
+            expiringSoon: expiringSoonCount,
+            expired: expiredCount,
+          },
+          `${rows.length} warranties · ${activeCount} active · ${expiringSoonCount} expiring soon · ${expiredCount} expired`,
+        )}
         action={
           <Button href="/console/warranties/new" size="sm">
-            + New Warranty
+            {t("console.warranties.newWarranty", undefined, "+ New Warranty")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active" value={fmt.number(activeCount)} accent />
-          <MetricCard label="Expiring Soon" value={fmt.number(expiringSoonCount)} />
-          <MetricCard label="Expired" value={fmt.number(expiredCount)} />
+          <MetricCard
+            label={t("console.warranties.metrics.active", undefined, "Active")}
+            value={fmt.number(activeCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.warranties.metrics.expiringSoon", undefined, "Expiring Soon")}
+            value={fmt.number(expiringSoonCount)}
+          />
+          <MetricCard
+            label={t("console.warranties.metrics.expired", undefined, "Expired")}
+            value={fmt.number(expiredCount)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/warranties/${r.id}`}
-          emptyLabel="No warranties tracked yet"
-          emptyDescription="Capture warranty coverage at closeout. The nightly batch advances warranty_state from active → expiring_soon → expired so the dashboard always shows current risk."
+          emptyLabel={t("console.warranties.emptyLabel", undefined, "No warranties tracked yet")}
+          emptyDescription={t(
+            "console.warranties.emptyDescription",
+            undefined,
+            "Capture warranty coverage at closeout. The nightly batch advances warranty_state from active → expiring_soon → expired so the dashboard always shows current risk.",
+          )}
           emptyAction={
             <Button href="/console/warranties/new" size="sm">
-              + New Warranty
+              {t("console.warranties.newWarranty", undefined, "+ New Warranty")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Coverage", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.warranties.columns.coverage", undefined, "Coverage"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.warranties.columns.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -104,7 +138,7 @@ export default async function Page() {
             },
             {
               key: "warrantor",
-              header: "Warrantor",
+              header: t("console.warranties.columns.warrantor", undefined, "Warrantor"),
               render: (r) => r.warrantor_name ?? r.vendor?.name ?? "—",
               accessor: (r) => r.warrantor_name ?? r.vendor?.name ?? null,
               filterable: true,
@@ -112,7 +146,7 @@ export default async function Page() {
             },
             {
               key: "start",
-              header: "Start",
+              header: t("console.warranties.columns.start", undefined, "Start"),
               render: (r) =>
                 fmt.dateParts(r.start_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.start_date,
@@ -120,7 +154,7 @@ export default async function Page() {
             },
             {
               key: "end",
-              header: "End",
+              header: t("console.warranties.columns.end", undefined, "End"),
               render: (r) =>
                 fmt.dateParts(r.end_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.end_date,
@@ -128,14 +162,14 @@ export default async function Page() {
             },
             {
               key: "duration",
-              header: "Months",
+              header: t("console.warranties.columns.months", undefined, "Months"),
               render: (r) => (r.duration_months != null ? r.duration_months.toString() : "—"),
               accessor: (r) => r.duration_months,
               className: "font-mono text-xs text-right",
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.warranties.columns.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.warranty_state]}>{toTitle(r.warranty_state)}</Badge>,
               accessor: (r) => r.warranty_state,
               filterable: true,

@@ -2,6 +2,7 @@
 
 import { useActionState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { generateWebhookSecretAction, type State } from "./actions";
 
 /**
@@ -28,23 +29,38 @@ export function WebhookSection({
     null,
   );
   const [pending, startTransition] = useTransition();
+  const t = useT();
 
   return (
     <section className="surface p-4">
-      <h3 className="text-sm font-semibold">Inbound Webhook</h3>
+      <h3 className="text-sm font-semibold">
+        {t("console.ai.automations.webhook.title", undefined, "Inbound Webhook")}
+      </h3>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        POST a JSON body to this URL to trigger the automation. Sign the body with HMAC-SHA256 of your secret in{" "}
+        {t(
+          "console.ai.automations.webhook.descriptionPrefix",
+          undefined,
+          "POST a JSON body to this URL to trigger the automation. Sign the body with HMAC-SHA256 of your secret in",
+        )}{" "}
         <code className="font-mono">X-Signature: sha256=&lt;hex&gt;</code>.
       </p>
 
       <div className="mt-3 space-y-2">
-        <label className="block text-xs font-medium text-[var(--text-secondary)]">Webhook URL</label>
+        <label className="block text-xs font-medium text-[var(--text-secondary)]">
+          {t("console.ai.automations.webhook.urlLabel", undefined, "Webhook URL")}
+        </label>
         <code className="block rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs break-all">{webhookUrl}</code>
       </div>
 
       <div className="mt-3 flex items-center gap-3">
         <span className="text-xs text-[var(--text-muted)]">
-          {hasSecret ? "Secret configured" : "No secret configured (unsigned posts accepted)"}
+          {hasSecret
+            ? t("console.ai.automations.webhook.secretConfigured", undefined, "Secret configured")
+            : t(
+                "console.ai.automations.webhook.noSecretConfigured",
+                undefined,
+                "No secret configured (unsigned posts accepted)",
+              )}
         </span>
         <form
           action={(fd) => {
@@ -54,7 +70,9 @@ export function WebhookSection({
           }}
         >
           <Button type="submit" variant="secondary" size="sm" disabled={pending}>
-            {hasSecret ? "Rotate Secret" : "Generate Secret"}
+            {hasSecret
+              ? t("console.ai.automations.webhook.rotateSecret", undefined, "Rotate Secret")
+              : t("console.ai.automations.webhook.generateSecret", undefined, "Generate Secret")}
           </Button>
         </form>
       </div>
@@ -62,7 +80,11 @@ export function WebhookSection({
       {state?.error && <p className="mt-2 text-xs text-[var(--accent-error)]">{state.error}</p>}
       {state?.ok && (
         <p className="mt-2 text-xs text-[var(--accent-success)]">
-          Secret rotated. The new value is stored server-side; reload to confirm.
+          {t(
+            "console.ai.automations.webhook.rotatedSuccess",
+            undefined,
+            "Secret rotated. The new value is stored server-side; reload to confirm.",
+          )}
         </p>
       )}
     </section>

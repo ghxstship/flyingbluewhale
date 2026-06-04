@@ -4,17 +4,24 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createServiceRequest } from "../actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Services" title="Open Service Request" />
+        <ModuleHeader
+          eyebrow={t("console.services.requests.new.eyebrow", undefined, "Services")}
+          title={t("console.services.requests.new.title", undefined, "Open Service Request")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.services.requests.new.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -31,40 +38,79 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Services" title="Open Service Request" />
+      <ModuleHeader
+        eyebrow={t("console.services.requests.new.eyebrow", undefined, "Services")}
+        title={t("console.services.requests.new.title", undefined, "Open Service Request")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createServiceRequest} cancelHref="/console/services/requests" submitLabel="Open Request">
+        <FormShell
+          action={createServiceRequest}
+          cancelHref="/console/services/requests"
+          submitLabel={t("console.services.requests.new.submit", undefined, "Open Request")}
+        >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Category</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.services.requests.new.categoryLabel", undefined, "Category")}
+            </label>
             <select name="category" defaultValue="AV" className="input-base mt-1.5 w-full" required>
-              <option value="AV">AV</option>
-              <option value="cleaning">Cleaning</option>
-              <option value="repair">Repair</option>
-              <option value="IT">IT</option>
-              <option value="hospitality">Hospitality</option>
-              <option value="security">Security</option>
-              <option value="other">Other</option>
+              <option value="AV">{t("console.services.requests.new.categoryAV", undefined, "AV")}</option>
+              <option value="cleaning">
+                {t("console.services.requests.new.categoryCleaning", undefined, "Cleaning")}
+              </option>
+              <option value="repair">{t("console.services.requests.new.categoryRepair", undefined, "Repair")}</option>
+              <option value="IT">{t("console.services.requests.new.categoryIT", undefined, "IT")}</option>
+              <option value="hospitality">
+                {t("console.services.requests.new.categoryHospitality", undefined, "Hospitality")}
+              </option>
+              <option value="security">
+                {t("console.services.requests.new.categorySecurity", undefined, "Security")}
+              </option>
+              <option value="other">{t("console.services.requests.new.categoryOther", undefined, "Other")}</option>
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Severity</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.services.requests.new.severityLabel", undefined, "Severity")}
+            </label>
             <select name="severity" defaultValue="P3" className="input-base mt-1.5 w-full" required>
-              <option value="P1">P1 — live-event blocker (5m ack, 1h resolve)</option>
-              <option value="P2">P2 — urgent (15m ack, 4h resolve)</option>
-              <option value="P3">P3 — standard (1h ack, 1d resolve)</option>
-              <option value="P4">P4 — low (4h ack, 3d resolve)</option>
+              <option value="P1">
+                {t(
+                  "console.services.requests.new.severityP1",
+                  undefined,
+                  "P1 — live-event blocker (5m ack, 1h resolve)",
+                )}
+              </option>
+              <option value="P2">
+                {t("console.services.requests.new.severityP2", undefined, "P2 — urgent (15m ack, 4h resolve)")}
+              </option>
+              <option value="P3">
+                {t("console.services.requests.new.severityP3", undefined, "P3 — standard (1h ack, 1d resolve)")}
+              </option>
+              <option value="P4">
+                {t("console.services.requests.new.severityP4", undefined, "P4 — low (4h ack, 3d resolve)")}
+              </option>
             </select>
           </div>
-          <Input label="Summary" name="summary" maxLength={200} placeholder="One-line description" required />
+          <Input
+            label={t("console.services.requests.new.summaryLabel", undefined, "Summary")}
+            name="summary"
+            maxLength={200}
+            placeholder={t("console.services.requests.new.summaryPlaceholder", undefined, "One-line description")}
+            required
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.services.requests.new.descriptionLabel", undefined, "Description")}
+            </label>
             <textarea name="description" rows={4} maxLength={4000} className="input-base mt-1.5 w-full" />
           </div>
           {projects.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Project (optional)</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.services.requests.new.projectLabel", undefined, "Project (optional)")}
+              </label>
               <select name="project_id" defaultValue="" className="input-base mt-1.5 w-full">
-                <option value="">— none —</option>
+                <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -75,9 +121,11 @@ export default async function Page() {
           )}
           {venues.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Venue (optional)</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.services.requests.new.venueLabel", undefined, "Venue (optional)")}
+              </label>
               <select name="venue_id" defaultValue="" className="input-base mt-1.5 w-full">
-                <option value="">— none —</option>
+                <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>
                 {venues.map((v) => (
                   <option key={v.id} value={v.id}>
                     {v.name}

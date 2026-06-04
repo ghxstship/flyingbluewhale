@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createBaseline } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +14,7 @@ const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: projects } = await supabase
     .from("projects")
@@ -24,28 +26,45 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="New Schedule Baseline"
-        subtitle="A named snapshot of the project schedule. Add activities + dependencies after creation; activate to make this the active baseline for the project."
+        eyebrow={t("console.schedule.baselines.new.eyebrow", undefined, "Operations")}
+        title={t("console.schedule.baselines.new.title", undefined, "New Schedule Baseline")}
+        subtitle={t(
+          "console.schedule.baselines.new.subtitle",
+          undefined,
+          "A named snapshot of the project schedule. Add activities + dependencies after creation; activate to make this the active baseline for the project.",
+        )}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createBaseline} cancelHref="/console/schedule/baselines" submitLabel="Create Baseline">
+        <FormShell
+          action={createBaseline}
+          cancelHref="/console/schedule/baselines"
+          submitLabel={t("console.schedule.baselines.new.submit", undefined, "Create Baseline")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.schedule.baselines.new.nameLabel", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="Initial 100% CD Baseline" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t("console.schedule.baselines.new.namePlaceholder", undefined, "Initial 100% CD Baseline")}
+              className={INPUT}
+            />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Description</span>
+            <span className={LBL}>
+              {t("console.schedule.baselines.new.descriptionLabel", undefined, "Description")}
+            </span>
             <textarea name="description" rows={3} className={INPUT} />
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.schedule.baselines.new.projectLabel", undefined, "Project")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <select name="project_id" required className={INPUT}>
-              <option value="">Select…</option>
+              <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>
               {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}

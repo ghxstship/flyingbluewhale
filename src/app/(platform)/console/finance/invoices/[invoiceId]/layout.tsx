@@ -1,4 +1,5 @@
 import { RecordTabsProvider } from "@/components/ui/RecordTabsContext";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Invoice detail layout — Line items live in `invoice_line_items`
@@ -13,10 +14,20 @@ export default async function InvoiceLayout({
   params: Promise<{ invoiceId: string }>;
 }) {
   const { invoiceId } = await params;
+  const { t } = await getRequestT();
   const tabs = [
-    { label: "Overview", href: `/console/finance/invoices/${invoiceId}` },
-    { label: "Line Items", href: `/console/finance/invoices/${invoiceId}/line-items` },
-    { label: "Activity", href: `/console/finance/invoices/${invoiceId}/activity` },
+    {
+      label: t("console.finance.invoices.detail.tabs.overview", undefined, "Overview"),
+      href: `/console/finance/invoices/${invoiceId}`,
+    },
+    {
+      label: t("console.finance.invoices.detail.tabs.lineItems", undefined, "Line Items"),
+      href: `/console/finance/invoices/${invoiceId}/line-items`,
+    },
+    {
+      label: t("console.finance.invoices.detail.tabs.activity", undefined, "Activity"),
+      href: `/console/finance/invoices/${invoiceId}/activity`,
+    },
   ];
   return <RecordTabsProvider tabs={tabs}>{children}</RecordTabsProvider>;
 }

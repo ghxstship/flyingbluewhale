@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ type Row = {
 export default async function Page({ params }: { params: Promise<{ personId: string }> }) {
   const { personId } = await params;
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -32,25 +34,39 @@ export default async function Page({ params }: { params: Promise<{ personId: str
 
   return (
     <>
-      <ModuleHeader eyebrow="Person" title="Assignments" subtitle="Crew records linked to this person." />
+      <ModuleHeader
+        eyebrow={t("console.people.assignments.eyebrow", undefined, "Person")}
+        title={t("console.people.assignments.title", undefined, "Assignments")}
+        subtitle={t("console.people.assignments.subtitle", undefined, "Crew records linked to this person.")}
+      />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No Assignments"
-          emptyDescription="This person has no crew records yet. Assignments link a person to project crew slots — create one from the Crew register."
+          emptyLabel={t("console.people.assignments.emptyLabel", undefined, "No Assignments")}
+          emptyDescription={t(
+            "console.people.assignments.emptyDescription",
+            undefined,
+            "This person has no crew records yet. Assignments link a person to project crew slots — create one from the Crew register.",
+          )}
           columns={[
             {
               key: "role",
-              header: "Role",
+              header: t("console.people.assignments.columns.role", undefined, "Role"),
               render: (r) => (r.role ? <Badge variant="brand">{r.role}</Badge> : "—"),
               accessor: (r) => r.role ?? "",
               filterable: true,
               groupable: true,
             },
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name, sortable: true },
+            {
+              key: "name",
+              header: t("console.people.assignments.columns.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+              sortable: true,
+            },
             {
               key: "day_rate_cents",
-              header: "Day Rate",
+              header: t("console.people.assignments.columns.dayRate", undefined, "Day Rate"),
               render: (r) => (r.day_rate_cents != null ? formatMoney(r.day_rate_cents) : "—"),
               accessor: (r) => r.day_rate_cents ?? 0,
               tabular: true,
@@ -60,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
             },
             {
               key: "contact",
-              header: "Contact",
+              header: t("console.people.assignments.columns.contact", undefined, "Contact"),
               render: (r) => r.email ?? r.phone ?? "—",
               accessor: (r) => r.email ?? r.phone ?? "",
               mono: true,

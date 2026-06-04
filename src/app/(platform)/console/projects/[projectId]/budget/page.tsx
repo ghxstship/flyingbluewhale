@@ -7,11 +7,13 @@ import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { money } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: project }, { data: budgets }] = await Promise.all([
     supabase
       .from("projects")
@@ -31,23 +33,38 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   return (
     <>
       <ModuleHeader
-        eyebrow={project?.name ?? "Project"}
-        title="Budget"
-        subtitle={total ? `${money(spent)} of ${money(total)} spent` : undefined}
+        eyebrow={project?.name ?? t("console.projects.budget.eyebrowFallback", undefined, "Project")}
+        title={t("console.projects.budget.title", undefined, "Budget")}
+        subtitle={
+          total
+            ? t(
+                "console.projects.budget.subtitle",
+                { spent: money(spent), total: money(total) },
+                `${money(spent)} of ${money(total)} spent`,
+              )
+            : undefined
+        }
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
-          { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Budget" },
+          { label: t("console.projects.breadcrumbs.projects", undefined, "Projects"), href: "/console/projects" },
+          {
+            label: project?.name ?? t("console.projects.budget.eyebrowFallback", undefined, "Project"),
+            href: `/console/projects/${projectId}`,
+          },
+          { label: t("console.projects.budget.title", undefined, "Budget") },
         ]}
       />
       <div className="page-content max-w-5xl space-y-3">
         {!budgets || budgets.length === 0 ? (
           <EmptyState
-            title="No Budgets Yet"
-            description="Create a budget from the Finance module."
+            title={t("console.projects.budget.empty.title", undefined, "No Budgets Yet")}
+            description={t(
+              "console.projects.budget.empty.description",
+              undefined,
+              "Create a budget from the Finance module.",
+            )}
             action={
               <Link className="text-sm text-[var(--org-primary)]" href="/console/finance/budgets/new">
-                New budget →
+                {t("console.projects.budget.empty.action", undefined, "New budget →")}
               </Link>
             }
           />

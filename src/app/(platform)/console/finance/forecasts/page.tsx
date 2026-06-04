@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -26,12 +26,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="Forecasts (EAC)" />
+        <ModuleHeader
+          eyebrow={t("console.finance.forecasts.eyebrow", undefined, "Finance")}
+          title={t("console.finance.forecasts.title", undefined, "Forecasts (EAC)")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.forecasts.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -85,36 +91,67 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="Forecasts (EAC)"
-        subtitle={`${rows.length} forecast${rows.length === 1 ? "" : "s"} · ${overrunCount} flag over original budget · ${fmtMoney(totalEac)} aggregate EAC`}
+        eyebrow={t("console.finance.forecasts.eyebrow", undefined, "Finance")}
+        title={t("console.finance.forecasts.title", undefined, "Forecasts (EAC)")}
+        subtitle={t(
+          "console.finance.forecasts.subtitle",
+          {
+            count: rows.length,
+            forecastWord:
+              rows.length === 1
+                ? t("console.finance.forecasts.forecastSingular", undefined, "forecast")
+                : t("console.finance.forecasts.forecastPlural", undefined, "forecasts"),
+            overrun: overrunCount,
+            eac: fmtMoney(totalEac),
+          },
+          `${rows.length} forecast${rows.length === 1 ? "" : "s"} · ${overrunCount} flag over original budget · ${fmtMoney(totalEac)} aggregate EAC`,
+        )}
         action={
           <Button href="/console/finance/forecasts/new" size="sm">
-            + New Forecast
+            {t("console.finance.forecasts.newForecast", undefined, "+ New Forecast")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Forecasts" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Aggregate EAC" value={fmtMoney(totalEac)} />
-          <MetricCard label="Over-Budget" value={fmt.number(overrunCount)} />
+          <MetricCard
+            label={t("console.finance.forecasts.metric.forecasts", undefined, "Forecasts")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.forecasts.metric.aggregateEac", undefined, "Aggregate EAC")}
+            value={fmtMoney(totalEac)}
+          />
+          <MetricCard
+            label={t("console.finance.forecasts.metric.overBudget", undefined, "Over-Budget")}
+            value={fmt.number(overrunCount)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/finance/forecasts/${r.id}`}
-          emptyLabel="No cost forecasts yet"
-          emptyDescription="An EAC forecast is a per-cost-code rollup: committed + incurred + forecast-to-complete, with variance vs original budget."
+          emptyLabel={t("console.finance.forecasts.empty.label", undefined, "No cost forecasts yet")}
+          emptyDescription={t(
+            "console.finance.forecasts.empty.description",
+            undefined,
+            "An EAC forecast is a per-cost-code rollup: committed + incurred + forecast-to-complete, with variance vs original budget.",
+          )}
           emptyAction={
             <Button href="/console/finance/forecasts/new" size="sm">
-              + New Forecast
+              {t("console.finance.forecasts.newForecast", undefined, "+ New Forecast")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.finance.forecasts.column.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.finance.forecasts.column.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -122,7 +159,7 @@ export default async function Page() {
             },
             {
               key: "method",
-              header: "Method",
+              header: t("console.finance.forecasts.column.method", undefined, "Method"),
               render: (r) => toTitle(r.methodology),
               accessor: (r) => r.methodology,
               filterable: true,
@@ -130,21 +167,21 @@ export default async function Page() {
             },
             {
               key: "lines",
-              header: "Lines",
+              header: t("console.finance.forecasts.column.lines", undefined, "Lines"),
               render: (r) => fmt.number(r.line_count),
               accessor: (r) => r.line_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "eac",
-              header: "EAC",
+              header: t("console.finance.forecasts.column.eac", undefined, "EAC"),
               render: (r) => fmtMoney(r.total_eac),
               accessor: (r) => r.total_eac,
               className: "font-mono text-xs text-right",
             },
             {
               key: "variance",
-              header: "Variance",
+              header: t("console.finance.forecasts.column.variance", undefined, "Variance"),
               render: (r) => {
                 const v = r.total_variance;
                 if (v === 0) return "—";

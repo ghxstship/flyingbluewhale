@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { createPunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: projects }, { data: users }, { data: vendors }, { data: plans }, { data: lists }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).order("name"),
     supabase.from("users").select("id, name, email").limit(200),
@@ -31,29 +33,44 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="New Punch Item"
-        subtitle="Show-ready gap. Gate doors-open when needed."
+        eyebrow={t("console.punch.new.eyebrow", undefined, "Operations")}
+        title={t("console.punch.new.title", undefined, "New Punch Item")}
+        subtitle={t("console.punch.new.subtitle", undefined, "Show-ready gap. Gate doors-open when needed.")}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createPunchItem} cancelHref="/console/punch" submitLabel="Create Item">
+        <FormShell
+          action={createPunchItem}
+          cancelHref="/console/punch"
+          submitLabel={t("console.punch.new.submit", undefined, "Create Item")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Title<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.punch.new.fields.title", undefined, "Title")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="title" required placeholder="Cable cover missing on stage-left run" className={INPUT} />
+            <input
+              name="title"
+              required
+              placeholder={t(
+                "console.punch.new.fields.titlePlaceholder",
+                undefined,
+                "Cable cover missing on stage-left run",
+              )}
+              className={INPUT}
+            />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Description</span>
+            <span className={LBL}>{t("console.punch.new.fields.description", undefined, "Description")}</span>
             <textarea name="description" rows={3} className={INPUT} />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.punch.new.fields.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
-                <option value="">Select…</option>
+                <option value="">{t("console.punch.new.selectPlaceholder", undefined, "Select…")}</option>
                 {(projects ?? []).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -62,7 +79,7 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Priority</span>
+              <span className={LBL}>{t("console.punch.new.fields.priority", undefined, "Priority")}</span>
               <select name="priority" className={INPUT} defaultValue="normal">
                 {["low", "normal", "high", "urgent"].map((p) => (
                   <option key={p} value={p}>
@@ -74,7 +91,7 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Assignee</span>
+              <span className={LBL}>{t("console.punch.new.fields.assignee", undefined, "Assignee")}</span>
               <select name="assignee_id" className={INPUT}>
                 <option value="">—</option>
                 {(users ?? []).map((u) => (
@@ -85,7 +102,7 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Vendor</span>
+              <span className={LBL}>{t("console.punch.new.fields.vendor", undefined, "Vendor")}</span>
               <select name="vendor_id" className={INPUT}>
                 <option value="">—</option>
                 {(vendors ?? []).map((v) => (
@@ -98,11 +115,11 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Due date</span>
+              <span className={LBL}>{t("console.punch.new.fields.dueDate", undefined, "Due date")}</span>
               <input type="date" name="due_at" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Site plan</span>
+              <span className={LBL}>{t("console.punch.new.fields.sitePlan", undefined, "Site plan")}</span>
               <select name="site_plan_id" className={INPUT}>
                 <option value="">—</option>
                 {(plans ?? []).map((p) => (
@@ -114,9 +131,9 @@ export default async function Page() {
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Punch list</span>
+            <span className={LBL}>{t("console.punch.new.fields.punchList", undefined, "Punch list")}</span>
             <select name="punch_list_id" className={INPUT} defaultValue="">
-              <option value="">— Unassigned —</option>
+              <option value="">{t("console.punch.new.unassignedOption", undefined, "— Unassigned —")}</option>
               {((lists ?? []) as Array<{ id: string; name: string; project_id: string }>).map((l) => (
                 <option key={l.id} value={l.id} data-project={l.project_id}>
                   {l.name}
@@ -124,13 +141,18 @@ export default async function Page() {
               ))}
             </select>
             <span className="text-[10px] text-[var(--text-muted)]">
-              Optional. Pick a list to group this item with others. The server enforces that the list&rsquo;s project
-              matches the item&rsquo;s.
+              {t(
+                "console.punch.new.punchListHint",
+                undefined,
+                "Optional. Pick a list to group this item with others. The server enforces that the list’s project matches the item’s.",
+              )}
             </span>
           </label>
           <label className="flex items-center gap-2">
             <input type="checkbox" name="show_ready_gate" value="1" />
-            <span className="text-xs">Gate doors-open until this item is closed</span>
+            <span className="text-xs">
+              {t("console.punch.new.gateLabel", undefined, "Gate doors-open until this item is closed")}
+            </span>
           </label>
         </FormShell>
       </div>

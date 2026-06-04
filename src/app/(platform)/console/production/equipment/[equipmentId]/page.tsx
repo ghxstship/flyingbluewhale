@@ -11,6 +11,7 @@ import { fmtDate, money } from "@/components/detail/DetailShell";
 import { setEquipmentStatus, deleteEquipment } from "../actions";
 import type { EquipmentStatus } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 const NEXT: Record<EquipmentStatus, EquipmentStatus[]> = {
   available: ["reserved", "in_use", "maintenance", "retired"],
@@ -24,6 +25,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   const { equipmentId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   // asset_movements canonical (0016) schema lives on the remote — but
   // database.types.ts was generated against the shadowed (0019) variant
   // with `asset_id` and no org_id. Migration 0060 guards against the
@@ -51,9 +53,14 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   if (!row || row.deleted_at) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Equipment" />
+        <ModuleHeader
+          eyebrow={t("console.production.equipment.eyebrow", undefined, "Production")}
+          title={t("console.production.equipment.title", undefined, "Equipment")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">Not found.</div>
+          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+            {t("console.production.equipment.detail.notFound", undefined, "Not found.")}
+          </div>
         </div>
       </>
     );
@@ -83,12 +90,15 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
+        eyebrow={t("console.production.equipment.eyebrow", undefined, "Production")}
         title={row.name}
         subtitle={row.category ?? undefined}
         breadcrumbs={[
-          { label: "Production" },
-          { label: "Equipment", href: "/console/production/equipment" },
+          { label: t("console.production.equipment.eyebrow", undefined, "Production") },
+          {
+            label: t("console.production.equipment.title", undefined, "Equipment"),
+            href: "/console/production/equipment",
+          },
           { label: row.name },
         ]}
         action={
@@ -105,15 +115,15 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                       : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  Mark {toTitle(to)}
+                  {t("console.production.equipment.detail.markStatus", { status: toTitle(to) }, `Mark ${toTitle(to)}`)}
                 </button>
               </form>
             ))}
             <a href={`/console/production/equipment/${row.id}/qr`} className="btn btn-ghost btn-sm">
-              QR
+              {t("console.production.equipment.detail.qr", undefined, "QR")}
             </a>
             <a href={`/console/production/equipment/${row.id}/edit`} className="btn btn-secondary btn-sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </a>
           </div>
         }
@@ -121,12 +131,34 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
       <div className="page-content max-w-3xl space-y-4">
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            <Field label="Status" value={<StatusBadge status={row.status} />} />
-            <Field label="Category" value={row.category ?? "—"} />
-            <Field label="Asset Tag" value={row.asset_tag ?? "—"} mono />
-            <Field label="Serial" value={row.serial ?? "—"} mono />
-            <Field label="Daily Rate" value={money(row.daily_rate_cents)} mono />
-            <Field label="Created" value={fmtDate(row.created_at)} mono />
+            <Field
+              label={t("console.production.equipment.detail.field.status", undefined, "Status")}
+              value={<StatusBadge status={row.status} />}
+            />
+            <Field
+              label={t("console.production.equipment.detail.field.category", undefined, "Category")}
+              value={row.category ?? "—"}
+            />
+            <Field
+              label={t("console.production.equipment.detail.field.assetTag", undefined, "Asset Tag")}
+              value={row.asset_tag ?? "—"}
+              mono
+            />
+            <Field
+              label={t("console.production.equipment.detail.field.serial", undefined, "Serial")}
+              value={row.serial ?? "—"}
+              mono
+            />
+            <Field
+              label={t("console.production.equipment.detail.field.dailyRate", undefined, "Daily Rate")}
+              value={money(row.daily_rate_cents)}
+              mono
+            />
+            <Field
+              label={t("console.production.equipment.detail.field.created", undefined, "Created")}
+              value={fmtDate(row.created_at)}
+              mono
+            />
           </div>
           {row.notes && (
             <div className="mt-4 border-t border-[var(--border-color)] pt-3 text-xs text-[var(--text-secondary)]">
@@ -137,19 +169,38 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
 
         <section className="surface p-5">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold">Movement Ledger</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.production.equipment.detail.ledger.title", undefined, "Movement Ledger")}
+            </h2>
             <span className="font-mono text-xs text-[var(--text-muted)]">
-              {movements.length} recent transition{movements.length === 1 ? "" : "s"}
+              {movements.length === 1
+                ? t(
+                    "console.production.equipment.detail.ledger.countOne",
+                    { count: movements.length },
+                    `${movements.length} recent transition`,
+                  )
+                : t(
+                    "console.production.equipment.detail.ledger.countOther",
+                    { count: movements.length },
+                    `${movements.length} recent transitions`,
+                  )}
             </span>
           </div>
           {movements.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No movements recorded yet. Every status change writes a row to the append-only ledger.
+              {t(
+                "console.production.equipment.detail.ledger.empty",
+                undefined,
+                "No movements recorded yet. Every status change writes a row to the append-only ledger.",
+              )}
             </p>
           ) : (
             <ol className="mt-3 space-y-2 text-xs">
               {movements.map((m) => {
-                const who = m.mover?.name ?? m.mover?.email ?? "system";
+                const who =
+                  m.mover?.name ??
+                  m.mover?.email ??
+                  t("console.production.equipment.detail.ledger.system", undefined, "system");
                 return (
                   <li
                     key={m.id}
@@ -161,10 +212,14 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                           <StatusBadge status={m.from_state} /> →{" "}
                         </>
                       ) : (
-                        <Badge variant="muted">initial</Badge>
+                        <Badge variant="muted">
+                          {t("console.production.equipment.detail.ledger.initial", undefined, "initial")}
+                        </Badge>
                       )}
                       <StatusBadge status={m.to_state} />
-                      <span className="text-[var(--text-muted)]">by {who}</span>
+                      <span className="text-[var(--text-muted)]">
+                        {t("console.production.equipment.detail.ledger.by", { who }, `by ${who}`)}
+                      </span>
                       {m.project?.name && <Badge variant="muted">{m.project.name}</Badge>}
                       {m.reason && <span className="text-[var(--text-secondary)]">— {m.reason}</span>}
                     </span>
@@ -178,11 +233,11 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
 
         <section className="surface p-4 text-xs">
           <div className="flex items-center justify-between">
-            <Badge variant="muted">Lifecycle</Badge>
+            <Badge variant="muted">{t("console.production.equipment.detail.lifecycle", undefined, "Lifecycle")}</Badge>
             <form action={deleteEquipment}>
               <input type="hidden" name="id" value={row.id} />
               <button type="submit" className="text-[color:var(--color-error)] hover:underline">
-                Retire & remove
+                {t("console.production.equipment.detail.retireRemove", undefined, "Retire & remove")}
               </button>
             </form>
           </div>

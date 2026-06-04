@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { brandingToCssVars, type Branding } from "@/lib/branding";
 import { saveBrandingAction } from "./actions";
 
@@ -15,6 +16,7 @@ export function BrandingForm({
   initial: Branding;
   projectName: string;
 }) {
+  const t = useT();
   const [accent, setAccent] = useState(initial.accentColor ?? "#DC2626");
   const [accentFg, setAccentFg] = useState(initial.accentForeground ?? "#FFFFFF");
   const [logo, setLogo] = useState(initial.logoUrl ?? "");
@@ -29,60 +31,82 @@ export function BrandingForm({
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
-      <FormShell action={saveBrandingAction} submitLabel="Save Branding" dirtyGuard>
+      <FormShell
+        action={saveBrandingAction}
+        submitLabel={t("console.projects.branding.submit", undefined, "Save Branding")}
+        dirtyGuard
+      >
         <input type="hidden" name="projectId" value={projectId} />
         <Input
-          label="Accent Color"
+          label={t("console.projects.branding.accentColor.label", undefined, "Accent Color")}
           name="accentColor"
           value={accent}
           onChange={(e) => setAccent(e.target.value)}
-          hint="Hex like #DC2626 — overrides --org-primary in portals."
+          hint={t(
+            "console.projects.branding.accentColor.hint",
+            undefined,
+            "Hex like #DC2626 — overrides --org-primary in portals.",
+          )}
           placeholder="#DC2626"
         />
         <Input
-          label="Accent Foreground"
+          label={t("console.projects.branding.accentForeground.label", undefined, "Accent Foreground")}
           name="accentForeground"
           value={accentFg}
           onChange={(e) => setAccentFg(e.target.value)}
-          hint="Text color shown on top of the accent."
+          hint={t(
+            "console.projects.branding.accentForeground.hint",
+            undefined,
+            "Text color shown on top of the accent.",
+          )}
           placeholder="#FFFFFF"
         />
         <Input
-          label="Logo URL"
+          label={t("console.projects.branding.logoUrl.label", undefined, "Logo URL")}
           name="logoUrl"
           value={logo}
           onChange={(e) => setLogo(e.target.value)}
-          hint="Must be https. SVG or PNG with transparent bg recommended."
+          hint={t(
+            "console.projects.branding.logoUrl.hint",
+            undefined,
+            "Must be https. SVG or PNG with transparent bg recommended.",
+          )}
           placeholder="https://…"
         />
         <Input
-          label="Favicon URL"
+          label={t("console.projects.branding.faviconUrl.label", undefined, "Favicon URL")}
           name="faviconUrl"
           value={favicon}
           onChange={(e) => setFavicon(e.target.value)}
-          hint="https URL to a square 512×512 PNG."
+          hint={t("console.projects.branding.faviconUrl.hint", undefined, "https URL to a square 512×512 PNG.")}
           placeholder="https://…"
         />
         <Input
-          label="Hero Image URL"
+          label={t("console.projects.branding.heroImageUrl.label", undefined, "Hero Image URL")}
           name="heroImageUrl"
           value={hero}
           onChange={(e) => setHero(e.target.value)}
-          hint="Used on the portal landing for this project."
+          hint={t(
+            "console.projects.branding.heroImageUrl.hint",
+            undefined,
+            "Used on the portal landing for this project.",
+          )}
           placeholder="https://…"
         />
         <Input
-          label="OG image URL"
+          label={t("console.projects.branding.ogImageUrl.label", undefined, "OG image URL")}
           name="ogImageUrl"
           value={og}
           onChange={(e) => setOg(e.target.value)}
-          hint="Open Graph share image (1200×630)."
+          hint={t("console.projects.branding.ogImageUrl.hint", undefined, "Open Graph share image (1200×630).")}
           placeholder="https://…"
         />
       </FormShell>
 
       <div className="space-y-3">
-        <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Live preview</div>
+        <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          {t("console.projects.branding.livePreview", undefined, "Live preview")}
+        </div>
         <div className="surface overflow-hidden" style={previewStyle} data-platform="gvteway">
           {hero && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -102,17 +126,21 @@ export function BrandingForm({
                 className="rounded px-3 py-1.5 text-xs font-medium"
                 style={{ background: accent, color: accentFg }}
               >
-                Primary action
+                {t("console.projects.branding.preview.primaryAction", undefined, "Primary action")}
               </button>
               <button
                 type="button"
                 className="rounded border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium"
               >
-                Secondary
+                {t("console.projects.branding.preview.secondary", undefined, "Secondary")}
               </button>
             </div>
             <p className="mt-3 text-xs text-[var(--text-muted)]">
-              Inputs are sanitized — only #hex colors and https URLs are accepted.
+              {t(
+                "console.projects.branding.preview.sanitizedNote",
+                undefined,
+                "Inputs are sanitized — only #hex colors and https URLs are accepted.",
+              )}
             </p>
           </div>
         </div>

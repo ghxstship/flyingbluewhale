@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { getSubscription, listSubscriptionTransitions, SUBSCRIPTION_TRANSITION_GRAPH } from "@/lib/subscriptions";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { SubscriptionStateControls } from "./SubscriptionStateControls";
 
 export const dynamic = "force-dynamic";
@@ -19,23 +20,40 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
 
   const transitions = await listSubscriptionTransitions(session.orgId, subscriptionId);
   const allowedNext = SUBSCRIPTION_TRANSITION_GRAPH[sub.state];
+  const { t } = await getRequestT();
+
+  const cadenceLabel = sub.renewal_cadence_months
+    ? t(
+        "console.subscriptions.detail.renewalCadence",
+        { months: sub.renewal_cadence_months },
+        `${sub.renewal_cadence_months}-month renewal`,
+      )
+    : t("console.subscriptions.detail.noCadence", undefined, "No cadence");
+  const createdLabel = t(
+    "console.subscriptions.detail.createdAt",
+    { time: timeAgo(sub.created_at) },
+    `Created ${timeAgo(sub.created_at)}`,
+  );
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Subscription"
+        eyebrow={t("console.subscriptions.detail.eyebrow", undefined, "Subscription")}
         title={sub.label}
-        subtitle={`${sub.kind} · ${sub.renewal_cadence_months ? `${sub.renewal_cadence_months}-month renewal` : "No cadence"} · Created ${timeAgo(sub.created_at)}`}
+        subtitle={`${sub.kind} · ${cadenceLabel} · ${createdLabel}`}
       />
       <div className="page-content space-y-6">
         <section className="surface space-y-4 p-6">
-          <h2 className="text-sm font-semibold tracking-wide uppercase">State</h2>
+          <h2 className="text-sm font-semibold tracking-wide uppercase">
+            {t("console.subscriptions.detail.state", undefined, "State")}
+          </h2>
           <div className="flex items-center gap-3">
             <Badge variant="default" className="text-base">
               {sub.state}
             </Badge>
             <span className="text-sm text-[var(--text-secondary)]">
-              Allowed next: {allowedNext.length === 0 ? "—" : allowedNext.join(", ")}
+              {t("console.subscriptions.detail.allowedNext", undefined, "Allowed next:")}{" "}
+              {allowedNext.length === 0 ? "—" : allowedNext.join(", ")}
             </span>
           </div>
           <SubscriptionStateControls subscriptionId={sub.id} currentState={sub.state} allowedNext={allowedNext} />
@@ -43,39 +61,65 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
 
         <section className="surface space-y-3 p-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold tracking-wide uppercase">Lifecycle Timeline</h2>
+            <h2 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.subscriptions.detail.lifecycleTimeline", undefined, "Lifecycle Timeline")}
+            </h2>
             <Link href={`/console/subscriptions/${sub.id}/transitions`} className="text-xs underline">
-              Full transitions log →
+              {t("console.subscriptions.detail.fullTransitionsLog", undefined, "Full transitions log →")}
             </Link>
           </div>
           <dl className="grid grid-cols-2 gap-3 text-sm">
-            <Field label="Started" value={sub.started_at ? new Date(sub.started_at).toLocaleString() : "—"} />
-            <Field label="Trial ends" value={sub.trial_ends_at ? new Date(sub.trial_ends_at).toLocaleString() : "—"} />
-            <Field label="Last renewed" value={sub.renewed_at ? new Date(sub.renewed_at).toLocaleString() : "—"} />
-            <Field label="Lapsed at" value={sub.lapsed_at ? new Date(sub.lapsed_at).toLocaleString() : "—"} />
             <Field
-              label="Reactivated at"
+              label={t("console.subscriptions.detail.started", undefined, "Started")}
+              value={sub.started_at ? new Date(sub.started_at).toLocaleString() : "—"}
+            />
+            <Field
+              label={t("console.subscriptions.detail.trialEnds", undefined, "Trial ends")}
+              value={sub.trial_ends_at ? new Date(sub.trial_ends_at).toLocaleString() : "—"}
+            />
+            <Field
+              label={t("console.subscriptions.detail.lastRenewed", undefined, "Last renewed")}
+              value={sub.renewed_at ? new Date(sub.renewed_at).toLocaleString() : "—"}
+            />
+            <Field
+              label={t("console.subscriptions.detail.lapsedAt", undefined, "Lapsed at")}
+              value={sub.lapsed_at ? new Date(sub.lapsed_at).toLocaleString() : "—"}
+            />
+            <Field
+              label={t("console.subscriptions.detail.reactivatedAt", undefined, "Reactivated at")}
               value={sub.reactivated_at ? new Date(sub.reactivated_at).toLocaleString() : "—"}
             />
-            <Field label="Churned at" value={sub.churned_at ? new Date(sub.churned_at).toLocaleString() : "—"} />
+            <Field
+              label={t("console.subscriptions.detail.churnedAt", undefined, "Churned at")}
+              value={sub.churned_at ? new Date(sub.churned_at).toLocaleString() : "—"}
+            />
           </dl>
         </section>
 
         <section className="surface space-y-3 p-6">
-          <h2 className="text-sm font-semibold tracking-wide uppercase">Recent Transitions ({transitions.length})</h2>
+          <h2 className="text-sm font-semibold tracking-wide uppercase">
+            {t(
+              "console.subscriptions.detail.recentTransitions",
+              { count: transitions.length },
+              `Recent Transitions (${transitions.length})`,
+            )}
+          </h2>
           {transitions.length === 0 ? (
-            <p className="text-sm text-[var(--text-secondary)]">No transitions logged yet.</p>
+            <p className="text-sm text-[var(--text-secondary)]">
+              {t("console.subscriptions.detail.noTransitions", undefined, "No transitions logged yet.")}
+            </p>
           ) : (
             <ul className="space-y-2 text-sm">
-              {transitions.slice(0, 8).map((t) => (
-                <li key={t.id} className="border-b border-[var(--border-color)] pb-2 last:border-0">
+              {transitions.slice(0, 8).map((row) => (
+                <li key={row.id} className="border-b border-[var(--border-color)] pb-2 last:border-0">
                   <span className="font-mono text-xs">
-                    {t.from_state ?? "(initial)"} → <strong>{t.to_state}</strong>
+                    {row.from_state ?? t("console.subscriptions.detail.initialState", undefined, "(initial)")} →{" "}
+                    <strong>{row.to_state}</strong>
                   </span>{" "}
-                  · <span className="text-[var(--text-secondary)]">{timeAgo(t.transitioned_at)}</span>
-                  {t.reason ? <span className="ms-2">{t.reason}</span> : null}
-                  {t.stripe_event_id ? (
-                    <span className="ms-2 font-mono text-xs">[stripe:{t.stripe_event_id}]</span>
+                  · <span className="text-[var(--text-secondary)]">{timeAgo(row.transitioned_at)}</span>
+                  {row.reason ? <span className="ms-2">{row.reason}</span> : null}
+                  {row.stripe_event_id ? (
+                    <span className="ms-2 font-mono text-xs">[stripe:{row.stripe_event_id}]</span>
                   ) : null}
                 </li>
               ))}

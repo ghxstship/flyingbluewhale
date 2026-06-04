@@ -7,17 +7,21 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Invoice } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function InvoicesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Invoices" />
+        <ModuleHeader title={t("console.finance.invoices.title", undefined, "Invoices")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.invoices.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -32,10 +36,18 @@ export default async function InvoicesPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="Invoices"
-        subtitle={`${rows.length} Total · ${formatMoney(outstanding)} outstanding · ${formatMoney(paid)} paid`}
-        action={<Button href="/console/finance/invoices/new">+ New Invoice</Button>}
+        eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
+        title={t("console.finance.invoices.title", undefined, "Invoices")}
+        subtitle={t(
+          "console.finance.invoices.subtitle",
+          { count: rows.length, outstanding: formatMoney(outstanding), paid: formatMoney(paid) },
+          `${rows.length} Total · ${formatMoney(outstanding)} outstanding · ${formatMoney(paid)} paid`,
+        )}
+        action={
+          <Button href="/console/finance/invoices/new">
+            {t("console.finance.invoices.new", undefined, "+ New Invoice")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<Invoice>
@@ -44,21 +56,26 @@ export default async function InvoicesPage() {
           columns={[
             {
               key: "number",
-              header: "Number",
+              header: t("console.finance.invoices.columns.number", undefined, "Number"),
               render: (r) => <span className="font-mono text-xs">{r.number}</span>,
               accessor: (r) => r.number ?? null,
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.finance.invoices.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "amount",
-              header: "Amount",
+              header: t("console.finance.invoices.columns.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents, r.currency),
               className: "font-mono text-xs",
               accessor: (r) => r.amount_cents ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.finance.invoices.columns.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.status} />,
               accessor: (r) => r.status,
               filterable: true,
@@ -66,14 +83,14 @@ export default async function InvoicesPage() {
             },
             {
               key: "due",
-              header: "Due",
+              header: t("console.finance.invoices.columns.due", undefined, "Due"),
               render: (r) => r.due_at ?? "—",
               className: "font-mono text-xs",
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "created",
-              header: "Created",
+              header: t("console.finance.invoices.columns.created", undefined, "Created"),
               render: (r) => timeAgo(r.created_at),
               className: "font-mono text-xs",
               accessor: (r) => r.created_at,

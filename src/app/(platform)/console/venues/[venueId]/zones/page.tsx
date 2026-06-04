@@ -5,6 +5,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +25,18 @@ function categoriesFor(raw: unknown): string[] {
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Zones" />
+        <ModuleHeader
+          eyebrow={t("console.venues.zones.eyebrow", undefined, "Venue")}
+          title={t("console.venues.zones.title", undefined, "Zones")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.zones.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -54,37 +61,50 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Zones`}
-        subtitle={`${zones.length} zone${zones.length === 1 ? "" : "s"} authored`}
+        eyebrow={t("console.venues.zones.eyebrow", undefined, "Venue")}
+        title={t("console.venues.zones.titleWithName", { name: venue.name }, `${venue.name} — Zones`)}
+        subtitle={t(
+          "console.venues.zones.subtitle",
+          { count: zones.length },
+          `${zones.length} zone${zones.length === 1 ? "" : "s"} authored`,
+        )}
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.zones.breadcrumbVenues", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "Zones" },
+          { label: t("console.venues.zones.breadcrumbZones", undefined, "Zones") },
         ]}
       />
       <div className="page-content space-y-5">
         <DataTable<ZoneRow>
           rows={zones}
-          emptyLabel="No zones yet"
-          emptyDescription="Author zones to map accreditation categories to physical areas. The accreditation/policy matrix derives from this list × the categories table."
+          emptyLabel={t("console.venues.zones.emptyLabel", undefined, "No zones yet")}
+          emptyDescription={t(
+            "console.venues.zones.emptyDescription",
+            undefined,
+            "Author zones to map accreditation categories to physical areas. The accreditation/policy matrix derives from this list × the categories table.",
+          )}
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.venues.zones.column.code", undefined, "Code"),
               render: (r) => <span className="font-mono text-xs">{r.code}</span>,
               accessor: (r) => r.code ?? null,
             },
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.venues.zones.column.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "parent",
-              header: "Parent",
+              header: t("console.venues.zones.column.parent", undefined, "Parent"),
               render: (r) => (r.parent_zone_id ? "↳" : "—"),
               accessor: (r) => r.parent_zone_id ?? null,
             },
             {
               key: "cats",
-              header: "Allowed Categories",
+              header: t("console.venues.zones.column.allowedCategories", undefined, "Allowed Categories"),
               render: (r) => {
                 const cats = categoriesFor(r.allowed_categories);
                 if (cats.length === 0) return <span className="text-[var(--text-muted)]">—</span>;

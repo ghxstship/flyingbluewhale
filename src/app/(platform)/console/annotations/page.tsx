@@ -8,6 +8,7 @@ import { listAnnotations, type Annotation } from "@/lib/db/annotations";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +19,15 @@ const SEVERITY_VARIANT: Record<Annotation["severity"], "muted" | "warning" | "er
 };
 
 export default async function AnnotationsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Annotations" />
+        <ModuleHeader title={t("console.annotations.title", undefined, "Annotations")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.annotations.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -40,9 +44,13 @@ export default async function AnnotationsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Run"
-        title="Annotations"
-        subtitle={`${open} Open  · ${critical} critical · ${rows.length - open} acknowledged`}
+        eyebrow={t("console.annotations.eyebrow", undefined, "Run")}
+        title={t("console.annotations.title", undefined, "Annotations")}
+        subtitle={t(
+          "console.annotations.subtitle",
+          { open, critical, acknowledged: rows.length - open },
+          `${open} Open  · ${critical} critical · ${rows.length - open} acknowledged`,
+        )}
       />
       <div className="page-content">
         <DataTable<Annotation>
@@ -51,7 +59,7 @@ export default async function AnnotationsPage() {
           columns={[
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.annotations.col.severity", undefined, "Severity"),
               render: (r) => (
                 <Badge variant={SEVERITY_VARIANT[r.severity]} className="uppercase">
                   {r.severity}
@@ -63,7 +71,7 @@ export default async function AnnotationsPage() {
             },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.annotations.col.kind", undefined, "Kind"),
               render: (r) => <span className="font-mono text-xs uppercase">{r.kind}</span>,
               accessor: (r) => r.kind,
               filterable: true,
@@ -71,12 +79,14 @@ export default async function AnnotationsPage() {
             },
             {
               key: "title",
-              header: "Title",
+              header: t("console.annotations.col.title", undefined, "Title"),
               render: (r) => (
                 <div className="flex flex-col gap-0.5">
                   <span className="font-medium">{r.title ?? r.body.slice(0, 80)}</span>
                   {r.tags.length > 0 ? (
-                    <span className="text-xs text-[var(--text-subtle)]">{r.tags.map((t) => `#${t}`).join(" ")}</span>
+                    <span className="text-xs text-[var(--text-subtle)]">
+                      {r.tags.map((tag) => `#${tag}`).join(" ")}
+                    </span>
                   ) : null}
                 </div>
               ),
@@ -84,7 +94,7 @@ export default async function AnnotationsPage() {
             },
             {
               key: "target",
-              header: "Target",
+              header: t("console.annotations.col.target", undefined, "Target"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.target_table}/{r.target_id.slice(0, 8)}
@@ -96,7 +106,7 @@ export default async function AnnotationsPage() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.annotations.col.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.status} />,
               accessor: (r) => r.status,
               filterable: true,
@@ -104,20 +114,20 @@ export default async function AnnotationsPage() {
             },
             {
               key: "due",
-              header: "Due",
+              header: t("console.annotations.col.due", undefined, "Due"),
               render: (r) => (r.due_at ? formatDate(r.due_at, "medium") : "—"),
               className: "font-mono text-xs",
               accessor: (r) => r.due_at,
             },
             {
               key: "confirm",
-              header: "Confirm",
+              header: t("console.annotations.col.confirm", undefined, "Confirm"),
               render: (r) =>
                 r.confirmation_required ? (
                   r.confirmed_at ? (
-                    <Badge variant="success">Confirmed</Badge>
+                    <Badge variant="success">{t("console.annotations.confirmed", undefined, "Confirmed")}</Badge>
                   ) : (
-                    <Badge variant="warning">Needed</Badge>
+                    <Badge variant="warning">{t("console.annotations.needed", undefined, "Needed")}</Badge>
                   )
                 ) : (
                   <span className="text-[var(--text-subtle)]">—</span>
@@ -126,7 +136,7 @@ export default async function AnnotationsPage() {
             },
             {
               key: "created",
-              header: "Created",
+              header: t("console.annotations.col.created", undefined, "Created"),
               render: (r) => timeAgo(r.created_at),
               className: "font-mono text-xs",
               accessor: (r) => r.created_at,
@@ -136,22 +146,37 @@ export default async function AnnotationsPage() {
 
         {rows.length === 0 ? (
           <div className="surface mt-6 p-6 text-sm text-[var(--text-subtle)]">
-            No open annotations. Use <code className="font-mono">createAnnotation()</code> from{" "}
-            <code className="font-mono">@/lib/db/annotations</code> or the helper SQL function{" "}
-            <code className="font-mono">create_annotation()</code> to flag records for follow-up.
+            {t("console.annotations.emptyPrefix", undefined, "No open annotations. Use")}{" "}
+            <code className="font-mono">createAnnotation()</code>{" "}
+            {t("console.annotations.emptyFrom", undefined, "from")}{" "}
+            <code className="font-mono">@/lib/db/annotations</code>{" "}
+            {t("console.annotations.emptyOrHelper", undefined, "or the helper SQL function")}{" "}
+            <code className="font-mono">create_annotation()</code>{" "}
+            {t("console.annotations.emptySuffix", undefined, "to flag records for follow-up.")}
           </div>
         ) : null}
 
         <div className="surface mt-6 p-4 text-xs text-[var(--text-subtle)]">
-          Annotations are polymorphic across all entity types. They auto-fire notifications to assignees and watchers,
-          and append to the audit log. Use <span className="font-mono">kind=flag</span> for items requiring action,{" "}
-          <span className="font-mono">kind=note</span> for context,
-          <span className="font-mono">kind=comment</span> for replies, and <span className="font-mono">kind=tag</span>{" "}
-          for label-only entries.{" "}
+          {t(
+            "console.annotations.infoIntro",
+            undefined,
+            "Annotations are polymorphic across all entity types. They auto-fire notifications to assignees and watchers, and append to the audit log. Use",
+          )}{" "}
+          <span className="font-mono">kind=flag</span>{" "}
+          {t("console.annotations.infoFlag", undefined, "for items requiring action,")}{" "}
+          <span className="font-mono">kind=note</span> {t("console.annotations.infoNote", undefined, "for context,")}
+          <span className="font-mono">kind=comment</span>{" "}
+          {t("console.annotations.infoComment", undefined, "for replies, and")}{" "}
+          <span className="font-mono">kind=tag</span>{" "}
+          {t("console.annotations.infoTag", undefined, "for label-only entries.")}{" "}
           <Link className="underline" href="/console/tasks">
-            Tasks
+            {t("console.annotations.tasksLink", undefined, "Tasks")}
           </Link>{" "}
-          remain the canonical primitive for actionable work with deadlines.
+          {t(
+            "console.annotations.infoOutro",
+            undefined,
+            "remain the canonical primitive for actionable work with deadlines.",
+          )}
         </div>
       </div>
     </>

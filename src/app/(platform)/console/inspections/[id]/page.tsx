@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { transitionInspection, setInspectionItemResult } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data: insp } = await supabase
     .from("inspections")
@@ -45,10 +47,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        breadcrumbs={[{ label: "Inspections", href: "/console/inspections" }, { label: insp.code }]}
+        eyebrow={t("console.inspections.detail.eyebrow", undefined, "Safety")}
+        breadcrumbs={[
+          { label: t("console.inspections.detail.breadcrumb", undefined, "Inspections"), href: "/console/inspections" },
+          { label: insp.code },
+        ]}
         title={`${insp.code} — ${insp.name}`}
-        subtitle={(insp.project as unknown as { name: string | null } | null)?.name ?? "No project"}
+        subtitle={
+          (insp.project as unknown as { name: string | null } | null)?.name ??
+          t("console.inspections.detail.noProject", undefined, "No project")
+        }
         action={
           <div className="flex items-center gap-2">
             <Badge variant="info">{toTitle(insp.status)}</Badge>
@@ -56,16 +64,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               href={`/console/inspections/${insp.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
             >
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </a>
             {insp.status === "scheduled" && (
-              <StatusForm action={transitionInspection.bind(null, id, "in_progress")} label="Start" />
+              <StatusForm
+                action={transitionInspection.bind(null, id, "in_progress")}
+                label={t("console.inspections.detail.start", undefined, "Start")}
+              />
             )}
             {insp.status === "in_progress" && totals.fail === 0 && (
-              <StatusForm action={transitionInspection.bind(null, id, "passed")} label="Pass" />
+              <StatusForm
+                action={transitionInspection.bind(null, id, "passed")}
+                label={t("console.inspections.detail.pass", undefined, "Pass")}
+              />
             )}
             {insp.status === "in_progress" && (
-              <StatusForm action={transitionInspection.bind(null, id, "failed")} label="Fail" />
+              <StatusForm
+                action={transitionInspection.bind(null, id, "failed")}
+                label={t("console.inspections.detail.fail", undefined, "Fail")}
+              />
             )}
           </div>
         }
@@ -74,26 +91,40 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="grid gap-3 md:grid-cols-4">
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.pass}</div>
-            <div className="text-xs text-[var(--text-muted)]">Pass</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.inspections.detail.totals.pass", undefined, "Pass")}
+            </div>
           </div>
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.fail}</div>
-            <div className="text-xs text-[var(--text-muted)]">Fail</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.inspections.detail.totals.fail", undefined, "Fail")}
+            </div>
           </div>
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.na}</div>
-            <div className="text-xs text-[var(--text-muted)]">N/A</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.inspections.detail.totals.na", undefined, "N/A")}
+            </div>
           </div>
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.pending}</div>
-            <div className="text-xs text-[var(--text-muted)]">Pending</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.inspections.detail.totals.pending", undefined, "Pending")}
+            </div>
           </div>
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Checklist</h3>
+          <h3 className="text-sm font-semibold">{t("console.inspections.detail.checklist", undefined, "Checklist")}</h3>
           {allItems.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No checklist items. Was a template attached?</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t(
+                "console.inspections.detail.emptyChecklist",
+                undefined,
+                "No checklist items. Was a template attached?",
+              )}
+            </p>
           ) : (
             <ul className="mt-3 space-y-2">
               {allItems.map((it) => (

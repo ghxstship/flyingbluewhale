@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteClient } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
@@ -16,44 +17,55 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
   const session = await requireSession();
   const client = await getOrgScoped("clients", session.orgId, clientId);
   if (!client) notFound();
+  const { t } = await getRequestT();
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Client"
+        eyebrow={t("console.clients.detail.eyebrow", undefined, "Client")}
         title={client.name}
-        subtitle={client.contact_email ?? "No email on file"}
+        subtitle={client.contact_email ?? t("console.clients.detail.noEmail", undefined, "No email on file")}
         breadcrumbs={[
-          { label: "Commerce", href: "/console/clients" },
-          { label: "Clients", href: "/console/clients" },
+          { label: t("console.clients.detail.breadcrumb.commerce", undefined, "Commerce"), href: "/console/clients" },
+          { label: t("console.clients.detail.breadcrumb.clients", undefined, "Clients"), href: "/console/clients" },
           { label: client.name },
         ]}
         action={
           <div className="flex items-center gap-2">
             <Button href={`/console/proposals/new?clientId=${client.id}`} size="sm">
-              + New Proposal
+              {t("console.clients.detail.newProposal", undefined, "+ New Proposal")}
             </Button>
             <Button href={`/console/clients/${clientId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteClient.bind(null, clientId)}
-              confirm={`Delete client "${client.name}"? Linked proposals and invoices will remain but become unattached.`}
+              confirm={t(
+                "console.clients.detail.deleteConfirm",
+                { name: client.name },
+                `Delete client "${client.name}"? Linked proposals and invoices will remain but become unattached.`,
+              )}
             />
           </div>
         }
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
-          <Field label="Email">{client.contact_email ?? "—"}</Field>
-          <Field label="Phone">{client.contact_phone ?? "—"}</Field>
-          <Field label="Website">{client.website ?? "—"}</Field>
-          <Field label="Added">{timeAgo(client.created_at)}</Field>
+          <Field label={t("console.clients.detail.field.email", undefined, "Email")}>
+            {client.contact_email ?? "—"}
+          </Field>
+          <Field label={t("console.clients.detail.field.phone", undefined, "Phone")}>
+            {client.contact_phone ?? "—"}
+          </Field>
+          <Field label={t("console.clients.detail.field.website", undefined, "Website")}>{client.website ?? "—"}</Field>
+          <Field label={t("console.clients.detail.field.added", undefined, "Added")}>
+            {timeAgo(client.created_at)}
+          </Field>
         </div>
 
         {client.notes && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Notes</h3>
+            <h3 className="text-sm font-semibold">{t("console.clients.detail.notes", undefined, "Notes")}</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{client.notes}</p>
           </div>
         )}

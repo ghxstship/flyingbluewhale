@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { runRiskBatch } from "./actions";
 
@@ -35,12 +35,18 @@ const SEV_TONE: Record<Severity, "muted" | "info" | "warning" | "error"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Risk Scores" />
+        <ModuleHeader
+          eyebrow={t("console.risk.eyebrow", undefined, "Programs")}
+          title={t("console.risk.title", undefined, "Risk Scores")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.risk.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -78,8 +84,8 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Programs"
-        title="Risk Scores"
+        eyebrow={t("console.risk.eyebrow", undefined, "Programs")}
+        title={t("console.risk.title", undefined, "Risk Scores")}
         subtitle={`${rows.length} score${rows.length === 1 ? "" : "s"} across ${projectCount} project${projectCount === 1 ? "" : "s"} · ${criticalCount} critical · ${highCount} high`}
         action={
           <form action={runRiskBatch}>
@@ -87,30 +93,44 @@ export default async function Page() {
               type="submit"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Run risk batch
+              {t("console.risk.runBatch", undefined, "Run risk batch")}
             </button>
           </form>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Critical" value={fmt.number(criticalCount)} accent />
-          <MetricCard label="High" value={fmt.number(highCount)} />
-          <MetricCard label="Projects Scored" value={fmt.number(projectCount)} />
+          <MetricCard
+            label={t("console.risk.metric.critical", undefined, "Critical")}
+            value={fmt.number(criticalCount)}
+            accent
+          />
+          <MetricCard label={t("console.risk.metric.high", undefined, "High")} value={fmt.number(highCount)} />
+          <MetricCard
+            label={t("console.risk.metric.projectsScored", undefined, "Projects Scored")}
+            value={fmt.number(projectCount)}
+          />
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Per-project, per-category predictive risk. The batch scorer populates rules_v1 from baseline-vs-actual
-          variance, RFI age, daily-log gaps, incident rate, sub-prequal score. Drivers JSONB explains each red flag.
+          {t(
+            "console.risk.description",
+            undefined,
+            "Per-project, per-category predictive risk. The batch scorer populates rules_v1 from baseline-vs-actual variance, RFI age, daily-log gaps, incident rate, sub-prequal score. Drivers JSONB explains each red flag.",
+          )}
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => (r.project ? `/console/projects/${r.project.id}` : "#")}
-          emptyLabel="No risk scores yet"
-          emptyDescription="The risk batch (separate ticket) runs nightly. Schema, RLS, and dashboard are live."
+          emptyLabel={t("console.risk.empty.label", undefined, "No risk scores yet")}
+          emptyDescription={t(
+            "console.risk.empty.description",
+            undefined,
+            "The risk batch (separate ticket) runs nightly. Schema, RLS, and dashboard are live.",
+          )}
           columns={[
             {
               key: "project",
-              header: "Project",
+              header: t("console.risk.col.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -118,7 +138,7 @@ export default async function Page() {
             },
             {
               key: "category",
-              header: "Category",
+              header: t("console.risk.col.category", undefined, "Category"),
               render: (r) => toTitle(r.category.replace(/_/g, " ")),
               accessor: (r) => r.category,
               filterable: true,
@@ -127,14 +147,14 @@ export default async function Page() {
             },
             {
               key: "score",
-              header: "Score",
+              header: t("console.risk.col.score", undefined, "Score"),
               render: (r) => Number(r.score).toFixed(1),
               accessor: (r) => Number(r.score),
               className: "font-mono text-xs text-right",
             },
             {
               key: "trend_7d",
-              header: "Δ 7d",
+              header: t("console.risk.col.trend7d", undefined, "Δ 7d"),
               render: (r) => {
                 if (r.trend_7d == null) return "—";
                 const v = Number(r.trend_7d);
@@ -150,7 +170,7 @@ export default async function Page() {
             },
             {
               key: "trend_30d",
-              header: "Δ 30d",
+              header: t("console.risk.col.trend30d", undefined, "Δ 30d"),
               render: (r) => {
                 if (r.trend_30d == null) return "—";
                 const v = Number(r.trend_30d);
@@ -166,7 +186,7 @@ export default async function Page() {
             },
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.risk.col.severity", undefined, "Severity"),
               render: (r) => <Badge variant={SEV_TONE[r.severity]}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity,
               filterable: true,
@@ -174,7 +194,7 @@ export default async function Page() {
             },
             {
               key: "scored_at",
-              header: "Scored",
+              header: t("console.risk.col.scored", undefined, "Scored"),
               render: (r) => fmt.dateParts(r.scored_at, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.scored_at,
               className: "font-mono text-xs",

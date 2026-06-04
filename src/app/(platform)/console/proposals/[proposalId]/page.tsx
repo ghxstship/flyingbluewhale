@@ -8,6 +8,7 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { ProposalConvertButton } from "./ProposalConvertButton";
 import { ProposalStatusControls } from "./ProposalStatusControls";
 
@@ -19,6 +20,7 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
   const session = await requireSession();
   const proposal = await getOrgScoped("proposals", session.orgId, proposalId);
   if (!proposal) notFound();
+  const { t } = await getRequestT();
 
   // Resolve the linked project (if any) so the header can swap the
   // Convert button for a View Project link once conversion has run.
@@ -40,24 +42,27 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
   return (
     <>
       <ModuleHeader
-        eyebrow={`Proposal · ${proposal.doc_number ?? proposal.id.slice(0, 8)}`}
+        eyebrow={`${t("console.proposals.detail.eyebrow", undefined, "Proposal")} · ${proposal.doc_number ?? proposal.id.slice(0, 8)}`}
         title={proposal.title}
-        subtitle={`${formatMoney(proposal.amount_cents ?? 0)} · v${proposal.version} · created ${timeAgo(proposal.created_at)}`}
+        subtitle={`${formatMoney(proposal.amount_cents ?? 0)} · v${proposal.version} · ${t("console.proposals.detail.createdPrefix", undefined, "created")} ${timeAgo(proposal.created_at)}`}
         breadcrumbs={[
-          { label: "Revenue", href: "/console/proposals" },
-          { label: "Proposals", href: "/console/proposals" },
+          { label: t("console.proposals.detail.breadcrumb.revenue", undefined, "Revenue"), href: "/console/proposals" },
+          {
+            label: t("console.proposals.detail.breadcrumb.proposals", undefined, "Proposals"),
+            href: "/console/proposals",
+          },
           { label: proposal.title },
         ]}
         action={
           <div className="flex items-center gap-2">
             <Link href={`/console/proposals/${proposal.id}/edit`} className="btn btn-secondary btn-sm">
-              Edit Document
+              {t("console.proposals.detail.editDocument", undefined, "Edit Document")}
             </Link>
             <ProposalStatusControls id={proposal.id} status={proposal.status} />
             {proposal.status === "signed" && !project && <ProposalConvertButton id={proposal.id} />}
             {project && (
               <Link href={`/console/projects/${project.id}`} className="btn btn-primary btn-sm">
-                View Project
+                {t("console.proposals.detail.viewProject", undefined, "View Project")}
               </Link>
             )}
           </div>
@@ -65,16 +70,22 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label="Status">
+          <Field label={t("console.proposals.detail.fields.status", undefined, "Status")}>
             <StatusBadge status={proposal.status} />
           </Field>
-          <Field label="Amount">{formatMoney(proposal.amount_cents ?? 0)}</Field>
-          <Field label="Sent">{proposal.sent_at ? timeAgo(proposal.sent_at) : "—"}</Field>
-          <Field label="Signed">{proposal.signed_at ? timeAgo(proposal.signed_at) : "—"}</Field>
+          <Field label={t("console.proposals.detail.fields.amount", undefined, "Amount")}>
+            {formatMoney(proposal.amount_cents ?? 0)}
+          </Field>
+          <Field label={t("console.proposals.detail.fields.sent", undefined, "Sent")}>
+            {proposal.sent_at ? timeAgo(proposal.sent_at) : "—"}
+          </Field>
+          <Field label={t("console.proposals.detail.fields.signed", undefined, "Signed")}>
+            {proposal.signed_at ? timeAgo(proposal.signed_at) : "—"}
+          </Field>
         </div>
         {proposal.notes && (
           <div className="surface p-5">
-            <h3 className="text-base font-semibold">Scope</h3>
+            <h3 className="text-base font-semibold">{t("console.proposals.detail.scope", undefined, "Scope")}</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{proposal.notes}</p>
           </div>
         )}

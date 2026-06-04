@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createChange } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
   if (!hasSupabase) return notFound();
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -24,12 +26,21 @@ export default async function Page() {
   if (accreditations.length === 0) {
     return (
       <>
-        <ModuleHeader eyebrow="Accreditation · Changes" title="New Change Request" />
+        <ModuleHeader
+          eyebrow={t("console.accreditation.changes.eyebrow", undefined, "Accreditation · Changes")}
+          title={t("console.accreditation.changes.new.title", undefined, "New Change Request")}
+        />
         <div className="page-content max-w-xl">
           <div className="surface space-y-3 p-6 text-sm">
-            <p>You need at least one accreditation on file before you can request a change.</p>
+            <p>
+              {t(
+                "console.accreditation.changes.new.emptyBody",
+                undefined,
+                "You need at least one accreditation on file before you can request a change.",
+              )}
+            </p>
             <Button href="/console/accreditation" size="sm">
-              Go to accreditation
+              {t("console.accreditation.changes.new.goToAccreditation", undefined, "Go to accreditation")}
             </Button>
           </div>
         </div>
@@ -39,11 +50,20 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Accreditation · Changes" title="New Change Request" />
+      <ModuleHeader
+        eyebrow={t("console.accreditation.changes.eyebrow", undefined, "Accreditation · Changes")}
+        title={t("console.accreditation.changes.new.title", undefined, "New Change Request")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createChange} cancelHref="/console/accreditation/changes" submitLabel="Request Change">
+        <FormShell
+          action={createChange}
+          cancelHref="/console/accreditation/changes"
+          submitLabel={t("console.accreditation.changes.new.submit", undefined, "Request Change")}
+        >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Accreditation</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.accreditation.changes.new.fields.accreditation", undefined, "Accreditation")}
+            </label>
             <select name="accreditation_id" className="input-base mt-1.5 w-full" required>
               {accreditations.map((a) => (
                 <option key={a.id} value={a.id}>
@@ -53,24 +73,36 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.accreditation.changes.new.fields.kind", undefined, "Kind")}
+            </label>
             <select name="kind" defaultValue="reissue" className="input-base mt-1.5 w-full" required>
-              <option value="reissue">Re-issue</option>
-              <option value="role_change">Role change</option>
-              <option value="zone_change">Zone change</option>
-              <option value="revocation">Revocation</option>
-              <option value="lost">Lost / replacement</option>
-              <option value="other">Other</option>
+              <option value="reissue">{t("console.accreditation.changes.kinds.reissue", undefined, "Re-issue")}</option>
+              <option value="role_change">
+                {t("console.accreditation.changes.kinds.roleChange", undefined, "Role change")}
+              </option>
+              <option value="zone_change">
+                {t("console.accreditation.changes.kinds.zoneChange", undefined, "Zone change")}
+              </option>
+              <option value="revocation">
+                {t("console.accreditation.changes.kinds.revocation", undefined, "Revocation")}
+              </option>
+              <option value="lost">
+                {t("console.accreditation.changes.kinds.lost", undefined, "Lost / replacement")}
+              </option>
+              <option value="other">{t("console.accreditation.changes.kinds.other", undefined, "Other")}</option>
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Note</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.accreditation.changes.new.fields.note", undefined, "Note")}
+            </label>
             <textarea
               name="note"
               rows={3}
               maxLength={2000}
               className="input-base mt-1.5 w-full"
-              placeholder="Reason / detail"
+              placeholder={t("console.accreditation.changes.new.fields.notePlaceholder", undefined, "Reason / detail")}
             />
           </div>
         </FormShell>

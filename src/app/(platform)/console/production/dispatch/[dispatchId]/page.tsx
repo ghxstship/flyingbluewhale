@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -59,12 +59,18 @@ function manifestLength(raw: unknown): number {
 
 export default async function Page({ params }: { params: Promise<{ dispatchId: string }> }) {
   const { dispatchId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Dispatch Run" />
+        <ModuleHeader
+          eyebrow={t("console.production.dispatch.detail.eyebrow", undefined, "Production")}
+          title={t("console.production.dispatch.detail.title", undefined, "Dispatch Run")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.dispatch.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -94,15 +100,22 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
     const diffMin = Math.round(
       (new Date(run.actual_depart).getTime() - new Date(run.scheduled_depart).getTime()) / 60_000,
     );
-    if (diffMin > 0) onTimeNote = `${diffMin}m late`;
-    else if (diffMin < 0) onTimeNote = `${Math.abs(diffMin)}m early`;
-    else onTimeNote = "On time";
+    if (diffMin > 0)
+      onTimeNote = t("console.production.dispatch.detail.minutesLate", { minutes: diffMin }, `${diffMin}m late`);
+    else if (diffMin < 0)
+      onTimeNote = t(
+        "console.production.dispatch.detail.minutesEarly",
+        { minutes: Math.abs(diffMin) },
+        `${Math.abs(diffMin)}m early`,
+      );
+    else onTimeNote = t("console.production.dispatch.detail.onTime", undefined, "On time");
   }
+  const onTimeLabel = t("console.production.dispatch.detail.onTime", undefined, "On time");
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
+        eyebrow={t("console.production.dispatch.detail.eyebrow", undefined, "Production")}
         title={`${run.origin?.name ?? "—"} → ${run.destination?.name ?? "—"}`}
         subtitle={
           <span className="font-mono text-xs">
@@ -111,37 +124,68 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
           </span>
         }
         breadcrumbs={[
-          { label: "Production", href: "/console/production" },
-          { label: "Dispatch", href: "/console/production/dispatch" },
+          { label: t("console.production.breadcrumb", undefined, "Production"), href: "/console/production" },
+          {
+            label: t("console.production.dispatch.breadcrumb", undefined, "Dispatch"),
+            href: "/console/production/dispatch",
+          },
           { label: run.id.slice(0, 8) },
         ]}
         action={<Badge variant={tone}>{toTitle(run.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Passengers" value={fmtIntl.number(passengers)} />
-          <MetricCard label="Driver" value={run.driver?.name ?? run.driver?.email ?? "Unassigned"} />
-          <MetricCard label="On-time" value={onTimeNote || "—"} accent={onTimeNote === "On time"} />
+          <MetricCard
+            label={t("console.production.dispatch.detail.metric.passengers", undefined, "Passengers")}
+            value={fmtIntl.number(passengers)}
+          />
+          <MetricCard
+            label={t("console.production.dispatch.detail.metric.driver", undefined, "Driver")}
+            value={
+              run.driver?.name ??
+              run.driver?.email ??
+              t("console.production.dispatch.detail.unassigned", undefined, "Unassigned")
+            }
+          />
+          <MetricCard
+            label={t("console.production.dispatch.detail.metric.onTime", undefined, "On-time")}
+            value={onTimeNote || "—"}
+            accent={onTimeNote === onTimeLabel}
+          />
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Schedule</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.production.dispatch.detail.scheduleHeading", undefined, "Schedule")}
+          </h3>
           <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-muted)]">Depart (scheduled)</dt>
+            <dt className="text-[var(--text-muted)]">
+              {t("console.production.dispatch.detail.departScheduled", undefined, "Depart (scheduled)")}
+            </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_depart)}</dd>
-            <dt className="text-[var(--text-muted)]">Depart (actual)</dt>
+            <dt className="text-[var(--text-muted)]">
+              {t("console.production.dispatch.detail.departActual", undefined, "Depart (actual)")}
+            </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_depart)}</dd>
-            <dt className="text-[var(--text-muted)]">Arrive (scheduled)</dt>
+            <dt className="text-[var(--text-muted)]">
+              {t("console.production.dispatch.detail.arriveScheduled", undefined, "Arrive (scheduled)")}
+            </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_arrive)}</dd>
-            <dt className="text-[var(--text-muted)]">Arrive (actual)</dt>
+            <dt className="text-[var(--text-muted)]">
+              {t("console.production.dispatch.detail.arriveActual", undefined, "Arrive (actual)")}
+            </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_arrive)}</dd>
           </dl>
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Manifest</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.production.dispatch.detail.manifestHeading", undefined, "Manifest")}
+          </h3>
           {passengers === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No passengers on this run.</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("console.production.dispatch.detail.noPassengers", undefined, "No passengers on this run.")}
+            </p>
           ) : (
             <pre className="mt-3 max-h-72 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
               {JSON.stringify(run.manifest, null, 2)}

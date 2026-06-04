@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -48,12 +49,18 @@ function stageTone(stage: StageRow): "muted" | "info" | "success" | "error" {
 }
 
 export default async function PipelinePage({ searchParams }: { searchParams: Promise<{ pipeline?: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Sales" title="Pipeline" />
+        <ModuleHeader
+          eyebrow={t("console.pipeline.eyebrow", undefined, "Sales")}
+          title={t("console.pipeline.title", undefined, "Pipeline")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.pipeline.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -74,11 +81,19 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
   if (pipelines.length === 0) {
     return (
       <>
-        <ModuleHeader eyebrow="Sales" title="Pipeline" subtitle="CRM deal pipeline grouped by stage" />
+        <ModuleHeader
+          eyebrow={t("console.pipeline.eyebrow", undefined, "Sales")}
+          title={t("console.pipeline.title", undefined, "Pipeline")}
+          subtitle={t("console.pipeline.subtitleDefault", undefined, "CRM deal pipeline grouped by stage")}
+        />
         <div className="page-content">
           <EmptyState
-            title="No Pipelines"
-            description="Pipelines are the named funnels deals move through (e.g. New Business, Renewals). Seed one in `pipeline_definitions` with at least one row in `pipeline_stages` to start tracking opportunities."
+            title={t("console.pipeline.empty.title", undefined, "No Pipelines")}
+            description={t(
+              "console.pipeline.empty.description",
+              undefined,
+              "Pipelines are the named funnels deals move through (e.g. New Business, Renewals). Seed one in `pipeline_definitions` with at least one row in `pipeline_stages` to start tracking opportunities.",
+            )}
           />
         </div>
       </>
@@ -125,9 +140,13 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
   return (
     <>
       <ModuleHeader
-        eyebrow="Sales"
-        title="Pipeline"
-        subtitle={`${opportunities.length} Open  deal${opportunities.length === 1 ? "" : "s"} in ${active.name}`}
+        eyebrow={t("console.pipeline.eyebrow", undefined, "Sales")}
+        title={t("console.pipeline.title", undefined, "Pipeline")}
+        subtitle={t(
+          opportunities.length === 1 ? "console.pipeline.subtitle.one" : "console.pipeline.subtitle.other",
+          { count: opportunities.length, pipeline: active.name },
+          `${opportunities.length} Open  deal${opportunities.length === 1 ? "" : "s"} in ${active.name}`,
+        )}
         action={
           pipelines.length > 1 ? (
             <div className="flex items-center gap-1">
@@ -149,15 +168,29 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open Value" value={formatMoney(totalValue)} />
-          <MetricCard label="Weighted" value={formatMoney(weightedValue)} accent />
-          <MetricCard label="Won (Open)" value={formatMoney(wonValue)} />
+          <MetricCard
+            label={t("console.pipeline.metrics.openValue", undefined, "Open Value")}
+            value={formatMoney(totalValue)}
+          />
+          <MetricCard
+            label={t("console.pipeline.metrics.weighted", undefined, "Weighted")}
+            value={formatMoney(weightedValue)}
+            accent
+          />
+          <MetricCard
+            label={t("console.pipeline.metrics.wonOpen", undefined, "Won (Open)")}
+            value={formatMoney(wonValue)}
+          />
         </div>
 
         {stages.length === 0 ? (
           <EmptyState
-            title="No Stages"
-            description={`Pipeline "${active.name}" has no stages. Add rows to \`pipeline_stages\` with this pipeline_id to start placing deals.`}
+            title={t("console.pipeline.noStages.title", undefined, "No Stages")}
+            description={t(
+              "console.pipeline.noStages.description",
+              { pipeline: active.name },
+              `Pipeline "${active.name}" has no stages. Add rows to \`pipeline_stages\` with this pipeline_id to start placing deals.`,
+            )}
           />
         ) : (
           <div className="space-y-4">
@@ -170,13 +203,19 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                     <div className="flex items-center gap-2">
                       <Badge variant={stageTone(stage)}>{stage.name}</Badge>
                       <span className="font-mono text-[11px] text-[var(--text-muted)]">
-                        {lane.length} deal{lane.length === 1 ? "" : "s"}
+                        {t(
+                          lane.length === 1 ? "console.pipeline.lane.deals.one" : "console.pipeline.lane.deals.other",
+                          { count: lane.length },
+                          `${lane.length} deal${lane.length === 1 ? "" : "s"}`,
+                        )}
                       </span>
                     </div>
                     <span className="font-mono text-xs">{formatMoney(laneValue)}</span>
                   </header>
                   {lane.length === 0 ? (
-                    <p className="py-4 text-center text-xs text-[var(--text-muted)]">No deals in this stage.</p>
+                    <p className="py-4 text-center text-xs text-[var(--text-muted)]">
+                      {t("console.pipeline.lane.empty", undefined, "No deals in this stage.")}
+                    </p>
                   ) : (
                     <ul className="mt-2 divide-y divide-[var(--border-color)]">
                       {lane.map((o) => (
@@ -189,9 +228,23 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                               <div className="truncate text-sm font-medium">{o.title}</div>
                               <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10px] text-[var(--text-muted)]">
                                 {o.account?.party?.display_name && <span>{o.account.party.display_name}</span>}
-                                {o.expected_close && <span>· close {o.expected_close}</span>}
+                                {o.expected_close && (
+                                  <span>
+                                    {t(
+                                      "console.pipeline.opp.close",
+                                      { date: o.expected_close },
+                                      `· close ${o.expected_close}`,
+                                    )}
+                                  </span>
+                                )}
                                 {o.source && <span>· {o.source}</span>}
-                                <span>· updated {timeAgo(o.updated_at)}</span>
+                                <span>
+                                  {t(
+                                    "console.pipeline.opp.updated",
+                                    { time: timeAgo(o.updated_at) },
+                                    `· updated ${timeAgo(o.updated_at)}`,
+                                  )}
+                                </span>
                               </div>
                             </div>
                             <div className="text-right">

@@ -3,18 +3,25 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { KNOWN_CONNECTORS } from "./connectors";
 import { installConnector, uninstallConnector } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function IntegrationsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Integrations" />
+        <ModuleHeader
+          eyebrow={t("console.settings.integrations.eyebrow", undefined, "Settings")}
+          title={t("console.settings.integrations.title", undefined, "Integrations")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.integrations.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -36,7 +43,11 @@ export default async function IntegrationsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Integrations" />
+      <ModuleHeader
+        eyebrow={t("console.settings.integrations.eyebrow", undefined, "Settings")}
+        title={t("console.settings.integrations.workspaceTitle", undefined, "Workspace Settings")}
+        subtitle={t("console.settings.integrations.subtitle", undefined, "Integrations")}
+      />
       <div className="page-content">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {KNOWN_CONNECTORS.map((c) => {
@@ -46,7 +57,15 @@ export default async function IntegrationsPage() {
               <div key={c.id} className="surface flex flex-col p-5">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">{c.name}</div>
-                  {isInstalled ? <Badge variant="success">Connected</Badge> : <Badge variant="muted">Available</Badge>}
+                  {isInstalled ? (
+                    <Badge variant="success">
+                      {t("console.settings.integrations.connected", undefined, "Connected")}
+                    </Badge>
+                  ) : (
+                    <Badge variant="muted">
+                      {t("console.settings.integrations.available", undefined, "Available")}
+                    </Badge>
+                  )}
                 </div>
                 <p className="mt-2 text-xs text-[var(--text-muted)]">{c.desc}</p>
                 <div className="mt-4 flex gap-2">
@@ -54,18 +73,20 @@ export default async function IntegrationsPage() {
                     <form action={uninstallConnector}>
                       <input type="hidden" name="connector" value={c.id} />
                       <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
-                        Disconnect
+                        {t("console.settings.integrations.disconnect", undefined, "Disconnect")}
                       </button>
                     </form>
                   ) : !envProof[c.id] ? (
                     <form action={installConnector}>
                       <input type="hidden" name="connector" value={c.id} />
                       <button type="submit" className="text-xs font-medium text-[var(--org-primary)] hover:underline">
-                        Connect
+                        {t("console.settings.integrations.connect", undefined, "Connect")}
                       </button>
                     </form>
                   ) : (
-                    <span className="text-xs text-[var(--text-muted)]">via env</span>
+                    <span className="text-xs text-[var(--text-muted)]">
+                      {t("console.settings.integrations.viaEnv", undefined, "via env")}
+                    </span>
                   )}
                 </div>
               </div>

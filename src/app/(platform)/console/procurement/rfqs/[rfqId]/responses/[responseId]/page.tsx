@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo, toTitle } from "@/lib/format";
 import { addResponseLine, deleteResponseLine } from "./actions";
 
@@ -44,7 +45,13 @@ type LineRow = {
 
 export default async function Page({ params }: { params: Promise<{ rfqId: string; responseId: string }> }) {
   const { rfqId, responseId } = await params;
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.procurement.rfqs.responses.detail.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -85,74 +92,134 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement · Response"
-        title={response.vendor?.name ?? "Unknown Vendor"}
+        eyebrow={t("console.procurement.rfqs.responses.detail.eyebrow", undefined, "Procurement · Response")}
+        title={
+          response.vendor?.name ??
+          t("console.procurement.rfqs.responses.detail.unknownVendor", undefined, "Unknown Vendor")
+        }
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <Badge variant={RESPONSE_TONE[response.response_state] ?? "muted"}>
               {toTitle(response.response_state)}
             </Badge>
             {response.submitted_at && (
-              <span className="font-mono text-xs">submitted {timeAgo(response.submitted_at)}</span>
+              <span className="font-mono text-xs">
+                {t(
+                  "console.procurement.rfqs.responses.detail.submittedAgo",
+                  { ago: timeAgo(response.submitted_at) },
+                  `submitted ${timeAgo(response.submitted_at)}`,
+                )}
+              </span>
             )}
-            {response.awarded_at && <span className="font-mono text-xs">awarded {timeAgo(response.awarded_at)}</span>}
+            {response.awarded_at && (
+              <span className="font-mono text-xs">
+                {t(
+                  "console.procurement.rfqs.responses.detail.awardedAgo",
+                  { ago: timeAgo(response.awarded_at) },
+                  `awarded ${timeAgo(response.awarded_at)}`,
+                )}
+              </span>
+            )}
           </span>
         }
         breadcrumbs={[
-          { label: "Procurement", href: "/console/procurement" },
-          { label: "RFQs", href: "/console/procurement/rfqs" },
+          { label: t("console.procurement.breadcrumb", undefined, "Procurement"), href: "/console/procurement" },
+          { label: t("console.procurement.rfqs.breadcrumb", undefined, "RFQs"), href: "/console/procurement/rfqs" },
           { label: rfq.title, href: `/console/procurement/rfqs/${rfqId}` },
-          { label: "Responses", href: `/console/procurement/rfqs/${rfqId}/responses` },
-          { label: response.vendor?.name ?? "Response" },
+          {
+            label: t("console.procurement.rfqs.responses.breadcrumb", undefined, "Responses"),
+            href: `/console/procurement/rfqs/${rfqId}/responses`,
+          },
+          {
+            label:
+              response.vendor?.name ??
+              t("console.procurement.rfqs.responses.detail.responseBreadcrumb", undefined, "Response"),
+          },
         ]}
         action={
           <Button href={`/console/procurement/rfqs/${rfqId}/responses`} variant="ghost" size="sm">
-            Back
+            {t("common.back", undefined, "Back")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label="Headline Total"
+            label={t("console.procurement.rfqs.responses.detail.metric.headlineTotal", undefined, "Headline Total")}
             value={response.total_cents != null ? formatMoney(response.total_cents) : "—"}
           />
-          <MetricCard label="Line-Item Sum" value={formatMoney(linesTotal)} accent={!totalsMatch} />
-          <MetricCard label="Lines" value={String(lines.length)} />
+          <MetricCard
+            label={t("console.procurement.rfqs.responses.detail.metric.lineItemSum", undefined, "Line-Item Sum")}
+            value={formatMoney(linesTotal)}
+            accent={!totalsMatch}
+          />
+          <MetricCard
+            label={t("console.procurement.rfqs.responses.detail.metric.lines", undefined, "Lines")}
+            value={String(lines.length)}
+          />
         </div>
 
         {!totalsMatch && (
           <div className="surface-inset rounded-md border border-[var(--warning)] p-3 text-xs">
-            <strong>Heads up:</strong> the line-item sum ({formatMoney(linesTotal)}) doesn&rsquo;t match the headline
-            total ({response.total_cents != null ? formatMoney(response.total_cents) : "—"}). Reconcile before awarding.
+            <strong>{t("console.procurement.rfqs.responses.detail.headsUp", undefined, "Heads up:")}</strong>{" "}
+            {t(
+              "console.procurement.rfqs.responses.detail.mismatch",
+              {
+                lineSum: formatMoney(linesTotal),
+                headline: response.total_cents != null ? formatMoney(response.total_cents) : "—",
+              },
+              `the line-item sum (${formatMoney(linesTotal)}) doesn’t match the headline total (${response.total_cents != null ? formatMoney(response.total_cents) : "—"}). Reconcile before awarding.`,
+            )}
           </div>
         )}
 
         {response.notes && (
           <section className="surface p-4">
-            <h2 className="text-sm font-semibold">Vendor Notes</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.procurement.rfqs.responses.detail.vendorNotes", undefined, "Vendor Notes")}
+            </h2>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{response.notes}</p>
           </section>
         )}
 
         <section className="surface p-5">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold tracking-wide uppercase">Line Items</h2>
-            <span className="font-mono text-xs text-[var(--text-muted)]">{lines.length} lines</span>
+            <h2 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.procurement.rfqs.responses.detail.lineItems", undefined, "Line Items")}
+            </h2>
+            <span className="font-mono text-xs text-[var(--text-muted)]">
+              {t(
+                "console.procurement.rfqs.responses.detail.linesCount",
+                { count: lines.length },
+                `${lines.length} lines`,
+              )}
+            </span>
           </div>
           {lines.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No itemized bid. Add lines below to break out SKU-level pricing for like-for-like comparison.
+              {t(
+                "console.procurement.rfqs.responses.detail.empty",
+                undefined,
+                "No itemized bid. Add lines below to break out SKU-level pricing for like-for-like comparison.",
+              )}
             </p>
           ) : (
             <table className="data-table mt-3 w-full">
               <thead>
                 <tr>
                   <th className="w-12 text-start">#</th>
-                  <th className="text-start">Description</th>
-                  <th className="text-right">Qty</th>
-                  <th className="text-right">Unit Price</th>
-                  <th className="text-right">Line Total</th>
+                  <th className="text-start">
+                    {t("console.procurement.rfqs.responses.detail.col.description", undefined, "Description")}
+                  </th>
+                  <th className="text-right">
+                    {t("console.procurement.rfqs.responses.detail.col.qty", undefined, "Qty")}
+                  </th>
+                  <th className="text-right">
+                    {t("console.procurement.rfqs.responses.detail.col.unitPrice", undefined, "Unit Price")}
+                  </th>
+                  <th className="text-right">
+                    {t("console.procurement.rfqs.responses.detail.col.lineTotal", undefined, "Line Total")}
+                  </th>
                   {editable && <th />}
                 </tr>
               </thead>
@@ -176,7 +243,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                           <input type="hidden" name="responseId" value={responseId} />
                           <input type="hidden" name="lineId" value={l.id} />
                           <Button type="submit" size="sm" variant="ghost">
-                            Remove
+                            {t("common.remove", undefined, "Remove")}
                           </Button>
                         </form>
                       </td>
@@ -197,7 +264,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
               <input
                 name="description"
                 required
-                placeholder="Description"
+                placeholder={t("console.procurement.rfqs.responses.detail.col.description", undefined, "Description")}
                 maxLength={500}
                 className="input-base sm:col-span-3"
               />
@@ -207,7 +274,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                 step="0.01"
                 min="0"
                 required
-                placeholder="Qty"
+                placeholder={t("console.procurement.rfqs.responses.detail.col.qty", undefined, "Qty")}
                 defaultValue="1"
                 className="input-base sm:col-span-1"
               />
@@ -217,11 +284,11 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                 step="0.01"
                 min="0"
                 required
-                placeholder="Unit $"
+                placeholder={t("console.procurement.rfqs.responses.detail.placeholder.unitPrice", undefined, "Unit $")}
                 className="input-base sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
-                Add Line
+                {t("console.procurement.rfqs.responses.detail.addLine", undefined, "Add Line")}
               </Button>
             </form>
           )}

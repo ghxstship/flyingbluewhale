@@ -1,17 +1,25 @@
 "use client";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createFabAction } from "../actions";
 
 export function NewFabForm() {
+  const t = useT();
   return (
-    <FormShell action={createFabAction} cancelHref="/console/production/fabrication" submitLabel="Create Order">
-      <Input label="Title" name="title" required />
+    <FormShell
+      action={createFabAction}
+      cancelHref="/console/production/fabrication"
+      submitLabel={t("console.production.fabrication.new.submit", undefined, "Create Order")}
+    >
+      <Input label={t("console.production.fabrication.new.title", undefined, "Title")} name="title" required />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">
+          {t("console.production.fabrication.new.description", undefined, "Description")}
+        </label>
         <textarea name="description" rows={3} className="input-base mt-1.5 w-full" />
       </div>
-      <Input label="Due" name="due_at" type="date" />
+      <Input label={t("console.production.fabrication.new.due", undefined, "Due")} name="due_at" type="date" />
     </FormShell>
   );
 }

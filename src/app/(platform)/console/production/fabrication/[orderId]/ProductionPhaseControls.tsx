@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { transitionProductionPhaseAction } from "../actions";
 import type { ProductionPhase } from "@/lib/production-phase";
 import { toTitle } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function ProductionPhaseControls({
   orderId,
@@ -15,10 +16,15 @@ export function ProductionPhaseControls({
   currentPhase: ProductionPhase;
   allowedNext: readonly ProductionPhase[];
 }) {
+  const t = useT();
   const [pending, startTransition] = useTransition();
 
   if (allowedNext.length === 0) {
-    return <p className="text-xs text-[var(--text-secondary)]">Terminal phase.</p>;
+    return (
+      <p className="text-xs text-[var(--text-secondary)]">
+        {t("console.production.fabrication.phaseControls.terminal", undefined, "Terminal phase.")}
+      </p>
+    );
   }
 
   return (
@@ -43,7 +49,8 @@ export function ProductionPhaseControls({
         </form>
       ))}
       <span className="ms-2 self-center text-xs text-[var(--text-secondary)]">
-        From <strong>{toTitle(currentPhase)}</strong>
+        {t("console.production.fabrication.phaseControls.from", undefined, "From")}{" "}
+        <strong>{toTitle(currentPhase)}</strong>
       </span>
     </div>
   );

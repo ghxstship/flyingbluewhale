@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -61,25 +61,30 @@ const STATE_TONE: Record<EnvelopeState, "muted" | "info" | "warning" | "success"
   expired: "muted",
 };
 
-const TARGET_LABEL: Record<TargetType, string> = {
-  proposal: "Proposal",
-  offer_letter: "Offer Letter",
-  msa: "MSA",
-  prime_contract: "Prime Contract",
-  sub_contract: "Sub Contract",
-  change_order: "Change Order",
-  lien_waiver: "Lien Waiver",
-  nda: "NDA",
-  other: "Other",
-};
-
 export default async function Page() {
+  const { t } = await getRequestT();
+  const TARGET_LABEL: Record<TargetType, string> = {
+    proposal: t("console.envelopes.target.proposal", undefined, "Proposal"),
+    offer_letter: t("console.envelopes.target.offerLetter", undefined, "Offer Letter"),
+    msa: t("console.envelopes.target.msa", undefined, "MSA"),
+    prime_contract: t("console.envelopes.target.primeContract", undefined, "Prime Contract"),
+    sub_contract: t("console.envelopes.target.subContract", undefined, "Sub Contract"),
+    change_order: t("console.envelopes.target.changeOrder", undefined, "Change Order"),
+    lien_waiver: t("console.envelopes.target.lienWaiver", undefined, "Lien Waiver"),
+    nda: t("console.envelopes.target.nda", undefined, "NDA"),
+    other: t("console.envelopes.target.other", undefined, "Other"),
+  };
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Legal" title="E-Sign Envelopes" />
+        <ModuleHeader
+          eyebrow={t("console.envelopes.eyebrow", undefined, "Legal")}
+          title={t("console.envelopes.title", undefined, "E-Sign Envelopes")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.envelopes.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -129,36 +134,61 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Legal"
-        title="E-Sign Envelopes"
-        subtitle={`${rows.length} envelope${rows.length === 1 ? "" : "s"} · ${outstandingCount} outstanding · ${completedCount} completed`}
+        eyebrow={t("console.envelopes.eyebrow", undefined, "Legal")}
+        title={t("console.envelopes.title", undefined, "E-Sign Envelopes")}
+        subtitle={t(
+          "console.envelopes.subtitle",
+          {
+            count: rows.length,
+            label: rows.length === 1 ? "envelope" : "envelopes",
+            outstanding: outstandingCount,
+            completed: completedCount,
+          },
+          `${rows.length} envelope${rows.length === 1 ? "" : "s"} · ${outstandingCount} outstanding · ${completedCount} completed`,
+        )}
         action={
           <Button href="/console/envelopes/new" size="sm">
-            + New Envelope
+            {t("console.envelopes.newEnvelope", undefined, "+ New Envelope")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Outstanding" value={fmt.number(outstandingCount)} accent />
-          <MetricCard label="Completed" value={fmt.number(completedCount)} />
-          <MetricCard label="Total" value={fmt.number(rows.length)} />
+          <MetricCard
+            label={t("console.envelopes.metric.outstanding", undefined, "Outstanding")}
+            value={fmt.number(outstandingCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.envelopes.metric.completed", undefined, "Completed")}
+            value={fmt.number(completedCount)}
+          />
+          <MetricCard label={t("console.envelopes.metric.total", undefined, "Total")} value={fmt.number(rows.length)} />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/envelopes/${r.id}`}
-          emptyLabel="No e-sign envelopes yet"
-          emptyDescription="Polymorphic e-signature envelopes for offer letters, MSAs, prime/sub contracts, change orders, lien waivers, NDAs. Routes via DocuSign / Adobe Sign / HelloSign / PandaDoc."
+          emptyLabel={t("console.envelopes.emptyLabel", undefined, "No e-sign envelopes yet")}
+          emptyDescription={t(
+            "console.envelopes.emptyDescription",
+            undefined,
+            "Polymorphic e-signature envelopes for offer letters, MSAs, prime/sub contracts, change orders, lien waivers, NDAs. Routes via DocuSign / Adobe Sign / HelloSign / PandaDoc.",
+          )}
           emptyAction={
             <Button href="/console/envelopes/new" size="sm">
-              + New Envelope
+              {t("console.envelopes.newEnvelope", undefined, "+ New Envelope")}
             </Button>
           }
           columns={[
-            { key: "subject", header: "Subject", render: (r) => r.subject, accessor: (r) => r.subject },
+            {
+              key: "subject",
+              header: t("console.envelopes.column.subject", undefined, "Subject"),
+              render: (r) => r.subject,
+              accessor: (r) => r.subject,
+            },
             {
               key: "target",
-              header: "Target",
+              header: t("console.envelopes.column.target", undefined, "Target"),
               render: (r) => TARGET_LABEL[r.target_type],
               accessor: (r) => r.target_type,
               filterable: true,
@@ -167,7 +197,7 @@ export default async function Page() {
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.envelopes.column.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -175,7 +205,7 @@ export default async function Page() {
             },
             {
               key: "provider",
-              header: "Provider",
+              header: t("console.envelopes.column.provider", undefined, "Provider"),
               render: (r) => toTitle(r.provider.replace(/_/g, " ")),
               accessor: (r) => r.provider,
               filterable: true,
@@ -184,14 +214,14 @@ export default async function Page() {
             },
             {
               key: "signers",
-              header: "Signers",
+              header: t("console.envelopes.column.signers", undefined, "Signers"),
               render: (r) => `${r.signed_count} / ${r.signer_count}`,
               accessor: (r) => r.signer_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "sent",
-              header: "Sent",
+              header: t("console.envelopes.column.sent", undefined, "Sent"),
               render: (r) =>
                 r.sent_at ? fmt.dateParts(r.sent_at, { month: "short", day: "numeric", year: "2-digit" }) : "—",
               accessor: (r) => r.sent_at,
@@ -199,7 +229,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.envelopes.column.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.envelope_state]}>{toTitle(r.envelope_state)}</Badge>,
               accessor: (r) => r.envelope_state,
               filterable: true,

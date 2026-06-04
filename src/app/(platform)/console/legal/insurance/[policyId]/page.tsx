@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deletePolicy } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ policyId: string }> }) {
   const p = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Insurance Policy" />
+        <ModuleHeader title={t("console.legal.insurance.detail.title", undefined, "Insurance Policy")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.legal.insurance.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ policyId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Legal · Insurance"
+        eyebrow={t("console.legal.insurance.detail.eyebrow", undefined, "Legal · Insurance")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/legal/insurance" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/legal/insurance/${p.policyId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deletePolicy.bind(null, p.policyId)}
-              confirm={`Delete policy "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.legal.insurance.detail.deleteConfirm",
+                { title },
+                `Delete policy "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

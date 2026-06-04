@@ -1,56 +1,85 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { getRequestT } from "@/lib/i18n/request";
 import { createCatalogItem } from "./actions";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Catalog" title="New Item" />
+      <ModuleHeader
+        eyebrow={t("console.settings.catalog.new.eyebrow", undefined, "Catalog")}
+        title={t("console.settings.catalog.new.title", undefined, "New Item")}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={createCatalogItem} cancelHref="/console/settings/catalog" submitLabel="Create">
+        <FormShell
+          action={createCatalogItem}
+          cancelHref="/console/settings/catalog"
+          submitLabel={t("common.create", undefined, "Create")}
+        >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.catalog.new.kindLabel", undefined, "Kind")}
+            </label>
             <select name="kind" required className="input-base mt-1.5 w-full" defaultValue="credential">
-              <option value="credential">Credential</option>
-              <option value="catering">Catering</option>
-              <option value="radio">Radio</option>
-              <option value="tool">Tool</option>
-              <option value="equipment">Equipment</option>
-              <option value="uniform">Uniform</option>
-              <option value="travel">Travel</option>
-              <option value="lodging">Lodging</option>
-              <option value="vehicle">Vehicle</option>
+              <option value="credential">
+                {t("console.settings.catalog.kind.credential", undefined, "Credential")}
+              </option>
+              <option value="catering">{t("console.settings.catalog.kind.catering", undefined, "Catering")}</option>
+              <option value="radio">{t("console.settings.catalog.kind.radio", undefined, "Radio")}</option>
+              <option value="tool">{t("console.settings.catalog.kind.tool", undefined, "Tool")}</option>
+              <option value="equipment">{t("console.settings.catalog.kind.equipment", undefined, "Equipment")}</option>
+              <option value="uniform">{t("console.settings.catalog.kind.uniform", undefined, "Uniform")}</option>
+              <option value="travel">{t("console.settings.catalog.kind.travel", undefined, "Travel")}</option>
+              <option value="lodging">{t("console.settings.catalog.kind.lodging", undefined, "Lodging")}</option>
+              <option value="vehicle">{t("console.settings.catalog.kind.vehicle", undefined, "Vehicle")}</option>
             </select>
           </div>
           <Input
-            label="Code"
+            label={t("console.settings.catalog.new.codeLabel", undefined, "Code")}
             name="code"
             required
             maxLength={64}
             placeholder="crew-pass-tier1"
-            hint="Short identifier. Lowercase, dashes ok."
+            hint={t("console.settings.catalog.new.codeHint", undefined, "Short identifier. Lowercase, dashes ok.")}
           />
-          <Input label="Name" name="name" required maxLength={200} placeholder="Crew Pass (Tier 1)" />
+          <Input
+            label={t("console.settings.catalog.new.nameLabel", undefined, "Name")}
+            name="name"
+            required
+            maxLength={200}
+            placeholder="Crew Pass (Tier 1)"
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.catalog.new.descriptionLabel", undefined, "Description")}
+            </label>
             <textarea name="description" rows={3} maxLength={1000} className="input-base mt-1.5 w-full" />
           </div>
           <Input
-            label="Unit cost (USD)"
+            label={t("console.settings.catalog.new.unitCostLabel", undefined, "Unit cost (USD)")}
             name="unit_cost_usd"
             type="number"
             step="0.01"
             min="0"
-            hint="Optional. Used for inventory roll-ups + cost-allocation reports."
+            hint={t(
+              "console.settings.catalog.new.unitCostHint",
+              undefined,
+              "Optional. Used for inventory roll-ups + cost-allocation reports.",
+            )}
           />
           <Input
-            label="Inventory quantity"
+            label={t("console.settings.catalog.new.inventoryQtyLabel", undefined, "Inventory quantity")}
             name="inventory_qty"
             type="number"
             step="1"
             min="0"
-            hint="Optional. Total stock available across the org."
+            hint={t(
+              "console.settings.catalog.new.inventoryQtyHint",
+              undefined,
+              "Optional. Total stock available across the org.",
+            )}
           />
         </FormShell>
       </div>

@@ -1,43 +1,82 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { getRequestT } from "@/lib/i18n/request";
 import { createPlaybook } from "./actions";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="New Playbook" />
+      <ModuleHeader
+        eyebrow={t("console.safety.playbooks.new.eyebrow", undefined, "Safety")}
+        title={t("console.safety.playbooks.new.title", undefined, "New Playbook")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createPlaybook} cancelHref="/console/safety/playbooks" submitLabel="Create Playbook">
+        <FormShell
+          action={createPlaybook}
+          cancelHref="/console/safety/playbooks"
+          submitLabel={t("console.safety.playbooks.new.submitLabel", undefined, "Create Playbook")}
+        >
           <div>
-            <Input label="Slug" name="slug" maxLength={80} placeholder="evacuation-stadium-a" required />
+            <Input
+              label={t("console.safety.playbooks.new.slugLabel", undefined, "Slug")}
+              name="slug"
+              maxLength={80}
+              placeholder="evacuation-stadium-a"
+              required
+            />
             <p className="mt-1 text-[10px] text-[var(--text-muted)]">
-              Lowercase letters, digits, dashes. Used in the URL.
+              {t(
+                "console.safety.playbooks.new.slugHint",
+                undefined,
+                "Lowercase letters, digits, dashes. Used in the URL.",
+              )}
             </p>
           </div>
-          <Input label="Title" name="title" maxLength={200} placeholder="Stadium A evacuation" required />
+          <Input
+            label={t("console.safety.playbooks.new.titleLabel", undefined, "Title")}
+            name="title"
+            maxLength={200}
+            placeholder={t("console.safety.playbooks.new.titlePlaceholder", undefined, "Stadium A evacuation")}
+            required
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Summary</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.playbooks.new.summaryLabel", undefined, "Summary")}
+            </label>
             <textarea
               name="summary"
               rows={3}
               maxLength={2000}
               className="input-base mt-1.5 w-full"
-              placeholder="One paragraph — when to invoke, who's accountable, what triggers it."
+              placeholder={t(
+                "console.safety.playbooks.new.summaryPlaceholder",
+                undefined,
+                "One paragraph — when to invoke, who's accountable, what triggers it.",
+              )}
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.playbooks.new.kindLabel", undefined, "Kind")}
+            </label>
             <select name="kind" defaultValue="general" className="input-base mt-1.5 w-full">
-              <option value="crisis">Crisis</option>
-              <option value="safety">Safety</option>
-              <option value="onboarding">Onboarding</option>
-              <option value="conops">ConOps</option>
-              <option value="general">General</option>
+              <option value="crisis">{t("console.safety.playbooks.new.kind.crisis", undefined, "Crisis")}</option>
+              <option value="safety">{t("console.safety.playbooks.new.kind.safety", undefined, "Safety")}</option>
+              <option value="onboarding">
+                {t("console.safety.playbooks.new.kind.onboarding", undefined, "Onboarding")}
+              </option>
+              <option value="conops">{t("console.safety.playbooks.new.kind.conops", undefined, "ConOps")}</option>
+              <option value="general">{t("console.safety.playbooks.new.kind.general", undefined, "General")}</option>
             </select>
           </div>
           <p className="text-xs text-[var(--text-muted)]">
-            Body content (sections, steps, attachments) is authored on the playbook detail page after creation.
+            {t(
+              "console.safety.playbooks.new.footnote",
+              undefined,
+              "Body content (sections, steps, attachments) is authored on the playbook detail page after creation.",
+            )}
           </p>
         </FormShell>
       </div>

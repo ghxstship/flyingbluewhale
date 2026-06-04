@@ -4,16 +4,23 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Accreditation Changes" />
+        <ModuleHeader
+          eyebrow={t("console.accreditation.changes.eyebrowWorkspace", undefined, "Workspace")}
+          title={t("console.accreditation.changes.titleFallback", undefined, "Accreditation Changes")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.accreditation.changes.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -26,12 +33,12 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation"
-        title="Changes"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.accreditation.changes.eyebrow", undefined, "Accreditation")}
+        title={t("console.accreditation.changes.title", undefined, "Changes")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.accreditation.changes.recordSingular", undefined, "Record") : t("console.accreditation.changes.recordPlural", undefined, "Records")}`}
         action={
           <Button href="/console/accreditation/changes/new" size="sm">
-            + Request change
+            {t("console.accreditation.changes.requestChange", undefined, "+ Request change")}
           </Button>
         }
       />
@@ -39,17 +46,21 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/accreditation/changes/${r.id}`}
-          emptyLabel="No accreditation changes"
-          emptyDescription="Re-issue, role change, and revocation requests with audit trail."
+          emptyLabel={t("console.accreditation.changes.emptyLabel", undefined, "No accreditation changes")}
+          emptyDescription={t(
+            "console.accreditation.changes.emptyDescription",
+            undefined,
+            "Re-issue, role change, and revocation requests with audit trail.",
+          )}
           emptyAction={
             <Button href="/console/accreditation/changes/new" size="sm">
-              + Request change
+              {t("console.accreditation.changes.requestChange", undefined, "+ Request change")}
             </Button>
           }
           columns={[
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.accreditation.changes.columnKind", undefined, "Kind"),
               render: (r) => String(r.kind ?? "—"),
               accessor: (r) => r.kind ?? null,
               filterable: true,
@@ -57,7 +68,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.accreditation.changes.columnStatus", undefined, "Status"),
               render: (r) => String(r.status ?? "—"),
               accessor: (r) => r.status ?? null,
               filterable: true,
@@ -65,7 +76,7 @@ export default async function Page() {
             },
             {
               key: "created_at",
-              header: "Requested",
+              header: t("console.accreditation.changes.columnRequested", undefined, "Requested"),
               render: (r) => <span className="font-mono text-xs">{String(r.created_at ?? "—")}</span>,
               accessor: (r) => r.created_at ?? null,
             },

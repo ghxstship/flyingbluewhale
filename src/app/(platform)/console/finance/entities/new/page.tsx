@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { createOrgEntity } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
+  const { t } = await getRequestT();
 
   const { data: parents } = await supabase
     .from("org_entities")
@@ -27,22 +29,32 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="New Legal Entity"
-        subtitle="One row per LLC / Ltd / Pty / subsidiary. Base currency drives FX snapshots on invoices, expenses, and pay-apps tagged to this entity."
+        eyebrow={t("console.finance.entities.new.eyebrow", undefined, "Finance")}
+        title={t("console.finance.entities.new.title", undefined, "New Legal Entity")}
+        subtitle={t(
+          "console.finance.entities.new.subtitle",
+          undefined,
+          "One row per LLC / Ltd / Pty / subsidiary. Base currency drives FX snapshots on invoices, expenses, and pay-apps tagged to this entity.",
+        )}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createOrgEntity} cancelHref="/console/finance/entities" submitLabel="Create Entity">
+        <FormShell
+          action={createOrgEntity}
+          cancelHref="/console/finance/entities"
+          submitLabel={t("console.finance.entities.new.submit", undefined, "Create Entity")}
+        >
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Legal Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.finance.entities.new.fields.legalName", undefined, "Legal Name")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input name="legal_name" required placeholder="ATLVS Productions LLC" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Short Code<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.finance.entities.new.fields.shortCode", undefined, "Short Code")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input
                 name="short_code"
@@ -56,7 +68,8 @@ export default async function Page() {
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Base Currency<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.finance.entities.new.fields.baseCurrency", undefined, "Base Currency")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input
                 name="base_currency"
@@ -68,19 +81,25 @@ export default async function Page() {
               />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Jurisdiction</span>
+              <span className={LBL}>
+                {t("console.finance.entities.new.fields.jurisdiction", undefined, "Jurisdiction")}
+              </span>
               <input name="jurisdiction" placeholder="US-CA, UK, DE…" maxLength={20} className={`${INPUT} font-mono`} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Tax ID / EIN</span>
+              <span className={LBL}>{t("console.finance.entities.new.fields.taxId", undefined, "Tax ID / EIN")}</span>
               <input name="tax_id" placeholder="XX-XXXXXXX" maxLength={40} className={`${INPUT} font-mono`} />
             </label>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Parent Entity (consolidates into)</span>
+              <span className={LBL}>
+                {t("console.finance.entities.new.fields.parentEntity", undefined, "Parent Entity (consolidates into)")}
+              </span>
               <select name="parent_entity_id" className={INPUT}>
-                <option value="">— (top-level)</option>
+                <option value="">
+                  {t("console.finance.entities.new.parent.topLevel", undefined, "— (top-level)")}
+                </option>
                 {((parents ?? []) as Array<{ id: string; legal_name: string; short_code: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.legal_name} ({p.short_code})
@@ -89,7 +108,13 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Ownership % (this entity in parent)</span>
+              <span className={LBL}>
+                {t(
+                  "console.finance.entities.new.fields.ownershipPct",
+                  undefined,
+                  "Ownership % (this entity in parent)",
+                )}
+              </span>
               <input
                 type="number"
                 step="0.01"
@@ -103,21 +128,25 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Consolidation Method</span>
+              <span className={LBL}>
+                {t("console.finance.entities.new.fields.consolidationMethod", undefined, "Consolidation Method")}
+              </span>
               <select name="consolidation_method" defaultValue="full" className={INPUT}>
                 {["full", "equity", "proportional", "none"].map((m) => (
                   <option key={m} value={m}>
-                    {toTitle(m)}
+                    {t(`console.finance.entities.new.consolidationMethod.${m}`, undefined, toTitle(m))}
                   </option>
                 ))}
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Consolidation State</span>
+              <span className={LBL}>
+                {t("console.finance.entities.new.fields.consolidationState", undefined, "Consolidation State")}
+              </span>
               <select name="consolidation_state" defaultValue="active" className={INPUT}>
                 {["active", "pending", "dormant", "divested"].map((s) => (
                   <option key={s} value={s}>
-                    {toTitle(s)}
+                    {t(`console.finance.entities.new.consolidationState.${s}`, undefined, toTitle(s))}
                   </option>
                 ))}
               </select>
@@ -125,11 +154,15 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Effective From</span>
+              <span className={LBL}>
+                {t("console.finance.entities.new.fields.effectiveFrom", undefined, "Effective From")}
+              </span>
               <input type="date" name="effective_from" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Effective To</span>
+              <span className={LBL}>
+                {t("console.finance.entities.new.fields.effectiveTo", undefined, "Effective To")}
+              </span>
               <input type="date" name="effective_to" className={INPUT} />
             </label>
           </div>

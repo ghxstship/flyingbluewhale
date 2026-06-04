@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -41,12 +41,18 @@ function readMedicalCapacity(metadata: unknown): { tier?: string; cot_count?: nu
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Medical Plan" />
+        <ModuleHeader
+          eyebrow={t("console.safety.medical.plan.eyebrow", undefined, "Safety")}
+          title={t("console.safety.medical.plan.title", undefined, "Medical Plan")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.medical.plan.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -83,35 +89,45 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Medical Plan"
-        subtitle={`${venues.length} Venue${venues.length === 1 ? "" : "s"} · ${covered} have medical capacity recorded${coveragePct != null ? ` · ${coveragePct}% coverage` : ""}`}
+        eyebrow={t("console.safety.medical.plan.eyebrow", undefined, "Safety")}
+        title={t("console.safety.medical.plan.title", undefined, "Medical Plan")}
+        subtitle={`${venues.length} ${venues.length === 1 ? t("console.safety.medical.plan.venueSingular", undefined, "Venue") : t("console.safety.medical.plan.venuePlural", undefined, "Venues")} · ${covered} ${t("console.safety.medical.plan.haveMedicalCapacityRecorded", undefined, "have medical capacity recorded")}${coveragePct != null ? ` · ${t("console.safety.medical.plan.coverageSuffix", { pct: coveragePct }, `${coveragePct}% coverage`)}` : ""}`}
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
-            + New Plan
+            {t("console.safety.medical.plan.newPlan", undefined, "+ New Plan")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <section>
-          <h3 className="text-sm font-semibold">Venues Requiring Medical Cover</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.safety.medical.plan.venuesHeading", undefined, "Venues Requiring Medical Cover")}
+          </h3>
           {venues.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No Competition / Training / Village Venues Yet"
-              description="Author venues in Console → Venues. Each venue's medical capacity is captured under metadata.medical."
+              title={t(
+                "console.safety.medical.plan.noVenuesTitle",
+                undefined,
+                "No Competition / Training / Village Venues Yet",
+              )}
+              description={t(
+                "console.safety.medical.plan.noVenuesDescription",
+                undefined,
+                "Author venues in Console → Venues. Each venue's medical capacity is captured under metadata.medical.",
+              )}
             />
           ) : (
             <div className="surface mt-3 overflow-x-auto">
               <table className="data-table w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Venue</th>
-                    <th>Kind</th>
-                    <th>Cluster</th>
-                    <th>Capacity</th>
-                    <th>Med tier</th>
-                    <th>Cots</th>
+                    <th>{t("console.safety.medical.plan.col.venue", undefined, "Venue")}</th>
+                    <th>{t("console.safety.medical.plan.col.kind", undefined, "Kind")}</th>
+                    <th>{t("console.safety.medical.plan.col.cluster", undefined, "Cluster")}</th>
+                    <th>{t("console.safety.medical.plan.col.capacity", undefined, "Capacity")}</th>
+                    <th>{t("console.safety.medical.plan.col.medTier", undefined, "Med tier")}</th>
+                    <th>{t("console.safety.medical.plan.col.cots", undefined, "Cots")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -150,17 +166,23 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Medical Playbooks</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.safety.medical.plan.playbooksHeading", undefined, "Medical Playbooks")}
+          </h3>
           <ul className="mt-3 space-y-2">
             {playbooks.length === 0 ? (
               <li>
                 <EmptyState
                   size="compact"
-                  title="No Medical Playbooks Authored"
-                  description="Author safety playbooks tagged with 'medical' to surface them here."
+                  title={t("console.safety.medical.plan.noPlaybooksTitle", undefined, "No Medical Playbooks Authored")}
+                  description={t(
+                    "console.safety.medical.plan.noPlaybooksDescription",
+                    undefined,
+                    "Author safety playbooks tagged with 'medical' to surface them here.",
+                  )}
                   action={
                     <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
-                      + New Plan
+                      {t("console.safety.medical.plan.newPlan", undefined, "+ New Plan")}
                     </Link>
                   }
                 />
@@ -185,8 +207,11 @@ export default async function Page() {
         </section>
 
         <p className="text-xs text-[var(--text-muted)]">
-          Roll-up of capacity by venue plus authoritative playbooks. Author granular tier / cot counts via the venue
-          metadata editor; author response procedures as Safety playbooks tagged with 'medical'.
+          {t(
+            "console.safety.medical.plan.footnote",
+            undefined,
+            "Roll-up of capacity by venue plus authoritative playbooks. Author granular tier / cot counts via the venue metadata editor; author response procedures as Safety playbooks tagged with 'medical'.",
+          )}
         </p>
       </div>
     </>

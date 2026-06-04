@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createBriefing } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data: projects } = await supabase
     .from("projects")
     .select("id, name")
@@ -22,17 +24,34 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="Schedule Briefing" />
+      <ModuleHeader
+        eyebrow={t("console.safety.briefings.new.eyebrow", undefined, "Safety")}
+        title={t("console.safety.briefings.new.title", undefined, "Schedule Briefing")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createBriefing} cancelHref="/console/safety/briefings" submitLabel="Schedule">
+        <FormShell
+          action={createBriefing}
+          cancelHref="/console/safety/briefings"
+          submitLabel={t("console.safety.briefings.new.submit", undefined, "Schedule")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Topic<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.safety.briefings.new.topic", undefined, "Topic")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="topic" required placeholder="Heat illness prevention — outdoor build days" className={INPUT} />
+            <input
+              name="topic"
+              required
+              placeholder={t(
+                "console.safety.briefings.new.topicPlaceholder",
+                undefined,
+                "Heat illness prevention — outdoor build days",
+              )}
+              className={INPUT}
+            />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Project</span>
+            <span className={LBL}>{t("console.safety.briefings.new.project", undefined, "Project")}</span>
             <select name="project_id" className={INPUT}>
               <option value="">—</option>
               {(projects ?? []).map((p) => (
@@ -44,12 +63,13 @@ export default async function Page() {
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Scheduled for<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.safety.briefings.new.scheduledFor", undefined, "Scheduled for")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input type="datetime-local" name="scheduled_for" required className={INPUT} />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.safety.briefings.new.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={4} className={INPUT} />
           </label>
         </FormShell>

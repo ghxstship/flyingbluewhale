@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -45,12 +45,18 @@ const STATE_TONE: Record<string, "muted" | "info" | "warning" | "success" | "err
 };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ scope?: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Procurement" title="Contracts" />
+        <ModuleHeader
+          eyebrow={t("console.contracts.eyebrow", undefined, "Procurement")}
+          title={t("console.contracts.title", undefined, "Contracts")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.contracts.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -91,20 +97,43 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Contracts"
-        subtitle={`${rows.length} contract${rows.length === 1 ? "" : "s"} (${constructionRows.length} construction-PM) · ${activeCount} active · ${fmtMoney(totalActiveMinor)} active value`}
+        eyebrow={t("console.contracts.eyebrow", undefined, "Procurement")}
+        title={t("console.contracts.title", undefined, "Contracts")}
+        subtitle={t(
+          "console.contracts.subtitle",
+          {
+            count: rows.length,
+            contractWord:
+              rows.length === 1
+                ? t("console.contracts.contractWordSingular", undefined, "contract")
+                : t("console.contracts.contractWordPlural", undefined, "contracts"),
+            construction: constructionRows.length,
+            active: activeCount,
+            value: fmtMoney(totalActiveMinor),
+          },
+          `${rows.length} ${rows.length === 1 ? "contract" : "contracts"} (${constructionRows.length} construction-PM) · ${activeCount} active · ${fmtMoney(totalActiveMinor)} active value`,
+        )}
         action={
           <Button href="/console/contracts/new" size="sm">
-            + New Contract
+            {t("console.contracts.newContract", undefined, "+ New Contract")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active (all)" value={fmt.number(activeCount)} accent />
-          <MetricCard label="Active (Construction)" value={fmt.number(constructionActiveCount)} />
-          <MetricCard label="Paid YTD" value={fmtMoney(paidYtdMinor)} />
+          <MetricCard
+            label={t("console.contracts.metrics.activeAll", undefined, "Active (all)")}
+            value={fmt.number(activeCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.contracts.metrics.activeConstruction", undefined, "Active (Construction)")}
+            value={fmt.number(constructionActiveCount)}
+          />
+          <MetricCard
+            label={t("console.contracts.metrics.paidYtd", undefined, "Paid YTD")}
+            value={fmtMoney(paidYtdMinor)}
+          />
         </div>
         <div className="flex items-center justify-end gap-1 text-xs">
           <a
@@ -112,43 +141,54 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             className={`rounded border border-[var(--border-color)] px-2 py-1 ${scope === "all" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             aria-current={scope === "all" ? "true" : undefined}
           >
-            All
+            {t("console.contracts.scope.all", undefined, "All")}
           </a>
           <a
             href="?scope=construction"
             className={`rounded border border-[var(--border-color)] px-2 py-1 ${scope === "construction" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             aria-current={scope === "construction" ? "true" : undefined}
           >
-            Construction Only
+            {t("console.contracts.scope.constructionOnly", undefined, "Construction Only")}
           </a>
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Unified contracts surface — engagement (sponsor / vendor / talent / MSA / NDA / venue / rental) and
-          construction-PM (prime / sub / consultant). Six billing methods supported: lump sum, T&amp;M, cost-plus-fee,
-          cost-plus-GMP, unit price, milestone. Retainage + NTE + allowance + bond tracked inline.
+          {t(
+            "console.contracts.descriptionLine1",
+            undefined,
+            "Unified contracts surface — engagement (sponsor / vendor / talent / MSA / NDA / venue / rental) and construction-PM (prime / sub / consultant). Six billing methods supported: lump sum, T&M, cost-plus-fee, cost-plus-GMP, unit price, milestone. Retainage + NTE + allowance + bond tracked inline.",
+          )}
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/contracts/${r.id}`}
-          emptyLabel="No contracts yet"
-          emptyDescription="One canonical contracts surface across engagement + construction-PM domains."
+          emptyLabel={t("console.contracts.emptyLabel", undefined, "No contracts yet")}
+          emptyDescription={t(
+            "console.contracts.emptyDescription",
+            undefined,
+            "One canonical contracts surface across engagement + construction-PM domains.",
+          )}
           emptyAction={
             <Button href="/console/contracts/new" size="sm">
-              + New Contract
+              {t("console.contracts.newContract", undefined, "+ New Contract")}
             </Button>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.contracts.columns.code", undefined, "Code"),
               render: (r) => r.code ?? r.number,
               accessor: (r) => r.code ?? r.number,
               className: "font-mono text-xs",
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.contracts.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.contracts.columns.kind", undefined, "Kind"),
               render: (r) => toTitle(r.kind.replace(/_/g, " ")),
               accessor: (r) => r.kind,
               filterable: true,
@@ -157,13 +197,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             },
             {
               key: "counterparty",
-              header: "Counterparty",
+              header: t("console.contracts.columns.counterparty", undefined, "Counterparty"),
               render: (r) => r.counterparty_name ?? "—",
               accessor: (r) => r.counterparty_name,
             },
             {
               key: "billing",
-              header: "Billing",
+              header: t("console.contracts.columns.billing", undefined, "Billing"),
               render: (r) => (r.billing_method ? toTitle(r.billing_method.replace(/_/g, " ")) : "—"),
               accessor: (r) => r.billing_method,
               filterable: true,
@@ -172,7 +212,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             },
             {
               key: "value",
-              header: "Value",
+              header: t("console.contracts.columns.value", undefined, "Value"),
               render: (r) =>
                 fmtMoney(Number(r.revised_amount_minor ?? r.original_amount_minor ?? r.total_value_minor ?? 0)),
               accessor: (r) => Number(r.revised_amount_minor ?? r.original_amount_minor ?? r.total_value_minor ?? 0),
@@ -180,21 +220,21 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             },
             {
               key: "paid",
-              header: "Paid",
+              header: t("console.contracts.columns.paid", undefined, "Paid"),
               render: (r) => fmtMoney(Number(r.paid_to_date_minor ?? 0)),
               accessor: (r) => Number(r.paid_to_date_minor ?? 0),
               className: "font-mono text-xs text-right",
             },
             {
               key: "retainage",
-              header: "Ret %",
+              header: t("console.contracts.columns.retainage", undefined, "Ret %"),
               render: (r) => (r.retainage_pct != null ? `${Number(r.retainage_pct).toFixed(1)}%` : "—"),
               accessor: (r) => r.retainage_pct,
               className: "font-mono text-xs text-right",
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.contracts.columns.state", undefined, "State"),
               render: (r) => (
                 <Badge variant={STATE_TONE[r.state] ?? "muted"}>{toTitle(r.state.replace(/_/g, " "))}</Badge>
               ),

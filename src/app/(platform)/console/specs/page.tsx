@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -44,12 +44,18 @@ const FORMAT_LABEL: Record<SpecFormat, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Creative" title="Specifications" />
+        <ModuleHeader
+          eyebrow={t("console.specs.eyebrow", undefined, "Creative")}
+          title={t("console.specs.title", undefined, "Specifications")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.specs.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -77,44 +83,60 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative"
-        title="Specifications"
-        subtitle={`${rows.length} Section${rows.length === 1 ? "" : "s"} · ${issuedCount} Issued · ${inReviewCount} In Review · ${draftCount} Draft`}
+        eyebrow={t("console.specs.eyebrow", undefined, "Creative")}
+        title={t("console.specs.title", undefined, "Specifications")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.specs.section", undefined, "Section") : t("console.specs.sections", undefined, "Sections")} · ${issuedCount} ${t("console.specs.issued", undefined, "Issued")} · ${inReviewCount} ${t("console.specs.inReview", undefined, "In Review")} · ${draftCount} ${t("console.specs.draft", undefined, "Draft")}`}
         action={
           <Button href="/console/specs/new" size="sm">
-            + New Section
+            {t("console.specs.newSection", undefined, "+ New Section")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard label="Total Sections" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Issued" value={fmt.number(issuedCount)} />
-          <MetricCard label="In Review" value={fmt.number(inReviewCount)} />
-          <MetricCard label="Draft" value={fmt.number(draftCount)} />
+          <MetricCard
+            label={t("console.specs.metric.totalSections", undefined, "Total Sections")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard label={t("console.specs.metric.issued", undefined, "Issued")} value={fmt.number(issuedCount)} />
+          <MetricCard
+            label={t("console.specs.metric.inReview", undefined, "In Review")}
+            value={fmt.number(inReviewCount)}
+          />
+          <MetricCard label={t("console.specs.metric.draft", undefined, "Draft")} value={fmt.number(draftCount)} />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/specs/${r.id}`}
-          emptyLabel="No spec sections yet"
-          emptyDescription="Specifications anchor RFIs and submittals to a section number (CSI MasterFormat, Uniformat, etc.). Start by adding the first division."
+          emptyLabel={t("console.specs.empty.label", undefined, "No spec sections yet")}
+          emptyDescription={t(
+            "console.specs.empty.description",
+            undefined,
+            "Specifications anchor RFIs and submittals to a section number (CSI MasterFormat, Uniformat, etc.). Start by adding the first division.",
+          )}
           emptyAction={
             <Button href="/console/specs/new" size="sm">
-              + New Section
+              {t("console.specs.newSection", undefined, "+ New Section")}
             </Button>
           }
           columns={[
             {
               key: "section_number",
-              header: "Number",
+              header: t("console.specs.column.number", undefined, "Number"),
               render: (r) => r.section_number,
               accessor: (r) => r.section_number,
               className: "font-mono text-xs",
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.specs.column.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "division",
-              header: "Division",
+              header: t("console.specs.column.division", undefined, "Division"),
               render: (r) => r.division ?? "—",
               accessor: (r) => r.division,
               filterable: true,
@@ -123,7 +145,7 @@ export default async function Page() {
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.specs.column.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -131,7 +153,7 @@ export default async function Page() {
             },
             {
               key: "format",
-              header: "Format",
+              header: t("console.specs.column.format", undefined, "Format"),
               render: (r) => FORMAT_LABEL[r.format],
               accessor: (r) => r.format,
               filterable: true,
@@ -140,7 +162,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.specs.column.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.section_state]}>{toTitle(r.section_state)}</Badge>,
               accessor: (r) => r.section_state,
               filterable: true,

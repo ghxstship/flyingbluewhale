@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateTimeEntry, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -20,25 +21,48 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
   const session = await requireSession();
   const row = await getOrgScoped("time_entries", session.orgId, p.entryId);
   if (!row) notFound();
+  const { t } = await getRequestT();
   const action = updateTimeEntry.bind(null, p.entryId) as unknown as (state: State, fd: FormData) => Promise<State>;
+  const fallbackDescription = t("console.finance.time.edit.fallbackDescription", undefined, "time entry");
   return (
     <>
-      <ModuleHeader eyebrow="Time Entry" title={`Edit ${row.description ?? "time entry"}`} />
+      <ModuleHeader
+        eyebrow={t("console.finance.time.edit.eyebrow", undefined, "Time Entry")}
+        title={t(
+          "console.finance.time.edit.title",
+          { description: row.description ?? fallbackDescription },
+          `Edit ${row.description ?? fallbackDescription}`,
+        )}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/finance/time/${p.entryId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/finance/time/${p.entryId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Description" name="description" defaultValue={row.description ?? ""} maxLength={500} />
           <Input
-            label="Started At"
+            label={t("console.finance.time.edit.fields.description", undefined, "Description")}
+            name="description"
+            defaultValue={row.description ?? ""}
+            maxLength={500}
+          />
+          <Input
+            label={t("console.finance.time.edit.fields.startedAt", undefined, "Started At")}
             name="started_at"
             type="datetime-local"
             defaultValue={dateTimeLocal(row.started_at)}
             required
           />
-          <Input label="Ended At" name="ended_at" type="datetime-local" defaultValue={dateTimeLocal(row.ended_at)} />
           <Input
-            label="Duration (minutes)"
+            label={t("console.finance.time.edit.fields.endedAt", undefined, "Ended At")}
+            name="ended_at"
+            type="datetime-local"
+            defaultValue={dateTimeLocal(row.ended_at)}
+          />
+          <Input
+            label={t("console.finance.time.edit.fields.durationMinutes", undefined, "Duration (minutes)")}
             name="duration_minutes"
             type="number"
             defaultValue={row.duration_minutes != null ? String(row.duration_minutes) : ""}
@@ -50,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
               defaultChecked={!!row.billable}
               className="rounded border-[var(--border-color)]"
             />
-            <span>Billable</span>
+            <span>{t("console.finance.time.edit.fields.billable", undefined, "Billable")}</span>
           </label>
         </FormShell>
       </div>

@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +28,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Equipment Utilization" />
+        <ModuleHeader
+          eyebrow={t("console.production.equipment.utilization.eyebrow", undefined, "Production")}
+          title={t("console.production.equipment.utilization.title", undefined, "Equipment Utilization")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.equipment.utilization.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -64,36 +70,58 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
-        title="Equipment Utilization"
-        subtitle={`${rows.length} asset${rows.length === 1 ? "" : "s"} · ${idleCount} under-utilized · avg ${avgUtil30.toFixed(1)}% over 30d`}
+        eyebrow={t("console.production.equipment.utilization.eyebrow", undefined, "Production")}
+        title={t("console.production.equipment.utilization.title", undefined, "Equipment Utilization")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.production.equipment.utilization.assetSingular", undefined, "asset") : t("console.production.equipment.utilization.assetPlural", undefined, "assets")} · ${idleCount} ${t("console.production.equipment.utilization.underUtilizedLower", undefined, "under-utilized")} · ${t("console.production.equipment.utilization.avgLabel", undefined, "avg")} ${avgUtil30.toFixed(1)}% ${t("console.production.equipment.utilization.over30d", undefined, "over 30d")}`}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Under-utilized" value={fmt.number(idleCount)} accent />
-          <MetricCard label="Avg Utilization 30d" value={`${avgUtil30.toFixed(1)}%`} />
-          <MetricCard label="Idle Revenue 30d" value={fmt.money(totalIdleRevenue)} />
+          <MetricCard
+            label={t("console.production.equipment.utilization.underUtilized", undefined, "Under-utilized")}
+            value={fmt.number(idleCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.production.equipment.utilization.avgUtilization30d", undefined, "Avg Utilization 30d")}
+            value={`${avgUtil30.toFixed(1)}%`}
+          />
+          <MetricCard
+            label={t("console.production.equipment.utilization.idleRevenue30d", undefined, "Idle Revenue 30d")}
+            value={fmt.money(totalIdleRevenue)}
+          />
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Rolled up from asset_movements. Under-utilized = &lt; 25% over the last 30 days. Idle revenue = (30 −
-          reserved_days) × daily_rate — what could have been earned had the asset been on a job.
+          {t(
+            "console.production.equipment.utilization.helpText",
+            undefined,
+            "Rolled up from asset_movements. Under-utilized = < 25% over the last 30 days. Idle revenue = (30 − reserved_days) × daily_rate — what could have been earned had the asset been on a job.",
+          )}
         </div>
         <DataTable
           rows={tableRows}
-          emptyLabel="No equipment yet"
-          emptyDescription="Register equipment and movements to see utilization."
+          emptyLabel={t("console.production.equipment.utilization.emptyLabel", undefined, "No equipment yet")}
+          emptyDescription={t(
+            "console.production.equipment.utilization.emptyDescription",
+            undefined,
+            "Register equipment and movements to see utilization.",
+          )}
           columns={[
-            { key: "name", header: "Asset", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.production.equipment.utilization.col.asset", undefined, "Asset"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "asset_tag",
-              header: "Tag",
+              header: t("console.production.equipment.utilization.col.tag", undefined, "Tag"),
               render: (r) => r.asset_tag ?? "—",
               accessor: (r) => r.asset_tag,
               className: "font-mono text-xs",
             },
             {
               key: "category",
-              header: "Category",
+              header: t("console.production.equipment.utilization.col.category", undefined, "Category"),
               render: (r) => r.category ?? "—",
               accessor: (r) => r.category,
               filterable: true,
@@ -102,21 +130,21 @@ export default async function Page() {
             },
             {
               key: "movements_30d",
-              header: "Moves 30d",
+              header: t("console.production.equipment.utilization.col.moves30d", undefined, "Moves 30d"),
               render: (r) => fmt.number(r.movements_30d),
               accessor: (r) => r.movements_30d,
               className: "font-mono text-xs text-right",
             },
             {
               key: "reserved_30d",
-              header: "Reserved 30d",
+              header: t("console.production.equipment.utilization.col.reserved30d", undefined, "Reserved 30d"),
               render: (r) => `${Number(r.reserved_days_30d).toFixed(1)}d`,
               accessor: (r) => Number(r.reserved_days_30d),
               className: "font-mono text-xs text-right",
             },
             {
               key: "util_30d",
-              header: "Util 30d",
+              header: t("console.production.equipment.utilization.col.util30d", undefined, "Util 30d"),
               render: (r) => {
                 const pct = Number(r.utilization_pct_30d ?? 0);
                 const tone = pct < 25 ? "error" : pct < 50 ? "warning" : pct < 75 ? "info" : "success";
@@ -126,14 +154,14 @@ export default async function Page() {
             },
             {
               key: "util_90d",
-              header: "Util 90d",
+              header: t("console.production.equipment.utilization.col.util90d", undefined, "Util 90d"),
               render: (r) => `${Number(r.utilization_pct_90d ?? 0).toFixed(1)}%`,
               accessor: (r) => Number(r.utilization_pct_90d ?? 0),
               className: "font-mono text-xs text-right",
             },
             {
               key: "idle_rev",
-              header: "Idle Rev 30d",
+              header: t("console.production.equipment.utilization.col.idleRev30d", undefined, "Idle Rev 30d"),
               render: (r) => (r.idle_revenue_30d_cents != null ? fmt.money(Number(r.idle_revenue_30d_cents)) : "—"),
               accessor: (r) => Number(r.idle_revenue_30d_cents ?? 0),
               className: "font-mono text-xs text-right",

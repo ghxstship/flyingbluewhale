@@ -6,9 +6,11 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const [{ data: project }, { data: crew }] = await Promise.all([
@@ -29,29 +31,44 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   return (
     <>
       <ModuleHeader
-        eyebrow={project?.name ?? "Project"}
-        title="Crew"
-        subtitle={`${crew?.length ?? 0} Roster Member${(crew?.length ?? 0) === 1 ? "" : "s"}`}
+        eyebrow={project?.name ?? t("console.projects.crew.eyebrowFallback", undefined, "Project")}
+        title={t("console.projects.crew.title", undefined, "Crew")}
+        subtitle={
+          (crew?.length ?? 0) === 1
+            ? t("console.projects.crew.subtitleOne", { count: crew?.length ?? 0 }, `${crew?.length ?? 0} Roster Member`)
+            : t(
+                "console.projects.crew.subtitleOther",
+                { count: crew?.length ?? 0 },
+                `${crew?.length ?? 0} Roster Members`,
+              )
+        }
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
-          { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Crew" },
+          { label: t("console.projects.crew.breadcrumbProjects", undefined, "Projects"), href: "/console/projects" },
+          {
+            label: project?.name ?? t("console.projects.crew.eyebrowFallback", undefined, "Project"),
+            href: `/console/projects/${projectId}`,
+          },
+          { label: t("console.projects.crew.title", undefined, "Crew") },
         ]}
       />
       <div className="page-content max-w-5xl">
         {!crew || crew.length === 0 ? (
           <EmptyState
-            title="No Crew in the Roster"
-            description="Import crew via CSV from People → Crew or add members individually."
+            title={t("console.projects.crew.emptyTitle", undefined, "No Crew in the Roster")}
+            description={t(
+              "console.projects.crew.emptyDescription",
+              undefined,
+              "Import crew via CSV from People → Crew or add members individually.",
+            )}
           />
         ) : (
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Role</th>
-                <th>Email</th>
-                <th>Day rate</th>
+                <th>{t("console.projects.crew.columnName", undefined, "Name")}</th>
+                <th>{t("console.projects.crew.columnRole", undefined, "Role")}</th>
+                <th>{t("console.projects.crew.columnEmail", undefined, "Email")}</th>
+                <th>{t("console.projects.crew.columnDayRate", undefined, "Day rate")}</th>
               </tr>
             </thead>
             <tbody>

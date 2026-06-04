@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateFabrication, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -20,21 +21,33 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
   const session = await requireSession();
   const row = await getOrgScoped("fabrication_orders", session.orgId, p.orderId);
   if (!row) notFound();
+  const { t } = await getRequestT();
   const action = updateFabrication.bind(null, p.orderId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Fabrication Order" title={`Edit ${row.title}`} />
+      <ModuleHeader
+        eyebrow={t("console.production.fabrication.edit.eyebrow", undefined, "Fabrication Order")}
+        title={t("console.production.fabrication.edit.title", { title: row.title }, `Edit ${row.title}`)}
+      />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/production/fabrication/${p.orderId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Title" name="title" defaultValue={row.title} required maxLength={200} />
+          <Input
+            label={t("console.production.fabrication.edit.titleLabel", undefined, "Title")}
+            name="title"
+            defaultValue={row.title}
+            required
+            maxLength={200}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Description</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.production.fabrication.edit.descriptionLabel", undefined, "Description")}
+            </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
@@ -43,8 +56,19 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
               className="input-base focus-ring w-full"
             />
           </label>
-          <Input label="Due At" name="due_at" type="datetime-local" defaultValue={dateTimeLocal(row.due_at)} />
-          <p className="text-xs text-[var(--text-muted)]">Status transitions are managed from the detail page.</p>
+          <Input
+            label={t("console.production.fabrication.edit.dueAtLabel", undefined, "Due At")}
+            name="due_at"
+            type="datetime-local"
+            defaultValue={dateTimeLocal(row.due_at)}
+          />
+          <p className="text-xs text-[var(--text-muted)]">
+            {t(
+              "console.production.fabrication.edit.statusHint",
+              undefined,
+              "Status transitions are managed from the detail page.",
+            )}
+          </p>
         </FormShell>
       </div>
     </>

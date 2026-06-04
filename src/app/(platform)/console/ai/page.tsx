@@ -1,27 +1,36 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
+import { getRequestT } from "@/lib/i18n/request";
 
 const SECTIONS = [
   {
     href: "/console/ai/automations",
-    title: "Automations",
-    body: "Domain-event triggers, scheduled jobs, webhook fan-out. The runtime dispatcher for everything reactive in the platform.",
+    titleKey: "console.ai.sections.automations.title",
+    titleFallback: "Automations",
+    bodyKey: "console.ai.sections.automations.body",
+    bodyFallback:
+      "Domain-event triggers, scheduled jobs, webhook fan-out. The runtime dispatcher for everything reactive in the platform.",
   },
 ];
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="AI" title="AI" subtitle="Automations and assistive workflows." />
+      <ModuleHeader
+        eyebrow={t("console.ai.eyebrow", undefined, "AI")}
+        title={t("console.ai.title", undefined, "AI")}
+        subtitle={t("console.ai.subtitle", undefined, "Automations and assistive workflows.")}
+      />
       <div className="page-content">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {SECTIONS.map((s) => (
             <Link key={s.href} href={s.href} className="surface hover-lift p-5">
-              <div className="text-sm font-semibold">{s.title}</div>
-              <p className="mt-2 text-xs text-[var(--text-secondary)]">{s.body}</p>
+              <div className="text-sm font-semibold">{t(s.titleKey, undefined, s.titleFallback)}</div>
+              <p className="mt-2 text-xs text-[var(--text-secondary)]">{t(s.bodyKey, undefined, s.bodyFallback)}</p>
               <div className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                Open <ArrowRight size={12} />
+                {t("common.open", undefined, "Open")} <ArrowRight size={12} />
               </div>
             </Link>
           ))}

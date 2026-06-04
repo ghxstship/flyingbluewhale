@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { addSettlementLine, deleteSettlementLine } from "./actions";
 
 const LINE_KIND_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
@@ -48,6 +49,7 @@ type Settlement = {
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!hasSupabase) return notFound();
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -86,15 +88,23 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Settlement"
+        eyebrow={t("console.bookings.settlements.detail.eyebrow", undefined, "Settlement")}
         title={s.show_date}
-        subtitle={s.finalized_at ? `Finalized ${new Date(s.finalized_at).toLocaleString()}` : "Draft / reconciling"}
+        subtitle={
+          s.finalized_at
+            ? t(
+                "console.bookings.settlements.detail.finalizedAt",
+                { when: new Date(s.finalized_at).toLocaleString() },
+                `Finalized ${new Date(s.finalized_at).toLocaleString()}`,
+              )
+            : t("console.bookings.settlements.detail.draftReconciling", undefined, "Draft / reconciling")
+        }
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>
             {s.talent_offer_id && (
               <Button href={`/console/bookings/deals/${s.talent_offer_id}/settlement`} size="sm" variant="ghost">
-                Edit on deal
+                {t("console.bookings.settlements.detail.editOnDeal", undefined, "Edit on deal")}
               </Button>
             )}
           </div>
@@ -103,82 +113,142 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-3xl space-y-5">
         <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">GBOR</div>
+            <div className="text-label text-[var(--text-muted)]">
+              {t("console.bookings.settlements.detail.gbor", undefined, "GBOR")}
+            </div>
             <div className="font-mono text-lg">{formatMoney(s.gross_box_office_cents)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">NBOR</div>
+            <div className="text-label text-[var(--text-muted)]">
+              {t("console.bookings.settlements.detail.nbor", undefined, "NBOR")}
+            </div>
             <div className="font-mono text-lg">{formatMoney(s.nbor_cents)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">Balance Due</div>
+            <div className="text-label text-[var(--text-muted)]">
+              {t("console.bookings.settlements.detail.balanceDue", undefined, "Balance Due")}
+            </div>
             <div className="font-mono text-lg">{formatMoney(s.balance_due_cents)}</div>
           </div>
         </section>
 
         <section className="surface p-5">
-          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Revenue</h2>
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.bookings.settlements.detail.revenue", undefined, "Revenue")}
+          </h2>
           <dl className="grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-secondary)]">Paid attendance</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.paidAttendance", undefined, "Paid attendance")}
+            </dt>
             <dd className="font-mono">{s.paid_attendance}</dd>
-            <dt className="text-[var(--text-secondary)]">Comps</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.comps", undefined, "Comps")}
+            </dt>
             <dd className="font-mono">{s.comp_count}</dd>
-            <dt className="text-[var(--text-secondary)]">Walkouts</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.walkouts", undefined, "Walkouts")}
+            </dt>
             <dd className="font-mono">{s.walkout_count}</dd>
-            <dt className="text-[var(--text-secondary)]">Bar</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.bar", undefined, "Bar")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.bar_revenue_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">Merch</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.merch", undefined, "Merch")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.merch_revenue_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">Other</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.other", undefined, "Other")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.other_revenue_cents)}</dd>
           </dl>
         </section>
 
         <section className="surface p-5">
-          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Deductions</h2>
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.bookings.settlements.detail.deductions", undefined, "Deductions")}
+          </h2>
           <dl className="grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-secondary)]">Sales tax</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.salesTax", undefined, "Sales tax")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.sales_tax_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">Amusement tax</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.amusementTax", undefined, "Amusement tax")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.amusement_tax_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">CC fees</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.ccFees", undefined, "CC fees")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.cc_fee_cents)}</dd>
           </dl>
         </section>
 
         <section className="surface p-5">
-          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Splits</h2>
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.bookings.settlements.detail.splits", undefined, "Splits")}
+          </h2>
           <dl className="grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-secondary)]">Artist payout</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.artistPayout", undefined, "Artist payout")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.artist_payout_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">Agent commission</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.agentCommission", undefined, "Agent commission")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.agent_commission_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">Support act</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.supportAct", undefined, "Support act")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.support_act_payout_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">Deposit received</dt>
+            <dt className="text-[var(--text-secondary)]">
+              {t("console.bookings.settlements.detail.depositReceived", undefined, "Deposit received")}
+            </dt>
             <dd className="font-mono">{formatMoney(s.deposit_received_cents)}</dd>
           </dl>
         </section>
 
         <section className="surface p-5">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold tracking-wide uppercase">Line Items</h2>
+            <h2 className="text-sm font-semibold tracking-wide uppercase">
+              {t("console.bookings.settlements.detail.lineItems", undefined, "Line Items")}
+            </h2>
             <span className="font-mono text-xs text-[var(--text-muted)]">
-              {lines.length} line{lines.length === 1 ? "" : "s"} · net {formatMoney(lineTotal)}
+              {lines.length === 1
+                ? t(
+                    "console.bookings.settlements.detail.lineSummary.one",
+                    { count: lines.length, net: formatMoney(lineTotal) },
+                    `${lines.length} line · net ${formatMoney(lineTotal)}`,
+                  )
+                : t(
+                    "console.bookings.settlements.detail.lineSummary.other",
+                    { count: lines.length, net: formatMoney(lineTotal) },
+                    `${lines.length} lines · net ${formatMoney(lineTotal)}`,
+                  )}
             </span>
           </div>
           {lines.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No itemized lines yet. Lines back the rolled-up cents columns with the receipts that justify them.
+              {t(
+                "console.bookings.settlements.detail.noLines",
+                undefined,
+                "No itemized lines yet. Lines back the rolled-up cents columns with the receipts that justify them.",
+              )}
             </p>
           ) : (
             <table className="data-table mt-3 w-full">
               <thead>
                 <tr>
-                  <th className="text-start">Kind</th>
-                  <th className="text-start">Category</th>
-                  <th className="text-start">Description</th>
-                  <th className="text-right">Amount</th>
+                  <th className="text-start">{t("console.bookings.settlements.detail.col.kind", undefined, "Kind")}</th>
+                  <th className="text-start">
+                    {t("console.bookings.settlements.detail.col.category", undefined, "Category")}
+                  </th>
+                  <th className="text-start">
+                    {t("console.bookings.settlements.detail.col.description", undefined, "Description")}
+                  </th>
+                  <th className="text-right">
+                    {t("console.bookings.settlements.detail.col.amount", undefined, "Amount")}
+                  </th>
                   {editable && <th />}
                 </tr>
               </thead>
@@ -197,7 +267,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                           <input type="hidden" name="settlementId" value={s.id} />
                           <input type="hidden" name="lineId" value={l.id} />
                           <Button type="submit" size="sm" variant="ghost">
-                            Remove
+                            {t("common.remove", undefined, "Remove")}
                           </Button>
                         </form>
                       </td>
@@ -214,17 +284,28 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             >
               <input type="hidden" name="settlementId" value={s.id} />
               <select name="kind" required defaultValue="expense" className="input-base sm:col-span-1">
-                <option value="revenue">Revenue</option>
-                <option value="expense">Expense</option>
-                <option value="adjustment">Adjustment</option>
-                <option value="tax">Tax</option>
-                <option value="fee">Fee</option>
-                <option value="split">Split</option>
+                <option value="revenue">
+                  {t("console.bookings.settlements.detail.kind.revenue", undefined, "Revenue")}
+                </option>
+                <option value="expense">
+                  {t("console.bookings.settlements.detail.kind.expense", undefined, "Expense")}
+                </option>
+                <option value="adjustment">
+                  {t("console.bookings.settlements.detail.kind.adjustment", undefined, "Adjustment")}
+                </option>
+                <option value="tax">{t("console.bookings.settlements.detail.kind.tax", undefined, "Tax")}</option>
+                <option value="fee">{t("console.bookings.settlements.detail.kind.fee", undefined, "Fee")}</option>
+                <option value="split">{t("console.bookings.settlements.detail.kind.split", undefined, "Split")}</option>
               </select>
-              <input name="category" placeholder="Category" maxLength={80} className="input-base sm:col-span-1" />
+              <input
+                name="category"
+                placeholder={t("console.bookings.settlements.detail.placeholder.category", undefined, "Category")}
+                maxLength={80}
+                className="input-base sm:col-span-1"
+              />
               <input
                 name="description"
-                placeholder="Description"
+                placeholder={t("console.bookings.settlements.detail.placeholder.description", undefined, "Description")}
                 maxLength={240}
                 className="input-base sm:col-span-2"
               />
@@ -237,12 +318,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 className="input-base sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
-                Add Line
+                {t("console.bookings.settlements.detail.addLine", undefined, "Add Line")}
               </Button>
             </form>
           )}
           {!editable && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">Settlement is finalized — line items are locked.</p>
+            <p className="mt-3 text-xs text-[var(--text-muted)]">
+              {t(
+                "console.bookings.settlements.detail.finalizedLocked",
+                undefined,
+                "Settlement is finalized — line items are locked.",
+              )}
+            </p>
           )}
         </section>
       </div>

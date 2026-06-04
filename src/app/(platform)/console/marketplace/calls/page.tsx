@@ -6,24 +6,10 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
 
 export const dynamic = "force-dynamic";
-
-const KIND_LABEL: Record<string, string> = {
-  talent_call: "Talent Call",
-  audition: "Audition",
-  gig: "Gig",
-  rfq: "Public RFQ",
-};
-
-const STATUS_LABEL: Record<string, string> = {
-  draft: "Draft",
-  published: "Published",
-  closed: "Closed",
-  archived: "Archived",
-};
 
 type CallRow = {
   id: string;
@@ -39,12 +25,30 @@ type CallRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
+  const KIND_LABEL: Record<string, string> = {
+    talent_call: t("console.marketplace.calls.kind.talentCall", undefined, "Talent Call"),
+    audition: t("console.marketplace.calls.kind.audition", undefined, "Audition"),
+    gig: t("console.marketplace.calls.kind.gig", undefined, "Gig"),
+    rfq: t("console.marketplace.calls.kind.rfq", undefined, "Public RFQ"),
+  };
+  const STATUS_LABEL: Record<string, string> = {
+    draft: t("console.marketplace.calls.status.draft", undefined, "Draft"),
+    published: t("console.marketplace.calls.status.published", undefined, "Published"),
+    closed: t("console.marketplace.calls.status.closed", undefined, "Closed"),
+    archived: t("console.marketplace.calls.status.archived", undefined, "Archived"),
+  };
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Marketplace" title="Open Calls" />
+        <ModuleHeader
+          eyebrow={t("console.marketplace.calls.eyebrow", undefined, "Marketplace")}
+          title={t("console.marketplace.calls.title", undefined, "Open Calls")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.marketplace.calls.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -71,67 +75,95 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Marketplace"
-        title="Open Calls"
-        subtitle={`${rows.length} Total · ${published} Live · ${totalSubs} Submissions`}
+        eyebrow={t("console.marketplace.calls.eyebrow", undefined, "Marketplace")}
+        title={t("console.marketplace.calls.title", undefined, "Open Calls")}
+        subtitle={t(
+          "console.marketplace.calls.subtitle",
+          { total: fmt.number(rows.length), live: fmt.number(published), subs: fmt.number(totalSubs) },
+          `${rows.length} Total · ${published} Live · ${totalSubs} Submissions`,
+        )}
         action={
           <Button href="/console/marketplace/calls/new" size="sm">
-            + New Call
+            {t("console.marketplace.calls.newCall", undefined, "+ New Call")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Live Calls" value={fmt.number(published)} accent />
-          <MetricCard label="Submissions" value={fmt.number(totalSubs)} />
-          <MetricCard label="Total Calls" value={fmt.number(rows.length)} />
+          <MetricCard
+            label={t("console.marketplace.calls.metric.liveCalls", undefined, "Live Calls")}
+            value={fmt.number(published)}
+            accent
+          />
+          <MetricCard
+            label={t("console.marketplace.calls.metric.submissions", undefined, "Submissions")}
+            value={fmt.number(totalSubs)}
+          />
+          <MetricCard
+            label={t("console.marketplace.calls.metric.totalCalls", undefined, "Total Calls")}
+            value={fmt.number(rows.length)}
+          />
         </div>
 
         <DataTable<CallRow>
           rows={rows}
           rowHref={(r) => `/console/marketplace/calls/${r.id}`}
-          emptyLabel="No open calls yet"
-          emptyDescription="Open calls invite talent, vendors, or crew to submit."
+          emptyLabel={t("console.marketplace.calls.empty.label", undefined, "No open calls yet")}
+          emptyDescription={t(
+            "console.marketplace.calls.empty.description",
+            undefined,
+            "Open calls invite talent, vendors, or crew to submit.",
+          )}
           emptyAction={
             <Button href="/console/marketplace/calls/new" size="sm">
-              + New Call
+              {t("console.marketplace.calls.newCall", undefined, "+ New Call")}
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.marketplace.calls.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.marketplace.calls.col.kind", undefined, "Kind"),
               render: (r) => <Badge variant="muted">{KIND_LABEL[r.kind] ?? r.kind}</Badge>,
               accessor: (r) => r.kind,
               filterable: true,
               groupable: true,
             },
-            { key: "region", header: "Region", render: (r) => r.region ?? "—", accessor: (r) => r.region ?? null },
+            {
+              key: "region",
+              header: t("console.marketplace.calls.col.region", undefined, "Region"),
+              render: (r) => r.region ?? "—",
+              accessor: (r) => r.region ?? null,
+            },
             {
               key: "fee",
-              header: "Fee Band",
+              header: t("console.marketplace.calls.col.feeBand", undefined, "Fee Band"),
               render: (r) => formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
               accessor: (r) => Number(r.fee_max_cents ?? r.fee_min_cents ?? 0),
               className: "font-mono text-xs",
             },
             {
               key: "deadline",
-              header: "Deadline",
+              header: t("console.marketplace.calls.col.deadline", undefined, "Deadline"),
               render: (r) => fmtDate(r.deadline_at),
               accessor: (r) => r.deadline_at,
               className: "font-mono text-xs",
             },
             {
               key: "subs",
-              header: "Submissions",
+              header: t("console.marketplace.calls.col.submissions", undefined, "Submissions"),
               render: (r) => fmt.number(r.submission_count ?? 0),
               accessor: (r) => Number(r.submission_count ?? 0),
               className: "font-mono text-xs tabular-nums",
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.marketplace.calls.col.status", undefined, "Status"),
               render: (r) => (
                 <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{STATUS_LABEL[r.status] ?? r.status}</Badge>
               ),

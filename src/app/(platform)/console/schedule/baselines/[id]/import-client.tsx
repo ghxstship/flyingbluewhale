@@ -2,6 +2,7 @@
 
 import { useActionState, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { importSchedule, type ImportState } from "./actions";
 
 const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
@@ -12,6 +13,7 @@ const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--b
  * keep the action interface server-friendly (just a string + baseline_id).
  */
 export function ImportScheduleClient({ baselineId }: { baselineId: string }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<ImportState, FormData>(importSchedule, null);
   const [fileText, setFileText] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
@@ -31,18 +33,26 @@ export function ImportScheduleClient({ baselineId }: { baselineId: string }) {
       <div className="flex items-center gap-2">
         <input type="file" accept=".xer,.xml,.txt" onChange={onFile} className={`${INPUT} text-xs`} />
         <Button type="submit" size="sm" disabled={!fileText || pending}>
-          {pending ? "Importing…" : "Import"}
+          {pending
+            ? t("console.schedule.baselines.import.importing", undefined, "Importing…")
+            : t("console.schedule.baselines.import.import", undefined, "Import")}
         </Button>
       </div>
       {fileName && (
         <p className="text-[10px] text-[var(--text-muted)]">
-          Selected: <span className="font-mono">{fileName}</span> · {(fileText.length / 1024).toFixed(1)} KB
+          {t("console.schedule.baselines.import.selected", undefined, "Selected:")}{" "}
+          <span className="font-mono">{fileName}</span> · {(fileText.length / 1024).toFixed(1)}{" "}
+          {t("console.schedule.baselines.import.kb", undefined, "KB")}
         </p>
       )}
       {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
       {state?.success && (
         <p className="text-xs text-[var(--color-success)]">
-          Imported {state.success.activities} activities and {state.success.dependencies} dependencies.
+          {t(
+            "console.schedule.baselines.import.imported",
+            { activities: state.success.activities, dependencies: state.success.dependencies },
+            `Imported ${state.success.activities} activities and ${state.success.dependencies} dependencies.`,
+          )}
           {state.success.warnings.length > 0 && (
             <span className="block text-[var(--text-muted)]">
               {state.success.warnings.map((w, i) => (

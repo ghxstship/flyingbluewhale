@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { BLOCK_LABELS } from "@/lib/proposals/types";
 import type { ProposalBlock } from "@/lib/proposals/types";
 import { partitionBlocks } from "@/lib/proposals/validate";
+import { getRequestT } from "@/lib/i18n/request";
 
 // Read-only preview of a single template. Renders the block outline so
 // ops can sanity-check the structure before applying. The Use Template
@@ -16,6 +17,7 @@ import { partitionBlocks } from "@/lib/proposals/validate";
 export default async function TemplatePreviewPage({ params }: { params: Promise<{ templateId: string }> }) {
   const { templateId } = await params;
   await requireSession();
+  const { t } = await getRequestT();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { data } = await supabase
     .from("proposal_templates")
@@ -37,24 +39,43 @@ export default async function TemplatePreviewPage({ params }: { params: Promise<
   return (
     <>
       <ModuleHeader
-        eyebrow={tpl.is_system ? "Template · System" : "Template · Org"}
+        eyebrow={
+          tpl.is_system
+            ? t("console.proposals.templates.preview.eyebrowSystem", undefined, "Template · System")
+            : t("console.proposals.templates.preview.eyebrowOrg", undefined, "Template · Org")
+        }
         title={tpl.name}
         subtitle={tpl.description ?? undefined}
         breadcrumbs={[
-          { label: "Revenue", href: "/console/proposals" },
-          { label: "Templates", href: "/console/proposals/templates" },
+          { label: t("console.proposals.breadcrumb.revenue", undefined, "Revenue"), href: "/console/proposals" },
+          {
+            label: t("console.proposals.templates.breadcrumb.templates", undefined, "Templates"),
+            href: "/console/proposals/templates",
+          },
           { label: tpl.name },
         ]}
         action={
           <Link href={`/console/proposals/new?templateId=${tpl.id}`} className="btn btn-primary btn-sm">
-            Use Template
+            {t("console.proposals.templates.preview.useTemplate", undefined, "Use Template")}
           </Link>
         }
       />
       <div className="page-content max-w-3xl space-y-3">
         <div className="text-xs text-[var(--text-muted)]">
-          {valid.length} valid block{valid.length === 1 ? "" : "s"}
-          {invalid > 0 ? ` · ${invalid} skipped (invalid)` : ""}
+          {valid.length === 1
+            ? t(
+                "console.proposals.templates.preview.validBlockOne",
+                { count: valid.length },
+                `${valid.length} valid block`,
+              )
+            : t(
+                "console.proposals.templates.preview.validBlockOther",
+                { count: valid.length },
+                `${valid.length} valid blocks`,
+              )}
+          {invalid > 0
+            ? ` ${t("console.proposals.templates.preview.skippedInvalid", { count: invalid }, `· ${invalid} skipped (invalid)`)}`
+            : ""}
         </div>
         {valid.map((block: ProposalBlock, i: number) => (
           <div key={i} className="surface p-3">

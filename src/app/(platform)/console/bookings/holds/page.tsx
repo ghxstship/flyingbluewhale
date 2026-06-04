@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +29,18 @@ const TIER_TONE: Record<number, "success" | "info" | "warning" | "muted"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Bookings" title="Holds" />
+        <ModuleHeader
+          eyebrow={t("console.bookings.holds.eyebrow", undefined, "Bookings")}
+          title={t("console.bookings.holds.title", undefined, "Holds")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.bookings.holds.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -54,58 +61,71 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Bookings"
-        title="Holds"
-        subtitle={`${rows.length} Active  hold${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.bookings.holds.eyebrow", undefined, "Bookings")}
+        title={t("console.bookings.holds.title", undefined, "Holds")}
+        subtitle={t(
+          "console.bookings.holds.subtitle",
+          { count: rows.length, plural: rows.length === 1 ? "" : "s" },
+          `${rows.length} Active  hold${rows.length === 1 ? "" : "s"}`,
+        )}
         action={
           <Button href="/console/bookings/holds/new" size="sm">
-            + New Hold
+            {t("console.bookings.holds.newHold", undefined, "+ New Hold")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <DataTable<HoldRow>
           rows={rows}
-          emptyLabel="No holds"
-          emptyDescription="Place a tiered hold. Tier 1 has first refusal; releasing it auto-promotes Tier 2."
+          emptyLabel={t("console.bookings.holds.emptyLabel", undefined, "No holds")}
+          emptyDescription={t(
+            "console.bookings.holds.emptyDescription",
+            undefined,
+            "Place a tiered hold. Tier 1 has first refusal; releasing it auto-promotes Tier 2.",
+          )}
           emptyAction={
             <Button href="/console/bookings/holds/new" size="sm">
-              + New Hold
+              {t("console.bookings.holds.newHold", undefined, "+ New Hold")}
             </Button>
           }
           columns={[
             {
               key: "tier",
-              header: "Tier",
+              header: t("console.bookings.holds.col.tier", undefined, "Tier"),
               render: (r) => <Badge variant={TIER_TONE[r.tier] ?? "muted"}>T{r.tier}</Badge>,
               accessor: (r) => Number(r.tier),
               filterable: true,
             },
-            { key: "label", header: "Label", render: (r) => r.label ?? "—", accessor: (r) => r.label ?? null },
+            {
+              key: "label",
+              header: t("console.bookings.holds.col.label", undefined, "Label"),
+              render: (r) => r.label ?? "—",
+              accessor: (r) => r.label ?? null,
+            },
             {
               key: "starts",
-              header: "Starts",
+              header: t("console.bookings.holds.col.starts", undefined, "Starts"),
               render: (r) => new Date(r.starts_at).toLocaleString(),
               accessor: (r) => r.starts_at,
               className: "font-mono text-xs",
             },
             {
               key: "ends",
-              header: "Ends",
+              header: t("console.bookings.holds.col.ends", undefined, "Ends"),
               render: (r) => new Date(r.ends_at).toLocaleString(),
               accessor: (r) => r.ends_at,
               className: "font-mono text-xs",
             },
             {
               key: "auto",
-              header: "Auto-release",
+              header: t("console.bookings.holds.col.autoRelease", undefined, "Auto-release"),
               render: (r) => (r.auto_release_on ? new Date(r.auto_release_on).toLocaleDateString() : "—"),
               accessor: (r) => r.auto_release_on,
               className: "font-mono text-xs",
             },
             {
               key: "venue",
-              header: "Venue",
+              header: t("console.bookings.holds.col.venue", undefined, "Venue"),
               render: (r) => (r.venue_id ? <span className="font-mono text-xs">{r.venue_id.slice(0, 8)}</span> : "—"),
               accessor: (r) => r.venue_id ?? null,
             },

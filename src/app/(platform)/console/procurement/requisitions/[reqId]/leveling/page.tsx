@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { awardResponse } from "./actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 type ResponseRow = {
   id: string;
@@ -35,6 +36,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data: req } = await supabase
     .from("requisitions")
@@ -61,36 +63,47 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
+        eyebrow={t("console.procurement.requisitions.leveling.eyebrow", undefined, "Procurement")}
         breadcrumbs={[
-          { label: "Requisitions", href: "/console/procurement/requisitions" },
+          {
+            label: t("console.procurement.requisitions.leveling.breadcrumbs.requisitions", undefined, "Requisitions"),
+            href: "/console/procurement/requisitions",
+          },
           { label: req.title, href: `/console/procurement/requisitions/${reqId}` },
-          { label: "Leveling" },
+          { label: t("console.procurement.requisitions.leveling.breadcrumbs.leveling", undefined, "Leveling") },
         ]}
-        title={`Bid leveling — ${req.title}`}
-        subtitle={`${all.length} Response${all.length === 1 ? "" : "s"} · ${responded.length} Priced · est. ${formatMoney(req.estimated_cents ?? 0)}`}
+        title={t(
+          "console.procurement.requisitions.leveling.title",
+          { title: req.title },
+          `Bid leveling — ${req.title}`,
+        )}
+        subtitle={`${all.length} ${all.length === 1 ? t("console.procurement.requisitions.leveling.responseSingular", undefined, "Response") : t("console.procurement.requisitions.leveling.responsePlural", undefined, "Responses")} · ${responded.length} ${t("console.procurement.requisitions.leveling.priced", undefined, "Priced")} · ${t("console.procurement.requisitions.leveling.estLabel", undefined, "est.")} ${formatMoney(req.estimated_cents ?? 0)}`}
         action={
           <Button href={`/console/procurement/requisitions/${reqId}/leveling/new`} size="sm">
-            + Add response
+            {t("console.procurement.requisitions.leveling.addResponse", undefined, "+ Add response")}
           </Button>
         }
       />
       <div className="page-content">
         <DataTable<ResponseRow>
           rows={all as unknown as ResponseRow[]}
-          emptyLabel="No Bid Responses"
-          emptyDescription="No bid responses yet. Invite vendors to bid from the requisition detail."
+          emptyLabel={t("console.procurement.requisitions.leveling.emptyLabel", undefined, "No Bid Responses")}
+          emptyDescription={t(
+            "console.procurement.requisitions.leveling.emptyDescription",
+            undefined,
+            "No bid responses yet. Invite vendors to bid from the requisition detail.",
+          )}
           columns={[
             {
               key: "vendor",
-              header: "Vendor",
+              header: t("console.procurement.requisitions.leveling.columns.vendor", undefined, "Vendor"),
               render: (r) => r.vendor?.name ?? "—",
               accessor: (r) => r.vendor?.name ?? "",
               sortable: true,
             },
             {
               key: "response_state",
-              header: "State",
+              header: t("console.procurement.requisitions.leveling.columns.state", undefined, "State"),
               render: (r) => (
                 <Badge variant={STATE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
               ),
@@ -100,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             },
             {
               key: "total_cents",
-              header: "Total",
+              header: t("console.procurement.requisitions.leveling.columns.total", undefined, "Total"),
               render: (r) => (r.total_cents != null ? formatMoney(Number(r.total_cents)) : "—"),
               accessor: (r) => (r.total_cents != null ? Number(r.total_cents) : 0),
               tabular: true,
@@ -110,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             },
             {
               key: "delta",
-              header: "Δ vs lowest",
+              header: t("console.procurement.requisitions.leveling.columns.delta", undefined, "Δ vs lowest"),
               render: (r) => {
                 const total = r.total_cents == null ? null : Number(r.total_cents);
                 const delta = total != null && lowest != null ? total - lowest : null;
@@ -127,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             },
             {
               key: "submitted_at",
-              header: "Submitted",
+              header: t("console.procurement.requisitions.leveling.columns.submitted", undefined, "Submitted"),
               render: (r) => (r.submitted_at ? new Date(r.submitted_at).toLocaleDateString() : "—"),
               accessor: (r) => r.submitted_at ?? "",
               mono: true,
@@ -143,7 +156,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
                       type="submit"
                       className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
                     >
-                      Award
+                      {t("console.procurement.requisitions.leveling.award", undefined, "Award")}
                     </button>
                   </form>
                 ) : null,

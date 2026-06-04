@@ -7,32 +7,71 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase, env } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { money } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 import { OpenPortalButton } from "./OpenPortalButton";
 
-const TIERS = [
-  { tier: "access", price: "Free", features: ["Basic project + ticketing", "Up to 3 users", "Community support"] },
-  { tier: "core", price: "$49/mo", features: ["Invoicing, expenses, tasks", "Up to 10 users", "Email support"] },
+type TierDef = {
+  tier: string;
+  priceKey: string;
+  priceFallback: string;
+  featureKeys: { key: string; fallback: string }[];
+};
+
+const TIERS: TierDef[] = [
+  {
+    tier: "access",
+    priceKey: "console.settings.billing.tiers.access.price",
+    priceFallback: "Free",
+    featureKeys: [
+      { key: "console.settings.billing.tiers.access.feature1", fallback: "Basic project + ticketing" },
+      { key: "console.settings.billing.tiers.access.feature2", fallback: "Up to 3 users" },
+      { key: "console.settings.billing.tiers.access.feature3", fallback: "Community support" },
+    ],
+  },
+  {
+    tier: "core",
+    priceKey: "console.settings.billing.tiers.core.price",
+    priceFallback: "$49/mo",
+    featureKeys: [
+      { key: "console.settings.billing.tiers.core.feature1", fallback: "Invoicing, expenses, tasks" },
+      { key: "console.settings.billing.tiers.core.feature2", fallback: "Up to 10 users" },
+      { key: "console.settings.billing.tiers.core.feature3", fallback: "Email support" },
+    ],
+  },
   {
     tier: "professional",
-    price: "$199/mo",
-    features: ["Full finance, procurement, AI", "Unlimited users", "Priority support"],
+    priceKey: "console.settings.billing.tiers.professional.price",
+    priceFallback: "$199/mo",
+    featureKeys: [
+      { key: "console.settings.billing.tiers.professional.feature1", fallback: "Full finance, procurement, AI" },
+      { key: "console.settings.billing.tiers.professional.feature2", fallback: "Unlimited users" },
+      { key: "console.settings.billing.tiers.professional.feature3", fallback: "Priority support" },
+    ],
   },
   {
     tier: "enterprise",
-    price: "Contact sales",
-    features: ["SSO, SCIM, audit", "Custom integrations", "Dedicated CSM"],
+    priceKey: "console.settings.billing.tiers.enterprise.price",
+    priceFallback: "Contact sales",
+    featureKeys: [
+      { key: "console.settings.billing.tiers.enterprise.feature1", fallback: "SSO, SCIM, audit" },
+      { key: "console.settings.billing.tiers.enterprise.feature2", fallback: "Custom integrations" },
+      { key: "console.settings.billing.tiers.enterprise.feature3", fallback: "Dedicated CSM" },
+    ],
   },
 ];
 
 export const dynamic = "force-dynamic";
 
 export default async function BillingPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Billing" />
+        <ModuleHeader title={t("console.settings.billing.title", undefined, "Billing")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.billing.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -58,20 +97,33 @@ export default async function BillingPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Billing" />
+      <ModuleHeader
+        eyebrow={t("console.settings.billing.eyebrow", undefined, "Settings")}
+        title={t("console.settings.billing.workspaceTitle", undefined, "Workspace Settings")}
+        subtitle={t("console.settings.billing.subtitle", undefined, "Billing")}
+      />
       <div className="page-content space-y-5">
         {!stripeConfigured && (
           <Alert kind="warning">
-            <span className="font-medium">Stripe is not configured.</span> Set
-            <code className="font-mono">STRIPE_SECRET_KEY</code> in env to enable customer-portal access for plan +
-            payment-method management.
+            <span className="font-medium">
+              {t("console.settings.billing.stripeNotConfigured", undefined, "Stripe is not configured.")}
+            </span>{" "}
+            {t("console.settings.billing.stripeNotConfiguredHintBefore", undefined, "Set")}
+            <code className="font-mono">STRIPE_SECRET_KEY</code>{" "}
+            {t(
+              "console.settings.billing.stripeNotConfiguredHintAfter",
+              undefined,
+              "in env to enable customer-portal access for plan + payment-method management.",
+            )}
           </Alert>
         )}
 
         <section className="surface p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <div className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Plan</div>
+              <div className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+                {t("console.settings.billing.plan", undefined, "Plan")}
+              </div>
               <div className="mt-1 text-base font-semibold">{toTitle(current)}</div>
             </div>
             <OpenPortalButton disabled={!stripeConfigured} />
@@ -79,21 +131,27 @@ export default async function BillingPage() {
         </section>
 
         <section>
-          <h2 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Plans</h2>
+          <h2 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            {t("console.settings.billing.plansHeading", undefined, "Plans")}
+          </h2>
           <div className="grid gap-3 md:grid-cols-4">
-            {TIERS.map((t) => (
+            {TIERS.map((tier) => (
               <div
-                key={t.tier}
-                className={`surface p-5 ${t.tier === current ? "ring-2 ring-[var(--org-primary)]" : ""}`}
+                key={tier.tier}
+                className={`surface p-5 ${tier.tier === current ? "ring-2 ring-[var(--org-primary)]" : ""}`}
               >
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold">{toTitle(t.tier)}</div>
-                  {t.tier === current && <Badge variant="brand">Current</Badge>}
+                  <div className="text-sm font-semibold">{toTitle(tier.tier)}</div>
+                  {tier.tier === current && (
+                    <Badge variant="brand">{t("console.settings.billing.current", undefined, "Current")}</Badge>
+                  )}
                 </div>
-                <div className="mt-2 text-lg font-semibold tracking-tight">{t.price}</div>
+                <div className="mt-2 text-lg font-semibold tracking-tight">
+                  {t(tier.priceKey, undefined, tier.priceFallback)}
+                </div>
                 <ul className="mt-3 space-y-1 text-xs text-[var(--text-secondary)]">
-                  {t.features.map((f) => (
-                    <li key={f}>· {f}</li>
+                  {tier.featureKeys.map((f) => (
+                    <li key={f.key}>· {t(f.key, undefined, f.fallback)}</li>
                   ))}
                 </ul>
               </div>
@@ -103,27 +161,29 @@ export default async function BillingPage() {
 
         <section>
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Recent invoices</h2>
+            <h2 className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              {t("console.settings.billing.recentInvoices", undefined, "Recent invoices")}
+            </h2>
             <Link href="/console/finance/invoices" className="text-xs text-[var(--org-primary)] hover:underline">
-              View all →
+              {t("console.settings.billing.viewAll", undefined, "View all →")}
             </Link>
           </div>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Number</th>
-                  <th>Status</th>
-                  <th>Amount</th>
-                  <th>Issued</th>
-                  <th>Due</th>
+                  <th>{t("console.settings.billing.table.number", undefined, "Number")}</th>
+                  <th>{t("console.settings.billing.table.status", undefined, "Status")}</th>
+                  <th>{t("console.settings.billing.table.amount", undefined, "Amount")}</th>
+                  <th>{t("console.settings.billing.table.issued", undefined, "Issued")}</th>
+                  <th>{t("console.settings.billing.table.due", undefined, "Due")}</th>
                 </tr>
               </thead>
               <tbody>
                 {invoices.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="py-6 text-center text-[var(--text-muted)]">
-                      No invoices yet.
+                      {t("console.settings.billing.noInvoices", undefined, "No invoices yet.")}
                     </td>
                   </tr>
                 ) : (

@@ -5,12 +5,17 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateAnnouncement } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -34,13 +39,28 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   return (
     <>
-      <ModuleHeader eyebrow="Announcement" title={`Edit · ${a.title}`} />
+      <ModuleHeader
+        eyebrow={t("console.comms.announcements.edit.eyebrow", undefined, "Announcement")}
+        title={t("console.comms.announcements.edit.title", { title: a.title }, `Edit · ${a.title}`)}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={updateAnnouncement} cancelHref={`/console/comms/announcements/${a.id}`} submitLabel="Save">
+        <FormShell
+          action={updateAnnouncement}
+          cancelHref={`/console/comms/announcements/${a.id}`}
+          submitLabel={t("common.save", undefined, "Save")}
+        >
           <input type="hidden" name="id" value={a.id} />
-          <Input label="Title" name="title" required maxLength={200} defaultValue={a.title} />
+          <Input
+            label={t("console.comms.announcements.edit.titleLabel", undefined, "Title")}
+            name="title"
+            required
+            maxLength={200}
+            defaultValue={a.title}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Body</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.comms.announcements.edit.bodyLabel", undefined, "Body")}
+            </label>
             <textarea
               name="body"
               rows={6}
@@ -51,17 +71,26 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Audience</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.comms.announcements.edit.audienceLabel", undefined, "Audience")}
+            </label>
             <select name="audience" className="input-base mt-1.5 w-full" defaultValue={a.audience}>
-              <option value="all">All</option>
-              <option value="crew">Crew</option>
-              <option value="contractors">Contractors</option>
-              <option value="vendors">Vendors</option>
-              <option value="admins">Admins</option>
+              <option value="all">{t("console.comms.announcements.edit.audience.all", undefined, "All")}</option>
+              <option value="crew">{t("console.comms.announcements.edit.audience.crew", undefined, "Crew")}</option>
+              <option value="contractors">
+                {t("console.comms.announcements.edit.audience.contractors", undefined, "Contractors")}
+              </option>
+              <option value="vendors">
+                {t("console.comms.announcements.edit.audience.vendors", undefined, "Vendors")}
+              </option>
+              <option value="admins">
+                {t("console.comms.announcements.edit.audience.admins", undefined, "Admins")}
+              </option>
             </select>
           </div>
           <label className="flex items-center gap-2 text-xs">
-            <input type="checkbox" name="pinned" defaultChecked={a.pinned} /> Pin to top of feed
+            <input type="checkbox" name="pinned" defaultChecked={a.pinned} />{" "}
+            {t("console.comms.announcements.edit.pinToTop", undefined, "Pin to top of feed")}
           </label>
         </FormShell>
       </div>

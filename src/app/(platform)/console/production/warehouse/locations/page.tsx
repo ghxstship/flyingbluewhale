@@ -4,6 +4,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,12 +18,18 @@ type LocationRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production · Warehouse" title="Locations" />
+        <ModuleHeader
+          eyebrow={t("console.production.warehouse.locations.eyebrow", undefined, "Production · Warehouse")}
+          title={t("console.production.warehouse.locations.title", undefined, "Locations")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.warehouse.locations.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -56,12 +63,21 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production · Warehouse"
-        title="Locations"
-        subtitle={`${rows.length} location${rows.length === 1 ? "" : "s"} · ${unassigned} asset${unassigned === 1 ? "" : "s"} unassigned`}
+        eyebrow={t("console.production.warehouse.locations.eyebrow", undefined, "Production · Warehouse")}
+        title={t("console.production.warehouse.locations.title", undefined, "Locations")}
+        subtitle={t(
+          "console.production.warehouse.locations.subtitle",
+          {
+            locations: rows.length,
+            locationSuffix: rows.length === 1 ? "" : "s",
+            unassigned,
+            assetSuffix: unassigned === 1 ? "" : "s",
+          },
+          `${rows.length} location${rows.length === 1 ? "" : "s"} · ${unassigned} asset${unassigned === 1 ? "" : "s"} unassigned`,
+        )}
         action={
           <Button href="/console/locations/new" size="sm">
-            + New Location
+            {t("console.production.warehouse.locations.newLocation", undefined, "+ New Location")}
           </Button>
         }
       />
@@ -69,32 +85,41 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/locations/${r.id}`}
-          emptyLabel="No locations on file"
-          emptyDescription="Locations are warehouses, staging bays, depots, and venue back-of-house. Each piece of equipment can be tagged to one."
+          emptyLabel={t("console.production.warehouse.locations.emptyLabel", undefined, "No locations on file")}
+          emptyDescription={t(
+            "console.production.warehouse.locations.emptyDescription",
+            undefined,
+            "Locations are warehouses, staging bays, depots, and venue back-of-house. Each piece of equipment can be tagged to one.",
+          )}
           emptyAction={
             <Button href="/console/locations/new" size="sm">
-              + New Location
+              {t("console.production.warehouse.locations.newLocation", undefined, "+ New Location")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "name",
+              header: t("console.production.warehouse.locations.columns.name", undefined, "Name"),
+              render: (r) => String(r.name ?? "—"),
+              accessor: (r) => r.name ?? null,
+            },
             {
               key: "city",
-              header: "City",
+              header: t("console.production.warehouse.locations.columns.city", undefined, "City"),
               render: (r) => [r.city, r.region].filter(Boolean).join(", ") || "—",
               className: "font-mono text-xs",
               accessor: (r) => r.city ?? null,
             },
             {
               key: "country",
-              header: "Country",
+              header: t("console.production.warehouse.locations.columns.country", undefined, "Country"),
               render: (r) => String(r.country ?? "—"),
               className: "font-mono text-xs",
               accessor: (r) => r.country ?? null,
             },
             {
               key: "asset_count",
-              header: "Assets",
+              header: t("console.production.warehouse.locations.columns.assets", undefined, "Assets"),
               render: (r) => <span className="font-mono text-xs">{String(r.asset_count ?? 0)}</span>,
               accessor: (r) => r.asset_count ?? null,
             },

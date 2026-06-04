@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { transitionAccountingPeriodAction } from "../actions";
 import type { AccountingPeriodState } from "@/lib/accounting-periods";
 
@@ -14,10 +15,15 @@ export function AccountingPeriodStateControls({
   currentState: AccountingPeriodState;
   allowedNext: readonly AccountingPeriodState[];
 }) {
+  const t = useT();
   const [pending, startTransition] = useTransition();
 
   if (allowedNext.length === 0) {
-    return <p className="text-sm text-[var(--text-secondary)]">Terminal state — no further transitions.</p>;
+    return (
+      <p className="text-sm text-[var(--text-secondary)]">
+        {t("console.finance.periods.controls.terminal", undefined, "Terminal state — no further transitions.")}
+      </p>
+    );
   }
 
   return (
@@ -47,7 +53,7 @@ export function AccountingPeriodStateControls({
         </form>
       ))}
       <span className="ms-2 self-center text-xs text-[var(--text-secondary)]">
-        From <strong>{currentState}</strong>
+        {t("console.finance.periods.controls.from", undefined, "From")} <strong>{currentState}</strong>
       </span>
     </div>
   );

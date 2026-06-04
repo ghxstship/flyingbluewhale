@@ -4,19 +4,25 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { formatMoney } from "@/lib/i18n/format";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Bookings" title="Overview" />
+        <ModuleHeader
+          eyebrow={t("console.bookings.eyebrow", undefined, "Bookings")}
+          title={t("console.bookings.overview.title", undefined, "Overview")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.bookings.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -50,45 +56,98 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Bookings" title="Overview" subtitle="Deals, holds, settlements, tours." />
+      <ModuleHeader
+        eyebrow={t("console.bookings.eyebrow", undefined, "Bookings")}
+        title={t("console.bookings.overview.title", undefined, "Overview")}
+        subtitle={t("console.bookings.overview.subtitle", undefined, "Deals, holds, settlements, tours.")}
+      />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard label="Live Deals" value={fmt.number(liveDeals)} accent />
-          <MetricCard label="Accepted" value={fmt.number(accepted)} />
-          <MetricCard label="Tier-1 Holds" value={fmt.number(tier1)} />
-          <MetricCard label="Settled GBOR" value={formatMoney(grossBO)} />
+          <MetricCard
+            label={t("console.bookings.metrics.liveDeals", undefined, "Live Deals")}
+            value={fmt.number(liveDeals)}
+            accent
+          />
+          <MetricCard
+            label={t("console.bookings.metrics.accepted", undefined, "Accepted")}
+            value={fmt.number(accepted)}
+          />
+          <MetricCard
+            label={t("console.bookings.metrics.tier1Holds", undefined, "Tier-1 Holds")}
+            value={fmt.number(tier1)}
+          />
+          <MetricCard
+            label={t("console.bookings.metrics.settledGbor", undefined, "Settled GBOR")}
+            value={formatMoney(grossBO)}
+          />
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           <Tile
             href="/console/bookings/deals"
             newHref="/console/marketplace/offers/new"
-            title="Deal Tracker"
-            blurb="Pipeline view of every deal — draft, sent, countered, accepted, contracted."
+            title={t("console.bookings.tiles.deals.title", undefined, "Deal Tracker")}
+            blurb={t(
+              "console.bookings.tiles.deals.blurb",
+              undefined,
+              "Pipeline view of every deal — draft, sent, countered, accepted, contracted.",
+            )}
           />
           <Tile
             href="/console/bookings/holds"
             newHref="/console/bookings/holds/new"
-            title="Holds"
-            blurb="Multi-tier hold calendar. Releasing a higher tier auto-promotes the next."
+            title={t("console.bookings.tiles.holds.title", undefined, "Holds")}
+            blurb={t(
+              "console.bookings.tiles.holds.blurb",
+              undefined,
+              "Multi-tier hold calendar. Releasing a higher tier auto-promotes the next.",
+            )}
           />
           <Tile
             href="/console/bookings/calendar"
-            title="Calendar"
-            blurb="Holds + confirms + marketing milestones in one view."
+            title={t("console.bookings.tiles.calendar.title", undefined, "Calendar")}
+            blurb={t(
+              "console.bookings.tiles.calendar.blurb",
+              undefined,
+              "Holds + confirms + marketing milestones in one view.",
+            )}
           />
           <Tile
             href="/console/bookings/settlements"
-            title="Settlements"
-            blurb={`${fmt.number(finalized)} finalized · NBOR auto-computed.`}
+            title={t("console.bookings.tiles.settlements.title", undefined, "Settlements")}
+            blurb={t(
+              "console.bookings.tiles.settlements.blurb",
+              { count: fmt.number(finalized) },
+              `${fmt.number(finalized)} finalized · NBOR auto-computed.`,
+            )}
           />
-          <Tile href="/console/agency/tours" title="Tours" blurb="Tour P&L roll-up across linked offers." />
-          <Tile href="/console/marketing" title="Marketing" blurb="Announce, presale, on-sale dates per show." />
-          <Tile href="/console/insights" title="Insights" blurb="Anonymized booking pool — opt-in only, k≥3 floor." />
+          <Tile
+            href="/console/agency/tours"
+            title={t("console.bookings.tiles.tours.title", undefined, "Tours")}
+            blurb={t("console.bookings.tiles.tours.blurb", undefined, "Tour P&L roll-up across linked offers.")}
+          />
+          <Tile
+            href="/console/marketing"
+            title={t("console.bookings.tiles.marketing.title", undefined, "Marketing")}
+            blurb={t("console.bookings.tiles.marketing.blurb", undefined, "Announce, presale, on-sale dates per show.")}
+          />
+          <Tile
+            href="/console/insights"
+            title={t("console.bookings.tiles.insights.title", undefined, "Insights")}
+            blurb={t(
+              "console.bookings.tiles.insights.blurb",
+              undefined,
+              "Anonymized booking pool — opt-in only, k≥3 floor.",
+            )}
+          />
           <Tile
             href="/console/settings/integrations/ticketing"
-            title="Ticketing"
-            blurb="Etix / DICE / Tixr / Eventbrite / SeeTickets / AXS."
+            title={t("console.bookings.tiles.ticketing.title", undefined, "Ticketing")}
+            blurb={t(
+              "console.bookings.tiles.ticketing.blurb",
+              undefined,
+              "Etix / DICE / Tixr / Eventbrite / SeeTickets / AXS.",
+            )}
           />
         </div>
       </div>

@@ -19,6 +19,7 @@ import {
 import { ChartShell } from "@/components/charts/ChartShell";
 import { ChartView } from "@/components/views/ChartView";
 import type { ChartViewConfig } from "@/lib/views/chart-config";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type MonthPoint = { month: string; revenue: number; expenses: number; margin: number };
 type AgingRow = { bucket: string; count: number; amount: number };
@@ -27,15 +28,7 @@ type CategoryRow = { name: string; value: number };
 // Phase 3.4 — config-driven cumulative revenue chart. Replaces the
 // hand-rolled AreaChart that used a custom linearGradient + DarkTooltip.
 // Tone "accent" binds to --org-primary so the brand overlay drives color.
-const CUMULATIVE_REVENUE_CHART: ChartViewConfig = {
-  type: "area",
-  title: "Cumulative Revenue",
-  description: "Trailing 12 months",
-  x: { field: "month" },
-  y: { field: "cumulative", format: "currency", currency: "USD" },
-  series: [{ field: "cumulative", label: "Cumulative", tone: "accent" }],
-  legend: false,
-};
+// Title/description/series label localized at call site below.
 
 // Multi-hue categorical palette for the pie chart — these are data-encoded
 // distinct categories, not status. Tokenized colors (org-primary + status
@@ -61,6 +54,22 @@ export function ReportsCharts({
   aging: AgingRow[];
   categories: CategoryRow[];
 }) {
+  const t = useT();
+  const cumulativeRevenueChart: ChartViewConfig = {
+    type: "area",
+    title: t("console.finance.reports.charts.cumulativeRevenue.title", undefined, "Cumulative Revenue"),
+    description: t("console.finance.reports.charts.cumulativeRevenue.description", undefined, "Trailing 12 months"),
+    x: { field: "month" },
+    y: { field: "cumulative", format: "currency", currency: "USD" },
+    series: [
+      {
+        field: "cumulative",
+        label: t("console.finance.reports.charts.cumulativeRevenue.seriesLabel", undefined, "Cumulative"),
+        tone: "accent",
+      },
+    ],
+    legend: false,
+  };
   const empty =
     monthly.every((m) => m.revenue === 0 && m.expenses === 0) &&
     aging.every((a) => a.count === 0) &&
@@ -68,8 +77,8 @@ export function ReportsCharts({
   return (
     <div className="grid gap-4 xl:grid-cols-2">
       <ChartShell
-        title="Revenue, expenses, margin"
-        description="Last 12 months"
+        title={t("console.finance.reports.charts.revenueExpensesMargin.title", undefined, "Revenue, expenses, margin")}
+        description={t("console.finance.reports.charts.revenueExpensesMargin.description", undefined, "Last 12 months")}
         empty={monthly.every((m) => m.revenue === 0 && m.expenses === 0)}
       >
         <ResponsiveContainer width="100%" height={260}>
@@ -79,11 +88,19 @@ export function ReportsCharts({
             <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} tickFormatter={fmtAxis} />
             <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--surface-inset)" }} />
             <Legend wrapperStyle={{ fontSize: 10 }} />
-            <Bar dataKey="revenue" name="Revenue" fill="var(--org-primary)" />
-            <Bar dataKey="expenses" name="Expenses" fill="var(--color-error)" />
+            <Bar
+              dataKey="revenue"
+              name={t("console.finance.reports.charts.revenueExpensesMargin.revenue", undefined, "Revenue")}
+              fill="var(--org-primary)"
+            />
+            <Bar
+              dataKey="expenses"
+              name={t("console.finance.reports.charts.revenueExpensesMargin.expenses", undefined, "Expenses")}
+              fill="var(--color-error)"
+            />
             <Line
               dataKey="margin"
-              name="Margin"
+              name={t("console.finance.reports.charts.revenueExpensesMargin.margin", undefined, "Margin")}
               type="monotone"
               stroke="var(--color-success)"
               strokeWidth={2}
@@ -94,8 +111,12 @@ export function ReportsCharts({
       </ChartShell>
 
       <ChartShell
-        title="AR aging"
-        description="Outstanding $ by overdue bucket"
+        title={t("console.finance.reports.charts.arAging.title", undefined, "AR aging")}
+        description={t(
+          "console.finance.reports.charts.arAging.description",
+          undefined,
+          "Outstanding $ by overdue bucket",
+        )}
         empty={aging.every((a) => a.amount === 0)}
       >
         <ResponsiveContainer width="100%" height={260}>
@@ -104,7 +125,11 @@ export function ReportsCharts({
             <XAxis dataKey="bucket" tick={{ fontSize: 10, fill: "var(--text-muted)" }} />
             <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} tickFormatter={fmtAxis} />
             <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--surface-inset)" }} />
-            <Bar dataKey="amount" name="Outstanding" radius={[4, 4, 0, 0]}>
+            <Bar
+              dataKey="amount"
+              name={t("console.finance.reports.charts.arAging.outstanding", undefined, "Outstanding")}
+              radius={[4, 4, 0, 0]}
+            >
               {aging.map((a) => (
                 <Cell
                   key={a.bucket}
@@ -128,14 +153,18 @@ export function ReportsCharts({
           Same visual output (org-primary gradient, monotone area), but
           driven by ChartViewConfig + the shared currency tooltip. */}
       <ChartView<{ month: string; cumulative: number }>
-        config={CUMULATIVE_REVENUE_CHART}
+        config={cumulativeRevenueChart}
         rows={accumulate(monthly)}
         height={220}
       />
 
       <ChartShell
-        title="Top Expense Categories"
-        description="Trailing total by category"
+        title={t("console.finance.reports.charts.topExpenseCategories.title", undefined, "Top Expense Categories")}
+        description={t(
+          "console.finance.reports.charts.topExpenseCategories.description",
+          undefined,
+          "Trailing total by category",
+        )}
         empty={categories.length === 0}
       >
         <ResponsiveContainer width="100%" height={220}>
@@ -162,7 +191,11 @@ export function ReportsCharts({
 
       {empty && (
         <p className="col-span-full text-xs text-[var(--text-muted)]">
-          No financial data yet. Charts populate as invoices are paid and expenses are filed.
+          {t(
+            "console.finance.reports.charts.emptyState",
+            undefined,
+            "No financial data yet. Charts populate as invoices are paid and expenses are filed.",
+          )}
         </p>
       )}
     </div>

@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -44,12 +44,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
 const HOSP_CODE_PREFIX = "hospitality";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Commercial" title="Hospitality" />
+        <ModuleHeader
+          eyebrow={t("console.commercial.hospitality.eyebrow", undefined, "Commercial")}
+          title={t("console.commercial.hospitality.title", undefined, "Hospitality")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.commercial.hospitality.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -122,46 +128,62 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Commercial"
-        title="Hospitality"
-        subtitle={`${packages.length} package${packages.length === 1 ? "" : "s"} · ${fmt.number(totalAllocation)} seats · ${ents.length} entitlement${ents.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.commercial.hospitality.eyebrow", undefined, "Commercial")}
+        title={t("console.commercial.hospitality.title", undefined, "Hospitality")}
+        subtitle={`${packages.length} ${packages.length === 1 ? t("console.commercial.hospitality.packageOne", undefined, "package") : t("console.commercial.hospitality.packageMany", undefined, "packages")} · ${fmt.number(totalAllocation)} ${t("console.commercial.hospitality.seats", undefined, "seats")} · ${ents.length} ${ents.length === 1 ? t("console.commercial.hospitality.entitlementOne", undefined, "entitlement") : t("console.commercial.hospitality.entitlementMany", undefined, "entitlements")}`}
         action={
           <Button href="/console/commercial/sponsors" size="sm">
-            Sponsors
+            {t("console.commercial.hospitality.sponsorsAction", undefined, "Sponsors")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Allocation" value={fmt.number(totalAllocation)} accent />
-          <MetricCard label="Revenue at Allocation" value={formatMoney(totalRevenue)} />
           <MetricCard
-            label="Entitlements Delivered"
+            label={t("console.commercial.hospitality.allocation", undefined, "Allocation")}
+            value={fmt.number(totalAllocation)}
+            accent
+          />
+          <MetricCard
+            label={t("console.commercial.hospitality.revenueAtAllocation", undefined, "Revenue at Allocation")}
+            value={formatMoney(totalRevenue)}
+          />
+          <MetricCard
+            label={t("console.commercial.hospitality.entitlementsDelivered", undefined, "Entitlements Delivered")}
             value={`${fmt.number(delivered)} / ${fmt.number(totalEntitlements)}`}
           />
         </div>
 
         <section>
-          <h3 className="text-sm font-semibold">Hospitality Packages</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.commercial.hospitality.packagesHeading", undefined, "Hospitality Packages")}
+          </h3>
           {packages.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No Hospitality Packages"
-              description="Hospitality maps onto master_catalog_items rows of kind='ticket' whose code starts with 'hospitality'. Author one in Console → Catalog."
+              title={t("console.commercial.hospitality.noPackagesTitle", undefined, "No Hospitality Packages")}
+              description={t(
+                "console.commercial.hospitality.noPackagesDescription",
+                undefined,
+                "Hospitality maps onto master_catalog_items rows of kind='ticket' whose code starts with 'hospitality'. Author one in Console → Catalog.",
+              )}
             />
           ) : (
             <ul className="mt-3 space-y-2">
-              {packages.map((t) => (
-                <li key={t.id} className="surface flex items-center justify-between p-3">
+              {packages.map((pkg) => (
+                <li key={pkg.id} className="surface flex items-center justify-between p-3">
                   <div>
-                    <div className="text-sm font-medium">{t.name}</div>
+                    <div className="text-sm font-medium">{pkg.name}</div>
                     <div className="font-mono text-xs text-[var(--text-muted)]">
-                      {fmt.number(t.inventory_qty ?? 0)} seats ·{" "}
-                      {formatMoney(t.unit_cost_cents ?? 0, t.currency ?? "USD")} ea · {fmt.number(t.fulfilled_count)}{" "}
-                      redeemed / {fmt.number(t.total_count)} issued
+                      {fmt.number(pkg.inventory_qty ?? 0)}{" "}
+                      {t("console.commercial.hospitality.seats", undefined, "seats")} ·{" "}
+                      {formatMoney(pkg.unit_cost_cents ?? 0, pkg.currency ?? "USD")}{" "}
+                      {t("console.commercial.hospitality.each", undefined, "ea")} · {fmt.number(pkg.fulfilled_count)}{" "}
+                      {t("console.commercial.hospitality.redeemed", undefined, "redeemed")} /{" "}
+                      {fmt.number(pkg.total_count)} {t("console.commercial.hospitality.issued", undefined, "issued")}
                     </div>
                   </div>
-                  <Badge variant="muted">{t.code}</Badge>
+                  <Badge variant="muted">{pkg.code}</Badge>
                 </li>
               ))}
             </ul>
@@ -169,15 +191,21 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">Sponsor Hospitality Entitlements</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.commercial.hospitality.entitlementsHeading", undefined, "Sponsor Hospitality Entitlements")}
+          </h3>
           {ents.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No Hospitality Entitlements"
-              description="Author sponsor entitlements with 'hospitality' in the title via the Commercial → Sponsors module."
+              title={t("console.commercial.hospitality.noEntitlementsTitle", undefined, "No Hospitality Entitlements")}
+              description={t(
+                "console.commercial.hospitality.noEntitlementsDescription",
+                undefined,
+                "Author sponsor entitlements with 'hospitality' in the title via the Commercial → Sponsors module.",
+              )}
               action={
                 <Link href="/console/commercial/sponsors" className="btn btn-secondary btn-sm">
-                  Open sponsors
+                  {t("console.commercial.hospitality.openSponsors", undefined, "Open sponsors")}
                 </Link>
               }
             />
@@ -188,8 +216,9 @@ export default async function Page() {
                   <div>
                     <div className="text-sm font-medium">{e.title}</div>
                     <div className="font-mono text-xs text-[var(--text-muted)]">
-                      {e.delivered} / {e.quantity} delivered
-                      {e.due_by ? ` · due ${e.due_by}` : ""}
+                      {e.delivered} / {e.quantity}{" "}
+                      {t("console.commercial.hospitality.delivered", undefined, "delivered")}
+                      {e.due_by ? ` · ${t("console.commercial.hospitality.due", undefined, "due")} ${e.due_by}` : ""}
                     </div>
                   </div>
                   <Badge variant={STATUS_TONE[e.status] ?? "muted"}>{toTitle(e.status)}</Badge>

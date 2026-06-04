@@ -1,28 +1,54 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { getRequestT } from "@/lib/i18n/request";
 import { createDsar } from "./actions";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Legal · Privacy" title="New DSAR Request" />
+      <ModuleHeader
+        eyebrow={t("console.legal.privacy.dsar.new.eyebrow", undefined, "Legal · Privacy")}
+        title={t("console.legal.privacy.dsar.new.title", undefined, "New DSAR Request")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createDsar} cancelHref="/console/legal/privacy/dsar" submitLabel="Log Request">
-          <Input label="Requester Email" name="requester_email" type="email" required />
+        <FormShell
+          action={createDsar}
+          cancelHref="/console/legal/privacy/dsar"
+          submitLabel={t("console.legal.privacy.dsar.new.submit", undefined, "Log Request")}
+        >
+          <Input
+            label={t("console.legal.privacy.dsar.new.requesterEmail", undefined, "Requester Email")}
+            name="requester_email"
+            type="email"
+            required
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.legal.privacy.dsar.new.kind", undefined, "Kind")}
+            </label>
             <select name="kind" defaultValue="access" className="input-base mt-1.5 w-full" required>
-              <option value="access">Access</option>
-              <option value="deletion">Deletion</option>
-              <option value="correction">Correction</option>
-              <option value="portability">Portability</option>
-              <option value="objection">Objection</option>
+              <option value="access">{t("console.legal.privacy.dsar.new.kindAccess", undefined, "Access")}</option>
+              <option value="deletion">
+                {t("console.legal.privacy.dsar.new.kindDeletion", undefined, "Deletion")}
+              </option>
+              <option value="correction">
+                {t("console.legal.privacy.dsar.new.kindCorrection", undefined, "Correction")}
+              </option>
+              <option value="portability">
+                {t("console.legal.privacy.dsar.new.kindPortability", undefined, "Portability")}
+              </option>
+              <option value="objection">
+                {t("console.legal.privacy.dsar.new.kindObjection", undefined, "Objection")}
+              </option>
             </select>
           </div>
-          <Input label="Due By" name="due_by" type="date" />
+          <Input label={t("console.legal.privacy.dsar.new.dueBy", undefined, "Due By")} name="due_by" type="date" />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Notes</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.legal.privacy.dsar.new.notes", undefined, "Notes")}
+            </label>
             <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
           </div>
         </FormShell>

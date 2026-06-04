@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -37,12 +37,18 @@ const STATE_TONE: Record<EstimateState, "muted" | "info" | "warning" | "success"
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Creative" title="Estimates" />
+        <ModuleHeader
+          eyebrow={t("console.estimates.eyebrow", undefined, "Creative")}
+          title={t("console.estimates.title", undefined, "Estimates")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.estimates.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -76,36 +82,52 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative"
-        title="Estimates"
-        subtitle={`${rows.length} estimate${rows.length === 1 ? "" : "s"} · ${inFlightCount} in flight · ${wonCount} won`}
+        eyebrow={t("console.estimates.eyebrow", undefined, "Creative")}
+        title={t("console.estimates.title", undefined, "Estimates")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.estimates.estimateSingular", undefined, "estimate") : t("console.estimates.estimatePlural", undefined, "estimates")} · ${inFlightCount} ${t("console.estimates.inFlightSuffix", undefined, "in flight")} · ${wonCount} ${t("console.estimates.wonSuffix", undefined, "won")}`}
         action={
           <Button href="/console/estimates/new" size="sm">
-            + New Estimate
+            {t("console.estimates.newEstimate", undefined, "+ New Estimate")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="In Flight" value={fmt.number(inFlightCount)} accent />
-          <MetricCard label="Pipeline Value" value={fmtMoney(pipelineValue)} />
-          <MetricCard label="Won" value={fmt.number(wonCount)} />
+          <MetricCard
+            label={t("console.estimates.inFlight", undefined, "In Flight")}
+            value={fmt.number(inFlightCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.estimates.pipelineValue", undefined, "Pipeline Value")}
+            value={fmtMoney(pipelineValue)}
+          />
+          <MetricCard label={t("console.estimates.won", undefined, "Won")} value={fmt.number(wonCount)} />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/estimates/${r.id}`}
-          emptyLabel="No estimates yet"
-          emptyDescription="Estimates join takeoff quantities to cost-database unit costs with markup. Export to budgets + proposal SOV."
+          emptyLabel={t("console.estimates.emptyLabel", undefined, "No estimates yet")}
+          emptyDescription={t(
+            "console.estimates.emptyDescription",
+            undefined,
+            "Estimates join takeoff quantities to cost-database unit costs with markup. Export to budgets + proposal SOV.",
+          )}
           emptyAction={
             <Button href="/console/estimates/new" size="sm">
-              + New Estimate
+              {t("console.estimates.newEstimate", undefined, "+ New Estimate")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.estimates.columns.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.estimates.columns.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -113,28 +135,28 @@ export default async function Page() {
             },
             {
               key: "markup",
-              header: "Markup",
+              header: t("console.estimates.columns.markup", undefined, "Markup"),
               render: (r) => `${(Number(r.default_markup_pct) * 100).toFixed(1)}%`,
               accessor: (r) => Number(r.default_markup_pct),
               className: "font-mono text-xs text-right",
             },
             {
               key: "subtotal",
-              header: "Subtotal",
+              header: t("console.estimates.columns.subtotal", undefined, "Subtotal"),
               render: (r) => fmtMoney(Number(r.subtotal_cost)),
               accessor: (r) => Number(r.subtotal_cost),
               className: "font-mono text-xs text-right",
             },
             {
               key: "total",
-              header: "Total",
+              header: t("console.estimates.columns.total", undefined, "Total"),
               render: (r) => fmtMoney(Number(r.total_with_markup)),
               accessor: (r) => Number(r.total_with_markup),
               className: "font-mono text-xs text-right",
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.estimates.columns.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.estimate_state]}>{toTitle(r.estimate_state)}</Badge>,
               accessor: (r) => r.estimate_state,
               filterable: true,

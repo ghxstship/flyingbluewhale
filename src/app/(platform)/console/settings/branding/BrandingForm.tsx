@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { updateBrandingAction, type BrandingState } from "./actions";
 
 type Initial = {
@@ -18,9 +19,10 @@ type Initial = {
 };
 
 export function BrandingForm({ initial }: { initial: Initial }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<BrandingState, FormData>(async (prev, fd) => {
     const result = await updateBrandingAction(prev, fd);
-    if (result?.ok) toast.success("Branding saved");
+    if (result?.ok) toast.success(t("console.settings.branding.savedToast", undefined, "Branding saved"));
     else if (result?.error) toast.error(result.error);
     return result;
   }, null);
@@ -33,13 +35,19 @@ export function BrandingForm({ initial }: { initial: Initial }) {
   return (
     <form action={formAction} className="space-y-5">
       <section className="surface p-5">
-        <h3 className="text-sm font-semibold">Identity</h3>
+        <h3 className="text-sm font-semibold">
+          {t("console.settings.branding.identity.title", undefined, "Identity")}
+        </h3>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Override the product name + logo that your crew, clients, and vendors see.
+          {t(
+            "console.settings.branding.identity.description",
+            undefined,
+            "Override the product name + logo that your crew, clients, and vendors see.",
+          )}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Input
-            label="Product Name Override"
+            label={t("console.settings.branding.identity.productNameLabel", undefined, "Product Name Override")}
             name="productName"
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
@@ -47,7 +55,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             placeholder="ATLVS Technologies"
           />
           <Input
-            label="Logo URL (HTTPS)"
+            label={t("console.settings.branding.identity.logoUrlLabel", undefined, "Logo URL (HTTPS)")}
             name="logoUrl"
             type="url"
             value={logoUrl}
@@ -58,20 +66,24 @@ export function BrandingForm({ initial }: { initial: Initial }) {
       </section>
 
       <section className="surface p-5">
-        <h3 className="text-sm font-semibold">Color</h3>
+        <h3 className="text-sm font-semibold">{t("console.settings.branding.color.title", undefined, "Color")}</h3>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Overrides <code className="font-mono">--org-primary</code> across every branded surface + PDF.
+          {t("console.settings.branding.color.descriptionPrefix", undefined, "Overrides")}{" "}
+          <code className="font-mono">--org-primary</code>{" "}
+          {t("console.settings.branding.color.descriptionSuffix", undefined, "across every branded surface + PDF.")}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="block text-xs font-medium text-[var(--text-muted)]">Accent Color</label>
+            <label className="block text-xs font-medium text-[var(--text-muted)]">
+              {t("console.settings.branding.color.accentLabel", undefined, "Accent Color")}
+            </label>
             <div className="mt-1 flex items-center gap-2">
               <input
                 type="color"
                 value={accent}
                 onChange={(e) => setAccent(e.target.value)}
                 className="h-10 w-10 cursor-pointer rounded border border-[var(--border-color)]"
-                aria-label="Pick Accent Color"
+                aria-label={t("console.settings.branding.color.pickAccentAria", undefined, "Pick Accent Color")}
               />
               <input
                 type="text"
@@ -84,14 +96,16 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[var(--text-muted)]">Text on Accent</label>
+            <label className="block text-xs font-medium text-[var(--text-muted)]">
+              {t("console.settings.branding.color.foregroundLabel", undefined, "Text on Accent")}
+            </label>
             <div className="mt-1 flex items-center gap-2">
               <input
                 type="color"
                 value={foreground}
                 onChange={(e) => setForeground(e.target.value)}
                 className="h-10 w-10 cursor-pointer rounded border border-[var(--border-color)]"
-                aria-label="Pick Foreground Color"
+                aria-label={t("console.settings.branding.color.pickForegroundAria", undefined, "Pick Foreground Color")}
               />
               <input
                 type="text"
@@ -107,27 +121,31 @@ export function BrandingForm({ initial }: { initial: Initial }) {
       </section>
 
       <section className="surface p-5">
-        <h3 className="text-sm font-semibold">Assets</h3>
+        <h3 className="text-sm font-semibold">{t("console.settings.branding.assets.title", undefined, "Assets")}</h3>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Hero image + favicon + Open Graph fallback. Used on marketing + shared links.
+          {t(
+            "console.settings.branding.assets.description",
+            undefined,
+            "Hero image + favicon + Open Graph fallback. Used on marketing + shared links.",
+          )}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Input
-            label="Favicon URL"
+            label={t("console.settings.branding.assets.faviconLabel", undefined, "Favicon URL")}
             name="faviconUrl"
             type="url"
             defaultValue={initial.faviconUrl}
             placeholder="https://.../favicon.ico"
           />
           <Input
-            label="Hero Image URL"
+            label={t("console.settings.branding.assets.heroLabel", undefined, "Hero Image URL")}
             name="heroImageUrl"
             type="url"
             defaultValue={initial.heroImageUrl}
             placeholder="https://.../hero.jpg"
           />
           <Input
-            label="Open Graph image URL"
+            label={t("console.settings.branding.assets.ogLabel", undefined, "Open Graph image URL")}
             name="ogImageUrl"
             type="url"
             defaultValue={initial.ogImageUrl}
@@ -140,19 +158,24 @@ export function BrandingForm({ initial }: { initial: Initial }) {
         className="surface p-5"
         style={{ ["--org-primary" as string]: accent, ["--org-on-primary" as string]: foreground }}
       >
-        <h3 className="text-sm font-semibold">Preview</h3>
+        <h3 className="text-sm font-semibold">{t("console.settings.branding.preview.title", undefined, "Preview")}</h3>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Live preview reflects your pending changes; save to apply everywhere.
+          {t(
+            "console.settings.branding.preview.description",
+            undefined,
+            "Live preview reflects your pending changes; save to apply everywhere.",
+          )}
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <button type="button" className="btn btn-primary btn-sm" disabled>
-            {productName || "Primary action"}
+            {productName || t("console.settings.branding.preview.primaryActionFallback", undefined, "Primary action")}
           </button>
           <button type="button" className="btn btn-ghost btn-sm" disabled>
-            Ghost
+            {t("console.settings.branding.preview.ghost", undefined, "Ghost")}
           </button>
           <span className="text-xs" style={{ color: accent }}>
-            Sample brand text · {productName || "ATLVS Technologies"}
+            {t("console.settings.branding.preview.sampleTextPrefix", undefined, "Sample brand text ·")}{" "}
+            {productName || "ATLVS Technologies"}
           </span>
         </div>
       </section>
@@ -161,7 +184,9 @@ export function BrandingForm({ initial }: { initial: Initial }) {
 
       <div className="flex justify-end">
         <Button type="submit" disabled={pending}>
-          {pending ? "Saving…" : "Save branding"}
+          {pending
+            ? t("common.saving", undefined, "Saving…")
+            : t("console.settings.branding.saveButton", undefined, "Save branding")}
         </Button>
       </div>
     </form>

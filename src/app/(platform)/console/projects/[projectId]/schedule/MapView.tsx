@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { MapPin } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type MapPin = {
   id: string;
@@ -17,16 +18,19 @@ export type MapPin = {
  * add a venue lat/lng surface.
  */
 export function MapView({ pins }: { pins: MapPin[] }) {
+  const t = useT();
   if (pins.length === 0) {
     return (
       <div className="surface p-6 text-sm text-[var(--text-muted)]">
-        No Events Carry A Location Yet. Set <strong>location_id</strong> on an event to map it.
+        {t("console.projects.schedule.map.emptyPrefix", undefined, "No Events Carry A Location Yet. Set ")}
+        <strong>location_id</strong>
+        {t("console.projects.schedule.map.emptySuffix", undefined, " on an event to map it.")}
       </div>
     );
   }
   const byLocation = new Map<string, MapPin[]>();
   for (const p of pins) {
-    const k = p.locationName ?? "Unassigned";
+    const k = p.locationName ?? t("console.projects.schedule.map.unassigned", undefined, "Unassigned");
     const list = byLocation.get(k) ?? [];
     list.push(p);
     byLocation.set(k, list);

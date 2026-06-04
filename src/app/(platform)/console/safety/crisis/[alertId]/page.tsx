@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteAlert } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ alertId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Crisis Alert" />
+        <ModuleHeader title={t("console.safety.crisis.detail.title", undefined, "Crisis Alert")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.crisis.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ alertId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety · Crisis"
+        eyebrow={t("console.safety.crisis.detail.eyebrow", undefined, "Safety · Crisis")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/safety/crisis" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/safety/crisis/${p.alertId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteAlert.bind(null, p.alertId)}
-              confirm={`Delete crisis alert "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.safety.crisis.detail.deleteConfirm",
+                { title },
+                `Delete crisis alert "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

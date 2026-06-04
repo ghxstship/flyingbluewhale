@@ -1,42 +1,64 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
+import { getRequestT } from "@/lib/i18n/request";
 
-const SECTIONS = [
-  {
-    href: "/console/commercial/sponsors",
-    title: "Sponsors",
-    body: "Sponsor entitlements, activations, brand assets, reporting, impressions.",
-  },
-  {
-    href: "/console/commercial/hospitality",
-    title: "Hospitality",
-    body: "VIP package management, allocations, fulfillment.",
-  },
-  {
-    href: "/console/commercial/tickets",
-    title: "Ticketing",
-    body: "Inventory, sales, transfers, gate scan integrations.",
-  },
-  {
-    href: "/console/commercial/licensing",
-    title: "Licensing",
-    body: "Music sync, broadcast rights, performance licenses.",
-  },
-  {
-    href: "/console/settings/branding",
-    title: "Brand",
-    body: "Logo, colors, custom domain, white-label posture.",
-  },
-];
+export default async function Page() {
+  const { t } = await getRequestT();
+  const SECTIONS = [
+    {
+      href: "/console/commercial/sponsors",
+      title: t("console.commercial.sections.sponsors.title", undefined, "Sponsors"),
+      body: t(
+        "console.commercial.sections.sponsors.body",
+        undefined,
+        "Sponsor entitlements, activations, brand assets, reporting, impressions.",
+      ),
+    },
+    {
+      href: "/console/commercial/hospitality",
+      title: t("console.commercial.sections.hospitality.title", undefined, "Hospitality"),
+      body: t(
+        "console.commercial.sections.hospitality.body",
+        undefined,
+        "VIP package management, allocations, fulfillment.",
+      ),
+    },
+    {
+      href: "/console/commercial/tickets",
+      title: t("console.commercial.sections.tickets.title", undefined, "Ticketing"),
+      body: t(
+        "console.commercial.sections.tickets.body",
+        undefined,
+        "Inventory, sales, transfers, gate scan integrations.",
+      ),
+    },
+    {
+      href: "/console/commercial/licensing",
+      title: t("console.commercial.sections.licensing.title", undefined, "Licensing"),
+      body: t(
+        "console.commercial.sections.licensing.body",
+        undefined,
+        "Music sync, broadcast rights, performance licenses.",
+      ),
+    },
+    {
+      href: "/console/settings/branding",
+      title: t("console.commercial.sections.brand.title", undefined, "Brand"),
+      body: t("console.commercial.sections.brand.body", undefined, "Logo, colors, custom domain, white-label posture."),
+    },
+  ];
 
-export default function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Commercial"
-        title="Commercial"
-        subtitle="Revenue surfaces — sponsors, ticketing, hospitality, licensing, brand."
+        eyebrow={t("console.commercial.eyebrow", undefined, "Commercial")}
+        title={t("console.commercial.title", undefined, "Commercial")}
+        subtitle={t(
+          "console.commercial.subtitle",
+          undefined,
+          "Revenue surfaces — sponsors, ticketing, hospitality, licensing, brand.",
+        )}
       />
       <div className="page-content">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -45,7 +67,7 @@ export default function Page() {
               <div className="text-sm font-semibold">{s.title}</div>
               <p className="mt-2 text-xs text-[var(--text-secondary)]">{s.body}</p>
               <div className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                Open <ArrowRight size={12} />
+                {t("common.open", undefined, "Open")} <ArrowRight size={12} />
               </div>
             </Link>
           ))}

@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,22 +33,36 @@ function expiryTone(expires: string | null): "muted" | "success" | "warning" | "
   return "success";
 }
 
-function expiryLabel(expires: string | null): string {
-  if (!expires) return "No expiry";
+function expiryLabel(
+  expires: string | null,
+  tr: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+): string {
+  if (!expires) return tr("console.venues.certifications.expiry.none", undefined, "No expiry");
   const days = Math.floor((new Date(expires).getTime() - Date.now()) / 86_400_000);
-  if (days < 0) return `Expired ${Math.abs(days)}d ago`;
-  if (days < 30) return `Expires in ${days}d`;
-  return `Valid · ${days}d`;
+  if (days < 0)
+    return tr(
+      "console.venues.certifications.expiry.expired",
+      { days: Math.abs(days) },
+      `Expired ${Math.abs(days)}d ago`,
+    );
+  if (days < 30) return tr("console.venues.certifications.expiry.expiring", { days }, `Expires in ${days}d`);
+  return tr("console.venues.certifications.expiry.valid", { days }, `Valid · ${days}d`);
 }
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Certifications" />
+        <ModuleHeader
+          eyebrow={t("console.venues.certifications.eyebrow", undefined, "Venue")}
+          title={t("console.venues.certifications.title", undefined, "Certifications")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.common.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -81,52 +95,88 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Certifications`}
-        subtitle={`${certs.length} Certificate${certs.length === 1 ? "" : "s"} On File`}
+        eyebrow={t("console.venues.certifications.eyebrow", undefined, "Venue")}
+        title={t("console.venues.certifications.headerTitle", { name: venue.name }, `${venue.name} — Certifications`)}
+        subtitle={
+          certs.length === 1
+            ? t(
+                "console.venues.certifications.subtitleOne",
+                { count: certs.length },
+                `${certs.length} Certificate On File`,
+              )
+            : t(
+                "console.venues.certifications.subtitleOther",
+                { count: certs.length },
+                `${certs.length} Certificates On File`,
+              )
+        }
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.title", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "Certifications" },
+          { label: t("console.venues.certifications.title", undefined, "Certifications") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active" value={fmt.number(certs.length - expired)} accent />
-          <MetricCard label="Expiring (≤30d)" value={fmt.number(expiring30)} />
-          <MetricCard label="Expired" value={fmt.number(expired)} />
+          <MetricCard
+            label={t("console.venues.certifications.metrics.active", undefined, "Active")}
+            value={fmt.number(certs.length - expired)}
+            accent
+          />
+          <MetricCard
+            label={t("console.venues.certifications.metrics.expiring", undefined, "Expiring (≤30d)")}
+            value={fmt.number(expiring30)}
+          />
+          <MetricCard
+            label={t("console.venues.certifications.metrics.expired", undefined, "Expired")}
+            value={fmt.number(expired)}
+          />
         </div>
 
         <DataTable<CertRow>
           rows={certs}
-          emptyLabel="No certifications uploaded"
-          emptyDescription="Track FOP homologation, fire/life-safety, and operating permits here. Each row should link to the issuer's certificate file in storage."
+          emptyLabel={t("console.venues.certifications.empty.label", undefined, "No certifications uploaded")}
+          emptyDescription={t(
+            "console.venues.certifications.empty.description",
+            undefined,
+            "Track FOP homologation, fire/life-safety, and operating permits here. Each row should link to the issuer's certificate file in storage.",
+          )}
           columns={[
-            { key: "certificate", header: "Certificate", render: (r) => r.certificate, accessor: (r) => r.certificate },
-            { key: "issuer", header: "Issuer", render: (r) => r.issuer, accessor: (r) => r.issuer },
+            {
+              key: "certificate",
+              header: t("console.venues.certifications.columns.certificate", undefined, "Certificate"),
+              render: (r) => r.certificate,
+              accessor: (r) => r.certificate,
+            },
+            {
+              key: "issuer",
+              header: t("console.venues.certifications.columns.issuer", undefined, "Issuer"),
+              render: (r) => r.issuer,
+              accessor: (r) => r.issuer,
+            },
             {
               key: "issued",
-              header: "Issued",
+              header: t("console.venues.certifications.columns.issued", undefined, "Issued"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.issued_on)}</span>,
               accessor: (r) => r.issued_on ?? null,
             },
             {
               key: "expires",
-              header: "Expires",
+              header: t("console.venues.certifications.columns.expires", undefined, "Expires"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.expires_on)}</span>,
               accessor: (r) => r.expires_on ?? null,
             },
             {
               key: "status",
-              header: "Status",
-              render: (r) => <Badge variant={expiryTone(r.expires_on)}>{expiryLabel(r.expires_on)}</Badge>,
+              header: t("console.venues.certifications.columns.status", undefined, "Status"),
+              render: (r) => <Badge variant={expiryTone(r.expires_on)}>{expiryLabel(r.expires_on, t)}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.expires_on ?? null,
             },
             {
               key: "file",
-              header: "File",
+              header: t("console.venues.certifications.columns.file", undefined, "File"),
               render: (r) =>
                 r.file_path ? (
                   <code className="font-mono text-[10px]">{r.file_path.slice(0, 40)}…</code>
@@ -139,7 +189,11 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Certifications gate venue go-live. Anything expiring in the next 30 days surfaces on operations dashboards.
+          {t(
+            "console.venues.certifications.footnote",
+            undefined,
+            "Certifications gate venue go-live. Anything expiring in the next 30 days surfaces on operations dashboards.",
+          )}
         </p>
       </div>
     </>

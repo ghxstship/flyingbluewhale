@@ -4,6 +4,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { NewProposalForm } from "./NewProposalForm";
 
 export const dynamic = "force-dynamic";
@@ -36,21 +37,26 @@ export default async function NewProposalPage({
         .is("deleted_at", null)
         .maybeSingle();
       if (tpl) {
-        const t = tpl as unknown as { id: string; name: string; blocks: unknown };
+        const tplRow = tpl as unknown as { id: string; name: string; blocks: unknown };
         template = {
-          id: t.id,
-          name: t.name,
-          blockCount: Array.isArray(t.blocks) ? t.blocks.length : 0,
+          id: tplRow.id,
+          name: tplRow.name,
+          blockCount: Array.isArray(tplRow.blocks) ? tplRow.blocks.length : 0,
         };
       }
     }
   }
+  const { t } = await getRequestT();
   return (
     <>
       <ModuleHeader
-        eyebrow="Sales"
-        title="New Proposal"
-        subtitle={template ? `Pre-filled from "${template.name}"` : undefined}
+        eyebrow={t("console.proposals.new.eyebrow", undefined, "Sales")}
+        title={t("console.proposals.new.title", undefined, "New Proposal")}
+        subtitle={
+          template
+            ? t("console.proposals.new.prefilledFrom", { name: template.name }, `Pre-filled from "${template.name}"`)
+            : undefined
+        }
       />
       <div className="page-content max-w-2xl">
         <NewProposalForm clients={clients} projects={projects} defaultClientId={defaultClientId} template={template} />

@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createPayApp } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +13,7 @@ const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 
 export default async function Page() {
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   const { data: pos } = await supabase
@@ -27,15 +29,23 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="New Pay Application" />
+      <ModuleHeader
+        eyebrow={t("console.finance.payApps.new.eyebrow", undefined, "Finance")}
+        title={t("console.finance.payApps.new.title", undefined, "New Pay Application")}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={createPayApp} cancelHref="/console/finance/pay-apps" submitLabel="Create Draft">
+        <FormShell
+          action={createPayApp}
+          cancelHref="/console/finance/pay-apps"
+          submitLabel={t("console.finance.payApps.new.submit", undefined, "Create Draft")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Purchase order<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.finance.payApps.new.purchaseOrder", undefined, "Purchase order")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <select name="purchase_order_id" required className={INPUT}>
-              <option value="">Select…</option>
+              <option value="">{t("common.selectEllipsis", undefined, "Select…")}</option>
               {(pos ?? []).map((p) => {
                 const project = p.project as unknown as { name: string | null } | null;
                 const vendor = p.vendor as unknown as { name: string | null } | null;
@@ -50,19 +60,21 @@ export default async function Page() {
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Period start<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.finance.payApps.new.periodStart", undefined, "Period start")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input type="date" name="period_start" required defaultValue={monthAgo} className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Period end<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.finance.payApps.new.periodEnd", undefined, "Period end")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <input type="date" name="period_end" required defaultValue={today} className={INPUT} />
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Retention %</span>
+            <span className={LBL}>{t("console.finance.payApps.new.retentionPct", undefined, "Retention %")}</span>
             <input
               type="number"
               name="retention_pct"
@@ -74,7 +86,7 @@ export default async function Page() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.finance.payApps.new.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={3} className={INPUT} />
           </label>
         </FormShell>

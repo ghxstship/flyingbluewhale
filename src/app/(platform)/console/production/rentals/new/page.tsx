@@ -2,11 +2,13 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { NewRentalForm } from "./NewRentalForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewRentalPage() {
+  const { t } = await getRequestT();
   let equipment: { id: string; name: string }[] = [];
   let projects: { id: string; name: string }[] = [];
   if (hasSupabase) {
@@ -20,7 +22,10 @@ export default async function NewRentalPage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Production" title="New Rental" />
+      <ModuleHeader
+        eyebrow={t("console.production.rentals.new.eyebrow", undefined, "Production")}
+        title={t("console.production.rentals.new.title", undefined, "New Rental")}
+      />
       <div className="page-content max-w-xl">
         <NewRentalForm equipment={equipment} projects={projects} />
       </div>

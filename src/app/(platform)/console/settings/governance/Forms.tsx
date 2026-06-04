@@ -5,9 +5,11 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/Dialog";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createCommittee, createPolicy, type CommitteeState, type PolicyState } from "./actions";
 
 export function CommitteeForm() {
+  const t = useT();
   const [state, action, pending] = useActionState<CommitteeState, FormData>(createCommittee, null);
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
@@ -17,32 +19,51 @@ export function CommitteeForm() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" size="sm">
-          + Committee
+          {t("console.settings.governance.forms.committee.trigger", undefined, "+ Committee")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New committee</DialogTitle>
+          <DialogTitle>
+            {t("console.settings.governance.forms.committee.title", undefined, "New committee")}
+          </DialogTitle>
         </DialogHeader>
         <form action={action} className="space-y-3">
-          <Input label="Name" name="name" required maxLength={120} />
+          <Input
+            label={t("console.settings.governance.forms.committee.name", undefined, "Name")}
+            name="name"
+            required
+            maxLength={120}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Cadence</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.governance.forms.committee.cadence", undefined, "Cadence")}
+            </label>
             <select name="cadence" defaultValue="monthly" className="input-base mt-1.5 w-full">
-              <option value="weekly">Weekly</option>
-              <option value="biweekly">Biweekly</option>
-              <option value="monthly">Monthly</option>
-              <option value="ad_hoc">Ad hoc</option>
+              <option value="weekly">
+                {t("console.settings.governance.forms.committee.cadence.weekly", undefined, "Weekly")}
+              </option>
+              <option value="biweekly">
+                {t("console.settings.governance.forms.committee.cadence.biweekly", undefined, "Biweekly")}
+              </option>
+              <option value="monthly">
+                {t("console.settings.governance.forms.committee.cadence.monthly", undefined, "Monthly")}
+              </option>
+              <option value="ad_hoc">
+                {t("console.settings.governance.forms.committee.cadence.adHoc", undefined, "Ad hoc")}
+              </option>
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Charter</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.governance.forms.committee.charter", undefined, "Charter")}
+            </label>
             <textarea name="charter" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
           </div>
           {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
-              Create
+              {t("common.create", undefined, "Create")}
             </Button>
           </div>
         </form>
@@ -52,6 +73,7 @@ export function CommitteeForm() {
 }
 
 export function PolicyForm() {
+  const t = useT();
   const [state, action, pending] = useActionState<PolicyState, FormData>(createPolicy, null);
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
@@ -61,29 +83,44 @@ export function PolicyForm() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" size="sm">
-          + Policy
+          {t("console.settings.governance.forms.policy.trigger", undefined, "+ Policy")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New policy</DialogTitle>
+          <DialogTitle>{t("console.settings.governance.forms.policy.title", undefined, "New policy")}</DialogTitle>
         </DialogHeader>
         <form action={action} className="space-y-3">
-          <Input label="Name" name="name" required maxLength={160} />
+          <Input
+            label={t("console.settings.governance.forms.policy.name", undefined, "Name")}
+            name="name"
+            required
+            maxLength={160}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Category</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.settings.governance.forms.policy.category", undefined, "Category")}
+            </label>
             <select name="category" defaultValue="operations" className="input-base mt-1.5 w-full">
-              <option value="finance">Finance</option>
-              <option value="safety">Safety</option>
-              <option value="hr">HR</option>
-              <option value="data">Data</option>
-              <option value="operations">Operations</option>
+              <option value="finance">
+                {t("console.settings.governance.forms.policy.category.finance", undefined, "Finance")}
+              </option>
+              <option value="safety">
+                {t("console.settings.governance.forms.policy.category.safety", undefined, "Safety")}
+              </option>
+              <option value="hr">{t("console.settings.governance.forms.policy.category.hr", undefined, "HR")}</option>
+              <option value="data">
+                {t("console.settings.governance.forms.policy.category.data", undefined, "Data")}
+              </option>
+              <option value="operations">
+                {t("console.settings.governance.forms.policy.category.operations", undefined, "Operations")}
+              </option>
             </select>
           </div>
           {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
-              Create
+              {t("common.create", undefined, "Create")}
             </Button>
           </div>
         </form>

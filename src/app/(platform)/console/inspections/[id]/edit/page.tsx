@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateInspection } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +41,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [{ data }, { data: projects }, { data: users }] = await Promise.all([
     supabase
@@ -58,20 +60,23 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title={`Edit Inspection · ${insp.code ?? insp.id.slice(0, 8)}`}
-        subtitle="Edit inspection."
+        eyebrow={t("console.inspections.edit.eyebrow", undefined, "Safety")}
+        title={`${t("console.inspections.edit.title", undefined, "Edit Inspection")} · ${insp.code ?? insp.id.slice(0, 8)}`}
+        subtitle={t("console.inspections.edit.subtitle", undefined, "Edit inspection.")}
         breadcrumbs={[
-          { label: "Inspections", href: "/console/inspections" },
-          { label: insp.code ?? "Inspection", href: `/console/inspections/${insp.id}` },
-          { label: "Edit" },
+          { label: t("console.inspections.breadcrumb", undefined, "Inspections"), href: "/console/inspections" },
+          {
+            label: insp.code ?? t("console.inspections.edit.inspectionFallback", undefined, "Inspection"),
+            href: `/console/inspections/${insp.id}`,
+          },
+          { label: t("common.edit", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">
         <FormShell
           action={updateInspection}
           cancelHref={`/console/inspections/${insp.id}`}
-          submitLabel="Save Inspection"
+          submitLabel={t("console.inspections.edit.submit", undefined, "Save Inspection")}
           dirtyGuard
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
@@ -80,14 +85,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.inspections.edit.fields.name", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input name="name" required defaultValue={insp.name} maxLength={200} className={INPUT} />
           </label>
 
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Project</span>
+              <span className={LBL}>{t("console.inspections.edit.fields.project", undefined, "Project")}</span>
               <select name="project_id" defaultValue={insp.project_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(projects ?? []).map((p) => (
@@ -98,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Status</span>
+              <span className={LBL}>{t("console.inspections.edit.fields.status", undefined, "Status")}</span>
               <select name="status" defaultValue={insp.status} className={INPUT}>
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -111,7 +117,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Scheduled for</span>
+              <span className={LBL}>
+                {t("console.inspections.edit.fields.scheduledFor", undefined, "Scheduled for")}
+              </span>
               <input
                 type="datetime-local"
                 name="scheduled_for"
@@ -120,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Inspector</span>
+              <span className={LBL}>{t("console.inspections.edit.fields.inspector", undefined, "Inspector")}</span>
               <select name="inspector_id" defaultValue={insp.inspector_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(users ?? []).map((u) => (
@@ -133,7 +141,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </div>
 
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.inspections.edit.fields.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={4} defaultValue={insp.notes ?? ""} maxLength={2000} className={INPUT} />
           </label>
         </FormShell>

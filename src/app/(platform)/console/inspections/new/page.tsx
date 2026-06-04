@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createInspection } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: projects }, { data: templates }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).order("name"),
     supabase
@@ -26,18 +28,36 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Safety" title="Schedule Inspection" subtitle="Pick a template and target." />
+      <ModuleHeader
+        eyebrow={t("console.inspections.new.eyebrow", undefined, "Safety")}
+        title={t("console.inspections.new.title", undefined, "Schedule Inspection")}
+        subtitle={t("console.inspections.new.subtitle", undefined, "Pick a template and target.")}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={createInspection} cancelHref="/console/inspections" submitLabel="Schedule">
+        <FormShell
+          action={createInspection}
+          cancelHref="/console/inspections"
+          submitLabel={t("console.inspections.new.submit", undefined, "Schedule")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.inspections.new.fields.name", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="Pre-doors rigging walk — Saturday" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t(
+                "console.inspections.new.fields.namePlaceholder",
+                undefined,
+                "Pre-doors rigging walk — Saturday",
+              )}
+              className={INPUT}
+            />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Project</span>
+              <span className={LBL}>{t("console.inspections.new.fields.project", undefined, "Project")}</span>
               <select name="project_id" className={INPUT}>
                 <option value="">—</option>
                 {(projects ?? []).map((p) => (
@@ -48,23 +68,23 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Template</span>
+              <span className={LBL}>{t("console.inspections.new.fields.template", undefined, "Template")}</span>
               <select name="template_id" className={INPUT}>
                 <option value="">—</option>
-                {(templates ?? []).map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
+                {(templates ?? []).map((tpl) => (
+                  <option key={tpl.id} value={tpl.id}>
+                    {tpl.name}
                   </option>
                 ))}
               </select>
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Scheduled for</span>
+            <span className={LBL}>{t("console.inspections.new.fields.scheduledFor", undefined, "Scheduled for")}</span>
             <input type="datetime-local" name="scheduled_for" className={INPUT} />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.inspections.new.fields.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={3} className={INPUT} />
           </label>
         </FormShell>

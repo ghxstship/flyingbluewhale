@@ -7,6 +7,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { Playbook } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,12 +18,18 @@ const STATUS_TONE: Record<Playbook["status"], "muted" | "success" | "warning"> =
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Playbooks" />
+        <ModuleHeader
+          eyebrow={t("console.safety.playbooks.eyebrow", undefined, "Safety")}
+          title={t("console.safety.playbooks.title", undefined, "Playbooks")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.playbooks.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -46,19 +53,31 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Playbooks"
-        subtitle={`${rows.length} Playbook${rows.length === 1 ? "" : "s"} · ${published} Published`}
+        eyebrow={t("console.safety.playbooks.eyebrow", undefined, "Safety")}
+        title={t("console.safety.playbooks.title", undefined, "Playbooks")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "console.safety.playbooks.subtitleSingular",
+                { count: rows.length, published },
+                `${rows.length} Playbook · ${published} Published`,
+              )
+            : t(
+                "console.safety.playbooks.subtitlePlural",
+                { count: rows.length, published },
+                `${rows.length} Playbooks · ${published} Published`,
+              )
+        }
         action={
           <Button href="/console/safety/playbooks/new" size="sm">
-            + New Playbook
+            {t("console.safety.playbooks.newCta", undefined, "+ New Playbook")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {kindEntries.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By Kind</h3>
+            <h3 className="text-sm font-semibold">{t("console.safety.playbooks.byKind", undefined, "By Kind")}</h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {kindEntries.map(([kind, count]) => (
                 <li key={kind} className="flex items-center justify-between text-sm">
@@ -72,24 +91,33 @@ export default async function Page() {
 
         <DataTable<Playbook>
           rows={rows}
-          emptyLabel="No playbooks authored"
-          emptyDescription="ConOps playbooks render in the Guide layout. Author one per scenario — crisis comms, evacuation, weather hold, dignitary visit."
+          emptyLabel={t("console.safety.playbooks.emptyLabel", undefined, "No playbooks authored")}
+          emptyDescription={t(
+            "console.safety.playbooks.emptyDescription",
+            undefined,
+            "ConOps playbooks render in the Guide layout. Author one per scenario — crisis comms, evacuation, weather hold, dignitary visit.",
+          )}
           emptyAction={
             <Button href="/console/safety/playbooks/new" size="sm">
-              + New Playbook
+              {t("console.safety.playbooks.newCta", undefined, "+ New Playbook")}
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.safety.playbooks.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "slug",
-              header: "Slug",
+              header: t("console.safety.playbooks.col.slug", undefined, "Slug"),
               render: (r) => <span className="font-mono text-xs">{r.slug}</span>,
               accessor: (r) => r.slug ?? null,
             },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.safety.playbooks.col.kind", undefined, "Kind"),
               render: (r) => <Badge variant="muted">{toTitle(r.kind)}</Badge>,
               accessor: (r) => r.kind ?? null,
               filterable: true,
@@ -97,13 +125,13 @@ export default async function Page() {
             },
             {
               key: "version",
-              header: "Version",
+              header: t("console.safety.playbooks.col.version", undefined, "Version"),
               render: (r) => <span className="font-mono text-xs">v{r.version}</span>,
               accessor: (r) => r.version ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.safety.playbooks.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status]}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
@@ -111,7 +139,7 @@ export default async function Page() {
             },
             {
               key: "updated_at",
-              header: "Updated",
+              header: t("console.safety.playbooks.col.updated", undefined, "Updated"),
               render: (r) => <span className="font-mono text-xs">{r.updated_at?.slice(0, 10)}</span>,
               accessor: (r) => r.updated_at?.slice ?? null,
             },

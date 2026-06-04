@@ -1,27 +1,62 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { getRequestT } from "@/lib/i18n/request";
 import { createTrademark } from "./actions";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Legal · IP" title="New Trademark" />
+      <ModuleHeader
+        eyebrow={t("console.legal.ip.new.eyebrow", undefined, "Legal · IP")}
+        title={t("console.legal.ip.new.title", undefined, "New Trademark")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createTrademark} cancelHref="/console/legal/ip" submitLabel="Register Mark">
-          <Input label="Mark" name="mark" maxLength={160} placeholder="e.g. EVENTLY" required />
-          <Input label="Jurisdiction" name="jurisdiction" maxLength={80} placeholder="e.g. US, EU, UK" />
-          <Input label="Registration Number" name="registration_no" maxLength={120} placeholder="e.g. 6,123,456" />
-          <Input label="Registered On" name="registered_on" type="date" />
-          <Input label="Expires On" name="expires_on" type="date" />
+        <FormShell
+          action={createTrademark}
+          cancelHref="/console/legal/ip"
+          submitLabel={t("console.legal.ip.new.submit", undefined, "Register Mark")}
+        >
+          <Input
+            label={t("console.legal.ip.new.fields.mark", undefined, "Mark")}
+            name="mark"
+            maxLength={160}
+            placeholder={t("console.legal.ip.new.placeholders.mark", undefined, "e.g. EVENTLY")}
+            required
+          />
+          <Input
+            label={t("console.legal.ip.new.fields.jurisdiction", undefined, "Jurisdiction")}
+            name="jurisdiction"
+            maxLength={80}
+            placeholder={t("console.legal.ip.new.placeholders.jurisdiction", undefined, "e.g. US, EU, UK")}
+          />
+          <Input
+            label={t("console.legal.ip.new.fields.registrationNumber", undefined, "Registration Number")}
+            name="registration_no"
+            maxLength={120}
+            placeholder={t("console.legal.ip.new.placeholders.registrationNumber", undefined, "e.g. 6,123,456")}
+          />
+          <Input
+            label={t("console.legal.ip.new.fields.registeredOn", undefined, "Registered On")}
+            name="registered_on"
+            type="date"
+          />
+          <Input
+            label={t("console.legal.ip.new.fields.expiresOn", undefined, "Expires On")}
+            name="expires_on"
+            type="date"
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Status</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.legal.ip.new.fields.status", undefined, "Status")}
+            </label>
             <select name="status" defaultValue="active" className="input-base mt-1.5 w-full">
-              <option value="pending">Pending</option>
-              <option value="active">Active</option>
-              <option value="opposed">Opposed</option>
-              <option value="abandoned">Abandoned</option>
-              <option value="expired">Expired</option>
+              <option value="pending">{t("console.legal.ip.new.status.pending", undefined, "Pending")}</option>
+              <option value="active">{t("console.legal.ip.new.status.active", undefined, "Active")}</option>
+              <option value="opposed">{t("console.legal.ip.new.status.opposed", undefined, "Opposed")}</option>
+              <option value="abandoned">{t("console.legal.ip.new.status.abandoned", undefined, "Abandoned")}</option>
+              <option value="expired">{t("console.legal.ip.new.status.expired", undefined, "Expired")}</option>
             </select>
           </div>
         </FormShell>

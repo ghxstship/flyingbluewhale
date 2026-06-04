@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 const EVENT_OPTIONS = [
   "*",
@@ -45,6 +46,7 @@ export function WebhookEditor({
   initialEvents: string[];
   initialActive: boolean;
 }) {
+  const t = useT();
   const router = useRouter();
   const [url, setUrl] = useState(initialUrl);
   const [description, setDescription] = useState(initialDescription);
@@ -65,11 +67,11 @@ export function WebhookEditor({
 
   function save() {
     if (!url.startsWith("https://")) {
-      toast.error("URL must start with https://");
+      toast.error(t("console.settings.webhooks.editor.urlMustBeHttps", undefined, "URL must start with https://"));
       return;
     }
     if (events.size === 0) {
-      toast.error("Pick at least one event");
+      toast.error(t("console.settings.webhooks.editor.pickAtLeastOne", undefined, "Pick at least one event"));
       return;
     }
     startTransition(async () => {
@@ -85,10 +87,10 @@ export function WebhookEditor({
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok || !body.ok) {
-        toast.error(body?.error?.message ?? "Save failed");
+        toast.error(body?.error?.message ?? t("console.settings.webhooks.editor.saveFailed", undefined, "Save failed"));
         return;
       }
-      toast.success("Saved");
+      toast.success(t("console.settings.webhooks.editor.savedToast", undefined, "Saved"));
       router.refresh();
     });
   }
@@ -98,26 +100,41 @@ export function WebhookEditor({
       const res = await fetch(`/api/v1/webhooks/endpoints/${id}`, { method: "DELETE" });
       const body = await res.json().catch(() => ({}));
       if (!res.ok || !body.ok) {
-        toast.error(body?.error?.message ?? "Delete failed");
+        toast.error(
+          body?.error?.message ?? t("console.settings.webhooks.editor.deleteFailed", undefined, "Delete failed"),
+        );
         return;
       }
-      toast.success("Endpoint deleted");
+      toast.success(t("console.settings.webhooks.editor.deletedToast", undefined, "Endpoint deleted"));
       router.push("/console/settings/webhooks");
     });
   }
 
   return (
     <div className="surface space-y-4 p-5">
-      <Input label="Endpoint URL" type="url" value={url} onChange={(e) => setUrl(e.target.value)} />
-      <Input label="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <Input
+        label={t("console.settings.webhooks.editor.endpointUrlLabel", undefined, "Endpoint URL")}
+        type="url"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+      />
+      <Input
+        label={t("console.settings.webhooks.editor.descriptionLabel", undefined, "Description")}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
 
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={isActive} onChange={(e) => setActive(e.target.checked)} />
-        <span>Active — deliver events to this endpoint</span>
+        <span>
+          {t("console.settings.webhooks.editor.activeLabel", undefined, "Active — deliver events to this endpoint")}
+        </span>
       </label>
 
       <div>
-        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">Events</label>
+        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+          {t("console.settings.webhooks.editor.eventsLabel", undefined, "Events")}
+        </label>
         <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           {EVENT_OPTIONS.map((ev) => (
             <label
@@ -135,25 +152,34 @@ export function WebhookEditor({
 
       <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-4">
         <Button variant="danger" onClick={() => setConfirmOpen(true)} disabled={isDeleting}>
-          {isDeleting ? "Deleting…" : "Delete endpoint"}
+          {isDeleting
+            ? t("console.settings.webhooks.editor.deleting", undefined, "Deleting…")
+            : t("console.settings.webhooks.editor.deleteEndpoint", undefined, "Delete endpoint")}
         </Button>
         <Button onClick={save} disabled={isPending}>
-          {isPending ? "Saving…" : "Save changes"}
+          {isPending
+            ? t("console.settings.webhooks.editor.saving", undefined, "Saving…")
+            : t("console.settings.webhooks.editor.saveChanges", undefined, "Save changes")}
         </Button>
       </div>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent size="sm">
           <DialogHeader>
-            <DialogTitle>Delete webhook endpoint?</DialogTitle>
+            <DialogTitle>
+              {t("console.settings.webhooks.editor.confirmTitle", undefined, "Delete webhook endpoint?")}
+            </DialogTitle>
             <DialogDescription>
-              Deliveries stop immediately. The signing secret cannot be recovered — a replacement endpoint gets a new
-              one.
+              {t(
+                "console.settings.webhooks.editor.confirmDescription",
+                undefined,
+                "Deliveries stop immediately. The signing secret cannot be recovered — a replacement endpoint gets a new one.",
+              )}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setConfirmOpen(false)}>
-              Cancel
+              {t("common.cancel", undefined, "Cancel")}
             </Button>
             <Button
               variant="danger"
@@ -163,7 +189,9 @@ export function WebhookEditor({
               }}
               disabled={isDeleting}
             >
-              {isDeleting ? "Deleting…" : "Delete endpoint"}
+              {isDeleting
+                ? t("console.settings.webhooks.editor.deleting", undefined, "Deleting…")
+                : t("console.settings.webhooks.editor.deleteEndpoint", undefined, "Delete endpoint")}
             </Button>
           </DialogFooter>
         </DialogContent>

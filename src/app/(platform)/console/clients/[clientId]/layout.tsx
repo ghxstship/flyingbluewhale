@@ -1,4 +1,5 @@
 import { RecordTabsProvider } from "@/components/ui/RecordTabsContext";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Client detail layout — Projects / Proposals / Invoices filter their
@@ -13,11 +14,21 @@ export default async function ClientLayout({
   params: Promise<{ clientId: string }>;
 }) {
   const { clientId } = await params;
+  const { t } = await getRequestT();
   const tabs = [
-    { label: "Overview", href: `/console/clients/${clientId}` },
-    { label: "Projects", href: `/console/clients/${clientId}/projects` },
-    { label: "Proposals", href: `/console/clients/${clientId}/proposals` },
-    { label: "Invoices", href: `/console/clients/${clientId}/invoices` },
+    { label: t("console.clients.detail.tabs.overview", undefined, "Overview"), href: `/console/clients/${clientId}` },
+    {
+      label: t("console.clients.detail.tabs.projects", undefined, "Projects"),
+      href: `/console/clients/${clientId}/projects`,
+    },
+    {
+      label: t("console.clients.detail.tabs.proposals", undefined, "Proposals"),
+      href: `/console/clients/${clientId}/proposals`,
+    },
+    {
+      label: t("console.clients.detail.tabs.invoices", undefined, "Invoices"),
+      href: `/console/clients/${clientId}/invoices`,
+    },
   ];
   return <RecordTabsProvider tabs={tabs}>{children}</RecordTabsProvider>;
 }

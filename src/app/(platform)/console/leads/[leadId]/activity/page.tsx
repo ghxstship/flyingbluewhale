@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,7 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
   const { leadId } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
     .from("audit_log")
@@ -32,34 +34,42 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
 
   return (
     <>
-      <ModuleHeader eyebrow="Lead" title="Activity" subtitle="Audit trail for this lead." />
+      <ModuleHeader
+        eyebrow={t("console.leads.activity.eyebrow", undefined, "Lead")}
+        title={t("console.leads.activity.title", undefined, "Activity")}
+        subtitle={t("console.leads.activity.subtitle", undefined, "Audit trail for this lead.")}
+      />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No Activity Yet"
-          emptyDescription="Audit log entries appear here as the lead moves through stages or is edited."
+          emptyLabel={t("console.leads.activity.emptyLabel", undefined, "No Activity Yet")}
+          emptyDescription={t(
+            "console.leads.activity.emptyDescription",
+            undefined,
+            "Audit log entries appear here as the lead moves through stages or is edited.",
+          )}
           columns={[
             {
               key: "at",
-              header: "When",
-              render: (r) => formatDate(r.at),
-              accessor: (r) => r.at,
+              header: t("console.leads.activity.col.when", undefined, "When"),
+              render: (row) => formatDate(row.at),
+              accessor: (row) => row.at,
               mono: true,
               sortable: true,
             },
             {
               key: "action",
-              header: "Action",
-              render: (r) => r.action,
-              accessor: (r) => r.action,
+              header: t("console.leads.activity.col.action", undefined, "Action"),
+              render: (row) => row.action,
+              accessor: (row) => row.action,
               mono: true,
               filterable: true,
             },
             {
               key: "actor_id",
-              header: "Actor",
-              render: (r) => r.actor_id ?? "system",
-              accessor: (r) => r.actor_id ?? "system",
+              header: t("console.leads.activity.col.actor", undefined, "Actor"),
+              render: (row) => row.actor_id ?? t("console.leads.activity.systemActor", undefined, "system"),
+              accessor: (row) => row.actor_id ?? "system",
               mono: true,
             },
           ]}

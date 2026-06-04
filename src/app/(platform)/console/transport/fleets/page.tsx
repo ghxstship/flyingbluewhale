@@ -5,17 +5,22 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const FLEET_LABELS: Record<string, string> = {
-  t1: "T1 — VIP",
-  t2: "T2 — Athletes / officials",
-  t3: "T3 — Workforce",
-  media: "Media",
-  workforce: "Workforce",
-  spectator: "Spectator",
-};
+function getFleetLabels(
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+): Record<string, string> {
+  return {
+    t1: t("console.transport.fleets.label.t1", undefined, "T1 — VIP"),
+    t2: t("console.transport.fleets.label.t2", undefined, "T2 — Athletes / officials"),
+    t3: t("console.transport.fleets.label.t3", undefined, "T3 — Workforce"),
+    media: t("console.transport.fleets.label.media", undefined, "Media"),
+    workforce: t("console.transport.fleets.label.workforce", undefined, "Workforce"),
+    spectator: t("console.transport.fleets.label.spectator", undefined, "Spectator"),
+  };
+}
 
 type RunRow = {
   id: string;
@@ -26,12 +31,18 @@ type RunRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Transport" title="Fleets" />
+        <ModuleHeader
+          eyebrow={t("console.transport.fleets.eyebrow", undefined, "Transport")}
+          title={t("console.transport.fleets.title", undefined, "Fleets")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.transport.fleets.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -72,23 +83,28 @@ export default async function Page() {
     }
   }
   const sorted = Array.from(fleets.values()).sort((a, b) => b.runCount - a.runCount);
+  const FLEET_LABELS = getFleetLabels(t);
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Transport"
-        title="Fleets"
-        subtitle={`${sorted.length} Fleet${sorted.length === 1 ? "" : "s"} · ${runs.length} run${runs.length === 1 ? "" : "s"} on file`}
+        eyebrow={t("console.transport.fleets.eyebrow", undefined, "Transport")}
+        title={t("console.transport.fleets.title", undefined, "Fleets")}
+        subtitle={`${sorted.length} ${sorted.length === 1 ? t("console.transport.fleets.fleetSingular", undefined, "Fleet") : t("console.transport.fleets.fleetPlural", undefined, "Fleets")} · ${runs.length} ${runs.length === 1 ? t("console.transport.fleets.runSingular", undefined, "run") : t("console.transport.fleets.runPlural", undefined, "runs")} ${t("console.transport.fleets.onFile", undefined, "on file")}`}
         action={
           <Button href="/console/transport/dispatch/new" size="sm">
-            + Schedule run
+            {t("console.transport.fleets.scheduleRun", undefined, "+ Schedule run")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         {sorted.length === 0 ? (
           <div className="surface p-8 text-center text-sm text-[var(--text-muted)]">
-            No dispatch runs yet. Schedule a run from /console/transport/dispatch to populate fleet data.
+            {t(
+              "console.transport.fleets.empty",
+              undefined,
+              "No dispatch runs yet. Schedule a run from /console/transport/dispatch to populate fleet data.",
+            )}
           </div>
         ) : (
           sorted.map((f) => (
@@ -97,8 +113,14 @@ export default async function Page() {
                 <div>
                   <h3 className="text-sm font-semibold">{FLEET_LABELS[f.fleet] ?? f.fleet}</h3>
                   <div className="font-mono text-xs text-[var(--text-muted)]">
-                    {f.vehicles.size} vehicle{f.vehicles.size === 1 ? "" : "s"} · {f.runCount} run
-                    {f.runCount === 1 ? "" : "s"}
+                    {f.vehicles.size}{" "}
+                    {f.vehicles.size === 1
+                      ? t("console.transport.fleets.vehicleSingular", undefined, "vehicle")
+                      : t("console.transport.fleets.vehiclePlural", undefined, "vehicles")}{" "}
+                    · {f.runCount}{" "}
+                    {f.runCount === 1
+                      ? t("console.transport.fleets.runSingular", undefined, "run")
+                      : t("console.transport.fleets.runPlural", undefined, "runs")}
                   </div>
                 </div>
                 <Badge variant="muted">{toTitle(f.fleet)}</Badge>
@@ -106,10 +128,10 @@ export default async function Page() {
               <table className="data-table w-full text-sm">
                 <thead>
                   <tr>
-                    <th>Vehicle</th>
-                    <th>Total runs</th>
-                    <th>Latest run</th>
-                    <th>Status</th>
+                    <th>{t("console.transport.fleets.vehicle", undefined, "Vehicle")}</th>
+                    <th>{t("console.transport.fleets.totalRuns", undefined, "Total runs")}</th>
+                    <th>{t("console.transport.fleets.latestRun", undefined, "Latest run")}</th>
+                    <th>{t("console.transport.fleets.status", undefined, "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>

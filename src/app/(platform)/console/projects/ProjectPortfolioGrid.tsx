@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { ChartShell } from "@/components/charts/ChartShell";
-import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { useLocale, useT } from "@/lib/i18n/LocaleProvider";
 
 export type PortfolioEntry = {
   id: string;
@@ -22,6 +22,7 @@ export type PortfolioEntry = {
  */
 export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] }) {
   const { locale, currency } = useLocale();
+  const t = useT();
   if (entries.length === 0) return null;
 
   const max = Math.max(1, ...entries.map((e) => e.budgetCents));
@@ -44,15 +45,28 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
 
   return (
     <ChartShell
-      title="Portfolio Health"
-      description="Tile size = budget · color = computed health (schedule + status)"
+      title={t("console.projects.portfolio.title", undefined, "Portfolio Health")}
+      description={t(
+        "console.projects.portfolio.description",
+        undefined,
+        "Tile size = budget · color = computed health (schedule + status)",
+      )}
       empty={enriched.length === 0}
       height={undefined as unknown as number}
       actions={
         <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
-          <Legend tone="bg-[var(--color-success)]" label={`On track ${counts.green}`} />
-          <Legend tone="bg-[var(--color-warning)]" label={`Watch ${counts.amber}`} />
-          <Legend tone="bg-[var(--color-error)]" label={`At risk ${counts.red}`} />
+          <Legend
+            tone="bg-[var(--color-success)]"
+            label={t("console.projects.portfolio.legend.onTrack", { count: counts.green }, `On track ${counts.green}`)}
+          />
+          <Legend
+            tone="bg-[var(--color-warning)]"
+            label={t("console.projects.portfolio.legend.watch", { count: counts.amber }, `Watch ${counts.amber}`)}
+          />
+          <Legend
+            tone="bg-[var(--color-error)]"
+            label={t("console.projects.portfolio.legend.atRisk", { count: counts.red }, `At risk ${counts.red}`)}
+          />
         </div>
       }
     >
@@ -75,7 +89,7 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
             </div>
             <div className="mt-3 flex items-baseline justify-between text-[11px] text-[var(--text-secondary)]">
               <span className="font-mono">{fmtBudget(p.budgetCents, locale, currency)}</span>
-              <span className="text-[var(--text-muted)]">{scheduleLabel(p)}</span>
+              <span className="text-[var(--text-muted)]">{scheduleLabel(p, t)}</span>
             </div>
           </Link>
         ))}
@@ -134,12 +148,14 @@ function fmtBudget(cents: number, locale: string, currency: string): string {
   }).format(cents / 100);
 }
 
-function scheduleLabel(p: PortfolioEntry): string {
-  if (!p.endDate) return "no end";
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+function scheduleLabel(p: PortfolioEntry, t: Translator): string {
+  if (!p.endDate) return t("console.projects.portfolio.schedule.noEnd", undefined, "no end");
   const days = Math.round((new Date(p.endDate).getTime() - Date.now()) / 86400000);
-  if (days < 0) return `${-days}d over`;
-  if (days === 0) return "ends today";
-  return `${days}d left`;
+  if (days < 0) return t("console.projects.portfolio.schedule.daysOver", { days: -days }, `${-days}d over`);
+  if (days === 0) return t("console.projects.portfolio.schedule.endsToday", undefined, "ends today");
+  return t("console.projects.portfolio.schedule.daysLeft", { days }, `${days}d left`);
 }
 
 function Legend({ tone, label }: { tone: string; label: string }) {

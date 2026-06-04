@@ -4,6 +4,7 @@ import * as React from "react";
 import { KanbanBoard, type KanbanLane } from "@/components/views";
 import { Badge } from "@/components/ui/Badge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { transitionPunchItem } from "./[id]/actions";
 
 export type PunchKanbanRow = {
@@ -17,14 +18,6 @@ export type PunchKanbanRow = {
   show_ready_gate: boolean;
 };
 
-const LANES: KanbanLane<PunchKanbanRow>[] = [
-  { id: "open", title: "Open", tone: "warn" },
-  { id: "in_progress", title: "In Progress", tone: "info" },
-  { id: "ready_for_review", title: "Review", tone: "info" },
-  { id: "complete", title: "Complete", tone: "success" },
-  { id: "void", title: "Void", tone: "neutral" },
-];
-
 const PRIORITY_TONE: Record<PunchKanbanRow["priority"], "muted" | "info" | "warning" | "error"> = {
   low: "muted",
   normal: "info",
@@ -33,6 +26,18 @@ const PRIORITY_TONE: Record<PunchKanbanRow["priority"], "muted" | "info" | "warn
 };
 
 export function PunchKanban({ rows }: { rows: PunchKanbanRow[] }): React.ReactElement {
+  const t = useT();
+  const lanes: KanbanLane<PunchKanbanRow>[] = React.useMemo(
+    () => [
+      { id: "open", title: t("console.punch.kanban.lane.open", undefined, "Open"), tone: "warn" },
+      { id: "in_progress", title: t("console.punch.kanban.lane.inProgress", undefined, "In Progress"), tone: "info" },
+      { id: "ready_for_review", title: t("console.punch.kanban.lane.review", undefined, "Review"), tone: "info" },
+      { id: "complete", title: t("console.punch.kanban.lane.complete", undefined, "Complete"), tone: "success" },
+      { id: "void", title: t("console.punch.kanban.lane.void", undefined, "Void"), tone: "neutral" },
+    ],
+    [t],
+  );
+
   const onMove = React.useCallback(async (rowId: string, toLaneId: string) => {
     await transitionPunchItem(rowId, toLaneId as PunchKanbanRow["status"]);
   }, []);
@@ -40,18 +45,25 @@ export function PunchKanban({ rows }: { rows: PunchKanbanRow[] }): React.ReactEl
   return (
     <KanbanBoard<PunchKanbanRow>
       rows={rows}
-      lanes={LANES}
+      lanes={lanes}
       laneOf={(r) => r.status}
       hrefOf={(r) => `/console/punch/${r.id}`}
       onMove={onMove}
-      emptyTitle="No punch items"
-      emptyDescription="Punch items capture show-ready gaps. Add one per gap."
+      emptyTitle={t("console.punch.kanban.emptyTitle", undefined, "No punch items")}
+      emptyDescription={t(
+        "console.punch.kanban.emptyDescription",
+        undefined,
+        "Punch items capture show-ready gaps. Add one per gap.",
+      )}
       renderCard={(r) => (
         <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">
             <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.code}</span>
             {r.show_ready_gate && (
-              <span title="Show-ready gate" className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-error)]" />
+              <span
+                title={t("console.punch.kanban.showReadyGate", undefined, "Show-ready gate")}
+                className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-error)]"
+              />
             )}
           </div>
           <div className="line-clamp-2 text-sm font-medium text-[var(--foreground)]">{r.title}</div>

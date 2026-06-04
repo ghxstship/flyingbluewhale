@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -44,12 +44,18 @@ function fmt(d: string | null): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Procurement" title="Submittals" />
+        <ModuleHeader
+          eyebrow={t("console.submittals.eyebrow", undefined, "Procurement")}
+          title={t("console.submittals.title", undefined, "Submittals")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.submittals.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -74,49 +80,68 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Submittals"
-        subtitle="Vendor packages with stamps + revision rounds."
+        eyebrow={t("console.submittals.eyebrow", undefined, "Procurement")}
+        title={t("console.submittals.title", undefined, "Submittals")}
+        subtitle={t("console.submittals.subtitle", undefined, "Vendor packages with stamps + revision rounds.")}
         action={
           <Button href="/console/submittals/new" size="sm">
-            + New Submittal
+            {t("console.submittals.newCta", undefined, "+ New Submittal")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="In Flight" value={fmtIntl.number(inFlight)} accent />
-          <MetricCard label="Approved" value={fmtIntl.number(approved)} />
-          <MetricCard label="Rejected" value={fmtIntl.number(rejected)} />
+          <MetricCard
+            label={t("console.submittals.metrics.inFlight", undefined, "In Flight")}
+            value={fmtIntl.number(inFlight)}
+            accent
+          />
+          <MetricCard
+            label={t("console.submittals.metrics.approved", undefined, "Approved")}
+            value={fmtIntl.number(approved)}
+          />
+          <MetricCard
+            label={t("console.submittals.metrics.rejected", undefined, "Rejected")}
+            value={fmtIntl.number(rejected)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/submittals/${r.id}`}
-          emptyLabel="No submittals yet"
-          emptyDescription="Vendor packages, technical specs, brand approvals — track them with stamps and revision rounds."
+          emptyLabel={t("console.submittals.emptyLabel", undefined, "No submittals yet")}
+          emptyDescription={t(
+            "console.submittals.emptyDescription",
+            undefined,
+            "Vendor packages, technical specs, brand approvals — track them with stamps and revision rounds.",
+          )}
           emptyAction={
             <Button href="/console/submittals/new" size="sm">
-              + New Submittal
+              {t("console.submittals.newCta", undefined, "+ New Submittal")}
             </Button>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.submittals.columns.code", undefined, "Code"),
               render: (r) => r.code,
               className: "font-mono text-xs",
               accessor: (r) => r.code,
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.submittals.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "spec",
-              header: "Spec",
+              header: t("console.submittals.columns.spec", undefined, "Spec"),
               render: (r) => r.spec_section ?? "—",
               accessor: (r) => r.spec_section ?? null,
             },
             {
               key: "vendor",
-              header: "Vendor",
+              header: t("console.submittals.columns.vendor", undefined, "Vendor"),
               render: (r) => r.vendor?.name ?? "—",
               filterable: true,
               groupable: true,
@@ -124,21 +149,21 @@ export default async function Page() {
             },
             {
               key: "round",
-              header: "Round",
+              header: t("console.submittals.columns.round", undefined, "Round"),
               render: (r) => `#${r.current_round}`,
               className: "font-mono text-xs",
               accessor: (r) => r.current_round ?? null,
             },
             {
               key: "due",
-              header: "Due",
+              header: t("console.submittals.columns.due", undefined, "Due"),
               render: (r) => fmt(r.due_at),
               className: "font-mono text-xs",
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.submittals.columns.status", undefined, "Status"),
               render: (r) => (
                 <span className="inline-flex items-center gap-2">
                   <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

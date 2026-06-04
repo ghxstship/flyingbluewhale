@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data } = await supabase
     .from("rentals")
     .select("id,starts_at,ends_at,rate_cents,notes,project_id")
@@ -31,16 +33,24 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
 
   return (
     <>
-      <ModuleHeader eyebrow="Equipment" title="Rentals" subtitle="Booking history for this asset." />
+      <ModuleHeader
+        eyebrow={t("console.production.equipment.rentals.eyebrow", undefined, "Equipment")}
+        title={t("console.production.equipment.rentals.title", undefined, "Rentals")}
+        subtitle={t("console.production.equipment.rentals.subtitle", undefined, "Booking history for this asset.")}
+      />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No Rentals"
-          emptyDescription="No rentals recorded against this equipment yet."
+          emptyLabel={t("console.production.equipment.rentals.emptyLabel", undefined, "No Rentals")}
+          emptyDescription={t(
+            "console.production.equipment.rentals.emptyDescription",
+            undefined,
+            "No rentals recorded against this equipment yet.",
+          )}
           columns={[
             {
               key: "starts_at",
-              header: "Starts",
+              header: t("console.production.equipment.rentals.col.starts", undefined, "Starts"),
               render: (r) => formatDate(r.starts_at),
               accessor: (r) => r.starts_at,
               mono: true,
@@ -48,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             },
             {
               key: "ends_at",
-              header: "Ends",
+              header: t("console.production.equipment.rentals.col.ends", undefined, "Ends"),
               render: (r) => formatDate(r.ends_at),
               accessor: (r) => r.ends_at,
               mono: true,
@@ -56,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             },
             {
               key: "rate_cents",
-              header: "Day Rate",
+              header: t("console.production.equipment.rentals.col.dayRate", undefined, "Day Rate"),
               render: (r) => (r.rate_cents != null ? formatMoney(r.rate_cents) : "—"),
               accessor: (r) => r.rate_cents ?? 0,
               tabular: true,
@@ -64,7 +74,12 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
               className: "text-right",
               headerClassName: "text-right",
             },
-            { key: "notes", header: "Notes", render: (r) => r.notes ?? "—", accessor: (r) => r.notes ?? "" },
+            {
+              key: "notes",
+              header: t("console.production.equipment.rentals.col.notes", undefined, "Notes"),
+              render: (r) => r.notes ?? "—",
+              accessor: (r) => r.notes ?? "",
+            },
           ]}
         />
       </div>

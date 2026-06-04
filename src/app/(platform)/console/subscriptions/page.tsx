@@ -6,16 +6,20 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listSubscriptions, type Subscription } from "@/lib/subscriptions";
 import { timeAgo, toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function SubscriptionsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Subscriptions" />
+        <ModuleHeader title={t("console.subscriptions.title", undefined, "Subscriptions")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.subscriptions.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,46 +33,63 @@ export default async function SubscriptionsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Membership"
-        title="Subscriptions"
-        subtitle={`${rows.length} Total · ${active} Active  · ${trial} trial · ${lapsed} lapsed`}
-        action={<Button href="/console/subscriptions/new">+ New Subscription</Button>}
+        eyebrow={t("console.subscriptions.eyebrow", undefined, "Membership")}
+        title={t("console.subscriptions.title", undefined, "Subscriptions")}
+        subtitle={t(
+          "console.subscriptions.subtitle",
+          { total: rows.length, active, trial, lapsed },
+          `${rows.length} Total · ${active} Active  · ${trial} trial · ${lapsed} lapsed`,
+        )}
+        action={
+          <Button href="/console/subscriptions/new">
+            {t("console.subscriptions.newAction", undefined, "+ New Subscription")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<Subscription>
           rows={rows}
           rowHref={(r) => `/console/subscriptions/${r.id}`}
           columns={[
-            { key: "label", header: "Label", render: (r) => r.label, accessor: (r) => r.label },
+            {
+              key: "label",
+              header: t("console.subscriptions.columns.label", undefined, "Label"),
+              render: (r) => r.label,
+              accessor: (r) => r.label,
+            },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.subscriptions.columns.kind", undefined, "Kind"),
               render: (r) => <Badge variant="default">{toTitle(r.kind)}</Badge>,
               accessor: (r) => r.kind,
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.subscriptions.columns.state", undefined, "State"),
               render: (r) => <Badge variant={badgeVariantForState(r.state)}>{toTitle(r.state)}</Badge>,
               accessor: (r) => r.state,
             },
             {
               key: "cadence",
-              header: "Cadence",
+              header: t("console.subscriptions.columns.cadence", undefined, "Cadence"),
               render: (r) => (r.renewal_cadence_months ? `${r.renewal_cadence_months}mo` : "—"),
               className: "font-mono text-xs",
               accessor: (r) => r.renewal_cadence_months ?? null,
             },
             {
               key: "started",
-              header: "Started",
+              header: t("console.subscriptions.columns.started", undefined, "Started"),
               render: (r) => (r.started_at ? timeAgo(r.started_at) : "—"),
               className: "text-xs text-[var(--text-secondary)]",
               accessor: (r) => r.started_at,
             },
           ]}
-          emptyLabel="No subscriptions yet"
-          emptyDescription="Track recurring relationships — members, retainers, recurring sponsors. Stripe webhook events advance state automatically."
+          emptyLabel={t("console.subscriptions.emptyLabel", undefined, "No subscriptions yet")}
+          emptyDescription={t(
+            "console.subscriptions.emptyDescription",
+            undefined,
+            "Track recurring relationships — members, retainers, recurring sponsors. Stripe webhook events advance state automatically.",
+          )}
         />
       </div>
     </>

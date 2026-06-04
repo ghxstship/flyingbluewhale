@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateMarketplaceSettingsAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,12 +15,18 @@ type Org = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Marketplace" title="Settings" />
+        <ModuleHeader
+          eyebrow={t("console.marketplace.settings.eyebrow", undefined, "Marketplace")}
+          title={t("console.marketplace.settings.title", undefined, "Settings")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.marketplace.settings.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -36,26 +43,43 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Marketplace"
-        title="Settings"
-        subtitle="Take rate and visibility for marketplace transactions."
+        eyebrow={t("console.marketplace.settings.eyebrow", undefined, "Marketplace")}
+        title={t("console.marketplace.settings.title", undefined, "Settings")}
+        subtitle={t(
+          "console.marketplace.settings.subtitle",
+          undefined,
+          "Take rate and visibility for marketplace transactions.",
+        )}
       />
       <div className="page-content max-w-xl">
-        <FormShell action={updateMarketplaceSettingsAction} submitLabel="Save Settings">
+        <FormShell
+          action={updateMarketplaceSettingsAction}
+          submitLabel={t("console.marketplace.settings.submitLabel", undefined, "Save Settings")}
+        >
           <fieldset className="surface-inset flex flex-col gap-2 p-3">
-            <legend className="text-xs font-medium tracking-wide uppercase">Visibility</legend>
+            <legend className="text-xs font-medium tracking-wide uppercase">
+              {t("console.marketplace.settings.visibilityLegend", undefined, "Visibility")}
+            </legend>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" name="marketplace_enabled" defaultChecked={org.marketplace_enabled} />
-              Enable public marketplace surfaces for this org
+              {t(
+                "console.marketplace.settings.enableLabel",
+                undefined,
+                "Enable public marketplace surfaces for this org",
+              )}
             </label>
             <p className="text-xs text-[var(--text-secondary)]">
-              When enabled, your published postings, calls, talent, and RFQs appear under{" "}
+              {t(
+                "console.marketplace.settings.enableHintPrefix",
+                undefined,
+                "When enabled, your published postings, calls, talent, and RFQs appear under",
+              )}{" "}
               <span className="font-mono">/marketplace/*</span>.
             </p>
           </fieldset>
 
           <Input
-            label="Take Rate (bps)"
+            label={t("console.marketplace.settings.takeRateLabel", undefined, "Take Rate (bps)")}
             name="marketplace_take_rate_bps"
             type="number"
             min={0}
@@ -63,7 +87,11 @@ export default async function Page() {
             defaultValue={String(org.marketplace_take_rate_bps)}
           />
           <p className="text-xs text-[var(--text-secondary)]">
-            Basis points (1 bp = 0.01%). 0 = no platform fee. Max 5000 (50%).
+            {t(
+              "console.marketplace.settings.takeRateHint",
+              undefined,
+              "Basis points (1 bp = 0.01%). 0 = no platform fee. Max 5000 (50%).",
+            )}
           </p>
         </FormShell>
       </div>

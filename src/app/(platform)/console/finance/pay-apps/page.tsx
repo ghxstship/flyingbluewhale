@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -35,12 +35,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="Pay Apps" />
+        <ModuleHeader
+          eyebrow={t("console.finance.payApps.eyebrow", undefined, "Finance")}
+          title={t("console.finance.payApps.titleShort", undefined, "Pay Apps")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.payApps.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -67,49 +73,67 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="Pay Applications"
-        subtitle="Production progress billing against PO line items."
+        eyebrow={t("console.finance.payApps.eyebrow", undefined, "Finance")}
+        title={t("console.finance.payApps.title", undefined, "Pay Applications")}
+        subtitle={t(
+          "console.finance.payApps.subtitle",
+          undefined,
+          "Production progress billing against PO line items.",
+        )}
         action={
           <Button href="/console/finance/pay-apps/new" size="sm">
-            + New Pay App
+            {t("console.finance.payApps.newCta", undefined, "+ New Pay App")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Pending Review" value={fmt.number(inFlight.length)} accent />
-          <MetricCard label="Net Due" value={formatMoney(totalDue)} />
-          <MetricCard label="Completed YTD" value={formatMoney(totalCompleted)} />
+          <MetricCard
+            label={t("console.finance.payApps.metrics.pendingReview", undefined, "Pending Review")}
+            value={fmt.number(inFlight.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.payApps.metrics.netDue", undefined, "Net Due")}
+            value={formatMoney(totalDue)}
+          />
+          <MetricCard
+            label={t("console.finance.payApps.metrics.completedYtd", undefined, "Completed YTD")}
+            value={formatMoney(totalCompleted)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/finance/pay-apps/${r.id}`}
-          emptyLabel="No pay apps yet"
-          emptyDescription="Vendors bill by % completion against PO line items. Retention is held back automatically."
+          emptyLabel={t("console.finance.payApps.emptyLabel", undefined, "No pay apps yet")}
+          emptyDescription={t(
+            "console.finance.payApps.emptyDescription",
+            undefined,
+            "Vendors bill by % completion against PO line items. Retention is held back automatically.",
+          )}
           emptyAction={
             <Button href="/console/finance/pay-apps/new" size="sm">
-              + New Pay App
+              {t("console.finance.payApps.newCta", undefined, "+ New Pay App")}
             </Button>
           }
           columns={[
             {
               key: "num",
-              header: "Application",
+              header: t("console.finance.payApps.columns.application", undefined, "Application"),
               render: (r) => `#${r.application_number}`,
               className: "font-mono text-xs",
               accessor: (r) => r.application_number ?? null,
             },
             {
               key: "po",
-              header: "PO",
+              header: t("console.finance.payApps.columns.po", undefined, "PO"),
               render: (r) => r.purchase_order?.number ?? "—",
               className: "font-mono text-xs",
               accessor: (r) => r.purchase_order?.number ?? null,
             },
             {
               key: "vendor",
-              header: "Vendor",
+              header: t("console.finance.payApps.columns.vendor", undefined, "Vendor"),
               render: (r) => r.vendor?.name ?? "—",
               filterable: true,
               groupable: true,
@@ -117,28 +141,28 @@ export default async function Page() {
             },
             {
               key: "period",
-              header: "Period",
+              header: t("console.finance.payApps.columns.period", undefined, "Period"),
               render: (r) => `${fmtDate(r.period_start)} — ${fmtDate(r.period_end)}`,
               className: "font-mono text-xs",
               accessor: (r) => r.period_start ?? null,
             },
             {
               key: "completed",
-              header: "Completed",
+              header: t("console.finance.payApps.columns.completed", undefined, "Completed"),
               render: (r) => formatMoney(r.total_completed_cents ?? 0),
               className: "font-mono text-xs",
               accessor: (r) => Number(r.total_completed_cents ?? 0),
             },
             {
               key: "due",
-              header: "Due",
+              header: t("console.finance.payApps.columns.due", undefined, "Due"),
               render: (r) => formatMoney(r.total_due_cents ?? 0),
               className: "font-mono text-xs",
               accessor: (r) => Number(r.total_due_cents ?? 0),
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.finance.payApps.columns.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SELECT_COLUMNS, TrackerView, type TrackerRow } from "@/components/xpms/TrackerView";
 import { AtomDrillIn } from "@/components/xpms/AtomDrillIn";
 import { fetchAtomDrillIn } from "@/lib/xpms/drill-in";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function TrackerPage({
   params,
@@ -20,6 +21,7 @@ export default async function TrackerPage({
   const { atom: focusedAtomId } = await searchParams;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data: project } = await supabase
     .from("projects")
     .select("id, name, xpms_phase")
@@ -44,12 +46,12 @@ export default async function TrackerPage({
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title="Tracker"
-        subtitle={`${atoms.length} Atom${atoms.length === 1 ? "" : "s"} · ${project.xpms_phase ?? "draft"} phase`}
+        title={t("console.projects.tracker.title", undefined, "Tracker")}
+        subtitle={`${atoms.length} ${atoms.length === 1 ? t("console.projects.tracker.atomSingular", undefined, "Atom") : t("console.projects.tracker.atomPlural", undefined, "Atoms")} · ${project.xpms_phase ?? "draft"} ${t("console.projects.tracker.phase", undefined, "phase")}`}
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
+          { label: t("console.projects.breadcrumb", undefined, "Projects"), href: "/console/projects" },
           { label: project.name, href: `/console/projects/${projectId}` },
-          { label: "Tracker" },
+          { label: t("console.projects.tracker.breadcrumb", undefined, "Tracker") },
         ]}
       />
       <div className="page-content">
@@ -58,7 +60,7 @@ export default async function TrackerPage({
           atomHrefBuilder={(id) => `/console/projects/${projectId}/tracker?atom=${id}`}
           emptyAction={
             <Link className="text-sm text-[var(--org-primary)]" href="/console/xpms">
-              Open Catalog →
+              {t("console.projects.tracker.openCatalog", undefined, "Open Catalog →")}
             </Link>
           }
         />

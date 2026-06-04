@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ChartShell } from "@/components/charts/ChartShell";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type CalendarEvent = {
   id: string;
@@ -25,6 +26,7 @@ type View = "month" | "week";
  * detail Gantt where event-vs-task ownership is unambiguous.
  */
 export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
+  const t = useT();
   const [view, setView] = React.useState<View>("month");
   const [cursor, setCursor] = React.useState<Date>(() => startOfMonth(new Date()));
 
@@ -55,9 +57,13 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
   return (
     <ChartShell
       title={view === "month" ? monthLabel : weekLabel(range.start, range.end)}
-      description={view === "month" ? "Click any event chip to open" : "This week — events visible in their start day"}
+      description={
+        view === "month"
+          ? t("console.schedule.calendar.descriptionMonth", undefined, "Click any event chip to open")
+          : t("console.schedule.calendar.descriptionWeek", undefined, "This week — events visible in their start day")
+      }
       empty={events.length === 0}
-      emptyLabel="No scheduled events yet."
+      emptyLabel={t("console.schedule.calendar.emptyLabel", undefined, "No scheduled events yet.")}
       height={500}
       actions={
         <div className="flex items-center gap-2">
@@ -67,31 +73,31 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
               onClick={() => setView("month")}
               className={`px-2 py-1 text-xs ${view === "month" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             >
-              Month
+              {t("console.schedule.calendar.viewMonth", undefined, "Month")}
             </button>
             <button
               type="button"
               onClick={() => setView("week")}
               className={`px-2 py-1 text-xs ${view === "week" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             >
-              Week
+              {t("console.schedule.calendar.viewWeek", undefined, "Week")}
             </button>
           </div>
           <button
             type="button"
             onClick={() => shift(-1)}
-            aria-label="Previous"
+            aria-label={t("common.previous", undefined, "Previous")}
             className="rounded p-1 hover:bg-[var(--surface-inset)]"
           >
             <ChevronLeft size={14} />
           </button>
           <Button type="button" variant="ghost" size="sm" onClick={jumpToday}>
-            Today
+            {t("console.schedule.calendar.today", undefined, "Today")}
           </Button>
           <button
             type="button"
             onClick={() => shift(1)}
-            aria-label="Next"
+            aria-label={t("common.next", undefined, "Next")}
             className="rounded p-1 hover:bg-[var(--surface-inset)]"
           >
             <ChevronRight size={14} />
@@ -107,7 +113,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
               key={d}
               className="px-2 py-1 text-[10px] font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase"
             >
-              {d}
+              {t(`console.schedule.calendar.weekday.${d.toLowerCase()}`, undefined, d)}
             </div>
           ))}
         </div>
@@ -152,7 +158,13 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                     </Link>
                   ))}
                   {dayEvents.length > 3 && (
-                    <span className="px-1 text-[9px] text-[var(--text-muted)]">+{dayEvents.length - 3} more</span>
+                    <span className="px-1 text-[9px] text-[var(--text-muted)]">
+                      {t(
+                        "console.schedule.calendar.moreEvents",
+                        { count: dayEvents.length - 3 },
+                        `+${dayEvents.length - 3} more`,
+                      )}
+                    </span>
                   )}
                 </div>
               </div>

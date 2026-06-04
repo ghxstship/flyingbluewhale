@@ -7,7 +7,7 @@ import { StatusChip, type StatusTone } from "@/components/ui/StatusChip";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { IncidentsKanban, type IncidentKanbanRow } from "./IncidentsKanban";
 
 const VALID_VIEWS = new Set(["list", "kanban"]);
@@ -33,6 +33,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const sp = await searchParams;
   const view = VALID_VIEWS.has(sp.view ?? "") ? (sp.view as "list" | "kanban") : "list";
   // closed_at column added in 20260504000010_due_date_convention.sql; the
@@ -48,12 +49,12 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Incidents"
-        subtitle="Field-logged safety + near-miss reports."
+        eyebrow={t("console.operations.incidents.eyebrow", undefined, "Operations")}
+        title={t("console.operations.incidents.title", undefined, "Incidents")}
+        subtitle={t("console.operations.incidents.subtitle", undefined, "Field-logged safety + near-miss reports.")}
         action={
           <Button href="/console/operations/incidents/new" size="sm">
-            Log incident
+            {t("console.operations.incidents.logIncident", undefined, "Log incident")}
           </Button>
         }
       />
@@ -64,14 +65,14 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
             className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "list" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             aria-current={view === "list" ? "true" : undefined}
           >
-            List
+            {t("console.operations.incidents.viewList", undefined, "List")}
           </a>
           <a
             href="?view=kanban"
             className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "kanban" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             aria-current={view === "kanban" ? "true" : undefined}
           >
-            Kanban
+            {t("console.operations.incidents.viewKanban", undefined, "Kanban")}
           </a>
         </div>
         {view === "kanban" ? (
@@ -92,40 +93,49 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
           <DataTable<IncidentRow>
             rows={rows}
             rowHref={(r) => `/console/operations/incidents/${r.id}`}
-            emptyLabel="No incidents reported"
-            emptyDescription="Log one from the console or field-log from the mobile shell at /m/incidents/new."
+            emptyLabel={t("console.operations.incidents.emptyLabel", undefined, "No incidents reported")}
+            emptyDescription={t(
+              "console.operations.incidents.emptyDescription",
+              undefined,
+              "Log one from the console or field-log from the mobile shell at /m/incidents/new.",
+            )}
             emptyAction={
               <Button href="/console/operations/incidents/new" size="sm">
-                Log incident
+                {t("console.operations.incidents.logIncident", undefined, "Log incident")}
               </Button>
             }
             columns={[
               {
                 key: "when",
-                header: "When",
+                header: t("console.operations.incidents.columns.when", undefined, "When"),
                 render: (r) => fmt.dateTime(r.occurred_at),
                 className: "font-mono text-xs",
                 accessor: (r) => r.occurred_at ?? null,
               },
               {
                 key: "severity",
-                header: "Severity",
+                header: t("console.operations.incidents.columns.severity", undefined, "Severity"),
                 render: (r) => <StatusChip tone={SEVERITY_TONE[r.severity] ?? "neutral"}>{r.severity}</StatusChip>,
                 filterable: true,
                 groupable: true,
                 accessor: (r) => r.severity ?? null,
               },
-              { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
+              {
+                key: "summary",
+                header: t("console.operations.incidents.columns.summary", undefined, "Summary"),
+                render: (r) => r.summary,
+                accessor: (r) => r.summary,
+              },
               {
                 key: "location",
-                header: "Location",
+                header: t("console.operations.incidents.columns.location", undefined, "Location"),
                 render: (r) => r.location ?? "—",
                 className: "text-[var(--text-muted)]",
                 accessor: (r) => r.location ?? null,
               },
               {
                 key: "status",
-                header: "Status",
+                header: t("console.operations.incidents.columns.status", undefined, "Status"),
                 render: (r) => (
                   <span className="inline-flex items-center gap-2">
                     <span>{r.status}</span>

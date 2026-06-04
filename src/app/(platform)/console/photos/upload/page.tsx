@@ -2,17 +2,24 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { PhotoUploadForm } from "./PhotoUploadForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Upload Photos" />
+        <ModuleHeader
+          eyebrow={t("console.photos.upload.eyebrow", undefined, "Operations")}
+          title={t("console.photos.upload.title", undefined, "Upload Photos")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase to upload photos.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.photos.upload.configureSupabase", undefined, "Configure Supabase to upload photos.")}
+          </div>
         </div>
       </>
     );
@@ -36,19 +43,27 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Upload Photos"
-        subtitle="Attach jobsite or production photos to a project album."
+        eyebrow={t("console.photos.upload.eyebrow", undefined, "Operations")}
+        title={t("console.photos.upload.title", undefined, "Upload Photos")}
+        subtitle={t(
+          "console.photos.upload.subtitle",
+          undefined,
+          "Attach jobsite or production photos to a project album.",
+        )}
         breadcrumbs={[
-          { label: "Operations", href: "/console" },
-          { label: "Photos", href: "/console/photos" },
-          { label: "Upload" },
+          { label: t("console.photos.upload.breadcrumbs.operations", undefined, "Operations"), href: "/console" },
+          { label: t("console.photos.upload.breadcrumbs.photos", undefined, "Photos"), href: "/console/photos" },
+          { label: t("console.photos.upload.breadcrumbs.upload", undefined, "Upload") },
         ]}
       />
       <div className="page-content max-w-2xl">
         {projects.length === 0 ? (
           <div className="surface p-6 text-sm text-[var(--text-muted)]">
-            No active projects. Create one before uploading photos.
+            {t(
+              "console.photos.upload.noProjects",
+              undefined,
+              "No active projects. Create one before uploading photos.",
+            )}
           </div>
         ) : (
           <PhotoUploadForm projects={projects} />

@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { PublishControls } from "./PublishControls";
 
 export const dynamic = "force-dynamic";
@@ -49,11 +50,12 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
     .maybeSingle();
   if (!data) return notFound();
   const p = data as Posting;
+  const { t } = await getRequestT();
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Marketplace · Job Posting"
+        eyebrow={t("console.marketplace.postings.detail.eyebrow", undefined, "Marketplace · Job Posting")}
         title={p.title}
         subtitle={[p.posting_type, p.employment_type, [p.city, p.region].filter(Boolean).join(", ") || null]
           .filter(Boolean)
@@ -62,10 +64,14 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[p.status] ?? "muted"}>{toTitle(p.status)}</Badge>
             <Button href={`/console/marketplace/postings/${p.id}/applicants`} size="sm" variant="ghost">
-              {p.applicant_count} applicants
+              {t(
+                "console.marketplace.postings.detail.applicants",
+                { count: p.applicant_count },
+                `${p.applicant_count} applicants`,
+              )}
             </Button>
             <Button href={`/console/marketplace/postings/${p.id}/edit`} size="sm" variant="ghost">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
           </div>
         }
@@ -74,25 +80,48 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         <PublishControls postingId={p.id} status={p.status} publicSlug={p.public_slug} expiresAt={p.expires_at} />
 
         <section className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Description</h2>
+          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+            {t("console.marketplace.postings.detail.description", undefined, "Description")}
+          </h2>
           <div className="text-sm whitespace-pre-wrap text-[var(--text-primary)]">{p.description ?? "—"}</div>
         </section>
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <Card title="Roles" items={p.role_taxonomy} />
-          <Card title="Certifications" items={p.certs_required} />
-          <Card title="Unions" items={p.union_required} />
+          <Card title={t("console.marketplace.postings.detail.roles", undefined, "Roles")} items={p.role_taxonomy} />
+          <Card
+            title={t("console.marketplace.postings.detail.certifications", undefined, "Certifications")}
+            items={p.certs_required}
+          />
+          <Card title={t("console.marketplace.postings.detail.unions", undefined, "Unions")} items={p.union_required} />
           <div className="surface p-5">
-            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Compensation</h2>
+            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+              {t("console.marketplace.postings.detail.compensation", undefined, "Compensation")}
+            </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">Day rate</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.postings.detail.dayRate", undefined, "Day rate")}
+              </dt>
               <dd>{formatFeeRange(p.day_rate_min_cents, p.day_rate_max_cents, p.currency)}</dd>
-              <dt className="text-[var(--text-secondary)]">Travel paid</dt>
-              <dd>{p.travel_paid ? "Yes" : "No"}</dd>
-              <dt className="text-[var(--text-secondary)]">Lodging</dt>
-              <dd>{p.lodging_provided ? "Provided" : "Not provided"}</dd>
-              <dt className="text-[var(--text-secondary)]">Audience</dt>
-              <dd>{p.vetted_only ? "Vetted-only" : "Public"}</dd>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.postings.detail.travelPaid", undefined, "Travel paid")}
+              </dt>
+              <dd>{p.travel_paid ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</dd>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.postings.detail.lodging", undefined, "Lodging")}
+              </dt>
+              <dd>
+                {p.lodging_provided
+                  ? t("console.marketplace.postings.detail.lodgingProvided", undefined, "Provided")
+                  : t("console.marketplace.postings.detail.lodgingNotProvided", undefined, "Not provided")}
+              </dd>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.marketplace.postings.detail.audience", undefined, "Audience")}
+              </dt>
+              <dd>
+                {p.vetted_only
+                  ? t("console.marketplace.postings.detail.audienceVetted", undefined, "Vetted-only")
+                  : t("console.marketplace.postings.detail.audiencePublic", undefined, "Public")}
+              </dd>
             </dl>
           </div>
         </section>

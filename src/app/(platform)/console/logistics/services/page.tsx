@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -39,12 +39,18 @@ function relativeTime(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Logistics" title="Services" />
+        <ModuleHeader
+          eyebrow={t("console.logistics.services.eyebrow", undefined, "Logistics")}
+          title={t("console.logistics.services.title", undefined, "Services")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.logistics.services.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -64,37 +70,60 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Logistics"
-        title="Services"
-        subtitle={`${rows.length} Request${rows.length === 1 ? "" : "s"} · ${open} Open  · waste, cleaning, repairs`}
+        eyebrow={t("console.logistics.services.eyebrow", undefined, "Logistics")}
+        title={t("console.logistics.services.title", undefined, "Services")}
+        subtitle={t(
+          "console.logistics.services.subtitle",
+          { count: rows.length, requestWord: rows.length === 1 ? "Request" : "Requests", open },
+          `${rows.length} ${rows.length === 1 ? "Request" : "Requests"} · ${open} Open  · waste, cleaning, repairs`,
+        )}
         action={
           <Button href="/console/services/requests/new" size="sm">
-            + New Service
+            {t("console.logistics.services.newService", undefined, "+ New Service")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmt.number(open)} accent />
-          <MetricCard label="SLA breached" value={fmt.number(breached)} />
-          <MetricCard label="Total · 30d" value={fmt.number(rows.length)} />
+          <MetricCard
+            label={t("console.logistics.services.metrics.open", undefined, "Open")}
+            value={fmt.number(open)}
+            accent
+          />
+          <MetricCard
+            label={t("console.logistics.services.metrics.slaBreached", undefined, "SLA breached")}
+            value={fmt.number(breached)}
+          />
+          <MetricCard
+            label={t("console.logistics.services.metrics.total30d", undefined, "Total · 30d")}
+            value={fmt.number(rows.length)}
+          />
         </div>
 
         <DataTable<ServiceRequest>
           rows={rows}
           rowHref={(r) => `/console/services/requests/${r.id}`}
-          emptyLabel="No logistics service requests"
-          emptyDescription="Cleaning, waste, and repair tickets land here. Author one via /console/services/requests."
+          emptyLabel={t("console.logistics.services.empty.label", undefined, "No logistics service requests")}
+          emptyDescription={t(
+            "console.logistics.services.empty.description",
+            undefined,
+            "Cleaning, waste, and repair tickets land here. Author one via /console/services/requests.",
+          )}
           emptyAction={
             <Button href="/console/services/requests/new" size="sm">
-              + New Service
+              {t("console.logistics.services.newService", undefined, "+ New Service")}
             </Button>
           }
           columns={[
-            { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
+            {
+              key: "summary",
+              header: t("console.logistics.services.columns.summary", undefined, "Summary"),
+              render: (r) => r.summary,
+              accessor: (r) => r.summary,
+            },
             {
               key: "category",
-              header: "Category",
+              header: t("console.logistics.services.columns.category", undefined, "Category"),
               render: (r) => <Badge variant="muted">{toTitle(r.category)}</Badge>,
               accessor: (r) => r.category ?? null,
               filterable: true,
@@ -102,7 +131,7 @@ export default async function Page() {
             },
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.logistics.services.columns.severity", undefined, "Severity"),
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
@@ -110,14 +139,14 @@ export default async function Page() {
             },
             {
               key: "opened",
-              header: "Opened",
+              header: t("console.logistics.services.columns.opened", undefined, "Opened"),
               render: (r) => relativeTime(r.opened_at),
               className: "font-mono text-xs",
               accessor: (r) => r.opened_at ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.logistics.services.columns.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status]}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

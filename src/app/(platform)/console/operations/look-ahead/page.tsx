@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +19,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
 
   function fmtDate(d: string): string {
     return new Date(d).toLocaleString(undefined, {
@@ -76,12 +77,12 @@ export default async function Page() {
   ]);
 
   const items: Item[] = [
-    ...(tasks.data ?? []).map((t) => ({
+    ...(tasks.data ?? []).map((task) => ({
       kind: "task",
-      id: t.id,
-      title: t.title,
-      when: t.due_at as string,
-      project: (t.project as unknown as { name: string | null } | null)?.name ?? null,
+      id: task.id,
+      title: task.title,
+      when: task.due_at as string,
+      project: (task.project as unknown as { name: string | null } | null)?.name ?? null,
     })),
     ...(events.data ?? []).map((e) => ({
       kind: "event",
@@ -107,7 +108,10 @@ export default async function Page() {
     ...(dispatchRuns.data ?? []).map((d) => {
       const origin = (d.origin as unknown as { name: string | null } | null)?.name;
       const destination = (d.destination as unknown as { name: string | null } | null)?.name;
-      const route = origin && destination ? `${origin} → ${destination}` : (d.vehicle_ref ?? "Dispatch");
+      const route =
+        origin && destination
+          ? `${origin} → ${destination}`
+          : (d.vehicle_ref ?? t("console.operations.lookAhead.dispatchFallback", undefined, "Dispatch"));
       return {
         kind: "dispatch" as const,
         id: d.id,
@@ -135,13 +139,21 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Look-ahead — next 21 days"
-        subtitle={`${items.length} Item${items.length === 1 ? "" : "s"} across tasks, events, briefings, inspections, dispatches.`}
+        eyebrow={t("console.operations.lookAhead.eyebrow", undefined, "Operations")}
+        title={t("console.operations.lookAhead.title", undefined, "Look-ahead — next 21 days")}
+        subtitle={t(
+          items.length === 1
+            ? "console.operations.lookAhead.subtitle_one"
+            : "console.operations.lookAhead.subtitle_other",
+          { count: items.length },
+          `${items.length} Item${items.length === 1 ? "" : "s"} across tasks, events, briefings, inspections, dispatches.`,
+        )}
       />
       <div className="page-content space-y-3">
         {Object.keys(buckets).length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">Nothing scheduled in the next 21 days.</div>
+          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+            {t("console.operations.lookAhead.empty", undefined, "Nothing scheduled in the next 21 days.")}
+          </div>
         ) : (
           Object.entries(buckets).map(([day, dayItems]) => (
             <section key={day} className="surface p-3">

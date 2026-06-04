@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { PunchKanban, type PunchKanbanRow } from "./PunchKanban";
 
@@ -43,12 +43,18 @@ const PRIORITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
 };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ view?: string; list?: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Punch List" />
+        <ModuleHeader
+          eyebrow={t("console.punch.eyebrow", undefined, "Operations")}
+          title={t("console.punch.title", undefined, "Punch List")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.punch.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -95,30 +101,41 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title={activeList ? `Punch · ${activeList.name}` : "Punch List"}
-        subtitle={activeList ? `Filtered to one list. Clear to see all items.` : "Show-ready checklist."}
+        eyebrow={t("console.punch.eyebrow", undefined, "Operations")}
+        title={
+          activeList
+            ? t("console.punch.titleFiltered", { name: activeList.name }, `Punch · ${activeList.name}`)
+            : t("console.punch.title", undefined, "Punch List")
+        }
+        subtitle={
+          activeList
+            ? t("console.punch.subtitleFiltered", undefined, "Filtered to one list. Clear to see all items.")
+            : t("console.punch.subtitle", undefined, "Show-ready checklist.")
+        }
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/punch/lists" size="sm" variant="ghost">
-              Lists
+              {t("console.punch.lists", undefined, "Lists")}
             </Button>
             {activeList && (
               <Button href="/console/punch" size="sm" variant="ghost">
-                Clear Filter
+                {t("console.punch.clearFilter", undefined, "Clear Filter")}
               </Button>
             )}
             <Button href="/console/punch/new" size="sm">
-              + New Item
+              {t("console.punch.newItem", undefined, "+ New Item")}
             </Button>
           </div>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmt.number(open)} accent />
-          <MetricCard label="Show-ready gates" value={fmt.number(showReady)} />
-          <MetricCard label="Urgent" value={fmt.number(urgent)} />
+          <MetricCard label={t("console.punch.metric.open", undefined, "Open")} value={fmt.number(open)} accent />
+          <MetricCard
+            label={t("console.punch.metric.showReadyGates", undefined, "Show-ready gates")}
+            value={fmt.number(showReady)}
+          />
+          <MetricCard label={t("console.punch.metric.urgent", undefined, "Urgent")} value={fmt.number(urgent)} />
         </div>
         <div className="flex items-center justify-end gap-1 text-xs">
           <a
@@ -126,14 +143,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
             className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "list" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             aria-current={view === "list" ? "true" : undefined}
           >
-            List
+            {t("console.punch.view.list", undefined, "List")}
           </a>
           <a
             href="?view=kanban"
             className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "kanban" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
             aria-current={view === "kanban" ? "true" : undefined}
           >
-            Kanban
+            {t("console.punch.view.kanban", undefined, "Kanban")}
           </a>
         </div>
         {view === "kanban" ? (
@@ -155,29 +172,33 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
           <DataTable<Row>
             rows={rows}
             rowHref={(r) => `/console/punch/${r.id}`}
-            emptyLabel="No punch items"
-            emptyDescription="Punch items capture show-ready gaps. Add one per gap; gate the doors-open milestone behind closure."
+            emptyLabel={t("console.punch.empty.label", undefined, "No punch items")}
+            emptyDescription={t(
+              "console.punch.empty.description",
+              undefined,
+              "Punch items capture show-ready gaps. Add one per gap; gate the doors-open milestone behind closure.",
+            )}
             emptyAction={
               <Button href="/console/punch/new" size="sm">
-                + New Item
+                {t("console.punch.newItem", undefined, "+ New Item")}
               </Button>
             }
             columns={[
               {
                 key: "code",
-                header: "Code",
+                header: t("console.punch.column.code", undefined, "Code"),
                 render: (r) => r.code,
                 className: "font-mono text-xs",
                 accessor: (r) => r.code,
               },
               {
                 key: "title",
-                header: "Title",
+                header: t("console.punch.column.title", undefined, "Title"),
                 render: (r) => (
                   <div className="flex items-center gap-2">
                     {r.show_ready_gate && (
                       <span
-                        title="Show-ready gate"
+                        title={t("console.punch.showReadyGate", undefined, "Show-ready gate")}
                         className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-error)]"
                       />
                     )}
@@ -188,13 +209,13 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
               },
               {
                 key: "project",
-                header: "Project",
+                header: t("console.punch.column.project", undefined, "Project"),
                 render: (r) => r.project?.name ?? "—",
                 accessor: (r) => r.project?.name ?? null,
               },
               {
                 key: "assignee",
-                header: "Assignee",
+                header: t("console.punch.column.assignee", undefined, "Assignee"),
                 render: (r) => r.assignee?.name ?? r.assignee?.email ?? "—",
                 filterable: true,
                 groupable: true,
@@ -202,14 +223,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
               },
               {
                 key: "due",
-                header: "Due",
+                header: t("console.punch.column.due", undefined, "Due"),
                 render: (r) => fmtDate(r.due_at),
                 className: "font-mono text-xs",
                 accessor: (r) => r.due_at ?? null,
               },
               {
                 key: "priority",
-                header: "Priority",
+                header: t("console.punch.column.priority", undefined, "Priority"),
                 render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{toTitle(r.priority)}</Badge>,
                 accessor: (r) => r.priority ?? null,
                 filterable: true,
@@ -217,7 +238,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
               },
               {
                 key: "status",
-                header: "Status",
+                header: t("console.punch.column.status", undefined, "Status"),
                 render: (r) => (
                   <span className="inline-flex items-center gap-2">
                     <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

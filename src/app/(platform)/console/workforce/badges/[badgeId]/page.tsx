@@ -7,13 +7,16 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { awardBadge, deleteBadge } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 type Award = { id: string; user_id: string; note: string | null; awarded_at: string };
 
 export default async function Page({ params }: { params: Promise<{ badgeId: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return <div className="page-content">{t("console.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const { badgeId } = await params;
   const session = await requireSession();
   const supabase = await createClient();

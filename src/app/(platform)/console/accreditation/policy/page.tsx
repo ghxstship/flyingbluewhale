@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -31,12 +32,18 @@ function categoriesAllowed(zoneList: unknown): string[] {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Accreditation" title="Policy" />
+        <ModuleHeader
+          eyebrow={t("console.accreditation.policy.eyebrow", undefined, "Accreditation")}
+          title={t("console.accreditation.policy.title", undefined, "Policy")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.accreditation.policy.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -68,27 +75,31 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation"
-        title="Policy"
-        subtitle={`${categories.length} categor${categories.length === 1 ? "y" : "ies"} × ${zones.length} zone${zones.length === 1 ? "" : "s"}${coverage != null ? ` · ${coverage}% coverage` : ""}`}
+        eyebrow={t("console.accreditation.policy.eyebrow", undefined, "Accreditation")}
+        title={t("console.accreditation.policy.title", undefined, "Policy")}
+        subtitle={`${categories.length} ${categories.length === 1 ? t("console.accreditation.policy.categorySingular", undefined, "category") : t("console.accreditation.policy.categoryPlural", undefined, "categories")} × ${zones.length} ${zones.length === 1 ? t("console.accreditation.policy.zoneSingular", undefined, "zone") : t("console.accreditation.policy.zonePlural", undefined, "zones")}${coverage != null ? ` · ${t("console.accreditation.policy.coverageSuffix", { coverage }, `${coverage}% coverage`)}` : ""}`}
         action={
           <Button href="/console/accreditation/categories" variant="secondary" size="sm">
-            Manage Categories
+            {t("console.accreditation.policy.manageCategories", undefined, "Manage Categories")}
           </Button>
         }
       />
       <div className="page-content">
         {categories.length === 0 || zones.length === 0 ? (
           <EmptyState
-            title="Need Categories + Zones First"
-            description="The matrix derives from accreditation categories crossed with venue zones. Author at least one of each before the policy renders."
+            title={t("console.accreditation.policy.emptyTitle", undefined, "Need Categories + Zones First")}
+            description={t(
+              "console.accreditation.policy.emptyDescription",
+              undefined,
+              "The matrix derives from accreditation categories crossed with venue zones. Author at least one of each before the policy renders.",
+            )}
             action={
               <div className="flex items-center gap-2">
                 <Link href="/console/accreditation/categories/new" className="btn btn-primary btn-sm">
-                  + New Category
+                  {t("console.accreditation.policy.newCategory", undefined, "+ New Category")}
                 </Link>
                 <Link href="/console/venues" className="btn btn-secondary btn-sm">
-                  Open Venues
+                  {t("console.accreditation.policy.openVenues", undefined, "Open Venues")}
                 </Link>
               </div>
             }
@@ -98,7 +109,9 @@ export default async function Page() {
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th className="text-start">Zone (venue)</th>
+                  <th className="text-start">
+                    {t("console.accreditation.policy.zoneVenueHeader", undefined, "Zone (venue)")}
+                  </th>
                   {categories.map((c) => (
                     <th key={c.id} className="text-center">
                       <span
@@ -126,11 +139,17 @@ export default async function Page() {
                       {categories.map((c) => (
                         <td key={c.id} className="text-center">
                           {allowed.has(c.code) || allowed.has(c.id) ? (
-                            <Badge variant="success" aria-label="Allowed">
+                            <Badge
+                              variant="success"
+                              aria-label={t("console.accreditation.policy.allowed", undefined, "Allowed")}
+                            >
                               <Check size={12} aria-hidden="true" strokeWidth={3} />
                             </Badge>
                           ) : (
-                            <span className="text-[var(--text-muted)]" aria-label="Not allowed">
+                            <span
+                              className="text-[var(--text-muted)]"
+                              aria-label={t("console.accreditation.policy.notAllowed", undefined, "Not allowed")}
+                            >
                               ·
                             </span>
                           )}
@@ -145,8 +164,11 @@ export default async function Page() {
         )}
 
         <p className="mt-4 text-xs text-[var(--text-muted)]">
-          A green cell means cardholders of the column's category are allowed in the row's zone. To edit, open the venue
-          and use its Zones tab — each zone's allowed-categories list drives this matrix.
+          {t(
+            "console.accreditation.policy.footnote",
+            undefined,
+            "A green cell means cardholders of the column's category are allowed in the row's zone. To edit, open the venue and use its Zones tab — each zone's allowed-categories list drives this matrix.",
+          )}
         </p>
       </div>
     </>

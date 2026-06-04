@@ -6,16 +6,23 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function DomainsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Domains" />
+        <ModuleHeader
+          eyebrow={t("console.settings.domains.eyebrow", undefined, "Settings")}
+          title={t("console.settings.domains.title", undefined, "Domains")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.domains.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -31,13 +38,22 @@ export default async function DomainsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Custom domains" />
+      <ModuleHeader
+        eyebrow={t("console.settings.domains.eyebrow", undefined, "Settings")}
+        title={t("console.settings.domains.workspaceTitle", undefined, "Workspace Settings")}
+        subtitle={t("console.settings.domains.subtitle", undefined, "Custom domains")}
+      />
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Add a Domain</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.settings.domains.addDomain", undefined, "Add a Domain")}
+          </h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Point a CNAME or TXT verification to your DNS provider. We re-check on demand and issue TLS automatically
-            once verified.
+            {t(
+              "console.settings.domains.addDomainHelp",
+              undefined,
+              "Point a CNAME or TXT verification to your DNS provider. We re-check on demand and issue TLS automatically once verified.",
+            )}
           </p>
           <div className="mt-4">
             <AddDomainForm />
@@ -45,15 +61,17 @@ export default async function DomainsPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Domains</h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            {t("console.settings.domains.sectionDomains", undefined, "Domains")}
+          </h3>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Hostname</th>
-                  <th>Purpose</th>
-                  <th>Status</th>
-                  <th>Verification record</th>
+                  <th>{t("console.settings.domains.colHostname", undefined, "Hostname")}</th>
+                  <th>{t("console.settings.domains.colPurpose", undefined, "Purpose")}</th>
+                  <th>{t("console.settings.domains.colStatus", undefined, "Status")}</th>
+                  <th>{t("console.settings.domains.colVerificationRecord", undefined, "Verification record")}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -61,7 +79,7 @@ export default async function DomainsPage() {
                 {domains.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="py-6 text-center text-[var(--text-muted)]">
-                      No custom domains yet.
+                      {t("console.settings.domains.empty", undefined, "No custom domains yet.")}
                     </td>
                   </tr>
                 ) : (
@@ -71,7 +89,9 @@ export default async function DomainsPage() {
                       <td className="text-xs text-[var(--text-secondary)]">{toTitle(d.purpose)}</td>
                       <td>
                         <Badge variant={d.verified_at ? "success" : "muted"}>
-                          {d.verified_at ? "Verified" : "Pending"}
+                          {d.verified_at
+                            ? t("console.settings.domains.statusVerified", undefined, "Verified")
+                            : t("console.settings.domains.statusPending", undefined, "Pending")}
                         </Badge>
                       </td>
                       <td className="font-mono text-[10px] text-[var(--text-muted)]">
@@ -82,14 +102,14 @@ export default async function DomainsPage() {
                           <form action={verifyDomainAction} className="inline">
                             <input type="hidden" name="id" value={d.id} />
                             <button type="submit" className="text-xs text-[var(--org-primary)] hover:underline">
-                              Verify
+                              {t("console.settings.domains.verify", undefined, "Verify")}
                             </button>
                           </form>
                         )}
                         <form action={deleteDomainAction} className="inline">
                           <input type="hidden" name="id" value={d.id} />
                           <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
-                            Remove
+                            {t("console.settings.domains.remove", undefined, "Remove")}
                           </button>
                         </form>
                       </td>

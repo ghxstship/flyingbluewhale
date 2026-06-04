@@ -2,17 +2,24 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { NewAnnouncementForm } from "./NewAnnouncementForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Comms · Announcements" title="New Announcement" />
+        <ModuleHeader
+          eyebrow={t("console.comms.announcements.new.eyebrow", undefined, "Comms · Announcements")}
+          title={t("console.comms.announcements.new.title", undefined, "New Announcement")}
+        />
         <div className="page-content max-w-2xl">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.comms.announcements.new.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -35,7 +42,10 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Comms · Announcements" title="New Announcement" />
+      <ModuleHeader
+        eyebrow={t("console.comms.announcements.new.eyebrow", undefined, "Comms · Announcements")}
+        title={t("console.comms.announcements.new.title", undefined, "New Announcement")}
+      />
       <div className="page-content max-w-2xl">
         <NewAnnouncementForm
           projects={(projects ?? []) as Array<{ id: string; name: string }>}

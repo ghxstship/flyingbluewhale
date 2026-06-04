@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { sendWaiver, recordSignature, markReturned, releaseWaiver, voidWaiver } from "./actions";
 
@@ -53,6 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { id } = await params;
 
   const { data: row } = await supabase
@@ -70,12 +71,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`Lien Waivers · ${w.project?.name ?? "Project"}`}
-        title={`${toTitle(w.waiver_type)} · ${toTitle(w.waiver_scope)} waiver`}
-        subtitle={`${w.vendor?.name ?? "Unassigned vendor"} · ${fmt.money(Math.round(Number(w.amount) * 100))}${w.through_date ? ` · through ${fmt.dateParts(w.through_date + "T00:00:00", { month: "short", day: "numeric", year: "numeric" })}` : ""}`}
+        eyebrow={`${t("console.finance.lienWaivers.detail.eyebrow", undefined, "Lien Waivers")} · ${w.project?.name ?? t("console.finance.lienWaivers.detail.projectFallback", undefined, "Project")}`}
+        title={`${toTitle(w.waiver_type)} · ${toTitle(w.waiver_scope)} ${t("console.finance.lienWaivers.detail.waiverWord", undefined, "waiver")}`}
+        subtitle={`${w.vendor?.name ?? t("console.finance.lienWaivers.detail.unassignedVendor", undefined, "Unassigned vendor")} · ${fmt.money(Math.round(Number(w.amount) * 100))}${w.through_date ? ` · ${t("console.finance.lienWaivers.detail.throughLabel", undefined, "through")} ${fmt.dateParts(w.through_date + "T00:00:00", { month: "short", day: "numeric", year: "numeric" })}` : ""}`}
         action={
           <Button href="/console/finance/lien-waivers" size="sm" variant="ghost">
-            ← All Waivers
+            {t("console.finance.lienWaivers.detail.allWaivers", undefined, "← All Waivers")}
           </Button>
         }
       />
@@ -83,11 +84,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[w.waiver_state]}>{toTitle(w.waiver_state)}</Badge>
           {w.state_jurisdiction && (
-            <span className="font-mono text-[var(--text-muted)]">JD · {w.state_jurisdiction}</span>
+            <span className="font-mono text-[var(--text-muted)]">
+              {t("console.finance.lienWaivers.detail.jdLabel", undefined, "JD")} · {w.state_jurisdiction}
+            </span>
           )}
           {w.envelope_id && (
             <span className="font-mono text-[10px] text-[var(--text-muted)]">
-              Envelope {w.envelope_id.slice(0, 12)}…
+              {t("console.finance.lienWaivers.detail.envelopeLabel", undefined, "Envelope")}{" "}
+              {w.envelope_id.slice(0, 12)}…
             </span>
           )}
           {w.payment_application && (
@@ -95,43 +99,57 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               className="text-[var(--accent)] underline"
               href={`/console/finance/pay-apps/${w.payment_application.id}`}
             >
-              Pay-App {w.payment_application.period_label ?? "—"}
+              {t("console.finance.lienWaivers.detail.payAppLabel", undefined, "Pay-App")}{" "}
+              {w.payment_application.period_label ?? "—"}
             </a>
           )}
         </div>
 
         <section className="surface space-y-2 p-4 text-xs">
-          <h2 className="text-sm font-semibold">Timeline</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.finance.lienWaivers.detail.timelineHeading", undefined, "Timeline")}
+          </h2>
           <ul className="space-y-1">
             {w.sent_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">Sent</span> ·{" "}
-                {fmt.dateParts(w.sent_at, { year: "numeric", month: "short", day: "numeric" })}
+                <span className="font-mono text-[var(--text-muted)]">
+                  {t("console.finance.lienWaivers.detail.sentLabel", undefined, "Sent")}
+                </span>{" "}
+                · {fmt.dateParts(w.sent_at, { year: "numeric", month: "short", day: "numeric" })}
               </li>
             )}
             {w.signed_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">Signed</span> · {w.signer_name ?? "—"}
+                <span className="font-mono text-[var(--text-muted)]">
+                  {t("console.finance.lienWaivers.detail.signedLabel", undefined, "Signed")}
+                </span>{" "}
+                · {w.signer_name ?? "—"}
                 {w.signer_title ? ` (${w.signer_title})` : ""} ·{" "}
                 {fmt.dateParts(w.signed_at, { year: "numeric", month: "short", day: "numeric" })}
               </li>
             )}
             {w.returned_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">Returned</span> ·{" "}
-                {fmt.dateParts(w.returned_at, { year: "numeric", month: "short", day: "numeric" })}
+                <span className="font-mono text-[var(--text-muted)]">
+                  {t("console.finance.lienWaivers.detail.returnedLabel", undefined, "Returned")}
+                </span>{" "}
+                · {fmt.dateParts(w.returned_at, { year: "numeric", month: "short", day: "numeric" })}
               </li>
             )}
             {w.released_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">Released</span> ·{" "}
-                {fmt.dateParts(w.released_at, { year: "numeric", month: "short", day: "numeric" })}
+                <span className="font-mono text-[var(--text-muted)]">
+                  {t("console.finance.lienWaivers.detail.releasedLabel", undefined, "Released")}
+                </span>{" "}
+                · {fmt.dateParts(w.released_at, { year: "numeric", month: "short", day: "numeric" })}
               </li>
             )}
             {w.voided_at && (
               <li className="text-[var(--color-error)]">
-                <span className="font-mono">Voided</span> ·{" "}
-                {fmt.dateParts(w.voided_at, { year: "numeric", month: "short", day: "numeric" })}
+                <span className="font-mono">
+                  {t("console.finance.lienWaivers.detail.voidedLabel", undefined, "Voided")}
+                </span>{" "}
+                · {fmt.dateParts(w.voided_at, { year: "numeric", month: "short", day: "numeric" })}
                 {w.voided_reason ? ` · ${w.voided_reason}` : ""}
               </li>
             )}
@@ -140,28 +158,47 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {w.waiver_state !== "voided" && w.waiver_state !== "released" && (
           <section className="surface space-y-3 p-4 text-xs">
-            <h2 className="text-sm font-semibold">Actions</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.finance.lienWaivers.detail.actionsHeading", undefined, "Actions")}
+            </h2>
             <div className="flex flex-wrap gap-2">
               {w.waiver_state === "drafted" && (
                 <form action={sendWaiver} className="flex items-center gap-2">
                   <input type="hidden" name="waiver_id" value={w.id} />
                   <input
                     name="envelope_id"
-                    placeholder="DocuSign envelope ID (optional)"
+                    placeholder={t(
+                      "console.finance.lienWaivers.detail.envelopePlaceholder",
+                      undefined,
+                      "DocuSign envelope ID (optional)",
+                    )}
                     className={`${INPUT} w-72 text-xs`}
                   />
                   <Button type="submit" size="sm">
-                    Mark Sent
+                    {t("console.finance.lienWaivers.detail.markSent", undefined, "Mark Sent")}
                   </Button>
                 </form>
               )}
               {(w.waiver_state === "drafted" || w.waiver_state === "sent") && (
                 <form action={recordSignature} className="flex items-center gap-2">
                   <input type="hidden" name="waiver_id" value={w.id} />
-                  <input name="signer_name" placeholder="Signer name" required className={`${INPUT} w-44 text-xs`} />
-                  <input name="signer_title" placeholder="Title" className={`${INPUT} w-32 text-xs`} />
+                  <input
+                    name="signer_name"
+                    placeholder={t(
+                      "console.finance.lienWaivers.detail.signerNamePlaceholder",
+                      undefined,
+                      "Signer name",
+                    )}
+                    required
+                    className={`${INPUT} w-44 text-xs`}
+                  />
+                  <input
+                    name="signer_title"
+                    placeholder={t("console.finance.lienWaivers.detail.titlePlaceholder", undefined, "Title")}
+                    className={`${INPUT} w-32 text-xs`}
+                  />
                   <Button type="submit" size="sm" variant="secondary">
-                    Record Signature
+                    {t("console.finance.lienWaivers.detail.recordSignature", undefined, "Record Signature")}
                   </Button>
                 </form>
               )}
@@ -169,7 +206,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <form action={markReturned}>
                   <input type="hidden" name="waiver_id" value={w.id} />
                   <Button type="submit" size="sm" variant="secondary">
-                    Mark Returned
+                    {t("console.finance.lienWaivers.detail.markReturned", undefined, "Mark Returned")}
                   </Button>
                 </form>
               )}
@@ -177,15 +214,23 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <form action={releaseWaiver}>
                   <input type="hidden" name="waiver_id" value={w.id} />
                   <Button type="submit" size="sm">
-                    Release (Payment Cleared)
+                    {t(
+                      "console.finance.lienWaivers.detail.releasePaymentCleared",
+                      undefined,
+                      "Release (Payment Cleared)",
+                    )}
                   </Button>
                 </form>
               )}
               <form action={voidWaiver} className="flex items-center gap-2">
                 <input type="hidden" name="waiver_id" value={w.id} />
-                <input name="reason" placeholder="Void reason" className={`${INPUT} w-56 text-xs`} />
+                <input
+                  name="reason"
+                  placeholder={t("console.finance.lienWaivers.detail.voidReasonPlaceholder", undefined, "Void reason")}
+                  className={`${INPUT} w-56 text-xs`}
+                />
                 <Button type="submit" size="sm" variant="ghost">
-                  Void
+                  {t("console.finance.lienWaivers.detail.void", undefined, "Void")}
                 </Button>
               </form>
             </div>
@@ -194,7 +239,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {w.notes && (
           <section className="surface space-y-2 p-4">
-            <h2 className="text-sm font-semibold">Notes</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.finance.lienWaivers.detail.notesHeading", undefined, "Notes")}
+            </h2>
             <p className="text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{w.notes}</p>
           </section>
         )}

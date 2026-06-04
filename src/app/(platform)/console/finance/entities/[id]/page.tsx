@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { toTitle } from "@/lib/format";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
+  const { t } = await getRequestT();
 
   const { data } = await supabase
     .from("org_entities")
@@ -69,56 +71,92 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance · Entity"
+        eyebrow={t("console.finance.entities.detail.eyebrow", undefined, "Finance · Entity")}
         title={e.legal_name}
         subtitle={`${e.short_code} · ${e.base_currency}${e.jurisdiction ? ` · ${e.jurisdiction}` : ""}`}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
           <MetricCard
-            label="State"
+            label={t("console.finance.entities.detail.metric.state", undefined, "State")}
             value={toTitle(e.consolidation_state)}
             accent={e.consolidation_state === "active"}
           />
-          <MetricCard label="Method" value={toTitle(e.consolidation_method)} />
-          <MetricCard label="Ownership" value={`${Number(e.ownership_pct).toFixed(2)}%`} />
-          <MetricCard label="Invoices" value={rows.length} />
+          <MetricCard
+            label={t("console.finance.entities.detail.metric.method", undefined, "Method")}
+            value={toTitle(e.consolidation_method)}
+          />
+          <MetricCard
+            label={t("console.finance.entities.detail.metric.ownership", undefined, "Ownership")}
+            value={`${Number(e.ownership_pct).toFixed(2)}%`}
+          />
+          <MetricCard
+            label={t("console.finance.entities.detail.metric.invoices", undefined, "Invoices")}
+            value={rows.length}
+          />
         </div>
         <div className="metric-grid-4">
-          <MetricCard label={`Base (${e.base_currency})`} value={formatMoney(baseTotal, e.base_currency)} accent />
-          <MetricCard label="Consolidated" value={formatMoney(consolidatedTotal, e.base_currency)} />
-          <MetricCard label="Outstanding" value={formatMoney(outstanding, e.base_currency)} />
-          <MetricCard label="Paid" value={formatMoney(paid, e.base_currency)} />
+          <MetricCard
+            label={t(
+              "console.finance.entities.detail.metric.base",
+              { currency: e.base_currency },
+              `Base (${e.base_currency})`,
+            )}
+            value={formatMoney(baseTotal, e.base_currency)}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.entities.detail.metric.consolidated", undefined, "Consolidated")}
+            value={formatMoney(consolidatedTotal, e.base_currency)}
+          />
+          <MetricCard
+            label={t("console.finance.entities.detail.metric.outstanding", undefined, "Outstanding")}
+            value={formatMoney(outstanding, e.base_currency)}
+          />
+          <MetricCard
+            label={t("console.finance.entities.detail.metric.paid", undefined, "Paid")}
+            value={formatMoney(paid, e.base_currency)}
+          />
         </div>
 
         <div className="surface p-5">
           <div className="mb-3 text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            Hierarchy
+            {t("console.finance.entities.detail.hierarchy", undefined, "Hierarchy")}
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Parent entity</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.finance.entities.detail.parentEntity", undefined, "Parent entity")}
+              </div>
               <div className="text-sm font-medium">
                 {e.parent ? (
                   `${e.parent.legal_name} (${e.parent.short_code})`
                 ) : (
-                  <Badge variant="muted">Top-level</Badge>
+                  <Badge variant="muted">{t("console.finance.entities.detail.topLevel", undefined, "Top-level")}</Badge>
                 )}
               </div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Effective window</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.finance.entities.detail.effectiveWindow", undefined, "Effective window")}
+              </div>
               <div className="font-mono text-sm">
                 {e.effective_from}
-                {e.effective_to ? ` → ${e.effective_to}` : " → present"}
+                {e.effective_to
+                  ? ` → ${e.effective_to}`
+                  : t("console.finance.entities.detail.toPresent", undefined, " → present")}
               </div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Tax ID</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.finance.entities.detail.taxId", undefined, "Tax ID")}
+              </div>
               <div className="font-mono text-sm">{e.tax_id ?? "—"}</div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">Base currency</div>
+              <div className="text-xs text-[var(--text-secondary)]">
+                {t("console.finance.entities.detail.baseCurrency", undefined, "Base currency")}
+              </div>
               <div className="font-mono text-sm">{e.base_currency}</div>
             </div>
           </div>

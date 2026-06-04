@@ -1,17 +1,22 @@
 import { ModuleHeader } from "@/components/Shell";
+import { getRequestT } from "@/lib/i18n/request";
 import { WebhookEndpointForm } from "./WebhookEndpointForm";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="New Webhook Endpoint"
-        subtitle="Register a URL to receive event deliveries."
+        eyebrow={t("console.settings.webhooks.new.eyebrow", undefined, "Settings")}
+        title={t("console.settings.webhooks.new.title", undefined, "New Webhook Endpoint")}
+        subtitle={t("console.settings.webhooks.new.subtitle", undefined, "Register a URL to receive event deliveries.")}
         breadcrumbs={[
-          { label: "Settings" },
-          { label: "Webhooks", href: "/console/settings/webhooks" },
-          { label: "New" },
+          { label: t("console.settings.webhooks.new.breadcrumb.settings", undefined, "Settings") },
+          {
+            label: t("console.settings.webhooks.new.breadcrumb.webhooks", undefined, "Webhooks"),
+            href: "/console/settings/webhooks",
+          },
+          { label: t("console.settings.webhooks.new.breadcrumb.new", undefined, "New") },
         ]}
       />
       <div className="page-content max-w-2xl">

@@ -1,30 +1,46 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
+import { getRequestT } from "@/lib/i18n/request";
 import { createCostCode } from "./actions";
 
 const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
 const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="New Cost Code" />
+      <ModuleHeader
+        eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
+        title={t("console.finance.costCodes.new.title", undefined, "New Cost Code")}
+      />
       <div className="page-content max-w-md">
-        <FormShell action={createCostCode} cancelHref="/console/finance/cost-codes" submitLabel="Create">
+        <FormShell
+          action={createCostCode}
+          cancelHref="/console/finance/cost-codes"
+          submitLabel={t("common.create", undefined, "Create")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Code<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.finance.costCodes.new.codeLabel", undefined, "Code")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input name="code" required placeholder="02-100" className={INPUT} />
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.finance.costCodes.new.nameLabel", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="Site Prep" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t("console.finance.costCodes.new.namePlaceholder", undefined, "Site Prep")}
+              className={INPUT}
+            />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Description</span>
+            <span className={LBL}>{t("console.finance.costCodes.new.descriptionLabel", undefined, "Description")}</span>
             <textarea name="description" rows={3} className={INPUT} />
           </label>
         </FormShell>

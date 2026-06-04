@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { ChartShell } from "@/components/charts/ChartShell";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
 export type TimelineRow = {
   id: string;
@@ -27,6 +27,7 @@ export function TimelineView({
   projectEnd: string | null;
 }) {
   const fmt = useFormatters();
+  const t = useT();
   const [now] = React.useState(() => new Date());
 
   const allDates = rows.flatMap((r) => [new Date(r.start), new Date(r.end)]);
@@ -74,8 +75,20 @@ export function TimelineView({
 
   return (
     <ChartShell
-      title="Timeline"
-      description={`${rows.length} Bar${rows.length === 1 ? "" : "s"} Across Tasks + Events`}
+      title={t("console.projects.schedule.timeline.title", undefined, "Timeline")}
+      description={
+        rows.length === 1
+          ? t(
+              "console.projects.schedule.timeline.description.one",
+              { count: rows.length },
+              `${rows.length} Bar Across Tasks + Events`,
+            )
+          : t(
+              "console.projects.schedule.timeline.description.other",
+              { count: rows.length },
+              `${rows.length} Bars Across Tasks + Events`,
+            )
+      }
       empty={rows.length === 0}
       height={height + 32}
     >
@@ -86,24 +99,24 @@ export function TimelineView({
           preserveAspectRatio="xMinYMin meet"
           className="font-sans"
           role="img"
-          aria-label="Project Timeline"
+          aria-label={t("console.projects.schedule.timeline.ariaLabel", undefined, "Project Timeline")}
         >
           <rect x={0} y={0} width={width} height={HEADER_HEIGHT} fill="var(--surface-inset)" />
           <line x1={LABEL_COL} y1={HEADER_HEIGHT} x2={width} y2={HEADER_HEIGHT} stroke="var(--border-color)" />
 
-          {monthTicks.map((t, i) => (
+          {monthTicks.map((tick, i) => (
             <g key={i}>
               <line
-                x1={t.x}
+                x1={tick.x}
                 y1={HEADER_HEIGHT}
-                x2={t.x}
+                x2={tick.x}
                 y2={height}
                 stroke="var(--border-color)"
                 strokeDasharray="2 4"
                 opacity={0.6}
               />
-              <text x={t.x + 4} y={HEADER_HEIGHT - 8} fontSize={10} fill="var(--text-muted)">
-                {t.label}
+              <text x={tick.x + 4} y={HEADER_HEIGHT - 8} fontSize={10} fill="var(--text-muted)">
+                {tick.label}
               </text>
             </g>
           ))}
@@ -119,7 +132,7 @@ export function TimelineView({
                 strokeWidth={1}
               />
               <text x={xFor(now.getTime()) + 4} y={HEADER_HEIGHT - 12} fontSize={9} fill="var(--org-primary)">
-                Today
+                {t("console.projects.schedule.timeline.today", undefined, "Today")}
               </text>
             </g>
           )}
@@ -137,7 +150,9 @@ export function TimelineView({
                     fill="var(--text-muted)"
                     style={{ letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600 }}
                   >
-                    {line.lane}
+                    {line.lane === "Tasks"
+                      ? t("console.projects.schedule.timeline.lane.tasks", undefined, "Tasks")
+                      : t("console.projects.schedule.timeline.lane.events", undefined, "Events")}
                   </text>
                 </g>
               );

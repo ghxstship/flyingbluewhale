@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { UploadInvoiceClient } from "./upload-client";
 
@@ -38,12 +38,18 @@ const STATE_TONE: Record<State, "muted" | "info" | "warning" | "success" | "erro
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="AP Invoice OCR" />
+        <ModuleHeader
+          eyebrow={t("console.finance.apOcr.eyebrow", undefined, "Finance")}
+          title={t("console.finance.apOcr.title", undefined, "AP Invoice OCR")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.apOcr.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -71,39 +77,58 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="AP Invoice OCR"
-        subtitle={`${rows.length} extraction${rows.length === 1 ? "" : "s"} · ${reviewCount} awaiting review · ${promotedCount} promoted to invoices · ${failedCount} failed`}
+        eyebrow={t("console.finance.apOcr.eyebrow", undefined, "Finance")}
+        title={t("console.finance.apOcr.title", undefined, "AP Invoice OCR")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.finance.apOcr.extractionSingular", undefined, "extraction") : t("console.finance.apOcr.extractionPlural", undefined, "extractions")} · ${reviewCount} ${t("console.finance.apOcr.awaitingReviewSuffix", undefined, "awaiting review")} · ${promotedCount} ${t("console.finance.apOcr.promotedToInvoicesSuffix", undefined, "promoted to invoices")} · ${failedCount} ${t("console.finance.apOcr.failedSuffix", undefined, "failed")}`}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Awaiting review" value={fmt.number(reviewCount)} accent />
-          <MetricCard label="Promoted" value={fmt.number(promotedCount)} />
-          <MetricCard label="Failed" value={fmt.number(failedCount)} />
+          <MetricCard
+            label={t("console.finance.apOcr.metric.awaitingReview", undefined, "Awaiting review")}
+            value={fmt.number(reviewCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.apOcr.metric.promoted", undefined, "Promoted")}
+            value={fmt.number(promotedCount)}
+          />
+          <MetricCard
+            label={t("console.finance.apOcr.metric.failed", undefined, "Failed")}
+            value={fmt.number(failedCount)}
+          />
         </div>
         <section className="surface space-y-3 p-4">
-          <h2 className="text-sm font-semibold">Upload an invoice PDF</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.finance.apOcr.upload.heading", undefined, "Upload an invoice PDF")}
+          </h2>
           <p className="text-xs text-[var(--text-muted)]">
-            Anthropic Vision (Claude Sonnet 4.6) extracts vendor + invoice + line-items + amounts. Low-confidence
-            extractions land in &ldquo;Review&rdquo; for human verification before promoting to an invoices row.
+            {t(
+              "console.finance.apOcr.upload.description",
+              undefined,
+              "Anthropic Vision (Claude Sonnet 4.6) extracts vendor + invoice + line-items + amounts. Low-confidence extractions land in “Review” for human verification before promoting to an invoices row.",
+            )}
           </p>
           <UploadInvoiceClient />
         </section>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/finance/ap-ocr/${r.id}`}
-          emptyLabel="No extractions yet"
-          emptyDescription="Upload an invoice PDF to start the OCR + matching workflow."
+          emptyLabel={t("console.finance.apOcr.empty.label", undefined, "No extractions yet")}
+          emptyDescription={t(
+            "console.finance.apOcr.empty.description",
+            undefined,
+            "Upload an invoice PDF to start the OCR + matching workflow.",
+          )}
           columns={[
             {
               key: "file",
-              header: "File",
+              header: t("console.finance.apOcr.column.file", undefined, "File"),
               render: (r) => r.file_name ?? "—",
               accessor: (r) => r.file_name,
             },
             {
               key: "vendor",
-              header: "Vendor",
+              header: t("console.finance.apOcr.column.vendor", undefined, "Vendor"),
               render: (r) => r.vendor_name ?? "—",
               accessor: (r) => r.vendor_name,
               filterable: true,
@@ -111,14 +136,14 @@ export default async function Page() {
             },
             {
               key: "invoice",
-              header: "Invoice #",
+              header: t("console.finance.apOcr.column.invoice", undefined, "Invoice #"),
               render: (r) => r.invoice_number ?? "—",
               accessor: (r) => r.invoice_number,
               className: "font-mono text-xs",
             },
             {
               key: "date",
-              header: "Date",
+              header: t("console.finance.apOcr.column.date", undefined, "Date"),
               render: (r) =>
                 r.invoice_date
                   ? fmt.dateParts(r.invoice_date + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" })
@@ -128,21 +153,21 @@ export default async function Page() {
             },
             {
               key: "amount",
-              header: "Amount",
+              header: t("console.finance.apOcr.column.amount", undefined, "Amount"),
               render: (r) => (r.total_amount_cents != null ? fmt.money(Number(r.total_amount_cents)) : "—"),
               accessor: (r) => Number(r.total_amount_cents ?? 0),
               className: "font-mono text-xs text-right",
             },
             {
               key: "confidence",
-              header: "Conf",
+              header: t("console.finance.apOcr.column.confidence", undefined, "Conf"),
               render: (r) => (r.confidence != null ? `${(Number(r.confidence) * 100).toFixed(0)}%` : "—"),
               accessor: (r) => Number(r.confidence ?? 0),
               className: "font-mono text-xs text-right",
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.finance.apOcr.column.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.state]}>{toTitle(r.state)}</Badge>,
               accessor: (r) => r.state,
               filterable: true,

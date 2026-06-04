@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { STATUS_TONE } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 import { upsertSettlementAction, finalizeSettlementAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const offerResp = await supabase
     .from("talent_offers")
@@ -73,20 +75,32 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow={`Settlement · ${offer.performance_date}`}
-        title="Post-Show Reconciliation"
+        eyebrow={t(
+          "console.bookings.deals.settlement.eyebrow",
+          { date: offer.performance_date },
+          `Settlement · ${offer.performance_date}`,
+        )}
+        title={t("console.bookings.deals.settlement.title", undefined, "Post-Show Reconciliation")}
         action={s && <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>}
       />
       <div className="page-content max-w-3xl space-y-5">
         {s && (
           <section className="surface p-5">
-            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Computed</h2>
+            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+              {t("console.bookings.deals.settlement.computed", undefined, "Computed")}
+            </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">NBOR</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.bookings.deals.settlement.nbor", undefined, "NBOR")}
+              </dt>
               <dd className="font-mono">{formatMoney(s.nbor_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">Balance Due</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.bookings.deals.settlement.balanceDue", undefined, "Balance Due")}
+              </dt>
               <dd className="font-mono">{formatMoney(s.balance_due_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">Total Ancillary</dt>
+              <dt className="text-[var(--text-secondary)]">
+                {t("console.bookings.deals.settlement.totalAncillary", undefined, "Total Ancillary")}
+              </dt>
               <dd className="font-mono">
                 {formatMoney(s.bar_revenue_cents + s.merch_revenue_cents + s.other_revenue_cents)}
               </dd>
@@ -94,10 +108,17 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
           </section>
         )}
 
-        <FormShell action={upsertSettlementAction} submitLabel={s ? "Update" : "Create Settlement"}>
+        <FormShell
+          action={upsertSettlementAction}
+          submitLabel={
+            s
+              ? t("common.update", undefined, "Update")
+              : t("console.bookings.deals.settlement.create", undefined, "Create Settlement")
+          }
+        >
           <input type="hidden" name="offer_id" value={offer.id} />
           <Input
-            label="Show Date"
+            label={t("console.bookings.deals.settlement.showDate", undefined, "Show Date")}
             name="show_date"
             type="date"
             required
@@ -105,31 +126,48 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
           />
 
           <fieldset className="surface-inset p-3">
-            <legend className="text-xs font-medium tracking-wide uppercase">Revenue</legend>
+            <legend className="text-xs font-medium tracking-wide uppercase">
+              {t("console.bookings.deals.settlement.revenue", undefined, "Revenue")}
+            </legend>
             <div className="grid grid-cols-2 gap-3">
               <Input
-                label="Gross Box Office"
+                label={t("console.bookings.deals.settlement.grossBoxOffice", undefined, "Gross Box Office")}
                 name="gross_box_office"
                 placeholder="0.00"
                 defaultValue={dollars(s?.gross_box_office_cents)}
               />
               <Input
-                label="Paid Attendance"
+                label={t("console.bookings.deals.settlement.paidAttendance", undefined, "Paid Attendance")}
                 name="paid_attendance"
                 type="number"
                 defaultValue={s?.paid_attendance ?? 0}
               />
-              <Input label="Comps" name="comp_count" type="number" defaultValue={s?.comp_count ?? 0} />
-              <Input label="Walkouts" name="walkout_count" type="number" defaultValue={s?.walkout_count ?? 0} />
-              <Input label="Bar" name="bar_revenue" placeholder="0.00" defaultValue={dollars(s?.bar_revenue_cents)} />
               <Input
-                label="Merch"
+                label={t("console.bookings.deals.settlement.comps", undefined, "Comps")}
+                name="comp_count"
+                type="number"
+                defaultValue={s?.comp_count ?? 0}
+              />
+              <Input
+                label={t("console.bookings.deals.settlement.walkouts", undefined, "Walkouts")}
+                name="walkout_count"
+                type="number"
+                defaultValue={s?.walkout_count ?? 0}
+              />
+              <Input
+                label={t("console.bookings.deals.settlement.bar", undefined, "Bar")}
+                name="bar_revenue"
+                placeholder="0.00"
+                defaultValue={dollars(s?.bar_revenue_cents)}
+              />
+              <Input
+                label={t("console.bookings.deals.settlement.merch", undefined, "Merch")}
                 name="merch_revenue"
                 placeholder="0.00"
                 defaultValue={dollars(s?.merch_revenue_cents)}
               />
               <Input
-                label="Other"
+                label={t("console.bookings.deals.settlement.other", undefined, "Other")}
                 name="other_revenue"
                 placeholder="0.00"
                 defaultValue={dollars(s?.other_revenue_cents)}
@@ -138,42 +176,56 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
           </fieldset>
 
           <fieldset className="surface-inset p-3">
-            <legend className="text-xs font-medium tracking-wide uppercase">Deductions (NBOR inputs)</legend>
+            <legend className="text-xs font-medium tracking-wide uppercase">
+              {t("console.bookings.deals.settlement.deductions", undefined, "Deductions (NBOR inputs)")}
+            </legend>
             <div className="grid grid-cols-3 gap-3">
-              <Input label="Sales Tax" name="sales_tax" placeholder="0.00" defaultValue={dollars(s?.sales_tax_cents)} />
               <Input
-                label="Amusement Tax"
+                label={t("console.bookings.deals.settlement.salesTax", undefined, "Sales Tax")}
+                name="sales_tax"
+                placeholder="0.00"
+                defaultValue={dollars(s?.sales_tax_cents)}
+              />
+              <Input
+                label={t("console.bookings.deals.settlement.amusementTax", undefined, "Amusement Tax")}
                 name="amusement_tax"
                 placeholder="0.00"
                 defaultValue={dollars(s?.amusement_tax_cents)}
               />
-              <Input label="CC Fees" name="cc_fee" placeholder="0.00" defaultValue={dollars(s?.cc_fee_cents)} />
+              <Input
+                label={t("console.bookings.deals.settlement.ccFees", undefined, "CC Fees")}
+                name="cc_fee"
+                placeholder="0.00"
+                defaultValue={dollars(s?.cc_fee_cents)}
+              />
             </div>
           </fieldset>
 
           <fieldset className="surface-inset p-3">
-            <legend className="text-xs font-medium tracking-wide uppercase">Splits + Payouts</legend>
+            <legend className="text-xs font-medium tracking-wide uppercase">
+              {t("console.bookings.deals.settlement.splitsPayouts", undefined, "Splits + Payouts")}
+            </legend>
             <div className="grid grid-cols-2 gap-3">
               <Input
-                label="Artist Payout"
+                label={t("console.bookings.deals.settlement.artistPayout", undefined, "Artist Payout")}
                 name="artist_payout"
                 placeholder="0.00"
                 defaultValue={dollars(s?.artist_payout_cents)}
               />
               <Input
-                label="Agent Commission"
+                label={t("console.bookings.deals.settlement.agentCommission", undefined, "Agent Commission")}
                 name="agent_commission"
                 placeholder="0.00"
                 defaultValue={dollars(s?.agent_commission_cents)}
               />
               <Input
-                label="Support Act"
+                label={t("console.bookings.deals.settlement.supportAct", undefined, "Support Act")}
                 name="support_act_payout"
                 placeholder="0.00"
                 defaultValue={dollars(s?.support_act_payout_cents)}
               />
               <Input
-                label="Deposit Received"
+                label={t("console.bookings.deals.settlement.depositReceived", undefined, "Deposit Received")}
                 name="deposit_received"
                 placeholder="0.00"
                 defaultValue={dollars(s?.deposit_received_cents)}
@@ -191,7 +243,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
           >
             <input type="hidden" name="offer_id" value={offer.id} />
             <Button type="submit" variant="primary">
-              Finalize Settlement
+              {t("console.bookings.deals.settlement.finalize", undefined, "Finalize Settlement")}
             </Button>
           </form>
         )}

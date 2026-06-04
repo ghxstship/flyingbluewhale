@@ -3,6 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { AuditLogViewer } from "./AuditLogViewer";
 import type { AuditLog } from "@/lib/supabase/types";
 
@@ -11,12 +12,15 @@ export const dynamic = "force-dynamic";
 const PAGE_SIZE = 100;
 
 export default async function AuditPage({ searchParams }: { searchParams: Promise<{ cursor?: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Audit Log" />
+        <ModuleHeader title={t("console.settings.audit.title", undefined, "Audit Log")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.audit.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -39,9 +43,13 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Workspace Settings"
-        subtitle={`Audit Log · ${showingFrom}–${showingTo} of ${page.totalCount}`}
+        eyebrow={t("console.settings.eyebrow", undefined, "Settings")}
+        title={t("console.settings.workspaceTitle", undefined, "Workspace Settings")}
+        subtitle={t(
+          "console.settings.audit.subtitle",
+          { from: showingFrom, to: showingTo, total: page.totalCount },
+          `Audit Log · ${showingFrom}–${showingTo} of ${page.totalCount}`,
+        )}
       />
       <div className="page-content max-w-6xl space-y-3">
         <AuditLogViewer rows={rows} />
@@ -55,7 +63,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
               }
               className="text-[var(--brand-color)] hover:underline"
             >
-              ← Newer
+              {t("console.settings.audit.newer", undefined, "← Newer")}
             </Link>
           ) : (
             <span aria-hidden="true" />
@@ -65,7 +73,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
               href={`/console/settings/audit?cursor=${page.nextCursor}`}
               className="text-[var(--brand-color)] hover:underline"
             >
-              Older →
+              {t("console.settings.audit.older", undefined, "Older →")}
             </Link>
           ) : (
             <span aria-hidden="true" />

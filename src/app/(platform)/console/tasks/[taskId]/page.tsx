@@ -8,6 +8,7 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { TaskStatusControls } from "./TaskStatusControls";
 import { deleteTask } from "./edit/actions";
 
@@ -19,37 +20,42 @@ export default async function TaskPage({ params }: { params: Promise<{ taskId: s
   const session = await requireSession();
   const task = await getOrgScoped("tasks", session.orgId, taskId);
   if (!task) notFound();
+  const { t } = await getRequestT();
   return (
     <>
       <ModuleHeader
-        eyebrow={`P${task.priority} task`}
+        eyebrow={t("console.tasks.detail.eyebrow", { priority: task.priority }, `P${task.priority} task`)}
         title={task.title}
-        subtitle={`${task.status} · due ${formatDate(task.due_at, "medium")}`}
+        subtitle={`${task.status} · ${t("console.tasks.detail.dueLabel", undefined, "due")} ${formatDate(task.due_at, "medium")}`}
         action={
           <div className="flex items-center gap-2">
             <TaskStatusControls id={task.id} status={task.status} />
             <Button href={`/console/tasks/${taskId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteTask.bind(null, taskId)}
-              confirm={`Delete task "${task.title}"? This cannot be undone.`}
+              confirm={t(
+                "console.tasks.detail.deleteConfirm",
+                { title: task.title },
+                `Delete task "${task.title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label="Status">
+          <Field label={t("console.tasks.detail.status", undefined, "Status")}>
             <StatusBadge status={task.status} />
           </Field>
-          <Field label="Priority">P{task.priority}</Field>
-          <Field label="Due">{formatDate(task.due_at, "medium")}</Field>
-          <Field label="Updated">{timeAgo(task.updated_at)}</Field>
+          <Field label={t("console.tasks.detail.priority", undefined, "Priority")}>P{task.priority}</Field>
+          <Field label={t("console.tasks.detail.due", undefined, "Due")}>{formatDate(task.due_at, "medium")}</Field>
+          <Field label={t("console.tasks.detail.updated", undefined, "Updated")}>{timeAgo(task.updated_at)}</Field>
         </div>
         {task.description && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Description</h3>
+            <h3 className="text-sm font-semibold">{t("console.tasks.detail.description", undefined, "Description")}</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{task.description}</p>
           </div>
         )}

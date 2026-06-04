@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -38,12 +39,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Cases" />
+        <ModuleHeader
+          eyebrow={t("console.programs.cases.eyebrow", undefined, "Programs")}
+          title={t("console.programs.cases.title", undefined, "Cases")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.cases.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -69,12 +76,24 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Programs"
-        title="Cases"
-        subtitle={`${rows.length} Case${rows.length === 1 ? "" : "s"} (90d) · ${open} Open  · protests, appeals, juries`}
+        eyebrow={t("console.programs.cases.eyebrow", undefined, "Programs")}
+        title={t("console.programs.cases.title", undefined, "Cases")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "console.programs.cases.subtitleSingular",
+                { count: rows.length, open },
+                `${rows.length} Case (90d) · ${open} Open  · protests, appeals, juries`,
+              )
+            : t(
+                "console.programs.cases.subtitlePlural",
+                { count: rows.length, open },
+                `${rows.length} Cases (90d) · ${open} Open  · protests, appeals, juries`,
+              )
+        }
         action={
           <Button href="/console/operations/incidents/new" size="sm">
-            + Open case
+            {t("console.programs.cases.openCase", undefined, "+ Open case")}
           </Button>
         }
       />
@@ -82,20 +101,29 @@ export default async function Page() {
         <DataTable<IncidentRow>
           rows={rows}
           rowHref={(r) => `/console/operations/incidents/${r.id}`}
-          emptyLabel="No cases logged"
-          emptyDescription="Cases are incidents with terms like 'protest', 'appeal', 'jury' in the summary. Open one via Operations → Incidents."
+          emptyLabel={t("console.programs.cases.emptyLabel", undefined, "No cases logged")}
+          emptyDescription={t(
+            "console.programs.cases.emptyDescription",
+            undefined,
+            "Cases are incidents with terms like 'protest', 'appeal', 'jury' in the summary. Open one via Operations → Incidents.",
+          )}
           columns={[
-            { key: "summary", header: "Case", render: (r) => r.summary, accessor: (r) => r.summary },
+            {
+              key: "summary",
+              header: t("console.programs.cases.col.case", undefined, "Case"),
+              render: (r) => r.summary,
+              accessor: (r) => r.summary,
+            },
             {
               key: "occurred",
-              header: "Filed",
+              header: t("console.programs.cases.col.filed", undefined, "Filed"),
               render: (r) => fmt(r.occurred_at),
               className: "font-mono text-xs",
               accessor: (r) => r.occurred_at ?? null,
             },
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.programs.cases.col.severity", undefined, "Severity"),
               render: (r) => <Badge variant="muted">{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
@@ -103,7 +131,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.programs.cases.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

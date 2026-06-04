@@ -1,42 +1,70 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { getRequestT } from "@/lib/i18n/request";
 import { createKnowledgeArticleAction } from "./actions";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
       <ModuleHeader
-        eyebrow="Knowledge"
-        title="New Article"
-        breadcrumbs={[{ label: "Knowledge", href: "/console/knowledge" }, { label: "New" }]}
+        eyebrow={t("console.knowledge.new.eyebrow", undefined, "Knowledge")}
+        title={t("console.knowledge.new.title", undefined, "New Article")}
+        breadcrumbs={[
+          { label: t("console.knowledge.new.breadcrumbKnowledge", undefined, "Knowledge"), href: "/console/knowledge" },
+          { label: t("console.knowledge.new.breadcrumbNew", undefined, "New") },
+        ]}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createKnowledgeArticleAction} cancelHref="/console/knowledge" submitLabel="Publish Article">
+        <FormShell
+          action={createKnowledgeArticleAction}
+          cancelHref="/console/knowledge"
+          submitLabel={t("console.knowledge.new.submitLabel", undefined, "Publish Article")}
+        >
           <Input
-            label="Slug"
+            label={t("console.knowledge.new.slugLabel", undefined, "Slug")}
             name="slug"
             required
             maxLength={120}
             placeholder="event-setup-checklist"
-            hint="Lowercase, dashes ok. Used in the URL: /console/knowledge/<slug>."
+            hint={t(
+              "console.knowledge.new.slugHint",
+              undefined,
+              "Lowercase, dashes ok. Used in the URL: /console/knowledge/<slug>.",
+            )}
           />
-          <Input label="Title" name="title" required maxLength={200} />
+          <Input
+            label={t("console.knowledge.new.titleLabel", undefined, "Title")}
+            name="title"
+            required
+            maxLength={200}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Body (Markdown)</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.knowledge.new.bodyLabel", undefined, "Body (Markdown)")}
+            </label>
             <textarea
               name="body_markdown"
               rows={18}
               required
               maxLength={50_000}
               className="input-base mt-1.5 w-full font-mono text-xs"
-              placeholder="# Heading&#10;&#10;Body paragraph. Lists, **bold**, *italic*, `inline code`, [links](https://example.com), and ```code``` fences supported."
+              placeholder={t(
+                "console.knowledge.new.bodyPlaceholder",
+                undefined,
+                "# Heading\n\nBody paragraph. Lists, **bold**, *italic*, `inline code`, [links](https://example.com), and ```code``` fences supported.",
+              )}
             />
           </div>
           <Input
-            label="Tags"
+            label={t("console.knowledge.new.tagsLabel", undefined, "Tags")}
             name="tags"
-            hint="Comma-separated. Used by /console/knowledge tag filter and by portal pages that pull articles by tag."
+            hint={t(
+              "console.knowledge.new.tagsHint",
+              undefined,
+              "Comma-separated. Used by /console/knowledge tag filter and by portal pages that pull articles by tag.",
+            )}
           />
         </FormShell>
       </div>

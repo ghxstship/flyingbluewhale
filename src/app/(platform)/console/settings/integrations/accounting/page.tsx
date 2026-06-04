@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -56,12 +56,18 @@ const SYSTEM_LABEL: Record<System, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Accounting Integrations" />
+        <ModuleHeader
+          eyebrow={t("console.settings.integrations.accounting.eyebrowShort", undefined, "Settings")}
+          title={t("console.settings.integrations.accounting.titleLong", undefined, "Accounting Integrations")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.integrations.accounting.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -85,40 +91,60 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings · Integrations"
-        title="Accounting"
-        subtitle={`${rows.length} connection${rows.length === 1 ? "" : "s"} · ${connectedCount} connected · ${errorCount} needs attention`}
+        eyebrow={t("console.settings.integrations.accounting.eyebrow", undefined, "Settings · Integrations")}
+        title={t("console.settings.integrations.accounting.title", undefined, "Accounting")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.settings.integrations.accounting.connectionSingular", undefined, "connection") : t("console.settings.integrations.accounting.connectionPlural", undefined, "connections")} · ${connectedCount} ${t("console.settings.integrations.accounting.connectedLower", undefined, "connected")} · ${errorCount} ${t("console.settings.integrations.accounting.needsAttention", undefined, "needs attention")}`}
         action={
           <Button href="/console/settings/integrations/accounting/new" size="sm">
-            + Connect System
+            {t("console.settings.integrations.accounting.connectSystem", undefined, "+ Connect System")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Connections" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Connected" value={fmt.number(connectedCount)} />
-          <MetricCard label="Issues" value={fmt.number(errorCount)} />
+          <MetricCard
+            label={t("console.settings.integrations.accounting.metric.connections", undefined, "Connections")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.settings.integrations.accounting.metric.connected", undefined, "Connected")}
+            value={fmt.number(connectedCount)}
+          />
+          <MetricCard
+            label={t("console.settings.integrations.accounting.metric.issues", undefined, "Issues")}
+            value={fmt.number(errorCount)}
+          />
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Connect QuickBooks Online, Sage 300 CRE / 100 Contractor, Foundation, Viewpoint Vista / Spectrum, Acumatica,
-          or Xero. The OAuth + sync worker is a separate service — this surface manages connection rows + field mapping
-          rules.
+          {t(
+            "console.settings.integrations.accounting.helper",
+            undefined,
+            "Connect QuickBooks Online, Sage 300 CRE / 100 Contractor, Foundation, Viewpoint Vista / Spectrum, Acumatica, or Xero. The OAuth + sync worker is a separate service — this surface manages connection rows + field mapping rules.",
+          )}
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/settings/integrations/accounting/${r.id}`}
-          emptyLabel="No accounting connections yet"
-          emptyDescription="Connect to an external system to two-way-sync vendors, cost codes, invoices, bills, pay-apps, and GL entries."
+          emptyLabel={t(
+            "console.settings.integrations.accounting.emptyLabel",
+            undefined,
+            "No accounting connections yet",
+          )}
+          emptyDescription={t(
+            "console.settings.integrations.accounting.emptyDescription",
+            undefined,
+            "Connect to an external system to two-way-sync vendors, cost codes, invoices, bills, pay-apps, and GL entries.",
+          )}
           emptyAction={
             <Button href="/console/settings/integrations/accounting/new" size="sm">
-              + Connect System
+              {t("console.settings.integrations.accounting.connectSystem", undefined, "+ Connect System")}
             </Button>
           }
           columns={[
             {
               key: "system",
-              header: "System",
+              header: t("console.settings.integrations.accounting.column.system", undefined, "System"),
               render: (r) => SYSTEM_LABEL[r.system],
               accessor: (r) => r.system,
               filterable: true,
@@ -126,20 +152,20 @@ export default async function Page() {
             },
             {
               key: "display_name",
-              header: "Display Name",
+              header: t("console.settings.integrations.accounting.column.displayName", undefined, "Display Name"),
               render: (r) => r.display_name,
               accessor: (r) => r.display_name,
             },
             {
               key: "tenant",
-              header: "Tenant",
+              header: t("console.settings.integrations.accounting.column.tenant", undefined, "Tenant"),
               render: (r) => r.tenant_id,
               accessor: (r) => r.tenant_id,
               className: "font-mono text-xs",
             },
             {
               key: "last_sync",
-              header: "Last Sync",
+              header: t("console.settings.integrations.accounting.column.lastSync", undefined, "Last Sync"),
               render: (r) =>
                 r.last_sync_at
                   ? fmt.dateParts(r.last_sync_at, { month: "short", day: "numeric", year: "2-digit" })
@@ -149,7 +175,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.settings.integrations.accounting.column.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.connection_state]}>{toTitle(r.connection_state)}</Badge>,
               accessor: (r) => r.connection_state,
               filterable: true,

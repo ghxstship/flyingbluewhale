@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 import ViewerLoader from "./viewer-loader";
 
 export const dynamic = "force-dynamic";
@@ -24,6 +25,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { id } = await params;
+  const { t } = await getRequestT();
 
   const { data: row } = await supabase
     .from("bim_models")
@@ -40,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`BIM Viewer · ${m.project?.name ?? "Project"}`}
+        eyebrow={`${t("console.bim.view.eyebrow", undefined, "BIM Viewer")} · ${m.project?.name ?? t("console.bim.view.projectFallback", undefined, "Project")}`}
         title={m.name}
         subtitle={`${m.source_type.toUpperCase()} · ${m.model_state}`}
         action={
@@ -49,10 +51,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               href={`/api/v1/bim/${m.id}/download`}
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Download {m.source_type.toUpperCase()}
+              {t("console.bim.view.download", { format: m.source_type.toUpperCase() }, "Download {format}")}
             </a>
             <Button href={`/console/bim/${m.id}`} size="sm" variant="ghost">
-              ← Back to Model
+              {t("console.bim.view.backToModel", undefined, "← Back to Model")}
             </Button>
           </div>
         }
@@ -63,9 +65,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         ) : (
           <div className="surface p-6 text-sm">
             <p>
-              Web viewer supports IFC only (via web-ifc). This model is{" "}
-              <Badge variant="info">{m.source_type.toUpperCase()}</Badge> — use the Autodesk Forge integration for Revit
-              / Navisworks, or download and open locally.
+              {t(
+                "console.bim.view.unsupportedPrefix",
+                undefined,
+                "Web viewer supports IFC only (via web-ifc). This model is",
+              )}{" "}
+              <Badge variant="info">{m.source_type.toUpperCase()}</Badge>{" "}
+              {t(
+                "console.bim.view.unsupportedSuffix",
+                undefined,
+                "— use the Autodesk Forge integration for Revit / Navisworks, or download and open locally.",
+              )}
             </p>
           </div>
         )}

@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -35,12 +35,18 @@ const STATE_TONE: Record<SheetSetState, "muted" | "info" | "warning" | "success"
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Creative" title="Drawings" />
+        <ModuleHeader
+          eyebrow={t("console.drawings.eyebrow", undefined, "Creative")}
+          title={t("console.drawings.title", undefined, "Drawings")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.drawings.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -85,42 +91,56 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative"
-        title="Drawings"
-        subtitle={`${rows.length} Sheet Set${rows.length === 1 ? "" : "s"} · ${publishedCount} Published · ${inReviewCount} In Review · ${draftCount} Draft`}
+        eyebrow={t("console.drawings.eyebrow", undefined, "Creative")}
+        title={t("console.drawings.title", undefined, "Drawings")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.drawings.sheetSet", undefined, "Sheet Set") : t("console.drawings.sheetSets", undefined, "Sheet Sets")} · ${publishedCount} ${t("console.drawings.published", undefined, "Published")} · ${inReviewCount} ${t("console.drawings.inReview", undefined, "In Review")} · ${draftCount} ${t("console.drawings.draft", undefined, "Draft")}`}
         action={
           <Button href="/console/drawings/new" size="sm">
-            + New Sheet Set
+            {t("console.drawings.newSheetSet", undefined, "+ New Sheet Set")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard label="Total Sets" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Published" value={fmt.number(publishedCount)} />
-          <MetricCard label="In Review" value={fmt.number(inReviewCount)} />
-          <MetricCard label="Draft" value={fmt.number(draftCount)} />
+          <MetricCard
+            label={t("console.drawings.totalSets", undefined, "Total Sets")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.drawings.published", undefined, "Published")}
+            value={fmt.number(publishedCount)}
+          />
+          <MetricCard
+            label={t("console.drawings.inReview", undefined, "In Review")}
+            value={fmt.number(inReviewCount)}
+          />
+          <MetricCard label={t("console.drawings.draft", undefined, "Draft")} value={fmt.number(draftCount)} />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/drawings/${r.id}`}
-          emptyLabel="No sheet sets yet"
-          emptyDescription="Group individual sheets into a versioned package — e.g. 50% DD, 100% CD — and publish for slip-sheet diff."
+          emptyLabel={t("console.drawings.emptyLabel", undefined, "No sheet sets yet")}
+          emptyDescription={t(
+            "console.drawings.emptyDescription",
+            undefined,
+            "Group individual sheets into a versioned package — e.g. 50% DD, 100% CD — and publish for slip-sheet diff.",
+          )}
           emptyAction={
             <Button href="/console/drawings/new" size="sm">
-              + New Sheet Set
+              {t("console.drawings.newSheetSet", undefined, "+ New Sheet Set")}
             </Button>
           }
           columns={[
             {
               key: "name",
-              header: "Name",
+              header: t("console.drawings.col.name", undefined, "Name"),
               render: (r) => r.name,
               accessor: (r) => r.name,
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.drawings.col.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -128,7 +148,7 @@ export default async function Page() {
             },
             {
               key: "discipline",
-              header: "Discipline",
+              header: t("console.drawings.col.discipline", undefined, "Discipline"),
               render: (r) => r.discipline ?? "—",
               accessor: (r) => r.discipline,
               filterable: true,
@@ -137,29 +157,31 @@ export default async function Page() {
             },
             {
               key: "version",
-              header: "Current Version",
+              header: t("console.drawings.col.currentVersion", undefined, "Current Version"),
               render: (r) =>
-                r.current_version?.version_label ?? <span className="text-[var(--text-muted)]">— none —</span>,
+                r.current_version?.version_label ?? (
+                  <span className="text-[var(--text-muted)]">{t("console.drawings.none", undefined, "— none —")}</span>
+                ),
               accessor: (r) => r.current_version?.version_label ?? null,
               className: "font-mono text-xs",
             },
             {
               key: "sheets",
-              header: "Sheets",
+              header: t("console.drawings.col.sheets", undefined, "Sheets"),
               render: (r) => fmt.number(r.member_count),
               accessor: (r) => r.member_count,
               className: "font-mono text-xs text-right",
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.drawings.col.state", undefined, "State"),
               render: (r) =>
                 r.current_version ? (
                   <Badge variant={STATE_TONE[r.current_version.set_state]}>
                     {toTitle(r.current_version.set_state)}
                   </Badge>
                 ) : (
-                  <Badge variant="muted">Draft</Badge>
+                  <Badge variant="muted">{t("console.drawings.draft", undefined, "Draft")}</Badge>
                 ),
               accessor: (r) => r.current_version?.set_state ?? "draft",
               filterable: true,

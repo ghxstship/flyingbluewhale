@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +21,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Time-Clock Zones" />
+        <ModuleHeader
+          eyebrow={t("console.settings.timeClockZones.eyebrow", undefined, "Settings")}
+          title={t("console.settings.timeClockZones.title", undefined, "Time-Clock Zones")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.timeClockZones.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -43,12 +50,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
-        title="Time-Clock Zones"
-        subtitle={`${rows.length} zone${rows.length === 1 ? "" : "s"} · classify field punches as inside/outside on /m/clock`}
+        eyebrow={t("console.settings.timeClockZones.eyebrow", undefined, "Settings")}
+        title={t("console.settings.timeClockZones.title", undefined, "Time-Clock Zones")}
+        subtitle={t(
+          "console.settings.timeClockZones.subtitle",
+          { count: rows.length, plural: rows.length === 1 ? "" : "s" },
+          `${rows.length} zone${rows.length === 1 ? "" : "s"} · classify field punches as inside/outside on /m/clock`,
+        )}
         action={
           <Button href="/console/settings/time-clock-zones/new" size="sm">
-            + New Zone
+            {t("console.settings.timeClockZones.newZone", undefined, "+ New Zone")}
           </Button>
         }
       />
@@ -56,25 +67,33 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/settings/time-clock-zones/${r.id}`}
-          emptyLabel="No zones defined"
-          emptyDescription="Define a worksite radius. Field punches classify as inside/outside the zone, and outside punches surface in the timesheet audit."
+          emptyLabel={t("console.settings.timeClockZones.emptyLabel", undefined, "No zones defined")}
+          emptyDescription={t(
+            "console.settings.timeClockZones.emptyDescription",
+            undefined,
+            "Define a worksite radius. Field punches classify as inside/outside the zone, and outside punches surface in the timesheet audit.",
+          )}
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.settings.timeClockZones.col.name", undefined, "Name"),
+              render: (r) => r.name,
+            },
             {
               key: "center",
-              header: "Center",
+              header: t("console.settings.timeClockZones.col.center", undefined, "Center"),
               render: (r) => `${r.center_lat.toFixed(5)}, ${r.center_lng.toFixed(5)}`,
               mono: true,
             },
             {
               key: "radius_m",
-              header: "Radius",
+              header: t("console.settings.timeClockZones.col.radius", undefined, "Radius"),
               render: (r) => `${r.radius_m} m`,
               mono: true,
             },
             {
               key: "lifecycle_state",
-              header: "State",
+              header: t("console.settings.timeClockZones.col.state", undefined, "State"),
               render: (r) => (
                 <Badge variant={r.lifecycle_state === "active" ? "success" : "muted"}>
                   {toTitle(r.lifecycle_state)}

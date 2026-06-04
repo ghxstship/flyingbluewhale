@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { addResponse } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
   const { reqId } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: vendors } = await supabase
     .from("vendors")
@@ -25,22 +27,27 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Add Bid Response"
-        subtitle="Record a vendor's quote against this RFQ."
+        eyebrow={t("console.procurement.requisitions.leveling.new.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.requisitions.leveling.new.title", undefined, "Add Bid Response")}
+        subtitle={t(
+          "console.procurement.requisitions.leveling.new.subtitle",
+          undefined,
+          "Record a vendor's quote against this RFQ.",
+        )}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={addResponse.bind(null, reqId)}
           cancelHref={`/console/procurement/requisitions/${reqId}/leveling`}
-          submitLabel="Add"
+          submitLabel={t("common.add", undefined, "Add")}
         >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Vendor<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.procurement.requisitions.leveling.new.vendorLabel", undefined, "Vendor")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <select name="vendor_id" required className={INPUT}>
-              <option value="">Select…</option>
+              <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>
               {(vendors ?? []).map((v) => (
                 <option key={v.id} value={v.id}>
                   {v.name}
@@ -49,11 +56,13 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Total ($)</span>
+            <span className={LBL}>
+              {t("console.procurement.requisitions.leveling.new.totalLabel", undefined, "Total ($)")}
+            </span>
             <input type="number" step="any" name="total" className={INPUT} />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("common.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={3} className={INPUT} />
           </label>
         </FormShell>

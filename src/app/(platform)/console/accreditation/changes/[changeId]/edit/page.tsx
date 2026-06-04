@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateAccreditationChange, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ changeId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
@@ -21,32 +23,49 @@ export default async function Page({ params }: { params: Promise<{ changeId: str
     state: State,
     fd: FormData,
   ) => Promise<State>;
+  const kindValue =
+    ((row as Record<string, unknown>)["kind"] as string | undefined) ??
+    t("console.accreditation.changes.edit.fallbackKind", undefined, "Accreditation change");
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation Change"
-        title={`Edit ${((row as Record<string, unknown>)["kind"] as string | undefined) ?? "Accreditation change"}`}
+        eyebrow={t("console.accreditation.changes.edit.eyebrow", undefined, "Accreditation Change")}
+        title={t("console.accreditation.changes.edit.title", { kind: kindValue }, `Edit ${kindValue}`)}
       />
       <div className="page-content max-w-xl">
         <FormShell
           action={action}
           cancelHref={`/console/accreditation/changes/${p.changeId}`}
-          submitLabel="Save Changes"
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
         >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Kind" name="kind" defaultValue={row.kind ?? ""} required maxLength={80} />
+          <Input
+            label={t("console.accreditation.changes.edit.kindLabel", undefined, "Kind")}
+            name="kind"
+            defaultValue={row.kind ?? ""}
+            required
+            maxLength={80}
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Status</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.accreditation.changes.edit.statusLabel", undefined, "Status")}
+            </span>
             <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
-              <option value="pending">pending</option>
-              <option value="approved">approved</option>
-              <option value="rejected">rejected</option>
-              <option value="applied">applied</option>
+              <option value="pending">{t("console.accreditation.changes.status.pending", undefined, "pending")}</option>
+              <option value="approved">
+                {t("console.accreditation.changes.status.approved", undefined, "approved")}
+              </option>
+              <option value="rejected">
+                {t("console.accreditation.changes.status.rejected", undefined, "rejected")}
+              </option>
+              <option value="applied">{t("console.accreditation.changes.status.applied", undefined, "applied")}</option>
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Note</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.accreditation.changes.edit.noteLabel", undefined, "Note")}
+            </span>
             <textarea name="note" defaultValue={row.note ?? ""} rows={5} className="input-base focus-ring w-full" />
           </label>
         </FormShell>

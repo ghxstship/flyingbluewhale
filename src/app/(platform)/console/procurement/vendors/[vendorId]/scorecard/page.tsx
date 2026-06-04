@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +16,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   // Compute a scorecard from concrete signals: PO fulfillment, change-order
   // rate, submittal approval rate. No standalone scorecards table — this is
   // derived. Keeps the user honest about source data.
@@ -43,22 +44,68 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
 
   return (
     <>
-      <ModuleHeader eyebrow="Vendor" title="Scorecard" subtitle="Performance across POs + submittals." />
+      <ModuleHeader
+        eyebrow={t("console.procurement.vendors.scorecard.eyebrow", undefined, "Vendor")}
+        title={t("console.procurement.vendors.scorecard.title", undefined, "Scorecard")}
+        subtitle={t(
+          "console.procurement.vendors.scorecard.subtitle",
+          undefined,
+          "Performance across POs + submittals.",
+        )}
+      />
       <div className="page-content">
         {!hasSignal ? (
           <EmptyState
-            title="Not Enough Signal"
-            description="Scorecard derives from completed POs and reviewed submittals. Issue a PO or accept a submittal to start the trail."
+            title={t("console.procurement.vendors.scorecard.empty.title", undefined, "Not Enough Signal")}
+            description={t(
+              "console.procurement.vendors.scorecard.empty.description",
+              undefined,
+              "Scorecard derives from completed POs and reviewed submittals. Issue a PO or accept a submittal to start the trail.",
+            )}
           />
         ) : (
           <div className="metric-grid">
-            <MetricCard label="PO Fulfillment" value={fulfillmentRate != null ? `${fulfillmentRate}%` : "—"} accent />
-            <MetricCard label="Total POs" value={fmt.number(totalPos)} />
-            <MetricCard label="Total Committed" value={formatMoney(totalCommitted)} />
-            <MetricCard label="POs Cancelled" value={fmt.number(cancelled)} />
-            <MetricCard label="Submittal Approval" value={submittalRate != null ? `${submittalRate}%` : "—"} />
-            <MetricCard label="Submittals Reviewed" value={fmt.number(subRows.length)} />
-            <MetricCard label="Submittals Rejected" value={fmt.number(rejected)} />
+            <MetricCard
+              label={t("console.procurement.vendors.scorecard.metrics.poFulfillment", undefined, "PO Fulfillment")}
+              value={fulfillmentRate != null ? `${fulfillmentRate}%` : "—"}
+              accent
+            />
+            <MetricCard
+              label={t("console.procurement.vendors.scorecard.metrics.totalPos", undefined, "Total POs")}
+              value={fmt.number(totalPos)}
+            />
+            <MetricCard
+              label={t("console.procurement.vendors.scorecard.metrics.totalCommitted", undefined, "Total Committed")}
+              value={formatMoney(totalCommitted)}
+            />
+            <MetricCard
+              label={t("console.procurement.vendors.scorecard.metrics.posCancelled", undefined, "POs Cancelled")}
+              value={fmt.number(cancelled)}
+            />
+            <MetricCard
+              label={t(
+                "console.procurement.vendors.scorecard.metrics.submittalApproval",
+                undefined,
+                "Submittal Approval",
+              )}
+              value={submittalRate != null ? `${submittalRate}%` : "—"}
+            />
+            <MetricCard
+              label={t(
+                "console.procurement.vendors.scorecard.metrics.submittalsReviewed",
+                undefined,
+                "Submittals Reviewed",
+              )}
+              value={fmt.number(subRows.length)}
+            />
+            <MetricCard
+              label={t(
+                "console.procurement.vendors.scorecard.metrics.submittalsRejected",
+                undefined,
+                "Submittals Rejected",
+              )}
+              value={fmt.number(rejected)}
+            />
           </div>
         )}
       </div>

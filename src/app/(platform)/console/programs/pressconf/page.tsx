@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -38,12 +39,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Press Conferences" />
+        <ModuleHeader
+          eyebrow={t("console.programs.pressconf.eyebrow", undefined, "Programs")}
+          title={t("console.programs.pressconf.title", undefined, "Press Conferences")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.pressconf.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -66,12 +73,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Programs"
-        title="Press Conferences"
-        subtitle={`${rows.length} press conference${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.programs.pressconf.eyebrow", undefined, "Programs")}
+        title={t("console.programs.pressconf.title", undefined, "Press Conferences")}
+        subtitle={
+          rows.length === 1
+            ? t("console.programs.pressconf.subtitleOne", { count: rows.length }, `${rows.length} press conference`)
+            : t("console.programs.pressconf.subtitleOther", { count: rows.length }, `${rows.length} press conferences`)
+        }
         action={
           <Button href="/console/events/new" size="sm">
-            + New Event
+            {t("console.programs.pressconf.newEvent", undefined, "+ New Event")}
           </Button>
         }
       />
@@ -79,38 +90,47 @@ export default async function Page() {
         <DataTable<EventRow>
           rows={rows}
           rowHref={(r) => `/console/events/${r.id}`}
-          emptyLabel="No press conferences"
-          emptyDescription="Press conferences are Events with 'press' or 'media briefing' in the name. Create one and accredited media will see it on the project portal."
+          emptyLabel={t("console.programs.pressconf.emptyLabel", undefined, "No press conferences")}
+          emptyDescription={t(
+            "console.programs.pressconf.emptyDescription",
+            undefined,
+            "Press conferences are Events with 'press' or 'media briefing' in the name. Create one and accredited media will see it on the project portal.",
+          )}
           emptyAction={
             <Button href="/console/events/new" size="sm">
-              + New Event
+              {t("console.programs.pressconf.newEvent", undefined, "+ New Event")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Briefing", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.programs.pressconf.col.briefing", undefined, "Briefing"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "starts",
-              header: "Starts",
+              header: t("console.programs.pressconf.col.starts", undefined, "Starts"),
               render: (r) => fmt(r.starts_at),
               className: "font-mono text-xs",
               accessor: (r) => r.starts_at ?? null,
             },
             {
               key: "ends",
-              header: "Ends",
+              header: t("console.programs.pressconf.col.ends", undefined, "Ends"),
               render: (r) => fmt(r.ends_at),
               className: "font-mono text-xs",
               accessor: (r) => r.ends_at ?? null,
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.programs.pressconf.col.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.programs.pressconf.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,

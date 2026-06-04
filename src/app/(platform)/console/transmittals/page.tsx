@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -36,12 +36,18 @@ const STATE_TONE: Record<TransmittalState, "muted" | "info" | "warning" | "succe
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Transmittals" />
+        <ModuleHeader
+          eyebrow={t("console.transmittals.eyebrow", undefined, "Operations")}
+          title={t("console.transmittals.title", undefined, "Transmittals")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.transmittals.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -72,44 +78,70 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Transmittals"
-        subtitle={`${rows.length} Total · ${sentCount} Outstanding · ${acknowledgedCount} Acknowledged · ${draftCount} Draft`}
+        eyebrow={t("console.transmittals.eyebrow", undefined, "Operations")}
+        title={t("console.transmittals.title", undefined, "Transmittals")}
+        subtitle={t(
+          "console.transmittals.subtitle",
+          { total: rows.length, sent: sentCount, acknowledged: acknowledgedCount, draft: draftCount },
+          `${rows.length} Total · ${sentCount} Outstanding · ${acknowledgedCount} Acknowledged · ${draftCount} Draft`,
+        )}
         action={
           <Button href="/console/transmittals/new" size="sm">
-            + New Transmittal
+            {t("console.transmittals.newTransmittal", undefined, "+ New Transmittal")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard label="Total" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Sent / Outstanding" value={fmt.number(sentCount)} />
-          <MetricCard label="Acknowledged" value={fmt.number(acknowledgedCount)} />
-          <MetricCard label="Draft" value={fmt.number(draftCount)} />
+          <MetricCard
+            label={t("console.transmittals.metrics.total", undefined, "Total")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.transmittals.metrics.sentOutstanding", undefined, "Sent / Outstanding")}
+            value={fmt.number(sentCount)}
+          />
+          <MetricCard
+            label={t("console.transmittals.metrics.acknowledged", undefined, "Acknowledged")}
+            value={fmt.number(acknowledgedCount)}
+          />
+          <MetricCard
+            label={t("console.transmittals.metrics.draft", undefined, "Draft")}
+            value={fmt.number(draftCount)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/transmittals/${r.id}`}
-          emptyLabel="No transmittals yet"
-          emptyDescription="Transmittals are the audit-grade envelope for project correspondence. Bundle drawings, specs, RFIs, or files and dispatch with read-receipt tracking."
+          emptyLabel={t("console.transmittals.empty.label", undefined, "No transmittals yet")}
+          emptyDescription={t(
+            "console.transmittals.empty.description",
+            undefined,
+            "Transmittals are the audit-grade envelope for project correspondence. Bundle drawings, specs, RFIs, or files and dispatch with read-receipt tracking.",
+          )}
           emptyAction={
             <Button href="/console/transmittals/new" size="sm">
-              + New Transmittal
+              {t("console.transmittals.newTransmittal", undefined, "+ New Transmittal")}
             </Button>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.transmittals.columns.code", undefined, "Code"),
               render: (r) => r.code,
               accessor: (r) => r.code,
               className: "font-mono text-xs",
             },
-            { key: "subject", header: "Subject", render: (r) => r.subject, accessor: (r) => r.subject },
+            {
+              key: "subject",
+              header: t("console.transmittals.columns.subject", undefined, "Subject"),
+              render: (r) => r.subject,
+              accessor: (r) => r.subject,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.transmittals.columns.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -117,14 +149,14 @@ export default async function Page() {
             },
             {
               key: "sent",
-              header: "Sent",
+              header: t("console.transmittals.columns.sent", undefined, "Sent"),
               render: (r) => fmtDate(r.sent_at),
               accessor: (r) => r.sent_at ?? null,
               className: "font-mono text-xs",
             },
             {
               key: "due",
-              header: "Due",
+              header: t("console.transmittals.columns.due", undefined, "Due"),
               render: (r) => (
                 <span className="inline-flex items-center gap-2">
                   {fmtDate(r.due_at)}
@@ -144,7 +176,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("console.transmittals.columns.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.transmittal_state]}>{toTitle(r.transmittal_state)}</Badge>,
               accessor: (r) => r.transmittal_state,
               filterable: true,

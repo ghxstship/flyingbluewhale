@@ -6,17 +6,21 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Credential } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function CredentialsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Credentials" />
+        <ModuleHeader title={t("console.people.credentials.title", undefined, "Credentials")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.people.credentials.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -35,12 +39,12 @@ export default async function CredentialsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="People"
-        title="Credentials"
-        subtitle={`${rows.length} certs tracked${expiringSoon ? ` · ${expiringSoon} expiring in 60d` : ""}`}
+        eyebrow={t("console.people.credentials.eyebrow", undefined, "People")}
+        title={t("console.people.credentials.title", undefined, "Credentials")}
+        subtitle={`${t("console.people.credentials.subtitleCertsTracked", { count: rows.length }, `${rows.length} certs tracked`)}${expiringSoon ? ` · ${t("console.people.credentials.subtitleExpiring", { count: expiringSoon }, `${expiringSoon} expiring in 60d`)}` : ""}`}
         action={
           <Button href="/console/people/credentials/new" size="sm">
-            + Add credential
+            {t("console.people.credentials.addCredential", undefined, "+ Add credential")}
           </Button>
         }
       />
@@ -48,17 +52,21 @@ export default async function CredentialsPage() {
         <DataTable<Credential>
           rows={rows}
           rowHref={(r) => `/console/people/credentials/${r.id}`}
-          emptyLabel="No credentials tracked"
-          emptyDescription="First-aid, working-at-height, security badges — track expiry to flag re-cert ahead of deployment."
+          emptyLabel={t("console.people.credentials.emptyLabel", undefined, "No credentials tracked")}
+          emptyDescription={t(
+            "console.people.credentials.emptyDescription",
+            undefined,
+            "First-aid, working-at-height, security badges — track expiry to flag re-cert ahead of deployment.",
+          )}
           emptyAction={
             <Button href="/console/people/credentials/new" size="sm">
-              + Add credential
+              {t("console.people.credentials.addCredential", undefined, "+ Add credential")}
             </Button>
           }
           columns={[
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.people.credentials.col.kind", undefined, "Kind"),
               render: (r) => r.kind,
               accessor: (r) => r.kind,
               filterable: true,
@@ -66,26 +74,32 @@ export default async function CredentialsPage() {
             },
             {
               key: "number",
-              header: "Number",
+              header: t("console.people.credentials.col.number", undefined, "Number"),
               render: (r) => r.number ?? "—",
               className: "font-mono text-xs",
               accessor: (r) => r.number ?? null,
             },
             {
               key: "issued",
-              header: "Issued",
+              header: t("console.people.credentials.col.issued", undefined, "Issued"),
               render: (r) => formatDate(r.issued_on, "medium"),
               className: "font-mono text-xs",
               accessor: (r) => r.issued_on,
             },
             {
               key: "expires",
-              header: "Expires",
+              header: t("console.people.credentials.col.expires", undefined, "Expires"),
               render: (r) => {
                 if (!r.expires_on) return "—";
                 const daysUntil = Math.ceil((new Date(r.expires_on).getTime() - Date.now()) / 86400_000);
-                if (daysUntil < 0) return <Badge variant="error">Expired</Badge>;
-                if (daysUntil < 30) return <Badge variant="warning">{daysUntil}d</Badge>;
+                if (daysUntil < 0)
+                  return <Badge variant="error">{t("console.people.credentials.expired", undefined, "Expired")}</Badge>;
+                if (daysUntil < 30)
+                  return (
+                    <Badge variant="warning">
+                      {t("console.people.credentials.daysShort", { count: daysUntil }, `${daysUntil}d`)}
+                    </Badge>
+                  );
                 return <span className="font-mono text-xs">{formatDate(r.expires_on, "medium")}</span>;
               },
               accessor: (r) => r.expires_on ?? null,

@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { RiskHeatmap, type RiskCell } from "./RiskHeatmap";
 import type { Risk, RiskLikelihood, RiskImpact } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,12 +16,18 @@ const LIKELIHOOD: RiskLikelihood[] = ["rare", "unlikely", "possible", "likely", 
 const IMPACT: RiskImpact[] = ["insignificant", "minor", "moderate", "major", "severe"];
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Risk Register" />
+        <ModuleHeader
+          eyebrow={t("console.programs.risk.eyebrow", undefined, "Programs")}
+          title={t("console.programs.risk.title", undefined, "Risk Register")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.risk.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -57,12 +64,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Programs"
-        title="Risk Register"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.programs.risk.eyebrow", undefined, "Programs")}
+        title={t("console.programs.risk.title", undefined, "Risk Register")}
+        subtitle={
+          rows.length === 1
+            ? t("console.programs.risk.subtitle.one", { count: rows.length }, `${rows.length} Record`)
+            : t("console.programs.risk.subtitle.other", { count: rows.length }, `${rows.length} Records`)
+        }
         action={
           <Button href="/console/programs/risk/new" size="sm">
-            + New Risk
+            {t("console.programs.risk.newRisk", undefined, "+ New Risk")}
           </Button>
         }
       />
@@ -73,10 +84,15 @@ export default async function Page() {
           rows={rows as Array<Risk & { id: string }>}
           rowHref={(r) => `/console/programs/risk/${r.id}`}
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.programs.risk.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.programs.risk.columns.kind", undefined, "Kind"),
               render: (r) => <Badge variant="muted">{toTitle(r.kind)}</Badge>,
               accessor: (r) => r.kind ?? null,
               filterable: true,
@@ -84,7 +100,7 @@ export default async function Page() {
             },
             {
               key: "matrix",
-              header: "L × I",
+              header: t("console.programs.risk.columns.matrix", undefined, "L × I"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.likelihood} × {r.impact}
@@ -94,7 +110,7 @@ export default async function Page() {
             },
             {
               key: "inherent_score",
-              header: "Score",
+              header: t("console.programs.risk.columns.score", undefined, "Score"),
               render: (r) => (
                 <span
                   className={`font-mono text-xs ${
@@ -112,7 +128,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.programs.risk.columns.status", undefined, "Status"),
               render: (r) => <Badge variant="muted">{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
@@ -120,7 +136,7 @@ export default async function Page() {
             },
             {
               key: "due_on",
-              header: "Due",
+              header: t("console.programs.risk.columns.due", undefined, "Due"),
               render: (r) => <span className="font-mono text-xs">{r.due_on ?? "—"}</span>,
               accessor: (r) => r.due_on ?? null,
             },

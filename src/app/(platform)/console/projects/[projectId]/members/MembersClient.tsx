@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/Alert";
 import { addProjectMemberAction, removeProjectMemberAction, updateProjectMemberRoleAction } from "./actions";
 import { PROJECT_ROLES, type ProjectRole } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type Candidate = { user_id: string; email: string; name: string | null };
 export type MemberRowData = {
@@ -19,26 +20,31 @@ export type MemberRowData = {
 
 export function AddMemberForm({ projectId, candidates }: { projectId: string; candidates: Candidate[] }) {
   const router = useRouter();
+  const t = useT();
   const action = addProjectMemberAction.bind(null, projectId);
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
 
   useEffect(() => {
     if (state?.ok) {
-      toast.success("Member added");
+      toast.success(t("console.projects.members.addedToast", undefined, "Member added"));
       router.refresh();
     } else if (state?.error) {
       toast.error(state.error);
     }
-  }, [state, router]);
+  }, [state, router, t]);
 
   if (candidates.length === 0) {
     return (
       <Alert kind="info">
-        No org members available to add. Invite someone via{" "}
+        {t(
+          "console.projects.members.noCandidatesPrefix",
+          undefined,
+          "No org members available to add. Invite someone via",
+        )}{" "}
         <a href="/console/people/invites" className="underline">
-          People → Invites
+          {t("console.projects.members.peopleInvitesLink", undefined, "People → Invites")}
         </a>{" "}
-        first.
+        {t("console.projects.members.noCandidatesSuffix", undefined, "first.")}
       </Alert>
     );
   }
@@ -47,13 +53,17 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
     <form action={formAction} className="surface space-y-4 p-4">
       <div className="grid gap-3 sm:grid-cols-[2fr_1fr_auto]">
         <label className="space-y-1 text-xs">
-          <div className="tracking-wide text-[var(--text-muted)] uppercase">Org Member</div>
+          <div className="tracking-wide text-[var(--text-muted)] uppercase">
+            {t("console.projects.members.orgMemberLabel", undefined, "Org Member")}
+          </div>
           <select
             name="userId"
             required
             className="w-full rounded-md border border-[var(--border)] bg-[var(--surface)] p-2 text-sm"
           >
-            <option value="">Select a member…</option>
+            <option value="">
+              {t("console.projects.members.selectMemberPlaceholder", undefined, "Select a member…")}
+            </option>
             {candidates.map((c) => (
               <option key={c.user_id} value={c.user_id}>
                 {c.name ? `${c.name} (${c.email})` : c.email}
@@ -62,7 +72,9 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
           </select>
         </label>
         <label className="space-y-1 text-xs">
-          <div className="tracking-wide text-[var(--text-muted)] uppercase">Project Role</div>
+          <div className="tracking-wide text-[var(--text-muted)] uppercase">
+            {t("console.projects.members.projectRoleLabel", undefined, "Project Role")}
+          </div>
           <select
             name="role"
             defaultValue="contributor"
@@ -78,7 +90,9 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
         </label>
         <div className="flex items-end">
           <Button type="submit" loading={pending}>
-            {pending ? "Adding" : "Add"}
+            {pending
+              ? t("console.projects.members.addingButton", undefined, "Adding")
+              : t("console.projects.members.addButton", undefined, "Add")}
           </Button>
         </div>
       </div>
@@ -97,6 +111,7 @@ export function MemberRow({
   currentUserId: string;
 }) {
   const router = useRouter();
+  const t = useT();
   const updateAction = updateProjectMemberRoleAction.bind(null, projectId);
   const [, updateFormAction, updating] = useActionState<FormState, FormData>(updateAction, null);
   const [removing, setRemoving] = useState(false);
@@ -109,11 +124,20 @@ export function MemberRow({
   }
 
   async function onRemove() {
-    if (!confirm(`Remove ${member.name ?? member.email} from this project?`)) return;
+    if (
+      !confirm(
+        t(
+          "console.projects.members.removeConfirm",
+          { name: member.name ?? member.email },
+          `Remove ${member.name ?? member.email} from this project?`,
+        ),
+      )
+    )
+      return;
     setRemoving(true);
     try {
       await removeProjectMemberAction(projectId, member.user_id);
-      toast.success("Member removed");
+      toast.success(t("console.projects.members.removedToast", undefined, "Member removed"));
       router.refresh();
     } finally {
       setRemoving(false);
@@ -130,7 +154,7 @@ export function MemberRow({
       </td>
       <td>
         <select
-          aria-label={`Role for ${member.email}`}
+          aria-label={t("console.projects.members.roleForAria", { email: member.email }, `Role for ${member.email}`)}
           defaultValue={member.role}
           disabled={updating}
           onChange={(e) => onChangeRole(e.currentTarget.value)}
@@ -145,7 +169,9 @@ export function MemberRow({
       </td>
       <td className="text-right">
         <Button type="button" variant="ghost" size="sm" onClick={onRemove} loading={removing} disabled={removing}>
-          {isSelf ? "Leave" : "Remove"}
+          {isSelf
+            ? t("console.projects.members.leaveButton", undefined, "Leave")
+            : t("console.projects.members.removeButton", undefined, "Remove")}
         </Button>
       </td>
     </tr>

@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
@@ -30,12 +30,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Agency" title="Tours" />
+        <ModuleHeader
+          eyebrow={t("console.agency.tours.eyebrow", undefined, "Agency")}
+          title={t("console.agency.tours.title", undefined, "Tours")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.agency.tours.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -59,65 +65,84 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Agency"
-        title="Tours"
-        subtitle={`${rows.length} Tour${rows.length === 1 ? "" : "s"} · multi-date P&L roll-up`}
+        eyebrow={t("console.agency.tours.eyebrow", undefined, "Agency")}
+        title={t("console.agency.tours.title", undefined, "Tours")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.agency.tours.subtitleTourSingular", undefined, "Tour") : t("console.agency.tours.subtitleTourPlural", undefined, "Tours")} · ${t("console.agency.tours.subtitleSuffix", undefined, "multi-date P&L roll-up")}`}
         action={
           <Button href="/console/agency/tours/new" size="sm">
-            + New Tour
+            {t("console.agency.tours.newTour", undefined, "+ New Tour")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total GBOR" value={formatMoney(totalGBOR)} accent />
-          <MetricCard label="Artist Payouts" value={formatMoney(totalArtist)} />
-          <MetricCard label="Agent Commissions" value={formatMoney(totalCommission)} />
+          <MetricCard
+            label={t("console.agency.tours.metric.totalGbor", undefined, "Total GBOR")}
+            value={formatMoney(totalGBOR)}
+            accent
+          />
+          <MetricCard
+            label={t("console.agency.tours.metric.artistPayouts", undefined, "Artist Payouts")}
+            value={formatMoney(totalArtist)}
+          />
+          <MetricCard
+            label={t("console.agency.tours.metric.agentCommissions", undefined, "Agent Commissions")}
+            value={formatMoney(totalCommission)}
+          />
         </div>
 
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/agency/tours/${r.tour_id}`}
-          emptyLabel="No tours yet"
-          emptyDescription="A tour groups multiple talent_offers under one container. Settlements roll up automatically."
+          emptyLabel={t("console.agency.tours.empty.label", undefined, "No tours yet")}
+          emptyDescription={t(
+            "console.agency.tours.empty.description",
+            undefined,
+            "A tour groups multiple talent_offers under one container. Settlements roll up automatically.",
+          )}
           emptyAction={
             <Button href="/console/agency/tours/new" size="sm">
-              + New Tour
+              {t("console.agency.tours.newTour", undefined, "+ New Tour")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Tour", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.agency.tours.col.tour", undefined, "Tour"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "status",
-              header: "Status",
+              header: t("console.agency.tours.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
             },
             {
               key: "legs",
-              header: "Legs",
+              header: t("console.agency.tours.col.legs", undefined, "Legs"),
               render: (r) => `${r.settled_legs}/${r.leg_count}`,
               accessor: (r) => Number(r.leg_count),
               className: "font-mono text-xs tabular-nums",
             },
             {
               key: "gbor",
-              header: "GBOR",
+              header: t("console.agency.tours.col.gbor", undefined, "GBOR"),
               render: (r) => formatMoney(r.gross_box_office_cents),
               accessor: (r) => Number(r.gross_box_office_cents),
               className: "font-mono text-xs",
             },
             {
               key: "nbor",
-              header: "NBOR",
+              header: t("console.agency.tours.col.nbor", undefined, "NBOR"),
               render: (r) => formatMoney(r.nbor_cents),
               accessor: (r) => Number(r.nbor_cents),
               className: "font-mono text-xs",
             },
             {
               key: "starts",
-              header: "Starts",
+              header: t("console.agency.tours.col.starts", undefined, "Starts"),
               render: (r) => r.starts_on ?? "—",
               accessor: (r) => r.starts_on,
               className: "font-mono text-xs",

@@ -1,12 +1,14 @@
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
+import { getRequestT } from "@/lib/i18n/request";
 import { NewProjectForm } from "./NewProjectForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewProjectPage() {
   const session = await requireSession();
+  const { t } = await getRequestT();
   const [clients, venues] = await Promise.all([
     listOrgScoped("clients", session.orgId, { orderBy: "name", ascending: true }),
     listOrgScoped("venues", session.orgId, { orderBy: "name", ascending: true }),
@@ -14,7 +16,10 @@ export default async function NewProjectPage() {
 
   return (
     <>
-      <ModuleHeader title="New Project" subtitle="Create a project for your organization" />
+      <ModuleHeader
+        title={t("console.projects.new.title", undefined, "New Project")}
+        subtitle={t("console.projects.new.subtitle", undefined, "Create a project for your organization")}
+      />
       <div className="page-content max-w-2xl">
         <NewProjectForm
           clients={clients.map((c) => ({ id: c.id, name: c.name }))}

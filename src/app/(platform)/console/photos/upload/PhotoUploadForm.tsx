@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Combobox, type ComboboxOption } from "@/components/ui/Combobox";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { uploadPhotosAction } from "./actions";
 
 const MAX_FILES = 20;
@@ -17,6 +18,7 @@ function fmtBytes(n: number): string {
 }
 
 export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
+  const t = useT();
   const [projectId, setProjectId] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -31,44 +33,58 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
   const tooBig = files.some((f) => f.size > MAX_BYTES);
 
   return (
-    <FormShell action={uploadPhotosAction} cancelHref="/console/photos" submitLabel="Upload">
+    <FormShell
+      action={uploadPhotosAction}
+      cancelHref="/console/photos"
+      submitLabel={t("console.photos.upload.submit", undefined, "Upload")}
+    >
       {/* Project picker — Combobox is client-only and uses controlled value, so we mirror
           into a hidden input that the FormData picks up. */}
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">
-          Project <span className="text-[var(--color-error)]">*</span>
+          {t("console.photos.upload.projectLabel", undefined, "Project")}{" "}
+          <span className="text-[var(--color-error)]">*</span>
         </label>
         <div className="mt-1.5">
           <Combobox
             options={projects}
             value={projectId}
             onChange={(v) => setProjectId(v)}
-            placeholder="Select a project"
-            searchPlaceholder="Search projects…"
+            placeholder={t("console.photos.upload.projectPlaceholder", undefined, "Select a project")}
+            searchPlaceholder={t("console.photos.upload.projectSearchPlaceholder", undefined, "Search projects…")}
           />
         </div>
         <input type="hidden" name="projectId" value={projectId} />
       </div>
 
       <Input
-        label="Album"
+        label={t("console.photos.upload.albumLabel", undefined, "Album")}
         name="album"
         maxLength={80}
-        placeholder='e.g. "Load-in day 1", "Stage build", "Compound"'
-        hint="Optional grouping label. Leave blank for unalbumed."
+        placeholder={t(
+          "console.photos.upload.albumPlaceholder",
+          undefined,
+          'e.g. "Load-in day 1", "Stage build", "Compound"',
+        )}
+        hint={t("console.photos.upload.albumHint", undefined, "Optional grouping label. Leave blank for unalbumed.")}
       />
 
       <Input
-        label="Caption"
+        label={t("console.photos.upload.captionLabel", undefined, "Caption")}
         name="caption"
         maxLength={280}
-        placeholder="Applied to every photo in this batch"
-        hint="Optional — same caption for all photos. Edit individually later."
+        placeholder={t("console.photos.upload.captionPlaceholder", undefined, "Applied to every photo in this batch")}
+        hint={t(
+          "console.photos.upload.captionHint",
+          undefined,
+          "Optional — same caption for all photos. Edit individually later.",
+        )}
       />
 
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">
-          Photos <span className="text-[var(--color-error)]">*</span>
+          {t("console.photos.upload.photosLabel", undefined, "Photos")}{" "}
+          <span className="text-[var(--color-error)]">*</span>
         </label>
         <div className="mt-1.5">
           <input
@@ -81,14 +97,28 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
           />
         </div>
         <div className="mt-1 text-[11px] text-[var(--text-muted)]">
-          Up to {MAX_FILES} photos, 25 MB each. JPEG, PNG, WebP, GIF, HEIC.
+          {t(
+            "console.photos.upload.limits",
+            { max: MAX_FILES },
+            `Up to ${MAX_FILES} photos, 25 MB each. JPEG, PNG, WebP, GIF, HEIC.`,
+          )}
         </div>
         {files.length > 0 && (
           <div className="mt-2 text-[11px] text-[var(--text-secondary)]">
-            {files.length} file{files.length === 1 ? "" : "s"} selected · {fmtBytes(totalBytes)} total
+            {files.length === 1
+              ? t(
+                  "console.photos.upload.selectedOne",
+                  { total: fmtBytes(totalBytes) },
+                  `${files.length} file selected · ${fmtBytes(totalBytes)} total`,
+                )
+              : t(
+                  "console.photos.upload.selectedMany",
+                  { count: files.length, total: fmtBytes(totalBytes) },
+                  `${files.length} files selected · ${fmtBytes(totalBytes)} total`,
+                )}
             {tooBig && (
               <span className="ms-2 font-semibold text-[var(--color-error)]">
-                One or more files exceed 25 MB and will be rejected.
+                {t("console.photos.upload.tooBig", undefined, "One or more files exceed 25 MB and will be rejected.")}
               </span>
             )}
           </div>

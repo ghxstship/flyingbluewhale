@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ const STATUS_VARIANT: Record<string, BadgeVariant> = {
 export default async function Page({ params }: { params: Promise<{ personId: string }> }) {
   const { personId } = await params;
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = await createClient();
   // offer_letters.crew_member_id is the FK; resolve via crew_members.user_id
@@ -54,23 +56,31 @@ export default async function Page({ params }: { params: Promise<{ personId: str
 
   return (
     <>
-      <ModuleHeader eyebrow="Person" title="Documents" subtitle="Offer letters and signed agreements." />
+      <ModuleHeader
+        eyebrow={t("console.people.documents.eyebrow", undefined, "Person")}
+        title={t("console.people.documents.title", undefined, "Documents")}
+        subtitle={t("console.people.documents.subtitle", undefined, "Offer letters and signed agreements.")}
+      />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No Documents"
-          emptyDescription="No offer letters or agreements on file for this person."
+          emptyLabel={t("console.people.documents.emptyLabel", undefined, "No Documents")}
+          emptyDescription={t(
+            "console.people.documents.emptyDescription",
+            undefined,
+            "No offer letters or agreements on file for this person.",
+          )}
           columns={[
             {
               key: "classification",
-              header: "Classification",
+              header: t("console.people.documents.col.classification", undefined, "Classification"),
               render: (r) => r.classification,
               accessor: (r) => r.classification,
               filterable: true,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.people.documents.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
@@ -78,7 +88,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
             },
             {
               key: "onsite_start_date",
-              header: "Engagement Starts",
+              header: t("console.people.documents.col.engagementStarts", undefined, "Engagement Starts"),
               render: (r) => (r.onsite_start_date ? formatDate(r.onsite_start_date) : "—"),
               accessor: (r) => r.onsite_start_date ?? "",
               mono: true,
@@ -86,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
             },
             {
               key: "sent_at",
-              header: "Sent",
+              header: t("console.people.documents.col.sent", undefined, "Sent"),
               render: (r) => (r.sent_at ? formatDate(r.sent_at) : "—"),
               accessor: (r) => r.sent_at ?? "",
               mono: true,
@@ -94,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
             },
             {
               key: "accepted_at",
-              header: "Accepted",
+              header: t("console.people.documents.col.accepted", undefined, "Accepted"),
               render: (r) => (r.accepted_at ? formatDate(r.accepted_at) : "—"),
               accessor: (r) => r.accepted_at ?? "",
               mono: true,

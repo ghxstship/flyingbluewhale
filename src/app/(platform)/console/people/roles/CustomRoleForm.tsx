@@ -5,9 +5,11 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/Dialog";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createCustomRole, type State } from "./actions";
 
 export function CustomRoleForm() {
+  const t = useT();
   const [state, action, pending] = useActionState<State, FormData>(createCustomRole, null);
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
@@ -17,29 +19,47 @@ export function CustomRoleForm() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button type="button" size="sm">
-          + New Role
+          {t("console.people.roles.newRole", undefined, "+ New Role")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New custom role</DialogTitle>
+          <DialogTitle>{t("console.people.roles.newCustomRole", undefined, "New custom role")}</DialogTitle>
         </DialogHeader>
         <form action={action} className="space-y-3">
           <Input
-            label="Slug"
+            label={t("console.people.roles.slugLabel", undefined, "Slug")}
             name="slug"
             required
             maxLength={60}
             placeholder="finance-reader"
-            hint="Lowercase, dashes ok. Used in API tokens."
+            hint={t("console.people.roles.slugHint", undefined, "Lowercase, dashes ok. Used in API tokens.")}
           />
-          <Input label="Label" name="label" required maxLength={120} placeholder="Finance Reader" />
-          <Input label="Description" name="description" maxLength={400} />
-          <Input label="Permissions" name="permissions" hint="Comma-separated, e.g. invoices:read, expenses:read" />
+          <Input
+            label={t("console.people.roles.labelLabel", undefined, "Label")}
+            name="label"
+            required
+            maxLength={120}
+            placeholder="Finance Reader"
+          />
+          <Input
+            label={t("console.people.roles.descriptionLabel", undefined, "Description")}
+            name="description"
+            maxLength={400}
+          />
+          <Input
+            label={t("console.people.roles.permissionsLabel", undefined, "Permissions")}
+            name="permissions"
+            hint={t(
+              "console.people.roles.permissionsHint",
+              undefined,
+              "Comma-separated, e.g. invoices:read, expenses:read",
+            )}
+          />
           {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
-              Create Role
+              {t("console.people.roles.createRole", undefined, "Create Role")}
             </Button>
           </div>
         </form>

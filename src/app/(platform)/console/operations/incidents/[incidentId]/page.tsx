@@ -7,7 +7,7 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteIncident } from "./edit/actions";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -21,12 +21,15 @@ const SEVERITY_TONE: Record<string, StatusTone> = {
 
 export default async function Page({ params }: { params: Promise<{ incidentId: string }> }) {
   const p = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Incident" />
+        <ModuleHeader title={t("console.operations.incidents.detail.title", undefined, "Incident")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.operations.incidents.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -40,19 +43,23 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations · Incident"
+        eyebrow={t("console.operations.incidents.detail.eyebrow", undefined, "Operations · Incident")}
         title={summary}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/operations/incidents" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/operations/incidents/${p.incidentId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteIncident.bind(null, p.incidentId)}
-              confirm={`Delete incident "${summary}"? This cannot be undone.`}
+              confirm={t(
+                "console.operations.incidents.detail.deleteConfirm",
+                { summary },
+                `Delete incident "${summary}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

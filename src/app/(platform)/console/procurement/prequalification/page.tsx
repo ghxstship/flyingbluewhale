@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +40,7 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
   const fmtIntl = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { data } = await supabase
     .from("vendor_prequalifications")
     .select("id, status, score, expires_at, vendor:vendor_id(name), questionnaire:questionnaire_id(name)")
@@ -57,40 +58,58 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Prequalification"
-        subtitle="Vendor vetting — insurance, safety, financials, references."
+        eyebrow={t("console.procurement.prequalification.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.prequalification.title", undefined, "Prequalification")}
+        subtitle={t(
+          "console.procurement.prequalification.subtitle",
+          undefined,
+          "Vendor vetting — insurance, safety, financials, references.",
+        )}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/procurement/prequalification/questionnaires" size="sm" variant="ghost">
-              Questionnaires
+              {t("console.procurement.prequalification.questionnaires", undefined, "Questionnaires")}
             </Button>
             <Button href="/console/procurement/prequalification/new" size="sm">
-              + Invite vendor
+              {t("console.procurement.prequalification.inviteVendor", undefined, "+ Invite vendor")}
             </Button>
           </div>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={fmtIntl.number(approved)} accent />
-          <MetricCard label="In Flight" value={fmtIntl.number(open)} />
-          <MetricCard label="Expiring &lt; 30d" value={fmtIntl.number(expiringSoon)} />
+          <MetricCard
+            label={t("console.procurement.prequalification.metric.approved", undefined, "Approved")}
+            value={fmtIntl.number(approved)}
+            accent
+          />
+          <MetricCard
+            label={t("console.procurement.prequalification.metric.inFlight", undefined, "In Flight")}
+            value={fmtIntl.number(open)}
+          />
+          <MetricCard
+            label={t("console.procurement.prequalification.metric.expiringSoon", undefined, "Expiring < 30d")}
+            value={fmtIntl.number(expiringSoon)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/procurement/prequalification/${r.id}`}
-          emptyLabel="No prequalifications yet"
-          emptyDescription="Build a questionnaire, invite vendors, score answers, then gate RFQs to approved vendors."
+          emptyLabel={t("console.procurement.prequalification.empty.label", undefined, "No prequalifications yet")}
+          emptyDescription={t(
+            "console.procurement.prequalification.empty.description",
+            undefined,
+            "Build a questionnaire, invite vendors, score answers, then gate RFQs to approved vendors.",
+          )}
           emptyAction={
             <Button href="/console/procurement/prequalification/questionnaires/new" size="sm">
-              + Build questionnaire
+              {t("console.procurement.prequalification.empty.action", undefined, "+ Build questionnaire")}
             </Button>
           }
           columns={[
             {
               key: "vendor",
-              header: "Vendor",
+              header: t("console.procurement.prequalification.col.vendor", undefined, "Vendor"),
               render: (r) => r.vendor?.name ?? "—",
               filterable: true,
               groupable: true,
@@ -98,27 +117,27 @@ export default async function Page() {
             },
             {
               key: "q",
-              header: "Questionnaire",
+              header: t("console.procurement.prequalification.col.questionnaire", undefined, "Questionnaire"),
               render: (r) => r.questionnaire?.name ?? "—",
               accessor: (r) => r.questionnaire?.name ?? null,
             },
             {
               key: "score",
-              header: "Score",
+              header: t("console.procurement.prequalification.col.score", undefined, "Score"),
               render: (r) => (r.score != null ? Number(r.score).toFixed(1) : "—"),
               className: "font-mono text-xs",
               accessor: (r) => r.score ?? null,
             },
             {
               key: "exp",
-              header: "Expires",
+              header: t("console.procurement.prequalification.col.expires", undefined, "Expires"),
               render: (r) => fmt(r.expires_at),
               className: "font-mono text-xs",
               accessor: (r) => r.expires_at ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.procurement.prequalification.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

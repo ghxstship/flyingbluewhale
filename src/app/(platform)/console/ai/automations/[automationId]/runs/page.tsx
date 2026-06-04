@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Run history — list view.
@@ -86,13 +87,28 @@ export default async function Page({
   const { automationId } = await params;
   const sp = (await searchParams) ?? {};
   const statusFilter = (sp.status ?? "all") as "all" | RunRow["status"];
+  const { t } = await getRequestT();
+
+  const STATUS_FILTER_LABELS: Record<"all" | RunRow["status"], string> = {
+    all: t("common.all", undefined, "All"),
+    success: t("console.ai.automations.runs.filter.success", undefined, "Success"),
+    failed: t("console.ai.automations.runs.filter.failed", undefined, "Failed"),
+    running: t("console.ai.automations.runs.filter.running", undefined, "Running"),
+    pending: t("console.ai.automations.runs.filter.pending", undefined, "Pending"),
+    cancelled: t("console.ai.automations.runs.filter.cancelled", undefined, "Cancelled"),
+  };
 
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Automations" title="Run History" />
+        <ModuleHeader
+          eyebrow={t("console.ai.automations.runs.eyebrow", undefined, "Automations")}
+          title={t("console.ai.automations.runs.title", undefined, "Run History")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.ai.automations.runs.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -133,17 +149,23 @@ export default async function Page({
   return (
     <>
       <ModuleHeader
-        eyebrow="Automations"
-        title="Run History"
+        eyebrow={t("console.ai.automations.runs.eyebrow", undefined, "Automations")}
+        title={t("console.ai.automations.runs.title", undefined, "Run History")}
         subtitle={
           <span className="font-mono text-xs">
-            {automation.name} · {runs.length} run{runs.length === 1 ? "" : "s"}
+            {automation.name} ·{" "}
+            {runs.length === 1
+              ? t("console.ai.automations.runs.countOne", { count: runs.length }, "1 run")
+              : t("console.ai.automations.runs.countOther", { count: runs.length }, `${runs.length} runs`)}
           </span>
         }
         breadcrumbs={[
-          { label: "Automations", href: "/console/ai/automations" },
+          {
+            label: t("console.ai.automations.runs.crumb.automations", undefined, "Automations"),
+            href: "/console/ai/automations",
+          },
           { label: automation.name, href: `/console/ai/automations/${automationId}` },
-          { label: "Runs" },
+          { label: t("console.ai.automations.runs.crumb.runs", undefined, "Runs") },
         ]}
       />
       <div className="page-content space-y-4">
@@ -166,7 +188,7 @@ export default async function Page({
                     : "rounded border border-[var(--border-color)] px-3 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]"
                 }
               >
-                {f.label}
+                {STATUS_FILTER_LABELS[f.key] ?? f.label}
               </Link>
             );
           })}
@@ -174,20 +196,36 @@ export default async function Page({
 
         {runs.length === 0 ? (
           <EmptyState
-            title="No Runs Yet"
-            description="Trigger this automation manually or wait for its scheduler / webhook / event to fire."
+            title={t("console.ai.automations.runs.empty.title", undefined, "No Runs Yet")}
+            description={t(
+              "console.ai.automations.runs.empty.description",
+              undefined,
+              "Trigger this automation manually or wait for its scheduler / webhook / event to fire.",
+            )}
           />
         ) : (
           <div className="surface overflow-hidden">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Started</th>
-                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Trigger</th>
-                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Status</th>
-                  <th className="px-3 py-2 text-right text-xs tracking-wide uppercase">Actions</th>
-                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">Finished</th>
-                  <th className="px-3 py-2 text-right text-xs tracking-wide uppercase">Duration</th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">
+                    {t("console.ai.automations.runs.col.started", undefined, "Started")}
+                  </th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">
+                    {t("console.ai.automations.runs.col.trigger", undefined, "Trigger")}
+                  </th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">
+                    {t("console.ai.automations.runs.col.status", undefined, "Status")}
+                  </th>
+                  <th className="px-3 py-2 text-right text-xs tracking-wide uppercase">
+                    {t("console.ai.automations.runs.col.actions", undefined, "Actions")}
+                  </th>
+                  <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">
+                    {t("console.ai.automations.runs.col.finished", undefined, "Finished")}
+                  </th>
+                  <th className="px-3 py-2 text-right text-xs tracking-wide uppercase">
+                    {t("console.ai.automations.runs.col.duration", undefined, "Duration")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -225,7 +263,13 @@ export default async function Page({
         )}
 
         <p className="text-xs text-[var(--text-muted)]">
-          {inFlight ? "Auto-refreshing every 5s while runs are in flight." : "Up to date."}
+          {inFlight
+            ? t(
+                "console.ai.automations.runs.autoRefreshing",
+                undefined,
+                "Auto-refreshing every 5s while runs are in flight.",
+              )
+            : t("console.ai.automations.runs.upToDate", undefined, "Up to date.")}
         </p>
       </div>
 

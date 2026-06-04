@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateMileage, type State } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -20,28 +21,66 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
   const session = await requireSession();
   const row = await getOrgScoped("mileage_logs", session.orgId, p.mileageId);
   if (!row) notFound();
+  const { t } = await getRequestT();
   const action = updateMileage.bind(null, p.mileageId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
     <>
-      <ModuleHeader eyebrow="Mileage Log" title={`Edit ${row.origin} → ${row.destination}`} />
+      <ModuleHeader
+        eyebrow={t("console.finance.mileage.edit.eyebrow", undefined, "Mileage Log")}
+        title={t(
+          "console.finance.mileage.edit.title",
+          { origin: row.origin, destination: row.destination },
+          `Edit ${row.origin} → ${row.destination}`,
+        )}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={action} cancelHref={`/console/finance/mileage/${p.mileageId}`} submitLabel="Save Changes">
+        <FormShell
+          action={action}
+          cancelHref={`/console/finance/mileage/${p.mileageId}`}
+          submitLabel={t("common.saveChanges", undefined, "Save Changes")}
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
-          <Input label="Origin" name="origin" defaultValue={row.origin} required maxLength={200} />
-          <Input label="Destination" name="destination" defaultValue={row.destination} required maxLength={200} />
+          <Input
+            label={t("console.finance.mileage.edit.origin", undefined, "Origin")}
+            name="origin"
+            defaultValue={row.origin}
+            required
+            maxLength={200}
+          />
+          <Input
+            label={t("console.finance.mileage.edit.destination", undefined, "Destination")}
+            name="destination"
+            defaultValue={row.destination}
+            required
+            maxLength={200}
+          />
           <div className="grid grid-cols-2 gap-3">
-            <Input label="Miles" name="miles" type="number" step="any" defaultValue={String(row.miles ?? 0)} />
             <Input
-              label="Rate (cents/mile)"
+              label={t("console.finance.mileage.edit.miles", undefined, "Miles")}
+              name="miles"
+              type="number"
+              step="any"
+              defaultValue={String(row.miles ?? 0)}
+            />
+            <Input
+              label={t("console.finance.mileage.edit.rateCents", undefined, "Rate (cents/mile)")}
               name="rate_cents"
               type="number"
               defaultValue={String(row.rate_cents ?? 0)}
             />
           </div>
-          <Input label="Logged On" name="logged_on" type="date" defaultValue={dateOnly(row.logged_on)} required />
+          <Input
+            label={t("console.finance.mileage.edit.loggedOn", undefined, "Logged On")}
+            name="logged_on"
+            type="date"
+            defaultValue={dateOnly(row.logged_on)}
+            required
+          />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">Notes</span>
+            <span className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.finance.mileage.edit.notes", undefined, "Notes")}
+            </span>
             <textarea
               name="notes"
               defaultValue={row.notes ?? ""}

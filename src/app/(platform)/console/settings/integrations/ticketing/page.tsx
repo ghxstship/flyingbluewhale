@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +20,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Ticketing" />
+        <ModuleHeader
+          eyebrow={t("console.settings.integrations.ticketing.eyebrowShort", undefined, "Settings")}
+          title={t("console.settings.integrations.ticketing.title", undefined, "Ticketing")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.integrations.ticketing.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -42,12 +49,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings · Integrations"
-        title="Ticketing"
-        subtitle="Etix · DICE · Tixr · Eventbrite · SeeTickets · AXS"
+        eyebrow={t("console.settings.integrations.ticketing.eyebrow", undefined, "Settings · Integrations")}
+        title={t("console.settings.integrations.ticketing.title", undefined, "Ticketing")}
+        subtitle={t(
+          "console.settings.integrations.ticketing.subtitle",
+          undefined,
+          "Etix · DICE · Tixr · Eventbrite · SeeTickets · AXS",
+        )}
         action={
           <Button href="/console/settings/integrations/ticketing/new" size="sm">
-            + Connect
+            {t("console.settings.integrations.ticketing.connect", undefined, "+ Connect")}
           </Button>
         }
       />
@@ -55,41 +66,54 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/settings/integrations/ticketing/${r.id}`}
-          emptyLabel="No ticketing connections"
-          emptyDescription="Connect a provider to feed live sales velocity into your deals + settlements."
+          emptyLabel={t("console.settings.integrations.ticketing.emptyLabel", undefined, "No ticketing connections")}
+          emptyDescription={t(
+            "console.settings.integrations.ticketing.emptyDescription",
+            undefined,
+            "Connect a provider to feed live sales velocity into your deals + settlements.",
+          )}
           emptyAction={
             <Button href="/console/settings/integrations/ticketing/new" size="sm">
-              + Connect
+              {t("console.settings.integrations.ticketing.connect", undefined, "+ Connect")}
             </Button>
           }
           columns={[
             {
               key: "provider",
-              header: "Provider",
+              header: t("console.settings.integrations.ticketing.col.provider", undefined, "Provider"),
               render: (r) => <Badge variant="muted">{toTitle(r.provider)}</Badge>,
               accessor: (r) => r.provider,
               filterable: true,
             },
-            { key: "label", header: "Label", render: (r) => r.label ?? "—", accessor: (r) => r.label ?? null },
+            {
+              key: "label",
+              header: t("console.settings.integrations.ticketing.col.label", undefined, "Label"),
+              render: (r) => r.label ?? "—",
+              accessor: (r) => r.label ?? null,
+            },
             {
               key: "evt",
-              header: "Event ID",
+              header: t("console.settings.integrations.ticketing.col.eventId", undefined, "Event ID"),
               render: (r) =>
                 r.external_event_id ? <span className="font-mono text-xs">{r.external_event_id}</span> : "—",
               accessor: (r) => r.external_event_id ?? null,
             },
             {
               key: "sync",
-              header: "Last Sync",
+              header: t("console.settings.integrations.ticketing.col.lastSync", undefined, "Last Sync"),
               render: (r) => (r.last_synced_at ? new Date(r.last_synced_at).toLocaleString() : "—"),
               accessor: (r) => r.last_synced_at,
               className: "font-mono text-xs",
             },
             {
               key: "active",
-              header: "Active",
+              header: t("console.settings.integrations.ticketing.col.active", undefined, "Active"),
               render: (r) => (
-                <Badge variant={r.is_active ? "success" : "muted"}>{r.is_active ? "active" : "off"}</Badge>
+                <Badge variant={r.is_active ? "success" : "muted"}>
+                  {r.is_active
+                    ? t("console.settings.integrations.ticketing.statusActive", undefined, "active")
+                    : t("console.settings.integrations.ticketing.statusOff", undefined, "off")}
+                </Badge>
               ),
               accessor: (r) => (r.is_active ? 1 : 0),
               filterable: true,

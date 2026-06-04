@@ -8,7 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
 import { AutomationControls } from "./AutomationControls";
 import { WebhookSection } from "./WebhookSection";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { urlFor } from "@/lib/urls";
 import { StepBuilder, type AutomationStep } from "@/components/automations/StepBuilder";
 // Side-effect import — registers all built-in actions with the in-memory
@@ -97,12 +97,18 @@ function coerceTriggerConfig(raw: Json): Record<string, unknown> {
 
 export default async function Page({ params }: { params: Promise<{ automationId: string }> }) {
   const { automationId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Automations" title="Automation" />
+        <ModuleHeader
+          eyebrow={t("console.ai.automations.eyebrow", undefined, "Automations")}
+          title={t("console.ai.automations.detail.titleFallback", undefined, "Automation")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.ai.automations.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -142,18 +148,24 @@ export default async function Page({ params }: { params: Promise<{ automationId:
   return (
     <>
       <ModuleHeader
-        eyebrow="Automations"
+        eyebrow={t("console.ai.automations.eyebrow", undefined, "Automations")}
         title={automation.name}
         subtitle={
           <span className="font-mono text-xs">
-            {automation.trigger_kind} · updated {fmt(automation.updated_at)}
+            {automation.trigger_kind} · {t("console.ai.automations.detail.updatedLabel", undefined, "updated")}{" "}
+            {fmt(automation.updated_at)}
           </span>
         }
-        breadcrumbs={[{ label: "Automations", href: "/console/ai/automations" }, { label: automation.name }]}
+        breadcrumbs={[
+          { label: t("console.ai.automations.eyebrow", undefined, "Automations"), href: "/console/ai/automations" },
+          { label: automation.name },
+        ]}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={automation.enabled ? "success" : "muted"}>
-              {automation.enabled ? "Enabled" : "Disabled"}
+              {automation.enabled
+                ? t("console.ai.automations.detail.enabled", undefined, "Enabled")
+                : t("console.ai.automations.detail.disabled", undefined, "Disabled")}
             </Badge>
             <Badge variant={triggerTone}>{automation.trigger_kind}</Badge>
           </div>
@@ -163,19 +175,35 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         {automation.description && <p className="text-sm text-[var(--text-secondary)]">{automation.description}</p>}
 
         <div className="metric-grid-3">
-          <MetricCard label="Steps" value={fmtIntl.number(steps)} />
-          <MetricCard label="Last Run" value={automation.last_run_at ? fmt(automation.last_run_at) : "Never"} />
           <MetricCard
-            label="Last Status"
+            label={t("console.ai.automations.detail.metricSteps", undefined, "Steps")}
+            value={fmtIntl.number(steps)}
+          />
+          <MetricCard
+            label={t("console.ai.automations.detail.metricLastRun", undefined, "Last Run")}
+            value={
+              automation.last_run_at
+                ? fmt(automation.last_run_at)
+                : t("console.ai.automations.detail.never", undefined, "Never")
+            }
+          />
+          <MetricCard
+            label={t("console.ai.automations.detail.metricLastStatus", undefined, "Last Status")}
             value={automation.last_run_status ?? "—"}
             accent={automation.last_run_status === "ok" || automation.last_run_status === "success"}
           />
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Controls</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.ai.automations.detail.controlsHeading", undefined, "Controls")}
+          </h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Toggle the automation on or off. Manual triggers can be invoked from this page.
+            {t(
+              "console.ai.automations.detail.controlsHelp",
+              undefined,
+              "Toggle the automation on or off. Manual triggers can be invoked from this page.",
+            )}
           </p>
           <div className="mt-3">
             <AutomationControls
@@ -188,8 +216,12 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
         <section className="surface p-4">
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Builder</h3>
-            <span className="text-[11px] text-[var(--text-muted)]">Auto-saves on change</span>
+            <h3 className="text-sm font-semibold">
+              {t("console.ai.automations.detail.builderHeading", undefined, "Builder")}
+            </h3>
+            <span className="text-[11px] text-[var(--text-muted)]">
+              {t("console.ai.automations.detail.builderAutosave", undefined, "Auto-saves on change")}
+            </span>
           </div>
           <StepBuilder
             automationId={automation.id}
@@ -214,7 +246,9 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
         {automation.last_run_status && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Last Run</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.ai.automations.detail.lastRunHeading", undefined, "Last Run")}
+            </h3>
             <div className="mt-2 flex items-center gap-2 text-sm">
               <Badge variant={RUN_TONE[automation.last_run_status] ?? "muted"}>{automation.last_run_status}</Badge>
               <span className="font-mono text-xs text-[var(--text-muted)]">{fmt(automation.last_run_at)}</span>

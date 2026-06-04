@@ -7,12 +7,17 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CATALOG_KIND_LABEL } from "@/lib/db/assignments";
+import { getRequestT } from "@/lib/i18n/request";
 import { createAssignmentAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const { projectId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -67,26 +72,41 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
   return (
     <>
-      <ModuleHeader eyebrow={(project as { name: string }).name} title="New Individual Assignment" />
+      <ModuleHeader
+        eyebrow={(project as { name: string }).name}
+        title={t("console.projects.advancing.assignments.new.title", undefined, "New Individual Assignment")}
+      />
       <div className="page-content max-w-2xl">
         <FormShell
           action={createAssignmentAction.bind(null, projectId)}
           cancelHref={`/console/projects/${projectId}/advancing/assignments`}
-          submitLabel="Create Assignment"
+          submitLabel={t("console.projects.advancing.assignments.new.submit", undefined, "Create Assignment")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Catalog Item</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.projects.advancing.assignments.new.catalogItem", undefined, "Catalog Item")}
+            </label>
             {catalogItems.length === 0 ? (
               <p className="mt-1.5 text-xs text-[var(--text-muted)]">
-                No active catalog items in this org. Author one at{" "}
+                {t(
+                  "console.projects.advancing.assignments.new.noCatalogPrefix",
+                  undefined,
+                  "No active catalog items in this org. Author one at",
+                )}{" "}
                 <a className="underline" href="/console/settings/catalog">
                   /console/settings/catalog
                 </a>{" "}
-                first.
+                {t("console.projects.advancing.assignments.new.noCatalogSuffix", undefined, "first.")}
               </p>
             ) : (
               <select name="catalog_item_id" required className="input-base mt-1.5 w-full">
-                <option value="">— Pick a catalog item —</option>
+                <option value="">
+                  {t(
+                    "console.projects.advancing.assignments.new.pickCatalogItem",
+                    undefined,
+                    "— Pick a catalog item —",
+                  )}
+                </option>
                 {catalogItems.map((c) => (
                   <option key={c.id} value={c.id}>
                     [{CATALOG_KIND_LABEL[c.kind]}] {c.code} · {c.name}
@@ -95,18 +115,28 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               </select>
             )}
             <p className="mt-1 text-[10px] text-[var(--text-muted)]">
-              The catalog row drives kind, pricing, and inventory rollup. Every assignment references a SKU.
+              {t(
+                "console.projects.advancing.assignments.new.catalogHint",
+                undefined,
+                "The catalog row drives kind, pricing, and inventory rollup. Every assignment references a SKU.",
+              )}
             </p>
           </div>
           <Input
-            label="Title"
+            label={t("console.projects.advancing.assignments.new.titleLabel", undefined, "Title")}
             name="title"
             required
             maxLength={200}
-            placeholder="e.g. All-Access Pass · Bay 4 Forklift · Hotel Suite A"
+            placeholder={t(
+              "console.projects.advancing.assignments.new.titlePlaceholder",
+              undefined,
+              "e.g. All-Access Pass · Bay 4 Forklift · Hotel Suite A",
+            )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Assignee</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.projects.advancing.assignments.new.assignee", undefined, "Assignee")}
+            </label>
             <select name="party_user_id" required className="input-base mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -115,14 +145,29 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               ))}
             </select>
           </div>
-          <Input label="Deadline" name="deadline" type="date" hint="When the assignment must be fulfilled by." />
+          <Input
+            label={t("console.projects.advancing.assignments.new.deadline", undefined, "Deadline")}
+            name="deadline"
+            type="date"
+            hint={t(
+              "console.projects.advancing.assignments.new.deadlineHint",
+              undefined,
+              "When the assignment must be fulfilled by.",
+            )}
+          />
           <AtomPicker
             name="atom_id"
             atoms={atomOptions}
-            hint="Pin this assignment to a WBS atom so it rolls up on the project Tracker."
+            hint={t(
+              "console.projects.advancing.assignments.new.atomHint",
+              undefined,
+              "Pin this assignment to a WBS atom so it rolls up on the project Tracker.",
+            )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Notes (optional)</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.projects.advancing.assignments.new.notes", undefined, "Notes (optional)")}
+            </label>
             <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
           </div>
         </FormShell>

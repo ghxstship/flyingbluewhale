@@ -1,33 +1,63 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { getRequestT } from "@/lib/i18n/request";
 import { createEncounter } from "./actions";
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Medical · Encounter" title="Log Encounter" />
+      <ModuleHeader
+        eyebrow={t("console.safety.medical.encounters.new.eyebrow", undefined, "Medical · Encounter")}
+        title={t("console.safety.medical.encounters.new.title", undefined, "Log Encounter")}
+      />
       <div className="page-content max-w-xl">
-        <FormShell action={createEncounter} cancelHref="/console/safety/medical/encounters" submitLabel="Log Encounter">
+        <FormShell
+          action={createEncounter}
+          cancelHref="/console/safety/medical/encounters"
+          submitLabel={t("console.safety.medical.encounters.new.submit", undefined, "Log Encounter")}
+        >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Triage</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.medical.encounters.new.triage", undefined, "Triage")}
+            </label>
             <select name="triage" defaultValue="green" className="input-base mt-1.5 w-full">
-              <option value="green">Green (minor)</option>
-              <option value="yellow">Yellow (urgent)</option>
-              <option value="red">Red (immediate)</option>
-              <option value="black">Black (deceased)</option>
+              <option value="green">
+                {t("console.safety.medical.encounters.new.triageGreen", undefined, "Green (minor)")}
+              </option>
+              <option value="yellow">
+                {t("console.safety.medical.encounters.new.triageYellow", undefined, "Yellow (urgent)")}
+              </option>
+              <option value="red">
+                {t("console.safety.medical.encounters.new.triageRed", undefined, "Red (immediate)")}
+              </option>
+              <option value="black">
+                {t("console.safety.medical.encounters.new.triageBlack", undefined, "Black (deceased)")}
+              </option>
             </select>
           </div>
-          <Input label="Patient Reference" name="patient_ref" maxLength={120} placeholder="Pseudonymous ID" />
+          <Input
+            label={t("console.safety.medical.encounters.new.patientRef", undefined, "Patient Reference")}
+            name="patient_ref"
+            maxLength={120}
+            placeholder={t("console.safety.medical.encounters.new.patientRefPlaceholder", undefined, "Pseudonymous ID")}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Chief Complaint</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.safety.medical.encounters.new.chiefComplaint", undefined, "Chief Complaint")}
+            </label>
             <textarea name="chief_complaint" rows={3} maxLength={500} className="input-base mt-1.5 w-full" />
           </div>
           <Input
-            label="Disposition"
+            label={t("console.safety.medical.encounters.new.disposition", undefined, "Disposition")}
             name="disposition"
             maxLength={120}
-            placeholder="e.g. Discharged, Hospital transfer"
+            placeholder={t(
+              "console.safety.medical.encounters.new.dispositionPlaceholder",
+              undefined,
+              "e.g. Discharged, Hospital transfer",
+            )}
           />
         </FormShell>
       </div>

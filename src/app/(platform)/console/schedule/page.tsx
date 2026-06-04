@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { CalendarEvent } from "@/components/views/CalendarView";
 import { ScheduleCalendarView } from "./ScheduleCalendarView";
 import type { EventRow } from "@/lib/supabase/types";
@@ -13,12 +14,15 @@ import type { EventRow } from "@/lib/supabase/types";
 export const dynamic = "force-dynamic";
 
 export default async function SchedulePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Schedule" />
+        <ModuleHeader title={t("console.schedule.title", undefined, "Schedule")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.schedule.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -44,15 +48,19 @@ export default async function SchedulePage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Master Schedule"
-        subtitle={`${rows.length} Event${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.schedule.eyebrow", undefined, "Operations")}
+        title={t("console.schedule.masterTitle", undefined, "Master Schedule")}
+        subtitle={
+          rows.length === 1
+            ? t("console.schedule.subtitleOne", { count: rows.length }, `${rows.length} Event`)
+            : t("console.schedule.subtitleOther", { count: rows.length }, `${rows.length} Events`)
+        }
         action={
           <div className="flex gap-2">
             <Button href="/api/v1/schedule.ics" variant="secondary">
-              Export .ics
+              {t("console.schedule.exportIcs", undefined, "Export .ics")}
             </Button>
-            <Button href="/console/events/new">+ New Event</Button>
+            <Button href="/console/events/new">{t("console.schedule.newEvent", undefined, "+ New Event")}</Button>
           </div>
         }
       />
@@ -63,24 +71,29 @@ export default async function SchedulePage() {
           rows={rows}
           rowHref={(r) => `/console/events/${r.id}`}
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.schedule.col.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "starts",
-              header: "Starts",
+              header: t("console.schedule.col.starts", undefined, "Starts"),
               render: (r) => formatDate(r.starts_at, "long"),
               className: "font-mono text-xs",
               accessor: (r) => r.starts_at,
             },
             {
               key: "ends",
-              header: "Ends",
+              header: t("console.schedule.col.ends", undefined, "Ends"),
               render: (r) => formatDate(r.ends_at, "long"),
               className: "font-mono text-xs",
               accessor: (r) => r.ends_at,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.schedule.col.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.status} />,
               accessor: (r) => r.status,
               filterable: true,

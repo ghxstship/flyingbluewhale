@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const { vendorId } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
     .from("purchase_orders")
@@ -45,33 +47,47 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Vendor"
-        title="Purchase Orders"
+        eyebrow={t("console.procurement.vendors.pos.eyebrow", undefined, "Vendor")}
+        title={t("console.procurement.vendors.pos.title", undefined, "Purchase Orders")}
         subtitle={
           rows.length > 0
-            ? `${rows.length} PO${rows.length === 1 ? "" : "s"} · ${formatMoney(total)} committed`
-            : "POs issued to this vendor."
+            ? t(
+                "console.procurement.vendors.pos.subtitleCount",
+                { count: rows.length, suffix: rows.length === 1 ? "" : "s", total: formatMoney(total) },
+                `${rows.length} PO${rows.length === 1 ? "" : "s"} · ${formatMoney(total)} committed`,
+              )
+            : t("console.procurement.vendors.pos.subtitleEmpty", undefined, "POs issued to this vendor.")
         }
       />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/procurement/purchase-orders/${r.id}`}
-          emptyLabel="No Purchase Orders"
-          emptyDescription="No POs have been issued to this vendor yet."
+          emptyLabel={t("console.procurement.vendors.pos.emptyLabel", undefined, "No Purchase Orders")}
+          emptyDescription={t(
+            "console.procurement.vendors.pos.emptyDescription",
+            undefined,
+            "No POs have been issued to this vendor yet.",
+          )}
           columns={[
             {
               key: "number",
-              header: "Number",
+              header: t("console.procurement.vendors.pos.col.number", undefined, "Number"),
               render: (r) => r.number,
               accessor: (r) => r.number,
               mono: true,
               sortable: true,
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title, sortable: true },
+            {
+              key: "title",
+              header: t("console.procurement.vendors.pos.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+              sortable: true,
+            },
             {
               key: "status",
-              header: "Status",
+              header: t("console.procurement.vendors.pos.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
@@ -79,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             },
             {
               key: "amount_cents",
-              header: "Amount",
+              header: t("console.procurement.vendors.pos.col.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents),
               accessor: (r) => r.amount_cents,
               tabular: true,

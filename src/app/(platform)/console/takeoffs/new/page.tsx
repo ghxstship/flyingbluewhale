@@ -3,6 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createTakeoff } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: projects }, { data: sheets }, { data: cc }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
     supabase
@@ -31,25 +33,40 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative"
-        title="New Takeoff"
-        subtitle="A measurement set. Pinned to a drawing sheet for calibrated measurement. Items captured on the detail page."
+        eyebrow={t("console.takeoffs.new.eyebrow", undefined, "Creative")}
+        title={t("console.takeoffs.new.title", undefined, "New Takeoff")}
+        subtitle={t(
+          "console.takeoffs.new.subtitle",
+          undefined,
+          "A measurement set. Pinned to a drawing sheet for calibrated measurement. Items captured on the detail page.",
+        )}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createTakeoff} cancelHref="/console/takeoffs" submitLabel="Create Takeoff">
+        <FormShell
+          action={createTakeoff}
+          cancelHref="/console/takeoffs"
+          submitLabel={t("console.takeoffs.new.submit", undefined, "Create Takeoff")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.takeoffs.new.fields.name", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="Slab-on-grade Level 1" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t("console.takeoffs.new.placeholders.name", undefined, "Slab-on-grade Level 1")}
+              className={INPUT}
+            />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.takeoffs.new.fields.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
-                <option value="">Select…</option>
+                <option value="">{t("common.selectEllipsis", undefined, "Select…")}</option>
                 {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -59,7 +76,8 @@ export default async function Page() {
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Unit<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.takeoffs.new.fields.unit", undefined, "Unit")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="unit" required className={INPUT} defaultValue="sf">
                 {UNITS.map((u) => (
@@ -72,7 +90,7 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Sheet (optional)</span>
+              <span className={LBL}>{t("console.takeoffs.new.fields.sheet", undefined, "Sheet (optional)")}</span>
               <select name="site_plan_id" className={INPUT}>
                 <option value="">—</option>
                 {((sheets ?? []) as Array<{ id: string; code: string; title: string }>).map((s) => (
@@ -83,7 +101,9 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Cost code (optional)</span>
+              <span className={LBL}>
+                {t("console.takeoffs.new.fields.costCode", undefined, "Cost code (optional)")}
+              </span>
               <select name="cost_code_id" className={INPUT}>
                 <option value="">—</option>
                 {((cc ?? []) as Array<{ id: string; code: string; name: string }>).map((c) => (
@@ -95,21 +115,26 @@ export default async function Page() {
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Calibration (inches per foot)</span>
+            <span className={LBL}>
+              {t("console.takeoffs.new.fields.calibration", undefined, "Calibration (inches per foot)")}
+            </span>
             <input
               type="number"
               step="0.001"
               name="calibration_in_per_ft"
-              placeholder="0.125 for 1/8&quot; = 1'"
+              placeholder={t("console.takeoffs.new.placeholders.calibration", undefined, "0.125 for 1/8\" = 1'")}
               className={INPUT}
             />
             <span className="text-[10px] text-[var(--text-muted)]">
-              Drawing scale used by the measurement engine. Common values: 0.0625 (1/16&quot;), 0.125 (1/8&quot;), 0.25
-              (1/4&quot;).
+              {t(
+                "console.takeoffs.new.hints.calibration",
+                undefined,
+                'Drawing scale used by the measurement engine. Common values: 0.0625 (1/16"), 0.125 (1/8"), 0.25 (1/4").',
+              )}
             </span>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.takeoffs.new.fields.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={3} className={INPUT} />
           </label>
         </FormShell>

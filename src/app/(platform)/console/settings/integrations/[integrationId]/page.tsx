@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Json } from "@/lib/supabase/database.types";
 
 export const dynamic = "force-dynamic";
@@ -46,12 +47,18 @@ function fmt(iso: string): string {
 
 export default async function Page({ params }: { params: Promise<{ integrationId: string }> }) {
   const { integrationId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Integration" />
+        <ModuleHeader
+          eyebrow={t("console.settings.integrations.detail.eyebrow", undefined, "Settings")}
+          title={t("console.settings.integrations.detail.title", undefined, "Integration")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.integrations.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -74,46 +81,74 @@ export default async function Page({ params }: { params: Promise<{ integrationId
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings"
+        eyebrow={t("console.settings.integrations.detail.eyebrow", undefined, "Settings")}
         title={integration.name}
         subtitle={
           <span className="font-mono text-xs">
-            /{integration.slug} · {kindLabel} · updated {fmt(integration.updated_at)}
+            /{integration.slug} · {kindLabel} ·{" "}
+            {t(
+              "console.settings.integrations.detail.updatedAt",
+              { date: fmt(integration.updated_at) },
+              `updated ${fmt(integration.updated_at)}`,
+            )}
           </span>
         }
         breadcrumbs={[
-          { label: "Settings", href: "/console/settings" },
-          { label: "Integrations", href: "/console/settings/integrations" },
+          { label: t("console.settings.breadcrumb", undefined, "Settings"), href: "/console/settings" },
+          {
+            label: t("console.settings.integrations.breadcrumb", undefined, "Integrations"),
+            href: "/console/settings/integrations",
+          },
           { label: integration.name },
         ]}
         action={
           <Badge variant={integration.enabled ? "success" : "muted"}>
-            {integration.enabled ? "Enabled" : "Disabled"}
+            {integration.enabled
+              ? t("console.settings.integrations.detail.enabled", undefined, "Enabled")
+              : t("console.settings.integrations.detail.disabled", undefined, "Disabled")}
           </Badge>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Kind" value={kindLabel} />
           <MetricCard
-            label="Status"
-            value={integration.enabled ? "Enabled" : "Disabled"}
+            label={t("console.settings.integrations.detail.kindLabel", undefined, "Kind")}
+            value={kindLabel}
+          />
+          <MetricCard
+            label={t("console.settings.integrations.detail.statusLabel", undefined, "Status")}
+            value={
+              integration.enabled
+                ? t("console.settings.integrations.detail.enabled", undefined, "Enabled")
+                : t("console.settings.integrations.detail.disabled", undefined, "Disabled")
+            }
             accent={integration.enabled}
           />
-          <MetricCard label="Created" value={integration.created_at.slice(0, 10)} />
+          <MetricCard
+            label={t("console.settings.integrations.detail.createdLabel", undefined, "Created")}
+            value={integration.created_at.slice(0, 10)}
+          />
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Configuration</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.settings.integrations.detail.configurationHeading", undefined, "Configuration")}
+          </h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Public configuration values for this connector. Secrets are stored separately in Vault.
+            {t(
+              "console.settings.integrations.detail.configurationDescription",
+              undefined,
+              "Public configuration values for this connector. Secrets are stored separately in Vault.",
+            )}
           </p>
           <pre className="mt-3 max-h-96 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
             {JSON.stringify(integration.config, null, 2)}
           </pre>
           {integration.secret_ref && (
             <div className="mt-3 text-xs">
-              <span className="text-[var(--text-muted)]">Secret ref: </span>
+              <span className="text-[var(--text-muted)]">
+                {t("console.settings.integrations.detail.secretRefLabel", undefined, "Secret ref:")}{" "}
+              </span>
               <code className="font-mono">{integration.secret_ref}</code>
             </div>
           )}

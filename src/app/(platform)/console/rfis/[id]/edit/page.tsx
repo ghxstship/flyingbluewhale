@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateRfi } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -32,6 +33,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [{ data }, { data: projects }, { data: users }] = await Promise.all([
     supabase
@@ -52,31 +54,38 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title={`Edit RFI · ${rfi.code ?? rfi.id.slice(0, 8)}`}
-        subtitle="Edit RFI."
+        eyebrow={t("console.rfis.edit.eyebrow", undefined, "Operations")}
+        title={`${t("console.rfis.edit.title", undefined, "Edit RFI")} · ${rfi.code ?? rfi.id.slice(0, 8)}`}
+        subtitle={t("console.rfis.edit.subtitle", undefined, "Edit RFI.")}
         breadcrumbs={[
-          { label: "RFIs", href: "/console/rfis" },
-          { label: rfi.code ?? "RFI", href: `/console/rfis/${rfi.id}` },
-          { label: "Edit" },
+          { label: t("console.rfis.breadcrumb", undefined, "RFIs"), href: "/console/rfis" },
+          { label: rfi.code ?? t("console.rfis.edit.rfiFallback", undefined, "RFI"), href: `/console/rfis/${rfi.id}` },
+          { label: t("common.edit", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={updateRfi} cancelHref={`/console/rfis/${rfi.id}`} submitLabel="Save RFI" dirtyGuard>
+        <FormShell
+          action={updateRfi}
+          cancelHref={`/console/rfis/${rfi.id}`}
+          submitLabel={t("console.rfis.edit.submit", undefined, "Save RFI")}
+          dirtyGuard
+        >
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={rfi.updated_at} />
           <input type="hidden" name="id" value={rfi.id} />
 
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Subject<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.rfis.fields.subject", undefined, "Subject")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input name="subject" required defaultValue={rfi.subject} maxLength={200} className={INPUT} />
           </label>
 
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Question<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.rfis.fields.question", undefined, "Question")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <textarea
               name="question"
@@ -91,7 +100,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.rfis.fields.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required defaultValue={rfi.project_id} className={INPUT}>
                 {(projects ?? []).map((p) => (
@@ -102,14 +112,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Category</span>
+              <span className={LBL}>{t("console.rfis.fields.category", undefined, "Category")}</span>
               <input name="category" defaultValue={rfi.category ?? ""} className={INPUT} />
             </label>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Ball in court</span>
+              <span className={LBL}>{t("console.rfis.fields.ballInCourt", undefined, "Ball in court")}</span>
               <select name="ball_in_court_id" defaultValue={rfi.ball_in_court_id ?? ""} className={INPUT}>
                 <option value="">—</option>
                 {(users ?? []).map((u) => (
@@ -120,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Priority</span>
+              <span className={LBL}>{t("console.rfis.fields.priority", undefined, "Priority")}</span>
               <select name="priority" defaultValue={rfi.priority} className={INPUT}>
                 {["low", "normal", "high", "urgent"].map((p) => (
                   <option key={p} value={p}>
@@ -130,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Status</span>
+              <span className={LBL}>{t("console.rfis.fields.status", undefined, "Status")}</span>
               <select name="status" defaultValue={rfi.status} className={INPUT}>
                 {["open", "answered", "closed"].map((s) => (
                   <option key={s} value={s}>
@@ -142,7 +152,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </div>
 
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Due by</span>
+            <span className={LBL}>{t("console.rfis.fields.dueBy", undefined, "Due by")}</span>
             <input
               type="date"
               name="due_at"
@@ -152,13 +162,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </label>
 
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Official answer</span>
+            <span className={LBL}>{t("console.rfis.fields.officialAnswer", undefined, "Official answer")}</span>
             <textarea
               name="official_answer"
               rows={5}
               defaultValue={rfi.official_answer ?? ""}
               maxLength={8000}
-              placeholder="Set status to Answered or Closed to record the answered_at timestamp."
+              placeholder={t(
+                "console.rfis.edit.officialAnswerPlaceholder",
+                undefined,
+                "Set status to Answered or Closed to record the answered_at timestamp.",
+              )}
               className={INPUT}
             />
           </label>

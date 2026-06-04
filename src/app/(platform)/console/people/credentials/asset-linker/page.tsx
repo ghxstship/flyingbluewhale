@@ -6,16 +6,23 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function AssetLinkerPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Credentials" title="Asset Linker" />
+        <ModuleHeader
+          eyebrow={t("console.people.credentials.assetLinker.eyebrow", undefined, "Credentials")}
+          title={t("console.people.credentials.assetLinker.title", undefined, "Asset Linker")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.people.credentials.assetLinker.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -52,7 +59,7 @@ export default async function AssetLinkerPage() {
       a.party_crew?.name ??
       a.party_external?.holder_name ??
       a.party_external?.holder_email ??
-      "Unknown",
+      t("console.people.credentials.assetLinker.unknown", undefined, "Unknown"),
   }));
 
   const { data: links } = await supabase
@@ -68,16 +75,25 @@ export default async function AssetLinkerPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Credentials"
-        title="Asset Linker"
-        subtitle="Bind a physical badge / card / QR / wristband to a credential assignment"
+        eyebrow={t("console.people.credentials.assetLinker.eyebrow", undefined, "Credentials")}
+        title={t("console.people.credentials.assetLinker.title", undefined, "Asset Linker")}
+        subtitle={t(
+          "console.people.credentials.assetLinker.subtitle",
+          undefined,
+          "Bind a physical badge / card / QR / wristband to a credential assignment",
+        )}
       />
       <div className="page-content max-w-4xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Bind a New Code</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.people.credentials.assetLinker.bindNewCode", undefined, "Bind a New Code")}
+          </h3>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Each physical token (NFC tag, RFID card, barcode, QR, wristband serial) attaches to exactly one credential
-            assignment. Void before re-issuing the same code.
+            {t(
+              "console.people.credentials.assetLinker.bindNewCodeDescription",
+              undefined,
+              "Each physical token (NFC tag, RFID card, barcode, QR, wristband serial) attaches to exactly one credential assignment. Void before re-issuing the same code.",
+            )}
           </p>
           <div className="mt-4">
             <LinkAssetForm assignments={assignments} />
@@ -85,17 +101,19 @@ export default async function AssetLinkerPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Active codes</h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            {t("console.people.credentials.assetLinker.activeCodes", undefined, "Active codes")}
+          </h3>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Holder</th>
-                  <th>Assignment</th>
-                  <th>Kind</th>
-                  <th>Code</th>
-                  <th>Issued</th>
-                  <th>Status</th>
+                  <th>{t("console.people.credentials.assetLinker.col.holder", undefined, "Holder")}</th>
+                  <th>{t("console.people.credentials.assetLinker.col.assignment", undefined, "Assignment")}</th>
+                  <th>{t("console.people.credentials.assetLinker.col.kind", undefined, "Kind")}</th>
+                  <th>{t("console.people.credentials.assetLinker.col.code", undefined, "Code")}</th>
+                  <th>{t("console.people.credentials.assetLinker.col.issued", undefined, "Issued")}</th>
+                  <th>{t("console.people.credentials.assetLinker.col.status", undefined, "Status")}</th>
                   <th></th>
                 </tr>
               </thead>
@@ -103,7 +121,7 @@ export default async function AssetLinkerPage() {
                 {(links ?? []).length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-6 text-center text-[var(--text-muted)]">
-                      No codes bound yet.
+                      {t("console.people.credentials.assetLinker.noCodesBound", undefined, "No codes bound yet.")}
                     </td>
                   </tr>
                 ) : (
@@ -115,14 +133,18 @@ export default async function AssetLinkerPage() {
                       <td className="font-mono text-xs">{l.code}</td>
                       <td className="font-mono text-xs">{new Date(l.issued_at).toLocaleDateString()}</td>
                       <td>
-                        <Badge variant={l.active ? "success" : "muted"}>{l.active ? "Active" : "Voided"}</Badge>
+                        <Badge variant={l.active ? "success" : "muted"}>
+                          {l.active
+                            ? t("console.people.credentials.assetLinker.statusActive", undefined, "Active")
+                            : t("console.people.credentials.assetLinker.statusVoided", undefined, "Voided")}
+                        </Badge>
                       </td>
                       <td>
                         {l.active && (
                           <form action={revokeLinkAction}>
                             <input type="hidden" name="id" value={l.id} />
                             <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
-                              Void
+                              {t("console.people.credentials.assetLinker.void", undefined, "Void")}
                             </button>
                           </form>
                         )}

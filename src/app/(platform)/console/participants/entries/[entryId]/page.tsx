@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteEntry } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ entryId: string }> }) {
   const p = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Entry" />
+        <ModuleHeader title={t("console.participants.entries.detail.title", undefined, "Entry")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.participants.entries.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Participants · Entry"
+        eyebrow={t("console.participants.entries.detail.eyebrow", undefined, "Participants · Entry")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/participants/entries" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/participants/entries/${p.entryId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteEntry.bind(null, p.entryId)}
-              confirm={`Delete entry "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.participants.entries.detail.deleteConfirm",
+                { title },
+                `Delete entry "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

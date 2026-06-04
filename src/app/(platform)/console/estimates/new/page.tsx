@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createEstimate } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +15,7 @@ const LBL = "text-xs font-medium text-[var(--text-secondary)]";
 export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const [{ data: projects }, { data: dbs }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
@@ -28,25 +30,40 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative"
-        title="New Estimate"
-        subtitle="Joins takeoff quantities to cost-database unit costs with markup. Exports to budgets + proposal SOV."
+        eyebrow={t("console.estimates.new.eyebrow", undefined, "Creative")}
+        title={t("console.estimates.new.title", undefined, "New Estimate")}
+        subtitle={t(
+          "console.estimates.new.subtitle",
+          undefined,
+          "Joins takeoff quantities to cost-database unit costs with markup. Exports to budgets + proposal SOV.",
+        )}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={createEstimate} cancelHref="/console/estimates" submitLabel="Create Estimate">
+        <FormShell
+          action={createEstimate}
+          cancelHref="/console/estimates"
+          submitLabel={t("console.estimates.new.submit", undefined, "Create Estimate")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.estimates.new.name", undefined, "Name")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
-            <input name="name" required placeholder="Schematic Design Estimate" className={INPUT} />
+            <input
+              name="name"
+              required
+              placeholder={t("console.estimates.new.namePlaceholder", undefined, "Schematic Design Estimate")}
+              className={INPUT}
+            />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.estimates.new.project", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
-                <option value="">Select…</option>
+                <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>
                 {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -55,7 +72,7 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Cost database</span>
+              <span className={LBL}>{t("console.estimates.new.costDatabase", undefined, "Cost database")}</span>
               <select name="cost_database_id" className={INPUT}>
                 <option value="">—</option>
                 {((dbs ?? []) as Array<{ id: string; name: string; source: string }>).map((d) => (
@@ -68,29 +85,33 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Default markup %</span>
+              <span className={LBL}>{t("console.estimates.new.defaultMarkupPct", undefined, "Default markup %")}</span>
               <input
                 type="number"
                 step="0.0001"
                 name="default_markup_pct"
-                placeholder="0.0700 for 7%"
+                placeholder={t("console.estimates.new.defaultMarkupPctPlaceholder", undefined, "0.0700 for 7%")}
                 className={INPUT}
               />
-              <span className="text-[10px] text-[var(--text-muted)]">Stored as a fraction (0.07 = 7%).</span>
+              <span className="text-[10px] text-[var(--text-muted)]">
+                {t("console.estimates.new.defaultMarkupHint", undefined, "Stored as a fraction (0.07 = 7%).")}
+              </span>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Default waste factor</span>
+              <span className={LBL}>
+                {t("console.estimates.new.defaultWasteFactor", undefined, "Default waste factor")}
+              </span>
               <input
                 type="number"
                 step="0.0001"
                 name="default_waste_factor"
-                placeholder="0.05 for 5% waste"
+                placeholder={t("console.estimates.new.defaultWasteFactorPlaceholder", undefined, "0.05 for 5% waste")}
                 className={INPUT}
               />
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Notes</span>
+            <span className={LBL}>{t("console.estimates.new.notes", undefined, "Notes")}</span>
             <textarea name="notes" rows={3} className={INPUT} />
           </label>
         </FormShell>

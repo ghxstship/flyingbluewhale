@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { STATE_LABEL, STATE_TONE } from "@/lib/siteplan/state";
 import type { SitePlanDocumentState, SitePlanSheetType } from "@/lib/siteplan/types";
 
@@ -55,12 +55,18 @@ const XPMS_CLASS_LABEL: Record<number, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Creative" title="Site Plans" />
+        <ModuleHeader
+          eyebrow={t("console.sitePlans.eyebrow", undefined, "Creative")}
+          title={t("console.sitePlans.title", undefined, "Site Plans")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.sitePlans.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -88,44 +94,68 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative"
-        title="Site Plans"
-        subtitle={`${rows.length} Sheet${rows.length === 1 ? "" : "s"} · ${issuedCount} Issued · ${inReviewCount} In Review · ${draftCount} Draft`}
+        eyebrow={t("console.sitePlans.eyebrow", undefined, "Creative")}
+        title={t("console.sitePlans.title", undefined, "Site Plans")}
+        subtitle={`${rows.length} ${rows.length === 1 ? t("console.sitePlans.sheet", undefined, "Sheet") : t("console.sitePlans.sheets", undefined, "Sheets")} · ${issuedCount} ${t("console.sitePlans.issued", undefined, "Issued")} · ${inReviewCount} ${t("console.sitePlans.inReview", undefined, "In Review")} · ${draftCount} ${t("console.sitePlans.draft", undefined, "Draft")}`}
         action={
           <Button href="/console/site-plans/new" size="sm">
-            + New Sheet
+            {t("console.sitePlans.newSheet", undefined, "+ New Sheet")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <MetricCard label="Total Sheets" value={fmt.number(rows.length)} accent />
-          <MetricCard label="Issued (IFC)" value={fmt.number(issuedCount)} />
-          <MetricCard label="In Review" value={fmt.number(inReviewCount)} />
-          <MetricCard label="Draft" value={fmt.number(draftCount)} />
+          <MetricCard
+            label={t("console.sitePlans.totalSheets", undefined, "Total Sheets")}
+            value={fmt.number(rows.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.sitePlans.issuedIfc", undefined, "Issued (IFC)")}
+            value={fmt.number(issuedCount)}
+          />
+          <MetricCard
+            label={t("console.sitePlans.inReview", undefined, "In Review")}
+            value={fmt.number(inReviewCount)}
+          />
+          <MetricCard label={t("console.sitePlans.draft", undefined, "Draft")} value={fmt.number(draftCount)} />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/site-plans/${r.id}`}
-          emptyLabel="No site plans yet"
-          emptyDescription="Pick a preset to scaffold zones, bands, and stations in one step."
+          emptyLabel={t("console.sitePlans.emptyLabel", undefined, "No site plans yet")}
+          emptyDescription={t(
+            "console.sitePlans.emptyDescription",
+            undefined,
+            "Pick a preset to scaffold zones, bands, and stations in one step.",
+          )}
           emptyAction={
             <Button href="/console/site-plans/new" size="sm">
-              + New Sheet
+              {t("console.sitePlans.newSheet", undefined, "+ New Sheet")}
             </Button>
           }
           columns={[
             {
               key: "atom_id",
-              header: "Atom ID",
-              render: (r) => r.atom_id ?? <span className="text-[var(--text-muted)]">— pending —</span>,
+              header: t("console.sitePlans.columns.atomId", undefined, "Atom ID"),
+              render: (r) =>
+                r.atom_id ?? (
+                  <span className="text-[var(--text-muted)]">
+                    {t("console.sitePlans.pending", undefined, "— pending —")}
+                  </span>
+                ),
               accessor: (r) => r.atom_id,
               className: "font-mono text-[11px]",
             },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.sitePlans.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "sheet_type",
-              header: "Type",
+              header: t("console.sitePlans.columns.type", undefined, "Type"),
               render: (r) => <Badge variant={SHEET_TYPE_TONE[r.sheet_type]}>{r.sheet_type}</Badge>,
               accessor: (r) => r.sheet_type,
               filterable: true,
@@ -133,7 +163,7 @@ export default async function Page() {
             },
             {
               key: "class",
-              header: "Class",
+              header: t("console.sitePlans.columns.class", undefined, "Class"),
               render: (r) =>
                 r.primary_class != null ? (
                   <span className="font-mono text-[11px]">{XPMS_CLASS_LABEL[r.primary_class]}</span>
@@ -146,7 +176,7 @@ export default async function Page() {
             },
             {
               key: "document_state",
-              header: "State",
+              header: t("console.sitePlans.columns.state", undefined, "State"),
               render: (r) => <Badge variant={STATE_TONE[r.document_state]}>{STATE_LABEL[r.document_state]}</Badge>,
               accessor: (r) => r.document_state,
               filterable: true,
@@ -154,14 +184,14 @@ export default async function Page() {
             },
             {
               key: "rev",
-              header: "Rev",
+              header: t("console.sitePlans.columns.rev", undefined, "Rev"),
               render: (r) => r.revision_letter ?? "—",
               className: "font-mono text-xs",
               accessor: (r) => r.revision_letter,
             },
             {
               key: "venue",
-              header: "Venue / Project",
+              header: t("console.sitePlans.columns.venueProject", undefined, "Venue / Project"),
               render: (r) => r.venue?.name ?? r.project?.name ?? "—",
               accessor: (r) => r.venue?.name ?? r.project?.name ?? null,
             },

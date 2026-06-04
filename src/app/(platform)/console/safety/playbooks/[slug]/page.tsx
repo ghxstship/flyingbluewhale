@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo, toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Json } from "@/lib/supabase/database.types";
 
 export const dynamic = "force-dynamic";
@@ -47,12 +48,18 @@ function getBlocks(content: Json): Block[] {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Playbook" />
+        <ModuleHeader
+          eyebrow={t("console.safety.playbooks.eyebrow", undefined, "Safety")}
+          title={t("console.safety.playbooks.detail.title", undefined, "Playbook")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.playbooks.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -75,22 +82,33 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Playbook"
+        eyebrow={t("console.safety.playbooks.detail.eyebrow", undefined, "Playbook")}
         title={pb.title}
         subtitle={
           <span className="font-mono text-xs">
-            v{pb.version} · updated {timeAgo(pb.updated_at)}
+            {t(
+              "console.safety.playbooks.detail.versionUpdated",
+              { version: pb.version, time: timeAgo(pb.updated_at) },
+              `v${pb.version} · updated ${timeAgo(pb.updated_at)}`,
+            )}
           </span>
         }
         breadcrumbs={[
-          { label: "Safety", href: "/console/safety" },
-          { label: "Playbooks", href: "/console/safety/playbooks" },
+          { label: t("console.safety.breadcrumb", undefined, "Safety"), href: "/console/safety" },
+          {
+            label: t("console.safety.playbooks.breadcrumb", undefined, "Playbooks"),
+            href: "/console/safety/playbooks",
+          },
           { label: pb.title },
         ]}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant="info">{KIND_LABEL[pb.kind] ?? pb.kind}</Badge>
-            <Badge variant={STATUS_TONE[pb.status]}>{toTitle(pb.status)}</Badge>
+            <Badge variant="info">
+              {t(`console.safety.playbooks.kind.${pb.kind}`, undefined, KIND_LABEL[pb.kind] ?? pb.kind)}
+            </Badge>
+            <Badge variant={STATUS_TONE[pb.status]}>
+              {t(`console.safety.playbooks.status.${pb.status}`, undefined, toTitle(pb.status))}
+            </Badge>
           </div>
         }
       />
@@ -99,7 +117,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         {blocks.length === 0 ? (
           <div className="surface p-6 text-sm text-[var(--text-muted)]">
-            No content blocks yet. The author has not added sections to this playbook.
+            {t(
+              "console.safety.playbooks.detail.emptyBlocks",
+              undefined,
+              "No content blocks yet. The author has not added sections to this playbook.",
+            )}
           </div>
         ) : (
           <div className="space-y-4">

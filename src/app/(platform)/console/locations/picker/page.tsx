@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { getRequestT } from "@/lib/i18n/request";
 import { LocationPickerDemo } from "./LocationPickerDemo";
 
 export const dynamic = "force-dynamic";
@@ -7,10 +8,15 @@ export const dynamic = "force-dynamic";
 // Intentionally omitted from `platformNav` — this page is a copy-paste
 // code sample, not a user destination. Reachable via the deep link
 // `/console/locations/picker` for engineers integrating the Combobox.
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   return (
     <>
-      <ModuleHeader eyebrow="Locations" title="Location Picker" subtitle="Async typeahead — paste this into any form" />
+      <ModuleHeader
+        eyebrow={t("console.locations.picker.eyebrow", undefined, "Locations")}
+        title={t("console.locations.picker.title", undefined, "Location Picker")}
+        subtitle={t("console.locations.picker.subtitle", undefined, "Async typeahead — paste this into any form")}
+      />
       <div className="page-content max-w-2xl space-y-4">
         <LocationPickerDemo />
         <pre className="surface overflow-x-auto p-4 text-xs">{`<Combobox

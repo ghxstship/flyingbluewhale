@@ -8,6 +8,7 @@ import { getTeam, listTeamMembers } from "@/lib/db/teams";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { TeamForms } from "./TeamForms";
 
 export const dynamic = "force-dynamic";
@@ -18,12 +19,18 @@ type OrgMemberRow = {
 };
 
 export default async function TeamDetailPage({ params }: { params: Promise<{ teamId: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="People · Teams" title="Team" />
+        <ModuleHeader
+          eyebrow={t("console.people.teams.detail.eyebrow", undefined, "People · Teams")}
+          title={t("console.people.teams.detail.titleFallback", undefined, "Team")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.people.teams.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -60,7 +67,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
   return (
     <>
       <ModuleHeader
-        eyebrow="People · Teams"
+        eyebrow={t("console.people.teams.detail.eyebrow", undefined, "People · Teams")}
         title={team.name}
         subtitle={`@team-${team.slug}${team.description ? ` — ${team.description}` : ""}`}
       />
@@ -68,10 +75,17 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
       <div className="page-content space-y-6">
         {canManage && (
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Edit Team</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.people.teams.detail.editTeam", undefined, "Edit Team")}
+            </h3>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Slug is locked once created. Delete the team and recreate if you need to rename the
-              <code className="font-mono"> @team-</code> handle.
+              {t(
+                "console.people.teams.detail.editTeamHintPrefix",
+                undefined,
+                "Slug is locked once created. Delete the team and recreate if you need to rename the",
+              )}
+              <code className="font-mono"> @team-</code>
+              {t("console.people.teams.detail.editTeamHintSuffix", undefined, " handle.")}
             </p>
             <div className="mt-4">
               <TeamForms.EditTeam
@@ -84,24 +98,34 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
         )}
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Members ({members.length})</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.people.teams.detail.membersCount", { count: members.length }, `Members (${members.length})`)}
+          </h3>
           {members.length === 0 ? (
             <EmptyState
-              title="No Members Yet"
+              title={t("console.people.teams.detail.noMembersTitle", undefined, "No Members Yet")}
               description={
                 canManage
-                  ? "Add org members below to fan out @team-mentions and team-scoped record grants."
-                  : "Ask a manager to add members to this team."
+                  ? t(
+                      "console.people.teams.detail.noMembersManageDescription",
+                      undefined,
+                      "Add org members below to fan out @team-mentions and team-scoped record grants.",
+                    )
+                  : t(
+                      "console.people.teams.detail.noMembersViewerDescription",
+                      undefined,
+                      "Ask a manager to add members to this team.",
+                    )
               }
             />
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Member</th>
-                  <th>Role</th>
-                  <th>Added</th>
-                  {canManage && <th aria-label="Actions" />}
+                  <th>{t("console.people.teams.detail.colMember", undefined, "Member")}</th>
+                  <th>{t("console.people.teams.detail.colRole", undefined, "Role")}</th>
+                  <th>{t("console.people.teams.detail.colAdded", undefined, "Added")}</th>
+                  {canManage && <th aria-label={t("common.actions", undefined, "Actions")} />}
                 </tr>
               </thead>
               <tbody>
@@ -138,9 +162,15 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
 
         {canManage && eligibleToAdd.length > 0 && (
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Add Member</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.people.teams.detail.addMember", undefined, "Add Member")}
+            </h3>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Pick from your org directory. The new member receives @team-{team.slug} mentions immediately.
+              {t(
+                "console.people.teams.detail.addMemberHint",
+                { slug: team.slug },
+                `Pick from your org directory. The new member receives @team-${team.slug} mentions immediately.`,
+              )}
             </p>
             <div className="mt-4">
               <TeamForms.AddMember teamId={team.id} eligible={eligibleToAdd} />
@@ -150,9 +180,15 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
 
         {canManage && (
           <section className="surface border-s-4 border-[var(--color-error)]/40 p-5">
-            <h3 className="text-sm font-semibold text-[var(--color-error)]">Danger Zone</h3>
+            <h3 className="text-sm font-semibold text-[var(--color-error)]">
+              {t("console.people.teams.detail.dangerZone", undefined, "Danger Zone")}
+            </h3>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Deleting a team removes all members and cancels any team-scoped record grants. This cannot be undone.
+              {t(
+                "console.people.teams.detail.dangerZoneHint",
+                undefined,
+                "Deleting a team removes all members and cancels any team-scoped record grants. This cannot be undone.",
+              )}
             </p>
             <div className="mt-4">
               <TeamForms.DeleteTeam teamId={team.id} />

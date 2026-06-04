@@ -4,6 +4,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +19,18 @@ type FormRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Forms" />
+        <ModuleHeader
+          eyebrow={t("console.forms.eyebrow", undefined, "Workspace")}
+          title={t("console.forms.title", undefined, "Forms")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.forms.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -41,12 +48,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workspace"
-        title="Forms"
-        subtitle={`${rows.length} form${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.forms.eyebrow", undefined, "Workspace")}
+        title={t("console.forms.title", undefined, "Forms")}
+        subtitle={
+          rows.length === 1
+            ? t("console.forms.countSingular", { count: rows.length }, `${rows.length} form`)
+            : t("console.forms.countPlural", { count: rows.length }, `${rows.length} forms`)
+        }
         action={
           <Button href="/console/forms/new" size="sm">
-            + New Form
+            {t("console.forms.newForm", undefined, "+ New Form")}
           </Button>
         }
       />
@@ -54,24 +65,33 @@ export default async function Page() {
         <DataTable<FormRow>
           rows={rows}
           rowHref={(r) => `/console/forms/${r.id}`}
-          emptyLabel="No forms yet"
-          emptyDescription="Author intake, RSVP, or feedback forms with a JSON schema. Each form gets a public response URL."
+          emptyLabel={t("console.forms.emptyLabel", undefined, "No forms yet")}
+          emptyDescription={t(
+            "console.forms.emptyDescription",
+            undefined,
+            "Author intake, RSVP, or feedback forms with a JSON schema. Each form gets a public response URL.",
+          )}
           emptyAction={
             <Button href="/console/forms/new" size="sm">
-              + New Form
+              {t("console.forms.newForm", undefined, "+ New Form")}
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.forms.column.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "slug",
-              header: "Slug",
+              header: t("console.forms.column.slug", undefined, "Slug"),
               render: (r) => <span className="font-mono text-xs">{r.slug}</span>,
               accessor: (r) => r.slug ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.forms.column.status", undefined, "Status"),
               render: (r) => r.status,
               accessor: (r) => r.status,
               filterable: true,
@@ -79,7 +99,7 @@ export default async function Page() {
             },
             {
               key: "updated_at",
-              header: "Updated",
+              header: t("console.forms.column.updated", undefined, "Updated"),
               render: (r) => <span className="font-mono text-xs">{r.updated_at?.slice(0, 10)}</span>,
               accessor: (r) => r.updated_at?.slice ?? null,
             },

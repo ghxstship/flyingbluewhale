@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ImportForm } from "./ImportForm";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 /**
@@ -15,12 +15,18 @@ import { toTitle } from "@/lib/format";
  */
 
 export default async function ImportsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="Imports" />
+        <ModuleHeader
+          eyebrow={t("console.settings.imports.eyebrow", undefined, "Settings")}
+          title={t("console.settings.imports.title", undefined, "Imports")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.imports.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -37,31 +43,37 @@ export default async function ImportsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="Imports" />
+      <ModuleHeader
+        eyebrow={t("console.settings.imports.eyebrow", undefined, "Settings")}
+        title={t("console.settings.imports.workspaceSettings", undefined, "Workspace Settings")}
+        subtitle={t("console.settings.imports.title", undefined, "Imports")}
+      />
       <div className="page-content max-w-4xl space-y-6">
         <section className="surface p-5">
           <ImportForm />
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">Recent runs</h3>
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            {t("console.settings.imports.recentRuns", undefined, "Recent runs")}
+          </h3>
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Kind</th>
-                  <th>Source</th>
-                  <th>Imported</th>
-                  <th>Failed</th>
-                  <th>Status</th>
-                  <th>Started</th>
+                  <th>{t("console.settings.imports.col.kind", undefined, "Kind")}</th>
+                  <th>{t("console.settings.imports.col.source", undefined, "Source")}</th>
+                  <th>{t("console.settings.imports.col.imported", undefined, "Imported")}</th>
+                  <th>{t("console.settings.imports.col.failed", undefined, "Failed")}</th>
+                  <th>{t("console.settings.imports.col.status", undefined, "Status")}</th>
+                  <th>{t("console.settings.imports.col.started", undefined, "Started")}</th>
                 </tr>
               </thead>
               <tbody>
                 {(runs ?? []).length === 0 ? (
                   <tr>
                     <td colSpan={6} className="py-6 text-center text-[var(--text-muted)]">
-                      No imports yet.
+                      {t("console.settings.imports.empty", undefined, "No imports yet.")}
                     </td>
                   </tr>
                 ) : (
@@ -88,16 +100,32 @@ export default async function ImportsPage() {
         </section>
 
         <section className="surface p-5 text-sm text-[var(--text-muted)]">
-          <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">Column Reference</h3>
+          <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">
+            {t("console.settings.imports.columnReference", undefined, "Column Reference")}
+          </h3>
           <p>
-            <strong>crew-members:</strong> name (required), role, phone, email, day_rate_cents, notes
+            <strong>crew-members:</strong>{" "}
+            {t(
+              "console.settings.imports.ref.crewMembers",
+              undefined,
+              "name (required), role, phone, email, day_rate_cents, notes",
+            )}
           </p>
           <p>
-            <strong>tasks:</strong> title (required), description, status (todo|in_progress|review|blocked|done),
-            priority (0-5), due_at (ISO)
+            <strong>tasks:</strong>{" "}
+            {t(
+              "console.settings.imports.ref.tasks",
+              undefined,
+              "title (required), description, status (todo|in_progress|review|blocked|done), priority (0-5), due_at (ISO)",
+            )}
           </p>
           <p>
-            <strong>vendors:</strong> name (required), contact_email, contact_phone, category, notes
+            <strong>vendors:</strong>{" "}
+            {t(
+              "console.settings.imports.ref.vendors",
+              undefined,
+              "name (required), contact_email, contact_phone, category, notes",
+            )}
           </p>
         </section>
       </div>

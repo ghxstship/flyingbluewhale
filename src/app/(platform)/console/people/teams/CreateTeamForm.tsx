@@ -2,27 +2,46 @@
 
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 // The /[teamId]/actions module exports createTeamAction even though it lives
 // under the dynamic segment — this keeps every team-related action colocated.
 import { createTeamAction } from "./[teamId]/actions";
 
 export function CreateTeamForm() {
+  const t = useT();
   return (
-    <FormShell action={createTeamAction} submitLabel="Create Team">
+    <FormShell
+      action={createTeamAction}
+      submitLabel={t("console.people.teams.create.submit", undefined, "Create Team")}
+    >
       <Input
-        label="Slug"
+        label={t("console.people.teams.create.slugLabel", undefined, "Slug")}
         name="slug"
         required
         autoComplete="off"
         placeholder="prod"
-        hint="Becomes @team-<slug>. Lowercase letters, digits, hyphens only."
+        hint={t(
+          "console.people.teams.create.slugHint",
+          undefined,
+          "Becomes @team-<slug>. Lowercase letters, digits, hyphens only.",
+        )}
       />
-      <Input label="Name" name="name" required autoComplete="off" placeholder="Production" />
       <Input
-        label="Description"
+        label={t("console.people.teams.create.nameLabel", undefined, "Name")}
+        name="name"
+        required
+        autoComplete="off"
+        placeholder="Production"
+      />
+      <Input
+        label={t("console.people.teams.create.descriptionLabel", undefined, "Description")}
         name="description"
         autoComplete="off"
-        placeholder="What this team is responsible for"
+        placeholder={t(
+          "console.people.teams.create.descriptionPlaceholder",
+          undefined,
+          "What this team is responsible for",
+        )}
       />
     </FormShell>
   );

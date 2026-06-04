@@ -4,6 +4,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,12 +18,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Badges" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.badges.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.badges.title", undefined, "Badges")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.badges.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );

@@ -12,17 +12,23 @@ import { hasSupabase } from "@/lib/env";
 // wrapper carries it instead.
 import { CarbonChartsClient as CarbonCharts } from "./CarbonChartsClient";
 import type { SustainabilityMetric } from "@/lib/supabase/types";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Sustainability" title="Carbon" />
+        <ModuleHeader
+          eyebrow={t("console.sustainability.carbon.eyebrow", undefined, "Sustainability")}
+          title={t("console.sustainability.carbon.title", undefined, "Carbon")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.sustainability.carbon.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -45,25 +51,43 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Sustainability"
-        title="Carbon"
-        subtitle={`${rows.length} Measurement${rows.length === 1 ? "" : "s"} On File`}
+        eyebrow={t("console.sustainability.carbon.eyebrow", undefined, "Sustainability")}
+        title={t("console.sustainability.carbon.title", undefined, "Carbon")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "console.sustainability.carbon.subtitleSingular",
+                { count: rows.length },
+                `${rows.length} Measurement On File`,
+              )
+            : t(
+                "console.sustainability.carbon.subtitlePlural",
+                { count: rows.length },
+                `${rows.length} Measurements On File`,
+              )
+        }
         action={
           <Button href="/console/sustainability/carbon/new" size="sm">
-            + Record measurement
+            {t("console.sustainability.carbon.recordMeasurement", undefined, "+ Record measurement")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label="Total Kg CO₂e"
+            label={t("console.sustainability.carbon.metric.totalKg", undefined, "Total Kg CO₂e")}
             value={fmt.number(Number(totalKg))}
             sparkline={byMonth.map((m) => m.actual)}
             accent
           />
-          <MetricCard label="Scopes Covered" value={byScope.length} />
-          <MetricCard label="Reporting Periods" value={rows.length} />
+          <MetricCard
+            label={t("console.sustainability.carbon.metric.scopesCovered", undefined, "Scopes Covered")}
+            value={byScope.length}
+          />
+          <MetricCard
+            label={t("console.sustainability.carbon.metric.reportingPeriods", undefined, "Reporting Periods")}
+            value={rows.length}
+          />
         </div>
 
         <CarbonCharts byMonth={byMonth} byScope={byScope} target={target} />
@@ -71,17 +95,21 @@ export default async function Page() {
         <DataTable<SustainabilityMetric>
           rows={rows}
           rowHref={(r) => `/console/sustainability/carbon/${r.id}`}
-          emptyLabel="No measurements yet"
-          emptyDescription="Quarterly Scope 1/2/3 measurements with method + source attribution."
+          emptyLabel={t("console.sustainability.carbon.emptyLabel", undefined, "No measurements yet")}
+          emptyDescription={t(
+            "console.sustainability.carbon.emptyDescription",
+            undefined,
+            "Quarterly Scope 1/2/3 measurements with method + source attribution.",
+          )}
           emptyAction={
             <Button href="/console/sustainability/carbon/new" size="sm">
-              + Record measurement
+              {t("console.sustainability.carbon.recordMeasurement", undefined, "+ Record measurement")}
             </Button>
           }
           columns={[
             {
               key: "period",
-              header: "Period",
+              header: t("console.sustainability.carbon.col.period", undefined, "Period"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.period_start.slice(0, 10)} → {r.period_end.slice(0, 10)}
@@ -91,21 +119,25 @@ export default async function Page() {
             },
             {
               key: "scope",
-              header: "Scope",
-              render: (r) => <Badge variant="muted">Scope {r.scope}</Badge>,
+              header: t("console.sustainability.carbon.col.scope", undefined, "Scope"),
+              render: (r) => (
+                <Badge variant="muted">
+                  {t("console.sustainability.carbon.scopeLabel", { scope: r.scope }, `Scope ${r.scope}`)}
+                </Badge>
+              ),
               filterable: true,
               groupable: true,
               accessor: (r) => r.scope ?? null,
             },
             {
               key: "kg_co2e",
-              header: "kg CO₂e",
+              header: t("console.sustainability.carbon.col.kgCo2e", undefined, "kg CO₂e"),
               render: (r) => <span className="font-mono text-xs">{fmt.number(r.kg_co2e)}</span>,
               accessor: (r) => r.kg_co2e.toLocaleString ?? null,
             },
             {
               key: "source",
-              header: "Source",
+              header: t("console.sustainability.carbon.col.source", undefined, "Source"),
               render: (r) => <span className="text-xs text-[var(--text-secondary)]">{r.source ?? "—"}</span>,
               filterable: true,
               groupable: true,
@@ -113,7 +145,7 @@ export default async function Page() {
             },
             {
               key: "method",
-              header: "Method",
+              header: t("console.sustainability.carbon.col.method", undefined, "Method"),
               render: (r) => <span className="text-xs text-[var(--text-muted)]">{r.method ?? "—"}</span>,
               filterable: true,
               groupable: true,

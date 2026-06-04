@@ -3,9 +3,11 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { convertProposalToProjectAction } from "../actions";
 
 export function ProposalConvertButton({ id }: { id: string }) {
+  const t = useT();
   const [pending, start] = useTransition();
   return (
     <Button
@@ -21,7 +23,9 @@ export function ProposalConvertButton({ id }: { id: string }) {
         })
       }
     >
-      {pending ? "Converting…" : "Convert to Project"}
+      {pending
+        ? t("console.proposals.convertButton.converting", undefined, "Converting…")
+        : t("console.proposals.convertButton.label", undefined, "Convert to Project")}
     </Button>
   );
 }

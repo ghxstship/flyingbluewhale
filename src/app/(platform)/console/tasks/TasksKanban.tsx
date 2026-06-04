@@ -3,18 +3,19 @@
 import * as React from "react";
 import { KanbanBoard, type KanbanLane } from "@/components/views";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { Task, TaskStatus } from "@/lib/supabase/types";
 import { setTaskStatusAction } from "./actions";
 
-const LANES: KanbanLane<Task>[] = [
-  { id: "todo", title: "Not Started", tone: "neutral" },
-  { id: "in_progress", title: "In Progress", tone: "info" },
-  { id: "blocked", title: "Blocked", tone: "warn" },
-  { id: "review", title: "Review", tone: "info" },
-  { id: "done", title: "Done", tone: "success" },
-];
-
 export function TasksKanban({ rows }: { rows: Task[] }): React.ReactElement {
+  const t = useT();
+  const LANES: KanbanLane<Task>[] = [
+    { id: "todo", title: t("console.tasks.kanban.lane.todo", undefined, "Not Started"), tone: "neutral" },
+    { id: "in_progress", title: t("console.tasks.kanban.lane.inProgress", undefined, "In Progress"), tone: "info" },
+    { id: "blocked", title: t("console.tasks.kanban.lane.blocked", undefined, "Blocked"), tone: "warn" },
+    { id: "review", title: t("console.tasks.kanban.lane.review", undefined, "Review"), tone: "info" },
+    { id: "done", title: t("console.tasks.kanban.lane.done", undefined, "Done"), tone: "success" },
+  ];
   const onMove = React.useCallback(async (rowId: string, toLaneId: string) => {
     const result = await setTaskStatusAction(rowId, toLaneId as TaskStatus);
     if (result && "error" in result && result.error) {
@@ -29,8 +30,12 @@ export function TasksKanban({ rows }: { rows: Task[] }): React.ReactElement {
       laneOf={(r) => r.status}
       hrefOf={(r) => `/console/tasks/${r.id}`}
       onMove={onMove}
-      emptyTitle="No tasks yet"
-      emptyDescription="Add a task to start populating the board."
+      emptyTitle={t("console.tasks.kanban.emptyTitle", undefined, "No tasks yet")}
+      emptyDescription={t(
+        "console.tasks.kanban.emptyDescription",
+        undefined,
+        "Add a task to start populating the board.",
+      )}
       renderCard={(r) => (
         <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">

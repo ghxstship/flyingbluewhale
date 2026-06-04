@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +20,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Comms" title="Polls" />
+        <ModuleHeader
+          eyebrow={t("console.comms.polls.eyebrow", undefined, "Comms")}
+          title={t("console.comms.polls.title", undefined, "Polls")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.comms.polls.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -43,12 +50,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Comms"
-        title="Polls"
-        subtitle={`${rows.length} poll${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.comms.polls.eyebrow", undefined, "Comms")}
+        title={t("console.comms.polls.title", undefined, "Polls")}
+        subtitle={
+          rows.length === 1
+            ? t("console.comms.polls.subtitleOne", { count: rows.length }, `${rows.length} poll`)
+            : t("console.comms.polls.subtitleOther", { count: rows.length }, `${rows.length} polls`)
+        }
         action={
           <Button href="/console/comms/polls/new" size="sm">
-            + New Poll
+            {t("console.comms.polls.newPoll", undefined, "+ New Poll")}
           </Button>
         }
       />
@@ -56,13 +67,21 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/comms/polls/${r.id}`}
-          emptyLabel="No polls yet"
-          emptyDescription="Quick one-question polls. Crews vote from /m/polls; results aggregate here."
+          emptyLabel={t("console.comms.polls.emptyLabel", undefined, "No polls yet")}
+          emptyDescription={t(
+            "console.comms.polls.emptyDescription",
+            undefined,
+            "Quick one-question polls. Crews vote from /m/polls; results aggregate here.",
+          )}
           columns={[
-            { key: "question", header: "Question", render: (r) => r.question },
+            {
+              key: "question",
+              header: t("console.comms.polls.col.question", undefined, "Question"),
+              render: (r) => r.question,
+            },
             {
               key: "publish_state",
-              header: "State",
+              header: t("console.comms.polls.col.state", undefined, "State"),
               render: (r) => (
                 <Badge
                   variant={r.publish_state === "live" ? "success" : r.publish_state === "closed" ? "muted" : "info"}
@@ -73,7 +92,7 @@ export default async function Page() {
             },
             {
               key: "audience",
-              header: "Audience",
+              header: t("console.comms.polls.col.audience", undefined, "Audience"),
               render: (r) => <Badge variant="muted">{toTitle(r.audience)}</Badge>,
             },
           ]}

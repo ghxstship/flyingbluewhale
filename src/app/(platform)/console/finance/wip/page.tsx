@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { generateOrgWipSnapshots } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -29,12 +29,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="WIP" />
+        <ModuleHeader
+          eyebrow={t("console.finance.wip.eyebrow", undefined, "Finance")}
+          title={t("console.finance.wip.title", undefined, "WIP")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.wip.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -71,9 +77,13 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="WIP"
-        subtitle="Work-in-progress snapshots. One row per project per snapshot date. Required for surety / bonding review."
+        eyebrow={t("console.finance.wip.eyebrow", undefined, "Finance")}
+        title={t("console.finance.wip.title", undefined, "WIP")}
+        subtitle={t(
+          "console.finance.wip.subtitle",
+          undefined,
+          "Work-in-progress snapshots. One row per project per snapshot date. Required for surety / bonding review.",
+        )}
         action={
           <div className="flex items-center gap-2">
             <form action={generateOrgWipSnapshots}>
@@ -81,7 +91,7 @@ export default async function Page() {
                 type="submit"
                 className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
               >
-                Generate snapshots
+                {t("console.finance.wip.generateSnapshots", undefined, "Generate snapshots")}
               </button>
             </form>
             <a
@@ -90,30 +100,44 @@ export default async function Page() {
               rel="noopener"
               className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
             >
-              Download Latest WIP PDF
+              {t("console.finance.wip.downloadLatestPdf", undefined, "Download Latest WIP PDF")}
             </a>
           </div>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Aggregate Contract" value={fmtMoney(totalContract)} accent />
-          <MetricCard label="Over-billed (latest)" value={fmtMoney(overBilled)} />
-          <MetricCard label="Under-billed (latest)" value={fmtMoney(underBilled)} />
+          <MetricCard
+            label={t("console.finance.wip.metric.aggregateContract", undefined, "Aggregate Contract")}
+            value={fmtMoney(totalContract)}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.wip.metric.overBilledLatest", undefined, "Over-billed (latest)")}
+            value={fmtMoney(overBilled)}
+          />
+          <MetricCard
+            label={t("console.finance.wip.metric.underBilledLatest", undefined, "Under-billed (latest)")}
+            value={fmtMoney(underBilled)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No WIP snapshots yet"
-          emptyDescription="WIP snapshots are generated monthly per project. Engineering pass forthcoming — schema, RLS, and admin view are live."
+          emptyLabel={t("console.finance.wip.emptyLabel", undefined, "No WIP snapshots yet")}
+          emptyDescription={t(
+            "console.finance.wip.emptyDescription",
+            undefined,
+            "WIP snapshots are generated monthly per project. Engineering pass forthcoming — schema, RLS, and admin view are live.",
+          )}
           emptyAction={
             <Button href="/console/finance/wip/new" size="sm">
-              + Snapshot
+              {t("console.finance.wip.addSnapshot", undefined, "+ Snapshot")}
             </Button>
           }
           columns={[
             {
               key: "project",
-              header: "Project",
+              header: t("console.finance.wip.col.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -121,7 +145,7 @@ export default async function Page() {
             },
             {
               key: "date",
-              header: "Snapshot",
+              header: t("console.finance.wip.col.snapshot", undefined, "Snapshot"),
               render: (r) =>
                 fmt.dateParts(r.snapshot_date + "T00:00:00", { year: "numeric", month: "short", day: "numeric" }),
               accessor: (r) => r.snapshot_date,
@@ -129,41 +153,43 @@ export default async function Page() {
             },
             {
               key: "contract",
-              header: "Contract (incl. CO)",
+              header: t("console.finance.wip.col.contract", undefined, "Contract (incl. CO)"),
               render: (r) => fmtMoney(Number(r.revised_contract_amount)),
               accessor: (r) => Number(r.revised_contract_amount),
               className: "font-mono text-xs text-right",
             },
             {
               key: "pct",
-              header: "% Comp",
+              header: t("console.finance.wip.col.pctComp", undefined, "% Comp"),
               render: (r) => `${Number(r.percent_complete).toFixed(1)}%`,
               accessor: (r) => Number(r.percent_complete),
               className: "font-mono text-xs text-right",
             },
             {
               key: "earned",
-              header: "Earned",
+              header: t("console.finance.wip.col.earned", undefined, "Earned"),
               render: (r) => fmtMoney(Number(r.earned_revenue)),
               accessor: (r) => Number(r.earned_revenue),
               className: "font-mono text-xs text-right",
             },
             {
               key: "billed",
-              header: "Billed",
+              header: t("console.finance.wip.col.billed", undefined, "Billed"),
               render: (r) => fmtMoney(Number(r.billed_to_date)),
               accessor: (r) => Number(r.billed_to_date),
               className: "font-mono text-xs text-right",
             },
             {
               key: "ou",
-              header: "Over / Under",
+              header: t("console.finance.wip.col.overUnder", undefined, "Over / Under"),
               render: (r) => {
                 const v = Number(r.over_under_billed);
                 if (v === 0) return "—";
                 return (
                   <span className={v > 0 ? "text-[var(--color-warning)]" : "text-[var(--color-info)]"}>
-                    {v > 0 ? "Over " : "Under "}
+                    {v > 0
+                      ? t("console.finance.wip.overPrefix", undefined, "Over ")
+                      : t("console.finance.wip.underPrefix", undefined, "Under ")}
                     {fmtMoney(Math.abs(v))}
                   </span>
                 );

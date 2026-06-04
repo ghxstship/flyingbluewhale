@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import {
   SITEPLAN_ADJACENCY_RELS,
   SITEPLAN_BAND_TYPES,
@@ -64,6 +64,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const supabase = await createClient();
   const loose = supabase as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
 
   const { data: sheet } = await supabase
@@ -123,25 +124,32 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Creative · Site Plans"
-        breadcrumbs={[{ label: "Site Plans", href: "/console/site-plans" }, { label: sp.atom_id ?? sp.code }]}
+        eyebrow={t("console.sitePlans.detail.eyebrow", undefined, "Creative · Site Plans")}
+        breadcrumbs={[
+          { label: t("console.sitePlans.detail.breadcrumb", undefined, "Site Plans"), href: "/console/site-plans" },
+          { label: sp.atom_id ?? sp.code },
+        ]}
         title={sp.title}
         subtitle={
           <span className="flex items-center gap-2 text-xs">
             {sp.atom_id ? (
               <span className="font-mono">{sp.atom_id}</span>
             ) : (
-              <span className="text-[var(--text-muted)]">— no atom id —</span>
+              <span className="text-[var(--text-muted)]">
+                {t("console.sitePlans.detail.noAtomId", undefined, "— no atom id —")}
+              </span>
             )}
             <span>·</span>
             <Badge variant={STATE_TONE[sp.document_state]}>{STATE_LABEL[sp.document_state]}</Badge>
             <Badge variant="muted">{sp.sheet_type}</Badge>
-            <Badge variant="info">Rev {sp.revision_letter}</Badge>
+            <Badge variant="info">
+              {t("console.sitePlans.detail.revPrefix", { rev: sp.revision_letter }, `Rev ${sp.revision_letter}`)}
+            </Badge>
           </span>
         }
         action={
           <Button href={`/console/site-plans/${sp.id}/edit`} variant="secondary" size="sm">
-            Edit
+            {t("common.edit", undefined, "Edit")}
           </Button>
         }
       />
@@ -151,36 +159,65 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {/* SUMMARY GRID */}
         <section className="surface p-4">
-          <h3 className="mb-3 text-sm font-semibold tracking-wide uppercase">Sheet</h3>
+          <h3 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.sitePlans.detail.sheet", undefined, "Sheet")}
+          </h3>
           <dl className="grid grid-cols-2 gap-3 text-xs md:grid-cols-4">
             <SummaryItem
-              label="XPMS Class"
+              label={t("console.sitePlans.detail.xpmsClass", undefined, "XPMS Class")}
               value={sp.primary_class != null ? XPMS_CLASS_LABEL[sp.primary_class] : "—"}
             />
-            <SummaryItem label="Tier" value={sp.tier_primary != null ? `Tier ${sp.tier_primary}` : "—"} />
-            <SummaryItem label="Sheet Type" value={sp.sheet_type} />
-            <SummaryItem label="Code" value={sp.code} />
-            <SummaryItem label="Shell" value={sp.shell_type ?? "—"} />
             <SummaryItem
-              label="Dimensions"
+              label={t("console.sitePlans.detail.tier", undefined, "Tier")}
               value={
-                dims
-                  ? `${dims.length_in}" × ${dims.width_in}" × ${dims.height_in}" · ${dims.gross_sqft ?? "?"} sqft`
+                sp.tier_primary != null
+                  ? t("console.sitePlans.detail.tierValue", { tier: sp.tier_primary }, `Tier ${sp.tier_primary}`)
                   : "—"
               }
             />
-            <SummaryItem label="Orientation" value={sp.orientation_deg != null ? `${sp.orientation_deg}°` : "—"} />
-            <SummaryItem label="Scale" value={sp.scale ?? "—"} />
-            <SummaryItem label="Project" value={sp.project?.name ?? "—"} />
-            <SummaryItem label="Event" value={sp.event?.name ?? "—"} />
-            <SummaryItem label="Venue" value={sp.venue?.name ?? "—"} />
-            <SummaryItem label="Issued" value={sp.issued_at ? fmtDate(sp.issued_at) : "—"} />
+            <SummaryItem
+              label={t("console.sitePlans.detail.sheetType", undefined, "Sheet Type")}
+              value={sp.sheet_type}
+            />
+            <SummaryItem label={t("console.sitePlans.detail.code", undefined, "Code")} value={sp.code} />
+            <SummaryItem label={t("console.sitePlans.detail.shell", undefined, "Shell")} value={sp.shell_type ?? "—"} />
+            <SummaryItem
+              label={t("console.sitePlans.detail.dimensions", undefined, "Dimensions")}
+              value={
+                dims
+                  ? `${dims.length_in}" × ${dims.width_in}" × ${dims.height_in}" · ${dims.gross_sqft ?? "?"} ${t("console.sitePlans.detail.sqft", undefined, "sqft")}`
+                  : "—"
+              }
+            />
+            <SummaryItem
+              label={t("console.sitePlans.detail.orientation", undefined, "Orientation")}
+              value={sp.orientation_deg != null ? `${sp.orientation_deg}°` : "—"}
+            />
+            <SummaryItem label={t("console.sitePlans.detail.scale", undefined, "Scale")} value={sp.scale ?? "—"} />
+            <SummaryItem
+              label={t("console.sitePlans.detail.project", undefined, "Project")}
+              value={sp.project?.name ?? "—"}
+            />
+            <SummaryItem
+              label={t("console.sitePlans.detail.event", undefined, "Event")}
+              value={sp.event?.name ?? "—"}
+            />
+            <SummaryItem
+              label={t("console.sitePlans.detail.venue", undefined, "Venue")}
+              value={sp.venue?.name ?? "—"}
+            />
+            <SummaryItem
+              label={t("console.sitePlans.detail.issued", undefined, "Issued")}
+              value={sp.issued_at ? fmtDate(sp.issued_at) : "—"}
+            />
           </dl>
         </section>
 
         {/* ACCEPTANCE CHECKLIST (§8.3) */}
         <section className="surface p-4">
-          <h3 className="mb-3 text-sm font-semibold tracking-wide uppercase">Acceptance · §8.3</h3>
+          <h3 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.sitePlans.detail.acceptance", undefined, "Acceptance · §8.3")}
+          </h3>
           {acc ? (
             <ul className="grid grid-cols-1 gap-1.5 md:grid-cols-2">
               {ACCEPTANCE_ITEMS.map((it) => {
@@ -197,11 +234,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               })}
             </ul>
           ) : (
-            <p className="text-xs text-[var(--text-muted)]">Acceptance snapshot unavailable.</p>
+            <p className="text-xs text-[var(--text-muted)]">
+              {t("console.sitePlans.detail.acceptanceUnavailable", undefined, "Acceptance snapshot unavailable.")}
+            </p>
           )}
           {violations.length > 0 && (
             <div className="mt-3 rounded-md border border-[var(--color-warning)] bg-[var(--color-warning-subtle,transparent)] p-3 text-xs">
-              <div className="font-semibold tracking-wide uppercase">Placement Law Violations (§9)</div>
+              <div className="font-semibold tracking-wide uppercase">
+                {t("console.sitePlans.detail.placementViolations", undefined, "Placement Law Violations (§9)")}
+              </div>
               <ul className="ms-4 mt-1 list-disc space-y-0.5">
                 {violations.map((v, i) => (
                   <li key={i}>{v}</li>
@@ -213,17 +254,26 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {/* ZONE REGIONS */}
         <section className="surface p-4">
-          <SectionHeader title="Zone Regions" count={regionRows.length} />
+          <SectionHeader
+            title={t("console.sitePlans.detail.zoneRegions", undefined, "Zone Regions")}
+            count={regionRows.length}
+          />
           {regionRows.length === 0 ? (
-            <Empty>No zone regions yet. Add Cold / Cook / Pass / Hold zones to anchor bands.</Empty>
+            <Empty>
+              {t(
+                "console.sitePlans.detail.noRegions",
+                undefined,
+                "No zone regions yet. Add Cold / Cook / Pass / Hold zones to anchor bands.",
+              )}
+            </Empty>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Code</th>
-                  <th>Label</th>
-                  <th>Class</th>
-                  <th>Notes</th>
+                  <th>{t("console.sitePlans.detail.code", undefined, "Code")}</th>
+                  <th>{t("console.sitePlans.detail.label", undefined, "Label")}</th>
+                  <th>{t("console.sitePlans.detail.class", undefined, "Class")}</th>
+                  <th>{t("console.sitePlans.detail.notes", undefined, "Notes")}</th>
                   <th />
                 </tr>
               </thead>
@@ -245,39 +295,56 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <InlineAddForm
             action={addRegion}
             sheetId={sp.id}
-            submitLabel="+ Region"
+            submitLabel={t("console.sitePlans.detail.addRegion", undefined, "+ Region")}
             fields={[
-              { name: "code", label: "Code", placeholder: "COLD", required: true, mono: true, maxLength: 16 },
-              { name: "label", label: "Label", placeholder: "Cold Zone", required: true, maxLength: 80 },
+              {
+                name: "code",
+                label: t("console.sitePlans.detail.code", undefined, "Code"),
+                placeholder: "COLD",
+                required: true,
+                mono: true,
+                maxLength: 16,
+              },
+              {
+                name: "label",
+                label: t("console.sitePlans.detail.label", undefined, "Label"),
+                placeholder: t("console.sitePlans.detail.coldZonePlaceholder", undefined, "Cold Zone"),
+                required: true,
+                maxLength: 80,
+              },
               {
                 name: "class_tag",
-                label: "Class",
+                label: t("console.sitePlans.detail.class", undefined, "Class"),
                 kind: "select",
                 options: [
                   { value: "", label: "—" },
                   ...Object.entries(XPMS_CLASS_LABEL).map(([v, l]) => ({ value: v, label: l })),
                 ],
               },
-              { name: "notes", label: "Notes", maxLength: 500 },
+              { name: "notes", label: t("console.sitePlans.detail.notes", undefined, "Notes"), maxLength: 500 },
             ]}
           />
         </section>
 
         {/* BANDS */}
         <section className="surface p-4">
-          <SectionHeader title="Bands · §6" count={bandRows.length} />
+          <SectionHeader title={t("console.sitePlans.detail.bands", undefined, "Bands · §6")} count={bandRows.length} />
           {bandRows.length === 0 ? (
             <Empty>
-              No bands yet. Bands are the canonical name for blue/orange lines — every linear surface is one.
+              {t(
+                "console.sitePlans.detail.noBands",
+                undefined,
+                "No bands yet. Bands are the canonical name for blue/orange lines — every linear surface is one.",
+              )}
             </Empty>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Type</th>
-                  <th>Edge</th>
-                  <th>Depth</th>
-                  <th>Label</th>
+                  <th>{t("console.sitePlans.detail.type", undefined, "Type")}</th>
+                  <th>{t("console.sitePlans.detail.edge", undefined, "Edge")}</th>
+                  <th>{t("console.sitePlans.detail.depth", undefined, "Depth")}</th>
+                  <th>{t("console.sitePlans.detail.label", undefined, "Label")}</th>
                   <th />
                 </tr>
               </thead>
@@ -311,41 +378,54 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <InlineAddForm
             action={addBand}
             sheetId={sp.id}
-            submitLabel="+ Band"
+            submitLabel={t("console.sitePlans.detail.addBand", undefined, "+ Band")}
             fields={[
               {
                 name: "band_type",
-                label: "Type",
+                label: t("console.sitePlans.detail.type", undefined, "Type"),
                 kind: "select",
                 required: true,
-                options: SITEPLAN_BAND_TYPES.map((t) => ({ value: t, label: t })),
+                options: SITEPLAN_BAND_TYPES.map((bt) => ({ value: bt, label: bt })),
               },
               {
                 name: "edge",
-                label: "Edge",
+                label: t("console.sitePlans.detail.edge", undefined, "Edge"),
                 kind: "select",
                 required: true,
                 options: SITEPLAN_EDGES.map((e) => ({ value: e, label: e })),
               },
-              { name: "depth_in", label: 'Depth (")', type: "number" },
-              { name: "label", label: "Label", maxLength: 80 },
+              {
+                name: "depth_in",
+                label: t("console.sitePlans.detail.depthInches", undefined, 'Depth (")'),
+                type: "number",
+              },
+              { name: "label", label: t("console.sitePlans.detail.label", undefined, "Label"), maxLength: 80 },
             ]}
           />
         </section>
 
         {/* STATIONS */}
         <section className="surface p-4">
-          <SectionHeader title="Stations" count={stationRows.length} />
+          <SectionHeader
+            title={t("console.sitePlans.detail.stations", undefined, "Stations")}
+            count={stationRows.length}
+          />
           {stationRows.length === 0 ? (
-            <Empty>No stations yet. A station is a discrete work position on a band (PREP-1, PLATE-1, EXPO-1).</Empty>
+            <Empty>
+              {t(
+                "console.sitePlans.detail.noStations",
+                undefined,
+                "No stations yet. A station is a discrete work position on a band (PREP-1, PLATE-1, EXPO-1).",
+              )}
+            </Empty>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Code</th>
-                  <th>Band</th>
-                  <th>Function</th>
-                  <th>Heads</th>
+                  <th>{t("console.sitePlans.detail.code", undefined, "Code")}</th>
+                  <th>{t("console.sitePlans.detail.band", undefined, "Band")}</th>
+                  <th>{t("console.sitePlans.detail.function", undefined, "Function")}</th>
+                  <th>{t("console.sitePlans.detail.heads", undefined, "Heads")}</th>
                   <th />
                 </tr>
               </thead>
@@ -373,11 +453,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <InlineAddForm
               action={addStation}
               sheetId={sp.id}
-              submitLabel="+ Station"
+              submitLabel={t("console.sitePlans.detail.addStation", undefined, "+ Station")}
               fields={[
                 {
                   name: "station_code",
-                  label: "Code",
+                  label: t("console.sitePlans.detail.code", undefined, "Code"),
                   placeholder: "PREP-1",
                   required: true,
                   mono: true,
@@ -385,7 +465,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 },
                 {
                   name: "band_id",
-                  label: "Band",
+                  label: t("console.sitePlans.detail.band", undefined, "Band"),
                   kind: "select",
                   required: true,
                   options: bandRows.map((b) => ({
@@ -393,9 +473,23 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     label: `${b.band_type}/${b.edge}${b.label ? ` (${b.label})` : ""}`,
                   })),
                 },
-                { name: "function", label: "Function", placeholder: "prep", maxLength: 60 },
-                { name: "head_count", label: "Heads", type: "number", defaultValue: "1" },
-                { name: "position_in", label: "Position", type: "number" },
+                {
+                  name: "function",
+                  label: t("console.sitePlans.detail.function", undefined, "Function"),
+                  placeholder: t("console.sitePlans.detail.prepPlaceholder", undefined, "prep"),
+                  maxLength: 60,
+                },
+                {
+                  name: "head_count",
+                  label: t("console.sitePlans.detail.heads", undefined, "Heads"),
+                  type: "number",
+                  defaultValue: "1",
+                },
+                {
+                  name: "position_in",
+                  label: t("console.sitePlans.detail.position", undefined, "Position"),
+                  type: "number",
+                },
               ]}
             />
           )}
@@ -403,18 +497,27 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {/* PLACEMENTS */}
         <section className="surface p-4">
-          <SectionHeader title="Placements · §4.5" count={placementRows.length} />
+          <SectionHeader
+            title={t("console.sitePlans.detail.placements", undefined, "Placements · §4.5")}
+            count={placementRows.length}
+          />
           {placementRows.length === 0 ? (
-            <Empty>No placements yet. A placement records that a UAC catalog item sits on this sheet at a tag.</Empty>
+            <Empty>
+              {t(
+                "console.sitePlans.detail.noPlacements",
+                undefined,
+                "No placements yet. A placement records that a UAC catalog item sits on this sheet at a tag.",
+              )}
+            </Empty>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Tag</th>
-                  <th>Station</th>
-                  <th>Band</th>
-                  <th>UAC</th>
-                  <th>Qty</th>
+                  <th>{t("console.sitePlans.detail.tag", undefined, "Tag")}</th>
+                  <th>{t("console.sitePlans.detail.station", undefined, "Station")}</th>
+                  <th>{t("console.sitePlans.detail.band", undefined, "Band")}</th>
+                  <th>{t("console.sitePlans.detail.uac", undefined, "UAC")}</th>
+                  <th>{t("console.sitePlans.detail.qty", undefined, "Qty")}</th>
                   <th />
                 </tr>
               </thead>
@@ -441,12 +544,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <InlineAddForm
             action={addPlacement}
             sheetId={sp.id}
-            submitLabel="+ Placement"
+            submitLabel={t("console.sitePlans.detail.addPlacement", undefined, "+ Placement")}
             fields={[
-              { name: "tag", label: "Tag", placeholder: "CONV-1", required: true, mono: true, maxLength: 40 },
+              {
+                name: "tag",
+                label: t("console.sitePlans.detail.tag", undefined, "Tag"),
+                placeholder: "CONV-1",
+                required: true,
+                mono: true,
+                maxLength: 40,
+              },
               {
                 name: "station_id",
-                label: "Station",
+                label: t("console.sitePlans.detail.station", undefined, "Station"),
                 kind: "select",
                 options: [
                   { value: "", label: "—" },
@@ -455,33 +565,53 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 name: "band_id",
-                label: "Band",
+                label: t("console.sitePlans.detail.band", undefined, "Band"),
                 kind: "select",
                 options: [
                   { value: "", label: "—" },
                   ...bandRows.map((b) => ({ value: b.id, label: `${b.band_type}/${b.edge}` })),
                 ],
               },
-              { name: "uac_atom_id", label: "UAC Atom", placeholder: "LYTE-...", mono: true, maxLength: 80 },
-              { name: "qty", label: "Qty", type: "number", defaultValue: "1" },
-              { name: "notes", label: "Notes", maxLength: 500 },
+              {
+                name: "uac_atom_id",
+                label: t("console.sitePlans.detail.uacAtom", undefined, "UAC Atom"),
+                placeholder: "LYTE-...",
+                mono: true,
+                maxLength: 80,
+              },
+              {
+                name: "qty",
+                label: t("console.sitePlans.detail.qty", undefined, "Qty"),
+                type: "number",
+                defaultValue: "1",
+              },
+              { name: "notes", label: t("console.sitePlans.detail.notes", undefined, "Notes"), maxLength: 500 },
             ]}
           />
         </section>
 
         {/* UTILITIES */}
         <section className="surface p-4">
-          <SectionHeader title="Utilities · §4.6" count={utilityRows.length} />
+          <SectionHeader
+            title={t("console.sitePlans.detail.utilities", undefined, "Utilities · §4.6")}
+            count={utilityRows.length}
+          />
           {utilityRows.length === 0 ? (
-            <Empty>No utility drops yet. Drops are power, gas, water, drain, data, and comms hand-offs.</Empty>
+            <Empty>
+              {t(
+                "console.sitePlans.detail.noUtilities",
+                undefined,
+                "No utility drops yet. Drops are power, gas, water, drain, data, and comms hand-offs.",
+              )}
+            </Empty>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Drop</th>
-                  <th>Service</th>
-                  <th>Loads</th>
-                  <th>Circuit</th>
+                  <th>{t("console.sitePlans.detail.drop", undefined, "Drop")}</th>
+                  <th>{t("console.sitePlans.detail.service", undefined, "Service")}</th>
+                  <th>{t("console.sitePlans.detail.loads", undefined, "Loads")}</th>
+                  <th>{t("console.sitePlans.detail.circuit", undefined, "Circuit")}</th>
                   <th />
                 </tr>
               </thead>
@@ -503,42 +633,68 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <InlineAddForm
             action={addUtility}
             sheetId={sp.id}
-            submitLabel="+ Drop"
+            submitLabel={t("console.sitePlans.detail.addDrop", undefined, "+ Drop")}
             fields={[
-              { name: "drop_code", label: "Drop", placeholder: "P-1", required: true, mono: true, maxLength: 40 },
+              {
+                name: "drop_code",
+                label: t("console.sitePlans.detail.drop", undefined, "Drop"),
+                placeholder: "P-1",
+                required: true,
+                mono: true,
+                maxLength: 40,
+              },
               {
                 name: "service_type",
-                label: "Service",
+                label: t("console.sitePlans.detail.service", undefined, "Service"),
                 kind: "select",
                 required: true,
                 options: SITEPLAN_UTILITY_SERVICES.map((s) => ({ value: s, label: s })),
               },
-              { name: "loads", label: "Loads (comma)", placeholder: "CONV-1, RI-REF", maxLength: 400 },
-              { name: "circuit_id", label: "Circuit", maxLength: 40 },
-              { name: "notes", label: "Notes", maxLength: 500 },
+              {
+                name: "loads",
+                label: t("console.sitePlans.detail.loadsComma", undefined, "Loads (comma)"),
+                placeholder: "CONV-1, RI-REF",
+                maxLength: 400,
+              },
+              { name: "circuit_id", label: t("console.sitePlans.detail.circuit", undefined, "Circuit"), maxLength: 40 },
+              { name: "notes", label: t("console.sitePlans.detail.notes", undefined, "Notes"), maxLength: 500 },
             ]}
           />
         </section>
 
         {/* ADJACENCIES */}
         <section className="surface p-4">
-          <SectionHeader title="Adjacencies · §4.7" count={adjRows.length} />
+          <SectionHeader
+            title={t("console.sitePlans.detail.adjacencies", undefined, "Adjacencies · §4.7")}
+            count={adjRows.length}
+          />
           {missingEdges.length > 0 && (
             <div className="mb-3 rounded-md border border-[var(--color-warning)] p-2 text-xs">
-              Missing edges: <span className="font-mono">{missingEdges.join(", ")}</span> — all four cardinal edges must
-              be declared before issue.
+              {t("console.sitePlans.detail.missingEdgesPrefix", undefined, "Missing edges:")}{" "}
+              <span className="font-mono">{missingEdges.join(", ")}</span>{" "}
+              {t(
+                "console.sitePlans.detail.missingEdgesSuffix",
+                undefined,
+                "— all four cardinal edges must be declared before issue.",
+              )}
             </div>
           )}
           {adjRows.length === 0 ? (
-            <Empty>No adjacencies declared. Each cardinal edge (N/S/E/W) must answer "what is on this side?"</Empty>
+            <Empty>
+              {t(
+                "console.sitePlans.detail.noAdjacencies",
+                undefined,
+                'No adjacencies declared. Each cardinal edge (N/S/E/W) must answer "what is on this side?"',
+              )}
+            </Empty>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Edge</th>
-                  <th>Relationship</th>
-                  <th>Adjacent</th>
-                  <th>Notes</th>
+                  <th>{t("console.sitePlans.detail.edge", undefined, "Edge")}</th>
+                  <th>{t("console.sitePlans.detail.relationship", undefined, "Relationship")}</th>
+                  <th>{t("console.sitePlans.detail.adjacent", undefined, "Adjacent")}</th>
+                  <th>{t("console.sitePlans.detail.notes", undefined, "Notes")}</th>
                   <th />
                 </tr>
               </thead>
@@ -547,7 +703,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <tr key={a.id}>
                     <td className="font-mono text-xs">{a.edge}</td>
                     <td className="font-mono text-xs">{a.relationship}</td>
-                    <td>{a.adjacent_label ?? (a.adjacent_sheet_id ? "(linked sheet)" : "—")}</td>
+                    <td>
+                      {a.adjacent_label ??
+                        (a.adjacent_sheet_id
+                          ? t("console.sitePlans.detail.linkedSheet", undefined, "(linked sheet)")
+                          : "—")}
+                    </td>
                     <td className="text-xs text-[var(--text-muted)]">{a.notes ?? "—"}</td>
                     <td className="text-end">
                       <DeleteFormBtn action={deleteAdjacency} id={a.id} sheetId={sp.id} />
@@ -560,40 +721,53 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <InlineAddForm
             action={addAdjacency}
             sheetId={sp.id}
-            submitLabel="+ Adjacency"
+            submitLabel={t("console.sitePlans.detail.addAdjacency", undefined, "+ Adjacency")}
             fields={[
               {
                 name: "edge",
-                label: "Edge",
+                label: t("console.sitePlans.detail.edge", undefined, "Edge"),
                 kind: "select",
                 required: true,
                 options: SITEPLAN_EDGES.map((e) => ({ value: e, label: e })),
               },
               {
                 name: "relationship",
-                label: "Relationship",
+                label: t("console.sitePlans.detail.relationship", undefined, "Relationship"),
                 kind: "select",
                 required: true,
                 options: SITEPLAN_ADJACENCY_RELS.map((r) => ({ value: r, label: r })),
               },
-              { name: "adjacent_label", label: "Adjacent", placeholder: "SC Performer BOH", maxLength: 120 },
-              { name: "notes", label: "Notes", maxLength: 500 },
+              {
+                name: "adjacent_label",
+                label: t("console.sitePlans.detail.adjacent", undefined, "Adjacent"),
+                placeholder: t("console.sitePlans.detail.adjacentPlaceholder", undefined, "SC Performer BOH"),
+                maxLength: 120,
+              },
+              { name: "notes", label: t("console.sitePlans.detail.notes", undefined, "Notes"), maxLength: 500 },
             ]}
           />
         </section>
 
         {/* LEGACY REVISIONS + PINS */}
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">File Revisions</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.sitePlans.detail.fileRevisions", undefined, "File Revisions")}
+          </h3>
           {(revisions.data ?? []).length === 0 ? (
-            <Empty>No file revisions yet. Upload one to render markups + pins.</Empty>
+            <Empty>
+              {t(
+                "console.sitePlans.detail.noRevisions",
+                undefined,
+                "No file revisions yet. Upload one to render markups + pins.",
+              )}
+            </Empty>
           ) : (
             <table className="data-table mt-3">
               <thead>
                 <tr>
-                  <th>Rev</th>
-                  <th>Uploaded</th>
-                  <th>Notes</th>
+                  <th>{t("console.sitePlans.detail.rev", undefined, "Rev")}</th>
+                  <th>{t("console.sitePlans.detail.uploaded", undefined, "Uploaded")}</th>
+                  <th>{t("console.sitePlans.detail.notes", undefined, "Notes")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -610,9 +784,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Pins</h3>
+          <h3 className="text-sm font-semibold">{t("console.sitePlans.detail.pins", undefined, "Pins")}</h3>
           {(pins.data ?? []).length === 0 ? (
-            <Empty>No pins yet. Pins link to RFIs, punch items, inspections, and zone callouts.</Empty>
+            <Empty>
+              {t(
+                "console.sitePlans.detail.noPins",
+                undefined,
+                "No pins yet. Pins link to RFIs, punch items, inspections, and zone callouts.",
+              )}
+            </Empty>
           ) : (
             <ul className="mt-3 space-y-1.5">
               {(pins.data ?? []).map((p) => {

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { closePoll } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,13 @@ type Option = { id: string; ordinal: number; label: string };
 type Vote = { option_id: string };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("console.comms.polls.detail.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { id } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -40,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Poll"
+        eyebrow={t("console.comms.polls.detail.eyebrow", undefined, "Poll")}
         title={p.question}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
@@ -48,7 +55,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               {p.publish_state}
             </Badge>
             <Badge variant="muted">{toTitle(p.audience)}</Badge>
-            <span className="font-mono text-xs">{total} votes</span>
+            <span className="font-mono text-xs">
+              {t("console.comms.polls.detail.votesCount", { count: total }, `${total} votes`)}
+            </span>
           </span>
         }
         action={
@@ -56,7 +65,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={closePoll}>
               <input type="hidden" name="id" value={p.id} />
               <button type="submit" className="btn btn-secondary">
-                Close Poll
+                {t("console.comms.polls.detail.closePoll", undefined, "Close Poll")}
               </button>
             </form>
           ) : null

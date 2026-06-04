@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,26 +21,31 @@ type Row = {
   items: { count: number }[] | null;
 };
 
-const CATEGORY_LABEL: Record<string, string> = {
-  rigging: "Rigging",
-  fire: "Fire",
-  electrical: "Electrical",
-  ada: "ADA",
-  food_safety: "Food Safety",
-  security: "Security",
-  foh: "FOH",
-  medical: "Medical",
-  sustainability: "Sustainability",
-  custom: "Custom",
-};
-
 export default async function Page() {
+  const { t } = await getRequestT();
+  const CATEGORY_LABEL: Record<string, string> = {
+    rigging: t("console.inspections.templates.category.rigging", undefined, "Rigging"),
+    fire: t("console.inspections.templates.category.fire", undefined, "Fire"),
+    electrical: t("console.inspections.templates.category.electrical", undefined, "Electrical"),
+    ada: t("console.inspections.templates.category.ada", undefined, "ADA"),
+    food_safety: t("console.inspections.templates.category.foodSafety", undefined, "Food Safety"),
+    security: t("console.inspections.templates.category.security", undefined, "Security"),
+    foh: t("console.inspections.templates.category.foh", undefined, "FOH"),
+    medical: t("console.inspections.templates.category.medical", undefined, "Medical"),
+    sustainability: t("console.inspections.templates.category.sustainability", undefined, "Sustainability"),
+    custom: t("console.inspections.templates.category.custom", undefined, "Custom"),
+  };
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Inspection Templates" />
+        <ModuleHeader
+          eyebrow={t("console.inspections.templates.eyebrow", undefined, "Safety")}
+          title={t("console.inspections.templates.title", undefined, "Inspection Templates")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.inspections.templates.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -58,13 +64,20 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Inspection Templates"
-        subtitle={`${rows.length} template${rows.length === 1 ? "" : "s"}`}
-        breadcrumbs={[{ label: "Inspections", href: "/console/inspections" }, { label: "Templates" }]}
+        eyebrow={t("console.inspections.templates.eyebrow", undefined, "Safety")}
+        title={t("console.inspections.templates.title", undefined, "Inspection Templates")}
+        subtitle={
+          rows.length === 1
+            ? t("console.inspections.templates.subtitleOne", { count: rows.length }, `${rows.length} template`)
+            : t("console.inspections.templates.subtitleOther", { count: rows.length }, `${rows.length} templates`)
+        }
+        breadcrumbs={[
+          { label: t("console.inspections.breadcrumb", undefined, "Inspections"), href: "/console/inspections" },
+          { label: t("console.inspections.templates.breadcrumb", undefined, "Templates") },
+        ]}
         action={
           <Button href="/console/inspections/templates/new" size="sm">
-            + New Template
+            {t("console.inspections.templates.newTemplate", undefined, "+ New Template")}
           </Button>
         }
       />
@@ -73,39 +86,53 @@ export default async function Page() {
           <div className="surface">
             <EmptyState
               size="compact"
-              title="No templates yet"
-              description="Templates define reusable checklists. Create one to schedule inspections from it."
+              title={t("console.inspections.templates.empty.title", undefined, "No templates yet")}
+              description={t(
+                "console.inspections.templates.empty.description",
+                undefined,
+                "Templates define reusable checklists. Create one to schedule inspections from it.",
+              )}
               action={
                 <Button href="/console/inspections/templates/new" size="sm">
-                  + Create first template
+                  {t("console.inspections.templates.empty.action", undefined, "+ Create first template")}
                 </Button>
               }
             />
           </div>
         ) : (
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {rows.map((t) => {
-              const itemCount = t.items?.[0]?.count ?? 0;
+            {rows.map((row) => {
+              const itemCount = row.items?.[0]?.count ?? 0;
               return (
-                <li key={t.id} className="surface hover-lift p-4">
+                <li key={row.id} className="surface hover-lift p-4">
                   <Link href={`/console/inspections/templates`} className="block">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <div className="font-mono text-[11px] tracking-wider text-[var(--text-muted)] uppercase">
-                          {t.code}
+                          {row.code}
                         </div>
-                        <div className="mt-1 truncate text-sm font-semibold">{t.name}</div>
+                        <div className="mt-1 truncate text-sm font-semibold">{row.name}</div>
                       </div>
-                      {!t.active && <Badge variant="muted">Inactive</Badge>}
+                      {!row.active && (
+                        <Badge variant="muted">
+                          {t("console.inspections.templates.inactive", undefined, "Inactive")}
+                        </Badge>
+                      )}
                     </div>
                     <div className="mt-2 flex items-center gap-2 text-[11px]">
-                      <Badge variant="info">{CATEGORY_LABEL[t.category] ?? t.category}</Badge>
+                      <Badge variant="info">{CATEGORY_LABEL[row.category] ?? row.category}</Badge>
                       <span className="text-[var(--text-muted)]">
-                        {itemCount} item{itemCount === 1 ? "" : "s"}
+                        {itemCount === 1
+                          ? t("console.inspections.templates.itemCountOne", { count: itemCount }, `${itemCount} item`)
+                          : t(
+                              "console.inspections.templates.itemCountOther",
+                              { count: itemCount },
+                              `${itemCount} items`,
+                            )}
                       </span>
                     </div>
-                    {t.description && (
-                      <p className="mt-2 line-clamp-2 text-xs text-[var(--text-secondary)]">{t.description}</p>
+                    {row.description && (
+                      <p className="mt-2 line-clamp-2 text-xs text-[var(--text-secondary)]">{row.description}</p>
                     )}
                   </Link>
                 </li>

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { stampRevision, addNextRound, closeSubmittal } from "./actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data: sub } = await supabase
     .from("submittals")
@@ -47,14 +49,22 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const all = revisions ?? [];
   const current = all.find((r) => r.round === sub.current_round);
   const project = (sub.project as unknown as { name: string | null } | null)?.name ?? "—";
+  const noSpecSection = t("console.submittals.detail.noSpecSection", undefined, "No Spec Section");
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        breadcrumbs={[{ label: "Submittals", href: "/console/submittals" }, { label: sub.code }]}
+        eyebrow={t("console.submittals.detail.eyebrow", undefined, "Procurement")}
+        breadcrumbs={[
+          { label: t("console.submittals.detail.breadcrumb", undefined, "Submittals"), href: "/console/submittals" },
+          { label: sub.code },
+        ]}
         title={`${sub.code} — ${sub.title}`}
-        subtitle={`${project} · ${sub.spec_section ?? "No Spec Section"} · Round #${sub.current_round}`}
+        subtitle={t(
+          "console.submittals.detail.subtitle",
+          { project, spec: sub.spec_section ?? noSpecSection, round: sub.current_round },
+          `${project} · ${sub.spec_section ?? noSpecSection} · Round #${sub.current_round}`,
+        )}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[sub.status] ?? "muted"}>{toTitle(sub.status)}</Badge>
@@ -62,12 +72,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               href={`/console/submittals/${sub.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
             >
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </a>
             {sub.status !== "closed" && sub.status !== "void" && (
               <form action={closeSubmittal.bind(null, id)}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Close
+                  {t("common.close", undefined, "Close")}
                 </button>
               </form>
             )}
@@ -76,14 +86,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-5">
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Revision Rounds</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.submittals.detail.revisionRounds", undefined, "Revision Rounds")}
+          </h3>
           <table className="data-table mt-3">
             <thead>
               <tr>
-                <th>Round</th>
-                <th>Submitted</th>
-                <th>Stamp</th>
-                <th>Stamp Notes</th>
+                <th>{t("console.submittals.detail.col.round", undefined, "Round")}</th>
+                <th>{t("console.submittals.detail.col.submitted", undefined, "Submitted")}</th>
+                <th>{t("console.submittals.detail.col.stamp", undefined, "Stamp")}</th>
+                <th>{t("console.submittals.detail.col.stampNotes", undefined, "Stamp Notes")}</th>
               </tr>
             </thead>
             <tbody>
@@ -103,23 +115,40 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
         {current && current.stamp === "no_stamp" && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Stamp Round #{current.round}</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.submittals.detail.stampRound", { round: current.round }, `Stamp Round #${current.round}`)}
+            </h3>
             <form action={stampRevision.bind(null, id, current.id)} className="mt-3 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-xs font-medium text-[var(--text-secondary)]">Stamp</span>
+                  <span className="text-xs font-medium text-[var(--text-secondary)]">
+                    {t("console.submittals.detail.col.stamp", undefined, "Stamp")}
+                  </span>
                   <select name="stamp" required className={INPUT}>
-                    <option value="approved">Approved</option>
-                    <option value="approved_with_comments">Approved With Comments</option>
-                    <option value="revise_resubmit">Revise &amp; Resubmit</option>
-                    <option value="rejected">Rejected</option>
+                    <option value="approved">
+                      {t("console.submittals.detail.stamp.approved", undefined, "Approved")}
+                    </option>
+                    <option value="approved_with_comments">
+                      {t("console.submittals.detail.stamp.approvedWithComments", undefined, "Approved With Comments")}
+                    </option>
+                    <option value="revise_resubmit">
+                      {t("console.submittals.detail.stamp.reviseResubmit", undefined, "Revise & Resubmit")}
+                    </option>
+                    <option value="rejected">
+                      {t("console.submittals.detail.stamp.rejected", undefined, "Rejected")}
+                    </option>
                   </select>
                 </label>
               </div>
-              <textarea name="stamp_notes" rows={3} placeholder="Reviewer notes…" className={INPUT} />
+              <textarea
+                name="stamp_notes"
+                rows={3}
+                placeholder={t("console.submittals.detail.reviewerNotesPlaceholder", undefined, "Reviewer notes…")}
+                className={INPUT}
+              />
               <div className="flex justify-end">
                 <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
-                  Apply Stamp
+                  {t("console.submittals.detail.applyStamp", undefined, "Apply Stamp")}
                 </button>
               </div>
             </form>
@@ -130,7 +159,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <section className="surface p-4">
             <form action={addNextRound.bind(null, id)}>
               <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
-                + Open Round #{sub.current_round + 1}
+                {t(
+                  "console.submittals.detail.openRound",
+                  { round: sub.current_round + 1 },
+                  `+ Open Round #${sub.current_round + 1}`,
+                )}
               </button>
             </form>
           </section>

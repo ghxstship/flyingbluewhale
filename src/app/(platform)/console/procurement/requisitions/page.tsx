@@ -7,17 +7,21 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Requisition } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function RequisitionsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Requisitions" />
+        <ModuleHeader title={t("console.procurement.requisitions.title", undefined, "Requisitions")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.requisitions.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -26,34 +30,47 @@ export default async function RequisitionsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Requisitions"
-        subtitle={`${rows.length} Requests`}
-        action={<Button href="/console/procurement/requisitions/new">+ New Request</Button>}
+        eyebrow={t("console.procurement.requisitions.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.requisitions.title", undefined, "Requisitions")}
+        subtitle={t("console.procurement.requisitions.subtitle", { count: rows.length }, `${rows.length} Requests`)}
+        action={
+          <Button href="/console/procurement/requisitions/new">
+            {t("console.procurement.requisitions.newRequest", undefined, "+ New Request")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<Requisition>
           rows={rows}
           rowHref={(r) => `/console/procurement/requisitions/${r.id}`}
-          emptyLabel="No requisitions"
-          emptyDescription="Submit a request to spend; once approved, it converts to a purchase order."
+          emptyLabel={t("console.procurement.requisitions.emptyLabel", undefined, "No requisitions")}
+          emptyDescription={t(
+            "console.procurement.requisitions.emptyDescription",
+            undefined,
+            "Submit a request to spend; once approved, it converts to a purchase order.",
+          )}
           emptyAction={
             <Button href="/console/procurement/requisitions/new" size="sm">
-              + New Request
+              {t("console.procurement.requisitions.newRequest", undefined, "+ New Request")}
             </Button>
           }
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.procurement.requisitions.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "estimated",
-              header: "Estimated",
+              header: t("console.procurement.requisitions.col.estimated", undefined, "Estimated"),
               render: (r) => formatMoney(r.estimated_cents),
               className: "font-mono text-xs",
               accessor: (r) => Number(r.estimated_cents ?? 0),
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.procurement.requisitions.col.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.status} />,
               accessor: (r) => r.status,
               filterable: true,
@@ -61,7 +78,7 @@ export default async function RequisitionsPage() {
             },
             {
               key: "created",
-              header: "Created",
+              header: t("console.procurement.requisitions.col.created", undefined, "Created"),
               render: (r) => timeAgo(r.created_at),
               className: "font-mono text-xs",
               accessor: (r) => r.created_at,

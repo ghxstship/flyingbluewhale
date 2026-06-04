@@ -7,17 +7,21 @@ import { hasSupabase } from "@/lib/env";
 import { DeleteForm } from "@/components/DeleteForm";
 import { deleteCategory } from "./edit/actions";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ categoryId: string }> }) {
+  const { t } = await getRequestT();
   const p = await params;
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Category" />
+        <ModuleHeader title={t("console.accreditation.categories.detail.title", undefined, "Category")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.accreditation.categories.detail.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -29,19 +33,23 @@ export default async function Page({ params }: { params: Promise<{ categoryId: s
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation · Category"
+        eyebrow={t("console.accreditation.categories.detail.eyebrow", undefined, "Accreditation · Category")}
         title={title}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/accreditation/categories" variant="ghost" size="sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Button>
             <Button href={`/console/accreditation/categories/${p.categoryId}/edit`} size="sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteCategory.bind(null, p.categoryId)}
-              confirm={`Delete category "${title}"? This cannot be undone.`}
+              confirm={t(
+                "console.accreditation.categories.detail.deleteConfirm",
+                { title },
+                `Delete category "${title}"? This cannot be undone.`,
+              )}
             />
           </div>
         }

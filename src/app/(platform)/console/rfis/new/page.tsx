@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { createRfi } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +16,7 @@ export default async function Page() {
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: projects }, { data: users }] = await Promise.all([
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).order("name"),
     supabase.from("users").select("id, name, email").limit(200),
@@ -22,33 +24,48 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Operations" title="New RFI" subtitle="Ask the production team an official question." />
+      <ModuleHeader
+        eyebrow={t("console.rfis.new.eyebrow", undefined, "Operations")}
+        title={t("console.rfis.new.title", undefined, "New RFI")}
+        subtitle={t("console.rfis.new.subtitle", undefined, "Ask the production team an official question.")}
+      />
       <div className="page-content max-w-2xl">
-        <FormShell action={createRfi} cancelHref="/console/rfis" submitLabel="Open RFI">
+        <FormShell
+          action={createRfi}
+          cancelHref="/console/rfis"
+          submitLabel={t("console.rfis.new.submit", undefined, "Open RFI")}
+        >
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Subject<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.rfis.new.subjectLabel", undefined, "Subject")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <input
               name="subject"
               required
-              placeholder="Confirm rigging point load capacity at downstage left"
+              placeholder={t(
+                "console.rfis.new.subjectPlaceholder",
+                undefined,
+                "Confirm rigging point load capacity at downstage left",
+              )}
               className={INPUT}
             />
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              Question<span className="ms-0.5 text-[var(--color-error)]">*</span>
+              {t("console.rfis.new.questionLabel", undefined, "Question")}
+              <span className="ms-0.5 text-[var(--color-error)]">*</span>
             </span>
             <textarea name="question" rows={4} required className={INPUT} />
           </label>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Project<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                {t("console.rfis.new.projectLabel", undefined, "Project")}
+                <span className="ms-0.5 text-[var(--color-error)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
-                <option value="">Select…</option>
+                <option value="">{t("common.selectEllipsis", undefined, "Select…")}</option>
                 {(projects ?? []).map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
@@ -57,13 +74,17 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Category</span>
-              <input name="category" placeholder="rigging / power / brand / catering" className={INPUT} />
+              <span className={LBL}>{t("console.rfis.new.categoryLabel", undefined, "Category")}</span>
+              <input
+                name="category"
+                placeholder={t("console.rfis.new.categoryPlaceholder", undefined, "rigging / power / brand / catering")}
+                className={INPUT}
+              />
             </label>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Ball in court</span>
+              <span className={LBL}>{t("console.rfis.new.ballInCourtLabel", undefined, "Ball in court")}</span>
               <select name="ball_in_court_id" className={INPUT}>
                 <option value="">—</option>
                 {(users ?? []).map((u) => (
@@ -74,7 +95,7 @@ export default async function Page() {
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Priority</span>
+              <span className={LBL}>{t("console.rfis.new.priorityLabel", undefined, "Priority")}</span>
               <select name="priority" className={INPUT} defaultValue="normal">
                 {["low", "normal", "high", "urgent"].map((p) => (
                   <option key={p} value={p}>
@@ -85,7 +106,7 @@ export default async function Page() {
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>Due by</span>
+            <span className={LBL}>{t("console.rfis.new.dueByLabel", undefined, "Due by")}</span>
             <input type="date" name="due_at" className={INPUT} />
           </label>
         </FormShell>

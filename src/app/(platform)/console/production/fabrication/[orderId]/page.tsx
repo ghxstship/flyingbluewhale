@@ -16,17 +16,24 @@ import {
 } from "@/lib/production-phase";
 import { ProductionPhaseControls } from "./ProductionPhaseControls";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
-const NEXT: Record<FabricationStatus, { to: FabricationStatus; label: string }[]> = {
+const NEXT: Record<FabricationStatus, { to: FabricationStatus; labelKey: string; labelFallback: string }[]> = {
   open: [
-    { to: "in_progress", label: "Start" },
-    { to: "blocked", label: "Block" },
+    { to: "in_progress", labelKey: "console.production.fabrication.detail.actions.start", labelFallback: "Start" },
+    { to: "blocked", labelKey: "console.production.fabrication.detail.actions.block", labelFallback: "Block" },
   ],
   in_progress: [
-    { to: "complete", label: "Mark Complete" },
-    { to: "blocked", label: "Block" },
+    {
+      to: "complete",
+      labelKey: "console.production.fabrication.detail.actions.markComplete",
+      labelFallback: "Mark Complete",
+    },
+    { to: "blocked", labelKey: "console.production.fabrication.detail.actions.block", labelFallback: "Block" },
   ],
-  blocked: [{ to: "in_progress", label: "Unblock" }],
+  blocked: [
+    { to: "in_progress", labelKey: "console.production.fabrication.detail.actions.unblock", labelFallback: "Unblock" },
+  ],
   complete: [],
 };
 
@@ -34,6 +41,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
   const { orderId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data: row } = await supabase
     .from("fabrication_orders")
     .select("id, title, description, status, due_at, project_id, created_at")
@@ -44,9 +52,14 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
   if (!row) {
     return (
       <>
-        <ModuleHeader eyebrow="Production" title="Fabrication" />
+        <ModuleHeader
+          eyebrow={t("console.production.fabrication.detail.eyebrow", undefined, "Production")}
+          title={t("console.production.fabrication.detail.title", undefined, "Fabrication")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">Not found.</div>
+          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+            {t("console.production.fabrication.detail.notFound", undefined, "Not found.")}
+          </div>
         </div>
       </>
     );
@@ -57,12 +70,15 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
+        eyebrow={t("console.production.fabrication.detail.eyebrow", undefined, "Production")}
         title={row.title}
         subtitle={row.description ?? undefined}
         breadcrumbs={[
-          { label: "Production" },
-          { label: "Fabrication", href: "/console/production/fabrication" },
+          { label: t("console.production.fabrication.detail.breadcrumbProduction", undefined, "Production") },
+          {
+            label: t("console.production.fabrication.detail.title", undefined, "Fabrication"),
+            href: "/console/production/fabrication",
+          },
           { label: row.title },
         ]}
         action={
@@ -79,12 +95,12 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
                       : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  {b.label}
+                  {t(b.labelKey, undefined, b.labelFallback)}
                 </button>
               </form>
             ))}
             <a href={`/console/production/fabrication/${row.id}/edit`} className="btn btn-secondary btn-sm">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </a>
           </div>
         }
@@ -92,9 +108,18 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
       <div className="page-content max-w-3xl space-y-4">
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Status" value={<StatusBadge status={row.status} />} />
-            <Field label="Due" value={<span className="font-mono text-xs">{fmtDate(row.due_at)}</span>} />
-            <Field label="Created" value={<span className="font-mono text-xs">{fmtDate(row.created_at)}</span>} />
+            <Field
+              label={t("console.production.fabrication.detail.fields.status", undefined, "Status")}
+              value={<StatusBadge status={row.status} />}
+            />
+            <Field
+              label={t("console.production.fabrication.detail.fields.due", undefined, "Due")}
+              value={<span className="font-mono text-xs">{fmtDate(row.due_at)}</span>}
+            />
+            <Field
+              label={t("console.production.fabrication.detail.fields.created", undefined, "Created")}
+              value={<span className="font-mono text-xs">{fmtDate(row.created_at)}</span>}
+            />
           </div>
           {row.description && (
             <div className="mt-4 border-t border-[var(--border-color)] pt-3 text-xs text-[var(--text-secondary)]">
@@ -105,11 +130,13 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
 
         <section className="surface p-4 text-xs">
           <div className="flex items-center justify-between">
-            <Badge variant="muted">Lifecycle</Badge>
+            <Badge variant="muted">
+              {t("console.production.fabrication.detail.lifecycleBadge", undefined, "Lifecycle")}
+            </Badge>
             <form action={deleteFab}>
               <input type="hidden" name="id" value={row.id} />
               <button type="submit" className="text-[color:var(--color-error)] hover:underline">
-                Delete Order
+                {t("console.production.fabrication.detail.deleteOrder", undefined, "Delete Order")}
               </button>
             </form>
           </div>
@@ -124,6 +151,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
 async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; orgId: string }) {
   // LDP §2 Production Lifecycle — distinct from the workflow-execution `status`
   // shown above. Phase tracks design→install arc; status tracks workflow gate.
+  const { t } = await getRequestT();
   const fab = await getFabricationOrder(orgId, orderId);
   if (!fab) return null;
   const transitions = await listProductionPhaseTransitions(orgId, orderId);
@@ -132,13 +160,17 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
   return (
     <section className="surface space-y-4 p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold tracking-wide uppercase">Production Phase</h2>
+        <h2 className="text-sm font-semibold tracking-wide uppercase">
+          {t("console.production.fabrication.detail.phase.heading", undefined, "Production Phase")}
+        </h2>
         <Badge variant="default">{toTitle(fab.production_phase)}</Badge>
       </div>
       <p className="text-xs text-[var(--text-secondary)]">
-        Sequential macro-arc: Discovery → Concept → Engineering → Pre-Pro → Fab → Logistics → Install → Strike. Phase
-        regression is permitted with a logged reason. Distinct from the workflow status shown above (Open / In Progress
-        / Blocked / Complete).
+        {t(
+          "console.production.fabrication.detail.phase.description",
+          undefined,
+          "Sequential macro-arc: Discovery → Concept → Engineering → Pre-Pro → Fab → Logistics → Install → Strike. Phase regression is permitted with a logged reason. Distinct from the workflow status shown above (Open / In Progress / Blocked / Complete).",
+        )}
       </p>
       <ProductionPhaseControls
         orderId={fab.id}
@@ -147,13 +179,17 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
       />
       {transitions.length > 0 && (
         <div className="border-t border-[var(--border-color)] pt-3">
-          <div className="mb-2 text-xs font-semibold tracking-wide uppercase">Recent Transitions</div>
+          <div className="mb-2 text-xs font-semibold tracking-wide uppercase">
+            {t("console.production.fabrication.detail.phase.recentTransitions", undefined, "Recent Transitions")}
+          </div>
           <ul className="space-y-1 text-xs">
-            {transitions.slice(0, 5).map((t) => (
-              <li key={t.id}>
-                {t.from_phase ? toTitle(t.from_phase) : "Initial"} → <strong>{toTitle(t.to_phase)}</strong> ·{" "}
-                {new Date(t.transitioned_at).toLocaleDateString()}
-                {t.reason ? <span className="ms-2">{t.reason}</span> : null}
+            {transitions.slice(0, 5).map((tr) => (
+              <li key={tr.id}>
+                {tr.from_phase
+                  ? toTitle(tr.from_phase)
+                  : t("console.production.fabrication.detail.phase.initial", undefined, "Initial")}{" "}
+                → <strong>{toTitle(tr.to_phase)}</strong> · {new Date(tr.transitioned_at).toLocaleDateString()}
+                {tr.reason ? <span className="ms-2">{tr.reason}</span> : null}
               </li>
             ))}
           </ul>

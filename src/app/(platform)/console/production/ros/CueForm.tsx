@@ -8,34 +8,60 @@ import { Badge } from "@/components/ui/Badge";
 import { createCueAction, setCueStatus, deleteCue, type State } from "./actions";
 import type { Cue } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function CueForm() {
+  const t = useT();
   const [state, action, pending] = useActionState<State, FormData>(createCueAction, null);
   return (
     <form action={action} className="grid gap-3 md:grid-cols-2">
-      <Input label="Scheduled At" name="scheduled_at" type="datetime-local" required />
+      <Input
+        label={t("console.production.ros.cueForm.scheduledAt", undefined, "Scheduled At")}
+        name="scheduled_at"
+        type="datetime-local"
+        required
+      />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Lane</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">
+          {t("console.production.ros.cueForm.lane", undefined, "Lane")}
+        </label>
         <select name="lane" defaultValue="show" className="input-base mt-1.5 w-full">
-          <option value="show">Show</option>
-          <option value="lights">Lights</option>
-          <option value="audio">Audio</option>
-          <option value="video">Video</option>
-          <option value="talent">Talent</option>
-          <option value="safety">Safety</option>
-          <option value="transport">Transport</option>
+          <option value="show">{t("console.production.ros.cueForm.lane.show", undefined, "Show")}</option>
+          <option value="lights">{t("console.production.ros.cueForm.lane.lights", undefined, "Lights")}</option>
+          <option value="audio">{t("console.production.ros.cueForm.lane.audio", undefined, "Audio")}</option>
+          <option value="video">{t("console.production.ros.cueForm.lane.video", undefined, "Video")}</option>
+          <option value="talent">{t("console.production.ros.cueForm.lane.talent", undefined, "Talent")}</option>
+          <option value="safety">{t("console.production.ros.cueForm.lane.safety", undefined, "Safety")}</option>
+          <option value="transport">
+            {t("console.production.ros.cueForm.lane.transport", undefined, "Transport")}
+          </option>
         </select>
       </div>
-      <Input label="Label" name="label" required maxLength={200} placeholder="e.g. House lights down" />
-      <Input label="Duration (sec)" name="duration_seconds" type="number" min={0} max={86400} placeholder="optional" />
+      <Input
+        label={t("console.production.ros.cueForm.label", undefined, "Label")}
+        name="label"
+        required
+        maxLength={200}
+        placeholder={t("console.production.ros.cueForm.labelPlaceholder", undefined, "e.g. House lights down")}
+      />
+      <Input
+        label={t("console.production.ros.cueForm.durationSec", undefined, "Duration (sec)")}
+        name="duration_seconds"
+        type="number"
+        min={0}
+        max={86400}
+        placeholder={t("console.production.ros.cueForm.optional", undefined, "optional")}
+      />
       <div className="md:col-span-2">
-        <label className="text-xs font-medium text-[var(--text-secondary)]">Description</label>
+        <label className="text-xs font-medium text-[var(--text-secondary)]">
+          {t("console.production.ros.cueForm.description", undefined, "Description")}
+        </label>
         <textarea name="description" rows={2} maxLength={2000} className="input-base mt-1.5 w-full" />
       </div>
       {state?.error && <p className="text-xs text-[var(--color-error)] md:col-span-2">{state.error}</p>}
       <div className="flex justify-end md:col-span-2">
         <Button type="submit" loading={pending}>
-          Add Cue
+          {t("console.production.ros.cueForm.addCue", undefined, "Add Cue")}
         </Button>
       </div>
     </form>
@@ -57,6 +83,7 @@ const NEXT_STATUS: Record<Cue["status"], { to: Cue["status"]; label: string }[]>
 };
 
 export function CueRow({ cue }: { cue: Cue }) {
+  const t = useT();
   const [pendingTo, setPendingTo] = React.useState<string | null>(null);
   const buttons = NEXT_STATUS[cue.status] ?? [];
   return (
@@ -91,7 +118,7 @@ export function CueRow({ cue }: { cue: Cue }) {
                     : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                {pendingTo === b.to ? "…" : b.label}
+                {pendingTo === b.to ? "…" : t(`console.production.ros.cueForm.action.${b.to}`, undefined, b.label)}
               </button>
             </form>
           ))}
@@ -101,7 +128,7 @@ export function CueRow({ cue }: { cue: Cue }) {
               type="submit"
               className="rounded px-2 py-0.5 text-[11px] text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/10"
             >
-              Delete
+              {t("common.delete", undefined, "Delete")}
             </button>
           </form>
         </div>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { SortableList } from "@/components/ui/SortableList";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { BLOCK_LABELS, BLOCK_TYPES, type ProposalBlock, type ProposalBlockType } from "@/lib/proposals/types";
 import { saveProposalAction, type EditState } from "./actions";
 import { LineagePanel, isLineageBlock } from "./LineagePanel";
@@ -102,6 +103,7 @@ export function ProposalEditor({
     blocks: unknown[];
   };
 }) {
+  const t = useT();
   const [blocks, setBlocks] = useState<IdentifiedBlock[]>(() =>
     (defaults.blocks as ProposalBlock[]).map((b) => ({ ...b, _dragId: tagId() })),
   );
@@ -113,7 +115,7 @@ export function ProposalEditor({
     fd.set("blocks", mode === "json" ? json : JSON.stringify(serializeBlocks(blocks)));
     const res = await saveProposalAction(proposalId, prev, fd);
     if (res?.error) toast.error(res.error);
-    else if (res?.ok) toast.success("Proposal saved · v bumped");
+    else if (res?.ok) toast.success(t("console.proposals.edit.savedToast", undefined, "Proposal saved · v bumped"));
     return res;
   }, null);
 
@@ -161,11 +163,23 @@ export function ProposalEditor({
   return (
     <form action={formAction} className="surface space-y-4 p-6">
       <div className="grid gap-4 sm:grid-cols-3">
-        <Input label="Title" name="title" required defaultValue={defaults.title} />
-        <Input label="Doc #" name="doc_number" defaultValue={defaults.doc_number} placeholder="FBW-001" />
+        <Input
+          label={t("console.proposals.edit.fields.title", undefined, "Title")}
+          name="title"
+          required
+          defaultValue={defaults.title}
+        />
+        <Input
+          label={t("console.proposals.edit.fields.docNumber", undefined, "Doc #")}
+          name="doc_number"
+          defaultValue={defaults.doc_number}
+          placeholder="FBW-001"
+        />
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Currency</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("console.proposals.edit.fields.currency", undefined, "Currency")}
+            </label>
             <select name="currency" defaultValue={defaults.currency} className="input-base mt-1.5 w-full">
               <option>USD</option>
               <option>EUR</option>
@@ -174,7 +188,7 @@ export function ProposalEditor({
             </select>
           </div>
           <Input
-            label="Deposit %"
+            label={t("console.proposals.edit.fields.depositPercent", undefined, "Deposit %")}
             name="deposit_percent"
             type="number"
             min="0"
@@ -184,13 +198,25 @@ export function ProposalEditor({
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input label="Theme Primary" name="theme_primary" defaultValue={defaults.theme.primary} />
-        <Input label="Theme Secondary" name="theme_secondary" defaultValue={defaults.theme.secondary} />
+        <Input
+          label={t("console.proposals.edit.fields.themePrimary", undefined, "Theme Primary")}
+          name="theme_primary"
+          defaultValue={defaults.theme.primary}
+        />
+        <Input
+          label={t("console.proposals.edit.fields.themeSecondary", undefined, "Theme Secondary")}
+          name="theme_secondary"
+          defaultValue={defaults.theme.secondary}
+        />
       </div>
 
       <div className="flex items-center justify-between">
         <div className="text-xs text-[var(--text-muted)]">
-          {summary.count} blocks · {summary.types.length} distinct types
+          {t(
+            "console.proposals.edit.summary",
+            { count: summary.count, types: summary.types.length },
+            `${summary.count} blocks · ${summary.types.length} distinct types`,
+          )}
         </div>
         <div className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5">
           <button
@@ -201,7 +227,7 @@ export function ProposalEditor({
             }}
             className={`rounded-full px-3 py-1 text-xs ${mode === "outline" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
           >
-            Outline
+            {t("console.proposals.edit.mode.outline", undefined, "Outline")}
           </button>
           <button
             type="button"
@@ -211,7 +237,7 @@ export function ProposalEditor({
             }}
             className={`rounded-full px-3 py-1 text-xs ${mode === "json" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
           >
-            JSON
+            {t("console.proposals.edit.mode.json", undefined, "JSON")}
           </button>
         </div>
       </div>
@@ -235,7 +261,7 @@ export function ProposalEditor({
                       <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
                         {i + 1} · {BLOCK_LABELS[item.block.type]}
                       </div>
-                      <div className="mt-0.5 truncate text-sm">{describeBlock(item.block)}</div>
+                      <div className="mt-0.5 truncate text-sm">{describeBlock(item.block, t)}</div>
                     </div>
                     <div className="flex items-center gap-1">
                       {lineage && (
@@ -243,17 +269,23 @@ export function ProposalEditor({
                           type="button"
                           onClick={() => toggleExpanded(item.block._dragId)}
                           className="btn btn-ghost btn-sm"
-                          aria-label={isOpen ? "Collapse lineage" : "Edit lineage"}
+                          aria-label={
+                            isOpen
+                              ? t("console.proposals.edit.lineage.collapse", undefined, "Collapse lineage")
+                              : t("console.proposals.edit.lineage.edit", undefined, "Edit lineage")
+                          }
                         >
                           <ChevronRight size={14} className={`transition-transform ${isOpen ? "rotate-90" : ""}`} />
-                          <span className="ms-1 text-xs">Lineage</span>
+                          <span className="ms-1 text-xs">
+                            {t("console.proposals.edit.lineage.label", undefined, "Lineage")}
+                          </span>
                         </button>
                       )}
                       <button
                         type="button"
                         onClick={() => removeBlock(item.block._dragId)}
                         className="btn btn-ghost btn-sm text-[var(--color-error)]"
-                        aria-label="Remove"
+                        aria-label={t("common.remove", undefined, "Remove")}
                       >
                         <Trash2 size={14} />
                       </button>
@@ -268,16 +300,18 @@ export function ProposalEditor({
           />
 
           <div className="surface-inset p-3">
-            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Add block</div>
+            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+              {t("console.proposals.edit.addBlock", undefined, "Add block")}
+            </div>
             <div className="mt-2 flex flex-wrap gap-1">
-              {BLOCK_TYPES.map((t) => (
+              {BLOCK_TYPES.map((blockType) => (
                 <button
-                  key={t}
+                  key={blockType}
                   type="button"
-                  onClick={() => addBlock(t)}
+                  onClick={() => addBlock(blockType)}
                   className="inline-flex items-center gap-1 rounded-full border border-[var(--border-color)] px-2.5 py-1 text-xs hover:bg-[var(--bg-secondary)]"
                 >
-                  <Plus size={10} /> {BLOCK_LABELS[t]}
+                  <Plus size={10} /> {BLOCK_LABELS[blockType]}
                 </button>
               ))}
             </div>
@@ -285,7 +319,9 @@ export function ProposalEditor({
         </div>
       ) : (
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Blocks JSON</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            {t("console.proposals.edit.blocksJson", undefined, "Blocks JSON")}
+          </label>
           <textarea
             value={json}
             onChange={(e) => setJson(e.target.value)}
@@ -300,14 +336,16 @@ export function ProposalEditor({
 
       <div className="flex items-center justify-end gap-2">
         <Button type="submit" disabled={pending}>
-          {pending ? "Saving…" : "Save proposal"}
+          {pending
+            ? t("common.saving", undefined, "Saving…")
+            : t("console.proposals.edit.save", undefined, "Save proposal")}
         </Button>
       </div>
     </form>
   );
 }
 
-function describeBlock(b: ProposalBlock): string {
+function describeBlock(b: ProposalBlock, t: ReturnType<typeof useT>): string {
   switch (b.type) {
     case "hero":
       return b.title;
@@ -321,22 +359,24 @@ function describeBlock(b: ProposalBlock): string {
       return b.title ?? b.body.slice(0, 60);
     case "phase":
       return `${b.num}. ${b.name}`;
-    case "investment_table":
-      return `${b.groups.reduce((s, g) => s + g.items.length, 0)} line items`;
+    case "investment_table": {
+      const count = b.groups.reduce((s, g) => s + g.items.length, 0);
+      return t("console.proposals.edit.describe.lineItems", { count }, `${count} line items`);
+    }
     case "total_block":
       return b.label;
     case "engagement_split":
       return `${b.depositPercent}% / ${b.balancePercent}%`;
     case "signature_block":
-      return `${b.parties.length} signer(s)`;
+      return t("console.proposals.edit.describe.signers", { count: b.parties.length }, `${b.parties.length} signer(s)`);
     case "legal_panel":
-      return `${b.panels.length} panel(s)`;
+      return t("console.proposals.edit.describe.panels", { count: b.panels.length }, `${b.panels.length} panel(s)`);
     case "exclusions":
-      return `${b.items.length} exclusions`;
+      return t("console.proposals.edit.describe.exclusions", { count: b.items.length }, `${b.items.length} exclusions`);
     case "equipment_manifest":
-      return `${b.items.length} items`;
+      return t("console.proposals.edit.describe.items", { count: b.items.length }, `${b.items.length} items`);
     case "terms_grid":
-      return `${b.items.length} terms`;
+      return t("console.proposals.edit.describe.terms", { count: b.items.length }, `${b.items.length} terms`);
     default:
       return "";
   }

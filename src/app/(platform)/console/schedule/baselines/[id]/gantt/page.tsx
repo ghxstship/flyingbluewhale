@@ -5,12 +5,14 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 import GanttClient from "../gantt-client";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   if (!hasSupabase) return null;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { id } = await params;
@@ -71,12 +73,20 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow={`Schedule · ${b.project?.name ?? "Project"}`}
-        title={`${b.name} · Gantt`}
-        subtitle={`${a.length} activities · ${criticalCount} on critical path · ${d.length} dependencies`}
+        eyebrow={t(
+          "console.schedule.baselines.gantt.eyebrow",
+          { project: b.project?.name ?? t("console.schedule.baselines.gantt.projectFallback", undefined, "Project") },
+          `Schedule · ${b.project?.name ?? "Project"}`,
+        )}
+        title={t("console.schedule.baselines.gantt.title", { name: b.name }, `${b.name} · Gantt`)}
+        subtitle={t(
+          "console.schedule.baselines.gantt.subtitle",
+          { activities: a.length, critical: criticalCount, dependencies: d.length },
+          `${a.length} activities · ${criticalCount} on critical path · ${d.length} dependencies`,
+        )}
         action={
           <Button href={`/console/schedule/baselines/${b.id}`} size="sm" variant="ghost">
-            ← Back to Baseline
+            {t("console.schedule.baselines.gantt.backToBaseline", undefined, "← Back to Baseline")}
           </Button>
         }
       />
@@ -85,7 +95,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <GanttClient activities={a} dependencies={d} />
         ) : (
           <div className="surface p-6 text-sm">
-            No activities yet — import a P6/MSP/Asta file or add activities to populate the schedule.
+            {t(
+              "console.schedule.baselines.gantt.empty",
+              undefined,
+              "No activities yet — import a P6/MSP/Asta file or add activities to populate the schedule.",
+            )}
           </div>
         )}
       </div>

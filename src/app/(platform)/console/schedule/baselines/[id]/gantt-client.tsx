@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Lightweight SVG Gantt chart (gap D20 client / G-001 runtime UX).
@@ -54,6 +55,7 @@ function dayDiff(a: Date, b: Date): number {
 }
 
 export default function GanttClient({ activities, dependencies }: Props) {
+  const t = useT();
   const [lookahead, setLookahead] = useState<Lookahead>("all");
   const [showFloat, setShowFloat] = useState(true);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -146,7 +148,9 @@ export default function GanttClient({ activities, dependencies }: Props) {
   return (
     <div className="space-y-3">
       <div className="surface flex flex-wrap items-center gap-3 p-2 text-xs">
-        <span className="font-mono text-[var(--text-muted)] uppercase">Lookahead</span>
+        <span className="font-mono text-[var(--text-muted)] uppercase">
+          {t("console.schedule.baselines.gantt.lookahead", undefined, "Lookahead")}
+        </span>
         {(["all", "3w", "6w"] as const).map((opt) => (
           <button
             key={opt}
@@ -156,20 +160,33 @@ export default function GanttClient({ activities, dependencies }: Props) {
               lookahead === opt ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
             }`}
           >
-            {opt === "all" ? "Full" : opt === "3w" ? "3-week" : "6-week"}
+            {opt === "all"
+              ? t("console.schedule.baselines.gantt.lookaheadFull", undefined, "Full")
+              : opt === "3w"
+                ? t("console.schedule.baselines.gantt.lookahead3w", undefined, "3-week")
+                : t("console.schedule.baselines.gantt.lookahead6w", undefined, "6-week")}
           </button>
         ))}
         <label className="flex items-center gap-1">
           <input type="checkbox" checked={showFloat} onChange={(e) => setShowFloat(e.target.checked)} />
-          Show float
+          {t("console.schedule.baselines.gantt.showFloat", undefined, "Show float")}
         </label>
         <span className="ms-auto font-mono text-[var(--text-muted)]">
-          {filteredActivities.length} of {activities.length} activities
+          {t(
+            "console.schedule.baselines.gantt.activityCount",
+            { shown: filteredActivities.length, total: activities.length },
+            `${filteredActivities.length} of ${activities.length} activities`,
+          )}
         </span>
       </div>
 
       <div className="surface overflow-auto p-2" style={{ maxHeight: "75vh" }}>
-        <svg width={totalW} height={totalH} role="img" aria-label="Gantt chart">
+        <svg
+          width={totalW}
+          height={totalH}
+          role="img"
+          aria-label={t("console.schedule.baselines.gantt.chartAriaLabel", undefined, "Gantt chart")}
+        >
           {/* Month grid */}
           <g>
             {monthMarks.map((m) => (
@@ -195,7 +212,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
                 strokeDasharray="3 3"
               />
               <text x={todayX + 4} y={HEADER_H - 2} fontSize="10" fill="#2563EB">
-                today
+                {t("console.schedule.baselines.gantt.today", undefined, "today")}
               </text>
             </g>
           )}
@@ -260,8 +277,11 @@ export default function GanttClient({ activities, dependencies }: Props) {
       </div>
 
       <div className="text-[10px] text-[var(--text-muted)]">
-        Red bars are on the critical path (total float ≤ 0). Light bars to the right of non-critical activities show
-        available float. FS dependencies render as elbow arrows.
+        {t(
+          "console.schedule.baselines.gantt.legend",
+          undefined,
+          "Red bars are on the critical path (total float ≤ 0). Light bars to the right of non-critical activities show available float. FS dependencies render as elbow arrows.",
+        )}
       </div>
     </div>
   );

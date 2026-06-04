@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -31,12 +31,18 @@ function inWindow(r: RentalRow, fromIso: string, toIso: string): boolean {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Production · Rentals" title="Availability" />
+        <ModuleHeader
+          eyebrow={t("console.production.rentals.availability.eyebrow", undefined, "Production · Rentals")}
+          title={t("console.production.rentals.availability.title", undefined, "Availability")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.production.rentals.availability.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -102,28 +108,36 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production · Rentals"
-        title="Availability"
-        subtitle={`${availableNow} available · ${reservedNow} reserved · ${inUseNow} in use`}
+        eyebrow={t("console.production.rentals.availability.eyebrow", undefined, "Production · Rentals")}
+        title={t("console.production.rentals.availability.title", undefined, "Availability")}
+        subtitle={t(
+          "console.production.rentals.availability.subtitle",
+          { available: availableNow, reserved: reservedNow, inUse: inUseNow },
+          `${availableNow} available · ${reservedNow} reserved · ${inUseNow} in use`,
+        )}
         action={
           <Button href="/console/production/rentals/new" size="sm">
-            + New Rental
+            {t("console.production.rentals.availability.newRental", undefined, "+ New Rental")}
           </Button>
         }
       />
       <div className="page-content">
         {eqList.length === 0 ? (
           <EmptyState
-            title="No Equipment to Show"
-            description="Author equipment in /console/production/equipment, then bookings + availability surface here."
+            title={t("console.production.rentals.availability.empty.title", undefined, "No Equipment to Show")}
+            description={t(
+              "console.production.rentals.availability.empty.description",
+              undefined,
+              "Author equipment in /console/production/equipment, then bookings + availability surface here.",
+            )}
           />
         ) : (
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr>
-                  <th>Asset</th>
-                  <th>Status</th>
+                  <th>{t("console.production.rentals.availability.col.asset", undefined, "Asset")}</th>
+                  <th>{t("console.production.rentals.availability.col.status", undefined, "Status")}</th>
                   {days.map((d) => (
                     <th key={d.toISOString()} className="text-center text-xs">
                       {fmt.dateParts(d, { weekday: "short", month: "numeric", day: "numeric" })}
@@ -146,9 +160,15 @@ export default async function Page() {
                     {days.map((d) => {
                       const s = statusForDay(eq, d);
                       const tone = s === "free" ? "success" : s === "booked" ? "warning" : "error";
+                      const label =
+                        s === "free"
+                          ? t("console.production.rentals.availability.day.free", undefined, "free")
+                          : s === "booked"
+                            ? t("console.production.rentals.availability.day.booked", undefined, "booked")
+                            : t("console.production.rentals.availability.day.blocked", undefined, "blocked");
                       return (
                         <td key={d.toISOString()} className="text-center">
-                          <Badge variant={tone}>{s}</Badge>
+                          <Badge variant={tone}>{label}</Badge>
                         </td>
                       );
                     })}
@@ -158,7 +178,11 @@ export default async function Page() {
             </table>
             {eqList.length > 200 && (
               <p className="px-4 py-3 text-xs text-[var(--text-muted)]">
-                Showing first 200 assets. Filter by category in /console/production/equipment for narrower views.
+                {t(
+                  "console.production.rentals.availability.truncationNote",
+                  undefined,
+                  "Showing first 200 assets. Filter by category in /console/production/equipment for narrower views.",
+                )}
               </p>
             )}
           </div>

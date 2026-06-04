@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { STATUS_TONE } from "@/lib/marketplace";
@@ -26,12 +26,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Bookings" title="Settlements" />
+        <ModuleHeader
+          eyebrow={t("console.bookings.settlements.eyebrow", undefined, "Bookings")}
+          title={t("console.bookings.settlements.title", undefined, "Settlements")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.bookings.settlements.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -58,16 +64,33 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Bookings"
-        title="Settlements"
-        subtitle={`${rows.length} Settlements · ${finalCount} Final · ${draftCount} Draft`}
+        eyebrow={t("console.bookings.settlements.eyebrow", undefined, "Bookings")}
+        title={t("console.bookings.settlements.title", undefined, "Settlements")}
+        subtitle={t(
+          "console.bookings.settlements.subtitle",
+          { total: rows.length, final: finalCount, draft: draftCount },
+          `${rows.length} Settlements · ${finalCount} Final · ${draftCount} Draft`,
+        )}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard label="Total GBOR" value={formatMoney(totalGBOR)} accent />
-          <MetricCard label="Total NBOR" value={formatMoney(totalNBOR)} />
-          <MetricCard label="Final" value={fmt.number(finalCount)} />
-          <MetricCard label="Draft" value={fmt.number(draftCount)} />
+          <MetricCard
+            label={t("console.bookings.settlements.metric.totalGbor", undefined, "Total GBOR")}
+            value={formatMoney(totalGBOR)}
+            accent
+          />
+          <MetricCard
+            label={t("console.bookings.settlements.metric.totalNbor", undefined, "Total NBOR")}
+            value={formatMoney(totalNBOR)}
+          />
+          <MetricCard
+            label={t("console.bookings.settlements.metric.final", undefined, "Final")}
+            value={fmt.number(finalCount)}
+          />
+          <MetricCard
+            label={t("console.bookings.settlements.metric.draft", undefined, "Draft")}
+            value={fmt.number(draftCount)}
+          />
         </div>
 
         <DataTable<Row>
@@ -77,54 +100,58 @@ export default async function Page() {
               ? `/console/bookings/deals/${r.talent_offer_id}/settlement`
               : `/console/bookings/settlements/${r.id}`
           }
-          emptyLabel="No settlements yet"
-          emptyDescription="Settlements are created from accepted deals on the deal detail page."
+          emptyLabel={t("console.bookings.settlements.emptyLabel", undefined, "No settlements yet")}
+          emptyDescription={t(
+            "console.bookings.settlements.emptyDescription",
+            undefined,
+            "Settlements are created from accepted deals on the deal detail page.",
+          )}
           columns={[
             {
               key: "date",
-              header: "Show Date",
+              header: t("console.bookings.settlements.col.showDate", undefined, "Show Date"),
               render: (r) => r.show_date,
               accessor: (r) => r.show_date,
               className: "font-mono text-xs",
             },
             {
               key: "gbor",
-              header: "GBOR",
+              header: t("console.bookings.settlements.col.gbor", undefined, "GBOR"),
               render: (r) => formatMoney(r.gross_box_office_cents),
               accessor: (r) => Number(r.gross_box_office_cents),
               className: "font-mono text-xs",
             },
             {
               key: "nbor",
-              header: "NBOR",
+              header: t("console.bookings.settlements.col.nbor", undefined, "NBOR"),
               render: (r) => formatMoney(r.nbor_cents),
               accessor: (r) => Number(r.nbor_cents),
               className: "font-mono text-xs",
             },
             {
               key: "artist",
-              header: "Artist Payout",
+              header: t("console.bookings.settlements.col.artistPayout", undefined, "Artist Payout"),
               render: (r) => formatMoney(r.artist_payout_cents),
               accessor: (r) => Number(r.artist_payout_cents),
               className: "font-mono text-xs",
             },
             {
               key: "balance",
-              header: "Balance Due",
+              header: t("console.bookings.settlements.col.balanceDue", undefined, "Balance Due"),
               render: (r) => formatMoney(r.balance_due_cents),
               accessor: (r) => Number(r.balance_due_cents),
               className: "font-mono text-xs",
             },
             {
               key: "att",
-              header: "Paid Att.",
+              header: t("console.bookings.settlements.col.paidAtt", undefined, "Paid Att."),
               render: (r) => fmt.number(r.paid_attendance ?? 0),
               accessor: (r) => Number(r.paid_attendance ?? 0),
               className: "font-mono text-xs tabular-nums",
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.bookings.settlements.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,

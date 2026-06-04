@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Programs" title="Protocol" />
+        <ModuleHeader
+          eyebrow={t("console.programs.protocol.eyebrow", undefined, "Programs")}
+          title={t("console.programs.protocol.title", undefined, "Protocol")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.programs.protocol.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -82,24 +88,48 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Programs" title="Protocol" subtitle="VIP itineraries · dignitary management · T3 fleet" />
+      <ModuleHeader
+        eyebrow={t("console.programs.protocol.eyebrow", undefined, "Programs")}
+        title={t("console.programs.protocol.title", undefined, "Protocol")}
+        subtitle={t(
+          "console.programs.protocol.subtitle",
+          undefined,
+          "VIP itineraries · dignitary management · T3 fleet",
+        )}
+      />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="VIP categories" value={fmtIntl.number(vipCats.length)} accent />
-          <MetricCard label="T3 runs · 14d" value={fmtIntl.number(runs.length)} />
-          <MetricCard label="Accommodation Blocks" value={fmtIntl.number(blockCount ?? 0)} />
+          <MetricCard
+            label={t("console.programs.protocol.metrics.vipCategories", undefined, "VIP categories")}
+            value={fmtIntl.number(vipCats.length)}
+            accent
+          />
+          <MetricCard
+            label={t("console.programs.protocol.metrics.t3Runs14d", undefined, "T3 runs · 14d")}
+            value={fmtIntl.number(runs.length)}
+          />
+          <MetricCard
+            label={t("console.programs.protocol.metrics.accommodationBlocks", undefined, "Accommodation Blocks")}
+            value={fmtIntl.number(blockCount ?? 0)}
+          />
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">VIP accreditation categories</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.programs.protocol.vipCategoriesHeading", undefined, "VIP accreditation categories")}
+          </h3>
           {vipCats.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No VIP categories defined"
-              description="Author categories with codes like VIP, VVIP, DIGNITARY, T3 in Console → Accreditation → Categories."
+              title={t("console.programs.protocol.empty.vipCategories.title", undefined, "No VIP categories defined")}
+              description={t(
+                "console.programs.protocol.empty.vipCategories.description",
+                undefined,
+                "Author categories with codes like VIP, VVIP, DIGNITARY, T3 in Console → Accreditation → Categories.",
+              )}
               action={
                 <Link href="/console/accreditation/categories" className="btn btn-secondary btn-sm">
-                  Open categories
+                  {t("console.programs.protocol.empty.vipCategories.action", undefined, "Open categories")}
                 </Link>
               }
             />
@@ -118,15 +148,21 @@ export default async function Page() {
         </section>
 
         <section>
-          <h3 className="text-sm font-semibold">T3 fleet — next 14 days</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.programs.protocol.t3FleetHeading", undefined, "T3 fleet — next 14 days")}
+          </h3>
           {runs.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No T3 dispatch runs scheduled"
-              description="Author dispatch runs with fleet = 't3' under Transport → Dispatch."
+              title={t("console.programs.protocol.empty.t3Runs.title", undefined, "No T3 dispatch runs scheduled")}
+              description={t(
+                "console.programs.protocol.empty.t3Runs.description",
+                undefined,
+                "Author dispatch runs with fleet = 't3' under Transport → Dispatch.",
+              )}
               action={
                 <Link href="/console/transport/dispatch/new" className="btn btn-secondary btn-sm">
-                  + Schedule run
+                  {t("console.programs.protocol.empty.t3Runs.action", undefined, "+ Schedule run")}
                 </Link>
               }
             />

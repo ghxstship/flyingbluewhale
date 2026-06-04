@@ -10,6 +10,7 @@ import { addCoLine, deleteCoLine, transitionPoChangeOrder } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data: co } = await supabase
     .from("po_change_orders")
@@ -60,9 +62,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
+        eyebrow={t("console.procurement.poChangeOrders.detail.eyebrow", undefined, "Procurement")}
         breadcrumbs={[
-          { label: "PO Change Orders", href: "/console/procurement/po-change-orders" },
+          {
+            label: t("console.procurement.poChangeOrders.detail.breadcrumb", undefined, "PO Change Orders"),
+            href: "/console/procurement/po-change-orders",
+          },
           { label: `CO-${co.number}` },
         ]}
         title={`CO #${co.number} — ${co.title}`}
@@ -71,12 +76,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[co.status] ?? "muted"}>{toTitle(co.status)}</Badge>
             {co.status === "proposed" && (
-              <StatusForm action={transitionPoChangeOrder.bind(null, id, "submitted")} label="Submit" />
+              <StatusForm
+                action={transitionPoChangeOrder.bind(null, id, "submitted")}
+                label={t("common.submit", undefined, "Submit")}
+              />
             )}
             {(co.status === "submitted" || co.status === "in_review") && (
               <>
-                <StatusForm action={transitionPoChangeOrder.bind(null, id, "approved")} label="Approve" />
-                <StatusForm action={transitionPoChangeOrder.bind(null, id, "rejected")} label="Reject" />
+                <StatusForm
+                  action={transitionPoChangeOrder.bind(null, id, "approved")}
+                  label={t("common.approve", undefined, "Approve")}
+                />
+                <StatusForm
+                  action={transitionPoChangeOrder.bind(null, id, "rejected")}
+                  label={t("common.reject", undefined, "Reject")}
+                />
               </>
             )}
           </div>
@@ -85,52 +99,87 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-5">
         <section className="grid gap-3 md:grid-cols-3">
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">Amount</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.procurement.poChangeOrders.detail.amount", undefined, "Amount")}
+            </div>
             <div className="text-lg font-semibold">{formatMoney(co.amount_cents)}</div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">Schedule impact</div>
-            <div className="text-lg font-semibold">{co.schedule_impact_days} days</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.procurement.poChangeOrders.detail.scheduleImpact", undefined, "Schedule impact")}
+            </div>
+            <div className="text-lg font-semibold">
+              {t(
+                "console.procurement.poChangeOrders.detail.daysCount",
+                { count: co.schedule_impact_days },
+                `${co.schedule_impact_days} days`,
+              )}
+            </div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">Proposed</div>
+            <div className="text-xs text-[var(--text-muted)]">
+              {t("console.procurement.poChangeOrders.detail.proposed", undefined, "Proposed")}
+            </div>
             <div className="text-lg font-semibold">{new Date(co.proposed_at).toLocaleDateString()}</div>
           </div>
         </section>
         {co.reason && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">Reason</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.procurement.poChangeOrders.detail.reason", undefined, "Reason")}
+            </h3>
             <p className="mt-2 text-sm whitespace-pre-wrap">{co.reason}</p>
           </section>
         )}
 
         <section className="surface p-5">
           <div className="flex items-baseline justify-between">
-            <h3 className="text-sm font-semibold">Line Items</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.procurement.poChangeOrders.detail.lineItems", undefined, "Line Items")}
+            </h3>
             <span className="font-mono text-xs text-[var(--text-muted)]">
-              {lines.length} line{lines.length === 1 ? "" : "s"} · sum {formatMoney(linesTotal)}
+              {t(
+                "console.procurement.poChangeOrders.detail.linesSummary",
+                { count: lines.length, sum: formatMoney(linesTotal) },
+                `${lines.length} line${lines.length === 1 ? "" : "s"} · sum ${formatMoney(linesTotal)}`,
+              )}
             </span>
           </div>
           {!totalsMatch && (
             <div className="surface-inset mt-3 rounded-md border border-[var(--warning)] p-3 text-xs">
-              <strong>Heads up:</strong> the line-item sum ({formatMoney(linesTotal)}) doesn&rsquo;t match the CO amount
-              ({formatMoney(co.amount_cents)}). Reconcile before approving — approval rolls the CO amount onto the
-              parent PO.
+              <strong>{t("console.procurement.poChangeOrders.detail.headsUp", undefined, "Heads up:")}</strong>{" "}
+              {t(
+                "console.procurement.poChangeOrders.detail.mismatchWarning",
+                { sum: formatMoney(linesTotal), amount: formatMoney(co.amount_cents) },
+                `the line-item sum (${formatMoney(linesTotal)}) doesn’t match the CO amount (${formatMoney(co.amount_cents)}). Reconcile before approving — approval rolls the CO amount onto the parent PO.`,
+              )}
             </div>
           )}
           {lines.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No itemized breakdown. Add lines below so the reviewer knows what the dollars cover.
+              {t(
+                "console.procurement.poChangeOrders.detail.noBreakdown",
+                undefined,
+                "No itemized breakdown. Add lines below so the reviewer knows what the dollars cover.",
+              )}
             </p>
           ) : (
             <table className="data-table mt-3 w-full">
               <thead>
                 <tr>
                   <th className="w-12 text-start">#</th>
-                  <th className="text-start">Description</th>
-                  <th className="text-right">Qty</th>
-                  <th className="text-right">Unit Price</th>
-                  <th className="text-right">Line Total</th>
+                  <th className="text-start">
+                    {t("console.procurement.poChangeOrders.detail.col.description", undefined, "Description")}
+                  </th>
+                  <th className="text-right">
+                    {t("console.procurement.poChangeOrders.detail.col.qty", undefined, "Qty")}
+                  </th>
+                  <th className="text-right">
+                    {t("console.procurement.poChangeOrders.detail.col.unitPrice", undefined, "Unit Price")}
+                  </th>
+                  <th className="text-right">
+                    {t("console.procurement.poChangeOrders.detail.col.lineTotal", undefined, "Line Total")}
+                  </th>
                   {editable && <th />}
                 </tr>
               </thead>
@@ -150,7 +199,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                           <input type="hidden" name="coId" value={id} />
                           <input type="hidden" name="lineId" value={l.id} />
                           <Button type="submit" size="sm" variant="ghost">
-                            Remove
+                            {t("common.remove", undefined, "Remove")}
                           </Button>
                         </form>
                       </td>
@@ -169,7 +218,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <input
                 name="description"
                 required
-                placeholder="Description"
+                placeholder={t("console.procurement.poChangeOrders.detail.col.description", undefined, "Description")}
                 maxLength={500}
                 className="input-base sm:col-span-3"
               />
@@ -179,7 +228,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 step="0.01"
                 min="0"
                 required
-                placeholder="Qty"
+                placeholder={t("console.procurement.poChangeOrders.detail.col.qty", undefined, "Qty")}
                 defaultValue="1"
                 className="input-base sm:col-span-1"
               />
@@ -189,17 +238,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 step="0.01"
                 min="0"
                 required
-                placeholder="Unit $"
+                placeholder={t("console.procurement.poChangeOrders.detail.unitDollarsPlaceholder", undefined, "Unit $")}
                 className="input-base sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
-                Add Line
+                {t("console.procurement.poChangeOrders.detail.addLine", undefined, "Add Line")}
               </Button>
             </form>
           )}
           {!editable && (
             <p className="mt-3 text-xs text-[var(--text-muted)]">
-              Lines are locked once the CO is in review / approved / rejected / void.
+              {t(
+                "console.procurement.poChangeOrders.detail.linesLocked",
+                undefined,
+                "Lines are locked once the CO is in review / approved / rejected / void.",
+              )}
             </p>
           )}
         </section>

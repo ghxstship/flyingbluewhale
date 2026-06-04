@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { IFCLoader } from "web-ifc-three";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Minimal IFC 3D viewer (gap G-006 / B8 runtime).
@@ -26,11 +27,12 @@ type Props = {
 };
 
 export default function ViewerClient({ modelId, ifcUrl }: Props) {
+  const t = useT();
   const mountRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const [status, setStatus] = useState<string>("Initializing…");
+  const [status, setStatus] = useState<string>(t("console.bim.view.status.initializing", undefined, "Initializing…"));
   const [elementCount, setElementCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -120,11 +122,11 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
     // self-contained.
     ifcLoader.ifcManager.setWasmPath("/wasm/");
 
-    setStatus("Downloading IFC…");
+    setStatus(t("console.bim.view.status.downloading", undefined, "Downloading IFC…"));
     ifcLoader.load(
       ifcUrl,
       (model) => {
-        setStatus("Rendering…");
+        setStatus(t("console.bim.view.status.rendering", undefined, "Rendering…"));
         scene.add(model);
 
         // Re-center camera on the loaded model.
@@ -144,11 +146,17 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
           if ((c as THREE.Mesh).isMesh) count += 1;
         });
         setElementCount(count);
-        setStatus("Ready");
+        setStatus(t("console.bim.view.status.ready", undefined, "Ready"));
       },
       undefined,
       (err) => {
-        setStatus(`Failed: ${err instanceof Error ? err.message : String(err)}`);
+        setStatus(
+          t(
+            "console.bim.view.status.failed",
+            { message: err instanceof Error ? err.message : String(err) },
+            `Failed: ${err instanceof Error ? err.message : String(err)}`,
+          ),
+        );
       },
     );
 
@@ -185,22 +193,31 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
   return (
     <div className="space-y-2">
       <div className="surface flex items-center gap-3 p-2 text-xs">
-        <span className="font-mono text-[var(--text-muted)] uppercase">Status</span>
+        <span className="font-mono text-[var(--text-muted)] uppercase">
+          {t("console.bim.view.statusLabel", undefined, "Status")}
+        </span>
         <span>{status}</span>
         {elementCount != null && (
-          <span className="ms-auto font-mono text-[var(--text-muted)]">{elementCount} meshes</span>
+          <span className="ms-auto font-mono text-[var(--text-muted)]">
+            {t("console.bim.view.meshesCount", { count: elementCount }, `${elementCount} meshes`)}
+          </span>
         )}
-        <span className="font-mono text-[10px] text-[var(--text-muted)]">model {modelId.slice(0, 8)}…</span>
+        <span className="font-mono text-[10px] text-[var(--text-muted)]">
+          {t("console.bim.view.modelLabel", { id: modelId.slice(0, 8) }, `model ${modelId.slice(0, 8)}…`)}
+        </span>
       </div>
       <div
         ref={mountRef}
         className="surface relative"
         style={{ height: "75vh", touchAction: "none" }}
-        aria-label="3D BIM viewer canvas"
+        aria-label={t("console.bim.view.canvasAriaLabel", undefined, "3D BIM viewer canvas")}
       />
       <p className="text-[10px] text-[var(--text-muted)]">
-        Drag to orbit, scroll to zoom. IFC parsing via web-ifc (WASM). For Revit / Navisworks, use Autodesk Forge — not
-        bundled here.
+        {t(
+          "console.bim.view.hint",
+          undefined,
+          "Drag to orbit, scroll to zoom. IFC parsing via web-ifc (WASM). For Revit / Navisworks, use Autodesk Forge — not bundled here.",
+        )}
       </p>
     </div>
   );

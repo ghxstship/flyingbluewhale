@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { SUBMISSION_STATUSES, STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { transitionSubmissionAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +30,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   const { callId, submissionId } = await params;
   if (!hasSupabase) return notFound();
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
     .from("open_call_submissions")
@@ -43,26 +45,38 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow="Submission"
+        eyebrow={t("console.marketplace.calls.submissions.detail.eyebrow", undefined, "Submission")}
         title={`#${s.id.slice(0, 8)}`}
-        subtitle={`Submitted ${new Date(s.submitted_at).toLocaleString()}`}
+        subtitle={t(
+          "console.marketplace.calls.submissions.detail.submittedAt",
+          { date: new Date(s.submitted_at).toLocaleString() },
+          `Submitted ${new Date(s.submitted_at).toLocaleString()}`,
+        )}
         action={<Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">
         <section className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Cover Note</h2>
+          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+            {t("console.marketplace.calls.submissions.detail.coverNote", undefined, "Cover Note")}
+          </h2>
           <div className="text-sm whitespace-pre-wrap">{s.cover_note ?? "—"}</div>
         </section>
 
         <section className="surface p-5">
-          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Submitter</h2>
+          <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+            {t("console.marketplace.calls.submissions.detail.submitter", undefined, "Submitter")}
+          </h2>
           <dl className="space-y-1 text-sm">
             <div>
-              <span className="text-[var(--text-secondary)]">User:</span>{" "}
+              <span className="text-[var(--text-secondary)]">
+                {t("console.marketplace.calls.submissions.detail.userLabel", undefined, "User:")}
+              </span>{" "}
               <span className="font-mono">{s.submitter_user_id.slice(0, 8)}</span>
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">Talent profile:</span>{" "}
+              <span className="text-[var(--text-secondary)]">
+                {t("console.marketplace.calls.submissions.detail.talentProfileLabel", undefined, "Talent profile:")}
+              </span>{" "}
               {s.talent_profile_id ? (
                 <a
                   className="font-mono text-[var(--org-primary)]"
@@ -75,12 +89,16 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               )}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">Proposed fee:</span>{" "}
+              <span className="text-[var(--text-secondary)]">
+                {t("console.marketplace.calls.submissions.detail.proposedFeeLabel", undefined, "Proposed fee:")}
+              </span>{" "}
               {s.fee_proposed_cents ? formatMoney(s.fee_proposed_cents) : "—"}
             </div>
             {s.score != null && (
               <div>
-                <span className="text-[var(--text-secondary)]">Score:</span>{" "}
+                <span className="text-[var(--text-secondary)]">
+                  {t("console.marketplace.calls.submissions.detail.scoreLabel", undefined, "Score:")}
+                </span>{" "}
                 <span className="font-mono">{s.score}</span>
               </div>
             )}
@@ -89,17 +107,26 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
 
         {s.internal_notes && (
           <section className="surface p-5">
-            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">Internal Notes</h2>
+            <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
+              {t("console.marketplace.calls.submissions.detail.internalNotes", undefined, "Internal Notes")}
+            </h2>
             <div className="text-sm whitespace-pre-wrap">{s.internal_notes}</div>
           </section>
         )}
 
         <section className="surface p-5">
-          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">Move submission</h2>
-          <FormShell action={transitionSubmissionAction} submitLabel="Update Status">
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.marketplace.calls.submissions.detail.moveSubmission", undefined, "Move submission")}
+          </h2>
+          <FormShell
+            action={transitionSubmissionAction}
+            submitLabel={t("console.marketplace.calls.submissions.detail.updateStatus", undefined, "Update Status")}
+          >
             <input type="hidden" name="submission_id" value={s.id} />
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Status</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.marketplace.calls.submissions.detail.statusLabel", undefined, "Status")}
+              </label>
               <select name="status" className="input-base mt-1.5 w-full" defaultValue={s.status}>
                 {SUBMISSION_STATUSES.map((st) => (
                   <option key={st} value={st}>
@@ -108,9 +135,18 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
                 ))}
               </select>
             </div>
-            <Input label="Score (0-100)" name="score" type="number" min={0} max={100} defaultValue={s.score ?? ""} />
+            <Input
+              label={t("console.marketplace.calls.submissions.detail.scoreInputLabel", undefined, "Score (0-100)")}
+              name="score"
+              type="number"
+              min={0}
+              max={100}
+              defaultValue={s.score ?? ""}
+            />
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Internal Notes</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("console.marketplace.calls.submissions.detail.internalNotes", undefined, "Internal Notes")}
+              </label>
               <textarea
                 name="internal_notes"
                 rows={4}

@@ -6,7 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -40,12 +40,18 @@ function relativeTime(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Compliance" title="Chain of Custody" />
+        <ModuleHeader
+          eyebrow={t("console.compliance.coc.eyebrow", undefined, "Compliance")}
+          title={t("console.compliance.coc.title", undefined, "Chain of Custody")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.compliance.coc.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -86,25 +92,35 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Compliance"
-        title="Chain of Custody"
-        subtitle="Audit trail for evidence + samples."
+        eyebrow={t("console.compliance.coc.eyebrow", undefined, "Compliance")}
+        title={t("console.compliance.coc.title", undefined, "Chain of Custody")}
+        subtitle={t("console.compliance.coc.subtitle", undefined, "Audit trail for evidence + samples.")}
         action={
           <Button href="/m/coc" size="sm">
-            Mobile capture
+            {t("console.compliance.coc.mobileCapture", undefined, "Mobile capture")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Events · 24h" value={fmt.number(count24h ?? 0)} accent />
-          <MetricCard label="Events · 30d" value={fmt.number(rows.length)} />
-          <MetricCard label="Distinct Actors" value={fmt.number(distinctActors.size)} />
+          <MetricCard
+            label={t("console.compliance.coc.metrics.events24h", undefined, "Events · 24h")}
+            value={fmt.number(count24h ?? 0)}
+            accent
+          />
+          <MetricCard
+            label={t("console.compliance.coc.metrics.events30d", undefined, "Events · 30d")}
+            value={fmt.number(rows.length)}
+          />
+          <MetricCard
+            label={t("console.compliance.coc.metrics.distinctActors", undefined, "Distinct Actors")}
+            value={fmt.number(distinctActors.size)}
+          />
         </div>
 
         {tableEntries.length > 0 && (
           <section className="surface p-4">
-            <h3 className="text-sm font-semibold">By Target</h3>
+            <h3 className="text-sm font-semibold">{t("console.compliance.coc.byTarget", undefined, "By Target")}</h3>
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {tableEntries.map(([table, count]) => (
                 <li key={table} className="flex items-center justify-between text-sm">
@@ -117,12 +133,18 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Recent Events</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.compliance.coc.recentEvents", undefined, "Recent Events")}
+          </h3>
           {rows.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No COC events in the last 30 days"
-              description="Custody events are auto-captured by the audit_log when evidence-bearing rows are created or modified."
+              title={t("console.compliance.coc.empty.title", undefined, "No COC events in the last 30 days")}
+              description={t(
+                "console.compliance.coc.empty.description",
+                undefined,
+                "Custody events are auto-captured by the audit_log when evidence-bearing rows are created or modified.",
+              )}
             />
           ) : (
             <ul className="mt-3 space-y-2">
@@ -130,7 +152,9 @@ export default async function Page() {
                 <li key={r.id} className="surface flex items-center justify-between p-3">
                   <div className="min-w-0 flex-1">
                     <div className="text-sm">
-                      <span className="font-medium">{r.actor?.name ?? r.actor?.email ?? "system"}</span>{" "}
+                      <span className="font-medium">
+                        {r.actor?.name ?? r.actor?.email ?? t("console.compliance.coc.system", undefined, "system")}
+                      </span>{" "}
                       <span className="text-[var(--text-muted)]">{r.action.replace(/[._]/g, " ")}</span>{" "}
                       <Badge variant="muted">{r.target_table ?? "—"}</Badge>
                     </div>

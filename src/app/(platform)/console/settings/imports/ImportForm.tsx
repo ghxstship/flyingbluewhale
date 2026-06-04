@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Target = "crew-members" | "tasks" | "vendors";
 
@@ -16,6 +17,7 @@ type ImportResult = {
 };
 
 export function ImportForm() {
+  const t = useT();
   const [target, setTarget] = useState<Target>("crew-members");
   const [csv, setCsv] = useState("");
   const [projectId, setProjectId] = useState("");
@@ -25,16 +27,16 @@ export function ImportForm() {
   function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    f.text().then((t) => setCsv(t));
+    f.text().then((text) => setCsv(text));
   }
 
   function submit() {
     if (!csv.trim()) {
-      toast.error("Drop a CSV file first");
+      toast.error(t("console.settings.imports.errors.noCsv", undefined, "Drop a CSV file first"));
       return;
     }
     if (target === "tasks" && !projectId) {
-      toast.error("Tasks require a projectId");
+      toast.error(t("console.settings.imports.errors.projectIdRequired", undefined, "Tasks require a projectId"));
       return;
     }
     startTransition(async () => {
@@ -51,11 +53,19 @@ export function ImportForm() {
         error?: { message?: string };
       };
       if (!r.ok || payload.ok === false) {
-        toast.error(payload.error?.message ?? "Import failed");
+        toast.error(
+          payload.error?.message ?? t("console.settings.imports.errors.importFailed", undefined, "Import failed"),
+        );
         return;
       }
       setResult(payload.data ?? null);
-      toast.success(`Imported ${payload.data?.insertedCount ?? 0} rows`);
+      toast.success(
+        t(
+          "console.settings.imports.successToast",
+          { count: payload.data?.insertedCount ?? 0 },
+          `Imported ${payload.data?.insertedCount ?? 0} rows`,
+        ),
+      );
     });
   }
 
@@ -63,45 +73,68 @@ export function ImportForm() {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3">
         <label className="flex flex-col gap-1 text-xs">
-          <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Target</span>
+          <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+            {t("console.settings.imports.targetLabel", undefined, "Target")}
+          </span>
           <select value={target} onChange={(e) => setTarget(e.target.value as Target)} className="input-base w-52">
-            <option value="crew-members">Crew roster</option>
-            <option value="tasks">Project tasks</option>
-            <option value="vendors">Vendors</option>
+            <option value="crew-members">
+              {t("console.settings.imports.targets.crewMembers", undefined, "Crew roster")}
+            </option>
+            <option value="tasks">{t("console.settings.imports.targets.tasks", undefined, "Project tasks")}</option>
+            <option value="vendors">{t("console.settings.imports.targets.vendors", undefined, "Vendors")}</option>
           </select>
         </label>
         {target === "tasks" ? (
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">Project id</span>
+            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+              {t("console.settings.imports.projectIdLabel", undefined, "Project id")}
+            </span>
             <input
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
               className="input-base w-80 font-mono text-xs"
-              placeholder="uuid"
+              placeholder={t("console.settings.imports.projectIdPlaceholder", undefined, "uuid")}
             />
           </label>
         ) : null}
       </div>
       <label className="block">
-        <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">CSV file</span>
+        <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+          {t("console.settings.imports.csvFileLabel", undefined, "CSV file")}
+        </span>
         <input type="file" accept=".csv,text/csv" onChange={onFile} className="mt-1 block" />
       </label>
       <Button type="button" onClick={submit} disabled={isPending}>
-        {isPending ? "Importing…" : "Import CSV"}
+        {isPending
+          ? t("console.settings.imports.importing", undefined, "Importing…")
+          : t("console.settings.imports.importCta", undefined, "Import CSV")}
       </Button>
       {result ? (
         <div className="rounded-md border border-[var(--border-color)] p-4 text-sm">
           <p>
-            <strong>{result.insertedCount}</strong> inserted · {result.skippedCount} skipped · {result.invalidCount}{" "}
-            invalid of {result.rowCount} rows
+            <strong>{result.insertedCount}</strong>{" "}
+            {t("console.settings.imports.summary.inserted", undefined, "inserted")} · {result.skippedCount}{" "}
+            {t("console.settings.imports.summary.skipped", undefined, "skipped")} · {result.invalidCount}{" "}
+            {t(
+              "console.settings.imports.summary.invalidOf",
+              { total: result.rowCount },
+              `invalid of ${result.rowCount} rows`,
+            )}
           </p>
           {result.invalid.length > 0 ? (
             <details className="mt-2">
-              <summary className="cursor-pointer">First {result.invalid.length} invalid rows</summary>
+              <summary className="cursor-pointer">
+                {t(
+                  "console.settings.imports.summary.firstInvalid",
+                  { count: result.invalid.length },
+                  `First ${result.invalid.length} invalid rows`,
+                )}
+              </summary>
               <ul className="mt-2 space-y-1 text-xs">
-                {result.invalid.map((r, i) => (
+                {result.invalid.map((row, i) => (
                   <li key={i}>
-                    Row {r.rowIdx}: {r.errors.join(" · ")}
+                    {t("console.settings.imports.summary.rowLabel", { idx: row.rowIdx }, `Row ${row.rowIdx}`)}:{" "}
+                    {row.errors.join(" · ")}
                   </li>
                 ))}
               </ul>

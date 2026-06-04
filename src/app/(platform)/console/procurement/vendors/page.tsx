@@ -6,17 +6,21 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Vendor } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function VendorsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Vendors" />
+        <ModuleHeader title={t("console.procurement.vendors.title", undefined, "Vendors")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.vendors.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -25,27 +29,44 @@ export default async function VendorsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Vendors"
-        subtitle={`${rows.length} Vendor${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/procurement/vendors/new">+ New Vendor</Button>}
+        eyebrow={t("console.procurement.vendors.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.vendors.title", undefined, "Vendors")}
+        subtitle={
+          rows.length === 1
+            ? t("console.procurement.vendors.subtitleOne", { count: rows.length }, `${rows.length} Vendor`)
+            : t("console.procurement.vendors.subtitleOther", { count: rows.length }, `${rows.length} Vendors`)
+        }
+        action={
+          <Button href="/console/procurement/vendors/new">
+            {t("console.procurement.vendors.newVendor", undefined, "+ New Vendor")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataTable<Vendor>
           rows={rows}
           rowHref={(r) => `/console/procurement/vendors/${r.id}`}
-          emptyLabel="No vendors yet"
-          emptyDescription="Onboard suppliers with W-9, COI, and payment terms before issuing POs."
+          emptyLabel={t("console.procurement.vendors.emptyLabel", undefined, "No vendors yet")}
+          emptyDescription={t(
+            "console.procurement.vendors.emptyDescription",
+            undefined,
+            "Onboard suppliers with W-9, COI, and payment terms before issuing POs.",
+          )}
           emptyAction={
             <Button href="/console/procurement/vendors/new" size="sm">
-              + New Vendor
+              {t("console.procurement.vendors.newVendor", undefined, "+ New Vendor")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.procurement.vendors.columns.name", undefined, "Name"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "category",
-              header: "Category",
+              header: t("console.procurement.vendors.columns.category", undefined, "Category"),
               render: (r) => r.category ?? "—",
               className: "font-mono text-xs",
               accessor: (r) => r.category ?? null,
@@ -54,21 +75,25 @@ export default async function VendorsPage() {
             },
             {
               key: "email",
-              header: "Email",
+              header: t("console.procurement.vendors.columns.email", undefined, "Email"),
               render: (r) => r.contact_email ?? "—",
               className: "font-mono text-xs",
               accessor: (r) => r.contact_email ?? null,
             },
             {
               key: "w9",
-              header: "W-9",
+              header: t("console.procurement.vendors.columns.w9", undefined, "W-9"),
               render: (r) =>
-                r.w9_on_file ? <Badge variant="success">On File</Badge> : <Badge variant="warning">Missing</Badge>,
+                r.w9_on_file ? (
+                  <Badge variant="success">{t("console.procurement.vendors.w9.onFile", undefined, "On File")}</Badge>
+                ) : (
+                  <Badge variant="warning">{t("console.procurement.vendors.w9.missing", undefined, "Missing")}</Badge>
+                ),
               accessor: (r) => r.w9_on_file ?? null,
             },
             {
               key: "coi",
-              header: "COI expires",
+              header: t("console.procurement.vendors.columns.coiExpires", undefined, "COI expires"),
               render: (r) => formatDate(r.coi_expires_at, "medium"),
               className: "font-mono text-xs",
               accessor: (r) => r.coi_expires_at,

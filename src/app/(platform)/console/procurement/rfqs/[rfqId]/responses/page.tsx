@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo, toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -43,12 +44,18 @@ const RESPONSE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "
 
 export default async function RfqResponsesPage({ params }: { params: Promise<{ rfqId: string }> }) {
   const { rfqId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Procurement" title="RFQ Responses" />
+        <ModuleHeader
+          eyebrow={t("console.procurement.rfqs.responses.eyebrow", undefined, "Procurement")}
+          title={t("console.procurement.rfqs.responses.titleFallback", undefined, "RFQ Responses")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.rfqs.responses.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -83,37 +90,59 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
   return (
     <>
       <ModuleHeader
-        eyebrow="Procurement"
-        title="Responses"
+        eyebrow={t("console.procurement.rfqs.responses.eyebrow", undefined, "Procurement")}
+        title={t("console.procurement.rfqs.responses.title", undefined, "Responses")}
         subtitle={
           <span className="font-mono text-xs">
-            {rfq.title} · {responses.length} response
-            {responses.length === 1 ? "" : "s"}
+            {rfq.title} · {responses.length}{" "}
+            {responses.length === 1
+              ? t("console.procurement.rfqs.responses.responseSingular", undefined, "response")
+              : t("console.procurement.rfqs.responses.responsePlural", undefined, "responses")}
           </span>
         }
         breadcrumbs={[
-          { label: "Procurement", href: "/console/procurement" },
-          { label: "RFQs", href: "/console/procurement/rfqs" },
+          {
+            label: t("console.procurement.rfqs.responses.breadcrumbProcurement", undefined, "Procurement"),
+            href: "/console/procurement",
+          },
+          {
+            label: t("console.procurement.rfqs.responses.breadcrumbRfqs", undefined, "RFQs"),
+            href: "/console/procurement/rfqs",
+          },
           { label: rfq.title, href: `/console/procurement/rfqs/${rfqId}` },
-          { label: "Responses" },
+          { label: t("console.procurement.rfqs.responses.breadcrumbResponses", undefined, "Responses") },
         ]}
         action={<Badge variant="muted">{toTitle(rfq.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Submitted" value={String(submitted.length)} />
-          <MetricCard label="Lowest Bid" value={lowest != null ? formatMoney(lowest) : "—"} accent={lowest != null} />
-          <MetricCard label="Avg Bid" value={average != null ? formatMoney(Math.round(average)) : "—"} />
+          <MetricCard
+            label={t("console.procurement.rfqs.responses.metricSubmitted", undefined, "Submitted")}
+            value={String(submitted.length)}
+          />
+          <MetricCard
+            label={t("console.procurement.rfqs.responses.metricLowestBid", undefined, "Lowest Bid")}
+            value={lowest != null ? formatMoney(lowest) : "—"}
+            accent={lowest != null}
+          />
+          <MetricCard
+            label={t("console.procurement.rfqs.responses.metricAvgBid", undefined, "Avg Bid")}
+            value={average != null ? formatMoney(Math.round(average)) : "—"}
+          />
         </div>
 
         <DataTable<ResponseRow>
           rows={responses}
-          emptyLabel="No Responses Yet"
-          emptyDescription="Vendors invited to this RFQ appear here once they view, bid, or decline. Use the public RFQ link (or invite vendors via requisitions) to start collecting responses."
+          emptyLabel={t("console.procurement.rfqs.responses.emptyLabel", undefined, "No Responses Yet")}
+          emptyDescription={t(
+            "console.procurement.rfqs.responses.emptyDescription",
+            undefined,
+            "Vendors invited to this RFQ appear here once they view, bid, or decline. Use the public RFQ link (or invite vendors via requisitions) to start collecting responses.",
+          )}
           columns={[
             {
               key: "vendor",
-              header: "Vendor",
+              header: t("console.procurement.rfqs.responses.colVendor", undefined, "Vendor"),
               render: (r) => (
                 <Link href={`/console/procurement/rfqs/${rfqId}/responses/${r.id}`} className="hover:underline">
                   {r.vendor?.name ?? "—"}
@@ -123,7 +152,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
             },
             {
               key: "response_state",
-              header: "State",
+              header: t("console.procurement.rfqs.responses.colState", undefined, "State"),
               render: (r) => (
                 <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
               ),
@@ -133,7 +162,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
             },
             {
               key: "total",
-              header: "Total",
+              header: t("console.procurement.rfqs.responses.colTotal", undefined, "Total"),
               render: (r) => (r.total_cents != null ? formatMoney(r.total_cents) : "—"),
               accessor: (r) => Number(r.total_cents ?? 0),
               mono: true,
@@ -143,21 +172,21 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
             },
             {
               key: "submitted",
-              header: "Submitted",
+              header: t("console.procurement.rfqs.responses.colSubmitted", undefined, "Submitted"),
               render: (r) => (r.submitted_at ? timeAgo(r.submitted_at) : "—"),
               accessor: (r) => r.submitted_at ?? null,
               mono: true,
             },
             {
               key: "awarded",
-              header: "Awarded",
+              header: t("console.procurement.rfqs.responses.colAwarded", undefined, "Awarded"),
               render: (r) => (r.awarded_at ? timeAgo(r.awarded_at) : "—"),
               accessor: (r) => r.awarded_at ?? null,
               mono: true,
             },
             {
               key: "notes",
-              header: "Notes",
+              header: t("console.procurement.rfqs.responses.colNotes", undefined, "Notes"),
               render: (r) => r.notes ?? "—",
               accessor: (r) => r.notes ?? null,
               defaultHidden: true,

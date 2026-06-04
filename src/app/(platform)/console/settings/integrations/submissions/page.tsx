@@ -8,6 +8,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,12 +36,18 @@ const TIER_TONE: Record<Tier, "muted" | "info" | "success" | "warning" | "error"
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings · Integrations" title="Partner Submissions" />
+        <ModuleHeader
+          eyebrow={t("console.settings.integrations.submissions.eyebrow", undefined, "Settings · Integrations")}
+          title={t("console.settings.integrations.submissions.title", undefined, "Partner Submissions")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.integrations.submissions.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -86,67 +93,123 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Settings · Integrations"
-        title="Partner Submissions"
-        subtitle={`${rows.length} Submission${rows.length === 1 ? "" : "s"} · ${counts.submitted + counts.reviewing} In Queue · ${counts.verified + counts.certified} Live`}
+        eyebrow={t("console.settings.integrations.submissions.eyebrow", undefined, "Settings · Integrations")}
+        title={t("console.settings.integrations.submissions.title", undefined, "Partner Submissions")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "console.settings.integrations.submissions.subtitleOne",
+                { inQueue: counts.submitted + counts.reviewing, live: counts.verified + counts.certified },
+                `1 Submission · ${counts.submitted + counts.reviewing} In Queue · ${counts.verified + counts.certified} Live`,
+              )
+            : t(
+                "console.settings.integrations.submissions.subtitleOther",
+                {
+                  count: rows.length,
+                  inQueue: counts.submitted + counts.reviewing,
+                  live: counts.verified + counts.certified,
+                },
+                `${rows.length} Submissions · ${counts.submitted + counts.reviewing} In Queue · ${counts.verified + counts.certified} Live`,
+              )
+        }
       />
       <div className="page-content space-y-5">
         {!serviceRoleAvailable ? (
           <div className="surface border-s-4 border-s-amber-500 p-4 text-xs text-[var(--text-secondary)]">
-            <strong className="text-[var(--text-primary)]">Limited view:</strong>{" "}
-            <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code> is not configured. Showing only published
-            verified/certified submissions. Set the env var to see the full review queue (submitted, reviewing,
-            rejected).
+            <strong className="text-[var(--text-primary)]">
+              {t("console.settings.integrations.submissions.limitedView", undefined, "Limited view:")}
+            </strong>{" "}
+            <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
+            {t(
+              "console.settings.integrations.submissions.limitedViewBody",
+              undefined,
+              "is not configured. Showing only published verified/certified submissions. Set the env var to see the full review queue (submitted, reviewing, rejected).",
+            )}
           </div>
         ) : null}
         <div className="metric-grid-4">
-          <MetricCard label="In queue" value={counts.submitted + counts.reviewing} accent />
-          <MetricCard label="Verified" value={counts.verified} />
-          <MetricCard label="Certified" value={counts.certified} />
-          <MetricCard label="Rejected" value={counts.rejected} />
+          <MetricCard
+            label={t("console.settings.integrations.submissions.metric.inQueue", undefined, "In queue")}
+            value={counts.submitted + counts.reviewing}
+            accent
+          />
+          <MetricCard
+            label={t("console.settings.integrations.submissions.metric.verified", undefined, "Verified")}
+            value={counts.verified}
+          />
+          <MetricCard
+            label={t("console.settings.integrations.submissions.metric.certified", undefined, "Certified")}
+            value={counts.certified}
+          />
+          <MetricCard
+            label={t("console.settings.integrations.submissions.metric.rejected", undefined, "Rejected")}
+            value={counts.rejected}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/settings/integrations/submissions/${r.id}`}
-          emptyLabel="No partner submissions yet"
-          emptyDescription="Partners submit proposals at /integrations/submit. Each lands here for tech review → Verified → Certified."
+          emptyLabel={t(
+            "console.settings.integrations.submissions.emptyLabel",
+            undefined,
+            "No partner submissions yet",
+          )}
+          emptyDescription={t(
+            "console.settings.integrations.submissions.emptyDescription",
+            undefined,
+            "Partners submit proposals at /integrations/submit. Each lands here for tech review → Verified → Certified.",
+          )}
           columns={[
-            { key: "name", header: "Integration", render: (r) => <span className="font-medium">{r.name}</span> },
-            { key: "partner_org_name", header: "Partner", render: (r) => r.partner_org_name },
-            { key: "category", header: "Category", render: (r) => toTitle(r.category) },
+            {
+              key: "name",
+              header: t("console.settings.integrations.submissions.col.integration", undefined, "Integration"),
+              render: (r) => <span className="font-medium">{r.name}</span>,
+            },
+            {
+              key: "partner_org_name",
+              header: t("console.settings.integrations.submissions.col.partner", undefined, "Partner"),
+              render: (r) => r.partner_org_name,
+            },
+            {
+              key: "category",
+              header: t("console.settings.integrations.submissions.col.category", undefined, "Category"),
+              render: (r) => toTitle(r.category),
+            },
             {
               key: "tier",
-              header: "Tier",
+              header: t("console.settings.integrations.submissions.col.tier", undefined, "Tier"),
               render: (r) => <Badge variant={TIER_TONE[r.certification_tier]}>{toTitle(r.certification_tier)}</Badge>,
             },
             {
               key: "live",
-              header: "Live",
+              header: t("console.settings.integrations.submissions.col.live", undefined, "Live"),
               render: (r) =>
                 r.published_at ? (
-                  <Badge variant="success">Live</Badge>
+                  <Badge variant="success">
+                    {t("console.settings.integrations.submissions.liveBadge", undefined, "Live")}
+                  </Badge>
                 ) : (
                   <span className="text-xs text-[var(--text-muted)]">—</span>
                 ),
             },
             {
               key: "email",
-              header: "Contact",
+              header: t("console.settings.integrations.submissions.col.contact", undefined, "Contact"),
               render: (r) => <span className="font-mono text-xs">{r.partner_contact_email}</span>,
             },
             {
               key: "submitted",
-              header: "Submitted",
+              header: t("console.settings.integrations.submissions.col.submitted", undefined, "Submitted"),
               render: (r) => new Date(r.created_at).toLocaleDateString(),
             },
           ]}
         />
         <p className="text-xs text-[var(--text-secondary)]">
-          Public partner directory:{" "}
+          {t("console.settings.integrations.submissions.publicDirectoryLabel", undefined, "Public partner directory:")}{" "}
           <Link href="/integrations/partners" className="underline">
             /integrations/partners
           </Link>
-          . Submission form:{" "}
+          . {t("console.settings.integrations.submissions.submissionFormLabel", undefined, "Submission form:")}{" "}
           <Link href="/integrations/submit" className="underline">
             /integrations/submit
           </Link>

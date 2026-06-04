@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +21,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Comms" title="Surveys" />
+        <ModuleHeader
+          eyebrow={t("console.comms.surveys.eyebrow", undefined, "Comms")}
+          title={t("console.comms.surveys.title", undefined, "Surveys")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.comms.surveys.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -44,12 +51,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Comms"
-        title="Surveys"
-        subtitle={`${rows.length} survey${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.comms.surveys.eyebrow", undefined, "Comms")}
+        title={t("console.comms.surveys.title", undefined, "Surveys")}
+        subtitle={
+          rows.length === 1
+            ? t("console.comms.surveys.subtitleOne", { count: rows.length }, `${rows.length} survey`)
+            : t("console.comms.surveys.subtitleOther", { count: rows.length }, `${rows.length} surveys`)
+        }
         action={
           <Button href="/console/comms/surveys/new" size="sm">
-            + New Survey
+            {t("console.comms.surveys.newSurvey", undefined, "+ New Survey")}
           </Button>
         }
       />
@@ -57,13 +68,21 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/comms/surveys/${r.id}`}
-          emptyLabel="No surveys yet"
-          emptyDescription="Pulse, eNPS, and suggestion-box surveys. Anonymous mode strips respondent_id."
+          emptyLabel={t("console.comms.surveys.emptyLabel", undefined, "No surveys yet")}
+          emptyDescription={t(
+            "console.comms.surveys.emptyDescription",
+            undefined,
+            "Pulse, eNPS, and suggestion-box surveys. Anonymous mode strips respondent_id.",
+          )}
           columns={[
-            { key: "title", header: "Title", render: (r) => r.title },
+            {
+              key: "title",
+              header: t("console.comms.surveys.columns.title", undefined, "Title"),
+              render: (r) => r.title,
+            },
             {
               key: "publish_state",
-              header: "State",
+              header: t("console.comms.surveys.columns.state", undefined, "State"),
               render: (r) => (
                 <Badge
                   variant={
@@ -76,10 +95,14 @@ export default async function Page() {
             },
             {
               key: "audience",
-              header: "Audience",
+              header: t("console.comms.surveys.columns.audience", undefined, "Audience"),
               render: (r) => <Badge variant="muted">{toTitle(r.audience)}</Badge>,
             },
-            { key: "anonymous", header: "Anon", render: (r) => (r.anonymous ? "Yes" : "—") },
+            {
+              key: "anonymous",
+              header: t("console.comms.surveys.columns.anon", undefined, "Anon"),
+              render: (r) => (r.anonymous ? t("common.yes", undefined, "Yes") : "—"),
+            },
           ]}
         />
       </div>

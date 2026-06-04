@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useRef } from "react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { State } from "./actions";
 
 const INPUT = "rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-xs";
@@ -27,6 +28,7 @@ type Props = {
 };
 
 export function InlineAddForm({ action, sheetId, submitLabel, fields }: Props) {
+  const t = useT();
   const formRef = useRef<HTMLFormElement>(null);
   const [state, formAction, pending] = useActionState<State, FormData>(async (prev, fd) => {
     const result = await action(prev, fd);
@@ -46,7 +48,7 @@ export function InlineAddForm({ action, sheetId, submitLabel, fields }: Props) {
           disabled={pending}
           className="rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--bg-hover)] disabled:opacity-60"
         >
-          {pending ? "…" : submitLabel}
+          {pending ? t("common.loadingEllipsis", undefined, "…") : submitLabel}
         </button>
         {state?.error && (
           <span className="text-[11px] text-[var(--color-error)]" role="alert">

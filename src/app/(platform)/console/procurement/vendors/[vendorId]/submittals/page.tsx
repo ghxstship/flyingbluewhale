@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const { vendorId } = await params;
   if (!hasSupabase) return null;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
     .from("submittals")
@@ -41,22 +43,43 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   return (
     <>
       <ModuleHeader
-        eyebrow="Vendor"
-        title="Submittals"
-        subtitle="Drawings, specs, and product data submitted by this vendor."
+        eyebrow={t("console.procurement.vendors.submittals.eyebrow", undefined, "Vendor")}
+        title={t("console.procurement.vendors.submittals.title", undefined, "Submittals")}
+        subtitle={t(
+          "console.procurement.vendors.submittals.subtitle",
+          undefined,
+          "Drawings, specs, and product data submitted by this vendor.",
+        )}
       />
       <div className="page-content">
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/submittals/${r.id}`}
-          emptyLabel="No Submittals"
-          emptyDescription="This vendor has not submitted any documentation yet."
+          emptyLabel={t("console.procurement.vendors.submittals.emptyLabel", undefined, "No Submittals")}
+          emptyDescription={t(
+            "console.procurement.vendors.submittals.emptyDescription",
+            undefined,
+            "This vendor has not submitted any documentation yet.",
+          )}
           columns={[
-            { key: "code", header: "Code", render: (r) => r.code, accessor: (r) => r.code, mono: true, sortable: true },
-            { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title, sortable: true },
+            {
+              key: "code",
+              header: t("console.procurement.vendors.submittals.col.code", undefined, "Code"),
+              render: (r) => r.code,
+              accessor: (r) => r.code,
+              mono: true,
+              sortable: true,
+            },
+            {
+              key: "title",
+              header: t("console.procurement.vendors.submittals.col.title", undefined, "Title"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+              sortable: true,
+            },
             {
               key: "spec_section",
-              header: "Spec",
+              header: t("console.procurement.vendors.submittals.col.spec", undefined, "Spec"),
               render: (r) => r.spec_section ?? "—",
               accessor: (r) => r.spec_section ?? "",
               mono: true,
@@ -64,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.procurement.vendors.submittals.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,

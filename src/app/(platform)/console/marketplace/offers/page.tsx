@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +25,18 @@ type OfferRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Marketplace" title="Offers" />
+        <ModuleHeader
+          eyebrow={t("console.marketplace.offers.eyebrow", undefined, "Marketplace")}
+          title={t("console.marketplace.offers.title", undefined, "Offers")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.marketplace.offers.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -49,12 +56,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Marketplace"
-        title="Offers"
-        subtitle={`${rows.length} Total · ${live} Active`}
+        eyebrow={t("console.marketplace.offers.eyebrow", undefined, "Marketplace")}
+        title={t("console.marketplace.offers.title", undefined, "Offers")}
+        subtitle={t(
+          "console.marketplace.offers.subtitle",
+          { total: rows.length, live },
+          `${rows.length} Total · ${live} Active`,
+        )}
         action={
           <Button href="/console/marketplace/offers/new" size="sm">
-            + New Offer
+            {t("console.marketplace.offers.newOffer", undefined, "+ New Offer")}
           </Button>
         }
       />
@@ -62,38 +73,42 @@ export default async function Page() {
         <DataTable<OfferRow>
           rows={rows}
           rowHref={(r) => `/console/marketplace/offers/${r.id}`}
-          emptyLabel="No offers yet"
-          emptyDescription="An offer locks date / fee / slot / rider before contracting."
+          emptyLabel={t("console.marketplace.offers.emptyLabel", undefined, "No offers yet")}
+          emptyDescription={t(
+            "console.marketplace.offers.emptyDescription",
+            undefined,
+            "An offer locks date / fee / slot / rider before contracting.",
+          )}
           emptyAction={
             <Button href="/console/marketplace/offers/new" size="sm">
-              + New Offer
+              {t("console.marketplace.offers.newOffer", undefined, "+ New Offer")}
             </Button>
           }
           columns={[
             {
               key: "date",
-              header: "Performance",
+              header: t("console.marketplace.offers.columns.performance", undefined, "Performance"),
               render: (r) => r.performance_date,
               accessor: (r) => r.performance_date,
               className: "font-mono text-xs",
             },
             {
               key: "fee",
-              header: "Fee",
+              header: t("console.marketplace.offers.columns.fee", undefined, "Fee"),
               render: (r) => formatMoney(r.fee_cents),
               accessor: (r) => Number(r.fee_cents),
               className: "font-mono text-xs",
             },
             {
               key: "deposit",
-              header: "Deposit",
+              header: t("console.marketplace.offers.columns.deposit", undefined, "Deposit"),
               render: (r) => `${r.deposit_pct}%`,
               accessor: (r) => Number(r.deposit_pct ?? 0),
               className: "font-mono text-xs",
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.marketplace.offers.columns.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,

@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -41,12 +41,18 @@ function fmt(iso: string | null): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Inspections" />
+        <ModuleHeader
+          eyebrow={t("console.inspections.eyebrow", undefined, "Safety")}
+          title={t("console.inspections.title", undefined, "Inspections")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.inspections.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -71,61 +77,80 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Inspections"
-        subtitle="Template-driven safety + compliance checklists."
+        eyebrow={t("console.inspections.eyebrow", undefined, "Safety")}
+        title={t("console.inspections.title", undefined, "Inspections")}
+        subtitle={t("console.inspections.subtitle", undefined, "Template-driven safety + compliance checklists.")}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/inspections/templates" size="sm" variant="ghost">
-              Templates
+              {t("console.inspections.templates", undefined, "Templates")}
             </Button>
             <Button href="/console/inspections/new" size="sm">
-              + New Inspection
+              {t("console.inspections.newInspection", undefined, "+ New Inspection")}
             </Button>
           </div>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmtIntl.number(open)} accent />
-          <MetricCard label="Passed" value={fmtIntl.number(passed30)} />
-          <MetricCard label="Failed" value={fmtIntl.number(failed30)} />
+          <MetricCard
+            label={t("console.inspections.metric.open", undefined, "Open")}
+            value={fmtIntl.number(open)}
+            accent
+          />
+          <MetricCard
+            label={t("console.inspections.metric.passed", undefined, "Passed")}
+            value={fmtIntl.number(passed30)}
+          />
+          <MetricCard
+            label={t("console.inspections.metric.failed", undefined, "Failed")}
+            value={fmtIntl.number(failed30)}
+          />
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/inspections/${r.id}`}
-          emptyLabel="No inspections yet"
-          emptyDescription="Inspections are checklist-driven. Define a template, then schedule instances per project or venue."
+          emptyLabel={t("console.inspections.emptyLabel", undefined, "No inspections yet")}
+          emptyDescription={t(
+            "console.inspections.emptyDescription",
+            undefined,
+            "Inspections are checklist-driven. Define a template, then schedule instances per project or venue.",
+          )}
           emptyAction={
             <Button href="/console/inspections/templates/new" size="sm">
-              + Create first template
+              {t("console.inspections.createFirstTemplate", undefined, "+ Create first template")}
             </Button>
           }
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.inspections.col.code", undefined, "Code"),
               render: (r) => r.code,
               className: "font-mono text-xs",
               accessor: (r) => r.code,
             },
-            { key: "name", header: "Inspection", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.inspections.col.inspection", undefined, "Inspection"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
             {
               key: "project",
-              header: "Project",
+              header: t("console.inspections.col.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
             },
             {
               key: "scheduled",
-              header: "Scheduled",
+              header: t("console.inspections.col.scheduled", undefined, "Scheduled"),
               render: (r) => fmt(r.scheduled_for),
               className: "font-mono text-xs",
               accessor: (r) => r.scheduled_for ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.inspections.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

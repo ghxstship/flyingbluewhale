@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChartShell } from "@/components/charts/ChartShell";
 import type { RiskLikelihood, RiskImpact, RiskStatus } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type RiskCell = {
   impact: RiskImpact;
@@ -28,21 +29,26 @@ export function RiskHeatmap({
   likelihood: RiskLikelihood[];
   impact: RiskImpact[];
 }) {
+  const t = useT();
   const total = cells.reduce((s, c) => s + c.risks.length, 0);
   const [open, setOpen] = React.useState<RiskCell | null>(null);
 
   return (
     <ChartShell
-      title="Risk Heatmap"
-      description="Likelihood × Impact (count = severity bubble; click a cell for the list)"
+      title={t("console.programs.risk.heatmap.title", undefined, "Risk Heatmap")}
+      description={t(
+        "console.programs.risk.heatmap.description",
+        undefined,
+        "Likelihood × Impact (count = severity bubble; click a cell for the list)",
+      )}
       empty={total === 0}
-      emptyLabel="No risks logged yet."
+      emptyLabel={t("console.programs.risk.heatmap.empty", undefined, "No risks logged yet.")}
       height={400}
     >
       <div className="flex w-full flex-col">
         <div
           role="grid"
-          aria-label="Risk heatmap"
+          aria-label={t("console.programs.risk.heatmap.gridAria", undefined, "Risk heatmap")}
           className="grid"
           style={{
             gridTemplateColumns: `64px repeat(${likelihood.length}, minmax(0, 1fr))`,
@@ -74,7 +80,15 @@ export function RiskHeatmap({
                     key={`${impactRow}-${likeCol}`}
                     type="button"
                     role="gridcell"
-                    aria-label={`${pretty(likeCol)} likelihood, ${pretty(impactRow)} impact: ${cell.risks.length} risks`}
+                    aria-label={t(
+                      "console.programs.risk.heatmap.cellAria",
+                      {
+                        likelihood: pretty(likeCol),
+                        impact: pretty(impactRow),
+                        count: cell.risks.length,
+                      },
+                      `${pretty(likeCol)} likelihood, ${pretty(impactRow)} impact: ${cell.risks.length} risks`,
+                    )}
                     onClick={() => cell.risks.length > 0 && setOpen(cell)}
                     className={`hover-lift relative m-0.5 flex aspect-square min-h-[56px] items-center justify-center rounded ${tone}`}
                   >
@@ -91,10 +105,22 @@ export function RiskHeatmap({
         </div>
 
         <div className="mt-3 flex items-center justify-end gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
-          <Legend tone="bg-[var(--color-success)]" label="Low" />
-          <Legend tone="bg-[var(--color-warning)]" label="Moderate" />
-          <Legend tone="bg-[color-mix(in_srgb,var(--color-warning)_70%,var(--color-error))]" label="High" />
-          <Legend tone="bg-[var(--color-error)]" label="Severe" />
+          <Legend
+            tone="bg-[var(--color-success)]"
+            label={t("console.programs.risk.heatmap.legend.low", undefined, "Low")}
+          />
+          <Legend
+            tone="bg-[var(--color-warning)]"
+            label={t("console.programs.risk.heatmap.legend.moderate", undefined, "Moderate")}
+          />
+          <Legend
+            tone="bg-[color-mix(in_srgb,var(--color-warning)_70%,var(--color-error))]"
+            label={t("console.programs.risk.heatmap.legend.high", undefined, "High")}
+          />
+          <Legend
+            tone="bg-[var(--color-error)]"
+            label={t("console.programs.risk.heatmap.legend.severe", undefined, "Severe")}
+          />
         </div>
 
         {open && (
@@ -104,15 +130,25 @@ export function RiskHeatmap({
           >
             <div className="mb-2 flex items-center justify-between">
               <h4 className="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
-                {pretty(open.likelihood)} × {pretty(open.impact)} — {open.risks.length} risk
-                {open.risks.length === 1 ? "" : "s"}
+                {pretty(open.likelihood)} × {pretty(open.impact)} —{" "}
+                {open.risks.length === 1
+                  ? t(
+                      "console.programs.risk.heatmap.riskCount.one",
+                      { count: open.risks.length },
+                      `${open.risks.length} risk`,
+                    )
+                  : t(
+                      "console.programs.risk.heatmap.riskCount.other",
+                      { count: open.risks.length },
+                      `${open.risks.length} risks`,
+                    )}
               </h4>
               <button
                 type="button"
                 onClick={() => setOpen(null)}
                 className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               >
-                Close
+                {t("common.close", undefined, "Close")}
               </button>
             </div>
             <ul className="space-y-1">
@@ -125,7 +161,7 @@ export function RiskHeatmap({
                     {r.title}
                   </Link>
                   <span className="ms-2 shrink-0 font-mono text-[var(--text-muted)]">
-                    {r.status} · score {r.score}
+                    {r.status} · {t("console.programs.risk.heatmap.score", { score: r.score }, `score ${r.score}`)}
                   </span>
                 </li>
               ))}

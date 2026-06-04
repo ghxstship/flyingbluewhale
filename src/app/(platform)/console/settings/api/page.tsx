@@ -5,31 +5,56 @@ import { CreateApiKeyForm } from "./CreateApiKeyForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const ENDPOINT_DOCS = [
-  ["GET", "/api/v1/health", "Liveness probe"],
-  ["GET", "/api/v1/projects", "List projects (org-scoped)"],
-  ["POST", "/api/v1/projects", "Create project"],
-  ["GET", "/api/v1/projects/[id]", "Get a project"],
-  ["PATCH", "/api/v1/projects/[id]", "Update project"],
-  ["POST", "/api/v1/scan", "Scan an assignment code (race-safe, any catalog kind)"],
-  ["POST", "/api/v1/risks", "Create RAID register entry"],
-  ["POST", "/api/v1/crisis/alerts", "Broadcast crisis alert"],
-  ["GET", "/api/v1/deliverables/[id]/download", "Signed download URL (60s)"],
-  ["POST", "/api/v1/ai/chat", "Streaming Anthropic chat"],
-  ["POST", "/api/v1/webhooks/stripe", "Stripe webhook receiver"],
-];
-
 export default async function ApiSettingsPage() {
+  const { t } = await getRequestT();
+  const ENDPOINT_DOCS: Array<[string, string, string]> = [
+    ["GET", "/api/v1/health", t("console.settings.api.endpoints.health", undefined, "Liveness probe")],
+    [
+      "GET",
+      "/api/v1/projects",
+      t("console.settings.api.endpoints.listProjects", undefined, "List projects (org-scoped)"),
+    ],
+    ["POST", "/api/v1/projects", t("console.settings.api.endpoints.createProject", undefined, "Create project")],
+    ["GET", "/api/v1/projects/[id]", t("console.settings.api.endpoints.getProject", undefined, "Get a project")],
+    ["PATCH", "/api/v1/projects/[id]", t("console.settings.api.endpoints.updateProject", undefined, "Update project")],
+    [
+      "POST",
+      "/api/v1/scan",
+      t("console.settings.api.endpoints.scan", undefined, "Scan an assignment code (race-safe, any catalog kind)"),
+    ],
+    ["POST", "/api/v1/risks", t("console.settings.api.endpoints.createRisk", undefined, "Create RAID register entry")],
+    [
+      "POST",
+      "/api/v1/crisis/alerts",
+      t("console.settings.api.endpoints.crisisAlert", undefined, "Broadcast crisis alert"),
+    ],
+    [
+      "GET",
+      "/api/v1/deliverables/[id]/download",
+      t("console.settings.api.endpoints.deliverableDownload", undefined, "Signed download URL (60s)"),
+    ],
+    ["POST", "/api/v1/ai/chat", t("console.settings.api.endpoints.aiChat", undefined, "Streaming Anthropic chat")],
+    [
+      "POST",
+      "/api/v1/webhooks/stripe",
+      t("console.settings.api.endpoints.stripeWebhook", undefined, "Stripe webhook receiver"),
+    ],
+  ];
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Settings" title="API" />
+        <ModuleHeader
+          eyebrow={t("console.settings.eyebrow", undefined, "Settings")}
+          title={t("console.settings.api.shortTitle", undefined, "API")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.settings.api.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -46,32 +71,37 @@ export default async function ApiSettingsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Settings" title="Workspace Settings" subtitle="API & keys" />
+      <ModuleHeader
+        eyebrow={t("console.settings.eyebrow", undefined, "Settings")}
+        title={t("console.settings.api.title", undefined, "Workspace Settings")}
+        subtitle={t("console.settings.api.subtitle", undefined, "API & keys")}
+      />
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Base URL</h3>
+          <h3 className="text-sm font-semibold">{t("console.settings.api.baseUrl", undefined, "Base URL")}</h3>
           <pre className="mt-3 rounded-lg bg-[var(--bg-secondary)] p-3 font-mono text-xs">
             https://your-domain.tld/api/v1
           </pre>
           <p className="mt-2 text-xs text-[var(--text-muted)]">
-            Every endpoint validates bodies with Zod and returns <code className="font-mono">{`{ ok, data }`}</code> or{" "}
+            {t("console.settings.api.zodHintPrefix", undefined, "Every endpoint validates bodies with Zod and returns")}{" "}
+            <code className="font-mono">{`{ ok, data }`}</code> {t("console.settings.api.zodHintOr", undefined, "or")}{" "}
             <code className="font-mono">{`{ ok: false, error }`}</code>.
           </p>
         </section>
 
         <section className="surface p-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">API keys</h3>
+            <h3 className="text-sm font-semibold">{t("console.settings.api.apiKeys", undefined, "API keys")}</h3>
             <CreateApiKeyForm />
           </div>
           <table className="data-table mt-3 w-full text-sm">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Prefix</th>
-                <th>Scopes</th>
-                <th>Last used</th>
-                <th>Status</th>
+                <th>{t("console.settings.api.col.name", undefined, "Name")}</th>
+                <th>{t("console.settings.api.col.prefix", undefined, "Prefix")}</th>
+                <th>{t("console.settings.api.col.scopes", undefined, "Scopes")}</th>
+                <th>{t("console.settings.api.col.lastUsed", undefined, "Last used")}</th>
+                <th>{t("console.settings.api.col.status", undefined, "Status")}</th>
                 <th></th>
               </tr>
             </thead>
@@ -79,7 +109,7 @@ export default async function ApiSettingsPage() {
               {keys.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-6 text-center text-[var(--text-muted)]">
-                    No API keys yet.
+                    {t("console.settings.api.empty", undefined, "No API keys yet.")}
                   </td>
                 </tr>
               ) : (
@@ -90,16 +120,24 @@ export default async function ApiSettingsPage() {
                       <td>{k.name}</td>
                       <td className="font-mono text-xs">{k.prefix}…</td>
                       <td className="text-xs text-[var(--text-secondary)]">{(k.scopes ?? []).join(", ") || "—"}</td>
-                      <td className="font-mono text-xs">{k.last_used_at ? fmt.dateTime(k.last_used_at) : "Never"}</td>
+                      <td className="font-mono text-xs">
+                        {k.last_used_at
+                          ? fmt.dateTime(k.last_used_at)
+                          : t("console.settings.api.never", undefined, "Never")}
+                      </td>
                       <td>
-                        <Badge variant={revoked ? "muted" : "success"}>{revoked ? "Revoked" : "Active"}</Badge>
+                        <Badge variant={revoked ? "muted" : "success"}>
+                          {revoked
+                            ? t("console.settings.api.revoked", undefined, "Revoked")
+                            : t("console.settings.api.active", undefined, "Active")}
+                        </Badge>
                       </td>
                       <td>
                         {!revoked && (
                           <form action={revokeApiKeyAction}>
                             <input type="hidden" name="id" value={k.id} />
                             <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
-                              Revoke
+                              {t("console.settings.api.revoke", undefined, "Revoke")}
                             </button>
                           </form>
                         )}
@@ -113,13 +151,15 @@ export default async function ApiSettingsPage() {
         </section>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Endpoints</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.settings.api.endpoints.heading", undefined, "Endpoints")}
+          </h3>
           <table className="data-table mt-3 w-full text-sm">
             <thead>
               <tr>
-                <th>Method</th>
-                <th>Path</th>
-                <th>Description</th>
+                <th>{t("console.settings.api.col.method", undefined, "Method")}</th>
+                <th>{t("console.settings.api.col.path", undefined, "Path")}</th>
+                <th>{t("console.settings.api.col.description", undefined, "Description")}</th>
               </tr>
             </thead>
             <tbody>

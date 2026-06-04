@@ -7,7 +7,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { createPunchList, deletePunchList, toggleListStatus } from "./actions";
 
@@ -30,12 +30,18 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations · Punch" title="Punch Lists" />
+        <ModuleHeader
+          eyebrow={t("console.punch.lists.eyebrow", undefined, "Operations · Punch")}
+          title={t("console.punch.lists.title", undefined, "Punch Lists")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.punch.lists.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -85,17 +91,17 @@ export default async function Page() {
   type CountRow = { punch_list_id: string; status: string };
   const totals = new Map<string, { total: number; open: number }>();
   for (const r of (itemCounts ?? []) as CountRow[]) {
-    const t = totals.get(r.punch_list_id) ?? { total: 0, open: 0 };
-    t.total += 1;
-    if (r.status !== "complete" && r.status !== "void") t.open += 1;
-    totals.set(r.punch_list_id, t);
+    const tally = totals.get(r.punch_list_id) ?? { total: 0, open: 0 };
+    tally.total += 1;
+    if (r.status !== "complete" && r.status !== "void") tally.open += 1;
+    totals.set(r.punch_list_id, tally);
   }
 
   const projectById = new Map<string, string>();
   for (const p of (projects ?? []) as Array<{ id: string; name: string }>) projectById.set(p.id, p.name);
 
   const hydrated: Row[] = lists.map((l) => {
-    const t = totals.get(l.id) ?? { total: 0, open: 0 };
+    const tally = totals.get(l.id) ?? { total: 0, open: 0 };
     return {
       id: l.id,
       name: l.name,
@@ -106,8 +112,8 @@ export default async function Page() {
       // null when the FK target was deleted (CASCADE means usually
       // the list went too, so this is a transient race).
       project_name: projectById.get(l.project_id ?? "") ?? null,
-      item_count: t.total,
-      open_count: t.open,
+      item_count: tally.total,
+      open_count: tally.open,
     };
   });
 
@@ -117,25 +123,42 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations · Punch"
-        title="Punch Lists"
-        subtitle={`${hydrated.length} list${hydrated.length === 1 ? "" : "s"} · ${openLists} open · ${openItems} open item${openItems === 1 ? "" : "s"} across all lists`}
-        breadcrumbs={[{ label: "Punch", href: "/console/punch" }, { label: "Lists" }]}
+        eyebrow={t("console.punch.lists.eyebrow", undefined, "Operations · Punch")}
+        title={t("console.punch.lists.title", undefined, "Punch Lists")}
+        subtitle={t(
+          "console.punch.lists.subtitle",
+          {
+            listCount: hydrated.length,
+            listLabel: hydrated.length === 1 ? "" : "s",
+            openLists,
+            openItems,
+            itemLabel: openItems === 1 ? "" : "s",
+          },
+          `${hydrated.length} list${hydrated.length === 1 ? "" : "s"} · ${openLists} open · ${openItems} open item${openItems === 1 ? "" : "s"} across all lists`,
+        )}
+        breadcrumbs={[
+          { label: t("console.punch.breadcrumb", undefined, "Punch"), href: "/console/punch" },
+          { label: t("console.punch.lists.breadcrumb", undefined, "Lists") },
+        ]}
         action={
           <Button href="/console/punch" size="sm" variant="ghost">
-            ← All Items
+            {t("console.punch.lists.allItems", undefined, "← All Items")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
           rows={hydrated}
-          emptyLabel="No punch lists"
-          emptyDescription="Create a list below to group items by milestone, area, or trade — easier to track 'all items for load-out' or 'closeout punch' than scrolling a flat 200-row list."
+          emptyLabel={t("console.punch.lists.emptyLabel", undefined, "No punch lists")}
+          emptyDescription={t(
+            "console.punch.lists.emptyDescription",
+            undefined,
+            "Create a list below to group items by milestone, area, or trade — easier to track 'all items for load-out' or 'closeout punch' than scrolling a flat 200-row list.",
+          )}
           columns={[
             {
               key: "name",
-              header: "Name",
+              header: t("console.punch.lists.col.name", undefined, "Name"),
               render: (r) => (
                 <Link href={`/console/punch?list=${r.id}`} className="font-semibold hover:underline">
                   {r.name}
@@ -146,7 +169,7 @@ export default async function Page() {
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.punch.lists.col.project", undefined, "Project"),
               render: (r) => r.project_name ?? <span className="text-[var(--text-muted)]">—</span>,
               accessor: (r) => r.project_name ?? "",
               filterable: true,
@@ -154,7 +177,7 @@ export default async function Page() {
             },
             {
               key: "category",
-              header: "Category",
+              header: t("console.punch.lists.col.category", undefined, "Category"),
               render: (r) =>
                 r.category ? (
                   <Badge variant="muted">{r.category}</Badge>
@@ -167,17 +190,20 @@ export default async function Page() {
             },
             {
               key: "items",
-              header: "Items",
+              header: t("console.punch.lists.col.items", undefined, "Items"),
               render: (r) => (
                 <span className="font-mono text-xs">
-                  {r.open_count}/{r.item_count} <span className="text-[var(--text-muted)]">open</span>
+                  {r.open_count}/{r.item_count}{" "}
+                  <span className="text-[var(--text-muted)]">
+                    {t("console.punch.lists.openSuffix", undefined, "open")}
+                  </span>
                 </span>
               ),
               accessor: (r) => r.open_count,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.punch.lists.col.status", undefined, "Status"),
               render: (r) => (
                 <form action={toggleListStatus}>
                   <input type="hidden" name="id" value={r.id} />
@@ -192,7 +218,7 @@ export default async function Page() {
             },
             {
               key: "created_at",
-              header: "Created",
+              header: t("console.punch.lists.col.created", undefined, "Created"),
               render: (r) => <span className="font-mono text-xs">{fmt.date(r.created_at)}</span>,
               accessor: (r) => r.created_at,
               sortable: true,
@@ -205,8 +231,16 @@ export default async function Page() {
                   action={deletePunchList.bind(null, r.id)}
                   confirm={
                     r.item_count > 0
-                      ? `Delete "${r.name}"? ${r.item_count} item${r.item_count === 1 ? "" : "s"} will be unassigned (the items themselves stay).`
-                      : `Delete "${r.name}"?`
+                      ? t(
+                          "console.punch.lists.deleteConfirmWithItems",
+                          {
+                            name: r.name,
+                            count: r.item_count,
+                            itemLabel: r.item_count === 1 ? "" : "s",
+                          },
+                          `Delete "${r.name}"? ${r.item_count} item${r.item_count === 1 ? "" : "s"} will be unassigned (the items themselves stay).`,
+                        )
+                      : t("console.punch.lists.deleteConfirm", { name: r.name }, `Delete "${r.name}"?`)
                   }
                 />
               ),
@@ -215,10 +249,13 @@ export default async function Page() {
         />
 
         <section className="surface p-5">
-          <h2 className="text-sm font-semibold">Create List</h2>
+          <h2 className="text-sm font-semibold">{t("console.punch.lists.createHeading", undefined, "Create List")}</h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Lists let you group items by milestone (Pre-Show / Show-Ready / Closeout), area (Stage A / Stage B), or
-            trade (Electrical / Rigging). Items keep their existing fields — the list is just a grouping.
+            {t(
+              "console.punch.lists.createHelp",
+              undefined,
+              "Lists let you group items by milestone (Pre-Show / Show-Ready / Closeout), area (Stage A / Stage B), or trade (Electrical / Rigging). Items keep their existing fields — the list is just a grouping.",
+            )}
           </p>
           <form
             action={createPunchList}
@@ -228,12 +265,12 @@ export default async function Page() {
               name="name"
               required
               maxLength={160}
-              placeholder="MMW Day 1 Punch"
+              placeholder={t("console.punch.lists.namePlaceholder", undefined, "MMW Day 1 Punch")}
               className="input-base sm:col-span-2"
             />
             <select name="project_id" required defaultValue="" className="input-base sm:col-span-2">
               <option value="" disabled>
-                — Project —
+                {t("console.punch.lists.projectPlaceholder", undefined, "— Project —")}
               </option>
               {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                 <option key={p.id} value={p.id}>
@@ -244,11 +281,11 @@ export default async function Page() {
             <input
               name="category"
               maxLength={80}
-              placeholder="Category (optional)"
+              placeholder={t("console.punch.lists.categoryPlaceholder", undefined, "Category (optional)")}
               className="input-base sm:col-span-1"
             />
             <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
-              Create List
+              {t("console.punch.lists.createButton", undefined, "Create List")}
             </Button>
           </form>
         </section>

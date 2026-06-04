@@ -3,6 +3,7 @@
 import * as React from "react";
 import { DashboardCanvas, type DashboardWidgetData } from "@/components/dashboards/DashboardCanvas";
 import type { DashboardLayout } from "@/lib/dashboards/types";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { saveLayoutAction } from "../actions";
 
 const DEBOUNCE_MS = 500;
@@ -79,18 +80,23 @@ function SaveIndicator({
   status: "idle" | "saving" | "saved" | "error";
   error: string | null;
 }): React.ReactElement {
+  const t = useT();
   if (status === "saving") {
-    return <span className="text-[var(--text-muted)]">Saving…</span>;
+    return (
+      <span className="text-[var(--text-muted)]">{t("console.dashboards.edit.saving", undefined, "Saving…")}</span>
+    );
   }
   if (status === "saved") {
-    return <span className="text-[var(--color-success)]">Saved</span>;
+    return (
+      <span className="text-[var(--color-success)]">{t("console.dashboards.edit.saved", undefined, "Saved")}</span>
+    );
   }
   if (status === "error") {
     return (
       <span className="text-[var(--color-error)]" role="alert">
-        {error ?? "Save failed"}
+        {error ?? t("console.dashboards.edit.saveFailed", undefined, "Save failed")}
       </span>
     );
   }
-  return <span className="text-[var(--text-muted)]">Idle</span>;
+  return <span className="text-[var(--text-muted)]">{t("console.dashboards.edit.idle", undefined, "Idle")}</span>;
 }

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -48,12 +49,18 @@ const BUCKETS: Array<{
 ];
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Operations" title="Maintenance" />
+        <ModuleHeader
+          eyebrow={t("console.operations.maintenance.eyebrow", undefined, "Operations")}
+          title={t("console.operations.maintenance.title", undefined, "Maintenance")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.operations.maintenance.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -121,15 +128,22 @@ export default async function Page() {
   const overdueCount = grouped.overdue.length;
   const next7 = grouped.today.length + grouped.this_week.length;
 
+  const bucketLabel = (key: ReturnType<typeof bucketDate>, fallback: string) =>
+    t(`console.operations.maintenance.bucket.${key}`, undefined, fallback);
+
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        title="Maintenance"
-        subtitle={`${overdueCount} overdue · ${next7} due in 7 days · ${all.length} Total upcoming`}
+        eyebrow={t("console.operations.maintenance.eyebrow", undefined, "Operations")}
+        title={t("console.operations.maintenance.title", undefined, "Maintenance")}
+        subtitle={t(
+          "console.operations.maintenance.subtitle",
+          { overdueCount, next7, total: all.length },
+          `${overdueCount} overdue · ${next7} due in 7 days · ${all.length} Total upcoming`,
+        )}
         action={
           <Button href="/console/operations/maintenance/schedules/new" size="sm">
-            + New Schedule
+            {t("console.operations.maintenance.newSchedule", undefined, "+ New Schedule")}
           </Button>
         }
       />
@@ -137,12 +151,15 @@ export default async function Page() {
         {all.length === 0 ? (
           <div className="surface p-6 text-sm">
             <p className="text-[var(--text-secondary)]">
-              No maintenance due. Author a recurring schedule to start tracking scaffold safety re-checks, PA system
-              pre-show diagnostics, generator service, or compliance audits.
+              {t(
+                "console.operations.maintenance.emptyBody",
+                undefined,
+                "No maintenance due. Author a recurring schedule to start tracking scaffold safety re-checks, PA system pre-show diagnostics, generator service, or compliance audits.",
+              )}
             </p>
             <div className="mt-3">
               <Button href="/console/operations/maintenance/schedules/new" size="sm">
-                + Author a schedule
+                {t("console.operations.maintenance.authorSchedule", undefined, "+ Author a schedule")}
               </Button>
             </div>
           </div>
@@ -153,7 +170,7 @@ export default async function Page() {
             return (
               <section key={b.key} className="surface">
                 <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2.5">
-                  <h3 className="text-sm font-semibold">{b.label}</h3>
+                  <h3 className="text-sm font-semibold">{bucketLabel(b.key, b.label)}</h3>
                   <Badge variant={b.tone}>{list.length}</Badge>
                 </header>
                 <ul className="divide-y divide-[var(--border-color)]">
@@ -167,7 +184,11 @@ export default async function Page() {
                           <div className="flex items-center gap-2">
                             <Badge variant={KIND_TONE[j.kind]}>{toTitle(j.kind)}</Badge>
                             <span className="font-mono text-[10px] text-[var(--text-muted)]">{j.target_kind}</span>
-                            {j.source === "credential" && <Badge variant="muted">auto</Badge>}
+                            {j.source === "credential" && (
+                              <Badge variant="muted">
+                                {t("console.operations.maintenance.autoBadge", undefined, "auto")}
+                              </Badge>
+                            )}
                           </div>
                           <div className="mt-1 text-sm">{j.title}</div>
                         </div>

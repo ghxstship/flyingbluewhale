@@ -7,7 +7,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -46,12 +46,18 @@ function fmt(iso: string): string {
 }
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Safety" title="Incidents" />
+        <ModuleHeader
+          eyebrow={t("console.safety.incidents.eyebrow", undefined, "Safety")}
+          title={t("console.safety.incidents.title", undefined, "Incidents")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.safety.incidents.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -90,41 +96,77 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Safety"
-        title="Incidents (unified)"
-        subtitle="Cross-domain incident feed."
+        eyebrow={t("console.safety.incidents.eyebrow", undefined, "Safety")}
+        title={t("console.safety.incidents.unifiedTitle", undefined, "Incidents (unified)")}
+        subtitle={t("console.safety.incidents.subtitle", undefined, "Cross-domain incident feed.")}
         action={
           <Button href="/console/operations/incidents/new" size="sm">
-            + Report incident
+            {t("console.safety.incidents.reportIncident", undefined, "+ Report incident")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total · 30d" value={fmtIntl.number(totalThirtyDay)} accent />
-          <MetricCard label="Open" value={fmtIntl.number(open)} />
-          <MetricCard label="Critical" value={fmtIntl.number(critical)} />
+          <MetricCard
+            label={t("console.safety.incidents.metric.total30d", undefined, "Total · 30d")}
+            value={fmtIntl.number(totalThirtyDay)}
+            accent
+          />
+          <MetricCard
+            label={t("console.safety.incidents.metric.open", undefined, "Open")}
+            value={fmtIntl.number(open)}
+          />
+          <MetricCard
+            label={t("console.safety.incidents.metric.critical", undefined, "Critical")}
+            value={fmtIntl.number(critical)}
+          />
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Drill Into a Domain</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.safety.incidents.drillInto", undefined, "Drill Into a Domain")}
+          </h3>
           <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
             <li>
               <Link href="/console/operations/incidents" className="surface hover-lift block p-3">
-                <div className="text-sm font-medium">Operations log</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{totalThirtyDay} ops + safety incidents</div>
+                <div className="text-sm font-medium">
+                  {t("console.safety.incidents.opsLog.title", undefined, "Operations log")}
+                </div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                  {t(
+                    "console.safety.incidents.opsLog.subtitle",
+                    { count: totalThirtyDay },
+                    `${totalThirtyDay} ops + safety incidents`,
+                  )}
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/console/safety/cyber-ir" className="surface hover-lift block p-3">
-                <div className="text-sm font-medium">Cyber IR</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{cyberCount ?? 0} incidents flagged cyber</div>
+                <div className="text-sm font-medium">
+                  {t("console.safety.incidents.cyberIr.title", undefined, "Cyber IR")}
+                </div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                  {t(
+                    "console.safety.incidents.cyberIr.subtitle",
+                    { count: cyberCount ?? 0 },
+                    `${cyberCount ?? 0} incidents flagged cyber`,
+                  )}
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/console/safety/medical/encounters" className="surface hover-lift block p-3">
-                <div className="text-sm font-medium">Medical encounters</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{medCount ?? 0} encounters · 30 days</div>
+                <div className="text-sm font-medium">
+                  {t("console.safety.incidents.medical.title", undefined, "Medical encounters")}
+                </div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                  {t(
+                    "console.safety.incidents.medical.subtitle",
+                    { count: medCount ?? 0 },
+                    `${medCount ?? 0} encounters · 30 days`,
+                  )}
+                </div>
               </Link>
             </li>
           </ul>
@@ -133,25 +175,30 @@ export default async function Page() {
         <DataTable<IncidentRow>
           rows={rows}
           rowHref={(r) => `/console/operations/incidents/${r.id}`}
-          emptyLabel="No incidents in the last 30 days"
+          emptyLabel={t("console.safety.incidents.empty", undefined, "No incidents in the last 30 days")}
           columns={[
-            { key: "summary", header: "Summary", render: (r) => r.summary, accessor: (r) => r.summary },
+            {
+              key: "summary",
+              header: t("console.safety.incidents.column.summary", undefined, "Summary"),
+              render: (r) => r.summary,
+              accessor: (r) => r.summary,
+            },
             {
               key: "occurred",
-              header: "Occurred",
+              header: t("console.safety.incidents.column.occurred", undefined, "Occurred"),
               render: (r) => fmt(r.occurred_at),
               className: "font-mono text-xs",
               accessor: (r) => r.occurred_at ?? null,
             },
             {
               key: "location",
-              header: "Location",
+              header: t("console.safety.incidents.column.location", undefined, "Location"),
               render: (r) => r.location ?? "—",
               accessor: (r) => r.location ?? null,
             },
             {
               key: "severity",
-              header: "Severity",
+              header: t("console.safety.incidents.column.severity", undefined, "Severity"),
               render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
@@ -159,7 +206,7 @@ export default async function Page() {
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.safety.incidents.column.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

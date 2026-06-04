@@ -3,6 +3,7 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,12 +16,18 @@ type ZoneRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Accreditation" title="Zones" />
+        <ModuleHeader
+          eyebrow={t("console.accreditation.zones.eyebrow", undefined, "Accreditation")}
+          title={t("console.accreditation.zones.title", undefined, "Zones")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.accreditation.zones.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -41,32 +48,45 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Accreditation"
-        title="Zones"
-        subtitle={`${rows.length} zone${rows.length === 1 ? "" : "s"} across all venues`}
+        eyebrow={t("console.accreditation.zones.eyebrow", undefined, "Accreditation")}
+        title={t("console.accreditation.zones.title", undefined, "Zones")}
+        subtitle={t(
+          "console.accreditation.zones.subtitle",
+          { count: rows.length, plural: rows.length === 1 ? "" : "s" },
+          `${rows.length} zone${rows.length === 1 ? "" : "s"} across all venues`,
+        )}
       />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
-          emptyLabel="No zones defined"
-          emptyDescription="Zones are authored per venue. Open a venue and use its Zones tab to add ingress, ops, FOH, BOH, and athlete-only areas."
+          emptyLabel={t("console.accreditation.zones.emptyLabel", undefined, "No zones defined")}
+          emptyDescription={t(
+            "console.accreditation.zones.emptyDescription",
+            undefined,
+            "Zones are authored per venue. Open a venue and use its Zones tab to add ingress, ops, FOH, BOH, and athlete-only areas.",
+          )}
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("console.accreditation.zones.columns.code", undefined, "Code"),
               render: (r) => <span className="font-mono text-xs">{String(r.code ?? "—")}</span>,
               accessor: (r) => r.code ?? null,
             },
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "name",
+              header: t("console.accreditation.zones.columns.name", undefined, "Name"),
+              render: (r) => String(r.name ?? "—"),
+              accessor: (r) => r.name ?? null,
+            },
             {
               key: "venue",
-              header: "Venue",
+              header: t("console.accreditation.zones.columns.venue", undefined, "Venue"),
               render: (r) => String(r.venue_name ?? "—"),
               accessor: (r) => r.venue_name ?? null,
             },
             {
               key: "parent_zone_id",
-              header: "Parent",
+              header: t("console.accreditation.zones.columns.parent", undefined, "Parent"),
               render: (r) =>
                 r.parent_zone_id ? (
                   <span className="font-mono text-xs">{String(r.parent_zone_id).slice(0, 8)}…</span>

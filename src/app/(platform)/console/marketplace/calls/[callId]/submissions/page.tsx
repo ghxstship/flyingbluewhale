@@ -8,6 +8,7 @@ import { notFound } from "next/navigation";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [callResp, subsResp] = await Promise.all([
     supabase
@@ -49,33 +51,41 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   return (
     <>
       <ModuleHeader
-        eyebrow={`Call · ${call.title}`}
-        title="Submissions"
-        subtitle={`${rows.length} Total · ${rows.filter((r) => r.status === "submitted").length} unreviewed`}
+        eyebrow={t("console.marketplace.calls.submissions.eyebrow", { title: call.title }, `Call · ${call.title}`)}
+        title={t("console.marketplace.calls.submissions.title", undefined, "Submissions")}
+        subtitle={t(
+          "console.marketplace.calls.submissions.subtitle",
+          { total: rows.length, unreviewed: rows.filter((r) => r.status === "submitted").length },
+          `${rows.length} Total · ${rows.filter((r) => r.status === "submitted").length} unreviewed`,
+        )}
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/marketplace/calls/${call.id}/submissions/${r.id}`}
-          emptyLabel="No submissions yet"
-          emptyDescription="Once published, submissions appear here."
+          emptyLabel={t("console.marketplace.calls.submissions.emptyLabel", undefined, "No submissions yet")}
+          emptyDescription={t(
+            "console.marketplace.calls.submissions.emptyDescription",
+            undefined,
+            "Once published, submissions appear here.",
+          )}
           columns={[
             {
               key: "when",
-              header: "Submitted",
+              header: t("console.marketplace.calls.submissions.col.submitted", undefined, "Submitted"),
               render: (r) => new Date(r.submitted_at).toLocaleDateString(),
               accessor: (r) => r.submitted_at,
               className: "font-mono text-xs",
             },
             {
               key: "submitter",
-              header: "Submitter",
+              header: t("console.marketplace.calls.submissions.col.submitter", undefined, "Submitter"),
               render: (r) => <span className="font-mono text-xs">{r.submitter_user_id.slice(0, 8)}</span>,
               accessor: (r) => r.submitter_user_id,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.marketplace.calls.submissions.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status,
               filterable: true,
@@ -83,21 +93,21 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             },
             {
               key: "score",
-              header: "Score",
+              header: t("console.marketplace.calls.submissions.col.score", undefined, "Score"),
               render: (r) => (r.score == null ? "—" : `${r.score}`),
               accessor: (r) => Number(r.score ?? 0),
               className: "font-mono text-xs tabular-nums",
             },
             {
               key: "fee",
-              header: "Proposed Fee",
+              header: t("console.marketplace.calls.submissions.col.proposedFee", undefined, "Proposed Fee"),
               render: (r) => (r.fee_proposed_cents ? formatMoney(r.fee_proposed_cents) : "—"),
               accessor: (r) => Number(r.fee_proposed_cents ?? 0),
               className: "font-mono text-xs",
             },
             {
               key: "cover",
-              header: "Note",
+              header: t("console.marketplace.calls.submissions.col.note", undefined, "Note"),
               render: (r) => (r.cover_note ? r.cover_note.slice(0, 80) + (r.cover_note.length > 80 ? "…" : "") : "—"),
               accessor: (r) => r.cover_note ?? null,
             },

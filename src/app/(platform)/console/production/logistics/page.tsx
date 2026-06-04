@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { fmtDateTime, money } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Logistics = rentals whose window overlaps today + next 7 days. Each
@@ -16,6 +17,7 @@ import { fmtDateTime, money } from "@/components/detail/DetailShell";
 export default async function LogisticsPage() {
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const now = new Date();
   const nowIso = now.toISOString();
   const in7d = new Date(now.getTime() + 7 * 864e5).toISOString();
@@ -38,25 +40,41 @@ export default async function LogisticsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Production"
-        title="Logistics"
-        subtitle={`${rows.length} Active  rental window${rows.length === 1 ? "" : "s"} across the next 7 days`}
+        eyebrow={t("console.production.logistics.eyebrow", undefined, "Production")}
+        title={t("console.production.logistics.title", undefined, "Logistics")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "console.production.logistics.subtitleOne",
+                { count: rows.length },
+                `${rows.length} Active  rental window across the next 7 days`,
+              )
+            : t(
+                "console.production.logistics.subtitleOther",
+                { count: rows.length },
+                `${rows.length} Active  rental windows across the next 7 days`,
+              )
+        }
       />
       <div className="page-content max-w-5xl">
         {rows.length === 0 ? (
           <EmptyState
-            title="Nothing Moving This Week"
-            description="Rentals with overlapping windows surface here as load-out / load-in candidates. Seed a rental against an equipment row to see it appear."
+            title={t("console.production.logistics.empty.title", undefined, "Nothing Moving This Week")}
+            description={t(
+              "console.production.logistics.empty.description",
+              undefined,
+              "Rentals with overlapping windows surface here as load-out / load-in candidates. Seed a rental against an equipment row to see it appear.",
+            )}
           />
         ) : (
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>Rental</th>
-                <th>Load-out</th>
-                <th>Load-in</th>
-                <th>Rate</th>
-                <th>Notes</th>
+                <th>{t("console.production.logistics.table.rental", undefined, "Rental")}</th>
+                <th>{t("console.production.logistics.table.loadOut", undefined, "Load-out")}</th>
+                <th>{t("console.production.logistics.table.loadIn", undefined, "Load-in")}</th>
+                <th>{t("console.production.logistics.table.rate", undefined, "Rate")}</th>
+                <th>{t("console.production.logistics.table.notes", undefined, "Notes")}</th>
               </tr>
             </thead>
             <tbody>

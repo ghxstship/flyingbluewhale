@@ -7,6 +7,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { StagePlotCanvas } from "@/components/stage-plots/StagePlotCanvas";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteStagePlot } from "./edit/actions";
 
 type StoredElement = {
@@ -27,6 +28,7 @@ export default async function StagePlotDetailPage({
   const { projectId, stagePlotId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const [{ data: project }, { data: plot }] = await Promise.all([
     supabase
@@ -51,13 +53,22 @@ export default async function StagePlotDetailPage({
   return (
     <>
       <ModuleHeader
-        eyebrow={project?.name ?? "Project"}
+        eyebrow={project?.name ?? t("console.projects.stagePlots.detail.projectFallback", undefined, "Project")}
         title={plot.name}
-        subtitle="Drag And Drop 2D Stage Layout Editor"
+        subtitle={t("console.projects.stagePlots.detail.subtitle", undefined, "Drag And Drop 2D Stage Layout Editor")}
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
-          { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Stage Plots", href: `/console/projects/${projectId}/stage-plots` },
+          {
+            label: t("console.projects.stagePlots.detail.breadcrumbs.projects", undefined, "Projects"),
+            href: "/console/projects",
+          },
+          {
+            label: project?.name ?? t("console.projects.stagePlots.detail.projectFallback", undefined, "Project"),
+            href: `/console/projects/${projectId}`,
+          },
+          {
+            label: t("console.projects.stagePlots.detail.breadcrumbs.stagePlots", undefined, "Stage Plots"),
+            href: `/console/projects/${projectId}/stage-plots`,
+          },
           { label: plot.name },
         ]}
         action={
@@ -67,11 +78,15 @@ export default async function StagePlotDetailPage({
               size="sm"
               variant="secondary"
             >
-              Edit metadata
+              {t("console.projects.stagePlots.detail.editMetadata", undefined, "Edit metadata")}
             </Button>
             <DeleteForm
               action={deleteStagePlot.bind(null, projectId, stagePlotId)}
-              confirm={`Delete stage plot "${plot.name}"? It will be soft-deleted.`}
+              confirm={t(
+                "console.projects.stagePlots.detail.deleteConfirm",
+                { name: plot.name },
+                `Delete stage plot "${plot.name}"? It will be soft-deleted.`,
+              )}
             />
           </div>
         }

@@ -4,17 +4,21 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Location } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function LocationsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader title="Locations" />
+        <ModuleHeader title={t("console.locations.title", undefined, "Locations")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.locations.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -23,44 +27,59 @@ export default async function LocationsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Work"
-        title="Locations"
-        subtitle={`${rows.length} location${rows.length === 1 ? "" : "s"}`}
-        action={<Button href="/console/locations/new">+ Add location</Button>}
+        eyebrow={t("console.locations.eyebrow", undefined, "Work")}
+        title={t("console.locations.title", undefined, "Locations")}
+        subtitle={
+          rows.length === 1
+            ? t("console.locations.subtitle.one", { count: rows.length }, `${rows.length} location`)
+            : t("console.locations.subtitle.other", { count: rows.length }, `${rows.length} locations`)
+        }
+        action={
+          <Button href="/console/locations/new">{t("console.locations.add", undefined, "+ Add location")}</Button>
+        }
       />
       <div className="page-content">
         <DataTable<Location>
           rows={rows}
-          rowHref={(r) => `/console/locations/${r.id}`}
-          emptyLabel="No locations yet"
-          emptyDescription="Add the addresses your operations reference — venues, hotels, warehouses, depots."
+          rowHref={(row) => `/console/locations/${row.id}`}
+          emptyLabel={t("console.locations.emptyLabel", undefined, "No locations yet")}
+          emptyDescription={t(
+            "console.locations.emptyDescription",
+            undefined,
+            "Add the addresses your operations reference — venues, hotels, warehouses, depots.",
+          )}
           emptyAction={
             <Button href="/console/locations/new" size="sm">
-              + Add location
+              {t("console.locations.add", undefined, "+ Add location")}
             </Button>
           }
           columns={[
-            { key: "name", header: "Name", render: (r) => r.name, accessor: (r) => r.name },
+            {
+              key: "name",
+              header: t("console.locations.columns.name", undefined, "Name"),
+              render: (row) => row.name,
+              accessor: (row) => row.name,
+            },
             {
               key: "address",
-              header: "Address",
-              render: (r) => r.address ?? "—",
+              header: t("console.locations.columns.address", undefined, "Address"),
+              render: (row) => row.address ?? "—",
               className: "font-mono text-xs",
-              accessor: (r) => r.address ?? null,
+              accessor: (row) => row.address ?? null,
             },
             {
               key: "city",
-              header: "City",
-              render: (r) => [r.city, r.region].filter(Boolean).join(", ") || "—",
+              header: t("console.locations.columns.city", undefined, "City"),
+              render: (row) => [row.city, row.region].filter(Boolean).join(", ") || "—",
               className: "font-mono text-xs",
-              accessor: (r) => r.city ?? null,
+              accessor: (row) => row.city ?? null,
             },
             {
               key: "country",
-              header: "Country",
-              render: (r) => r.country ?? "—",
+              header: t("console.locations.columns.country", undefined, "Country"),
+              render: (row) => row.country ?? "—",
               className: "font-mono text-xs",
-              accessor: (r) => r.country ?? null,
+              accessor: (row) => row.country ?? null,
             },
           ]}
         />

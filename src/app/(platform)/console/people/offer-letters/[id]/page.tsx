@@ -28,7 +28,7 @@ import { LetterShareCard } from "./LetterShareCard";
 import { LetterLifecycleActions } from "./LetterLifecycleActions";
 import { LetterEmailComposer } from "./LetterEmailComposer";
 import { composeOfferLetterEmail } from "@/lib/offer-letters/compose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +40,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const data = await getOfferLetter(session.orgId, id);
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   if (!data) notFound();
   const { raw, resolved } = data;
   const activeMsa = await getActiveMsaForCrew(raw.crew_member_id);
@@ -89,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <ModuleHeader
         eyebrow={
           <Link href="/console/people/offer-letters" className="hover:text-[var(--org-primary)]">
-            People · Offer Letters
+            {t("console.people.offerLetters.detail.eyebrow", undefined, "People · Offer Letters")}
           </Link>
         }
         title={resolved.recipient_name}
@@ -116,18 +117,37 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             rel="noreferrer"
             className="rounded border border-[var(--border-default)] px-3 py-1.5 hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
           >
-            Print / Save as PDF →
+            {t("console.people.offerLetters.detail.printLink", undefined, "Print / Save as PDF →")}
           </a>
           <span className="text-[var(--text-muted)]">
-            Bare-bones print view — browser&apos;s Save-as-PDF target produces a clean document.
+            {t(
+              "console.people.offerLetters.detail.printHint",
+              undefined,
+              "Bare-bones print view — browser's Save-as-PDF target produces a clean document.",
+            )}
           </span>
         </div>
 
         {raw.snapshot && (
           <div className="surface px-4 py-3 text-xs text-[var(--text-muted)]">
-            <span className="tracking-wider uppercase">Snapshot Frozen</span>
-            {raw.snapshot_at && <> at {fmt.dateTime(raw.snapshot_at)}.</>} The letter below renders from the frozen
-            snapshot — even if rate cards, roles, or settings change later, the signed document stays the same.
+            <span className="tracking-wider uppercase">
+              {t("console.people.offerLetters.detail.snapshotFrozen", undefined, "Snapshot Frozen")}
+            </span>
+            {raw.snapshot_at && (
+              <>
+                {" "}
+                {t(
+                  "console.people.offerLetters.detail.snapshotAt",
+                  { when: fmt.dateTime(raw.snapshot_at) },
+                  `at ${fmt.dateTime(raw.snapshot_at)}.`,
+                )}
+              </>
+            )}{" "}
+            {t(
+              "console.people.offerLetters.detail.snapshotNote",
+              undefined,
+              "The letter below renders from the frozen snapshot — even if rate cards, roles, or settings change later, the signed document stays the same.",
+            )}
           </div>
         )}
 
@@ -140,20 +160,47 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <LetterLifecycleActions letterId={raw.id} status={raw.status} hasMsa={!!activeMsa} />
 
             <section className="surface space-y-3 p-5">
-              <h3 className="text-sm font-semibold tracking-wider uppercase">Sources</h3>
-              <DefRow k="Recipient" v={resolved.recipient_name} />
-              <DefRow k="Role" v={`${resolved.role_title} (${resolved.role_slug})`} />
-              <DefRow k="Reports To" v={resolved.reports_to_name ?? "—"} />
-              <DefRow k="Venue" v={resolved.venue_name ?? "—"} />
-              <DefRow k="Rate Card" v={resolved.rate_sku ?? "—"} />
-              <DefRow k="Project" v={resolved.project_name} />
-              <DefRow k="Signing Authority" v={resolved.signing_authority_name ?? "—"} />
+              <h3 className="text-sm font-semibold tracking-wider uppercase">
+                {t("console.people.offerLetters.detail.sources", undefined, "Sources")}
+              </h3>
+              <DefRow
+                k={t("console.people.offerLetters.detail.recipient", undefined, "Recipient")}
+                v={resolved.recipient_name}
+              />
+              <DefRow
+                k={t("console.people.offerLetters.detail.role", undefined, "Role")}
+                v={`${resolved.role_title} (${resolved.role_slug})`}
+              />
+              <DefRow
+                k={t("console.people.offerLetters.detail.reportsTo", undefined, "Reports To")}
+                v={resolved.reports_to_name ?? "—"}
+              />
+              <DefRow
+                k={t("console.people.offerLetters.detail.venue", undefined, "Venue")}
+                v={resolved.venue_name ?? "—"}
+              />
+              <DefRow
+                k={t("console.people.offerLetters.detail.rateCard", undefined, "Rate Card")}
+                v={resolved.rate_sku ?? "—"}
+              />
+              <DefRow
+                k={t("console.people.offerLetters.detail.project", undefined, "Project")}
+                v={resolved.project_name}
+              />
+              <DefRow
+                k={t("console.people.offerLetters.detail.signingAuthority", undefined, "Signing Authority")}
+                v={resolved.signing_authority_name ?? "—"}
+              />
             </section>
 
             <section className="surface space-y-3 p-5">
-              <h3 className="text-sm font-semibold tracking-wider uppercase">Activity</h3>
+              <h3 className="text-sm font-semibold tracking-wider uppercase">
+                {t("console.people.offerLetters.detail.activity", undefined, "Activity")}
+              </h3>
               {activity.length === 0 ? (
-                <div className="text-xs text-[var(--text-muted)]">No activity yet.</div>
+                <div className="text-xs text-[var(--text-muted)]">
+                  {t("console.people.offerLetters.detail.noActivity", undefined, "No activity yet.")}
+                </div>
               ) : (
                 <ul className="space-y-3 text-xs">
                   {activity.map((a) => (

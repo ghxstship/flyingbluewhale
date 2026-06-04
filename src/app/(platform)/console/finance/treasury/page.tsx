@@ -7,7 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,20 +33,19 @@ type StripeEventRow = {
   received_at: string;
 };
 
-const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
-  { href: "/console/finance/invoices", label: "Invoices", description: "Receivables — issued, sent, paid" },
-  { href: "/console/finance/expenses", label: "Expenses", description: "Payables awaiting reimbursement" },
-  { href: "/console/finance/budgets", label: "Budgets", description: "Project P&L envelopes" },
-  { href: "/console/finance/payouts", label: "Payouts", description: "Stripe Connect supplier payments" },
-];
-
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="Treasury" />
+        <ModuleHeader
+          eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
+          title={t("console.finance.treasury.title", undefined, "Treasury")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.treasury.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -104,35 +103,85 @@ export default async function Page() {
   const overdue = invoices.filter((i) => i.due_at && new Date(i.due_at).getTime() < Date.now() && i.status !== "paid");
   const overdueTotal = overdue.reduce((s, i) => s + i.amount_cents, 0);
 
+  const HUB_TILES: Array<{ href: string; label: string; description: string }> = [
+    {
+      href: "/console/finance/invoices",
+      label: t("console.finance.treasury.tiles.invoices.label", undefined, "Invoices"),
+      description: t(
+        "console.finance.treasury.tiles.invoices.description",
+        undefined,
+        "Receivables — issued, sent, paid",
+      ),
+    },
+    {
+      href: "/console/finance/expenses",
+      label: t("console.finance.treasury.tiles.expenses.label", undefined, "Expenses"),
+      description: t(
+        "console.finance.treasury.tiles.expenses.description",
+        undefined,
+        "Payables awaiting reimbursement",
+      ),
+    },
+    {
+      href: "/console/finance/budgets",
+      label: t("console.finance.treasury.tiles.budgets.label", undefined, "Budgets"),
+      description: t("console.finance.treasury.tiles.budgets.description", undefined, "Project P&L envelopes"),
+    },
+    {
+      href: "/console/finance/payouts",
+      label: t("console.finance.treasury.tiles.payouts.label", undefined, "Payouts"),
+      description: t(
+        "console.finance.treasury.tiles.payouts.description",
+        undefined,
+        "Stripe Connect supplier payments",
+      ),
+    },
+  ];
+
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="Treasury" subtitle="Cash position, receivables, payables." />
+      <ModuleHeader
+        eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
+        title={t("console.finance.treasury.title", undefined, "Treasury")}
+        subtitle={t("console.finance.treasury.subtitle", undefined, "Cash position, receivables, payables.")}
+      />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label="Outstanding Receivables"
+            label={t("console.finance.treasury.metrics.outstandingReceivables", undefined, "Outstanding Receivables")}
             value={fmt.number(Array.from(byCurrency.values()).reduce((s, v) => s + v.outstanding, 0))}
             accent
           />
           <MetricCard
-            label="Pending Payables"
+            label={t("console.finance.treasury.metrics.pendingPayables", undefined, "Pending Payables")}
             value={fmt.number(Array.from(expByCurrency.values()).reduce((s, v) => s + v, 0))}
           />
-          <MetricCard label="Stripe Events · 30d" value={fmt.number(stripeEvents.length)} />
+          <MetricCard
+            label={t("console.finance.treasury.metrics.stripeEvents30d", undefined, "Stripe Events · 30d")}
+            value={fmt.number(stripeEvents.length)}
+          />
         </div>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">By Currency</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.finance.treasury.byCurrency", undefined, "By Currency")}
+          </h3>
           {byCurrency.size === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No invoices issued yet.</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("console.finance.treasury.noInvoices", undefined, "No invoices issued yet.")}
+            </p>
           ) : (
             <table className="data-table mt-3 w-full text-sm">
               <thead>
                 <tr>
-                  <th>Currency</th>
-                  <th className="text-end">Paid</th>
-                  <th className="text-end">Outstanding</th>
-                  <th className="text-end">Pending payables</th>
+                  <th>{t("console.finance.treasury.columns.currency", undefined, "Currency")}</th>
+                  <th className="text-end">{t("console.finance.treasury.columns.paid", undefined, "Paid")}</th>
+                  <th className="text-end">
+                    {t("console.finance.treasury.columns.outstanding", undefined, "Outstanding")}
+                  </th>
+                  <th className="text-end">
+                    {t("console.finance.treasury.columns.pendingPayables", undefined, "Pending payables")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -156,7 +205,11 @@ export default async function Page() {
         {overdue.length > 0 && (
           <section className="surface p-4">
             <h3 className="text-sm font-semibold">
-              Overdue receivables ({overdue.length} · {formatMoney(overdueTotal)})
+              {t(
+                "console.finance.treasury.overdueHeading",
+                { count: overdue.length, total: formatMoney(overdueTotal) },
+                "Overdue receivables ({count} · {total})",
+              )}
             </h3>
             <ul className="mt-3 space-y-1.5">
               {overdue.slice(0, 10).map((inv) => (
@@ -165,7 +218,9 @@ export default async function Page() {
                     {inv.number}
                   </Link>
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs text-[var(--text-muted)]">due {fmtDate(inv.due_at)}</span>
+                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                      {t("console.finance.treasury.dueLabel", { date: fmtDate(inv.due_at) }, "due {date}")}
+                    </span>
                     <span className="font-mono text-xs">{formatMoney(inv.amount_cents, inv.currency)}</span>
                   </div>
                 </li>
@@ -175,12 +230,12 @@ export default async function Page() {
         )}
 
         <section>
-          <h3 className="text-sm font-semibold">Drill In</h3>
+          <h3 className="text-sm font-semibold">{t("console.finance.treasury.drillIn", undefined, "Drill In")}</h3>
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {HUB_TILES.map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-4">
-                <div className="text-sm font-medium">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.description}</div>
+            {HUB_TILES.map((tile) => (
+              <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
+                <div className="text-sm font-medium">{tile.label}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.description}</div>
               </Link>
             ))}
           </div>
@@ -189,8 +244,16 @@ export default async function Page() {
         {stripeEvents.length === 0 && (
           <EmptyState
             size="compact"
-            title="No Stripe webhook activity in the last 30 days"
-            description="Connect Stripe via Settings → Integrations to see live webhook events here."
+            title={t(
+              "console.finance.treasury.empty.title",
+              undefined,
+              "No Stripe webhook activity in the last 30 days",
+            )}
+            description={t(
+              "console.finance.treasury.empty.description",
+              undefined,
+              "Connect Stripe via Settings → Integrations to see live webhook events here.",
+            )}
           />
         )}
       </div>

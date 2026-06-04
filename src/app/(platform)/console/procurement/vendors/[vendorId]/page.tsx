@@ -5,11 +5,13 @@ import { createClient } from "@/lib/supabase/server";
 import { DetailShell, fmtDate } from "@/components/detail/DetailShell";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteVendor } from "./edit/actions";
 
 export default async function Page({ params }: { params: Promise<{ vendorId: string }> }) {
   const { vendorId } = await params;
   const session = await requireSession();
+  const { t } = await getRequestT();
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("vendors")
@@ -20,23 +22,46 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   return (
     <DetailShell
       row={row}
-      eyebrow="Procurement"
+      eyebrow={t("console.procurement.vendors.detail.eyebrow", undefined, "Procurement")}
       title={(r) => r.name}
       subtitle={(r) => r.category}
       breadcrumbs={[
-        { label: "Procurement" },
-        { label: "Vendors", href: "/console/procurement/vendors" },
-        { label: row?.name ?? "Vendor" },
+        { label: t("console.procurement.vendors.detail.breadcrumbs.procurement", undefined, "Procurement") },
+        {
+          label: t("console.procurement.vendors.detail.breadcrumbs.vendors", undefined, "Vendors"),
+          href: "/console/procurement/vendors",
+        },
+        { label: row?.name ?? t("console.procurement.vendors.detail.breadcrumbs.fallback", undefined, "Vendor") },
       ]}
       fields={
         row
           ? [
-              { label: "Category", value: row.category ?? "—" },
-              { label: "Contact Email", value: row.contact_email ?? "—" },
-              { label: "Contact Phone", value: row.contact_phone ?? "—" },
-              { label: "COI expires", value: fmtDate(row.coi_expires_at) },
-              { label: "Stripe Payout", value: row.payout_account_id ? "Connected" : "Not connected" },
-              { label: "Notes", value: row.notes ?? "—" },
+              {
+                label: t("console.procurement.vendors.detail.fields.category", undefined, "Category"),
+                value: row.category ?? "—",
+              },
+              {
+                label: t("console.procurement.vendors.detail.fields.contactEmail", undefined, "Contact Email"),
+                value: row.contact_email ?? "—",
+              },
+              {
+                label: t("console.procurement.vendors.detail.fields.contactPhone", undefined, "Contact Phone"),
+                value: row.contact_phone ?? "—",
+              },
+              {
+                label: t("console.procurement.vendors.detail.fields.coiExpires", undefined, "COI expires"),
+                value: fmtDate(row.coi_expires_at),
+              },
+              {
+                label: t("console.procurement.vendors.detail.fields.stripePayout", undefined, "Stripe Payout"),
+                value: row.payout_account_id
+                  ? t("console.procurement.vendors.detail.stripePayout.connected", undefined, "Connected")
+                  : t("console.procurement.vendors.detail.stripePayout.notConnected", undefined, "Not connected"),
+              },
+              {
+                label: t("console.procurement.vendors.detail.fields.notes", undefined, "Notes"),
+                value: row.notes ?? "—",
+              },
             ]
           : undefined
       }
@@ -44,11 +69,15 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
         row ? (
           <div className="flex items-center gap-2">
             <Button href={`/console/procurement/vendors/${vendorId}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </Button>
             <DeleteForm
               action={deleteVendor.bind(null, vendorId)}
-              confirm={`Delete vendor "${row.name}"? This cannot be undone.`}
+              confirm={t(
+                "console.procurement.vendors.detail.deleteConfirm",
+                { name: row.name },
+                `Delete vendor "${row.name}"? This cannot be undone.`,
+              )}
             />
           </div>
         ) : undefined

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type CalendarEvent = {
   id: string;
@@ -33,6 +34,7 @@ export function CalendarGrid({
   tasks: CalendarTask[];
   initialMonth: string;
 }) {
+  const t = useT();
   const [cursor, setCursor] = React.useState(() => parseMonth(initialMonth));
   const monthLabel = cursor.toLocaleDateString(undefined, { month: "long", year: "numeric" });
 
@@ -45,7 +47,7 @@ export function CalendarGrid({
   for (let d = new Date(gridStart); d <= gridEnd; d.setDate(d.getDate() + 1)) days.push(new Date(d));
 
   const eventsByDay = bucketByDay(events, (e) => (e.starts_at ? new Date(e.starts_at) : null));
-  const tasksByDay = bucketByDay(tasks, (t) => (t.due_at ? new Date(t.due_at) : null));
+  const tasksByDay = bucketByDay(tasks, (task) => (task.due_at ? new Date(task.due_at) : null));
 
   return (
     <div className="surface overflow-hidden rounded-md border border-[var(--border-color)]">
@@ -54,7 +56,7 @@ export function CalendarGrid({
           type="button"
           className="btn btn-sm"
           onClick={() => setCursor(addMonths(cursor, -1))}
-          aria-label="Previous Month"
+          aria-label={t("console.projects.schedule.calendar.previousMonth", undefined, "Previous Month")}
         >
           ←
         </button>
@@ -63,13 +65,21 @@ export function CalendarGrid({
           type="button"
           className="btn btn-sm"
           onClick={() => setCursor(addMonths(cursor, 1))}
-          aria-label="Next Month"
+          aria-label={t("console.projects.schedule.calendar.nextMonth", undefined, "Next Month")}
         >
           →
         </button>
       </div>
       <div className="grid grid-cols-7 border-b border-[var(--border-color)] bg-[var(--surface-inset)] text-[10px] font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+        {[
+          t("console.projects.schedule.calendar.weekday.sun", undefined, "Sun"),
+          t("console.projects.schedule.calendar.weekday.mon", undefined, "Mon"),
+          t("console.projects.schedule.calendar.weekday.tue", undefined, "Tue"),
+          t("console.projects.schedule.calendar.weekday.wed", undefined, "Wed"),
+          t("console.projects.schedule.calendar.weekday.thu", undefined, "Thu"),
+          t("console.projects.schedule.calendar.weekday.fri", undefined, "Fri"),
+          t("console.projects.schedule.calendar.weekday.sat", undefined, "Sat"),
+        ].map((d) => (
           <div key={d} className="px-2 py-1.5 text-center">
             {d}
           </div>
@@ -98,20 +108,20 @@ export function CalendarGrid({
                     <Link
                       href={`/console/events/${e.id}`}
                       className="block truncate rounded-sm bg-[var(--org-primary)]/15 px-1 py-0.5 text-[10px] hover:bg-[var(--org-primary)]/25"
-                      title={`${e.name} · ${e.status ?? "draft"}`}
+                      title={`${e.name} · ${e.status ?? t("console.projects.schedule.calendar.eventStatusDraft", undefined, "draft")}`}
                     >
                       {e.name}
                     </Link>
                   </li>
                 ))}
-                {dayTasks.map((t) => (
-                  <li key={`t-${t.id}`}>
+                {dayTasks.map((task) => (
+                  <li key={`t-${task.id}`}>
                     <Link
-                      href={`/console/tasks/${t.id}`}
+                      href={`/console/tasks/${task.id}`}
                       className="block truncate rounded-sm bg-[var(--surface-inset)] px-1 py-0.5 text-[10px] hover:bg-[var(--surface)]"
-                      title={`${t.title} · ${t.status ?? "open"}`}
+                      title={`${task.title} · ${task.status ?? t("console.projects.schedule.calendar.taskStatusOpen", undefined, "open")}`}
                     >
-                      ◇ {t.title}
+                      ◇ {task.title}
                     </Link>
                   </li>
                 ))}

@@ -8,6 +8,7 @@ import { PERSONA_TIERS } from "@/lib/db/guides";
 import { listAccessCodes, listRedemptions } from "@/lib/db/guide-access";
 import { hasSupabase } from "@/lib/env";
 import { isPublicPersona } from "@/lib/guides/access-token";
+import { getRequestT } from "@/lib/i18n/request";
 import type { GuidePersona } from "@/lib/supabase/types";
 import { AccessCodeManager } from "./AccessCodeManager";
 
@@ -33,6 +34,7 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
   const persona = rawPersona as GuidePersona;
 
   const session = await requireSession();
+  const { t } = await getRequestT();
   const project = await getProject(session.orgId, projectId);
   if (!project) notFound();
 
@@ -46,25 +48,38 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
       <>
         <ModuleHeader
           eyebrow={project.name}
-          title={`${labelFor(persona)} — access`}
-          subtitle={`Tier ${tierInfo.tier} · ${tierInfo.classification}`}
+          title={t(
+            "console.projects.guides.access.publicTitle",
+            { persona: labelFor(persona, t) },
+            `${labelFor(persona, t)} — access`,
+          )}
+          subtitle={t(
+            "console.projects.guides.access.subtitle",
+            { tier: tierInfo.tier, classification: tierInfo.classification },
+            `Tier ${tierInfo.tier} · ${tierInfo.classification}`,
+          )}
         />
         <div className="page-content max-w-3xl">
           <div className="surface space-y-3 p-6">
-            <Badge variant="success">Public — no code required</Badge>
+            <Badge variant="success">
+              {t("console.projects.guides.access.publicBadge", undefined, "Public — no code required")}
+            </Badge>
             <p className="text-sm text-[var(--text-secondary)]">
-              This persona is publicly accessible. Anyone with the link sees this guide once it is published. There is
-              nothing to manage here.
+              {t(
+                "console.projects.guides.access.publicExplainer",
+                undefined,
+                "This persona is publicly accessible. Anyone with the link sees this guide once it is published. There is nothing to manage here.",
+              )}
             </p>
             <p className="text-xs text-[var(--text-muted)]">
-              Public URL:{" "}
+              {t("console.projects.guides.access.publicUrlLabel", undefined, "Public URL:")}{" "}
               <code className="font-mono">
                 /p/{project.slug ?? "<slug>"}/guide?as={persona}
               </code>
             </p>
             <div className="pt-2">
               <Link href={`/console/projects/${projectId}/guides/${persona}`} className="btn btn-secondary btn-sm">
-                Edit guide content
+                {t("console.projects.guides.access.editGuideContent", undefined, "Edit guide content")}
               </Link>
             </div>
           </div>
@@ -82,8 +97,16 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title={`${labelFor(persona)} — access codes`}
-        subtitle={`Tier ${tierInfo.tier} · ${tierInfo.classification}`}
+        title={t(
+          "console.projects.guides.access.codesTitle",
+          { persona: labelFor(persona, t) },
+          `${labelFor(persona, t)} — access codes`,
+        )}
+        subtitle={t(
+          "console.projects.guides.access.subtitle",
+          { tier: tierInfo.tier, classification: tierInfo.classification },
+          `Tier ${tierInfo.tier} · ${tierInfo.classification}`,
+        )}
       />
       <div className="page-content max-w-4xl">
         <AccessCodeManager
@@ -97,18 +120,21 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
   );
 }
 
-function labelFor(p: GuidePersona): string {
+function labelFor(
+  p: GuidePersona,
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+): string {
   const map: Record<GuidePersona, string> = {
-    staff: "Production",
-    crew: "Operations",
-    vendor: "Food & Beverage",
-    brand_ambassador: "Brand Ambassador",
-    sponsor: "Sponsors",
-    artist: "Talent",
-    media_press: "Media & Press",
-    client: "Client",
-    guest: "Guests",
-    custom: "Temporary Access",
+    staff: t("console.projects.guides.access.persona.staff", undefined, "Production"),
+    crew: t("console.projects.guides.access.persona.crew", undefined, "Operations"),
+    vendor: t("console.projects.guides.access.persona.vendor", undefined, "Food & Beverage"),
+    brand_ambassador: t("console.projects.guides.access.persona.brand_ambassador", undefined, "Brand Ambassador"),
+    sponsor: t("console.projects.guides.access.persona.sponsor", undefined, "Sponsors"),
+    artist: t("console.projects.guides.access.persona.artist", undefined, "Talent"),
+    media_press: t("console.projects.guides.access.persona.media_press", undefined, "Media & Press"),
+    client: t("console.projects.guides.access.persona.client", undefined, "Client"),
+    guest: t("console.projects.guides.access.persona.guest", undefined, "Guests"),
+    custom: t("console.projects.guides.access.persona.custom", undefined, "Temporary Access"),
   };
   return map[p];
 }

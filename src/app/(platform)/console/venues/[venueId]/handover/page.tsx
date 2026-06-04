@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { Database } from "@/lib/supabase/database.types";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -26,13 +26,13 @@ type ItemRow = {
   notes: string | null;
 };
 
-const STATE_LABEL: Record<HandoverState, string> = {
-  not_started: "Not started",
-  inspection: "Inspection",
-  snag: "Snag",
-  sign_off: "Sign-off",
-  accepted: "Accepted",
-  closeout: "Closeout",
+const STATE_LABEL_KEY: Record<HandoverState, { key: string; fallback: string }> = {
+  not_started: { key: "console.venues.handover.state.notStarted", fallback: "Not started" },
+  inspection: { key: "console.venues.handover.state.inspection", fallback: "Inspection" },
+  snag: { key: "console.venues.handover.state.snag", fallback: "Snag" },
+  sign_off: { key: "console.venues.handover.state.signOff", fallback: "Sign-off" },
+  accepted: { key: "console.venues.handover.state.accepted", fallback: "Accepted" },
+  closeout: { key: "console.venues.handover.state.closeout", fallback: "Closeout" },
 };
 
 const STATE_TONE: Record<HandoverState, "muted" | "warning" | "info" | "success"> = {
@@ -55,12 +55,18 @@ const ITEM_TONE: Record<string, "muted" | "info" | "warning" | "success" | "erro
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
   const { venueId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Venue" title="Handover" />
+        <ModuleHeader
+          eyebrow={t("console.venues.handover.eyebrow", undefined, "Venue")}
+          title={t("console.venues.handover.title", undefined, "Handover")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.handover.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -103,65 +109,95 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   return (
     <>
       <ModuleHeader
-        eyebrow="Venue"
-        title={`${venue.name} — Handover`}
-        subtitle={`${items.length} commissioning item${items.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.venues.handover.eyebrow", undefined, "Venue")}
+        title={t("console.venues.handover.titleWithVenue", { name: venue.name }, `${venue.name} — Handover`)}
+        subtitle={
+          items.length === 1
+            ? t("console.venues.handover.subtitleOne", { count: items.length }, `${items.length} commissioning item`)
+            : t("console.venues.handover.subtitleOther", { count: items.length }, `${items.length} commissioning items`)
+        }
         breadcrumbs={[
-          { label: "Venues", href: "/console/venues" },
+          { label: t("console.venues.breadcrumb", undefined, "Venues"), href: "/console/venues" },
           { label: venue.name, href: `/console/venues/${venue.id}` },
-          { label: "Handover" },
+          { label: t("console.venues.handover.breadcrumb", undefined, "Handover") },
         ]}
-        action={<Badge variant={STATE_TONE[venue.handover_state]}>{STATE_LABEL[venue.handover_state]}</Badge>}
+        action={
+          <Badge variant={STATE_TONE[venue.handover_state]}>
+            {t(STATE_LABEL_KEY[venue.handover_state].key, undefined, STATE_LABEL_KEY[venue.handover_state].fallback)}
+          </Badge>
+        }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Passed" value={fmt.number(passed)} accent />
-          <MetricCard label="Open" value={fmt.number(open)} />
-          <MetricCard label="Failed" value={fmt.number(failed)} />
+          <MetricCard
+            label={t("console.venues.handover.metrics.passed", undefined, "Passed")}
+            value={fmt.number(passed)}
+            accent
+          />
+          <MetricCard label={t("console.venues.handover.metrics.open", undefined, "Open")} value={fmt.number(open)} />
+          <MetricCard
+            label={t("console.venues.handover.metrics.failed", undefined, "Failed")}
+            value={fmt.number(failed)}
+          />
         </div>
 
         {items.length > 0 && (
           <section className="surface p-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Commissioning Progress</h3>
+              <h3 className="text-sm font-semibold">
+                {t("console.venues.handover.progress.title", undefined, "Commissioning Progress")}
+              </h3>
               <span className="font-mono text-xs">{pct}%</span>
             </div>
             <ProgressBar value={pct} className="mt-3" />
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              Progress = (passed + waived) / total. Snags must be resolved before sign-off.
+              {t(
+                "console.venues.handover.progress.help",
+                undefined,
+                "Progress = (passed + waived) / total. Snags must be resolved before sign-off.",
+              )}
             </p>
           </section>
         )}
 
         <DataTable<ItemRow>
           rows={items}
-          emptyLabel="No handover items yet"
-          emptyDescription="Author the commissioning checklist — overlay, MEP, IT, signage, broadcast, catering, medical, security, operations. Each item gets owned, due-dated, and signed off."
+          emptyLabel={t("console.venues.handover.empty.label", undefined, "No handover items yet")}
+          emptyDescription={t(
+            "console.venues.handover.empty.description",
+            undefined,
+            "Author the commissioning checklist — overlay, MEP, IT, signage, broadcast, catering, medical, security, operations. Each item gets owned, due-dated, and signed off.",
+          )}
           columns={[
             {
               key: "category",
-              header: "Category",
+              header: t("console.venues.handover.columns.category", undefined, "Category"),
               render: (r) => <Badge variant="muted">{toTitle(r.category)}</Badge>,
               accessor: (r) => r.category ?? null,
               filterable: true,
               groupable: true,
             },
-            { key: "desc", header: "Item", render: (r) => r.description, accessor: (r) => r.description },
+            {
+              key: "desc",
+              header: t("console.venues.handover.columns.item", undefined, "Item"),
+              render: (r) => r.description,
+              accessor: (r) => r.description,
+            },
             {
               key: "due",
-              header: "Due",
+              header: t("console.venues.handover.columns.due", undefined, "Due"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_at)}</span>,
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "resolved",
-              header: "Resolved",
+              header: t("console.venues.handover.columns.resolved", undefined, "Resolved"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.resolved_at)}</span>,
               accessor: (r) => r.resolved_at ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("console.venues.handover.columns.status", undefined, "Status"),
               render: (r) => <Badge variant={ITEM_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

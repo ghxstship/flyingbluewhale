@@ -8,7 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { answerRfi, closeRfi } from "./actions";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +22,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const { data: rfi } = await supabase
     .from("rfis")
     .select(
@@ -38,8 +39,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        breadcrumbs={[{ label: "RFIs", href: "/console/rfis" }, { label: rfi.code }]}
+        eyebrow={t("console.rfis.detail.eyebrow", undefined, "Operations")}
+        breadcrumbs={[
+          { label: t("console.rfis.detail.breadcrumb", undefined, "RFIs"), href: "/console/rfis" },
+          { label: rfi.code },
+        ]}
         title={`${rfi.code} — ${rfi.subject}`}
         subtitle={project}
         action={
@@ -50,12 +54,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               href={`/console/rfis/${rfi.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
             >
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </a>
             {rfi.status === "answered" && (
               <form action={closeRfi.bind(null, id)}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Close RFI
+                  {t("console.rfis.detail.closeRfi", undefined, "Close RFI")}
                 </button>
               </form>
             )}
@@ -64,18 +68,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-5">
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Question</h3>
+          <h3 className="text-sm font-semibold">{t("console.rfis.detail.questionHeading", undefined, "Question")}</h3>
           <p className="mt-2 text-sm whitespace-pre-wrap">{rfi.question}</p>
-          {rfi.category && <p className="mt-2 text-xs text-[var(--text-muted)]">Category: {toTitle(rfi.category)}</p>}
+          {rfi.category && (
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("console.rfis.detail.categoryLabel", undefined, "Category:")} {toTitle(rfi.category)}
+            </p>
+          )}
         </section>
 
         <section className="surface p-4">
-          <h3 className="text-sm font-semibold">Official Answer</h3>
+          <h3 className="text-sm font-semibold">
+            {t("console.rfis.detail.officialAnswerHeading", undefined, "Official Answer")}
+          </h3>
           {rfi.official_answer ? (
             <div className="mt-2">
               <p className="text-sm whitespace-pre-wrap">{rfi.official_answer}</p>
               <p className="mt-2 text-xs text-[var(--text-muted)]">
-                Answered by{" "}
+                {t("console.rfis.detail.answeredBy", undefined, "Answered by")}{" "}
                 {(rfi.answerer as unknown as { name: string | null; email: string | null } | null)?.name ?? "—"}
                 {rfi.answered_at ? ` · ${fmt.dateTime(rfi.answered_at)}` : ""}
               </p>
@@ -87,12 +97,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   name="official_answer"
                   rows={4}
                   required
-                  placeholder="Provide the binding response. This becomes the authoritative answer."
+                  placeholder={t(
+                    "console.rfis.detail.answerPlaceholder",
+                    undefined,
+                    "Provide the binding response. This becomes the authoritative answer.",
+                  )}
                   className={INPUT}
                 />
                 <div className="flex justify-end">
                   <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
-                    Post Answer
+                    {t("console.rfis.detail.postAnswer", undefined, "Post Answer")}
                   </button>
                 </div>
               </form>

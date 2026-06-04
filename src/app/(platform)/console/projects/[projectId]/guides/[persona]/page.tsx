@@ -6,6 +6,7 @@ import { getProject } from "@/lib/db/projects";
 import { getGuideByPersona, PERSONA_TIERS } from "@/lib/db/guides";
 import { hasSupabase } from "@/lib/env";
 import { isPublicPersona } from "@/lib/guides/access-token";
+import { getRequestT } from "@/lib/i18n/request";
 import type { GuidePersona } from "@/lib/supabase/types";
 import { GuideEditor } from "./GuideEditor";
 
@@ -57,17 +58,26 @@ export default async function GuideEditorPage({ params }: { params: Promise<{ pr
 
   const existing = await getGuideByPersona(projectId, persona);
   const tierInfo = PERSONA_TIERS[persona];
+  const { t } = await getRequestT();
 
   return (
     <>
       <ModuleHeader
         eyebrow={project.name}
-        title={`${persona.charAt(0).toUpperCase() + persona.slice(1)} guide`}
-        subtitle={`Tier ${tierInfo.tier} · ${tierInfo.classification}`}
+        title={t(
+          "console.projects.guides.persona.title",
+          { persona: persona.charAt(0).toUpperCase() + persona.slice(1) },
+          `${persona.charAt(0).toUpperCase() + persona.slice(1)} guide`,
+        )}
+        subtitle={t(
+          "console.projects.guides.persona.subtitle",
+          { tier: tierInfo.tier, classification: tierInfo.classification },
+          `Tier ${tierInfo.tier} · ${tierInfo.classification}`,
+        )}
         action={
           !isPublicPersona(persona) ? (
             <Link href={`/console/projects/${projectId}/guides/${persona}/access`} className="btn btn-secondary btn-sm">
-              Manage access codes
+              {t("console.projects.guides.persona.manageAccessCodes", undefined, "Manage access codes")}
             </Link>
           ) : undefined
         }
@@ -77,7 +87,13 @@ export default async function GuideEditorPage({ params }: { params: Promise<{ pr
           projectId={projectId}
           persona={persona}
           defaultValues={{
-            title: existing?.title ?? `${project.name} — ${persona} guide`,
+            title:
+              existing?.title ??
+              t(
+                "console.projects.guides.persona.defaultTitle",
+                { projectName: project.name, persona },
+                `${project.name} — ${persona} guide`,
+              ),
             subtitle: existing?.subtitle ?? "",
             classification: existing?.classification ?? tierInfo.classification,
             published: existing?.published ?? false,

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { transitionPunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -28,6 +29,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
 
   const { data: item } = await supabase
     .from("punch_items")
@@ -44,38 +46,43 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Operations"
-        breadcrumbs={[{ label: "Punch List", href: "/console/punch" }, { label: item.code }]}
+        eyebrow={t("console.punch.detail.eyebrow", undefined, "Operations")}
+        breadcrumbs={[
+          { label: t("console.punch.detail.breadcrumb", undefined, "Punch List"), href: "/console/punch" },
+          { label: item.code },
+        ]}
         title={`${item.code} — ${item.title}`}
         subtitle={project}
         action={
           <div className="flex items-center gap-2">
             <Badge variant={STATUS_TONE[item.status] ?? "muted"}>{toTitle(item.status)}</Badge>
-            {item.show_ready_gate && <Badge variant="error">Doors Gate</Badge>}
+            {item.show_ready_gate && (
+              <Badge variant="error">{t("console.punch.detail.doorsGate", undefined, "Doors Gate")}</Badge>
+            )}
             <a
               href={`/console/punch/${item.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
             >
-              Edit
+              {t("common.edit", undefined, "Edit")}
             </a>
             {item.status === "open" && (
               <form action={transitionPunchItem.bind(null, id, "in_progress")}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Start
+                  {t("console.punch.detail.start", undefined, "Start")}
                 </button>
               </form>
             )}
             {item.status === "in_progress" && (
               <form action={transitionPunchItem.bind(null, id, "ready_for_review")}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Mark ready
+                  {t("console.punch.detail.markReady", undefined, "Mark ready")}
                 </button>
               </form>
             )}
             {item.status === "ready_for_review" && (
               <form action={transitionPunchItem.bind(null, id, "complete")}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
-                  Close
+                  {t("console.punch.detail.close", undefined, "Close")}
                 </button>
               </form>
             )}
@@ -86,19 +93,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="surface p-4">
           <dl className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">Priority</dt>
+              <dt className="text-xs text-[var(--text-muted)]">
+                {t("console.punch.detail.priority", undefined, "Priority")}
+              </dt>
               <dd className="font-medium">{toTitle(item.priority)}</dd>
             </div>
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">Due</dt>
+              <dt className="text-xs text-[var(--text-muted)]">{t("console.punch.detail.due", undefined, "Due")}</dt>
               <dd className="font-mono">{fmt(item.due_at)}</dd>
             </div>
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">Assignee</dt>
+              <dt className="text-xs text-[var(--text-muted)]">
+                {t("console.punch.detail.assignee", undefined, "Assignee")}
+              </dt>
               <dd>{assignee?.name ?? assignee?.email ?? "—"}</dd>
             </div>
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">Vendor</dt>
+              <dt className="text-xs text-[var(--text-muted)]">
+                {t("console.punch.detail.vendor", undefined, "Vendor")}
+              </dt>
               <dd>{vendor ?? "—"}</dd>
             </div>
           </dl>

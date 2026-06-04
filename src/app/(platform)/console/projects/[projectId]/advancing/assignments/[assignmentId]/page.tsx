@@ -9,7 +9,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import {
   advanceState,
   deleteAssignment,
@@ -32,7 +32,11 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string; assignmentId: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const { projectId, assignmentId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -98,12 +102,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     a.party_kind === "user"
       ? ((party as { name: string | null; email: string } | null)?.name ??
         (party as { email: string } | null)?.email ??
-        "Unassigned")
+        t("console.projects.assignments.detail.unassigned", undefined, "Unassigned"))
       : a.party_kind === "crew_member"
-        ? ((party as { name: string } | null)?.name ?? "Unknown crew")
+        ? ((party as { name: string } | null)?.name ??
+          t("console.projects.assignments.detail.unknownCrew", undefined, "Unknown crew"))
         : ((party as { holder_name: string | null; holder_email: string | null } | null)?.holder_name ??
           (party as { holder_email: string | null } | null)?.holder_email ??
-          "Guest");
+          t("console.projects.assignments.detail.guest", undefined, "Guest"));
 
   const memberList = (
     (members ?? []) as unknown as Array<{
@@ -186,22 +191,34 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     <>
       <ModuleHeader
         eyebrow={CATALOG_KIND_LABEL_SINGULAR[a.catalog_kind]}
-        title={a.title ?? "Untitled"}
+        title={a.title ?? t("console.projects.assignments.detail.untitled", undefined, "Untitled")}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <StatusBadge status={a.fulfillment_state} />
             <Badge variant="muted">{partyLabel}</Badge>
-            {a.deadline && <span className="font-mono text-xs">due {fmt.date(a.deadline)}</span>}
+            {a.deadline && (
+              <span className="font-mono text-xs">
+                {t(
+                  "console.projects.assignments.detail.due",
+                  { date: fmt.date(a.deadline) },
+                  `due ${fmt.date(a.deadline)}`,
+                )}
+              </span>
+            )}
           </span>
         }
         action={
           <div className="flex items-center gap-2">
             <Link href={`/console/projects/${projectId}/advancing/assignments`} className="btn btn-ghost btn-sm">
-              Back
+              {t("common.back", undefined, "Back")}
             </Link>
             <DeleteForm
               action={deleteAssignment.bind(null, projectId, a.id)}
-              confirm="Cancel this assignment? The assignee will no longer see it on their advancing surface."
+              confirm={t(
+                "console.projects.assignments.detail.cancelConfirm",
+                undefined,
+                "Cancel this assignment? The assignee will no longer see it on their advancing surface.",
+              )}
             />
           </div>
         }
@@ -209,69 +226,75 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <div className="page-content max-w-3xl space-y-4">
         {notes && (
           <section className="surface p-4">
-            <h2 className="text-sm font-semibold">Notes</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.projects.assignments.detail.notes", undefined, "Notes")}
+            </h2>
             <p className="mt-2 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{notes}</p>
           </section>
         )}
 
         {a.catalog_kind === "ticket" && (
           <KindPanel
-            title="Ticket Details"
-            description="Tier + access zones, gate routing, seat assignment, transfer policy. Drives the COMPVSS gate scanner display."
+            title={t("console.projects.assignments.detail.ticket.title", undefined, "Ticket Details")}
+            description={t(
+              "console.projects.assignments.detail.ticket.description",
+              undefined,
+              "Tier + access zones, gate routing, seat assignment, transfer policy. Drives the COMPVSS gate scanner display.",
+            )}
           >
             <form action={upsertTicketDetails} className="grid grid-cols-1 gap-2 sm:grid-cols-6">
               <input type="hidden" name="projectId" value={projectId} />
               <input type="hidden" name="assignmentId" value={a.id} />
               <DetailInput
                 name="tier_code"
-                label="Tier"
+                label={t("console.projects.assignments.detail.ticket.tier", undefined, "Tier")}
                 className="sm:col-span-2"
                 defaultValue={(detail as TicketDetails | null)?.tier_code ?? ""}
                 placeholder="ga, vip, all_access"
               />
               <DetailInput
                 name="zone_codes"
-                label="Zones (comma)"
+                label={t("console.projects.assignments.detail.ticket.zones", undefined, "Zones (comma)")}
                 className="sm:col-span-2"
                 defaultValue={((detail as TicketDetails | null)?.zone_codes ?? []).join(", ")}
                 placeholder="main_stage, bar_b"
               />
               <DetailInput
                 name="gate_codes"
-                label="Gates (comma)"
+                label={t("console.projects.assignments.detail.ticket.gates", undefined, "Gates (comma)")}
                 className="sm:col-span-2"
                 defaultValue={((detail as TicketDetails | null)?.gate_codes ?? []).join(", ")}
                 placeholder="gate_a, gate_c"
               />
               <DetailInput
                 name="valid_from"
-                label="Valid from"
+                label={t("console.projects.assignments.detail.ticket.validFrom", undefined, "Valid from")}
                 type="datetime-local"
                 className="sm:col-span-2"
                 defaultValue={isoLocal((detail as TicketDetails | null)?.valid_from)}
               />
               <DetailInput
                 name="valid_until"
-                label="Valid until"
+                label={t("console.projects.assignments.detail.ticket.validUntil", undefined, "Valid until")}
                 type="datetime-local"
                 className="sm:col-span-2"
                 defaultValue={isoLocal((detail as TicketDetails | null)?.valid_until)}
               />
               <DetailInput
                 name="seat_section"
-                label="Section"
+                label={t("console.projects.assignments.detail.ticket.section", undefined, "Section")}
                 className="sm:col-span-1"
                 defaultValue={(detail as TicketDetails | null)?.seat_section ?? ""}
               />
               <DetailInput
                 name="seat_row"
-                label="Row"
+                label={t("console.projects.assignments.detail.ticket.row", undefined, "Row")}
                 className="sm:col-span-1"
                 defaultValue={(detail as TicketDetails | null)?.seat_row ?? ""}
               />
               <DetailInput
                 name="seat_number"
-                label="Seat"
+                label={t("console.projects.assignments.detail.ticket.seat", undefined, "Seat")}
                 className="sm:col-span-2"
                 defaultValue={(detail as TicketDetails | null)?.seat_number ?? ""}
               />
@@ -282,11 +305,15 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   value="true"
                   defaultChecked={(detail as TicketDetails | null)?.transferable ?? false}
                 />
-                Transferable to another holder
+                {t(
+                  "console.projects.assignments.detail.ticket.transferable",
+                  undefined,
+                  "Transferable to another holder",
+                )}
               </label>
               <div className="flex justify-end sm:col-span-6">
                 <Button type="submit" size="sm" variant="secondary">
-                  Save Ticket Details
+                  {t("console.projects.assignments.detail.ticket.save", undefined, "Save Ticket Details")}
                 </Button>
               </div>
             </form>
@@ -295,36 +322,48 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         {a.catalog_kind === "credential" && (
           <KindPanel
-            title="Credential Details"
-            description="Access level, expiry, return policy. Parent assignment lets escort badges defer to a primary credential."
+            title={t("console.projects.assignments.detail.credential.title", undefined, "Credential Details")}
+            description={t(
+              "console.projects.assignments.detail.credential.description",
+              undefined,
+              "Access level, expiry, return policy. Parent assignment lets escort badges defer to a primary credential.",
+            )}
           >
             <form action={upsertCredentialDetails} className="grid grid-cols-1 gap-2 sm:grid-cols-6">
               <input type="hidden" name="projectId" value={projectId} />
               <input type="hidden" name="assignmentId" value={a.id} />
               <DetailInput
                 name="access_level"
-                label="Access level"
+                label={t("console.projects.assignments.detail.credential.accessLevel", undefined, "Access level")}
                 className="sm:col-span-3"
                 defaultValue={(detail as CredentialDetails | null)?.access_level ?? ""}
                 placeholder="backstage, production_only, all_areas"
               />
               <DetailInput
                 name="parent_assignment_id"
-                label="Parent credential (assignment UUID)"
+                label={t(
+                  "console.projects.assignments.detail.credential.parent",
+                  undefined,
+                  "Parent credential (assignment UUID)",
+                )}
                 className="sm:col-span-3"
                 defaultValue={(detail as CredentialDetails | null)?.parent_assignment_id ?? ""}
-                placeholder="optional UUID"
+                placeholder={t(
+                  "console.projects.assignments.detail.credential.parentPlaceholder",
+                  undefined,
+                  "optional UUID",
+                )}
               />
               <DetailInput
                 name="issued_on"
-                label="Issued on"
+                label={t("console.projects.assignments.detail.credential.issuedOn", undefined, "Issued on")}
                 type="date"
                 className="sm:col-span-2"
                 defaultValue={(detail as CredentialDetails | null)?.issued_on ?? ""}
               />
               <DetailInput
                 name="expires_on"
-                label="Expires on"
+                label={t("console.projects.assignments.detail.credential.expiresOn", undefined, "Expires on")}
                 type="date"
                 className="sm:col-span-2"
                 defaultValue={(detail as CredentialDetails | null)?.expires_on ?? ""}
@@ -336,16 +375,20 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   value="true"
                   defaultChecked={(detail as CredentialDetails | null)?.must_return ?? false}
                 />
-                Must be returned
+                {t("console.projects.assignments.detail.credential.mustReturn", undefined, "Must be returned")}
               </label>
               {(detail as CredentialDetails | null)?.returned_at && (
                 <p className="text-xs text-[var(--text-muted)] sm:col-span-6">
-                  Returned {fmt.date((detail as CredentialDetails).returned_at as string)}
+                  {t(
+                    "console.projects.assignments.detail.credential.returnedOn",
+                    { date: fmt.date((detail as CredentialDetails).returned_at as string) },
+                    `Returned ${fmt.date((detail as CredentialDetails).returned_at as string)}`,
+                  )}
                 </p>
               )}
               <div className="flex justify-end sm:col-span-6">
                 <Button type="submit" size="sm" variant="secondary">
-                  Save Credential Details
+                  {t("console.projects.assignments.detail.credential.save", undefined, "Save Credential Details")}
                 </Button>
               </div>
             </form>
@@ -354,56 +397,68 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         {a.catalog_kind === "lodging" && (
           <KindPanel
-            title="Lodging Details"
-            description="Property, room, dates, roommate pairing. Drives the /m/advances lodging card."
+            title={t("console.projects.assignments.detail.lodging.title", undefined, "Lodging Details")}
+            description={t(
+              "console.projects.assignments.detail.lodging.description",
+              undefined,
+              "Property, room, dates, roommate pairing. Drives the /m/advances lodging card.",
+            )}
           >
             <form action={upsertLodgingDetails} className="grid grid-cols-1 gap-2 sm:grid-cols-6">
               <input type="hidden" name="projectId" value={projectId} />
               <input type="hidden" name="assignmentId" value={a.id} />
               <DetailInput
                 name="property_name"
-                label="Property"
+                label={t("console.projects.assignments.detail.lodging.property", undefined, "Property")}
                 className="sm:col-span-4"
                 defaultValue={(detail as LodgingDetails | null)?.property_name ?? ""}
                 placeholder="Fontainebleau Miami Beach"
               />
               <DetailInput
                 name="room_number"
-                label="Room"
+                label={t("console.projects.assignments.detail.lodging.room", undefined, "Room")}
                 className="sm:col-span-2"
                 defaultValue={(detail as LodgingDetails | null)?.room_number ?? ""}
                 placeholder="2418"
               />
               <DetailInput
                 name="check_in"
-                label="Check-in"
+                label={t("console.projects.assignments.detail.lodging.checkIn", undefined, "Check-in")}
                 type="date"
                 className="sm:col-span-2"
                 defaultValue={(detail as LodgingDetails | null)?.check_in ?? ""}
               />
               <DetailInput
                 name="check_out"
-                label="Check-out"
+                label={t("console.projects.assignments.detail.lodging.checkOut", undefined, "Check-out")}
                 type="date"
                 className="sm:col-span-2"
                 defaultValue={(detail as LodgingDetails | null)?.check_out ?? ""}
               />
               <DetailInput
                 name="confirmation_code"
-                label="Confirmation"
+                label={t("console.projects.assignments.detail.lodging.confirmation", undefined, "Confirmation")}
                 className="sm:col-span-2"
                 defaultValue={(detail as LodgingDetails | null)?.confirmation_code ?? ""}
               />
               <DetailInput
                 name="roommate_assignment_id"
-                label="Roommate (assignment UUID)"
+                label={t(
+                  "console.projects.assignments.detail.lodging.roommate",
+                  undefined,
+                  "Roommate (assignment UUID)",
+                )}
                 className="sm:col-span-6"
                 defaultValue={(detail as LodgingDetails | null)?.roommate_assignment_id ?? ""}
-                placeholder="optional UUID — pairs two assignments to the same room"
+                placeholder={t(
+                  "console.projects.assignments.detail.lodging.roommatePlaceholder",
+                  undefined,
+                  "optional UUID — pairs two assignments to the same room",
+                )}
               />
               <div className="flex justify-end sm:col-span-6">
                 <Button type="submit" size="sm" variant="secondary">
-                  Save Lodging Details
+                  {t("console.projects.assignments.detail.lodging.save", undefined, "Save Lodging Details")}
                 </Button>
               </div>
             </form>
@@ -412,76 +467,88 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         {a.catalog_kind === "travel" && (
           <KindPanel
-            title="Travel Details"
-            description="One leg per assignment — multi-leg itineraries are multiple assignments grouped by atom_id."
+            title={t("console.projects.assignments.detail.travel.title", undefined, "Travel Details")}
+            description={t(
+              "console.projects.assignments.detail.travel.description",
+              undefined,
+              "One leg per assignment — multi-leg itineraries are multiple assignments grouped by atom_id.",
+            )}
           >
             <form action={upsertTravelDetails} className="grid grid-cols-1 gap-2 sm:grid-cols-6">
               <input type="hidden" name="projectId" value={projectId} />
               <input type="hidden" name="assignmentId" value={a.id} />
               <label className="text-xs sm:col-span-2">
-                <span className="text-label">Mode</span>
+                <span className="text-label">
+                  {t("console.projects.assignments.detail.travel.mode", undefined, "Mode")}
+                </span>
                 <select
                   name="mode"
                   defaultValue={(detail as TravelDetails | null)?.mode ?? ""}
                   className="input-base mt-1 w-full"
                 >
                   <option value="">—</option>
-                  <option value="flight">Flight</option>
-                  <option value="ground">Ground</option>
-                  <option value="rail">Rail</option>
-                  <option value="sea">Sea</option>
+                  <option value="flight">
+                    {t("console.projects.assignments.detail.travel.flight", undefined, "Flight")}
+                  </option>
+                  <option value="ground">
+                    {t("console.projects.assignments.detail.travel.ground", undefined, "Ground")}
+                  </option>
+                  <option value="rail">
+                    {t("console.projects.assignments.detail.travel.rail", undefined, "Rail")}
+                  </option>
+                  <option value="sea">{t("console.projects.assignments.detail.travel.sea", undefined, "Sea")}</option>
                 </select>
               </label>
               <DetailInput
                 name="carrier"
-                label="Carrier"
+                label={t("console.projects.assignments.detail.travel.carrier", undefined, "Carrier")}
                 className="sm:col-span-2"
                 defaultValue={(detail as TravelDetails | null)?.carrier ?? ""}
                 placeholder="Delta, Amtrak, …"
               />
               <DetailInput
                 name="confirmation_code"
-                label="Confirmation"
+                label={t("console.projects.assignments.detail.travel.confirmation", undefined, "Confirmation")}
                 className="sm:col-span-2"
                 defaultValue={(detail as TravelDetails | null)?.confirmation_code ?? ""}
               />
               <DetailInput
                 name="from_location"
-                label="From"
+                label={t("console.projects.assignments.detail.travel.from", undefined, "From")}
                 className="sm:col-span-3"
                 defaultValue={(detail as TravelDetails | null)?.from_location ?? ""}
                 placeholder="LAX"
               />
               <DetailInput
                 name="to_location"
-                label="To"
+                label={t("console.projects.assignments.detail.travel.to", undefined, "To")}
                 className="sm:col-span-3"
                 defaultValue={(detail as TravelDetails | null)?.to_location ?? ""}
                 placeholder="MIA"
               />
               <DetailInput
                 name="depart_at"
-                label="Depart"
+                label={t("console.projects.assignments.detail.travel.depart", undefined, "Depart")}
                 type="datetime-local"
                 className="sm:col-span-3"
                 defaultValue={isoLocal((detail as TravelDetails | null)?.depart_at)}
               />
               <DetailInput
                 name="arrive_at"
-                label="Arrive"
+                label={t("console.projects.assignments.detail.travel.arrive", undefined, "Arrive")}
                 type="datetime-local"
                 className="sm:col-span-3"
                 defaultValue={isoLocal((detail as TravelDetails | null)?.arrive_at)}
               />
               <DetailInput
                 name="seat"
-                label="Seat"
+                label={t("console.projects.assignments.detail.travel.seat", undefined, "Seat")}
                 className="sm:col-span-2"
                 defaultValue={(detail as TravelDetails | null)?.seat ?? ""}
               />
               <div className="flex justify-end sm:col-span-6">
                 <Button type="submit" size="sm" variant="secondary">
-                  Save Travel Details
+                  {t("console.projects.assignments.detail.travel.save", undefined, "Save Travel Details")}
                 </Button>
               </div>
             </form>
@@ -490,43 +557,47 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         {a.catalog_kind === "vehicle" && (
           <KindPanel
-            title="Vehicle Details"
-            description="Label, plate, pickup/return timestamps, mileage delta for rental wear billing."
+            title={t("console.projects.assignments.detail.vehicle.title", undefined, "Vehicle Details")}
+            description={t(
+              "console.projects.assignments.detail.vehicle.description",
+              undefined,
+              "Label, plate, pickup/return timestamps, mileage delta for rental wear billing.",
+            )}
           >
             <form action={upsertVehicleDetails} className="grid grid-cols-1 gap-2 sm:grid-cols-6">
               <input type="hidden" name="projectId" value={projectId} />
               <input type="hidden" name="assignmentId" value={a.id} />
               <DetailInput
                 name="vehicle_label"
-                label="Label"
+                label={t("console.projects.assignments.detail.vehicle.label", undefined, "Label")}
                 className="sm:col-span-3"
                 defaultValue={(detail as VehicleDetails | null)?.vehicle_label ?? ""}
                 placeholder="Ford Transit (white)"
               />
               <DetailInput
                 name="plate"
-                label="Plate"
+                label={t("console.projects.assignments.detail.vehicle.plate", undefined, "Plate")}
                 className="sm:col-span-3"
                 defaultValue={(detail as VehicleDetails | null)?.plate ?? ""}
                 placeholder="ABC-1234"
               />
               <DetailInput
                 name="picked_up_at"
-                label="Picked up"
+                label={t("console.projects.assignments.detail.vehicle.pickedUp", undefined, "Picked up")}
                 type="datetime-local"
                 className="sm:col-span-3"
                 defaultValue={isoLocal((detail as VehicleDetails | null)?.picked_up_at)}
               />
               <DetailInput
                 name="returned_at"
-                label="Returned"
+                label={t("console.projects.assignments.detail.vehicle.returned", undefined, "Returned")}
                 type="datetime-local"
                 className="sm:col-span-3"
                 defaultValue={isoLocal((detail as VehicleDetails | null)?.returned_at)}
               />
               <DetailInput
                 name="mileage_start"
-                label="Mileage start"
+                label={t("console.projects.assignments.detail.vehicle.mileageStart", undefined, "Mileage start")}
                 type="number"
                 className="sm:col-span-3"
                 defaultValue={
@@ -537,7 +608,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               />
               <DetailInput
                 name="mileage_end"
-                label="Mileage end"
+                label={t("console.projects.assignments.detail.vehicle.mileageEnd", undefined, "Mileage end")}
                 type="number"
                 className="sm:col-span-3"
                 defaultValue={
@@ -548,7 +619,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               />
               <div className="flex justify-end sm:col-span-6">
                 <Button type="submit" size="sm" variant="secondary">
-                  Save Vehicle Details
+                  {t("console.projects.assignments.detail.vehicle.save", undefined, "Save Vehicle Details")}
                 </Button>
               </div>
             </form>
@@ -557,9 +628,15 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         {allowed.length > 0 && (
           <section className="surface p-4">
-            <h2 className="text-sm font-semibold">Advance State</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.projects.assignments.detail.advanceState.title", undefined, "Advance State")}
+            </h2>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Move the assignment forward in the advancing → fulfillment → tracking lifecycle.
+              {t(
+                "console.projects.assignments.detail.advanceState.description",
+                undefined,
+                "Move the assignment forward in the advancing → fulfillment → tracking lifecycle.",
+              )}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               {allowed.map((next) => (
@@ -578,9 +655,15 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
 
         {a.party_kind === "user" && (
           <section className="surface p-4">
-            <h2 className="text-sm font-semibold">Reassign</h2>
+            <h2 className="text-sm font-semibold">
+              {t("console.projects.assignments.detail.reassign.title", undefined, "Reassign")}
+            </h2>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Hand this off to a different person. The new assignee is push-notified.
+              {t(
+                "console.projects.assignments.detail.reassign.description",
+                undefined,
+                "Hand this off to a different person. The new assignee is push-notified.",
+              )}
             </p>
             <form action={reassignAssignment} className="mt-3 flex items-end gap-2">
               <input type="hidden" name="projectId" value={projectId} />
@@ -593,27 +676,36 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 ))}
               </select>
               <Button type="submit" variant="secondary" size="sm">
-                Save
+                {t("common.save", undefined, "Save")}
               </Button>
             </form>
           </section>
         )}
 
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Comments</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.projects.assignments.detail.comments.title", undefined, "Comments")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Back-and-forth between the assignee and the project team. The assignee is push-notified on every new
-            comment.
+            {t(
+              "console.projects.assignments.detail.comments.description",
+              undefined,
+              "Back-and-forth between the assignee and the project team. The assignee is push-notified on every new comment.",
+            )}
           </p>
           <ol className="mt-3 space-y-3">
             {commentRows.length === 0 ? (
-              <li className="text-xs text-[var(--text-muted)]">No comments.</li>
+              <li className="text-xs text-[var(--text-muted)]">
+                {t("console.projects.assignments.detail.comments.empty", undefined, "No comments.")}
+              </li>
             ) : (
               commentRows.map((c) => (
                 <li key={c.id} className="surface-inset rounded-md p-3">
                   <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
                     <span className="font-medium text-[var(--text-secondary)]">
-                      {c.actor?.name ?? c.actor?.email ?? "Unknown"}
+                      {c.actor?.name ??
+                        c.actor?.email ??
+                        t("console.projects.assignments.detail.unknown", undefined, "Unknown")}
                     </span>
                     <span className="font-mono">{fmt.date(c.at)}</span>
                   </div>
@@ -630,28 +722,43 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               required
               rows={3}
               maxLength={4000}
-              placeholder="Add a comment for the assignee…"
+              placeholder={t(
+                "console.projects.assignments.detail.comments.placeholder",
+                undefined,
+                "Add a comment for the assignee…",
+              )}
               className="input-base w-full resize-y"
             />
             <div className="flex justify-end">
               <Button type="submit" variant="secondary" size="sm">
-                Post Comment
+                {t("console.projects.assignments.detail.comments.post", undefined, "Post Comment")}
               </Button>
             </div>
           </form>
         </section>
 
         <section className="surface p-4">
-          <h2 className="text-sm font-semibold">Activity</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.projects.assignments.detail.activity.title", undefined, "Activity")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Every state transition + scan + comment, in reverse chronological order. One log for everything.
+            {t(
+              "console.projects.assignments.detail.activity.description",
+              undefined,
+              "Every state transition + scan + comment, in reverse chronological order. One log for everything.",
+            )}
           </p>
           <ol className="mt-3 space-y-2 text-xs">
             {auditRows.length === 0 ? (
-              <li className="text-[var(--text-muted)]">No activity recorded.</li>
+              <li className="text-[var(--text-muted)]">
+                {t("console.projects.assignments.detail.activity.empty", undefined, "No activity recorded.")}
+              </li>
             ) : (
               auditRows.map((e) => {
-                const actor = e.actor?.name ?? e.actor?.email ?? "system";
+                const actor =
+                  e.actor?.name ??
+                  e.actor?.email ??
+                  t("console.projects.assignments.detail.system", undefined, "system");
                 return (
                   <li
                     key={e.id}
@@ -665,7 +772,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                           <Badge variant="info">{toTitle(e.to_state)}</Badge>{" "}
                         </>
                       ) : null}
-                      <span className="text-[var(--text-muted)]">by {actor}</span>
+                      <span className="text-[var(--text-muted)]">
+                        {t("console.projects.assignments.detail.activity.by", { actor }, `by ${actor}`)}
+                      </span>
                     </span>
                     <span className="font-mono text-[var(--text-muted)]">{fmt.date(e.at)}</span>
                   </li>
@@ -676,7 +785,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         </section>
 
         <p className="text-xs text-[var(--text-muted)]">
-          Created {fmt.date(a.created_at)} · Last updated {fmt.date(a.updated_at)}
+          {t(
+            "console.projects.assignments.detail.timestamps",
+            { created: fmt.date(a.created_at), updated: fmt.date(a.updated_at) },
+            `Created ${fmt.date(a.created_at)} · Last updated ${fmt.date(a.updated_at)}`,
+          )}
         </p>
       </div>
     </>

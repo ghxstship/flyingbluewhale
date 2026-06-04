@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listOnboardingSteps, type OnboardingStep } from "@/lib/db/onboarding";
 import { formatDate } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,18 +17,20 @@ const STATE_VARIANT: Record<OnboardingStep["step_state"], "muted" | "warning" | 
   waived: "muted",
   blocked: "error",
 };
-const STATE_LABEL: Record<OnboardingStep["step_state"], string> = {
-  pending: "Pending",
-  in_progress: "In Progress",
-  done: "Done",
-  waived: "Waived",
-  blocked: "Blocked",
-};
 
 export default async function LetterOnboardingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!hasSupabase) return notFound();
   await requireSession();
+  const { t } = await getRequestT();
+
+  const STATE_LABEL: Record<OnboardingStep["step_state"], string> = {
+    pending: t("console.people.offerLetters.onboarding.state.pending", undefined, "Pending"),
+    in_progress: t("console.people.offerLetters.onboarding.state.inProgress", undefined, "In Progress"),
+    done: t("console.people.offerLetters.onboarding.state.done", undefined, "Done"),
+    waived: t("console.people.offerLetters.onboarding.state.waived", undefined, "Waived"),
+    blocked: t("console.people.offerLetters.onboarding.state.blocked", undefined, "Blocked"),
+  };
 
   const steps = await listOnboardingSteps(id);
   if (steps.length === 0) notFound();
@@ -40,9 +43,13 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
   return (
     <>
       <ModuleHeader
-        eyebrow="Onboarding"
-        title="Engagement Onboarding"
-        subtitle={`${done}/${total} steps complete (${pct}%) · ${cpOpen} critical-path open`}
+        eyebrow={t("console.people.offerLetters.onboarding.eyebrow", undefined, "Onboarding")}
+        title={t("console.people.offerLetters.onboarding.title", undefined, "Engagement Onboarding")}
+        subtitle={t(
+          "console.people.offerLetters.onboarding.subtitle",
+          { done, total, pct, cpOpen },
+          `${done}/${total} steps complete (${pct}%) · ${cpOpen} critical-path open`,
+        )}
       />
       <div className="page-content space-y-4">
         <ul className="space-y-2">
@@ -59,8 +66,24 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
                 </div>
                 {s.description ? <p className="mt-1 text-sm text-[var(--text-subtle)]">{s.description}</p> : null}
                 <div className="mt-2 flex gap-3 text-xs text-[var(--text-subtle)]">
-                  {s.due_at ? <span>Due {formatDate(s.due_at, "medium")}</span> : null}
-                  {s.completed_at ? <span>· Completed {formatDate(s.completed_at, "medium")}</span> : null}
+                  {s.due_at ? (
+                    <span>
+                      {t(
+                        "console.people.offerLetters.onboarding.due",
+                        { date: formatDate(s.due_at, "medium") },
+                        `Due ${formatDate(s.due_at, "medium")}`,
+                      )}
+                    </span>
+                  ) : null}
+                  {s.completed_at ? (
+                    <span>
+                      {t(
+                        "console.people.offerLetters.onboarding.completed",
+                        { date: formatDate(s.completed_at, "medium") },
+                        `· Completed ${formatDate(s.completed_at, "medium")}`,
+                      )}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </li>
@@ -68,7 +91,7 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
         </ul>
         <div className="surface p-4 text-xs text-[var(--text-subtle)]">
           <Link href="/console/people/offer-letters" className="underline">
-            ← Back to offer letters
+            {t("console.people.offerLetters.onboarding.backLink", undefined, "← Back to offer letters")}
           </Link>
         </div>
       </div>

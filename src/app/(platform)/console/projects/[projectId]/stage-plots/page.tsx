@@ -5,6 +5,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { NewStagePlotButton } from "@/components/stage-plots/NewStagePlotButton";
+import { getRequestT } from "@/lib/i18n/request";
 
 /** Stage plot list for a project — Opportunity #11 UI surface. */
 
@@ -12,6 +13,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
   const { projectId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const [{ data: project }, { data: plots }] = await Promise.all([
     supabase
       .from("projects")
@@ -31,13 +33,23 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
   return (
     <>
       <ModuleHeader
-        eyebrow={project?.name ?? "Project"}
-        title="Stage Plots"
-        subtitle="Interactive 2D Layouts — Mics, Amps, Risers, Truss"
+        eyebrow={project?.name ?? t("console.projects.stagePlots.eyebrowFallback", undefined, "Project")}
+        title={t("console.projects.stagePlots.title", undefined, "Stage Plots")}
+        subtitle={t(
+          "console.projects.stagePlots.subtitle",
+          undefined,
+          "Interactive 2D Layouts — Mics, Amps, Risers, Truss",
+        )}
         breadcrumbs={[
-          { label: "Projects", href: "/console/projects" },
-          { label: project?.name ?? "Project", href: `/console/projects/${projectId}` },
-          { label: "Stage Plots" },
+          {
+            label: t("console.projects.stagePlots.breadcrumbProjects", undefined, "Projects"),
+            href: "/console/projects",
+          },
+          {
+            label: project?.name ?? t("console.projects.stagePlots.eyebrowFallback", undefined, "Project"),
+            href: `/console/projects/${projectId}`,
+          },
+          { label: t("console.projects.stagePlots.title", undefined, "Stage Plots") },
         ]}
         action={<NewStagePlotButton projectId={projectId} />}
       />
@@ -46,9 +58,9 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Dimensions</th>
-                <th>Last updated</th>
+                <th>{t("console.projects.stagePlots.colName", undefined, "Name")}</th>
+                <th>{t("console.projects.stagePlots.colDimensions", undefined, "Dimensions")}</th>
+                <th>{t("console.projects.stagePlots.colLastUpdated", undefined, "Last updated")}</th>
               </tr>
             </thead>
             <tbody>
@@ -72,7 +84,9 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
           </table>
         ) : (
           <div className="surface p-6 text-center text-sm text-[var(--text-muted)]">
-            No stage plots yet. Click <strong>New stage plot</strong> above to open the canvas editor.
+            {t("console.projects.stagePlots.emptyPrefix", undefined, "No stage plots yet. Click")}{" "}
+            <strong>{t("console.projects.stagePlots.emptyAction", undefined, "New stage plot")}</strong>{" "}
+            {t("console.projects.stagePlots.emptySuffix", undefined, "above to open the canvas editor.")}
           </div>
         )}
       </div>

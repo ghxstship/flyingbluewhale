@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -25,12 +25,18 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Project Correspondence" title="Email Inbox" />
+        <ModuleHeader
+          eyebrow={t("console.emailInbox.eyebrow", undefined, "Project Correspondence")}
+          title={t("console.emailInbox.title", undefined, "Email Inbox")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.emailInbox.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -56,36 +62,57 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Project Correspondence"
-        title="Email Inbox"
-        subtitle={`${rows.length} message${rows.length === 1 ? "" : "s"} · ${unroutedCount} unrouted · ${routedCount} promoted to records`}
+        eyebrow={t("console.emailInbox.eyebrow", undefined, "Project Correspondence")}
+        title={t("console.emailInbox.title", undefined, "Email Inbox")}
+        subtitle={t(
+          "console.emailInbox.subtitle",
+          { count: rows.length, plural: rows.length === 1 ? "" : "s", unrouted: unroutedCount, routed: routedCount },
+          `${rows.length} message${rows.length === 1 ? "" : "s"} · ${unroutedCount} unrouted · ${routedCount} promoted to records`,
+        )}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Unrouted" value={fmt.number(unroutedCount)} accent />
-          <MetricCard label="Promoted" value={fmt.number(routedCount)} />
-          <MetricCard label="Total" value={fmt.number(rows.length)} />
+          <MetricCard
+            label={t("console.emailInbox.metric.unrouted", undefined, "Unrouted")}
+            value={fmt.number(unroutedCount)}
+            accent
+          />
+          <MetricCard
+            label={t("console.emailInbox.metric.promoted", undefined, "Promoted")}
+            value={fmt.number(routedCount)}
+          />
+          <MetricCard
+            label={t("console.emailInbox.metric.total", undefined, "Total")}
+            value={fmt.number(rows.length)}
+          />
         </div>
         <div className="text-[10px] text-[var(--text-muted)]">
-          Inbound emails captured at {`{slug}@in.atlvs.pro`}. The router (separate worker) processes incoming messages;
-          a human promotes each to an RFI / submittal / transmittal / note. Schema + RLS + admin view are live.
+          {t(
+            "console.emailInbox.routerNote",
+            undefined,
+            "Inbound emails captured at {slug}@in.atlvs.pro. The router (separate worker) processes incoming messages; a human promotes each to an RFI / submittal / transmittal / note. Schema + RLS + admin view are live.",
+          )}
         </div>
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/email-inbox/${r.id}`}
-          emptyLabel="No inbound emails yet"
-          emptyDescription="Configure a project_email row to start routing messages to a project."
+          emptyLabel={t("console.emailInbox.emptyLabel", undefined, "No inbound emails yet")}
+          emptyDescription={t(
+            "console.emailInbox.emptyDescription",
+            undefined,
+            "Configure a project_email row to start routing messages to a project.",
+          )}
           columns={[
             {
               key: "received",
-              header: "Received",
+              header: t("console.emailInbox.column.received", undefined, "Received"),
               render: (r) => fmt.dateParts(r.received_at, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.received_at,
               className: "font-mono text-xs",
             },
             {
               key: "from",
-              header: "From",
+              header: t("console.emailInbox.column.from", undefined, "From"),
               render: (r) => `${r.from_name ?? ""} <${r.from_email}>`.trim(),
               accessor: (r) => r.from_email,
               filterable: true,
@@ -93,13 +120,13 @@ export default async function Page() {
             },
             {
               key: "subject",
-              header: "Subject",
-              render: (r) => r.subject ?? "(no subject)",
+              header: t("console.emailInbox.column.subject", undefined, "Subject"),
+              render: (r) => r.subject ?? t("console.emailInbox.noSubject", undefined, "(no subject)"),
               accessor: (r) => r.subject,
             },
             {
               key: "project",
-              header: "Project",
+              header: t("console.emailInbox.column.project", undefined, "Project"),
               render: (r) => r.project?.name ?? "—",
               accessor: (r) => r.project?.name ?? null,
               filterable: true,
@@ -107,12 +134,12 @@ export default async function Page() {
             },
             {
               key: "routed",
-              header: "Routed To",
+              header: t("console.emailInbox.column.routedTo", undefined, "Routed To"),
               render: (r) =>
                 r.routed_to ? (
                   <Badge variant="success">{toTitle(r.routed_to)}</Badge>
                 ) : (
-                  <Badge variant="muted">Unrouted</Badge>
+                  <Badge variant="muted">{t("console.emailInbox.unrouted", undefined, "Unrouted")}</Badge>
                 ),
               accessor: (r) => r.routed_to ?? "unrouted",
               filterable: true,

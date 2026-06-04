@@ -3,11 +3,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { NewExpenseForm, type ExpenseAtomOption } from "./NewExpenseForm";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewExpensePage() {
+  const { t } = await getRequestT();
   let projects: { id: string; name: string }[] = [];
   let atoms: ExpenseAtomOption[] = [];
   if (hasSupabase) {
@@ -41,7 +43,10 @@ export default async function NewExpensePage() {
   }
   return (
     <>
-      <ModuleHeader eyebrow="Finance" title="Log Expense" />
+      <ModuleHeader
+        eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
+        title={t("console.finance.expenses.new.title", undefined, "Log Expense")}
+      />
       <div className="page-content max-w-xl">
         <NewExpenseForm projects={projects} atoms={atoms} />
       </div>

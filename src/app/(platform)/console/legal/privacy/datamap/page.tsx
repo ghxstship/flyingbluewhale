@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -153,12 +154,18 @@ const REGISTER: Array<{
 ];
 
 export default async function DatamapPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Privacy" title="Data Map" />
+        <ModuleHeader
+          eyebrow={t("console.legal.privacy.datamap.eyebrow", undefined, "Privacy")}
+          title={t("console.legal.privacy.datamap.title", undefined, "Data Map")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.legal.privacy.datamap.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -181,25 +188,29 @@ export default async function DatamapPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Privacy" title="Data Map" subtitle="GDPR Article 30 processing register" />
+      <ModuleHeader
+        eyebrow={t("console.legal.privacy.datamap.eyebrow", undefined, "Privacy")}
+        title={t("console.legal.privacy.datamap.title", undefined, "Data Map")}
+        subtitle={t("console.legal.privacy.datamap.subtitle", undefined, "GDPR Article 30 processing register")}
+      />
       <div className="page-content max-w-5xl space-y-4">
         <div className="overflow-x-auto">
           <table className="data-table w-full text-sm">
             <thead>
               <tr>
-                <th>Domain</th>
-                <th>Table</th>
-                <th>Records</th>
-                <th>Category</th>
-                <th>Processors</th>
-                <th>Retention</th>
-                <th>Legal basis</th>
+                <th>{t("console.legal.privacy.datamap.col.domain", undefined, "Domain")}</th>
+                <th>{t("console.legal.privacy.datamap.col.table", undefined, "Table")}</th>
+                <th>{t("console.legal.privacy.datamap.col.records", undefined, "Records")}</th>
+                <th>{t("console.legal.privacy.datamap.col.category", undefined, "Category")}</th>
+                <th>{t("console.legal.privacy.datamap.col.processors", undefined, "Processors")}</th>
+                <th>{t("console.legal.privacy.datamap.col.retention", undefined, "Retention")}</th>
+                <th>{t("console.legal.privacy.datamap.col.legalBasis", undefined, "Legal basis")}</th>
               </tr>
             </thead>
             <tbody>
               {REGISTER.map((r) => (
                 <tr key={r.table}>
-                  <td>{r.domain}</td>
+                  <td>{t(`console.legal.privacy.datamap.domain.${r.domain}`, undefined, r.domain)}</td>
                   <td className="font-mono text-xs">{r.table}</td>
                   <td className="font-mono text-xs">{countMap.get(r.table) ?? "—"}</td>
                   <td>
@@ -214,20 +225,27 @@ export default async function DatamapPage() {
                               : "muted"
                       }
                     >
-                      {r.category}
+                      {t(`console.legal.privacy.datamap.category.${r.category}`, undefined, r.category)}
                     </Badge>
                   </td>
                   <td className="text-xs text-[var(--text-secondary)]">{r.processors.join(", ")}</td>
-                  <td className="text-xs">{r.retention}</td>
-                  <td className="text-xs">{toTitle(r.legal_basis)}</td>
+                  <td className="text-xs">
+                    {t(`console.legal.privacy.datamap.retention.${r.table}`, undefined, r.retention)}
+                  </td>
+                  <td className="text-xs">
+                    {t(`console.legal.privacy.datamap.legalBasis.${r.legal_basis}`, undefined, toTitle(r.legal_basis))}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
         <p className="text-xs text-[var(--text-muted)]">
-          This register reflects the canonical schema. Custom data retained outside the platform must be added
-          separately to your DPA appendix.
+          {t(
+            "console.legal.privacy.datamap.footnote",
+            undefined,
+            "This register reflects the canonical schema. Custom data retained outside the platform must be added separately to your DPA appendix.",
+          )}
         </p>
       </div>
     </>

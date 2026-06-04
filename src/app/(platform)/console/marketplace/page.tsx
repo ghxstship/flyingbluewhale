@@ -4,18 +4,24 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Marketplace" title="Overview" />
+        <ModuleHeader
+          eyebrow={t("console.marketplace.eyebrow", undefined, "Marketplace")}
+          title={t("console.marketplace.title", undefined, "Overview")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.marketplace.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -44,58 +50,99 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Marketplace"
-        title="Overview"
-        subtitle="Public surfaces — RFQs, crew gigs, talent calls, offers."
+        eyebrow={t("console.marketplace.eyebrow", undefined, "Marketplace")}
+        title={t("console.marketplace.title", undefined, "Overview")}
+        subtitle={t(
+          "console.marketplace.subtitle",
+          undefined,
+          "Public surfaces — RFQs, crew gigs, talent calls, offers.",
+        )}
         action={
           <Button href="/console/marketplace/settings" size="sm" variant="ghost">
-            Settings
+            {t("console.marketplace.settings", undefined, "Settings")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard label="Live Postings" value={fmt.number(publishedPostings)} accent />
-          <MetricCard label="Open Calls" value={fmt.number(publishedCalls)} />
-          <MetricCard label="Active Offers" value={fmt.number(liveOffers)} />
-          <MetricCard label="New Applicants" value={fmt.number(newApplicants)} />
+          <MetricCard
+            label={t("console.marketplace.metrics.livePostings", undefined, "Live Postings")}
+            value={fmt.number(publishedPostings)}
+            accent
+          />
+          <MetricCard
+            label={t("console.marketplace.metrics.openCalls", undefined, "Open Calls")}
+            value={fmt.number(publishedCalls)}
+          />
+          <MetricCard
+            label={t("console.marketplace.metrics.activeOffers", undefined, "Active Offers")}
+            value={fmt.number(liveOffers)}
+          />
+          <MetricCard
+            label={t("console.marketplace.metrics.newApplicants", undefined, "New Applicants")}
+            value={fmt.number(newApplicants)}
+          />
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           <Tile
-            title="Job Postings"
+            title={t("console.marketplace.tiles.postings.title", undefined, "Job Postings")}
             href="/console/marketplace/postings"
             newHref="/console/marketplace/postings/new"
-            blurb="Public crew job board. Single, tour-leg, or recurring. Reviews land in your ATS."
+            blurb={t(
+              "console.marketplace.tiles.postings.blurb",
+              undefined,
+              "Public crew job board. Single, tour-leg, or recurring. Reviews land in your ATS.",
+            )}
           />
           <Tile
-            title="Open Calls"
+            title={t("console.marketplace.tiles.calls.title", undefined, "Open Calls")}
             href="/console/marketplace/calls"
             newHref="/console/marketplace/calls/new"
-            blurb="Casting calls and open RFPs. Submissions feed your shortlist."
+            blurb={t(
+              "console.marketplace.tiles.calls.blurb",
+              undefined,
+              "Casting calls and open RFPs. Submissions feed your shortlist.",
+            )}
           />
           <Tile
-            title="Talent"
+            title={t("console.marketplace.tiles.talent.title", undefined, "Talent")}
             href="/console/marketplace/talent"
             newHref="/console/marketplace/talent/new"
-            blurb="EPK roster: act, riders, fee bands, availability, agent."
+            blurb={t(
+              "console.marketplace.tiles.talent.blurb",
+              undefined,
+              "EPK roster: act, riders, fee bands, availability, agent.",
+            )}
           />
           <Tile
-            title="Offers"
+            title={t("console.marketplace.tiles.offers.title", undefined, "Offers")}
             href="/console/marketplace/offers"
             newHref="/console/marketplace/offers/new"
-            blurb="Talent offers, counters, contracts. 60/40 default; auto-builds advancing on accept."
+            blurb={t(
+              "console.marketplace.tiles.offers.blurb",
+              undefined,
+              "Talent offers, counters, contracts. 60/40 default; auto-builds advancing on accept.",
+            )}
           />
           <Tile
-            title="RFQ Marketplace"
+            title={t("console.marketplace.tiles.rfq.title", undefined, "RFQ Marketplace")}
             href="/console/procurement/rfqs"
             newHref="/console/procurement/rfqs/new"
-            blurb="Publish RFQs to the public marketplace with prequalification gates."
+            blurb={t(
+              "console.marketplace.tiles.rfq.blurb",
+              undefined,
+              "Publish RFQs to the public marketplace with prequalification gates.",
+            )}
           />
           <Tile
-            title="Reviews"
+            title={t("console.marketplace.tiles.reviews.title", undefined, "Reviews")}
             href="/console/marketplace/reviews"
-            blurb="Bidirectional reviews. Hidden until both sides post — no retaliation surface."
+            blurb={t(
+              "console.marketplace.tiles.reviews.blurb",
+              undefined,
+              "Bidirectional reviews. Hidden until both sides post — no retaliation surface.",
+            )}
           />
         </div>
       </div>

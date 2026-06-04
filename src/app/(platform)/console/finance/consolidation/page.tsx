@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { toTitle } from "@/lib/format";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,12 +36,18 @@ type ConsolidatedRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Finance" title="Consolidation" />
+        <ModuleHeader
+          eyebrow={t("console.finance.consolidation.eyebrow", undefined, "Finance")}
+          title={t("console.finance.consolidation.title", undefined, "Consolidation")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.finance.consolidation.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -115,26 +122,65 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
-        title="Consolidation"
-        subtitle={`${bucketList.length} Entit${bucketList.length === 1 ? "y" : "ies"} · Group rollup in entity base currencies`}
+        eyebrow={t("console.finance.consolidation.eyebrow", undefined, "Finance")}
+        title={t("console.finance.consolidation.title", undefined, "Consolidation")}
+        subtitle={t(
+          "console.finance.consolidation.subtitle",
+          {
+            count: bucketList.length,
+            entityWord:
+              bucketList.length === 1
+                ? t("console.finance.consolidation.entitySingular", undefined, "Entity")
+                : t("console.finance.consolidation.entityPlural", undefined, "Entities"),
+          },
+          `${bucketList.length} Entit${bucketList.length === 1 ? "y" : "ies"} · Group rollup in entity base currencies`,
+        )}
       />
       <div className="page-content space-y-6">
         <div className="metric-grid-4">
-          <MetricCard label="Entities" value={bucketList.length} accent />
-          <MetricCard label="Group consolidated" value={formatMoney(groupConsolidated, orgCurrency)} />
-          <MetricCard label="Group outstanding" value={formatMoney(groupOutstanding, orgCurrency)} />
-          <MetricCard label="Group paid" value={formatMoney(groupPaid, orgCurrency)} />
+          <MetricCard
+            label={t("console.finance.consolidation.metrics.entities", undefined, "Entities")}
+            value={bucketList.length}
+            accent
+          />
+          <MetricCard
+            label={t("console.finance.consolidation.metrics.groupConsolidated", undefined, "Group consolidated")}
+            value={formatMoney(groupConsolidated, orgCurrency)}
+          />
+          <MetricCard
+            label={t("console.finance.consolidation.metrics.groupOutstanding", undefined, "Group outstanding")}
+            value={formatMoney(groupOutstanding, orgCurrency)}
+          />
+          <MetricCard
+            label={t("console.finance.consolidation.metrics.groupPaid", undefined, "Group paid")}
+            value={formatMoney(groupPaid, orgCurrency)}
+          />
         </div>
 
         <div className="surface p-5 text-xs text-[var(--text-secondary)]">
           <p>
-            <strong className="text-[var(--text-primary)]">How consolidation works:</strong> the view{" "}
-            <code className="font-mono">v_consolidated_ar</code> applies each entity&apos;s ownership % for proportional
-            consolidation, zeros out entities flagged <code className="font-mono">consolidation_method = none</code>,
-            and passes through <code className="font-mono">base_amount_cents</code> for full/equity. FX rates are
-            snapshotted at invoice insert (see <code className="font-mono">fx_rate_to_base</code> on{" "}
-            <code className="font-mono">invoices</code>). Refresh the daily rate store via{" "}
+            <strong className="text-[var(--text-primary)]">
+              {t("console.finance.consolidation.howItWorks.heading", undefined, "How consolidation works:")}
+            </strong>{" "}
+            {t("console.finance.consolidation.howItWorks.part1", undefined, "the view")}{" "}
+            <code className="font-mono">v_consolidated_ar</code>{" "}
+            {t(
+              "console.finance.consolidation.howItWorks.part2",
+              undefined,
+              "applies each entity's ownership % for proportional consolidation, zeros out entities flagged",
+            )}{" "}
+            <code className="font-mono">consolidation_method = none</code>,{" "}
+            {t("console.finance.consolidation.howItWorks.part3", undefined, "and passes through")}{" "}
+            <code className="font-mono">base_amount_cents</code>{" "}
+            {t(
+              "console.finance.consolidation.howItWorks.part4",
+              undefined,
+              "for full/equity. FX rates are snapshotted at invoice insert (see",
+            )}{" "}
+            <code className="font-mono">fx_rate_to_base</code>{" "}
+            {t("console.finance.consolidation.howItWorks.part5", undefined, "on")}{" "}
+            <code className="font-mono">invoices</code>
+            {t("console.finance.consolidation.howItWorks.part6", undefined, "). Refresh the daily rate store via")}{" "}
             <code className="font-mono">POST /api/v1/integrations/fx/refresh</code>.
           </p>
         </div>
@@ -149,32 +195,47 @@ export default async function Page() {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="text-xs tracking-wider text-[var(--text-secondary)] uppercase">
-                    {b.short_code ?? "Unassigned"}
+                    {b.short_code ?? t("console.finance.consolidation.unassigned", undefined, "Unassigned")}
                   </div>
-                  <div className="mt-0.5 text-base font-semibold">{b.legal_name ?? "Unassigned invoices"}</div>
+                  <div className="mt-0.5 text-base font-semibold">
+                    {b.legal_name ??
+                      t("console.finance.consolidation.unassignedInvoices", undefined, "Unassigned invoices")}
+                  </div>
                 </div>
                 {b.method ? <Badge variant="info">{toTitle(b.method)}</Badge> : null}
               </div>
               <div className="mt-4 grid grid-cols-3 gap-3 text-xs">
                 <div>
-                  <div className="text-[var(--text-secondary)]">Base</div>
+                  <div className="text-[var(--text-secondary)]">
+                    {t("console.finance.consolidation.card.base", undefined, "Base")}
+                  </div>
                   <div className="font-mono text-sm">{formatMoney(b.base_total, b.base_currency ?? orgCurrency)}</div>
                 </div>
                 <div>
-                  <div className="text-[var(--text-secondary)]">Consolidated</div>
+                  <div className="text-[var(--text-secondary)]">
+                    {t("console.finance.consolidation.card.consolidated", undefined, "Consolidated")}
+                  </div>
                   <div className="font-mono text-sm">
                     {formatMoney(b.consolidated_total, b.base_currency ?? orgCurrency)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-[var(--text-secondary)]">Ownership</div>
+                  <div className="text-[var(--text-secondary)]">
+                    {t("console.finance.consolidation.card.ownership", undefined, "Ownership")}
+                  </div>
                   <div className="font-mono text-sm">
                     {b.ownership_pct != null ? `${Number(b.ownership_pct).toFixed(2)}%` : "—"}
                   </div>
                 </div>
               </div>
               <div className="mt-3 flex items-center justify-between text-xs">
-                <span className="text-[var(--text-secondary)]">{b.invoice_count} invoices</span>
+                <span className="text-[var(--text-secondary)]">
+                  {t(
+                    "console.finance.consolidation.card.invoiceCount",
+                    { count: b.invoice_count },
+                    `${b.invoice_count} invoices`,
+                  )}
+                </span>
                 <span className="font-mono">
                   <span className="text-[var(--color-warning)]">
                     {formatMoney(b.outstanding_total, b.base_currency ?? orgCurrency)}
@@ -189,7 +250,7 @@ export default async function Page() {
           ))}
           {bucketList.length === 0 ? (
             <div className="surface p-6 text-sm text-[var(--text-secondary)]">
-              No entities yet. Create one at{" "}
+              {t("console.finance.consolidation.empty.prefix", undefined, "No entities yet. Create one at")}{" "}
               <Link href="/console/finance/entities/new" className="underline">
                 /console/finance/entities/new
               </Link>

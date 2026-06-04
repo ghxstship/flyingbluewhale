@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as pdfjs from "pdfjs-dist";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * PDF.js + canvas drawing-markup renderer (gap G-015 / B7 runtime).
@@ -70,6 +71,7 @@ const DEFAULT_COLOR = "#EF4444";
 const DEFAULT_STROKE = 2;
 
 export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerFoot }: Props) {
+  const t = useT();
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const baseCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const overlayCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -80,7 +82,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
   const [tool, setTool] = useState<MarkupKind>("rectangle");
   const [color, setColor] = useState(DEFAULT_COLOR);
   const [stroke, setStroke] = useState(DEFAULT_STROKE);
-  const [text, setText] = useState("Note");
+  const [text, setText] = useState(t("console.sitePlans.markup.defaultText", undefined, "Note"));
   const [markups, setMarkups] = useState<Markup[]>([]);
   const [layers, setLayers] = useState<Layer[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -340,7 +342,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
     <div className="space-y-3">
       <div className="surface flex flex-wrap items-center gap-2 p-2 text-xs">
         <label className="flex items-center gap-1">
-          Tool
+          {t("console.sitePlans.markup.tool", undefined, "Tool")}
           <select
             value={tool}
             onChange={(e) => setTool(e.target.value as MarkupKind)}
@@ -366,11 +368,11 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           </select>
         </label>
         <label className="flex items-center gap-1">
-          Color
+          {t("console.sitePlans.markup.color", undefined, "Color")}
           <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="h-6 w-8 rounded" />
         </label>
         <label className="flex items-center gap-1">
-          Stroke
+          {t("console.sitePlans.markup.stroke", undefined, "Stroke")}
           <input
             type="range"
             min="1"
@@ -383,7 +385,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
         </label>
         {(tool === "text" || tool === "callout") && (
           <label className="flex items-center gap-1">
-            Text
+            {t("console.sitePlans.markup.text", undefined, "Text")}
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -397,6 +399,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
             className="rounded border border-[var(--border-color)] px-2 py-1 disabled:opacity-50"
+            aria-label={t("console.sitePlans.markup.previousPage", undefined, "Previous page")}
           >
             ‹
           </button>
@@ -408,6 +411,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
             disabled={page >= pageCount}
             className="rounded border border-[var(--border-color)] px-2 py-1 disabled:opacity-50"
+            aria-label={t("console.sitePlans.markup.nextPage", undefined, "Next page")}
           >
             ›
           </button>
@@ -415,6 +419,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             type="button"
             onClick={() => setScale((s) => Math.max(0.5, s - 0.25))}
             className="rounded border border-[var(--border-color)] px-2 py-1"
+            aria-label={t("console.sitePlans.markup.zoomOut", undefined, "Zoom out")}
           >
             −
           </button>
@@ -423,16 +428,28 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             type="button"
             onClick={() => setScale((s) => Math.min(4, s + 0.25))}
             className="rounded border border-[var(--border-color)] px-2 py-1"
+            aria-label={t("console.sitePlans.markup.zoomIn", undefined, "Zoom in")}
           >
             +
           </button>
         </span>
       </div>
-      {error && <div className="surface p-3 text-xs text-[var(--color-error)]">PDF render error: {error}</div>}
+      {error && (
+        <div className="surface p-3 text-xs text-[var(--color-error)]">
+          {t("console.sitePlans.markup.renderError", { error }, "PDF render error: {error}")}
+        </div>
+      )}
       <div className="text-[10px] text-[var(--text-muted)]">
-        {layers.length} layer{layers.length === 1 ? "" : "s"} ·{" "}
-        {markups.filter((m) => (m.geometry?.page ?? 1) === page).length} markup
-        {markups.filter((m) => (m.geometry?.page ?? 1) === page).length === 1 ? "" : "s"} on this page
+        {t(
+          "console.sitePlans.markup.summary",
+          {
+            layerCount: layers.length,
+            layerWord: layers.length === 1 ? "layer" : "layers",
+            markupCount: markups.filter((m) => (m.geometry?.page ?? 1) === page).length,
+            markupWord: markups.filter((m) => (m.geometry?.page ?? 1) === page).length === 1 ? "markup" : "markups",
+          },
+          "{layerCount} {layerWord} · {markupCount} {markupWord} on this page",
+        )}
       </div>
       <div ref={wrapperRef} className="surface relative inline-block overflow-auto" style={{ maxHeight: "75vh" }}>
         <canvas ref={baseCanvasRef} className="block" />

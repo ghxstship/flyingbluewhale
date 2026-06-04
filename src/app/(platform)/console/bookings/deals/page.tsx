@@ -6,7 +6,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { formatMoney } from "@/lib/i18n/format";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
@@ -37,12 +37,18 @@ const STAGE_BUCKETS: Record<string, string> = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Bookings" title="Deal Tracker" />
+        <ModuleHeader
+          eyebrow={t("console.bookings.deals.eyebrow", undefined, "Bookings")}
+          title={t("console.bookings.deals.title", undefined, "Deal Tracker")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.bookings.deals.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -72,38 +78,56 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Bookings"
-        title="Deal Tracker"
-        subtitle={`${rows.length} deals · ${live} Active  · ${stuck} stuck >7d`}
+        eyebrow={t("console.bookings.deals.eyebrow", undefined, "Bookings")}
+        title={t("console.bookings.deals.title", undefined, "Deal Tracker")}
+        subtitle={t(
+          "console.bookings.deals.subtitle",
+          { count: rows.length, live, stuck },
+          `${rows.length} deals · ${live} Active  · ${stuck} stuck >7d`,
+        )}
         action={
           <Button href="/console/marketplace/offers/new" size="sm">
-            + New Deal
+            {t("console.bookings.deals.newDeal", undefined, "+ New Deal")}
           </Button>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active Deals" value={fmt.number(live)} accent />
-          <MetricCard label="Stuck >7d" value={fmt.number(stuck)} />
-          <MetricCard label="Total Fee Volume" value={formatMoney(totalFee)} />
+          <MetricCard
+            label={t("console.bookings.deals.metric.activeDeals", undefined, "Active Deals")}
+            value={fmt.number(live)}
+            accent
+          />
+          <MetricCard
+            label={t("console.bookings.deals.metric.stuck", undefined, "Stuck >7d")}
+            value={fmt.number(stuck)}
+          />
+          <MetricCard
+            label={t("console.bookings.deals.metric.totalFeeVolume", undefined, "Total Fee Volume")}
+            value={formatMoney(totalFee)}
+          />
         </div>
 
         <DataTable<DealRow>
           rows={rows}
           rowHref={(r) => `/console/bookings/deals/${r.id}`}
-          emptyLabel="No deals yet"
-          emptyDescription="A deal is the booking-side view of a talent_offer. Create one from /console/marketplace/offers/new."
+          emptyLabel={t("console.bookings.deals.empty.label", undefined, "No deals yet")}
+          emptyDescription={t(
+            "console.bookings.deals.empty.description",
+            undefined,
+            "A deal is the booking-side view of a talent_offer. Create one from /console/marketplace/offers/new.",
+          )}
           columns={[
             {
               key: "date",
-              header: "Performance",
+              header: t("console.bookings.deals.col.performance", undefined, "Performance"),
               render: (r) => r.performance_date,
               accessor: (r) => r.performance_date,
               className: "font-mono text-xs",
             },
             {
               key: "type",
-              header: "Deal Type",
+              header: t("console.bookings.deals.col.dealType", undefined, "Deal Type"),
               render: (r) => <Badge variant="muted">{toTitle(r.deal_type)}</Badge>,
               accessor: (r) => r.deal_type,
               filterable: true,
@@ -111,28 +135,28 @@ export default async function Page() {
             },
             {
               key: "fee",
-              header: "Fee / Guar",
+              header: t("console.bookings.deals.col.feeGuar", undefined, "Fee / Guar"),
               render: (r) => formatMoney(r.guarantee_cents ?? r.fee_cents),
               accessor: (r) => Number(r.guarantee_cents ?? r.fee_cents),
               className: "font-mono text-xs",
             },
             {
               key: "door",
-              header: "Door %",
+              header: t("console.bookings.deals.col.door", undefined, "Door %"),
               render: (r) => (r.door_pct == null ? "—" : `${r.door_pct}%`),
               accessor: (r) => Number(r.door_pct ?? 0),
               className: "font-mono text-xs",
             },
             {
               key: "deposit",
-              header: "Deposit",
+              header: t("console.bookings.deals.col.deposit", undefined, "Deposit"),
               render: (r) => `${r.deposit_pct}%`,
               accessor: (r) => Number(r.deposit_pct ?? 0),
               className: "font-mono text-xs",
             },
             {
               key: "stage",
-              header: "Stage",
+              header: t("console.bookings.deals.col.stage", undefined, "Stage"),
               render: (r) => (
                 <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{STAGE_BUCKETS[r.status] ?? r.status}</Badge>
               ),

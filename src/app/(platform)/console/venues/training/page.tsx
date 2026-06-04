@@ -3,16 +3,23 @@ import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <>
-        <ModuleHeader eyebrow="Workspace" title="Training Venues" />
+        <ModuleHeader
+          eyebrow={t("console.venues.training.eyebrow", undefined, "Workspace")}
+          title={t("console.venues.training.title", undefined, "Training Venues")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.venues.training.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -26,21 +33,34 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Workspace"
-        title="Training Venues"
-        subtitle={`${rows.length} Record${rows.length === 1 ? "" : "s"}`}
+        eyebrow={t("console.venues.training.eyebrow", undefined, "Workspace")}
+        title={t("console.venues.training.title", undefined, "Training Venues")}
+        subtitle={t(
+          "console.venues.training.recordCount",
+          { count: rows.length, plural: rows.length === 1 ? "" : "s" },
+          `${rows.length} Record${rows.length === 1 ? "" : "s"}`,
+        )}
       />
       <div className="page-content">
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/venues/${r.id}`}
-          emptyLabel="No training venues"
-          emptyDescription="Sub-set of venues filtered to training spaces. Edit the venue record itself for capacity, layout, and handover state."
+          emptyLabel={t("console.venues.training.emptyLabel", undefined, "No training venues")}
+          emptyDescription={t(
+            "console.venues.training.emptyDescription",
+            undefined,
+            "Sub-set of venues filtered to training spaces. Edit the venue record itself for capacity, layout, and handover state.",
+          )}
           columns={[
-            { key: "name", header: "Name", render: (r) => String(r.name ?? "—"), accessor: (r) => r.name ?? null },
+            {
+              key: "name",
+              header: t("console.venues.training.columns.name", undefined, "Name"),
+              render: (r) => String(r.name ?? "—"),
+              accessor: (r) => r.name ?? null,
+            },
             {
               key: "kind",
-              header: "Kind",
+              header: t("console.venues.training.columns.kind", undefined, "Kind"),
               render: (r) => String(r.kind ?? "—"),
               accessor: (r) => r.kind ?? null,
               filterable: true,
@@ -48,7 +68,7 @@ export default async function Page() {
             },
             {
               key: "capacity",
-              header: "Capacity",
+              header: t("console.venues.training.columns.capacity", undefined, "Capacity"),
               render: (r) => <span className="font-mono text-xs">{String(r.capacity ?? "—")}</span>,
               accessor: (r) => r.capacity ?? null,
             },

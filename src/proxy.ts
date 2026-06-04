@@ -179,6 +179,32 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // ADR-0009 grace window — role-prefixed mobile aliases.
+  //
+  // Treat `/m/<role>/<surface>` as an alias of `/m/<surface>` so the
+  // canonical pages don't need to be duplicated under every role's
+  // namespace just to ship role-routed URLs. Per-role pages still take
+  // priority when they exist (e.g. /m/[role] for the role home — Next's
+  // static-match-wins-over-dynamic resolves it).
+  //
+  // Inverts the ADR's planned migration order: the canonical pages
+  // remain at /m/<surface>; new role-prefixed URLs are the aliases. The
+  // full migration (flip canonical to /m/[role]/<surface>) becomes a
+  // dedicated PR once the smoke harness + per-role page bodies land.
+  const MOBILE_ROLE_ALIAS = /^\/m\/(performer|crew|driver|medic|guard|admin)\/(.+)$/;
+  const targetPath = rewriteUrl?.pathname ?? pathname;
+  const aliasMatch = targetPath.match(MOBILE_ROLE_ALIAS);
+  if (aliasMatch) {
+    const [, , rest] = aliasMatch;
+    // Skip the rewrite for `settings/role` — that's the role chooser,
+    // which IS a real role-prefixed surface and must not collapse.
+    if (rest !== "settings/role") {
+      const aliasUrl = rewriteUrl ? new URL(rewriteUrl.toString()) : request.nextUrl.clone();
+      aliasUrl.pathname = `/m/${rest}`;
+      rewriteUrl = aliasUrl;
+    }
+  }
+
   const response = await updateSession(request, rewriteUrl);
 
   // ────────────────────────────────────────────────────────────────────
@@ -201,12 +227,10 @@ export async function proxy(request: NextRequest) {
   if (portalPath && hasSupabase) {
     const slug = extractPortalSlug(portalPath);
     if (slug && !(await portalSlugExists(request, slug))) {
-      const res = new NextResponse(
-        '<!doctype html><html><head><meta charset="utf-8"><title>404 — Portal Not Found</title></head>' +
-          '<body style="font:14px/1.6 system-ui;padding:48px"><h1>404 — Portal Not Found</h1>' +
-          `<p>No portal exists at <code>/p/${escapeHtml(slug)}/</code>.</p></body></html>`,
-        { status: 404, headers: { "content-type": "text/html; charset=utf-8" } },
-      );
+      const res = new NextResponse(renderPortalSlugNotFound(slug), {
+        status: 404,
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
       res.headers.set("x-request-id", requestId);
       res.headers.set("x-shell", shell);
       if (tenantSlug) res.headers.set("x-tenant-slug", tenantSlug);
@@ -353,6 +377,57 @@ async function checkMfaForRequest(request: NextRequest, pathname: string): Promi
 // extractPortalSlug + escapeHtml moved to lib/portal-slug.ts so they're
 // covered by unit tests independent of the Edge runtime.
 // ────────────────────────────────────────────────────────────────────
+
+// Brand-aligned 404 for unknown portal slugs. Rendered as inline HTML by
+// the Edge runtime (no React) because the response is emitted *before*
+// Next.js boots the route group — see the pre-check rationale at the
+// call site. The palette mirrors ATLVS dark surfaces with the GVTEWAY
+// portal accent so the page still reads as "this is part of the same
+// product" instead of a bare system-ui error.
+function renderPortalSlugNotFound(slug: string): string {
+  // Inter (project body font) with a system fallback chain in case the
+  // self-hosted font hasn't preloaded — this response is served before
+  // the link-rel-preload header for the woff2 file.
+  const fontStack = "Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif";
+  return [
+    "<!doctype html>",
+    '<html lang="en">',
+    "<head>",
+    '<meta charset="utf-8">',
+    '<meta name="viewport" content="width=device-width,initial-scale=1">',
+    "<title>404 — Portal Not Found · GVTEWAY</title>",
+    "<style>",
+    `:root{color-scheme:dark}`,
+    `html,body{margin:0;padding:0;height:100%;background:#0a0c10;color:#e7e7ec;font-family:${fontStack};-webkit-font-smoothing:antialiased}`,
+    `main{min-height:100%;display:flex;align-items:center;justify-content:center;padding:48px 24px}`,
+    `.card{max-width:28rem;text-align:center}`,
+    `.eyebrow{font-size:11px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:#5b9dff}`,
+    `h1{margin:12px 0 0;font-size:28px;font-weight:600;letter-spacing:-.01em;color:#ffffff}`,
+    `p{margin:8px 0 0;font-size:14px;line-height:1.6;color:#a0a4ae}`,
+    `code{font-family:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#e7e7ec;background:#161a22;border:1px solid #232936;border-radius:6px;padding:2px 6px}`,
+    `.actions{margin-top:24px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}`,
+    `a.btn{display:inline-block;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;text-decoration:none;transition:filter .15s ease}`,
+    `a.btn:hover{filter:brightness(1.1)}`,
+    `a.btn-primary{background:#5b9dff;color:#0a0c10}`,
+    `a.btn-secondary{background:transparent;color:#e7e7ec;border:1px solid #2a3142}`,
+    "</style>",
+    "</head>",
+    "<body>",
+    "<main>",
+    '<div class="card">',
+    '<div class="eyebrow">404 · Portal</div>',
+    "<h1>Not Found</h1>",
+    `<p>No portal exists at <code>/p/${escapeHtml(slug)}/</code>. Check the link or contact the team that shared it.</p>`,
+    '<div class="actions">',
+    '<a class="btn btn-primary" href="/">Home</a>',
+    '<a class="btn btn-secondary" href="/contact">Contact Us</a>',
+    "</div>",
+    "</div>",
+    "</main>",
+    "</body>",
+    "</html>",
+  ].join("");
+}
 
 // Per-edge-instance cache. Positive entries get a longer TTL because slugs
 // don't get reused; negative entries expire faster so a freshly published

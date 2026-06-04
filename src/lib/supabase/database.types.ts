@@ -14413,7 +14413,9 @@ export type Database = {
           id: string
           kind: string
           org_id: string
+          project_id: string | null
           read_at: string | null
+          scope: string
           snoozed_until: string | null
           source_id: string | null
           source_type: string | null
@@ -14431,7 +14433,9 @@ export type Database = {
           id?: string
           kind?: string
           org_id: string
+          project_id?: string | null
           read_at?: string | null
+          scope?: string
           snoozed_until?: string | null
           source_id?: string | null
           source_type?: string | null
@@ -14449,7 +14453,9 @@ export type Database = {
           id?: string
           kind?: string
           org_id?: string
+          project_id?: string | null
           read_at?: string | null
+          scope?: string
           snoozed_until?: string | null
           source_id?: string | null
           source_type?: string | null
@@ -14463,6 +14469,13 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
           {

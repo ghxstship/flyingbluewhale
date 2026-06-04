@@ -1300,6 +1300,31 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       privacy,
     ],
   };
+  // ADR-0008 Move 3 §Open questions #1 — vendor at 14 items breaks
+  // Miller's 9-item ceiling. Split into Engagement (the procurement-side
+  // workflow: PO/invoice/credentials/training/time-off/submissions) +
+  // Operations (the Connecteam-parity day-to-day: feed/chat/kudos/docs/
+  // directory/schedule/equipment-pull). Other personas keep the single
+  // persona section since they're already under 10.
+  if (persona === "vendor") {
+    const items = personaSubItems.vendor;
+    const byHref = new Map(items.map((i) => [i.href, i] as const));
+    const pick = (slugs: string[]): NavItem[] =>
+      slugs.map((s) => byHref.get(`${base}/${s}`)).filter((v): v is NavItem => !!v);
+    const engagement: NavSection = {
+      label: "Vendor / Engagement",
+      items: [...pick(["submissions", "purchase-orders", "invoices", "credentials", "training", "time-off"])],
+    };
+    const operations: NavSection = {
+      label: "Vendor / Operations",
+      items: [...pick(["equipment-pull-list", "schedule", "feed", "chat", "kudos", "docs", "directory", "privacy"])],
+    };
+    return {
+      label: SUPER_PERSONA_LABEL[superPersonaOf(persona)],
+      items: [],
+      sections: [workspaceSection, engagement, operations],
+    };
+  }
   const personaSection: NavSection = {
     label: PERSONA_TITLE[persona],
     items: personaSubItems[persona],

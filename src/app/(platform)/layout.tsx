@@ -6,13 +6,27 @@ import { AvatarMenu } from "@/components/AvatarMenu";
 import { MobileNavDrawer } from "@/components/MobileNavDrawer";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
-import { platformNav } from "@/lib/nav";
+import { getPlatformNav, type NavMode } from "@/lib/nav";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
   // Protects /console at the outer boundary so every page inherits the
   // guard; individual pages may still call requireSession() for session data.
-  const session = await requireSession("/login");
+  const session = await requireSession();
   const tenant = await resolveTenant();
+  // ADR-0006: resolve sidebar shape from per-user pref. Default "domain";
+  // power users opting into the XPMS-numeric spine flip to "xpms" via
+  // /me/preferences. Read non-blocking — fall through to default if the
+  // pref row hasn't materialized yet (new users / first signin).
+  const supabase = await createClient();
+  const { data: prefRow } = await supabase
+    .from("user_preferences")
+    .select("ui_state")
+    .eq("user_id", session.userId)
+    .maybeSingle();
+  const uiState = (prefRow?.ui_state as { nav_mode?: NavMode } | null) ?? null;
+  const navMode: NavMode = uiState?.nav_mode === "xpms" ? "xpms" : "domain";
+  const platformNav = getPlatformNav(navMode);
   return (
     <TenantShell tenant={tenant}>
       {/*

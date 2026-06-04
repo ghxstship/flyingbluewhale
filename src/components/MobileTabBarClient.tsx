@@ -3,18 +3,24 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, QrCode, BookOpen, CheckSquare, User } from "lucide-react";
+import { Home, Inbox, Clock, Bell, User, QrCode, BookOpen, CheckSquare } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { navItemKey } from "@/lib/i18n/nav-label";
 
 const ICONS: Record<string, typeof Home> = {
+  // ADR-0006 generic-default tab bar.
   "/m": Home,
+  "/m/inbox": Inbox,
+  "/m/shift": Clock,
+  "/m/alerts": Bell,
+  "/m/settings": User,
+  // Retained mappings so legacy tab bar configs (and persona-routed
+  // variants from ADR-0009 once it lands) render correctly.
   "/m/check-in": QrCode,
   "/m/guide": BookOpen,
   "/m/tasks": CheckSquare,
-  "/m/settings": User,
 };
 
 export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {

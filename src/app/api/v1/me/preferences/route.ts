@@ -27,9 +27,12 @@ const PatchSchema = z.object({
   sidebar_width: z.number().int().min(56).max(480).optional(),
   sidebar_pinned: z.array(z.string()).max(30).optional(),
   sidebar_collapsed: z.boolean().optional(),
+  // ADR-0006: console sidebar shape. "domain" = 7-group domain-noun nav
+  // (operator default); "xpms" = ADR-0004 XPMS-numeric spine (power user).
+  nav_mode: z.enum(["domain", "xpms"]).optional(),
 });
 
-const UI_STATE_KEYS = ["palette_recents", "sidebar_width", "sidebar_pinned", "sidebar_collapsed"] as const;
+const UI_STATE_KEYS = ["palette_recents", "sidebar_width", "sidebar_pinned", "sidebar_collapsed", "nav_mode"] as const;
 
 export async function GET() {
   const supabase = await createClient();

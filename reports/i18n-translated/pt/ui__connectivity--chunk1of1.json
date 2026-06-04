@@ -1,0 +1,4 @@
+{
+  "ui.connectivity.offline": "Você está offline — as ações entrarão na fila e serão sincronizadas quando reconectar.",
+  "ui.connectivity.backOnline": "De volta online — sincronizando ações em fila…"
+}

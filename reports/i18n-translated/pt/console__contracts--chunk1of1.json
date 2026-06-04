@@ -1,0 +1,23 @@
+{
+  "console.contracts.eyebrow": "Procurement",
+  "console.contracts.title": "Contratos",
+  "console.contracts.configureSupabase": "Configure o Supabase.",
+  "console.contracts.contractWordSingular": "contrato",
+  "console.contracts.contractWordPlural": "contratos",
+  "console.contracts.newContract": "+ Novo Contrato",
+  "console.contracts.metrics.activeAll": "Ativos (Todos)",
+  "console.contracts.metrics.activeConstruction": "Ativos (Construção)",
+  "console.contracts.metrics.paidYtd": "Pago no Ano",
+  "console.contracts.scope.all": "Todos",
+  "console.contracts.scope.constructionOnly": "Apenas Construção",
+  "console.contracts.emptyLabel": "Nenhum contrato ainda",
+  "console.contracts.columns.code": "Código",
+  "console.contracts.columns.title": "Título",
+  "console.contracts.columns.kind": "Tipo",
+  "console.contracts.columns.counterparty": "Contraparte",
+  "console.contracts.columns.billing": "Faturamento",
+  "console.contracts.columns.value": "Valor",
+  "console.contracts.columns.paid": "Pago",
+  "console.contracts.columns.retainage": "Ret %",
+  "console.contracts.columns.state": "Estado"
+}

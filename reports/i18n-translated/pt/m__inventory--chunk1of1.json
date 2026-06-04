@@ -1,0 +1,17 @@
+{
+  "m.inventory.scan.toast.failed": "Falha na leitura",
+  "m.inventory.scan.toast.notFound": "Nenhum equipamento com essa tag",
+  "m.inventory.scan.announce.notFound": "Ativo não encontrado",
+  "m.inventory.scan.assetTag": "Tag do Ativo",
+  "m.inventory.scan.placeholder": "Escaneie ou digite",
+  "m.inventory.scan.toggle": "Alternar",
+  "m.inventory.scan.checkIn": "Devolver",
+  "m.inventory.scan.checkOut": "Retirar",
+  "m.inventory.scan.recent": "Recentes",
+  "m.inventory.scan.empty.title": "Nenhuma Leitura Ainda",
+  "m.inventory.scan.badge.notFound": "não encontrado",
+  "m.inventory.scan.badge.error": "erro",
+  "m.inventory.scan.eyebrow": "Campo",
+  "m.inventory.scan.title": "Leitura de Inventário",
+  "m.inventory.scan.subtitle": "Escaneie ou digite uma tag de ativo para retirar / devolver."
+}

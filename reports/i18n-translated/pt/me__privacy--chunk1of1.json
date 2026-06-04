@@ -1,0 +1,16 @@
+{
+  "me.privacy.errors.deleteFailed": "Não foi possível excluir",
+  "me.privacy.toast.scheduled": "Conta agendada para exclusão em 30 dias.",
+  "me.privacy.export.title": "Exportar Meus Dados",
+  "me.privacy.export.action": "Baixar",
+  "me.privacy.cookies.title": "Preferências de Cookies",
+  "me.privacy.cookies.action": "Gerenciar cookies",
+  "me.privacy.delete.title": "Excluir Minha Conta",
+  "me.privacy.delete.action": "Excluir conta",
+  "me.privacy.dialog.title": "Excluir Sua Conta?",
+  "me.privacy.dialog.descriptionSuffix": "abaixo.",
+  "me.privacy.dialog.placeholder": "excluir minha conta",
+  "me.privacy.dialog.ariaLabel": "Digite a Frase de Confirmação",
+  "me.privacy.eyebrow": "Conta",
+  "me.privacy.title": "Privacidade e dados"
+}

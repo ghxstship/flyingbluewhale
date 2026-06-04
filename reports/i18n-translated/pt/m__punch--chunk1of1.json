@@ -1,0 +1,10 @@
+{
+  "m.punch.eyebrow": "Campo",
+  "m.punch.title": "Punch List",
+  "m.punch.noOpenItems": "Nenhum item aberto atribuído a você.",
+  "m.punch.openCount": "${rows.length} em aberto",
+  "m.punch.empty.title": "Punch List Zerada",
+  "m.punch.empty.action": "Tarefas Abertas",
+  "m.punch.overdue": "Atrasado",
+  "m.punch.due": "Vence ${r.due_at}"
+}

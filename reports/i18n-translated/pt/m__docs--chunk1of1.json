@@ -1,0 +1,23 @@
+{
+  "m.docs.download.openError": "Não foi possível abrir o documento",
+  "m.docs.download.openFailed": "Falha ao abrir",
+  "m.docs.download.opening": "Abrindo…",
+  "m.docs.download.label": "Baixar",
+  "m.docs.new.configureSupabase": "Configure o Supabase.",
+  "m.docs.new.title": "Enviar Documento",
+  "m.docs.new.label": "Rótulo",
+  "m.docs.new.labelPlaceholder": "ex.: Carteira de Motorista",
+  "m.docs.new.kind": "Tipo",
+  "m.docs.new.kindId": "Identidade",
+  "m.docs.new.kindLicense": "Licença / Certificação",
+  "m.docs.new.kindTax": "Documento Fiscal",
+  "m.docs.new.kindContract": "Contrato",
+  "m.docs.new.kindMedical": "Médico",
+  "m.docs.new.kindOther": "Outro",
+  "m.docs.new.file": "Arquivo",
+  "m.docs.new.upload": "Enviar",
+  "m.docs.eyebrow": "Mobile",
+  "m.docs.title": "Meus Documentos",
+  "m.docs.uploadCta": "+ Enviar",
+  "m.docs.empty.title": "Sem Documentos"
+}

@@ -1,0 +1,14 @@
+{
+  "m.incident.new.eyebrow": "Campo",
+  "m.incident.new.title": "Registro Rápido",
+  "m.incident.new.openFullForm": "Abrir",
+  "m.incident.new.summaryLabel": "O Que Aconteceu?",
+  "m.incident.new.fileNow": "Registrar Agora",
+  "m.incident.new.subtitle": "Registre um problema de segurança — admin e líder de EHS são notificados imediatamente.",
+  "m.incident.eyebrow": "Campo",
+  "m.incident.title": "Meus Incidentes",
+  "m.incident.subtitle": "Relatórios que você registrou. {count} em aberto. Veja a fila geral da org em",
+  "m.incident.quickFile": "Registro Rápido (Um Campo)",
+  "m.incident.fullReport": "Relatório Completo",
+  "m.incident.empty.title": "Nenhum Relatório Ainda"
+}

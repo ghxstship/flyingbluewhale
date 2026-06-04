@@ -1,0 +1,9 @@
+{
+  "m.handover.eyebrow": "Mobile",
+  "m.handover.title": "Handover",
+  "m.handover.needsWalk": "Precisa de walk",
+  "m.handover.empty.title": "Todos os Venues Entregues",
+  "m.handover.empty.description": "Nada pendente hoje.",
+  "m.handover.capAbbrev": "cap",
+  "m.handover.handedOver": "Entregue"
+}

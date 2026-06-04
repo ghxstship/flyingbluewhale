@@ -1,0 +1,15 @@
+{
+  "m.ros.show.configureSupabase": "Configure o Supabase.",
+  "m.ros.show.backToAll": "← Todas as deixas",
+  "m.ros.show.eyebrow": "Show",
+  "m.ros.show.liveLabel": "Ao Vivo",
+  "m.ros.show.startedAt": "iniciado às ${fmtTime(live.scheduled_at)}",
+  "m.ros.show.upcomingHeading": "Próximas · ${upcoming.length}",
+  "m.ros.show.noMoreCues": "Nenhuma deixa na fila.",
+  "m.ros.show.completedHeading": "Concluídas · ${done.length}",
+  "m.ros.show.doneBadge": "Concluída",
+  "m.ros.eyebrow": "Mobile",
+  "m.ros.title": "Run of Show",
+  "m.ros.noneToday": "Nenhuma deixa agendada hoje.",
+  "m.ros.empty.title": "Sem Deixas Hoje"
+}

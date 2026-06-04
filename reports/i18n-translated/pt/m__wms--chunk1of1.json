@@ -1,0 +1,13 @@
+{
+  "m.wms.eyebrow": "Campo",
+  "m.wms.title": "Almoxarifado",
+  "m.wms.subtitle": "Picking, put-away e check-in/out por escaneamento.",
+  "m.wms.scanAsset": "Escanear Ativo",
+  "m.wms.assetRegister": "Registro de Ativos",
+  "m.wms.inMaintenance": "Em Manutenção",
+  "m.wms.empty.maintenance": "Nenhum Item em Manutenção",
+  "m.wms.empty.returns": "Nenhuma Devolução Agendada",
+  "m.wms.noTag": "sem tag",
+  "m.wms.returnsDue": "Devoluções Pendentes",
+  "m.wms.due": "Vence ${fmtDay(r.ends_at)}"
+}

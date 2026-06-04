@@ -1,0 +1,14 @@
+{
+  "console.compliance.coc.eyebrow": "Compliance",
+  "console.compliance.coc.title": "Cadeia de Custódia",
+  "console.compliance.coc.configureSupabase": "Configure o Supabase.",
+  "console.compliance.coc.subtitle": "Trilha de auditoria para evidências + amostras.",
+  "console.compliance.coc.mobileCapture": "Captura Mobile",
+  "console.compliance.coc.metrics.events24h": "Eventos · 24h",
+  "console.compliance.coc.metrics.events30d": "Eventos · 30d",
+  "console.compliance.coc.metrics.distinctActors": "Atores Distintos",
+  "console.compliance.coc.byTarget": "Por Alvo",
+  "console.compliance.coc.recentEvents": "Eventos Recentes",
+  "console.compliance.coc.empty.title": "Sem eventos de cadeia de custódia nos últimos 30 dias",
+  "console.compliance.coc.system": "sistema"
+}

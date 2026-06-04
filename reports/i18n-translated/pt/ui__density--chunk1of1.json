@@ -1,0 +1,9 @@
+{
+  "ui.density.compact": "Compacta",
+  "ui.density.compactAria": "Usar densidade compacta",
+  "ui.density.comfortable": "Padrão",
+  "ui.density.comfortableAria": "Usar densidade confortável",
+  "ui.density.spacious": "Espaçosa",
+  "ui.density.spaciousAria": "Usar densidade espaçosa",
+  "ui.density.label": "Densidade"
+}

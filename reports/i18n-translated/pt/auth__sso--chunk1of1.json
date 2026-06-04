@@ -1,0 +1,5 @@
+{
+  "auth.sso.errorTitle": "Não foi possível iniciar o SSO",
+  "auth.sso.errorSubtitle": "Não conseguimos redirecionar você para ${provider}.",
+  "auth.sso.noRedirect": "Nenhuma URL de redirecionamento foi retornada."
+}

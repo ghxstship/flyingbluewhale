@@ -1,0 +1,16 @@
+{
+  "console.actionItems.eyebrow": "Workspace",
+  "console.actionItems.title": "Itens de Ação",
+  "console.actionItems.subtitle": "Rollup de bola-na-quadra entre módulos.",
+  "console.actionItems.filter.all": "Todos",
+  "console.actionItems.filter.mineOnly": "Apenas Meus",
+  "console.actionItems.metrics.openItems": "Itens Abertos",
+  "console.actionItems.metrics.overdue": "Atrasados",
+  "console.actionItems.metrics.acrossKinds": "Entre Tipos",
+  "console.actionItems.empty.label": "Inbox Zero",
+  "console.actionItems.columns.kind": "Tipo",
+  "console.actionItems.columns.title": "Título",
+  "console.actionItems.columns.status": "Status",
+  "console.actionItems.columns.due": "Prazo",
+  "console.actionItems.columns.priority": "Prioridade"
+}

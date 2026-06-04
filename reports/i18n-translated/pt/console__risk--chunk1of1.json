@@ -1,0 +1,17 @@
+{
+  "console.risk.eyebrow": "Programas",
+  "console.risk.title": "Pontuações de Risco",
+  "console.risk.configureSupabase": "Configure o Supabase.",
+  "console.risk.runBatch": "Executar Lote de Risco",
+  "console.risk.metric.critical": "Crítico",
+  "console.risk.metric.high": "Alto",
+  "console.risk.metric.projectsScored": "Projetos Pontuados",
+  "console.risk.empty.label": "Nenhuma pontuação de risco ainda",
+  "console.risk.col.project": "Projeto",
+  "console.risk.col.category": "Categoria",
+  "console.risk.col.score": "Pontuação",
+  "console.risk.col.trend7d": "Δ 7d",
+  "console.risk.col.trend30d": "Δ 30d",
+  "console.risk.col.severity": "Severidade",
+  "console.risk.col.scored": "Pontuado"
+}

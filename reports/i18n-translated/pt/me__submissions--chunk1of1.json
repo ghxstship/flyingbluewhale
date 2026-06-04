@@ -1,0 +1,11 @@
+{
+  "me.submissions.detail.eyebrow": "Inscrição",
+  "me.submissions.detail.coverNote": "Carta de apresentação",
+  "me.submissions.detail.proposedFee": "Cachê proposto",
+  "me.submissions.eyebrow": "Minhas inscrições",
+  "me.submissions.title": "Inscrições",
+  "me.submissions.subtitle": "Inscrições em open calls que você enviou.",
+  "me.submissions.empty.title": "Nenhuma inscrição ainda",
+  "me.submissions.empty.action": "Ver open calls",
+  "me.submissions.deletedCall": "(open call excluída)"
+}

@@ -1,0 +1,10 @@
+{
+  "m.dailyLog.eyebrow": "Campo",
+  "m.dailyLog.title": "Diário de Bordo",
+  "m.dailyLog.subtitle": "Captura rápida direto do chão",
+  "m.dailyLog.todaysLog": "Diário de hoje — {date}",
+  "m.dailyLog.selectProject": "Selecione um projeto…",
+  "m.dailyLog.weatherPlaceholder": "Clima (ex.: 26°C, ensolarado)",
+  "m.dailyLog.saveLog": "Salvar diário",
+  "m.dailyLog.recent": "Recentes"
+}

@@ -1,0 +1,19 @@
+{
+  "p.guide.title": "Guia do Evento",
+  "p.guide.subtitle": "Seu Know-Before-You-Go",
+  "p.guide.downloadPdf.aria": "Baixar este guia em PDF",
+  "p.guide.downloadPdf.label": "Baixar PDF",
+  "p.guide.persona.staff": "Produção",
+  "p.guide.persona.crew": "Operações",
+  "p.guide.persona.vendor": "Alimentos e Bebidas",
+  "p.guide.persona.brandAmbassador": "Embaixador de Marca",
+  "p.guide.persona.sponsor": "Patrocinadores",
+  "p.guide.persona.artist": "Talento",
+  "p.guide.persona.mediaPress": "Mídia e Imprensa",
+  "p.guide.persona.guest": "Convidados",
+  "p.guide.persona.custom": "Acesso Temporário",
+  "p.guide.persona.client": "Cliente",
+  "p.guide.preview.previewingAs": "Visualizando como",
+  "p.guide.preview.previewAs": "Visualizar como",
+  "p.guide.preview.exit": "Sair da Visualização"
+}

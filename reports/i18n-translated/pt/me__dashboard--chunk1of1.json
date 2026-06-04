@@ -1,0 +1,13 @@
+{
+  "me.dashboard.title": "Meu Painel",
+  "me.dashboard.configureSupabase": "Configure o Supabase para entrar.",
+  "me.dashboard.eyebrow": "Meu painel",
+  "me.dashboard.role": "Função",
+  "me.dashboard.tier": "Plano",
+  "me.dashboard.organization": "Organização",
+  "me.dashboard.noOrg": "Nenhuma",
+  "me.dashboard.openConsole": "Abrir Console →",
+  "me.dashboard.consoleBlurb": "Projetos, financeiro, compras, produção, pessoas, IA.",
+  "me.dashboard.marketplaceHeading": "Marketplace",
+  "me.dashboard.accountHeading": "Conta"
+}

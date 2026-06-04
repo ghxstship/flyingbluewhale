@@ -1,0 +1,13 @@
+{
+  "m.wallet.configureSupabase": "Configure o Supabase.",
+  "m.wallet.eyebrow": "Mobile",
+  "m.wallet.title": "Minha Credencial",
+  "m.wallet.subtitle": "Mostre esta tela no portão. Mantenha-a ativa até o fim do seu turno.",
+  "m.wallet.empty.title": "Nenhuma Credencial Emitida",
+  "m.wallet.defaultCategoryCode": "ACC",
+  "m.wallet.cardBarcode": "Código de Barras do Cartão",
+  "m.wallet.validFrom": "Válida A Partir De",
+  "m.wallet.validTo": "Válida Até",
+  "m.wallet.otherCards": "Outros Cartões",
+  "m.wallet.openProfile": "Abrir Perfil →"
+}

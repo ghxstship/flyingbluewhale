@@ -1,0 +1,9 @@
+{
+  "m.tasks.eyebrow": "Campo",
+  "m.tasks.title": "Minhas Tarefas",
+  "m.tasks.empty": "Nenhuma tarefa atribuída",
+  "m.tasks.dueLabel": "Prazo ${formatDate(task.due_at)}",
+  "m.tasks.detail.back": "← Tarefas",
+  "m.tasks.detail.dueLabel": "Prazo ${formatDate(task.due_at)}",
+  "m.tasks.detail.updateStatus": "Atualizar Status"
+}

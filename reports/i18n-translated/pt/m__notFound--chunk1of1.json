@@ -1,0 +1,5 @@
+{
+  "m.notFound.title": "Tela não encontrada",
+  "m.notFound.description": "Esta tela mobile não está no manifest.",
+  "m.notFound.homeCta": "Início"
+}

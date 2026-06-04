@@ -1,0 +1,9 @@
+{
+  "auth.mfa.recoveryCode": "Código de recuperação",
+  "auth.mfa.recoveryHint": "Insira um dos códigos de recuperação que você salvou ao se cadastrar.",
+  "auth.mfa.authenticatorCode": "Código do autenticador",
+  "auth.mfa.submitting": "Verificando",
+  "auth.mfa.submit": "Verificar",
+  "auth.mfa.useAuthenticator": "Usar código do autenticador",
+  "auth.mfa.useRecovery": "Usar um código de recuperação"
+}

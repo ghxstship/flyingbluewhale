@@ -1,0 +1,13 @@
+{
+  "me.applications.detail.eyebrow": "Candidatura",
+  "me.applications.detail.coverNote": "Carta de apresentação",
+  "me.applications.detail.proposedDayRate": "Diária proposta",
+  "me.applications.detail.resume": "Currículo",
+  "me.applications.title": "Minhas Candidaturas",
+  "me.applications.configureSupabase": "Configure o Supabase.",
+  "me.applications.eyebrow": "Minhas candidaturas",
+  "me.applications.heading": "Candidaturas",
+  "me.applications.empty.title": "Nenhuma Candidatura Ainda",
+  "me.applications.empty.action": "Explorar Gigs",
+  "me.applications.deletedPosting": "Vaga Excluída"
+}

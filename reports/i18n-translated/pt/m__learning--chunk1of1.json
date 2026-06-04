@@ -1,0 +1,12 @@
+{
+  "m.learning.course.lessonLabel": "Lição ${l.ordinal}",
+  "m.learning.course.quizHeading": "Quiz",
+  "m.learning.course.passed": "Aprovado",
+  "m.learning.course.didNotPass": "Não Aprovado",
+  "m.learning.title": "Aprendizagem",
+  "m.learning.coursesAssigned": "${rows.length} cursos atribuídos",
+  "m.learning.empty.title": "Sem Cursos",
+  "m.learning.empty.description": "As atribuições de treinamento aparecerão aqui.",
+  "m.learning.dueDate": "prazo ${fmt.date(a.due_at)}",
+  "m.learning.courseFallback": "Curso"
+}

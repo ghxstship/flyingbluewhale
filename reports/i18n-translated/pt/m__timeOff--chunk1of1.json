@@ -1,0 +1,19 @@
+{
+  "m.timeOff.new.title": "Nova Solicitação de Folga",
+  "m.timeOff.new.policy": "Política",
+  "m.timeOff.new.startsOn": "Início em",
+  "m.timeOff.new.endsOn": "Término em",
+  "m.timeOff.new.hoursRequested": "Horas Solicitadas",
+  "m.timeOff.new.reason": "Motivo",
+  "m.timeOff.title": "Folgas",
+  "m.timeOff.balancesHeading": "Saldos (${year})",
+  "m.timeOff.noPolicies": "Nenhuma política atribuída ainda.",
+  "m.timeOff.policyFallback": "Política",
+  "m.timeOff.hours": "${b.balance_hours}h",
+  "m.timeOff.available": "disponível",
+  "m.timeOff.newRequest": "Nova Solicitação",
+  "m.timeOff.recentRequests": "Solicitações Recentes",
+  "m.timeOff.empty.title": "Sem Solicitações",
+  "m.timeOff.empty.description": "Suas solicitações de folga aparecerão aqui.",
+  "m.timeOff.timeOffFallback": "Folga"
+}

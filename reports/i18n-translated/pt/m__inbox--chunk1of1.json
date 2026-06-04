@@ -1,0 +1,11 @@
+{
+  "m.inbox.room.directMessage": "Mensagem direta",
+  "m.inbox.room.messagePlaceholder": "Mensagem",
+  "m.inbox.configureSupabase": "Configure o Supabase.",
+  "m.inbox.eyebrow": "Mobile",
+  "m.inbox.title": "Caixa de entrada",
+  "m.inbox.count": "${list.length} conversas",
+  "m.inbox.empty.title": "Nenhuma conversa",
+  "m.inbox.unreadBadge": "Novo",
+  "m.inbox.directMessage": "Mensagem direta"
+}

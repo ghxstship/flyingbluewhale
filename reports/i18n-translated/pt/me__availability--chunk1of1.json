@@ -1,0 +1,14 @@
+{
+  "me.availability.configureSupabase": "Configure o Supabase.",
+  "me.availability.eyebrow": "Disponibilidade",
+  "me.availability.title": "Calendário de Bookings",
+  "me.availability.addSlot": "Adicionar Slot",
+  "me.availability.kind": "Tipo",
+  "me.availability.label": "Rótulo",
+  "me.availability.labelPlaceholder": "Montagem do Deck MMW26",
+  "me.availability.starts": "Início",
+  "me.availability.ends": "Fim",
+  "me.availability.allDay": "Dia Inteiro",
+  "me.availability.upcoming": "Próximos",
+  "me.availability.empty": "Nenhum slot de disponibilidade ainda."
+}

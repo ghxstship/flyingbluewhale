@@ -1,0 +1,12 @@
+{
+  "me.reviews.configure": "Configure o Supabase.",
+  "me.reviews.eyebrow": "Minhas avaliações",
+  "me.reviews.title": "Avaliações",
+  "me.reviews.subtitle": "As avaliações ficam ocultas até que ambos os lados publiquem. Sem espaço para retaliação.",
+  "me.reviews.received": "Recebidas",
+  "me.reviews.emptyReceived": "Nenhuma avaliação pública ainda.",
+  "me.reviews.written": "Escritas",
+  "me.reviews.emptyWritten": "Você ainda não escreveu nenhuma avaliação.",
+  "me.reviews.status.released": "publicada",
+  "me.reviews.status.hidden": "oculta — aguardando contraparte"
+}

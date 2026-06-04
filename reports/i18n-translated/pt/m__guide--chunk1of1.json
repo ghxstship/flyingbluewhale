@@ -1,0 +1,9 @@
+{
+  "m.guide.eyebrow": "Guia de Campo",
+  "m.guide.noActiveProject.title": "Nenhum Projeto Ativo",
+  "m.guide.noActiveProject.body": "Volte quando você for designado a um show.",
+  "m.guide.pending.title": "Guia Pendente",
+  "m.guide.pending.body": "A produção ainda não publicou um guia para sua função.",
+  "m.guide.downloadPdf.ariaLabel": "Baixar este guia em PDF",
+  "m.guide.downloadPdf.label": "Baixar PDF"
+}

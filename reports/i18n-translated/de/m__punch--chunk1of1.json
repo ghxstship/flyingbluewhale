@@ -1,0 +1,10 @@
+{
+  "m.punch.eyebrow": "Feld",
+  "m.punch.title": "Punch-Liste",
+  "m.punch.noOpenItems": "Keine offenen Punkte für Dich.",
+  "m.punch.openCount": "${rows.length} offen",
+  "m.punch.empty.title": "Punch-Liste sauber",
+  "m.punch.empty.action": "Offene Aufgaben",
+  "m.punch.overdue": "Überfällig",
+  "m.punch.due": "Fällig ${r.due_at}"
+}

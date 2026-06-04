@@ -1,0 +1,19 @@
+{
+  "m.timeOff.new.title": "Neuer Abwesenheitsantrag",
+  "m.timeOff.new.policy": "Richtlinie",
+  "m.timeOff.new.startsOn": "Beginnt am",
+  "m.timeOff.new.endsOn": "Endet am",
+  "m.timeOff.new.hoursRequested": "Beantragte Stunden",
+  "m.timeOff.new.reason": "Grund",
+  "m.timeOff.title": "Abwesenheit",
+  "m.timeOff.balancesHeading": "Salden (${year})",
+  "m.timeOff.noPolicies": "Noch keine Richtlinien zugewiesen.",
+  "m.timeOff.policyFallback": "Richtlinie",
+  "m.timeOff.hours": "${b.balance_hours}h",
+  "m.timeOff.available": "verfügbar",
+  "m.timeOff.newRequest": "Neuer Antrag",
+  "m.timeOff.recentRequests": "Aktuelle Anträge",
+  "m.timeOff.empty.title": "Keine Anträge",
+  "m.timeOff.empty.description": "Deine Abwesenheitsanträge erscheinen hier.",
+  "m.timeOff.timeOffFallback": "Abwesenheit"
+}

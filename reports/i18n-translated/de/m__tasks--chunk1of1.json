@@ -1,0 +1,9 @@
+{
+  "m.tasks.eyebrow": "Field",
+  "m.tasks.title": "Meine Aufgaben",
+  "m.tasks.empty": "Keine Aufgaben zugewiesen",
+  "m.tasks.dueLabel": "Fällig ${formatDate(task.due_at)}",
+  "m.tasks.detail.back": "← Aufgaben",
+  "m.tasks.detail.dueLabel": "Fällig ${formatDate(task.due_at)}",
+  "m.tasks.detail.updateStatus": "Status Aktualisieren"
+}

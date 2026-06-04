@@ -1,0 +1,10 @@
+{
+  "m.dailyLog.eyebrow": "Field",
+  "m.dailyLog.title": "Tagesprotokoll",
+  "m.dailyLog.subtitle": "Schnellerfassung direkt vom Floor",
+  "m.dailyLog.todaysLog": "Heutiges Protokoll — {date}",
+  "m.dailyLog.selectProject": "Projekt auswählen …",
+  "m.dailyLog.weatherPlaceholder": "Wetter (z. B. 25 °C, sonnig)",
+  "m.dailyLog.saveLog": "Protokoll speichern",
+  "m.dailyLog.recent": "Zuletzt"
+}

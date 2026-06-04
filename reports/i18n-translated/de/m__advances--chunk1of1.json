@@ -1,0 +1,10 @@
+{
+  "m.advances.eyebrow": "Mobil",
+  "m.advances.title": "Meine Zuweisungen",
+  "m.advances.empty.title": "Noch nichts zugewiesen",
+  "m.advances.untitled": "Ohne Titel",
+  "m.advances.projectFallback": "Projekt",
+  "m.advances.singleShow.prompt": "Arbeitest Du an einer einzelnen Show?",
+  "m.advances.singleShow.link": "Öffne Deine Schicht",
+  "m.advances.singleShow.suffix": ", um den heutigen Call zu sehen."
+}

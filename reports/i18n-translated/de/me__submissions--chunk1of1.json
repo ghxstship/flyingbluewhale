@@ -1,0 +1,11 @@
+{
+  "me.submissions.detail.eyebrow": "Bewerbung",
+  "me.submissions.detail.coverNote": "Anschreiben",
+  "me.submissions.detail.proposedFee": "Vorgeschlagene Gage",
+  "me.submissions.eyebrow": "Meine Bewerbungen",
+  "me.submissions.title": "Bewerbungen",
+  "me.submissions.subtitle": "Deine Bewerbungen auf Open Calls.",
+  "me.submissions.empty.title": "Noch keine Bewerbungen",
+  "me.submissions.empty.action": "Open Calls durchsuchen",
+  "me.submissions.deletedCall": "(gelöschter Call)"
+}

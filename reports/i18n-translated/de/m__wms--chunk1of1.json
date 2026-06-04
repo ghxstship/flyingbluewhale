@@ -1,0 +1,13 @@
+{
+  "m.wms.eyebrow": "Field",
+  "m.wms.title": "Lager",
+  "m.wms.subtitle": "Pick, Einlagerung und Check-in/out per Scan.",
+  "m.wms.scanAsset": "Asset scannen",
+  "m.wms.assetRegister": "Asset-Register",
+  "m.wms.inMaintenance": "In Wartung",
+  "m.wms.empty.maintenance": "Keine Artikel in Wartung",
+  "m.wms.empty.returns": "Keine Rückgaben geplant",
+  "m.wms.noTag": "kein Tag",
+  "m.wms.returnsDue": "Fällige Rückgaben",
+  "m.wms.due": "Fällig ${fmtDay(r.ends_at)}"
+}

@@ -1,0 +1,9 @@
+{
+  "m.alerts.eyebrow": "Mobil",
+  "m.alerts.title": "Alarme",
+  "m.alerts.noneActive": "Keine aktiven Alarme.",
+  "m.alerts.empty.title": "Keine aktiven Alarme",
+  "m.alerts.scheduled": "geplant",
+  "m.alerts.acknowledgedAt": "Bestätigt ${fmt.time(ack)}",
+  "m.alerts.acknowledge": "Bestätigen"
+}

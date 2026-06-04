@@ -1,0 +1,3 @@
+{
+  "rootError.ref": "Ref: ${error.digest}"
+}

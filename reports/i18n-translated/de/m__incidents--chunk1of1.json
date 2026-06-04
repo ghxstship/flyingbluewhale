@@ -1,0 +1,9 @@
+{
+  "m.incidents.eyebrow": "Field",
+  "m.incidents.title": "Vorfall",
+  "m.incidents.noneLast30": "Keine Vorfälle in den letzten 30 Tagen erfasst.",
+  "m.incidents.summary": "${rows.length} in den letzten 30 Tagen · ${open} offen",
+  "m.incidents.criticalSuffix": "${critical} kritisch",
+  "m.incidents.reportCta": "+ Vorfall melden",
+  "m.incidents.empty.title": "Alles ruhig"
+}

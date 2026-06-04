@@ -1,0 +1,13 @@
+{
+  "me.dashboard.title": "Mein Dashboard",
+  "me.dashboard.configureSupabase": "Konfiguriere Supabase, um dich anzumelden.",
+  "me.dashboard.eyebrow": "Mein Dashboard",
+  "me.dashboard.role": "Rolle",
+  "me.dashboard.tier": "Tarif",
+  "me.dashboard.organization": "Organisation",
+  "me.dashboard.noOrg": "Keine",
+  "me.dashboard.openConsole": "Konsole öffnen →",
+  "me.dashboard.consoleBlurb": "Projekte, Finanzen, Beschaffung, Produktion, Personal, KI.",
+  "me.dashboard.marketplaceHeading": "Marketplace",
+  "me.dashboard.accountHeading": "Konto"
+}

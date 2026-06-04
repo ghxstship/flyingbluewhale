@@ -1,0 +1,4 @@
+{
+  "ui.connectivity.offline": "Du bist offline — Aktionen werden in die Warteschlange gestellt und synchronisiert, sobald die Verbindung steht.",
+  "ui.connectivity.backOnline": "Wieder online — Warteschlange wird synchronisiert…"
+}

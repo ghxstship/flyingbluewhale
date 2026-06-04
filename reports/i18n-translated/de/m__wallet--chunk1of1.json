@@ -1,0 +1,13 @@
+{
+  "m.wallet.configureSupabase": "Supabase konfigurieren.",
+  "m.wallet.eyebrow": "Mobil",
+  "m.wallet.title": "Mein Ausweis",
+  "m.wallet.subtitle": "Zeige diesen Screen am Gate. Halte ihn aktiv, bis deine Schicht endet.",
+  "m.wallet.empty.title": "Kein ausgestellter Ausweis",
+  "m.wallet.defaultCategoryCode": "ACC",
+  "m.wallet.cardBarcode": "Karten-Barcode",
+  "m.wallet.validFrom": "Gültig ab",
+  "m.wallet.validTo": "Gültig bis",
+  "m.wallet.otherCards": "Weitere Karten",
+  "m.wallet.openProfile": "Profil öffnen →"
+}

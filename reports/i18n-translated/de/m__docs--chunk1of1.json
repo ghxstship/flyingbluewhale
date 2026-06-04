@@ -1,0 +1,23 @@
+{
+  "m.docs.download.openError": "Dokument konnte nicht geöffnet werden",
+  "m.docs.download.openFailed": "Öffnen fehlgeschlagen",
+  "m.docs.download.opening": "Wird geöffnet…",
+  "m.docs.download.label": "Download",
+  "m.docs.new.configureSupabase": "Supabase konfigurieren.",
+  "m.docs.new.title": "Dokument hochladen",
+  "m.docs.new.label": "Bezeichnung",
+  "m.docs.new.labelPlaceholder": "z. B. Führerschein",
+  "m.docs.new.kind": "Art",
+  "m.docs.new.kindId": "Ausweis",
+  "m.docs.new.kindLicense": "Lizenz / Zertifizierung",
+  "m.docs.new.kindTax": "Steuerformular",
+  "m.docs.new.kindContract": "Vertrag",
+  "m.docs.new.kindMedical": "Medizinisch",
+  "m.docs.new.kindOther": "Sonstiges",
+  "m.docs.new.file": "Datei",
+  "m.docs.new.upload": "Hochladen",
+  "m.docs.eyebrow": "Mobile",
+  "m.docs.title": "Meine Dokumente",
+  "m.docs.uploadCta": "+ Hochladen",
+  "m.docs.empty.title": "Keine Dokumente"
+}

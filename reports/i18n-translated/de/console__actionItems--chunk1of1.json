@@ -1,0 +1,16 @@
+{
+  "console.actionItems.eyebrow": "Workspace",
+  "console.actionItems.title": "Aufgaben",
+  "console.actionItems.subtitle": "Ball-in-Court-Rollup über alle Module hinweg.",
+  "console.actionItems.filter.all": "Alle",
+  "console.actionItems.filter.mineOnly": "Nur meine",
+  "console.actionItems.metrics.openItems": "Offene Posten",
+  "console.actionItems.metrics.overdue": "Überfällig",
+  "console.actionItems.metrics.acrossKinds": "Über Arten hinweg",
+  "console.actionItems.empty.label": "Inbox Zero",
+  "console.actionItems.columns.kind": "Art",
+  "console.actionItems.columns.title": "Titel",
+  "console.actionItems.columns.status": "Status",
+  "console.actionItems.columns.due": "Fällig",
+  "console.actionItems.columns.priority": "Priorität"
+}

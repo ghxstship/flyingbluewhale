@@ -1,0 +1,6 @@
+{
+  "console.notFound.eyebrow": "404",
+  "console.notFound.title": "Nicht gefunden",
+  "console.notFound.subtitle": "Dieser Datensatz existiert nicht oder du hast keinen Zugriff.",
+  "console.notFound.backToWorkspace": "Zurück zum Workspace"
+}

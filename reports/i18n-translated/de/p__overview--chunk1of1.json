@@ -1,0 +1,5 @@
+{
+  "p.overview.title": "Projektübersicht",
+  "p.overview.subtitle": "Wähle dein Portal, um fortzufahren",
+  "p.overview.openPortal": "${toTitle(persona)}-Portal öffnen →"
+}

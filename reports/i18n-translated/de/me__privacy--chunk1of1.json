@@ -1,0 +1,16 @@
+{
+  "me.privacy.errors.deleteFailed": "Konnte nicht gelöscht werden",
+  "me.privacy.toast.scheduled": "Konto zur Löschung in 30 Tagen vorgemerkt.",
+  "me.privacy.export.title": "Meine Daten exportieren",
+  "me.privacy.export.action": "Herunterladen",
+  "me.privacy.cookies.title": "Cookie-Einstellungen",
+  "me.privacy.cookies.action": "Cookies verwalten",
+  "me.privacy.delete.title": "Mein Konto löschen",
+  "me.privacy.delete.action": "Konto löschen",
+  "me.privacy.dialog.title": "Konto wirklich löschen?",
+  "me.privacy.dialog.descriptionSuffix": "unten.",
+  "me.privacy.dialog.placeholder": "mein konto löschen",
+  "me.privacy.dialog.ariaLabel": "Bestätigungssatz eingeben",
+  "me.privacy.eyebrow": "Konto",
+  "me.privacy.title": "Datenschutz & Daten"
+}

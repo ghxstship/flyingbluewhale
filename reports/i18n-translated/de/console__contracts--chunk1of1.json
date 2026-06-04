@@ -1,0 +1,23 @@
+{
+  "console.contracts.eyebrow": "Beschaffung",
+  "console.contracts.title": "Verträge",
+  "console.contracts.configureSupabase": "Supabase konfigurieren.",
+  "console.contracts.contractWordSingular": "Vertrag",
+  "console.contracts.contractWordPlural": "Verträge",
+  "console.contracts.newContract": "+ Neuer Vertrag",
+  "console.contracts.metrics.activeAll": "Aktiv (alle)",
+  "console.contracts.metrics.activeConstruction": "Aktiv (Bau)",
+  "console.contracts.metrics.paidYtd": "Bezahlt YTD",
+  "console.contracts.scope.all": "Alle",
+  "console.contracts.scope.constructionOnly": "Nur Bau",
+  "console.contracts.emptyLabel": "Noch keine Verträge",
+  "console.contracts.columns.code": "Code",
+  "console.contracts.columns.title": "Titel",
+  "console.contracts.columns.kind": "Art",
+  "console.contracts.columns.counterparty": "Vertragspartner",
+  "console.contracts.columns.billing": "Abrechnung",
+  "console.contracts.columns.value": "Wert",
+  "console.contracts.columns.paid": "Bezahlt",
+  "console.contracts.columns.retainage": "Einbeh. %",
+  "console.contracts.columns.state": "Status"
+}

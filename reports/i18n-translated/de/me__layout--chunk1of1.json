@@ -1,0 +1,22 @@
+{
+  "me.layout.groups.account": "Account",
+  "me.layout.groups.activity": "Aktivität",
+  "me.layout.groups.marketplace": "Marketplace",
+  "me.layout.tabs.profile": "Profil",
+  "me.layout.tabs.preferences": "Präferenzen",
+  "me.layout.tabs.settings": "Einstellungen",
+  "me.layout.tabs.privacy": "Datenschutz",
+  "me.layout.tabs.security": "Sicherheit",
+  "me.layout.tabs.organizations": "Organisationen",
+  "me.layout.tabs.dashboard": "Dashboard",
+  "me.layout.tabs.notifications": "Benachrichtigungen",
+  "me.layout.tabs.tickets": "Tickets",
+  "me.layout.tabs.reviews": "Bewertungen",
+  "me.layout.tabs.talent": "Talent",
+  "me.layout.tabs.applications": "Bewerbungen",
+  "me.layout.tabs.submissions": "Einreichungen",
+  "me.layout.tabs.offers": "Angebote",
+  "me.layout.tabs.availability": "Verfügbarkeit",
+  "me.layout.tabs.savedSearches": "Gespeicherte Suchen",
+  "me.layout.tabs.crew": "Crew"
+}

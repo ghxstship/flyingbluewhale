@@ -1,0 +1,12 @@
+{
+  "m.guard.configureSupabase": "Supabase konfigurieren.",
+  "m.guard.eyebrow": "Field",
+  "m.guard.title": "Guard",
+  "m.guard.noToursAssigned": "Dir sind keine Touren zugewiesen.",
+  "m.guard.empty.title": "Keine Zugewiesenen Touren",
+  "m.guard.empty.action": "Guard-Touren öffnen",
+  "m.guard.venue.assigned": "Zugewiesener Veranstaltungsort",
+  "m.guard.venue.any": "Beliebiger Veranstaltungsort",
+  "m.guard.cadenceSuffix": " · alle ${r.cadence_minutes}m",
+  "m.guard.badge.next": "Nächste ${fmtTime(r.next_run_at)}"
+}

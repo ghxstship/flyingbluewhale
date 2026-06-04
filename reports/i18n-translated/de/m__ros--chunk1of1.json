@@ -1,0 +1,15 @@
+{
+  "m.ros.show.configureSupabase": "Supabase konfigurieren.",
+  "m.ros.show.backToAll": "← Alle Cues",
+  "m.ros.show.eyebrow": "Show",
+  "m.ros.show.liveLabel": "Live",
+  "m.ros.show.startedAt": "gestartet ${fmtTime(live.scheduled_at)}",
+  "m.ros.show.upcomingHeading": "Anstehend · ${upcoming.length}",
+  "m.ros.show.noMoreCues": "Keine weiteren Cues in der Warteschlange.",
+  "m.ros.show.completedHeading": "Abgeschlossen · ${done.length}",
+  "m.ros.show.doneBadge": "Erledigt",
+  "m.ros.eyebrow": "Mobile",
+  "m.ros.title": "Run of Show",
+  "m.ros.noneToday": "Heute keine Cues geplant.",
+  "m.ros.empty.title": "Heute keine Cues"
+}

@@ -1,0 +1,5 @@
+{
+  "m.notFound.title": "Oberfläche nicht gefunden",
+  "m.notFound.description": "Dieser Mobile-Screen steht nicht im Manifest.",
+  "m.notFound.homeCta": "Start"
+}

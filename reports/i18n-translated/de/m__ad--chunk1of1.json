@@ -1,0 +1,14 @@
+{
+  "m.ad.eyebrow": "Mobil",
+  "m.ad.title": "Ankünfte & Abflüge",
+  "m.ad.todayPrefix": "Heute",
+  "m.ad.arrivalsHeading": "Ankünfte",
+  "m.ad.noArrivals": "Heute keine Ankünfte",
+  "m.ad.eta": "ETA",
+  "m.ad.partyOf": "Gruppe von ${m.party_size}",
+  "m.ad.landedAt": "gelandet ${fmtClock(m.actual_at)}",
+  "m.ad.departuresHeading": "Abflüge",
+  "m.ad.noDepartures": "Heute keine Abflüge",
+  "m.ad.etd": "ETD",
+  "m.ad.departedAt": "abgeflogen ${fmtClock(m.actual_at)}"
+}

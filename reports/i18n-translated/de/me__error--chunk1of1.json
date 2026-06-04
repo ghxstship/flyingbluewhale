@@ -1,0 +1,6 @@
+{
+  "me.error.title": "Etwas ist schiefgelaufen",
+  "me.error.fallbackMessage": "Beim Laden deiner Konto-Ansicht ist ein Fehler aufgetreten.",
+  "me.error.ref": "Ref: ${error.digest}",
+  "me.error.backToYourSpace": "Zurück zu deinem Bereich"
+}

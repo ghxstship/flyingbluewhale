@@ -1,0 +1,9 @@
+{
+  "ui.density.compact": "Kompakt",
+  "ui.density.compactAria": "Kompakte Dichte verwenden",
+  "ui.density.comfortable": "Standard",
+  "ui.density.comfortableAria": "Komfortable Dichte verwenden",
+  "ui.density.spacious": "Großzügig",
+  "ui.density.spaciousAria": "Großzügige Dichte verwenden",
+  "ui.density.label": "Dichte"
+}

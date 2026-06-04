@@ -1,0 +1,8 @@
+{
+  "m.gigs.eyebrow": "Marketplace",
+  "m.gigs.title": "Offene Gigs",
+  "m.gigs.countOne": "${rows.length} aktiver Gig im Netzwerk.",
+  "m.gigs.countOther": "${rows.length} aktive Gigs im Netzwerk.",
+  "m.gigs.empty": "Aktuell keine aktiven Gigs.",
+  "m.gigs.travelPaid": "Reise bezahlt"
+}

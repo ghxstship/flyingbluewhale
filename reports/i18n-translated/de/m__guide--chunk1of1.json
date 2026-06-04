@@ -1,0 +1,9 @@
+{
+  "m.guide.eyebrow": "Field Guide",
+  "m.guide.noActiveProject.title": "Kein aktives Projekt",
+  "m.guide.noActiveProject.body": "Schau wieder rein, sobald du auf eine Show gebucht bist.",
+  "m.guide.pending.title": "Guide ausstehend",
+  "m.guide.pending.body": "Die Produktion hat noch keinen Guide für deine Rolle veröffentlicht.",
+  "m.guide.downloadPdf.ariaLabel": "Diesen Guide als PDF herunterladen",
+  "m.guide.downloadPdf.label": "PDF herunterladen"
+}

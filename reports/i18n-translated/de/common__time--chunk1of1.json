@@ -1,0 +1,6 @@
+{
+  "common.time.justNow": "gerade eben",
+  "common.time.minutesShort": "${min} Min.",
+  "common.time.hoursShort": "${hr} Std.",
+  "common.time.daysShort": "${day} T."
+}

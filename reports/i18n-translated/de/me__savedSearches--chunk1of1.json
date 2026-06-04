@@ -1,0 +1,22 @@
+{
+  "me.savedSearches.eyebrow": "Gespeicherte Suchen",
+  "me.savedSearches.title": "Gespeicherte Suchen",
+  "me.savedSearches.add.title": "Abonnement hinzufügen",
+  "me.savedSearches.fields.kind": "Art",
+  "me.savedSearches.fields.name": "Name",
+  "me.savedSearches.fields.namePlaceholder": "A1 / Lichtprogrammierer · FL",
+  "me.savedSearches.fields.query": "Abfrage (JSON)",
+  "me.savedSearches.fields.emailAlerts": "E-Mail-Benachrichtigungen",
+  "me.savedSearches.fields.pushAlerts": "Push-Benachrichtigungen",
+  "me.savedSearches.kinds.gig": "Gig",
+  "me.savedSearches.kinds.rfq": "RFQ",
+  "me.savedSearches.kinds.talentCall": "Talent Call",
+  "me.savedSearches.kinds.talent": "Talent",
+  "me.savedSearches.kinds.crew": "Crew",
+  "me.savedSearches.kinds.vendor": "Lieferant",
+  "me.savedSearches.active.title": "Aktive Abonnements",
+  "me.savedSearches.empty": "Noch keine gespeicherten Suchen.",
+  "me.savedSearches.badge.email": "E-Mail",
+  "me.savedSearches.badge.push": "Push",
+  "me.savedSearches.matches": "${r.match_count} Treffer"
+}

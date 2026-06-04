@@ -1,0 +1,13 @@
+{
+  "me.applications.detail.eyebrow": "Bewerbung",
+  "me.applications.detail.coverNote": "Anschreiben",
+  "me.applications.detail.proposedDayRate": "Vorgeschlagener Tagessatz",
+  "me.applications.detail.resume": "Lebenslauf",
+  "me.applications.title": "Meine Bewerbungen",
+  "me.applications.configureSupabase": "Supabase konfigurieren.",
+  "me.applications.eyebrow": "Meine Bewerbungen",
+  "me.applications.heading": "Bewerbungen",
+  "me.applications.empty.title": "Noch Keine Bewerbungen",
+  "me.applications.empty.action": "Gigs Durchsuchen",
+  "me.applications.deletedPosting": "Gelöschte Ausschreibung"
+}

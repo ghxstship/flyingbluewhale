@@ -1,0 +1,17 @@
+{
+  "m.inventory.scan.toast.failed": "Scan fehlgeschlagen",
+  "m.inventory.scan.toast.notFound": "Kein Equipment mit diesem Tag",
+  "m.inventory.scan.announce.notFound": "Asset nicht gefunden",
+  "m.inventory.scan.assetTag": "Asset-Tag",
+  "m.inventory.scan.placeholder": "Scannen oder tippen",
+  "m.inventory.scan.toggle": "Umschalten",
+  "m.inventory.scan.checkIn": "Einchecken",
+  "m.inventory.scan.checkOut": "Auschecken",
+  "m.inventory.scan.recent": "Zuletzt",
+  "m.inventory.scan.empty.title": "Noch Keine Scans",
+  "m.inventory.scan.badge.notFound": "nicht gefunden",
+  "m.inventory.scan.badge.error": "Fehler",
+  "m.inventory.scan.eyebrow": "Field",
+  "m.inventory.scan.title": "Inventar-Scan",
+  "m.inventory.scan.subtitle": "Asset-Tag scannen oder eintippen, um ein- / auszuchecken."
+}

@@ -1,0 +1,13 @@
+{
+  "me.settings.title": "Einstellungen",
+  "me.settings.appearance.title": "Erscheinungsbild",
+  "me.settings.workspace.title": "Workspace-Einstellungen",
+  "me.settings.workspace.submit": "Einstellungen speichern",
+  "me.settings.workspace.density.label": "Dichte",
+  "me.settings.workspace.density.compact": "Kompakt",
+  "me.settings.workspace.density.comfortable": "Komfortabel",
+  "me.settings.workspace.density.spacious": "Großzügig",
+  "me.settings.workspace.locale.label": "Sprachregion (z. B. de, de-DE, en)",
+  "me.settings.workspace.timezone.label": "Zeitzone (IANA, z. B. Europe/Berlin)",
+  "me.settings.workspace.timezone.placeholder": "Bei leerem Feld automatisch erkannt"
+}

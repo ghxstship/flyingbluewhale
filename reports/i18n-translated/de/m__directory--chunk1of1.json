@@ -1,0 +1,7 @@
+{
+  "m.directory.eyebrow": "Mobil",
+  "m.directory.title": "Verzeichnis",
+  "m.directory.peopleCount": "${members.length} Personen in deiner Organisation",
+  "m.directory.empty.title": "Keine Mitglieder",
+  "m.directory.empty.description": "Org-Mitglieder erscheinen hier, sobald sie hinzugefügt sind."
+}

@@ -1,0 +1,13 @@
+{
+  "console.guides.eyebrow": "Wissen",
+  "console.guides.title": "Guides",
+  "console.guides.configureSupabase": "Supabase konfigurieren.",
+  "console.guides.subtitleSingular": "${rows.length} Guide über deine Projekte",
+  "console.guides.subtitlePlural": "${rows.length} Guides über deine Projekte",
+  "console.guides.empty.title": "Noch keine Event-Guides",
+  "console.guides.empty.openProjects": "Projekte öffnen →",
+  "console.guides.table.project": "Projekt",
+  "console.guides.table.persona": "Persona",
+  "console.guides.table.updated": "Aktualisiert",
+  "console.guides.editLink": "Bearbeiten →"
+}

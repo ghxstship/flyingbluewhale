@@ -1,0 +1,14 @@
+{
+  "me.availability.configureSupabase": "Supabase konfigurieren.",
+  "me.availability.eyebrow": "Verfügbarkeit",
+  "me.availability.title": "Buchungskalender",
+  "me.availability.addSlot": "Slot hinzufügen",
+  "me.availability.kind": "Art",
+  "me.availability.label": "Bezeichnung",
+  "me.availability.labelPlaceholder": "MMW26 Deck-Aufbau",
+  "me.availability.starts": "Beginn",
+  "me.availability.ends": "Ende",
+  "me.availability.allDay": "Ganztägig",
+  "me.availability.upcoming": "Anstehend",
+  "me.availability.empty": "Noch keine Verfügbarkeits-Slots."
+}

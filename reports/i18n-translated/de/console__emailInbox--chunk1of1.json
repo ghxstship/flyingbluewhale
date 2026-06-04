@@ -1,0 +1,16 @@
+{
+  "console.emailInbox.eyebrow": "Projektkorrespondenz",
+  "console.emailInbox.title": "E-Mail-Posteingang",
+  "console.emailInbox.configureSupabase": "Supabase konfigurieren.",
+  "console.emailInbox.metric.unrouted": "Nicht zugeordnet",
+  "console.emailInbox.metric.promoted": "Hochgestuft",
+  "console.emailInbox.metric.total": "Gesamt",
+  "console.emailInbox.emptyLabel": "Noch keine eingehenden E-Mails",
+  "console.emailInbox.column.received": "Empfangen",
+  "console.emailInbox.column.from": "Von",
+  "console.emailInbox.column.subject": "Betreff",
+  "console.emailInbox.column.project": "Projekt",
+  "console.emailInbox.column.routedTo": "Zugeordnet an",
+  "console.emailInbox.noSubject": "(kein Betreff)",
+  "console.emailInbox.unrouted": "Nicht zugeordnet"
+}

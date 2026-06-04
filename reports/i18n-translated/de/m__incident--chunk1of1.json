@@ -1,0 +1,14 @@
+{
+  "m.incident.new.eyebrow": "Field",
+  "m.incident.new.title": "Schnellmeldung",
+  "m.incident.new.openFullForm": "Vollformular öffnen",
+  "m.incident.new.summaryLabel": "Was ist passiert?",
+  "m.incident.new.fileNow": "Jetzt melden",
+  "m.incident.new.subtitle": "Sicherheitsvorfall protokollieren — Admin und EHS-Lead werden sofort benachrichtigt.",
+  "m.incident.eyebrow": "Field",
+  "m.incident.title": "Meine Vorfälle",
+  "m.incident.subtitle": "Von Dir gemeldete Vorfälle. {count} offen. Org-weite Queue unter",
+  "m.incident.quickFile": "Schnellmeldung (ein Feld)",
+  "m.incident.fullReport": "Vollständiger Bericht",
+  "m.incident.empty.title": "Noch keine Meldungen"
+}

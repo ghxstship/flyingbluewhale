@@ -1,0 +1,11 @@
+{
+  "console.inbox.eyebrow": "Workspace",
+  "console.inbox.title": "Nachrichten",
+  "console.inbox.configureSupabase": "Supabase konfigurieren.",
+  "console.inbox.conversationCount.one": "${list.length} Konversation",
+  "console.inbox.conversationCount.other": "${list.length} Konversationen",
+  "console.inbox.unreadSuffix": "${unreadCount} ungelesen",
+  "console.inbox.empty.title": "Keine Konversationen",
+  "console.inbox.untitledRoom": "Unbenannter Raum",
+  "console.inbox.newBadge": "Neu"
+}

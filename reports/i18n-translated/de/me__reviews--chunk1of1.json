@@ -1,0 +1,12 @@
+{
+  "me.reviews.configure": "Supabase konfigurieren.",
+  "me.reviews.eyebrow": "Meine Bewertungen",
+  "me.reviews.title": "Bewertungen",
+  "me.reviews.subtitle": "Bewertungen bleiben verborgen, bis beide Seiten gepostet haben. Keine Vergeltungsfläche.",
+  "me.reviews.received": "Erhalten",
+  "me.reviews.emptyReceived": "Noch keine öffentlichen Bewertungen.",
+  "me.reviews.written": "Verfasst",
+  "me.reviews.emptyWritten": "Du hast noch keine Bewertungen verfasst.",
+  "me.reviews.status.released": "freigegeben",
+  "me.reviews.status.hidden": "verborgen — wartet auf Gegenseite"
+}

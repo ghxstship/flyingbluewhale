@@ -1,0 +1,14 @@
+{
+  "console.compliance.coc.eyebrow": "Compliance",
+  "console.compliance.coc.title": "Chain of Custody",
+  "console.compliance.coc.configureSupabase": "Supabase konfigurieren.",
+  "console.compliance.coc.subtitle": "Audit-Trail für Beweise und Proben.",
+  "console.compliance.coc.mobileCapture": "Mobile Erfassung",
+  "console.compliance.coc.metrics.events24h": "Ereignisse · 24h",
+  "console.compliance.coc.metrics.events30d": "Ereignisse · 30T",
+  "console.compliance.coc.metrics.distinctActors": "Einzelne Akteure",
+  "console.compliance.coc.byTarget": "Nach Ziel",
+  "console.compliance.coc.recentEvents": "Letzte Ereignisse",
+  "console.compliance.coc.empty.title": "Keine COC-Ereignisse in den letzten 30 Tagen",
+  "console.compliance.coc.system": "System"
+}

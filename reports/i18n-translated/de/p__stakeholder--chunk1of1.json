@@ -1,0 +1,19 @@
+{
+  "p.stakeholder.home.portfolioPnl.title": "Portfolio & P&L",
+  "p.stakeholder.home.portfolio.label": "Portfolio",
+  "p.stakeholder.home.portfolio.desc": "Aktive Projekte + Phasen",
+  "p.stakeholder.home.pnl.label": "P&L",
+  "p.stakeholder.home.pnl.desc": "Roll-up über das Portfolio",
+  "p.stakeholder.home.governance.title": "Governance",
+  "p.stakeholder.home.committees.label": "Gremien",
+  "p.stakeholder.home.committees.desc": "Chartas + Taktung",
+  "p.stakeholder.home.esg.title": "Nachhaltigkeit",
+  "p.stakeholder.home.esg.description": "ESG-Reporting + Nachhaltigkeitsprofil.",
+  "p.stakeholder.home.esg.label": "ESG",
+  "p.stakeholder.home.esg.desc": "CO2 + Community-Impact",
+  "p.stakeholder.home.audit.title": "Audit-Trail",
+  "p.stakeholder.home.audit.description": "Jede privilegierte Aktion, mit Zeitstempel.",
+  "p.stakeholder.home.auditLog.label": "Audit-Log",
+  "p.stakeholder.home.auditLog.desc": "Schreibgeschütztes Ledger",
+  "p.stakeholder.home.title": "Stakeholder-Portal"
+}

@@ -1,13 +1,31 @@
 {
-  "name": "ATLVS Technologies",
-  "short_name": "ATLVS",
-  "description": "Unified production platform — internal console, external portals, mobile field PWA.",
-  "start_url": "/",
+  "name": "COMPVSS — ATLVS Technologies",
+  "short_name": "COMPVSS",
+  "description": "ATLVS Technologies' field PWA for crew, vendors, and talent — clocks, advancing, comms, scans. Offline-first.",
+  "start_url": "/m",
+  "scope": "/m",
   "display": "standalone",
-  "background_color": "#0A0A0A",
-  "theme_color": "#0A0A0A",
+  "orientation": "portrait",
+  "background_color": "#F7F8FA",
+  "theme_color": "#E9A23B",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    {
+      "src": "/brand/atlvs-icon-compvss.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/atlvs-icon-compvss.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/brand/atlvs-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "monochrome"
+    }
   ]
 }

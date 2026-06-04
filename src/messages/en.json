@@ -85,21 +85,48 @@
       "mobilePrimaryAriaLabel": "Mobile primary",
       "product": {
         "label": "Product",
-        "features": { "label": "Features", "description": "Every module, every phase" },
-        "solutions": { "label": "Solutions", "description": "ATLVS · COMPVSS · GVTEWAY" },
-        "atlvs": { "label": "ATLVS — Production", "description": "Producer console" },
-        "compvss": { "label": "COMPVSS — Crew", "description": "Workforce + field ops" },
-        "gvteway": { "label": "GVTEWAY — Guests", "description": "Ticketing + stakeholder portal" }
+        "features": {
+          "label": "Features",
+          "description": "Every module, every phase"
+        },
+        "solutions": {
+          "label": "Solutions",
+          "description": "ATLVS · COMPVSS · GVTEWAY"
+        },
+        "atlvs": {
+          "label": "ATLVS — Production",
+          "description": "Producer console"
+        },
+        "compvss": {
+          "label": "COMPVSS — Crew",
+          "description": "Workforce + field ops"
+        },
+        "gvteway": {
+          "label": "GVTEWAY — Guests",
+          "description": "Ticketing + stakeholder portal"
+        }
       },
       "industries": {
         "label": "Industries"
       },
       "resources": {
         "label": "Resources",
-        "blog": { "label": "Blog", "description": "Launches, releases, industry takes" },
-        "guides": { "label": "Guides", "description": "Long-form for producers" },
-        "docs": { "label": "Docs", "description": "Platform reference + API" },
-        "changelog": { "label": "Changelog", "description": "Every release, dated" }
+        "blog": {
+          "label": "Blog",
+          "description": "Launches, releases, industry takes"
+        },
+        "guides": {
+          "label": "Guides",
+          "description": "Long-form for producers"
+        },
+        "docs": {
+          "label": "Docs",
+          "description": "Platform reference + API"
+        },
+        "changelog": {
+          "label": "Changelog",
+          "description": "Every release, dated"
+        }
       }
     },
     "home": {
@@ -131,6 +158,3046 @@
       "startFreeForLife": "Start Free for Life",
       "contactSales": "Contact sales",
       "pitchStory": "Pitch a story"
+    },
+    "pages": {
+      "about": {
+        "meta": {
+          "title": "About — The Studio",
+          "description": "ATLVS Technologies builds the platform for production. ATLVS, GVTEWAY, COMPVSS — three apps, one schema. Shipped by operators who've run the room.",
+          "ogImageEyebrow": "The Studio",
+          "ogImageTitle": "Built by the People Who Run the Show."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "about": "About"
+        },
+        "hero": {
+          "eyebrow": "The Studio",
+          "title": "Built by the People Who Run the Show.",
+          "lead": "ATLVS Technologies builds the platform for production. Every module came out of opening a spreadsheet for the third time and saying \"why isn't this in the platform.\"",
+          "subLead": "Three apps. One schema. Forty-seven modules. We ship to real productions the weekend before each release. The work decides what stays in."
+        },
+        "principles": {
+          "heading": "How We Build.",
+          "threeApps": {
+            "title": "Three apps. One schema.",
+            "body": "ATLVS, GVTEWAY, COMPVSS share identity, data, and design. One database underneath."
+          },
+          "rls": {
+            "title": "RLS at the database.",
+            "body": "Tenant walled in Postgres, not in the UI. Immutable audit log on every change. Signed webhooks. Standard on every tier."
+          },
+          "tested": {
+            "title": "Tested in the room.",
+            "body": "We ship to a real production the weekend before each release. If it doesn't survive load-in, it doesn't ship."
+          },
+          "perOrg": {
+            "title": "Per org. Never per seat.",
+            "body": "No per-seat trap. No per-scan tax. No velvet-rope gates on things that should be standard. Pricing reads like one number, not a tax form."
+          }
+        },
+        "milestones": {
+          "heading": "What Shipped, When.",
+          "procoreParity": {
+            "title": "Procore parity",
+            "body": "RFIs, submittals, daily logs, punch list, payment apps, change orders. Plus everything Procore won't touch."
+          },
+          "threeApps": {
+            "title": "Three apps on one schema",
+            "body": "ATLVS, GVTEWAY, COMPVSS shipped on one database — workspace, portal, field."
+          },
+          "kbyg": {
+            "title": "KBYG event guides",
+            "body": "One Know-Before-You-Go, authored once, rendered per-persona across portal and field."
+          },
+          "proposals": {
+            "title": "Proposals, signed in place",
+            "body": "Twenty-three block types. Live pricing. E-sign in the page. One URL replaces the PDF email thread."
+          },
+          "stripeConnect": {
+            "title": "Stripe Connect payouts + advancing",
+            "body": "Vendor payouts via Connect. Sixteen typed deliverables with history, comments, attachments."
+          },
+          "firstProduction": {
+            "title": "First production shipped",
+            "body": "Staffed and scanned a 2,000-cap show end-to-end on the platform. Stage went down. The platform didn't."
+          }
+        },
+        "studio": {
+          "heading": "Who Builds It.",
+          "body": "ATLVS is a production + technology studio. We've staffed residencies, touring runs, private launches, gallery programs, brand activations. We shipped software for every one of them. The platform is a decade of in-the-field instinct, compressed into one workspace.",
+          "joinLink": "Join the studio",
+          "talkLink": "Talk to the studio",
+          "githubLink": "GitHub"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free forever for small teams. Per-org pricing the rest of the way up.",
+          "primaryLabel": "Sign Up Free",
+          "secondaryLabel": "Book a Walkthrough"
+        }
+      },
+      "ai-slug": {
+        "meta": {
+          "fallbackTitle": "AI",
+          "ogEyebrow": "AI"
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "ai": "AI"
+        },
+        "hero": {
+          "eyebrowPrefix": "AI"
+        },
+        "sections": {
+          "reads": {
+            "eyebrow": "What It Reads"
+          },
+          "outputs": {
+            "eyebrow": "What It Drafts"
+          },
+          "surfaces": {
+            "title": "Where It Shows Up."
+          },
+          "modules": {
+            "title": "Modules It Touches."
+          },
+          "faq": {
+            "suffix": "FAQ"
+          },
+          "siblings": {
+            "title": "Other AI Use Cases."
+          }
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free for small teams. AI included on Crew and up."
+        }
+      },
+      "ai": {
+        "meta": {
+          "title": "AI For Production — Drafts From Your Workspace, Never The Public Internet",
+          "description": "An assistant that drafts riders, incident reports, call sheets, proposals, recaps, and safety briefs from your live workspace data. Anthropic Claude under the hood; per-org scope; never trained on your data.",
+          "ogImageEyebrow": "AI",
+          "ogImageTitle": "Drafts From Your Workspace."
+        },
+        "jsonLd": {
+          "description": "Production-AI assistant grounded in your workspace, powered by Anthropic Claude."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "ai": "AI"
+        },
+        "hero": {
+          "eyebrow": "AI",
+          "titleLine1": "Drafts From Your Workspace.",
+          "titleLine2": "Never The Public Internet.",
+          "subtitle": "An assistant that reads your projects, talent, vendors, schedule, and budgets — then drafts the things production teams write every day. Riders, incident reports, call sheets, proposals, recaps, safety briefs. Anthropic Claude under the hood, scoped to your tenant, never trained on your data."
+        },
+        "drafts": {
+          "title": "What It Drafts.",
+          "subtitle": "Six production workflows where the assistant takes a draft 80% of the way and you ship the last 20%.",
+          "cardCta": "See how it works"
+        },
+        "rules": {
+          "eyebrow": "The Rules",
+          "title": "What The AI Does — And Won't Do.",
+          "subtitle": "Production teams asked us where the lines are. Here's the canon.",
+          "items": {
+            "0": "Reads only your org's data. RLS at the database — not the app.",
+            "1": "Drafts; does not auto-publish. PM, EHS, or TM holds the publish key.",
+            "2": "Flags inferences vs. grounded facts. You see what's invented.",
+            "3": "Conversations log in your tenant, queryable, exportable, not shared.",
+            "4": "Anthropic Claude — never trained on your records.",
+            "5": "Per-org cost cap. Runaway usage is impossible."
+          }
+        },
+        "faq": {
+          "title": "AI · FAQ",
+          "otherOrgs": {
+            "q": "Does the AI see other organizations' data?",
+            "a": "No. Every tool the assistant can call is scoped to your organization. RLS at the database — your tenant is walled off in Postgres, not in the app layer. The AI cannot reach into anyone else's data, by design."
+          },
+          "training": {
+            "q": "Do you train on our data?",
+            "a": "No. We don't train models. We're a production platform that uses Anthropic Claude under the hood — your conversations stay in your tenant, your records stay yours."
+          },
+          "model": {
+            "q": "Which model does it use?",
+            "a": "Claude Sonnet 4.6 by default for day-to-day work, Claude Opus 4.7 available per conversation when you need deeper reasoning. Switch in the conversation menu; cost is metered per-org with configurable monthly caps."
+          },
+          "wrong": {
+            "q": "What if the AI gets something wrong?",
+            "a": "Every output is a draft. The PM, EHS lead, or tour manager publishes. Auto-publish workflows are configurable but opt-in. The assistant also flags when it's inferring vs. when it's working from explicit data."
+          },
+          "freeTier": {
+            "q": "Is there a free tier?",
+            "a": "Yes. The Free tier includes light AI assistance. Crew and Production tiers include the streaming assistant with conversation history. Festival tier adds custom system prompts and dedicated model selection."
+          }
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free for small teams. AI included on Crew and up."
+        }
+      },
+      "alternatives": {
+        "competitor": {
+          "metadata": {
+            "fallbackTitle": "Alternatives",
+            "title": "{competitor} Alternatives for Production Teams",
+            "description": "Looking for an alternative to {competitor}? Here's what production teams reach for and why.",
+            "ogImageEyebrow": "{competitor} Alternatives",
+            "ogImageTitle": "For Production Teams."
+          },
+          "crumbs": {
+            "home": "Home",
+            "alternatives": "Alternatives",
+            "competitorAlternatives": "{competitor} alternatives"
+          },
+          "hero": {
+            "eyebrow": "{competitor} Alternatives",
+            "title": "{competitor} Alternatives, For Production Teams.",
+            "body": "If you're searching for an alternative to {competitor}, you've probably outgrown one of these: the per-seat cost math, missing production primitives, or the workflow that doesn't survive the second show. Here's what to look at — and what's worked for teams that switched."
+          },
+          "pros": {
+            "title": "What {competitor} Does Well.",
+            "body": "Setting the record straight before talking alternatives. {competitor} earned its place — here's where it shines.",
+            "fallback": "Strong category presence and brand recognition."
+          },
+          "cons": {
+            "title": "Where Production Teams Hit The Wall.",
+            "body": "These are the gaps we hear from teams searching for an alternative. Your mileage may vary."
+          },
+          "atlvsAlt": {
+            "eyebrow": "The ATLVS Alternative",
+            "compareLink": "Head-to-head comparison →"
+          },
+          "migrate": {
+            "title": "How To Migrate.",
+            "body": "The path teams take to move off {competitor}."
+          },
+          "faq": {
+            "title": "{competitor} Alternatives · FAQ"
+          },
+          "other": {
+            "title": "Other Alternatives To Consider.",
+            "body": "See how production teams evaluate other tools.",
+            "itemLabel": "{competitor} alternatives"
+          },
+          "cta": {
+            "title": "ATLVS Is Open.",
+            "subtitle": "Free forever for small teams. Migrate when you're ready."
+          }
+        },
+        "meta": {
+          "title": "Alternatives — Production Software, Side By Side",
+          "description": "Looking for an alternative? Here's how production teams evaluate Cvent, Procore, DocuSign, Monday, Notion, and the rest.",
+          "ogEyebrow": "Alternatives",
+          "ogTitle": "Production Software, Side By Side."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "alternatives": "Alternatives"
+        },
+        "hero": {
+          "eyebrow": "Alternatives",
+          "title": "Production Software, Side By Side.",
+          "body": "Each page below is the long-form on a tool production teams commonly evaluate — what it does well, where the gaps land for live work, and what teams reach for instead."
+        },
+        "card": {
+          "alternativesSuffix": "alternatives",
+          "readLongForm": "Read the long-form"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free forever for small teams. Migrate when you're ready."
+        }
+      },
+      "blog": {
+        "post": {
+          "metadata": {
+            "notFoundTitle": "Post not found",
+            "ogEyebrow": "Blog"
+          },
+          "breadcrumbs": {
+            "home": "Home",
+            "blog": "Blog"
+          },
+          "eyebrow": "ATLVS Technologies · Blog",
+          "allPostsLink": "← All posts",
+          "cta": {
+            "title": "Run Your Next Show on ATLVS Technologies",
+            "subtitle": "Start free. No credit card."
+          }
+        },
+        "meta": {
+          "title": "Blog — updates from the ATLVS Technologies team",
+          "description": "Essays on production operations, platform architecture, and how to run shows with less duct tape. From the ATLVS Technologies team.",
+          "ogEyebrow": "Blog",
+          "ogTitle": "Updates from the team."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "blog": "Blog"
+        },
+        "hero": {
+          "eyebrow": "Blog",
+          "title": "Updates From the Team.",
+          "subtitle": "Essays on production operations, platform architecture, and how to run shows with less duct tape."
+        }
+      },
+      "brand-kit": {
+        "metadata": {
+          "title": "Brand Kit · The Venture Beyond System",
+          "description": "GHXSTSHIP design system — foundations, marketing site, product UI, documents, and handoff. The complete kit. Every tile is live; click to open.",
+          "ogTitle": "G H X S T S H I P · Brand Kit",
+          "ogDescription": "Retro-futurist nautical pop art system. Cosmic ink ground, brass doubloon accent, nebula + plasma signals."
+        },
+        "chips": {
+          "years": "14+ Years",
+          "experiences": "250+ Experiences",
+          "memories": "5M+ Memories",
+          "verticals": "3 Verticals",
+          "destinations": "10 Destinations"
+        },
+        "blocks": {
+          "marketing": {
+            "eyebrow": "Marketing Site",
+            "heading": "The Spaceport"
+          },
+          "productUi": {
+            "eyebrow": "Product UI · ATLVS · COMPVSS · GVTEWAY",
+            "heading": "The Instruments"
+          },
+          "saas": {
+            "eyebrow": "ATLVS Technologies · SaaS Product Kit",
+            "heading": "The Product System"
+          },
+          "collateral": {
+            "eyebrow": "Documents · Email · Social",
+            "heading": "Collateral"
+          },
+          "foundations": {
+            "eyebrow": "Foundations & Handoff",
+            "heading": "The Docs"
+          }
+        },
+        "tiles": {
+          "homepage": {
+            "title": "Homepage",
+            "body": "Full marketing site — booking-sequence IA, departures ticker, 8-phase strip-map, hero-mode toggle.",
+            "meta": "/ — public"
+          },
+          "festivalProduction": {
+            "title": "Festival Production",
+            "body": "Per-vertical SEO/GEO landing page model.",
+            "meta": "+5 more verticals"
+          },
+          "broadcast": {
+            "title": "TV, Film & Broadcast",
+            "body": "Vertical landing page — Service + FAQ + Breadcrumb schema.",
+            "meta": "/solutions/"
+          },
+          "appDashboard": {
+            "title": "App Dashboard",
+            "body": "Switchable shell across all three instruments.",
+            "meta": "/console"
+          },
+          "bridgeKit1": {
+            "title": "Bridge Kit I",
+            "body": "Buttons, forms, tables, modals, command palette, auth, 404."
+          },
+          "bridgeKit2": {
+            "title": "Bridge Kit II",
+            "body": "Charts, mobile, notifications, detail, chat, prose, signature."
+          },
+          "bridgeKit3": {
+            "title": "Bridge Kit III",
+            "body": "Atomic gaps — tooltip, slider, calendar, gallery, funnel, heatmap."
+          },
+          "atlvsGantt": {
+            "title": "ATLVS · Gantt",
+            "body": "Production timeline, 8-phase columns."
+          },
+          "compvssCerts": {
+            "title": "COMPVSS · Certs",
+            "body": "Crew compliance & expiry."
+          },
+          "gvtewayCheckout": {
+            "title": "GVTEWAY · Checkout",
+            "body": "Fan ticketing + boarding-pass QR."
+          },
+          "mobileUi": {
+            "title": "Mobile UI",
+            "body": "Phone screens — board, detail, wallet, sheet, auth.",
+            "meta": "compvss field PWA"
+          },
+          "atlvsProductKit": {
+            "title": "ATLVS Product Kit",
+            "body": "Neutral light/dark SaaS theme — dashboard, screens, per-product accent. Distinct from the cosmic brand.",
+            "meta": "/console"
+          },
+          "saasDashboard": {
+            "title": "SaaS Dashboard",
+            "body": "Light/dark + ATLVS/COMPVSS/GVTEWAY accent toggle."
+          },
+          "saasScreens": {
+            "title": "SaaS Screens",
+            "body": "Gantt, certifications, checkout — skinned."
+          },
+          "proposalSow": {
+            "title": "Proposal / SOW",
+            "body": "Contract-grade: manifest, schedule, manning, systems, investment."
+          },
+          "runOfShow": {
+            "title": "Run of Show",
+            "body": "Live cue sheet, department-coded."
+          },
+          "postEventRecap": {
+            "title": "Post-Event Recap",
+            "body": "Results, gallery, delivered checklist."
+          },
+          "emailTemplates": {
+            "title": "Email Templates",
+            "body": "Brand + ATLVS/COMPVSS/GVTEWAY notifications."
+          },
+          "socialTemplates": {
+            "title": "Social Templates",
+            "body": "Instagram + LinkedIn."
+          },
+          "stationery": {
+            "title": "Stationery",
+            "body": "Business card, letterhead, signature, invoice."
+          },
+          "pitchDeck": {
+            "title": "Pitch Deck",
+            "body": "9 slide types on the system."
+          },
+          "readme": {
+            "title": "README",
+            "body": "Brand brain — voice, visual foundations, index."
+          },
+          "brandArchitecture": {
+            "title": "Brand Architecture",
+            "body": "3 verticals, the metaphor, surface register, locks."
+          },
+          "tokensJson": {
+            "title": "tokens.json",
+            "body": "Machine-readable design tokens for engineering."
+          },
+          "handoff": {
+            "title": "Handoff",
+            "body": "Claude Code brief — file map, rules, build order."
+          },
+          "seoGeo": {
+            "title": "SEO / GEO",
+            "body": "Playbook + per-vertical page template."
+          },
+          "proprietaryIp": {
+            "title": "Proprietary IP",
+            "body": "8-Phase Lifecycle locked; XPMS pending input."
+          },
+          "competitive": {
+            "title": "Competitive",
+            "body": "Positioning vs. industry leaders."
+          },
+          "templatesMap": {
+            "title": "Templates Map",
+            "body": "Lifecycle collateral + UI inventory roadmap."
+          },
+          "iconography": {
+            "title": "Iconography",
+            "body": "Phosphor system + skull glyph rules."
+          },
+          "photography": {
+            "title": "Photography",
+            "body": "Duotone / grade treatment guidelines."
+          },
+          "logoKit": {
+            "title": "ATLVS Logo Kit",
+            "body": "The Waypoint — 8-point navigational star. Primary lockup, app-icons, clearspace, endorsement, do/don't.",
+            "meta": "/brand-kit/logo-kit"
+          }
+        }
+      },
+      "careers": {
+        "metadata": {
+          "title": "Careers — Build for Production",
+          "description": "We're a small studio shipping the operating system for live events. Open roles ship work that surfaces on real shows — measured in load-ins survived, not story points burned.",
+          "ogEyebrow": "Careers",
+          "ogTitle": "Build for Production."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "careers": "Careers"
+        },
+        "hero": {
+          "eyebrow": "Careers",
+          "title": "Build for Production.",
+          "body": "We're building the platform the live-events industry has needed for fifteen years — one operating system that runs the producer's desk, the crew's phone, and the client's portal off the same database. Small studio, deep ownership, real shows."
+        },
+        "values": {
+          "heading": "How We Crew",
+          "crew": {
+            "title": "Crew, not staff",
+            "body": "Small group, deep ownership. Every role touches every shell — marketing, ATLVS, portal, mobile."
+          },
+          "tested": {
+            "title": "Tested on the water",
+            "body": "We ship to real shows the weekend before each release. Bias to load-in survival over feature theater."
+          },
+          "pricing": {
+            "title": "Pricing is an ethic",
+            "body": "Per org, not per seat. We hold that line internally — no token economies, no perf review caste system."
+          },
+          "brandFirst": {
+            "title": "Brand-first engineering",
+            "body": "The platform reads like a magazine. Brutal where it should be, breathing where it can. Code follows."
+          },
+          "distributed": {
+            "title": "Distributed by default",
+            "body": "Studio in Miami, crew across timezones. Async-first. Travel for site visits and shows, not standups."
+          },
+          "equity": {
+            "title": "Equity that means something",
+            "body": "Real ownership stake, four-year vest, ten-year exercise window. We pay competitively in cash too."
+          }
+        },
+        "roles": {
+          "heading": "Open Roles",
+          "updatedNote": "Updated continuously",
+          "empty": {
+            "eyebrow": "No open roles right now",
+            "body": "We hire deliberately and post openings here when they exist. If your background is unusual or specifically aligned with what we're building, we read every thoughtful intro that comes through the contact form.",
+            "cta": "Send a thoughtful intro"
+          },
+          "applyCta": "Apply"
+        },
+        "faq": {
+          "heading": "Careers FAQ",
+          "hiring": {
+            "q": "Is the studio hiring right now?",
+            "a": "We're a small team and we hire deliberately. When we do open a role, it lands here first. If nothing's posted, it's truly closed — but we always read thoughtful intros at the contact link below."
+          },
+          "visas": {
+            "q": "Do you sponsor visas?",
+            "a": "For senior engineering and design roles, yes — case by case. We'll be explicit on each posting whether sponsorship is on the table."
+          },
+          "remote": {
+            "q": "Remote? Hybrid? In-office?",
+            "a": "Distributed by default. The Miami studio is open if you're nearby and want desk time, but no role requires you to be there."
+          },
+          "interview": {
+            "q": "What's the interview process?",
+            "a": "Three calls: intro with a founder, working session with a peer (no whiteboard puzzles — we look at real work), and a paid trial week if both sides want to keep going."
+          },
+          "notHire": {
+            "q": "What do you NOT hire for?",
+            "a": "Project managers, scrum coaches, and \"head of\" titles where the work is meetings. Engineering managers code; design leads design; founders sell."
+          }
+        },
+        "cta": {
+          "title": "Not Listed? Tell Us Anyway.",
+          "subtitle": "If your background is unusual or specifically built for what we ship, write us. The studio reads every note.",
+          "primaryLabel": "Send a Note",
+          "secondaryLabel": "Read the About Page"
+        }
+      },
+      "changelog": {
+        "metadata": {
+          "title": "Changelog — what shipped on ATLVS Technologies",
+          "description": "Release notes for ATLVS Technologies. Every shipping change, with context. Feature launches, reliability, security, and performance.",
+          "ogEyebrow": "Changelog",
+          "ogTitle": "What shipped."
+        },
+        "kinds": {
+          "feature": "Feature",
+          "improvement": "Improvement",
+          "security": "Security",
+          "performance": "Performance"
+        },
+        "crumbs": {
+          "home": "Home",
+          "changelog": "Changelog"
+        },
+        "hero": {
+          "eyebrow": "Changelog",
+          "title": "What Shipped.",
+          "bodyBefore": "Every release since v0.6, with enough context to understand why we shipped it. Subscribe via RSS at",
+          "bodyAfter": "."
+        },
+        "cta": {
+          "title": "Try What's New",
+          "subtitle": "Every change ships to free and trial accounts immediately."
+        }
+      },
+      "community": {
+        "detail": {
+          "metadata": {
+            "fallbackTitle": "Case study",
+            "ogEyebrow": "Case study"
+          },
+          "breadcrumbs": {
+            "home": "Home",
+            "community": "Community"
+          },
+          "hero": {
+            "eyebrow": "Case study"
+          },
+          "sections": {
+            "challenge": "Challenge",
+            "solution": "Solution",
+            "outcome": "Outcome"
+          },
+          "modules": {
+            "label": "Modules used"
+          },
+          "more": {
+            "title": "More From the Community",
+            "seeAll": "See all →"
+          },
+          "cta": {
+            "title": "Ship Your Next Show on ATLVS Technologies",
+            "subtitle": "Free on the Access tier. 14-day trial of Professional."
+          }
+        },
+        "meta": {
+          "title": "Community — the production teams building on ATLVS",
+          "description": "The festivals, tours, agencies, and fabrication shops running their production on ATLVS, GVTEWAY, and COMPVSS. Member stories, numbers, and what they actually ship.",
+          "ogImageEyebrow": "Community",
+          "ogImageTitle": "Production teams running on ATLVS."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "community": "Community"
+        },
+        "hero": {
+          "eyebrow": "Community",
+          "title": "Production teams, building in public.",
+          "subtitle": "The festivals, tours, agencies, and fabrication shops running their shows on ATLVS Technologies. Real workflows. Real numbers. Real receipts."
+        },
+        "metrics": {
+          "productionTeams": "production teams",
+          "ticketsScanned": "tickets scanned",
+          "showsAdvanced": "shows advanced",
+          "countries": "countries"
+        },
+        "stories": {
+          "title": "Member Stories",
+          "subtitle": "What they were running before, what they switched, what measurably improved."
+        },
+        "join": {
+          "eyebrow": "Join the roster",
+          "title": "Your Team, Here.",
+          "body": "Shipping real shows on ATLVS Technologies? We're always looking to document new member stories. A short interview, anonymized numbers, your words.",
+          "pitchCta": "Pitch a story",
+          "startCta": "Start free"
+        },
+        "cta": {
+          "title": "Be the Next Story",
+          "subtitle": "Start free. Ship a show. We'll talk afterward."
+        }
+      },
+      "compare": {
+        "detail": {
+          "metadata": {
+            "fallbackTitle": "Compare",
+            "ogImageTitle": "What we are."
+          },
+          "breadcrumbs": {
+            "home": "Home",
+            "compare": "Compare"
+          },
+          "bottomLine": {
+            "eyebrow": "Bottom line"
+          },
+          "features": {
+            "title": "Feature Comparison.",
+            "subtitle": "Side by side, without the marketing math.",
+            "columnFeature": "Feature",
+            "yes": "Yes",
+            "no": "No"
+          },
+          "whyWeWin": {
+            "title": "Where We Win."
+          },
+          "whenTheyWin": {
+            "title": "When {competitor} Wins.",
+            "subtitle": "We're not the answer to every problem. These are the cases where they're the right call."
+          },
+          "migration": {
+            "title": "Migration Path.",
+            "subtitle": "For teams moving from {competitor}.",
+            "longFormLink": "Read the long-form on {competitor} alternatives →"
+          },
+          "cta": {
+            "title": "ATLVS Is Open.",
+            "subtitle": "Free forever for small teams. Migrate when you're ready."
+          }
+        },
+        "meta": {
+          "title": "From the General-Purpose Tools",
+          "description": "Notes for teams arriving from a general-purpose tool. We don't run scorecards. We define what we are.",
+          "ogImageEyebrow": "Category Notes",
+          "ogImageTitle": "We Don't Compare. We Define."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "current": "From general-purpose tools"
+        },
+        "hero": {
+          "eyebrow": "Category Notes",
+          "title": "We Don't Compare. We Define.",
+          "body": "Producers land here because a general-purpose tool taught them what they didn't want. These pages are notes for the search engine — what we are, said plainly. No scorecards."
+        },
+        "card": {
+          "eyebrow": "Coming from",
+          "cta": "Read the notes"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free forever for small teams.",
+          "primaryLabel": "Sign Up Free",
+          "secondaryLabel": "Book a Walkthrough"
+        }
+      },
+      "contact": {
+        "metadata": {
+          "title": "Contact — Talk to the Studio",
+          "description": "Direct line. Demos, partnerships, concierge support, Festival access. Routed to producers who've run the room.",
+          "ogImageEyebrow": "Contact",
+          "ogImageTitle": "Talk to the Studio."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "contact": "Contact"
+        },
+        "hero": {
+          "eyebrow": "Contact",
+          "title": "Talk to the Studio.",
+          "bodyPrefix": "No dark patterns. No forced calls. Sign up free at",
+          "signupLabel": "/signup",
+          "bodySuffix": ". Or request a walkthrough below — one business day, usually faster."
+        },
+        "routes": {
+          "walkthrough": {
+            "title": "Walkthrough",
+            "body": "Thirty minutes. Screen-share ATLVS wired to a real production. No deck.",
+            "cta": "Get on the calendar"
+          },
+          "studio": {
+            "title": "Studio",
+            "body": "Direct line to a producer. One business day, usually faster."
+          },
+          "concierge": {
+            "title": "Concierge",
+            "body": "For current customers — triaged by tier. Festival gets an SLA."
+          },
+          "partners": {
+            "title": "Partners",
+            "body": "Integrations, agencies, distribution. Build with us."
+          }
+        },
+        "form": {
+          "heading": "Leave a Note.",
+          "fields": {
+            "name": "Name",
+            "email": "Work email",
+            "company": "Company",
+            "scale": "Productions per year",
+            "vertical": "What do you run?",
+            "message": "What are you running?",
+            "demoOptIn": "I'd rather walk it through live than trade emails."
+          },
+          "verticals": {
+            "liveEvents": "Live events / festivals",
+            "touring": "Touring / artist management",
+            "corporate": "Corporate / activations",
+            "fabrication": "Fabrication / shop",
+            "other": "Other"
+          },
+          "actions": {
+            "signupInstead": "Sign Up Free Instead",
+            "submit": "Send to the Studio"
+          }
+        },
+        "faqs": {
+          "heading": "Contact FAQ",
+          "start": {
+            "q": "Do I need to call to get started?",
+            "a": "No. /signup and you're on Free — forever. 14-day trial on Crew or Production, no card. The studio is for Festival access, custom integrations, or a walkthrough."
+          },
+          "responseTime": {
+            "q": "How fast does the studio respond?",
+            "a": "Studio: one business day. Concierge on Crew: 24 business hours. Production: 4. Festival: contractual SLA, usually one hour for P0."
+          },
+          "producer": {
+            "q": "Can we talk to a producer, not a salesperson?",
+            "a": "We'll schedule a call with someone from the studio who's run productions on the platform. Check the box in the form."
+          },
+          "location": {
+            "q": "Where are you based?",
+            "a": "Distributed across the US — producers in NYC, LA, Miami, Chicago, Austin. Happy to show up in-person wherever the work is."
+          }
+        }
+      },
+      "customers": {
+        "detail": {
+          "meta": {
+            "fallbackTitle": "Customer story",
+            "fallbackDescription": "ATLVS customer story",
+            "title": "{name} — Customer story",
+            "descriptionFallback": "How {name} runs production on ATLVS."
+          },
+          "eyebrow": "Customer story",
+          "sections": {
+            "challenge": "Challenge",
+            "solution": "Solution",
+            "outcomes": "Outcomes"
+          },
+          "backLink": "← All customer stories"
+        },
+        "metadata": {
+          "title": "Customers — Production Teams Running On ATLVS",
+          "description": "Real production teams running on ATLVS — festivals, touring, fabrication, immersive, brand activations, broadcast. Case studies landing through Q4.",
+          "keywords": {
+            "0": "ATLVS customer stories",
+            "1": "production software case studies",
+            "2": "event platform customers",
+            "3": "festival software customers"
+          },
+          "ogImageEyebrow": "Customers",
+          "ogImageTitle": "Production Teams Running On ATLVS."
+        },
+        "crumbs": {
+          "home": "Home",
+          "customers": "Customers"
+        },
+        "hero": {
+          "eyebrow": "Customers",
+          "title": "Production Teams Running On ATLVS.",
+          "body": "Six launch-partner case studies are landing through Q4. Anonymized teasers + hard metrics below; the full stories drop on the published date. For an under-NDA preview tailored to your event shape, book a brief.",
+          "primaryCta": "Book a brief"
+        },
+        "published": {
+          "title": "Published."
+        },
+        "landingSoon": {
+          "title": "Landing Soon.",
+          "count": "{count} stories in production",
+          "body": "Anonymized for NDA. Hard metrics already captured; the full narrative + permission-cleared logo + PDF publish on the date below."
+        },
+        "cta": {
+          "title": "Want To Be Profiled?",
+          "subtitle": "Send a one-paragraph note about your upcoming event window and we'll talk about a partnership.",
+          "primaryLabel": "Book a brief",
+          "secondaryLabel": "Sign Up Free"
+        }
+      },
+      "demo-persona": {
+        "metadata": {
+          "fallbackTitle": "Demo",
+          "fallbackDescription": "Book a walkthrough.",
+          "titlePrefix": "Demo for",
+          "ogEyebrowPrefix": "Demo ·"
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "demo": "Demo"
+        },
+        "hero": {
+          "eyebrowPrefix": "Demo ·"
+        },
+        "outcomes": {
+          "heading": "What You'll See."
+        },
+        "modules": {
+          "heading": "Modules We'll Walk Through."
+        },
+        "faq": {
+          "titleSuffix": "FAQ"
+        },
+        "cta": {
+          "title": "Ready When You Are.",
+          "subtitle": "Sign up free first. Walkthrough when you have questions."
+        }
+      },
+      "demo": {
+        "metadata": {
+          "title": "Book A Walkthrough — Wired To A Real Show",
+          "description": "Talk to the studio. Walk the platform on a real production. No sales-call calisthenics — operators talking to operators.",
+          "ogImageEyebrow": "Demo",
+          "ogImageTitle": "Walk The Platform."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "demo": "Demo"
+        },
+        "hero": {
+          "eyebrow": "Demo",
+          "title": "Walk The Platform.",
+          "subtitle": "Forty minutes, wired to a real production. Pick the walkthrough that matches your work — or sign up free first and bring questions later."
+        },
+        "personas": {
+          "title": "Walkthroughs By Operation.",
+          "subtitle": "Each variant tunes the walkthrough to your work. Same platform, different starting point.",
+          "cta": "Book this walkthrough"
+        },
+        "faqs": {
+          "title": "FAQ",
+          "walkthrough": {
+            "q": "What happens on a walkthrough?",
+            "a": "Forty minutes. We open the platform wired to a real production — the canonical one is MMW26 Hialeah. You ask what your show needs, we show you the wiring that runs it. No slide deck."
+          },
+          "salesCall": {
+            "q": "Is this a sales call?",
+            "a": "No. It's a walkthrough. Sales conversations happen if you want them to — most teams open the free tier and start in the platform first."
+          },
+          "tryWithoutCall": {
+            "q": "Can I just try it without a call?",
+            "a": "Yes. Sign up free — 30 seconds, no card. The walkthrough is for teams that want to see specific workflows wired to their use case."
+          }
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free, forever, for small teams. Per-org pricing the rest of the way up."
+        }
+      },
+      "docs": {
+        "meta": {
+          "title": "Docs — Architecture, API, Guides CMS, Auth",
+          "description": "Technical reference for the ATLVS Technologies platform — architecture, integrations, the Guides CMS, and the auth model. The deep details for teams who want them.",
+          "ogEyebrow": "Docs",
+          "ogTitle": "How the platform works"
+        },
+        "eyebrow": "Docs",
+        "hero": {
+          "title": "How the Platform Works"
+        },
+        "sections": {
+          "architecture": {
+            "title": "Architecture",
+            "desc": "Three connected apps on one backbone. Every org's data walled off."
+          },
+          "api": {
+            "title": "API v1",
+            "desc": "A clean REST API with validated inputs and predictable responses."
+          },
+          "guidesCms": {
+            "title": "Guides CMS",
+            "desc": "Author a Know Before You Go from ATLVS. Render it role-scoped across portal and mobile."
+          },
+          "authModel": {
+            "title": "Auth model",
+            "desc": "Four platform roles for billing, five project roles for ops — enforced at the data layer."
+          }
+        }
+      },
+      "error": {
+        "eyebrow": "Off Course",
+        "title": "Something went wrong loading this page.",
+        "fallbackMessage": "We hit a snag. Try again, or head back to the homepage.",
+        "refLabel": "Ref:",
+        "tryAgain": "Try Again",
+        "home": "Home"
+      },
+      "features": {
+        "metadata": {
+          "title": "Features — Every Module. Native.",
+          "description": "Forty-seven modules across three apps that share one database. ATLVS, GVTEWAY, COMPVSS. AI, finance, procurement, audit. One source.",
+          "ogEyebrow": "Features",
+          "ogTitle": "Every Module. Native."
+        },
+        "hero": {
+          "eyebrow": "Features",
+          "title": "Every Module. Native.",
+          "subtitle": "Forty-seven modules across three apps. Same database, same auth, same audit log. No integration tax."
+        },
+        "categories": {
+          "ariaLabel": "Feature Categories",
+          "items": {
+            "atlvs": {
+              "title": "ATLVS",
+              "desc": "Production operations workspace — 47 modules, 9 domains, one sidebar."
+            },
+            "portals": {
+              "title": "GVTEWAY",
+              "desc": "Stakeholder portal — twelve personas, each their lane."
+            },
+            "mobile": {
+              "title": "COMPVSS",
+              "desc": "Offline-first field PWA. Gate, shift, incident, medic."
+            },
+            "procoreParity": {
+              "title": "Construction",
+              "desc": "RFIs, submittals, daily logs, punch list, inspections, change orders, payment apps."
+            },
+            "advancing": {
+              "title": "Advancing",
+              "desc": "Riders, hospitality, stage plots, travel — 16 typed deliverables."
+            },
+            "proposals": {
+              "title": "Proposals",
+              "desc": "23 block types, e-sig in place, revocable share links, version history."
+            },
+            "finance": {
+              "title": "Finance",
+              "desc": "Invoices, expenses, budgets, time, mileage, advances, Stripe Connect payouts, P&L."
+            },
+            "procurement": {
+              "title": "Procurement",
+              "desc": "RFQs, POs, vendor scorecards, COIs, W-9s, work order broadcasts."
+            },
+            "production": {
+              "title": "Production",
+              "desc": "Equipment, rentals, fabrication, dispatch, logistics, site plans."
+            },
+            "safety": {
+              "title": "Safety",
+              "desc": "Incidents, OSHA, medical, crisis, BC/DR, cyber-IR, safeguarding, environmental."
+            },
+            "guides": {
+              "title": "Event guides (KBYG)",
+              "desc": "One project, six personas, 17 section types — schedule, SOPs, PPE, radio, evac."
+            },
+            "ai": {
+              "title": "AI assistant",
+              "desc": "Drafts riders, RFPs, call sheets, recaps. Grounded in your workspace, never the public web."
+            },
+            "knowledge": {
+              "title": "Knowledge base",
+              "desc": "Tagged articles, public-form intake, vendor training rolls up to compliance."
+            },
+            "forms": {
+              "title": "Forms",
+              "desc": "Schema-driven. Public submission. Honeypot anti-spam."
+            },
+            "ticketing": {
+              "title": "Ticketing + scan",
+              "desc": "Sub-100ms QR + barcode. Offline-queued. Replays in order."
+            },
+            "compliance": {
+              "title": "Audit + compliance",
+              "desc": "Immutable audit log, signed webhooks, self-expiring shares, SOC-2 posture."
+            }
+          }
+        }
+      },
+      "glossary": {
+        "meta": {
+          "title": "Glossary — The Vocabulary of Live Production",
+          "description": "Definitions of the terms live-event operators use every day — advancing, ROS, KBYG, riders, credentials, OSHA logs, settlements.",
+          "ogImageEyebrow": "Glossary",
+          "ogImageTitle": "Live Production Vocabulary."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "glossary": "Glossary"
+        },
+        "jsonLd": {
+          "name": "ATLVS Live Production Glossary"
+        },
+        "hero": {
+          "eyebrow": "Glossary",
+          "title": "The Vocabulary Of Live Production.",
+          "body": "The terms operators use to run shows — explained the way operators use them. No academic gloss. No marketing redirect. Just the words and what they mean on the gig."
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free, forever, for small teams. Per-org pricing the rest of the way up."
+        }
+      },
+      "guides": {
+        "detail": {
+          "meta": {
+            "fallbackTitle": "Guide"
+          },
+          "eyebrow": "Guide",
+          "crumbs": {
+            "home": "Home",
+            "guides": "Guides"
+          },
+          "tldrLabel": "TL;DR",
+          "faqTitle": "{title} · FAQ",
+          "otherGuides": "Other Guides",
+          "cta": {
+            "title": "Run Your Ops on ATLVS Technologies",
+            "subtitle": "Start free. No credit card."
+          }
+        },
+        "meta": {
+          "title": "Guides — production ops, advancing, and KBYG",
+          "description": "Long-form guides to production operations. Event advancing, Know Before You Go, and the modern production-ops platform thesis. Written by operators.",
+          "ogImageEyebrow": "Guides",
+          "ogImageTitle": "Written by operators."
+        },
+        "crumbs": {
+          "home": "Home",
+          "guides": "Guides"
+        },
+        "hero": {
+          "eyebrow": "Guides",
+          "title": "Written by Operators.",
+          "subtitle": "Deep-dive guides to the fundamentals of production operations — the disciplines, the taxonomies, and the tooling that makes a show work."
+        },
+        "cta": {
+          "title": "Ship Your Ops",
+          "subtitle": "Start free on the Access tier."
+        }
+      },
+      "help": {
+        "metadata": {
+          "title": "Help — Crew Support",
+          "description": "Self-serve guides, status, and direct support channels. Concierge for customers — triaged by tier. Festival gets an SLA.",
+          "ogImageEyebrow": "Help",
+          "ogImageTitle": "Crew Support."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "help": "Help"
+        },
+        "hero": {
+          "eyebrow": "Help",
+          "title": "Crew Support.",
+          "subtitle": "Self-serve guides for the patient, concierge for the urgent, hotline for the load-in. Choose your channel by how live the show is."
+        },
+        "sections": {
+          "getHelp": {
+            "title": "Get Help"
+          },
+          "commonIssues": {
+            "title": "Common Issues"
+          }
+        },
+        "channels": {
+          "fieldGuide": {
+            "title": "Field Guide",
+            "body": "Long-form guides on every shell — how to run a load-in week, set up advancing, wire Stripe payouts, configure portal access.",
+            "cta": "Open the Field Guide"
+          },
+          "changelog": {
+            "title": "Changelog",
+            "body": "What shipped this week. Every release, with context on why it matters at load-in.",
+            "cta": "Read what shipped"
+          },
+          "concierge": {
+            "title": "Concierge",
+            "body": "For customers — triaged by tier (Free, Crew, Production, Festival). Festival gets a four-hour SLA."
+          },
+          "hotline": {
+            "title": "Production hotline",
+            "body": "Live show in trouble? The hotline is staffed by producers, not bots. Available 24h during your event window if you've notified us.",
+            "cta": "Request hotline access"
+          }
+        },
+        "troubleshooting": {
+          "signIn": {
+            "title": "Can't sign in",
+            "body": "Try the magic-link flow first — it bypasses password issues. If your email isn't recognized, an admin needs to invite you. The producer or workspace owner can issue an invite from Settings → People."
+          },
+          "webhook": {
+            "title": "Webhook isn't firing",
+            "body": "Check the audit log first (Settings → Audit). Webhooks ship signed; if signature verification fails on your end, the receipt won't register. Re-check the secret + the SHA-256 verification snippet in the docs."
+          },
+          "mobileOffline": {
+            "title": "Mobile app stuck offline",
+            "body": "Pull-to-refresh on the call sheet to force a sync. If a queued action shows as pending for more than 30 seconds, sign out and back in — that re-pairs the offline cache to the active workspace."
+          }
+        },
+        "faqSection": {
+          "title": "Help FAQ"
+        },
+        "faqs": {
+          "reportBug": {
+            "q": "Where do I report a bug?",
+            "a": "Email support@atlvs.pro with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side."
+          },
+          "statusPage": {
+            "q": "Do you have a status page?",
+            "a": "Yes — status.atlvs.pro. Production incidents post within ten minutes. Maintenance windows announce 48 hours ahead."
+          },
+          "phoneSupport": {
+            "q": "Can I get phone support?",
+            "a": "The production hotline is the closest thing — staffed by producers during active event windows. We don't run general phone support; concierge email gets to a human within hours, faster on Festival."
+          },
+          "invoice": {
+            "q": "Where do I find my invoice or change billing details?",
+            "a": "Inside ATLVS: Settings → Billing. Stripe-hosted self-serve, so you can update card, download past invoices, or change billing email there directly."
+          },
+          "cancel": {
+            "q": "How do I cancel?",
+            "a": "Settings → Billing → Cancel subscription. Your data stays available read-only for 90 days; export anything you need from Settings → Exports during that window."
+          },
+          "lostAccess": {
+            "q": "I lost access to my admin account — what now?",
+            "a": "Contact concierge from the email on file with the org. We require a chain of identity proof to transfer ownership — typically founder/officer documentation. Plan ~3 business days for the handover."
+          }
+        },
+        "cta": {
+          "title": "Still Stuck? Talk to a Producer.",
+          "subtitle": "Concierge email is the fastest path. We respond within hours, faster on Festival.",
+          "primaryLabel": "Email Concierge",
+          "secondaryLabel": "Open the Field Guide"
+        }
+      },
+      "integrations": {
+        "meta": {
+          "title": "Integrations — Stripe, Anthropic, Supabase, Twilio, Resend, Calendar, OAuth, Webhooks",
+          "description": "The integrations wired in code today — payments, AI, infrastructure, comms, auth, calendar, geo, observability. No coming-soon list; every entry is in production.",
+          "ogImageEyebrow": "Integrations",
+          "ogImageTitle": "Wired In Code, Not On A Slide."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "integrations": "Integrations"
+        },
+        "hero": {
+          "eyebrow": "Integrations",
+          "title": "Wired In Code, Not On A Slide.",
+          "body": "The integrations below ship live in production. No coming-soon list, no aspirational entries. Each page links to the technical anchor in the codebase so you can audit before you switch."
+        },
+        "card": {
+          "howItsWired": "How it's wired"
+        },
+        "partner": {
+          "eyebrow": "Partner Program",
+          "title": "Build your own integration.",
+          "body": "Open API surface (REST + GraphQL). Verified Partner + Certified tiers. No revenue share, no gatekeeping.",
+          "directoryCta": "Partner directory",
+          "submitCta": "Submit a proposal"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free for small teams. All integrations included on every tier."
+        }
+      },
+      "marketplace": {
+        "calls": {
+          "detail": {
+            "breadcrumbs": {
+              "marketplace": "Marketplace",
+              "calls": "Open Calls"
+            },
+            "closesPrefix": "Closes",
+            "brief": {
+              "title": "Brief"
+            },
+            "tags": {
+              "title": "Tags"
+            },
+            "booking": {
+              "title": "Booking Window",
+              "performance": "Performance:",
+              "tbd": "TBD",
+              "fee": "Fee:",
+              "deadline": "Deadline:",
+              "submissions": "Submissions:"
+            },
+            "cta": {
+              "submit": "Submit",
+              "needAccount": "Need an account?"
+            }
+          },
+          "metadata": {
+            "title": "Open Calls — Casting & Production Submissions",
+            "description": "Casting calls and open RFPs for live production, talent, and creative."
+          },
+          "breadcrumbs": {
+            "marketplace": "Marketplace",
+            "calls": "Open Calls"
+          },
+          "hero": {
+            "eyebrow": "Marketplace · Open Calls",
+            "title": "Open Calls",
+            "countSingular": "{count} active call",
+            "countPlural": "{count} active calls"
+          },
+          "empty": {
+            "message": "No active calls at the moment."
+          },
+          "card": {
+            "show": "Show {date}",
+            "closes": "Closes {date}"
+          }
+        },
+        "crew": {
+          "metadata": {
+            "title": "Crew Directory — Vetted Production Crew",
+            "description": "Vetted crew profiles — roles, gear, unions, day rates, availability."
+          },
+          "breadcrumbs": {
+            "marketplace": "Marketplace",
+            "crew": "Crew"
+          },
+          "hero": {
+            "eyebrow": "Marketplace · Crew",
+            "title": "Crew Directory",
+            "profileCountSingular": "vetted profile",
+            "profileCountPlural": "vetted profiles"
+          },
+          "empty": {
+            "message": "No published crew yet."
+          },
+          "card": {
+            "perDaySuffix": "/day",
+            "travelRadius": "{km} km radius",
+            "availableNow": "Available now"
+          }
+        },
+        "gigs": {
+          "meta": {
+            "title": "Crew Gigs — Production Job Board",
+            "description": "Paid production crew gigs from operators in the ATLVS network.",
+            "perDay": "/day",
+            "travelPaid": "Travel paid",
+            "lodgingProvided": "Lodging provided"
+          },
+          "breadcrumbs": {
+            "marketplace": "Marketplace",
+            "crewGigs": "Crew Gigs"
+          },
+          "hero": {
+            "eyebrow": "Marketplace · Crew Gigs",
+            "title": "Crew Gigs",
+            "liveGigSingular": "live gig",
+            "liveGigPlural": "live gigs",
+            "subtitle": "single shows, tour legs, recurring"
+          },
+          "empty": "No live gigs at the moment."
+        },
+        "meta": {
+          "title": "Marketplace — Live Production Crew, Talent, RFQs",
+          "description": "Discover open production gigs, casting calls, talent, vetted crew, and live RFQs from the ATLVS network."
+        },
+        "breadcrumb": "Marketplace",
+        "hero": {
+          "eyebrow": "Marketplace",
+          "title": "Find the Work. Find the Crew. Find the Act.",
+          "body": "One network for production RFQs, crew gigs, casting calls, and direct artist booking. Vetted, not crowdsourced. Bidirectional reviews. Bid + book + advance, end to end."
+        },
+        "sections": {
+          "rfqs": {
+            "title": "Open RFQs",
+            "blurb": "Production RFPs from operators in our network. Bid through prequalification."
+          },
+          "gigs": {
+            "title": "Crew Gigs",
+            "blurb": "Posting board for paid production roles — single show, tour leg, or recurring."
+          },
+          "calls": {
+            "title": "Open Calls",
+            "blurb": "Casting calls and open submissions for talent, vendors, and creators."
+          },
+          "talent": {
+            "title": "Talent",
+            "blurb": "Artist EPKs — bio, reel, riders, fee bands, agent. Direct booking."
+          },
+          "crew": {
+            "title": "Crew",
+            "blurb": "Vetted production crew profiles — roles, gear, unions, day rates."
+          },
+          "vendors": {
+            "title": "Vendors",
+            "blurb": "Production vendors with current insurance, W-9, and prequalification."
+          }
+        },
+        "operators": {
+          "title": "For Operators",
+          "body": "Publish your own RFQs, gigs, and casting calls — gated by your prequalification rules.",
+          "cta": "Sign Up Free"
+        },
+        "rfqs": {
+          "detail": {
+            "breadcrumbs": {
+              "marketplace": "Marketplace",
+              "openRfqs": "Open RFQs"
+            },
+            "header": {
+              "eyebrow": "RFQ · {org}",
+              "dueBadge": "Due {date}"
+            },
+            "scope": {
+              "title": "Scope"
+            },
+            "trades": {
+              "title": "Trades"
+            },
+            "compliance": {
+              "title": "Compliance Gates",
+              "prequalification": "Prequalification",
+              "insurance": "Insurance (COI)",
+              "w9": "W-9 / W-8",
+              "nda": "NDA acceptance"
+            },
+            "cta": {
+              "bid": "Bid on This RFQ",
+              "signup": "Need an account?"
+            }
+          },
+          "meta": {
+            "title": "Open RFQs — Production Marketplace",
+            "description": "Browse open requests for quotes from production operators in the ATLVS network."
+          },
+          "breadcrumbs": {
+            "marketplace": "Marketplace",
+            "openRfqs": "Open RFQs"
+          },
+          "hero": {
+            "eyebrow": "Marketplace · Open RFQs",
+            "title": "Open RFQs",
+            "countSingular": "live RFQ",
+            "countPlural": "live RFQs",
+            "requirements": "vendor prequalification + COI required"
+          },
+          "empty": {
+            "message": "No open RFQs at the moment."
+          },
+          "card": {
+            "dueLabel": "Due",
+            "prequalRequired": "Prequal required",
+            "coiRequired": "COI required"
+          }
+        },
+        "talent": {
+          "detail": {
+            "breadcrumb": {
+              "marketplace": "Marketplace",
+              "talent": "Talent"
+            },
+            "verifiedBadge": "verified",
+            "bio": {
+              "heading": "Bio"
+            },
+            "booking": {
+              "heading": "Booking",
+              "feeBandLabel": "Fee band:",
+              "travelRadiusLabel": "Travel radius:",
+              "ratingLabel": "Rating:",
+              "noReviews": "no reviews yet"
+            },
+            "reach": {
+              "heading": "Reach",
+              "monthlyListenersLabel": "Monthly listeners:",
+              "followersLabel": "Followers:",
+              "reelLabel": "Reel:",
+              "watchCta": "Watch ↗"
+            },
+            "cta": {
+              "sendInquiry": "Send Inquiry",
+              "needAccount": "Need an account?"
+            }
+          },
+          "meta": {
+            "title": "Talent Directory — Artist EPKs",
+            "description": "Discover and book talent for festivals, brand activations, private events.",
+            "kmRadius": "km radius",
+            "monthlyListeners": "mo listeners"
+          },
+          "breadcrumbs": {
+            "marketplace": "Marketplace",
+            "talent": "Talent"
+          },
+          "hero": {
+            "eyebrow": "Marketplace · Talent",
+            "title": "Talent Directory",
+            "actSingular": "act",
+            "actPlural": "acts"
+          },
+          "empty": {
+            "message": "No published talent yet."
+          }
+        },
+        "vendors": {
+          "meta": {
+            "title": "Vendor Directory — Production Vendors",
+            "description": "Vetted production vendors with current insurance, W-9, and prequalification."
+          },
+          "breadcrumbs": {
+            "marketplace": "Marketplace",
+            "vendors": "Vendors"
+          },
+          "hero": {
+            "eyebrow": "Marketplace · Vendors",
+            "title": "Vendor Directory",
+            "countOne": "{count} vetted vendor",
+            "countOther": "{count} vetted vendors"
+          },
+          "empty": "No published vendors yet.",
+          "card": {
+            "established": "Est. {year}"
+          }
+        }
+      },
+      "marketplace-crew-handle": {
+        "breadcrumbs": {
+          "marketplace": "Marketplace",
+          "crew": "Crew"
+        },
+        "badges": {
+          "verified": "verified",
+          "available": "Available"
+        },
+        "sections": {
+          "bio": "Bio",
+          "roles": "Roles",
+          "unions": "Unions",
+          "certs": "Certs"
+        },
+        "booking": {
+          "title": "Booking",
+          "dayRate": "Day rate:",
+          "travelRadius": "Travel radius:",
+          "reel": "Reel:",
+          "watch": "Watch ↗",
+          "rating": "Rating:",
+          "noReviews": "no reviews yet"
+        },
+        "cta": {
+          "sendInquiry": "Send Inquiry",
+          "needAccount": "Need an account?"
+        }
+      },
+      "marketplace-gigs-detail": {
+        "breadcrumbs": {
+          "marketplace": "Marketplace",
+          "crewGigs": "Crew Gigs"
+        },
+        "hero": {
+          "eyebrow": "Gig",
+          "perDay": "/day"
+        },
+        "about": {
+          "title": "About this gig"
+        },
+        "roles": {
+          "title": "Roles"
+        },
+        "requirements": {
+          "title": "Requirements",
+          "unions": "Unions:",
+          "certs": "Certs:",
+          "travel": "Travel:",
+          "travelPaid": "Paid",
+          "travelNotPaid": "Not paid",
+          "lodging": "Lodging:",
+          "lodgingProvided": "Provided",
+          "lodgingNotProvided": "Not provided"
+        },
+        "cta": {
+          "apply": "Apply",
+          "needAccount": "Need an account?",
+          "applicants": "applicants"
+        }
+      },
+      "marketplace-vendors-detail": {
+        "breadcrumbs": {
+          "marketplace": "Marketplace",
+          "vendors": "Vendors"
+        },
+        "badges": {
+          "verified": "verified"
+        },
+        "about": {
+          "title": "About"
+        },
+        "coverage": {
+          "title": "Coverage",
+          "regions": "Regions:",
+          "founded": "Founded:",
+          "web": "Web:",
+          "rating": "Rating:",
+          "noReviews": "no reviews yet"
+        },
+        "cta": {
+          "requestQuote": "Request Quote",
+          "needAccount": "Need an account?"
+        }
+      },
+      "home": {
+        "metadata": {
+          "title": "ATLVS — Production Management Software for Live Experiences",
+          "description": "ATLVS Technologies — production management, crew operations, and ticketing software built for live events. Three apps, one schema: ATLVS for producers, COMPVSS for crew, GVTEWAY for guests. Pitch through wrap on a single platform.",
+          "ogImageTitle": "Production Runs On It."
+        },
+        "hero": {
+          "eyebrow": "ATLVS Technologies",
+          "titleLine1": "Production runs on",
+          "titleLine2": "one platform.",
+          "subtitleLead": "Three apps, one schema.",
+          "subtitleAtlvs": "runs the production.",
+          "subtitleCompvss": "runs the field.",
+          "subtitleGvteway": "runs the portal. Pitch through wrap on a single connected platform for live experiential production.",
+          "ctaPrimary": "Start Free",
+          "ctaSecondary": "Book a Walkthrough",
+          "disclaimer": "Free forever for small teams · No credit card required · Per-org pricing",
+          "ecosystemLabel": "The ATLVS Ecosystem"
+        },
+        "trustBar": {
+          "label": "Trusted by production teams behind"
+        },
+        "threeApps": {
+          "eyebrow": "The ATLVS Ecosystem",
+          "title": "Three apps, one schema.",
+          "body": "ATLVS Technologies ships three connected products on a shared Postgres database. Adopt one or run the full platform — every record flows across producer console, field PWA, and stakeholder portal.",
+          "readMore": "Read more →"
+        },
+        "products": {
+          "atlvs": {
+            "audience": "For producers · internal teams",
+            "tag": "Production & resource management",
+            "body": "Projects, RFIs, submittals, daily logs, advancing, finance, procurement, AI assistant. The producer's console — pitch through wrap."
+          },
+          "compvss": {
+            "audience": "For crew · vendors · talent",
+            "tag": "Workforce & field operations",
+            "body": "Scheduling, certifications, gate scan, shift clock-in, incidents, medical. Offline-first PWA. Sub-100ms scans on one-bar LTE."
+          },
+          "gvteway": {
+            "audience": "For guests · clients · partners",
+            "tag": "Ticketing & stakeholder portal",
+            "body": "Ticketing, proposals, twelve personas. Artists, vendors, clients, sponsors, guests — each their lane."
+          }
+        },
+        "industries": {
+          "eyebrow": "Built For",
+          "title": "Production teams running real work.",
+          "body": "The schema is generic. The vernacular is specific. Pick the kind of production you ship and the platform speaks your language out of the box.",
+          "footnote": "Hospitality, corporate, and private events too —",
+          "footnoteLink": "see every solution →",
+          "items": {
+            "festivals": {
+              "title": "Festivals",
+              "body": "Multi-stage infrastructure, headliner advance, and gate operations at scale."
+            },
+            "concertsTours": {
+              "title": "Concerts & Tours",
+              "body": "Show production, multi-city routing, advancing, and settlement for live music."
+            },
+            "brandActivations": {
+              "title": "Brand Activations",
+              "body": "Experiential marketing, pop-ups, and environments that convert."
+            },
+            "immersiveExperiences": {
+              "title": "Immersive Experiences",
+              "body": "Narrative installations and worlds audiences step inside — ticketed, timed, tracked."
+            },
+            "sportingEvents": {
+              "title": "Sporting Events",
+              "body": "Stadium activations, fan experiences, and game-day production operations."
+            },
+            "tvFilmBroadcast": {
+              "title": "TV, Film & Broadcast",
+              "body": "Live broadcast, content capture, crew compliance, and on-air activations."
+            },
+            "corporateAgm": {
+              "title": "Corporate & AGM",
+              "body": "Summits, annual meetings, internal kickoffs, premium hospitality."
+            },
+            "theatrical": {
+              "title": "Theatrical",
+              "body": "Productions, residencies, repertory seasons, touring theatre."
+            }
+          }
+        },
+        "lifecycle": {
+          "eyebrow": "The 8-Phase Production Lifecycle",
+          "title": "Discovery to Strike on one timeline.",
+          "body": "Every production runs through the same eight phases. The schema follows the phases, the audit log follows the schema, and every approval gate blocks the next phase until the previous one closes.",
+          "phaseLabel": "Phase",
+          "phases": {
+            "discovery": {
+              "name": "Discovery",
+              "sub": "Consult · Scope"
+            },
+            "rd": {
+              "name": "R&D",
+              "sub": "Feasibility"
+            },
+            "design": {
+              "name": "Design",
+              "sub": "Direction"
+            },
+            "compliance": {
+              "name": "Compliance",
+              "sub": "Engineering · Safety"
+            },
+            "build": {
+              "name": "Build",
+              "sub": "Fabrication"
+            },
+            "operations": {
+              "name": "Operations",
+              "sub": "Logistics"
+            },
+            "activation": {
+              "name": "Activation",
+              "sub": "Showtime"
+            },
+            "strike": {
+              "name": "Strike",
+              "sub": "Settle · Wrap"
+            }
+          }
+        },
+        "difference": {
+          "eyebrow": "Why ATLVS",
+          "title": "Not a CRM stitched to a PM tool.",
+          "body": "Most production-operations stacks bolt together a CRM, a project tool, a doc tool, and a ticketing integration. ATLVS Technologies owns the entire stack — every app built in-house, every record connected.",
+          "edges": {
+            "endToEnd": {
+              "title": "End to End",
+              "tag": "One schema",
+              "body": "Pitch through wrap, all eight phases, in one workspace. No integration tax, no schema reconciliation."
+            },
+            "proprietaryStack": {
+              "title": "Proprietary Stack",
+              "tag": "Built in-house",
+              "body": "ATLVS, COMPVSS, and GVTEWAY share a single Postgres schema. No vendor lock-in dressed up as integrations."
+            },
+            "perOrgNotPerSeat": {
+              "title": "Per Org, Not Per Seat",
+              "tag": "Add the whole crew",
+              "body": "The whole production team, every freelancer, every vendor. Pricing scales with you, not your headcount."
+            }
+          }
+        },
+        "adopt": {
+          "eyebrow": "Adopt your way",
+          "title": "Start where you are.",
+          "body": "Run the whole platform end to end, take a single app, or pick exactly the modules your scope needs. Same database in every case.",
+          "pricingLink": "See the pricing grid →",
+          "tiers": {
+            "fullPlatform": {
+              "name": "Full Platform",
+              "tag": "All eight phases",
+              "body": "Every phase of the production lifecycle, pitch to wrap — one workspace, one schema, total accountability."
+            },
+            "singleApp": {
+              "name": "Single App",
+              "tag": "Adopt one product",
+              "body": "Start with ATLVS, COMPVSS, or GVTEWAY individually. Same database, expand when ready."
+            },
+            "modulesOnly": {
+              "name": "Modules Only",
+              "tag": "Pick what you need",
+              "body": "RFIs, advancing, inspections, gate scan. Buy exactly the modules your scope demands."
+            }
+          }
+        },
+        "projects": {
+          "eyebrow": "Receipts · Case studies",
+          "title": "Shipped on ATLVS.",
+          "body": "A selection of productions our customers have shipped using ATLVS Technologies — across festivals, brand activations, and broadcast.",
+          "tableHeaders": {
+            "project": "Project",
+            "title": "Title",
+            "year": "Year"
+          },
+          "items": {
+            "rrr312": {
+              "title": "Black Coffee at the Race Track",
+              "sub": "Concert Experience · Miami Music Week · Club Space"
+            },
+            "rrr226": {
+              "title": "Polymarket Grocery Store",
+              "sub": "Brand Activation · Miami"
+            },
+            "rrr052": {
+              "title": "Salvage City Supper Club",
+              "sub": "Immersive Experience · Club Space · Miami"
+            },
+            "rrr108": {
+              "title": "PATRÓN Cristalino × Becky G",
+              "sub": "Product Launch · Los Angeles"
+            },
+            "rrr023": {
+              "title": "Heineken Turn 4 Nightclub",
+              "sub": "Motorsports · F1 Las Vegas Grand Prix"
+            },
+            "rrr311": {
+              "title": "Red Bull Unforeseen Motel",
+              "sub": "Brand Activation · III Points · Miami"
+            },
+            "rrr001": {
+              "title": "Formula 1 Las Vegas Grand Prix",
+              "sub": "Motorsports · Las Vegas"
+            }
+          }
+        },
+        "stats": {
+          "ariaLabel": "Company history",
+          "items": {
+            "yearsExperience": "Years experience",
+            "productionsShipped": "Productions shipped",
+            "guestsServed": "Guests served"
+          }
+        },
+        "faq": {
+          "title": "Frequently Asked.",
+          "items": {
+            "whatIsAtlvs": {
+              "q": "What is ATLVS Technologies?",
+              "a": "ATLVS Technologies is the platform behind live experiential production. Three connected apps on one database: ATLVS for producers (projects, RFIs, advancing, finance, procurement, AI), COMPVSS for crew (scheduling, certifications, gate scan, incidents), and GVTEWAY for guests and stakeholders (ticketing, proposals, twelve personas). Same record across all three, pitch through wrap."
+            },
+            "whoIsItFor": {
+              "q": "Who is the ATLVS platform for?",
+              "a": "Production teams running real live work. Festivals, residencies, touring, fabrication shops, brand activations, broadcast compounds, private events. The schema is generic; the vernacular is specific. If your org has a load-in, a manifest, vendors, and a wrap — it fits."
+            },
+            "pricing": {
+              "q": "How does ATLVS pricing work?",
+              "a": "Per organization, not per seat. Free forever for solo operators and small teams. Crew opens up the team. Production unlocks every module plus multi-project. Festival is multi-org with SSO, custom DPA, and a 99.9% SLA. Full grid at /pricing."
+            },
+            "vendorPayouts": {
+              "q": "How do vendor payouts work?",
+              "a": "Stripe Connect. Vendors onboard a payout account through their portal. You approve the PO. Payouts route directly. Money never crosses our books. ACH, card, international wire. Signed webhooks for every event."
+            },
+            "compvssOffline": {
+              "q": "Does COMPVSS actually work offline?",
+              "a": "Yes. COMPVSS is an offline-first PWA. Gate scan, shift clock-in, daily log, incident, medic intake — all queue locally and sync on signal return. Sub-100ms scan even on one-bar LTE. Tested at 15,000-guest gates."
+            },
+            "whoBuilds": {
+              "q": "Who builds ATLVS Technologies?",
+              "a": "ATLVS Technologies is a GHXSTSHIP Industries company — the technology arm of an experiential production house headquartered in Miami with offices in New York, Chicago, and Los Angeles. ATLVS, COMPVSS, and GVTEWAY are built in-house by people who have shipped real shows."
+            },
+            "dataSecurity": {
+              "q": "How is the data secured?",
+              "a": "Row-level security at the database — your tenant is walled off in Postgres, not in the app layer. Every change writes to an immutable audit log (actor, IP, user agent, before/after). Signed webhooks (HMAC-SHA256). File shares self-expire. SOC-2 attestation plus custom DPA on Festival tier."
+            },
+            "aiAssistant": {
+              "q": "Is the AI assistant useful or marketing?",
+              "a": "Useful. It reads your workspace data — never the public internet — and drafts riders, RFPs, call sheets, recaps, safety briefs, and incident reports. Streaming, conversation-persisted in your tenant. Anthropic Claude under the hood."
+            },
+            "exportData": {
+              "q": "Can I export my data?",
+              "a": "Always. CSV exports on every tier from every list view. Full data export via Settings → Exports on Production and above. You own the data; we host it. Cancel and you get a 90-day read-only window to pull everything."
+            }
+          }
+        },
+        "latest": {
+          "eyebrow": "From the team",
+          "title": "Field notes & releases.",
+          "posts": {
+            "fieldNotes": {
+              "cat": "Field Notes",
+              "title": "How the 8-Phase Lifecycle keeps a build on course"
+            },
+            "release": {
+              "cat": "Release",
+              "title": "Advancing v2 — 16 typed deliverables ship"
+            },
+            "careers": {
+              "cat": "Careers",
+              "title": "Hiring — engineers, PMs, designers"
+            }
+          }
+        },
+        "cta": {
+          "eyebrow": "Get started",
+          "title": "Start running your production on ATLVS.",
+          "body": "Free forever for small teams. Per-org pricing. No credit card to start.",
+          "ctaPrimary": "Sign Up Free",
+          "ctaSecondary": "Book a Walkthrough"
+        }
+      },
+      "partners": {
+        "metadata": {
+          "title": "Partners — Production Consultants + Implementation Partners",
+          "description": "ATLVS-trained production consultants who help teams migrate, configure, and optimize on the platform. Partner directory launching Q1.",
+          "ogImageEyebrow": "Partners",
+          "ogImageTitle": "Implementation + Consulting."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "partners": "Partners"
+        },
+        "hero": {
+          "eyebrow": "Partners",
+          "title": "Implementation + Consulting.",
+          "body": "ATLVS-trained production consultants who help teams migrate, configure, and optimize on the platform. Partner directory launching Q1 with vetted profiles, project portfolios, and rate cards.",
+          "primaryCta": "Apply to the partner program"
+        },
+        "tracks": {
+          "heading": "Three Partner Tracks.",
+          "implementation": {
+            "name": "Implementation Partners",
+            "body": "Production consultants who help teams migrate from spreadsheets / Asana / Master Tour onto ATLVS in 1-3 days.",
+            "forWho": "For agencies + consultants"
+          },
+          "build": {
+            "name": "Build Partners",
+            "body": "Studios who customize ATLVS for specialized verticals — touring opera, immersive theatre, theme-park installs.",
+            "forWho": "For technical studios"
+          },
+          "solution": {
+            "name": "Solution Partners",
+            "body": "Industry experts (EHS, rigging, broadcast) who bundle ATLVS with their service.",
+            "forWho": "For domain specialists"
+          }
+        },
+        "directory": {
+          "eyebrow": "Coming Soon",
+          "title": "Partner Directory.",
+          "body": "Browse vetted partners by region, vertical, certification level, and language. Each profile lists project portfolio, recent customers, rate card, and direct booking link. Q1 launch.",
+          "cta": "Get on the early-access list"
+        },
+        "cta": {
+          "title": "Want To Partner?",
+          "subtitle": "Tell us about your production-consulting practice — region, vertical, recent projects, and how you'd want to plug into ATLVS.",
+          "primaryLabel": "Apply to the program"
+        }
+      },
+      "press": {
+        "meta": {
+          "title": "Press — Brand, Logos, Spokespersons",
+          "description": "Press kit, brand guidelines, logo lockups, and spokesperson contact for journalists, analysts, and partners covering ATLVS Technologies.",
+          "ogEyebrow": "Press",
+          "ogTitle": "Press + Brand."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "press": "Press"
+        },
+        "hero": {
+          "eyebrow": "Press",
+          "title": "Press + Brand.",
+          "body": "For journalists, analysts, and partners covering ATLVS. Quick facts below; full press kit landing Q4."
+        },
+        "facts": {
+          "heading": "Quick Facts.",
+          "legalName": {
+            "label": "Legal name",
+            "value": "ATLVS Technologies, Inc."
+          },
+          "brand": {
+            "label": "Brand",
+            "value": "ATLVS"
+          },
+          "parent": {
+            "label": "Parent",
+            "value": "GHXSTSHIP Industries"
+          },
+          "founded": {
+            "label": "Founded",
+            "value": "2024"
+          },
+          "apexDomain": {
+            "label": "Apex domain"
+          },
+          "categories": {
+            "label": "Categories",
+            "value": "Production operations · live event ops · advancing platform"
+          },
+          "subProducts": {
+            "label": "Sub-products",
+            "value": "ATLVS (production operations workspace, red) · GVTEWAY (stakeholder portal, blue) · COMPVSS (field PWA, yellow)"
+          }
+        },
+        "kit": {
+          "eyebrow": "Coming Soon",
+          "title": "Full Press Kit.",
+          "body": "Logo lockups (full color, mono, knockout) in SVG + PNG. Brand guidelines (typography, color tokens, spacing). Product screenshot library across all three shells. Founder bios + headshots. Q4 launch.",
+          "cta": "Request preview kit"
+        },
+        "contact": {
+          "eyebrow": "Press Contact",
+          "body": "Spokespersons available for interview on production operations, AI-grounded workflows, the move off fragmented stacks, and the marketplace canon. Response within one business day."
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free for small teams. Per-org pricing the rest of the way up."
+        }
+      },
+      "pricing": {
+        "meta": {
+          "title": "Pricing — Per Org. Never Per Seat.",
+          "description": "Free forever for small teams. Per-org pricing the rest of the way up. No per-seat trap. No per-scan tax.",
+          "ogEyebrow": "Pricing",
+          "ogTitle": "Per Org. Never Per Seat."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "pricing": "Pricing"
+        },
+        "hero": {
+          "eyebrow": "Pricing",
+          "title": "Per Org. Never Per Seat.",
+          "subtitle": "Tenant walled at the database on every tier. Audit log immutable on every tier. The team gets bigger; the bill doesn't."
+        },
+        "tiers": {
+          "mostCommonBadge": "Most Common",
+          "free": {
+            "name": "Free",
+            "price": "$0",
+            "per": "forever",
+            "description": "Solo operators and side projects.",
+            "features": {
+              "basicProjects": "Basic projects + tasks",
+              "guestArtistPortals": "Guest + artist portals",
+              "upTo3Users": "Up to 3 users",
+              "upTo100Credentials": "Up to 100 portal credentials per project",
+              "communitySupport": "Community support"
+            },
+            "cta": "Sign Up Free"
+          },
+          "crew": {
+            "name": "Crew",
+            "price": "$49",
+            "per": "month per org",
+            "description": "Small teams shipping their first season.",
+            "features": {
+              "everythingInFree": "Everything in Free",
+              "invoicingExpensesBudgets": "Invoicing + expenses + budgets",
+              "advancing16": "Advancing — 16 deliverable types",
+              "upTo10Users": "Up to 10 users",
+              "upTo2kCredentials": "Up to 2,000 portal credentials per project",
+              "emailSupport": "Email support"
+            },
+            "cta": "14-day trial"
+          },
+          "production": {
+            "name": "Production",
+            "price": "$199",
+            "per": "month per org",
+            "description": "Teams running multiple productions in flight.",
+            "features": {
+              "everythingInCrew": "Everything in Crew",
+              "fullProcurement": "Full procurement + Stripe Connect payouts",
+              "aiAssistant": "AI assistant grounded in your workspace",
+              "proposalsSigned": "Proposals signed in place",
+              "kbygGuides": "KBYG event guides",
+              "unlimitedUsers": "Unlimited users",
+              "priorityConcierge": "Priority concierge + onboarding"
+            },
+            "cta": "14-day trial"
+          },
+          "festival": {
+            "name": "Festival",
+            "price": "Custom",
+            "per": "",
+            "description": "Multi-org agencies, touring companies, OCOG-scale work.",
+            "features": {
+              "everythingInProduction": "Everything in Production",
+              "multiOrgSso": "Multi-org with SSO + custom roles",
+              "soc2Dpa": "SOC-2 attestation pack + signed DPA",
+              "dedicatedCsm": "Dedicated CSM + 99.9% uptime SLA",
+              "sourceAvailable": "Source-available license option",
+              "customIntegrations": "Custom integrations built with you"
+            },
+            "cta": "Talk to the studio"
+          }
+        },
+        "comparison": {
+          "title": "Every Module, Every Tier.",
+          "intro": "The full grid. If a module you need is gated above where you are,",
+          "talkToStudio": "talk to the studio",
+          "headers": {
+            "module": "Module",
+            "free": "Free",
+            "crew": "Crew",
+            "production": "Production",
+            "festival": "Festival"
+          },
+          "values": {
+            "unlimited": "Unlimited",
+            "included": "Included",
+            "custom": "Custom"
+          },
+          "categories": {
+            "core": "Core",
+            "atlvs": "ATLVS",
+            "gvteway": "GVTEWAY",
+            "compvss": "COMPVSS",
+            "ai": "AI",
+            "payments": "Payments",
+            "security": "Security & Compliance",
+            "support": "Support"
+          },
+          "core": {
+            "tenantWalled": "Tenant walled at the database (RLS)",
+            "usersPerOrg": "Users per org",
+            "projectsPerOrg": "Projects per org",
+            "webhooks": "Webhooks + signed delivery"
+          },
+          "atlvs": {
+            "projectsTasks": "Projects, tasks, schedule, ROS",
+            "rfisSubmittals": "RFIs · submittals · daily logs · punch",
+            "inspections": "Inspections (10 categories)",
+            "finance": "Finance — invoices, budgets, expenses",
+            "procurement": "Procurement — RFQs, POs, vendor scorecards",
+            "production": "Production — equipment, rentals, fab orders",
+            "peopleCredentials": "People + credentials + call sheets",
+            "advancing": "Advancing — 16 deliverable types",
+            "kbygGuides": "KBYG event guides"
+          },
+          "gvteway": {
+            "guestPortal": "Guest portal",
+            "artistPortal": "Artist portal",
+            "vendorPortal": "Vendor portal",
+            "clientPortal": "Client portal + proposals",
+            "sponsorPortal": "Sponsor portal",
+            "crewPortal": "Crew portal",
+            "whiteLabel": "White-label branding"
+          },
+          "compvss": {
+            "offlineGateScan": "Offline gate scan",
+            "geoShiftClock": "Geo-verified shift clock-in",
+            "dailyLog": "Daily log + warehouse + dispatch",
+            "fieldIntake": "Field intake — incidents, medical, safeguarding"
+          },
+          "ai": {
+            "assistantGrounded": "Assistant grounded in your workspace",
+            "deepReasoning": "Deep-reasoning model",
+            "draftingTemplates": "Drafting templates (riders, RFPs, recaps)",
+            "monthlyBudget": "Monthly AI budget"
+          },
+          "payments": {
+            "cardAch": "Card + ACH invoice payments",
+            "stripeConnect": "Stripe Connect vendor payouts",
+            "internationalWire": "International wire"
+          },
+          "security": {
+            "immutableAudit": "Immutable audit log",
+            "selfExpiringShares": "Self-expiring file shares",
+            "rateLimited": "Rate-limited endpoints",
+            "strictHeaders": "Strict edge security headers",
+            "sso": "SSO (SAML / OIDC)",
+            "soc2": "SOC-2 attestation pack",
+            "customDpa": "Custom DPA",
+            "dataResidency": "Data residency"
+          },
+          "support": {
+            "community": "Community",
+            "emailSupport": "Email support",
+            "priorityOnboarding": "Priority + onboarding",
+            "dedicatedCsm": "Dedicated CSM",
+            "uptimeSla": "99.9% uptime SLA"
+          }
+        },
+        "faqs": {
+          "title": "Pricing FAQ",
+          "perSeat": {
+            "q": "Is pricing per seat?",
+            "a": "Per org. Production is unlimited users for $199/month. Adding the crew never becomes a surprise line item."
+          },
+          "freeReallyFree": {
+            "q": "Is Free really free?",
+            "a": "Forever. Basic projects, guest + artist portals, three users, up to 100 portal credentials per project. No card."
+          },
+          "trialWorks": {
+            "q": "How does the trial work?",
+            "a": "Crew and Production unlock every feature in the tier for 14 days. No card up front. Don't upgrade by day 14? You drop to Free — your data stays where it is."
+          },
+          "changeTiers": {
+            "q": "Can I change tiers later?",
+            "a": "Anytime. Upgrades hit instantly. Downgrades kick in at the end of the billing period. Nothing gets deleted — features above your tier go read-only until you come back."
+          },
+          "nonprofits": {
+            "q": "Nonprofits and community programs?",
+            "a": "30% off Crew and Production for registered nonprofits and community arts programs. Email hello@atlvs.pro with your 501(c)(3) or equivalent."
+          },
+          "perScanFee": {
+            "q": "Is there a per-scan fee?",
+            "a": "No. Scan all weekend. Every weekend."
+          },
+          "festivalVsProduction": {
+            "q": "What's in Festival that isn't in Production?",
+            "a": "Multi-org with SSO. Custom roles + access policies. SOC-2 attestation pack. Custom DPA. Dedicated CSM. 99.9% uptime SLA. Source-available license. Custom integrations we build with you."
+          },
+          "selfHost": {
+            "q": "Can I self-host?",
+            "a": "Source-available license ships with Festival. Managed infrastructure is the recommended route — handles security, storage, and uptime."
+          },
+          "dataAfterCancel": {
+            "q": "What happens to my data if I cancel?",
+            "a": "Export everything — CSV or JSON — anytime. After cancel, your data lives 90 days read-only (re-subscribe and you're back), then purges. Signed logs of the purge on request. You own the data."
+          }
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Sign up free — 30 seconds, no card. Free is free, forever.",
+          "primaryLabel": "Sign Up Free",
+          "secondaryLabel": "Book a Walkthrough"
+        }
+      },
+      "pt-BR": {
+        "metadata": {
+          "title": "ATLVS — A Produção Roda Aqui",
+          "description": "A plataforma para produção ao vivo. Três apps, um schema, cada módulo — do pitch ao wrap. RLS no banco. Construído por operadores.",
+          "keywords": {
+            "productionManagement": "software de gestão de produção",
+            "eventOperations": "plataforma de operações de eventos",
+            "festivalSoftware": "software de festival",
+            "advancingSoftware": "advancing software",
+            "liveEventProduction": "plataforma para produção de eventos ao vivo"
+          },
+          "ogImageTitle": "A Produção Roda Aqui."
+        },
+        "jsonLd": {
+          "description": "A plataforma para produção ao vivo."
+        },
+        "hero": {
+          "titleLine1": "A Produção",
+          "titleLine2": "Roda Aqui.",
+          "subtitle": "A plataforma para trabalho ao vivo. Do pitch ao wrap, em um workspace. Três apps, um schema, cada módulo — da pré-produção ao strike.",
+          "primaryCta": "Cadastre-se Grátis",
+          "secondaryCta": "Agende Um Walkthrough"
+        },
+        "apps": {
+          "subtitle": "Um banco de dados. Três superfícies otimizadas. O mesmo registro do escritório, do portal e do campo.",
+          "atlvs": {
+            "body": "RFIs, submittals, daily logs, punch, advancing, financeiro, procurement, IA. Uma sidebar só. Do pitch ao wrap."
+          },
+          "gvteway": {
+            "body": "Doze personas. Cada uma na sua faixa. Artistas veem riders. Vendors veem POs. Clientes veem propostas."
+          },
+          "compvss": {
+            "body": "Offline. Sub-100ms. Scan, ponto, incidente, médico, brief diário. Funciona com uma barra de LTE."
+          },
+          "seeMore": "Ver mais"
+        },
+        "faq": {
+          "title": "FAQ",
+          "q1": {
+            "question": "O que a plataforma faz?",
+            "answer": "Quarenta e sete módulos em três apps que compartilham um banco de dados. ATLVS é o workspace de operações — RFIs, submittals, daily logs, punch, advancing, financeiro, procurement, IA. GVTEWAY é o portal de stakeholders. COMPVSS é o PWA offline-first do campo — scan de portão, ponto eletrônico, incidentes, médico, briefing diário de segurança."
+          },
+          "q2": {
+            "question": "Pra quem é?",
+            "answer": "Times de produção que rodam trabalho real ao vivo. Festivais, residências, turnês, oficinas de fabricação, ativações de marca, compounds de broadcast, eventos privados. O schema é genérico; o vocabulário é específico."
+          },
+          "q3": {
+            "question": "Como funciona o preço?",
+            "answer": "Por organização, não por assento. Grátis para sempre para times pequenos. Crew abre o time. Production libera cada módulo. Festival é multi-org com SSO, DPA personalizado e SLA de 99.9%."
+          },
+          "q4": {
+            "question": "O app de campo funciona offline mesmo?",
+            "answer": "Sim. COMPVSS é um PWA offline-first. Scan, ponto, daily log, intake de incidente, intake médico — tudo fica em fila localmente e sincroniza quando o sinal volta. Testado em portões com 15,000 convidados."
+          }
+        },
+        "cta": {
+          "title": "ATLVS Está Aberto.",
+          "subtitle": "Grátis, pra sempre, para times pequenos. Preço por organização, não por assento.",
+          "primaryLabel": "Cadastre-se Grátis",
+          "secondaryLabel": "Agende Um Walkthrough"
+        }
+      },
+      "roadmap": {
+        "metadata": {
+          "title": "Roadmap — What's Shipping Next",
+          "description": "Public-facing roadmap with three-quarter horizon. Confirmed work, in-progress work, and the requests we're sizing.",
+          "ogImageEyebrow": "Roadmap",
+          "ogImageTitle": "What's Shipping Next."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "roadmap": "Roadmap"
+        },
+        "hero": {
+          "eyebrow": "Roadmap",
+          "title": "What's Shipping Next.",
+          "subtitle": "Three-quarter horizon. In Flight is committed and tracking to date. Next is sized and prioritized. Exploring is on the table for the quarter after.",
+          "influencePrefix": "Want to influence the order?",
+          "influenceLink": "Send a note",
+          "influenceSuffix": "— we read every line."
+        },
+        "status": {
+          "inFlight": "In Flight",
+          "next": "Next",
+          "exploring": "Exploring"
+        },
+        "tags": {
+          "shipped": "Shipped",
+          "partial": "Partial",
+          "inProgress": "In progress"
+        },
+        "quarters": {
+          "q3-2026": {
+            "label": "Q3 2026 · In Flight",
+            "items": {
+              "aiUseCases": {
+                "title": "AI use-case pages",
+                "body": "Six production-AI surfaces shipped on /ai (advancing, incidents, scheduling, proposals, recaps, safety)."
+              },
+              "featureIndustryFarm": {
+                "title": "Programmatic feature × industry farm",
+                "body": "160 cross-context pages live at /features/[module]/[industry]."
+              },
+              "comparisonExpansion": {
+                "title": "Comparison expansion + alternatives narrative",
+                "body": "21 competitors + 21 alternatives narrative variants + footer column."
+              },
+              "glossary": {
+                "title": "Glossary surface",
+                "body": "40 production-ops terms with DefinedTerm schema."
+              },
+              "freeToolsHub": {
+                "title": "Free tools hub",
+                "body": "Per-diem calculator + capacity calculator live; 8 more sized for Q4."
+              },
+              "customerStoriesP1": {
+                "title": "Customer stories — Phase 1",
+                "body": "Six launch-partner case studies; anonymized teasers visible, full stories landing through Q4."
+              }
+            }
+          },
+          "q4-2026": {
+            "label": "Q4 2026 · Next",
+            "items": {
+              "savingsCalculator": {
+                "title": "Savings calculator on /pricing",
+                "body": "Drop in current stack line items; computes annual vs. ATLVS."
+              },
+              "aiTiers": {
+                "title": "Pricing layered AI tiers",
+                "body": "AI usage caps + add-on options per Crew, Production, Festival."
+              },
+              "localesBeyondHome": {
+                "title": "URL-routed locales beyond home",
+                "body": "Top 13 pages translated to es-ES + pt-BR with full hreflang."
+              },
+              "customerStoriesP2": {
+                "title": "Customer stories — Phase 2",
+                "body": "Four more launch-partner case studies with downloadable PDF."
+              },
+              "templatesExpansion": {
+                "title": "Templates expansion to 25+",
+                "body": "Stage plot, RFI, COI checklist, run-of-show, change order library."
+              },
+              "sixMoreTools": {
+                "title": "Six more free tools",
+                "body": "Load-in scheduler, manifest builder, rig-load calc, ROS time-math, set-conflict checker, credentials counter."
+              }
+            }
+          },
+          "q1-2027": {
+            "label": "Q1 2027 · Exploring",
+            "items": {
+              "megaMenu": {
+                "title": "Mega-menu navigation",
+                "body": "Replace the column dropdowns with grouped grids + icons + descriptions."
+              },
+              "mediaKit": {
+                "title": "Press / brand / media kit",
+                "body": "Downloadable logo lockups, brand guidelines, screenshot library."
+              },
+              "partnerDirectory": {
+                "title": "Partner directory",
+                "body": "Service-provider directory for production consultants who specialize on ATLVS."
+              },
+              "roadmapUpvoting": {
+                "title": "Roadmap upvoting",
+                "body": "Read-only today; auth'd upvote + comment in 2027."
+              }
+            }
+          }
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free for small teams. Per-org pricing the rest of the way up."
+        }
+      },
+      "solutions": {
+        "atlvs": {
+          "meta": {
+            "title": "ATLVS — Production Operations Workspace",
+            "description": "Where the production lives. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Pitch through wrap. One sidebar.",
+            "ogImageTitle": "Where the Production Lives"
+          },
+          "breadcrumbs": {
+            "home": "Home",
+            "solutions": "Solutions",
+            "atlvs": "ATLVS"
+          },
+          "schema": {
+            "name": "ATLVS — Production Operations Workspace",
+            "description": "Production operations workspace. Projects, finance, procurement, advancing, AI — one workspace, one schema."
+          },
+          "hero": {
+            "title": "Where the Production Lives.",
+            "subtitle": "Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Forty-seven modules on one schema.",
+            "ctaPrimary": "Sign Up Free",
+            "ctaSecondary": "Book a Walkthrough",
+            "ctaPricing": "Pricing →"
+          },
+          "modules": {
+            "eyebrow": "Nine domains · forty-seven modules",
+            "title": "Pitch Through Wrap. Same Workspace.",
+            "work": {
+              "title": "Work",
+              "body": "Projects, tasks, Gantt, schedule, ROS, events, locations. The run-sheet."
+            },
+            "sales": {
+              "title": "Sales",
+              "body": "Pipeline, leads, clients, proposals signed in place. 23 block types, e-sig in the page."
+            },
+            "finance": {
+              "title": "Finance",
+              "body": "Invoices, expenses, budgets with utilization, time, mileage, advances, payouts, live P&L."
+            },
+            "procurement": {
+              "title": "Procurement",
+              "body": "Reqs, RFQs, POs, vendor scorecards, COIs, W-9s, work order broadcasts."
+            },
+            "production": {
+              "title": "Production",
+              "body": "Equipment, rentals with availability, fab orders, dispatch, logistics, site plans."
+            },
+            "people": {
+              "title": "People",
+              "body": "Directory, crew, credentials with expiry alerts, roles, call sheets, time tracking."
+            },
+            "construction": {
+              "title": "Construction",
+              "body": "RFIs, submittals, daily logs, punch list, inspections (10 categories), change orders, payment apps."
+            },
+            "safety": {
+              "title": "Safety",
+              "body": "Incidents, OSHA, medical, crisis comms, BC/DR, cyber-IR, safeguarding, environmental, playbooks."
+            },
+            "ai": {
+              "title": "AI assistant",
+              "body": "Drafts riders, RFPs, recaps, call sheets from your workspace. Never the public web."
+            }
+          },
+          "architecture": {
+            "eyebrow": "Under the hood",
+            "title": "Same Rails. Every Module.",
+            "body1": "List, detail, create, edit. Every module rides the same rails — with status flow where it counts (invoices, proposals, POs, tasks, RFIs). Validation at the door. Tenant walled at the database.",
+            "body2": "Same rails mean the team learns ATLVS once. New modules ship in days. The work changes — the workflow holds.",
+            "bullets": {
+              "rls": "RLS at the database. Tenant walled in Postgres.",
+              "roleAware": "Role-aware on every action. Enforced server-side, not in the UI.",
+              "auditLog": "Immutable audit log. Actor, IP, before, after. Forever.",
+              "aiGrounded": "AI grounded in your workspace. Never the public internet.",
+              "stripeConnect": "Stripe Connect vendor payouts. Money never crosses our books.",
+              "signedWebhooks": "Signed webhooks (HMAC-SHA256) on every state change.",
+              "selfExpiring": "Self-expiring file shares. No public buckets.",
+              "sla": "99.9% uptime SLA on Festival."
+            }
+          },
+          "personas": {
+            "title": "Who Lives Here.",
+            "owner": {
+              "role": "Owner / Admin",
+              "body": "Full access. Billing, org, members, integrations, branding. Runs the business while the show runs."
+            },
+            "controller": {
+              "role": "Controller",
+              "body": "Finance + procurement. Invoices, expenses, budgets, POs, payouts, audit log."
+            },
+            "projectManager": {
+              "role": "Project manager",
+              "body": "Daily driver. Projects, tasks, schedule, RFIs, submittals, advancing, crew, proposals, clients."
+            }
+          },
+          "faq": {
+            "title": "ATLVS · FAQ",
+            "what": {
+              "q": "What is ATLVS?",
+              "a": "The production operations workspace. Red-branded, desk-bound, always on. Forty-seven modules — proposals, RFIs, submittals, daily logs, punch, inspections, advancing, finance, procurement, AI. Where the production lives."
+            },
+            "roleAware": {
+              "q": "How does role-aware access work?",
+              "a": "Ten roles (owner, admin, controller, collaborator, contractor, crew, client, viewer, and cameos). Every capability is gated by role — enforced at the database via RLS, not in the UI."
+            },
+            "brand": {
+              "q": "Can I brand it?",
+              "a": "Self-serve brand skins under Settings → Branding land on Festival. Production gets logo + accent. Every tier respects your org's accent color in the chrome."
+            },
+            "ai": {
+              "q": "What AI is included?",
+              "a": "Anthropic Claude under the hood. A fast model for daily drafting on Production. Deep-reasoning model on Festival. Every thread logs to your workspace, scoped tight."
+            }
+          },
+          "cta": {
+            "title": "ATLVS Is Open.",
+            "subtitle": "Free forever for small teams. Per-org pricing the rest of the way up.",
+            "primaryLabel": "Sign Up Free",
+            "secondaryLabel": "Book a Walkthrough"
+          }
+        },
+        "compvss": {
+          "meta": {
+            "title": "COMPVSS — The Field",
+            "description": "Offline-first PWA. Sub-100ms gate scan. Shift clock-in, daily log, incident, medic, driver, guard, warehouse. Installs from the browser in one tap.",
+            "ogImageTitle": "Offline. Sub-100ms."
+          },
+          "breadcrumbs": {
+            "home": "Home",
+            "solutions": "Solutions",
+            "compvss": "COMPVSS"
+          },
+          "schema": {
+            "name": "COMPVSS — The Field",
+            "description": "Offline-first PWA for production crew. Gate scan, clock-in, incident, medic, driver, guard, warehouse."
+          },
+          "hero": {
+            "titleLine1": "Offline.",
+            "titleLine2": "Sub-100ms.",
+            "body": "Installs from the browser in one tap. Gate scan, shift clock-in, medic triage, incident, driver run, guard tour, warehouse, daily safety brief. Works on one-bar LTE.",
+            "primaryCta": "Sign Up Free",
+            "secondaryCta": "Book a Walkthrough"
+          },
+          "modules": {
+            "heading": "What the Crew Runs in the Field.",
+            "today": {
+              "title": "Today",
+              "body": "Role-routed landing — call sheet, pinned tasks, tonight's shift."
+            },
+            "gateScan": {
+              "title": "Gate + ticket scan",
+              "body": "QR + barcode. Accreditation zone logic. Sub-100ms. Offline or on."
+            },
+            "doorPass": {
+              "title": "Door pass",
+              "body": "Same KBYG as the portal — scoped crew-side to radio, PPE, SOPs."
+            },
+            "shift": {
+              "title": "Shift",
+              "body": "Geo-verified clock-in / break / meal-credit / clock-out. Manual fallback included."
+            },
+            "warehouse": {
+              "title": "Warehouse",
+              "body": "Pick / put-away scans. Offline queue replays in order. Nothing goes missing."
+            },
+            "incident": {
+              "title": "Incident · medic · safeguarding",
+              "body": "Photos, location, witnesses. Admin + medic + safeguarding lead paged instantly. Encrypted at rest."
+            }
+          },
+          "offlineFirst": {
+            "eyebrow": "Offline-first",
+            "heading": "The Cell Tower Is Not Your Problem.",
+            "body1": "Gate scan, manual lookup, tonight's call sheet — cached on device. Scans queue locally and replay in order the second signal returns. Nothing drops. Nobody waits.",
+            "body2": "Install from the browser — open the link, tap Install, full-screen launcher on the home screen. Done before soundcheck.",
+            "bullets": {
+              "install": "Installs from the browser — one tap",
+              "queue": "Offline scan queue replays in order. Zero drops.",
+              "tested": "Tested at 15,000 per night",
+              "scanStates": "Clear scan states — accepted · duplicate · voided · not found",
+              "geoVerified": "Geo-verified clock-in with accuracy bounds",
+              "permissions": "Camera + GPS requested only when needed",
+              "tabBar": "Bottom tab bar — five field-side actions",
+              "contrast": "High-contrast every screen. Readable across the gate."
+            }
+          },
+          "faq": {
+            "title": "COMPVSS · FAQ",
+            "native": {
+              "q": "Is COMPVSS a native iOS / Android app?",
+              "a": "No. PWA. Open the URL, tap Install, full-screen launcher. No App Store review. No fleet update the morning of. No version drift across your 400-person gate team."
+            },
+            "noSignal": {
+              "q": "What if the venue has no cell signal?",
+              "a": "The scanner, tonight's call sheet, and the door pass cache on device. Scans queue locally and replay in order the moment signal returns."
+            },
+            "gateSpeed": {
+              "q": "How fast is the gate?",
+              "a": "Sub-100ms server-side. US cell adds 200–400ms round-trip. Offline scans are instant locally. Duplicates, voided, not-found — distinct states, all on-screen in a glance."
+            },
+            "offlineCheckin": {
+              "q": "Offline check-in — really?",
+              "a": "Really. Scans queue on device. Replay in order when signal returns. During an offline window, duplicates the scanner can't yet confirm are flagged pending — the server reconciles on sync."
+            },
+            "camera": {
+              "q": "Camera access?",
+              "a": "For QR + barcode scans. Manual input is the fallback for damaged codes or blocked permissions. The crew member at the gate never waits on IT."
+            }
+          },
+          "cta": {
+            "title": "Open the Field App.",
+            "subtitle": "Installs on any phone. No App Store. No fleet update. Ready in a tap.",
+            "primaryLabel": "Sign Up Free",
+            "secondaryLabel": "Book a Walkthrough"
+          }
+        },
+        "gvteway": {
+          "meta": {
+            "title": "GVTEWAY — The Portal",
+            "description": "Twelve personas. Each their lane. Artists see riders. Vendors see POs. Clients see proposals. Same project, RLS at the database.",
+            "ogImageTitle": "Twelve Personas. Each Their Lane."
+          },
+          "crumbs": {
+            "home": "Home",
+            "solutions": "Solutions"
+          },
+          "jsonLd": {
+            "name": "GVTEWAY — The Portal",
+            "description": "External stakeholder portal. Twelve personas, each scoped to their lane via RLS at the database."
+          },
+          "hero": {
+            "title": "Twelve Personas. Each Their Lane.",
+            "body": "Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same project. Twelve scoped reads. RLS at the database.",
+            "ctaPrimary": "Sign Up Free",
+            "ctaSecondary": "Book a Walkthrough"
+          },
+          "personas": {
+            "title": "Twelve Personas. Same Database.",
+            "body": "Every persona arrives at its own lane — nav, flows, deliverables tuned to the role. The artist never sees the sponsor's invoice. The delegation never sees the vendor's COI. Enforced in Postgres.",
+            "artist": {
+              "title": "Artist",
+              "body": "Tech rider, hospitality rider, input list, stage plot, guest list, schedule, travel."
+            },
+            "vendor": {
+              "title": "Vendor",
+              "body": "Submissions, pull list, POs, invoices, COI + W-9 uploads, training records."
+            },
+            "client": {
+              "title": "Client",
+              "body": "Proposals signed in place, deliverables, invoices via card/ACH, messages, files."
+            },
+            "sponsor": {
+              "title": "Sponsor",
+              "body": "Entitlements tracker, activations, brand assets, reporting, impressions."
+            },
+            "guest": {
+              "title": "Guest",
+              "body": "Tickets — buy, claim, transfer. Schedule. Day-of logistics. Rideshare hand-off."
+            },
+            "crew": {
+              "title": "Crew",
+              "body": "Call sheet, time submission, advances, safety briefing, SOPs."
+            },
+            "delegation": {
+              "title": "Delegation",
+              "body": "Entries, rate card, training venues, meetings, cases, transport, accommodation, visa."
+            },
+            "media": {
+              "title": "Media",
+              "body": "MPC rate card, accommodation, shuttles, press-conf RSVP, info-on-demand."
+            },
+            "vip": {
+              "title": "VIP + Hospitality",
+              "body": "Dedicated fleet, hotel allocation, itinerary, guest list, package access."
+            },
+            "volunteer": {
+              "title": "Volunteer",
+              "body": "Application, training, shift schedule, uniform pickup, door pass."
+            },
+            "athlete": {
+              "title": "Athlete",
+              "body": "Training bookings, resident services, safeguarding, visa, privacy self-service."
+            },
+            "privacy": {
+              "title": "Privacy (all)",
+              "body": "Every persona gets DSAR self-service + consent management. GDPR, handled."
+            }
+          },
+          "features": {
+            "proposals": {
+              "eyebrow": "Proposals",
+              "title": "Proposals That Close Themselves.",
+              "body": "Twenty-three block types. Scroll-spy nav. Per-phase contract refs. Add-on pickers with live totals. E-sign in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll. Clean PDF if legal still wants paper.",
+              "link": "Read the breakdown →"
+            },
+            "kbyg": {
+              "eyebrow": "KBYG",
+              "title": "Written Once. Read Twelve Ways.",
+              "body": "One Know-Before-You-Go doc in ATLVS. Renders per-persona in the portal and in the field. Artists get riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. Seventeen section types. One source, twelve reads.",
+              "link": "Read the breakdown →"
+            }
+          },
+          "security": {
+            "eyebrow": "Security",
+            "title": "RLS at the Database.",
+            "body": "Every record is scoped to its org and project in Postgres. Share links are signed, expirable, revocable, audit-logged. Nobody slips from the sponsor lounge into the artist compound — access enforced on the data, not in the UI.",
+            "items": {
+              "perProjectPortals": "Per-project portals — one link, one project",
+              "perPersonaNav": "Per-persona nav, per-persona reads",
+              "signedLinks": "Signed share links with expiry + revocation",
+              "fileDownloads": "File downloads self-expire",
+              "everyViewLogged": "Every view logged in engagement analytics",
+              "eSign": "E-sign in place — typed or drawn, IP + timestamp captured"
+            }
+          },
+          "faq": {
+            "title": "GVTEWAY · FAQ",
+            "q1": {
+              "q": "What is GVTEWAY?",
+              "a": "The portal. Blue-branded. Every guest, artist, vendor, sponsor, and collaborator arrives through their own lane. Twelve personas — each sees only its scope."
+            },
+            "q2": {
+              "q": "Do guests need an account?",
+              "a": "Read-only? Share the link — they're in. Contributing (riders, COIs, signatures)? A lightweight signup creates a credential scoped to that project. Fast by design."
+            },
+            "q3": {
+              "q": "Can I white-label the portal?",
+              "a": "Festival. Your mark, colors, email, custom domain. Clients see your brand. Vendors see your vendors' brand."
+            },
+            "q4": {
+              "q": "How is data isolated between projects?",
+              "a": "Postgres RLS. Every record is scoped to its org and project. The link you share maps to one project — nobody slips from one to another."
+            },
+            "q5": {
+              "q": "Can one credential access two projects?",
+              "a": "Yes. A vendor on one project and a sponsor on another switches cleanly from the portal home. One login, two scoped reads."
+            }
+          },
+          "cta": {
+            "title": "Twelve Personas. One Source.",
+            "subtitle": "Wired default. Reskin if you want. Use it if you don't.",
+            "primaryLabel": "Sign Up Free",
+            "secondaryLabel": "Book a Walkthrough"
+          }
+        },
+        "metadata": {
+          "title": "Solutions — Three Apps. One Schema.",
+          "description": "ATLVS — production operations workspace. GVTEWAY — stakeholder portal. COMPVSS — offline-first field PWA. Same record from the office, the stakeholder, and the gate."
+        },
+        "crumbs": {
+          "home": "Home",
+          "solutions": "Solutions"
+        },
+        "hero": {
+          "eyebrow": "Solutions",
+          "title": "Three Apps. One Schema.",
+          "body": "ATLVS, GVTEWAY, COMPVSS. One database underneath. Same record, three optimized surfaces — your office, your stakeholders, your crew, all reading the same truth."
+        },
+        "apps": {
+          "heading": "The Three Apps",
+          "cta": "Walk the room",
+          "atlvs": {
+            "tier": "WORKSPACE",
+            "title": "Where the production lives",
+            "body": "Forty-seven modules in one sidebar. Pitch through wrap. Proposals to payouts, RFIs to inspections, advancing to AI.",
+            "bullets": {
+              "0": "47 modules across 9 domains",
+              "1": "AI assistant grounded in your workspace",
+              "2": "Immutable audit log — actor, IP, before, after",
+              "3": "Role-aware on every action, enforced server-side"
+            }
+          },
+          "gvteway": {
+            "tier": "PORTAL",
+            "title": "Twelve personas, each their lane",
+            "body": "Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Same project, scoped reads.",
+            "bullets": {
+              "0": "12 personas per project",
+              "1": "Proposals signed in place — 23 block types",
+              "2": "Live advancing with deliverable tracking",
+              "3": "Per-persona KBYG guides, anonymous-shareable"
+            }
+          },
+          "compvss": {
+            "tier": "FIELD",
+            "title": "Offline. Sub-100ms.",
+            "body": "Gate scan, shift clock-in, daily log, incident, medic, driver, guard, warehouse. Installs from the browser in one tap.",
+            "bullets": {
+              "0": "<100ms gate scan, signal or none",
+              "1": "Geo-verified shift + meal credits",
+              "2": "Offline queue replays in order",
+              "3": "Tonight's call sheet + KBYG in pocket"
+            }
+          }
+        },
+        "industries": {
+          "heading": "Live Work, Whatever the Shape",
+          "body": "Each shape gets a tuned setup — starter templates, default role matrix, vernacular notes from operators who've done it.",
+          "live-events": {
+            "name": "Residencies + nights",
+            "blurb": "Sold-out weeks, recurring programming"
+          },
+          "concerts": {
+            "name": "Concerts",
+            "blurb": "Single night, amphitheatre, arena"
+          },
+          "festivals-tours": {
+            "name": "Festivals + tours",
+            "blurb": "Multi-day, multi-stage, multi-city"
+          },
+          "immersive-experiences": {
+            "name": "Immersive",
+            "blurb": "Installations, walk-throughs, pop-ups"
+          },
+          "brand-activations": {
+            "name": "Activations",
+            "blurb": "Launches, pop-ups, experiential"
+          },
+          "corporate-events": {
+            "name": "Private programs",
+            "blurb": "Summits, closed-room, invite-only"
+          },
+          "theatrical-performances": {
+            "name": "Theatrical",
+            "blurb": "Residencies, tours, galas"
+          },
+          "broadcast-tv-film": {
+            "name": "Broadcast / TV / Film",
+            "blurb": "Studio, remote, location"
+          }
+        },
+        "faq": {
+          "title": "Solutions · FAQ",
+          "items": {
+            "0": {
+              "q": "How are the three apps different?",
+              "a": "ATLVS is the production operations workspace — where the production lives. GVTEWAY is the stakeholder portal — twelve personas, each their lane. COMPVSS is the offline-first field PWA. One database underneath."
+            },
+            "1": {
+              "q": "Do I get all three?",
+              "a": "Every tier ships all three. Most teams open with ATLVS + one GVTEWAY persona (artist or client), add COMPVSS at load-in, then expand. Your tempo."
+            },
+            "2": {
+              "q": "Can other orgs see my data?",
+              "a": "No. RLS at the database — walled in Postgres, not in the app layer. A credential in one org cannot read or touch anything in another. Enforced in the data."
+            },
+            "3": {
+              "q": "White-labeled portal?",
+              "a": "Festival. Your mark, your colors, your email, your custom domain on every persona. The brand is yours."
+            }
+          }
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "primaryLabel": "Sign Up Free",
+          "secondaryLabel": "Book a Walkthrough"
+        }
+      },
+      "status": {
+        "meta": {
+          "title": "Status — Platform Uptime + Incident History",
+          "description": "Real-time platform status across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe to incident alerts.",
+          "ogEyebrow": "Status",
+          "ogTitle": "Platform Health."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "status": "Status"
+        },
+        "hero": {
+          "eyebrow": "Status",
+          "title": "All Systems Operational.",
+          "body": "Real-time platform health across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe for incident alerts via email or webhook.",
+          "badge": "All systems operational · last 30 days"
+        },
+        "services": {
+          "atlvs": "Production operations workspace (app.atlvs.pro)",
+          "gvteway": "Stakeholder portals (gvteway.atlvs.pro)",
+          "compvss": "Offline-first PWA (compvss.atlvs.pro)",
+          "marketing": "atlvs.pro + auth flows",
+          "webhooks": "Outbound + inbound webhook delivery",
+          "ai": "Anthropic Claude integration",
+          "stripe": "Vendor payout rail"
+        },
+        "stateLabel": {
+          "operational": "Operational",
+          "degraded": "Degraded",
+          "outage": "Major Outage"
+        },
+        "comingSoon": {
+          "eyebrow": "Coming Soon",
+          "title": "Live Status Page.",
+          "body": "The page above shows current state. Soon: 90-day uptime per service, incident history with post-mortems, subscribe-by-email and webhook for alerts. Targeting Q4 launch on",
+          "cta": "Get notified at launch"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free for small teams. Per-org pricing the rest of the way up."
+        }
+      },
+      "teams": {
+        "meta": {
+          "title": "Built For Production Roles — Tour, Production, Stage, Festival, Site, Tech, Talent, EHS",
+          "description": "ATLVS Technologies is tuned to the role you actually run. Per-role landing pages with the modules each persona lives in, the workflows that matter, and the FAQs they ask.",
+          "ogImageEyebrow": "Built For",
+          "ogImageTitle": "The Role You Run."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "builtFor": "Built For"
+        },
+        "hero": {
+          "eyebrow": "Built For",
+          "title": "The Role You Run.",
+          "body": "One platform, eight production roles. Each gets the modules they live in day-to-day, the workflows that move first, and the FAQs operators actually ask. Same backbone, different starting point."
+        },
+        "cards": {
+          "cta": "See the Fit"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free, forever, for small teams. Per-org pricing the rest of the way up."
+        }
+      },
+      "templates": {
+        "detail": {
+          "metadata": {
+            "fallbackTitle": "Template",
+            "titleSuffix": "Production Template",
+            "ogEyebrow": "Template"
+          },
+          "crumbs": {
+            "home": "Home",
+            "templates": "Templates"
+          },
+          "hero": {
+            "eyebrow": "Template",
+            "ctaPrimary": "Open This Template"
+          },
+          "whatsInIt": {
+            "title": "What's In It."
+          },
+          "bestFor": {
+            "eyebrow": "Best For"
+          },
+          "livesIn": {
+            "label": "Lives in:"
+          },
+          "cta": {
+            "title": "ATLVS Is Open.",
+            "subtitle": "Open this template — and the other 47 modules — free for small teams."
+          }
+        },
+        "meta": {
+          "title": "Templates — Production Artifacts, Ready to Run",
+          "description": "Pre-built ROS, advancing checklists, riders, call sheets, safety briefs, and vendor onboarding templates — open one in ATLVS in seconds.",
+          "ogImageEyebrow": "Templates",
+          "ogImageTitle": "Production Artifacts, Ready To Run."
+        },
+        "crumbs": {
+          "home": "Home",
+          "templates": "Templates"
+        },
+        "hero": {
+          "eyebrow": "Templates",
+          "title": "Production Artifacts, Ready To Run.",
+          "body": "ROS, advancing checklists, riders, call sheets, safety briefs, vendor onboarding — the artifacts every production team writes from scratch on every show. Pre-built, opinionated, opened in ATLVS in seconds."
+        },
+        "card": {
+          "cta": "Open this template"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free, forever, for small teams. Open these templates inside ATLVS."
+        }
+      },
+      "tools": {
+        "meta": {
+          "title": "Free Tools — Production Calculators",
+          "description": "Per-diem calculator, capacity calculator, and more — free tools production teams use to plan, budget, and run shows.",
+          "ogImageEyebrow": "Free Tools",
+          "ogImageTitle": "Production Calculators."
+        },
+        "breadcrumbs": {
+          "home": "Home",
+          "tools": "Tools"
+        },
+        "hero": {
+          "eyebrow": "Free Tools",
+          "title": "Production Calculators.",
+          "body": "The math production teams redo every Monday morning, automated. Free, no signup, no email gate."
+        },
+        "items": {
+          "perDiem": {
+            "title": "Per-Diem Calculator",
+            "short": "Compute crew or talent per-diem totals by city and day count."
+          },
+          "capacity": {
+            "title": "Venue Capacity Calculator",
+            "short": "Estimate maximum occupancy from square footage and use type."
+          }
+        },
+        "card": {
+          "cta": "Use this tool"
+        },
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free, forever, for small teams. Per-org pricing the rest of the way up."
+        }
+      }
+    },
+    "layout": {
+      "footer": {
+        "product": {
+          "heading": "Product",
+          "solutions": "Solutions",
+          "atlvs": "ATLVS",
+          "gvteway": "GVTEWAY",
+          "compvss": "COMPVSS",
+          "features": "Features",
+          "ai": "AI",
+          "integrations": "Integrations",
+          "pricing": "Pricing",
+          "changelog": "Changelog",
+          "roadmap": "Roadmap"
+        },
+        "builtFor": {
+          "heading": "Built For",
+          "tourManagers": "Tour Managers",
+          "productionManagers": "Production Managers",
+          "stageManagers": "Stage Managers",
+          "festivalDirectors": "Festival Directors",
+          "siteManagers": "Site Managers",
+          "techDirectors": "Tech Directors",
+          "talentBuyers": "Talent Buyers",
+          "ehsLeads": "EHS Leads"
+        },
+        "industries": {
+          "heading": "Industries",
+          "liveEvents": "Live Events",
+          "concerts": "Concerts",
+          "festivalsTours": "Festivals & Tours",
+          "immersive": "Immersive",
+          "brandActivations": "Brand Activations",
+          "corporate": "Corporate",
+          "theatrical": "Theatrical",
+          "broadcast": "Broadcast / TV / Film"
+        },
+        "resources": {
+          "heading": "Resources",
+          "docs": "Docs",
+          "guides": "Guides",
+          "glossary": "Glossary",
+          "templates": "Templates",
+          "tools": "Tools",
+          "blog": "Blog",
+          "community": "Community",
+          "help": "Help"
+        },
+        "compare": {
+          "heading": "Compare",
+          "cvent": "vs Cvent",
+          "procore": "vs Procore",
+          "eventbrite": "vs Eventbrite",
+          "masterTour": "vs Master Tour",
+          "monday": "vs Monday",
+          "notion": "vs Notion",
+          "airtable": "vs Airtable",
+          "asana": "vs Asana",
+          "docusign": "vs DocuSign",
+          "salesforce": "vs Salesforce",
+          "allAlternatives": "All alternatives"
+        },
+        "studio": {
+          "heading": "Studio",
+          "about": "About",
+          "contact": "Contact",
+          "careers": "Careers",
+          "customers": "Customers",
+          "press": "Press",
+          "partners": "Partners",
+          "status": "Status"
+        },
+        "legal": {
+          "heading": "Legal",
+          "terms": "Terms",
+          "privacy": "Privacy",
+          "dpa": "DPA",
+          "sla": "SLA"
+        },
+        "brand": {
+          "homeAriaLabel": "ATLVS Technologies — home",
+          "tagline": "The platform for production. Three apps, one schema."
+        },
+        "social": {
+          "twitter": "Twitter",
+          "github": "GitHub"
+        },
+        "copyright": "© {year} ATLVS Technologies",
+        "tagline": "Production runs on it.",
+        "trademarkPrefix": "ATLVS, GVTEWAY, and COMPVSS are registered trademarks of ATLVS Technologies, a",
+        "trademarkSuffix": "Industries company."
+      }
     }
   },
   "auth": {

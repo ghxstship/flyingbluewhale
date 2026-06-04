@@ -12,6 +12,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./brand-kit.css";
+import { getRequestT } from "@/lib/i18n/request";
 import {
   Globe,
   Music,
@@ -42,21 +43,23 @@ import {
   Crosshair,
   Shapes,
   Image as ImageIcon,
+  Compass,
   type LucideIcon,
 } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Brand Kit · The Venture Beyond System",
-  description:
-    "GHXSTSHIP design system — foundations, marketing site, product UI, documents, and handoff. The complete kit. Every tile is live; click to open.",
-  alternates: { canonical: "/brand-kit" },
-  openGraph: {
-    title: "G H X S T S H I P · Brand Kit",
-    description:
-      "Retro-futurist nautical pop art system. Cosmic ink ground, brass doubloon accent, nebula + plasma signals.",
-    url: "/brand-kit",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return {
+    title: t("marketing.pages.brand-kit.metadata.title"),
+    description: t("marketing.pages.brand-kit.metadata.description"),
+    alternates: { canonical: "/brand-kit" },
+    openGraph: {
+      title: t("marketing.pages.brand-kit.metadata.ogTitle"),
+      description: t("marketing.pages.brand-kit.metadata.ogDescription"),
+      url: "/brand-kit",
+    },
+  };
+}
 
 // Reach into the ghxstship token vocabulary directly. The kit page
 // is the one place we *want* to paint with the named --gx-* palette
@@ -78,254 +81,280 @@ type Tile = {
 
 type Block = { eyebrow: string; heading: string; tiles: Tile[] };
 
-const BLOCKS: Block[] = [
-  {
-    eyebrow: "Marketing Site",
-    heading: "The Spaceport",
-    tiles: [
-      {
-        href: "/",
-        icon: Globe,
-        title: "Homepage",
-        body: "Full marketing site — booking-sequence IA, departures ticker, 8-phase strip-map, hero-mode toggle.",
-        meta: "/ — public",
-      },
-      {
-        href: "/solutions/festivals-tours",
-        icon: Music,
-        title: "Festival Production",
-        body: "Per-vertical SEO/GEO landing page model.",
-        meta: "+5 more verticals",
-      },
-      {
-        href: "/solutions/broadcast-tv-film",
-        icon: Tv,
-        title: "TV, Film & Broadcast",
-        body: "Vertical landing page — Service + FAQ + Breadcrumb schema.",
-        meta: "/solutions/",
-      },
-    ],
-  },
-  {
-    eyebrow: "Product UI · ATLVS · COMPVSS · GVTEWAY",
-    heading: "The Instruments",
-    tiles: [
-      {
-        href: "/console",
-        icon: LayoutGrid,
-        title: "App Dashboard",
-        body: "Switchable shell across all three instruments.",
-        meta: "/console",
-      },
-      {
-        href: "/brand-kit",
-        icon: AppWindow,
-        title: "Bridge Kit I",
-        body: "Buttons, forms, tables, modals, command palette, auth, 404.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: BarChart3,
-        title: "Bridge Kit II",
-        body: "Charts, mobile, notifications, detail, chat, prose, signature.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Atom,
-        title: "Bridge Kit III",
-        body: "Atomic gaps — tooltip, slider, calendar, gallery, funnel, heatmap.",
-        state: "preview",
-      },
-      {
-        href: "/solutions/atlvs",
-        icon: LineChart,
-        title: "ATLVS · Gantt",
-        body: "Production timeline, 8-phase columns.",
-      },
-      {
-        href: "/solutions/compvss",
-        icon: IdCard,
-        title: "COMPVSS · Certs",
-        body: "Crew compliance & expiry.",
-      },
-      {
-        href: "/solutions/gvteway",
-        icon: Ticket,
-        title: "GVTEWAY · Checkout",
-        body: "Fan ticketing + boarding-pass QR.",
-      },
-      {
-        href: "/solutions/compvss",
-        icon: Smartphone,
-        title: "Mobile UI",
-        body: "Phone screens — board, detail, wallet, sheet, auth.",
-        meta: "compvss field PWA",
-      },
-    ],
-  },
-  {
-    eyebrow: "ATLVS Technologies · SaaS Product Kit",
-    heading: "The Product System",
-    tiles: [
-      {
-        href: "/console",
-        icon: AppWindow,
-        title: "ATLVS Product Kit",
-        body: "Neutral light/dark SaaS theme — dashboard, screens, per-product accent. Distinct from the cosmic brand.",
-        meta: "/console",
-      },
-      {
-        href: "/console",
-        icon: LayoutDashboard,
-        title: "SaaS Dashboard",
-        body: "Light/dark + ATLVS/COMPVSS/GVTEWAY accent toggle.",
-      },
-      {
-        href: "/console",
-        icon: Layers,
-        title: "SaaS Screens",
-        body: "Gantt, certifications, checkout — skinned.",
-      },
-    ],
-  },
-  {
-    eyebrow: "Documents · Email · Social",
-    heading: "Collateral",
-    tiles: [
-      {
-        href: "/brand-kit",
-        icon: FileText,
-        title: "Proposal / SOW",
-        body: "Contract-grade: manifest, schedule, manning, systems, investment.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: ListChecks,
-        title: "Run of Show",
-        body: "Live cue sheet, department-coded.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: PieChart,
-        title: "Post-Event Recap",
-        body: "Results, gallery, delivered checklist.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Mail,
-        title: "Email Templates",
-        body: "Brand + ATLVS/COMPVSS/GVTEWAY notifications.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Instagram,
-        title: "Social Templates",
-        body: "Instagram + LinkedIn.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Files,
-        title: "Stationery",
-        body: "Business card, letterhead, signature, invoice.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Presentation,
-        title: "Pitch Deck",
-        body: "9 slide types on the system.",
-        state: "preview",
-      },
-    ],
-  },
-  {
-    eyebrow: "Foundations & Handoff",
-    heading: "The Docs",
-    tiles: [
-      {
-        href: "/brand-kit",
-        icon: BookOpen,
-        title: "README",
-        body: "Brand brain — voice, visual foundations, index.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Network,
-        title: "Brand Architecture",
-        body: "3 verticals, the metaphor, surface register, locks.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Palette,
-        title: "tokens.json",
-        body: "Machine-readable design tokens for engineering.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Handshake,
-        title: "Handoff",
-        body: "Claude Code brief — file map, rules, build order.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Search,
-        title: "SEO / GEO",
-        body: "Playbook + per-vertical page template.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Target,
-        title: "Proprietary IP",
-        body: "8-Phase Lifecycle locked; XPMS pending input.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Crosshair,
-        title: "Competitive",
-        body: "Positioning vs. industry leaders.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Layers,
-        title: "Templates Map",
-        body: "Lifecycle collateral + UI inventory roadmap.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: Shapes,
-        title: "Iconography",
-        body: "Phosphor system + skull glyph rules.",
-        state: "preview",
-      },
-      {
-        href: "/brand-kit",
-        icon: ImageIcon,
-        title: "Photography",
-        body: "Duotone / grade treatment guidelines.",
-        state: "preview",
-      },
-    ],
-  },
-];
+type T = (key: string) => string;
 
-const CHIPS = ["14+ Years", "250+ Experiences", "5M+ Memories", "3 Verticals", "10 Destinations"];
+function buildBlocks(t: T): Block[] {
+  return [
+    {
+      eyebrow: t("marketing.pages.brand-kit.blocks.marketing.eyebrow"),
+      heading: t("marketing.pages.brand-kit.blocks.marketing.heading"),
+      tiles: [
+        {
+          href: "/",
+          icon: Globe,
+          title: t("marketing.pages.brand-kit.tiles.homepage.title"),
+          body: t("marketing.pages.brand-kit.tiles.homepage.body"),
+          meta: t("marketing.pages.brand-kit.tiles.homepage.meta"),
+        },
+        {
+          href: "/solutions/festivals-tours",
+          icon: Music,
+          title: t("marketing.pages.brand-kit.tiles.festivalProduction.title"),
+          body: t("marketing.pages.brand-kit.tiles.festivalProduction.body"),
+          meta: t("marketing.pages.brand-kit.tiles.festivalProduction.meta"),
+        },
+        {
+          href: "/solutions/broadcast-tv-film",
+          icon: Tv,
+          title: t("marketing.pages.brand-kit.tiles.broadcast.title"),
+          body: t("marketing.pages.brand-kit.tiles.broadcast.body"),
+          meta: t("marketing.pages.brand-kit.tiles.broadcast.meta"),
+        },
+      ],
+    },
+    {
+      eyebrow: t("marketing.pages.brand-kit.blocks.productUi.eyebrow"),
+      heading: t("marketing.pages.brand-kit.blocks.productUi.heading"),
+      tiles: [
+        {
+          href: "/console",
+          icon: LayoutGrid,
+          title: t("marketing.pages.brand-kit.tiles.appDashboard.title"),
+          body: t("marketing.pages.brand-kit.tiles.appDashboard.body"),
+          meta: t("marketing.pages.brand-kit.tiles.appDashboard.meta"),
+        },
+        {
+          href: "/brand-kit",
+          icon: AppWindow,
+          title: t("marketing.pages.brand-kit.tiles.bridgeKit1.title"),
+          body: t("marketing.pages.brand-kit.tiles.bridgeKit1.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: BarChart3,
+          title: t("marketing.pages.brand-kit.tiles.bridgeKit2.title"),
+          body: t("marketing.pages.brand-kit.tiles.bridgeKit2.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Atom,
+          title: t("marketing.pages.brand-kit.tiles.bridgeKit3.title"),
+          body: t("marketing.pages.brand-kit.tiles.bridgeKit3.body"),
+          state: "preview",
+        },
+        {
+          href: "/solutions/atlvs",
+          icon: LineChart,
+          title: t("marketing.pages.brand-kit.tiles.atlvsGantt.title"),
+          body: t("marketing.pages.brand-kit.tiles.atlvsGantt.body"),
+        },
+        {
+          href: "/solutions/compvss",
+          icon: IdCard,
+          title: t("marketing.pages.brand-kit.tiles.compvssCerts.title"),
+          body: t("marketing.pages.brand-kit.tiles.compvssCerts.body"),
+        },
+        {
+          href: "/solutions/gvteway",
+          icon: Ticket,
+          title: t("marketing.pages.brand-kit.tiles.gvtewayCheckout.title"),
+          body: t("marketing.pages.brand-kit.tiles.gvtewayCheckout.body"),
+        },
+        {
+          href: "/solutions/compvss",
+          icon: Smartphone,
+          title: t("marketing.pages.brand-kit.tiles.mobileUi.title"),
+          body: t("marketing.pages.brand-kit.tiles.mobileUi.body"),
+          meta: t("marketing.pages.brand-kit.tiles.mobileUi.meta"),
+        },
+      ],
+    },
+    {
+      eyebrow: t("marketing.pages.brand-kit.blocks.saas.eyebrow"),
+      heading: t("marketing.pages.brand-kit.blocks.saas.heading"),
+      tiles: [
+        {
+          href: "/console",
+          icon: AppWindow,
+          title: t("marketing.pages.brand-kit.tiles.atlvsProductKit.title"),
+          body: t("marketing.pages.brand-kit.tiles.atlvsProductKit.body"),
+          meta: t("marketing.pages.brand-kit.tiles.atlvsProductKit.meta"),
+        },
+        {
+          href: "/console",
+          icon: LayoutDashboard,
+          title: t("marketing.pages.brand-kit.tiles.saasDashboard.title"),
+          body: t("marketing.pages.brand-kit.tiles.saasDashboard.body"),
+        },
+        {
+          href: "/console",
+          icon: Layers,
+          title: t("marketing.pages.brand-kit.tiles.saasScreens.title"),
+          body: t("marketing.pages.brand-kit.tiles.saasScreens.body"),
+        },
+      ],
+    },
+    {
+      eyebrow: t("marketing.pages.brand-kit.blocks.collateral.eyebrow"),
+      heading: t("marketing.pages.brand-kit.blocks.collateral.heading"),
+      tiles: [
+        {
+          href: "/brand-kit",
+          icon: FileText,
+          title: t("marketing.pages.brand-kit.tiles.proposalSow.title"),
+          body: t("marketing.pages.brand-kit.tiles.proposalSow.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: ListChecks,
+          title: t("marketing.pages.brand-kit.tiles.runOfShow.title"),
+          body: t("marketing.pages.brand-kit.tiles.runOfShow.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: PieChart,
+          title: t("marketing.pages.brand-kit.tiles.postEventRecap.title"),
+          body: t("marketing.pages.brand-kit.tiles.postEventRecap.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Mail,
+          title: t("marketing.pages.brand-kit.tiles.emailTemplates.title"),
+          body: t("marketing.pages.brand-kit.tiles.emailTemplates.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Instagram,
+          title: t("marketing.pages.brand-kit.tiles.socialTemplates.title"),
+          body: t("marketing.pages.brand-kit.tiles.socialTemplates.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Files,
+          title: t("marketing.pages.brand-kit.tiles.stationery.title"),
+          body: t("marketing.pages.brand-kit.tiles.stationery.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Presentation,
+          title: t("marketing.pages.brand-kit.tiles.pitchDeck.title"),
+          body: t("marketing.pages.brand-kit.tiles.pitchDeck.body"),
+          state: "preview",
+        },
+      ],
+    },
+    {
+      eyebrow: t("marketing.pages.brand-kit.blocks.foundations.eyebrow"),
+      heading: t("marketing.pages.brand-kit.blocks.foundations.heading"),
+      tiles: [
+        // The ATLVS Waypoint logo kit — the only reference page in this
+        // block that's actually shipped as a live route (the rest are
+        // preview placeholders). Sits at the top so it reads as the
+        // current canonical reference, not a "coming soon" tile.
+        {
+          href: "/brand-kit/logo-kit",
+          icon: Compass,
+          title: t("marketing.pages.brand-kit.tiles.logoKit.title"),
+          body: t("marketing.pages.brand-kit.tiles.logoKit.body"),
+          meta: t("marketing.pages.brand-kit.tiles.logoKit.meta"),
+        },
+        {
+          href: "/brand-kit",
+          icon: BookOpen,
+          title: t("marketing.pages.brand-kit.tiles.readme.title"),
+          body: t("marketing.pages.brand-kit.tiles.readme.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Network,
+          title: t("marketing.pages.brand-kit.tiles.brandArchitecture.title"),
+          body: t("marketing.pages.brand-kit.tiles.brandArchitecture.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Palette,
+          title: t("marketing.pages.brand-kit.tiles.tokensJson.title"),
+          body: t("marketing.pages.brand-kit.tiles.tokensJson.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Handshake,
+          title: t("marketing.pages.brand-kit.tiles.handoff.title"),
+          body: t("marketing.pages.brand-kit.tiles.handoff.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Search,
+          title: t("marketing.pages.brand-kit.tiles.seoGeo.title"),
+          body: t("marketing.pages.brand-kit.tiles.seoGeo.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Target,
+          title: t("marketing.pages.brand-kit.tiles.proprietaryIp.title"),
+          body: t("marketing.pages.brand-kit.tiles.proprietaryIp.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Crosshair,
+          title: t("marketing.pages.brand-kit.tiles.competitive.title"),
+          body: t("marketing.pages.brand-kit.tiles.competitive.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Layers,
+          title: t("marketing.pages.brand-kit.tiles.templatesMap.title"),
+          body: t("marketing.pages.brand-kit.tiles.templatesMap.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: Shapes,
+          title: t("marketing.pages.brand-kit.tiles.iconography.title"),
+          body: t("marketing.pages.brand-kit.tiles.iconography.body"),
+          state: "preview",
+        },
+        {
+          href: "/brand-kit",
+          icon: ImageIcon,
+          title: t("marketing.pages.brand-kit.tiles.photography.title"),
+          body: t("marketing.pages.brand-kit.tiles.photography.body"),
+          state: "preview",
+        },
+      ],
+    },
+  ];
+}
 
-export default function BrandKitPage() {
+function buildChips(t: T): string[] {
+  return [
+    t("marketing.pages.brand-kit.chips.years"),
+    t("marketing.pages.brand-kit.chips.experiences"),
+    t("marketing.pages.brand-kit.chips.memories"),
+    t("marketing.pages.brand-kit.chips.verticals"),
+    t("marketing.pages.brand-kit.chips.destinations"),
+  ];
+}
+
+export default async function BrandKitPage() {
+  const { t } = await getRequestT();
+  const blocks = buildBlocks(t);
+  const chips = buildChips(t);
   return (
     <div className="bk-root">
       <header className="bk-hero">
@@ -349,7 +378,7 @@ export default function BrandKitPage() {
             marketing site, product UI, documents, and handoff. Every tile is live; click to open.
           </p>
           <div className="bk-chips">
-            {CHIPS.map((c) => (
+            {chips.map((c) => (
               <span key={c} className="bk-chip">
                 {c}
               </span>
@@ -359,7 +388,7 @@ export default function BrandKitPage() {
       </header>
 
       <main>
-        {BLOCKS.map((block) => (
+        {blocks.map((block) => (
           <section key={block.heading} className="bk-section">
             <div className={wrap}>
               <p className="bk-eyebrow">{block.eyebrow}</p>

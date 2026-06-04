@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { RunActions } from "./RunActions";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -48,8 +48,13 @@ function parseManifest(raw: unknown): ManifestEntry[] {
 
 export default async function Page({ params }: { params: Promise<{ runId: string }> }) {
   const { runId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.driver.run.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -79,11 +84,13 @@ export default async function Page({ params }: { params: Promise<{ runId: string
   return (
     <div className="px-4 pt-6 pb-24">
       <Link href="/m/driver" className="text-xs text-[var(--text-muted)]">
-        ← Today's runs
+        {t("m.driver.run.backToToday", undefined, "← Today's runs")}
       </Link>
       <div className="mt-3 flex items-start justify-between gap-3">
         <div>
-          <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Run</div>
+          <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+            {t("m.driver.run.eyebrow", undefined, "Run")}
+          </div>
           <h1 className="mt-1 text-xl leading-tight font-semibold">
             {run.origin?.name ?? "—"} → {run.destination?.name ?? "—"}
           </h1>
@@ -97,20 +104,32 @@ export default async function Page({ params }: { params: Promise<{ runId: string
 
       <section className="mt-5 grid grid-cols-2 gap-2">
         <div className="surface p-3">
-          <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">Depart</div>
+          <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.driver.run.depart", undefined, "Depart")}
+          </div>
           <div className="mt-1 font-mono text-base tabular-nums">{fmtTime(run.scheduled_depart)}</div>
           {run.actual_depart && (
             <div className="mt-0.5 font-mono text-[10px] text-[var(--color-success)]">
-              actual {fmtTime(run.actual_depart)}
+              {t(
+                "m.driver.run.actualPrefix",
+                { time: fmtTime(run.actual_depart) },
+                `actual ${fmtTime(run.actual_depart)}`,
+              )}
             </div>
           )}
         </div>
         <div className="surface p-3">
-          <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">Arrive</div>
+          <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.driver.run.arrive", undefined, "Arrive")}
+          </div>
           <div className="mt-1 font-mono text-base tabular-nums">{fmtTime(run.scheduled_arrive)}</div>
           {run.actual_arrive && (
             <div className="mt-0.5 font-mono text-[10px] text-[var(--color-success)]">
-              actual {fmtTime(run.actual_arrive)}
+              {t(
+                "m.driver.run.actualPrefix",
+                { time: fmtTime(run.actual_arrive) },
+                `actual ${fmtTime(run.actual_arrive)}`,
+              )}
             </div>
           )}
         </div>
@@ -118,17 +137,21 @@ export default async function Page({ params }: { params: Promise<{ runId: string
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Manifest · {manifest.length}
+          {t("m.driver.run.manifestHeading", { count: manifest.length }, `Manifest · ${manifest.length}`)}
         </h2>
         {manifest.length === 0 ? (
-          <p className="mt-2 text-xs text-[var(--text-muted)]">No passengers listed.</p>
+          <p className="mt-2 text-xs text-[var(--text-muted)]">
+            {t("m.driver.run.noPassengers", undefined, "No passengers listed.")}
+          </p>
         ) : (
           <ul className="mt-3 space-y-2">
             {manifest.map((m, i) => (
               <li key={i} className="surface p-3">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <div className="text-sm font-semibold">{m.name ?? `Passenger ${i + 1}`}</div>
+                    <div className="text-sm font-semibold">
+                      {m.name ?? t("m.driver.run.passengerFallback", { index: i + 1 }, `Passenger ${i + 1}`)}
+                    </div>
                     {m.role && <div className="text-xs text-[var(--text-muted)]">{m.role}</div>}
                   </div>
                   {m.phone && (
@@ -139,9 +162,13 @@ export default async function Page({ params }: { params: Promise<{ runId: string
                 </div>
                 {(m.pickup || m.dropoff) && (
                   <div className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">
-                    {m.pickup && <span>pickup {m.pickup}</span>}
+                    {m.pickup && (
+                      <span>{t("m.driver.run.pickupPrefix", { location: m.pickup }, `pickup ${m.pickup}`)}</span>
+                    )}
                     {m.pickup && m.dropoff && <span> · </span>}
-                    {m.dropoff && <span>dropoff {m.dropoff}</span>}
+                    {m.dropoff && (
+                      <span>{t("m.driver.run.dropoffPrefix", { location: m.dropoff }, `dropoff ${m.dropoff}`)}</span>
+                    )}
                   </div>
                 )}
                 {m.notes && <p className="mt-1 text-xs text-[var(--text-secondary)]">{m.notes}</p>}

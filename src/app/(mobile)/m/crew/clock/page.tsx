@@ -1,5 +1,6 @@
 import { ClockInOut } from "./ClockInOut";
 import { getOpenShiftAction } from "./actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -10,11 +11,16 @@ export const dynamic = "force-dynamic";
  */
 export default async function ClockPage() {
   const initial = await getOpenShiftAction();
+  const { t } = await getRequestT();
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
-      <h1 className="mt-1 text-2xl font-semibold">Clock</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">Geo-verified time tracking</p>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.clock.eyebrow", undefined, "Field")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.clock.title", undefined, "Clock")}</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.clock.subtitle", undefined, "Geo-verified time tracking")}
+      </p>
       <div className="mt-6">
         <ClockInOut initial={initial} />
       </div>

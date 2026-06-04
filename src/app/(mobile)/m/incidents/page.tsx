@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -34,8 +34,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
 };
 
 export default async function MobileIncidentPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -44,7 +49,7 @@ export default async function MobileIncidentPage() {
   const relativeTime = (iso: string): string => {
     const ms = Date.now() - new Date(iso).getTime();
     const min = Math.floor(ms / 60_000);
-    if (min < 1) return "just now";
+    if (min < 1) return t("common.justNow", undefined, "just now");
     if (min < 60) return `${min}m`;
     const hr = Math.floor(min / 60);
     if (hr < 24) return `${hr}h`;
@@ -67,16 +72,18 @@ export default async function MobileIncidentPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">Field</div>
-      <h1 className="mt-1 text-2xl font-semibold">Incident</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+        {t("m.incidents.eyebrow", undefined, "Field")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.incidents.title", undefined, "Incident")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {rows.length === 0
-          ? "No incidents logged in the last 30 days."
-          : `${rows.length} in last 30 days · ${open} open${critical ? ` · ${critical} critical` : ""}`}
+          ? t("m.incidents.noneLast30", undefined, "No incidents logged in the last 30 days.")
+          : `${t("m.incidents.summary", { count: rows.length, open }, `${rows.length} in last 30 days · ${open} open`)}${critical ? ` · ${t("m.incidents.criticalSuffix", { critical }, `${critical} critical`)}` : ""}`}
       </p>
 
       <Link href="/m/incidents/new" className="btn btn-primary mt-5 w-full">
-        + Report incident
+        {t("m.incidents.reportCta", undefined, "+ Report incident")}
       </Link>
 
       <ul className="mt-6 space-y-2">
@@ -84,8 +91,12 @@ export default async function MobileIncidentPage() {
           <li>
             <EmptyState
               size="compact"
-              title="All Quiet"
-              description="Incidents reported here are routed to admin and EHS lead in real time."
+              title={t("m.incidents.empty.title", undefined, "All Quiet")}
+              description={t(
+                "m.incidents.empty.description",
+                undefined,
+                "Incidents reported here are routed to admin and EHS lead in real time.",
+              )}
             />
           </li>
         ) : (

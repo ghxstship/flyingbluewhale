@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -20,8 +20,13 @@ type NotificationRow = {
 };
 
 export default async function NotificationsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -29,12 +34,12 @@ export default async function NotificationsPage() {
   const relativeTime = (iso: string): string => {
     const ms = Date.now() - new Date(iso).getTime();
     const min = Math.floor(ms / 60_000);
-    if (min < 1) return "just now";
-    if (min < 60) return `${min}m`;
+    if (min < 1) return t("common.time.justNow", undefined, "just now");
+    if (min < 60) return t("common.time.minutesShort", { n: min }, `${min}m`);
     const hr = Math.floor(min / 60);
-    if (hr < 24) return `${hr}h`;
+    if (hr < 24) return t("common.time.hoursShort", { n: hr }, `${hr}h`);
     const day = Math.floor(hr / 24);
-    if (day < 7) return `${day}d`;
+    if (day < 7) return t("common.time.daysShort", { n: day }, `${day}d`);
     return fmt.dateParts(iso, { month: "short", day: "numeric" });
   };
   const { data } = await supabase
@@ -50,13 +55,21 @@ export default async function NotificationsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Notifications</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.notifications.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.notifications.title", undefined, "Notifications")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        {rows.length === 0 ? "All caught up." : `${unread} unread of ${rows.length} recent`}
+        {rows.length === 0
+          ? t("m.notifications.allCaughtUp", undefined, "All caught up.")
+          : t(
+              "m.notifications.unreadOfRecent",
+              { unread, total: rows.length },
+              `${unread} unread of ${rows.length} recent`,
+            )}
         {" · "}
         <Link href="/me/notifications" className="text-[var(--org-primary)]">
-          settings
+          {t("m.notifications.settingsLink", undefined, "settings")}
         </Link>
       </p>
 
@@ -65,8 +78,12 @@ export default async function NotificationsPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Notifications"
-              description="You're all caught up. New notifications will appear here."
+              title={t("m.notifications.empty.title", undefined, "No Notifications")}
+              description={t(
+                "m.notifications.empty.description",
+                undefined,
+                "You're all caught up. New notifications will appear here.",
+              )}
             />
           </li>
         ) : (

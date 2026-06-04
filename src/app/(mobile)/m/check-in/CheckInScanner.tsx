@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { useAnnounce } from "@/components/ui/LiveRegion";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { haptic } from "@/lib/haptics";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 import { CameraScanner, type ScannedCode } from "@/components/scanners";
 
 type ScanResp =
@@ -34,6 +34,7 @@ export function CheckInScanner() {
   const inputRef = useRef<HTMLInputElement>(null);
   const announce = useAnnounce();
   const fmt = useFormatters();
+  const t = useT();
 
   // Hydrate mode from localStorage after mount (avoids SSR drift).
   useEffect(() => {
@@ -86,7 +87,10 @@ export function CheckInScanner() {
 
           if (!json.ok) {
             haptic("error");
-            announce(`Error: ${json.error.message}`, "assertive");
+            announce(
+              t("m.checkIn.announce.error", { message: json.error.message }, `Error: ${json.error.message}`),
+              "assertive",
+            );
             toast.error(json.error.message);
             setLog((l) =>
               [{ at: new Date().toISOString(), code: trimmed, result: "not_found" as const }, ...l].slice(0, 50),
@@ -95,27 +99,30 @@ export function CheckInScanner() {
             const result = json.data.result;
             if (result === "accepted") {
               haptic("success");
-              const name = "holderName" in json.data ? (json.data.holderName ?? "Guest") : "Guest";
-              announce(`Accepted: ${name}`, "polite");
+              const name =
+                "holderName" in json.data
+                  ? (json.data.holderName ?? t("m.checkIn.guest", undefined, "Guest"))
+                  : t("m.checkIn.guest", undefined, "Guest");
+              announce(t("m.checkIn.announce.accepted", { name }, `Accepted: ${name}`), "polite");
               toast.success(name);
             } else if (result === "duplicate") {
               haptic("warning");
-              announce("Duplicate ticket — already scanned", "assertive");
-              toast.error("Already scanned");
+              announce(t("m.checkIn.announce.duplicate", undefined, "Duplicate ticket — already scanned"), "assertive");
+              toast.error(t("m.checkIn.toast.alreadyScanned", undefined, "Already scanned"));
             } else if (result === "voided") {
               haptic("error");
-              announce("Voided ticket — denied", "assertive");
-              toast.error("Voided ticket");
+              announce(t("m.checkIn.announce.voided", undefined, "Voided ticket — denied"), "assertive");
+              toast.error(t("m.checkIn.toast.voided", undefined, "Voided ticket"));
             } else {
               haptic("error");
-              announce("Ticket not found", "assertive");
-              toast.error("Not found");
+              announce(t("m.checkIn.announce.notFound", undefined, "Ticket not found"), "assertive");
+              toast.error(t("m.checkIn.toast.notFound", undefined, "Not found"));
             }
             const entry: LogEntry = { at: new Date().toISOString(), code: trimmed, result };
             setLog((l) => [entry, ...l].slice(0, 50));
           }
         } catch (e) {
-          toast.error(e instanceof Error ? e.message : "Network error");
+          toast.error(e instanceof Error ? e.message : t("m.checkIn.toast.networkError", undefined, "Network error"));
         } finally {
           setCode("");
           // Only steal focus when keyboard-wedge mode is active so the camera
@@ -124,7 +131,7 @@ export function CheckInScanner() {
         }
       });
     },
-    [announce, mode],
+    [announce, mode, t],
   );
 
   const handleCameraScan = useCallback(
@@ -146,12 +153,32 @@ export function CheckInScanner() {
       <div className="card-elevated p-4">
         <div className="grid grid-cols-4 gap-2 text-center">
           {[
-            { label: "OK", value: counts.accepted, variant: "success" as const },
-            { label: "Dup", value: counts.duplicate, variant: "warning" as const },
-            { label: "Void", value: counts.voided, variant: "error" as const },
-            { label: "Miss", value: counts.not_found, variant: "muted" as const },
+            {
+              key: "ok",
+              label: t("m.checkIn.counts.ok", undefined, "OK"),
+              value: counts.accepted,
+              variant: "success" as const,
+            },
+            {
+              key: "dup",
+              label: t("m.checkIn.counts.dup", undefined, "Dup"),
+              value: counts.duplicate,
+              variant: "warning" as const,
+            },
+            {
+              key: "void",
+              label: t("m.checkIn.counts.void", undefined, "Void"),
+              value: counts.voided,
+              variant: "error" as const,
+            },
+            {
+              key: "miss",
+              label: t("m.checkIn.counts.miss", undefined, "Miss"),
+              value: counts.not_found,
+              variant: "muted" as const,
+            },
           ].map((s) => (
-            <div key={s.label}>
+            <div key={s.key}>
               <div className="text-display text-2xl">{s.value}</div>
               <Badge variant={s.variant}>{s.label}</Badge>
             </div>
@@ -159,7 +186,11 @@ export function CheckInScanner() {
         </div>
       </div>
 
-      <div role="tablist" aria-label="Scanner Input Mode" className="card-elevated grid grid-cols-2 gap-1 p-1">
+      <div
+        role="tablist"
+        aria-label={t("m.checkIn.tablist.ariaLabel", undefined, "Scanner Input Mode")}
+        className="card-elevated grid grid-cols-2 gap-1 p-1"
+      >
         <button
           type="button"
           role="tab"
@@ -171,7 +202,7 @@ export function CheckInScanner() {
               : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
           }`}
         >
-          Keyboard Wedge
+          {t("m.checkIn.mode.wedge", undefined, "Keyboard Wedge")}
         </button>
         <button
           type="button"
@@ -184,7 +215,7 @@ export function CheckInScanner() {
               : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
           }`}
         >
-          Camera
+          {t("m.checkIn.mode.camera", undefined, "Camera")}
         </button>
       </div>
 
@@ -196,7 +227,9 @@ export function CheckInScanner() {
           }}
           className="card-elevated p-4"
         >
-          <label className="text-label text-[var(--color-text-tertiary)]">Ticket Code</label>
+          <label className="text-label text-[var(--color-text-tertiary)]">
+            {t("m.checkIn.ticketCode", undefined, "Ticket Code")}
+          </label>
           <input
             ref={inputRef}
             value={code}
@@ -204,32 +237,38 @@ export function CheckInScanner() {
             inputMode="text"
             autoComplete="off"
             autoCapitalize="characters"
-            placeholder="Scan or type"
+            placeholder={t("m.checkIn.placeholder", undefined, "Scan or type")}
             className="input text-mono mt-1.5 w-full text-base"
             disabled={pending}
           />
           <div className="mt-3 flex gap-2">
             <Button type="submit" size="lg" className="flex-1" disabled={pending || !code}>
-              {pending ? "Validating…" : "Validate"}
+              {pending
+                ? t("m.checkIn.validating", undefined, "Validating…")
+                : t("m.checkIn.validate", undefined, "Validate")}
             </Button>
           </div>
         </form>
       ) : (
         <div className="card-elevated p-4">
-          <label className="text-label text-[var(--color-text-tertiary)]">Ticket Code</label>
+          <label className="text-label text-[var(--color-text-tertiary)]">
+            {t("m.checkIn.ticketCode", undefined, "Ticket Code")}
+          </label>
           <div className="mt-1.5">
             <CameraScanner onScan={handleCameraScan} formats={["qr_code", "code_128"]} />
           </div>
           <p className="text-mono mt-2 text-[11px] text-[var(--color-text-tertiary)]">
-            Point at a ticket QR. Validates automatically on detect.
+            {t("m.checkIn.camera.hint", undefined, "Point at a ticket QR. Validates automatically on detect.")}
           </p>
         </div>
       )}
 
       <div className="card-elevated">
-        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
+        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">
+          {t("m.checkIn.recent", undefined, "Recent")}
+        </div>
         {log.length === 0 ? (
-          <EmptyState size="compact" title="No Scans Yet" />
+          <EmptyState size="compact" title={t("m.checkIn.empty.title", undefined, "No Scans Yet")} />
         ) : (
           <ul>
             {log.map((e, i) => (
@@ -251,7 +290,13 @@ export function CheckInScanner() {
                             : "muted"
                     }
                   >
-                    {e.result}
+                    {e.result === "accepted"
+                      ? t("m.checkIn.result.accepted", undefined, "accepted")
+                      : e.result === "duplicate"
+                        ? t("m.checkIn.result.duplicate", undefined, "duplicate")
+                        : e.result === "voided"
+                          ? t("m.checkIn.result.voided", undefined, "voided")
+                          : t("m.checkIn.result.notFound", undefined, "not_found")}
                   </Badge>
                 </span>
               </li>

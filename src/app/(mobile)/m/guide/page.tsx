@@ -9,6 +9,7 @@ import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import type { GuideConfig } from "@/lib/guides/types";
 import type { GuidePersona, Persona } from "@/lib/supabase/types";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,7 @@ function mapPersona(persona: Persona): GuidePersona {
 export default async function MobileGuide() {
   if (!hasSupabase) notFound();
   const session = await requireSession();
+  const { t } = await getRequestT();
 
   // Pick the most recent active project for this user
   const supabase = await createClient();
@@ -56,9 +58,15 @@ export default async function MobileGuide() {
   if (!active) {
     return (
       <div className="px-4 pt-6 pb-24">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field Guide</div>
-        <h1 className="mt-1 text-2xl font-semibold">No Active Project</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">Check back when you&apos;re assigned to a show.</p>
+        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+          {t("m.guide.eyebrow", undefined, "Field Guide")}
+        </div>
+        <h1 className="mt-1 text-2xl font-semibold">
+          {t("m.guide.noActiveProject.title", undefined, "No Active Project")}
+        </h1>
+        <p className="mt-2 text-sm text-[var(--text-muted)]">
+          {t("m.guide.noActiveProject.body", undefined, "Check back when you're assigned to a show.")}
+        </p>
       </div>
     );
   }
@@ -70,9 +78,9 @@ export default async function MobileGuide() {
     return (
       <div className="px-4 pt-6 pb-24">
         <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{active.name}</div>
-        <h1 className="mt-1 text-2xl font-semibold">Guide Pending</h1>
+        <h1 className="mt-1 text-2xl font-semibold">{t("m.guide.pending.title", undefined, "Guide Pending")}</h1>
         <p className="mt-2 text-sm text-[var(--text-muted)]">
-          Production hasn&apos;t published a guide for your role yet.
+          {t("m.guide.pending.body", undefined, "Production hasn't published a guide for your role yet.")}
         </p>
       </div>
     );
@@ -91,10 +99,10 @@ export default async function MobileGuide() {
         <Link
           href={`/api/v1/guides/${guide.id}/pdf`}
           className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
-          aria-label="Download this guide as a PDF"
+          aria-label={t("m.guide.downloadPdf.ariaLabel", undefined, "Download this guide as a PDF")}
         >
           <FileDown size={14} aria-hidden="true" />
-          Download PDF
+          {t("m.guide.downloadPdf.label", undefined, "Download PDF")}
         </Link>
       </div>
       <GuideView

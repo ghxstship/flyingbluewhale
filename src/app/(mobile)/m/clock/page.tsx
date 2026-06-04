@@ -4,7 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CheckInControls } from "./CheckInControls";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +29,13 @@ const ATT_TONE: Record<ShiftRow["attendance"], "success" | "info" | "warning" | 
 };
 
 export default async function CheckInPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.clock.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -64,30 +69,45 @@ export default async function CheckInPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
-      <h1 className="mt-1 text-2xl font-semibold">Check-in</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.clock.eyebrow", undefined, "Field")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.clock.title", undefined, "Check-in")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Today's shifts. Clock in when you arrive, take breaks as needed, clock out when you leave.
+        {t(
+          "m.clock.subtitle",
+          undefined,
+          "Today's shifts. Clock in when you arrive, take breaks as needed, clock out when you leave.",
+        )}
       </p>
 
       {!wfm && (
         <div className="surface mt-6 p-4 text-sm">
-          Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your record to{" "}
-          {session.userId}.
+          {t(
+            "m.clock.noWorkforceProfile",
+            { userId: session.userId },
+            "Your workforce profile isn't linked to this account yet. Ask your supervisor to connect your record to {userId}.",
+          )}
         </div>
       )}
 
       <ul className="mt-6 space-y-3">
         {shifts.length === 0 ? (
           <li>
-            <EmptyState size="compact" title="No Shifts Today" description="Check back when you're rostered." />
+            <EmptyState
+              size="compact"
+              title={t("m.clock.empty.title", undefined, "No Shifts Today")}
+              description={t("m.clock.empty.description", undefined, "Check back when you're rostered.")}
+            />
           </li>
         ) : (
           shifts.map((s) => (
             <li key={s.id} className="surface p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-sm font-semibold">{s.venue?.name ?? "Unassigned venue"}</div>
+                  <div className="text-sm font-semibold">
+                    {s.venue?.name ?? t("m.clock.unassignedVenue", undefined, "Unassigned venue")}
+                  </div>
                   <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
                     {fmt.time(s.starts_at)}
                     {" – "}
@@ -98,7 +118,7 @@ export default async function CheckInPage() {
                     <div className="mt-2 font-mono text-xs text-[var(--text-secondary)]">
                       {s.checked_in_at && (
                         <>
-                          In{" "}
+                          {t("m.clock.inLabel", undefined, "In")}{" "}
                           {fmt.dateParts(s.checked_in_at, {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -108,7 +128,7 @@ export default async function CheckInPage() {
                       {s.checked_in_at && s.checked_out_at && " · "}
                       {s.checked_out_at && (
                         <>
-                          Out{" "}
+                          {t("m.clock.outLabel", undefined, "Out")}{" "}
                           {fmt.dateParts(s.checked_out_at, {
                             hour: "2-digit",
                             minute: "2-digit",

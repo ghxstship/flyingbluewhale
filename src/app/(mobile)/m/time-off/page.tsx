@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +30,13 @@ type BalanceRow = {
 type PolicyRow = { id: string; name: string; policy_kind: string };
 
 export default async function MobileTimeOffPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -61,13 +67,17 @@ export default async function MobileTimeOffPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Time Off</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.common.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.timeOff.title", undefined, "Time Off")}</h1>
 
       <section className="mt-5">
-        <h2 className="text-sm font-semibold">Balances ({year})</h2>
+        <h2 className="text-sm font-semibold">{t("m.timeOff.balancesHeading", { year }, `Balances (${year})`)}</h2>
         {balanceList.length === 0 ? (
-          <p className="mt-2 text-xs text-[var(--text-muted)]">No policies assigned yet.</p>
+          <p className="mt-2 text-xs text-[var(--text-muted)]">
+            {t("m.timeOff.noPolicies", undefined, "No policies assigned yet.")}
+          </p>
         ) : (
           <ul className="mt-2 space-y-2">
             {balanceList.map((b) => {
@@ -75,14 +85,24 @@ export default async function MobileTimeOffPage() {
               return (
                 <li key={b.policy_id} className="surface flex items-center justify-between p-3">
                   <div>
-                    <div className="text-sm font-semibold">{policy?.name ?? "Policy"}</div>
+                    <div className="text-sm font-semibold">
+                      {policy?.name ?? t("m.timeOff.policyFallback", undefined, "Policy")}
+                    </div>
                     <div className="font-mono text-xs text-[var(--text-muted)]">
-                      Accrued {b.accrued_ytd_hours}h / Used {b.used_ytd_hours}h
+                      {t(
+                        "m.timeOff.accruedUsed",
+                        { accrued: b.accrued_ytd_hours, used: b.used_ytd_hours },
+                        `Accrued ${b.accrued_ytd_hours}h / Used ${b.used_ytd_hours}h`,
+                      )}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-mono text-base font-semibold">{b.balance_hours}h</div>
-                    <div className="text-[10px] text-[var(--text-muted)]">available</div>
+                    <div className="font-mono text-base font-semibold">
+                      {t("m.timeOff.hours", { hours: b.balance_hours }, `${b.balance_hours}h`)}
+                    </div>
+                    <div className="text-[10px] text-[var(--text-muted)]">
+                      {t("m.timeOff.available", undefined, "available")}
+                    </div>
                   </div>
                 </li>
               );
@@ -93,16 +113,20 @@ export default async function MobileTimeOffPage() {
 
       <div className="mt-5 flex justify-end">
         <Link href="/m/time-off/new" className="btn btn-primary btn-sm">
-          New Request
+          {t("m.timeOff.newRequest", undefined, "New Request")}
         </Link>
       </div>
 
       <section className="mt-5">
-        <h2 className="text-sm font-semibold">Recent Requests</h2>
+        <h2 className="text-sm font-semibold">{t("m.timeOff.recentRequests", undefined, "Recent Requests")}</h2>
         <ul className="mt-2 space-y-2">
           {requestList.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No Requests" description="Your time-off requests will appear here." />
+              <EmptyState
+                size="compact"
+                title={t("m.timeOff.empty.title", undefined, "No Requests")}
+                description={t("m.timeOff.empty.description", undefined, "Your time-off requests will appear here.")}
+              />
             </li>
           ) : (
             requestList.map((r) => {
@@ -119,9 +143,13 @@ export default async function MobileTimeOffPage() {
                 <li key={r.id} className="surface p-3">
                   <div className="flex items-center justify-between">
                     <Badge variant={tone}>{r.request_state}</Badge>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">{r.hours_requested}h</span>
+                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                      {t("m.timeOff.hours", { hours: r.hours_requested }, `${r.hours_requested}h`)}
+                    </span>
                   </div>
-                  <div className="mt-1 text-sm font-semibold">{policy?.name ?? "Time off"}</div>
+                  <div className="mt-1 text-sm font-semibold">
+                    {policy?.name ?? t("m.timeOff.timeOffFallback", undefined, "Time off")}
+                  </div>
                   <div className="font-mono text-xs text-[var(--text-muted)]">
                     {fmt.date(r.starts_on)} → {fmt.date(r.ends_on)}
                   </div>

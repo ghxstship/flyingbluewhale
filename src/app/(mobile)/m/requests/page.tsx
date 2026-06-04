@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -18,8 +18,13 @@ const SEV: Record<ServiceRequest["severity"], "error" | "warning" | "info" | "mu
 };
 
 export default async function MobileRequests() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -39,19 +44,27 @@ export default async function MobileRequests() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.requests.eyebrow", undefined, "Field")}
+      </div>
       <div className="mt-1 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Service Requests</h1>
+        <h1 className="text-2xl font-semibold">{t("m.requests.title", undefined, "Service Requests")}</h1>
         <Link href="/m/requests/new" className="btn btn-primary btn-sm">
-          + Open
+          {t("m.requests.openCta", undefined, "+ Open")}
         </Link>
       </div>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">Active requests across the org.</p>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.requests.subtitle", undefined, "Active requests across the org.")}
+      </p>
 
       <ul className="mt-5 space-y-2">
         {rows.length === 0 ? (
           <li>
-            <EmptyState size="compact" title="Nothing Open" description="All quiet right now." />
+            <EmptyState
+              size="compact"
+              title={t("m.requests.empty.title", undefined, "Nothing Open")}
+              description={t("m.requests.empty.description", undefined, "All quiet right now.")}
+            />
           </li>
         ) : (
           rows.map((r) => (

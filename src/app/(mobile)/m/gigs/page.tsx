@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,6 +33,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -45,15 +47,17 @@ export default async function Page() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-label text-[var(--brand-color)]">Marketplace</div>
-      <h1 className="text-display mt-2 text-3xl">Open Gigs</h1>
+      <div className="text-label text-[var(--brand-color)]">{t("m.gigs.eyebrow", undefined, "Marketplace")}</div>
+      <h1 className="text-display mt-2 text-3xl">{t("m.gigs.title", undefined, "Open Gigs")}</h1>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        {rows.length} live gig{rows.length === 1 ? "" : "s"} across the network.
+        {rows.length === 1
+          ? t("m.gigs.countOne", { count: rows.length }, `${rows.length} live gig across the network.`)
+          : t("m.gigs.countOther", { count: rows.length }, `${rows.length} live gigs across the network.`)}
       </p>
 
       {rows.length === 0 ? (
         <div className="card-elevated mt-6 p-6 text-sm text-[var(--color-text-secondary)]">
-          No live gigs at the moment.
+          {t("m.gigs.empty", undefined, "No live gigs at the moment.")}
         </div>
       ) : (
         <ul className="mt-6 space-y-2">
@@ -63,13 +67,17 @@ export default async function Page() {
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-semibold">{r.title}</span>
                   <span className="text-xs whitespace-nowrap text-[var(--color-text-secondary)]">
-                    {formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency)}/day
+                    {t(
+                      "m.gigs.perDay",
+                      { rate: formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency) },
+                      `${formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency)}/day`,
+                    )}
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
                   {r.org_name}
                   {r.city || r.region ? ` · ${[r.city, r.region].filter(Boolean).join(", ")}` : ""}
-                  {r.travel_paid ? " · travel paid" : ""}
+                  {r.travel_paid ? ` · ${t("m.gigs.travelPaid", undefined, "travel paid")}` : ""}
                 </p>
                 {r.role_taxonomy.length > 0 && (
                   <p className="mt-2 text-xs text-[var(--color-text-tertiary)]">

@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { requestSwap } from "./actions";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -20,8 +20,13 @@ type ShiftRow = {
 };
 
 export default async function MobileShiftSwapPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -52,16 +57,24 @@ export default async function MobileShiftSwapPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
-        Field
+        {t("m.shift.swap.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Swap Shift</h1>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.shift.swap.title", undefined, "Swap Shift")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Pick an upcoming shift to flag your scheduler. Roster admins get a notification with your reason.
+        {t(
+          "m.shift.swap.intro",
+          undefined,
+          "Pick an upcoming shift to flag your scheduler. Roster admins get a notification with your reason.",
+        )}
       </p>
 
       {!wfm && (
         <div className="surface mt-6 p-4 text-sm">
-          Your workforce profile isn't linked yet. Ask a supervisor to associate your account.
+          {t(
+            "m.shift.swap.noProfile",
+            undefined,
+            "Your workforce profile isn't linked yet. Ask a supervisor to associate your account.",
+          )}
         </div>
       )}
 
@@ -70,11 +83,15 @@ export default async function MobileShiftSwapPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Upcoming Shifts to Swap"
-              description="Only shifts you haven't checked into can be swapped. See your roster on the Shift screen."
+              title={t("m.shift.swap.empty.title", undefined, "No Upcoming Shifts to Swap")}
+              description={t(
+                "m.shift.swap.empty.description",
+                undefined,
+                "Only shifts you haven't checked into can be swapped. See your roster on the Shift screen.",
+              )}
               action={
                 <Link href="/m/shift" className="btn btn-secondary btn-sm">
-                  Open shift
+                  {t("m.shift.swap.empty.action", undefined, "Open shift")}
                 </Link>
               }
             />
@@ -84,7 +101,9 @@ export default async function MobileShiftSwapPage() {
             <li key={s.id} className="surface p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold">{s.venue?.name ?? "Unassigned venue"}</div>
+                  <div className="text-sm font-semibold">
+                    {s.venue?.name ?? t("m.shift.swap.unassignedVenue", undefined, "Unassigned venue")}
+                  </div>
                   <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
                     {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
                     {s.role ? ` · ${s.role}` : ""}
@@ -99,11 +118,11 @@ export default async function MobileShiftSwapPage() {
                   rows={2}
                   maxLength={500}
                   required
-                  placeholder="Reason for swap…"
+                  placeholder={t("m.shift.swap.reasonPlaceholder", undefined, "Reason for swap…")}
                   className="input-base w-full text-sm"
                 />
                 <button type="submit" className="btn btn-primary btn-sm w-full">
-                  Request swap
+                  {t("m.shift.swap.requestButton", undefined, "Request swap")}
                 </button>
               </form>
             </li>

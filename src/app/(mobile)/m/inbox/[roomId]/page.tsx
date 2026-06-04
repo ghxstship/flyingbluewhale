@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { postMessage, markRoomRead } from "../actions";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 
@@ -16,7 +16,13 @@ type Msg = {
 };
 
 export default async function RoomPage({ params }: { params: Promise<{ roomId: string }> }) {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { roomId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -52,7 +58,9 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
         event="INSERT"
       />
       <div className="border-b border-[var(--border-color)] px-4 pt-4 pb-3">
-        <h1 className="truncate text-base font-semibold">{room.name ?? "Direct message"}</h1>
+        <h1 className="truncate text-base font-semibold">
+          {room.name ?? t("m.inbox.room.directMessage", undefined, "Direct message")}
+        </h1>
         <p className="text-xs text-[var(--text-muted)]">{room.room_kind}</p>
       </div>
       <ul className="flex-1 space-y-2 overflow-y-auto px-4 py-3">
@@ -79,13 +87,13 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
         <input
           type="text"
           name="body"
-          placeholder="Message"
+          placeholder={t("m.inbox.room.messagePlaceholder", undefined, "Message")}
           required
           maxLength={4000}
           className="flex-1 rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
         />
         <button type="submit" className="btn btn-primary btn-sm">
-          Send
+          {t("common.send", undefined, "Send")}
         </button>
       </form>
     </div>

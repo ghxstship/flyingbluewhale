@@ -1,6 +1,7 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { createTimeOffRequest } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -8,7 +9,13 @@ export const dynamic = "force-dynamic";
 type Policy = { id: string; name: string; policy_kind: string };
 
 export default async function NewTimeOffPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const { data: policies } = await supabase
@@ -22,10 +29,10 @@ export default async function NewTimeOffPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <h1 className="text-xl font-semibold">New Time-Off Request</h1>
+      <h1 className="text-xl font-semibold">{t("m.timeOff.new.title", undefined, "New Time-Off Request")}</h1>
       <form action={createTimeOffRequest} className="mt-5 space-y-4">
         <label className="block text-xs font-semibold">
-          Policy
+          {t("m.timeOff.new.policy", undefined, "Policy")}
           <select
             name="policy_id"
             required
@@ -39,7 +46,7 @@ export default async function NewTimeOffPage() {
           </select>
         </label>
         <label className="block text-xs font-semibold">
-          Starts on
+          {t("m.timeOff.new.startsOn", undefined, "Starts on")}
           <input
             type="date"
             name="starts_on"
@@ -48,7 +55,7 @@ export default async function NewTimeOffPage() {
           />
         </label>
         <label className="block text-xs font-semibold">
-          Ends on
+          {t("m.timeOff.new.endsOn", undefined, "Ends on")}
           <input
             type="date"
             name="ends_on"
@@ -57,7 +64,7 @@ export default async function NewTimeOffPage() {
           />
         </label>
         <label className="block text-xs font-semibold">
-          Hours requested
+          {t("m.timeOff.new.hoursRequested", undefined, "Hours requested")}
           <input
             type="number"
             name="hours_requested"
@@ -68,7 +75,7 @@ export default async function NewTimeOffPage() {
           />
         </label>
         <label className="block text-xs font-semibold">
-          Reason
+          {t("m.timeOff.new.reason", undefined, "Reason")}
           <textarea
             name="reason"
             rows={3}
@@ -77,7 +84,7 @@ export default async function NewTimeOffPage() {
           />
         </label>
         <button type="submit" className="btn btn-primary w-full">
-          Submit
+          {t("common.submit", undefined, "Submit")}
         </button>
       </form>
     </div>

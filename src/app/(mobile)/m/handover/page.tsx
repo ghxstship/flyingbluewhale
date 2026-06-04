@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -34,8 +34,13 @@ const HANDOVER_TONE: Record<string, "muted" | "info" | "warning" | "success"> = 
 };
 
 export default async function MobileHandoverPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const fmt = await getRequestFormatters();
@@ -51,20 +56,30 @@ export default async function MobileHandoverPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Handover</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.handover.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.handover.title", undefined, "Handover")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Commissioning walks per venue. Tap into a venue on the desktop to mark its handover state.
+        {t(
+          "m.handover.description",
+          undefined,
+          "Commissioning walks per venue. Tap into a venue on the desktop to mark its handover state.",
+        )}
       </p>
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Needs walk · {open.length}
+          {t("m.handover.needsWalk", undefined, "Needs walk")} · {open.length}
         </h2>
         <ul className="mt-3 space-y-2">
           {open.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="All Venues Handed Over" description="Nothing pending today." />
+              <EmptyState
+                size="compact"
+                title={t("m.handover.empty.title", undefined, "All Venues Handed Over")}
+                description={t("m.handover.empty.description", undefined, "Nothing pending today.")}
+              />
             </li>
           ) : (
             open.map((v) => (
@@ -73,7 +88,8 @@ export default async function MobileHandoverPage() {
                   <div>
                     <div className="text-sm font-semibold">{v.name}</div>
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
-                      {v.cluster ?? "—"} · cap {v.capacity != null ? fmt.number(v.capacity) : "—"}
+                      {v.cluster ?? "—"} · {t("m.handover.capAbbrev", undefined, "cap")}{" "}
+                      {v.capacity != null ? fmt.number(v.capacity) : "—"}
                     </div>
                   </div>
                   <Badge variant={HANDOVER_TONE[v.handover_state] ?? "muted"}>{toTitle(v.handover_state)}</Badge>
@@ -87,7 +103,7 @@ export default async function MobileHandoverPage() {
       {done.length > 0 && (
         <section className="mt-6">
           <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Handed over · {done.length}
+            {t("m.handover.handedOver", undefined, "Handed over")} · {done.length}
           </h2>
           <ul className="mt-3 space-y-2">
             {done.map((v) => (

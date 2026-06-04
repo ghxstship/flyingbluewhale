@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { markAnnouncementRead } from "./actions";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
@@ -20,8 +20,13 @@ type Row = {
 };
 
 export default async function MobileFeedPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -51,16 +56,24 @@ export default async function MobileFeedPage() {
         table="announcements"
         filter={`org_id=eq.${session.orgId}`}
       />
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Updates</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.feed.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.feed.title", undefined, "Updates")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        {rows.length === 0 ? "No updates yet." : `${unread} unread of ${rows.length}`}
+        {rows.length === 0
+          ? t("m.feed.noUpdatesYet", undefined, "No updates yet.")
+          : t("m.feed.unreadOfTotal", { unread, total: rows.length }, `${unread} unread of ${rows.length}`)}
       </p>
 
       <ul className="mt-5 space-y-3">
         {rows.length === 0 ? (
           <li>
-            <EmptyState size="compact" title="No Updates" description="Org announcements will appear here." />
+            <EmptyState
+              size="compact"
+              title={t("m.feed.empty.title", undefined, "No Updates")}
+              description={t("m.feed.empty.description", undefined, "Org announcements will appear here.")}
+            />
           </li>
         ) : (
           rows.map((a) => {
@@ -69,7 +82,7 @@ export default async function MobileFeedPage() {
               <li key={a.id} className={`surface p-4 ${read ? "opacity-60" : ""}`}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    {a.pinned && <Badge variant="warning">Pinned</Badge>}
+                    {a.pinned && <Badge variant="warning">{t("m.feed.pinned", undefined, "Pinned")}</Badge>}
                     <Badge variant="muted">{toTitle(a.audience)}</Badge>
                   </div>
                   <span className="font-mono text-xs text-[var(--text-muted)]">
@@ -82,7 +95,7 @@ export default async function MobileFeedPage() {
                   <form action={markAnnouncementRead} className="mt-3 flex justify-end">
                     <input type="hidden" name="announcementId" value={a.id} />
                     <button type="submit" className="btn btn-secondary btn-sm">
-                      Mark Read
+                      {t("m.feed.markRead", undefined, "Mark Read")}
                     </button>
                   </form>
                 )}

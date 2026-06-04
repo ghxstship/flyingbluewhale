@@ -1,6 +1,7 @@
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { savePreferences } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +19,13 @@ type Kind = { kind: string; label: string; description: string };
 type Matrix = Record<string, { push?: boolean; email?: boolean }>;
 
 export default async function NotifPrefsPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -33,41 +40,58 @@ export default async function NotifPrefsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Settings</div>
-      <h1 className="mt-1 text-2xl font-semibold">Notifications</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.settings.notifications.eyebrow", undefined, "Settings")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.settings.notifications.title", undefined, "Notifications")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Choose which event kinds reach you over push and email. The push channel only fires when you&apos;ve also
-        enabled push subscriptions on{" "}
+        {t(
+          "m.settings.notifications.descriptionPrefix",
+          undefined,
+          "Choose which event kinds reach you over push and email. The push channel only fires when you've also enabled push subscriptions on",
+        )}{" "}
         <a className="underline" href="/m/settings">
-          Settings → Push Notifications
+          {t("m.settings.notifications.pushSettingsLink", undefined, "Settings → Push Notifications")}
         </a>
         .
       </p>
 
       <form action={savePreferences} className="mt-5 space-y-4">
         <div className="surface p-4">
-          <h2 className="text-sm font-semibold">Digest</h2>
+          <h2 className="text-sm font-semibold">{t("m.settings.notifications.digest.heading", undefined, "Digest")}</h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            How often to batch quieter events instead of pinging immediately.
+            {t(
+              "m.settings.notifications.digest.description",
+              undefined,
+              "How often to batch quieter events instead of pinging immediately.",
+            )}
           </p>
           <select name="digest" defaultValue={digest} className="input-base mt-3 w-full">
-            <option value="immediate">Immediate</option>
-            <option value="hourly">Hourly digest</option>
-            <option value="daily">Daily digest</option>
+            <option value="immediate">{t("m.settings.notifications.digest.immediate", undefined, "Immediate")}</option>
+            <option value="hourly">{t("m.settings.notifications.digest.hourly", undefined, "Hourly digest")}</option>
+            <option value="daily">{t("m.settings.notifications.digest.daily", undefined, "Daily digest")}</option>
           </select>
         </div>
 
         <div className="surface p-4">
-          <h2 className="text-sm font-semibold">Per-Kind Toggles</h2>
+          <h2 className="text-sm font-semibold">
+            {t("m.settings.notifications.perKind.heading", undefined, "Per-Kind Toggles")}
+          </h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Default is on. Turn off the noise you don&apos;t want.
+            {t(
+              "m.settings.notifications.perKind.description",
+              undefined,
+              "Default is on. Turn off the noise you don't want.",
+            )}
           </p>
           <table className="mt-3 w-full text-sm">
             <thead>
               <tr className="text-start text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
-                <th className="pb-2">Kind</th>
-                <th className="pb-2 text-center">Push</th>
-                <th className="pb-2 text-center">Email</th>
+                <th className="pb-2">{t("m.settings.notifications.perKind.colKind", undefined, "Kind")}</th>
+                <th className="pb-2 text-center">{t("m.settings.notifications.perKind.colPush", undefined, "Push")}</th>
+                <th className="pb-2 text-center">
+                  {t("m.settings.notifications.perKind.colEmail", undefined, "Email")}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -95,7 +119,7 @@ export default async function NotifPrefsPage() {
         </div>
 
         <button type="submit" className="btn btn-primary w-full">
-          Save Preferences
+          {t("m.settings.notifications.savePreferences", undefined, "Save Preferences")}
         </button>
       </form>
     </div>

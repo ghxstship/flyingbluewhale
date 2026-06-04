@@ -4,7 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { acknowledgeAlert } from "./actions";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +29,13 @@ const SEVERITY_TONE: Record<string, "error" | "warning" | "info" | "muted"> = {
 };
 
 export default async function AlertsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -61,10 +66,18 @@ export default async function AlertsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Alerts</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+        {t("m.alerts.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.alerts.title", undefined, "Alerts")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        {rows.length === 0 ? "No active alerts." : `${unacked} unacknowledged of ${rows.length} active`}
+        {rows.length === 0
+          ? t("m.alerts.noneActive", undefined, "No active alerts.")
+          : t(
+              "m.alerts.countSummary",
+              { unacked, total: rows.length },
+              `${unacked} unacknowledged of ${rows.length} active`,
+            )}
       </p>
 
       <ul className="mt-5 space-y-3">
@@ -72,8 +85,12 @@ export default async function AlertsPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Active Alerts"
-              description="Crisis notifications appear here when activated."
+              title={t("m.alerts.empty.title", undefined, "No Active Alerts")}
+              description={t(
+                "m.alerts.empty.description",
+                undefined,
+                "Crisis notifications appear here when activated.",
+              )}
             />
           </li>
         ) : (
@@ -85,19 +102,21 @@ export default async function AlertsPage() {
                 <div className="flex items-start justify-between gap-3">
                   <Badge variant={tone}>{toTitle(a.severity)}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">
-                    {a.sent_at ? fmt.time(a.sent_at) : "scheduled"}
+                    {a.sent_at ? fmt.time(a.sent_at) : t("m.alerts.scheduled", undefined, "scheduled")}
                   </span>
                 </div>
                 <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
                 <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{a.body}</p>
                 <div className="mt-3 flex items-center justify-end gap-2">
                   {ack ? (
-                    <span className="text-xs text-[var(--text-muted)]">Acknowledged {fmt.time(ack)}</span>
+                    <span className="text-xs text-[var(--text-muted)]">
+                      {t("m.alerts.acknowledgedAt", { time: fmt.time(ack) }, `Acknowledged ${fmt.time(ack)}`)}
+                    </span>
                   ) : (
                     <form action={acknowledgeAlert}>
                       <input type="hidden" name="alertId" value={a.id} />
                       <button type="submit" className="btn btn-primary btn-sm">
-                        Acknowledge
+                        {t("m.alerts.acknowledge", undefined, "Acknowledge")}
                       </button>
                     </form>
                   )}

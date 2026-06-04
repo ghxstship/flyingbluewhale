@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -38,8 +38,13 @@ function fmtDuration(s: number | null): string {
 
 export default async function Page({ params }: { params: Promise<{ showId: string }> }) {
   const { showId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.ros.show.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -72,9 +77,11 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
   return (
     <div className="px-4 pt-6 pb-24">
       <Link href="/m/ros" className="text-xs text-[var(--text-muted)]">
-        ← All cues
+        {t("m.ros.show.backToAll", undefined, "← All cues")}
       </Link>
-      <div className="mt-2 text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Show</div>
+      <div className="mt-2 text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.ros.show.eyebrow", undefined, "Show")}
+      </div>
       <h1 className="mt-1 text-2xl leading-tight font-semibold">{show.name}</h1>
       <p className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
         {fmtTime(show.starts_at)} → {fmtTime(show.ends_at)} · {show.status}
@@ -82,10 +89,13 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
 
       {live && (
         <section className="surface mt-6 p-4 ring-2 ring-[var(--color-error)]">
-          <div className="text-[10px] font-semibold tracking-wider text-[var(--color-error)] uppercase">Live</div>
+          <div className="text-[10px] font-semibold tracking-wider text-[var(--color-error)] uppercase">
+            {t("m.ros.show.liveLabel", undefined, "Live")}
+          </div>
           <div className="mt-1 text-base leading-snug font-semibold">{live.label}</div>
           <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-            {live.lane} · started {fmtTime(live.scheduled_at)}
+            {live.lane} ·{" "}
+            {t("m.ros.show.startedAt", { time: fmtTime(live.scheduled_at) }, `started ${fmtTime(live.scheduled_at)}`)}
             {live.duration_seconds ? ` · ${fmtDuration(live.duration_seconds)}` : ""}
           </div>
           {live.description && <p className="mt-2 text-xs text-[var(--text-secondary)]">{live.description}</p>}
@@ -94,10 +104,12 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Upcoming · {upcoming.length}
+          {t("m.ros.show.upcomingHeading", { count: upcoming.length }, `Upcoming · ${upcoming.length}`)}
         </h2>
         {upcoming.length === 0 ? (
-          <p className="mt-2 text-xs text-[var(--text-muted)]">No more cues queued.</p>
+          <p className="mt-2 text-xs text-[var(--text-muted)]">
+            {t("m.ros.show.noMoreCues", undefined, "No more cues queued.")}
+          </p>
         ) : (
           <ul className="mt-3 divide-y divide-[var(--border-color)]">
             {upcoming.map((c) => (
@@ -124,14 +136,14 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
       {done.length > 0 && (
         <section className="mt-6 opacity-70">
           <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Completed · {done.length}
+            {t("m.ros.show.completedHeading", { count: done.length }, `Completed · ${done.length}`)}
           </h2>
           <ul className="mt-3 divide-y divide-[var(--border-color)]">
             {done.map((c) => (
               <li key={c.id} className="flex items-start gap-3 py-2 text-xs">
                 <div className="w-12 shrink-0 font-mono tabular-nums">{fmtTime(c.scheduled_at)}</div>
                 <div className="min-w-0 flex-1">{c.label}</div>
-                <Badge variant="success">Done</Badge>
+                <Badge variant="success">{t("m.ros.show.doneBadge", undefined, "Done")}</Badge>
               </li>
             ))}
           </ul>

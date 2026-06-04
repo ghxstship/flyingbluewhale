@@ -4,6 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +20,13 @@ type AccreditationRow = {
 };
 
 export default async function WalletPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.wallet.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -48,21 +54,31 @@ export default async function WalletPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">My Credential</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.wallet.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.wallet.title", undefined, "My Credential")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Show this screen at the gate. Keep it active until your shift ends.
+        {t("m.wallet.subtitle", undefined, "Show this screen at the gate. Keep it active until your shift ends.")}
       </p>
 
       {issued.length === 0 ? (
         <div className="mt-6">
           <EmptyState
             size="compact"
-            title="No Issued Credential"
+            title={t("m.wallet.empty.title", undefined, "No Issued Credential")}
             description={
               cards.length === 0
-                ? "You don't have an accreditation in this workspace yet. Reach out to your delegation contact."
-                : "Your application is in vetting. You'll see the card here once it's approved + issued."
+                ? t(
+                    "m.wallet.empty.noAccreditation",
+                    undefined,
+                    "You don't have an accreditation in this workspace yet. Reach out to your delegation contact.",
+                  )
+                : t(
+                    "m.wallet.empty.inVetting",
+                    undefined,
+                    "Your application is in vetting. You'll see the card here once it's approved + issued.",
+                  )
             }
           />
         </div>
@@ -77,7 +93,7 @@ export default async function WalletPage() {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="text-xs font-semibold tracking-[0.2em] text-[var(--brand-color,var(--org-primary))] uppercase">
-                    {c.category?.code ?? "ACC"}
+                    {c.category?.code ?? t("m.wallet.defaultCategoryCode", undefined, "ACC")}
                   </div>
                   <div className="mt-1 text-xl leading-snug font-semibold">{c.person_name}</div>
                   <div className="font-mono text-xs text-[var(--text-muted)]">
@@ -92,17 +108,19 @@ export default async function WalletPage() {
               </div>
               {c.card_barcode && (
                 <div className="surface-inset mt-4 rounded-md p-4 text-center">
-                  <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">Card Barcode</div>
+                  <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">
+                    {t("m.wallet.cardBarcode", undefined, "Card Barcode")}
+                  </div>
                   <div className="mt-1.5 font-mono text-base tracking-wider">{c.card_barcode}</div>
                 </div>
               )}
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <div className="text-[var(--text-muted)]">Valid From</div>
+                  <div className="text-[var(--text-muted)]">{t("m.wallet.validFrom", undefined, "Valid From")}</div>
                   <div className="mt-0.5 font-mono">{c.valid_from?.slice(0, 10) ?? "—"}</div>
                 </div>
                 <div>
-                  <div className="text-[var(--text-muted)]">Valid To</div>
+                  <div className="text-[var(--text-muted)]">{t("m.wallet.validTo", undefined, "Valid To")}</div>
                   <div className="mt-0.5 font-mono">{c.valid_to?.slice(0, 10) ?? "—"}</div>
                 </div>
               </div>
@@ -113,7 +131,9 @@ export default async function WalletPage() {
 
       {others.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Other Cards</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.wallet.otherCards", undefined, "Other Cards")}
+          </h2>
           <ul className="mt-3 space-y-2">
             {others.map((c) => (
               <li key={c.id} className="surface flex items-center justify-between p-3">
@@ -130,7 +150,7 @@ export default async function WalletPage() {
                         : "muted"
                   }
                 >
-                  {c.state}
+                  {t(`m.wallet.state.${c.state}`, undefined, c.state)}
                 </Badge>
               </li>
             ))}
@@ -140,7 +160,7 @@ export default async function WalletPage() {
 
       <div className="mt-8 border-t border-[var(--border-color)] pt-4">
         <Link href="/me/profile" className="text-xs text-[var(--org-primary)]">
-          Open profile →
+          {t("m.wallet.openProfile", undefined, "Open profile →")}
         </Link>
       </div>
     </div>

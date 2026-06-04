@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -27,8 +27,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "er
 };
 
 export default async function SafeguardingPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -44,33 +49,46 @@ export default async function SafeguardingPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Safeguarding</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+        {t("m.safeguarding.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.safeguarding.title", undefined, "Safeguarding")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        File a confidential disclosure. Reports route to the designated safeguarding lead and are retained for 10 years
-        per statute.
+        {t(
+          "m.safeguarding.intro",
+          undefined,
+          "File a confidential disclosure. Reports route to the designated safeguarding lead and are retained for 10 years per statute.",
+        )}
       </p>
 
       <div className="mt-5">
         <Link href="/console/safety/safeguarding/new" className="btn btn-danger w-full">
-          File new report
+          {t("m.safeguarding.fileNew", undefined, "File new report")}
         </Link>
         <p className="mt-2 text-[10px] text-[var(--text-muted)]">
-          The form is currently desktop-only. Mobile-native intake is on the roadmap.
+          {t(
+            "m.safeguarding.desktopOnlyHint",
+            undefined,
+            "The form is currently desktop-only. Mobile-native intake is on the roadmap.",
+          )}
         </p>
       </div>
 
       <section className="mt-8">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Reports you've filed
+          {t("m.safeguarding.reportsFiledHeading", undefined, "Reports you've filed")}
         </h2>
         <ul className="mt-3 space-y-2">
           {reports.length === 0 ? (
             <li>
               <EmptyState
                 size="compact"
-                title="No Reports Filed"
-                description="Reports filed under your account appear here. Other reporters' reports are confidential."
+                title={t("m.safeguarding.empty.title", undefined, "No Reports Filed")}
+                description={t(
+                  "m.safeguarding.empty.description",
+                  undefined,
+                  "Reports filed under your account appear here. Other reporters' reports are confidential.",
+                )}
               />
             </li>
           ) : (
@@ -84,7 +102,9 @@ export default async function SafeguardingPage() {
                 </div>
                 <p className="mt-2 line-clamp-3 text-xs text-[var(--text-secondary)]">{r.narrative}</p>
                 {r.subject_ref && (
-                  <div className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">Subject: {r.subject_ref}</div>
+                  <div className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">
+                    {t("m.safeguarding.subjectLabel", undefined, "Subject:")} {r.subject_ref}
+                  </div>
                 )}
               </li>
             ))

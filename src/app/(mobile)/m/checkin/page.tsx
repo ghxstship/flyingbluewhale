@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +29,13 @@ type ShiftRow = {
 };
 
 export default async function CheckinPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.checkIn.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -68,39 +73,55 @@ export default async function CheckinPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
-      <h1 className="mt-1 text-2xl font-semibold">Check-in Summary</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.checkIn.eyebrow", undefined, "Field")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.checkIn.title", undefined, "Check-in Summary")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Today&apos;s clock activity, breaks, and meal credits. Use{" "}
+        {t("m.checkIn.subtitlePrefix", undefined, "Today's clock activity, breaks, and meal credits. Use")}{" "}
         <a className="underline" href="/m/clock">
           /m/clock
         </a>{" "}
-        to actually punch in or out.
+        {t("m.checkIn.subtitleSuffix", undefined, "to actually punch in or out.")}
       </p>
 
       {!wfm && (
         <div className="surface mt-6 p-4 text-sm">
-          Your workforce profile isn&apos;t linked to this account. Ask a supervisor to associate your record.
+          {t(
+            "m.checkIn.noWorkforceProfile",
+            undefined,
+            "Your workforce profile isn't linked to this account. Ask a supervisor to associate your record.",
+          )}
         </div>
       )}
 
       <section className="mt-5 grid grid-cols-3 gap-2">
         <div className="surface p-3">
           <div className="font-mono text-2xl font-semibold">{shifts.length}</div>
-          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Today</div>
+          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.checkIn.stats.today", undefined, "Today")}
+          </div>
         </div>
         <div className="surface p-3">
           <div className="font-mono text-2xl font-semibold">{mealsCredited}</div>
-          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Meals</div>
+          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.checkIn.stats.meals", undefined, "Meals")}
+          </div>
         </div>
         <div className="surface p-3">
           <div className="font-mono text-2xl font-semibold">{totalBreakMinutes}</div>
-          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Break min</div>
+          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.checkIn.stats.breakMin", undefined, "Break min")}
+          </div>
         </div>
       </section>
 
       <p className="mt-3 text-xs text-[var(--text-muted)]">
-        {completed} of {shifts.length} shifts closed.
+        {t(
+          "m.checkIn.shiftsClosed",
+          { completed, total: shifts.length },
+          `${completed} of ${shifts.length} shifts closed.`,
+        )}
       </p>
 
       <ul className="mt-5 space-y-3">
@@ -108,8 +129,12 @@ export default async function CheckinPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Shifts Today"
-              description="Check-in totals appear here when you have a shift on the books."
+              title={t("m.checkIn.empty.title", undefined, "No Shifts Today")}
+              description={t(
+                "m.checkIn.empty.description",
+                undefined,
+                "Check-in totals appear here when you have a shift on the books.",
+              )}
             />
           </li>
         ) : (
@@ -117,14 +142,22 @@ export default async function CheckinPage() {
             <li key={s.id} className="surface p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-semibold">{s.venue?.name ?? "Unassigned venue"}</div>
+                  <div className="truncate text-sm font-semibold">
+                    {s.venue?.name ?? t("m.checkIn.unassignedVenue", undefined, "Unassigned venue")}
+                  </div>
                   <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
                     {fmt.time(s.starts_at)} – {fmt.time(s.ends_at)}
                     {s.role ? ` · ${s.role}` : ""}
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                    {s.meal_credit && <Badge variant="success">Meal credited</Badge>}
-                    {s.break_minutes > 0 && <Badge variant="muted">{s.break_minutes}m break</Badge>}
+                    {s.meal_credit && (
+                      <Badge variant="success">{t("m.checkIn.badge.mealCredited", undefined, "Meal credited")}</Badge>
+                    )}
+                    {s.break_minutes > 0 && (
+                      <Badge variant="muted">
+                        {t("m.checkIn.badge.breakMinutes", { minutes: s.break_minutes }, `${s.break_minutes}m break`)}
+                      </Badge>
+                    )}
                   </div>
                 </div>
                 <Badge

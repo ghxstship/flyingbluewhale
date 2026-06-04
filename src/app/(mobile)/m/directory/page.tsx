@@ -2,6 +2,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,13 @@ type Member = {
 };
 
 export default async function MobileDirectoryPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -35,14 +42,22 @@ export default async function MobileDirectoryPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Directory</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">{members.length} people in your org</p>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.directory.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.directory.title", undefined, "Directory")}</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.directory.peopleCount", { count: members.length }, `${members.length} people in your org`)}
+      </p>
 
       <ul className="mt-5 divide-y divide-[var(--border-color)]">
         {members.length === 0 ? (
           <li className="py-4">
-            <EmptyState size="compact" title="No Members" description="Org members appear here once added." />
+            <EmptyState
+              size="compact"
+              title={t("m.directory.empty.title", undefined, "No Members")}
+              description={t("m.directory.empty.description", undefined, "Org members appear here once added.")}
+            />
           </li>
         ) : (
           members.map(({ role, user }) => (

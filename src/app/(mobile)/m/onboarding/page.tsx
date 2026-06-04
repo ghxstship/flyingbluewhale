@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,13 @@ type Assignment = {
 type Flow = { id: string; name: string; description: string | null };
 
 export default async function MobileOnboardingPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -39,10 +45,16 @@ export default async function MobileOnboardingPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Onboarding</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.onboarding.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.onboarding.title", undefined, "Onboarding")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Read, sign, upload, complete. Your supervisor sees when each step finishes.
+        {t(
+          "m.onboarding.subtitle",
+          undefined,
+          "Read, sign, upload, complete. Your supervisor sees when each step finishes.",
+        )}
       </p>
 
       <ul className="mt-5 space-y-3">
@@ -50,8 +62,12 @@ export default async function MobileOnboardingPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Active Flows"
-              description="New-hire journeys assigned to you appear here."
+              title={t("m.onboarding.empty.title", undefined, "No Active Flows")}
+              description={t(
+                "m.onboarding.empty.description",
+                undefined,
+                "New-hire journeys assigned to you appear here.",
+              )}
             />
           </li>
         ) : (
@@ -72,7 +88,9 @@ export default async function MobileOnboardingPage() {
                     <Badge variant={tone}>{a.assignment_phase}</Badge>
                     <span className="font-mono text-xs text-[var(--text-muted)]">{fmt.date(a.assigned_at)}</span>
                   </div>
-                  <h2 className="mt-2 text-sm font-semibold">{flow?.name ?? "Onboarding"}</h2>
+                  <h2 className="mt-2 text-sm font-semibold">
+                    {flow?.name ?? t("m.onboarding.fallbackFlowName", undefined, "Onboarding")}
+                  </h2>
                   {flow?.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{flow.description}</p>}
                 </Link>
               </li>

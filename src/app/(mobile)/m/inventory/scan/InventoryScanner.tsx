@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { useAnnounce } from "@/components/ui/LiveRegion";
 import { haptic } from "@/lib/haptics";
 import { toTitle } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Entry = {
   at: string;
@@ -20,6 +21,7 @@ type Entry = {
 };
 
 export function InventoryScanner() {
+  const t = useT();
   const [tag, setTag] = useState("");
   const [log, setLog] = useState<Entry[]>([]);
   const [pending, startTransition] = useTransition();
@@ -51,7 +53,7 @@ export function InventoryScanner() {
               ...l,
             ].slice(0, 50),
           );
-          toast.error(body?.error?.message ?? "Scan failed");
+          toast.error(body?.error?.message ?? t("m.inventory.scan.toast.failed", undefined, "Scan failed"));
           haptic("error");
           return;
         }
@@ -76,8 +78,8 @@ export function InventoryScanner() {
               ...l,
             ].slice(0, 50),
           );
-          announce("Asset not found", "assertive");
-          toast.error("No equipment with that tag");
+          announce(t("m.inventory.scan.announce.notFound", undefined, "Asset not found"), "assertive");
+          toast.error(t("m.inventory.scan.toast.notFound", undefined, "No equipment with that tag"));
           haptic("error");
         } else {
           setLog((l) =>
@@ -93,7 +95,14 @@ export function InventoryScanner() {
               ...l,
             ].slice(0, 50),
           );
-          announce(`${data.name} is now ${data.status}`, "polite");
+          announce(
+            t(
+              "m.inventory.scan.announce.statusChanged",
+              { name: data.name ?? "", status: data.status ?? "" },
+              `${data.name} is now ${data.status}`,
+            ),
+            "polite",
+          );
           toast.success(`${data.name} → ${data.status}`);
           haptic("success");
         }
@@ -127,7 +136,9 @@ export function InventoryScanner() {
           submit(tag);
         }}
       >
-        <label className="text-label text-[var(--color-text-tertiary)]">Asset Tag</label>
+        <label className="text-label text-[var(--color-text-tertiary)]">
+          {t("m.inventory.scan.assetTag", undefined, "Asset Tag")}
+        </label>
         <input
           value={tag}
           onChange={(e) => setTag(e.target.value)}
@@ -136,12 +147,14 @@ export function InventoryScanner() {
           autoCapitalize="characters"
           autoCorrect="off"
           spellCheck={false}
-          placeholder="Scan or type"
+          placeholder={t("m.inventory.scan.placeholder", undefined, "Scan or type")}
           className="input-base w-full font-mono text-lg tracking-wider"
         />
         <div className="flex gap-2">
           <Button type="submit" size="lg" className="flex-1" disabled={pending || !tag}>
-            {pending ? "Processing…" : "Toggle"}
+            {pending
+              ? t("common.processing", undefined, "Processing…")
+              : t("m.inventory.scan.toggle", undefined, "Toggle")}
           </Button>
           <Button
             type="button"
@@ -150,7 +163,7 @@ export function InventoryScanner() {
             disabled={pending || !tag}
             onClick={() => submit(tag, "check_in")}
           >
-            Check in
+            {t("m.inventory.scan.checkIn", undefined, "Check in")}
           </Button>
           <Button
             type="button"
@@ -159,15 +172,17 @@ export function InventoryScanner() {
             disabled={pending || !tag}
             onClick={() => submit(tag, "check_out")}
           >
-            Check out
+            {t("m.inventory.scan.checkOut", undefined, "Check out")}
           </Button>
         </div>
       </form>
 
       <div className="card-elevated">
-        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
+        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">
+          {t("m.inventory.scan.recent", undefined, "Recent")}
+        </div>
         {log.length === 0 ? (
-          <EmptyState size="compact" title="No Scans Yet" />
+          <EmptyState size="compact" title={t("m.inventory.scan.empty.title", undefined, "No Scans Yet")} />
         ) : (
           <ul>
             {log.map((e, i) => (
@@ -181,8 +196,12 @@ export function InventoryScanner() {
                   {e.result === "ok" && e.status && (
                     <Badge variant={e.status === "available" ? "success" : "brand"}>{toTitle(e.status)}</Badge>
                   )}
-                  {e.result === "not_found" && <Badge variant="muted">not found</Badge>}
-                  {e.result === "error" && <Badge variant="error">{e.error ?? "error"}</Badge>}
+                  {e.result === "not_found" && (
+                    <Badge variant="muted">{t("m.inventory.scan.badge.notFound", undefined, "not found")}</Badge>
+                  )}
+                  {e.result === "error" && (
+                    <Badge variant="error">{e.error ?? t("m.inventory.scan.badge.error", undefined, "error")}</Badge>
+                  )}
                 </span>
               </li>
             ))}

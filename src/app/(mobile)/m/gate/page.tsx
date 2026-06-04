@@ -5,7 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,8 +26,13 @@ const RESULT_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
 };
 
 export default async function MobileGatePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.gate.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -52,30 +57,40 @@ export default async function MobileGatePage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
-        Field
+        {t("m.gate.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Gate</h1>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.gate.title", undefined, "Gate")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        {rows.length === 0 ? "No scans yet today." : `${rows.length} today · ${granted} granted · ${denied} denied`}
+        {rows.length === 0
+          ? t("m.gate.noScansYet", undefined, "No scans yet today.")
+          : t(
+              "m.gate.summary",
+              { count: rows.length, granted, denied },
+              `${rows.length} today · ${granted} granted · ${denied} denied`,
+            )}
       </p>
 
       <Link href="/m/gate/scan" className="btn btn-primary mt-5 flex w-full items-center justify-center gap-2">
         <QrCode size={18} />
-        Open scanner
+        {t("m.gate.openScanner", undefined, "Open scanner")}
       </Link>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Recent Scans</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          {t("m.gate.recentScans", undefined, "Recent Scans")}
+        </h2>
         <ul className="mt-3 space-y-2">
           {rows.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No Scans Logged Today" />
+              <EmptyState size="compact" title={t("m.gate.empty.title", undefined, "No Scans Logged Today")} />
             </li>
           ) : (
             rows.map((r) => (
               <li key={r.id} className="surface flex items-center justify-between p-3">
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm font-medium">{r.venue?.name ?? r.gate_code ?? "Gate"}</div>
+                  <div className="text-sm font-medium">
+                    {r.venue?.name ?? r.gate_code ?? t("m.gate.gateFallback", undefined, "Gate")}
+                  </div>
                   {r.reason && <div className="mt-0.5 truncate text-xs text-[var(--text-muted)]">{r.reason}</div>}
                 </div>
                 <div className="flex flex-none items-center gap-2">

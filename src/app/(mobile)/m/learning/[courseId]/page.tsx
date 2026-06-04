@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { submitQuiz } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +12,13 @@ type Lesson = { id: string; ordinal: number; title: string; body: string | null;
 type Question = { id: string; prompt: string; choices: string[]; ordinal: number };
 
 export default async function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { courseId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -63,7 +70,9 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
         {lessonList.map((l) => (
           <article key={l.id} className="surface p-4">
             <div className="flex items-center justify-between gap-3">
-              <Badge variant="muted">Lesson {l.ordinal}</Badge>
+              <Badge variant="muted">
+                {t("m.learning.course.lessonLabel", { ordinal: l.ordinal }, `Lesson ${l.ordinal}`)}
+              </Badge>
               <span className="font-mono text-xs text-[var(--text-muted)]">{l.lesson_kind}</span>
             </div>
             <h2 className="mt-2 text-sm font-semibold">{l.title}</h2>
@@ -74,13 +83,21 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
 
       {questionList.length > 0 && (
         <section className="mt-6">
-          <h2 className="text-base font-semibold">Quiz</h2>
+          <h2 className="text-base font-semibold">{t("m.learning.course.quizHeading", undefined, "Quiz")}</h2>
           {completion ? (
             <div className="surface mt-3 p-4">
               <Badge variant={(completion as { passed: boolean }).passed ? "success" : "error"}>
-                {(completion as { passed: boolean }).passed ? "Passed" : "Did Not Pass"}
+                {(completion as { passed: boolean }).passed
+                  ? t("m.learning.course.passed", undefined, "Passed")
+                  : t("m.learning.course.didNotPass", undefined, "Did Not Pass")}
               </Badge>
-              <p className="mt-2 text-xs">Score: {(completion as { score_pct: number | null }).score_pct ?? 0}%</p>
+              <p className="mt-2 text-xs">
+                {t(
+                  "m.learning.course.score",
+                  { pct: (completion as { score_pct: number | null }).score_pct ?? 0 },
+                  `Score: ${(completion as { score_pct: number | null }).score_pct ?? 0}%`,
+                )}
+              </p>
             </div>
           ) : (
             <form action={submitQuiz} className="mt-3 space-y-4">
@@ -102,7 +119,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
                 </fieldset>
               ))}
               <button type="submit" className="btn btn-primary w-full">
-                Submit
+                {t("common.submit", undefined, "Submit")}
               </button>
             </form>
           )}

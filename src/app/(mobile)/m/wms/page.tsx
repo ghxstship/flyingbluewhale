@@ -5,7 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -33,8 +33,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 };
 
 export default async function MobileWmsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -64,31 +69,35 @@ export default async function MobileWmsPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
-        Field
+        {t("m.wms.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Warehouse</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">Pick, put-away, and check-in/out via scan.</p>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.wms.title", undefined, "Warehouse")}</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.wms.subtitle", undefined, "Pick, put-away, and check-in/out via scan.")}
+      </p>
 
       <section className="mt-5 grid grid-cols-2 gap-2">
         <Link href="/m/inventory/scan" className="surface flex flex-col items-center gap-1 p-4 text-sm font-medium">
           <ScanLine size={20} />
-          Scan asset
+          {t("m.wms.scanAsset", undefined, "Scan asset")}
         </Link>
         <Link
           href="/console/production/equipment"
           className="surface flex flex-col items-center gap-1 p-4 text-sm font-medium"
         >
           <Package size={20} />
-          Asset register
+          {t("m.wms.assetRegister", undefined, "Asset register")}
         </Link>
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">In Maintenance</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          {t("m.wms.inMaintenance", undefined, "In Maintenance")}
+        </h2>
         <ul className="mt-3 space-y-2">
           {maintenance.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No Items in Maintenance" />
+              <EmptyState size="compact" title={t("m.wms.empty.maintenance", undefined, "No Items in Maintenance")} />
             </li>
           ) : (
             maintenance.map((r) => (
@@ -96,7 +105,7 @@ export default async function MobileWmsPage() {
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium">{r.name}</div>
                   <div className="font-mono text-xs text-[var(--text-muted)]">
-                    {r.asset_tag ?? "no tag"}
+                    {r.asset_tag ?? t("m.wms.noTag", undefined, "no tag")}
                     {r.category ? ` · ${r.category}` : ""}
                   </div>
                 </div>
@@ -108,11 +117,13 @@ export default async function MobileWmsPage() {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Returns Due</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          {t("m.wms.returnsDue", undefined, "Returns Due")}
+        </h2>
         <ul className="mt-3 space-y-2">
           {rentals.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No Returns Scheduled" />
+              <EmptyState size="compact" title={t("m.wms.empty.returns", undefined, "No Returns Scheduled")} />
             </li>
           ) : (
             rentals.map((r) => (
@@ -121,7 +132,7 @@ export default async function MobileWmsPage() {
                   <div className="text-sm font-medium">{r.equipment?.name ?? "—"}</div>
                   <div className="font-mono text-xs text-[var(--text-muted)]">{r.equipment?.asset_tag ?? ""}</div>
                 </div>
-                <Badge variant="muted">Due {fmtDay(r.ends_at)}</Badge>
+                <Badge variant="muted">{t("m.wms.due", { date: fmtDay(r.ends_at) }, `Due ${fmtDay(r.ends_at)}`)}</Badge>
               </li>
             ))
           )}

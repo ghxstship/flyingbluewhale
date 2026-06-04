@@ -3,6 +3,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { castVote } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,13 @@ type Option = { id: string; poll_id: string; ordinal: number; label: string };
 type Vote = { poll_id: string; option_id: string };
 
 export default async function MobilePollsPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -43,13 +50,19 @@ export default async function MobilePollsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Polls</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.common.mobileEyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.polls.title", undefined, "Polls")}</h1>
 
       <ul className="mt-5 space-y-3">
         {((polls ?? []) as Poll[]).length === 0 ? (
           <li>
-            <EmptyState size="compact" title="No Active Polls" description="Live polls will appear here." />
+            <EmptyState
+              size="compact"
+              title={t("m.polls.empty.title", undefined, "No Active Polls")}
+              description={t("m.polls.empty.description", undefined, "Live polls will appear here.")}
+            />
           </li>
         ) : (
           ((polls ?? []) as Poll[]).map((p) => {
@@ -57,7 +70,7 @@ export default async function MobilePollsPage() {
             const voted = myVote.get(p.id);
             return (
               <li key={p.id} className="surface p-4">
-                <Badge variant="info">Live</Badge>
+                <Badge variant="info">{t("m.polls.liveBadge", undefined, "Live")}</Badge>
                 <h2 className="mt-2 text-sm font-semibold">{p.question}</h2>
                 {voted ? (
                   <ul className="mt-3 space-y-1.5">
@@ -87,7 +100,7 @@ export default async function MobilePollsPage() {
                       </label>
                     ))}
                     <button type="submit" className="btn btn-primary btn-sm mt-2 w-full">
-                      Vote
+                      {t("m.polls.voteButton", undefined, "Vote")}
                     </button>
                   </form>
                 )}

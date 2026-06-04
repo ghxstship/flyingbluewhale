@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +17,13 @@ type Survey = {
 };
 
 export default async function MobileSurveysPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -39,13 +45,19 @@ export default async function MobileSurveysPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Surveys</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.common.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.surveys.title", undefined, "Surveys")}</h1>
 
       <ul className="mt-5 space-y-3">
         {list.length === 0 ? (
           <li>
-            <EmptyState size="compact" title="No Active Surveys" description="Open surveys will appear here." />
+            <EmptyState
+              size="compact"
+              title={t("m.surveys.empty.title", undefined, "No Active Surveys")}
+              description={t("m.surveys.empty.description", undefined, "Open surveys will appear here.")}
+            />
           </li>
         ) : (
           list.map((s) => {
@@ -57,13 +69,21 @@ export default async function MobileSurveysPage() {
                   className={`surface block p-4 ${done ? "opacity-60" : ""}`}
                 >
                   <div className="flex items-center justify-between">
-                    {done ? <Badge variant="success">Submitted</Badge> : <Badge variant="info">Open</Badge>}
-                    {s.anonymous && <Badge variant="muted">Anonymous</Badge>}
+                    {done ? (
+                      <Badge variant="success">{t("m.surveys.badge.submitted", undefined, "Submitted")}</Badge>
+                    ) : (
+                      <Badge variant="info">{t("m.surveys.badge.open", undefined, "Open")}</Badge>
+                    )}
+                    {s.anonymous && (
+                      <Badge variant="muted">{t("m.surveys.badge.anonymous", undefined, "Anonymous")}</Badge>
+                    )}
                   </div>
                   <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
                   {s.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{s.description}</p>}
                   {s.closes_at && (
-                    <p className="mt-1 font-mono text-xs text-[var(--text-muted)]">closes {fmt.date(s.closes_at)}</p>
+                    <p className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                      {t("m.surveys.closesAt", { date: fmt.date(s.closes_at) }, `closes ${fmt.date(s.closes_at)}`)}
+                    </p>
                   )}
                 </Link>
               </li>

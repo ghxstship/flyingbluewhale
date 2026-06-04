@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { submitSurvey } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +17,13 @@ type Question = {
 };
 
 export default async function SurveyPage({ params }: { params: Promise<{ surveyId: string }> }) {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { surveyId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -74,10 +81,12 @@ export default async function SurveyPage({ params }: { params: Promise<{ surveyI
               ) : q.question_kind === "boolean" ? (
                 <div className="mt-2 flex gap-3 text-xs">
                   <label className="flex items-center gap-1">
-                    <input type="radio" name={`q_${q.id}`} value="yes" required={q.required} /> Yes
+                    <input type="radio" name={`q_${q.id}`} value="yes" required={q.required} />{" "}
+                    {t("common.yes", undefined, "Yes")}
                   </label>
                   <label className="flex items-center gap-1">
-                    <input type="radio" name={`q_${q.id}`} value="no" required={q.required} /> No
+                    <input type="radio" name={`q_${q.id}`} value="no" required={q.required} />{" "}
+                    {t("common.no", undefined, "No")}
                   </label>
                 </div>
               ) : (
@@ -92,7 +101,7 @@ export default async function SurveyPage({ params }: { params: Promise<{ surveyI
           );
         })}
         <button type="submit" className="btn btn-primary w-full">
-          Submit
+          {t("common.submit", undefined, "Submit")}
         </button>
       </form>
     </div>

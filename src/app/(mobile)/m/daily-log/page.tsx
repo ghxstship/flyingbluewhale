@@ -4,7 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { quickCreateDailyLog } from "./actions";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +16,7 @@ export default async function Page() {
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   const fmtDate = (d: string): string =>
     fmt.dateParts(d + "T00:00:00", { weekday: "short", month: "short", day: "numeric" });
   const today = new Date().toISOString().slice(0, 10);
@@ -37,33 +38,49 @@ export default async function Page() {
 
   return (
     <>
-      <ModuleHeader eyebrow="Field" title="Daily Log" subtitle="Quick capture from the floor" />
+      <ModuleHeader
+        eyebrow={t("m.dailyLog.eyebrow", undefined, "Field")}
+        title={t("m.dailyLog.title", undefined, "Daily Log")}
+        subtitle={t("m.dailyLog.subtitle", undefined, "Quick capture from the floor")}
+      />
       <div className="page-content space-y-4">
         <form action={quickCreateDailyLog} className="surface space-y-3 p-4">
-          <h3 className="text-sm font-semibold">Today&apos;s log — {fmtDate(today)}</h3>
+          <h3 className="text-sm font-semibold">
+            {t("m.dailyLog.todaysLog", { date: fmtDate(today) }, "Today's log — {date}")}
+          </h3>
           <select name="project_id" required className={INPUT}>
-            <option value="">Select a project…</option>
+            <option value="">{t("m.dailyLog.selectProject", undefined, "Select a project…")}</option>
             {(projects ?? []).map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
               </option>
             ))}
           </select>
-          <input name="weather_summary" placeholder="Weather (e.g. 78°F, sunny)" className={INPUT} />
+          <input
+            name="weather_summary"
+            placeholder={t("m.dailyLog.weatherPlaceholder", undefined, "Weather (e.g. 78°F, sunny)")}
+            className={INPUT}
+          />
           <textarea
             name="notes"
             rows={4}
-            placeholder="Quick narrative — milestones, blockers, deliveries…"
+            placeholder={t(
+              "m.dailyLog.notesPlaceholder",
+              undefined,
+              "Quick narrative — milestones, blockers, deliveries…",
+            )}
             className={INPUT}
           />
           <input type="hidden" name="log_date" value={today} />
           <button type="submit" className="surface hover-lift w-full rounded-md py-2.5 text-sm font-medium">
-            Save log
+            {t("m.dailyLog.saveLog", undefined, "Save log")}
           </button>
         </form>
 
         <section className="surface p-3">
-          <h3 className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">Recent</h3>
+          <h3 className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+            {t("m.dailyLog.recent", undefined, "Recent")}
+          </h3>
           <ul className="mt-2 space-y-1.5">
             {(
               (recent ?? []) as Array<{

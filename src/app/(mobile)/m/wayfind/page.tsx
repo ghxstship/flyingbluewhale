@@ -5,7 +5,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +29,13 @@ const KIND_TONE: Record<string, "muted" | "info" | "success"> = {
 };
 
 export default async function MobileWayfindPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -46,8 +51,9 @@ export default async function MobileWayfindPage() {
   const rows = (data ?? []) as VenueRow[];
 
   // Group by cluster
+  const otherLabel = t("m.wayfind.otherCluster", undefined, "Other");
   const byCluster = rows.reduce<Map<string, VenueRow[]>>((map, v) => {
-    const key = v.cluster ?? "Other";
+    const key = v.cluster ?? otherLabel;
     if (!map.has(key)) map.set(key, []);
     map.get(key)!.push(v);
     return map;
@@ -57,20 +63,26 @@ export default async function MobileWayfindPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
-        Field
+        {t("m.wayfind.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Wayfinding</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">Pick a venue to view its zones, gates, and meet-points.</p>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.wayfind.title", undefined, "Wayfinding")}</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.wayfind.subtitle", undefined, "Pick a venue to view its zones, gates, and meet-points.")}
+      </p>
 
       {clusters.length === 0 ? (
         <div className="mt-6">
           <EmptyState
             size="compact"
-            title="No Venues Yet"
-            description="Author venues from Console → Venues. Each venue's zones become the routable points here."
+            title={t("m.wayfind.empty.title", undefined, "No Venues Yet")}
+            description={t(
+              "m.wayfind.empty.description",
+              undefined,
+              "Author venues from Console → Venues. Each venue's zones become the routable points here.",
+            )}
             action={
               <Link href="/console/venues" className="btn btn-secondary btn-sm">
-                Open Venues
+                {t("m.wayfind.empty.action", undefined, "Open Venues")}
               </Link>
             }
           />
@@ -93,7 +105,11 @@ export default async function MobileWayfindPage() {
                         </div>
                         {v.capacity != null && (
                           <div className="ms-5 mt-0.5 font-mono text-xs text-[var(--text-muted)]">
-                            cap {fmt.number(v.capacity)}
+                            {t(
+                              "m.wayfind.capacity",
+                              { count: fmt.number(v.capacity) },
+                              `cap ${fmt.number(v.capacity)}`,
+                            )}
                           </div>
                         )}
                       </div>

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Tile = { href: string; label: string; sub: string };
 
@@ -12,6 +13,7 @@ type Tile = { href: string; label: string; sub: string };
  * Reports sections house the 17 surfaces that previously had no anchor.
  */
 export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools: Tile[]; reports: Tile[] }) {
+  const t = useT();
   const [active, setActive] = React.useState<"today" | "tools" | "reports">("today");
   const tiles = active === "today" ? today : active === "tools" ? tools : reports;
 
@@ -19,14 +21,14 @@ export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools
     <>
       <div
         role="tablist"
-        aria-label="Mobile home sections"
+        aria-label={t("m.home.tabs.ariaLabel", undefined, "Mobile home sections")}
         className="mt-5 inline-flex w-full items-center gap-0.5 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-0.5"
       >
         {(
           [
-            ["today", "Today", today.length],
-            ["tools", "Tools", tools.length],
-            ["reports", "Reports", reports.length],
+            ["today", t("m.home.tabs.today", undefined, "Today"), today.length],
+            ["tools", t("m.home.tabs.tools", undefined, "Tools"), tools.length],
+            ["reports", t("m.home.tabs.reports", undefined, "Reports"), reports.length],
           ] as const
         ).map(([key, label, count]) => (
           <button
@@ -48,10 +50,10 @@ export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        {tiles.map((t) => (
-          <Link key={t.href} href={t.href} className="card p-4">
-            <div className="text-label">{t.label}</div>
-            <div className="text-mono mt-1 text-xs text-[var(--color-text-tertiary)]">{t.sub}</div>
+        {tiles.map((tile) => (
+          <Link key={tile.href} href={tile.href} className="card p-4">
+            <div className="text-label">{tile.label}</div>
+            <div className="text-mono mt-1 text-xs text-[var(--color-text-tertiary)]">{tile.sub}</div>
           </Link>
         ))}
       </div>

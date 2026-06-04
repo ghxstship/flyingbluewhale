@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -34,8 +34,13 @@ const SEVERITY_TONE: Record<string, "info" | "warning" | "error" | "muted"> = {
 };
 
 export default async function MyIncidentsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -53,10 +58,12 @@ export default async function MyIncidentsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Field</div>
-      <h1 className="mt-1 text-2xl font-semibold">My Incidents</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.incident.eyebrow", undefined, "Field")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.incident.title", undefined, "My Incidents")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Reports you filed. {openCount} open. See the org-wide queue at{" "}
+        {t("m.incident.subtitle", { count: openCount }, "Reports you filed. {count} open. See the org-wide queue at")}{" "}
         <a className="underline" href="/m/incidents">
           /m/incidents
         </a>
@@ -65,10 +72,10 @@ export default async function MyIncidentsPage() {
 
       <div className="mt-4 flex flex-wrap gap-2">
         <Link href="/m/incident/new" className="btn btn-primary btn-sm">
-          Quick-file (one field)
+          {t("m.incident.quickFile", undefined, "Quick-file (one field)")}
         </Link>
         <Link href="/m/incidents/new" className="btn btn-secondary btn-sm">
-          Full report
+          {t("m.incident.fullReport", undefined, "Full report")}
         </Link>
       </div>
 
@@ -77,8 +84,12 @@ export default async function MyIncidentsPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Reports Yet"
-              description="Anything you file from this screen or /m/incidents/new appears here."
+              title={t("m.incident.empty.title", undefined, "No Reports Yet")}
+              description={t(
+                "m.incident.empty.description",
+                undefined,
+                "Anything you file from this screen or /m/incidents/new appears here.",
+              )}
             />
           </li>
         ) : (

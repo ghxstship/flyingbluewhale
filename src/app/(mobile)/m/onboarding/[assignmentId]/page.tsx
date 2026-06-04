@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { completeStep, finalizeAssignment } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +18,13 @@ type Step = {
 };
 
 export default async function Page({ params }: { params: Promise<{ assignmentId: string }> }) {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { assignmentId } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -51,7 +58,9 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <h1 className="text-xl font-semibold">{(flow as { name: string } | null)?.name ?? "Onboarding"}</h1>
+      <h1 className="text-xl font-semibold">
+        {(flow as { name: string } | null)?.name ?? t("m.onboarding.title", undefined, "Onboarding")}
+      </h1>
       {(flow as { description: string | null } | null)?.description && (
         <p className="mt-1 text-xs text-[var(--text-secondary)]">{(flow as { description: string }).description}</p>
       )}
@@ -81,11 +90,15 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
                   <input type="hidden" name="assignmentId" value={a.id} />
                   <input type="hidden" name="stepId" value={s.id} />
                   <button type="submit" className="btn btn-primary btn-sm">
-                    Mark Done
+                    {t("m.onboarding.markDone", undefined, "Mark Done")}
                   </button>
                 </form>
               )}
-              {done && <p className="mt-2 text-xs text-[var(--color-success)]">✓ Completed</p>}
+              {done && (
+                <p className="mt-2 text-xs text-[var(--color-success)]">
+                  {t("m.onboarding.completed", undefined, "✓ Completed")}
+                </p>
+              )}
             </li>
           );
         })}
@@ -95,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
         <form action={finalizeAssignment} className="mt-6">
           <input type="hidden" name="assignmentId" value={a.id} />
           <button type="submit" className="btn btn-primary w-full">
-            Finish Onboarding
+            {t("m.onboarding.finish", undefined, "Finish Onboarding")}
           </button>
         </form>
       )}

@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { clockInAction, clockOutAction, type OpenShift } from "./actions";
 
 type State = "idle" | "clocked_in";
@@ -18,6 +19,7 @@ type State = "idle" | "clocked_in";
  * still proceeds; we'd rather have the time entry than block the shift.
  */
 export function ClockInOut({ initial }: { initial: OpenShift }) {
+  const t = useT();
   const [state, setState] = useState<State>(initial ? "clocked_in" : "idle");
   const [startedAt, setStartedAt] = useState<string | null>(initial?.startedAt ?? null);
   const [elapsed, setElapsed] = useState(0);
@@ -56,7 +58,7 @@ export function ClockInOut({ initial }: { initial: OpenShift }) {
       setStartedAt(result.startedAt);
       setState("clocked_in");
       setElapsed(Math.floor((Date.now() - new Date(result.startedAt).getTime()) / 1000));
-      toast.success("Clocked in");
+      toast.success(t("m.clock.toast.clockedIn", undefined, "Clocked in"));
     });
 
   const clockOut = () =>
@@ -69,14 +71,22 @@ export function ClockInOut({ initial }: { initial: OpenShift }) {
       setState("idle");
       setStartedAt(null);
       setElapsed(0);
-      toast.success(`Clocked out · ${result.durationMinutes}m logged`);
+      toast.success(
+        t(
+          "m.clock.toast.clockedOut",
+          { minutes: result.durationMinutes },
+          `Clocked out · ${result.durationMinutes}m logged`,
+        ),
+      );
     });
 
   return (
     <div className="surface p-6 text-center">
       {state === "clocked_in" ? (
         <>
-          <div className="text-xs font-semibold tracking-wider text-[var(--color-success)] uppercase">Clocked In</div>
+          <div className="text-xs font-semibold tracking-wider text-[var(--color-success)] uppercase">
+            {t("m.clock.status.clockedIn", undefined, "Clocked In")}
+          </div>
           <div className="mt-3 font-mono text-4xl tabular-nums">
             {Math.floor(elapsed / 3600)
               .toString()
@@ -88,15 +98,17 @@ export function ClockInOut({ initial }: { initial: OpenShift }) {
             :{(elapsed % 60).toString().padStart(2, "0")}
           </div>
           <Button size="lg" variant="danger" className="mt-6 w-full" disabled={pending} onClick={clockOut}>
-            Clock out
+            {t("m.clock.action.clockOut", undefined, "Clock out")}
           </Button>
         </>
       ) : (
         <>
-          <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Ready to Start</div>
+          <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.clock.status.readyToStart", undefined, "Ready to Start")}
+          </div>
           <div className="mt-3 font-mono text-4xl text-[var(--text-muted)] tabular-nums">00:00:00</div>
           <Button size="lg" className="mt-6 w-full" disabled={pending} onClick={clockIn}>
-            Clock in
+            {t("m.clock.action.clockIn", undefined, "Clock in")}
           </Button>
         </>
       )}

@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +16,13 @@ type RoomRow = {
 };
 
 export default async function InboxPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.inbox.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -55,17 +60,25 @@ export default async function InboxPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Inbox</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">{list.length} conversations</p>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.inbox.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.inbox.title", undefined, "Inbox")}</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.inbox.count", { n: list.length }, `${list.length} conversations`)}
+      </p>
 
       <ul className="mt-5 space-y-2">
         {list.length === 0 ? (
           <li>
             <EmptyState
               size="compact"
-              title="No Conversations"
-              description="Direct messages and channels you join appear here."
+              title={t("m.inbox.empty.title", undefined, "No Conversations")}
+              description={t(
+                "m.inbox.empty.description",
+                undefined,
+                "Direct messages and channels you join appear here.",
+              )}
             />
           </li>
         ) : (
@@ -78,9 +91,11 @@ export default async function InboxPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <Badge variant="muted">{r.room_kind}</Badge>
-                      {unread && <Badge variant="warning">New</Badge>}
+                      {unread && <Badge variant="warning">{t("m.inbox.unreadBadge", undefined, "New")}</Badge>}
                     </div>
-                    <div className="mt-1 truncate text-sm font-semibold">{r.name ?? "Direct message"}</div>
+                    <div className="mt-1 truncate text-sm font-semibold">
+                      {r.name ?? t("m.inbox.directMessage", undefined, "Direct message")}
+                    </div>
                   </div>
                   <span className="shrink-0 font-mono text-xs text-[var(--text-muted)]">
                     {r.last_message_at ? fmt.time(r.last_message_at) : ""}

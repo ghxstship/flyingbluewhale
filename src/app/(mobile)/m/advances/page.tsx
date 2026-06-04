@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { CATALOG_KINDS, CATALOG_KIND_LABEL, listMyAssignments, type CatalogKind } from "@/lib/db/assignments";
 
@@ -35,8 +35,13 @@ const STATE_TONE: Record<string, "info" | "success" | "warning" | "error" | "mut
 };
 
 export default async function MobileAdvancesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -65,18 +70,28 @@ export default async function MobileAdvancesPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">My Assignments</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.advances.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.advances.title", undefined, "My Assignments")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        {openCount} open of {rows.length} across every show you&apos;re on.
+        {t(
+          "m.advances.summary",
+          { open: openCount, total: rows.length },
+          `${openCount} open of ${rows.length} across every show you're on.`,
+        )}
       </p>
 
       {rows.length === 0 ? (
         <div className="mt-5">
           <EmptyState
             size="compact"
-            title="Nothing Assigned Yet"
-            description="When your production team pins something to you, it lands here."
+            title={t("m.advances.empty.title", undefined, "Nothing Assigned Yet")}
+            description={t(
+              "m.advances.empty.description",
+              undefined,
+              "When your production team pins something to you, it lands here.",
+            )}
           />
         </div>
       ) : (
@@ -93,10 +108,18 @@ export default async function MobileAdvancesPage() {
                     <li key={d.id} className="surface p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <div className="truncate text-sm font-semibold">{d.title ?? "Untitled"}</div>
+                          <div className="truncate text-sm font-semibold">
+                            {d.title ?? t("m.advances.untitled", undefined, "Untitled")}
+                          </div>
                           <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                            {projectMap.get(d.project_id) ?? "Project"}
-                            {d.deadline ? ` · due ${fmt.date(d.deadline)}` : ""}
+                            {projectMap.get(d.project_id) ?? t("m.advances.projectFallback", undefined, "Project")}
+                            {d.deadline
+                              ? t(
+                                  "m.advances.dueSuffix",
+                                  { date: fmt.date(d.deadline) },
+                                  ` · due ${fmt.date(d.deadline)}`,
+                                )
+                              : ""}
                           </div>
                         </div>
                         <Badge variant={STATE_TONE[d.fulfillment_state] ?? "muted"}>
@@ -113,11 +136,11 @@ export default async function MobileAdvancesPage() {
       )}
 
       <p className="mt-6 text-xs text-[var(--text-muted)]">
-        Working a single show?{" "}
+        {t("m.advances.singleShow.prompt", undefined, "Working a single show?")}{" "}
         <Link className="underline" href="/m/shift">
-          Open your shift
+          {t("m.advances.singleShow.link", undefined, "Open your shift")}
         </Link>{" "}
-        to see today&apos;s call.
+        {t("m.advances.singleShow.suffix", undefined, "to see today's call.")}
       </p>
     </div>
   );

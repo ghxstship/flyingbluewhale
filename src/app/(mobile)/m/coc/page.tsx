@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,8 +20,13 @@ type AuditRow = {
 const COC_TABLES = ["incidents", "incident_photos", "credentials", "evidence_uploads", "deliverables", "ticket_scans"];
 
 export default async function MobileCocPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -30,7 +35,7 @@ export default async function MobileCocPage() {
   const relativeTime = (iso: string): string => {
     const ms = Date.now() - new Date(iso).getTime();
     const min = Math.floor(ms / 60_000);
-    if (min < 1) return "just now";
+    if (min < 1) return t("common.relativeTime.justNow", undefined, "just now");
     if (min < 60) return `${min}m`;
     const hr = Math.floor(min / 60);
     if (hr < 24) return `${hr}h`;
@@ -53,33 +58,41 @@ export default async function MobileCocPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
-        Field
+        {t("m.coc.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Chain of Custody</h1>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.coc.title", undefined, "Chain of Custody")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Evidence + sample handover trail. Capture by uploading evidence on an incident, scan, or credential.
+        {t(
+          "m.coc.description",
+          undefined,
+          "Evidence + sample handover trail. Capture by uploading evidence on an incident, scan, or credential.",
+        )}
       </p>
 
       <section className="mt-5 grid grid-cols-2 gap-2">
         <Link href="/m/incidents/new" className="surface p-3 text-center text-sm font-medium">
-          + Log incident
+          {t("m.coc.actions.logIncident", undefined, "+ Log incident")}
         </Link>
         <Link href="/m/inventory/scan" className="surface p-3 text-center text-sm font-medium">
-          Scan asset
+          {t("m.coc.actions.scanAsset", undefined, "Scan asset")}
         </Link>
       </section>
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          My recent custody events
+          {t("m.coc.recent.heading", undefined, "My recent custody events")}
         </h2>
         <ul className="mt-3 space-y-2">
           {rows.length === 0 ? (
             <li>
               <EmptyState
                 size="compact"
-                title="Nothing in the Last 7 Days"
-                description="Custody events you create are auto-logged into the audit trail and appear here."
+                title={t("m.coc.empty.title", undefined, "Nothing in the Last 7 Days")}
+                description={t(
+                  "m.coc.empty.description",
+                  undefined,
+                  "Custody events you create are auto-logged into the audit trail and appear here.",
+                )}
               />
             </li>
           ) : (
@@ -95,7 +108,7 @@ export default async function MobileCocPage() {
                   )}
                 </div>
                 <div className="flex flex-none items-center gap-2">
-                  <Badge variant="muted">Audit</Badge>
+                  <Badge variant="muted">{t("m.coc.badge.audit", undefined, "Audit")}</Badge>
                   <span className="font-mono text-xs text-[var(--text-muted)]">{relativeTime(r.at)}</span>
                 </div>
               </li>
@@ -103,9 +116,9 @@ export default async function MobileCocPage() {
           )}
         </ul>
         <p className="mt-4 text-xs text-[var(--text-muted)]">
-          Need the desktop view?{" "}
+          {t("m.coc.desktopPrompt", undefined, "Need the desktop view?")}{" "}
           <Link href="/console/compliance/coc" className="text-[var(--org-primary)]">
-            Open Chain of Custody
+            {t("m.coc.desktopLink", undefined, "Open Chain of Custody")}
           </Link>
           .
         </p>

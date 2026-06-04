@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -35,8 +35,13 @@ function fmtDuration(s: number | null): string {
 }
 
 export default async function MobileRosPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -63,12 +68,18 @@ export default async function MobileRosPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Run of Show</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.ros.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.ros.title", undefined, "Run of Show")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {cues.length === 0
-          ? "No cues scheduled today."
-          : `${live} live · ${upcoming} upcoming · ${cues.length} total today`}
+          ? t("m.ros.noneToday", undefined, "No cues scheduled today.")
+          : t(
+              "m.ros.summary",
+              { live, upcoming, total: cues.length },
+              `${live} live · ${upcoming} upcoming · ${cues.length} total today`,
+            )}
       </p>
 
       <ul className="mt-5 space-y-2">
@@ -76,8 +87,12 @@ export default async function MobileRosPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Cues Today"
-              description="Cues authored on the desktop ROS will appear here on the day they're scheduled."
+              title={t("m.ros.empty.title", undefined, "No Cues Today")}
+              description={t(
+                "m.ros.empty.description",
+                undefined,
+                "Cues authored on the desktop ROS will appear here on the day they're scheduled.",
+              )}
             />
           </li>
         ) : (

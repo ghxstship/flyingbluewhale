@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { createKudos, toggleReaction } from "./actions";
 
 const REACTION_EMOJIS = ["👏", "🙌", "🔥", "💯", "🚀", "❤️"] as const;
@@ -23,7 +23,13 @@ type Post = {
 type Member = { id: string; email: string };
 
 export default async function MobileKudosPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -82,8 +88,10 @@ export default async function MobileKudosPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Kudos</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.common.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.kudos.title", undefined, "Kudos")}</h1>
 
       {(
         (myBadges ?? []) as Array<{
@@ -95,7 +103,9 @@ export default async function MobileKudosPage() {
         }>
       ).length > 0 && (
         <section className="mt-5">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">My Badges</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("m.kudos.myBadges", undefined, "My Badges")}
+          </h2>
           <ul className="mt-2 flex flex-wrap gap-2">
             {(
               (myBadges ?? []) as Array<{
@@ -108,7 +118,9 @@ export default async function MobileKudosPage() {
             ).map((ba) => (
               <li key={ba.id} className="surface flex items-center gap-2 px-3 py-2 text-xs">
                 <span className="font-mono text-base">{ba.badge?.icon ?? "🏅"}</span>
-                <span className="font-semibold">{ba.badge?.name ?? "Badge"}</span>
+                <span className="font-semibold">
+                  {ba.badge?.name ?? t("m.kudos.badgeFallback", undefined, "Badge")}
+                </span>
               </li>
             ))}
           </ul>
@@ -116,10 +128,10 @@ export default async function MobileKudosPage() {
       )}
 
       <details className="surface mt-4 p-3">
-        <summary className="cursor-pointer text-sm font-semibold">Give Kudos</summary>
+        <summary className="cursor-pointer text-sm font-semibold">{t("m.kudos.give", undefined, "Give Kudos")}</summary>
         <form action={createKudos} className="mt-3 space-y-2">
           <label className="block text-xs font-semibold">
-            To
+            {t("m.kudos.to", undefined, "To")}
             <select
               name="to_user_id"
               required
@@ -135,7 +147,7 @@ export default async function MobileKudosPage() {
             </select>
           </label>
           <label className="block text-xs font-semibold">
-            Message
+            {t("m.kudos.message", undefined, "Message")}
             <textarea
               name="message"
               required
@@ -145,7 +157,7 @@ export default async function MobileKudosPage() {
             />
           </label>
           <label className="block text-xs font-semibold">
-            Value (optional tag)
+            {t("m.kudos.valueTag", undefined, "Value (optional tag)")}
             <input
               type="text"
               name="value_tag"
@@ -154,7 +166,7 @@ export default async function MobileKudosPage() {
             />
           </label>
           <button type="submit" className="btn btn-primary w-full">
-            Send
+            {t("common.send", undefined, "Send")}
           </button>
         </form>
       </details>
@@ -162,14 +174,20 @@ export default async function MobileKudosPage() {
       <ul className="mt-5 space-y-3">
         {((posts ?? []) as Post[]).length === 0 ? (
           <li>
-            <EmptyState size="compact" title="No Kudos Yet" description="Recognition posts will appear here." />
+            <EmptyState
+              size="compact"
+              title={t("m.kudos.empty.title", undefined, "No Kudos Yet")}
+              description={t("m.kudos.empty.description", undefined, "Recognition posts will appear here.")}
+            />
           </li>
         ) : (
           ((posts ?? []) as Post[]).map((p) => (
             <li key={p.id} className="surface p-4">
               <div className="flex items-center justify-between gap-3">
                 <span className="text-xs">
-                  <span className="font-semibold">{memberMap.get(p.from_user_id) ?? "Someone"}</span>{" "}
+                  <span className="font-semibold">
+                    {memberMap.get(p.from_user_id) ?? t("m.kudos.someone", undefined, "Someone")}
+                  </span>{" "}
                   <span className="text-[var(--text-muted)]">→</span>{" "}
                   <span className="font-semibold">{memberMap.get(p.to_user_id) ?? "Someone"}</span>
                 </span>
@@ -178,7 +196,9 @@ export default async function MobileKudosPage() {
               <p className="mt-2 text-sm">{p.message}</p>
               <div className="mt-2 flex items-center gap-2">
                 {p.value_tag && <Badge variant="info">{p.value_tag}</Badge>}
-                {p.points > 0 && <Badge variant="muted">{p.points} pts</Badge>}
+                {p.points > 0 && (
+                  <Badge variant="muted">{t("m.kudos.points", { count: p.points }, `${p.points} pts`)}</Badge>
+                )}
               </div>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {REACTION_EMOJIS.map((emoji) => {
@@ -191,7 +211,7 @@ export default async function MobileKudosPage() {
                       <input type="hidden" name="emoji" value={emoji} />
                       <button
                         type="submit"
-                        aria-label={`React with ${emoji}`}
+                        aria-label={t("m.kudos.reactWith", { emoji }, `React with ${emoji}`)}
                         aria-pressed={mine}
                         className={`rounded-full border px-2 py-0.5 text-xs transition-colors ${
                           mine

@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { DocDownloadLink } from "./DocDownloadLink";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +28,13 @@ const KIND_TONE: Record<string, "info" | "success" | "warning" | "muted"> = {
 };
 
 export default async function MobileDocsPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -44,15 +50,21 @@ export default async function MobileDocsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">My Documents</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.docs.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.docs.title", undefined, "My Documents")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Personal IDs, licenses, tax forms, and signed contracts. Only you can see these.
+        {t(
+          "m.docs.subtitle",
+          undefined,
+          "Personal IDs, licenses, tax forms, and signed contracts. Only you can see these.",
+        )}
       </p>
 
       <div className="mt-4 flex justify-end">
         <Link href="/m/docs/new" className="btn btn-primary btn-sm">
-          + Upload
+          {t("m.docs.uploadCta", undefined, "+ Upload")}
         </Link>
       </div>
 
@@ -61,8 +73,12 @@ export default async function MobileDocsPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Documents"
-              description="Uploads from onboarding and contract signing land here."
+              title={t("m.docs.empty.title", undefined, "No Documents")}
+              description={t(
+                "m.docs.empty.description",
+                undefined,
+                "Uploads from onboarding and contract signing land here.",
+              )}
             />
           </li>
         ) : (

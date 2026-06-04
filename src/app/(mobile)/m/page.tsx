@@ -1,5 +1,6 @@
 import { QrCode } from "lucide-react";
 import { FAB } from "@/components/mobile/FAB";
+import { getRequestT } from "@/lib/i18n/request";
 import { MobileHomeTabs } from "./MobileHomeTabs";
 
 /**
@@ -13,46 +14,143 @@ import { MobileHomeTabs } from "./MobileHomeTabs";
  * grouping inside the active tab. Hick's-Law-respecting (6 primary tiles,
  * then scoped sub-grids on demand).
  */
-export default function MobileHome() {
+export default async function MobileHome() {
+  const { t } = await getRequestT();
   const today = [
-    { href: "/m/check-in", label: "Check-in", sub: "Scan tickets" },
-    { href: "/m/tasks", label: "Tasks", sub: "Today's queue" },
-    { href: "/m/crew/clock", label: "Clock", sub: "In / out" },
-    { href: "/m/inventory/scan", label: "Inventory", sub: "Equipment scan" },
-    { href: "/m/incidents/new", label: "Incident", sub: "Safety report" },
-    { href: "/m/settings", label: "Settings", sub: "Offline, perms" },
+    {
+      href: "/m/check-in",
+      label: t("m.home.today.checkIn.label", undefined, "Check-in"),
+      sub: t("m.home.today.checkIn.sub", undefined, "Scan tickets"),
+    },
+    {
+      href: "/m/tasks",
+      label: t("m.home.today.tasks.label", undefined, "Tasks"),
+      sub: t("m.home.today.tasks.sub", undefined, "Today's queue"),
+    },
+    {
+      href: "/m/crew/clock",
+      label: t("m.home.today.clock.label", undefined, "Clock"),
+      sub: t("m.home.today.clock.sub", undefined, "In / out"),
+    },
+    {
+      href: "/m/inventory/scan",
+      label: t("m.home.today.inventory.label", undefined, "Inventory"),
+      sub: t("m.home.today.inventory.sub", undefined, "Equipment scan"),
+    },
+    {
+      href: "/m/incidents/new",
+      label: t("m.home.today.incident.label", undefined, "Incident"),
+      sub: t("m.home.today.incident.sub", undefined, "Safety report"),
+    },
+    {
+      href: "/m/settings",
+      label: t("m.home.today.settings.label", undefined, "Settings"),
+      sub: t("m.home.today.settings.sub", undefined, "Offline, perms"),
+    },
   ];
 
   const tools = [
-    { href: "/m/gate", label: "Gate Scan", sub: "Door check-in" },
-    { href: "/m/wallet", label: "Wallet", sub: "Pass + payouts" },
-    { href: "/m/wms", label: "Warehouse", sub: "Stock moves" },
-    { href: "/m/driver", label: "Driver", sub: "Run sheet" },
-    { href: "/m/ad", label: "A&D", sub: "Arrival / departure" },
-    { href: "/m/ros", label: "Run of Show", sub: "Cue-by-cue" },
-    { href: "/m/guard", label: "Guard", sub: "Patrol log" },
-    { href: "/m/safeguarding", label: "Safeguarding", sub: "Welfare" },
-    { href: "/m/medic", label: "Medic", sub: "Patient log" },
-    { href: "/m/coc", label: "Chain of Custody", sub: "Asset trail" },
-    { href: "/m/handover", label: "Handover", sub: "Shift transfer" },
-    { href: "/m/wayfind", label: "Wayfind", sub: "Site map" },
-    { href: "/m/gigs", label: "Open Gigs", sub: "Find next work" },
+    {
+      href: "/m/gate",
+      label: t("m.home.tools.gate.label", undefined, "Gate Scan"),
+      sub: t("m.home.tools.gate.sub", undefined, "Door check-in"),
+    },
+    {
+      href: "/m/wallet",
+      label: t("m.home.tools.wallet.label", undefined, "Wallet"),
+      sub: t("m.home.tools.wallet.sub", undefined, "Pass + payouts"),
+    },
+    {
+      href: "/m/wms",
+      label: t("m.home.tools.wms.label", undefined, "Warehouse"),
+      sub: t("m.home.tools.wms.sub", undefined, "Stock moves"),
+    },
+    {
+      href: "/m/driver",
+      label: t("m.home.tools.driver.label", undefined, "Driver"),
+      sub: t("m.home.tools.driver.sub", undefined, "Run sheet"),
+    },
+    {
+      href: "/m/ad",
+      label: t("m.home.tools.ad.label", undefined, "A&D"),
+      sub: t("m.home.tools.ad.sub", undefined, "Arrival / departure"),
+    },
+    {
+      href: "/m/ros",
+      label: t("m.home.tools.ros.label", undefined, "Run of Show"),
+      sub: t("m.home.tools.ros.sub", undefined, "Cue-by-cue"),
+    },
+    {
+      href: "/m/guard",
+      label: t("m.home.tools.guard.label", undefined, "Guard"),
+      sub: t("m.home.tools.guard.sub", undefined, "Patrol log"),
+    },
+    {
+      href: "/m/safeguarding",
+      label: t("m.home.tools.safeguarding.label", undefined, "Safeguarding"),
+      sub: t("m.home.tools.safeguarding.sub", undefined, "Welfare"),
+    },
+    {
+      href: "/m/medic",
+      label: t("m.home.tools.medic.label", undefined, "Medic"),
+      sub: t("m.home.tools.medic.sub", undefined, "Patient log"),
+    },
+    {
+      href: "/m/coc",
+      label: t("m.home.tools.coc.label", undefined, "Chain of Custody"),
+      sub: t("m.home.tools.coc.sub", undefined, "Asset trail"),
+    },
+    {
+      href: "/m/handover",
+      label: t("m.home.tools.handover.label", undefined, "Handover"),
+      sub: t("m.home.tools.handover.sub", undefined, "Shift transfer"),
+    },
+    {
+      href: "/m/wayfind",
+      label: t("m.home.tools.wayfind.label", undefined, "Wayfind"),
+      sub: t("m.home.tools.wayfind.sub", undefined, "Site map"),
+    },
+    {
+      href: "/m/gigs",
+      label: t("m.home.tools.gigs.label", undefined, "Open Gigs"),
+      sub: t("m.home.tools.gigs.sub", undefined, "Find next work"),
+    },
   ];
 
   const reports = [
-    { href: "/m/daily-log", label: "Daily Log", sub: "Today's entries" },
-    { href: "/m/punch", label: "Punch List", sub: "Open items" },
-    { href: "/m/incidents", label: "Incidents", sub: "All reports" },
-    { href: "/m/requests", label: "Requests", sub: "Service desk" },
-    { href: "/m/notifications", label: "Notifications", sub: "All alerts" },
+    {
+      href: "/m/daily-log",
+      label: t("m.home.reports.dailyLog.label", undefined, "Daily Log"),
+      sub: t("m.home.reports.dailyLog.sub", undefined, "Today's entries"),
+    },
+    {
+      href: "/m/punch",
+      label: t("m.home.reports.punch.label", undefined, "Punch List"),
+      sub: t("m.home.reports.punch.sub", undefined, "Open items"),
+    },
+    {
+      href: "/m/incidents",
+      label: t("m.home.reports.incidents.label", undefined, "Incidents"),
+      sub: t("m.home.reports.incidents.sub", undefined, "All reports"),
+    },
+    {
+      href: "/m/requests",
+      label: t("m.home.reports.requests.label", undefined, "Requests"),
+      sub: t("m.home.reports.requests.sub", undefined, "Service desk"),
+    },
+    {
+      href: "/m/notifications",
+      label: t("m.home.reports.notifications.label", undefined, "Notifications"),
+      sub: t("m.home.reports.notifications.sub", undefined, "All alerts"),
+    },
   ];
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-label text-[var(--brand-color)]">Field</div>
-      <h1 className="text-display mt-2 text-3xl">Today</h1>
+      <div className="text-label text-[var(--brand-color)]">{t("m.home.eyebrow", undefined, "Field")}</div>
+      <h1 className="text-display mt-2 text-3xl">{t("m.home.title", undefined, "Today")}</h1>
       <MobileHomeTabs today={today} tools={tools} reports={reports} />
-      <FAB href="/m/check-in" label="Scan Ticket">
+      <FAB href="/m/check-in" label={t("m.home.fab.scanTicket", undefined, "Scan Ticket")}>
         <QrCode size={22} />
       </FAB>
     </div>

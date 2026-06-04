@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { useAnnounce } from "@/components/ui/LiveRegion";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { haptic } from "@/lib/haptics";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 import { CameraScanner, type ScannedCode } from "@/components/scanners";
 
 type ScanRecord = {
@@ -46,6 +46,7 @@ export function GateScanner() {
   const inputRef = useRef<HTMLInputElement>(null);
   const announce = useAnnounce();
   const fmt = useFormatters();
+  const t = useT();
 
   // Hydrate mode from localStorage after mount (avoids SSR drift).
   useEffect(() => {
@@ -86,22 +87,27 @@ export function GateScanner() {
 
           if (!json.ok) {
             haptic("error");
-            announce(`Error: ${json.error.message}`, "assertive");
+            announce(
+              t("m.gate.scan.announce.error", { message: json.error.message }, `Error: ${json.error.message}`),
+              "assertive",
+            );
             toast.error(json.error.message);
           } else {
             const { result, reason } = json.data.scan;
             if (result === "allow") {
               haptic("success");
-              announce("Allow", "polite");
-              toast.success("Allow");
+              announce(t("m.gate.scan.result.allow", undefined, "Allow"), "polite");
+              toast.success(t("m.gate.scan.result.allow", undefined, "Allow"));
             } else if (result === "warn") {
               haptic("warning");
-              announce(`Warn: ${reason ?? "review"}`, "assertive");
-              toast.warning(reason ?? "review");
+              const warnReason = reason ?? t("m.gate.scan.reason.review", undefined, "review");
+              announce(t("m.gate.scan.announce.warn", { reason: warnReason }, `Warn: ${warnReason}`), "assertive");
+              toast.warning(warnReason);
             } else {
               haptic("error");
-              announce(`Deny: ${reason ?? "denied"}`, "assertive");
-              toast.error(reason ?? "denied");
+              const denyReason = reason ?? t("m.gate.scan.reason.denied", undefined, "denied");
+              announce(t("m.gate.scan.announce.deny", { reason: denyReason }, `Deny: ${denyReason}`), "assertive");
+              toast.error(denyReason);
             }
             setLog((l) =>
               [
@@ -116,14 +122,14 @@ export function GateScanner() {
             );
           }
         } catch (e) {
-          toast.error(e instanceof Error ? e.message : "Network error");
+          toast.error(e instanceof Error ? e.message : t("common.networkError", undefined, "Network error"));
         } finally {
           setBarcode("");
           if (mode === "wedge") inputRef.current?.focus();
         }
       });
     },
-    [announce, mode],
+    [announce, mode, t],
   );
 
   const handleCameraScan = useCallback(
@@ -144,20 +150,24 @@ export function GateScanner() {
         <div className="grid grid-cols-3 gap-2 text-center">
           <div>
             <div className="text-display text-2xl">{counts.allow}</div>
-            <Badge variant="success">Allow</Badge>
+            <Badge variant="success">{t("m.gate.scan.badge.allow", undefined, "Allow")}</Badge>
           </div>
           <div>
             <div className="text-display text-2xl">{counts.warn}</div>
-            <Badge variant="warning">Warn</Badge>
+            <Badge variant="warning">{t("m.gate.scan.badge.warn", undefined, "Warn")}</Badge>
           </div>
           <div>
             <div className="text-display text-2xl">{counts.deny}</div>
-            <Badge variant="error">Deny</Badge>
+            <Badge variant="error">{t("m.gate.scan.badge.deny", undefined, "Deny")}</Badge>
           </div>
         </div>
       </div>
 
-      <div role="tablist" aria-label="Scanner Input Mode" className="card-elevated grid grid-cols-2 gap-1 p-1">
+      <div
+        role="tablist"
+        aria-label={t("m.gate.scan.mode.ariaLabel", undefined, "Scanner Input Mode")}
+        className="card-elevated grid grid-cols-2 gap-1 p-1"
+      >
         <button
           type="button"
           role="tab"
@@ -169,7 +179,7 @@ export function GateScanner() {
               : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
           }`}
         >
-          Keyboard Wedge
+          {t("m.gate.scan.mode.wedge", undefined, "Keyboard Wedge")}
         </button>
         <button
           type="button"
@@ -182,7 +192,7 @@ export function GateScanner() {
               : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]"
           }`}
         >
-          Camera
+          {t("m.gate.scan.mode.camera", undefined, "Camera")}
         </button>
       </div>
 
@@ -194,7 +204,9 @@ export function GateScanner() {
           }}
           className="card-elevated p-4"
         >
-          <label className="text-label text-[var(--color-text-tertiary)]">Card Barcode</label>
+          <label className="text-label text-[var(--color-text-tertiary)]">
+            {t("m.gate.scan.cardBarcode.label", undefined, "Card Barcode")}
+          </label>
           <input
             ref={inputRef}
             value={barcode}
@@ -202,32 +214,42 @@ export function GateScanner() {
             inputMode="text"
             autoComplete="off"
             autoCapitalize="characters"
-            placeholder="Scan or type"
+            placeholder={t("m.gate.scan.cardBarcode.placeholder", undefined, "Scan or type")}
             className="input text-mono mt-1.5 w-full text-base"
             disabled={pending}
           />
           <div className="mt-3 flex gap-2">
             <Button type="submit" size="lg" className="flex-1" disabled={pending || !barcode}>
-              {pending ? "Validating…" : "Validate"}
+              {pending
+                ? t("m.gate.scan.validating", undefined, "Validating…")
+                : t("m.gate.scan.validate", undefined, "Validate")}
             </Button>
           </div>
         </form>
       ) : (
         <div className="card-elevated p-4">
-          <label className="text-label text-[var(--color-text-tertiary)]">Card Barcode</label>
+          <label className="text-label text-[var(--color-text-tertiary)]">
+            {t("m.gate.scan.cardBarcode.label", undefined, "Card Barcode")}
+          </label>
           <div className="mt-1.5">
             <CameraScanner onScan={handleCameraScan} formats={["qr_code", "code_128"]} />
           </div>
           <p className="text-mono mt-2 text-[11px] text-[var(--color-text-tertiary)]">
-            Point at a credential barcode. Validates automatically on detect.
+            {t(
+              "m.gate.scan.camera.hint",
+              undefined,
+              "Point at a credential barcode. Validates automatically on detect.",
+            )}
           </p>
         </div>
       )}
 
       <div className="card-elevated">
-        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">Recent</div>
+        <div className="text-heading border-b border-[var(--color-border)] px-4 py-3 text-sm">
+          {t("m.gate.scan.recent", undefined, "Recent")}
+        </div>
         {log.length === 0 ? (
-          <EmptyState size="compact" title="No Scans Yet" />
+          <EmptyState size="compact" title={t("m.gate.scan.empty.title", undefined, "No Scans Yet")} />
         ) : (
           <ul>
             {log.map((e, i) => (
@@ -242,7 +264,11 @@ export function GateScanner() {
                 <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
                   {fmt.time(e.at, { seconds: true })}
                   <Badge variant={e.result === "allow" ? "success" : e.result === "warn" ? "warning" : "error"}>
-                    {e.result}
+                    {e.result === "allow"
+                      ? t("m.gate.scan.badge.allow", undefined, "Allow")
+                      : e.result === "warn"
+                        ? t("m.gate.scan.badge.warn", undefined, "Warn")
+                        : t("m.gate.scan.badge.deny", undefined, "Deny")}
                   </Badge>
                 </span>
               </li>

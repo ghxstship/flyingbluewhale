@@ -7,6 +7,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
 import { SELECT_COLUMNS, trackerTotals, type TrackerRow } from "@/components/xpms/TrackerView";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,8 +18,13 @@ export const dynamic = "force-dynamic";
  * reach the desktop-grade tracker (no mobile drill-down yet).
  */
 export default async function MobileTrackerPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("m.tracker.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -70,16 +76,26 @@ export default async function MobileTrackerPage() {
     <main className="space-y-4 px-4 pt-4 pb-24">
       <header>
         <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">XPMS</div>
-        <h1 className="mt-1 text-xl font-semibold">Tracker</h1>
+        <h1 className="mt-1 text-xl font-semibold">{t("m.tracker.title", undefined, "Tracker")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          {sections.length} project{sections.length === 1 ? "" : "s"} · {atoms.length} atom
-          {atoms.length === 1 ? "" : "s"}
+          {sections.length}{" "}
+          {sections.length === 1
+            ? t("m.tracker.projectSingular", undefined, "project")
+            : t("m.tracker.projectPlural", undefined, "projects")}{" "}
+          · {atoms.length}{" "}
+          {atoms.length === 1
+            ? t("m.tracker.atomSingular", undefined, "atom")
+            : t("m.tracker.atomPlural", undefined, "atoms")}
         </p>
       </header>
       {sections.length === 0 ? (
         <EmptyState
-          title="No Projects Yet"
-          description="Projects with a WBS atom assigned will appear here once any work is pinned."
+          title={t("m.tracker.empty.title", undefined, "No Projects Yet")}
+          description={t(
+            "m.tracker.empty.description",
+            undefined,
+            "Projects with a WBS atom assigned will appear here once any work is pinned.",
+          )}
         />
       ) : (
         sections.map(({ project, projectId, totals, atomCount }) => (
@@ -92,7 +108,10 @@ export default async function MobileTrackerPage() {
               <div className="min-w-0">
                 <div className="truncate text-sm font-semibold">{project!.name}</div>
                 <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                  {atomCount} atom{atomCount === 1 ? "" : "s"}
+                  {atomCount}{" "}
+                  {atomCount === 1
+                    ? t("m.tracker.atomSingular", undefined, "atom")
+                    : t("m.tracker.atomPlural", undefined, "atoms")}
                 </div>
               </div>
               <div className="shrink-0 text-right">
@@ -100,12 +119,23 @@ export default async function MobileTrackerPage() {
               </div>
             </div>
             <div className="mt-2">
-              <ProgressBar value={totals.projectPct} aria-label={`Progress ${totals.projectPct}%`} />
+              <ProgressBar
+                value={totals.projectPct}
+                aria-label={t(
+                  "m.tracker.progressAriaLabel",
+                  { pct: totals.projectPct },
+                  `Progress ${totals.projectPct}%`,
+                )}
+              />
             </div>
             <div className="mt-3 grid grid-cols-3 gap-2">
-              <MetricCard label="Budget" value={money(totals.totalBudget)} />
-              <MetricCard label="Actual" value={money(totals.totalActual)} />
-              <MetricCard label="Variance" value={money(totals.totalVariance)} accent={totals.totalVariance > 0} />
+              <MetricCard label={t("m.tracker.metric.budget", undefined, "Budget")} value={money(totals.totalBudget)} />
+              <MetricCard label={t("m.tracker.metric.actual", undefined, "Actual")} value={money(totals.totalActual)} />
+              <MetricCard
+                label={t("m.tracker.metric.variance", undefined, "Variance")}
+                value={money(totals.totalVariance)}
+                accent={totals.totalVariance > 0}
+              />
             </div>
           </Link>
         ))

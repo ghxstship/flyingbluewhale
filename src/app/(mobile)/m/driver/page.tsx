@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -31,8 +31,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 };
 
 export default async function MobileDriverPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -61,23 +66,29 @@ export default async function MobileDriverPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Driver</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.driver.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.driver.title", undefined, "Driver")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Today's runs assigned to you. Tap a run to view manifest + waypoints.
+        {t("m.driver.subtitle", undefined, "Today's runs assigned to you. Tap a run to view manifest + waypoints.")}
       </p>
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Upcoming · {upcoming.length}
+          {t("m.driver.upcoming", undefined, "Upcoming")} · {upcoming.length}
         </h2>
         <ul className="mt-3 space-y-2">
           {upcoming.length === 0 ? (
             <li>
               <EmptyState
                 size="compact"
-                title="No Runs Upcoming Today"
-                description="Check back when dispatch schedules a run for you."
+                title={t("m.driver.empty.title", undefined, "No Runs Upcoming Today")}
+                description={t(
+                  "m.driver.empty.description",
+                  undefined,
+                  "Check back when dispatch schedules a run for you.",
+                )}
               />
             </li>
           ) : (
@@ -88,7 +99,9 @@ export default async function MobileDriverPage() {
                     <span className="font-mono text-base font-semibold tabular-nums">
                       {fmtTime(r.scheduled_depart)}
                     </span>
-                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">depart</span>
+                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                      {t("m.driver.depart", undefined, "depart")}
+                    </span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
@@ -100,7 +113,11 @@ export default async function MobileDriverPage() {
                     <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-[10px] text-[var(--text-muted)]">
                       <span>{r.fleet}</span>
                       {r.vehicle_ref && <span>· {r.vehicle_ref}</span>}
-                      {r.scheduled_arrive && <span>· ETA {fmtTime(r.scheduled_arrive)}</span>}
+                      {r.scheduled_arrive && (
+                        <span>
+                          · {t("m.driver.eta", undefined, "ETA")} {fmtTime(r.scheduled_arrive)}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </Link>
@@ -113,7 +130,7 @@ export default async function MobileDriverPage() {
       {completed.length > 0 && (
         <section className="mt-6">
           <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-            Completed · {completed.length}
+            {t("m.driver.completed", undefined, "Completed")} · {completed.length}
           </h2>
           <ul className="mt-3 space-y-2">
             {completed.map((r) => (
@@ -123,7 +140,13 @@ export default async function MobileDriverPage() {
                     {r.origin?.name ?? "—"} → {r.destination?.name ?? "—"}
                   </div>
                   <div className="font-mono text-xs text-[var(--text-muted)]">
-                    {r.actual_arrive ? `Arrived ${fmtTime(r.actual_arrive)}` : "Cancelled"}
+                    {r.actual_arrive
+                      ? t(
+                          "m.driver.arrivedAt",
+                          { time: fmtTime(r.actual_arrive) },
+                          `Arrived ${fmtTime(r.actual_arrive)}`,
+                        )
+                      : t("m.driver.cancelled", undefined, "Cancelled")}
                   </div>
                 </div>
                 <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -33,8 +34,13 @@ const PRIORITY_LABEL: Record<number, string> = {
 };
 
 export default async function MobilePunchPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -57,13 +63,19 @@ export default async function MobilePunchPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
-        Field
+        {t("m.punch.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Punch List</h1>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.punch.title", undefined, "Punch List")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {rows.length === 0
-          ? "No open items assigned to you."
-          : `${rows.length} open${overdueCount ? ` · ${overdueCount} overdue` : ""}`}
+          ? t("m.punch.noOpenItems", undefined, "No open items assigned to you.")
+          : overdueCount
+            ? t(
+                "m.punch.openCountWithOverdue",
+                { count: rows.length, overdue: overdueCount },
+                `${rows.length} open · ${overdueCount} overdue`,
+              )
+            : t("m.punch.openCount", { count: rows.length }, `${rows.length} open`)}
       </p>
 
       <ul className="mt-6 space-y-2">
@@ -71,11 +83,15 @@ export default async function MobilePunchPage() {
           <li>
             <EmptyState
               size="compact"
-              title="Punch List Clear"
-              description="Open items assigned to you appear here. Visit Tasks on desktop to assign new ones."
+              title={t("m.punch.empty.title", undefined, "Punch List Clear")}
+              description={t(
+                "m.punch.empty.description",
+                undefined,
+                "Open items assigned to you appear here. Visit Tasks on desktop to assign new ones.",
+              )}
               action={
                 <Link href="/console/tasks" className="btn btn-secondary btn-sm">
-                  Open Tasks
+                  {t("m.punch.empty.action", undefined, "Open Tasks")}
                 </Link>
               }
             />
@@ -95,8 +111,10 @@ export default async function MobilePunchPage() {
                       <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                       <Badge variant="muted">{PRIORITY_LABEL[r.priority] ?? `P${r.priority}`}</Badge>
                       {r.project?.name && <Badge variant="muted">{r.project.name}</Badge>}
-                      {overdue && <Badge variant="error">Overdue</Badge>}
-                      {r.due_at && !overdue && <Badge variant="muted">Due {r.due_at}</Badge>}
+                      {overdue && <Badge variant="error">{t("m.punch.overdue", undefined, "Overdue")}</Badge>}
+                      {r.due_at && !overdue && (
+                        <Badge variant="muted">{t("m.punch.due", { date: r.due_at }, `Due ${r.due_at}`)}</Badge>
+                      )}
                     </div>
                   </div>
                 </div>

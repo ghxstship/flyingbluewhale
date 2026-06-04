@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -30,8 +30,13 @@ const TRIAGE_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
 };
 
 export default async function MobileMedicPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -40,7 +45,7 @@ export default async function MobileMedicPage() {
   const relativeTime = (iso: string): string => {
     const ms = Date.now() - new Date(iso).getTime();
     const min = Math.floor(ms / 60_000);
-    if (min < 1) return "just now";
+    if (min < 1) return t("common.relativeTime.justNow", undefined, "just now");
     if (min < 60) return `${min}m`;
     const hr = Math.floor(min / 60);
     if (hr < 24) return `${hr}h`;
@@ -64,17 +69,17 @@ export default async function MobileMedicPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
-        Field
+        {t("m.medic.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">Medic</h1>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.medic.title", undefined, "Medic")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {rows.length === 0
-          ? "No encounters logged in the last 24h."
-          : `${rows.length} in last 24h${open ? ` · ${open} open` : ""}`}
+          ? t("m.medic.empty24h", undefined, "No encounters logged in the last 24h.")
+          : `${t("m.medic.countIn24h", { count: rows.length }, `${rows.length} in last 24h`)}${open ? ` · ${t("m.medic.openCount", { count: open }, `${open} open`)}` : ""}`}
       </p>
 
       <Link href="/m/medic/new" className="btn btn-primary mt-5 w-full">
-        + New Encounter
+        {t("m.medic.newEncounter", undefined, "+ New Encounter")}
       </Link>
 
       <ul className="mt-6 space-y-2">
@@ -82,8 +87,12 @@ export default async function MobileMedicPage() {
           <li>
             <EmptyState
               size="compact"
-              title="No Encounters Yet"
-              description="Encounters you log here are PHI-encrypted and visible only to medical staff."
+              title={t("m.medic.emptyState.title", undefined, "No Encounters Yet")}
+              description={t(
+                "m.medic.emptyState.description",
+                undefined,
+                "Encounters you log here are PHI-encrypted and visible only to medical staff.",
+              )}
             />
           </li>
         ) : (
@@ -91,7 +100,9 @@ export default async function MobileMedicPage() {
             <li key={r.id} className="surface p-4">
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold">{r.patient_ref ?? "Anon patient"}</div>
+                  <div className="text-sm font-semibold">
+                    {r.patient_ref ?? t("m.medic.anonPatient", undefined, "Anon patient")}
+                  </div>
                   {r.chief_complaint && (
                     <p className="mt-1 text-xs text-[var(--text-secondary)]">{r.chief_complaint}</p>
                   )}

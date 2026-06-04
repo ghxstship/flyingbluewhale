@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +24,13 @@ type CourseRow = {
 };
 
 export default async function MobileLearningPage() {
-  if (!hasSupabase) return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -45,14 +51,22 @@ export default async function MobileLearningPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Learning</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">{rows.length} courses assigned</p>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.common.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.learning.title", undefined, "Learning")}</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.learning.coursesAssigned", { count: rows.length }, `${rows.length} courses assigned`)}
+      </p>
 
       <ul className="mt-5 space-y-3">
         {rows.length === 0 ? (
           <li>
-            <EmptyState size="compact" title="No Courses" description="Training assignments will appear here." />
+            <EmptyState
+              size="compact"
+              title={t("m.learning.empty.title", undefined, "No Courses")}
+              description={t("m.learning.empty.description", undefined, "Training assignments will appear here.")}
+            />
           </li>
         ) : (
           rows.map((a) => {
@@ -65,15 +79,25 @@ export default async function MobileLearningPage() {
                   <div className="flex items-center justify-between gap-3">
                     <Badge variant={tone}>{a.assignment_state}</Badge>
                     <span className="font-mono text-xs text-[var(--text-muted)]">
-                      {a.due_at ? `due ${fmt.date(a.due_at)}` : ""}
+                      {a.due_at
+                        ? t("m.learning.dueDate", { date: fmt.date(a.due_at) }, `due ${fmt.date(a.due_at)}`)
+                        : ""}
                     </span>
                   </div>
-                  <h2 className="mt-2 text-sm font-semibold">{course?.title ?? "Course"}</h2>
+                  <h2 className="mt-2 text-sm font-semibold">
+                    {course?.title ?? t("m.learning.courseFallback", undefined, "Course")}
+                  </h2>
                   {course?.summary ? (
                     <p className="mt-1 text-xs text-[var(--text-secondary)]">{course.summary}</p>
                   ) : null}
                   {course?.duration_minutes ? (
-                    <p className="mt-1 text-xs text-[var(--text-muted)]">~{course.duration_minutes} min</p>
+                    <p className="mt-1 text-xs text-[var(--text-muted)]">
+                      {t(
+                        "m.learning.durationMin",
+                        { minutes: course.duration_minutes },
+                        `~${course.duration_minutes} min`,
+                      )}
+                    </p>
                   ) : null}
                 </Link>
               </li>

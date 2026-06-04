@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -30,8 +30,13 @@ const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "er
 };
 
 export default async function MobileAdPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("common.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const session = await requireSession();
 
@@ -63,18 +68,22 @@ export default async function MobileAdPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Mobile</div>
-      <h1 className="mt-1 text-2xl font-semibold">Arrivals & departures</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">Today · {fmtDay(startOfWindow)}</p>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("m.ad.eyebrow", undefined, "Mobile")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.ad.title", undefined, "Arrivals & departures")}</h1>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        {t("m.ad.todayPrefix", undefined, "Today")} · {fmtDay(startOfWindow)}
+      </p>
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Arrivals · {arrivals.length}
+          {t("m.ad.arrivalsHeading", undefined, "Arrivals")} · {arrivals.length}
         </h2>
         <ul className="mt-3 space-y-2">
           {arrivals.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No Arrivals Today" />
+              <EmptyState size="compact" title={t("m.ad.noArrivals", undefined, "No Arrivals Today")} />
             </li>
           ) : (
             arrivals.map((m) => (
@@ -82,7 +91,9 @@ export default async function MobileAdPage() {
                 <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
-                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">ETA</span>
+                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                      {t("m.ad.eta", undefined, "ETA")}
+                    </span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
@@ -93,8 +104,9 @@ export default async function MobileAdPage() {
                       <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
-                      Party of {m.party_size}
-                      {m.actual_at && ` · landed ${fmtClock(m.actual_at)}`}
+                      {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}
+                      {m.actual_at &&
+                        ` · ${t("m.ad.landedAt", { time: fmtClock(m.actual_at) }, `landed ${fmtClock(m.actual_at)}`)}`}
                     </div>
                   </div>
                 </Link>
@@ -106,12 +118,12 @@ export default async function MobileAdPage() {
 
       <section className="mt-6">
         <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          Departures · {departures.length}
+          {t("m.ad.departuresHeading", undefined, "Departures")} · {departures.length}
         </h2>
         <ul className="mt-3 space-y-2">
           {departures.length === 0 ? (
             <li>
-              <EmptyState size="compact" title="No Departures Today" />
+              <EmptyState size="compact" title={t("m.ad.noDepartures", undefined, "No Departures Today")} />
             </li>
           ) : (
             departures.map((m) => (
@@ -119,7 +131,9 @@ export default async function MobileAdPage() {
                 <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
-                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">ETD</span>
+                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                      {t("m.ad.etd", undefined, "ETD")}
+                    </span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
@@ -130,8 +144,9 @@ export default async function MobileAdPage() {
                       <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
-                      Party of {m.party_size}
-                      {m.actual_at && ` · departed ${fmtClock(m.actual_at)}`}
+                      {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}
+                      {m.actual_at &&
+                        ` · ${t("m.ad.departedAt", { time: fmtClock(m.actual_at) }, `departed ${fmtClock(m.actual_at)}`)}`}
                     </div>
                   </div>
                 </Link>

@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Action = "check_in" | "check_out" | "break_start" | "break_end";
 
@@ -28,6 +29,7 @@ export function CheckInControls({
 }) {
   const [pending, start] = useTransition();
   const router = useRouter();
+  const t = useT();
 
   const submit = (action: Action, label: string) => {
     start(async () => {
@@ -51,26 +53,28 @@ export function CheckInControls({
           error?: { message: string };
         };
         if (!json.ok) {
-          toast.error(json.error?.message ?? "Couldn't update");
+          toast.error(json.error?.message ?? t("m.clock.error.couldntUpdate", undefined, "Couldn't update"));
           return;
         }
         // 202 from the service worker means the punch is queued for
         // background sync. Surface this so the user knows their action
         // landed (just not against the server yet).
         if (json.queued) {
-          toast.info(`${label} (queued — will sync when online)`);
+          toast.info(t("m.clock.toast.queued", { label }, `${label} (queued — will sync when online)`));
         } else {
           toast.success(label);
         }
         router.refresh();
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Network error");
+        toast.error(e instanceof Error ? e.message : t("m.clock.error.network", undefined, "Network error"));
       }
     });
   };
 
   if (attendance === "checked_out") {
-    return <div className="text-xs text-[var(--text-muted)]">Shift closed.</div>;
+    return (
+      <div className="text-xs text-[var(--text-muted)]">{t("m.clock.shiftClosed", undefined, "Shift closed.")}</div>
+    );
   }
 
   return (
@@ -80,9 +84,9 @@ export function CheckInControls({
           type="button"
           className="btn btn-primary col-span-2"
           disabled={pending}
-          onClick={() => submit("check_in", "Checked in")}
+          onClick={() => submit("check_in", t("m.clock.toast.checkedIn", undefined, "Checked in"))}
         >
-          {pending ? "Working…" : "Clock in"}
+          {pending ? t("m.clock.working", undefined, "Working…") : t("m.clock.clockIn", undefined, "Clock in")}
         </button>
       )}
       {attendance === "checked_in" && (
@@ -91,17 +95,17 @@ export function CheckInControls({
             type="button"
             className="btn btn-secondary"
             disabled={pending}
-            onClick={() => submit("break_start", "Break started")}
+            onClick={() => submit("break_start", t("m.clock.toast.breakStarted", undefined, "Break started"))}
           >
-            Start break
+            {t("m.clock.startBreak", undefined, "Start break")}
           </button>
           <button
             type="button"
             className="btn btn-danger"
             disabled={pending}
-            onClick={() => submit("check_out", "Clocked out")}
+            onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
           >
-            Clock out
+            {t("m.clock.clockOut", undefined, "Clock out")}
           </button>
         </>
       )}
@@ -111,17 +115,17 @@ export function CheckInControls({
             type="button"
             className="btn btn-primary"
             disabled={pending}
-            onClick={() => submit("break_end", "Back from break")}
+            onClick={() => submit("break_end", t("m.clock.toast.backFromBreak", undefined, "Back from break"))}
           >
-            End break
+            {t("m.clock.endBreak", undefined, "End break")}
           </button>
           <button
             type="button"
             className="btn btn-danger"
             disabled={pending}
-            onClick={() => submit("check_out", "Clocked out")}
+            onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
           >
-            Clock out
+            {t("m.clock.clockOut", undefined, "Clock out")}
           </button>
         </>
       )}

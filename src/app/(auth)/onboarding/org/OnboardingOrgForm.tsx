@@ -8,8 +8,10 @@ import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { createOrgAction } from "./actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function OnboardingOrgForm({ initialName = "", email }: { initialName?: string; email: string }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(createOrgAction, null);
 
   useEffect(() => {
@@ -18,28 +20,34 @@ export function OnboardingOrgForm({ initialName = "", email }: { initialName?: s
 
   return (
     <AuthShell
-      title="Name Your Workspace"
-      subtitle={`Signed in as ${email}. Just one more step — pick a workspace name and you're in.`}
+      title={t("auth.onboarding.title", undefined, "Name your workspace")}
+      subtitle={t(
+        "auth.onboarding.subtitle",
+        { email },
+        `Signed in as ${email}. Just one more step — pick a workspace name and you're in.`,
+      )}
     >
       <form action={formAction} className="space-y-4" noValidate>
         <Input
-          label="Workspace Name"
+          label={t("auth.onboarding.workspaceName", undefined, "Workspace name")}
           name="name"
           required
           autoFocus
           defaultValue={initialName}
-          placeholder="Acme Productions"
+          placeholder={t("auth.onboarding.workspaceNamePlaceholder", undefined, "Acme Productions")}
           autoComplete="organization"
-          hint="You can rename this later from Settings."
+          hint={t("auth.onboarding.workspaceNameHint", undefined, "You can rename this later from Settings.")}
           error={state?.fieldErrors?.name}
         />
         {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <Button type="submit" size="lg" className="w-full" loading={pending}>
-          {pending ? "Creating workspace" : "Create workspace"}
+          {pending
+            ? t("auth.onboarding.submitting", undefined, "Creating workspace")
+            : t("auth.onboarding.submit", undefined, "Create workspace")}
         </Button>
         <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
-          You&apos;ll become the owner. You can invite teammates from <code>/console/people/invites</code> once
-          you&apos;re in.
+          {t("auth.onboarding.ownerNotePrefix", undefined, "You'll become the owner. You can invite teammates from")}{" "}
+          <code>/console/people/invites</code> {t("auth.onboarding.ownerNoteSuffix", undefined, "once you're in.")}
         </p>
       </form>
     </AuthShell>

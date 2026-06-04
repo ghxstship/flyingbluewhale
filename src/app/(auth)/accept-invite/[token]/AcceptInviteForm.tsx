@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { acceptInviteAction } from "../../actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function AcceptInviteForm({ token }: { token: string }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(acceptInviteAction, null);
 
   useEffect(() => {
@@ -18,16 +20,20 @@ export function AcceptInviteForm({ token }: { token: string }) {
 
   return (
     <AuthShell
-      title="Join Your Team"
-      subtitle="Accept your invitation to ATLVS Technologies"
+      title={t("auth.acceptInvite.title", undefined, "Join your team")}
+      subtitle={t("auth.acceptInvite.subtitle", undefined, "Accept your invitation to ATLVS Technologies")}
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
-          Sign in instead
+          {t("auth.acceptInvite.signInInstead", undefined, "Sign in instead")}
         </Link>
       }
     >
       <p className="text-sm text-[var(--text-secondary)]">
-        You&apos;ve been invited to a ATLVS Technologies workspace. Accept below and we&apos;ll take you straight in.
+        {t(
+          "auth.acceptInvite.body",
+          undefined,
+          "You've been invited to a ATLVS Technologies workspace. Accept below and we'll take you straight in.",
+        )}
       </p>
       {state?.error && (
         <Alert kind="error" className="mt-4">
@@ -37,7 +43,9 @@ export function AcceptInviteForm({ token }: { token: string }) {
       <form action={formAction} className="mt-6">
         <input type="hidden" name="token" value={token} />
         <Button type="submit" size="lg" className="w-full" loading={pending}>
-          {pending ? "Joining…" : "Accept invite"}
+          {pending
+            ? t("auth.acceptInvite.submitting", undefined, "Joining…")
+            : t("auth.acceptInvite.submit", undefined, "Accept invite")}
         </Button>
       </form>
     </AuthShell>

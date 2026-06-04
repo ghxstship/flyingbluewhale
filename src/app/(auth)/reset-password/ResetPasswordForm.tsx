@@ -9,8 +9,10 @@ import { PasswordField } from "@/components/auth/PasswordField";
 import { Alert } from "@/components/ui/Alert";
 import { resetPasswordAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function ResetPasswordForm() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(resetPasswordAction, null);
 
   useEffect(() => {
@@ -19,28 +21,28 @@ export function ResetPasswordForm() {
 
   return (
     <AuthShell
-      title="Set a new password"
-      subtitle="Choose a password you haven't used before."
+      title={t("auth.resetPassword.title", undefined, "Set a new password")}
+      subtitle={t("auth.resetPassword.subtitle", undefined, "Choose a password you haven't used before.")}
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
-          Back to sign in
+          {t("auth.forgotPassword.backToLogin", undefined, "Back to sign in")}
         </Link>
       }
     >
       <form action={formAction} className="space-y-4" noValidate>
         <PasswordField
           name="password"
-          label="New Password"
+          label={t("auth.resetPassword.newPassword", undefined, "New password")}
           required
           minLength={8}
           autoComplete="new-password"
           showStrength
-          hint="At least 8 characters"
+          hint={t("auth.signup.passwordHelp", undefined, "At least 8 characters")}
           error={state?.fieldErrors?.password}
         />
         <PasswordField
           name="password_confirm"
-          label="Confirm Password"
+          label={t("auth.resetPassword.confirmPassword", undefined, "Confirm password")}
           required
           minLength={8}
           autoComplete="new-password"
@@ -48,7 +50,9 @@ export function ResetPasswordForm() {
         />
         {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <Button type="submit" size="lg" className="w-full" loading={pending}>
-          {pending ? "Updating" : "Update password"}
+          {pending
+            ? t("auth.resetPassword.submitting", undefined, "Updating")
+            : t("auth.resetPassword.submit", undefined, "Update password")}
         </Button>
       </form>
     </AuthShell>

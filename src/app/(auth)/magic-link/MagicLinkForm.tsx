@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { magicLinkAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function MagicLinkForm() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(magicLinkAction, null);
 
   useEffect(() => {
@@ -19,20 +21,26 @@ export function MagicLinkForm() {
 
   return (
     <AuthShell
-      title="Email Me a Magic Link"
-      subtitle="We'll send a sign-in link to your inbox — no password required."
+      title={t("auth.magicLink.title", undefined, "Email me a magic link")}
+      subtitle={t(
+        "auth.magicLink.subtitle",
+        undefined,
+        "We'll send a sign-in link to your inbox — no password required.",
+      )}
       footer={
         <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
-          Back to sign in
+          {t("auth.magicLink.backToLogin", undefined, "Back to sign in")}
         </Link>
       }
     >
       {state?.ok ? (
-        <Alert kind="success">Check your inbox — we sent a sign-in link that expires in 1 hour.</Alert>
+        <Alert kind="success">
+          {t("auth.magicLink.success", undefined, "Check your inbox — we sent a sign-in link that expires in 1 hour.")}
+        </Alert>
       ) : (
         <form action={formAction} className="space-y-4" noValidate>
           <Input
-            label="Email"
+            label={t("auth.login.email", undefined, "Email")}
             name="email"
             type="email"
             required
@@ -41,7 +49,9 @@ export function MagicLinkForm() {
           />
           {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
           <Button type="submit" size="lg" className="w-full" loading={pending}>
-            {pending ? "Sending" : "Send magic link"}
+            {pending
+              ? t("auth.magicLink.submitting", undefined, "Sending")
+              : t("auth.magicLink.submit", undefined, "Send magic link")}
           </Button>
         </form>
       )}

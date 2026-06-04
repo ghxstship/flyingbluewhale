@@ -11,8 +11,10 @@ import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { loginAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function LoginForm() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(loginAction, null);
 
   useEffect(() => {
@@ -21,13 +23,13 @@ export function LoginForm() {
 
   return (
     <AuthShell
-      title="Sign In"
-      subtitle="Welcome back. Pick up where you left off."
+      title={t("auth.login.title", undefined, "Sign in")}
+      subtitle={t("auth.login.subtitle", undefined, "Welcome back. Pick up where you left off.")}
       footer={
         <>
-          Don&apos;t have an account?{" "}
+          {t("auth.login.noAccount", undefined, "Don't have an account?")}{" "}
           <Link href="/signup" className="text-[var(--org-primary)] underline underline-offset-4">
-            Create one
+            {t("auth.login.createOne", undefined, "Create one")}
           </Link>
         </>
       }
@@ -36,7 +38,7 @@ export function LoginForm() {
       <AuthDivider />
       <form action={formAction} className="space-y-4" noValidate>
         <Input
-          label="Email"
+          label={t("auth.login.email", undefined, "Email")}
           name="email"
           type="email"
           required
@@ -45,22 +47,24 @@ export function LoginForm() {
         />
         <PasswordField
           name="password"
-          label="Password"
+          label={t("auth.login.password", undefined, "Password")}
           required
           autoComplete="current-password"
           error={state?.fieldErrors?.password}
         />
         {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <Button type="submit" size="lg" className="w-full" loading={pending}>
-          {pending ? "Signing in" : "Sign in"}
+          {pending
+            ? t("auth.login.submitting", undefined, "Signing in…")
+            : t("auth.login.submit", undefined, "Sign in")}
         </Button>
       </form>
       <div className="mt-4 flex items-center justify-between text-xs">
         <Link href="/forgot-password" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-          Forgot password?
+          {t("auth.login.forgotPassword", undefined, "Forgot password?")}
         </Link>
         <Link href="/magic-link" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-          Email me a link
+          {t("auth.login.emailMeALink", undefined, "Email me a link")}
         </Link>
       </div>
     </AuthShell>

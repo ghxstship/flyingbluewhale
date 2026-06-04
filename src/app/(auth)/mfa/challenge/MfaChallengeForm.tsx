@@ -8,8 +8,10 @@ import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { verifyChallengeAction } from "./actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function MfaChallengeForm({ factorId, next }: { factorId: string; next: string }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(verifyChallengeAction, null);
   const [code, setCode] = useState("");
   const [useRecovery, setUseRecovery] = useState(false);
@@ -25,18 +27,18 @@ export function MfaChallengeForm({ factorId, next }: { factorId: string; next: s
 
       {useRecovery ? (
         <Input
-          label="Recovery code"
+          label={t("auth.mfa.recoveryCode", undefined, "Recovery code")}
           name="code"
           autoComplete="one-time-code"
           required
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder="abcd1234-5678efgh"
-          hint="Enter one of the recovery codes you saved when you enrolled."
+          hint={t("auth.mfa.recoveryHint", undefined, "Enter one of the recovery codes you saved when you enrolled.")}
         />
       ) : (
         <Input
-          label="Authenticator code"
+          label={t("auth.mfa.authenticatorCode", undefined, "Authenticator code")}
           name="code"
           inputMode="numeric"
           autoComplete="one-time-code"
@@ -53,7 +55,7 @@ export function MfaChallengeForm({ factorId, next }: { factorId: string; next: s
       {state?.error && <Alert kind="error">{state.error}</Alert>}
 
       <Button type="submit" size="lg" className="w-full" loading={pending} disabled={!useRecovery && code.length !== 6}>
-        {pending ? "Verifying" : "Verify"}
+        {pending ? t("auth.mfa.submitting", undefined, "Verifying") : t("auth.mfa.submit", undefined, "Verify")}
       </Button>
 
       <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
@@ -65,10 +67,12 @@ export function MfaChallengeForm({ factorId, next }: { factorId: string; next: s
           }}
           className="underline-offset-4 hover:underline"
         >
-          {useRecovery ? "Use authenticator code" : "Use a recovery code"}
+          {useRecovery
+            ? t("auth.mfa.useAuthenticator", undefined, "Use authenticator code")
+            : t("auth.mfa.useRecovery", undefined, "Use a recovery code")}
         </button>
         <Link href="/auth/signout" className="hover:text-[var(--text-primary)]">
-          Sign out
+          {t("common.signOut", undefined, "Sign out")}
         </Link>
       </div>
     </form>

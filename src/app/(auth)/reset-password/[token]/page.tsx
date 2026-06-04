@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Direct recovery-token landing. Supabase normally bounces password-reset
@@ -24,14 +25,22 @@ export default async function Page({ params }: { params: Promise<{ token: string
     redirect("/reset-password");
   }
 
+  const { t } = await getRequestT();
   return (
-    <AuthShell title="Reset link expired" subtitle="We couldn't open your password-reset session.">
+    <AuthShell
+      title={t("auth.resetPassword.expiredTitle", undefined, "Reset link expired")}
+      subtitle={t("auth.resetPassword.expiredSubtitle", undefined, "We couldn't open your password-reset session.")}
+    >
       <Alert kind="error">{error.message}</Alert>
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
-        Reset links expire after 24 hours. Request a fresh one to continue.
+        {t(
+          "auth.resetPassword.expiredBody",
+          undefined,
+          "Reset links expire after 24 hours. Request a fresh one to continue.",
+        )}
       </p>
       <a href="/forgot-password" className="btn btn-primary mt-4 w-full">
-        Request a new reset link
+        {t("auth.resetPassword.requestNew", undefined, "Request a new reset link")}
       </a>
     </AuthShell>
   );

@@ -11,8 +11,10 @@ import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { signupAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function SignupForm() {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(signupAction, null);
 
   useEffect(() => {
@@ -21,13 +23,13 @@ export function SignupForm() {
 
   return (
     <AuthShell
-      title="Create Your Account"
-      subtitle="Free for Life on the Access tier. No credit card."
+      title={t("auth.signup.title", undefined, "Create your account")}
+      subtitle={t("auth.signup.subtitle", undefined, "Free for Life on the Access tier. No credit card.")}
       footer={
         <>
-          Already have an account?{" "}
+          {t("auth.signup.haveAccount", undefined, "Already have an account?")}{" "}
           <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
-            Sign in
+            {t("auth.signup.signIn", undefined, "Sign in")}
           </Link>
         </>
       }
@@ -35,9 +37,15 @@ export function SignupForm() {
       <OAuthButtons />
       <AuthDivider />
       <form action={formAction} className="space-y-4" noValidate>
-        <Input label="Name" name="name" required autoComplete="name" error={state?.fieldErrors?.name} />
         <Input
-          label="Work Email"
+          label={t("auth.signup.name", undefined, "Name")}
+          name="name"
+          required
+          autoComplete="name"
+          error={state?.fieldErrors?.name}
+        />
+        <Input
+          label={t("auth.signup.email", undefined, "Work email")}
           name="email"
           type="email"
           required
@@ -47,36 +55,38 @@ export function SignupForm() {
         />
         <PasswordField
           name="password"
-          label="Password"
+          label={t("auth.signup.password", undefined, "Password")}
           required
           minLength={8}
           autoComplete="new-password"
           showStrength
-          hint="At least 8 characters"
+          hint={t("auth.signup.passwordHelp", undefined, "At least 8 characters")}
           error={state?.fieldErrors?.password}
         />
         <Input
-          label="Organization"
+          label={t("auth.signup.organization", undefined, "Organization")}
           name="orgName"
-          placeholder="Optional"
+          placeholder={t("common.optional", undefined, "Optional")}
           autoComplete="organization"
-          hint="You can create this later from settings."
+          hint={t("auth.signup.organizationHelp", undefined, "You can create this later from settings.")}
           error={state?.fieldErrors?.orgName}
         />
         {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
         <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
-          By creating an account you agree to our{" "}
+          {t("auth.signup.tosPrefix", undefined, "By creating an account you agree to our")}{" "}
           <Link href="/legal/terms" className="underline">
-            Terms
+            {t("nav.legal.terms", undefined, "Terms")}
           </Link>{" "}
-          and{" "}
+          {t("common.and", undefined, "and")}{" "}
           <Link href="/legal/privacy" className="underline">
-            Privacy Policy
+            {t("auth.signup.privacyPolicy", undefined, "Privacy Policy")}
           </Link>
           .
         </p>
         <Button type="submit" size="lg" className="w-full" loading={pending}>
-          {pending ? "Creating account" : "Create account"}
+          {pending
+            ? t("auth.signup.submitting", undefined, "Creating account…")
+            : t("auth.signup.submit", undefined, "Create account")}
         </Button>
       </form>
     </AuthShell>

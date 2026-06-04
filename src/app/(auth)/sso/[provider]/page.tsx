@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { getRequestT } from "@/lib/i18n/request";
 
 const SUPPORTED_PROVIDERS = ["google", "github", "azure", "apple", "linkedin_oidc"] as const;
 type SupportedProvider = (typeof SUPPORTED_PROVIDERS)[number];
@@ -44,14 +45,22 @@ export default async function Page({
     redirect(data.url);
   }
 
+  const { t } = await getRequestT();
   return (
-    <AuthShell title="Couldn't start SSO" subtitle={`We couldn't redirect you to ${provider}.`}>
-      <Alert kind="error">{error?.message ?? "No redirect URL returned."}</Alert>
+    <AuthShell
+      title={t("auth.sso.errorTitle", undefined, "Couldn't start SSO")}
+      subtitle={t("auth.sso.errorSubtitle", { provider }, `We couldn't redirect you to ${provider}.`)}
+    >
+      <Alert kind="error">{error?.message ?? t("auth.sso.noRedirect", undefined, "No redirect URL returned.")}</Alert>
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
-        Make sure the provider is enabled for this workspace, or sign in with email instead.
+        {t(
+          "auth.sso.body",
+          undefined,
+          "Make sure the provider is enabled for this workspace, or sign in with email instead.",
+        )}
       </p>
       <a href="/login" className="btn btn-primary mt-4 w-full">
-        Back to sign in
+        {t("auth.forgotPassword.backToLogin", undefined, "Back to sign in")}
       </a>
     </AuthShell>
   );

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Direct magic-link landing. Supabase normally bounces magic-link clicks
@@ -26,14 +27,22 @@ export default async function Page({ params }: { params: Promise<{ token: string
     redirect("/auth/resolve");
   }
 
+  const { t } = await getRequestT();
   return (
-    <AuthShell title="Link expired or invalid" subtitle="We couldn't sign you in with that link.">
+    <AuthShell
+      title={t("auth.magicLink.expiredTitle", undefined, "Link expired or invalid")}
+      subtitle={t("auth.magicLink.expiredSubtitle", undefined, "We couldn't sign you in with that link.")}
+    >
       <Alert kind="error">{error.message}</Alert>
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
-        Magic links expire after a short window. Request a fresh one and try again.
+        {t(
+          "auth.magicLink.expiredBody",
+          undefined,
+          "Magic links expire after a short window. Request a fresh one and try again.",
+        )}
       </p>
       <Link href="/magic-link" className="btn btn-primary mt-4 w-full">
-        Send another magic link
+        {t("auth.magicLink.sendAnother", undefined, "Send another magic link")}
       </Link>
     </AuthShell>
   );

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { Alert } from "@/components/ui/Alert";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Direct email-confirmation landing. Same pattern as /magic-link/[token] —
@@ -22,14 +23,22 @@ export default async function Page({ params }: { params: Promise<{ token: string
     redirect("/auth/resolve");
   }
 
+  const { t } = await getRequestT();
   return (
-    <AuthShell title="Verification failed" subtitle="We couldn't verify your email with that link.">
+    <AuthShell
+      title={t("auth.verifyEmail.failedTitle", undefined, "Verification failed")}
+      subtitle={t("auth.verifyEmail.failedSubtitle", undefined, "We couldn't verify your email with that link.")}
+    >
       <Alert kind="error">{error.message}</Alert>
       <p className="mt-4 text-sm text-[var(--text-secondary)]">
-        Verification links expire after 24 hours. Request a fresh one from the verify-email page.
+        {t(
+          "auth.verifyEmail.failedBody",
+          undefined,
+          "Verification links expire after 24 hours. Request a fresh one from the verify-email page.",
+        )}
       </p>
       <Link href="/verify-email" className="btn btn-primary mt-4 w-full">
-        Resend verification email
+        {t("auth.verifyEmail.resend", undefined, "Resend verification email")}
       </Link>
     </AuthShell>
   );

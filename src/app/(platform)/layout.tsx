@@ -1,19 +1,19 @@
 import { PlatformSidebar } from "@/components/Shell";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { CommandPalette, CommandPaletteTrigger } from "@/components/CommandPalette";
-import { NotificationsBell } from "@/components/NotificationsBell";
-import { AvatarMenu } from "@/components/AvatarMenu";
+import { CommandPalette } from "@/components/CommandPalette";
 import { MobileNavDrawer } from "@/components/MobileNavDrawer";
+import { WorkspaceChrome, defaultSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { getPlatformNav, type NavMode } from "@/lib/nav";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function PlatformLayout({ children }: { children: React.ReactNode }) {
   // Protects /console at the outer boundary so every page inherits the
   // guard; individual pages may still call requireSession() for session data.
   const session = await requireSession();
   const tenant = await resolveTenant();
+  const { t } = await getRequestT();
   // ADR-0006: resolve sidebar shape from per-user pref. Default "domain";
   // power users opting into the XPMS-numeric spine flip to "xpms" via
   // /me/preferences. Read non-blocking — fall through to default if the
@@ -24,9 +24,24 @@ export default async function PlatformLayout({ children }: { children: React.Rea
     .select("ui_state")
     .eq("user_id", session.userId)
     .maybeSingle();
-  const uiState = (prefRow?.ui_state as { nav_mode?: NavMode } | null) ?? null;
+  const uiState = (prefRow?.ui_state as { nav_mode?: NavMode; last_portal_slug?: string } | null) ?? null;
   const navMode: NavMode = uiState?.nav_mode === "xpms" ? "xpms" : "domain";
   const platformNav = getPlatformNav(navMode);
+  // ADR-0007 — pre-fetch saved dashboards for the chrome top-bar menu.
+  // Hard-cap at 8 so the popover stays scannable; "All Dashboards" footer
+  // always links to /console/dashboards for the full list.
+  const { data: dashboardRows } = await supabase
+    .from("dashboards")
+    .select("id, name")
+    .eq("org_id", session.orgId)
+    .order("name", { ascending: true })
+    .limit(8);
+  const dashboards = (dashboardRows ?? []).map((d) => ({
+    id: d.id as string,
+    name: (d.name as string) ?? "Untitled",
+    href: `/console/dashboards/${d.id}`,
+  }));
+  const switcherEntries = defaultSwitcherEntries(session.role, uiState?.last_portal_slug ?? null);
   return (
     <TenantShell tenant={tenant}>
       {/*
@@ -53,20 +68,20 @@ export default async function PlatformLayout({ children }: { children: React.Rea
            * palette, notifications, theme, profile) plus the workspace
            * orientation handed up from the sidebar's WorkspaceSwitcher.
            */}
-          <header className="glass-nav sticky top-0 z-30 flex shrink-0 items-center gap-2 px-4 sm:px-6">
-            {/* Mobile-only hamburger — opens the platform nav as an off-
-                canvas drawer. The desktop PlatformSidebar is hidden at
-                `< md` (it would swallow 240px of a 375px phone viewport).
-                On md+ this button is `display: none` and the sidebar
-                takes over. */}
-            <MobileNavDrawer groups={platformNav} />
-            <div className="ms-auto flex items-center gap-2">
-              <CommandPaletteTrigger />
-              <NotificationsBell />
-              <ThemeToggle />
-              <AvatarMenu name={session.email || "User"} email={session.email} />
-            </div>
-          </header>
+          {/* ADR-0007: shared workspace chrome — same component used by
+              all three shells with per-shell skin. The MobileNavDrawer
+              slot holds the mobile-only hamburger; desktop sidebar takes
+              over at md+. */}
+          <WorkspaceChrome
+            shell="platform"
+            workspaceLabel={tenant.orgName}
+            userEmail={session.email}
+            userName={session.email || t("console.layout.userFallback", undefined, "User")}
+            messagesHref="/console/inbox"
+            dashboards={dashboards}
+            switcherEntries={switcherEntries}
+            navDrawer={<MobileNavDrawer groups={platformNav} />}
+          />
           {/*
            * <main> landmark — Sea Trial FINDING-004. Was a generic <div>
            * which left screen readers without a "main content" anchor for

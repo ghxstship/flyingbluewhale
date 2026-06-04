@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";
+import { WorkspaceChrome, defaultSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
+import { getSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 
 /**
@@ -34,13 +36,28 @@ export default async function PortalSlugLayout({
   const branding = safeBranding(data?.branding);
   const style = brandingToCssVars(branding) as React.CSSProperties;
 
+  // ADR-0007 — workspace chrome for portal. Anon (unauthenticated)
+  // portal visitors still get the bare layout; chrome only renders when
+  // a session exists so we don't surface bell/messages to non-users.
+  const session = await getSession();
+  const switcherEntries = session ? defaultSwitcherEntries(session.role, slug) : [];
+
   return (
-    <div data-portal-slug={slug} style={style}>
+    <div data-portal-slug={slug} data-theme="atlvs-product" data-platform="gvteway" style={style}>
       {data?.branding && Object.keys(branding).length > 0 && (
         <a className="sr-only" href={`/p/${slug}/overview`}>
           {t("p.shared.layout.srPortalLink", { name: data.name ?? slug }, `${data.name ?? slug} portal`)}
         </a>
       )}
+      {session ? (
+        <WorkspaceChrome
+          shell="portal"
+          workspaceLabel={data.name ?? slug}
+          userEmail={session.email}
+          messagesHref={`/p/${slug}/messages`}
+          switcherEntries={switcherEntries}
+        />
+      ) : null}
       {children}
       <CommandPalette scope="portal" portalSlug={slug} />
     </div>

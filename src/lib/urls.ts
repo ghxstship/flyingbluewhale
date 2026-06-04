@@ -5,6 +5,18 @@
  * prefix in fallback mode). All cross-shell links MUST go through `urlFor`
  * so the apex/subdomain decision flips in exactly one place.
  *
+ * ## `/me` vs `/p/[slug]` boundary (ADR-0010 §Move 3)
+ *
+ * Cross-project, identity-scoped surfaces live in `/me`. Project-scoped
+ * engagement lives in `/p/[slug]`. Rule: if the data answer changes per
+ * project, it belongs in `/p/[slug]`; otherwise it belongs in `/me`.
+ *
+ *   - Talent EPK / resume / ratings rollup → `/me/talent`
+ *   - Marketplace applications across all projects → `/me/applications`
+ *   - Application detail for a specific project → `/p/[slug]/apply/[id]`
+ *   - Cross-project event log → `/me/notifications`
+ *   - Conversation with a project's account manager → `/p/[slug]/messages`
+ *
  * Modes:
  *   - Subdomain mode (NEXT_PUBLIC_USE_SUBDOMAINS=1):
  *       atlvs.pro                → marketing / auth / personal

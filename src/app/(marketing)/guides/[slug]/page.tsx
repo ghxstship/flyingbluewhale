@@ -13,6 +13,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema, faqSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 import { MARKETING_GUIDES, MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
+import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
   return MARKETING_GUIDE_LIST.map((g) => ({ slug: g.slug }));
@@ -21,13 +22,19 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const g = MARKETING_GUIDES[slug];
-  if (!g) return buildMetadata({ title: "Guide", description: "", path: `/guides/${slug}` });
+  const { t } = await getRequestT();
+  if (!g)
+    return buildMetadata({
+      title: t("marketing.pages.guides.detail.meta.fallbackTitle"),
+      description: "",
+      path: `/guides/${slug}`,
+    });
   return buildMetadata({
     title: g.title,
     description: g.blurb,
     path: `/guides/${g.slug}`,
     keywords: g.keywords,
-    ogImageEyebrow: "Guide",
+    ogImageEyebrow: t("marketing.pages.guides.detail.eyebrow"),
     ogImageTitle: g.title,
   });
 }
@@ -36,10 +43,11 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const g = MARKETING_GUIDES[slug];
   if (!g) notFound();
+  const { t } = await getRequestT();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Guides", href: "/guides" },
+    { label: t("marketing.pages.guides.detail.crumbs.home"), href: "/" },
+    { label: t("marketing.pages.guides.detail.crumbs.guides"), href: "/guides" },
     { label: g.title, href: `/guides/${g.slug}` },
   ];
 
@@ -59,13 +67,13 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Guide</div>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.guides.detail.eyebrow")}</div>
         <h1 className="hed-xl mt-4">{g.title}</h1>
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
         <p className="mt-6 text-lg text-[var(--text-secondary)]">{g.hero}</p>
 
         <div className="surface mt-8 p-6">
-          <div className="eyebrow">TL;DR</div>
+          <div className="eyebrow">{t("marketing.pages.guides.detail.tldrLabel")}</div>
           <div className="mt-2 text-sm">{g.tldr}</div>
         </div>
 
@@ -105,10 +113,10 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
         </div>
       </article>
 
-      <FAQSection title={`${g.title} · FAQ`} faqs={g.faqs} />
+      <FAQSection title={t("marketing.pages.guides.detail.faqTitle", { title: g.title })} faqs={g.faqs} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Other Guides</h2>
+        <h2 className="hed-lg">{t("marketing.pages.guides.detail.otherGuides")}</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {MARKETING_GUIDE_LIST.filter((x) => x.slug !== g.slug).map((x) => (
             <Link key={x.slug} href={`/guides/${x.slug}`} className="surface hover-lift p-5">
@@ -119,7 +127,10 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      <CTASection title="Run Your Ops on ATLVS Technologies" subtitle="Start free. No credit card." />
+      <CTASection
+        title={t("marketing.pages.guides.detail.cta.title")}
+        subtitle={t("marketing.pages.guides.detail.cta.subtitle")}
+      />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 import { POSTS, POST_LIST } from "@/lib/blog";
+import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
   return POST_LIST.map((p) => ({ slug: p.slug }));
@@ -20,13 +21,19 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const post = POSTS[slug];
-  if (!post) return buildMetadata({ title: "Post not found", description: "", path: `/blog/${slug}` });
+  const { t } = await getRequestT();
+  if (!post)
+    return buildMetadata({
+      title: t("marketing.pages.blog.post.metadata.notFoundTitle"),
+      description: "",
+      path: `/blog/${slug}`,
+    });
   return buildMetadata({
     title: post.title,
     description: post.blurb,
     path: `/blog/${post.slug}`,
     keywords: post.keywords,
-    ogImageEyebrow: "Blog",
+    ogImageEyebrow: t("marketing.pages.blog.post.metadata.ogEyebrow"),
     ogImageTitle: post.title,
   });
 }
@@ -35,10 +42,11 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = POSTS[slug];
   if (!post) notFound();
+  const { t } = await getRequestT();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Blog", href: "/blog" },
+    { label: t("marketing.pages.blog.post.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.blog.post.breadcrumbs.blog"), href: "/blog" },
     { label: post.title, href: `/blog/${post.slug}` },
   ];
 
@@ -58,7 +66,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">ATLVS Technologies · Blog</div>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.blog.post.eyebrow")}</div>
         <h1 className="hed-xl mt-4">{post.title}</h1>
         <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--text-muted)]">
           <span>{post.date}</span>
@@ -131,12 +139,15 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
         <div className="mt-8">
           <Link href="/blog" className="text-sm text-[var(--org-primary)]">
-            ← All posts
+            {t("marketing.pages.blog.post.allPostsLink")}
           </Link>
         </div>
       </article>
 
-      <CTASection title="Run Your Next Show on ATLVS Technologies" subtitle="Start free. No credit card." />
+      <CTASection
+        title={t("marketing.pages.blog.post.cta.title")}
+        subtitle={t("marketing.pages.blog.post.cta.subtitle")}
+      />
     </div>
   );
 }

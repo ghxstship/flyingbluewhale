@@ -8,55 +8,28 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema, SITE } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Careers — Build for Production",
-  description:
-    "We're a small studio shipping the operating system for live events. Open roles ship work that surfaces on real shows — measured in load-ins survived, not story points burned.",
-  path: "/careers",
-  keywords: [
-    "ATLVS careers",
-    "event production platform jobs",
-    "event tech startup careers",
-    "remote engineering jobs",
-    "design jobs production",
-  ],
-  ogImageEyebrow: "Careers",
-  ogImageTitle: "Build for Production.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.careers.metadata.title"),
+    description: t("marketing.pages.careers.metadata.description"),
+    path: "/careers",
+    keywords: [
+      "ATLVS careers",
+      "event production platform jobs",
+      "event tech startup careers",
+      "remote engineering jobs",
+      "design jobs production",
+    ],
+    ogImageEyebrow: t("marketing.pages.careers.metadata.ogEyebrow"),
+    ogImageTitle: t("marketing.pages.careers.metadata.ogTitle"),
+  });
+}
 
-const VALUES = [
-  {
-    icon: Layers,
-    title: "Crew, not staff",
-    body: "Small group, deep ownership. Every role touches every shell — marketing, ATLVS, portal, mobile.",
-  },
-  {
-    icon: Compass,
-    title: "Tested on the water",
-    body: "We ship to real shows the weekend before each release. Bias to load-in survival over feature theater.",
-  },
-  {
-    icon: Heart,
-    title: "Pricing is an ethic",
-    body: "Per org, not per seat. We hold that line internally — no token economies, no perf review caste system.",
-  },
-  {
-    icon: Sparkles,
-    title: "Brand-first engineering",
-    body: "The platform reads like a magazine. Brutal where it should be, breathing where it can. Code follows.",
-  },
-  {
-    icon: Globe2,
-    title: "Distributed by default",
-    body: "Studio in Miami, crew across timezones. Async-first. Travel for site visits and shows, not standups.",
-  },
-  {
-    icon: Rocket,
-    title: "Equity that means something",
-    body: "Real ownership stake, four-year vest, ten-year exercise window. We pay competitively in cash too.",
-  },
-];
+const VALUE_ICONS = [Layers, Compass, Heart, Sparkles, Globe2, Rocket] as const;
+const VALUE_KEYS = ["crew", "tested", "pricing", "brandFirst", "distributed", "equity"] as const;
 
 type Role = {
   title: string;
@@ -70,34 +43,23 @@ type Role = {
 // "no current openings" state, which is honest — better than ghost listings.
 const ROLES: Role[] = [];
 
-const FAQ = [
-  {
-    q: "Is the studio hiring right now?",
-    a: "We're a small team and we hire deliberately. When we do open a role, it lands here first. If nothing's posted, it's truly closed — but we always read thoughtful intros at the contact link below.",
-  },
-  {
-    q: "Do you sponsor visas?",
-    a: "For senior engineering and design roles, yes — case by case. We'll be explicit on each posting whether sponsorship is on the table.",
-  },
-  {
-    q: "Remote? Hybrid? In-office?",
-    a: "Distributed by default. The Miami studio is open if you're nearby and want desk time, but no role requires you to be there.",
-  },
-  {
-    q: "What's the interview process?",
-    a: "Three calls: intro with a founder, working session with a peer (no whiteboard puzzles — we look at real work), and a paid trial week if both sides want to keep going.",
-  },
-  {
-    q: "What do you NOT hire for?",
-    a: 'Project managers, scrum coaches, and "head of" titles where the work is meetings. Engineering managers code; design leads design; founders sell.',
-  },
-];
+const FAQ_KEYS = ["hiring", "visas", "remote", "interview", "notHire"] as const;
 
-export default function CareersPage() {
+export default async function CareersPage() {
+  const { t } = await getRequestT();
   const trail = [
-    { label: "Home", href: "/" },
-    { label: "Careers", href: "/careers" },
+    { label: t("marketing.pages.careers.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.careers.breadcrumbs.careers"), href: "/careers" },
   ];
+  const values = VALUE_KEYS.map((key, i) => ({
+    icon: VALUE_ICONS[i],
+    title: t(`marketing.pages.careers.values.${key}.title`),
+    body: t(`marketing.pages.careers.values.${key}.body`),
+  }));
+  const faq = FAQ_KEYS.map((key) => ({
+    q: t(`marketing.pages.careers.faq.${key}.q`),
+    a: t(`marketing.pages.careers.faq.${key}.a`),
+  }));
 
   return (
     <>
@@ -120,20 +82,18 @@ export default function CareersPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <Breadcrumbs items={trail} />
         <div className="mt-6 max-w-3xl">
-          <div className="eyebrow eyebrow-brand">Careers</div>
-          <h1 className="hed-2xl mt-4">Build for Production.</h1>
+          <div className="eyebrow eyebrow-brand">{t("marketing.pages.careers.hero.eyebrow")}</div>
+          <h1 className="hed-2xl mt-4">{t("marketing.pages.careers.hero.title")}</h1>
           <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
-            We&apos;re building the platform the live-events industry has needed for fifteen years — one operating
-            system that runs the producer&apos;s desk, the crew&apos;s phone, and the client&apos;s portal off the same
-            database. Small studio, deep ownership, real shows.
+            {t("marketing.pages.careers.hero.body")}
           </p>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-xl">How We Crew</h2>
+        <h2 className="hed-xl">{t("marketing.pages.careers.values.heading")}</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {VALUES.map(({ icon: Icon, title, body }) => (
+          {values.map(({ icon: Icon, title, body }) => (
             <div key={title} className="surface p-6">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
@@ -149,20 +109,19 @@ export default function CareersPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-end justify-between">
-          <h2 className="hed-xl">Open Roles</h2>
-          <span className="text-xs text-[var(--text-muted)]">Updated continuously</span>
+          <h2 className="hed-xl">{t("marketing.pages.careers.roles.heading")}</h2>
+          <span className="text-xs text-[var(--text-muted)]">{t("marketing.pages.careers.roles.updatedNote")}</span>
         </div>
 
         {ROLES.length === 0 ? (
           <div className="surface mt-8 p-10 text-center">
-            <div className="eyebrow">No open roles right now</div>
+            <div className="eyebrow">{t("marketing.pages.careers.roles.empty.eyebrow")}</div>
             <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-              We hire deliberately and post openings here when they exist. If your background is unusual or specifically
-              aligned with what we&apos;re building, we read every thoughtful intro that comes through the contact form.
+              {t("marketing.pages.careers.roles.empty.body")}
             </p>
             <div className="mt-5">
               <Link href="/contact" className="btn btn-primary">
-                Send a thoughtful intro
+                {t("marketing.pages.careers.roles.empty.cta")}
               </Link>
             </div>
           </div>
@@ -179,7 +138,7 @@ export default function CareersPage() {
                     <p className="mt-2 text-sm text-[var(--text-secondary)]">{r.body}</p>
                   </div>
                   <Link href="/contact" className="btn btn-secondary btn-sm shrink-0">
-                    Apply
+                    {t("marketing.pages.careers.roles.applyCta")}
                   </Link>
                 </div>
               </li>
@@ -188,14 +147,14 @@ export default function CareersPage() {
         )}
       </section>
 
-      <FAQSection title="Careers FAQ" faqs={FAQ} />
+      <FAQSection title={t("marketing.pages.careers.faq.heading")} faqs={faq} />
 
       <CTASection
-        title="Not Listed? Tell Us Anyway."
-        subtitle="If your background is unusual or specifically built for what we ship, write us. The studio reads every note."
-        primaryLabel="Send a Note"
+        title={t("marketing.pages.careers.cta.title")}
+        subtitle={t("marketing.pages.careers.cta.subtitle")}
+        primaryLabel={t("marketing.pages.careers.cta.primaryLabel")}
         primaryHref="/contact"
-        secondaryLabel="Read the About Page"
+        secondaryLabel={t("marketing.pages.careers.cta.secondaryLabel")}
         secondaryHref="/about"
       />
     </>

@@ -11,29 +11,33 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "COMPVSS — The Field",
-  description:
-    "Offline-first PWA. Sub-100ms gate scan. Shift clock-in, daily log, incident, medic, driver, guard, warehouse. Installs from the browser in one tap.",
-  path: "/solutions/compvss",
-  keywords: [
-    "COMPVSS",
-    "event ticket scan PWA",
-    "offline ticket scanning",
-    "production mobile app",
-    "crew mobile app",
-    "event check-in software",
-  ],
-  ogImageEyebrow: "COMPVSS",
-  ogImageTitle: "Offline. Sub-100ms.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.solutions.compvss.meta.title"),
+    description: t("marketing.pages.solutions.compvss.meta.description"),
+    path: "/solutions/compvss",
+    keywords: [
+      "COMPVSS",
+      "event ticket scan PWA",
+      "offline ticket scanning",
+      "production mobile app",
+      "crew mobile app",
+      "event check-in software",
+    ],
+    ogImageEyebrow: "COMPVSS",
+    ogImageTitle: t("marketing.pages.solutions.compvss.meta.ogImageTitle"),
+  });
+}
 
-export default function CompvssPage() {
+export default async function CompvssPage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Solutions", href: "/solutions" },
-    { label: "COMPVSS", href: "/solutions/compvss" },
+    { label: t("marketing.pages.solutions.compvss.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.solutions.compvss.breadcrumbs.solutions"), href: "/solutions" },
+    { label: t("marketing.pages.solutions.compvss.breadcrumbs.compvss"), href: "/solutions/compvss" },
   ];
 
   return (
@@ -41,9 +45,8 @@ export default function CompvssPage() {
       <JsonLd
         data={[
           productSchema({
-            name: "COMPVSS — The Field",
-            description:
-              "Offline-first PWA for production crew. Gate scan, clock-in, incident, medic, driver, guard, warehouse.",
+            name: t("marketing.pages.solutions.compvss.schema.name"),
+            description: t("marketing.pages.solutions.compvss.schema.description"),
             url: urlFor("marketing", "/solutions/compvss"),
           }),
         ]}
@@ -53,58 +56,59 @@ export default function CompvssPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-accent">COMPVSS</div>
         <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">
-          Offline.
+          {t("marketing.pages.solutions.compvss.hero.titleLine1")}
           <br />
-          Sub-100ms.
+          {t("marketing.pages.solutions.compvss.hero.titleLine2")}
         </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Installs from the browser in one tap. Gate scan, shift clock-in, medic triage, incident, driver run, guard
-          tour, warehouse, daily safety brief. Works on one-bar LTE.
+          {t("marketing.pages.solutions.compvss.hero.body")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Sign Up Free</Button>
+          <Button href="/signup">{t("marketing.pages.solutions.compvss.hero.primaryCta")}</Button>
           <Button href="/contact" variant="secondary">
-            Book a Walkthrough
+            {t("marketing.pages.solutions.compvss.hero.secondaryCta")}
           </Button>
         </div>
       </section>
 
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What the Crew Runs in the Field.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t("marketing.pages.solutions.compvss.modules.heading")}
+        </h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
             features={[
               {
                 icon: Home,
-                title: "Today",
-                body: "Role-routed landing — call sheet, pinned tasks, tonight&apos;s shift.",
+                title: t("marketing.pages.solutions.compvss.modules.today.title"),
+                body: t("marketing.pages.solutions.compvss.modules.today.body"),
               },
               {
                 icon: QrCode,
-                title: "Gate + ticket scan",
-                body: "QR + barcode. Accreditation zone logic. Sub-100ms. Offline or on.",
+                title: t("marketing.pages.solutions.compvss.modules.gateScan.title"),
+                body: t("marketing.pages.solutions.compvss.modules.gateScan.body"),
               },
               {
                 icon: BookOpen,
-                title: "Door pass",
-                body: "Same KBYG as the portal — scoped crew-side to radio, PPE, SOPs.",
+                title: t("marketing.pages.solutions.compvss.modules.doorPass.title"),
+                body: t("marketing.pages.solutions.compvss.modules.doorPass.body"),
               },
               {
                 icon: Clock,
-                title: "Shift",
-                body: "Geo-verified clock-in / break / meal-credit / clock-out. Manual fallback included.",
+                title: t("marketing.pages.solutions.compvss.modules.shift.title"),
+                body: t("marketing.pages.solutions.compvss.modules.shift.body"),
               },
               {
                 icon: Camera,
-                title: "Warehouse",
-                body: "Pick / put-away scans. Offline queue replays in order. Nothing goes missing.",
+                title: t("marketing.pages.solutions.compvss.modules.warehouse.title"),
+                body: t("marketing.pages.solutions.compvss.modules.warehouse.body"),
               },
               {
                 icon: AlertTriangle,
-                title: "Incident · medic · safeguarding",
-                body: "Photos, location, witnesses. Admin + medic + safeguarding lead paged instantly. Encrypted at rest.",
+                title: t("marketing.pages.solutions.compvss.modules.incident.title"),
+                body: t("marketing.pages.solutions.compvss.modules.incident.body"),
               },
             ]}
           />
@@ -116,28 +120,28 @@ export default function CompvssPage() {
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              <Wifi size={14} /> Offline-first
+              <Wifi size={14} /> {t("marketing.pages.solutions.compvss.offlineFirst.eyebrow")}
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">The Cell Tower Is Not Your Problem.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+              {t("marketing.pages.solutions.compvss.offlineFirst.heading")}
+            </h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Gate scan, manual lookup, tonight&apos;s call sheet — cached on device. Scans queue locally and replay in
-              order the second signal returns. Nothing drops. Nobody waits.
+              {t("marketing.pages.solutions.compvss.offlineFirst.body1")}
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Install from the browser — open the link, tap Install, full-screen launcher on the home screen. Done
-              before soundcheck.
+              {t("marketing.pages.solutions.compvss.offlineFirst.body2")}
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Installs from the browser — one tap",
-              "Offline scan queue replays in order. Zero drops.",
-              "Tested at 15,000 per night",
-              "Clear scan states — accepted · duplicate · voided · not found",
-              "Geo-verified clock-in with accuracy bounds",
-              "Camera + GPS requested only when needed",
-              "Bottom tab bar — five field-side actions",
-              "High-contrast every screen. Readable across the gate.",
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.install"),
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.queue"),
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.tested"),
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.scanStates"),
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.geoVerified"),
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.permissions"),
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.tabBar"),
+              t("marketing.pages.solutions.compvss.offlineFirst.bullets.contrast"),
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -149,37 +153,37 @@ export default function CompvssPage() {
       </section>
 
       <FAQSection
-        title="COMPVSS · FAQ"
+        title={t("marketing.pages.solutions.compvss.faq.title")}
         faqs={[
           {
-            q: "Is COMPVSS a native iOS / Android app?",
-            a: "No. PWA. Open the URL, tap Install, full-screen launcher. No App Store review. No fleet update the morning of. No version drift across your 400-person gate team.",
+            q: t("marketing.pages.solutions.compvss.faq.native.q"),
+            a: t("marketing.pages.solutions.compvss.faq.native.a"),
           },
           {
-            q: "What if the venue has no cell signal?",
-            a: "The scanner, tonight's call sheet, and the door pass cache on device. Scans queue locally and replay in order the moment signal returns.",
+            q: t("marketing.pages.solutions.compvss.faq.noSignal.q"),
+            a: t("marketing.pages.solutions.compvss.faq.noSignal.a"),
           },
           {
-            q: "How fast is the gate?",
-            a: "Sub-100ms server-side. US cell adds 200–400ms round-trip. Offline scans are instant locally. Duplicates, voided, not-found — distinct states, all on-screen in a glance.",
+            q: t("marketing.pages.solutions.compvss.faq.gateSpeed.q"),
+            a: t("marketing.pages.solutions.compvss.faq.gateSpeed.a"),
           },
           {
-            q: "Offline check-in — really?",
-            a: "Really. Scans queue on device. Replay in order when signal returns. During an offline window, duplicates the scanner can't yet confirm are flagged pending — the server reconciles on sync.",
+            q: t("marketing.pages.solutions.compvss.faq.offlineCheckin.q"),
+            a: t("marketing.pages.solutions.compvss.faq.offlineCheckin.a"),
           },
           {
-            q: "Camera access?",
-            a: "For QR + barcode scans. Manual input is the fallback for damaged codes or blocked permissions. The crew member at the gate never waits on IT.",
+            q: t("marketing.pages.solutions.compvss.faq.camera.q"),
+            a: t("marketing.pages.solutions.compvss.faq.camera.a"),
           },
         ]}
       />
 
       <CTASection
-        title="Open the Field App."
-        subtitle="Installs on any phone. No App Store. No fleet update. Ready in a tap."
-        primaryLabel="Sign Up Free"
+        title={t("marketing.pages.solutions.compvss.cta.title")}
+        subtitle={t("marketing.pages.solutions.compvss.cta.subtitle")}
+        primaryLabel={t("marketing.pages.solutions.compvss.cta.primaryLabel")}
         primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
+        secondaryLabel={t("marketing.pages.solutions.compvss.cta.secondaryLabel")}
         secondaryHref="/contact"
       />
     </div>

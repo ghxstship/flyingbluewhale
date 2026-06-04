@@ -12,28 +12,32 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "GVTEWAY — The Portal",
-  description:
-    "Twelve personas. Each their lane. Artists see riders. Vendors see POs. Clients see proposals. Same project, RLS at the database.",
-  path: "/solutions/gvteway",
-  keywords: [
-    "GVTEWAY",
-    "stakeholder portal",
-    "artist portal",
-    "vendor portal",
-    "client portal",
-    "event portal software",
-  ],
-  ogImageEyebrow: "GVTEWAY",
-  ogImageTitle: "Twelve Personas. Each Their Lane.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.solutions.gvteway.meta.title"),
+    description: t("marketing.pages.solutions.gvteway.meta.description"),
+    path: "/solutions/gvteway",
+    keywords: [
+      "GVTEWAY",
+      "stakeholder portal",
+      "artist portal",
+      "vendor portal",
+      "client portal",
+      "event portal software",
+    ],
+    ogImageEyebrow: "GVTEWAY",
+    ogImageTitle: t("marketing.pages.solutions.gvteway.meta.ogImageTitle"),
+  });
+}
 
-export default function GvtewayPage() {
+export default async function GvtewayPage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Solutions", href: "/solutions" },
+    { label: t("marketing.pages.solutions.gvteway.crumbs.home"), href: "/" },
+    { label: t("marketing.pages.solutions.gvteway.crumbs.solutions"), href: "/solutions" },
     { label: "GVTEWAY", href: "/solutions/gvteway" },
   ];
 
@@ -42,9 +46,8 @@ export default function GvtewayPage() {
       <JsonLd
         data={[
           productSchema({
-            name: "GVTEWAY — The Portal",
-            description:
-              "External stakeholder portal. Twelve personas, each scoped to their lane via RLS at the database.",
+            name: t("marketing.pages.solutions.gvteway.jsonLd.name"),
+            description: t("marketing.pages.solutions.gvteway.jsonLd.description"),
             url: urlFor("marketing", "/solutions/gvteway"),
           }),
         ]}
@@ -53,25 +56,27 @@ export default function GvtewayPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-accent">GVTEWAY</div>
-        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">Twelve Personas. Each Their Lane.</h1>
+        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">
+          {t("marketing.pages.solutions.gvteway.hero.title")}
+        </h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Artists advance. Vendors quote. Clients sign. Guests scan in. Crew clocks on. Same project. Twelve scoped
-          reads. RLS at the database.
+          {t("marketing.pages.solutions.gvteway.hero.body")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Sign Up Free</Button>
+          <Button href="/signup">{t("marketing.pages.solutions.gvteway.hero.ctaPrimary")}</Button>
           <Button href="/contact" variant="secondary">
-            Book a Walkthrough
+            {t("marketing.pages.solutions.gvteway.hero.ctaSecondary")}
           </Button>
         </div>
       </section>
 
       {/* Personas */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Twelve Personas. Same Database.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t("marketing.pages.solutions.gvteway.personas.title")}
+        </h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Every persona arrives at its own lane — nav, flows, deliverables tuned to the role. The artist never sees the
-          sponsor&apos;s invoice. The delegation never sees the vendor&apos;s COI. Enforced in Postgres.
+          {t("marketing.pages.solutions.gvteway.personas.body")}
         </p>
         <div className="mt-8">
           <FeatureGrid
@@ -79,59 +84,63 @@ export default function GvtewayPage() {
             features={[
               {
                 icon: Mic2,
-                title: "Artist",
-                body: "Tech rider, hospitality rider, input list, stage plot, guest list, schedule, travel.",
+                title: t("marketing.pages.solutions.gvteway.personas.artist.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.artist.body"),
               },
               {
                 icon: Truck,
-                title: "Vendor",
-                body: "Submissions, pull list, POs, invoices, COI + W-9 uploads, training records.",
+                title: t("marketing.pages.solutions.gvteway.personas.vendor.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.vendor.body"),
               },
               {
                 icon: Users,
-                title: "Client",
-                body: "Proposals signed in place, deliverables, invoices via card/ACH, messages, files.",
+                title: t("marketing.pages.solutions.gvteway.personas.client.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.client.body"),
               },
               {
                 icon: Award,
-                title: "Sponsor",
-                body: "Entitlements tracker, activations, brand assets, reporting, impressions.",
+                title: t("marketing.pages.solutions.gvteway.personas.sponsor.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.sponsor.body"),
               },
               {
                 icon: Ticket,
-                title: "Guest",
-                body: "Tickets — buy, claim, transfer. Schedule. Day-of logistics. Rideshare hand-off.",
-              },
-              { icon: HardHat, title: "Crew", body: "Call sheet, time submission, advances, safety briefing, SOPs." },
-              {
-                icon: Users,
-                title: "Delegation",
-                body: "Entries, rate card, training venues, meetings, cases, transport, accommodation, visa.",
-              },
-              {
-                icon: BookOpen,
-                title: "Media",
-                body: "MPC rate card, accommodation, shuttles, press-conf RSVP, info-on-demand.",
-              },
-              {
-                icon: Award,
-                title: "VIP + Hospitality",
-                body: "Dedicated fleet, hotel allocation, itinerary, guest list, package access.",
+                title: t("marketing.pages.solutions.gvteway.personas.guest.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.guest.body"),
               },
               {
                 icon: HardHat,
-                title: "Volunteer",
-                body: "Application, training, shift schedule, uniform pickup, door pass.",
+                title: t("marketing.pages.solutions.gvteway.personas.crew.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.crew.body"),
+              },
+              {
+                icon: Users,
+                title: t("marketing.pages.solutions.gvteway.personas.delegation.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.delegation.body"),
+              },
+              {
+                icon: BookOpen,
+                title: t("marketing.pages.solutions.gvteway.personas.media.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.media.body"),
+              },
+              {
+                icon: Award,
+                title: t("marketing.pages.solutions.gvteway.personas.vip.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.vip.body"),
+              },
+              {
+                icon: HardHat,
+                title: t("marketing.pages.solutions.gvteway.personas.volunteer.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.volunteer.body"),
               },
               {
                 icon: Mic2,
-                title: "Athlete",
-                body: "Training bookings, resident services, safeguarding, visa, privacy self-service.",
+                title: t("marketing.pages.solutions.gvteway.personas.athlete.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.athlete.body"),
               },
               {
                 icon: Share2,
-                title: "Privacy (all)",
-                body: "Every persona gets DSAR self-service + consent management. GDPR, handled.",
+                title: t("marketing.pages.solutions.gvteway.personas.privacy.title"),
+                body: t("marketing.pages.solutions.gvteway.personas.privacy.body"),
               },
             ]}
           />
@@ -143,36 +152,36 @@ export default function GvtewayPage() {
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div className="surface p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              <Share2 size={14} /> Proposals
+              <Share2 size={14} /> {t("marketing.pages.solutions.gvteway.features.proposals.eyebrow")}
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Proposals That Close Themselves.</h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight">
+              {t("marketing.pages.solutions.gvteway.features.proposals.title")}
+            </h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Twenty-three block types. Scroll-spy nav. Per-phase contract refs. Add-on pickers with live totals. E-sign
-              in place — typed or drawn. Revocable share links. Version history. Engagement analytics on every scroll.
-              Clean PDF if legal still wants paper.
+              {t("marketing.pages.solutions.gvteway.features.proposals.body")}
             </p>
             <Link
               href="/features/proposals"
               className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]"
             >
-              Read the breakdown →
+              {t("marketing.pages.solutions.gvteway.features.proposals.link")}
             </Link>
           </div>
           <div className="surface p-8">
             <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              <BookOpen size={14} /> KBYG
+              <BookOpen size={14} /> {t("marketing.pages.solutions.gvteway.features.kbyg.eyebrow")}
             </div>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight">Written Once. Read Twelve Ways.</h3>
+            <h3 className="mt-3 text-2xl font-semibold tracking-tight">
+              {t("marketing.pages.solutions.gvteway.features.kbyg.title")}
+            </h3>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              One Know-Before-You-Go doc in ATLVS. Renders per-persona in the portal and in the field. Artists get
-              riders + catering. Crew sees call sheet + radio + PPE. Guests see logistics + tickets. Seventeen section
-              types. One source, twelve reads.
+              {t("marketing.pages.solutions.gvteway.features.kbyg.body")}
             </p>
             <Link
               href="/features/guides"
               className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]"
             >
-              Read the breakdown →
+              {t("marketing.pages.solutions.gvteway.features.kbyg.link")}
             </Link>
           </div>
         </div>
@@ -183,23 +192,23 @@ export default function GvtewayPage() {
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              Security
+              {t("marketing.pages.solutions.gvteway.security.eyebrow")}
             </div>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight">RLS at the Database.</h3>
+            <h3 className="mt-3 text-3xl font-semibold tracking-tight">
+              {t("marketing.pages.solutions.gvteway.security.title")}
+            </h3>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              Every record is scoped to its org and project in Postgres. Share links are signed, expirable, revocable,
-              audit-logged. Nobody slips from the sponsor lounge into the artist compound — access enforced on the data,
-              not in the UI.
+              {t("marketing.pages.solutions.gvteway.security.body")}
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "Per-project portals — one link, one project",
-              "Per-persona nav, per-persona reads",
-              "Signed share links with expiry + revocation",
-              "File downloads self-expire",
-              "Every view logged in engagement analytics",
-              "E-sign in place — typed or drawn, IP + timestamp captured",
+              t("marketing.pages.solutions.gvteway.security.items.perProjectPortals"),
+              t("marketing.pages.solutions.gvteway.security.items.perPersonaNav"),
+              t("marketing.pages.solutions.gvteway.security.items.signedLinks"),
+              t("marketing.pages.solutions.gvteway.security.items.fileDownloads"),
+              t("marketing.pages.solutions.gvteway.security.items.everyViewLogged"),
+              t("marketing.pages.solutions.gvteway.security.items.eSign"),
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -211,37 +220,37 @@ export default function GvtewayPage() {
       </section>
 
       <FAQSection
-        title="GVTEWAY · FAQ"
+        title={t("marketing.pages.solutions.gvteway.faq.title")}
         faqs={[
           {
-            q: "What is GVTEWAY?",
-            a: "The portal. Blue-branded. Every guest, artist, vendor, sponsor, and collaborator arrives through their own lane. Twelve personas — each sees only its scope.",
+            q: t("marketing.pages.solutions.gvteway.faq.q1.q"),
+            a: t("marketing.pages.solutions.gvteway.faq.q1.a"),
           },
           {
-            q: "Do guests need an account?",
-            a: "Read-only? Share the link — they're in. Contributing (riders, COIs, signatures)? A lightweight signup creates a credential scoped to that project. Fast by design.",
+            q: t("marketing.pages.solutions.gvteway.faq.q2.q"),
+            a: t("marketing.pages.solutions.gvteway.faq.q2.a"),
           },
           {
-            q: "Can I white-label the portal?",
-            a: "Festival. Your mark, colors, email, custom domain. Clients see your brand. Vendors see your vendors' brand.",
+            q: t("marketing.pages.solutions.gvteway.faq.q3.q"),
+            a: t("marketing.pages.solutions.gvteway.faq.q3.a"),
           },
           {
-            q: "How is data isolated between projects?",
-            a: "Postgres RLS. Every record is scoped to its org and project. The link you share maps to one project — nobody slips from one to another.",
+            q: t("marketing.pages.solutions.gvteway.faq.q4.q"),
+            a: t("marketing.pages.solutions.gvteway.faq.q4.a"),
           },
           {
-            q: "Can one credential access two projects?",
-            a: "Yes. A vendor on one project and a sponsor on another switches cleanly from the portal home. One login, two scoped reads.",
+            q: t("marketing.pages.solutions.gvteway.faq.q5.q"),
+            a: t("marketing.pages.solutions.gvteway.faq.q5.a"),
           },
         ]}
       />
 
       <CTASection
-        title="Twelve Personas. One Source."
-        subtitle="Wired default. Reskin if you want. Use it if you don't."
-        primaryLabel="Sign Up Free"
+        title={t("marketing.pages.solutions.gvteway.cta.title")}
+        subtitle={t("marketing.pages.solutions.gvteway.cta.subtitle")}
+        primaryLabel={t("marketing.pages.solutions.gvteway.cta.primaryLabel")}
         primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
+        secondaryLabel={t("marketing.pages.solutions.gvteway.cta.secondaryLabel")}
         secondaryHref="/contact"
       />
     </div>

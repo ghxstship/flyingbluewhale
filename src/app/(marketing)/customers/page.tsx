@@ -8,26 +8,30 @@ import { Button } from "@/components/ui/Button";
 import { buildMetadata, breadcrumbSchema, CANONICAL_CTAS } from "@/lib/seo";
 import { PUBLISHED_CUSTOMER_STORIES, IN_PROGRESS_CUSTOMER_STORIES } from "@/lib/marketing/customers";
 import { INDUSTRIES } from "@/lib/marketing/industries";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Customers — Production Teams Running On ATLVS",
-  description:
-    "Real production teams running on ATLVS — festivals, touring, fabrication, immersive, brand activations, broadcast. Case studies landing through Q4.",
-  path: "/customers",
-  keywords: [
-    "ATLVS customer stories",
-    "production software case studies",
-    "event platform customers",
-    "festival software customers",
-  ],
-  ogImageEyebrow: "Customers",
-  ogImageTitle: "Production Teams Running On ATLVS.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.customers.metadata.title"),
+    description: t("marketing.pages.customers.metadata.description"),
+    path: "/customers",
+    keywords: [
+      t("marketing.pages.customers.metadata.keywords.0"),
+      t("marketing.pages.customers.metadata.keywords.1"),
+      t("marketing.pages.customers.metadata.keywords.2"),
+      t("marketing.pages.customers.metadata.keywords.3"),
+    ],
+    ogImageEyebrow: t("marketing.pages.customers.metadata.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.customers.metadata.ogImageTitle"),
+  });
+}
 
-export default function CustomersHub() {
+export default async function CustomersHub() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Customers", href: "/customers" },
+    { label: t("marketing.pages.customers.crumbs.home"), href: "/" },
+    { label: t("marketing.pages.customers.crumbs.customers"), href: "/customers" },
   ];
 
   return (
@@ -36,16 +40,17 @@ export default function CustomersHub() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Customers</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          {t("marketing.pages.customers.hero.eyebrow")}
+        </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-7xl">
-          Production Teams Running On ATLVS.
+          {t("marketing.pages.customers.hero.title")}
         </h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          Six launch-partner case studies are landing through Q4. Anonymized teasers + hard metrics below; the full
-          stories drop on the published date. For an under-NDA preview tailored to your event shape, book a brief.
+          {t("marketing.pages.customers.hero.body")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href={CANONICAL_CTAS.secondary.href}>Book a brief</Button>
+          <Button href={CANONICAL_CTAS.secondary.href}>{t("marketing.pages.customers.hero.primaryCta")}</Button>
           <Button href={CANONICAL_CTAS.primary.href} variant="secondary">
             {CANONICAL_CTAS.primary.label}
           </Button>
@@ -54,7 +59,7 @@ export default function CustomersHub() {
 
       {PUBLISHED_CUSTOMER_STORIES.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-2xl font-semibold tracking-tight">Published.</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">{t("marketing.pages.customers.published.title")}</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {PUBLISHED_CUSTOMER_STORIES.map((s) => (
               <Link key={s.slug} href={`/customers/${s.slug}`} className="surface hover-lift p-5">
@@ -71,14 +76,13 @@ export default function CustomersHub() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight">Landing Soon.</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">{t("marketing.pages.customers.landingSoon.title")}</h2>
           <span className="text-xs text-[var(--text-muted)]">
-            {IN_PROGRESS_CUSTOMER_STORIES.length} stories in production
+            {t("marketing.pages.customers.landingSoon.count", { count: IN_PROGRESS_CUSTOMER_STORIES.length })}
           </span>
         </div>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Anonymized for NDA. Hard metrics already captured; the full narrative + permission-cleared logo + PDF publish
-          on the date below.
+          {t("marketing.pages.customers.landingSoon.body")}
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-2">
           {IN_PROGRESS_CUSTOMER_STORIES.map((s) => (
@@ -108,11 +112,11 @@ export default function CustomersHub() {
       </section>
 
       <CTASection
-        title="Want To Be Profiled?"
-        subtitle="Send a one-paragraph note about your upcoming event window and we'll talk about a partnership."
-        primaryLabel="Book a brief"
+        title={t("marketing.pages.customers.cta.title")}
+        subtitle={t("marketing.pages.customers.cta.subtitle")}
+        primaryLabel={t("marketing.pages.customers.cta.primaryLabel")}
         primaryHref={CANONICAL_CTAS.secondary.href}
-        secondaryLabel="Sign Up Free"
+        secondaryLabel={t("marketing.pages.customers.cta.secondaryLabel")}
       />
     </div>
   );

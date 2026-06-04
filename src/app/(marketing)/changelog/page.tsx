@@ -5,48 +5,62 @@ import { Sparkles, Wrench, ShieldCheck, Zap } from "lucide-react";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
-export const metadata: Metadata = buildMetadata({
-  title: "Changelog — what shipped on ATLVS Technologies",
-  description:
-    "Release notes for ATLVS Technologies. Every shipping change, with context. Feature launches, reliability, security, and performance.",
-  path: "/changelog",
-  keywords: [
-    "ATLVS Technologies changelog",
-    "ATLVS changelog",
-    "GVTEWAY changelog",
-    "COMPVSS changelog",
-    "release notes",
-    "product updates",
-  ],
-  ogImageEyebrow: "Changelog",
-  ogImageTitle: "What shipped.",
-});
+import { getRequestT } from "@/lib/i18n/request";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.changelog.metadata.title"),
+    description: t("marketing.pages.changelog.metadata.description"),
+    path: "/changelog",
+    keywords: [
+      "ATLVS Technologies changelog",
+      "ATLVS changelog",
+      "GVTEWAY changelog",
+      "COMPVSS changelog",
+      "release notes",
+      "product updates",
+    ],
+    ogImageEyebrow: t("marketing.pages.changelog.metadata.ogEyebrow"),
+    ogImageTitle: t("marketing.pages.changelog.metadata.ogTitle"),
+  });
+}
 
 import { CHANGELOG_ENTRIES, type ChangelogKind } from "@/lib/changelog";
 
 type EntryKind = ChangelogKind;
 
-const KINDS: Record<EntryKind, { label: string; className: string; icon: typeof Sparkles }> = {
-  feature: { label: "Feature", className: "bg-[var(--org-primary)]/10 text-[var(--org-primary)]", icon: Sparkles },
-  improvement: { label: "Improvement", className: "bg-[var(--accent)]/10 text-[var(--accent)]", icon: Wrench },
-  security: {
-    label: "Security",
-    className: "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]",
-    icon: ShieldCheck,
-  },
-  performance: {
-    label: "Performance",
-    className: "bg-[color-mix(in_srgb,var(--color-warning)_10%,transparent)] text-[var(--color-warning)]",
-    icon: Zap,
-  },
-};
+export default async function ChangelogPage() {
+  const { t } = await getRequestT();
 
-const ENTRIES = CHANGELOG_ENTRIES;
+  const KINDS: Record<EntryKind, { label: string; className: string; icon: typeof Sparkles }> = {
+    feature: {
+      label: t("marketing.pages.changelog.kinds.feature"),
+      className: "bg-[var(--org-primary)]/10 text-[var(--org-primary)]",
+      icon: Sparkles,
+    },
+    improvement: {
+      label: t("marketing.pages.changelog.kinds.improvement"),
+      className: "bg-[var(--accent)]/10 text-[var(--accent)]",
+      icon: Wrench,
+    },
+    security: {
+      label: t("marketing.pages.changelog.kinds.security"),
+      className: "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]",
+      icon: ShieldCheck,
+    },
+    performance: {
+      label: t("marketing.pages.changelog.kinds.performance"),
+      className: "bg-[color-mix(in_srgb,var(--color-warning)_10%,transparent)] text-[var(--color-warning)]",
+      icon: Zap,
+    },
+  };
 
-export default function ChangelogPage() {
+  const ENTRIES = CHANGELOG_ENTRIES;
+
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Changelog", href: "/changelog" },
+    { label: t("marketing.pages.changelog.crumbs.home"), href: "/" },
+    { label: t("marketing.pages.changelog.crumbs.changelog"), href: "/changelog" },
   ];
 
   return (
@@ -54,14 +68,14 @@ export default function ChangelogPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="eyebrow eyebrow-brand">Changelog</div>
-        <h1 className="hed-2xl mt-4">What Shipped.</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.changelog.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.changelog.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Every release since v0.6, with enough context to understand why we shipped it. Subscribe via RSS at{" "}
+          {t("marketing.pages.changelog.hero.bodyBefore")}{" "}
           <a className="underline" href="/changelog.rss">
             /changelog.rss
           </a>
-          .
+          {t("marketing.pages.changelog.hero.bodyAfter")}
         </p>
       </section>
 
@@ -95,7 +109,10 @@ export default function ChangelogPage() {
         </ul>
       </section>
 
-      <CTASection title="Try What's New" subtitle="Every change ships to free and trial accounts immediately." />
+      <CTASection
+        title={t("marketing.pages.changelog.cta.title")}
+        subtitle={t("marketing.pages.changelog.cta.subtitle")}
+      />
     </div>
   );
 }

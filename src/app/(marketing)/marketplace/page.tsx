@@ -2,59 +2,65 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
+import { getRequestT } from "@/lib/i18n/request";
 import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Marketplace — Live Production Crew, Talent, RFQs",
-  description:
-    "Discover open production gigs, casting calls, talent, vetted crew, and live RFQs from the ATLVS network.",
-  path: "/marketplace",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.marketplace.meta.title"),
+    description: t("marketing.pages.marketplace.meta.description"),
+    path: "/marketplace",
+  });
+}
 
-const SECTIONS = [
-  {
-    href: "/marketplace/rfqs",
-    title: "Open RFQs",
-    blurb: "Production RFPs from operators in our network. Bid through prequalification.",
-  },
-  {
-    href: "/marketplace/gigs",
-    title: "Crew Gigs",
-    blurb: "Posting board for paid production roles — single show, tour leg, or recurring.",
-  },
-  {
-    href: "/marketplace/calls",
-    title: "Open Calls",
-    blurb: "Casting calls and open submissions for talent, vendors, and creators.",
-  },
-  {
-    href: "/marketplace/talent",
-    title: "Talent",
-    blurb: "Artist EPKs — bio, reel, riders, fee bands, agent. Direct booking.",
-  },
-  {
-    href: "/marketplace/crew",
-    title: "Crew",
-    blurb: "Vetted production crew profiles — roles, gear, unions, day rates.",
-  },
-  {
-    href: "/marketplace/vendors",
-    title: "Vendors",
-    blurb: "Production vendors with current insurance, W-9, and prequalification.",
-  },
-];
+export default async function Page() {
+  const { t } = await getRequestT();
+  const SECTIONS = [
+    {
+      href: "/marketplace/rfqs",
+      title: t("marketing.pages.marketplace.sections.rfqs.title"),
+      blurb: t("marketing.pages.marketplace.sections.rfqs.blurb"),
+    },
+    {
+      href: "/marketplace/gigs",
+      title: t("marketing.pages.marketplace.sections.gigs.title"),
+      blurb: t("marketing.pages.marketplace.sections.gigs.blurb"),
+    },
+    {
+      href: "/marketplace/calls",
+      title: t("marketing.pages.marketplace.sections.calls.title"),
+      blurb: t("marketing.pages.marketplace.sections.calls.blurb"),
+    },
+    {
+      href: "/marketplace/talent",
+      title: t("marketing.pages.marketplace.sections.talent.title"),
+      blurb: t("marketing.pages.marketplace.sections.talent.blurb"),
+    },
+    {
+      href: "/marketplace/crew",
+      title: t("marketing.pages.marketplace.sections.crew.title"),
+      blurb: t("marketing.pages.marketplace.sections.crew.blurb"),
+    },
+    {
+      href: "/marketplace/vendors",
+      title: t("marketing.pages.marketplace.sections.vendors.title"),
+      blurb: t("marketing.pages.marketplace.sections.vendors.blurb"),
+    },
+  ];
 
-export default function Page() {
   return (
     <>
-      <Breadcrumbs items={[{ label: "Marketplace" }]} className="mx-auto max-w-6xl px-6 pt-6" />
+      <Breadcrumbs
+        items={[{ label: t("marketing.pages.marketplace.breadcrumb") }]}
+        className="mx-auto max-w-6xl px-6 pt-6"
+      />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace</div>
-        <h1 className="hed-2xl mt-4">Find the Work. Find the Crew. Find the Act.</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          One network for production RFQs, crew gigs, casting calls, and direct artist booking. Vetted, not
-          crowdsourced. Bidirectional reviews. Bid + book + advance, end to end.
+          {t("marketing.pages.marketplace.hero.body")}
         </p>
       </section>
 
@@ -71,12 +77,10 @@ export default function Page() {
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="surface p-6">
-          <h2 className="hed-lg mb-2">For Operators</h2>
-          <p className="mb-3 text-sm text-[var(--text-secondary)]">
-            Publish your own RFQs, gigs, and casting calls — gated by your prequalification rules.
-          </p>
+          <h2 className="hed-lg mb-2">{t("marketing.pages.marketplace.operators.title")}</h2>
+          <p className="mb-3 text-sm text-[var(--text-secondary)]">{t("marketing.pages.marketplace.operators.body")}</p>
           <Button href="/signup" size="sm">
-            Sign Up Free
+            {t("marketing.pages.marketplace.operators.cta")}
           </Button>
         </div>
       </section>

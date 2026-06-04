@@ -4,27 +4,30 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata, breadcrumbSchema, SITE } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Status — Platform Uptime + Incident History",
-  description:
-    "Real-time platform status across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe to incident alerts.",
-  path: "/status",
-  keywords: ["ATLVS status", "ATLVS uptime", "ATLVS Technologies incidents", "platform health"],
-  ogImageEyebrow: "Status",
-  ogImageTitle: "Platform Health.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.status.meta.title"),
+    description: t("marketing.pages.status.meta.description"),
+    path: "/status",
+    keywords: ["ATLVS status", "ATLVS uptime", "ATLVS Technologies incidents", "platform health"],
+    ogImageEyebrow: t("marketing.pages.status.meta.ogEyebrow"),
+    ogImageTitle: t("marketing.pages.status.meta.ogTitle"),
+  });
+}
 
-type ServiceRow = { name: string; description: string; state: "operational" | "degraded" | "outage" };
+type ServiceRow = { name: string; descriptionKey: string; state: "operational" | "degraded" | "outage" };
 
 const SERVICES: ServiceRow[] = [
-  { name: "ATLVS", description: "Production operations workspace (app.atlvs.pro)", state: "operational" },
-  { name: "GVTEWAY Portal", description: "Stakeholder portals (gvteway.atlvs.pro)", state: "operational" },
-  { name: "COMPVSS Field", description: "Offline-first PWA (compvss.atlvs.pro)", state: "operational" },
-  { name: "Marketing + Auth", description: "atlvs.pro + auth flows", state: "operational" },
-  { name: "Webhooks", description: "Outbound + inbound webhook delivery", state: "operational" },
-  { name: "AI Assistant", description: "Anthropic Claude integration", state: "operational" },
-  { name: "Stripe Connect", description: "Vendor payout rail", state: "operational" },
+  { name: "ATLVS", descriptionKey: "marketing.pages.status.services.atlvs", state: "operational" },
+  { name: "GVTEWAY Portal", descriptionKey: "marketing.pages.status.services.gvteway", state: "operational" },
+  { name: "COMPVSS Field", descriptionKey: "marketing.pages.status.services.compvss", state: "operational" },
+  { name: "Marketing + Auth", descriptionKey: "marketing.pages.status.services.marketing", state: "operational" },
+  { name: "Webhooks", descriptionKey: "marketing.pages.status.services.webhooks", state: "operational" },
+  { name: "AI Assistant", descriptionKey: "marketing.pages.status.services.ai", state: "operational" },
+  { name: "Stripe Connect", descriptionKey: "marketing.pages.status.services.stripe", state: "operational" },
 ];
 
 const STATE_COLOR: Record<ServiceRow["state"], string> = {
@@ -33,16 +36,17 @@ const STATE_COLOR: Record<ServiceRow["state"], string> = {
   outage: "var(--color-error)",
 };
 
-const STATE_LABEL: Record<ServiceRow["state"], string> = {
-  operational: "Operational",
-  degraded: "Degraded",
-  outage: "Major Outage",
+const STATE_LABEL_KEY: Record<ServiceRow["state"], string> = {
+  operational: "marketing.pages.status.stateLabel.operational",
+  degraded: "marketing.pages.status.stateLabel.degraded",
+  outage: "marketing.pages.status.stateLabel.outage",
 };
 
-export default function StatusPage() {
+export default async function StatusPage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Status", href: "/status" },
+    { label: t("marketing.pages.status.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.status.breadcrumbs.status"), href: "/status" },
   ];
 
   return (
@@ -51,19 +55,16 @@ export default function StatusPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Status</div>
-        <h1 className="hed-3xl mt-4">All Systems Operational.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          Real-time platform health across ATLVS, GVTEWAY, COMPVSS, and the marketing surface. Subscribe for incident
-          alerts via email or webhook.
-        </p>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.status.hero.eyebrow")}</div>
+        <h1 className="hed-3xl mt-4">{t("marketing.pages.status.hero.title")}</h1>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.status.hero.body")}</p>
         <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-1.5">
           <span
             className="inline-block h-2 w-2 rounded-full"
             style={{ background: "var(--success)" }}
             aria-hidden="true"
           />
-          <span className="text-xs font-medium">All systems operational · last 30 days</span>
+          <span className="text-xs font-medium">{t("marketing.pages.status.hero.badge")}</span>
         </div>
       </section>
 
@@ -76,7 +77,7 @@ export default function StatusPage() {
             >
               <div>
                 <div className="text-sm font-semibold">{s.name}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{s.description}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{t(s.descriptionKey)}</div>
               </div>
               <div className="flex items-center gap-2">
                 <span
@@ -85,7 +86,7 @@ export default function StatusPage() {
                   aria-hidden="true"
                 />
                 <span className="text-xs font-medium" style={{ color: STATE_COLOR[s.state] }}>
-                  {STATE_LABEL[s.state]}
+                  {t(STATE_LABEL_KEY[s.state])}
                 </span>
               </div>
             </div>
@@ -95,22 +96,21 @@ export default function StatusPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8 md:p-10">
-          <div className="eyebrow eyebrow-brand">Coming Soon</div>
-          <h2 className="hed-lg mt-3">Live Status Page.</h2>
+          <div className="eyebrow eyebrow-brand">{t("marketing.pages.status.comingSoon.eyebrow")}</div>
+          <h2 className="hed-lg mt-3">{t("marketing.pages.status.comingSoon.title")}</h2>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
-            The page above shows current state. Soon: 90-day uptime per service, incident history with post-mortems,
-            subscribe-by-email and webhook for alerts. Targeting Q4 launch on
+            {t("marketing.pages.status.comingSoon.body")}
             <span className="font-mono"> status.{SITE.domain}</span>.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href="/contact" variant="secondary">
-              Get notified at launch
+              {t("marketing.pages.status.comingSoon.cta")}
             </Button>
           </div>
         </div>
       </section>
 
-      <CTASection title="ATLVS Is Open." subtitle="Free for small teams. Per-org pricing the rest of the way up." />
+      <CTASection title={t("marketing.pages.status.cta.title")} subtitle={t("marketing.pages.status.cta.subtitle")} />
     </div>
   );
 }

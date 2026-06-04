@@ -4,44 +4,52 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata, breadcrumbSchema, CANONICAL_CTAS } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Partners — Production Consultants + Implementation Partners",
-  description:
-    "ATLVS-trained production consultants who help teams migrate, configure, and optimize on the platform. Partner directory launching Q1.",
-  path: "/partners",
-  keywords: [
-    "ATLVS partners",
-    "ATLVS implementation partners",
-    "production software consultants",
-    "ATLVS Technologies partner program",
-  ],
-  ogImageEyebrow: "Partners",
-  ogImageTitle: "Implementation + Consulting.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.partners.metadata.title"),
+    description: t("marketing.pages.partners.metadata.description"),
+    path: "/partners",
+    keywords: [
+      "ATLVS partners",
+      "ATLVS implementation partners",
+      "production software consultants",
+      "ATLVS Technologies partner program",
+    ],
+    ogImageEyebrow: t("marketing.pages.partners.metadata.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.partners.metadata.ogImageTitle"),
+  });
+}
 
-const TRACKS = [
-  {
-    name: "Implementation Partners",
-    body: "Production consultants who help teams migrate from spreadsheets / Asana / Master Tour onto ATLVS in 1-3 days.",
-    forWho: "For agencies + consultants",
-  },
-  {
-    name: "Build Partners",
-    body: "Studios who customize ATLVS for specialized verticals — touring opera, immersive theatre, theme-park installs.",
-    forWho: "For technical studios",
-  },
-  {
-    name: "Solution Partners",
-    body: "Industry experts (EHS, rigging, broadcast) who bundle ATLVS with their service.",
-    forWho: "For domain specialists",
-  },
-];
+export default async function PartnersPage() {
+  const { t } = await getRequestT();
 
-export default function PartnersPage() {
+  const TRACKS = [
+    {
+      key: "implementation",
+      name: t("marketing.pages.partners.tracks.implementation.name"),
+      body: t("marketing.pages.partners.tracks.implementation.body"),
+      forWho: t("marketing.pages.partners.tracks.implementation.forWho"),
+    },
+    {
+      key: "build",
+      name: t("marketing.pages.partners.tracks.build.name"),
+      body: t("marketing.pages.partners.tracks.build.body"),
+      forWho: t("marketing.pages.partners.tracks.build.forWho"),
+    },
+    {
+      key: "solution",
+      name: t("marketing.pages.partners.tracks.solution.name"),
+      body: t("marketing.pages.partners.tracks.solution.body"),
+      forWho: t("marketing.pages.partners.tracks.solution.forWho"),
+    },
+  ];
+
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Partners", href: "/partners" },
+    { label: t("marketing.pages.partners.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.partners.breadcrumbs.partners"), href: "/partners" },
   ];
 
   return (
@@ -50,14 +58,11 @@ export default function PartnersPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Partners</div>
-        <h1 className="hed-3xl mt-4">Implementation + Consulting.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          ATLVS-trained production consultants who help teams migrate, configure, and optimize on the platform. Partner
-          directory launching Q1 with vetted profiles, project portfolios, and rate cards.
-        </p>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.partners.hero.eyebrow")}</div>
+        <h1 className="hed-3xl mt-4">{t("marketing.pages.partners.hero.title")}</h1>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.partners.hero.body")}</p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/contact">Apply to the partner program</Button>
+          <Button href="/contact">{t("marketing.pages.partners.hero.primaryCta")}</Button>
           <Button href={CANONICAL_CTAS.primary.href} variant="secondary">
             {CANONICAL_CTAS.primary.label}
           </Button>
@@ -65,13 +70,13 @@ export default function PartnersPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Three Partner Tracks.</h2>
+        <h2 className="hed-lg">{t("marketing.pages.partners.tracks.heading")}</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {TRACKS.map((t) => (
-            <div key={t.name} className="surface p-6">
-              <div className="eyebrow eyebrow-brand">{t.forWho}</div>
-              <h3 className="mt-2 text-base font-semibold">{t.name}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{t.body}</p>
+          {TRACKS.map((track) => (
+            <div key={track.key} className="surface p-6">
+              <div className="eyebrow eyebrow-brand">{track.forWho}</div>
+              <h3 className="mt-2 text-base font-semibold">{track.name}</h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">{track.body}</p>
             </div>
           ))}
         </div>
@@ -83,24 +88,23 @@ export default function PartnersPage() {
             className="absolute inset-x-0 top-0 h-1"
             style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
           />
-          <div className="eyebrow eyebrow-brand">Coming Soon</div>
-          <h2 className="hed-lg mt-3">Partner Directory.</h2>
+          <div className="eyebrow eyebrow-brand">{t("marketing.pages.partners.directory.eyebrow")}</div>
+          <h2 className="hed-lg mt-3">{t("marketing.pages.partners.directory.title")}</h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-            Browse vetted partners by region, vertical, certification level, and language. Each profile lists project
-            portfolio, recent customers, rate card, and direct booking link. Q1 launch.
+            {t("marketing.pages.partners.directory.body")}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href="/contact" variant="secondary">
-              Get on the early-access list
+              {t("marketing.pages.partners.directory.cta")}
             </Button>
           </div>
         </div>
       </section>
 
       <CTASection
-        title="Want To Partner?"
-        subtitle="Tell us about your production-consulting practice — region, vertical, recent projects, and how you'd want to plug into ATLVS."
-        primaryLabel="Apply to the program"
+        title={t("marketing.pages.partners.cta.title")}
+        subtitle={t("marketing.pages.partners.cta.subtitle")}
+        primaryLabel={t("marketing.pages.partners.cta.primaryLabel")}
         primaryHref={CANONICAL_CTAS.secondary.href}
         secondaryLabel={CANONICAL_CTAS.primary.label}
         secondaryHref={CANONICAL_CTAS.primary.href}

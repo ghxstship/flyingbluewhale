@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
+import { getRequestT } from "@/lib/i18n/request";
 import {
   buildMetadata,
   organizationSchema,
@@ -14,46 +15,50 @@ import {
   SITE,
 } from "@/lib/seo";
 
-export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — A Produção Roda Aqui",
-  description:
-    "A plataforma para produção ao vivo. Três apps, um schema, cada módulo — do pitch ao wrap. RLS no banco. Construído por operadores.",
-  path: "/pt-BR",
-  ogLocale: "pt_BR",
-  languages: {
-    "en-US": `${SITE.baseUrl}/`,
-    "es-ES": `${SITE.baseUrl}/es-ES`,
-  },
-  keywords: [
-    "software de gestão de produção",
-    "plataforma de operações de eventos",
-    "software de festival",
-    "advancing software",
-    "plataforma para produção de eventos ao vivo",
-  ],
-  ogImageTitle: "A Produção Roda Aqui.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.pt-BR.metadata.title"),
+    description: t("marketing.pages.pt-BR.metadata.description"),
+    path: "/pt-BR",
+    ogLocale: "pt_BR",
+    languages: {
+      "en-US": `${SITE.baseUrl}/`,
+      "es-ES": `${SITE.baseUrl}/es-ES`,
+    },
+    keywords: [
+      t("marketing.pages.pt-BR.metadata.keywords.productionManagement"),
+      t("marketing.pages.pt-BR.metadata.keywords.eventOperations"),
+      t("marketing.pages.pt-BR.metadata.keywords.festivalSoftware"),
+      t("marketing.pages.pt-BR.metadata.keywords.advancingSoftware"),
+      t("marketing.pages.pt-BR.metadata.keywords.liveEventProduction"),
+    ],
+    ogImageTitle: t("marketing.pages.pt-BR.metadata.ogImageTitle"),
+  });
+}
 
-const FAQ_PT = [
-  {
-    q: "O que a plataforma faz?",
-    a: "Quarenta e sete módulos em três apps que compartilham um banco de dados. ATLVS é o workspace de operações — RFIs, submittals, daily logs, punch, advancing, financeiro, procurement, IA. GVTEWAY é o portal de stakeholders. COMPVSS é o PWA offline-first do campo — scan de portão, ponto eletrônico, incidentes, médico, briefing diário de segurança.",
-  },
-  {
-    q: "Pra quem é?",
-    a: "Times de produção que rodam trabalho real ao vivo. Festivais, residências, turnês, oficinas de fabricação, ativações de marca, compounds de broadcast, eventos privados. O schema é genérico; o vocabulário é específico.",
-  },
-  {
-    q: "Como funciona o preço?",
-    a: "Por organização, não por assento. Grátis para sempre para times pequenos. Crew abre o time. Production libera cada módulo. Festival é multi-org com SSO, DPA personalizado e SLA de 99.9%.",
-  },
-  {
-    q: "O app de campo funciona offline mesmo?",
-    a: "Sim. COMPVSS é um PWA offline-first. Scan, ponto, daily log, intake de incidente, intake médico — tudo fica em fila localmente e sincroniza quando o sinal volta. Testado em portões com 15,000 convidados.",
-  },
-];
+export default async function HomePT() {
+  const { t } = await getRequestT();
 
-export default function HomePT() {
+  const FAQ_PT = [
+    {
+      q: t("marketing.pages.pt-BR.faq.q1.question"),
+      a: t("marketing.pages.pt-BR.faq.q1.answer"),
+    },
+    {
+      q: t("marketing.pages.pt-BR.faq.q2.question"),
+      a: t("marketing.pages.pt-BR.faq.q2.answer"),
+    },
+    {
+      q: t("marketing.pages.pt-BR.faq.q3.question"),
+      a: t("marketing.pages.pt-BR.faq.q3.answer"),
+    },
+    {
+      q: t("marketing.pages.pt-BR.faq.q4.question"),
+      a: t("marketing.pages.pt-BR.faq.q4.answer"),
+    },
+  ];
+
   return (
     <div lang="pt-BR">
       <JsonLd
@@ -62,7 +67,7 @@ export default function HomePT() {
           websiteSchema(),
           softwareApplicationSchema({
             name: "ATLVS Technologies",
-            description: "A plataforma para produção ao vivo.",
+            description: t("marketing.pages.pt-BR.jsonLd.description"),
             url: `${SITE.baseUrl}/pt-BR`,
             price: "0",
           }),
@@ -72,20 +77,19 @@ export default function HomePT() {
       <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-12 text-balance">
         <div className="eyebrow eyebrow-brand">ATLVS Technologies</div>
         <h1 className="mt-4 text-5xl leading-[1.05] font-semibold tracking-tight sm:text-7xl">
-          A Produção
+          {t("marketing.pages.pt-BR.hero.titleLine1")}
           <br />
-          Roda Aqui.
+          {t("marketing.pages.pt-BR.hero.titleLine2")}
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          A plataforma para trabalho ao vivo. Do pitch ao wrap, em um workspace. Três apps, um schema, cada módulo — da
-          pré-produção ao strike.
+          {t("marketing.pages.pt-BR.hero.subtitle")}
         </p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href} size="lg">
-            Cadastre-se Grátis
+            {t("marketing.pages.pt-BR.hero.primaryCta")}
           </Button>
           <Button href={CANONICAL_CTAS.secondary.href} size="lg" variant="secondary">
-            Agende Um Walkthrough
+            {t("marketing.pages.pt-BR.hero.secondaryCta")}
           </Button>
         </div>
       </section>
@@ -93,23 +97,23 @@ export default function HomePT() {
       <section className="mx-auto max-w-6xl px-6 py-16">
         <h2 className="hed-xl">ATLVS · GVTEWAY · COMPVSS</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Um banco de dados. Três superfícies otimizadas. O mesmo registro do escritório, do portal e do campo.
+          {t("marketing.pages.pt-BR.apps.subtitle")}
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
             {
               name: "ATLVS",
-              body: "RFIs, submittals, daily logs, punch, advancing, financeiro, procurement, IA. Uma sidebar só. Do pitch ao wrap.",
+              body: t("marketing.pages.pt-BR.apps.atlvs.body"),
               href: "/solutions/atlvs",
             },
             {
               name: "GVTEWAY",
-              body: "Doze personas. Cada uma na sua faixa. Artistas veem riders. Vendors veem POs. Clientes veem propostas.",
+              body: t("marketing.pages.pt-BR.apps.gvteway.body"),
               href: "/solutions/gvteway",
             },
             {
               name: "COMPVSS",
-              body: "Offline. Sub-100ms. Scan, ponto, incidente, médico, brief diário. Funciona com uma barra de LTE.",
+              body: t("marketing.pages.pt-BR.apps.compvss.body"),
               href: "/solutions/compvss",
             },
           ].map((app) => (
@@ -117,20 +121,20 @@ export default function HomePT() {
               <div className="text-sm font-semibold">{app.name}</div>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{app.body}</p>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                Ver mais <ArrowRight size={12} />
+                {t("marketing.pages.pt-BR.apps.seeMore")} <ArrowRight size={12} />
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <FAQSection title="FAQ" faqs={FAQ_PT} />
+      <FAQSection title={t("marketing.pages.pt-BR.faq.title")} faqs={FAQ_PT} />
 
       <CTASection
-        title="ATLVS Está Aberto."
-        subtitle="Grátis, pra sempre, para times pequenos. Preço por organização, não por assento."
-        primaryLabel="Cadastre-se Grátis"
-        secondaryLabel="Agende Um Walkthrough"
+        title={t("marketing.pages.pt-BR.cta.title")}
+        subtitle={t("marketing.pages.pt-BR.cta.subtitle")}
+        primaryLabel={t("marketing.pages.pt-BR.cta.primaryLabel")}
+        secondaryLabel={t("marketing.pages.pt-BR.cta.secondaryLabel")}
       />
     </div>
   );

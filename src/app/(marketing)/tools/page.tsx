@@ -5,42 +5,47 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Free Tools — Production Calculators",
-  description:
-    "Per-diem calculator, capacity calculator, and more — free tools production teams use to plan, budget, and run shows.",
-  path: "/tools",
-  keywords: [
-    "per diem calculator",
-    "event capacity calculator",
-    "venue occupancy calculator",
-    "production calculator",
-    "free event planning tools",
-  ],
-  ogImageEyebrow: "Free Tools",
-  ogImageTitle: "Production Calculators.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.tools.meta.title"),
+    description: t("marketing.pages.tools.meta.description"),
+    path: "/tools",
+    keywords: [
+      "per diem calculator",
+      "event capacity calculator",
+      "venue occupancy calculator",
+      "production calculator",
+      "free event planning tools",
+    ],
+    ogImageEyebrow: t("marketing.pages.tools.meta.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.tools.meta.ogImageTitle"),
+  });
+}
 
-const TOOLS = [
-  {
-    slug: "per-diem-calculator",
-    title: "Per-Diem Calculator",
-    short: "Compute crew or talent per-diem totals by city and day count.",
-    icon: Calculator,
-  },
-  {
-    slug: "capacity-calculator",
-    title: "Venue Capacity Calculator",
-    short: "Estimate maximum occupancy from square footage and use type.",
-    icon: Ruler,
-  },
-];
+export default async function ToolsIndex() {
+  const { t } = await getRequestT();
 
-export default function ToolsIndex() {
+  const TOOLS = [
+    {
+      slug: "per-diem-calculator",
+      title: t("marketing.pages.tools.items.perDiem.title"),
+      short: t("marketing.pages.tools.items.perDiem.short"),
+      icon: Calculator,
+    },
+    {
+      slug: "capacity-calculator",
+      title: t("marketing.pages.tools.items.capacity.title"),
+      short: t("marketing.pages.tools.items.capacity.short"),
+      icon: Ruler,
+    },
+  ];
+
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Tools", href: "/tools" },
+    { label: t("marketing.pages.tools.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.tools.breadcrumbs.tools"), href: "/tools" },
   ];
 
   return (
@@ -49,11 +54,9 @@ export default function ToolsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Free Tools</div>
-        <h1 className="hed-2xl mt-4">Production Calculators.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          The math production teams redo every Monday morning, automated. Free, no signup, no email gate.
-        </p>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.tools.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.tools.hero.title")}</h1>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.tools.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
@@ -78,7 +81,7 @@ export default function ToolsIndex() {
                 </div>
                 <p className="mt-3 text-sm text-[var(--text-secondary)]">{tool.short}</p>
                 <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                  Use this tool <ArrowRight size={12} />
+                  {t("marketing.pages.tools.card.cta")} <ArrowRight size={12} />
                 </div>
               </Link>
             );
@@ -86,10 +89,7 @@ export default function ToolsIndex() {
         </div>
       </section>
 
-      <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
-      />
+      <CTASection title={t("marketing.pages.tools.cta.title")} subtitle={t("marketing.pages.tools.cta.subtitle")} />
     </div>
   );
 }

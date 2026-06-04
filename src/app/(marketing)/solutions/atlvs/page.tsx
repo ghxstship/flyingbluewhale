@@ -22,22 +22,31 @@ import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — Production Operations Workspace",
-  description:
-    "Where the production lives. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Pitch through wrap. One sidebar.",
-  path: "/solutions/atlvs",
-  keywords: ["ATLVS", "production operations workspace", "event production dashboard", "internal production platform"],
-  ogImageEyebrow: "ATLVS",
-  ogImageTitle: "Where the Production Lives",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.solutions.atlvs.meta.title"),
+    description: t("marketing.pages.solutions.atlvs.meta.description"),
+    path: "/solutions/atlvs",
+    keywords: [
+      "ATLVS",
+      "production operations workspace",
+      "event production dashboard",
+      "internal production platform",
+    ],
+    ogImageEyebrow: "ATLVS",
+    ogImageTitle: t("marketing.pages.solutions.atlvs.meta.ogImageTitle"),
+  });
+}
 
-export default function ATLVSPage() {
+export default async function ATLVSPage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Solutions", href: "/solutions" },
-    { label: "ATLVS", href: "/solutions/atlvs" },
+    { label: t("marketing.pages.solutions.atlvs.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.solutions.atlvs.breadcrumbs.solutions"), href: "/solutions" },
+    { label: t("marketing.pages.solutions.atlvs.breadcrumbs.atlvs"), href: "/solutions/atlvs" },
   ];
 
   return (
@@ -45,9 +54,8 @@ export default function ATLVSPage() {
       <JsonLd
         data={[
           productSchema({
-            name: "ATLVS — Production Operations Workspace",
-            description:
-              "Production operations workspace. Projects, finance, procurement, advancing, AI — one workspace, one schema.",
+            name: t("marketing.pages.solutions.atlvs.schema.name"),
+            description: t("marketing.pages.solutions.atlvs.schema.description"),
             url: urlFor("marketing", "/solutions/atlvs"),
             price: "0",
           }),
@@ -57,18 +65,17 @@ export default function ATLVSPage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-accent">ATLVS</div>
-        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">Where the Production Lives.</h1>
+        <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">{t("marketing.pages.solutions.atlvs.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI.
-          Forty-seven modules on one schema.
+          {t("marketing.pages.solutions.atlvs.hero.subtitle")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button href="/signup">Sign Up Free</Button>
+          <Button href="/signup">{t("marketing.pages.solutions.atlvs.hero.ctaPrimary")}</Button>
           <Button href="/contact" variant="secondary">
-            Book a Walkthrough
+            {t("marketing.pages.solutions.atlvs.hero.ctaSecondary")}
           </Button>
           <Link href="/pricing" className="btn btn-ghost">
-            Pricing →
+            {t("marketing.pages.solutions.atlvs.hero.ctaPricing")}
           </Link>
         </div>
       </section>
@@ -76,57 +83,59 @@ export default function ATLVSPage() {
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-          Nine domains · forty-seven modules
+          {t("marketing.pages.solutions.atlvs.modules.eyebrow")}
         </div>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Pitch Through Wrap. Same Workspace.</h2>
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t("marketing.pages.solutions.atlvs.modules.title")}
+        </h2>
         <div className="mt-8">
           <FeatureGrid
             cols={3}
             features={[
               {
                 icon: Command,
-                title: "Work",
-                body: "Projects, tasks, Gantt, schedule, ROS, events, locations. The run-sheet.",
+                title: t("marketing.pages.solutions.atlvs.modules.work.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.work.body"),
               },
               {
                 icon: FileSignature,
-                title: "Sales",
-                body: "Pipeline, leads, clients, proposals signed in place. 23 block types, e-sig in the page.",
+                title: t("marketing.pages.solutions.atlvs.modules.sales.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.sales.body"),
               },
               {
                 icon: DollarSign,
-                title: "Finance",
-                body: "Invoices, expenses, budgets with utilization, time, mileage, advances, payouts, live P&L.",
+                title: t("marketing.pages.solutions.atlvs.modules.finance.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.finance.body"),
               },
               {
                 icon: ClipboardList,
-                title: "Procurement",
-                body: "Reqs, RFQs, POs, vendor scorecards, COIs, W-9s, work order broadcasts.",
+                title: t("marketing.pages.solutions.atlvs.modules.procurement.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.procurement.body"),
               },
               {
                 icon: Database,
-                title: "Production",
-                body: "Equipment, rentals with availability, fab orders, dispatch, logistics, site plans.",
+                title: t("marketing.pages.solutions.atlvs.modules.production.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.production.body"),
               },
               {
                 icon: Users,
-                title: "People",
-                body: "Directory, crew, credentials with expiry alerts, roles, call sheets, time tracking.",
+                title: t("marketing.pages.solutions.atlvs.modules.people.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.people.body"),
               },
               {
                 icon: ClipboardList,
-                title: "Construction",
-                body: "RFIs, submittals, daily logs, punch list, inspections (10 categories), change orders, payment apps.",
+                title: t("marketing.pages.solutions.atlvs.modules.construction.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.construction.body"),
               },
               {
                 icon: ShieldCheck,
-                title: "Safety",
-                body: "Incidents, OSHA, medical, crisis comms, BC/DR, cyber-IR, safeguarding, environmental, playbooks.",
+                title: t("marketing.pages.solutions.atlvs.modules.safety.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.safety.body"),
               },
               {
                 icon: Brain,
-                title: "AI assistant",
-                body: "Drafts riders, RFPs, recaps, call sheets from your workspace. Never the public web.",
+                title: t("marketing.pages.solutions.atlvs.modules.ai.title"),
+                body: t("marketing.pages.solutions.atlvs.modules.ai.body"),
               },
             ]}
           />
@@ -138,28 +147,28 @@ export default function ATLVSPage() {
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
             <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
-              Under the hood
+              {t("marketing.pages.solutions.atlvs.architecture.eyebrow")}
             </div>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight">Same Rails. Every Module.</h2>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight">
+              {t("marketing.pages.solutions.atlvs.architecture.title")}
+            </h2>
             <p className="mt-4 text-sm text-[var(--text-secondary)]">
-              List, detail, create, edit. Every module rides the same rails — with status flow where it counts
-              (invoices, proposals, POs, tasks, RFIs). Validation at the door. Tenant walled at the database.
+              {t("marketing.pages.solutions.atlvs.architecture.body1")}
             </p>
             <p className="mt-3 text-sm text-[var(--text-secondary)]">
-              Same rails mean the team learns ATLVS once. New modules ship in days. The work changes — the workflow
-              holds.
+              {t("marketing.pages.solutions.atlvs.architecture.body2")}
             </p>
           </div>
           <ul className="space-y-3 text-sm">
             {[
-              "RLS at the database. Tenant walled in Postgres.",
-              "Role-aware on every action. Enforced server-side, not in the UI.",
-              "Immutable audit log. Actor, IP, before, after. Forever.",
-              "AI grounded in your workspace. Never the public internet.",
-              "Stripe Connect vendor payouts. Money never crosses our books.",
-              "Signed webhooks (HMAC-SHA256) on every state change.",
-              "Self-expiring file shares. No public buckets.",
-              "99.9% uptime SLA on Festival.",
+              t("marketing.pages.solutions.atlvs.architecture.bullets.rls"),
+              t("marketing.pages.solutions.atlvs.architecture.bullets.roleAware"),
+              t("marketing.pages.solutions.atlvs.architecture.bullets.auditLog"),
+              t("marketing.pages.solutions.atlvs.architecture.bullets.aiGrounded"),
+              t("marketing.pages.solutions.atlvs.architecture.bullets.stripeConnect"),
+              t("marketing.pages.solutions.atlvs.architecture.bullets.signedWebhooks"),
+              t("marketing.pages.solutions.atlvs.architecture.bullets.selfExpiring"),
+              t("marketing.pages.solutions.atlvs.architecture.bullets.sla"),
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
                 <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
@@ -172,20 +181,20 @@ export default function ATLVSPage() {
 
       {/* Persona tiles */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Who Lives Here.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.atlvs.personas.title")}</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {[
             {
-              role: "Owner / Admin",
-              body: "Full access. Billing, org, members, integrations, branding. Runs the business while the show runs.",
+              role: t("marketing.pages.solutions.atlvs.personas.owner.role"),
+              body: t("marketing.pages.solutions.atlvs.personas.owner.body"),
             },
             {
-              role: "Controller",
-              body: "Finance + procurement. Invoices, expenses, budgets, POs, payouts, audit log.",
+              role: t("marketing.pages.solutions.atlvs.personas.controller.role"),
+              body: t("marketing.pages.solutions.atlvs.personas.controller.body"),
             },
             {
-              role: "Project manager",
-              body: "Daily driver. Projects, tasks, schedule, RFIs, submittals, advancing, crew, proposals, clients.",
+              role: t("marketing.pages.solutions.atlvs.personas.projectManager.role"),
+              body: t("marketing.pages.solutions.atlvs.personas.projectManager.body"),
             },
           ].map((p) => (
             <div key={p.role} className="surface p-5">
@@ -197,33 +206,33 @@ export default function ATLVSPage() {
       </section>
 
       <FAQSection
-        title="ATLVS · FAQ"
+        title={t("marketing.pages.solutions.atlvs.faq.title")}
         faqs={[
           {
-            q: "What is ATLVS?",
-            a: "The production operations workspace. Red-branded, desk-bound, always on. Forty-seven modules — proposals, RFIs, submittals, daily logs, punch, inspections, advancing, finance, procurement, AI. Where the production lives.",
+            q: t("marketing.pages.solutions.atlvs.faq.what.q"),
+            a: t("marketing.pages.solutions.atlvs.faq.what.a"),
           },
           {
-            q: "How does role-aware access work?",
-            a: "Ten roles (owner, admin, controller, collaborator, contractor, crew, client, viewer, and cameos). Every capability is gated by role — enforced at the database via RLS, not in the UI.",
+            q: t("marketing.pages.solutions.atlvs.faq.roleAware.q"),
+            a: t("marketing.pages.solutions.atlvs.faq.roleAware.a"),
           },
           {
-            q: "Can I brand it?",
-            a: "Self-serve brand skins under Settings → Branding land on Festival. Production gets logo + accent. Every tier respects your org's accent color in the chrome.",
+            q: t("marketing.pages.solutions.atlvs.faq.brand.q"),
+            a: t("marketing.pages.solutions.atlvs.faq.brand.a"),
           },
           {
-            q: "What AI is included?",
-            a: "Anthropic Claude under the hood. A fast model for daily drafting on Production. Deep-reasoning model on Festival. Every thread logs to your workspace, scoped tight.",
+            q: t("marketing.pages.solutions.atlvs.faq.ai.q"),
+            a: t("marketing.pages.solutions.atlvs.faq.ai.a"),
           },
         ]}
       />
 
       <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free forever for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Sign Up Free"
+        title={t("marketing.pages.solutions.atlvs.cta.title")}
+        subtitle={t("marketing.pages.solutions.atlvs.cta.subtitle")}
+        primaryLabel={t("marketing.pages.solutions.atlvs.cta.primaryLabel")}
         primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
+        secondaryLabel={t("marketing.pages.solutions.atlvs.cta.secondaryLabel")}
         secondaryHref="/contact"
       />
     </div>

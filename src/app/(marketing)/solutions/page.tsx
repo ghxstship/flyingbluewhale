@@ -8,46 +8,138 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Solutions — Three Apps. One Schema.",
-  description:
-    "ATLVS — production operations workspace. GVTEWAY — stakeholder portal. COMPVSS — offline-first field PWA. Same record from the office, the stakeholder, and the gate.",
-  path: "/solutions",
-  keywords: [
-    "live events software",
-    "concerts production platform",
-    "festivals and tours software",
-    "immersive experience operations",
-    "brand activation platform",
-    "corporate events software",
-    "theatrical production software",
-    "broadcast tv film production",
-    "ATLVS GVTEWAY COMPVSS",
-  ],
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.solutions.metadata.title"),
+    description: t("marketing.pages.solutions.metadata.description"),
+    path: "/solutions",
+    keywords: [
+      "live events software",
+      "concerts production platform",
+      "festivals and tours software",
+      "immersive experience operations",
+      "brand activation platform",
+      "corporate events software",
+      "theatrical production software",
+      "broadcast tv film production",
+      "ATLVS GVTEWAY COMPVSS",
+    ],
+  });
+}
 
-export default function SolutionsIndex() {
+export default async function SolutionsIndex() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Solutions", href: "/solutions" },
+    { label: t("marketing.pages.solutions.crumbs.home"), href: "/" },
+    { label: t("marketing.pages.solutions.crumbs.solutions"), href: "/solutions" },
+  ];
+  const APPS = [
+    {
+      slug: "atlvs",
+      name: "ATLVS",
+      tier: t("marketing.pages.solutions.apps.atlvs.tier"),
+      title: t("marketing.pages.solutions.apps.atlvs.title"),
+      body: t("marketing.pages.solutions.apps.atlvs.body"),
+      bullets: [
+        t("marketing.pages.solutions.apps.atlvs.bullets.0"),
+        t("marketing.pages.solutions.apps.atlvs.bullets.1"),
+        t("marketing.pages.solutions.apps.atlvs.bullets.2"),
+        t("marketing.pages.solutions.apps.atlvs.bullets.3"),
+      ],
+      href: "/solutions/atlvs",
+    },
+    {
+      slug: "gvteway",
+      name: "GVTEWAY",
+      tier: t("marketing.pages.solutions.apps.gvteway.tier"),
+      title: t("marketing.pages.solutions.apps.gvteway.title"),
+      body: t("marketing.pages.solutions.apps.gvteway.body"),
+      bullets: [
+        t("marketing.pages.solutions.apps.gvteway.bullets.0"),
+        t("marketing.pages.solutions.apps.gvteway.bullets.1"),
+        t("marketing.pages.solutions.apps.gvteway.bullets.2"),
+        t("marketing.pages.solutions.apps.gvteway.bullets.3"),
+      ],
+      href: "/solutions/gvteway",
+    },
+    {
+      slug: "compvss",
+      name: "COMPVSS",
+      tier: t("marketing.pages.solutions.apps.compvss.tier"),
+      title: t("marketing.pages.solutions.apps.compvss.title"),
+      body: t("marketing.pages.solutions.apps.compvss.body"),
+      bullets: [
+        t("marketing.pages.solutions.apps.compvss.bullets.0"),
+        t("marketing.pages.solutions.apps.compvss.bullets.1"),
+        t("marketing.pages.solutions.apps.compvss.bullets.2"),
+        t("marketing.pages.solutions.apps.compvss.bullets.3"),
+      ],
+      href: "/solutions/compvss",
+    },
+  ] as const;
+
+  const INDUSTRIES = [
+    {
+      slug: "live-events",
+      name: t("marketing.pages.solutions.industries.live-events.name"),
+      blurb: t("marketing.pages.solutions.industries.live-events.blurb"),
+    },
+    {
+      slug: "concerts",
+      name: t("marketing.pages.solutions.industries.concerts.name"),
+      blurb: t("marketing.pages.solutions.industries.concerts.blurb"),
+    },
+    {
+      slug: "festivals-tours",
+      name: t("marketing.pages.solutions.industries.festivals-tours.name"),
+      blurb: t("marketing.pages.solutions.industries.festivals-tours.blurb"),
+    },
+    {
+      slug: "immersive-experiences",
+      name: t("marketing.pages.solutions.industries.immersive-experiences.name"),
+      blurb: t("marketing.pages.solutions.industries.immersive-experiences.blurb"),
+    },
+    {
+      slug: "brand-activations",
+      name: t("marketing.pages.solutions.industries.brand-activations.name"),
+      blurb: t("marketing.pages.solutions.industries.brand-activations.blurb"),
+    },
+    {
+      slug: "corporate-events",
+      name: t("marketing.pages.solutions.industries.corporate-events.name"),
+      blurb: t("marketing.pages.solutions.industries.corporate-events.blurb"),
+    },
+    {
+      slug: "theatrical-performances",
+      name: t("marketing.pages.solutions.industries.theatrical-performances.name"),
+      blurb: t("marketing.pages.solutions.industries.theatrical-performances.blurb"),
+    },
+    {
+      slug: "broadcast-tv-film",
+      name: t("marketing.pages.solutions.industries.broadcast-tv-film.name"),
+      blurb: t("marketing.pages.solutions.industries.broadcast-tv-film.blurb"),
+    },
   ];
   return (
     <>
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Solutions</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight">Three Apps. One Schema.</h1>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          {t("marketing.pages.solutions.hero.eyebrow")}
+        </div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight">{t("marketing.pages.solutions.hero.title")}</h1>
         <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          ATLVS, GVTEWAY, COMPVSS. One database underneath. Same record, three optimized surfaces — your office, your
-          stakeholders, your crew, all reading the same truth.
+          {t("marketing.pages.solutions.hero.body")}
         </p>
       </section>
 
       {/* Apps */}
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h2 className="text-3xl font-semibold tracking-tight">The Three Apps</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.apps.heading")}</h2>
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {APPS.map((a) => (
             <Link
@@ -80,7 +172,7 @@ export default function SolutionsIndex() {
                 ))}
               </ul>
               <div className="mt-5 inline-flex items-center gap-1 text-xs font-medium">
-                Walk the room <ArrowRight size={12} />
+                {t("marketing.pages.solutions.apps.cta")} <ArrowRight size={12} />
               </div>
             </Link>
           ))}
@@ -89,10 +181,9 @@ export default function SolutionsIndex() {
 
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Live Work, Whatever the Shape</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.industries.heading")}</h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each shape gets a tuned setup — starter templates, default role matrix, vernacular notes from operators
-          who&apos;ve done it.
+          {t("marketing.pages.solutions.industries.body")}
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
@@ -105,90 +196,34 @@ export default function SolutionsIndex() {
       </section>
 
       <FAQSection
-        title="Solutions · FAQ"
+        title={t("marketing.pages.solutions.faq.title")}
         faqs={[
           {
-            q: "How are the three apps different?",
-            a: "ATLVS is the production operations workspace — where the production lives. GVTEWAY is the stakeholder portal — twelve personas, each their lane. COMPVSS is the offline-first field PWA. One database underneath.",
+            q: t("marketing.pages.solutions.faq.items.0.q"),
+            a: t("marketing.pages.solutions.faq.items.0.a"),
           },
           {
-            q: "Do I get all three?",
-            a: "Every tier ships all three. Most teams open with ATLVS + one GVTEWAY persona (artist or client), add COMPVSS at load-in, then expand. Your tempo.",
+            q: t("marketing.pages.solutions.faq.items.1.q"),
+            a: t("marketing.pages.solutions.faq.items.1.a"),
           },
           {
-            q: "Can other orgs see my data?",
-            a: "No. RLS at the database — walled in Postgres, not in the app layer. A credential in one org cannot read or touch anything in another. Enforced in the data.",
+            q: t("marketing.pages.solutions.faq.items.2.q"),
+            a: t("marketing.pages.solutions.faq.items.2.a"),
           },
           {
-            q: "White-labeled portal?",
-            a: "Festival. Your mark, your colors, your email, your custom domain on every persona. The brand is yours.",
+            q: t("marketing.pages.solutions.faq.items.3.q"),
+            a: t("marketing.pages.solutions.faq.items.3.a"),
           },
         ]}
       />
 
       <CTASection
-        title="ATLVS Is Open."
-        primaryLabel="Sign Up Free"
+        title={t("marketing.pages.solutions.cta.title")}
+        primaryLabel={t("marketing.pages.solutions.cta.primaryLabel")}
         primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
+        secondaryLabel={t("marketing.pages.solutions.cta.secondaryLabel")}
         secondaryHref="/contact"
       />
     </>
   );
 }
-
-const APPS = [
-  {
-    slug: "atlvs",
-    name: "ATLVS",
-    tier: "WORKSPACE",
-    title: "Where the production lives",
-    body: "Forty-seven modules in one sidebar. Pitch through wrap. Proposals to payouts, RFIs to inspections, advancing to AI.",
-    bullets: [
-      "47 modules across 9 domains",
-      "AI assistant grounded in your workspace",
-      "Immutable audit log — actor, IP, before, after",
-      "Role-aware on every action, enforced server-side",
-    ],
-    href: "/solutions/atlvs",
-  },
-  {
-    slug: "gvteway",
-    name: "GVTEWAY",
-    tier: "PORTAL",
-    title: "Twelve personas, each their lane",
-    body: "Artist, vendor, client, sponsor, guest, crew, delegation, media, VIP, hospitality, volunteer, athlete. Same project, scoped reads.",
-    bullets: [
-      "12 personas per project",
-      "Proposals signed in place — 23 block types",
-      "Live advancing with deliverable tracking",
-      "Per-persona KBYG guides, anonymous-shareable",
-    ],
-    href: "/solutions/gvteway",
-  },
-  {
-    slug: "compvss",
-    name: "COMPVSS",
-    tier: "FIELD",
-    title: "Offline. Sub-100ms.",
-    body: "Gate scan, shift clock-in, daily log, incident, medic, driver, guard, warehouse. Installs from the browser in one tap.",
-    bullets: [
-      "<100ms gate scan, signal or none",
-      "Geo-verified shift + meal credits",
-      "Offline queue replays in order",
-      "Tonight's call sheet + KBYG in pocket",
-    ],
-    href: "/solutions/compvss",
-  },
-] as const;
-
-const INDUSTRIES = [
-  { slug: "live-events", name: "Residencies + nights", blurb: "Sold-out weeks, recurring programming" },
-  { slug: "concerts", name: "Concerts", blurb: "Single night, amphitheatre, arena" },
-  { slug: "festivals-tours", name: "Festivals + tours", blurb: "Multi-day, multi-stage, multi-city" },
-  { slug: "immersive-experiences", name: "Immersive", blurb: "Installations, walk-throughs, pop-ups" },
-  { slug: "brand-activations", name: "Activations", blurb: "Launches, pop-ups, experiential" },
-  { slug: "corporate-events", name: "Private programs", blurb: "Summits, closed-room, invite-only" },
-  { slug: "theatrical-performances", name: "Theatrical", blurb: "Residencies, tours, galas" },
-  { slug: "broadcast-tv-film", name: "Broadcast / TV / Film", blurb: "Studio, remote, location" },
-];

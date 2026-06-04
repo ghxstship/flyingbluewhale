@@ -10,93 +10,105 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { PricingCalculator } from "@/components/marketing/PricingCalculator";
 import { buildMetadata, faqSchema } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Pricing — Per Org. Never Per Seat.",
-  description:
-    "Free forever for small teams. Per-org pricing the rest of the way up. No per-seat trap. No per-scan tax.",
-  path: "/pricing",
-  keywords: [
-    "production software pricing",
-    "event management software cost",
-    "ATLVS Technologies pricing",
-    "ATLVS pricing",
-    "GVTEWAY pricing",
-    "COMPVSS pricing",
-  ],
-  ogImageEyebrow: "Pricing",
-  ogImageTitle: "Per Org. Never Per Seat.",
-});
-
-const TIERS = [
-  {
-    tier: "Free",
-    price: "$0",
-    per: "forever",
-    description: "Solo operators and side projects.",
-    features: [
-      "Basic projects + tasks",
-      "Guest + artist portals",
-      "Up to 3 users",
-      "Up to 100 portal credentials per project",
-      "Community support",
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.pricing.meta.title"),
+    description: t("marketing.pages.pricing.meta.description"),
+    path: "/pricing",
+    keywords: [
+      "production software pricing",
+      "event management software cost",
+      "ATLVS Technologies pricing",
+      "ATLVS pricing",
+      "GVTEWAY pricing",
+      "COMPVSS pricing",
     ],
-    cta: "Sign Up Free",
+    ogImageEyebrow: t("marketing.pages.pricing.meta.ogEyebrow"),
+    ogImageTitle: t("marketing.pages.pricing.meta.ogTitle"),
+  });
+}
+
+type TierT = (key: string) => string;
+
+const buildTiers = (t: TierT) => [
+  {
+    tier: t("marketing.pages.pricing.tiers.free.name"),
+    price: t("marketing.pages.pricing.tiers.free.price"),
+    per: t("marketing.pages.pricing.tiers.free.per"),
+    description: t("marketing.pages.pricing.tiers.free.description"),
+    features: [
+      t("marketing.pages.pricing.tiers.free.features.basicProjects"),
+      t("marketing.pages.pricing.tiers.free.features.guestArtistPortals"),
+      t("marketing.pages.pricing.tiers.free.features.upTo3Users"),
+      t("marketing.pages.pricing.tiers.free.features.upTo100Credentials"),
+      t("marketing.pages.pricing.tiers.free.features.communitySupport"),
+    ],
+    cta: t("marketing.pages.pricing.tiers.free.cta"),
     href: "/signup",
+    highlight: false,
   },
   {
-    tier: "Crew",
-    price: "$49",
-    per: "month per org",
-    description: "Small teams shipping their first season.",
+    tier: t("marketing.pages.pricing.tiers.crew.name"),
+    price: t("marketing.pages.pricing.tiers.crew.price"),
+    per: t("marketing.pages.pricing.tiers.crew.per"),
+    description: t("marketing.pages.pricing.tiers.crew.description"),
     features: [
-      "Everything in Free",
-      "Invoicing + expenses + budgets",
-      "Advancing — 16 deliverable types",
-      "Up to 10 users",
-      "Up to 2,000 portal credentials per project",
-      "Email support",
+      t("marketing.pages.pricing.tiers.crew.features.everythingInFree"),
+      t("marketing.pages.pricing.tiers.crew.features.invoicingExpensesBudgets"),
+      t("marketing.pages.pricing.tiers.crew.features.advancing16"),
+      t("marketing.pages.pricing.tiers.crew.features.upTo10Users"),
+      t("marketing.pages.pricing.tiers.crew.features.upTo2kCredentials"),
+      t("marketing.pages.pricing.tiers.crew.features.emailSupport"),
     ],
-    cta: "14-day trial",
+    cta: t("marketing.pages.pricing.tiers.crew.cta"),
     href: "/signup",
+    highlight: false,
   },
   {
-    tier: "Production",
-    price: "$199",
-    per: "month per org",
-    description: "Teams running multiple productions in flight.",
+    tier: t("marketing.pages.pricing.tiers.production.name"),
+    price: t("marketing.pages.pricing.tiers.production.price"),
+    per: t("marketing.pages.pricing.tiers.production.per"),
+    description: t("marketing.pages.pricing.tiers.production.description"),
     features: [
-      "Everything in Crew",
-      "Full procurement + Stripe Connect payouts",
-      "AI assistant grounded in your workspace",
-      "Proposals signed in place",
-      "KBYG event guides",
-      "Unlimited users",
-      "Priority concierge + onboarding",
+      t("marketing.pages.pricing.tiers.production.features.everythingInCrew"),
+      t("marketing.pages.pricing.tiers.production.features.fullProcurement"),
+      t("marketing.pages.pricing.tiers.production.features.aiAssistant"),
+      t("marketing.pages.pricing.tiers.production.features.proposalsSigned"),
+      t("marketing.pages.pricing.tiers.production.features.kbygGuides"),
+      t("marketing.pages.pricing.tiers.production.features.unlimitedUsers"),
+      t("marketing.pages.pricing.tiers.production.features.priorityConcierge"),
     ],
-    cta: "14-day trial",
+    cta: t("marketing.pages.pricing.tiers.production.cta"),
     href: "/signup",
     highlight: true,
   },
   {
-    tier: "Festival",
-    price: "Custom",
-    per: "",
-    description: "Multi-org agencies, touring companies, OCOG-scale work.",
+    tier: t("marketing.pages.pricing.tiers.festival.name"),
+    price: t("marketing.pages.pricing.tiers.festival.price"),
+    per: t("marketing.pages.pricing.tiers.festival.per"),
+    description: t("marketing.pages.pricing.tiers.festival.description"),
     features: [
-      "Everything in Production",
-      "Multi-org with SSO + custom roles",
-      "SOC-2 attestation pack + signed DPA",
-      "Dedicated CSM + 99.9% uptime SLA",
-      "Source-available license option",
-      "Custom integrations built with you",
+      t("marketing.pages.pricing.tiers.festival.features.everythingInProduction"),
+      t("marketing.pages.pricing.tiers.festival.features.multiOrgSso"),
+      t("marketing.pages.pricing.tiers.festival.features.soc2Dpa"),
+      t("marketing.pages.pricing.tiers.festival.features.dedicatedCsm"),
+      t("marketing.pages.pricing.tiers.festival.features.sourceAvailable"),
+      t("marketing.pages.pricing.tiers.festival.features.customIntegrations"),
     ],
-    cta: "Talk to the studio",
+    cta: t("marketing.pages.pricing.tiers.festival.cta"),
     href: "/contact",
+    highlight: false,
   },
 ];
 
-const COMPARISON: Array<{
+type ComparisonT = (key: string) => string;
+
+const buildComparison = (
+  t: ComparisonT,
+): Array<{
   category: string;
   rows: Array<{
     feature: string;
@@ -105,153 +117,398 @@ const COMPARISON: Array<{
     production: boolean | string;
     festival: boolean | string;
   }>;
-}> = [
-  {
-    category: "Core",
-    rows: [
-      { feature: "Tenant walled at the database (RLS)", free: true, crew: true, production: true, festival: true },
-      { feature: "Users per org", free: "3", crew: "10", production: "Unlimited", festival: "Unlimited" },
-      { feature: "Projects per org", free: "1", crew: "5", production: "Unlimited", festival: "Unlimited" },
-      { feature: "Webhooks + signed delivery", free: true, crew: true, production: true, festival: true },
-    ],
-  },
-  {
-    category: "ATLVS",
-    rows: [
-      { feature: "Projects, tasks, schedule, ROS", free: true, crew: true, production: true, festival: true },
-      { feature: "RFIs · submittals · daily logs · punch", free: false, crew: true, production: true, festival: true },
-      { feature: "Inspections (10 categories)", free: false, crew: true, production: true, festival: true },
-      { feature: "Finance — invoices, budgets, expenses", free: false, crew: true, production: true, festival: true },
-      {
-        feature: "Procurement — RFQs, POs, vendor scorecards",
-        free: false,
-        crew: false,
-        production: true,
-        festival: true,
-      },
-      {
-        feature: "Production — equipment, rentals, fab orders",
-        free: false,
-        crew: true,
-        production: true,
-        festival: true,
-      },
-      { feature: "People + credentials + call sheets", free: false, crew: true, production: true, festival: true },
-      { feature: "Advancing — 16 deliverable types", free: false, crew: true, production: true, festival: true },
-      { feature: "KBYG event guides", free: false, crew: false, production: true, festival: true },
-    ],
-  },
-  {
-    category: "GVTEWAY",
-    rows: [
-      { feature: "Guest portal", free: true, crew: true, production: true, festival: true },
-      { feature: "Artist portal", free: true, crew: true, production: true, festival: true },
-      { feature: "Vendor portal", free: false, crew: true, production: true, festival: true },
-      { feature: "Client portal + proposals", free: false, crew: false, production: true, festival: true },
-      { feature: "Sponsor portal", free: false, crew: false, production: true, festival: true },
-      { feature: "Crew portal", free: false, crew: true, production: true, festival: true },
-      { feature: "White-label branding", free: false, crew: false, production: true, festival: true },
-    ],
-  },
-  {
-    category: "COMPVSS",
-    rows: [
-      { feature: "Offline gate scan", free: true, crew: true, production: true, festival: true },
-      { feature: "Geo-verified shift clock-in", free: false, crew: true, production: true, festival: true },
-      { feature: "Daily log + warehouse + dispatch", free: false, crew: true, production: true, festival: true },
-      {
-        feature: "Field intake — incidents, medical, safeguarding",
-        free: false,
-        crew: true,
-        production: true,
-        festival: true,
-      },
-    ],
-  },
-  {
-    category: "AI",
-    rows: [
-      { feature: "Assistant grounded in your workspace", free: false, crew: false, production: true, festival: true },
-      { feature: "Deep-reasoning model", free: false, crew: false, production: false, festival: true },
-      {
-        feature: "Drafting templates (riders, RFPs, recaps)",
-        free: false,
-        crew: false,
-        production: true,
-        festival: true,
-      },
-      { feature: "Monthly AI budget", free: "—", crew: "—", production: "Included", festival: "Custom" },
-    ],
-  },
-  {
-    category: "Payments",
-    rows: [
-      { feature: "Card + ACH invoice payments", free: false, crew: true, production: true, festival: true },
-      { feature: "Stripe Connect vendor payouts", free: false, crew: false, production: true, festival: true },
-      { feature: "International wire", free: false, crew: false, production: true, festival: true },
-    ],
-  },
-  {
-    category: "Security & Compliance",
-    rows: [
-      { feature: "Immutable audit log", free: true, crew: true, production: true, festival: true },
-      { feature: "Self-expiring file shares", free: true, crew: true, production: true, festival: true },
-      { feature: "Rate-limited endpoints", free: true, crew: true, production: true, festival: true },
-      { feature: "Strict edge security headers", free: true, crew: true, production: true, festival: true },
-      { feature: "SSO (SAML / OIDC)", free: false, crew: false, production: false, festival: true },
-      { feature: "SOC-2 attestation pack", free: false, crew: false, production: false, festival: true },
-      { feature: "Custom DPA", free: false, crew: false, production: false, festival: true },
-      { feature: "Data residency", free: false, crew: false, production: false, festival: true },
-    ],
-  },
-  {
-    category: "Support",
-    rows: [
-      { feature: "Community", free: true, crew: true, production: true, festival: true },
-      { feature: "Email support", free: false, crew: true, production: true, festival: true },
-      { feature: "Priority + onboarding", free: false, crew: false, production: true, festival: true },
-      { feature: "Dedicated CSM", free: false, crew: false, production: false, festival: true },
-      { feature: "99.9% uptime SLA", free: false, crew: false, production: false, festival: true },
-    ],
-  },
-];
+}> => {
+  const unlimited = t("marketing.pages.pricing.comparison.values.unlimited");
+  return [
+    {
+      category: t("marketing.pages.pricing.comparison.categories.core"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.core.tenantWalled"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.core.usersPerOrg"),
+          free: "3",
+          crew: "10",
+          production: unlimited,
+          festival: unlimited,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.core.projectsPerOrg"),
+          free: "1",
+          crew: "5",
+          production: unlimited,
+          festival: unlimited,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.core.webhooks"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+      ],
+    },
+    {
+      category: t("marketing.pages.pricing.comparison.categories.atlvs"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.projectsTasks"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.rfisSubmittals"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.inspections"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.finance"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.procurement"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.production"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.peopleCredentials"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.advancing"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.atlvs.kbygGuides"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+      ],
+    },
+    {
+      category: t("marketing.pages.pricing.comparison.categories.gvteway"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.gvteway.guestPortal"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.gvteway.artistPortal"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.gvteway.vendorPortal"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.gvteway.clientPortal"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.gvteway.sponsorPortal"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.gvteway.crewPortal"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.gvteway.whiteLabel"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+      ],
+    },
+    {
+      category: t("marketing.pages.pricing.comparison.categories.compvss"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.compvss.offlineGateScan"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.compvss.geoShiftClock"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.compvss.dailyLog"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.compvss.fieldIntake"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+      ],
+    },
+    {
+      category: t("marketing.pages.pricing.comparison.categories.ai"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.ai.assistantGrounded"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.ai.deepReasoning"),
+          free: false,
+          crew: false,
+          production: false,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.ai.draftingTemplates"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.ai.monthlyBudget"),
+          free: "—",
+          crew: "—",
+          production: t("marketing.pages.pricing.comparison.values.included"),
+          festival: t("marketing.pages.pricing.comparison.values.custom"),
+        },
+      ],
+    },
+    {
+      category: t("marketing.pages.pricing.comparison.categories.payments"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.payments.cardAch"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.payments.stripeConnect"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.payments.internationalWire"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+      ],
+    },
+    {
+      category: t("marketing.pages.pricing.comparison.categories.security"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.security.immutableAudit"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.security.selfExpiringShares"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.security.rateLimited"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.security.strictHeaders"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.security.sso"),
+          free: false,
+          crew: false,
+          production: false,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.security.soc2"),
+          free: false,
+          crew: false,
+          production: false,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.security.customDpa"),
+          free: false,
+          crew: false,
+          production: false,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.security.dataResidency"),
+          free: false,
+          crew: false,
+          production: false,
+          festival: true,
+        },
+      ],
+    },
+    {
+      category: t("marketing.pages.pricing.comparison.categories.support"),
+      rows: [
+        {
+          feature: t("marketing.pages.pricing.comparison.support.community"),
+          free: true,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.support.emailSupport"),
+          free: false,
+          crew: true,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.support.priorityOnboarding"),
+          free: false,
+          crew: false,
+          production: true,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.support.dedicatedCsm"),
+          free: false,
+          crew: false,
+          production: false,
+          festival: true,
+        },
+        {
+          feature: t("marketing.pages.pricing.comparison.support.uptimeSla"),
+          free: false,
+          crew: false,
+          production: false,
+          festival: true,
+        },
+      ],
+    },
+  ];
+};
 
-const FAQS = [
+type FaqT = (key: string) => string;
+
+const buildFaqs = (t: FaqT) => [
   {
-    q: "Is pricing per seat?",
-    a: "Per org. Production is unlimited users for $199/month. Adding the crew never becomes a surprise line item.",
+    q: t("marketing.pages.pricing.faqs.perSeat.q"),
+    a: t("marketing.pages.pricing.faqs.perSeat.a"),
   },
   {
-    q: "Is Free really free?",
-    a: "Forever. Basic projects, guest + artist portals, three users, up to 100 portal credentials per project. No card.",
+    q: t("marketing.pages.pricing.faqs.freeReallyFree.q"),
+    a: t("marketing.pages.pricing.faqs.freeReallyFree.a"),
   },
   {
-    q: "How does the trial work?",
-    a: "Crew and Production unlock every feature in the tier for 14 days. No card up front. Don't upgrade by day 14? You drop to Free — your data stays where it is.",
+    q: t("marketing.pages.pricing.faqs.trialWorks.q"),
+    a: t("marketing.pages.pricing.faqs.trialWorks.a"),
   },
   {
-    q: "Can I change tiers later?",
-    a: "Anytime. Upgrades hit instantly. Downgrades kick in at the end of the billing period. Nothing gets deleted — features above your tier go read-only until you come back.",
+    q: t("marketing.pages.pricing.faqs.changeTiers.q"),
+    a: t("marketing.pages.pricing.faqs.changeTiers.a"),
   },
   {
-    q: "Nonprofits and community programs?",
-    a: "30% off Crew and Production for registered nonprofits and community arts programs. Email hello@atlvs.pro with your 501(c)(3) or equivalent.",
+    q: t("marketing.pages.pricing.faqs.nonprofits.q"),
+    a: t("marketing.pages.pricing.faqs.nonprofits.a"),
   },
   {
-    q: "Is there a per-scan fee?",
-    a: "No. Scan all weekend. Every weekend.",
+    q: t("marketing.pages.pricing.faqs.perScanFee.q"),
+    a: t("marketing.pages.pricing.faqs.perScanFee.a"),
   },
   {
-    q: "What's in Festival that isn't in Production?",
-    a: "Multi-org with SSO. Custom roles + access policies. SOC-2 attestation pack. Custom DPA. Dedicated CSM. 99.9% uptime SLA. Source-available license. Custom integrations we build with you.",
+    q: t("marketing.pages.pricing.faqs.festivalVsProduction.q"),
+    a: t("marketing.pages.pricing.faqs.festivalVsProduction.a"),
   },
   {
-    q: "Can I self-host?",
-    a: "Source-available license ships with Festival. Managed infrastructure is the recommended route — handles security, storage, and uptime.",
+    q: t("marketing.pages.pricing.faqs.selfHost.q"),
+    a: t("marketing.pages.pricing.faqs.selfHost.a"),
   },
   {
-    q: "What happens to my data if I cancel?",
-    a: "Export everything — CSV or JSON — anytime. After cancel, your data lives 90 days read-only (re-subscribe and you're back), then purges. Signed logs of the purge on request. You own the data.",
+    q: t("marketing.pages.pricing.faqs.dataAfterCancel.q"),
+    a: t("marketing.pages.pricing.faqs.dataAfterCancel.a"),
   },
 ];
 
@@ -262,44 +519,49 @@ function Cell({ value }: { value: boolean | string }) {
   return <span className="text-xs text-[var(--text-secondary)]">{value}</span>;
 }
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const { t } = await getRequestT();
+  const tiers = buildTiers(t);
+  const comparison = buildComparison(t);
+  const faqs = buildFaqs(t);
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Pricing", href: "/pricing" },
+    { label: t("marketing.pages.pricing.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.pricing.breadcrumbs.pricing"), href: "/pricing" },
   ];
 
   return (
     <div>
-      <JsonLd data={[faqSchema(FAQS)]} />
+      <JsonLd data={[faqSchema(faqs)]} />
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-10 text-center">
-        <div className="eyebrow eyebrow-accent">Pricing</div>
-        <h1 className="kinetic-display mx-auto mt-3 max-w-3xl text-5xl sm:text-6xl">Per Org. Never Per Seat.</h1>
+        <div className="eyebrow eyebrow-accent">{t("marketing.pages.pricing.hero.eyebrow")}</div>
+        <h1 className="kinetic-display mx-auto mt-3 max-w-3xl text-5xl sm:text-6xl">
+          {t("marketing.pages.pricing.hero.title")}
+        </h1>
         <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Tenant walled at the database on every tier. Audit log immutable on every tier. The team gets bigger; the bill
-          doesn&apos;t.
+          {t("marketing.pages.pricing.hero.subtitle")}
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-12">
         <div className="grid gap-4 md:grid-cols-4">
-          {TIERS.map((t) => (
+          {tiers.map((tier) => (
             <div
-              key={t.tier}
-              className={`surface flex flex-col p-6 ${t.highlight ? "ring-2 ring-[var(--org-primary)]" : ""}`}
+              key={tier.tier}
+              className={`surface flex flex-col p-6 ${tier.highlight ? "ring-2 ring-[var(--org-primary)]" : ""}`}
             >
               <div className="flex items-center justify-between">
-                <div className="text-sm font-semibold">{t.tier}</div>
-                {t.highlight && <Badge variant="brand">Most Common</Badge>}
+                <div className="text-sm font-semibold">{tier.tier}</div>
+                {tier.highlight && <Badge variant="brand">{t("marketing.pages.pricing.tiers.mostCommonBadge")}</Badge>}
               </div>
               <div className="mt-4">
-                <span className="text-3xl font-semibold tracking-tight">{t.price}</span>
-                {t.per && <span className="text-sm text-[var(--text-muted)]"> / {t.per}</span>}
+                <span className="text-3xl font-semibold tracking-tight">{tier.price}</span>
+                {tier.per && <span className="text-sm text-[var(--text-muted)]"> / {tier.per}</span>}
               </div>
-              <p className="mt-2 text-xs text-[var(--text-secondary)]">{t.description}</p>
+              <p className="mt-2 text-xs text-[var(--text-secondary)]">{tier.description}</p>
               <ul className="mt-5 flex-1 space-y-2 text-sm text-[var(--text-secondary)]">
-                {t.features.map((f) => (
+                {tier.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <Check size={14} className="mt-0.5 text-[var(--org-primary)]" />
                     <span>{f}</span>
@@ -307,8 +569,8 @@ export default function PricingPage() {
                 ))}
               </ul>
               <div className="mt-6">
-                <Button href={t.href} variant={t.highlight ? "primary" : "secondary"} className="w-full">
-                  {t.cta}
+                <Button href={tier.href} variant={tier.highlight ? "primary" : "secondary"} className="w-full">
+                  {tier.cta}
                 </Button>
               </div>
             </div>
@@ -317,11 +579,13 @@ export default function PricingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">Every Module, Every Tier.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t("marketing.pages.pricing.comparison.title")}
+        </h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
-          The full grid. If a module you need is gated above where you are,{" "}
+          {t("marketing.pages.pricing.comparison.intro")}{" "}
           <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">
-            talk to the studio
+            {t("marketing.pages.pricing.comparison.talkToStudio")}
           </a>
           .
         </p>
@@ -329,15 +593,23 @@ export default function PricingPage() {
           <table className="w-full min-w-[720px] text-left">
             <thead>
               <tr className="border-b border-[var(--border)] text-xs tracking-wider text-[var(--text-muted)] uppercase">
-                <th className="py-3 pr-4 font-semibold">Module</th>
-                <th className="py-3 pr-4 text-center font-semibold">Free</th>
-                <th className="py-3 pr-4 text-center font-semibold">Crew</th>
-                <th className="py-3 pr-4 text-center font-semibold">Production</th>
-                <th className="py-3 pr-4 text-center font-semibold">Festival</th>
+                <th className="py-3 pr-4 font-semibold">{t("marketing.pages.pricing.comparison.headers.module")}</th>
+                <th className="py-3 pr-4 text-center font-semibold">
+                  {t("marketing.pages.pricing.comparison.headers.free")}
+                </th>
+                <th className="py-3 pr-4 text-center font-semibold">
+                  {t("marketing.pages.pricing.comparison.headers.crew")}
+                </th>
+                <th className="py-3 pr-4 text-center font-semibold">
+                  {t("marketing.pages.pricing.comparison.headers.production")}
+                </th>
+                <th className="py-3 pr-4 text-center font-semibold">
+                  {t("marketing.pages.pricing.comparison.headers.festival")}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {COMPARISON.map((cat) => (
+              {comparison.map((cat) => (
                 <>
                   <tr key={cat.category} className="bg-[var(--surface-inset)]">
                     <td
@@ -375,14 +647,14 @@ export default function PricingPage() {
         <PricingCalculator />
       </section>
 
-      <FAQSection title="Pricing FAQ" faqs={FAQS} />
+      <FAQSection title={t("marketing.pages.pricing.faqs.title")} faqs={faqs} />
 
       <CTASection
-        title="ATLVS Is Open."
-        subtitle="Sign up free — 30 seconds, no card. Free is free, forever."
-        primaryLabel="Sign Up Free"
+        title={t("marketing.pages.pricing.cta.title")}
+        subtitle={t("marketing.pages.pricing.cta.subtitle")}
+        primaryLabel={t("marketing.pages.pricing.cta.primaryLabel")}
         primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
+        secondaryLabel={t("marketing.pages.pricing.cta.secondaryLabel")}
         secondaryHref="/contact"
       />
     </div>

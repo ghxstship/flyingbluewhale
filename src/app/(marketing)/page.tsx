@@ -9,230 +9,302 @@ import type { Metadata } from "next";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — Production Management Software for Live Experiences",
-  description:
-    "ATLVS Technologies — production management, crew operations, and ticketing software built for live events. Three apps, one schema: ATLVS for producers, COMPVSS for crew, GVTEWAY for guests. Pitch through wrap on a single platform.",
-  path: "/",
-  languages: {
-    "es-ES": `${SITE.baseUrl}/es-ES`,
-    "pt-BR": `${SITE.baseUrl}/pt-BR`,
-  },
-  keywords: [
-    "ATLVS",
-    "ATLVS Technologies",
-    "COMPVSS",
-    "GVTEWAY",
-    "production management software",
-    "event operations platform",
-    "crew management software",
-    "live event software",
-    "festival operations platform",
-    "experiential production platform",
-    "concert tour management",
-    "brand activation software",
-    "production scheduling",
-    "event ticketing platform",
-    "offline-first crew app",
-  ],
-  ogImageTitle: "Production Runs On It.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.home.metadata.title"),
+    description: t("marketing.pages.home.metadata.description"),
+    path: "/",
+    languages: {
+      "es-ES": `${SITE.baseUrl}/es-ES`,
+      "pt-BR": `${SITE.baseUrl}/pt-BR`,
+    },
+    keywords: [
+      "ATLVS",
+      "ATLVS Technologies",
+      "COMPVSS",
+      "GVTEWAY",
+      "production management software",
+      "event operations platform",
+      "crew management software",
+      "live event software",
+      "festival operations platform",
+      "experiential production platform",
+      "concert tour management",
+      "brand activation software",
+      "production scheduling",
+      "event ticketing platform",
+      "offline-first crew app",
+    ],
+    ogImageTitle: t("marketing.pages.home.metadata.ogImageTitle"),
+  });
+}
 
-const INDUSTRIES: Array<{ title: string; body: string; href: string }> = [
-  {
-    title: "Festivals",
-    body: "Multi-stage infrastructure, headliner advance, and gate operations at scale.",
-    href: "/solutions/festivals-tours",
-  },
-  {
-    title: "Concerts & Tours",
-    body: "Show production, multi-city routing, advancing, and settlement for live music.",
-    href: "/solutions/concerts",
-  },
-  {
-    title: "Brand Activations",
-    body: "Experiential marketing, pop-ups, and environments that convert.",
-    href: "/solutions/brand-activations",
-  },
-  {
-    title: "Immersive Experiences",
-    body: "Narrative installations and worlds audiences step inside — ticketed, timed, tracked.",
-    href: "/solutions/immersive-experiences",
-  },
-  {
-    title: "Sporting Events",
-    body: "Stadium activations, fan experiences, and game-day production operations.",
-    href: "/solutions/live-events",
-  },
-  {
-    title: "TV, Film & Broadcast",
-    body: "Live broadcast, content capture, crew compliance, and on-air activations.",
-    href: "/solutions/broadcast-tv-film",
-  },
-  {
-    title: "Corporate & AGM",
-    body: "Summits, annual meetings, internal kickoffs, premium hospitality.",
-    href: "/solutions/corporate-events",
-  },
-  {
-    title: "Theatrical",
-    body: "Productions, residencies, repertory seasons, touring theatre.",
-    href: "/solutions/theatrical-performances",
-  },
-];
+export default async function Home() {
+  const { t } = await getRequestT();
 
-const TIERS = [
-  {
-    name: "Full Platform",
-    tag: "All eight phases",
-    body: "Every phase of the production lifecycle, pitch to wrap — one workspace, one schema, total accountability.",
-  },
-  {
-    name: "Single App",
-    tag: "Adopt one product",
-    body: "Start with ATLVS, COMPVSS, or GVTEWAY individually. Same database, expand when ready.",
-  },
-  {
-    name: "Modules Only",
-    tag: "Pick what you need",
-    body: "RFIs, advancing, inspections, gate scan. Buy exactly the modules your scope demands.",
-  },
-];
+  const INDUSTRIES: Array<{ title: string; body: string; href: string }> = [
+    {
+      title: t("marketing.pages.home.industries.items.festivals.title"),
+      body: t("marketing.pages.home.industries.items.festivals.body"),
+      href: "/solutions/festivals-tours",
+    },
+    {
+      title: t("marketing.pages.home.industries.items.concertsTours.title"),
+      body: t("marketing.pages.home.industries.items.concertsTours.body"),
+      href: "/solutions/concerts",
+    },
+    {
+      title: t("marketing.pages.home.industries.items.brandActivations.title"),
+      body: t("marketing.pages.home.industries.items.brandActivations.body"),
+      href: "/solutions/brand-activations",
+    },
+    {
+      title: t("marketing.pages.home.industries.items.immersiveExperiences.title"),
+      body: t("marketing.pages.home.industries.items.immersiveExperiences.body"),
+      href: "/solutions/immersive-experiences",
+    },
+    {
+      title: t("marketing.pages.home.industries.items.sportingEvents.title"),
+      body: t("marketing.pages.home.industries.items.sportingEvents.body"),
+      href: "/solutions/live-events",
+    },
+    {
+      title: t("marketing.pages.home.industries.items.tvFilmBroadcast.title"),
+      body: t("marketing.pages.home.industries.items.tvFilmBroadcast.body"),
+      href: "/solutions/broadcast-tv-film",
+    },
+    {
+      title: t("marketing.pages.home.industries.items.corporateAgm.title"),
+      body: t("marketing.pages.home.industries.items.corporateAgm.body"),
+      href: "/solutions/corporate-events",
+    },
+    {
+      title: t("marketing.pages.home.industries.items.theatrical.title"),
+      body: t("marketing.pages.home.industries.items.theatrical.body"),
+      href: "/solutions/theatrical-performances",
+    },
+  ];
 
-const PHASES: Array<{ n: string; name: string; sub: string }> = [
-  { n: "01", name: "Discovery", sub: "Consult · Scope" },
-  { n: "02", name: "R&D", sub: "Feasibility" },
-  { n: "03", name: "Design", sub: "Direction" },
-  { n: "04", name: "Compliance", sub: "Engineering · Safety" },
-  { n: "05", name: "Build", sub: "Fabrication" },
-  { n: "06", name: "Operations", sub: "Logistics" },
-  { n: "07", name: "Activation", sub: "Showtime" },
-  { n: "08", name: "Strike", sub: "Settle · Wrap" },
-];
+  const TIERS = [
+    {
+      name: t("marketing.pages.home.adopt.tiers.fullPlatform.name"),
+      tag: t("marketing.pages.home.adopt.tiers.fullPlatform.tag"),
+      body: t("marketing.pages.home.adopt.tiers.fullPlatform.body"),
+    },
+    {
+      name: t("marketing.pages.home.adopt.tiers.singleApp.name"),
+      tag: t("marketing.pages.home.adopt.tiers.singleApp.tag"),
+      body: t("marketing.pages.home.adopt.tiers.singleApp.body"),
+    },
+    {
+      name: t("marketing.pages.home.adopt.tiers.modulesOnly.name"),
+      tag: t("marketing.pages.home.adopt.tiers.modulesOnly.tag"),
+      body: t("marketing.pages.home.adopt.tiers.modulesOnly.body"),
+    },
+  ];
 
-const PRODUCTS = [
-  {
-    slug: "atlvs",
-    title: "ATLVS",
-    audience: "For producers · internal teams",
-    tag: "Production & resource management",
-    body: "Projects, RFIs, submittals, daily logs, advancing, finance, procurement, AI assistant. The producer's console — pitch through wrap.",
-    href: "/solutions/atlvs",
-    color: "#FF2E88",
-  },
-  {
-    slug: "compvss",
-    title: "COMPVSS",
-    audience: "For crew · vendors · talent",
-    tag: "Workforce & field operations",
-    body: "Scheduling, certifications, gate scan, shift clock-in, incidents, medical. Offline-first PWA. Sub-100ms scans on one-bar LTE.",
-    href: "/solutions/compvss",
-    color: "#E9A23B",
-  },
-  {
-    slug: "gvteway",
-    title: "GVTEWAY",
-    audience: "For guests · clients · partners",
-    tag: "Ticketing & stakeholder portal",
-    body: "Ticketing, proposals, twelve personas. Artists, vendors, clients, sponsors, guests — each their lane.",
-    href: "/solutions/gvteway",
-    color: "#12B5B5",
-  },
-];
+  const PHASES: Array<{ n: string; name: string; sub: string }> = [
+    {
+      n: "01",
+      name: t("marketing.pages.home.lifecycle.phases.discovery.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.discovery.sub"),
+    },
+    {
+      n: "02",
+      name: t("marketing.pages.home.lifecycle.phases.rd.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.rd.sub"),
+    },
+    {
+      n: "03",
+      name: t("marketing.pages.home.lifecycle.phases.design.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.design.sub"),
+    },
+    {
+      n: "04",
+      name: t("marketing.pages.home.lifecycle.phases.compliance.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.compliance.sub"),
+    },
+    {
+      n: "05",
+      name: t("marketing.pages.home.lifecycle.phases.build.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.build.sub"),
+    },
+    {
+      n: "06",
+      name: t("marketing.pages.home.lifecycle.phases.operations.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.operations.sub"),
+    },
+    {
+      n: "07",
+      name: t("marketing.pages.home.lifecycle.phases.activation.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.activation.sub"),
+    },
+    {
+      n: "08",
+      name: t("marketing.pages.home.lifecycle.phases.strike.name"),
+      sub: t("marketing.pages.home.lifecycle.phases.strike.sub"),
+    },
+  ];
 
-const EDGES = [
-  {
-    n: "01",
-    title: "End to End",
-    tag: "One schema",
-    body: "Pitch through wrap, all eight phases, in one workspace. No integration tax, no schema reconciliation.",
-  },
-  {
-    n: "02",
-    title: "Proprietary Stack",
-    tag: "Built in-house",
-    body: "ATLVS, COMPVSS, and GVTEWAY share a single Postgres schema. No vendor lock-in dressed up as integrations.",
-  },
-  {
-    n: "03",
-    title: "Per Org, Not Per Seat",
-    tag: "Add the whole crew",
-    body: "The whole production team, every freelancer, every vendor. Pricing scales with you, not your headcount.",
-  },
-];
+  const PRODUCTS = [
+    {
+      slug: "atlvs",
+      title: "ATLVS",
+      audience: t("marketing.pages.home.products.atlvs.audience"),
+      tag: t("marketing.pages.home.products.atlvs.tag"),
+      body: t("marketing.pages.home.products.atlvs.body"),
+      href: "/solutions/atlvs",
+      color: "#FF2E88",
+    },
+    {
+      slug: "compvss",
+      title: "COMPVSS",
+      audience: t("marketing.pages.home.products.compvss.audience"),
+      tag: t("marketing.pages.home.products.compvss.tag"),
+      body: t("marketing.pages.home.products.compvss.body"),
+      href: "/solutions/compvss",
+      color: "#E9A23B",
+    },
+    {
+      slug: "gvteway",
+      title: "GVTEWAY",
+      audience: t("marketing.pages.home.products.gvteway.audience"),
+      tag: t("marketing.pages.home.products.gvteway.tag"),
+      body: t("marketing.pages.home.products.gvteway.body"),
+      href: "/solutions/gvteway",
+      color: "#12B5B5",
+    },
+  ];
 
-const PROJECTS = [
-  {
-    code: "RRR 312",
-    title: "Black Coffee at the Race Track",
-    sub: "Concert Experience · Miami Music Week · Club Space",
-    year: "2026",
-  },
-  { code: "RRR 226", title: "Polymarket Grocery Store", sub: "Brand Activation · Miami", year: "2026" },
-  {
-    code: "RRR 052",
-    title: "Salvage City Supper Club",
-    sub: "Immersive Experience · Club Space · Miami",
-    year: "2025",
-  },
-  { code: "RRR 108", title: "PATRÓN Cristalino × Becky G", sub: "Product Launch · Los Angeles", year: "2024" },
-  { code: "RRR 023", title: "Heineken Turn 4 Nightclub", sub: "Motorsports · F1 Las Vegas Grand Prix", year: "2024" },
-  { code: "RRR 311", title: "Red Bull Unforeseen Motel", sub: "Brand Activation · III Points · Miami", year: "2023" },
-  { code: "RRR 001", title: "Formula 1 Las Vegas Grand Prix", sub: "Motorsports · Las Vegas", year: "2023" },
-];
+  const EDGES = [
+    {
+      n: "01",
+      title: t("marketing.pages.home.difference.edges.endToEnd.title"),
+      tag: t("marketing.pages.home.difference.edges.endToEnd.tag"),
+      body: t("marketing.pages.home.difference.edges.endToEnd.body"),
+    },
+    {
+      n: "02",
+      title: t("marketing.pages.home.difference.edges.proprietaryStack.title"),
+      tag: t("marketing.pages.home.difference.edges.proprietaryStack.tag"),
+      body: t("marketing.pages.home.difference.edges.proprietaryStack.body"),
+    },
+    {
+      n: "03",
+      title: t("marketing.pages.home.difference.edges.perOrgNotPerSeat.title"),
+      tag: t("marketing.pages.home.difference.edges.perOrgNotPerSeat.tag"),
+      body: t("marketing.pages.home.difference.edges.perOrgNotPerSeat.body"),
+    },
+  ];
 
-const HOME_FAQ = [
-  {
-    q: "What is ATLVS Technologies?",
-    a: "ATLVS Technologies is the platform behind live experiential production. Three connected apps on one database: ATLVS for producers (projects, RFIs, advancing, finance, procurement, AI), COMPVSS for crew (scheduling, certifications, gate scan, incidents), and GVTEWAY for guests and stakeholders (ticketing, proposals, twelve personas). Same record across all three, pitch through wrap.",
-  },
-  {
-    q: "Who is the ATLVS platform for?",
-    a: "Production teams running real live work. Festivals, residencies, touring, fabrication shops, brand activations, broadcast compounds, private events. The schema is generic; the vernacular is specific. If your org has a load-in, a manifest, vendors, and a wrap — it fits.",
-  },
-  {
-    q: "How does ATLVS pricing work?",
-    a: "Per organization, not per seat. Free forever for solo operators and small teams. Crew opens up the team. Production unlocks every module plus multi-project. Festival is multi-org with SSO, custom DPA, and a 99.9% SLA. Full grid at /pricing.",
-  },
-  {
-    q: "How do vendor payouts work?",
-    a: "Stripe Connect. Vendors onboard a payout account through their portal. You approve the PO. Payouts route directly. Money never crosses our books. ACH, card, international wire. Signed webhooks for every event.",
-  },
-  {
-    q: "Does COMPVSS actually work offline?",
-    a: "Yes. COMPVSS is an offline-first PWA. Gate scan, shift clock-in, daily log, incident, medic intake — all queue locally and sync on signal return. Sub-100ms scan even on one-bar LTE. Tested at 15,000-guest gates.",
-  },
-  {
-    q: "Who builds ATLVS Technologies?",
-    a: "ATLVS Technologies is a GHXSTSHIP Industries company — the technology arm of an experiential production house headquartered in Miami with offices in New York, Chicago, and Los Angeles. ATLVS, COMPVSS, and GVTEWAY are built in-house by people who have shipped real shows.",
-  },
-  {
-    q: "How is the data secured?",
-    a: "Row-level security at the database — your tenant is walled off in Postgres, not in the app layer. Every change writes to an immutable audit log (actor, IP, user agent, before/after). Signed webhooks (HMAC-SHA256). File shares self-expire. SOC-2 attestation plus custom DPA on Festival tier.",
-  },
-  {
-    q: "Is the AI assistant useful or marketing?",
-    a: "Useful. It reads your workspace data — never the public internet — and drafts riders, RFPs, call sheets, recaps, safety briefs, and incident reports. Streaming, conversation-persisted in your tenant. Anthropic Claude under the hood.",
-  },
-  {
-    q: "Can I export my data?",
-    a: "Always. CSV exports on every tier from every list view. Full data export via Settings → Exports on Production and above. You own the data; we host it. Cancel and you get a 90-day read-only window to pull everything.",
-  },
-];
+  const PROJECTS = [
+    {
+      code: "RRR 312",
+      title: t("marketing.pages.home.projects.items.rrr312.title"),
+      sub: t("marketing.pages.home.projects.items.rrr312.sub"),
+      year: "2026",
+    },
+    {
+      code: "RRR 226",
+      title: t("marketing.pages.home.projects.items.rrr226.title"),
+      sub: t("marketing.pages.home.projects.items.rrr226.sub"),
+      year: "2026",
+    },
+    {
+      code: "RRR 052",
+      title: t("marketing.pages.home.projects.items.rrr052.title"),
+      sub: t("marketing.pages.home.projects.items.rrr052.sub"),
+      year: "2025",
+    },
+    {
+      code: "RRR 108",
+      title: t("marketing.pages.home.projects.items.rrr108.title"),
+      sub: t("marketing.pages.home.projects.items.rrr108.sub"),
+      year: "2024",
+    },
+    {
+      code: "RRR 023",
+      title: t("marketing.pages.home.projects.items.rrr023.title"),
+      sub: t("marketing.pages.home.projects.items.rrr023.sub"),
+      year: "2024",
+    },
+    {
+      code: "RRR 311",
+      title: t("marketing.pages.home.projects.items.rrr311.title"),
+      sub: t("marketing.pages.home.projects.items.rrr311.sub"),
+      year: "2023",
+    },
+    {
+      code: "RRR 001",
+      title: t("marketing.pages.home.projects.items.rrr001.title"),
+      sub: t("marketing.pages.home.projects.items.rrr001.sub"),
+      year: "2023",
+    },
+  ];
 
-const POSTS = [
-  {
-    date: "2026 · 05 · 28",
-    cat: "Field Notes",
-    title: "How the 8-Phase Lifecycle keeps a build on course",
-    href: "/blog",
-  },
-  { date: "2026 · 05 · 12", cat: "Release", title: "Advancing v2 — 16 typed deliverables ship", href: "/changelog" },
-  { date: "2026 · 04 · 30", cat: "Careers", title: "Hiring — engineers, PMs, designers", href: "/careers" },
-];
+  const HOME_FAQ = [
+    {
+      q: t("marketing.pages.home.faq.items.whatIsAtlvs.q"),
+      a: t("marketing.pages.home.faq.items.whatIsAtlvs.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.whoIsItFor.q"),
+      a: t("marketing.pages.home.faq.items.whoIsItFor.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.pricing.q"),
+      a: t("marketing.pages.home.faq.items.pricing.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.vendorPayouts.q"),
+      a: t("marketing.pages.home.faq.items.vendorPayouts.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.compvssOffline.q"),
+      a: t("marketing.pages.home.faq.items.compvssOffline.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.whoBuilds.q"),
+      a: t("marketing.pages.home.faq.items.whoBuilds.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.dataSecurity.q"),
+      a: t("marketing.pages.home.faq.items.dataSecurity.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.aiAssistant.q"),
+      a: t("marketing.pages.home.faq.items.aiAssistant.a"),
+    },
+    {
+      q: t("marketing.pages.home.faq.items.exportData.q"),
+      a: t("marketing.pages.home.faq.items.exportData.a"),
+    },
+  ];
 
-export default function Home() {
+  const POSTS = [
+    {
+      date: "2026 · 05 · 28",
+      cat: t("marketing.pages.home.latest.posts.fieldNotes.cat"),
+      title: t("marketing.pages.home.latest.posts.fieldNotes.title"),
+      href: "/blog",
+    },
+    {
+      date: "2026 · 05 · 12",
+      cat: t("marketing.pages.home.latest.posts.release.cat"),
+      title: t("marketing.pages.home.latest.posts.release.title"),
+      href: "/changelog",
+    },
+    {
+      date: "2026 · 04 · 30",
+      cat: t("marketing.pages.home.latest.posts.careers.cat"),
+      title: t("marketing.pages.home.latest.posts.careers.title"),
+      href: "/careers",
+    },
+  ];
+
   return (
     <>
       <JsonLd
@@ -254,41 +326,41 @@ export default function Home() {
           <div className="grid items-center gap-12 md:grid-cols-[1.5fr_1fr]">
             <div>
               <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
-                ATLVS Technologies
+                {t("marketing.pages.home.hero.eyebrow")}
               </p>
               <h1 className="mt-5 text-4xl leading-[1.05] font-bold tracking-tight sm:text-5xl md:text-6xl">
-                Production runs on
+                {t("marketing.pages.home.hero.titleLine1")}
                 <br />
-                <span className="text-[var(--p-accent)]">one platform.</span>
+                <span className="text-[var(--p-accent)]">{t("marketing.pages.home.hero.titleLine2")}</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--p-text-2)]">
-                Three apps, one schema. <strong className="text-[var(--p-text-1)]">ATLVS</strong> runs the production.{" "}
-                <strong className="text-[var(--p-text-1)]">COMPVSS</strong> runs the field.{" "}
-                <strong className="text-[var(--p-text-1)]">GVTEWAY</strong> runs the portal. Pitch through wrap on a
-                single connected platform for live experiential production.
+                {t("marketing.pages.home.hero.subtitleLead")} <strong className="text-[var(--p-text-1)]">ATLVS</strong>{" "}
+                {t("marketing.pages.home.hero.subtitleAtlvs")}{" "}
+                <strong className="text-[var(--p-text-1)]">COMPVSS</strong>{" "}
+                {t("marketing.pages.home.hero.subtitleCompvss")}{" "}
+                <strong className="text-[var(--p-text-1)]">GVTEWAY</strong>{" "}
+                {t("marketing.pages.home.hero.subtitleGvteway")}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
                   href="/signup"
                   className="rounded-md bg-[var(--p-accent)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
                 >
-                  Start Free
+                  {t("marketing.pages.home.hero.ctaPrimary")}
                 </Link>
                 <Link
                   href="/demo"
                   className="rounded-md border border-[var(--p-border-2)] px-5 py-2.5 text-sm font-semibold text-[var(--p-text-1)] transition hover:bg-[var(--p-surface-2)]"
                 >
-                  Book a Walkthrough
+                  {t("marketing.pages.home.hero.ctaSecondary")}
                 </Link>
               </div>
-              <p className="mt-6 text-xs text-[var(--p-text-3)]">
-                Free forever for small teams · No credit card required · Per-org pricing
-              </p>
+              <p className="mt-6 text-xs text-[var(--p-text-3)]">{t("marketing.pages.home.hero.disclaimer")}</p>
             </div>
             <div className="hidden md:block">
               <div className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-6 shadow-[var(--p-elev-2)]">
                 <div className="mb-3 text-[10px] font-semibold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
-                  The ATLVS Ecosystem
+                  {t("marketing.pages.home.hero.ecosystemLabel")}
                 </div>
                 {PRODUCTS.map((p) => (
                   <div key={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
@@ -297,7 +369,7 @@ export default function Home() {
                         {p.title}
                       </span>
                       <span className="text-[10px] font-medium tracking-[0.08em] text-[var(--p-text-3)] uppercase">
-                        {p.audience.replace(/^For /, "")}
+                        {p.audience.replace(/^For /i, "")}
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-[var(--p-text-2)]">{p.tag}</p>
@@ -313,7 +385,7 @@ export default function Home() {
       <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-10">
         <div className="mx-auto max-w-6xl">
           <p className="text-center text-[11px] font-semibold tracking-[0.16em] text-[var(--p-text-3)] uppercase">
-            Trusted by production teams behind
+            {t("marketing.pages.home.trustBar.label")}
           </p>
           <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-sm font-bold tracking-[0.12em] text-[var(--p-text-1)] uppercase opacity-80">
             <span>Red Bull</span>
@@ -330,13 +402,12 @@ export default function Home() {
       <section id="apps" className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
-            The ATLVS Ecosystem
+            {t("marketing.pages.home.threeApps.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Three apps, one schema.</h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">
-            ATLVS Technologies ships three connected products on a shared Postgres database. Adopt one or run the full
-            platform — every record flows across producer console, field PWA, and stakeholder portal.
-          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("marketing.pages.home.threeApps.title")}
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.threeApps.body")}</p>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {PRODUCTS.map((p) => (
               <Link
@@ -358,7 +429,9 @@ export default function Home() {
                 </h3>
                 <p className="mt-1 text-xs font-medium text-[var(--p-text-3)] uppercase">{p.tag}</p>
                 <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{p.body}</p>
-                <p className="mt-5 text-xs font-semibold text-[var(--p-text-1)]">Read more →</p>
+                <p className="mt-5 text-xs font-semibold text-[var(--p-text-1)]">
+                  {t("marketing.pages.home.threeApps.readMore")}
+                </p>
               </Link>
             ))}
           </div>
@@ -368,12 +441,13 @@ export default function Home() {
       {/* INDUSTRIES */}
       <section id="industries" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">Built For</p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Production teams running real work.</h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">
-            The schema is generic. The vernacular is specific. Pick the kind of production you ship and the platform
-            speaks your language out of the box.
+          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+            {t("marketing.pages.home.industries.eyebrow")}
           </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("marketing.pages.home.industries.title")}
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.industries.body")}</p>
           <div className="mt-10 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {INDUSTRIES.map((d) => (
               <Link
@@ -387,9 +461,9 @@ export default function Home() {
             ))}
           </div>
           <p className="mt-8 text-sm text-[var(--p-text-2)]">
-            Hospitality, corporate, and private events too —{" "}
+            {t("marketing.pages.home.industries.footnote")}{" "}
             <Link href="/solutions" className="font-semibold text-[var(--p-accent-text)] hover:underline">
-              see every solution →
+              {t("marketing.pages.home.industries.footnoteLink")}
             </Link>
           </p>
         </div>
@@ -399,13 +473,12 @@ export default function Home() {
       <section id="lifecycle" className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
-            The 8-Phase Production Lifecycle
+            {t("marketing.pages.home.lifecycle.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Discovery to Strike on one timeline.</h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">
-            Every production runs through the same eight phases. The schema follows the phases, the audit log follows
-            the schema, and every approval gate blocks the next phase until the previous one closes.
-          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("marketing.pages.home.lifecycle.title")}
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.lifecycle.body")}</p>
           <div className="mt-10 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
             {PHASES.map((s) => (
               <div
@@ -413,7 +486,7 @@ export default function Home() {
                 className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-4 shadow-[var(--p-elev-1)]"
               >
                 <div className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--p-text-3)]">
-                  Phase {s.n}
+                  {t("marketing.pages.home.lifecycle.phaseLabel")} {s.n}
                 </div>
                 <div className="mt-1.5 text-base font-semibold text-[var(--p-text-1)]">{s.name}</div>
                 <div className="mt-0.5 text-xs text-[var(--p-text-2)]">{s.sub}</div>
@@ -426,12 +499,13 @@ export default function Home() {
       {/* THE DIFFERENCE */}
       <section className="border-y border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">Why ATLVS</p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Not a CRM stitched to a PM tool.</h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">
-            Most production-operations stacks bolt together a CRM, a project tool, a doc tool, and a ticketing
-            integration. ATLVS Technologies owns the entire stack — every app built in-house, every record connected.
+          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+            {t("marketing.pages.home.difference.eyebrow")}
           </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("marketing.pages.home.difference.title")}
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.difference.body")}</p>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {EDGES.map((e) => (
               <article
@@ -456,13 +530,12 @@ export default function Home() {
       <section id="adopt" className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
-            Adopt your way
+            {t("marketing.pages.home.adopt.eyebrow")}
           </p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Start where you are.</h2>
-          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">
-            Run the whole platform end to end, take a single app, or pick exactly the modules your scope needs. Same
-            database in every case.
-          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("marketing.pages.home.adopt.title")}
+          </h2>
+          <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.adopt.body")}</p>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {TIERS.map((t) => (
               <article
@@ -479,7 +552,7 @@ export default function Home() {
           </div>
           <p className="mt-8 text-sm text-[var(--p-text-2)]">
             <Link href="/pricing" className="font-semibold text-[var(--p-accent-text)] hover:underline">
-              See the pricing grid →
+              {t("marketing.pages.home.adopt.pricingLink")}
             </Link>
           </p>
         </div>
@@ -491,20 +564,19 @@ export default function Home() {
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
               <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
-                Receipts · Case studies
+                {t("marketing.pages.home.projects.eyebrow")}
               </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Shipped on ATLVS.</h2>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+                {t("marketing.pages.home.projects.title")}
+              </h2>
             </div>
-            <p className="max-w-md text-sm text-[var(--p-text-2)]">
-              A selection of productions our customers have shipped using ATLVS Technologies — across festivals, brand
-              activations, and broadcast.
-            </p>
+            <p className="max-w-md text-sm text-[var(--p-text-2)]">{t("marketing.pages.home.projects.body")}</p>
           </div>
           <div className="mt-10 overflow-hidden rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] shadow-[var(--p-elev-1)]">
             <div className="grid grid-cols-[110px_1fr_70px] gap-4 border-b border-[var(--p-border)] bg-[var(--p-surface-2)] px-5 py-3 text-[10px] font-semibold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
-              <span>Project</span>
-              <span>Title</span>
-              <span>Year</span>
+              <span>{t("marketing.pages.home.projects.tableHeaders.project")}</span>
+              <span>{t("marketing.pages.home.projects.tableHeaders.title")}</span>
+              <span>{t("marketing.pages.home.projects.tableHeaders.year")}</span>
             </div>
             {PROJECTS.map((v) => (
               <div
@@ -524,13 +596,13 @@ export default function Home() {
       </section>
 
       {/* RECEIPTS — STATS */}
-      <section className="px-6 py-20" aria-label="Company history">
+      <section className="px-6 py-20" aria-label={t("marketing.pages.home.stats.ariaLabel")}>
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-6 rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-10 text-center shadow-[var(--p-elev-1)] md:grid-cols-3">
             {[
-              { big: "14+", label: "Years experience" },
-              { big: "250+", label: "Productions shipped" },
-              { big: "5M+", label: "Guests served" },
+              { big: "14+", label: t("marketing.pages.home.stats.items.yearsExperience") },
+              { big: "250+", label: t("marketing.pages.home.stats.items.productionsShipped") },
+              { big: "5M+", label: t("marketing.pages.home.stats.items.guestsServed") },
             ].map((s) => (
               <div key={s.label}>
                 <div className="text-5xl font-bold tracking-tight text-[var(--p-accent)] md:text-6xl">{s.big}</div>
@@ -544,13 +616,17 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <FAQSection title="Frequently Asked." faqs={HOME_FAQ} />
+      <FAQSection title={t("marketing.pages.home.faq.title")} faqs={HOME_FAQ} />
 
       {/* LATEST */}
       <section id="latest" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20">
         <div className="mx-auto max-w-6xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">From the team</p>
-          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Field notes &amp; releases.</h2>
+          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+            {t("marketing.pages.home.latest.eyebrow")}
+          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            {t("marketing.pages.home.latest.title")}
+          </h2>
           <div className="mt-10 divide-y divide-[var(--p-border)] rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] shadow-[var(--p-elev-1)]">
             {POSTS.map((l) => (
               <Link
@@ -573,25 +649,23 @@ export default function Home() {
       {/* CTA */}
       <section id="cta" className="px-6 py-24 text-center">
         <div className="mx-auto max-w-3xl">
-          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">Get started</p>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
-            Start running your production on ATLVS.
-          </h2>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-[var(--p-text-2)]">
-            Free forever for small teams. Per-org pricing. No credit card to start.
+          <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
+            {t("marketing.pages.home.cta.eyebrow")}
           </p>
+          <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">{t("marketing.pages.home.cta.title")}</h2>
+          <p className="mx-auto mt-6 max-w-xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.cta.body")}</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/signup"
               className="rounded-md bg-[var(--p-accent)] px-6 py-3 text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
             >
-              Sign Up Free
+              {t("marketing.pages.home.cta.ctaPrimary")}
             </Link>
             <Link
               href="/demo"
               className="rounded-md border border-[var(--p-border-2)] px-6 py-3 text-sm font-semibold text-[var(--p-text-1)] transition hover:bg-[var(--p-surface-2)]"
             >
-              Book a Walkthrough
+              {t("marketing.pages.home.cta.ctaSecondary")}
             </Link>
           </div>
         </div>

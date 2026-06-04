@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,13 +36,14 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const { data } = await supabase.from("public_crew_directory").select("*").eq("public_handle", handle).maybeSingle();
   if (!data) return notFound();
   const c = data as Row;
+  const { t } = await getRequestT();
 
   return (
     <>
       <Breadcrumbs
         items={[
-          { label: "Marketplace", href: "/marketplace" },
-          { label: "Crew", href: "/marketplace/crew" },
+          { label: t("marketing.pages.marketplace-crew-handle.breadcrumbs.marketplace"), href: "/marketplace" },
+          { label: t("marketing.pages.marketplace-crew-handle.breadcrumbs.crew"), href: "/marketplace/crew" },
           { label: c.name },
         ]}
         className="mx-auto max-w-6xl px-6 pt-6"
@@ -51,8 +53,12 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         <div className="eyebrow eyebrow-brand">@{c.public_handle}</div>
         <div className="mt-4 flex items-start gap-3">
           <h1 className="hed-2xl">{c.name}</h1>
-          {c.is_verified && <Badge variant="success">verified</Badge>}
-          {c.availability_open && <Badge variant="info">Available</Badge>}
+          {c.is_verified && (
+            <Badge variant="success">{t("marketing.pages.marketplace-crew-handle.badges.verified")}</Badge>
+          )}
+          {c.availability_open && (
+            <Badge variant="info">{t("marketing.pages.marketplace-crew-handle.badges.available")}</Badge>
+          )}
         </div>
         {c.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{c.tagline}</p>}
       </section>
@@ -60,14 +66,14 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
       <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
         {c.bio && (
           <div className="surface p-5">
-            <h2 className="hed-md mb-3">Bio</h2>
+            <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.sections.bio")}</h2>
             <div className="text-sm whitespace-pre-wrap">{c.bio}</div>
           </div>
         )}
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
           <div className="surface p-5">
-            <h2 className="hed-md mb-3">Roles</h2>
+            <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.sections.roles")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {c.roles.length === 0 ? (
                 <span className="text-sm text-[var(--text-secondary)]">—</span>
@@ -81,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             </div>
           </div>
           <div className="surface p-5">
-            <h2 className="hed-md mb-3">Unions</h2>
+            <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.sections.unions")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {c.unions.length === 0 ? (
                 <span className="text-sm text-[var(--text-secondary)]">—</span>
@@ -95,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             </div>
           </div>
           <div className="surface p-5">
-            <h2 className="hed-md mb-3">Certs</h2>
+            <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.sections.certs")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {c.certifications.length === 0 ? (
                 <span className="text-sm text-[var(--text-secondary)]">—</span>
@@ -111,37 +117,49 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         </div>
 
         <div className="surface p-5">
-          <h2 className="hed-md mb-3">Booking</h2>
+          <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.booking.title")}</h2>
           <dl className="space-y-1 text-sm">
             <div>
-              <span className="text-[var(--text-secondary)]">Day rate:</span>{" "}
+              <span className="text-[var(--text-secondary)]">
+                {t("marketing.pages.marketplace-crew-handle.booking.dayRate")}
+              </span>{" "}
               {formatFeeRange(c.day_rate_min_cents, c.day_rate_max_cents, "USD")}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">Travel radius:</span>{" "}
+              <span className="text-[var(--text-secondary)]">
+                {t("marketing.pages.marketplace-crew-handle.booking.travelRadius")}
+              </span>{" "}
               {c.travel_radius_km ? `${c.travel_radius_km} km` : "—"}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">Reel:</span>{" "}
+              <span className="text-[var(--text-secondary)]">
+                {t("marketing.pages.marketplace-crew-handle.booking.reel")}
+              </span>{" "}
               {c.reel_url ? (
                 <a href={c.reel_url} target="_blank" rel="noopener" className="font-mono text-[var(--org-primary)]">
-                  Watch ↗
+                  {t("marketing.pages.marketplace-crew-handle.booking.watch")}
                 </a>
               ) : (
                 "—"
               )}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">Rating:</span>{" "}
-              {c.rating_avg == null ? "no reviews yet" : `★ ${c.rating_avg} (${c.rating_count})`}
+              <span className="text-[var(--text-secondary)]">
+                {t("marketing.pages.marketplace-crew-handle.booking.rating")}
+              </span>{" "}
+              {c.rating_avg == null
+                ? t("marketing.pages.marketplace-crew-handle.booking.noReviews")
+                : `★ ${c.rating_avg} (${c.rating_count})`}
             </div>
           </dl>
         </div>
 
         <div className="flex items-center gap-3">
-          <Button href={`/login?redirect=/marketplace/crew/${c.public_handle}/inquire`}>Send Inquiry</Button>
+          <Button href={`/login?redirect=/marketplace/crew/${c.public_handle}/inquire`}>
+            {t("marketing.pages.marketplace-crew-handle.cta.sendInquiry")}
+          </Button>
           <Button href="/signup" variant="ghost">
-            Need an account?
+            {t("marketing.pages.marketplace-crew-handle.cta.needAccount")}
           </Button>
         </div>
       </section>

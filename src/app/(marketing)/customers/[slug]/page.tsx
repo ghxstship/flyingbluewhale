@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -47,23 +48,27 @@ async function loadCaseStudy(slug: string): Promise<CaseStudyRow | null> {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const cs = await loadCaseStudy(slug);
   if (!cs) {
     return buildMetadata({
-      title: "Customer story",
-      description: "ATLVS customer story",
+      title: t("marketing.pages.customers.detail.meta.fallbackTitle"),
+      description: t("marketing.pages.customers.detail.meta.fallbackDescription"),
       path: `/customers/${slug}`,
     });
   }
   return buildMetadata({
-    title: `${cs.customer_name} — Customer story`,
-    description: cs.challenge?.slice(0, 160) ?? `How ${cs.customer_name} runs production on ATLVS.`,
+    title: t("marketing.pages.customers.detail.meta.title", { name: cs.customer_name }),
+    description:
+      cs.challenge?.slice(0, 160) ??
+      t("marketing.pages.customers.detail.meta.descriptionFallback", { name: cs.customer_name }),
     path: `/customers/${cs.slug}`,
   });
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const cs = await loadCaseStudy(slug);
   if (!cs) notFound();
 
@@ -72,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
-      <div className="eyebrow eyebrow-brand">Customer story</div>
+      <div className="eyebrow eyebrow-brand">{t("marketing.pages.customers.detail.eyebrow")}</div>
       <h1 className="hed-xl mt-4">{cs.customer_name}</h1>
       {meta && <p className="mt-2 font-mono text-xs text-[var(--text-muted)]">{meta}</p>}
 
@@ -89,21 +94,27 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       {cs.challenge && (
         <section className="mt-10">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">Challenge</h2>
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("marketing.pages.customers.detail.sections.challenge")}
+          </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">{cs.challenge}</p>
         </section>
       )}
 
       {cs.solution && (
         <section className="mt-8">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">Solution</h2>
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("marketing.pages.customers.detail.sections.solution")}
+          </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">{cs.solution}</p>
         </section>
       )}
 
       {cs.outcomes && (
         <section className="mt-8">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">Outcomes</h2>
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            {t("marketing.pages.customers.detail.sections.outcomes")}
+          </h2>
           <p className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">{cs.outcomes}</p>
         </section>
       )}
@@ -123,7 +134,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       <div className="mt-12 flex items-center gap-3">
         <Link href="/customers" className="text-xs text-[var(--org-primary)]">
-          ← All customer stories
+          {t("marketing.pages.customers.detail.backLink")}
         </Link>
       </div>
     </article>

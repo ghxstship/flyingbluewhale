@@ -12,6 +12,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, faqSchema, breadcrumbSchema, reviewSchema, CANONICAL_CTAS } from "@/lib/seo";
 import { Button } from "@/components/ui/Button";
 import { COMPARE, COMPARE_LIST } from "@/lib/compare";
+import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
   return COMPARE_LIST.map((c) => ({ competitor: c.slug }));
@@ -19,21 +20,27 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ competitor: string }> }): Promise<Metadata> {
   const { competitor } = await params;
+  const { t } = await getRequestT();
   const c = COMPARE[competitor];
-  if (!c) return buildMetadata({ title: "Compare", description: "", path: `/compare/${competitor}` });
+  if (!c)
+    return buildMetadata({
+      title: t("marketing.pages.compare.detail.metadata.fallbackTitle"),
+      description: "",
+      path: `/compare/${competitor}`,
+    });
   return buildMetadata({
     title: `ATLVS Technologies vs. ${c.competitor}`,
     description: c.blurb,
     path: `/compare/${c.slug}`,
     keywords: c.keywords,
     ogImageEyebrow: `vs. ${c.competitor}`,
-    ogImageTitle: "What we are.",
+    ogImageTitle: t("marketing.pages.compare.detail.metadata.ogImageTitle"),
   });
 }
 
-function CellMark({ value }: { value: string | boolean }) {
-  if (value === true) return <Check size={16} className="text-[var(--success)]" aria-label="Yes" />;
-  if (value === false) return <X size={16} className="text-[var(--text-muted)]" aria-label="No" />;
+function CellMark({ value, yesLabel, noLabel }: { value: string | boolean; yesLabel: string; noLabel: string }) {
+  if (value === true) return <Check size={16} className="text-[var(--success)]" aria-label={yesLabel} />;
+  if (value === false) return <X size={16} className="text-[var(--text-muted)]" aria-label={noLabel} />;
   return (
     <span className="inline-flex items-center gap-1 text-xs text-[var(--text-secondary)]">
       <Minus size={12} className="text-[var(--text-muted)]" />
@@ -44,12 +51,13 @@ function CellMark({ value }: { value: string | boolean }) {
 
 export default async function CompareDetail({ params }: { params: Promise<{ competitor: string }> }) {
   const { competitor } = await params;
+  const { t } = await getRequestT();
   const c = COMPARE[competitor];
   if (!c) notFound();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Compare", href: "/compare" },
+    { label: t("marketing.pages.compare.detail.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.compare.detail.breadcrumbs.compare"), href: "/compare" },
     { label: `vs. ${c.competitor}`, href: `/compare/${c.slug}` },
   ];
 
@@ -84,20 +92,24 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
           </Button>
         </div>
         <div className="surface mt-8 p-5">
-          <div className="eyebrow">Bottom line</div>
+          <div className="eyebrow">{t("marketing.pages.compare.detail.bottomLine.eyebrow")}</div>
           <div className="mt-2 text-sm font-medium">{c.bottomLine}</div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-xl">Feature Comparison.</h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">Side by side, without the marketing math.</p>
+        <h2 className="hed-xl">{t("marketing.pages.compare.detail.features.title")}</h2>
+        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+          {t("marketing.pages.compare.detail.features.subtitle")}
+        </p>
         <div className="surface mt-8 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="data-table w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border-color)] bg-[var(--surface-inset)]">
-                  <th className="eyebrow px-4 py-3 text-left">Feature</th>
+                  <th className="eyebrow px-4 py-3 text-left">
+                    {t("marketing.pages.compare.detail.features.columnFeature")}
+                  </th>
                   <th
                     className="px-4 py-3 text-left text-[11px] font-semibold tracking-[0.2em] uppercase"
                     style={{ color: "var(--org-primary)" }}
@@ -115,10 +127,18 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
                       {row.note ? <div className="mt-1 text-xs text-[var(--text-muted)]">{row.note}</div> : null}
                     </td>
                     <td className="px-4 py-3 align-top">
-                      <CellMark value={row.us} />
+                      <CellMark
+                        value={row.us}
+                        yesLabel={t("marketing.pages.compare.detail.features.yes")}
+                        noLabel={t("marketing.pages.compare.detail.features.no")}
+                      />
                     </td>
                     <td className="px-4 py-3 align-top">
-                      <CellMark value={row.them} />
+                      <CellMark
+                        value={row.them}
+                        yesLabel={t("marketing.pages.compare.detail.features.yes")}
+                        noLabel={t("marketing.pages.compare.detail.features.no")}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -129,7 +149,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-xl">Where We Win.</h2>
+        <h2 className="hed-xl">{t("marketing.pages.compare.detail.whyWeWin.title")}</h2>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {c.whyWeWin.map((w) => (
             <div key={w.title} className="surface p-6">
@@ -142,9 +162,11 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       {c.whenTheyWin.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="hed-lg">When {c.competitor} Wins.</h2>
+          <h2 className="hed-lg">
+            {t("marketing.pages.compare.detail.whenTheyWin.title", { competitor: c.competitor })}
+          </h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-            We're not the answer to every problem. These are the cases where they're the right call.
+            {t("marketing.pages.compare.detail.whenTheyWin.subtitle")}
           </p>
           <ul className="mt-6 space-y-3 text-sm">
             {c.whenTheyWin.map((w) => (
@@ -171,8 +193,10 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Migration Path.</h2>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">For teams moving from {c.competitor}.</p>
+        <h2 className="hed-lg">{t("marketing.pages.compare.detail.migration.title")}</h2>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+          {t("marketing.pages.compare.detail.migration.subtitle", { competitor: c.competitor })}
+        </p>
         <div className="surface mt-6 p-6">
           <ol className="list-decimal space-y-2 pl-5 text-sm text-[var(--text-secondary)]">
             {c.migration.map((m) => (
@@ -182,14 +206,17 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
         </div>
         <div className="mt-6">
           <Link href={`/alternatives/${c.slug}`} className="text-sm font-medium text-[var(--org-primary)]">
-            Read the long-form on {c.competitor} alternatives →
+            {t("marketing.pages.compare.detail.migration.longFormLink", { competitor: c.competitor })}
           </Link>
         </div>
       </section>
 
       <FAQSection title={`vs. ${c.competitor} · FAQ`} faqs={c.faqs} />
 
-      <CTASection title="ATLVS Is Open." subtitle="Free forever for small teams. Migrate when you're ready." />
+      <CTASection
+        title={t("marketing.pages.compare.detail.cta.title")}
+        subtitle={t("marketing.pages.compare.detail.cta.subtitle")}
+      />
     </div>
   );
 }

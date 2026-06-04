@@ -9,21 +9,25 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { MARKETING_GUIDE_LIST } from "@/lib/marketing-guides";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Guides — production ops, advancing, and KBYG",
-  description:
-    "Long-form guides to production operations. Event advancing, Know Before You Go, and the modern production-ops platform thesis. Written by operators.",
-  path: "/guides",
-  keywords: ["event production guides", "advancing guide", "KBYG guide", "production operations guide"],
-  ogImageEyebrow: "Guides",
-  ogImageTitle: "Written by operators.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.guides.meta.title"),
+    description: t("marketing.pages.guides.meta.description"),
+    path: "/guides",
+    keywords: ["event production guides", "advancing guide", "KBYG guide", "production operations guide"],
+    ogImageEyebrow: t("marketing.pages.guides.meta.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.guides.meta.ogImageTitle"),
+  });
+}
 
-export default function GuidesPage() {
+export default async function GuidesPage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Guides", href: "/guides" },
+    { label: t("marketing.pages.guides.crumbs.home"), href: "/" },
+    { label: t("marketing.pages.guides.crumbs.guides"), href: "/guides" },
   ];
 
   return (
@@ -31,11 +35,10 @@ export default function GuidesPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="eyebrow eyebrow-brand">Guides</div>
-        <h1 className="hed-2xl mt-4">Written by Operators.</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.guides.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.guides.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Deep-dive guides to the fundamentals of production operations — the disciplines, the taxonomies, and the
-          tooling that makes a show work.
+          {t("marketing.pages.guides.hero.subtitle")}
         </p>
       </section>
 
@@ -53,7 +56,7 @@ export default function GuidesPage() {
         </ul>
       </section>
 
-      <CTASection title="Ship Your Ops" subtitle="Start free on the Access tier." />
+      <CTASection title={t("marketing.pages.guides.cta.title")} subtitle={t("marketing.pages.guides.cta.subtitle")} />
     </div>
   );
 }

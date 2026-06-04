@@ -5,14 +5,18 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Crew Gigs — Production Job Board",
-  description: "Paid production crew gigs from operators in the ATLVS network.",
-  path: "/marketplace/gigs",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.marketplace.gigs.meta.title"),
+    description: t("marketing.pages.marketplace.gigs.meta.description"),
+    path: "/marketplace/gigs",
+  });
+}
 
 type Row = {
   id: string;
@@ -38,6 +42,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -52,21 +57,30 @@ export default async function Page() {
   return (
     <>
       <Breadcrumbs
-        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Crew Gigs" }]}
+        items={[
+          { label: t("marketing.pages.marketplace.gigs.breadcrumbs.marketplace"), href: "/marketplace" },
+          { label: t("marketing.pages.marketplace.gigs.breadcrumbs.crewGigs") },
+        ]}
         className="mx-auto max-w-6xl px-6 pt-6"
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Crew Gigs</div>
-        <h1 className="hed-2xl mt-4">Crew Gigs</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.gigs.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.gigs.hero.title")}</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          {rows.length} live gig{rows.length === 1 ? "" : "s"} · single shows, tour legs, recurring
+          {rows.length}{" "}
+          {rows.length === 1
+            ? t("marketing.pages.marketplace.gigs.hero.liveGigSingular")
+            : t("marketing.pages.marketplace.gigs.hero.liveGigPlural")}{" "}
+          · {t("marketing.pages.marketplace.gigs.hero.subtitle")}
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         {rows.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No live gigs at the moment.</div>
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+            {t("marketing.pages.marketplace.gigs.empty")}
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {rows.map((r) => (
@@ -78,10 +92,11 @@ export default async function Page() {
                 tags={r.role_taxonomy}
                 meta={[
                   [r.city, r.region, r.country].filter(Boolean).join(", ") || null,
-                  formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency) + "/day",
+                  formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, r.currency) +
+                    t("marketing.pages.marketplace.gigs.meta.perDay"),
                   r.posting_type,
-                  r.travel_paid ? "Travel paid" : null,
-                  r.lodging_provided ? "Lodging provided" : null,
+                  r.travel_paid ? t("marketing.pages.marketplace.gigs.meta.travelPaid") : null,
+                  r.lodging_provided ? t("marketing.pages.marketplace.gigs.meta.lodgingProvided") : null,
                 ]}
                 badge={r.union_required.length > 0 ? r.union_required[0] : null}
               />

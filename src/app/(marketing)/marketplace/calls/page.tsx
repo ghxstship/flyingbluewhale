@@ -6,14 +6,18 @@ import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Open Calls — Casting & Production Submissions",
-  description: "Casting calls and open RFPs for live production, talent, and creative.",
-  path: "/marketplace/calls",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.marketplace.calls.metadata.title"),
+    description: t("marketing.pages.marketplace.calls.metadata.description"),
+    path: "/marketplace/calls",
+  });
+}
 
 type Row = {
   id: string;
@@ -35,6 +39,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -49,21 +54,28 @@ export default async function Page() {
   return (
     <>
       <Breadcrumbs
-        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Open Calls" }]}
+        items={[
+          { label: t("marketing.pages.marketplace.calls.breadcrumbs.marketplace"), href: "/marketplace" },
+          { label: t("marketing.pages.marketplace.calls.breadcrumbs.calls") },
+        ]}
         className="mx-auto max-w-6xl px-6 pt-6"
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Open Calls</div>
-        <h1 className="hed-2xl mt-4">Open Calls</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.calls.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.calls.hero.title")}</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          {rows.length} active call{rows.length === 1 ? "" : "s"}
+          {rows.length === 1
+            ? t("marketing.pages.marketplace.calls.hero.countSingular", { count: String(rows.length) })
+            : t("marketing.pages.marketplace.calls.hero.countPlural", { count: String(rows.length) })}
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         {rows.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No active calls at the moment.</div>
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+            {t("marketing.pages.marketplace.calls.empty.message")}
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {rows.map((r) => (
@@ -77,8 +89,16 @@ export default async function Page() {
                 meta={[
                   r.region,
                   r.venue_type,
-                  r.performance_date ? `Show ${new Date(r.performance_date).toLocaleDateString()}` : null,
-                  r.deadline_at ? `Closes ${new Date(r.deadline_at).toLocaleDateString()}` : null,
+                  r.performance_date
+                    ? t("marketing.pages.marketplace.calls.card.show", {
+                        date: new Date(r.performance_date).toLocaleDateString(),
+                      })
+                    : null,
+                  r.deadline_at
+                    ? t("marketing.pages.marketplace.calls.card.closes", {
+                        date: new Date(r.deadline_at).toLocaleDateString(),
+                      })
+                    : null,
                   formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
                 ]}
               />

@@ -6,29 +6,33 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { TEAMS } from "@/lib/marketing/teams";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Built For Production Roles — Tour, Production, Stage, Festival, Site, Tech, Talent, EHS",
-  description:
-    "ATLVS Technologies is tuned to the role you actually run. Per-role landing pages with the modules each persona lives in, the workflows that matter, and the FAQs they ask.",
-  path: "/teams",
-  keywords: [
-    "production software by role",
-    "tour manager software",
-    "production manager software",
-    "stage manager software",
-    "festival director software",
-    "EHS lead software",
-    "TD software event production",
-  ],
-  ogImageEyebrow: "Built For",
-  ogImageTitle: "The Role You Run.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.teams.meta.title"),
+    description: t("marketing.pages.teams.meta.description"),
+    path: "/teams",
+    keywords: [
+      "production software by role",
+      "tour manager software",
+      "production manager software",
+      "stage manager software",
+      "festival director software",
+      "EHS lead software",
+      "TD software event production",
+    ],
+    ogImageEyebrow: t("marketing.pages.teams.meta.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.teams.meta.ogImageTitle"),
+  });
+}
 
-export default function TeamsHub() {
+export default async function TeamsHub() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Built For", href: "/teams" },
+    { label: t("marketing.pages.teams.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.teams.breadcrumbs.builtFor"), href: "/teams" },
   ];
 
   return (
@@ -37,33 +41,27 @@ export default function TeamsHub() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Built For</div>
-        <h1 className="hed-3xl mt-4">The Role You Run.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          One platform, eight production roles. Each gets the modules they live in day-to-day, the workflows that move
-          first, and the FAQs operators actually ask. Same backbone, different starting point.
-        </p>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.teams.hero.eyebrow")}</div>
+        <h1 className="hed-3xl mt-4">{t("marketing.pages.teams.hero.title")}</h1>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.teams.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-          {TEAMS.map((t) => (
-            <Link key={t.slug} href={`/teams/${t.slug}`} className="surface hover-lift p-6">
-              <div className="eyebrow eyebrow-brand">{t.hero.eyebrow}</div>
-              <h3 className="hed-lg mt-3">{t.role}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{t.blurb}</p>
+          {TEAMS.map((team) => (
+            <Link key={team.slug} href={`/teams/${team.slug}`} className="surface hover-lift p-6">
+              <div className="eyebrow eyebrow-brand">{team.hero.eyebrow}</div>
+              <h3 className="hed-lg mt-3">{team.role}</h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)]">{team.blurb}</p>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                See the Fit <ArrowRight size={12} />
+                {t("marketing.pages.teams.cards.cta")} <ArrowRight size={12} />
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
-      />
+      <CTASection title={t("marketing.pages.teams.cta.title")} subtitle={t("marketing.pages.teams.cta.subtitle")} />
     </div>
   );
 }

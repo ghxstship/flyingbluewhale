@@ -8,21 +8,25 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { buildMetadata } from "@/lib/seo";
 import { POST_LIST } from "@/lib/blog";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Blog — updates from the ATLVS Technologies team",
-  description:
-    "Essays on production operations, platform architecture, and how to run shows with less duct tape. From the ATLVS Technologies team.",
-  path: "/blog",
-  keywords: ["production blog", "event production software blog", "ATLVS Technologies blog"],
-  ogImageEyebrow: "Blog",
-  ogImageTitle: "Updates from the team.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.blog.meta.title"),
+    description: t("marketing.pages.blog.meta.description"),
+    path: "/blog",
+    keywords: ["production blog", "event production software blog", "ATLVS Technologies blog"],
+    ogImageEyebrow: t("marketing.pages.blog.meta.ogEyebrow"),
+    ogImageTitle: t("marketing.pages.blog.meta.ogTitle"),
+  });
+}
 
-export default function BlogIndex() {
+export default async function BlogIndex() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Blog", href: "/blog" },
+    { label: t("marketing.pages.blog.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.blog.breadcrumbs.blog"), href: "/blog" },
   ];
 
   return (
@@ -30,11 +34,9 @@ export default function BlogIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
-        <div className="eyebrow eyebrow-brand">Blog</div>
-        <h1 className="hed-2xl mt-4">Updates From the Team.</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Essays on production operations, platform architecture, and how to run shows with less duct tape.
-        </p>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.blog.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.blog.hero.title")}</h1>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.blog.hero.subtitle")}</p>
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-8">

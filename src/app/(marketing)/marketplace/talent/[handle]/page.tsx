@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -36,13 +37,14 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const { data } = await supabase.from("public_talent_directory").select("*").eq("public_handle", handle).maybeSingle();
   if (!data) return notFound();
   const t = data as Row;
+  const { t: tr } = await getRequestT();
 
   return (
     <>
       <Breadcrumbs
         items={[
-          { label: "Marketplace", href: "/marketplace" },
-          { label: "Talent", href: "/marketplace/talent" },
+          { label: tr("marketing.pages.marketplace.talent.detail.breadcrumb.marketplace"), href: "/marketplace" },
+          { label: tr("marketing.pages.marketplace.talent.detail.breadcrumb.talent"), href: "/marketplace/talent" },
           { label: t.act_name },
         ]}
         className="mx-auto max-w-6xl px-6 pt-6"
@@ -52,7 +54,9 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         <div className="eyebrow eyebrow-brand">@{t.public_handle}</div>
         <div className="mt-4 flex items-start gap-3">
           <h1 className="hed-2xl">{t.act_name}</h1>
-          {t.is_verified && <Badge variant="success">verified</Badge>}
+          {t.is_verified && (
+            <Badge variant="success">{tr("marketing.pages.marketplace.talent.detail.verifiedBadge")}</Badge>
+          )}
         </div>
         {t.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t.tagline}</p>}
         <div className="mt-5 flex flex-wrap gap-1.5">
@@ -67,42 +71,56 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
       <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
         {t.bio && (
           <div className="surface p-5">
-            <h2 className="hed-md mb-3">Bio</h2>
+            <h2 className="hed-md mb-3">{tr("marketing.pages.marketplace.talent.detail.bio.heading")}</h2>
             <div className="text-sm whitespace-pre-wrap">{t.bio}</div>
           </div>
         )}
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="surface p-5">
-            <h2 className="hed-md mb-3">Booking</h2>
+            <h2 className="hed-md mb-3">{tr("marketing.pages.marketplace.talent.detail.booking.heading")}</h2>
             <dl className="space-y-1 text-sm">
               <div>
-                <span className="text-[var(--text-secondary)]">Fee band:</span>{" "}
+                <span className="text-[var(--text-secondary)]">
+                  {tr("marketing.pages.marketplace.talent.detail.booking.feeBandLabel")}
+                </span>{" "}
                 {formatFeeRange(t.fee_min_cents, t.fee_max_cents, t.currency)}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">Travel radius:</span>{" "}
+                <span className="text-[var(--text-secondary)]">
+                  {tr("marketing.pages.marketplace.talent.detail.booking.travelRadiusLabel")}
+                </span>{" "}
                 {t.travel_radius_km ? `${t.travel_radius_km} km` : "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">Rating:</span>{" "}
-                {t.rating_avg == null ? "no reviews yet" : `★ ${t.rating_avg} (${t.rating_count})`}
+                <span className="text-[var(--text-secondary)]">
+                  {tr("marketing.pages.marketplace.talent.detail.booking.ratingLabel")}
+                </span>{" "}
+                {t.rating_avg == null
+                  ? tr("marketing.pages.marketplace.talent.detail.booking.noReviews")
+                  : `★ ${t.rating_avg} (${t.rating_count})`}
               </div>
             </dl>
           </div>
           <div className="surface p-5">
-            <h2 className="hed-md mb-3">Reach</h2>
+            <h2 className="hed-md mb-3">{tr("marketing.pages.marketplace.talent.detail.reach.heading")}</h2>
             <dl className="space-y-1 text-sm">
               <div>
-                <span className="text-[var(--text-secondary)]">Monthly listeners:</span>{" "}
+                <span className="text-[var(--text-secondary)]">
+                  {tr("marketing.pages.marketplace.talent.detail.reach.monthlyListenersLabel")}
+                </span>{" "}
                 {t.monthly_listeners?.toLocaleString() ?? "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">Followers:</span>{" "}
+                <span className="text-[var(--text-secondary)]">
+                  {tr("marketing.pages.marketplace.talent.detail.reach.followersLabel")}
+                </span>{" "}
                 {t.follower_count?.toLocaleString() ?? "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">Reel:</span>{" "}
+                <span className="text-[var(--text-secondary)]">
+                  {tr("marketing.pages.marketplace.talent.detail.reach.reelLabel")}
+                </span>{" "}
                 {t.video_reel_url ? (
                   <a
                     href={t.video_reel_url}
@@ -110,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                     rel="noopener"
                     className="font-mono text-[var(--org-primary)]"
                   >
-                    Watch ↗
+                    {tr("marketing.pages.marketplace.talent.detail.reach.watchCta")}
                   </a>
                 ) : (
                   "—"
@@ -121,9 +139,11 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         </div>
 
         <div className="flex items-center gap-3">
-          <Button href={`/login?redirect=/marketplace/talent/${t.public_handle}/inquire`}>Send Inquiry</Button>
+          <Button href={`/login?redirect=/marketplace/talent/${t.public_handle}/inquire`}>
+            {tr("marketing.pages.marketplace.talent.detail.cta.sendInquiry")}
+          </Button>
           <Button href="/signup" variant="ghost">
-            Need an account?
+            {tr("marketing.pages.marketplace.talent.detail.cta.needAccount")}
           </Button>
         </div>
       </section>

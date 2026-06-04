@@ -4,6 +4,7 @@ export const revalidate = 300;
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildMetadata } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 import {
   MarketingHero,
   MarketingSection,
@@ -11,115 +12,84 @@ import {
   MarketingPageShell,
 } from "@/components/marketing/MarketingPrimitives";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Features — Every Module. Native.",
-  description:
-    "Forty-seven modules across three apps that share one database. ATLVS, GVTEWAY, COMPVSS. AI, finance, procurement, audit. One source.",
-  path: "/features",
-  keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
-  ogImageEyebrow: "Features",
-  ogImageTitle: "Every Module. Native.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.features.metadata.title"),
+    description: t("marketing.pages.features.metadata.description"),
+    path: "/features",
+    keywords: ["production software features", "event management platform", "stakeholder portals", "mobile field PWA"],
+    ogImageEyebrow: t("marketing.pages.features.metadata.ogEyebrow"),
+    ogImageTitle: t("marketing.pages.features.metadata.ogTitle"),
+  });
+}
 
-const CATEGORIES = [
-  { key: "atlvs", title: "ATLVS", desc: "Production operations workspace — 47 modules, 9 domains, one sidebar." },
-  {
-    key: "portals",
-    title: "GVTEWAY",
-    desc: "Stakeholder portal — twelve personas, each their lane.",
-  },
-  {
-    key: "mobile",
-    title: "COMPVSS",
-    desc: "Offline-first field PWA. Gate, shift, incident, medic.",
-  },
-  {
-    key: "procore-parity",
-    title: "Construction",
-    desc: "RFIs, submittals, daily logs, punch list, inspections, change orders, payment apps.",
-  },
-  {
-    key: "advancing",
-    title: "Advancing",
-    desc: "Riders, hospitality, stage plots, travel — 16 typed deliverables.",
-  },
-  {
-    key: "proposals",
-    title: "Proposals",
-    desc: "23 block types, e-sig in place, revocable share links, version history.",
-  },
-  {
-    key: "finance",
-    title: "Finance",
-    desc: "Invoices, expenses, budgets, time, mileage, advances, Stripe Connect payouts, P&L.",
-  },
-  {
-    key: "procurement",
-    title: "Procurement",
-    desc: "RFQs, POs, vendor scorecards, COIs, W-9s, work order broadcasts.",
-  },
-  {
-    key: "production",
-    title: "Production",
-    desc: "Equipment, rentals, fabrication, dispatch, logistics, site plans.",
-  },
-  {
-    key: "safety",
-    title: "Safety",
-    desc: "Incidents, OSHA, medical, crisis, BC/DR, cyber-IR, safeguarding, environmental.",
-  },
-  {
-    key: "guides",
-    title: "Event guides (KBYG)",
-    desc: "One project, six personas, 17 section types — schedule, SOPs, PPE, radio, evac.",
-  },
-  {
-    key: "ai",
-    title: "AI assistant",
-    desc: "Drafts riders, RFPs, call sheets, recaps. Grounded in your workspace, never the public web.",
-  },
-  {
-    key: "knowledge",
-    title: "Knowledge base",
-    desc: "Tagged articles, public-form intake, vendor training rolls up to compliance.",
-  },
-  {
-    key: "forms",
-    title: "Forms",
-    desc: "Schema-driven. Public submission. Honeypot anti-spam.",
-  },
-  {
-    key: "ticketing",
-    title: "Ticketing + scan",
-    desc: "Sub-100ms QR + barcode. Offline-queued. Replays in order.",
-  },
-  {
-    key: "compliance",
-    title: "Audit + compliance",
-    desc: "Immutable audit log, signed webhooks, self-expiring shares, SOC-2 posture.",
-  },
-];
+const CATEGORY_KEYS = [
+  "atlvs",
+  "portals",
+  "mobile",
+  "procore-parity",
+  "advancing",
+  "proposals",
+  "finance",
+  "procurement",
+  "production",
+  "safety",
+  "guides",
+  "ai",
+  "knowledge",
+  "forms",
+  "ticketing",
+  "compliance",
+] as const;
 
-export default function FeaturesPage() {
+const CATEGORY_I18N_KEYS: Record<(typeof CATEGORY_KEYS)[number], string> = {
+  atlvs: "atlvs",
+  portals: "portals",
+  mobile: "mobile",
+  "procore-parity": "procoreParity",
+  advancing: "advancing",
+  proposals: "proposals",
+  finance: "finance",
+  procurement: "procurement",
+  production: "production",
+  safety: "safety",
+  guides: "guides",
+  ai: "ai",
+  knowledge: "knowledge",
+  forms: "forms",
+  ticketing: "ticketing",
+  compliance: "compliance",
+};
+
+export default async function FeaturesPage() {
+  const { t } = await getRequestT();
   return (
     <MarketingPageShell>
       <MarketingHero
-        eyebrow="Features"
-        title="Every Module. Native."
-        subtitle="Forty-seven modules across three apps. Same database, same auth, same audit log. No integration tax."
+        eyebrow={t("marketing.pages.features.hero.eyebrow")}
+        title={t("marketing.pages.features.hero.title")}
+        subtitle={t("marketing.pages.features.hero.subtitle")}
       />
-      <MarketingSection aria-label="Feature Categories">
+      <MarketingSection aria-label={t("marketing.pages.features.categories.ariaLabel")}>
         <MarketingGrid cols={4}>
-          {CATEGORIES.map((c) => (
-            <Link
-              key={c.key}
-              href={`/features/${c.key}`}
-              className="surface hover-lift rounded-lg p-5 focus-visible:ring-2 focus-visible:ring-[var(--accent-solid,var(--org-primary))] focus-visible:ring-offset-2"
-            >
-              <div className="text-sm font-semibold">{c.title}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{c.desc}</div>
-            </Link>
-          ))}
+          {CATEGORY_KEYS.map((key) => {
+            const i18nKey = CATEGORY_I18N_KEYS[key];
+            return (
+              <Link
+                key={key}
+                href={`/features/${key}`}
+                className="surface hover-lift rounded-lg p-5 focus-visible:ring-2 focus-visible:ring-[var(--accent-solid,var(--org-primary))] focus-visible:ring-offset-2"
+              >
+                <div className="text-sm font-semibold">
+                  {t(`marketing.pages.features.categories.items.${i18nKey}.title`)}
+                </div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                  {t(`marketing.pages.features.categories.items.${i18nKey}.desc`)}
+                </div>
+              </Link>
+            );
+          })}
         </MarketingGrid>
       </MarketingSection>
     </MarketingPageShell>

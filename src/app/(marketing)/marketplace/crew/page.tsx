@@ -5,14 +5,18 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Crew Directory — Vetted Production Crew",
-  description: "Vetted crew profiles — roles, gear, unions, day rates, availability.",
-  path: "/marketplace/crew",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.marketplace.crew.metadata.title"),
+    description: t("marketing.pages.marketplace.crew.metadata.description"),
+    path: "/marketplace/crew",
+  });
+}
 
 type Row = {
   id: string;
@@ -32,6 +36,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -47,21 +52,29 @@ export default async function Page() {
   return (
     <>
       <Breadcrumbs
-        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Crew" }]}
+        items={[
+          { label: t("marketing.pages.marketplace.crew.breadcrumbs.marketplace"), href: "/marketplace" },
+          { label: t("marketing.pages.marketplace.crew.breadcrumbs.crew") },
+        ]}
         className="mx-auto max-w-6xl px-6 pt-6"
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Crew</div>
-        <h1 className="hed-2xl mt-4">Crew Directory</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.crew.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.crew.hero.title")}</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          {rows.length} vetted profile{rows.length === 1 ? "" : "s"}
+          {rows.length}{" "}
+          {rows.length === 1
+            ? t("marketing.pages.marketplace.crew.hero.profileCountSingular")
+            : t("marketing.pages.marketplace.crew.hero.profileCountPlural")}
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         {rows.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No published crew yet.</div>
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+            {t("marketing.pages.marketplace.crew.empty.message")}
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {rows.map((r) => (
@@ -72,10 +85,13 @@ export default async function Page() {
                 subtitle={r.tagline ?? undefined}
                 tags={r.roles}
                 meta={[
-                  formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, "USD") + "/day",
+                  formatFeeRange(r.day_rate_min_cents, r.day_rate_max_cents, "USD") +
+                    t("marketing.pages.marketplace.crew.card.perDaySuffix"),
                   r.unions.join(", ") || null,
-                  r.travel_radius_km ? `${r.travel_radius_km} km radius` : null,
-                  r.availability_open ? "Available now" : null,
+                  r.travel_radius_km
+                    ? t("marketing.pages.marketplace.crew.card.travelRadius", { km: String(r.travel_radius_km) })
+                    : null,
+                  r.availability_open ? t("marketing.pages.marketplace.crew.card.availableNow") : null,
                 ]}
                 rating={{ avg: r.rating_avg, count: r.rating_count }}
                 verified={r.is_verified}

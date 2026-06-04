@@ -7,20 +7,25 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { COMPARE_LIST } from "@/lib/compare";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "From the General-Purpose Tools",
-  description: "Notes for teams arriving from a general-purpose tool. We don't run scorecards. We define what we are.",
-  path: "/compare",
-  keywords: ["ATLVS Technologies comparison"],
-  ogImageEyebrow: "Category Notes",
-  ogImageTitle: "We Don't Compare. We Define.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.compare.meta.title"),
+    description: t("marketing.pages.compare.meta.description"),
+    path: "/compare",
+    keywords: ["ATLVS Technologies comparison"],
+    ogImageEyebrow: t("marketing.pages.compare.meta.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.compare.meta.ogImageTitle"),
+  });
+}
 
-export default function ComparePage() {
+export default async function ComparePage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "From general-purpose tools", href: "/compare" },
+    { label: t("marketing.pages.compare.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.compare.breadcrumbs.current"), href: "/compare" },
   ];
 
   return (
@@ -29,13 +34,12 @@ export default function ComparePage() {
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          Category Notes
+          {t("marketing.pages.compare.hero.eyebrow")}
         </div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">We Don&apos;t Compare. We Define.</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          Producers land here because a general-purpose tool taught them what they didn&apos;t want. These pages are
-          notes for the search engine — what we are, said plainly. No scorecards.
-        </p>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+          {t("marketing.pages.compare.hero.title")}
+        </h1>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.compare.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-8">
@@ -43,9 +47,9 @@ export default function ComparePage() {
           {COMPARE_LIST.map((c) => (
             <Link key={c.slug} href={`/compare/${c.slug}`} className="surface hover-lift p-6">
               <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                Coming from {c.competitor}
+                {t("marketing.pages.compare.card.eyebrow")} {c.competitor}
               </div>
-              <div className="mt-3 text-2xl font-semibold tracking-tight">Read the notes</div>
+              <div className="mt-3 text-2xl font-semibold tracking-tight">{t("marketing.pages.compare.card.cta")}</div>
               <div className="mt-3 text-sm text-[var(--text-secondary)]">{c.blurb}</div>
             </Link>
           ))}
@@ -53,11 +57,11 @@ export default function ComparePage() {
       </section>
 
       <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free forever for small teams."
-        primaryLabel="Sign Up Free"
+        title={t("marketing.pages.compare.cta.title")}
+        subtitle={t("marketing.pages.compare.cta.subtitle")}
+        primaryLabel={t("marketing.pages.compare.cta.primaryLabel")}
         primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
+        secondaryLabel={t("marketing.pages.compare.cta.secondaryLabel")}
         secondaryHref="/contact"
       />
     </div>

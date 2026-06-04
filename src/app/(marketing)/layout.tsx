@@ -2,102 +2,104 @@ import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
 import { StickyCTABar } from "@/components/marketing/StickyCTABar";
+import { getRequestT } from "@/lib/i18n/request";
 
-const FOOTER_NAV: Array<{ heading: string; items: Array<{ label: string; href: string }> }> = [
+const FOOTER_NAV: Array<{ headingKey: string; items: Array<{ labelKey: string; href: string }> }> = [
   {
-    heading: "Product",
+    headingKey: "marketing.layout.footer.product.heading",
     items: [
-      { label: "Solutions", href: "/solutions" },
-      { label: "ATLVS", href: "/solutions/atlvs" },
-      { label: "GVTEWAY", href: "/solutions/gvteway" },
-      { label: "COMPVSS", href: "/solutions/compvss" },
-      { label: "Features", href: "/features" },
-      { label: "AI", href: "/ai" },
-      { label: "Integrations", href: "/integrations" },
-      { label: "Pricing", href: "/pricing" },
-      { label: "Changelog", href: "/changelog" },
-      { label: "Roadmap", href: "/roadmap" },
+      { labelKey: "marketing.layout.footer.product.solutions", href: "/solutions" },
+      { labelKey: "marketing.layout.footer.product.atlvs", href: "/solutions/atlvs" },
+      { labelKey: "marketing.layout.footer.product.gvteway", href: "/solutions/gvteway" },
+      { labelKey: "marketing.layout.footer.product.compvss", href: "/solutions/compvss" },
+      { labelKey: "marketing.layout.footer.product.features", href: "/features" },
+      { labelKey: "marketing.layout.footer.product.ai", href: "/ai" },
+      { labelKey: "marketing.layout.footer.product.integrations", href: "/integrations" },
+      { labelKey: "marketing.layout.footer.product.pricing", href: "/pricing" },
+      { labelKey: "marketing.layout.footer.product.changelog", href: "/changelog" },
+      { labelKey: "marketing.layout.footer.product.roadmap", href: "/roadmap" },
     ],
   },
   {
-    heading: "Built For",
+    headingKey: "marketing.layout.footer.builtFor.heading",
     items: [
-      { label: "Tour Managers", href: "/teams/tour-managers" },
-      { label: "Production Managers", href: "/teams/production-managers" },
-      { label: "Stage Managers", href: "/teams/stage-managers" },
-      { label: "Festival Directors", href: "/teams/festival-directors" },
-      { label: "Site Managers", href: "/teams/site-managers" },
-      { label: "Tech Directors", href: "/teams/technical-directors" },
-      { label: "Talent Buyers", href: "/teams/talent-buyers" },
-      { label: "EHS Leads", href: "/teams/hse-leads" },
+      { labelKey: "marketing.layout.footer.builtFor.tourManagers", href: "/teams/tour-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.productionManagers", href: "/teams/production-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.stageManagers", href: "/teams/stage-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.festivalDirectors", href: "/teams/festival-directors" },
+      { labelKey: "marketing.layout.footer.builtFor.siteManagers", href: "/teams/site-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.techDirectors", href: "/teams/technical-directors" },
+      { labelKey: "marketing.layout.footer.builtFor.talentBuyers", href: "/teams/talent-buyers" },
+      { labelKey: "marketing.layout.footer.builtFor.ehsLeads", href: "/teams/hse-leads" },
     ],
   },
   {
-    heading: "Industries",
+    headingKey: "marketing.layout.footer.industries.heading",
     items: [
-      { label: "Live Events", href: "/solutions/live-events" },
-      { label: "Concerts", href: "/solutions/concerts" },
-      { label: "Festivals & Tours", href: "/solutions/festivals-tours" },
-      { label: "Immersive", href: "/solutions/immersive-experiences" },
-      { label: "Brand Activations", href: "/solutions/brand-activations" },
-      { label: "Corporate", href: "/solutions/corporate-events" },
-      { label: "Theatrical", href: "/solutions/theatrical-performances" },
-      { label: "Broadcast / TV / Film", href: "/solutions/broadcast-tv-film" },
+      { labelKey: "marketing.layout.footer.industries.liveEvents", href: "/solutions/live-events" },
+      { labelKey: "marketing.layout.footer.industries.concerts", href: "/solutions/concerts" },
+      { labelKey: "marketing.layout.footer.industries.festivalsTours", href: "/solutions/festivals-tours" },
+      { labelKey: "marketing.layout.footer.industries.immersive", href: "/solutions/immersive-experiences" },
+      { labelKey: "marketing.layout.footer.industries.brandActivations", href: "/solutions/brand-activations" },
+      { labelKey: "marketing.layout.footer.industries.corporate", href: "/solutions/corporate-events" },
+      { labelKey: "marketing.layout.footer.industries.theatrical", href: "/solutions/theatrical-performances" },
+      { labelKey: "marketing.layout.footer.industries.broadcast", href: "/solutions/broadcast-tv-film" },
     ],
   },
   {
-    heading: "Resources",
+    headingKey: "marketing.layout.footer.resources.heading",
     items: [
-      { label: "Docs", href: "/docs" },
-      { label: "Guides", href: "/guides" },
-      { label: "Glossary", href: "/glossary" },
-      { label: "Templates", href: "/templates" },
-      { label: "Tools", href: "/tools" },
-      { label: "Blog", href: "/blog" },
-      { label: "Community", href: "/community" },
-      { label: "Help", href: "/help" },
+      { labelKey: "marketing.layout.footer.resources.docs", href: "/docs" },
+      { labelKey: "marketing.layout.footer.resources.guides", href: "/guides" },
+      { labelKey: "marketing.layout.footer.resources.glossary", href: "/glossary" },
+      { labelKey: "marketing.layout.footer.resources.templates", href: "/templates" },
+      { labelKey: "marketing.layout.footer.resources.tools", href: "/tools" },
+      { labelKey: "marketing.layout.footer.resources.blog", href: "/blog" },
+      { labelKey: "marketing.layout.footer.resources.community", href: "/community" },
+      { labelKey: "marketing.layout.footer.resources.help", href: "/help" },
     ],
   },
   {
-    heading: "Compare",
+    headingKey: "marketing.layout.footer.compare.heading",
     items: [
-      { label: "vs Cvent", href: "/compare/cvent" },
-      { label: "vs Procore", href: "/compare/procore" },
-      { label: "vs Eventbrite", href: "/compare/eventbrite" },
-      { label: "vs Master Tour", href: "/compare/master-tour" },
-      { label: "vs Monday", href: "/compare/monday" },
-      { label: "vs Notion", href: "/compare/notion" },
-      { label: "vs Airtable", href: "/compare/airtable" },
-      { label: "vs Asana", href: "/compare/asana" },
-      { label: "vs DocuSign", href: "/compare/docusign" },
-      { label: "vs Salesforce", href: "/compare/salesforce" },
-      { label: "All alternatives", href: "/alternatives" },
+      { labelKey: "marketing.layout.footer.compare.cvent", href: "/compare/cvent" },
+      { labelKey: "marketing.layout.footer.compare.procore", href: "/compare/procore" },
+      { labelKey: "marketing.layout.footer.compare.eventbrite", href: "/compare/eventbrite" },
+      { labelKey: "marketing.layout.footer.compare.masterTour", href: "/compare/master-tour" },
+      { labelKey: "marketing.layout.footer.compare.monday", href: "/compare/monday" },
+      { labelKey: "marketing.layout.footer.compare.notion", href: "/compare/notion" },
+      { labelKey: "marketing.layout.footer.compare.airtable", href: "/compare/airtable" },
+      { labelKey: "marketing.layout.footer.compare.asana", href: "/compare/asana" },
+      { labelKey: "marketing.layout.footer.compare.docusign", href: "/compare/docusign" },
+      { labelKey: "marketing.layout.footer.compare.salesforce", href: "/compare/salesforce" },
+      { labelKey: "marketing.layout.footer.compare.allAlternatives", href: "/alternatives" },
     ],
   },
   {
-    heading: "Studio",
+    headingKey: "marketing.layout.footer.studio.heading",
     items: [
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "/contact" },
-      { label: "Careers", href: "/careers" },
-      { label: "Customers", href: "/customers" },
-      { label: "Press", href: "/press" },
-      { label: "Partners", href: "/partners" },
-      { label: "Status", href: "/status" },
+      { labelKey: "marketing.layout.footer.studio.about", href: "/about" },
+      { labelKey: "marketing.layout.footer.studio.contact", href: "/contact" },
+      { labelKey: "marketing.layout.footer.studio.careers", href: "/careers" },
+      { labelKey: "marketing.layout.footer.studio.customers", href: "/customers" },
+      { labelKey: "marketing.layout.footer.studio.press", href: "/press" },
+      { labelKey: "marketing.layout.footer.studio.partners", href: "/partners" },
+      { labelKey: "marketing.layout.footer.studio.status", href: "/status" },
     ],
   },
   {
-    heading: "Legal",
+    headingKey: "marketing.layout.footer.legal.heading",
     items: [
-      { label: "Terms", href: "/legal/terms" },
-      { label: "Privacy", href: "/legal/privacy" },
-      { label: "DPA", href: "/legal/dpa" },
-      { label: "SLA", href: "/legal/sla" },
+      { labelKey: "marketing.layout.footer.legal.terms", href: "/legal/terms" },
+      { labelKey: "marketing.layout.footer.legal.privacy", href: "/legal/privacy" },
+      { labelKey: "marketing.layout.footer.legal.dpa", href: "/legal/dpa" },
+      { labelKey: "marketing.layout.footer.legal.sla", href: "/legal/sla" },
     ],
   },
 ];
 
-export default function MarketingLayout({ children }: { children: React.ReactNode }) {
+export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
+  const { t } = await getRequestT();
   // Two-skin lock: the ATLVS marketing site uses the same neutral SaaS
   // skin as the console — visual consistency with the actual products
   // (Inter, soft elevation, neutral surfaces, per-product accent). The
@@ -116,13 +118,11 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               <Link
                 href="/"
                 className="text-base font-semibold tracking-[0.18em] whitespace-nowrap uppercase"
-                aria-label="ATLVS Technologies — home"
+                aria-label={t("marketing.layout.footer.brand.homeAriaLabel")}
               >
                 A T L V S
               </Link>
-              <p className="mt-3 text-xs text-[var(--text-muted)]">
-                The platform for production. Three apps, one schema.
-              </p>
+              <p className="mt-3 text-xs text-[var(--text-muted)]">{t("marketing.layout.footer.brand.tagline")}</p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
                 <a
                   href="https://twitter.com/atlvs.pro"
@@ -130,7 +130,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                   rel="noreferrer"
                   className="hover:text-[var(--text-primary)]"
                 >
-                  Twitter
+                  {t("marketing.layout.footer.social.twitter")}
                 </a>
                 <a
                   href="https://github.com/ghxstship"
@@ -138,18 +138,18 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
                   rel="noreferrer"
                   className="hover:text-[var(--text-primary)]"
                 >
-                  GitHub
+                  {t("marketing.layout.footer.social.github")}
                 </a>
               </div>
             </div>
             {FOOTER_NAV.map((col) => (
-              <div key={col.heading}>
-                <div className="eyebrow">{col.heading}</div>
+              <div key={col.headingKey}>
+                <div className="eyebrow">{t(col.headingKey)}</div>
                 <ul className="mt-4 space-y-2 text-sm">
                   {col.items.map((item) => (
                     <li key={item.href}>
                       <Link href={item.href} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
-                        {item.label}
+                        {t(item.labelKey)}
                       </Link>
                     </li>
                   ))}
@@ -159,13 +159,13 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           </div>
           <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span>© {new Date().getFullYear()} ATLVS Technologies</span>
-              <span>Production runs on it.</span>
+              <span>{t("marketing.layout.footer.copyright", { year: new Date().getFullYear() })}</span>
+              <span>{t("marketing.layout.footer.tagline")}</span>
             </div>
             <div className="mt-3 text-[11px] leading-relaxed">
-              ATLVS, GVTEWAY, and COMPVSS are registered trademarks of ATLVS Technologies, a{" "}
+              {t("marketing.layout.footer.trademarkPrefix")}{" "}
               <span className="font-medium tracking-[0.18em] text-[var(--text-secondary)]">G H X S T S H I P</span>{" "}
-              Industries company.
+              {t("marketing.layout.footer.trademarkSuffix")}
             </div>
           </div>
         </div>

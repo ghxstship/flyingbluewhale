@@ -7,84 +7,88 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "About — The Studio",
-  description:
-    "ATLVS Technologies builds the platform for production. ATLVS, GVTEWAY, COMPVSS — three apps, one schema. Shipped by operators who&apos;ve run the room.",
-  path: "/about",
-  keywords: [
-    "ATLVS Technologies about",
-    "ATLVS",
-    "GVTEWAY",
-    "COMPVSS",
-    "event production platform",
-    "production software company",
-  ],
-  ogImageEyebrow: "The Studio",
-  ogImageTitle: "Built by the People Who Run the Show.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.about.meta.title"),
+    description: t("marketing.pages.about.meta.description"),
+    path: "/about",
+    keywords: [
+      "ATLVS Technologies about",
+      "ATLVS",
+      "GVTEWAY",
+      "COMPVSS",
+      "event production platform",
+      "production software company",
+    ],
+    ogImageEyebrow: t("marketing.pages.about.meta.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.about.meta.ogImageTitle"),
+  });
+}
 
 const PRINCIPLES = [
   {
     icon: Layers,
-    title: "Three apps. One schema.",
-    body: "ATLVS, GVTEWAY, COMPVSS share identity, data, and design. One database underneath.",
+    titleKey: "marketing.pages.about.principles.threeApps.title",
+    bodyKey: "marketing.pages.about.principles.threeApps.body",
   },
   {
     icon: ShieldCheck,
-    title: "RLS at the database.",
-    body: "Tenant walled in Postgres, not in the UI. Immutable audit log on every change. Signed webhooks. Standard on every tier.",
+    titleKey: "marketing.pages.about.principles.rls.title",
+    bodyKey: "marketing.pages.about.principles.rls.body",
   },
   {
     icon: Rocket,
-    title: "Tested in the room.",
-    body: "We ship to a real production the weekend before each release. If it doesn&apos;t survive load-in, it doesn&apos;t ship.",
+    titleKey: "marketing.pages.about.principles.tested.title",
+    bodyKey: "marketing.pages.about.principles.tested.body",
   },
   {
     icon: Compass,
-    title: "Per org. Never per seat.",
-    body: "No per-seat trap. No per-scan tax. No velvet-rope gates on things that should be standard. Pricing reads like one number, not a tax form.",
+    titleKey: "marketing.pages.about.principles.perOrg.title",
+    bodyKey: "marketing.pages.about.principles.perOrg.body",
   },
 ];
 
 const MILESTONES = [
   {
     date: "2026 Q2",
-    title: "Procore parity",
-    body: "RFIs, submittals, daily logs, punch list, payment apps, change orders. Plus everything Procore won&apos;t touch.",
+    titleKey: "marketing.pages.about.milestones.procoreParity.title",
+    bodyKey: "marketing.pages.about.milestones.procoreParity.body",
   },
   {
     date: "2026 Q1",
-    title: "Three apps on one schema",
-    body: "ATLVS, GVTEWAY, COMPVSS shipped on one database — workspace, portal, field.",
+    titleKey: "marketing.pages.about.milestones.threeApps.title",
+    bodyKey: "marketing.pages.about.milestones.threeApps.body",
   },
   {
     date: "2025 Q4",
-    title: "KBYG event guides",
-    body: "One Know-Before-You-Go, authored once, rendered per-persona across portal and field.",
+    titleKey: "marketing.pages.about.milestones.kbyg.title",
+    bodyKey: "marketing.pages.about.milestones.kbyg.body",
   },
   {
     date: "2025 Q3",
-    title: "Proposals, signed in place",
-    body: "Twenty-three block types. Live pricing. E-sign in the page. One URL replaces the PDF email thread.",
+    titleKey: "marketing.pages.about.milestones.proposals.title",
+    bodyKey: "marketing.pages.about.milestones.proposals.body",
   },
   {
     date: "2025 Q2",
-    title: "Stripe Connect payouts + advancing",
-    body: "Vendor payouts via Connect. Sixteen typed deliverables with history, comments, attachments.",
+    titleKey: "marketing.pages.about.milestones.stripeConnect.title",
+    bodyKey: "marketing.pages.about.milestones.stripeConnect.body",
   },
   {
     date: "2025 Q1",
-    title: "First production shipped",
-    body: "Staffed and scanned a 2,000-cap show end-to-end on the platform. Stage went down. The platform didn&apos;t.",
+    titleKey: "marketing.pages.about.milestones.firstProduction.title",
+    bodyKey: "marketing.pages.about.milestones.firstProduction.body",
   },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
+    { label: t("marketing.pages.about.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.about.breadcrumbs.about"), href: "/about" },
   ];
 
   return (
@@ -93,46 +97,46 @@ export default function AboutPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">The Studio</div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          {t("marketing.pages.about.hero.eyebrow")}
+        </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
-          Built by the People Who Run the Show.
+          {t("marketing.pages.about.hero.title")}
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          ATLVS Technologies builds the platform for production. Every module came out of opening a spreadsheet for the
-          third time and saying &quot;why isn&apos;t this in the platform.&quot;
-        </p>
-        <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Three apps. One schema. Forty-seven modules. We ship to real productions the weekend before each release. The
-          work decides what stays in.
-        </p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.about.hero.lead")}</p>
+        <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">{t("marketing.pages.about.hero.subLead")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">How We Build.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t("marketing.pages.about.principles.heading")}
+        </h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {PRINCIPLES.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="surface p-6">
+          {PRINCIPLES.map(({ icon: Icon, titleKey, bodyKey }) => (
+            <div key={titleKey} className="surface p-6">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
                   <Icon size={18} />
                 </div>
-                <div className="text-sm font-semibold">{title}</div>
+                <div className="text-sm font-semibold">{t(titleKey)}</div>
               </div>
-              <p className="mt-3 text-sm text-[var(--text-secondary)]">{body}</p>
+              <p className="mt-3 text-sm text-[var(--text-secondary)]">{t(bodyKey)}</p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What Shipped, When.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t("marketing.pages.about.milestones.heading")}
+        </h2>
         <ul className="mt-8 space-y-6">
           {MILESTONES.map((m) => (
             <li key={m.date} className="surface grid gap-2 p-6 md:grid-cols-[140px_1fr] md:items-start md:gap-6">
               <div className="font-mono text-xs text-[var(--text-muted)]">{m.date}</div>
               <div>
-                <div className="text-sm font-semibold">{m.title}</div>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">{m.body}</p>
+                <div className="text-sm font-semibold">{t(m.titleKey)}</div>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">{t(m.bodyKey)}</p>
               </div>
             </li>
           ))}
@@ -141,19 +145,17 @@ export default function AboutPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-10">
-          <h2 className="text-3xl font-semibold tracking-tight">Who Builds It.</h2>
+          <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.about.studio.heading")}</h2>
           <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-            ATLVS is a production + technology studio. We&apos;ve staffed residencies, touring runs, private launches,
-            gallery programs, brand activations. We shipped software for every one of them. The platform is a decade of
-            in-the-field instinct, compressed into one workspace.
+            {t("marketing.pages.about.studio.body")}
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <Link className="underline underline-offset-4" href="/careers">
-              Join the studio
+              {t("marketing.pages.about.studio.joinLink")}
             </Link>
             <span className="text-[var(--text-muted)]">·</span>
             <Link className="underline underline-offset-4" href="/contact">
-              Talk to the studio
+              {t("marketing.pages.about.studio.talkLink")}
             </Link>
             <span className="text-[var(--text-muted)]">·</span>
             <a
@@ -162,18 +164,18 @@ export default function AboutPage() {
               target="_blank"
               rel="noreferrer"
             >
-              GitHub
+              {t("marketing.pages.about.studio.githubLink")}
             </a>
           </div>
         </div>
       </section>
 
       <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free forever for small teams. Per-org pricing the rest of the way up."
-        primaryLabel="Sign Up Free"
+        title={t("marketing.pages.about.cta.title")}
+        subtitle={t("marketing.pages.about.cta.subtitle")}
+        primaryLabel={t("marketing.pages.about.cta.primaryLabel")}
         primaryHref="/signup"
-        secondaryLabel="Book a Walkthrough"
+        secondaryLabel={t("marketing.pages.about.cta.secondaryLabel")}
         secondaryHref="/contact"
       />
     </div>

@@ -8,42 +8,47 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema, CANONICAL_CTAS } from "@/lib/seo";
 import { DEMO_PERSONAS } from "@/lib/marketing/demo-personas";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Book A Walkthrough — Wired To A Real Show",
-  description:
-    "Talk to the studio. Walk the platform on a real production. No sales-call calisthenics — operators talking to operators.",
-  path: "/demo",
-  keywords: [
-    "ATLVS demo",
-    "event production software demo",
-    "book a production software walkthrough",
-    "festival software demo",
-    "tour management software demo",
-  ],
-  ogImageEyebrow: "Demo",
-  ogImageTitle: "Walk The Platform.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.demo.metadata.title"),
+    description: t("marketing.pages.demo.metadata.description"),
+    path: "/demo",
+    keywords: [
+      "ATLVS demo",
+      "event production software demo",
+      "book a production software walkthrough",
+      "festival software demo",
+      "tour management software demo",
+    ],
+    ogImageEyebrow: t("marketing.pages.demo.metadata.ogImageEyebrow"),
+    ogImageTitle: t("marketing.pages.demo.metadata.ogImageTitle"),
+  });
+}
 
-const FAQS = [
-  {
-    q: "What happens on a walkthrough?",
-    a: "Forty minutes. We open the platform wired to a real production — the canonical one is MMW26 Hialeah. You ask what your show needs, we show you the wiring that runs it. No slide deck.",
-  },
-  {
-    q: "Is this a sales call?",
-    a: "No. It's a walkthrough. Sales conversations happen if you want them to — most teams open the free tier and start in the platform first.",
-  },
-  {
-    q: "Can I just try it without a call?",
-    a: "Yes. Sign up free — 30 seconds, no card. The walkthrough is for teams that want to see specific workflows wired to their use case.",
-  },
-];
+export default async function DemoIndex() {
+  const { t } = await getRequestT();
 
-export default function DemoIndex() {
+  const FAQS = [
+    {
+      q: t("marketing.pages.demo.faqs.walkthrough.q"),
+      a: t("marketing.pages.demo.faqs.walkthrough.a"),
+    },
+    {
+      q: t("marketing.pages.demo.faqs.salesCall.q"),
+      a: t("marketing.pages.demo.faqs.salesCall.a"),
+    },
+    {
+      q: t("marketing.pages.demo.faqs.tryWithoutCall.q"),
+      a: t("marketing.pages.demo.faqs.tryWithoutCall.a"),
+    },
+  ];
+
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Demo", href: "/demo" },
+    { label: t("marketing.pages.demo.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.demo.breadcrumbs.demo"), href: "/demo" },
   ];
 
   return (
@@ -52,12 +57,13 @@ export default function DemoIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Demo</div>
-        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">Walk The Platform.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          Forty minutes, wired to a real production. Pick the walkthrough that matches your work — or sign up free first
-          and bring questions later.
-        </p>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+          {t("marketing.pages.demo.hero.eyebrow")}
+        </div>
+        <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
+          {t("marketing.pages.demo.hero.title")}
+        </h1>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.demo.hero.subtitle")}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -67,9 +73,9 @@ export default function DemoIndex() {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight">Walkthroughs By Operation.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.demo.personas.title")}</h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-          Each variant tunes the walkthrough to your work. Same platform, different starting point.
+          {t("marketing.pages.demo.personas.subtitle")}
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {DEMO_PERSONAS.map((p) => (
@@ -80,19 +86,16 @@ export default function DemoIndex() {
               <h3 className="mt-2 text-xl font-semibold">{p.hero}</h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)]">{p.subhero}</p>
               <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
-                Book this walkthrough <ArrowRight size={12} />
+                {t("marketing.pages.demo.personas.cta")} <ArrowRight size={12} />
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      <FAQSection title="FAQ" faqs={FAQS} />
+      <FAQSection title={t("marketing.pages.demo.faqs.title")} faqs={FAQS} />
 
-      <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
-      />
+      <CTASection title={t("marketing.pages.demo.cta.title")} subtitle={t("marketing.pages.demo.cta.subtitle")} />
     </div>
   );
 }

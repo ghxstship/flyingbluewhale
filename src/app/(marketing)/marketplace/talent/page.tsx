@@ -5,14 +5,18 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { formatFeeRange } from "@/lib/marketplace";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Talent Directory — Artist EPKs",
-  description: "Discover and book talent for festivals, brand activations, private events.",
-  path: "/marketplace/talent",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.pages.marketplace.talent.meta.title"),
+    description: t("marketing.pages.marketplace.talent.meta.description"),
+    path: "/marketplace/talent",
+  });
+}
 
 type Row = {
   id: string;
@@ -32,6 +36,7 @@ type Row = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -49,21 +54,29 @@ export default async function Page() {
   return (
     <>
       <Breadcrumbs
-        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Talent" }]}
+        items={[
+          { label: t("marketing.pages.marketplace.talent.breadcrumbs.marketplace"), href: "/marketplace" },
+          { label: t("marketing.pages.marketplace.talent.breadcrumbs.talent") },
+        ]}
         className="mx-auto max-w-6xl px-6 pt-6"
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Talent</div>
-        <h1 className="hed-2xl mt-4">Talent Directory</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.talent.hero.eyebrow")}</div>
+        <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.talent.hero.title")}</h1>
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          {rows.length} act{rows.length === 1 ? "" : "s"}
+          {rows.length}{" "}
+          {rows.length === 1
+            ? t("marketing.pages.marketplace.talent.hero.actSingular")
+            : t("marketing.pages.marketplace.talent.hero.actPlural")}
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         {rows.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No published talent yet.</div>
+          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+            {t("marketing.pages.marketplace.talent.empty.message")}
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {rows.map((r) => (
@@ -75,8 +88,12 @@ export default async function Page() {
                 tags={r.genre_tags}
                 meta={[
                   formatFeeRange(r.fee_min_cents, r.fee_max_cents, r.currency),
-                  r.travel_radius_km ? `${r.travel_radius_km} km radius` : null,
-                  r.monthly_listeners ? `${r.monthly_listeners.toLocaleString()} mo listeners` : null,
+                  r.travel_radius_km
+                    ? `${r.travel_radius_km} ${t("marketing.pages.marketplace.talent.meta.kmRadius")}`
+                    : null,
+                  r.monthly_listeners
+                    ? `${r.monthly_listeners.toLocaleString()} ${t("marketing.pages.marketplace.talent.meta.monthlyListeners")}`
+                    : null,
                 ]}
                 rating={{ avg: r.rating_avg, count: r.rating_count }}
                 verified={r.is_verified}

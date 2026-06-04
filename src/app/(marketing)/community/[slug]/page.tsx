@@ -9,6 +9,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, articleSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 import { COMMUNITY, COMMUNITY_LIST } from "@/lib/community";
+import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
   return COMMUNITY_LIST.map((c) => ({ slug: c.slug }));
@@ -16,26 +17,33 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const c = COMMUNITY[slug];
-  if (!c) return buildMetadata({ title: "Case study", description: "", path: `/community/${slug}` });
+  if (!c)
+    return buildMetadata({
+      title: t("marketing.pages.community.detail.metadata.fallbackTitle"),
+      description: "",
+      path: `/community/${slug}`,
+    });
   return buildMetadata({
     title: `${c.name} — ${c.headline}`,
     description: c.blurb,
     path: `/community/${c.slug}`,
     keywords: c.keywords,
-    ogImageEyebrow: "Case study",
+    ogImageEyebrow: t("marketing.pages.community.detail.metadata.ogEyebrow"),
     ogImageTitle: c.name,
   });
 }
 
 export default async function CaseStudy({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const c = COMMUNITY[slug];
   if (!c) notFound();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Community", href: "/community" },
+    { label: t("marketing.pages.community.detail.breadcrumbs.home"), href: "/" },
+    { label: t("marketing.pages.community.detail.breadcrumbs.community"), href: "/community" },
     { label: c.name, href: `/community/${c.slug}` },
   ];
 
@@ -54,7 +62,9 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Case study · {c.industry}</div>
+        <div className="eyebrow eyebrow-brand">
+          {t("marketing.pages.community.detail.hero.eyebrow")} · {c.industry}
+        </div>
         <h1 className="hed-xl mt-4">{c.headline}</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
         <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{c.timeline}</div>
@@ -74,7 +84,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-8 md:grid-cols-3">
           <div className="surface p-6">
-            <div className="eyebrow">Challenge</div>
+            <div className="eyebrow">{t("marketing.pages.community.detail.sections.challenge")}</div>
             <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
               {c.challenge.map((x) => (
                 <li key={x}>· {x}</li>
@@ -82,7 +92,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             </ul>
           </div>
           <div className="surface p-6">
-            <div className="eyebrow">Solution</div>
+            <div className="eyebrow">{t("marketing.pages.community.detail.sections.solution")}</div>
             <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
               {c.solution.map((x) => (
                 <li key={x}>· {x}</li>
@@ -90,7 +100,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             </ul>
           </div>
           <div className="surface p-6">
-            <div className="eyebrow">Outcome</div>
+            <div className="eyebrow">{t("marketing.pages.community.detail.sections.outcome")}</div>
             <ul className="mt-4 space-y-3 text-sm">
               {c.outcome.map((x) => (
                 <li key={x} className="flex items-start gap-2">
@@ -113,7 +123,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-8">
-          <div className="eyebrow">Modules used</div>
+          <div className="eyebrow">{t("marketing.pages.community.detail.modules.label")}</div>
           <div className="mt-4 flex flex-wrap gap-2">
             {c.modules.map((m) => (
               <Badge key={m} variant="brand-soft">
@@ -126,9 +136,9 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
-          <h2 className="hed-lg">More From the Community</h2>
+          <h2 className="hed-lg">{t("marketing.pages.community.detail.more.title")}</h2>
           <Link href="/community" className="text-sm text-[var(--org-primary)]">
-            See all →
+            {t("marketing.pages.community.detail.more.seeAll")}
           </Link>
         </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -142,8 +152,8 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       </section>
 
       <CTASection
-        title="Ship Your Next Show on ATLVS Technologies"
-        subtitle="Free on the Access tier. 14-day trial of Professional."
+        title={t("marketing.pages.community.detail.cta.title")}
+        subtitle={t("marketing.pages.community.detail.cta.subtitle")}
       />
     </div>
   );

@@ -318,13 +318,12 @@ export function PlatformSidebar({
                 className="grid h-7 w-7 flex-none place-items-center rounded-[7px]"
                 style={{ background: "var(--p-accent, var(--org-primary))" }}
               >
-                <Image
-                  src="/brand/skull-bone.svg"
-                  alt=""
-                  width={18}
-                  height={18}
-                  className="[filter:brightness(0)_invert(1)]"
-                />
+                {/* Kit v3 swap: the ATLVS product mark is the 8-point
+                    Waypoint star (atlvs-mark-white.svg), not the GHXSTSHIP
+                    ghost-ship skull. The skull is the parent-company mark
+                    only and must not appear as the product icon. Per
+                    design_handoff/ATLVS_PRODUCT/README.md (v3). */}
+                <Image src="/brand/atlvs-mark-white.svg" alt="" width={18} height={18} />
               </span>
               <div className="min-w-0 leading-tight">
                 <div className="truncate text-sm font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--text-primary))]">

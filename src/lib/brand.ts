@@ -117,6 +117,14 @@ export const BRAND = {
        *  (ui_kits/atlvs/dashboard.html: "Production Management"). */
       subtitle: "Production Management",
       audience: "Producers · Internal",
+      /** Kit v3 logo asset paths. The product mark is the 8-point
+       *  Waypoint star; the GHXSTSHIP skull is parent-company only.
+       *  Use the white variant on accent tiles, the ink variant on
+       *  light grounds, and the per-product icon (white waypoint on
+       *  the accent tile, self-contained) where a colored chip works. */
+      iconWhite: "/brand/atlvs-mark-white.svg",
+      iconInk: "/brand/atlvs-mark.svg",
+      iconTile: "/brand/atlvs-icon-atlvs.svg",
     },
     portal: {
       name: "GVTEWAY",
@@ -124,6 +132,9 @@ export const BRAND = {
       color: "plasma",
       subtitle: "Tickets & Fans",
       audience: "Guests · Clients",
+      iconWhite: "/brand/atlvs-mark-white.svg",
+      iconInk: "/brand/atlvs-mark.svg",
+      iconTile: "/brand/atlvs-icon-gvteway.svg",
     },
     mobile: {
       name: "COMPVSS",
@@ -131,6 +142,9 @@ export const BRAND = {
       color: "brass",
       subtitle: "Workforce & Crew",
       audience: "Crew · Vendors · Talent",
+      iconWhite: "/brand/atlvs-mark-white.svg",
+      iconInk: "/brand/atlvs-mark.svg",
+      iconTile: "/brand/atlvs-icon-compvss.svg",
     },
   },
 } as const;

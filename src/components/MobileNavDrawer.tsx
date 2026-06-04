@@ -62,7 +62,23 @@ export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
         className="w-[85vw] max-w-[320px] overflow-y-auto bg-[var(--p-surface,var(--bg-secondary))] p-0 text-[var(--p-text-1,var(--text-primary))]"
       >
         <div className="flex items-center justify-between border-b border-[var(--p-border,var(--border-color))] px-4 py-3">
-          <div className="text-base font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--text-primary))]">ATLVS</div>
+          {/* Kit v3 brand header — accent-tile + waypoint mark + name,
+              mirroring ui_kits/atlvs/dashboard.html .brandrow. The
+              Waypoint star (atlvs-mark-white.svg) replaces the ghost-
+              ship skull on every product surface; the skull is parent-
+              company GHXSTSHIP only. */}
+          <div className="flex min-w-0 items-center gap-2">
+            <span
+              aria-hidden
+              className="grid h-7 w-7 flex-none place-items-center rounded-[7px] bg-[var(--p-accent,var(--org-primary))]"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/brand/atlvs-mark-white.svg" alt="" width={18} height={18} />
+            </span>
+            <div className="text-base font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--text-primary))]">
+              ATLVS
+            </div>
+          </div>
           <button
             type="button"
             onClick={() => setOpen(false)}

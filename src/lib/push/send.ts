@@ -263,7 +263,59 @@ async function recordNotifications(userIds: string[], payload: PushPayload): Pro
   }
 }
 
-async function sendOne(sub: PushSubRow, serialized: string): Promise<"sent" | "disabled" | "failed"> {
+/**
+ * P2 hardening — enqueue a failed push delivery into
+ * `public.push_send_failures` for replay. Exponential backoff:
+ *   attempt 1 → next try in 5s
+ *   attempt 2 → next try in 30s
+ *   attempt 3 → next try in 5min (final retry; row is GC'd after that)
+ *
+ * Fire-and-forget; an enqueue failure is logged but never blocks the
+ * originating push send.
+ */
+function nextBackoffMs(attempt: number): number {
+  if (attempt <= 1) return 5_000;
+  if (attempt === 2) return 30_000;
+  return 5 * 60_000;
+}
+
+async function enqueuePushRetry(
+  userId: string,
+  sub: PushSubRow,
+  payload: PushPayload,
+  status: number | undefined,
+  err: string,
+): Promise<void> {
+  try {
+    const svc = createServiceClient();
+    const nextAt = new Date(Date.now() + nextBackoffMs(1)).toISOString();
+    await (
+      svc.from as unknown as (table: string) => {
+        insert: (rows: Array<Record<string, unknown>>) => Promise<{ error: { message: string } | null }>;
+      }
+    )("push_send_failures").insert([
+      {
+        user_id: userId,
+        subscription_id: sub.id,
+        payload,
+        attempt: 1,
+        max_attempts: 3,
+        next_attempt_at: nextAt,
+        last_error: err.slice(0, 500),
+        last_status: status ?? null,
+      },
+    ]);
+  } catch (e) {
+    log.warn("push.enqueue_retry_exception", { err: (e as Error).message, sub: sub.id });
+  }
+}
+
+async function sendOne(
+  userId: string,
+  sub: PushSubRow,
+  payload: PushPayload,
+  serialized: string,
+): Promise<"sent" | "disabled" | "failed"> {
   try {
     await webpush.sendNotification(
       {
@@ -276,11 +328,18 @@ async function sendOne(sub: PushSubRow, serialized: string): Promise<"sent" | "d
     return "sent";
   } catch (err) {
     const status = (err as { statusCode?: number }).statusCode;
+    const msg = err instanceof Error ? err.message : String(err);
     if (status === 410 || status === 404) {
       await markDisabled(sub.id);
       return "disabled";
     }
     await bumpFailure(sub.id, sub.failure_count);
+    // P2: enqueue for retry on transient failures (429 / 5xx / network).
+    // 401/403 means something is wrong with the VAPID config — no point
+    // in retrying with the same keys. Fire-and-forget.
+    if (status !== 401 && status !== 403) {
+      void enqueuePushRetry(userId, sub, payload, status, msg);
+    }
     return "failed";
   }
 }
@@ -317,7 +376,7 @@ export async function sendPushTo(userId: string, payload: PushPayload): Promise<
   const subs = await fetchActiveSubs(userId);
   if (subs.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   const serialized = JSON.stringify(payload);
-  const results = await Promise.allSettled(subs.map((s) => sendOne(s, serialized)));
+  const results = await Promise.allSettled(subs.map((s) => sendOne(userId, s, payload, serialized)));
   let sent = 0;
   let failed = 0;
   let disabled = 0;
@@ -346,11 +405,18 @@ export async function sendPushBulk(userIds: string[], payload: PushPayload): Pro
   const allowed = userIds.filter((u) => !excluded.has(u));
   if (allowed.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   const byUser = await fetchActiveSubsBulk(allowed);
-  const subs: PushSubRow[] = [];
-  for (const list of byUser.values()) subs.push(...list);
-  if (subs.length === 0) return { sent: 0, failed: 0, disabled: 0 };
+  // Preserve userId per sub so the retry queue (P2) knows which user
+  // the failed payload belonged to. Pre-XPMS code flattened the map
+  // and lost that mapping.
+  const subsWithUser: Array<{ userId: string; sub: PushSubRow }> = [];
+  for (const [uid, list] of byUser.entries()) {
+    for (const sub of list) subsWithUser.push({ userId: uid, sub });
+  }
+  if (subsWithUser.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   const serialized = JSON.stringify(payload);
-  const results = await Promise.allSettled(subs.map((s) => sendOne(s, serialized)));
+  const results = await Promise.allSettled(
+    subsWithUser.map(({ userId: uid, sub }) => sendOne(uid, sub, payload, serialized)),
+  );
   let sent = 0;
   let failed = 0;
   let disabled = 0;

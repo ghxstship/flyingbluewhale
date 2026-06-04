@@ -65,7 +65,14 @@ export async function listOrgScoped<T extends TableName>(
     else if (f.op === "lte") q = q.lte(f.column, f.value);
   }
   if (opts.orderBy) q = q.order(opts.orderBy, { ascending: opts.ascending ?? false });
-  if (opts.limit) q = q.limit(opts.limit);
+  // P2 hardening — default limit of 100 if caller doesn't pass one.
+  // The audit found 155 .select("*") sites that shipped unbounded
+  // result sets; this is the centralized guard. Caller can pass
+  // `limit: 10_000` to opt into bulk export, but the silent-load-the-
+  // whole-table case is gone. Callers that genuinely want everything
+  // can pass `limit: 0` (interpreted as "no cap").
+  const effectiveLimit = opts.limit === 0 ? null : (opts.limit ?? 100);
+  if (effectiveLimit !== null) q = q.limit(effectiveLimit);
   const { data, error } = await q;
   if (error) throw error;
   return (data ?? []) as PublicTables[T]["Row"][];

@@ -33,9 +33,14 @@ export default async function BudgetsPage() {
         title={t("console.finance.budgets.title", undefined, "Budgets")}
         subtitle={t("console.finance.budgets.countSubtitle", { count: rows.length }, `${rows.length} Budgets`)}
         action={
-          <Button href="/console/finance/budgets/new">
-            {t("console.finance.budgets.newBudget", undefined, "+ New Budget")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/console/finance/budgets/summary" variant="secondary">
+              {t("console.finance.budgets.summaryAction", undefined, "Summary")}
+            </Button>
+            <Button href="/console/finance/budgets/new">
+              {t("console.finance.budgets.newBudget", undefined, "+ New Budget")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content">

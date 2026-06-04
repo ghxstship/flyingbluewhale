@@ -1,0 +1,267 @@
+/*
+ * /brand-kit/logo-kit page styles — port of ui_kits/atlvs/logo-kit.html
+ * (v4 GHXSTSHIP design handoff bundle, ATLVS_PRODUCT track).
+ *
+ * Paint flows through the --p-* SaaS namespace; the page wrapper carries
+ * data-theme="atlvs-product" so it overrides the parent (marketing)
+ * shell's cosmic skin and reads in the canonical neutral SaaS register.
+ */
+
+.lk-root {
+  background: var(--p-bg, #f7f8fa);
+  color: var(--p-text-1, #181b23);
+  font-family: var(--p-font, var(--font-inter, "Inter", system-ui, sans-serif));
+  min-height: 100svh;
+}
+
+.lk-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* head */
+.lk-head .lk-eb {
+  font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--p-text-3, #8c95a3);
+  margin: 0 0 10px;
+}
+.lk-head h1 {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--p-text-1, #181b23);
+  text-transform: none;
+}
+.lk-head p {
+  font-size: 15px;
+  color: var(--p-text-2, #5b6472);
+  margin: 10px 0 0;
+  max-width: 680px;
+  line-height: 1.55;
+}
+
+/* section heading — Space Mono caps, hairline-divider per canon */
+.lk-section {
+  margin-top: 40px;
+}
+.lk-section > h2 {
+  font-size: 12px;
+  font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--p-text-3, #8c95a3);
+  border-bottom: 1px solid var(--p-border, #e4e7ec);
+  padding-bottom: 12px;
+  margin: 0 0 22px;
+  font-weight: 600;
+}
+
+/* shared card */
+.lk-card {
+  background: var(--p-surface, #fff);
+  border: 1px solid var(--p-border, #e4e7ec);
+  border-radius: 12px;
+  box-shadow: var(--p-elev-1, 0 1px 2px rgba(16, 20, 30, 0.05));
+}
+.lk-card--pad {
+  padding: 28px;
+}
+
+.lk-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+/* primary lockup */
+.lk-lockup {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 28px;
+  flex: 1 1 320px;
+  min-width: 320px;
+}
+.lk-lockup img {
+  width: 64px;
+  height: 64px;
+}
+.lk-lockup--dark {
+  background: #111318;
+  border-color: #23262e;
+}
+.lk-lk {
+  display: flex;
+  flex-direction: column;
+}
+.lk-wm {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+}
+.lk-wm--lg {
+  font-size: 32px;
+}
+.lk-lockup .lk-wm {
+  color: var(--p-text-1, #181b23);
+}
+.lk-lockup--dark .lk-wm {
+  color: #f2f4f8;
+}
+.lk-sub {
+  font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-text-3, #8c95a3);
+  margin-top: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.lk-lockup--dark .lk-sub {
+  color: #6e7682;
+}
+
+/* icon cells */
+.lk-icons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.lk-iconcell {
+  text-align: center;
+}
+.lk-icon-tile {
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(16, 20, 30, 0.1);
+}
+.lk-cap {
+  font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--p-text-3, #8c95a3);
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
+/* size waterfall */
+.lk-sizes {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.lk-sizes img {
+  display: block;
+}
+
+/* clearspace demonstration */
+.lk-clearbox {
+  position: relative;
+  padding: 36px;
+  display: inline-block;
+  background: repeating-linear-gradient(45deg, #eef0f3 0 8px, transparent 8px 16px);
+  border-radius: 10px;
+}
+.lk-clearbox-inner {
+  background: var(--p-surface, #fff);
+  border: 1px dashed #ff2e88;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.lk-clearbox-inner img {
+  width: 54px;
+  height: 54px;
+}
+
+/* endorsement */
+.lk-endorse {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 26px;
+}
+.lk-endorse-div {
+  width: 1px;
+  height: 38px;
+  background: var(--p-border, #e4e7ec);
+}
+.lk-endorse-skull {
+  image-rendering: pixelated;
+}
+.lk-mono {
+  font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--p-text-3, #8c95a3);
+}
+.lk-endorse-cap {
+  line-height: 1.6;
+}
+
+/* do / don't */
+.lk-dd {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 720px) {
+  .lk-dd {
+    grid-template-columns: 1fr;
+  }
+}
+.lk-do,
+.lk-dont {
+  padding: 18px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--p-text-2, #5b6472);
+}
+.lk-do {
+  background: rgba(47, 169, 104, 0.08);
+  border: 1px solid rgba(47, 169, 104, 0.3);
+}
+.lk-dont {
+  background: rgba(229, 72, 77, 0.07);
+  border: 1px solid rgba(229, 72, 77, 0.3);
+}
+.lk-do b {
+  color: #1f8a55;
+}
+.lk-dont b {
+  color: #c2333a;
+}
+.lk-do ul,
+.lk-dont ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+/* footer link back to brand kit */
+.lk-foot {
+  margin-top: 48px;
+  text-align: center;
+}
+.lk-link {
+  font-family: var(--p-mono, var(--font-space-mono, ui-monospace, monospace));
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--p-accent-text, #d11668);
+  text-decoration: none;
+}
+.lk-link:hover {
+  filter: brightness(0.9);
+}

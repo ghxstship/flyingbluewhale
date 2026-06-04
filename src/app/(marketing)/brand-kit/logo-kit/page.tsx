@@ -1,0 +1,211 @@
+/**
+ * /brand-kit/logo-kit — ATLVS Technologies logo reference page.
+ *
+ * Port of project/ui_kits/atlvs/logo-kit.html from the v4 GHXSTSHIP
+ * design handoff bundle. Documents the ATLVS Waypoint mark (8-point
+ * navigational star) as the canonical product mark, distinct from the
+ * cosmic GHXSTSHIP ghost-ship skull (parent-company mark only).
+ *
+ * Renders the primary lockup (light + dark), per-product app-icons
+ * (atlvs/compvss/gvteway/ink), favicon size waterfall, clearspace
+ * rule, endorsement lockup, and the Do/Don't grid — all per
+ * ui_kits/atlvs/logo-kit.html.
+ *
+ * This page paints in the ATLVS Technologies SaaS register (neutral
+ * canvas, Inter type) — it documents the ATLVS product mark, not the
+ * GHXSTSHIP cosmic brand. The data-theme override pins the SaaS skin
+ * regardless of the visitor's cookie pref on the rest of the (marketing)
+ * shell.
+ */
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import "./logo-kit.css";
+
+export const metadata: Metadata = {
+  title: "ATLVS Logo Kit · The Waypoint",
+  description:
+    "The ATLVS mark is the Waypoint — an 8-point navigational star with a centered void. Primary lockup, per-product app-icons, clearspace, endorsement, do/don't.",
+  alternates: { canonical: "/brand-kit/logo-kit" },
+};
+
+type ProductIcon = {
+  slug: "atlvs" | "compvss" | "gvteway" | "ink";
+  src: string;
+  label: string;
+  caption: string;
+};
+
+const PRODUCT_ICONS: ProductIcon[] = [
+  { slug: "atlvs", src: "/brand/atlvs-icon-atlvs.svg", label: "ATLVS · pink", caption: "Producer / Internal" },
+  {
+    slug: "compvss",
+    src: "/brand/atlvs-icon-compvss.svg",
+    label: "COMPVSS · amber",
+    caption: "Crew / Vendor / Talent",
+  },
+  { slug: "gvteway", src: "/brand/atlvs-icon-gvteway.svg", label: "GVTEWAY · cyan", caption: "Guest / Client" },
+  { slug: "ink", src: "/brand/atlvs-icon-ink.svg", label: "Ink", caption: "Neutral / Suite" },
+];
+
+const SIZES: Array<{ px: number; label: string; useTile: boolean }> = [
+  { px: 64, label: "64", useTile: true },
+  { px: 48, label: "48", useTile: true },
+  { px: 32, label: "32", useTile: true },
+  { px: 16, label: "16 · bare mark", useTile: false },
+];
+
+// Wordmark sub-letters — rendered between the primary lockup's mark and
+// the spaced "TECHNOLOGIES" tag underneath. Each letter is its own span
+// so the row justifies edge-to-edge under the wordmark, matching the
+// reference's typographic affordance.
+const TECHNOLOGIES = "TECHNOLOGIES".split("");
+
+export default function LogoKitPage() {
+  return (
+    <div className="lk-root" data-theme="atlvs-product">
+      <div className="lk-wrap">
+        <header className="lk-head">
+          <p className="lk-eb">ATLVS Technologies · Brand</p>
+          <h1>The Logo Kit</h1>
+          <p>
+            The ATLVS mark is a <b>waypoint</b> — an eight-point navigational star with a center void, the navigation
+            system rendered as one geometric glyph. Neutral SaaS register; recolors per product. Distinct from the
+            cosmic GHXSTSHIP ghost-ship skull (the parent-company mark).
+          </p>
+        </header>
+
+        <section className="lk-section">
+          <h2>Primary Lockup</h2>
+          <div className="lk-row">
+            <PrimaryLockup variant="light" />
+            <PrimaryLockup variant="dark" />
+          </div>
+        </section>
+
+        <section className="lk-section">
+          <h2>Product app-icons — one mark, three accents</h2>
+          <div className="lk-card lk-card--pad">
+            <div className="lk-icons">
+              {PRODUCT_ICONS.map((icon) => (
+                <div key={icon.slug} className="lk-iconcell">
+                  <Image src={icon.src} alt={`${icon.label} icon`} width={88} height={88} className="lk-icon-tile" />
+                  <div className="lk-cap">
+                    {icon.label}
+                    <br />
+                    {icon.caption}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="lk-section">
+          <h2>Favicon / Min-size — the mark holds at every scale</h2>
+          <div className="lk-card lk-card--pad">
+            <div className="lk-sizes">
+              {SIZES.map((s) => (
+                <div key={s.label} className="lk-iconcell">
+                  <Image
+                    src={s.useTile ? "/brand/atlvs-icon-atlvs.svg" : "/brand/atlvs-mark.svg"}
+                    alt=""
+                    width={s.px}
+                    height={s.px}
+                    style={{
+                      borderRadius: s.useTile ? `${Math.round((s.px / 128) * 28)}px` : undefined,
+                    }}
+                  />
+                  <div className="lk-cap">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="lk-section">
+          <h2>Clearspace — keep margin = ½ mark height on all sides</h2>
+          <div className="lk-clearbox">
+            <div className="lk-clearbox-inner">
+              <Image src="/brand/atlvs-mark.svg" alt="" width={54} height={54} />
+              <div className="lk-wm" style={{ fontSize: 22 }}>
+                A T L V S
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="lk-section">
+          <h2>Endorsement — ATLVS + GHXSTSHIP parent</h2>
+          <div className="lk-card lk-endorse">
+            <Image src="/brand/atlvs-mark.svg" alt="" width={44} height={44} />
+            <div className="lk-wm" style={{ fontSize: 22 }}>
+              A T L V S
+            </div>
+            <div className="lk-endorse-div" />
+            <Image src="/brand/logo-ghostship-skull.svg" alt="" width={30} height={30} className="lk-endorse-skull" />
+            <div className="lk-mono lk-endorse-cap">
+              a G H X S T S H I P
+              <br />
+              Industries company
+            </div>
+          </div>
+        </section>
+
+        <section className="lk-section">
+          <h2>Do · Don&apos;t</h2>
+          <div className="lk-dd">
+            <div className="lk-do">
+              <b>Do</b>
+              <ul>
+                <li>Recolor the tile to the product accent; keep the mark white (or ink on light).</li>
+                <li>Maintain clearspace = ½ mark height.</li>
+                <li>Use the bare mark at ≤16px; the tiled icon at ≥32px.</li>
+                <li>
+                  Pair with the spaced <b>A&nbsp;T&nbsp;L&nbsp;V&nbsp;S</b> wordmark, nowrap.
+                </li>
+              </ul>
+            </div>
+            <div className="lk-dont">
+              <b>Don&apos;t</b>
+              <ul>
+                <li>Recolor or gradient the star itself — only the tile carries color.</li>
+                <li>Rotate, stretch, or add the cosmic halftone/skull to it.</li>
+                <li>Set the wordmark unspaced or lowercase.</li>
+                <li>Place the mark on a busy photo without the solid tile.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <p className="lk-foot">
+          <Link href="/brand-kit" className="lk-link">
+            ← Back to the brand kit
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function PrimaryLockup({ variant }: { variant: "light" | "dark" }) {
+  const isDark = variant === "dark";
+  return (
+    <div className={`lk-card lk-lockup${isDark ? "lk-lockup--dark" : ""}`}>
+      <Image
+        src={isDark ? "/brand/atlvs-mark-white.svg" : "/brand/atlvs-mark.svg"}
+        alt="ATLVS mark"
+        width={64}
+        height={64}
+      />
+      <div className="lk-lk">
+        <div className="lk-wm lk-wm--lg">A T L V S</div>
+        <div className="lk-sub">
+          {TECHNOLOGIES.map((letter, i) => (
+            <span key={`${letter}-${i}`}>{letter}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

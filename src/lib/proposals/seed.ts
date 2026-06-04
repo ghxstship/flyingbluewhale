@@ -163,11 +163,31 @@ export async function seedFromBlocks(input: SeedFromBlocksInput): Promise<SeedFr
     (b): b is Extract<ProposalBlock, { type: "investment_table" }> => b.type === "investment_table",
   );
 
+  // XPMS classes (migration 0070). When the proposal's category text
+  // matches one of these (case-insensitive), the seed populates the
+  // typed `department` enum so the row participates in XPMS rollups
+  // from day one. Otherwise department stays null and operators can
+  // backfill via the edit form.
+  const XPMS_DEPARTMENTS = new Set([
+    "executive",
+    "creative",
+    "talent",
+    "marketing",
+    "build",
+    "production",
+    "operations",
+    "experience",
+    "hospitality",
+    "technology",
+  ]);
+
   type BudgetInsert = {
     org_id: string;
     project_id: string;
     name: string;
     category: string;
+    department: string | null;
+    line_type: "Scope" | "Fee" | "Contingency" | "Allowance" | "Markup";
     amount_cents: number;
   };
   const budgetRows: BudgetInsert[] = [];
@@ -185,11 +205,18 @@ export async function seedFromBlocks(input: SeedFromBlocksInput): Promise<SeedFr
       const key = `${category}::${group.label}`;
       if (seenBudgetKeys.has(key)) continue;
       seenBudgetKeys.add(key);
+      // Map category → XPMS department when the text matches an XPMS
+      // class. The original casing of the canonical label is
+      // preserved on the way in (the enum column requires exact case).
+      const norm = category.toLowerCase();
+      const department = XPMS_DEPARTMENTS.has(norm) ? norm.charAt(0).toUpperCase() + norm.slice(1) : null;
       budgetRows.push({
         org_id: orgId,
         project_id: projectId,
         name: group.label,
         category,
+        department,
+        line_type: "Scope",
         amount_cents: groupTotalCents,
       });
     }

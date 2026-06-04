@@ -16,7 +16,9 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("expenses")
-    .select("id, description, amount_cents, currency, category, status, spent_at, receipt_path, project_id")
+    .select(
+      "id, description, amount_cents, currency, category, status, spent_at, receipt_path, project_id, department, discipline, xpms_phase, item, vendor",
+    )
     .eq("org_id", session.orgId)
     .eq("id", expenseId)
     .maybeSingle();
@@ -25,9 +27,14 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
       row={row}
       eyebrow={t("console.finance.expenses.detail.eyebrow", undefined, "Finance")}
       title={(r) => r.description}
-      subtitle={(r) =>
-        `${money(r.amount_cents)} · ${r.category ?? t("console.finance.expenses.detail.uncategorized", undefined, "uncategorized")}`
-      }
+      subtitle={(r) => {
+        // Prefer XPMS department; fall back to legacy category text.
+        const dept =
+          (r as unknown as { department?: string | null }).department ??
+          r.category ??
+          t("console.finance.expenses.detail.uncategorized", undefined, "uncategorized");
+        return `${money(r.amount_cents)} · ${dept}`;
+      }}
       breadcrumbs={[
         { label: t("console.finance.breadcrumb", undefined, "Finance"), href: "/console/finance" },
         { label: t("console.finance.expenses.breadcrumb", undefined, "Expenses"), href: "/console/finance/expenses" },
@@ -49,8 +56,24 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
                 value: row.currency,
               },
               {
-                label: t("console.finance.expenses.detail.fields.category", undefined, "Category"),
-                value: row.category ?? "—",
+                label: t("console.finance.expenses.detail.fields.department", undefined, "Department"),
+                value: (row as { department?: string | null }).department ?? row.category ?? "—",
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.discipline", undefined, "Discipline"),
+                value: (row as { discipline?: string | null }).discipline ?? "—",
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.phase", undefined, "Phase"),
+                value: (row as { xpms_phase?: string | null }).xpms_phase ?? "—",
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.item", undefined, "Item"),
+                value: (row as { item?: string | null }).item ?? "—",
+              },
+              {
+                label: t("console.finance.expenses.detail.fields.vendor", undefined, "Vendor"),
+                value: (row as { vendor?: string | null }).vendor ?? "—",
               },
               {
                 label: t("console.finance.expenses.detail.fields.spentOn", undefined, "Spent On"),

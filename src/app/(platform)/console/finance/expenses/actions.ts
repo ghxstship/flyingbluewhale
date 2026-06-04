@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
+import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
@@ -19,6 +20,13 @@ const Schema = z.object({
   project_id: z.string().uuid().optional().or(z.literal("")),
   notes: z.string().max(2000).optional(),
   atom_id: z.string().uuid().optional().or(z.literal("")),
+  // XPMS taxonomy (migration 0071). Optional; line_type for expenses
+  // is implicit (always Scope — Fee/Contingency live on budgets only).
+  department: z.enum(XPMS_DEPARTMENTS).optional().or(z.literal("")),
+  discipline: z.enum(XPMS_DISCIPLINES).optional().or(z.literal("")),
+  xpms_phase: z.enum(XPMS_PHASES).optional().or(z.literal("")),
+  item: z.string().max(120).optional().or(z.literal("")),
+  vendor: z.string().max(160).optional().or(z.literal("")),
 });
 
 export type State = { error?: string } | null;
@@ -65,6 +73,11 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
     spent_at: parsed.data.spent_at,
     project_id: parsed.data.project_id || null,
     atom_id: atomId,
+    department: parsed.data.department || null,
+    discipline: parsed.data.discipline || null,
+    xpms_phase: parsed.data.xpms_phase || null,
+    item: parsed.data.item || null,
+    vendor: parsed.data.vendor || null,
   });
   if (error) return { error: error.message };
   revalidatePath("/console/finance/expenses");

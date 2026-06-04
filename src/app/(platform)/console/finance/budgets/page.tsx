@@ -58,20 +58,31 @@ export default async function BudgetsPage() {
               accessor: (r) => r.name,
             },
             {
-              key: "category",
-              header: t("console.finance.budgets.col.category", undefined, "Category"),
-              render: (r) => r.category ?? "—",
+              // XPMS department (typed enum) is the canonical taxonomy
+              // column. Fall back to the legacy free-text `category`
+              // for rows that haven't been migrated yet.
+              key: "department",
+              header: t("console.finance.budgets.col.department", undefined, "Department"),
+              render: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? "—",
               className: "font-mono text-xs",
-              accessor: (r) => r.category ?? null,
+              accessor: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? null,
               filterable: true,
               groupable: true,
             },
             {
-              key: "spent",
-              header: t("console.finance.budgets.col.spent", undefined, "Spent"),
-              render: (r) => formatMoney(r.spent_cents),
+              // Reads actual_cents (XPMS) with spent_cents as the
+              // pre-XPMS fallback. Migration 0073's trigger keeps them
+              // in sync but the coalesce is defensive for rows that
+              // landed before that trigger fired.
+              key: "actual",
+              header: t("console.finance.budgets.col.actual", undefined, "Actual"),
+              render: (r) => {
+                const v = (r as unknown as { actual_cents?: number | null }).actual_cents ?? r.spent_cents;
+                return formatMoney(v);
+              },
               className: "font-mono text-xs",
-              accessor: (r) => Number(r.spent_cents ?? 0),
+              accessor: (r) =>
+                Number((r as unknown as { actual_cents?: number | null }).actual_cents ?? r.spent_cents ?? 0),
             },
             {
               key: "amount",
@@ -84,10 +95,16 @@ export default async function BudgetsPage() {
               key: "util",
               header: t("console.finance.budgets.col.utilization", undefined, "Utilization"),
               render: (r) => {
-                const pct = r.amount_cents > 0 ? (r.spent_cents / r.amount_cents) * 100 : 0;
+                const actual = (r as unknown as { actual_cents?: number | null }).actual_cents ?? r.spent_cents ?? 0;
+                const pct = r.amount_cents > 0 ? (Number(actual) / r.amount_cents) * 100 : 0;
                 return <ProgressBar value={pct} showLabel />;
               },
-              accessor: (r) => (Number(r.spent_cents ?? 0) / Math.max(1, Number(r.amount_cents ?? 1))) * 100,
+              accessor: (r) => {
+                const actual = Number(
+                  (r as unknown as { actual_cents?: number | null }).actual_cents ?? r.spent_cents ?? 0,
+                );
+                return (actual / Math.max(1, Number(r.amount_cents ?? 1))) * 100;
+              },
             },
           ]}
         />

@@ -6,6 +6,25 @@ import { Input } from "@/components/ui/Input";
 import { AtomPicker } from "@/components/xpms/AtomPicker";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createExpenseAction } from "../actions";
+import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
+
+const SELECT_CLASS = "w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm";
+
+function XpmsSelect({ label, name, options }: { label: string; name: string; options: readonly string[] }) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">{label}</span>
+      <select name={name} className={SELECT_CLASS} defaultValue="">
+        <option value="">—</option>
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
 
 export type ExpenseAtomOption = {
   id: string;
@@ -54,11 +73,33 @@ export function NewExpenseForm({
           defaultValue={new Date().toISOString().slice(0, 10)}
         />
       </div>
-      <Input
-        label={t("console.finance.expenses.new.category", undefined, "Category")}
-        name="category"
-        placeholder={t("console.finance.expenses.new.categoryPlaceholder", undefined, "Travel, meals, equipment…")}
-      />
+      {/* XPMS taxonomy — typed enums first, free-text category last
+          for legacy compatibility. The expenses-rollup trigger keys
+          off department + project_id to write into budgets.actual_cents. */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <XpmsSelect
+          label={t("console.finance.expenses.new.department", undefined, "Department (XPMS)")}
+          name="department"
+          options={XPMS_DEPARTMENTS}
+        />
+        <XpmsSelect
+          label={t("console.finance.expenses.new.discipline", undefined, "Discipline")}
+          name="discipline"
+          options={XPMS_DISCIPLINES}
+        />
+        <XpmsSelect
+          label={t("console.finance.expenses.new.phase", undefined, "Phase (8-Gate)")}
+          name="xpms_phase"
+          options={XPMS_PHASES}
+        />
+        <Input label={t("console.finance.expenses.new.item", undefined, "Item")} name="item" maxLength={120} />
+        <Input label={t("console.finance.expenses.new.vendor", undefined, "Vendor")} name="vendor" maxLength={160} />
+        <Input
+          label={t("console.finance.expenses.new.category", undefined, "Category (legacy)")}
+          name="category"
+          placeholder={t("console.finance.expenses.new.categoryPlaceholder", undefined, "Travel, meals, equipment…")}
+        />
+      </div>
       {projects.length > 0 && (
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">

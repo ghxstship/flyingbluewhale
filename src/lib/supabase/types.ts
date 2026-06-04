@@ -354,6 +354,22 @@ export type Expense = {
   spent_at: string;
   created_at: string;
   updated_at: string;
+  // XPMS Universal Budget Template v08 taxonomy (migration 0071).
+  department: string | null;
+  class: string | null;
+  item: string | null;
+  discipline: string | null;
+  xpms_phase: string | null;
+  vendor: string | null;
+  expense_type: string | null;
+  method_of_payment: string | null;
+  invoice: string | null;
+  due_date: string | null;
+  payment_date: string | null;
+  confirmation: string | null;
+  flag: boolean;
+  external_notes: string | null;
+  internal_notes: string | null;
 };
 export type Budget = {
   id: string;
@@ -365,6 +381,34 @@ export type Budget = {
   spent_cents: number;
   created_at: string;
   updated_at: string;
+  // XPMS Universal Budget Template v08 taxonomy (migration 0070).
+  event: string | null;
+  location: string | null;
+  activation: string | null;
+  department: string | null;
+  team: string | null;
+  class: string | null;
+  item: string | null;
+  discipline: string | null;
+  xpms_phase: string | null;
+  tier: string | null;
+  xyz: string | null;
+  line_type: string;
+  quantity: number | null;
+  rate_cents: number | null;
+  estimate_cents: number | null;
+  actual_cents: number | null;
+  vendor: string | null;
+  budget_status: string | null;
+  flag: boolean;
+  external_notes: string | null;
+  internal_notes: string | null;
+  forecast_cents: number;
+  committed_cents: number;
+  eac_cents: number;
+  code: string | null;
+  notes: string | null;
+  xtc_code: number | null;
 };
 export type TimeEntry = {
   id: string;

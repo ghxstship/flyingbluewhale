@@ -7,6 +7,35 @@ import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { updateExpense, type State } from "./actions";
+import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
+
+const SELECT_CLASS = "input-base focus-ring w-full";
+
+function XpmsSelect({
+  label,
+  name,
+  options,
+  defaultValue,
+}: {
+  label: string;
+  name: string;
+  options: readonly string[];
+  defaultValue?: string;
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-xs font-medium text-[var(--text-secondary)]">{label}</span>
+      <select name={name} defaultValue={defaultValue ?? ""} className={SELECT_CLASS}>
+        <option value="">—</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
 
 export const dynamic = "force-dynamic";
 
@@ -57,12 +86,47 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
             required
             maxLength={3}
           />
-          <Input
-            label={t("console.finance.expenses.edit.categoryLabel", undefined, "Category")}
-            name="category"
-            defaultValue={row.category ?? ""}
-            maxLength={120}
-          />
+          {/* XPMS taxonomy parity with the create form. The expenses-
+              rollup trigger keys off department + project_id to write
+              into budgets.actual_cents. */}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <XpmsSelect
+              label={t("console.finance.expenses.edit.departmentLabel", undefined, "Department (XPMS)")}
+              name="department"
+              options={XPMS_DEPARTMENTS}
+              defaultValue={(row as { department?: string | null }).department ?? ""}
+            />
+            <XpmsSelect
+              label={t("console.finance.expenses.edit.disciplineLabel", undefined, "Discipline")}
+              name="discipline"
+              options={XPMS_DISCIPLINES}
+              defaultValue={(row as { discipline?: string | null }).discipline ?? ""}
+            />
+            <XpmsSelect
+              label={t("console.finance.expenses.edit.phaseLabel", undefined, "Phase (8-Gate)")}
+              name="xpms_phase"
+              options={XPMS_PHASES}
+              defaultValue={(row as { xpms_phase?: string | null }).xpms_phase ?? ""}
+            />
+            <Input
+              label={t("console.finance.expenses.edit.itemLabel", undefined, "Item")}
+              name="item"
+              defaultValue={(row as { item?: string | null }).item ?? ""}
+              maxLength={120}
+            />
+            <Input
+              label={t("console.finance.expenses.edit.vendorLabel", undefined, "Vendor")}
+              name="vendor"
+              defaultValue={(row as { vendor?: string | null }).vendor ?? ""}
+              maxLength={160}
+            />
+            <Input
+              label={t("console.finance.expenses.edit.categoryLabel", undefined, "Category (legacy)")}
+              name="category"
+              defaultValue={row.category ?? ""}
+              maxLength={120}
+            />
+          </div>
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">
               {t("console.finance.expenses.edit.statusLabel", undefined, "Status")}

@@ -5,9 +5,14 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
- * Reconcile a budget by recomputing `spent_cents` from real expenses +
- * paid invoices that share the same project_id (and category, when
- * present). Persists the result so dashboards/list views stay accurate.
+ * Reconcile a budget by recomputing actual spend from real expenses +
+ * paid invoices. Persists into BOTH `actual_cents` (XPMS canonical) and
+ * `spent_cents` (legacy mirror) so the XPMS Summary rollups and the
+ * pre-XPMS dashboards see the same value.
+ *
+ * Prefers the XPMS `department` enum when filtering expenses; falls
+ * back to legacy `category` text for budget rows that haven't been
+ * migrated to the new taxonomy yet.
  *
  * Read-time also computes this — but persisting once on reconcile means
  * the list view doesn't have to re-aggregate on every render.
@@ -19,7 +24,7 @@ export async function reconcileBudget(formData: FormData) {
   const supabase = await createClient();
   const { data: budget } = await supabase
     .from("budgets")
-    .select("id, project_id, category, amount_cents")
+    .select("id, project_id, category, department, amount_cents")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
@@ -27,21 +32,36 @@ export async function reconcileBudget(formData: FormData) {
   const computed = await computeBudgetSpend(supabase, {
     orgId: session.orgId,
     projectId: budget.project_id,
+    department: (budget as { department?: string | null }).department ?? null,
     category: budget.category,
   });
-  await supabase.from("budgets").update({ spent_cents: computed }).eq("id", id).eq("org_id", session.orgId);
+  // Dual-write so both XPMS readers (actual_cents) and legacy readers
+  // (spent_cents) see the reconciliation result. The expenses trigger
+  // keeps them in sync automatically on regular writes; this manual
+  // path repeats the contract.
+  await supabase
+    .from("budgets")
+    .update({ spent_cents: computed, actual_cents: computed })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
   revalidatePath("/console/finance/budgets");
   revalidatePath(`/console/finance/budgets/${id}`);
 }
 
 export async function computeBudgetSpend(
   supabase: Awaited<ReturnType<typeof createClient>>,
-  args: { orgId: string; projectId: string | null; category: string | null },
+  args: { orgId: string; projectId: string | null; department: string | null; category: string | null },
 ): Promise<number> {
   // Expenses (any status — operators reconcile on actuals, not approvals).
   let q = supabase.from("expenses").select("amount_cents").eq("org_id", args.orgId);
   if (args.projectId) q = q.eq("project_id", args.projectId);
-  if (args.category) q = q.eq("category", args.category);
+  // Prefer the XPMS department enum; fall back to legacy category text
+  // for budget rows that haven't been migrated to the new taxonomy.
+  if (args.department) {
+    q = q.eq("department", args.department);
+  } else if (args.category) {
+    q = q.eq("category", args.category);
+  }
   const { data: expenses } = await q;
   const expensesTotal = (expenses ?? []).reduce((s, r) => s + (r.amount_cents ?? 0), 0);
 

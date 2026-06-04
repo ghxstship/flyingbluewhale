@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
+import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
@@ -14,6 +15,12 @@ const Schema = z.object({
   category: z.string().max(120).optional().or(z.literal("")),
   status: z.string(),
   spent_at: z.string().min(1),
+  // XPMS taxonomy parity with the create action
+  department: z.enum(XPMS_DEPARTMENTS).optional().or(z.literal("")),
+  discipline: z.enum(XPMS_DISCIPLINES).optional().or(z.literal("")),
+  xpms_phase: z.enum(XPMS_PHASES).optional().or(z.literal("")),
+  item: z.string().max(120).optional().or(z.literal("")),
+  vendor: z.string().max(160).optional().or(z.literal("")),
 });
 
 export type State = { error?: string } | null;
@@ -31,6 +38,11 @@ export async function updateExpense(id: string, _: State, fd: FormData): Promise
     category: parsed.data.category || null,
     status: parsed.data.status as "pending" | "approved" | "rejected" | "reimbursed",
     spent_at: parsed.data.spent_at,
+    department: parsed.data.department || null,
+    discipline: parsed.data.discipline || null,
+    xpms_phase: parsed.data.xpms_phase || null,
+    item: parsed.data.item || null,
+    vendor: parsed.data.vendor || null,
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Expense not found." };

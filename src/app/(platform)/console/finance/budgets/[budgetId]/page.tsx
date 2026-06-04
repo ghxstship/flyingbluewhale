@@ -19,7 +19,9 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
   const supabase = await createClient();
   const { data: budget } = await supabase
     .from("budgets")
-    .select("id, name, amount_cents, spent_cents, category, project_id, created_at")
+    .select(
+      "id, name, amount_cents, spent_cents, actual_cents, forecast_cents, category, department, discipline, xpms_phase, tier, xyz, line_type, vendor, project_id, created_at",
+    )
     .eq("org_id", session.orgId)
     .eq("id", budgetId)
     .maybeSingle();
@@ -40,18 +42,26 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
     );
   }
 
+  const xpmsDepartment = (budget as { department?: string | null }).department ?? null;
   const recomputed = await computeBudgetSpend(supabase, {
     orgId: session.orgId,
     projectId: budget.project_id,
+    department: xpmsDepartment,
     category: budget.category,
   });
 
   let expensesQ = supabase
     .from("expenses")
-    .select("id, description, amount_cents, spent_at, category")
+    .select("id, description, amount_cents, spent_at, category, department")
     .eq("org_id", session.orgId);
   if (budget.project_id) expensesQ = expensesQ.eq("project_id", budget.project_id);
-  if (budget.category) expensesQ = expensesQ.eq("category", budget.category);
+  // Prefer XPMS department filter; fall back to legacy category text
+  // for budget rows not yet migrated to the new taxonomy.
+  if (xpmsDepartment) {
+    expensesQ = expensesQ.eq("department", xpmsDepartment);
+  } else if (budget.category) {
+    expensesQ = expensesQ.eq("category", budget.category);
+  }
   const { data: expenses } = await expensesQ.order("spent_at", { ascending: false }).limit(50);
 
   let invoicesQ = supabase
@@ -62,7 +72,10 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
   if (budget.project_id) invoicesQ = invoicesQ.eq("project_id", budget.project_id);
   const { data: invoices } = await invoicesQ.order("paid_at", { ascending: false }).limit(50);
 
-  const variance = recomputed - budget.spent_cents;
+  // XPMS-aware: prefer actual_cents (canonical), fall back to spent_cents
+  // (legacy) for rows whose trigger hasn't fired yet.
+  const storedActual = (budget as { actual_cents?: number | null }).actual_cents ?? budget.spent_cents ?? 0;
+  const variance = recomputed - storedActual;
   const utilization = budget.amount_cents > 0 ? (recomputed / budget.amount_cents) * 100 : 0;
   const remaining = budget.amount_cents - recomputed;
 
@@ -71,7 +84,9 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
       <ModuleHeader
         eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
         title={budget.name}
-        subtitle={budget.category ?? undefined}
+        subtitle={
+          xpmsDepartment ?? (budget as { discipline?: string | null }).discipline ?? budget.category ?? undefined
+        }
         breadcrumbs={[
           { label: t("console.finance.eyebrow", undefined, "Finance"), href: "/console/finance" },
           { label: t("console.finance.budgets.breadcrumb", undefined, "Budgets"), href: "/console/finance/budgets" },
@@ -103,6 +118,44 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         }
       />
       <div className="page-content max-w-5xl space-y-5">
+        {/* XPMS taxonomy strip — only renders when any XPMS column is
+            set, so legacy rows stay clean. */}
+        {(() => {
+          const b = budget as {
+            department?: string | null;
+            discipline?: string | null;
+            xpms_phase?: string | null;
+            tier?: string | null;
+            xyz?: string | null;
+            line_type?: string | null;
+            vendor?: string | null;
+          };
+          const items = [
+            ["Department", b.department],
+            ["Discipline", b.discipline],
+            ["Phase", b.xpms_phase],
+            ["Tier", b.tier],
+            ["XYZ", b.xyz],
+            ["Line Type", b.line_type],
+            ["Vendor", b.vendor],
+          ].filter(([, v]) => !!v) as Array<[string, string]>;
+          if (items.length === 0) return null;
+          return (
+            <section className="surface p-4">
+              <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                XPMS Classification
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {items.map(([k, v]) => (
+                  <Badge key={k} variant="muted">
+                    <span className="text-[var(--text-muted)]">{k}:</span> <span className="font-medium">{v}</span>
+                  </Badge>
+                ))}
+              </div>
+            </section>
+          );
+        })()}
+
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>

@@ -62,11 +62,15 @@ export default async function ExpensesPage() {
               accessor: (r) => r.description,
             },
             {
-              key: "category",
-              header: t("console.finance.expenses.columns.category", undefined, "Category"),
-              render: (r) => r.category ?? "—",
+              // XPMS department prefer-over-legacy category. The
+              // department enum drives the budgets.actual_cents rollup
+              // via the expenses trigger; category is kept around as
+              // the pre-XPMS fallback display.
+              key: "department",
+              header: t("console.finance.expenses.columns.department", undefined, "Department"),
+              render: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? "—",
               className: "font-mono text-xs",
-              accessor: (r) => r.category ?? null,
+              accessor: (r) => (r as unknown as { department?: string | null }).department ?? r.category ?? null,
               filterable: true,
               groupable: true,
             },

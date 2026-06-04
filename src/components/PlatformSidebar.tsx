@@ -14,6 +14,8 @@ import { Hint } from "@/components/ui/Tooltip";
 import { WorkspaceSwitcher } from "@/components/WorkspaceSwitcher";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 import { BRAND } from "@/lib/brand";
+import { useT } from "@/lib/i18n/LocaleProvider";
+import { navGroupKey, navItemKey } from "@/lib/i18n/nav-label";
 
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 400;
@@ -388,6 +390,8 @@ function SidebarGroup({
    *  Pinned pseudo-group and when the group is force-open. */
   onToggleGroup: ((label: string) => void) | null;
 }) {
+  const t = useT();
+  const groupLabelDisplay = t(navGroupKey({ label }), undefined, label);
   const headerId = `sidebar-group-${label.toLowerCase().replace(/\s+/g, "-")}`;
   const useSections = sections && sections.length > 0;
   return (
@@ -402,7 +406,7 @@ function SidebarGroup({
             aria-controls={`${headerId}-items`}
             className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--text-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
           >
-            <span className="truncate">{label}</span>
+            <span className="truncate">{groupLabelDisplay}</span>
             <ChevronDown
               size={10}
               aria-hidden="true"
@@ -411,7 +415,7 @@ function SidebarGroup({
           </button>
         ) : (
           <div id={headerId} className="px-2 text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">
-            {label}
+            {groupLabelDisplay}
           </div>
         ))}
       {(collapsed || isOpen) &&
@@ -421,7 +425,7 @@ function SidebarGroup({
               <div key={s.label}>
                 {!collapsed && (
                   <div className="mt-1.5 mb-0.5 px-2 text-[10px] font-medium tracking-[0.14em] text-[var(--text-muted)]/70 uppercase">
-                    {s.label}
+                    {t(navGroupKey(s), undefined, s.label)}
                   </div>
                 )}
                 <SidebarItems
@@ -466,12 +470,14 @@ function SidebarItems({
   id?: string;
   ariaLabelledBy?: string;
 }) {
+  const t = useT();
   return (
     <ul id={id} aria-labelledby={ariaLabelledBy} className="space-y-0.5">
       {items.map((item) => {
         const { isActive: active } = matchRoute(pathname ?? "", item.href);
         const isPinned = pinned.includes(item.href);
         const Icon = item.icon ? NAV_ICONS[item.icon] : null;
+        const itemLabel = t(navItemKey(item), undefined, item.label);
         const linkEl = (
           <Link
             href={item.href}
@@ -505,7 +511,7 @@ function SidebarItems({
               ) : collapsed ? (
                 <ChevronRight size={12} className="shrink-0" aria-hidden="true" />
               ) : null}
-              {!collapsed && <span className="truncate">{item.label}</span>}
+              {!collapsed && <span className="truncate">{itemLabel}</span>}
             </span>
             {!collapsed && (
               <button
@@ -514,7 +520,11 @@ function SidebarItems({
                   e.preventDefault();
                   onTogglePin(item.href);
                 }}
-                aria-label={isPinned ? `Unpin ${item.label}` : `Pin ${item.label}`}
+                aria-label={
+                  isPinned
+                    ? t("nav.unpin", { name: itemLabel }, `Unpin ${itemLabel}`)
+                    : t("nav.pin", { name: itemLabel }, `Pin ${itemLabel}`)
+                }
                 className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
                   isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 }`}
@@ -527,7 +537,7 @@ function SidebarItems({
         return (
           <li key={item.href} className="group relative">
             {collapsed ? (
-              <Hint label={item.label} side="right" delayDuration={300}>
+              <Hint label={itemLabel} side="right" delayDuration={300}>
                 {linkEl}
               </Hint>
             ) : (

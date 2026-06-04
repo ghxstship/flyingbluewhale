@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import { Home, QrCode, BookOpen, CheckSquare, User } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
+import { useT } from "@/lib/i18n/LocaleProvider";
+import { navItemKey } from "@/lib/i18n/nav-label";
 
 const ICONS: Record<string, typeof Home> = {
   "/m": Home,
@@ -17,11 +19,12 @@ const ICONS: Record<string, typeof Home> = {
 
 export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {
   const pathname = usePathname();
+  const t = useT();
 
   return (
     <nav
       role="navigation"
-      aria-label="Primary"
+      aria-label={t("marketing.header.primaryAriaLabel", undefined, "Primary")}
       className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--border-color)] bg-[var(--background)]/95 backdrop-blur"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
@@ -57,7 +60,9 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
                     </span>
                   )}
                 </span>
-                <span className={active ? "text-[var(--org-primary)]" : "text-[var(--text-muted)]"}>{i.label}</span>
+                <span className={active ? "text-[var(--org-primary)]" : "text-[var(--text-muted)]"}>
+                  {t(navItemKey(i), undefined, i.label)}
+                </span>
               </Link>
             </li>
           );

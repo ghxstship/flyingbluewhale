@@ -6,6 +6,8 @@ import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
 import { RecordTabsSlot } from "@/components/ui/RecordTabsContext";
 import { matchRoute } from "@/lib/match-route";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
+import { getRequestT } from "@/lib/i18n/request";
+import { navGroupKey, navItemKey } from "@/lib/i18n/nav-label";
 
 export { PlatformSidebar } from "./PlatformSidebar";
 
@@ -17,8 +19,14 @@ export { PlatformSidebar } from "./PlatformSidebar";
  * `title` is optional and overrides `group.label` when supplied — used
  * by the shared `/p/[slug]/{tasks,messages,inbox,announcements}` pages
  * that need a generic "Portal" label rather than a super-persona name.
+ *
+ * Async server component — pulls the per-request translator from
+ * `getRequestT()` and resolves each item / section / group label via the
+ * stable nav-key derivation helpers. Missing keys fall back to the
+ * English label baked into `nav.ts`, so this component ships before the
+ * catalog is fully populated without flashing dot-paths.
  */
-export function PortalRail({
+export async function PortalRail({
   group,
   items,
   title,
@@ -29,12 +37,13 @@ export function PortalRail({
   title?: string;
   currentPath?: string;
 }) {
+  const { t } = await getRequestT();
   const sections: NavSection[] = group?.sections?.length
     ? group.sections
     : group
       ? [{ label: group.label, items: group.items }]
       : [{ label: title ?? "", items: items ?? [] }];
-  const headerTitle = title ?? group?.label ?? "";
+  const headerTitle = title ?? (group ? t(navGroupKey(group), undefined, group.label) : "");
   // hidden md:flex: PortalRail is hidden below 768px (it would steal 224px
   // from a 375px viewport). Portal child pages already render full-width
   // on mobile; the rail's navigation duplicates the persona index page
@@ -52,33 +61,36 @@ export function PortalRail({
         <span className="text-base font-bold tracking-[-0.01em] text-[var(--org-primary)]">G V T E W A Y</span>
       </div>
       {headerTitle ? <div className="nav-label">{headerTitle}</div> : null}
-      {sections.map((section, idx) => (
-        <div key={`${section.label}-${idx}`} className={idx === 0 ? "mt-0.5" : "mt-3"}>
-          {idx > 0 && section.label ? (
-            <div className="nav-label px-2 pb-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
-              {section.label}
-            </div>
-          ) : null}
-          <ul className="space-y-0.5">
-            {section.items.map((i) => {
-              // Unified active-route rule so /p/{slug}/client/invoices/{id} still
-              // marks `Invoices` active. IA spec §7 anti-pattern #2.
-              const { isActive: active } = matchRoute(currentPath ?? "", i.href);
-              return (
-                <li key={i.href}>
-                  <Link
-                    href={i.href}
-                    aria-current={active ? "page" : undefined}
-                    className={active ? "nav-item nav-item-active" : "nav-item"}
-                  >
-                    {i.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
+      {sections.map((section, idx) => {
+        const sectionLabel = section.label ? t(navGroupKey(section), undefined, section.label) : "";
+        return (
+          <div key={`${section.label}-${idx}`} className={idx === 0 ? "mt-0.5" : "mt-3"}>
+            {idx > 0 && sectionLabel ? (
+              <div className="nav-label px-2 pb-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+                {sectionLabel}
+              </div>
+            ) : null}
+            <ul className="space-y-0.5">
+              {section.items.map((i) => {
+                // Unified active-route rule so /p/{slug}/client/invoices/{id} still
+                // marks `Invoices` active. IA spec §7 anti-pattern #2.
+                const { isActive: active } = matchRoute(currentPath ?? "", i.href);
+                return (
+                  <li key={i.href}>
+                    <Link
+                      href={i.href}
+                      aria-current={active ? "page" : undefined}
+                      className={active ? "nav-item nav-item-active" : "nav-item"}
+                    >
+                      {t(navItemKey(i), undefined, i.label)}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        );
+      })}
       {/* Language switch parity with the platform sidebar — every authed
           surface needs a way out of English without leaving the page. */}
       <div className="mt-auto flex justify-end pt-3">

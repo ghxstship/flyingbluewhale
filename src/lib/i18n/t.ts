@@ -27,20 +27,28 @@ export function interpolate(template: string, vars?: Record<string, string | num
 }
 
 /**
- * Build a `t(key, vars?)` translator over a primary catalog with optional
- * fallback catalogs. Lookup walks the chain in order — the primary locale
- * wins, missing keys fall back to (typically) the English catalog, and only
- * if every catalog misses do we surface the key path.
+ * Build a `t(key, vars?, fallback?)` translator over a primary catalog with
+ * optional fallback catalogs. Lookup walks the chain in order — the primary
+ * locale wins, missing keys fall back to (typically) the English catalog,
+ * and only if every catalog misses do we surface the `fallback` arg (or the
+ * key path if no fallback was supplied).
  *
  * Pattern:
  *   const t = makeT(spanish, [english]);
- *   t("common.save")          // "Guardar" if present, else "Save"
+ *   t("common.save")              // "Guardar" if present, else "Save"
+ *   t("nav.foo.bar", undefined, "Foo Bar")  // English fallback while
+ *                                            // catalogs are being filled.
  *
- * Locale catalog stubs can therefore be partial — translators add keys
- * incrementally without UIs flashing dot-paths during the rollout.
+ * The third `fallback` argument is the migration release valve: it lets the
+ * caller ship `t()` call sites BEFORE the catalog has the key, so the UI
+ * never flashes dot-paths during a rollout. Once the catalog is populated,
+ * the fallback becomes inert (the primary lookup wins). Production calls
+ * never log warnings; dev calls log once-per-key per process to surface
+ * staleness.
  */
+const __missingKeyOnce = new Set<string>();
 export function makeT(messages: Messages, fallbacks: Messages[] = []) {
-  return function t(key: string, vars?: Record<string, string | number>): string {
+  return function t(key: string, vars?: Record<string, string | number>, fallback?: string): string {
     let raw = getByPath(messages, key);
     if (raw === undefined) {
       for (const fb of fallbacks) {
@@ -49,10 +57,11 @@ export function makeT(messages: Messages, fallbacks: Messages[] = []) {
       }
     }
     if (raw === undefined) {
-      if (process.env.NODE_ENV === "development") {
-        console.warn(`[i18n] missing key: ${key}`);
+      if (process.env.NODE_ENV === "development" && !__missingKeyOnce.has(key)) {
+        __missingKeyOnce.add(key);
+        console.warn(`[i18n] missing key: ${key}${fallback ? ` (using fallback)` : ""}`);
       }
-      return key;
+      return fallback ?? key;
     }
     return interpolate(raw, vars);
   };

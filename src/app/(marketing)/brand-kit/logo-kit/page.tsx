@@ -191,7 +191,7 @@ export default function LogoKitPage() {
 function PrimaryLockup({ variant }: { variant: "light" | "dark" }) {
   const isDark = variant === "dark";
   return (
-    <div className={`lk-card lk-lockup${isDark ? "lk-lockup--dark" : ""}`}>
+    <div className={["lk-card", "lk-lockup", isDark ? "lk-lockup--dark" : null].filter(Boolean).join(" ")}>
       <Image
         src={isDark ? "/brand/atlvs-mark-white.svg" : "/brand/atlvs-mark.svg"}
         alt="ATLVS mark"

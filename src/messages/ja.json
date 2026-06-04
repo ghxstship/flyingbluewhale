@@ -85,21 +85,48 @@
       "mobilePrimaryAriaLabel": "モバイルメインナビゲーション",
       "product": {
         "label": "プロダクト",
-        "features": { "label": "機能", "description": "すべてのモジュール、すべてのフェーズ" },
-        "solutions": { "label": "ソリューション", "description": "ATLVS · COMPVSS · GVTEWAY" },
-        "atlvs": { "label": "ATLVS — プロダクション", "description": "プロデューサーコンソール" },
-        "compvss": { "label": "COMPVSS — クルー", "description": "ワークフォースと現場運用" },
-        "gvteway": { "label": "GVTEWAY — ゲスト", "description": "チケッティングとステークホルダーポータル" }
+        "features": {
+          "label": "機能",
+          "description": "すべてのモジュール、すべてのフェーズ"
+        },
+        "solutions": {
+          "label": "ソリューション",
+          "description": "ATLVS · COMPVSS · GVTEWAY"
+        },
+        "atlvs": {
+          "label": "ATLVS — プロダクション",
+          "description": "プロデューサーコンソール"
+        },
+        "compvss": {
+          "label": "COMPVSS — クルー",
+          "description": "ワークフォースと現場運用"
+        },
+        "gvteway": {
+          "label": "GVTEWAY — ゲスト",
+          "description": "チケッティングとステークホルダーポータル"
+        }
       },
       "industries": {
         "label": "業界"
       },
       "resources": {
         "label": "リソース",
-        "blog": { "label": "ブログ", "description": "ローンチ、リリース、業界の見解" },
-        "guides": { "label": "ガイド", "description": "プロデューサー向けロングフォーム" },
-        "docs": { "label": "ドキュメント", "description": "プラットフォームリファレンス + API" },
-        "changelog": { "label": "Changelog", "description": "すべてのリリースに日付付きで" }
+        "blog": {
+          "label": "ブログ",
+          "description": "ローンチ、リリース、業界の見解"
+        },
+        "guides": {
+          "label": "ガイド",
+          "description": "プロデューサー向けロングフォーム"
+        },
+        "docs": {
+          "label": "ドキュメント",
+          "description": "プラットフォームリファレンス + API"
+        },
+        "changelog": {
+          "label": "Changelog",
+          "description": "すべてのリリースに日付付きで"
+        }
       }
     },
     "home": {
@@ -503,5 +530,46 @@
     "lastSync": "最終同期",
     "active": "有効",
     "off": "無効"
+  },
+  "m": {
+    "clock": {
+      "error": {
+        "couldntUpdate": "更新できませんでした",
+        "network": "ネットワークエラー"
+      },
+      "toast": {
+        "queued": "${label}（キュー登録済み — オンライン復帰時に同期します）",
+        "checkedIn": "チェックイン完了",
+        "breakStarted": "休憩を開始しました",
+        "clockedOut": "退勤しました",
+        "backFromBreak": "休憩から復帰しました",
+        "clockedIn": "出勤しました"
+      },
+      "shiftClosed": "シフトを終了しました。",
+      "working": "勤務中…",
+      "clockIn": "出勤",
+      "startBreak": "休憩開始",
+      "clockOut": "退勤",
+      "endBreak": "休憩終了",
+      "configureSupabase": "Supabase を設定してください。",
+      "eyebrow": "現場",
+      "title": "チェックイン",
+      "empty": {
+        "title": "本日のシフトはありません",
+        "description": "ロスター登録後にもう一度ご確認ください。"
+      },
+      "unassignedVenue": "会場未割当",
+      "inLabel": "入",
+      "outLabel": "出",
+      "status": {
+        "clockedIn": "出勤中",
+        "readyToStart": "開始準備完了"
+      },
+      "action": {
+        "clockOut": "退勤",
+        "clockIn": "出勤"
+      },
+      "subtitle": "位置情報認証付き勤怠管理"
+    }
   }
 }

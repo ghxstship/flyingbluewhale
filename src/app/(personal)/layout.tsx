@@ -70,8 +70,16 @@ export default async function PersonalLayout({ children }: { children: React.Rea
               aria-label={brandAria}
             >
               {tenant.branding.logoUrl ? (
+                // White-label tenant logo overrides.
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={tenant.branding.logoUrl} alt="" className="h-5 w-auto" />
+              ) : isDefaultBrand ? (
+                // Default ATLVS — pair the Waypoint mark with the spaced
+                // wordmark per ui_kits/atlvs/logo-kit.html "Primary Lockup".
+                // Only renders when neither tenant.productName nor orgName
+                // overrides; org-named tenants keep the text-only treatment.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src="/brand/atlvs-mark.svg" alt="" width={18} height={18} aria-hidden="true" />
               ) : null}
               <span className={isDefaultBrand ? "tracking-[0.14em] uppercase" : ""}>{brandName}</span>
             </Link>

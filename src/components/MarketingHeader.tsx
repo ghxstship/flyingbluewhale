@@ -142,20 +142,23 @@ export function MarketingHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-3">
         <Link
           href="/"
-          // whitespace-nowrap: the spaced "A T L V S" mark uses literal
-          // U+0020 between letters so screen readers + selection treat each
-          // letter as a separate word. Without nowrap, narrow viewports
-          // (~1024px tablet) wrap the mark letter-by-letter into a vertical
-          // stack instead of keeping it horizontal.
+          // Canonical ATLVS primary lockup — Waypoint mark + spaced
+          // wordmark per ui_kits/atlvs/logo-kit.html "Primary Lockup".
+          // The mark is the bare ink star (atlvs-mark.svg, 22px); the
+          // wordmark below stays nowrap so narrow viewports never break
+          // it letter-by-letter into a vertical stack.
           //
-          // Inter at weight 800 + tight tracking is the ATLVS product canon
-          // lockup — the SaaS skin doesn't use Big Shoulders even for the
-          // wordmark. Brand display is reserved for the cosmic surface only.
-          className="text-[1.3rem] leading-none font-extrabold tracking-[0.04em] whitespace-nowrap text-[var(--p-text-1)] uppercase"
+          // Inter at weight 800 + tight tracking is the ATLVS product
+          // canon — SaaS skin doesn't use Big Shoulders even for the
+          // wordmark. Brand display is reserved for the cosmic surface
+          // only. Aria-label still announces the wordmark form.
+          className="flex items-center gap-2.5 leading-none text-[var(--p-text-1)]"
           onClick={() => setMobileOpen(false)}
           aria-label={t("marketing.header.brandAriaLabel")}
         >
-          A T L V S
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
+          <span className="text-[1.3rem] font-extrabold tracking-[0.04em] whitespace-nowrap uppercase">A T L V S</span>
         </Link>
 
         {/* Desktop primary nav — 3 dropdowns + 2 direct links = 5 visible items,

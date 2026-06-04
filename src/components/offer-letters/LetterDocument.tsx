@@ -353,7 +353,7 @@ export function LetterDocument({
         </div>
       </section>
 
-      <footer className="space-y-1 border-t border-[var(--border-default)] pt-6 text-xs text-[var(--text-muted)]">
+      <footer className="space-y-3 border-t border-[var(--border-default)] pt-6 text-xs text-[var(--text-muted)]">
         {msaOnFile && activeMsa ? (
           <p>
             This engagement is subject to your <strong>Independent Contractor Master Services Agreement</strong> signed{" "}
@@ -392,6 +392,22 @@ export function LetterDocument({
           Governing law: <strong>State of Nevada</strong>. Venue: Clark County, NV. Confidential and proprietary to{" "}
           {EMPLOYER_LABEL[letter.employer]}.
         </p>
+        {/* GHXSTSHIP parent endorsement — v4 logo-kit canon for formal
+            documents. Mark on the left, parent skull endorsement on the
+            right; reads as a small chrome strip below the legal terms. */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3">
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/atlvs-mark.svg" alt="" width={14} height={14} aria-hidden="true" />
+            <span className="font-semibold tracking-[0.18em] uppercase">A T L V S</span>
+            <span>· Technologies</span>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/logo-ghostship-skull.svg" alt="" width={12} height={12} aria-hidden="true" />
+            <span className="tracking-[0.12em] uppercase">a G H X S T S H I P Industries company</span>
+          </div>
+        </div>
       </footer>
     </article>
   );

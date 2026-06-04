@@ -208,7 +208,7 @@
       "about": {
         "meta": {
           "title": "About — The Studio",
-          "description": "ATLVS Technologies builds the platform for production. ATLVS, GVTEWAY, COMPVSS — three apps, one schema. Shipped by operators who've run the room.",
+          "description": "ATLVS Technologies builds the platform for production. ATLVS, GVTEWAY, COMPVSS — three apps, one single source of truth. Shipped by operators who've run the room.",
           "ogImageEyebrow": "The Studio",
           "ogImageTitle": "Built by the People Who Run the Show."
         },
@@ -220,12 +220,12 @@
           "eyebrow": "The Studio",
           "title": "Built by the People Who Run the Show.",
           "lead": "ATLVS Technologies builds the platform for production. Every module came out of opening a spreadsheet for the third time and saying \"why isn't this in the platform.\"",
-          "subLead": "Three apps. One schema. Forty-seven modules. We ship to real productions the weekend before each release. The work decides what stays in."
+          "subLead": "Three apps. One single source of truth. Forty-seven modules. We ship to real productions the weekend before each release. The work decides what stays in."
         },
         "principles": {
           "heading": "How We Build.",
           "threeApps": {
-            "title": "Three apps. One schema.",
+            "title": "Three apps. One single source of truth.",
             "body": "ATLVS, GVTEWAY, COMPVSS share identity, data, and design. One database underneath."
           },
           "rls": {
@@ -248,7 +248,7 @@
             "body": "RFIs, submittals, daily logs, punch list, payment apps, change orders. Plus everything Procore won't touch."
           },
           "threeApps": {
-            "title": "Three apps on one schema",
+            "title": "Three apps on one single source of truth",
             "body": "ATLVS, GVTEWAY, COMPVSS shipped on one database — workspace, portal, field."
           },
           "kbyg": {
@@ -1215,7 +1215,7 @@
             },
             "forms": {
               "title": "Forms",
-              "desc": "Schema-driven. Public submission. Honeypot anti-spam."
+              "desc": "Custom fields. Public submission. Honeypot anti-spam."
             },
             "ticketing": {
               "title": "Ticketing + scan",
@@ -1761,14 +1761,14 @@
       "home": {
         "metadata": {
           "title": "ATLVS — Production Management Software for Live Experiences",
-          "description": "ATLVS Technologies — production management, crew operations, and ticketing software built for live events. Three apps, one schema: ATLVS for producers, COMPVSS for crew, GVTEWAY for guests. Pitch through wrap on a single platform.",
+          "description": "ATLVS Technologies — production management, crew operations, and ticketing software built for live events. Three apps, one single source of truth: ATLVS for producers, COMPVSS for crew, GVTEWAY for guests. Pitch through wrap on a single platform.",
           "ogImageTitle": "Production Runs On It."
         },
         "hero": {
           "eyebrow": "ATLVS Technologies",
           "titleLine1": "Production runs on",
           "titleLine2": "one platform.",
-          "subtitleLead": "Three apps, one schema.",
+          "subtitleLead": "Three apps, one single source of truth.",
           "subtitleAtlvs": "runs the production.",
           "subtitleCompvss": "runs the field.",
           "subtitleGvteway": "runs the portal. Pitch through wrap on a single connected platform for live experiential production.",
@@ -1782,7 +1782,7 @@
         },
         "threeApps": {
           "eyebrow": "The ATLVS Ecosystem",
-          "title": "Three apps, one schema.",
+          "title": "Three apps, one single source of truth.",
           "body": "ATLVS Technologies ships three connected products on a shared Postgres database. Adopt one or run the full platform — every record flows across producer console, field PWA, and stakeholder portal.",
           "readMore": "Read more →"
         },
@@ -1891,7 +1891,7 @@
           "edges": {
             "endToEnd": {
               "title": "End to End",
-              "tag": "One schema",
+              "tag": "Single source of truth",
               "body": "Pitch through wrap, all eight phases, in one workspace. No integration tax, no schema reconciliation."
             },
             "proprietaryStack": {
@@ -1915,7 +1915,7 @@
             "fullPlatform": {
               "name": "Full Platform",
               "tag": "All eight phases",
-              "body": "Every phase of the production lifecycle, pitch to wrap — one workspace, one schema, total accountability."
+              "body": "Every phase of the production lifecycle, pitch to wrap — one workspace, one single source of truth, total accountability."
             },
             "singleApp": {
               "name": "Single App",
@@ -2555,11 +2555,11 @@
           },
           "schema": {
             "name": "ATLVS — Production Operations Workspace",
-            "description": "Production operations workspace. Projects, finance, procurement, advancing, AI — one workspace, one schema."
+            "description": "Production operations workspace. Projects, finance, procurement, advancing, AI — one workspace, one single source of truth."
           },
           "hero": {
             "title": "Where the Production Lives.",
-            "subtitle": "Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Forty-seven modules on one schema.",
+            "subtitle": "Pitch to wrap, in one sidebar. RFIs, submittals, daily logs, punch, advancing, finance, procurement, AI. Forty-seven modules on one single source of truth.",
             "ctaPrimary": "Sign Up Free",
             "ctaSecondary": "Book a Walkthrough",
             "ctaPricing": "Pricing →"
@@ -3232,7 +3232,7 @@
         },
         "brand": {
           "homeAriaLabel": "ATLVS Technologies — home",
-          "tagline": "The platform for production. Three apps, one schema."
+          "tagline": "The platform for production. Three apps, one single source of truth."
         },
         "social": {
           "twitter": "Twitter",

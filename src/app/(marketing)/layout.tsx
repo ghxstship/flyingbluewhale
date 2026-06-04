@@ -115,12 +115,16 @@ export default async function MarketingLayout({ children }: { children: React.Re
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-10 md:grid-cols-3 lg:grid-cols-7">
             <div className="md:col-span-1">
+              {/* Canonical ATLVS primary lockup — Waypoint mark + spaced
+                  wordmark per ui_kits/atlvs/logo-kit.html "Primary Lockup". */}
               <Link
                 href="/"
-                className="text-base font-semibold tracking-[0.18em] whitespace-nowrap uppercase"
+                className="inline-flex items-center gap-2 whitespace-nowrap"
                 aria-label={t("marketing.layout.footer.brand.homeAriaLabel")}
               >
-                A T L V S
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/brand/atlvs-mark.svg" alt="" width={20} height={20} aria-hidden="true" />
+                <span className="text-base font-semibold tracking-[0.18em] uppercase">A T L V S</span>
               </Link>
               <p className="mt-3 text-xs text-[var(--text-muted)]">{t("marketing.layout.footer.brand.tagline")}</p>
               <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
@@ -162,8 +166,21 @@ export default async function MarketingLayout({ children }: { children: React.Re
               <span>{t("marketing.layout.footer.copyright", { year: new Date().getFullYear() })}</span>
               <span>{t("marketing.layout.footer.tagline")}</span>
             </div>
-            <div className="mt-3 text-[11px] leading-relaxed">
+            <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] leading-relaxed">
               {t("marketing.layout.footer.trademarkPrefix")}{" "}
+              {/* GHXSTSHIP parent endorsement lockup — small ink-tile skull
+                  paired with the spaced wordmark per v4 logo-kit
+                  "Endorsement" section. The skull is the parent-company
+                  mark, NEVER the ATLVS product icon. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/logo-ghostship-skull.svg"
+                alt=""
+                width={14}
+                height={14}
+                aria-hidden="true"
+                className="inline-block align-middle"
+              />
               <span className="font-medium tracking-[0.18em] text-[var(--text-secondary)]">G H X S T S H I P</span>{" "}
               {t("marketing.layout.footer.trademarkSuffix")}
             </div>

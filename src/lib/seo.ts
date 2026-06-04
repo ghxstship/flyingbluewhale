@@ -26,7 +26,7 @@ export const SITE = {
   baseUrl: process.env.NEXT_PUBLIC_APP_URL ?? "https://atlvs.pro",
   tagline: "Production Runs On It.",
   description:
-    "The platform for production. ATLVS · GVTEWAY · COMPVSS — three apps, one schema, every module. Pitch through wrap. RLS at the database. Built by operators.",
+    "The platform for production. ATLVS · GVTEWAY · COMPVSS — three apps, one single source of truth, every module. Pitch through wrap. RLS at the database. Built by operators.",
   /**
    * Social handle. Same string across every platform we live on; not a
    * Twitter/X handle — ATLVS does not run an X account. The Twitter Card

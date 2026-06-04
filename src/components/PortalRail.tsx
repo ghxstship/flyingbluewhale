@@ -39,7 +39,19 @@ export async function PortalRail({
   const headerTitle = title ?? (group ? t(navGroupKey(group), undefined, group.label) : "");
   return (
     <aside className="hidden w-56 shrink-0 flex-col border-e border-[var(--border-color)] bg-[var(--bg-secondary)] p-3 md:flex">
+      {/* Canonical SaaS brand row — cyan-tiled Waypoint app-icon + spaced
+          wordmark per ui_kits/atlvs/dashboard.html .brandrow. Per v4
+          logo-kit canon, the GVTEWAY app icon is the Waypoint on cyan. */}
       <div className="mb-3 flex items-center gap-2">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/brand/atlvs-icon-gvteway.svg"
+          alt=""
+          width={28}
+          height={28}
+          aria-hidden="true"
+          className="rounded-md"
+        />
         <span className="text-base font-bold tracking-[-0.01em] text-[var(--org-primary)]">G V T E W A Y</span>
       </div>
       {headerTitle ? <div className="nav-label">{headerTitle}</div> : null}

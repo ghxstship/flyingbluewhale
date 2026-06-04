@@ -943,14 +943,17 @@ export const MODULES: Record<string, ModuleConfig> = {
     slug: "forms",
     name: "Forms",
     eyebrow: "ATLVS · Forms",
-    title: "Schema-driven public submission with honeypot anti-spam.",
+    title: "Custom-field public submission with honeypot anti-spam.",
     blurb:
       "Build a form, share a URL, land submissions in your tenant — no third-party form vendor, no data-residency surprises.",
     heroTitle: "Forms that respect your data residency.",
     heroBody:
-      "Every form is schema-driven — define fields, validation, anti-spam in code or in the CMS. Public URLs. Submissions land in your tenant, not in a third-party SaaS. Per-form rate limits and honeypot protection built in.",
+      "Every form is yours to shape — define fields, validation, anti-spam in code or in the CMS. Public URLs. Submissions land in your tenant, not in a third-party SaaS. Per-form rate limits and honeypot protection built in.",
     highlights: [
-      { title: "Schema-driven", body: "Define field types, validation, required fields, file uploads in one schema." },
+      {
+        title: "Custom fields",
+        body: "Define field types, validation, required fields, and file uploads in one place.",
+      },
       { title: "Public submission", body: "Share a URL — no auth required for the submitter, no third-party scripts." },
       { title: "Honeypot anti-spam", body: "Multi-layer: honeypot, time-delay, rate limit, optional reCAPTCHA." },
       { title: "Conditional logic", body: "Fields show/hide based on prior answers, server-validated on submit." },

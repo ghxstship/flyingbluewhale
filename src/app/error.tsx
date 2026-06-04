@@ -12,6 +12,10 @@ export default function RootError({ error, reset }: { error: Error & { digest?: 
 
   return (
     <div className="mx-auto max-w-md px-6 py-24 text-center">
+      {/* Waypoint brand anchor — even the runtime error boundary
+          stays on-brand instead of reading as a generic crash page. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/atlvs-mark.svg" alt="" width={32} height={32} aria-hidden="true" className="mx-auto mb-6" />
       <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
         {t("rootError.eyebrow", undefined, "Error")}
       </div>

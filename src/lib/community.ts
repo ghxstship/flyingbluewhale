@@ -36,7 +36,7 @@ export const COMMUNITY: Record<string, CaseStudy> = {
       "Six distinct stakeholder personas (guest, artist, crew, vendor, sponsor, club) with wildly different information needs — a single PDF KBYG was unmanageable.",
     ],
     solution: [
-      "Migrated to the ATLVS Technologies suite three months before show. One Supabase project, one schema, one design system across internal + external + mobile.",
+      "Migrated to the ATLVS Technologies suite three months before show. One Supabase project, one single source of truth, one design system across internal + external + mobile.",
       "Authored one canonical KBYG in ATLVS CMS. The Boarding Pass pattern rendered six different persona views from the same config — no PDF duplication, no sync drift.",
       "Crew installed COMPVSS PWA from the URL. Zero App Store review. Scanner cached app shell + today's data before doors; queued scans during the signal dead-zone at peak.",
       "Vendor portal (GVTEWAY) handled 14 vendors' COIs, W-9s, POs, and Stripe Connect payouts. Finance closed books on the Monday after show.",

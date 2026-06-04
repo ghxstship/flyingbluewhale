@@ -67,8 +67,25 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
           />
         )}
       </main>
-      <footer className="mx-auto max-w-4xl border-t border-[var(--border-color)] px-8 py-12 text-center text-xs text-[var(--text-muted)]">
-        Prepared by ATLVS Technologies · {proposal.doc_number ?? proposal.id.slice(0, 8)} · v{proposal.version}
+      {/* Document endorsement footer — v4 logo-kit canon for formal
+          client-facing PDFs. Waypoint mark + spaced "A T L V S" wordmark
+          on the left, GHXSTSHIP skull + parent attribution on the right,
+          doc number + version inline. */}
+      <footer className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 border-t border-[var(--border-color)] px-8 py-10 text-xs text-[var(--text-muted)]">
+        <div className="flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/atlvs-mark.svg" alt="" width={18} height={18} aria-hidden="true" />
+          <span className="font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase">A T L V S</span>
+          <span>· Technologies</span>
+        </div>
+        <div className="font-mono">
+          {proposal.doc_number ?? proposal.id.slice(0, 8)} · v{proposal.version}
+        </div>
+        <div className="flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/logo-ghostship-skull.svg" alt="" width={14} height={14} aria-hidden="true" />
+          <span className="tracking-[0.14em] uppercase">a G H X S T S H I P Industries company</span>
+        </div>
       </footer>
     </div>
   );

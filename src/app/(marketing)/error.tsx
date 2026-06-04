@@ -11,6 +11,9 @@ export default function MarketingError({ error, reset }: { error: Error & { dige
   }, [error]);
   return (
     <main className="mx-auto max-w-3xl px-6 py-24 text-center">
+      {/* Waypoint brand anchor — keeps the marketing error on-brand. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/brand/atlvs-mark.svg" alt="" width={32} height={32} aria-hidden="true" className="mx-auto mb-6" />
       <p className="eyebrow eyebrow-brand">{t("marketing.pages.error.eyebrow")}</p>
       <h1 className="mt-4 text-4xl font-semibold tracking-tight">{t("marketing.pages.error.title")}</h1>
       <p className="mt-3 text-sm text-[var(--text-secondary)]">

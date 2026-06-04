@@ -48,7 +48,7 @@ export const POSTS: Record<string, BlogPost> = {
       { kind: "h2", text: "Why three shells, not three apps" },
       {
         kind: "p",
-        text: "The single biggest architectural decision was to treat ATLVS, GVTEWAY, and COMPVSS as three route groups inside one Next.js app, not three separate deployments. It is one Supabase project, one schema, one auth, one set of policies. The shells differ only in layout, nav, and a data-platform attribute that swaps the accent color and OG image.",
+        text: "The single biggest architectural decision was to treat ATLVS, GVTEWAY, and COMPVSS as three route groups inside one Next.js app, not three separate deployments. It is one Supabase project, one single source of truth, one auth, one set of policies. The shells differ only in layout, nav, and a data-platform attribute that swaps the accent color and OG image.",
       },
       {
         kind: "p",
@@ -122,7 +122,7 @@ export const POSTS: Record<string, BlogPost> = {
       },
       {
         kind: "p",
-        text: "We liked it enough to copy the pattern into the platform. Event guides are now a first-class module in ATLVS, rendered on both GVTEWAY (portal) and COMPVSS (mobile) with one schema and zero duplication.",
+        text: "We liked it enough to copy the pattern into the platform. Event guides are now a first-class module in ATLVS, rendered on both GVTEWAY (portal) and COMPVSS (mobile) from one source of truth, with zero duplication.",
       },
 
       { kind: "h2", text: "The problem with PDF KBYG" },
@@ -135,7 +135,7 @@ export const POSTS: Record<string, BlogPost> = {
         text: "A PDF also can't be updated at 9am on show day when the weather changes the load-in schedule. You can generate a new PDF, rename it, re-upload it to a link — and hope every stakeholder refreshes from the new one. They won't.",
       },
 
-      { kind: "h2", text: "One schema, six persona renders" },
+      { kind: "h2", text: "One source of truth, six persona renders" },
       {
         kind: "p",
         text: "An event guide is a single row in event_guides per project × persona. The JSONB config column holds a typed list of sections: overview, schedule, set_times, timeline, credentials, contacts, faq, sops, ppe, radio, resources, evacuation, fire_safety, accessibility, sustainability, code_of_conduct, or custom.",

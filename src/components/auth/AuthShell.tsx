@@ -57,9 +57,17 @@ export function AuthShell({
           aria-label={productName}
         >
           {rail?.logoUrl ? (
+            // White-label tenant override.
             // eslint-disable-next-line @next/next/no-img-element
             <img src={rail.logoUrl} alt="" className="h-6 w-auto" />
-          ) : null}
+          ) : (
+            // Default — canonical ATLVS Waypoint mark per
+            // ui_kits/atlvs/logo-kit.html "Primary Lockup". The auth
+            // screens are the first product touch and carry the full
+            // lockup, not just text.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
+          )}
           <span className={rail?.productName ? "" : "tracking-[0.14em] uppercase"}>{rail?.productName ?? "ATLVS"}</span>
         </Link>
         <div>

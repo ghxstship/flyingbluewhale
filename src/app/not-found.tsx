@@ -111,6 +111,12 @@ export default async function NotFound() {
       className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-24"
     >
       <div className="mx-auto max-w-md text-center">
+        {/* Waypoint brand anchor — the root 404 is what Next.js falls
+            through to for unrouted paths across every subdomain.
+            Carrying the mark gives the page brand integrity instead
+            of reading as a generic browser error. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/brand/atlvs-mark.svg" alt="" width={36} height={36} aria-hidden="true" className="mx-auto mb-6" />
         <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">404</div>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
           {t("notFound.title", undefined, "Not Found")}

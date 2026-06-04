@@ -371,10 +371,28 @@
   border: 1px solid var(--p-border);
 }
 
-[data-theme="atlvs-product"] a,
-[data-theme="atlvs-product"] .ps-link {
-  color: var(--p-accent-text);
-  text-decoration: none;
+/* Plain anchor color — kit canon from product-theme.css.
+ *
+ * Two adjustments vs the kit's raw selector:
+ *
+ *   1. `:where()` collapses specificity to (0,0,0) so any single
+ *      utility class beats it.
+ *   2. `@layer components` parks the rule below `@layer utilities`
+ *      in the cascade. Without the layer, the rule is "unlayered"
+ *      and wins over EVERY layered rule regardless of specificity —
+ *      which is why CTAs were painting --p-accent-text (the link
+ *      color) on top of an --p-accent background, producing a low-
+ *      contrast pink-on-pink. The Tailwind utility now wins:
+ *
+ *        .text-\[var\(--p-accent-contrast\)\]  ← inside @layer utilities
+ *        :where([data-theme=...]) a            ← inside @layer components
+ *
+ *      Utilities are declared after components, so they take priority. */
+@layer components {
+  :where([data-theme="atlvs-product"] a, [data-theme="atlvs-product"] .ps-link) {
+    color: var(--p-accent-text);
+    text-decoration: none;
+  }
 }
 
 [data-theme="atlvs-product"] *:focus-visible {

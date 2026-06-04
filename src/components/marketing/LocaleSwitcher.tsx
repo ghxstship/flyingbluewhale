@@ -6,6 +6,7 @@ import { Globe, Check, ChevronDown } from "lucide-react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { SUPPORTED_LOCALES, isSupportedLocale, type Locale, DEFAULT_LOCALE } from "@/lib/i18n/config";
 import { setLocalePreferences } from "@/lib/i18n/actions";
+import { useLocale, useT } from "@/lib/i18n/LocaleProvider";
 import { track } from "@/lib/marketing-telemetry";
 
 // Native-name labels — the universally-correct way to expose language
@@ -46,14 +47,22 @@ function readLocaleCookie(): Locale {
 
 export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
   const router = useRouter();
+  const t = useT();
+  // The provider snapshot is the SSOT — server-resolved (cookie → header →
+  // DB → org default → baseline) and pushed into context once per request,
+  // so the checked state is correct on first paint without a hydration
+  // flash. Falls back to cookie/default outside the provider for legacy
+  // call sites.
+  const { locale: providerLocale } = useLocale();
   const [isPending, startTransition] = useTransition();
-  // Initialize from the cookie on the client so the menu's checked state is
-  // correct on first paint even when a `current` prop isn't plumbed.
-  const [active, setActive] = useState<Locale>(() => current ?? DEFAULT_LOCALE);
+  const [active, setActive] = useState<Locale>(() => current ?? providerLocale ?? DEFAULT_LOCALE);
 
   useEffect(() => {
-    if (!current) setActive(readLocaleCookie());
-  }, [current]);
+    if (current) return;
+    if (providerLocale && providerLocale !== active) setActive(providerLocale);
+    else if (!providerLocale) setActive(readLocaleCookie());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current, providerLocale]);
 
   function pick(next: Locale) {
     if (next === active) return;
@@ -78,7 +87,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
         <button
           type="button"
           className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
-          aria-label="Change language"
+          aria-label={t("footerUtility.changeLanguage")}
           disabled={isPending}
         >
           <Globe size={14} aria-hidden="true" />
@@ -93,7 +102,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
           className="surface z-50 min-w-[11rem] rounded-lg border border-[var(--border-color)] p-1 text-sm"
         >
           <DropdownMenu.Label className="px-2 pt-0.5 pb-1 text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
-            Language
+            {t("marketing.header.language")}
           </DropdownMenu.Label>
           <DropdownMenu.RadioGroup value={active} onValueChange={(v) => pick(v as Locale)}>
             {SUPPORTED_LOCALES.map((loc) => (

@@ -78,7 +78,29 @@
       "language": "اللغة",
       "theme": "النمط",
       "openMenu": "فتح القائمة",
-      "closeMenu": "إغلاق القائمة"
+      "closeMenu": "إغلاق القائمة",
+      "marketplace": "السوق",
+      "brandAriaLabel": "ATLVS Technologies — الرئيسية",
+      "primaryAriaLabel": "التنقل الرئيسي",
+      "mobilePrimaryAriaLabel": "التنقل الرئيسي للجوال",
+      "product": {
+        "label": "المنتج",
+        "features": { "label": "الميزات", "description": "كل وحدة، كل مرحلة" },
+        "solutions": { "label": "الحلول", "description": "ATLVS · COMPVSS · GVTEWAY" },
+        "atlvs": { "label": "ATLVS — الإنتاج", "description": "وحدة تحكم المنتج" },
+        "compvss": { "label": "COMPVSS — الطاقم", "description": "القوى العاملة وعمليات الميدان" },
+        "gvteway": { "label": "GVTEWAY — الضيوف", "description": "التذاكر وبوابة أصحاب المصلحة" }
+      },
+      "industries": {
+        "label": "القطاعات"
+      },
+      "resources": {
+        "label": "الموارد",
+        "blog": { "label": "المدونة", "description": "الإطلاقات والإصدارات وآراء القطاع" },
+        "guides": { "label": "الأدلة", "description": "محتوى موسّع للمنتجين" },
+        "docs": { "label": "الوثائق", "description": "مرجع المنصة + واجهة برمجة التطبيقات" },
+        "changelog": { "label": "سجل التغييرات", "description": "كل إصدار بتاريخه" }
+      }
     },
     "home": {
       "cta": {

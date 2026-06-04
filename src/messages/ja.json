@@ -78,7 +78,29 @@
       "language": "言語",
       "theme": "テーマ",
       "openMenu": "メニューを開く",
-      "closeMenu": "メニューを閉じる"
+      "closeMenu": "メニューを閉じる",
+      "marketplace": "マーケットプレイス",
+      "brandAriaLabel": "ATLVS Technologies — ホーム",
+      "primaryAriaLabel": "メインナビゲーション",
+      "mobilePrimaryAriaLabel": "モバイルメインナビゲーション",
+      "product": {
+        "label": "プロダクト",
+        "features": { "label": "機能", "description": "すべてのモジュール、すべてのフェーズ" },
+        "solutions": { "label": "ソリューション", "description": "ATLVS · COMPVSS · GVTEWAY" },
+        "atlvs": { "label": "ATLVS — プロダクション", "description": "プロデューサーコンソール" },
+        "compvss": { "label": "COMPVSS — クルー", "description": "ワークフォースと現場運用" },
+        "gvteway": { "label": "GVTEWAY — ゲスト", "description": "チケッティングとステークホルダーポータル" }
+      },
+      "industries": {
+        "label": "業界"
+      },
+      "resources": {
+        "label": "リソース",
+        "blog": { "label": "ブログ", "description": "ローンチ、リリース、業界の見解" },
+        "guides": { "label": "ガイド", "description": "プロデューサー向けロングフォーム" },
+        "docs": { "label": "ドキュメント", "description": "プラットフォームリファレンス + API" },
+        "changelog": { "label": "Changelog", "description": "すべてのリリースに日付付きで" }
+      }
     },
     "home": {
       "cta": {

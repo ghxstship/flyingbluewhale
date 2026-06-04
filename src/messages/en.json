@@ -78,7 +78,29 @@
       "language": "Language",
       "theme": "Theme",
       "openMenu": "Open menu",
-      "closeMenu": "Close menu"
+      "closeMenu": "Close menu",
+      "marketplace": "Marketplace",
+      "brandAriaLabel": "ATLVS Technologies — home",
+      "primaryAriaLabel": "Primary",
+      "mobilePrimaryAriaLabel": "Mobile primary",
+      "product": {
+        "label": "Product",
+        "features": { "label": "Features", "description": "Every module, every phase" },
+        "solutions": { "label": "Solutions", "description": "ATLVS · COMPVSS · GVTEWAY" },
+        "atlvs": { "label": "ATLVS — Production", "description": "Producer console" },
+        "compvss": { "label": "COMPVSS — Crew", "description": "Workforce + field ops" },
+        "gvteway": { "label": "GVTEWAY — Guests", "description": "Ticketing + stakeholder portal" }
+      },
+      "industries": {
+        "label": "Industries"
+      },
+      "resources": {
+        "label": "Resources",
+        "blog": { "label": "Blog", "description": "Launches, releases, industry takes" },
+        "guides": { "label": "Guides", "description": "Long-form for producers" },
+        "docs": { "label": "Docs", "description": "Platform reference + API" },
+        "changelog": { "label": "Changelog", "description": "Every release, dated" }
+      }
     },
     "home": {
       "cta": {

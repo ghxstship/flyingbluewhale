@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
 
 // SSO config is owner/admin-only — RLS gates writes, but pre-check at
 // the action so unauthorized users don't waste a roundtrip to learn
@@ -54,11 +55,28 @@ export async function upsertSsoProvider(fd: FormData): Promise<void> {
     updated_at: new Date().toISOString(),
   };
 
+  let writtenId: string | null = id;
   if (id) {
     await supabase.from("org_sso_providers").update(payload).eq("id", id).eq("org_id", session.orgId);
   } else {
-    await supabase.from("org_sso_providers").insert(payload);
+    const { data: inserted } = await supabase.from("org_sso_providers").insert(payload).select("id").maybeSingle();
+    writtenId = (inserted as { id: string } | null)?.id ?? null;
   }
+
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.sso.upserted",
+    targetTable: "org_sso_providers",
+    targetId: writtenId,
+    metadata: {
+      provider_type: parsed.data.provider_type,
+      enabled: payload.enabled,
+      domains: payload.email_domains,
+      created: !id,
+    },
+  });
 
   revalidatePath("/console/settings/sso");
 }
@@ -81,6 +99,16 @@ export async function toggleSsoProvider(fd: FormData): Promise<void> {
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
 
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.sso.upserted",
+    targetTable: "org_sso_providers",
+    targetId: parsed.data.id,
+    metadata: { toggled_to: parsed.data.enabled },
+  });
+
   revalidatePath("/console/settings/sso");
 }
 
@@ -90,7 +118,24 @@ export async function deleteSsoProvider(id: string): Promise<void> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return;
 
   const supabase = await createClient();
-  await supabase.from("org_sso_providers").delete().eq("id", id).eq("org_id", session.orgId);
+  const { data: deleted } = await supabase
+    .from("org_sso_providers")
+    .delete()
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .select("id")
+    .maybeSingle();
+
+  if (deleted) {
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.sso.deleted",
+      targetTable: "org_sso_providers",
+      targetId: id,
+    });
+  }
 
   revalidatePath("/console/settings/sso");
 }

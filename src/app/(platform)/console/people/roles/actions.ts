@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
 
 const Schema = z.object({
   slug: z
@@ -33,15 +34,28 @@ export async function createCustomRole(_: State, fd: FormData): Promise<State> {
     .split(",")
     .map((p) => p.trim())
     .filter(Boolean);
-  const { error } = await supabase.from("org_roles").insert({
-    org_id: session.orgId,
-    slug: parsed.data.slug,
-    label: parsed.data.label,
-    description: parsed.data.description || null,
-    permissions,
-    is_system: false,
-  });
+  const { data: created, error } = await supabase
+    .from("org_roles")
+    .insert({
+      org_id: session.orgId,
+      slug: parsed.data.slug,
+      label: parsed.data.label,
+      description: parsed.data.description || null,
+      permissions,
+      is_system: false,
+    })
+    .select("id")
+    .maybeSingle();
   if (error) return { error: error.message };
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.org_role.created",
+    targetTable: "org_roles",
+    targetId: (created as { id: string } | null)?.id ?? null,
+    metadata: { slug: parsed.data.slug, label: parsed.data.label, permissions },
+  });
   revalidatePath("/console/people/roles");
   return null;
 }
@@ -52,6 +66,23 @@ export async function deleteCustomRole(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase.from("org_roles").delete().eq("id", id).eq("org_id", session.orgId).eq("is_system", false);
+  const { data: deleted } = await supabase
+    .from("org_roles")
+    .delete()
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .eq("is_system", false)
+    .select("id")
+    .maybeSingle();
+  if (deleted) {
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.org_role.deleted",
+      targetTable: "org_roles",
+      targetId: id,
+    });
+  }
   revalidatePath("/console/people/roles");
 }

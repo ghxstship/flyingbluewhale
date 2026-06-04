@@ -24,9 +24,37 @@ export type AuditAction =
   | "auth.passkey.revoked"
   | "auth.password.reset_requested"
   | "auth.delete_requested"
+  | "auth.delete_cancelled"
   | "auth.org.switched"
   | "auth.mfa.enabled"
   | "auth.mfa.disabled"
+  // Role + membership lifecycle. `auth.role.changed` is the most
+  // security-sensitive write in the console — it grants or revokes
+  // platform-level capabilities. Always log it.
+  | "auth.role.changed"
+  | "auth.member.removed"
+  | "auth.member.restored"
+  | "auth.invite.created"
+  | "auth.invite.revoked"
+  | "auth.invite.accepted"
+  // Project membership lifecycle.
+  | "auth.project_member.added"
+  | "auth.project_member.role_changed"
+  | "auth.project_member.removed"
+  // API keys (PATs).
+  | "auth.api_key.minted"
+  | "auth.api_key.revoked"
+  // Org-level admin config that changes auth posture.
+  | "auth.sso.upserted"
+  | "auth.sso.deleted"
+  | "auth.org_role.created"
+  | "auth.org_role.deleted"
+  | "auth.rate_limit.set"
+  | "auth.rate_limit.cleared"
+  // Proposal share links (public surface) — minting + revoking these
+  // grants and removes anon access to a proposal document.
+  | "auth.proposal_share.created"
+  | "auth.proposal_share.revoked"
   // Advancing state-machine transitions — driven by
   // POST /api/v1/deliverables/:id/transition
   | "deliverable.in_review"

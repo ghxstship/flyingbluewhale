@@ -59,7 +59,29 @@ export function CreateApiKeyForm() {
         ) : (
           <form action={formAction} className="space-y-3">
             <Input label="Name" name="name" required maxLength={120} placeholder="e.g. CI bot" />
-            <Input label="Scopes" name="scopes" hint="Comma-separated, e.g. projects:read, invoices:read" />
+            <Input
+              label="Scopes"
+              name="scopes"
+              hint="Comma-separated; leave blank for full access. Capability strings — projects:read, projects:write, tasks:write, deliverables:read, invoices:read, etc."
+            />
+            <details className="rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-2 text-xs">
+              <summary className="cursor-pointer text-[var(--text-muted)]">Common scope sets</summary>
+              <ul className="mt-2 space-y-1 font-mono">
+                <li>
+                  <code className="text-[var(--text-secondary)]">projects:read, tasks:read</code> — read-only reporter
+                </li>
+                <li>
+                  <code className="text-[var(--text-secondary)]">tasks:write, time:write</code> — field clock-in
+                </li>
+                <li>
+                  <code className="text-[var(--text-secondary)]">deliverables:read, deliverables:write</code> —
+                  advancing pipeline
+                </li>
+                <li>
+                  <code className="text-[var(--text-secondary)]">(blank)</code> — full access of the issuing user
+                </li>
+              </ul>
+            </details>
             {state && "error" in state && state.error && (
               <p className="text-xs text-[var(--color-error)]">{state.error}</p>
             )}

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
 
 const BUCKETS = ["ai", "scan", "webhook", "auth"] as const;
 
@@ -52,6 +53,19 @@ export async function upsertRateLimitOverride(fd: FormData): Promise<void> {
     });
   }
 
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.rate_limit.set",
+    targetTable: "rate_limit_overrides",
+    metadata: {
+      bucket: parsed.data.bucket,
+      limit: parsed.data.limit_count,
+      window_seconds: parsed.data.window_seconds,
+    },
+  });
+
   revalidatePath("/console/settings/rate-limits");
 }
 
@@ -61,7 +75,25 @@ export async function deleteRateLimitOverride(id: string): Promise<void> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return;
 
   const supabase = await createClient();
-  await supabase.from("rate_limit_overrides").delete().eq("id", id).eq("org_id", session.orgId);
+  const { data: deleted } = await supabase
+    .from("rate_limit_overrides")
+    .delete()
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .select("bucket")
+    .maybeSingle();
+
+  if (deleted) {
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.rate_limit.cleared",
+      targetTable: "rate_limit_overrides",
+      targetId: id,
+      metadata: { bucket: (deleted as { bucket: string }).bucket },
+    });
+  }
 
   revalidatePath("/console/settings/rate-limits");
 }

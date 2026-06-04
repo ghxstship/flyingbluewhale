@@ -135,5 +135,9 @@ export async function verifyApiKey(authorizationHeader: string | null | undefine
     isDeveloper: mem.is_developer,
     tier,
     persona: personaForRole(role),
+    // Propagate the stored scopes. Cookie sessions leave this undefined
+    // (= wildcard). Tokens minted with no scopes also surface an empty
+    // array which `assertScope` treats as wildcard, matching mint UX.
+    scopes: k.scopes ?? [],
   };
 }

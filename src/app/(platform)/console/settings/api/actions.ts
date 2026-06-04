@@ -5,6 +5,7 @@ import { z } from "zod";
 import { randomBytes, createHash } from "node:crypto";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
 
 const CreateSchema = z.object({
   name: z.string().min(1).max(120),
@@ -36,15 +37,28 @@ export async function createApiKeyAction(_: CreateState, fd: FormData): Promise<
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  const { error } = await supabase.from("api_keys").insert({
-    org_id: session.orgId,
-    name: parsed.data.name,
-    prefix,
-    hashed_secret: hashed,
-    scopes,
-    created_by: session.userId,
-  });
+  const { data: minted, error } = await supabase
+    .from("api_keys")
+    .insert({
+      org_id: session.orgId,
+      name: parsed.data.name,
+      prefix,
+      hashed_secret: hashed,
+      scopes,
+      created_by: session.userId,
+    })
+    .select("id")
+    .maybeSingle();
   if (error) return { error: error.message };
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.api_key.minted",
+    targetTable: "api_keys",
+    targetId: (minted as { id: string } | null)?.id ?? null,
+    metadata: { name: parsed.data.name, prefix, scopes },
+  });
   revalidatePath("/console/settings/api");
   return { prefix, secret: fullSecret };
 }
@@ -58,11 +72,23 @@ export async function revokeApiKeyAction(formData: FormData) {
   // .is("revoked_at", null) — don't re-stamp revoked_at on an already-
   // revoked key (would change the audit timestamp from the original
   // revocation to "now").
-  await supabase
+  const { data: revoked } = await supabase
     .from("api_keys")
     .update({ revoked_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
-    .is("revoked_at", null);
+    .is("revoked_at", null)
+    .select("id")
+    .maybeSingle();
+  if (revoked) {
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.api_key.revoked",
+      targetTable: "api_keys",
+      targetId: id,
+    });
+  }
   revalidatePath("/console/settings/api");
 }

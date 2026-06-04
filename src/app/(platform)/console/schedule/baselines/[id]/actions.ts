@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { compute, type ActivityInput, type DependencyInput, type DepType } from "@/lib/schedule/cpm";
@@ -12,6 +12,10 @@ const Schema = z.object({ baseline_id: z.string().uuid() });
 
 export async function activateBaseline(fd: FormData): Promise<void> {
   const session = await requireSession();
+  // RLS catches this too (schedule_baselines update requires manager+),
+  // but the app gate keeps the failure path predictable and lets us
+  // skip the round trip when we already know the answer.
+  if (!isManagerPlus(session)) return;
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return;
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -47,6 +51,7 @@ export async function activateBaseline(fd: FormData): Promise<void> {
 
 export async function archiveBaseline(fd: FormData): Promise<void> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return;
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return;
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -67,6 +72,7 @@ export async function archiveBaseline(fd: FormData): Promise<void> {
  */
 export async function runCpm(fd: FormData): Promise<void> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return;
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return;
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -176,6 +182,7 @@ export type ImportState = {
 
 export async function importSchedule(_: ImportState, fd: FormData): Promise<ImportState> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only owners, admins, and managers can import a schedule." };
   const parsed = ImportScheduleSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = (await createClient()) as unknown as LooseSupabase;

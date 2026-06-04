@@ -3,7 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { emitAudit } from "@/lib/audit";
 import { getSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 
 /**
  * Account deletion request — soft-delete with a 30-day grace window.
@@ -68,8 +68,24 @@ export async function POST(req: NextRequest) {
   // Revoke memberships immediately. Same idempotency guard — only
   // soft-delete rows that aren't already deleted, preserving the
   // original offboard timestamps.
+  //
+  // Service-role: post-migration 0063, the RLS helpers `has_org_role` and
+  // `is_org_member` filter `deleted_at IS NULL` — meaning the session
+  // client can no longer update memberships for a user who is being
+  // soft-deleted (they're not an owner/admin of their own org for
+  // policy purposes once we soft-delete one). Self-offboard is a
+  // privileged anti-bricking flow; use the service client so a missing
+  // SUPABASE_SERVICE_ROLE_KEY surfaces a clean 503 instead of a silent
+  // RLS rejection.
+  if (!isServiceClientAvailable()) {
+    return apiError(
+      "service_unavailable",
+      "Account deletion requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+    );
+  }
+  const svcForDelete = createServiceClient();
   const nowIso = new Date().toISOString();
-  await supabase.from("memberships").update({ deleted_at: nowIso }).eq("user_id", userId).is("deleted_at", null);
+  await svcForDelete.from("memberships").update({ deleted_at: nowIso }).eq("user_id", userId).is("deleted_at", null);
 
   // H2-07 — audit the deletion request BEFORE we sign out so the
   // actor is still on the session used by emitAudit().

@@ -197,6 +197,38 @@ export async function unenrollMfaAction(factorId: string): Promise<State> {
   if (!session) return { error: "Sign in to remove a second factor." };
 
   const supabase = await createClient();
+
+  // Last-factor self-lockout guard. If the org has require_2fa_for the
+  // user's role AND this is their last verified TOTP factor, removing
+  // it immediately locks them out on the next request (the MFA gate
+  // in proxy.ts bounces to /mfa/challenge but there's nothing to
+  // challenge against). Refuse and tell them to enroll a replacement
+  // first.
+  if (session.orgId) {
+    const { data: orgRow } = await supabase
+      .from("orgs")
+      .select("require_2fa_for")
+      .eq("id", session.orgId)
+      .maybeSingle();
+    const requireMap =
+      ((orgRow as { require_2fa_for?: Record<string, boolean> } | null)?.require_2fa_for as
+        | Record<string, boolean>
+        | undefined) ?? {};
+    if (requireMap[session.role]) {
+      // Count remaining verified factors. Supabase returns all factors
+      // including unverified — only count the ones that would still
+      // satisfy the MFA gate after this unenroll.
+      const { data: factorList } = await supabase.auth.mfa.listFactors();
+      const verified = (factorList?.totp ?? []).filter((f) => f.status === "verified" && f.id !== factorId);
+      if (verified.length === 0) {
+        return {
+          error:
+            "Your org requires 2FA for your role. Enroll another factor before removing this one or you'll be locked out.",
+        };
+      }
+    }
+  }
+
   const { error } = await supabase.auth.mfa.unenroll({ factorId });
   if (error) return { error: error.message };
 

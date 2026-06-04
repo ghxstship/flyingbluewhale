@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { emitAudit } from "@/lib/audit";
 
 /**
  * Workspace switcher — powers <WorkspaceSwitcher> at the top of the
@@ -78,6 +79,19 @@ export async function PATCH(req: NextRequest) {
       }
     ).upsert({ user_id: session.userId, last_org_id: input.orgId }, { onConflict: "user_id" });
     if (error) return apiError("internal", (error as { message?: string }).message ?? "write failed");
+
+    // Audit only when the org actually changed; refreshes that re-pick
+    // the same org are noise.
+    if (input.orgId !== session.orgId) {
+      await emitAudit({
+        actorId: session.userId,
+        orgId: input.orgId,
+        actorEmail: session.email,
+        action: "auth.org.switched",
+        metadata: { from: session.orgId, to: input.orgId },
+        requestId: req.headers.get("x-request-id"),
+      });
+    }
 
     return apiOk({ ok: true, orgId: input.orgId });
   });

@@ -31,6 +31,14 @@ export type Session = {
   isDeveloper: boolean;
   tier: Tier;
   persona: Persona;
+  /**
+   * Programmatic API key scopes, when the session is sourced from a PAT.
+   * Undefined for cookie sessions (full user capabilities). Empty array,
+   * undefined, or `["*"]` are all interpreted as wildcard — any scope is
+   * allowed. Use `assertScope(session, "foo:write")` at API boundaries
+   * that want to gate beyond persona/role.
+   */
+  scopes?: string[];
 };
 
 export async function getSession(): Promise<Session | null> {
@@ -312,8 +320,12 @@ const CAPABILITIES_BY_PERSONA: Partial<Record<Persona, readonly string[]>> = {
   crew: ["check-in:*", "tasks:read", "tasks:write", "time:write"],
   // Proposal recipient / portal viewer. Read-only.
   client: ["proposals:read", "deliverables:read", "tasks:read"],
-  // Generic read-only stakeholder.
-  viewer: ["projects:read", "tasks:read"],
+  // Generic read-only stakeholder. Same read scope as `client` so a
+  // GVTEWAY stakeholder-viewer can browse proposals + deliverables on
+  // a project they've been added to. Without proposals:read /
+  // deliverables:read here, a stakeholder-viewer who follows a portal
+  // link sees a 403 on the only screens they care about.
+  viewer: ["projects:read", "tasks:read", "proposals:read", "deliverables:read"],
   // Public marketplace browser; no organizational capabilities at all.
   community: [],
   // `guest` (pre-real-org member) and `visitor` (anon) intentionally
@@ -343,6 +355,13 @@ export function can(session: Session | null, capability: string): boolean {
  * `withAuth` to form a two-step gate — withAuth proves "who", this
  * function proves "may". H2-10 / IK-017.
  *
+ * Implicitly enforces PAT scopes: if the session is sourced from an API key
+ * with explicit `scopes`, the capability must be in the scope list. Cookie
+ * sessions (no scopes) and wildcard-scoped tokens (`[]` or `["*"]`) skip
+ * the scope check. This gives every existing `assertCapability` call site
+ * automatic scope enforcement without per-route edits — the convention is
+ * that `capability` and `scope` use the same `domain:action` strings.
+ *
  * Usage:
  *   return withAuth(async (session) => {
  *     const denial = assertCapability(session, "projects:write");
@@ -351,6 +370,11 @@ export function can(session: Session | null, capability: string): boolean {
  *   });
  */
 export function assertCapability(session: Session, capability: string): Response | null {
+  // PAT scope check first — surfaces a clearer error message that names
+  // the scope rather than the persona/role. If a token-restricted call
+  // passes the scope gate, fall through to the persona/role check.
+  const scopeDenial = assertScope(session, capability);
+  if (scopeDenial) return scopeDenial;
   if (can(session, capability)) return null;
   // Surface persona (granular) in the error so operators auditing 403s see
   // which marketplace persona was rejected — not just the coarse role.
@@ -358,4 +382,36 @@ export function assertCapability(session: Session, capability: string): Response
     "forbidden",
     `Persona "${session.persona}" (role "${session.role}") lacks capability "${capability}"`,
   );
+}
+
+/**
+ * PAT-scope gate. Returns a 403 envelope when the session is sourced from
+ * an API key whose `scopes` array doesn't include the required scope; null
+ * when the session is a cookie (no scopes) or the scope is permitted.
+ *
+ * Convention: `undefined`, `[]`, and `["*"]` are all wildcards. This is
+ * Stripe / GitHub-style: a token minted without explicit scopes is treated
+ * as the full capability set of its issuer. Use alongside `assertCapability`
+ * for routes that want EITHER role-based OR scope-based gating.
+ *
+ *   return withAuth(async (session) => {
+ *     const scopeDenial = assertScope(session, "projects:write");
+ *     if (scopeDenial) return scopeDenial;
+ *     const capDenial = assertCapability(session, "projects:write");
+ *     if (capDenial) return capDenial;
+ *     ...mutation...
+ *   });
+ *
+ * Routes that are intentionally cookie-only (e.g. PAT-blocked endpoints)
+ * should check `session.scopes !== undefined` and refuse.
+ */
+export function assertScope(session: Session, scope: string): Response | null {
+  // Cookie session — no scope restriction.
+  if (session.scopes === undefined) return null;
+  // Wildcard.
+  if (session.scopes.length === 0 || session.scopes.includes("*")) return null;
+  // Match exact OR domain wildcard (`projects:*` permits `projects:write`).
+  const [domain] = scope.split(":");
+  if (session.scopes.includes(scope) || session.scopes.includes(`${domain}:*`)) return null;
+  return apiError("forbidden", `API key lacks scope "${scope}"`);
 }

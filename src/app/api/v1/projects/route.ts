@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
-import { assertCapability, withAuth } from "@/lib/auth";
+import { assertCapability, assertScope, withAuth } from "@/lib/auth";
 import { createProject } from "@/lib/db/projects";
 import { listOrgScopedPage } from "@/lib/db/resource";
 import { withIdempotency } from "@/lib/idempotency";
@@ -34,6 +34,8 @@ export async function GET(req: Request) {
 
   return withAuth(async (session) => {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
+    const scopeDenial = assertScope(session, "projects:read");
+    if (scopeDenial) return scopeDenial;
     const page = await listOrgScopedPage("projects", session.orgId, {
       cursor,
       pageSize: Number.isFinite(pageSize) ? pageSize : undefined,
@@ -64,6 +66,8 @@ async function postHandler(req: NextRequest) {
 
   return withAuth(async (session) => {
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
+    // assertCapability folds in assertScope internally — covers both PAT
+    // scope and persona-cap in one call.
     const denial = assertCapability(session, "projects:write");
     if (denial) return denial;
     try {

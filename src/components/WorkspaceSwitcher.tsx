@@ -13,20 +13,28 @@ import {
 } from "@/components/ui/DropdownMenu";
 
 /**
- * Curated palette for the initials-fallback tile. Picked for legible
- * white text contrast (WCAG AA on bold weights). The hash assigns a
- * stable color per workspace name so each org has a consistent identity
- * across sessions, even before logoUrl loads.
+ * Initials-fallback tile palette — workspace identity discriminator.
+ *
+ * 8 hash buckets so each org gets a stable color across sessions even
+ * before `logoUrl` loads. The set MUST be visually distinct enough that
+ * users tell workspaces apart at a glance.
+ *
+ * Per the v3 kit ratification (tokens.json#tokenSourceOfTruth): every
+ * paint resolves from CSS vars on the SaaS skin. These 8 are CSS-var
+ * references; the values live in atlvs-product.css `--p-avatar-1..8`
+ * so a future tenant-branding pass can override the discriminator
+ * without touching this component. Each value picks WCAG-AA-legible
+ * white text contrast at 600+ weight per its own contrast audit.
  */
 const TILE_PALETTE = [
-  "#0EA5E9", // sky
-  "#8B5CF6", // violet
-  "#10B981", // emerald
-  "#F59E0B", // amber
-  "#EF4444", // red
-  "#EC4899", // pink
-  "#6366F1", // indigo
-  "#14B8A6", // teal
+  "var(--p-avatar-1)",
+  "var(--p-avatar-2)",
+  "var(--p-avatar-3)",
+  "var(--p-avatar-4)",
+  "var(--p-avatar-5)",
+  "var(--p-avatar-6)",
+  "var(--p-avatar-7)",
+  "var(--p-avatar-8)",
 ];
 
 function tileColor(seed: string): string {

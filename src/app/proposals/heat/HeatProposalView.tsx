@@ -1149,7 +1149,13 @@ function Footer() {
       <div className="heat-footer-inner">
         <div>
           <h4>Producer</h4>
-          <div style={{ fontSize: 18, fontFamily: "var(--font-display, Anton)", letterSpacing: "0.05em" }}>
+          <div
+            style={{
+              fontSize: 18,
+              fontFamily: "var(--font-display, var(--font-space-grotesk))",
+              letterSpacing: "0.05em",
+            }}
+          >
             {HEAT_DOC.producerLong}
           </div>
           <div style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>{HEAT_DOC.contactProducer}</div>

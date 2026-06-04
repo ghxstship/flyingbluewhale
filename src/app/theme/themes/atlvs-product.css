@@ -49,6 +49,23 @@
   --p-eyebrow: var(--p-mono);
   --p-casing: none;
 
+  /* Workspace-identity discriminator palette — 8 hash buckets so each
+   * org tile is stable across sessions before its logoUrl loads.
+   *
+   * Picked for AA-legible white text contrast at 600+ weight. NOT part
+   * of the semantic palette (success/warning/danger/info) — these are
+   * pure discriminators, like GitHub's avatar tints. Tenant branding
+   * can override any of the 8 per-org via the same custom-property
+   * cascade; see src/components/WorkspaceSwitcher.tsx for consumers. */
+  --p-avatar-1: #0ea5e9;
+  --p-avatar-2: #8b5cf6;
+  --p-avatar-3: #10b981;
+  --p-avatar-4: #f59e0b;
+  --p-avatar-5: #ef4444;
+  --p-avatar-6: #ec4899;
+  --p-avatar-7: #6366f1;
+  --p-avatar-8: #14b8a6;
+
   /* Radii — productivity-tool friendly, not pop-art sharp. */
   --p-r-sm: 6px;
   --p-r: 8px;

@@ -2,27 +2,10 @@ import type { Metadata, Viewport } from "next";
 import {
   Inter,
   JetBrains_Mono,
-  Cormorant_Garamond,
-  // CHROMA BEACON theme typography — loaded once, consumed per palette via
-  // `--font-body` / `--font-display` in each theme's CSS.
-  Fraunces,
-  Instrument_Serif,
-  DM_Serif_Display,
-  Bricolage_Grotesque,
   Space_Grotesk,
-  Geist,
-  Geist_Mono,
-  // Bermuda Triangle typography — aligned with HVRBOR.CLUB brand stack:
-  // Anton (display), Bebas Neue (subdisplay), DM Sans (body/UI),
-  // Share Tech Mono (data / labels / eyebrows).
-  Anton,
-  Bebas_Neue,
-  Share_Tech, // retained for legacy CHROMA themes that opt in
-  Share_Tech_Mono,
-  DM_Sans,
-  // GHXSTSHIP typography — Big Shoulders Display (poster condensed),
-  // Space Grotesk (body — already imported as spaceGrot above; reused),
-  // Silkscreen (pixel/8-bit labels), Space Mono (data/coordinates).
+  // GHXSTSHIP typography — Big Shoulders Display (cosmic /ghxstship-only),
+  // Space Grotesk (body — see above), Silkscreen (cosmic pixel labels),
+  // Space Mono (data/coordinates + SaaS eyebrows).
   Big_Shoulders,
   Silkscreen,
   Space_Mono,
@@ -49,67 +32,20 @@ import "./theme/index.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: "swap" });
-const serif = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-// CHROMA BEACON theme fonts — the CSS variable names match what each theme's
-// `--font-display` / `--font-body` declarations reference.
-const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap" });
-const instrument = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-instrument-serif",
-  display: "swap",
-});
-const dmSerif = DM_Serif_Display({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-dm-serif-display",
-  display: "swap",
-});
-const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", display: "swap" });
 const spaceGrot = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist", display: "swap" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono", display: "swap" });
 
-// Bermuda Triangle — HVRBOR-aligned brand stack.
-// Anton (display) + Bebas Neue (subdisplay) + DM Sans (body) + Share Tech Mono (data).
-// Share Tech (regular) is retained as a CSS variable for legacy theme escapes;
-// active body type is DM Sans.
-const anton = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
-const bebasNeue = Bebas_Neue({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-bebas-neue",
-  display: "swap",
-});
-const shareTech = Share_Tech({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-share-tech",
-  display: "swap",
-});
-const shareTechMono = Share_Tech_Mono({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-share-tech-mono",
-  display: "swap",
-});
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
-});
-
-// GHXSTSHIP — Deep Space Voyage brand stack.
-// Big Shoulders Display (condensed poster display), Silkscreen (pixel
-// labels), Space Mono (coordinates / data). Space Grotesk for body is
-// already loaded above as `spaceGrot`; the ghxstship theme reads it
-// via the same `--font-space-grotesk` variable.
+// GHXSTSHIP — Deep Space Voyage brand stack (cosmic /ghxstship surface only).
+// Big Shoulders Display (poster display), Silkscreen (pixel labels), Space
+// Mono (coordinates / data + SaaS eyebrows). Space Grotesk for body is
+// already loaded above as `spaceGrot`; both ghxstship and atlvs-product
+// themes read it via the same `--font-space-grotesk` variable.
+//
+// Purged 2026-06-03: Anton, Bebas Neue, Share Tech, Share Tech Mono,
+// DM Sans (dead Bermuda Triangle / HVRBOR stack), Fraunces, Instrument
+// Serif, DM Serif Display, Bricolage, Geist, Geist Mono, Cormorant
+// Garamond (CHROMA BEACON 8-theme picker that was retired with the
+// two-skin lock). Zero call sites consume these vars; loading them
+// added network requests + CSS bytes for nothing.
 const bigShoulders = Big_Shoulders({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -212,7 +148,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       dir={dir}
       data-theme={ssrTheme}
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${inter.variable} ${mono.variable} ${serif.variable} ${fraunces.variable} ${instrument.variable} ${dmSerif.variable} ${bricolage.variable} ${spaceGrot.variable} ${geist.variable} ${geistMono.variable} ${anton.variable} ${bebasNeue.variable} ${shareTech.variable} ${shareTechMono.variable} ${dmSans.variable} ${bigShoulders.variable} ${silkscreen.variable} ${spaceMono.variable}`}
+      className={`h-full ${inter.variable} ${mono.variable} ${spaceGrot.variable} ${bigShoulders.variable} ${silkscreen.variable} ${spaceMono.variable}`}
       suppressHydrationWarning
     >
       <head>

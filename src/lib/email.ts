@@ -75,12 +75,12 @@ export async function sendProposalShareEmail({
     to,
     subject: `${senderName ?? "ATLVS Technologies"} sent you a proposal: ${proposalTitle}`,
     html: `
-      <div style="font-family:'DM Sans','Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
-        <p style="color:#666;font-size:12px;letter-spacing:.15em;text-transform:uppercase;font-family:'Share Tech Mono','Courier New',monospace">Proposal</p>
-        <h1 style="font-family:'Anton','Helvetica Neue',Arial,sans-serif;font-size:36px;margin:12px 0 8px;letter-spacing:-0.02em;text-transform:uppercase">${proposalTitle}</h1>
-        <p style="color:#444;font-size:14px">${senderName ?? "The team"} shared a proposal with you.</p>
-        <p><a href="${url}" style="display:inline-block;background:#0a0a0a;color:#fff;padding:12px 24px;border:0;text-decoration:none;font-size:14px;text-transform:uppercase;letter-spacing:.1em">Open proposal</a></p>
-        <p style="color:#999;font-size:12px;margin-top:24px;font-family:'Share Tech Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code>${url}</code></p>
+      <div style="font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px">
+        <p style="color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
+        <h1 style="font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;margin:12px 0 8px;letter-spacing:-0.01em">${proposalTitle}</h1>
+        <p style="color:#181b23;font-size:14px">${senderName ?? "The team"} shared a proposal with you.</p>
+        <p><a href="${url}" style="display:inline-block;background:#FF2E88;color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Open proposal</a></p>
+        <p style="color:#8c95a3;font-size:12px;margin-top:24px;font-family:'Space Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code>${url}</code></p>
       </div>`,
   });
 }

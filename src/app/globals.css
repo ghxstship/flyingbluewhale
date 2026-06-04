@@ -1311,13 +1311,16 @@ pre,
   }
 
   /* ───── Marketing typography scale ─────
-   * Bermuda Triangle canon — h1/h2/h3 render in --font-display (Anton) via
-   * the global `h1,h2,h3 { font-family: var(--font-display) }` rule.
-   * `.hed-*` classes provide the size/weight scale and CAPITAL CASE via
-   * `text-transform: uppercase` so the JSX source stays Title Case
-   * (accessible to screen readers, grep-friendly, i18n-portable) while the
-   * visible chrome holds the brutal display vocabulary Anton was designed
-   * for.
+   * ATLVS-kit canon — h1/h2/h3 render in --font-display, which on the
+   * SaaS skin resolves to Space Grotesk (via atlvs-product.css `--p-heading`
+   * = `var(--p-font)`), and on the cosmic /ghxstship skin resolves to
+   * Big Shoulders Display. `.hed-*` classes provide the size/weight scale.
+   *
+   * Casing was UPPERCASE on the dead Bermuda Triangle canon; per the v3
+   * kit ratification (tokens.json#saasThemeHouseRules#A, 2026-06-03) the
+   * SaaS skin uses Title Case authored in source — UPPERCASE is cosmic-
+   * only. The `text-transform: uppercase` on `.hed-*` is therefore a
+   * marketing-cosmic affordance that should NOT bleed into product code.
    *
    * BEFORE these classes existed, 16+ marketplace pages referenced
    * `hed-2xl` / `eyebrow` in JSX with no CSS definition — they rendered

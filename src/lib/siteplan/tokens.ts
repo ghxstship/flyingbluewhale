@@ -1,17 +1,23 @@
 /**
  * SITEPLAN Design Tokens — protocol §7.
  *
- * The renderer-side spine for the GHXSTSHIP Contemporary Minimal Pop Art
- * sheet aesthetic. Per-shell accent overrides happen elsewhere; bands
- * always render their canonical band-vocab color regardless of shell theming.
+ * The renderer-side spine for the ATLVS site-plan sheet aesthetic.
+ * Per-shell accent overrides happen elsewhere; bands always render
+ * their canonical band-vocab color regardless of shell theming.
+ *
+ * Type families realigned to the v3 ATLVS kit (2026-06-03): the dead
+ * Bermuda Triangle / HVRBOR stack (Anton/Bebas/Share Tech) is purged
+ * everywhere it lived as a free-text font name. Site plans now read
+ * in the kit's two-family canon — Space Grotesk for headings and
+ * body, Space Mono for data labels and identifiers.
  */
 
 /** §7.1 Typography. */
 export const SITEPLAN_FONTS = {
-  display: "Anton", // sheet title H1, dimension callouts
-  heading: "Bebas Neue", // section bars, zone labels, station tags
-  body: "Share Tech", // notes, narrative blocks
-  mono: "Share Tech Mono", // atom IDs, model numbers, dimensions, schedules
+  display: "Space Grotesk", // sheet title H1, dimension callouts
+  heading: "Space Grotesk", // section bars, zone labels, station tags
+  body: "Space Grotesk", // notes, narrative blocks
+  mono: "Space Mono", // atom IDs, model numbers, dimensions, schedules
 } as const;
 
 /** §7.2 Color — paper aesthetic (default). */

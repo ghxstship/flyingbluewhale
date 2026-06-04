@@ -280,6 +280,71 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
+  it("no dead Bermuda-Triangle / HVRBOR font references survive", () => {
+    // The pre-v3 codebase loaded Anton / Bebas Neue / Share Tech /
+    // Share Tech Mono / DM Sans for the dead Bermuda Triangle stack and
+    // Fraunces / Instrument Serif / DM Serif Display / Bricolage / Geist
+    // / Geist Mono / Cormorant Garamond for the CHROMA BEACON 8-theme
+    // picker. Both were retired with the two-skin lock (453bbd7c) and
+    // the v3 ATLVS kit. Re-importing any of them or referencing the
+    // matching `--font-*` CSS var resurrects dead bytes on every page.
+    const DEAD_FONTS = [
+      "Anton",
+      "Bebas_Neue",
+      "Share_Tech",
+      "Share_Tech_Mono",
+      "DM_Sans",
+      "Fraunces",
+      "Instrument_Serif",
+      "DM_Serif_Display",
+      "Bricolage_Grotesque",
+      "Geist",
+      "Geist_Mono",
+      "Cormorant_Garamond",
+    ];
+    const DEAD_VARS = [
+      "--font-anton",
+      "--font-bebas-neue",
+      "--font-share-tech",
+      "--font-share-tech-mono",
+      "--font-dm-sans",
+      "--font-fraunces",
+      "--font-instrument-serif",
+      "--font-dm-serif-display",
+      "--font-bricolage",
+      "--font-geist",
+      "--font-geist-mono",
+      "--font-serif",
+    ];
+    const importRe = new RegExp(`\\b(${DEAD_FONTS.join("|")})\\b`);
+    const varRe = new RegExp(`var\\((${DEAD_VARS.join("|")})\\b`);
+    const ALLOW = new Set<string>([
+      // The design-system test itself enumerates the dead names.
+      "src/app/design-system.test.ts",
+    ]);
+    const offenders: string[] = [];
+    const scan = walk(SRC_DIR).filter((f) => /\.(tsx?|css|md)$/.test(f));
+    for (const file of scan) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW.has(rel)) continue;
+      // Skip memory/history docs — they reference dead canon as history.
+      if (/\.md$/.test(rel) && /README|memory/i.test(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      const lines = txt.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (/^\s*(\/\/|\*|#)/.test(line)) continue;
+        if (importRe.test(line) || varRe.test(line)) {
+          offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 120)}`);
+        }
+      }
+    }
+    expect(
+      offenders,
+      `Dead-font references resurrect the Bermuda Triangle / CHROMA BEACON typography purged in commit 34b0b073:\n${offenders.join("\n")}`,
+    ).toEqual([]);
+  });
+
   it("mobile responsiveness — platform sidebar carries the `hidden md:flex/block` toggle", () => {
     // PlatformSidebar (240px) and PortalRail (224px) must hide at
     // viewports below `md` (768px); the topbar MobileNavDrawer replaces

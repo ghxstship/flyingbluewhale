@@ -1,0 +1,10 @@
+{
+  "m.advances.eyebrow": "Móvil",
+  "m.advances.title": "Mis Asignaciones",
+  "m.advances.empty.title": "Aún Sin Asignaciones",
+  "m.advances.untitled": "Sin Título",
+  "m.advances.projectFallback": "Proyecto",
+  "m.advances.singleShow.prompt": "¿Trabajando un solo show?",
+  "m.advances.singleShow.link": "Abre tu turno",
+  "m.advances.singleShow.suffix": "para ver el call de hoy."
+}

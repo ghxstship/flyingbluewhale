@@ -1,30 +1,30 @@
 {
   "locales": {
     "es": {
-      "jobs": 272,
-      "keys": 11254
+      "jobs": 154,
+      "keys": 8234
     },
     "fr": {
-      "jobs": 272,
-      "keys": 11254
+      "jobs": 237,
+      "keys": 11216
     },
     "de": {
-      "jobs": 272,
-      "keys": 11254
+      "jobs": 236,
+      "keys": 11167
     },
     "pt": {
-      "jobs": 272,
-      "keys": 11254
+      "jobs": 250,
+      "keys": 11253
     },
     "ja": {
-      "jobs": 272,
-      "keys": 11254
+      "jobs": 250,
+      "keys": 11227
     },
     "ar": {
-      "jobs": 272,
+      "jobs": 251,
       "keys": 11254
     }
   },
-  "totalJobs": 1632,
-  "chunkSize": 200
+  "totalJobs": 1378,
+  "chunkSize": 800
 }

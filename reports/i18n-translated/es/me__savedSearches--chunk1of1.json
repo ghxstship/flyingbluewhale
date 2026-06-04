@@ -1,0 +1,22 @@
+{
+  "me.savedSearches.eyebrow": "Búsquedas guardadas",
+  "me.savedSearches.title": "Búsquedas Guardadas",
+  "me.savedSearches.add.title": "Añadir suscripción",
+  "me.savedSearches.fields.kind": "Tipo",
+  "me.savedSearches.fields.name": "Nombre",
+  "me.savedSearches.fields.namePlaceholder": "A1 / Programador de Iluminación · FL",
+  "me.savedSearches.fields.query": "Consulta (JSON)",
+  "me.savedSearches.fields.emailAlerts": "Alertas por email",
+  "me.savedSearches.fields.pushAlerts": "Alertas push",
+  "me.savedSearches.kinds.gig": "Bolo",
+  "me.savedSearches.kinds.rfq": "RFQ",
+  "me.savedSearches.kinds.talentCall": "Convocatoria de Talento",
+  "me.savedSearches.kinds.talent": "Talento",
+  "me.savedSearches.kinds.crew": "Crew",
+  "me.savedSearches.kinds.vendor": "Proveedor",
+  "me.savedSearches.active.title": "Suscripciones activas",
+  "me.savedSearches.empty": "Aún no hay búsquedas guardadas.",
+  "me.savedSearches.badge.email": "email",
+  "me.savedSearches.badge.push": "push",
+  "me.savedSearches.matches": "${r.match_count} coincidencias"
+}

@@ -1,0 +1,16 @@
+{
+  "me.privacy.errors.deleteFailed": "No se pudo eliminar",
+  "me.privacy.toast.scheduled": "Cuenta programada para eliminación en 30 días.",
+  "me.privacy.export.title": "Exportar mis datos",
+  "me.privacy.export.action": "Descargar",
+  "me.privacy.cookies.title": "Preferencias de cookies",
+  "me.privacy.cookies.action": "Gestionar cookies",
+  "me.privacy.delete.title": "Eliminar mi cuenta",
+  "me.privacy.delete.action": "Eliminar cuenta",
+  "me.privacy.dialog.title": "¿Eliminar tu cuenta?",
+  "me.privacy.dialog.descriptionSuffix": "abajo.",
+  "me.privacy.dialog.placeholder": "eliminar mi cuenta",
+  "me.privacy.dialog.ariaLabel": "Escribe la frase de confirmación",
+  "me.privacy.eyebrow": "Cuenta",
+  "me.privacy.title": "Privacidad y datos"
+}

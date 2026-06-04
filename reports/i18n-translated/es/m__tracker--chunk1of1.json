@@ -1,0 +1,12 @@
+{
+  "m.tracker.configureSupabase": "Configura Supabase.",
+  "m.tracker.title": "Tracker",
+  "m.tracker.projectSingular": "proyecto",
+  "m.tracker.projectPlural": "proyectos",
+  "m.tracker.atomSingular": "átomo",
+  "m.tracker.atomPlural": "átomos",
+  "m.tracker.empty.title": "Aún no hay proyectos",
+  "m.tracker.metric.budget": "Presupuesto",
+  "m.tracker.metric.actual": "Real",
+  "m.tracker.metric.variance": "Variación"
+}

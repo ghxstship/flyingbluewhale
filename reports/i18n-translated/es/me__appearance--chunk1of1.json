@@ -1,0 +1,7 @@
+{
+  "me.appearance.eyebrow": "Ajustes",
+  "me.appearance.title": "Apariencia",
+  "me.appearance.colorMode.label": "Modo de color",
+  "me.appearance.colorMode.hint": "Claro, oscuro o sigue la configuración de tu sistema.",
+  "me.appearance.density.label": "Densidad"
+}

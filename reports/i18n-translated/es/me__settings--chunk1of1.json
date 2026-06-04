@@ -1,0 +1,13 @@
+{
+  "me.settings.title": "Ajustes",
+  "me.settings.appearance.title": "Apariencia",
+  "me.settings.workspace.title": "Preferencias del espacio de trabajo",
+  "me.settings.workspace.submit": "Guardar preferencias",
+  "me.settings.workspace.density.label": "Densidad",
+  "me.settings.workspace.density.compact": "Compacta",
+  "me.settings.workspace.density.comfortable": "Cómoda",
+  "me.settings.workspace.density.spacious": "Amplia",
+  "me.settings.workspace.locale.label": "Idioma (p. ej. en, en-US, es)",
+  "me.settings.workspace.timezone.label": "Zona horaria (IANA, p. ej. America/New_York)",
+  "me.settings.workspace.timezone.placeholder": "Se detecta automáticamente si se deja en blanco"
+}

@@ -1,0 +1,14 @@
+{
+  "m.kudos.title": "Kudos",
+  "m.kudos.myBadges": "Mis Insignias",
+  "m.kudos.badgeFallback": "Insignia",
+  "m.kudos.give": "Dar Kudos",
+  "m.kudos.to": "Para",
+  "m.kudos.message": "Mensaje",
+  "m.kudos.valueTag": "Valor (etiqueta opcional)",
+  "m.kudos.empty.title": "Aún Sin Kudos",
+  "m.kudos.empty.description": "Las publicaciones de reconocimiento aparecerán aquí.",
+  "m.kudos.someone": "Alguien",
+  "m.kudos.points": "${p.points} pts",
+  "m.kudos.reactWith": "Reaccionar con ${emoji}"
+}

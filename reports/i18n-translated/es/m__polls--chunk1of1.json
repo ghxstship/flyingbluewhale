@@ -1,0 +1,7 @@
+{
+  "m.polls.title": "Encuestas",
+  "m.polls.empty.title": "Sin Encuestas Activas",
+  "m.polls.empty.description": "Las encuestas en vivo aparecerán aquí.",
+  "m.polls.liveBadge": "En Vivo",
+  "m.polls.voteButton": "Votar"
+}

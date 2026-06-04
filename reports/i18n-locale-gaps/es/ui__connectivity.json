@@ -1,4 +1,0 @@
-{
-  "ui.connectivity.offline": "You're offline — actions will queue and sync when you reconnect.",
-  "ui.connectivity.backOnline": "Back online — syncing queued actions…"
-}

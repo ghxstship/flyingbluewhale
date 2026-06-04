@@ -1,0 +1,9 @@
+{
+  "m.onboarding.title": "Incorporación",
+  "m.onboarding.markDone": "Marcar como hecho",
+  "m.onboarding.completed": "✓ Completado",
+  "m.onboarding.finish": "Finalizar incorporación",
+  "m.onboarding.eyebrow": "Móvil",
+  "m.onboarding.empty.title": "Sin flujos activos",
+  "m.onboarding.fallbackFlowName": "Incorporación"
+}

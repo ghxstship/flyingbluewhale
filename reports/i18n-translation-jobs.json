@@ -1,843 +1,6 @@
 [
   {
     "locale": "es",
-    "ns": "auth.error",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 2,
-    "inputPath": "reports/i18n-translation-input/es/auth__error--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__error--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.magicLink",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/es/auth__magicLink--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__magicLink--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.mfa",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 7,
-    "inputPath": "reports/i18n-translation-input/es/auth__mfa--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__mfa--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.notFound",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/auth__notFound--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__notFound--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.onboarding",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 8,
-    "inputPath": "reports/i18n-translation-input/es/auth__onboarding--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__onboarding--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.resetPassword",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/es/auth__resetPassword--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__resetPassword--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.signup",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 4,
-    "inputPath": "reports/i18n-translation-input/es/auth__signup--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__signup--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.sso",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/es/auth__sso--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__sso--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "auth.verifyEmail",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 2,
-    "inputPath": "reports/i18n-translation-input/es/auth__verifyEmail--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/auth__verifyEmail--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "avatarMenu.account",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/avatarMenu__account--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/avatarMenu__account--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "avatarMenu.keyboardShortcuts",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/avatarMenu__keyboardShortcuts--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/avatarMenu__keyboardShortcuts--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "avatarMenu.openAriaLabel",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/avatarMenu__openAriaLabel--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/avatarMenu__openAriaLabel--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "avatarMenu.preferences",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/avatarMenu__preferences--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/avatarMenu__preferences--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.actions",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__actions--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__actions--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.add",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__add--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__add--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.and",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__and--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__and--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.approve",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__approve--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__approve--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.archive",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__archive--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__archive--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.configureSupabase",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__configureSupabase--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__configureSupabase--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.dash",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__dash--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__dash--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.download",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__download--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__download--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.emDash",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__emDash--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__emDash--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.home",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__home--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__home--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.justNow",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__justNow--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__justNow--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.loadingEllipsis",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__loadingEllipsis--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__loadingEllipsis--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.name",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__name--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__name--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.networkError",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__networkError--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__networkError--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.notes",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__notes--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__notes--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.open",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__open--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__open--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.openArrow",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__openArrow--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__openArrow--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.processing",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__processing--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__processing--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.reactivate",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__reactivate--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__reactivate--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.reject",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__reject--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__reject--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.relativeTime",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__relativeTime--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__relativeTime--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.remove",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__remove--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__remove--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.saveChanges",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__saveChanges--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__saveChanges--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.savedToast",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__savedToast--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__savedToast--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.saving",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__saving--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__saving--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.selectEllipsis",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__selectEllipsis--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__selectEllipsis--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.selectPlaceholder",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__selectPlaceholder--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__selectPlaceholder--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.send",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__send--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__send--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.time",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 4,
-    "inputPath": "reports/i18n-translation-input/es/common__time--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__time--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.tryAgain",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__tryAgain--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__tryAgain--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.untitled",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__untitled--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__untitled--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.update",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__update--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__update--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "common.upload",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/common__upload--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/common__upload--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.accommodation",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 40,
-    "inputPath": "reports/i18n-translation-input/es/console__accommodation--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__accommodation--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.accreditation",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 90,
-    "inputPath": "reports/i18n-translation-input/es/console__accreditation--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__accreditation--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.actionItems",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 14,
-    "inputPath": "reports/i18n-translation-input/es/console__actionItems--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__actionItems--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.agency",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 81,
-    "inputPath": "reports/i18n-translation-input/es/console__agency--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__agency--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.ai",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 80,
-    "inputPath": "reports/i18n-translation-input/es/console__ai--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__ai--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.annotations",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 47,
-    "inputPath": "reports/i18n-translation-input/es/console__annotations--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__annotations--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.assistant",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 25,
-    "inputPath": "reports/i18n-translation-input/es/console__assistant--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__assistant--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.bim",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 78,
-    "inputPath": "reports/i18n-translation-input/es/console__bim--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__bim--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.bookings",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 177,
-    "inputPath": "reports/i18n-translation-input/es/console__bookings--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__bookings--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.campaigns",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/es/console__campaigns--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__campaigns--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.captures",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 27,
-    "inputPath": "reports/i18n-translation-input/es/console__captures--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__captures--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.clients",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 69,
-    "inputPath": "reports/i18n-translation-input/es/console__clients--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__clients--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.commercial",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 106,
-    "inputPath": "reports/i18n-translation-input/es/console__commercial--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__commercial--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.common",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/console__common--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__common--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.comms",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 102,
-    "inputPath": "reports/i18n-translation-input/es/console__comms--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__comms--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.compliance",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 12,
-    "inputPath": "reports/i18n-translation-input/es/console__compliance--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__compliance--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.configureSupabase",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/console__configureSupabase--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__configureSupabase--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.contracts",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 21,
-    "inputPath": "reports/i18n-translation-input/es/console__contracts--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__contracts--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.dashboard",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 24,
-    "inputPath": "reports/i18n-translation-input/es/console__dashboard--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__dashboard--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.dashboards",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/es/console__dashboards--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__dashboards--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.drawings",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 44,
-    "inputPath": "reports/i18n-translation-input/es/console__drawings--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__drawings--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.emailInbox",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 14,
-    "inputPath": "reports/i18n-translation-input/es/console__emailInbox--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__emailInbox--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.envelopes",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 24,
-    "inputPath": "reports/i18n-translation-input/es/console__envelopes--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__envelopes--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.error",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 6,
-    "inputPath": "reports/i18n-translation-input/es/console__error--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__error--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.estimates",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 31,
-    "inputPath": "reports/i18n-translation-input/es/console__estimates--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__estimates--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.events",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 43,
-    "inputPath": "reports/i18n-translation-input/es/console__events--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__events--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.finance",
-    "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__finance--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/es/console__finance--chunk1of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.finance",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__finance--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/es/console__finance--chunk2of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.finance",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 196,
-    "inputPath": "reports/i18n-translation-input/es/console__finance--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/es/console__finance--chunk3of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.forms",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 40,
-    "inputPath": "reports/i18n-translation-input/es/console__forms--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__forms--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.guides",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 11,
-    "inputPath": "reports/i18n-translation-input/es/console__guides--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__guides--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.import",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 10,
-    "inputPath": "reports/i18n-translation-input/es/console__import--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__import--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.inbox",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 9,
-    "inputPath": "reports/i18n-translation-input/es/console__inbox--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__inbox--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.insights",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 14,
-    "inputPath": "reports/i18n-translation-input/es/console__insights--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__insights--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.inspections",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 48,
-    "inputPath": "reports/i18n-translation-input/es/console__inspections--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__inspections--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.knowledge",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 30,
-    "inputPath": "reports/i18n-translation-input/es/console__knowledge--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__knowledge--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.layout",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/console__layout--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__layout--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.leads",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 59,
-    "inputPath": "reports/i18n-translation-input/es/console__leads--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__leads--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.legal",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 155,
-    "inputPath": "reports/i18n-translation-input/es/console__legal--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__legal--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.locations",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 50,
-    "inputPath": "reports/i18n-translation-input/es/console__locations--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__locations--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.logistics",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 87,
-    "inputPath": "reports/i18n-translation-input/es/console__logistics--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__logistics--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.marketing",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 24,
-    "inputPath": "reports/i18n-translation-input/es/console__marketing--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__marketing--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.marketplace",
-    "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__marketplace--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/es/console__marketplace--chunk1of2.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.marketplace",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 162,
-    "inputPath": "reports/i18n-translation-input/es/console__marketplace--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/es/console__marketplace--chunk2of2.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.meetings",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 67,
-    "inputPath": "reports/i18n-translation-input/es/console__meetings--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__meetings--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.notFound",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 4,
-    "inputPath": "reports/i18n-translation-input/es/console__notFound--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__notFound--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.operations",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 135,
-    "inputPath": "reports/i18n-translation-input/es/console__operations--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/console__operations--chunk1of1.json"
-  },
-  {
-    "locale": "es",
     "ns": "console.ops",
     "chunk": 1,
     "chunkOf": 1,
@@ -858,19 +21,10 @@
     "locale": "es",
     "ns": "console.people",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__people--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/es/console__people--chunk1of2.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.people",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 175,
-    "inputPath": "reports/i18n-translation-input/es/console__people--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/es/console__people--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 375,
+    "inputPath": "reports/i18n-translation-input/es/console__people--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/es/console__people--chunk1of1.json"
   },
   {
     "locale": "es",
@@ -894,46 +48,19 @@
     "locale": "es",
     "ns": "console.procurement",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__procurement--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/es/console__procurement--chunk1of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.procurement",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__procurement--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/es/console__procurement--chunk2of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.procurement",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/es/console__procurement--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/es/console__procurement--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 437,
+    "inputPath": "reports/i18n-translation-input/es/console__procurement--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/es/console__procurement--chunk1of1.json"
   },
   {
     "locale": "es",
     "ns": "console.production",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__production--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/es/console__production--chunk1of2.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.production",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 123,
-    "inputPath": "reports/i18n-translation-input/es/console__production--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/es/console__production--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 323,
+    "inputPath": "reports/i18n-translation-input/es/console__production--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/es/console__production--chunk1of1.json"
   },
   {
     "locale": "es",
@@ -948,28 +75,10 @@
     "locale": "es",
     "ns": "console.projects",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__projects--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/es/console__projects--chunk1of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.projects",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__projects--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/es/console__projects--chunk2of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.projects",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 80,
-    "inputPath": "reports/i18n-translation-input/es/console__projects--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/es/console__projects--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 480,
+    "inputPath": "reports/i18n-translation-input/es/console__projects--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/es/console__projects--chunk1of1.json"
   },
   {
     "locale": "es",
@@ -1011,19 +120,10 @@
     "locale": "es",
     "ns": "console.safety",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__safety--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/es/console__safety--chunk1of2.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.safety",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 117,
-    "inputPath": "reports/i18n-translation-input/es/console__safety--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/es/console__safety--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 317,
+    "inputPath": "reports/i18n-translation-input/es/console__safety--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/es/console__safety--chunk1of1.json"
   },
   {
     "locale": "es",
@@ -1047,37 +147,10 @@
     "locale": "es",
     "ns": "console.settings",
     "chunk": 1,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__settings--chunk1of4.json",
-    "outputPath": "reports/i18n-translated/es/console__settings--chunk1of4.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.settings",
-    "chunk": 2,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__settings--chunk2of4.json",
-    "outputPath": "reports/i18n-translated/es/console__settings--chunk2of4.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.settings",
-    "chunk": 3,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__settings--chunk3of4.json",
-    "outputPath": "reports/i18n-translated/es/console__settings--chunk3of4.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.settings",
-    "chunk": 4,
-    "chunkOf": 4,
-    "count": 73,
-    "inputPath": "reports/i18n-translation-input/es/console__settings--chunk4of4.json",
-    "outputPath": "reports/i18n-translated/es/console__settings--chunk4of4.json"
+    "chunkOf": 1,
+    "count": 673,
+    "inputPath": "reports/i18n-translation-input/es/console__settings--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/es/console__settings--chunk1of1.json"
   },
   {
     "locale": "es",
@@ -1191,28 +264,10 @@
     "locale": "es",
     "ns": "console.workforce",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__workforce--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/es/console__workforce--chunk1of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.workforce",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/console__workforce--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/es/console__workforce--chunk2of3.json"
-  },
-  {
-    "locale": "es",
-    "ns": "console.workforce",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 16,
-    "inputPath": "reports/i18n-translation-input/es/console__workforce--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/es/console__workforce--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 416,
+    "inputPath": "reports/i18n-translation-input/es/console__workforce--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/es/console__workforce--chunk1of1.json"
   },
   {
     "locale": "es",
@@ -1641,73 +696,19 @@
     "locale": "es",
     "ns": "marketing.pages",
     "chunk": 1,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk1of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk1of8.json"
+    "chunkOf": 2,
+    "count": 800,
+    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk1of2.json",
+    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk1of2.json"
   },
   {
     "locale": "es",
     "ns": "marketing.pages",
     "chunk": 2,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk2of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk2of8.json"
-  },
-  {
-    "locale": "es",
-    "ns": "marketing.pages",
-    "chunk": 3,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk3of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk3of8.json"
-  },
-  {
-    "locale": "es",
-    "ns": "marketing.pages",
-    "chunk": 4,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk4of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk4of8.json"
-  },
-  {
-    "locale": "es",
-    "ns": "marketing.pages",
-    "chunk": 5,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk5of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk5of8.json"
-  },
-  {
-    "locale": "es",
-    "ns": "marketing.pages",
-    "chunk": 6,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk6of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk6of8.json"
-  },
-  {
-    "locale": "es",
-    "ns": "marketing.pages",
-    "chunk": 7,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk7of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk7of8.json"
-  },
-  {
-    "locale": "es",
-    "ns": "marketing.pages",
-    "chunk": 8,
-    "chunkOf": 8,
-    "count": 165,
-    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk8of8.json",
-    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk8of8.json"
+    "chunkOf": 2,
+    "count": 765,
+    "inputPath": "reports/i18n-translation-input/es/marketing__pages--chunk2of2.json",
+    "outputPath": "reports/i18n-translated/es/marketing__pages--chunk2of2.json"
   },
   {
     "locale": "es",
@@ -2368,69 +1369,6 @@
   },
   {
     "locale": "es",
-    "ns": "ui.alert",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/ui__alert--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/ui__alert--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "ui.banner",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/ui__banner--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/ui__banner--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "ui.connectivity",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 2,
-    "inputPath": "reports/i18n-translation-input/es/ui__connectivity--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/ui__connectivity--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "ui.density",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 7,
-    "inputPath": "reports/i18n-translation-input/es/ui__density--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/ui__density--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "ui.dialog",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/ui__dialog--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/ui__dialog--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "ui.sortable",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/ui__sortable--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/ui__sortable--chunk1of1.json"
-  },
-  {
-    "locale": "es",
-    "ns": "workspace.fallbackName",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/es/workspace__fallbackName--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/es/workspace__fallbackName--chunk1of1.json"
-  },
-  {
-    "locale": "es",
     "ns": "workspace.manage",
     "chunk": 1,
     "chunkOf": 1,
@@ -2446,132 +1384,6 @@
     "count": 1,
     "inputPath": "reports/i18n-translation-input/es/workspace__menuLabel--chunk1of1.json",
     "outputPath": "reports/i18n-translated/es/workspace__menuLabel--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.error",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 2,
-    "inputPath": "reports/i18n-translation-input/fr/auth__error--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__error--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.magicLink",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/fr/auth__magicLink--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__magicLink--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.mfa",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 7,
-    "inputPath": "reports/i18n-translation-input/fr/auth__mfa--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__mfa--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.notFound",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/fr/auth__notFound--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__notFound--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.onboarding",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 8,
-    "inputPath": "reports/i18n-translation-input/fr/auth__onboarding--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__onboarding--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.resetPassword",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/fr/auth__resetPassword--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__resetPassword--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.signup",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 4,
-    "inputPath": "reports/i18n-translation-input/fr/auth__signup--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__signup--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.sso",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/fr/auth__sso--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__sso--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "auth.verifyEmail",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 2,
-    "inputPath": "reports/i18n-translation-input/fr/auth__verifyEmail--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/auth__verifyEmail--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "avatarMenu.account",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/fr/avatarMenu__account--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/avatarMenu__account--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "avatarMenu.keyboardShortcuts",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/fr/avatarMenu__keyboardShortcuts--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/avatarMenu__keyboardShortcuts--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "avatarMenu.openAriaLabel",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/fr/avatarMenu__openAriaLabel--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/avatarMenu__openAriaLabel--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "avatarMenu.preferences",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/fr/avatarMenu__preferences--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/avatarMenu__preferences--chunk1of1.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "common.actions",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/fr/common__actions--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/fr/common__actions--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3099,28 +1911,10 @@
     "locale": "fr",
     "ns": "console.finance",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__finance--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__finance--chunk1of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.finance",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__finance--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__finance--chunk2of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.finance",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 196,
-    "inputPath": "reports/i18n-translation-input/fr/console__finance--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__finance--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 596,
+    "inputPath": "reports/i18n-translation-input/fr/console__finance--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__finance--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3243,19 +2037,10 @@
     "locale": "fr",
     "ns": "console.marketplace",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__marketplace--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__marketplace--chunk1of2.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.marketplace",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 162,
-    "inputPath": "reports/i18n-translation-input/fr/console__marketplace--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__marketplace--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 362,
+    "inputPath": "reports/i18n-translation-input/fr/console__marketplace--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__marketplace--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3306,19 +2091,10 @@
     "locale": "fr",
     "ns": "console.people",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__people--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__people--chunk1of2.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.people",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 175,
-    "inputPath": "reports/i18n-translation-input/fr/console__people--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__people--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 375,
+    "inputPath": "reports/i18n-translation-input/fr/console__people--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__people--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3342,46 +2118,19 @@
     "locale": "fr",
     "ns": "console.procurement",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__procurement--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__procurement--chunk1of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.procurement",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__procurement--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__procurement--chunk2of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.procurement",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/fr/console__procurement--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__procurement--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 437,
+    "inputPath": "reports/i18n-translation-input/fr/console__procurement--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__procurement--chunk1of1.json"
   },
   {
     "locale": "fr",
     "ns": "console.production",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__production--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__production--chunk1of2.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.production",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 123,
-    "inputPath": "reports/i18n-translation-input/fr/console__production--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__production--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 323,
+    "inputPath": "reports/i18n-translation-input/fr/console__production--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__production--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3396,28 +2145,10 @@
     "locale": "fr",
     "ns": "console.projects",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__projects--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__projects--chunk1of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.projects",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__projects--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__projects--chunk2of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.projects",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 80,
-    "inputPath": "reports/i18n-translation-input/fr/console__projects--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__projects--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 480,
+    "inputPath": "reports/i18n-translation-input/fr/console__projects--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__projects--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3459,19 +2190,10 @@
     "locale": "fr",
     "ns": "console.safety",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__safety--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__safety--chunk1of2.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.safety",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 117,
-    "inputPath": "reports/i18n-translation-input/fr/console__safety--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/fr/console__safety--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 317,
+    "inputPath": "reports/i18n-translation-input/fr/console__safety--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__safety--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3495,37 +2217,10 @@
     "locale": "fr",
     "ns": "console.settings",
     "chunk": 1,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__settings--chunk1of4.json",
-    "outputPath": "reports/i18n-translated/fr/console__settings--chunk1of4.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.settings",
-    "chunk": 2,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__settings--chunk2of4.json",
-    "outputPath": "reports/i18n-translated/fr/console__settings--chunk2of4.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.settings",
-    "chunk": 3,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__settings--chunk3of4.json",
-    "outputPath": "reports/i18n-translated/fr/console__settings--chunk3of4.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.settings",
-    "chunk": 4,
-    "chunkOf": 4,
-    "count": 73,
-    "inputPath": "reports/i18n-translation-input/fr/console__settings--chunk4of4.json",
-    "outputPath": "reports/i18n-translated/fr/console__settings--chunk4of4.json"
+    "chunkOf": 1,
+    "count": 673,
+    "inputPath": "reports/i18n-translation-input/fr/console__settings--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__settings--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -3639,28 +2334,10 @@
     "locale": "fr",
     "ns": "console.workforce",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__workforce--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__workforce--chunk1of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.workforce",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/console__workforce--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__workforce--chunk2of3.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "console.workforce",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 16,
-    "inputPath": "reports/i18n-translation-input/fr/console__workforce--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/fr/console__workforce--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 416,
+    "inputPath": "reports/i18n-translation-input/fr/console__workforce--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/fr/console__workforce--chunk1of1.json"
   },
   {
     "locale": "fr",
@@ -4089,73 +2766,19 @@
     "locale": "fr",
     "ns": "marketing.pages",
     "chunk": 1,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk1of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk1of8.json"
+    "chunkOf": 2,
+    "count": 800,
+    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk1of2.json",
+    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk1of2.json"
   },
   {
     "locale": "fr",
     "ns": "marketing.pages",
     "chunk": 2,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk2of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk2of8.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "marketing.pages",
-    "chunk": 3,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk3of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk3of8.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "marketing.pages",
-    "chunk": 4,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk4of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk4of8.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "marketing.pages",
-    "chunk": 5,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk5of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk5of8.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "marketing.pages",
-    "chunk": 6,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk6of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk6of8.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "marketing.pages",
-    "chunk": 7,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk7of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk7of8.json"
-  },
-  {
-    "locale": "fr",
-    "ns": "marketing.pages",
-    "chunk": 8,
-    "chunkOf": 8,
-    "count": 165,
-    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk8of8.json",
-    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk8of8.json"
+    "chunkOf": 2,
+    "count": 765,
+    "inputPath": "reports/i18n-translation-input/fr/marketing__pages--chunk2of2.json",
+    "outputPath": "reports/i18n-translated/fr/marketing__pages--chunk2of2.json"
   },
   {
     "locale": "fr",
@@ -4897,132 +3520,6 @@
   },
   {
     "locale": "de",
-    "ns": "auth.error",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 2,
-    "inputPath": "reports/i18n-translation-input/de/auth__error--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__error--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.magicLink",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/de/auth__magicLink--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__magicLink--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.mfa",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 7,
-    "inputPath": "reports/i18n-translation-input/de/auth__mfa--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__mfa--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.notFound",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/de/auth__notFound--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__notFound--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.onboarding",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 8,
-    "inputPath": "reports/i18n-translation-input/de/auth__onboarding--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__onboarding--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.resetPassword",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/de/auth__resetPassword--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__resetPassword--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.signup",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 4,
-    "inputPath": "reports/i18n-translation-input/de/auth__signup--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__signup--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.sso",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 3,
-    "inputPath": "reports/i18n-translation-input/de/auth__sso--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__sso--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "auth.verifyEmail",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 2,
-    "inputPath": "reports/i18n-translation-input/de/auth__verifyEmail--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/auth__verifyEmail--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "avatarMenu.account",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/de/avatarMenu__account--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/avatarMenu__account--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "avatarMenu.keyboardShortcuts",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/de/avatarMenu__keyboardShortcuts--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/avatarMenu__keyboardShortcuts--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "avatarMenu.openAriaLabel",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/de/avatarMenu__openAriaLabel--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/avatarMenu__openAriaLabel--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "avatarMenu.preferences",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/de/avatarMenu__preferences--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/avatarMenu__preferences--chunk1of1.json"
-  },
-  {
-    "locale": "de",
-    "ns": "common.actions",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/de/common__actions--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/common__actions--chunk1of1.json"
-  },
-  {
-    "locale": "de",
     "ns": "common.add",
     "chunk": 1,
     "chunkOf": 1,
@@ -5547,28 +4044,10 @@
     "locale": "de",
     "ns": "console.finance",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__finance--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/de/console__finance--chunk1of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.finance",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__finance--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/de/console__finance--chunk2of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.finance",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 196,
-    "inputPath": "reports/i18n-translation-input/de/console__finance--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/de/console__finance--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 596,
+    "inputPath": "reports/i18n-translation-input/de/console__finance--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__finance--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -5691,19 +4170,10 @@
     "locale": "de",
     "ns": "console.marketplace",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__marketplace--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/de/console__marketplace--chunk1of2.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.marketplace",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 162,
-    "inputPath": "reports/i18n-translation-input/de/console__marketplace--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/de/console__marketplace--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 362,
+    "inputPath": "reports/i18n-translation-input/de/console__marketplace--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__marketplace--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -5754,19 +4224,10 @@
     "locale": "de",
     "ns": "console.people",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__people--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/de/console__people--chunk1of2.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.people",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 175,
-    "inputPath": "reports/i18n-translation-input/de/console__people--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/de/console__people--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 375,
+    "inputPath": "reports/i18n-translation-input/de/console__people--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__people--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -5790,46 +4251,19 @@
     "locale": "de",
     "ns": "console.procurement",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__procurement--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/de/console__procurement--chunk1of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.procurement",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__procurement--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/de/console__procurement--chunk2of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.procurement",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/de/console__procurement--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/de/console__procurement--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 437,
+    "inputPath": "reports/i18n-translation-input/de/console__procurement--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__procurement--chunk1of1.json"
   },
   {
     "locale": "de",
     "ns": "console.production",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__production--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/de/console__production--chunk1of2.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.production",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 123,
-    "inputPath": "reports/i18n-translation-input/de/console__production--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/de/console__production--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 323,
+    "inputPath": "reports/i18n-translation-input/de/console__production--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__production--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -5844,28 +4278,10 @@
     "locale": "de",
     "ns": "console.projects",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__projects--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/de/console__projects--chunk1of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.projects",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__projects--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/de/console__projects--chunk2of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.projects",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 80,
-    "inputPath": "reports/i18n-translation-input/de/console__projects--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/de/console__projects--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 480,
+    "inputPath": "reports/i18n-translation-input/de/console__projects--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__projects--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -5907,19 +4323,10 @@
     "locale": "de",
     "ns": "console.safety",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__safety--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/de/console__safety--chunk1of2.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.safety",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 117,
-    "inputPath": "reports/i18n-translation-input/de/console__safety--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/de/console__safety--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 317,
+    "inputPath": "reports/i18n-translation-input/de/console__safety--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__safety--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -5943,37 +4350,10 @@
     "locale": "de",
     "ns": "console.settings",
     "chunk": 1,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__settings--chunk1of4.json",
-    "outputPath": "reports/i18n-translated/de/console__settings--chunk1of4.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.settings",
-    "chunk": 2,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__settings--chunk2of4.json",
-    "outputPath": "reports/i18n-translated/de/console__settings--chunk2of4.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.settings",
-    "chunk": 3,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__settings--chunk3of4.json",
-    "outputPath": "reports/i18n-translated/de/console__settings--chunk3of4.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.settings",
-    "chunk": 4,
-    "chunkOf": 4,
-    "count": 73,
-    "inputPath": "reports/i18n-translation-input/de/console__settings--chunk4of4.json",
-    "outputPath": "reports/i18n-translated/de/console__settings--chunk4of4.json"
+    "chunkOf": 1,
+    "count": 673,
+    "inputPath": "reports/i18n-translation-input/de/console__settings--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__settings--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -6087,28 +4467,10 @@
     "locale": "de",
     "ns": "console.workforce",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__workforce--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/de/console__workforce--chunk1of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.workforce",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/console__workforce--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/de/console__workforce--chunk2of3.json"
-  },
-  {
-    "locale": "de",
-    "ns": "console.workforce",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 16,
-    "inputPath": "reports/i18n-translation-input/de/console__workforce--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/de/console__workforce--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 416,
+    "inputPath": "reports/i18n-translation-input/de/console__workforce--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/de/console__workforce--chunk1of1.json"
   },
   {
     "locale": "de",
@@ -6537,73 +4899,19 @@
     "locale": "de",
     "ns": "marketing.pages",
     "chunk": 1,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk1of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk1of8.json"
+    "chunkOf": 2,
+    "count": 800,
+    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk1of2.json",
+    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk1of2.json"
   },
   {
     "locale": "de",
     "ns": "marketing.pages",
     "chunk": 2,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk2of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk2of8.json"
-  },
-  {
-    "locale": "de",
-    "ns": "marketing.pages",
-    "chunk": 3,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk3of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk3of8.json"
-  },
-  {
-    "locale": "de",
-    "ns": "marketing.pages",
-    "chunk": 4,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk4of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk4of8.json"
-  },
-  {
-    "locale": "de",
-    "ns": "marketing.pages",
-    "chunk": 5,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk5of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk5of8.json"
-  },
-  {
-    "locale": "de",
-    "ns": "marketing.pages",
-    "chunk": 6,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk6of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk6of8.json"
-  },
-  {
-    "locale": "de",
-    "ns": "marketing.pages",
-    "chunk": 7,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk7of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk7of8.json"
-  },
-  {
-    "locale": "de",
-    "ns": "marketing.pages",
-    "chunk": 8,
-    "chunkOf": 8,
-    "count": 165,
-    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk8of8.json",
-    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk8of8.json"
+    "chunkOf": 2,
+    "count": 765,
+    "inputPath": "reports/i18n-translation-input/de/marketing__pages--chunk2of2.json",
+    "outputPath": "reports/i18n-translated/de/marketing__pages--chunk2of2.json"
   },
   {
     "locale": "de",
@@ -7084,15 +5392,6 @@
   },
   {
     "locale": "de",
-    "ns": "p.producer",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 49,
-    "inputPath": "reports/i18n-translation-input/de/p__producer--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/de/p__producer--chunk1of1.json"
-  },
-  {
-    "locale": "de",
     "ns": "p.promoter",
     "chunk": 1,
     "chunkOf": 1,
@@ -7369,15 +5668,6 @@
     "count": 7,
     "inputPath": "reports/i18n-translation-input/pt/auth__mfa--chunk1of1.json",
     "outputPath": "reports/i18n-translated/pt/auth__mfa--chunk1of1.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "auth.notFound",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 1,
-    "inputPath": "reports/i18n-translation-input/pt/auth__notFound--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/pt/auth__notFound--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -7995,28 +6285,10 @@
     "locale": "pt",
     "ns": "console.finance",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__finance--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__finance--chunk1of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.finance",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__finance--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__finance--chunk2of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.finance",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 196,
-    "inputPath": "reports/i18n-translation-input/pt/console__finance--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__finance--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 596,
+    "inputPath": "reports/i18n-translation-input/pt/console__finance--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__finance--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8139,19 +6411,10 @@
     "locale": "pt",
     "ns": "console.marketplace",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__marketplace--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__marketplace--chunk1of2.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.marketplace",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 162,
-    "inputPath": "reports/i18n-translation-input/pt/console__marketplace--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__marketplace--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 362,
+    "inputPath": "reports/i18n-translation-input/pt/console__marketplace--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__marketplace--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8202,19 +6465,10 @@
     "locale": "pt",
     "ns": "console.people",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__people--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__people--chunk1of2.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.people",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 175,
-    "inputPath": "reports/i18n-translation-input/pt/console__people--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__people--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 375,
+    "inputPath": "reports/i18n-translation-input/pt/console__people--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__people--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8238,46 +6492,19 @@
     "locale": "pt",
     "ns": "console.procurement",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__procurement--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__procurement--chunk1of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.procurement",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__procurement--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__procurement--chunk2of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.procurement",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/pt/console__procurement--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__procurement--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 437,
+    "inputPath": "reports/i18n-translation-input/pt/console__procurement--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__procurement--chunk1of1.json"
   },
   {
     "locale": "pt",
     "ns": "console.production",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__production--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__production--chunk1of2.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.production",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 123,
-    "inputPath": "reports/i18n-translation-input/pt/console__production--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__production--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 323,
+    "inputPath": "reports/i18n-translation-input/pt/console__production--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__production--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8292,28 +6519,10 @@
     "locale": "pt",
     "ns": "console.projects",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__projects--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__projects--chunk1of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.projects",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__projects--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__projects--chunk2of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.projects",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 80,
-    "inputPath": "reports/i18n-translation-input/pt/console__projects--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__projects--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 480,
+    "inputPath": "reports/i18n-translation-input/pt/console__projects--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__projects--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8355,19 +6564,10 @@
     "locale": "pt",
     "ns": "console.safety",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__safety--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__safety--chunk1of2.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.safety",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 117,
-    "inputPath": "reports/i18n-translation-input/pt/console__safety--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/pt/console__safety--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 317,
+    "inputPath": "reports/i18n-translation-input/pt/console__safety--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__safety--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8391,37 +6591,10 @@
     "locale": "pt",
     "ns": "console.settings",
     "chunk": 1,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__settings--chunk1of4.json",
-    "outputPath": "reports/i18n-translated/pt/console__settings--chunk1of4.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.settings",
-    "chunk": 2,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__settings--chunk2of4.json",
-    "outputPath": "reports/i18n-translated/pt/console__settings--chunk2of4.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.settings",
-    "chunk": 3,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__settings--chunk3of4.json",
-    "outputPath": "reports/i18n-translated/pt/console__settings--chunk3of4.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.settings",
-    "chunk": 4,
-    "chunkOf": 4,
-    "count": 73,
-    "inputPath": "reports/i18n-translation-input/pt/console__settings--chunk4of4.json",
-    "outputPath": "reports/i18n-translated/pt/console__settings--chunk4of4.json"
+    "chunkOf": 1,
+    "count": 673,
+    "inputPath": "reports/i18n-translation-input/pt/console__settings--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__settings--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8535,28 +6708,10 @@
     "locale": "pt",
     "ns": "console.workforce",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__workforce--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__workforce--chunk1of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.workforce",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/console__workforce--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__workforce--chunk2of3.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "console.workforce",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 16,
-    "inputPath": "reports/i18n-translation-input/pt/console__workforce--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/pt/console__workforce--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 416,
+    "inputPath": "reports/i18n-translation-input/pt/console__workforce--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/pt/console__workforce--chunk1of1.json"
   },
   {
     "locale": "pt",
@@ -8985,73 +7140,19 @@
     "locale": "pt",
     "ns": "marketing.pages",
     "chunk": 1,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk1of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk1of8.json"
+    "chunkOf": 2,
+    "count": 800,
+    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk1of2.json",
+    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk1of2.json"
   },
   {
     "locale": "pt",
     "ns": "marketing.pages",
     "chunk": 2,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk2of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk2of8.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "marketing.pages",
-    "chunk": 3,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk3of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk3of8.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "marketing.pages",
-    "chunk": 4,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk4of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk4of8.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "marketing.pages",
-    "chunk": 5,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk5of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk5of8.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "marketing.pages",
-    "chunk": 6,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk6of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk6of8.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "marketing.pages",
-    "chunk": 7,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk7of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk7of8.json"
-  },
-  {
-    "locale": "pt",
-    "ns": "marketing.pages",
-    "chunk": 8,
-    "chunkOf": 8,
-    "count": 165,
-    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk8of8.json",
-    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk8of8.json"
+    "chunkOf": 2,
+    "count": 765,
+    "inputPath": "reports/i18n-translation-input/pt/marketing__pages--chunk2of2.json",
+    "outputPath": "reports/i18n-translated/pt/marketing__pages--chunk2of2.json"
   },
   {
     "locale": "pt",
@@ -10443,28 +8544,10 @@
     "locale": "ja",
     "ns": "console.finance",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__finance--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__finance--chunk1of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.finance",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__finance--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__finance--chunk2of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.finance",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 196,
-    "inputPath": "reports/i18n-translation-input/ja/console__finance--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__finance--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 596,
+    "inputPath": "reports/i18n-translation-input/ja/console__finance--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__finance--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -10587,19 +8670,10 @@
     "locale": "ja",
     "ns": "console.marketplace",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__marketplace--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__marketplace--chunk1of2.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.marketplace",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 162,
-    "inputPath": "reports/i18n-translation-input/ja/console__marketplace--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__marketplace--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 362,
+    "inputPath": "reports/i18n-translation-input/ja/console__marketplace--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__marketplace--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -10650,19 +8724,10 @@
     "locale": "ja",
     "ns": "console.people",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__people--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__people--chunk1of2.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.people",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 175,
-    "inputPath": "reports/i18n-translation-input/ja/console__people--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__people--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 375,
+    "inputPath": "reports/i18n-translation-input/ja/console__people--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__people--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -10686,46 +8751,19 @@
     "locale": "ja",
     "ns": "console.procurement",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__procurement--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__procurement--chunk1of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.procurement",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__procurement--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__procurement--chunk2of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.procurement",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/ja/console__procurement--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__procurement--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 437,
+    "inputPath": "reports/i18n-translation-input/ja/console__procurement--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__procurement--chunk1of1.json"
   },
   {
     "locale": "ja",
     "ns": "console.production",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__production--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__production--chunk1of2.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.production",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 123,
-    "inputPath": "reports/i18n-translation-input/ja/console__production--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__production--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 323,
+    "inputPath": "reports/i18n-translation-input/ja/console__production--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__production--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -10740,28 +8778,10 @@
     "locale": "ja",
     "ns": "console.projects",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__projects--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__projects--chunk1of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.projects",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__projects--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__projects--chunk2of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.projects",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 80,
-    "inputPath": "reports/i18n-translation-input/ja/console__projects--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__projects--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 480,
+    "inputPath": "reports/i18n-translation-input/ja/console__projects--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__projects--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -10803,19 +8823,10 @@
     "locale": "ja",
     "ns": "console.safety",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__safety--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__safety--chunk1of2.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.safety",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 117,
-    "inputPath": "reports/i18n-translation-input/ja/console__safety--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ja/console__safety--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 317,
+    "inputPath": "reports/i18n-translation-input/ja/console__safety--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__safety--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -10839,37 +8850,10 @@
     "locale": "ja",
     "ns": "console.settings",
     "chunk": 1,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__settings--chunk1of4.json",
-    "outputPath": "reports/i18n-translated/ja/console__settings--chunk1of4.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.settings",
-    "chunk": 2,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__settings--chunk2of4.json",
-    "outputPath": "reports/i18n-translated/ja/console__settings--chunk2of4.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.settings",
-    "chunk": 3,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__settings--chunk3of4.json",
-    "outputPath": "reports/i18n-translated/ja/console__settings--chunk3of4.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.settings",
-    "chunk": 4,
-    "chunkOf": 4,
-    "count": 73,
-    "inputPath": "reports/i18n-translation-input/ja/console__settings--chunk4of4.json",
-    "outputPath": "reports/i18n-translated/ja/console__settings--chunk4of4.json"
+    "chunkOf": 1,
+    "count": 673,
+    "inputPath": "reports/i18n-translation-input/ja/console__settings--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__settings--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -10983,28 +8967,10 @@
     "locale": "ja",
     "ns": "console.workforce",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__workforce--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__workforce--chunk1of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.workforce",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/console__workforce--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__workforce--chunk2of3.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "console.workforce",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 16,
-    "inputPath": "reports/i18n-translation-input/ja/console__workforce--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ja/console__workforce--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 416,
+    "inputPath": "reports/i18n-translation-input/ja/console__workforce--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ja/console__workforce--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -11059,15 +9025,6 @@
     "count": 45,
     "inputPath": "reports/i18n-translation-input/ja/m__checkIn--chunk1of1.json",
     "outputPath": "reports/i18n-translated/ja/m__checkIn--chunk1of1.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "m.clock",
-    "chunk": 1,
-    "chunkOf": 1,
-    "count": 27,
-    "inputPath": "reports/i18n-translation-input/ja/m__clock--chunk1of1.json",
-    "outputPath": "reports/i18n-translated/ja/m__clock--chunk1of1.json"
   },
   {
     "locale": "ja",
@@ -11433,73 +9390,19 @@
     "locale": "ja",
     "ns": "marketing.pages",
     "chunk": 1,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk1of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk1of8.json"
+    "chunkOf": 2,
+    "count": 800,
+    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk1of2.json",
+    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk1of2.json"
   },
   {
     "locale": "ja",
     "ns": "marketing.pages",
     "chunk": 2,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk2of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk2of8.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "marketing.pages",
-    "chunk": 3,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk3of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk3of8.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "marketing.pages",
-    "chunk": 4,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk4of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk4of8.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "marketing.pages",
-    "chunk": 5,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk5of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk5of8.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "marketing.pages",
-    "chunk": 6,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk6of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk6of8.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "marketing.pages",
-    "chunk": 7,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk7of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk7of8.json"
-  },
-  {
-    "locale": "ja",
-    "ns": "marketing.pages",
-    "chunk": 8,
-    "chunkOf": 8,
-    "count": 165,
-    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk8of8.json",
-    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk8of8.json"
+    "chunkOf": 2,
+    "count": 765,
+    "inputPath": "reports/i18n-translation-input/ja/marketing__pages--chunk2of2.json",
+    "outputPath": "reports/i18n-translated/ja/marketing__pages--chunk2of2.json"
   },
   {
     "locale": "ja",
@@ -12891,28 +10794,10 @@
     "locale": "ar",
     "ns": "console.finance",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__finance--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__finance--chunk1of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.finance",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__finance--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__finance--chunk2of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.finance",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 196,
-    "inputPath": "reports/i18n-translation-input/ar/console__finance--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__finance--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 596,
+    "inputPath": "reports/i18n-translation-input/ar/console__finance--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__finance--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13035,19 +10920,10 @@
     "locale": "ar",
     "ns": "console.marketplace",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__marketplace--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__marketplace--chunk1of2.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.marketplace",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 162,
-    "inputPath": "reports/i18n-translation-input/ar/console__marketplace--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__marketplace--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 362,
+    "inputPath": "reports/i18n-translation-input/ar/console__marketplace--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__marketplace--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13098,19 +10974,10 @@
     "locale": "ar",
     "ns": "console.people",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__people--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__people--chunk1of2.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.people",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 175,
-    "inputPath": "reports/i18n-translation-input/ar/console__people--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__people--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 375,
+    "inputPath": "reports/i18n-translation-input/ar/console__people--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__people--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13134,46 +11001,19 @@
     "locale": "ar",
     "ns": "console.procurement",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__procurement--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__procurement--chunk1of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.procurement",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__procurement--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__procurement--chunk2of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.procurement",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 37,
-    "inputPath": "reports/i18n-translation-input/ar/console__procurement--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__procurement--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 437,
+    "inputPath": "reports/i18n-translation-input/ar/console__procurement--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__procurement--chunk1of1.json"
   },
   {
     "locale": "ar",
     "ns": "console.production",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__production--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__production--chunk1of2.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.production",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 123,
-    "inputPath": "reports/i18n-translation-input/ar/console__production--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__production--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 323,
+    "inputPath": "reports/i18n-translation-input/ar/console__production--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__production--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13188,28 +11028,10 @@
     "locale": "ar",
     "ns": "console.projects",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__projects--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__projects--chunk1of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.projects",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__projects--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__projects--chunk2of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.projects",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 80,
-    "inputPath": "reports/i18n-translation-input/ar/console__projects--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__projects--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 480,
+    "inputPath": "reports/i18n-translation-input/ar/console__projects--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__projects--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13251,19 +11073,10 @@
     "locale": "ar",
     "ns": "console.safety",
     "chunk": 1,
-    "chunkOf": 2,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__safety--chunk1of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__safety--chunk1of2.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.safety",
-    "chunk": 2,
-    "chunkOf": 2,
-    "count": 117,
-    "inputPath": "reports/i18n-translation-input/ar/console__safety--chunk2of2.json",
-    "outputPath": "reports/i18n-translated/ar/console__safety--chunk2of2.json"
+    "chunkOf": 1,
+    "count": 317,
+    "inputPath": "reports/i18n-translation-input/ar/console__safety--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__safety--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13287,37 +11100,10 @@
     "locale": "ar",
     "ns": "console.settings",
     "chunk": 1,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__settings--chunk1of4.json",
-    "outputPath": "reports/i18n-translated/ar/console__settings--chunk1of4.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.settings",
-    "chunk": 2,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__settings--chunk2of4.json",
-    "outputPath": "reports/i18n-translated/ar/console__settings--chunk2of4.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.settings",
-    "chunk": 3,
-    "chunkOf": 4,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__settings--chunk3of4.json",
-    "outputPath": "reports/i18n-translated/ar/console__settings--chunk3of4.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.settings",
-    "chunk": 4,
-    "chunkOf": 4,
-    "count": 73,
-    "inputPath": "reports/i18n-translation-input/ar/console__settings--chunk4of4.json",
-    "outputPath": "reports/i18n-translated/ar/console__settings--chunk4of4.json"
+    "chunkOf": 1,
+    "count": 673,
+    "inputPath": "reports/i18n-translation-input/ar/console__settings--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__settings--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13431,28 +11217,10 @@
     "locale": "ar",
     "ns": "console.workforce",
     "chunk": 1,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__workforce--chunk1of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__workforce--chunk1of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.workforce",
-    "chunk": 2,
-    "chunkOf": 3,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/console__workforce--chunk2of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__workforce--chunk2of3.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "console.workforce",
-    "chunk": 3,
-    "chunkOf": 3,
-    "count": 16,
-    "inputPath": "reports/i18n-translation-input/ar/console__workforce--chunk3of3.json",
-    "outputPath": "reports/i18n-translated/ar/console__workforce--chunk3of3.json"
+    "chunkOf": 1,
+    "count": 416,
+    "inputPath": "reports/i18n-translation-input/ar/console__workforce--chunk1of1.json",
+    "outputPath": "reports/i18n-translated/ar/console__workforce--chunk1of1.json"
   },
   {
     "locale": "ar",
@@ -13881,73 +11649,19 @@
     "locale": "ar",
     "ns": "marketing.pages",
     "chunk": 1,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk1of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk1of8.json"
+    "chunkOf": 2,
+    "count": 800,
+    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk1of2.json",
+    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk1of2.json"
   },
   {
     "locale": "ar",
     "ns": "marketing.pages",
     "chunk": 2,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk2of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk2of8.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "marketing.pages",
-    "chunk": 3,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk3of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk3of8.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "marketing.pages",
-    "chunk": 4,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk4of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk4of8.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "marketing.pages",
-    "chunk": 5,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk5of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk5of8.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "marketing.pages",
-    "chunk": 6,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk6of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk6of8.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "marketing.pages",
-    "chunk": 7,
-    "chunkOf": 8,
-    "count": 200,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk7of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk7of8.json"
-  },
-  {
-    "locale": "ar",
-    "ns": "marketing.pages",
-    "chunk": 8,
-    "chunkOf": 8,
-    "count": 165,
-    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk8of8.json",
-    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk8of8.json"
+    "chunkOf": 2,
+    "count": 765,
+    "inputPath": "reports/i18n-translation-input/ar/marketing__pages--chunk2of2.json",
+    "outputPath": "reports/i18n-translated/ar/marketing__pages--chunk2of2.json"
   },
   {
     "locale": "ar",

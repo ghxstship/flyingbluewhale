@@ -1,0 +1,19 @@
+{
+  "p.stakeholder.home.portfolioPnl.title": "Portafolio y P&L",
+  "p.stakeholder.home.portfolio.label": "Portafolio",
+  "p.stakeholder.home.portfolio.desc": "Proyectos activos + etapas",
+  "p.stakeholder.home.pnl.label": "P&L",
+  "p.stakeholder.home.pnl.desc": "Consolidado del portafolio",
+  "p.stakeholder.home.governance.title": "Gobernanza",
+  "p.stakeholder.home.committees.label": "Comités",
+  "p.stakeholder.home.committees.desc": "Estatutos + cadencia",
+  "p.stakeholder.home.esg.title": "Sostenibilidad",
+  "p.stakeholder.home.esg.description": "Reportes ESG + postura de sostenibilidad.",
+  "p.stakeholder.home.esg.label": "ESG",
+  "p.stakeholder.home.esg.desc": "Huella de carbono + impacto comunitario",
+  "p.stakeholder.home.audit.title": "Registro de Auditoría",
+  "p.stakeholder.home.audit.description": "Cada acción privilegiada, con marca de tiempo.",
+  "p.stakeholder.home.auditLog.label": "Registro de Auditoría",
+  "p.stakeholder.home.auditLog.desc": "Libro de solo lectura",
+  "p.stakeholder.home.title": "Portal de Stakeholders"
+}

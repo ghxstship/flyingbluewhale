@@ -1695,7 +1695,6 @@
   "auth.mfa.submit": "Verify",
   "auth.mfa.useAuthenticator": "Use authenticator code",
   "auth.mfa.useRecovery": "Use a recovery code",
-  "auth.notFound.title": "Auth path not found.",
   "auth.onboarding.title": "Name your workspace",
   "auth.onboarding.workspaceName": "Workspace name",
   "auth.onboarding.workspaceNamePlaceholder": "Acme Productions",

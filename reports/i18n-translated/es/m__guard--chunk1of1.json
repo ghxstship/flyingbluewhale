@@ -1,0 +1,12 @@
+{
+  "m.guard.configureSupabase": "Configura Supabase.",
+  "m.guard.eyebrow": "Campo",
+  "m.guard.title": "Guard",
+  "m.guard.noToursAssigned": "No tienes rondas asignadas.",
+  "m.guard.empty.title": "Sin Rondas Asignadas",
+  "m.guard.empty.action": "Abrir Rondas De Guard",
+  "m.guard.venue.assigned": "Sede asignada",
+  "m.guard.venue.any": "Cualquier sede",
+  "m.guard.cadenceSuffix": " · cada ${r.cadence_minutes}m",
+  "m.guard.badge.next": "Próxima ${fmtTime(r.next_run_at)}"
+}

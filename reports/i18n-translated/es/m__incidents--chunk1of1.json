@@ -1,0 +1,9 @@
+{
+  "m.incidents.eyebrow": "Campo",
+  "m.incidents.title": "Incidente",
+  "m.incidents.noneLast30": "Sin incidentes registrados en los últimos 30 días.",
+  "m.incidents.summary": "${rows.length} en los últimos 30 días · ${open} abiertos",
+  "m.incidents.criticalSuffix": "${critical} críticos",
+  "m.incidents.reportCta": "+ Reportar incidente",
+  "m.incidents.empty.title": "Todo en Calma"
+}

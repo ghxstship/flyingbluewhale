@@ -1,0 +1,9 @@
+{
+  "m.tasks.eyebrow": "Campo",
+  "m.tasks.title": "Mis Tareas",
+  "m.tasks.empty": "Sin tareas asignadas",
+  "m.tasks.dueLabel": "Vence ${formatDate(task.due_at)}",
+  "m.tasks.detail.back": "← Tareas",
+  "m.tasks.detail.dueLabel": "Vence ${formatDate(task.due_at)}",
+  "m.tasks.detail.updateStatus": "Actualizar Estado"
+}

@@ -1,0 +1,13 @@
+{
+  "m.wms.eyebrow": "Campo",
+  "m.wms.title": "Almacén",
+  "m.wms.subtitle": "Picking, ubicación y check-in/out por escaneo.",
+  "m.wms.scanAsset": "Escanear Activo",
+  "m.wms.assetRegister": "Registro de Activos",
+  "m.wms.inMaintenance": "En Mantenimiento",
+  "m.wms.empty.maintenance": "Sin Artículos en Mantenimiento",
+  "m.wms.empty.returns": "Sin Devoluciones Programadas",
+  "m.wms.noTag": "sin etiqueta",
+  "m.wms.returnsDue": "Devoluciones Pendientes",
+  "m.wms.due": "Vence ${fmtDay(r.ends_at)}"
+}

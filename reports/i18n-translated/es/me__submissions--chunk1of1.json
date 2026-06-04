@@ -1,0 +1,11 @@
+{
+  "me.submissions.detail.eyebrow": "Postulación",
+  "me.submissions.detail.coverNote": "Nota de presentación",
+  "me.submissions.detail.proposedFee": "Tarifa propuesta",
+  "me.submissions.eyebrow": "Mis postulaciones",
+  "me.submissions.title": "Postulaciones",
+  "me.submissions.subtitle": "Postulaciones a convocatorias abiertas que has realizado.",
+  "me.submissions.empty.title": "Aún sin postulaciones",
+  "me.submissions.empty.action": "Explorar convocatorias abiertas",
+  "me.submissions.deletedCall": "(convocatoria eliminada)"
+}

@@ -1,0 +1,18 @@
+{
+  "me.talent.configureSupabase": "Configura Supabase.",
+  "me.talent.eyebrow": "Mi perfil de talento",
+  "me.talent.title": "EPK",
+  "me.talent.descriptionPrefix": "Público al activarlo. Descubierto vía",
+  "me.talent.liveAt": "En vivo en",
+  "me.talent.liveBadge": "en vivo",
+  "me.talent.publishedNotice": "Tu EPK está publicado.",
+  "me.talent.submit": "Guardar EPK",
+  "me.talent.fields.actName": "Nombre Artístico",
+  "me.talent.fields.tagline": "Lema",
+  "me.talent.fields.bio": "Biografía",
+  "me.talent.fields.genreTags": "Etiquetas de Género (separadas por comas)",
+  "me.talent.fields.feeMin": "Caché Mínimo",
+  "me.talent.fields.feeMax": "Caché Máximo",
+  "me.talent.fields.reelUrl": "URL del Reel",
+  "me.talent.fields.publishToMarketplace": "Publicar en /marketplace/talent"
+}

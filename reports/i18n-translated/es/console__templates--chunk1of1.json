@@ -1,0 +1,20 @@
+{
+  "console.templates.new.eyebrow": "Nuevo Proyecto desde Plantilla",
+  "console.templates.new.cardTitle": "Detalles del Proyecto",
+  "console.templates.new.projectNameLabel": "Nombre del Proyecto",
+  "console.templates.new.slugLabel": "Slug",
+  "console.templates.new.modulesLabel": "Módulos a Habilitar",
+  "console.templates.new.willBeCreatedLabel": "Se Creará",
+  "console.templates.new.createProjectButton": "Crear Proyecto",
+  "console.templates.category.festival": "Festival",
+  "console.templates.category.activation": "Activación",
+  "console.templates.category.tour": "Gira",
+  "console.templates.category.corporate": "Corporativo",
+  "console.templates.category.sponsor": "Patrocinador",
+  "console.templates.category.custom": "Personalizado",
+  "console.templates.eyebrow": "Plantillas",
+  "console.templates.title": "PLANTILLAS DE PROYECTO",
+  "console.templates.empty.title": "Aún no hay plantillas",
+  "console.templates.useTemplateAria": "Usar plantilla ${tpl.name}",
+  "console.templates.officialBadge": "Oficial"
+}

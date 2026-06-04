@@ -1,8 +1,0 @@
-{
-  "console.error.eyebrow": "Error",
-  "console.error.title": "Something Went Wrong",
-  "console.error.ref": "Ref: ${error.digest}",
-  "console.error.fallbackMessage": "An unexpected error occurred.",
-  "console.error.tryAgain": "Try Again",
-  "console.error.backToWorkspace": "Back to Workspace"
-}

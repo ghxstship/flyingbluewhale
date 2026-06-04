@@ -1,0 +1,10 @@
+{
+  "m.dailyLog.eyebrow": "Campo",
+  "m.dailyLog.title": "Bitácora Diaria",
+  "m.dailyLog.subtitle": "Captura rápida desde el piso",
+  "m.dailyLog.todaysLog": "Bitácora de hoy — {date}",
+  "m.dailyLog.selectProject": "Selecciona un proyecto…",
+  "m.dailyLog.weatherPlaceholder": "Clima (p. ej. 78°F, soleado)",
+  "m.dailyLog.saveLog": "Guardar bitácora",
+  "m.dailyLog.recent": "Recientes"
+}

@@ -1,0 +1,14 @@
+{
+  "m.incident.new.eyebrow": "Campo",
+  "m.incident.new.title": "Reporte Rápido",
+  "m.incident.new.openFullForm": "Ábrelo",
+  "m.incident.new.summaryLabel": "¿Qué pasó?",
+  "m.incident.new.fileNow": "Reportar Ahora",
+  "m.incident.new.subtitle": "Registra una incidencia de seguridad — admin y EHS lead reciben aviso al instante.",
+  "m.incident.eyebrow": "Campo",
+  "m.incident.title": "Mis Reportes",
+  "m.incident.subtitle": "Reportes que presentaste. {count} abiertos. Consulta la cola global en",
+  "m.incident.quickFile": "Reporte Rápido (un campo)",
+  "m.incident.fullReport": "Reporte Completo",
+  "m.incident.empty.title": "Aún Sin Reportes"
+}

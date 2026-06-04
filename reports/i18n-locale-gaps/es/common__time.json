@@ -1,6 +1,0 @@
-{
-  "common.time.justNow": "just now",
-  "common.time.minutesShort": "${min}m",
-  "common.time.hoursShort": "${hr}h",
-  "common.time.daysShort": "${day}d"
-}

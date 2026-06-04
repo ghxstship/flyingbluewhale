@@ -1,0 +1,11 @@
+{
+  "me.tickets.title": "Mis Tickets",
+  "me.tickets.configureSupabase": "Configura Supabase.",
+  "me.tickets.subtitle": "Tickets emitidos a ${session.email}",
+  "me.tickets.empty": "Aún no hay tickets",
+  "me.tickets.columns.code": "Código",
+  "me.tickets.columns.tier": "Nivel",
+  "me.tickets.columns.state": "Estado",
+  "me.tickets.columns.issued": "Emitido",
+  "me.tickets.columns.redeemed": "Canjeado"
+}

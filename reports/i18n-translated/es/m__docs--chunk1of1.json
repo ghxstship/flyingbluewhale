@@ -1,0 +1,23 @@
+{
+  "m.docs.download.openError": "No se pudo abrir el documento",
+  "m.docs.download.openFailed": "Apertura fallida",
+  "m.docs.download.opening": "Abriendo…",
+  "m.docs.download.label": "Descargar",
+  "m.docs.new.configureSupabase": "Configura Supabase.",
+  "m.docs.new.title": "Subir Documento",
+  "m.docs.new.label": "Etiqueta",
+  "m.docs.new.labelPlaceholder": "p. ej. Licencia de Conducir",
+  "m.docs.new.kind": "Tipo",
+  "m.docs.new.kindId": "Identificación",
+  "m.docs.new.kindLicense": "Licencia / certificación",
+  "m.docs.new.kindTax": "Formulario fiscal",
+  "m.docs.new.kindContract": "Contrato",
+  "m.docs.new.kindMedical": "Médico",
+  "m.docs.new.kindOther": "Otro",
+  "m.docs.new.file": "Archivo",
+  "m.docs.new.upload": "Subir",
+  "m.docs.eyebrow": "Móvil",
+  "m.docs.title": "Mis Documentos",
+  "m.docs.uploadCta": "+ Subir",
+  "m.docs.empty.title": "Sin Documentos"
+}

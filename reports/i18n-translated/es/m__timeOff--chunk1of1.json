@@ -1,0 +1,19 @@
+{
+  "m.timeOff.new.title": "Nueva Solicitud de Tiempo Libre",
+  "m.timeOff.new.policy": "Política",
+  "m.timeOff.new.startsOn": "Comienza el",
+  "m.timeOff.new.endsOn": "Termina el",
+  "m.timeOff.new.hoursRequested": "Horas Solicitadas",
+  "m.timeOff.new.reason": "Motivo",
+  "m.timeOff.title": "Tiempo Libre",
+  "m.timeOff.balancesHeading": "Saldos (${year})",
+  "m.timeOff.noPolicies": "Aún no hay políticas asignadas.",
+  "m.timeOff.policyFallback": "Política",
+  "m.timeOff.hours": "${b.balance_hours}h",
+  "m.timeOff.available": "disponibles",
+  "m.timeOff.newRequest": "Nueva Solicitud",
+  "m.timeOff.recentRequests": "Solicitudes Recientes",
+  "m.timeOff.empty.title": "Sin Solicitudes",
+  "m.timeOff.empty.description": "Tus solicitudes de tiempo libre aparecerán aquí.",
+  "m.timeOff.timeOffFallback": "Tiempo libre"
+}

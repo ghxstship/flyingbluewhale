@@ -1,0 +1,17 @@
+{
+  "m.inventory.scan.toast.failed": "Escaneo fallido",
+  "m.inventory.scan.toast.notFound": "Ningún equipo con esa etiqueta",
+  "m.inventory.scan.announce.notFound": "Activo no encontrado",
+  "m.inventory.scan.assetTag": "Etiqueta de Activo",
+  "m.inventory.scan.placeholder": "Escanea o escribe",
+  "m.inventory.scan.toggle": "Alternar",
+  "m.inventory.scan.checkIn": "Registrar entrada",
+  "m.inventory.scan.checkOut": "Registrar salida",
+  "m.inventory.scan.recent": "Recientes",
+  "m.inventory.scan.empty.title": "Aún Sin Escaneos",
+  "m.inventory.scan.badge.notFound": "no encontrado",
+  "m.inventory.scan.badge.error": "error",
+  "m.inventory.scan.eyebrow": "Campo",
+  "m.inventory.scan.title": "Escaneo de Inventario",
+  "m.inventory.scan.subtitle": "Escanea o escribe una etiqueta de activo para registrar entrada / salida."
+}

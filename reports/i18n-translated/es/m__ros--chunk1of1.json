@@ -1,0 +1,15 @@
+{
+  "m.ros.show.configureSupabase": "Configura Supabase.",
+  "m.ros.show.backToAll": "← Todas las señales",
+  "m.ros.show.eyebrow": "Show",
+  "m.ros.show.liveLabel": "En vivo",
+  "m.ros.show.startedAt": "iniciado ${fmtTime(live.scheduled_at)}",
+  "m.ros.show.upcomingHeading": "Próximas · ${upcoming.length}",
+  "m.ros.show.noMoreCues": "No hay más señales en cola.",
+  "m.ros.show.completedHeading": "Completadas · ${done.length}",
+  "m.ros.show.doneBadge": "Listo",
+  "m.ros.eyebrow": "Móvil",
+  "m.ros.title": "Run of Show",
+  "m.ros.noneToday": "No hay señales programadas hoy.",
+  "m.ros.empty.title": "Sin Señales Hoy"
+}

@@ -1,0 +1,7 @@
+{
+  "m.directory.eyebrow": "Móvil",
+  "m.directory.title": "Directorio",
+  "m.directory.peopleCount": "${members.length} personas en tu organización",
+  "m.directory.empty.title": "Sin Miembros",
+  "m.directory.empty.description": "Los miembros de la organización aparecen aquí una vez agregados."
+}

@@ -1,0 +1,11 @@
+{
+  "m.coc.eyebrow": "Campo",
+  "m.coc.title": "Cadena de custodia",
+  "m.coc.actions.logIncident": "+ Registrar incidente",
+  "m.coc.actions.scanAsset": "Escanear activo",
+  "m.coc.recent.heading": "Mis eventos de custodia recientes",
+  "m.coc.empty.title": "Nada en los últimos 7 días",
+  "m.coc.badge.audit": "Auditoría",
+  "m.coc.desktopPrompt": "¿Necesitas la vista de escritorio?",
+  "m.coc.desktopLink": "Abrir Cadena de custodia"
+}

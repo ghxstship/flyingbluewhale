@@ -1,0 +1,14 @@
+{
+  "me.availability.configureSupabase": "Configura Supabase.",
+  "me.availability.eyebrow": "Disponibilidad",
+  "me.availability.title": "Calendario de Reservas",
+  "me.availability.addSlot": "Añadir Bloque",
+  "me.availability.kind": "Tipo",
+  "me.availability.label": "Etiqueta",
+  "me.availability.labelPlaceholder": "Montaje de escenario MMW26",
+  "me.availability.starts": "Inicia",
+  "me.availability.ends": "Finaliza",
+  "me.availability.allDay": "Todo el Día",
+  "me.availability.upcoming": "Próximos",
+  "me.availability.empty": "Aún no hay bloques de disponibilidad."
+}

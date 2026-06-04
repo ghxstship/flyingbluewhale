@@ -1,0 +1,4 @@
+{
+  "auth.error.title": "Error de inicio de sesión",
+  "auth.error.ref": "Ref: ${error.digest}"
+}

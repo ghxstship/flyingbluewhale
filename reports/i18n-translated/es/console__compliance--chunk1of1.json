@@ -1,0 +1,14 @@
+{
+  "console.compliance.coc.eyebrow": "Cumplimiento",
+  "console.compliance.coc.title": "Cadena de custodia",
+  "console.compliance.coc.configureSupabase": "Configura Supabase.",
+  "console.compliance.coc.subtitle": "Registro de auditoría para evidencia y muestras.",
+  "console.compliance.coc.mobileCapture": "Captura móvil",
+  "console.compliance.coc.metrics.events24h": "Eventos · 24 h",
+  "console.compliance.coc.metrics.events30d": "Eventos · 30 d",
+  "console.compliance.coc.metrics.distinctActors": "Actores distintos",
+  "console.compliance.coc.byTarget": "Por objetivo",
+  "console.compliance.coc.recentEvents": "Eventos recientes",
+  "console.compliance.coc.empty.title": "Sin eventos de CdC en los últimos 30 días",
+  "console.compliance.coc.system": "sistema"
+}

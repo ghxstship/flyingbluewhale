@@ -1,0 +1,6 @@
+{
+  "auth.signup.organization": "Organisation",
+  "auth.signup.organizationHelp": "Du kannst diese später in den Einstellungen anlegen.",
+  "auth.signup.tosPrefix": "Mit der Erstellung eines Kontos akzeptierst du unsere",
+  "auth.signup.privacyPolicy": "Datenschutzerklärung"
+}

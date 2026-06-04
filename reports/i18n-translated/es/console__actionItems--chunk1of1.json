@@ -1,0 +1,16 @@
+{
+  "console.actionItems.eyebrow": "Espacio de trabajo",
+  "console.actionItems.title": "Pendientes",
+  "console.actionItems.subtitle": "Consolidado de responsables entre módulos.",
+  "console.actionItems.filter.all": "Todos",
+  "console.actionItems.filter.mineOnly": "Solo míos",
+  "console.actionItems.metrics.openItems": "Pendientes Abiertos",
+  "console.actionItems.metrics.overdue": "Vencidos",
+  "console.actionItems.metrics.acrossKinds": "Entre Tipos",
+  "console.actionItems.empty.label": "Bandeja en Cero",
+  "console.actionItems.columns.kind": "Tipo",
+  "console.actionItems.columns.title": "Título",
+  "console.actionItems.columns.status": "Estado",
+  "console.actionItems.columns.due": "Vence",
+  "console.actionItems.columns.priority": "Prioridad"
+}

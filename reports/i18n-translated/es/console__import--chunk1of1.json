@@ -1,0 +1,12 @@
+{
+  "console.import.noOrg.title": "Sin organización",
+  "console.import.noOrg.description": "Cambia a una organización para ver los trabajos de importación.",
+  "console.import.eyebrow": "Importación",
+  "console.import.title": "CENTRO DE IMPORTACIÓN",
+  "console.import.newImport": "Nueva Importación",
+  "console.import.empty.title": "Aún no hay importaciones",
+  "console.import.stats.total": "Total",
+  "console.import.stats.succeeded": "Exitosas",
+  "console.import.stats.failed": "Fallidas",
+  "console.import.errors.rowPrefix": "Fila ${e.row}"
+}

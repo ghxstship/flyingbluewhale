@@ -1,0 +1,16 @@
+{
+  "console.insights.eyebrow": "Insights",
+  "console.insights.title": "Booking Pool",
+  "console.insights.configureSupabase": "Configura Supabase.",
+  "console.insights.subtitle": "Agregados mensuales anonimizados por género.",
+  "console.insights.contributing": "contribuyendo",
+  "console.insights.notContributing": "sin contribuir",
+  "console.insights.optInPrefix": "Tu organización no está contribuyendo al booking pool. Activa",
+  "console.insights.emptyLabel": "Aún no hay agregados",
+  "console.insights.columns.month": "Mes",
+  "console.insights.columns.genre": "Género",
+  "console.insights.columns.shows": "Shows",
+  "console.insights.columns.avgGross": "Bruto Medio",
+  "console.insights.columns.avgAttendance": "Asistencia Media",
+  "console.insights.columns.avgArtistPayout": "Pago Medio al Artista"
+}

@@ -1,0 +1,9 @@
+{
+  "auth.mfa.recoveryCode": "Wiederherstellungscode",
+  "auth.mfa.recoveryHint": "Gib einen der Wiederherstellungscodes ein, die du bei der Einrichtung gespeichert hast.",
+  "auth.mfa.authenticatorCode": "Authenticator-Code",
+  "auth.mfa.submitting": "Wird verifiziert",
+  "auth.mfa.submit": "Verifizieren",
+  "auth.mfa.useAuthenticator": "Authenticator-Code verwenden",
+  "auth.mfa.useRecovery": "Wiederherstellungscode verwenden"
+}

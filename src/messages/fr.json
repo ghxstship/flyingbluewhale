@@ -41,7 +41,8 @@
     "pending": "En attente",
     "accepted": "Accepté",
     "revoked": "Révoqué",
-    "expired": "Expiré"
+    "expired": "Expiré",
+    "actions": "Actions"
   },
   "nav": {
     "product": "Produit",
@@ -85,21 +86,48 @@
       "mobilePrimaryAriaLabel": "Navigation principale mobile",
       "product": {
         "label": "Produit",
-        "features": { "label": "Fonctionnalités", "description": "Chaque module, chaque phase" },
-        "solutions": { "label": "Solutions", "description": "ATLVS · COMPVSS · GVTEWAY" },
-        "atlvs": { "label": "ATLVS — Production", "description": "Console producteur" },
-        "compvss": { "label": "COMPVSS — Équipe", "description": "Effectifs et opérations terrain" },
-        "gvteway": { "label": "GVTEWAY — Invités", "description": "Billetterie et portail parties prenantes" }
+        "features": {
+          "label": "Fonctionnalités",
+          "description": "Chaque module, chaque phase"
+        },
+        "solutions": {
+          "label": "Solutions",
+          "description": "ATLVS · COMPVSS · GVTEWAY"
+        },
+        "atlvs": {
+          "label": "ATLVS — Production",
+          "description": "Console producteur"
+        },
+        "compvss": {
+          "label": "COMPVSS — Équipe",
+          "description": "Effectifs et opérations terrain"
+        },
+        "gvteway": {
+          "label": "GVTEWAY — Invités",
+          "description": "Billetterie et portail parties prenantes"
+        }
       },
       "industries": {
         "label": "Secteurs"
       },
       "resources": {
         "label": "Ressources",
-        "blog": { "label": "Blog", "description": "Lancements, sorties, regards sur le secteur" },
-        "guides": { "label": "Guides", "description": "Contenus longs pour producteurs" },
-        "docs": { "label": "Docs", "description": "Référence plateforme + API" },
-        "changelog": { "label": "Changelog", "description": "Chaque version, datée" }
+        "blog": {
+          "label": "Blog",
+          "description": "Lancements, sorties, regards sur le secteur"
+        },
+        "guides": {
+          "label": "Guides",
+          "description": "Contenus longs pour producteurs"
+        },
+        "docs": {
+          "label": "Docs",
+          "description": "Référence plateforme + API"
+        },
+        "changelog": {
+          "label": "Changelog",
+          "description": "Chaque version, datée"
+        }
       }
     },
     "home": {
@@ -166,7 +194,11 @@
         "fair": "Correct",
         "strong": "Fort",
         "veryStrong": "Très fort"
-      }
+      },
+      "organization": "Organisation",
+      "organizationHelp": "Vous pourrez la créer plus tard depuis les paramètres.",
+      "tosPrefix": "En créant un compte, vous acceptez notre",
+      "privacyPolicy": "Politique de confidentialité"
     },
     "oauth": {
       "continueWith": "Continuer avec {provider}",
@@ -184,7 +216,10 @@
       "submit": "Envoyer le lien magique",
       "submitting": "Envoi",
       "success": "Vérifiez votre boîte de réception — nous avons envoyé un lien de connexion qui expire dans 1 heure.",
-      "backToLogin": "Retour à la connexion"
+      "backToLogin": "Retour à la connexion",
+      "expiredTitle": "Lien expiré ou invalide",
+      "expiredSubtitle": "Impossible de vous connecter avec ce lien.",
+      "sendAnother": "Envoyer un nouveau lien magique"
     },
     "verifyEmail": {
       "title": "Vérifiez votre boîte de réception",
@@ -196,7 +231,9 @@
       "resendCooldown": "Renvoyer dans {seconds}s",
       "resendSending": "Envoi…",
       "resendSuccess": "E-mail de vérification renvoyé.",
-      "backToLogin": "Retour à la connexion"
+      "backToLogin": "Retour à la connexion",
+      "failedTitle": "Échec de la vérification",
+      "failedSubtitle": "Impossible de vérifier votre adresse e-mail avec ce lien."
     },
     "forgotPassword": {
       "title": "Mot de passe oublié",
@@ -215,7 +252,10 @@
       "submitting": "Mise à jour",
       "mismatch": "Les mots de passe ne correspondent pas",
       "expired": "Votre lien de réinitialisation a expiré ou n'est pas reconnu. Demandez-en un nouveau via Mot de passe oublié.",
-      "backToLogin": "Retour à la connexion"
+      "backToLogin": "Retour à la connexion",
+      "expiredTitle": "Lien de réinitialisation expiré",
+      "expiredSubtitle": "Impossible d'ouvrir votre session de réinitialisation de mot de passe.",
+      "requestNew": "Demander un nouveau lien de réinitialisation"
     },
     "acceptInvite": {
       "title": "Rejoignez votre équipe",
@@ -236,6 +276,37 @@
       "notConfigured": "Supabase non configuré. Définissez NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
       "signupNoUser": "Inscription échouée — aucun utilisateur retourné.",
       "unknown": "Une erreur s'est produite — veuillez réessayer"
+    },
+    "error": {
+      "title": "Erreur de connexion",
+      "ref": "Réf : ${error.digest}"
+    },
+    "mfa": {
+      "recoveryCode": "Code de récupération",
+      "recoveryHint": "Saisissez l'un des codes de récupération que vous avez enregistrés lors de votre inscription.",
+      "authenticatorCode": "Code d'authentification",
+      "submitting": "Vérification",
+      "submit": "Vérifier",
+      "useAuthenticator": "Utiliser un code d'authentification",
+      "useRecovery": "Utiliser un code de récupération"
+    },
+    "notFound": {
+      "title": "Chemin d'authentification introuvable."
+    },
+    "onboarding": {
+      "title": "Nommez votre espace de travail",
+      "workspaceName": "Nom de l'espace de travail",
+      "workspaceNamePlaceholder": "Acme Productions",
+      "workspaceNameHint": "Vous pourrez le renommer plus tard depuis les Paramètres.",
+      "submitting": "Création de l'espace de travail",
+      "submit": "Créer l'espace de travail",
+      "ownerNotePrefix": "Vous en deviendrez le propriétaire. Vous pourrez inviter vos coéquipiers depuis",
+      "ownerNoteSuffix": "une fois connecté."
+    },
+    "sso": {
+      "errorTitle": "Impossible de lancer le SSO",
+      "errorSubtitle": "Impossible de vous rediriger vers ${provider}.",
+      "noRedirect": "Aucune URL de redirection renvoyée."
     }
   },
   "invites": {
@@ -503,5 +574,11 @@
     "lastSync": "Dernière Synchro",
     "active": "Actif",
     "off": "Inactif"
+  },
+  "avatarMenu": {
+    "account": "Compte",
+    "keyboardShortcuts": "Raccourcis clavier",
+    "openAriaLabel": "Ouvrir le menu du compte",
+    "preferences": "Préférences"
   }
 }

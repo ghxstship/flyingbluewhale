@@ -1,0 +1,5 @@
+{
+  "auth.magicLink.expiredTitle": "Link abgelaufen oder ungültig",
+  "auth.magicLink.expiredSubtitle": "Wir konnten Dich mit diesem Link nicht anmelden.",
+  "auth.magicLink.sendAnother": "Neuen Magic Link senden"
+}

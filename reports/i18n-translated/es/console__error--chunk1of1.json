@@ -1,0 +1,8 @@
+{
+  "console.error.eyebrow": "Error",
+  "console.error.title": "Algo salió mal",
+  "console.error.ref": "Ref: ${error.digest}",
+  "console.error.fallbackMessage": "Ocurrió un error inesperado.",
+  "console.error.tryAgain": "Reintentar",
+  "console.error.backToWorkspace": "Volver al espacio de trabajo"
+}

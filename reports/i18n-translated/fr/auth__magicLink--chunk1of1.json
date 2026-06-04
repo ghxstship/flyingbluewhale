@@ -1,0 +1,5 @@
+{
+  "auth.magicLink.expiredTitle": "Lien expiré ou invalide",
+  "auth.magicLink.expiredSubtitle": "Impossible de vous connecter avec ce lien.",
+  "auth.magicLink.sendAnother": "Envoyer un nouveau lien magique"
+}

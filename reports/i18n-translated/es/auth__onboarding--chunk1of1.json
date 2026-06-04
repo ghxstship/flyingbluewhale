@@ -1,0 +1,10 @@
+{
+  "auth.onboarding.title": "Nombra tu espacio de trabajo",
+  "auth.onboarding.workspaceName": "Nombre del espacio de trabajo",
+  "auth.onboarding.workspaceNamePlaceholder": "Acme Productions",
+  "auth.onboarding.workspaceNameHint": "Puedes renombrarlo más tarde desde Ajustes.",
+  "auth.onboarding.submitting": "Creando espacio de trabajo",
+  "auth.onboarding.submit": "Crear espacio de trabajo",
+  "auth.onboarding.ownerNotePrefix": "Te convertirás en el propietario. Podrás invitar a tu equipo desde",
+  "auth.onboarding.ownerNoteSuffix": "una vez dentro."
+}

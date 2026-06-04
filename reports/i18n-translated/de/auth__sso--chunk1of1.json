@@ -1,0 +1,5 @@
+{
+  "auth.sso.errorTitle": "SSO konnte nicht gestartet werden",
+  "auth.sso.errorSubtitle": "Weiterleitung zu ${provider} fehlgeschlagen.",
+  "auth.sso.noRedirect": "Keine Weiterleitungs-URL erhalten."
+}

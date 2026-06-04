@@ -1,0 +1,6 @@
+{
+  "auth.signup.organization": "Organización",
+  "auth.signup.organizationHelp": "Puedes crearla más tarde desde ajustes.",
+  "auth.signup.tosPrefix": "Al crear una cuenta aceptas nuestra",
+  "auth.signup.privacyPolicy": "Política de Privacidad"
+}

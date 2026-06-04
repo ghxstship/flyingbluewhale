@@ -85,21 +85,48 @@
       "mobilePrimaryAriaLabel": "Navegação principal mobile",
       "product": {
         "label": "Produto",
-        "features": { "label": "Recursos", "description": "Cada módulo, cada fase" },
-        "solutions": { "label": "Soluções", "description": "ATLVS · COMPVSS · GVTEWAY" },
-        "atlvs": { "label": "ATLVS — Produção", "description": "Console do produtor" },
-        "compvss": { "label": "COMPVSS — Crew", "description": "Equipe e operações de campo" },
-        "gvteway": { "label": "GVTEWAY — Convidados", "description": "Ticketing e portal de stakeholders" }
+        "features": {
+          "label": "Recursos",
+          "description": "Cada módulo, cada fase"
+        },
+        "solutions": {
+          "label": "Soluções",
+          "description": "ATLVS · COMPVSS · GVTEWAY"
+        },
+        "atlvs": {
+          "label": "ATLVS — Produção",
+          "description": "Console do produtor"
+        },
+        "compvss": {
+          "label": "COMPVSS — Crew",
+          "description": "Equipe e operações de campo"
+        },
+        "gvteway": {
+          "label": "GVTEWAY — Convidados",
+          "description": "Ticketing e portal de stakeholders"
+        }
       },
       "industries": {
         "label": "Setores"
       },
       "resources": {
         "label": "Recursos",
-        "blog": { "label": "Blog", "description": "Lançamentos, releases, leituras do setor" },
-        "guides": { "label": "Guias", "description": "Conteúdos longos para produtores" },
-        "docs": { "label": "Docs", "description": "Referência da plataforma + API" },
-        "changelog": { "label": "Changelog", "description": "Cada release, com data" }
+        "blog": {
+          "label": "Blog",
+          "description": "Lançamentos, releases, leituras do setor"
+        },
+        "guides": {
+          "label": "Guias",
+          "description": "Conteúdos longos para produtores"
+        },
+        "docs": {
+          "label": "Docs",
+          "description": "Referência da plataforma + API"
+        },
+        "changelog": {
+          "label": "Changelog",
+          "description": "Cada release, com data"
+        }
       }
     },
     "home": {
@@ -236,6 +263,9 @@
       "notConfigured": "Supabase não configurado. Defina NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
       "signupNoUser": "Cadastro falhou — nenhum usuário retornado.",
       "unknown": "Algo deu errado — tente novamente"
+    },
+    "notFound": {
+      "title": "Rota de autenticação não encontrada."
     }
   },
   "invites": {

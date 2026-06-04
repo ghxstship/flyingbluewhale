@@ -41,7 +41,8 @@
     "pending": "Ausstehend",
     "accepted": "Akzeptiert",
     "revoked": "Widerrufen",
-    "expired": "Abgelaufen"
+    "expired": "Abgelaufen",
+    "actions": "Aktionen"
   },
   "nav": {
     "product": "Produkt",
@@ -85,21 +86,48 @@
       "mobilePrimaryAriaLabel": "Mobile Hauptnavigation",
       "product": {
         "label": "Produkt",
-        "features": { "label": "Funktionen", "description": "Jedes Modul, jede Phase" },
-        "solutions": { "label": "Lösungen", "description": "ATLVS · COMPVSS · GVTEWAY" },
-        "atlvs": { "label": "ATLVS — Produktion", "description": "Konsole für Produzent:innen" },
-        "compvss": { "label": "COMPVSS — Crew", "description": "Personal und Field Ops" },
-        "gvteway": { "label": "GVTEWAY — Gäste", "description": "Ticketing und Stakeholder-Portal" }
+        "features": {
+          "label": "Funktionen",
+          "description": "Jedes Modul, jede Phase"
+        },
+        "solutions": {
+          "label": "Lösungen",
+          "description": "ATLVS · COMPVSS · GVTEWAY"
+        },
+        "atlvs": {
+          "label": "ATLVS — Produktion",
+          "description": "Konsole für Produzent:innen"
+        },
+        "compvss": {
+          "label": "COMPVSS — Crew",
+          "description": "Personal und Field Ops"
+        },
+        "gvteway": {
+          "label": "GVTEWAY — Gäste",
+          "description": "Ticketing und Stakeholder-Portal"
+        }
       },
       "industries": {
         "label": "Branchen"
       },
       "resources": {
         "label": "Ressourcen",
-        "blog": { "label": "Blog", "description": "Launches, Releases, Branchenmeinungen" },
-        "guides": { "label": "Guides", "description": "Langformate für Produzent:innen" },
-        "docs": { "label": "Docs", "description": "Plattformreferenz + API" },
-        "changelog": { "label": "Changelog", "description": "Jedes Release, datiert" }
+        "blog": {
+          "label": "Blog",
+          "description": "Launches, Releases, Branchenmeinungen"
+        },
+        "guides": {
+          "label": "Guides",
+          "description": "Langformate für Produzent:innen"
+        },
+        "docs": {
+          "label": "Docs",
+          "description": "Plattformreferenz + API"
+        },
+        "changelog": {
+          "label": "Changelog",
+          "description": "Jedes Release, datiert"
+        }
       }
     },
     "home": {
@@ -166,7 +194,11 @@
         "fair": "Mittel",
         "strong": "Stark",
         "veryStrong": "Sehr stark"
-      }
+      },
+      "organization": "Organisation",
+      "organizationHelp": "Du kannst diese später in den Einstellungen anlegen.",
+      "tosPrefix": "Mit der Erstellung eines Kontos akzeptierst du unsere",
+      "privacyPolicy": "Datenschutzerklärung"
     },
     "oauth": {
       "continueWith": "Weiter mit {provider}",
@@ -184,7 +216,10 @@
       "submit": "Magic Link senden",
       "submitting": "Wird gesendet",
       "success": "Sieh in dein Postfach — wir haben einen Anmeldelink gesendet, der in 1 Stunde abläuft.",
-      "backToLogin": "Zurück zur Anmeldung"
+      "backToLogin": "Zurück zur Anmeldung",
+      "expiredTitle": "Link abgelaufen oder ungültig",
+      "expiredSubtitle": "Wir konnten Dich mit diesem Link nicht anmelden.",
+      "sendAnother": "Neuen Magic Link senden"
     },
     "verifyEmail": {
       "title": "Postfach prüfen",
@@ -196,7 +231,9 @@
       "resendCooldown": "Erneut senden in {seconds}s",
       "resendSending": "Wird gesendet…",
       "resendSuccess": "Bestätigungs-E-Mail erneut gesendet.",
-      "backToLogin": "Zurück zur Anmeldung"
+      "backToLogin": "Zurück zur Anmeldung",
+      "failedTitle": "Verifizierung fehlgeschlagen",
+      "failedSubtitle": "Wir konnten deine E-Mail-Adresse mit diesem Link nicht verifizieren."
     },
     "forgotPassword": {
       "title": "Passwort vergessen",
@@ -215,7 +252,10 @@
       "submitting": "Wird aktualisiert",
       "mismatch": "Passwörter stimmen nicht überein",
       "expired": "Dein Reset-Link ist abgelaufen oder unbekannt. Fordere über Passwort vergessen einen neuen an.",
-      "backToLogin": "Zurück zur Anmeldung"
+      "backToLogin": "Zurück zur Anmeldung",
+      "expiredTitle": "Reset-Link abgelaufen",
+      "expiredSubtitle": "Wir konnten deine Passwort-Reset-Sitzung nicht öffnen.",
+      "requestNew": "Neuen Reset-Link anfordern"
     },
     "acceptInvite": {
       "title": "Tritt deinem Team bei",
@@ -236,6 +276,37 @@
       "notConfigured": "Supabase nicht konfiguriert. Setze NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.",
       "signupNoUser": "Registrierung fehlgeschlagen — kein Benutzer zurückgegeben.",
       "unknown": "Etwas ist schiefgelaufen — bitte erneut versuchen"
+    },
+    "error": {
+      "title": "Anmeldefehler",
+      "ref": "Ref: ${error.digest}"
+    },
+    "mfa": {
+      "recoveryCode": "Wiederherstellungscode",
+      "recoveryHint": "Gib einen der Wiederherstellungscodes ein, die du bei der Einrichtung gespeichert hast.",
+      "authenticatorCode": "Authenticator-Code",
+      "submitting": "Wird verifiziert",
+      "submit": "Verifizieren",
+      "useAuthenticator": "Authenticator-Code verwenden",
+      "useRecovery": "Wiederherstellungscode verwenden"
+    },
+    "notFound": {
+      "title": "Auth-Pfad nicht gefunden."
+    },
+    "onboarding": {
+      "title": "Benenne deinen Workspace",
+      "workspaceName": "Workspace-Name",
+      "workspaceNamePlaceholder": "Acme Productions",
+      "workspaceNameHint": "Du kannst ihn später in den Einstellungen umbenennen.",
+      "submitting": "Workspace wird erstellt",
+      "submit": "Workspace erstellen",
+      "ownerNotePrefix": "Du wirst zum Owner. Teammitglieder kannst du einladen aus",
+      "ownerNoteSuffix": "sobald du drin bist."
+    },
+    "sso": {
+      "errorTitle": "SSO konnte nicht gestartet werden",
+      "errorSubtitle": "Weiterleitung zu ${provider} fehlgeschlagen.",
+      "noRedirect": "Keine Weiterleitungs-URL erhalten."
     }
   },
   "invites": {
@@ -503,5 +574,106 @@
     "lastSync": "Letzte Sync",
     "active": "Aktiv",
     "off": "Inaktiv"
+  },
+  "avatarMenu": {
+    "account": "Konto",
+    "keyboardShortcuts": "Tastaturkürzel",
+    "openAriaLabel": "Kontomenü öffnen",
+    "preferences": "Einstellungen"
+  },
+  "p": {
+    "producer": {
+      "approvals": {
+        "configureSupabase": "Supabase konfigurieren.",
+        "title": "Freigaben",
+        "empty": {
+          "title": "Keine Freigaben"
+        },
+        "proposalFallback": "Angebot",
+        "signedAt": "unterschrieben ${fmt.date(a.signed_at)}",
+        "dueAt": "fällig ${fmt.date(a.due_at)}",
+        "tile": {
+          "label": "Freigaben",
+          "desc": "Offene Entscheidungen"
+        }
+      },
+      "portfolio": {
+        "title": "Portfolio",
+        "description": "Projekte in Deiner Verantwortung, nach Phase.",
+        "tile": {
+          "label": "Alle Projekte",
+          "desc": "Projektkarten nach Phase"
+        },
+        "configureSupabase": "Supabase konfigurieren.",
+        "empty": {
+          "title": "Keine Projekte"
+        }
+      },
+      "pnl": {
+        "title": "P&L",
+        "description": "Aggregation über Deine Projekte.",
+        "tile": {
+          "label": "Producer P&L",
+          "desc": "Marge + Abweichung"
+        },
+        "configureSupabase": "Supabase konfigurieren.",
+        "noProject": {
+          "title": "Kein Projekt"
+        },
+        "subtitle": "Kennzahlen-Aggregation für ${project.name}.",
+        "metrics": {
+          "budget": "Budget",
+          "spent": "Ausgegeben",
+          "revenuePaid": "Umsatz (bezahlt)",
+          "margin": "Marge"
+        },
+        "fullBreakdownOn": "Vollständige Aufschlüsselung auf"
+      },
+      "riskReadiness": {
+        "title": "Risiko + Readiness"
+      },
+      "risk": {
+        "tile": {
+          "label": "Risiko",
+          "desc": "Mitigation Owner + Fälligkeiten"
+        },
+        "title": "Risikoregister",
+        "thisProject": "dieses Projekt",
+        "empty": {
+          "title": "Keine Risiken erfasst"
+        },
+        "col": {
+          "title": "Titel",
+          "category": "Kategorie",
+          "likelihood": "Eintrittswahrscheinlichkeit",
+          "impact": "Auswirkung",
+          "owner": "Owner",
+          "due": "Fällig",
+          "status": "Status"
+        }
+      },
+      "readiness": {
+        "tile": {
+          "label": "Readiness",
+          "desc": "Phase-Gate-Checklisten"
+        }
+      },
+      "approvalsReviews": {
+        "title": "Freigaben & Reviews",
+        "description": "Entscheidungen und Post-Mortems."
+      },
+      "reviews": {
+        "tile": {
+          "label": "Reviews",
+          "desc": "Show-Debriefs"
+        }
+      },
+      "title": "Producer Portal",
+      "tracker": {
+        "configureSupabase": "Supabase konfigurieren.",
+        "title": "Tracker",
+        "backToOverview": "← Zurück zur Übersicht"
+      }
+    }
   }
 }

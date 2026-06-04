@@ -1176,6 +1176,33 @@ pre,
     min-height: 3.5rem; /* 56px — matches sidebar header */
   }
 
+  /* ───── Mobile responsiveness (< md = 768px) ──────────────────────
+   * The desktop PlatformSidebar / PortalRail are hidden on mobile by
+   * their own `hidden md:flex` class — the hamburger MobileNavDrawer
+   * takes over. The remaining mobile fixes live here:
+   *
+   *   1. Page + module padding tightens 32px → 16px so tables and
+   *      grids don't lose another 32px to inset on a 375px phone.
+   *   2. Tables wider than the viewport get horizontal scroll INSIDE
+   *      the main column (overflow-x:auto on .console-content) rather
+   *      than being clipped by the shell's `overflow:hidden`. Two
+   *      scroll axes per region (vertical = column, horizontal =
+   *      table) is the standard SaaS dashboard pattern (Linear, Vercel,
+   *      Stripe Dashboard, Notion). */
+  @media (max-width: 767px) {
+    .console-content {
+      overflow-x: auto;
+    }
+    .page-content {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    .module-header {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
   /* ───── v3 ATLVS Product theme — SaaS-scoped surface overrides ─────
    *
    * The cosmic ghxstship skin uses a translucent glass-blur header to

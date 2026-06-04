@@ -156,7 +156,11 @@ export function PlatformSidebar({
   return (
     <aside
       aria-label="Primary"
-      className="relative shrink-0 overflow-hidden border-e border-[var(--border-color)] bg-[var(--bg-secondary)] transition-[width] duration-[var(--motion-fast)] ease-[var(--ease-hover)]"
+      // hidden md:flex: the desktop sidebar is suppressed below 768px
+      // because its width swallows the entire phone viewport. The
+      // MobileNavDrawer (top bar hamburger) replaces it for `< md`. See
+      // (platform)/layout.tsx for the drawer mount.
+      className="relative hidden shrink-0 overflow-hidden border-e border-[var(--border-color)] bg-[var(--bg-secondary)] transition-[width] duration-[var(--motion-fast)] ease-[var(--ease-hover)] md:block"
       style={{ width: `${currentWidth}px` }}
     >
       <div className="flex h-full min-h-0 flex-col">

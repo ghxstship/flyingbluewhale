@@ -227,4 +227,73 @@ describe("Design system — component primitive adoption", () => {
       `Raw Tailwind palette literals — replace with token vars (var(--color-success) / var(--color-warning) / var(--color-error) / var(--color-info) / var(--org-primary) / var(--p-text-*) / var(--p-border) / var(--p-surface*)):\n${offenders.join("\n")}`,
     ).toEqual([]);
   });
+
+  it("mobile responsiveness — no min-w hardcoded ≥ 375px outside allowlist", () => {
+    // 375px is the iPhone SE / standard small-phone viewport. Any
+    // `min-w-[Xpx]` ≥ 375 on a primitive that doesn't sit inside an
+    // `overflow-x-auto` parent is a horizontal-scroll bug waiting to
+    // happen. Calendar / Gantt / Wide-grid surfaces are allow-listed
+    // because they intentionally render wider than mobile + are
+    // wrapped in a scroll container at the page level.
+    const MIN_W_RE = /\bmin-w-\[(\d{3,})(?:px|rem)\]/g;
+    const ALLOW = new Set<string>([
+      // Calendars: month/week grids intentionally exceed 375px and are
+      // wrapped in `overflow-x-auto` containers by the parent page.
+      "src/components/views/CalendarWeekGrid.tsx",
+      "src/components/views/CalendarMonthGrid.tsx",
+      // Schedule / Gantt: same pattern as calendars.
+      "src/app/(platform)/console/schedule/baselines/[id]/gantt/page.tsx",
+      // RiskHeatmap renders a row-per-risk grid that needs horizontal
+      // scroll on mobile — wrapped at the page level.
+      "src/app/(platform)/console/programs/risk/RiskHeatmap.tsx",
+      // TrackerView columns target a desktop table layout; parent
+      // wraps in overflow-x-auto via .console-content media query.
+      "src/components/xpms/TrackerView.tsx",
+      // Pricing comparison table — wider than mobile by design,
+      // wrapped in `overflow-x-auto` (confirmed at line 328).
+      "src/app/(marketing)/pricing/page.tsx",
+    ]);
+    const offenders: string[] = [];
+    for (const file of ALL_FILES) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW.has(rel)) continue;
+      if (/\.test\.tsx?$/.test(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      const lines = txt.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (/^\s*(\/\/|\*)/.test(line)) continue;
+        let m: RegExpExecArray | null;
+        const re = new RegExp(MIN_W_RE.source, "g");
+        while ((m = re.exec(line)) !== null) {
+          const px = parseInt(m[1], 10);
+          // Treat rem ≥ 24 as ≥ 384px (24×16). Conservative threshold.
+          if (px >= 375) {
+            offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 120)}`);
+          }
+        }
+      }
+    }
+    expect(
+      offenders,
+      `Hardcoded min-widths ≥ 375px outside the calendar/gantt allowlist will overflow the mobile viewport. Wrap the offending block in an \`overflow-x-auto\` container OR move the min-width into a responsive class (\`min-w-0 md:min-w-[Xpx]\`):\n${offenders.join("\n")}`,
+    ).toEqual([]);
+  });
+
+  it("mobile responsiveness — platform sidebar carries the `hidden md:flex/block` toggle", () => {
+    // PlatformSidebar (240px) and PortalRail (224px) must hide at
+    // viewports below `md` (768px); the topbar MobileNavDrawer replaces
+    // them. Without this, a 375px phone gives 135px / 151px main
+    // content — sub-readable.
+    const sidebarTxt = readFileSync(join(REPO_ROOT, "src/components/PlatformSidebar.tsx"), "utf8");
+    const shellTxt = readFileSync(join(REPO_ROOT, "src/components/Shell.tsx"), "utf8");
+    expect(
+      sidebarTxt.includes("hidden md:block") || sidebarTxt.includes("hidden md:flex"),
+      "PlatformSidebar must hide below md — add `hidden md:block` (or `md:flex`) to the outer <aside>",
+    ).toBe(true);
+    expect(
+      shellTxt.includes("hidden w-56") && shellTxt.includes("md:flex"),
+      "PortalRail (Shell.tsx) must hide below md — add `hidden md:flex` to the outer <aside>",
+    ).toBe(true);
+  });
 });

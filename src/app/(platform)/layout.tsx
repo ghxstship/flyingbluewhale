@@ -3,6 +3,7 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { CommandPalette, CommandPaletteTrigger } from "@/components/CommandPalette";
 import { NotificationsBell } from "@/components/NotificationsBell";
 import { AvatarMenu } from "@/components/AvatarMenu";
+import { MobileNavDrawer } from "@/components/MobileNavDrawer";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { platformNav } from "@/lib/nav";
@@ -38,11 +39,19 @@ export default async function PlatformLayout({ children }: { children: React.Rea
            * palette, notifications, theme, profile) plus the workspace
            * orientation handed up from the sidebar's WorkspaceSwitcher.
            */}
-          <header className="glass-nav sticky top-0 z-30 flex shrink-0 items-center justify-end gap-2 px-6">
-            <CommandPaletteTrigger />
-            <NotificationsBell />
-            <ThemeToggle />
-            <AvatarMenu name={session.email || "User"} email={session.email} />
+          <header className="glass-nav sticky top-0 z-30 flex shrink-0 items-center gap-2 px-4 sm:px-6">
+            {/* Mobile-only hamburger — opens the platform nav as an off-
+                canvas drawer. The desktop PlatformSidebar is hidden at
+                `< md` (it would swallow 240px of a 375px phone viewport).
+                On md+ this button is `display: none` and the sidebar
+                takes over. */}
+            <MobileNavDrawer groups={platformNav} />
+            <div className="ms-auto flex items-center gap-2">
+              <CommandPaletteTrigger />
+              <NotificationsBell />
+              <ThemeToggle />
+              <AvatarMenu name={session.email || "User"} email={session.email} />
+            </div>
           </header>
           {/*
            * <main> landmark — Sea Trial FINDING-004. Was a generic <div>

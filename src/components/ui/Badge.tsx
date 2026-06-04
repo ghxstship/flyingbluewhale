@@ -3,6 +3,18 @@
 import * as React from "react";
 import { X } from "lucide-react";
 
+/**
+ * Kit-spec variants: default · success · warning · error · info · brand ·
+ * brand-soft · muted (mirrors tokens.json#semantic + brand neutrals).
+ *
+ * Kit-extension aliases (house additions, kept for call-site readability):
+ *   - `cyan`   → aliased to `info`  (paints with --color-info / brand soft)
+ *   - `purple` → aliased to `brand` (paints with --org-primary)
+ * Both share the same paint tokens as the underlying kit variant — they
+ * exist for vocabulary fit, not new colors. No call site should pass a
+ * raw hex/Tailwind palette for either; if you need a new color, add it
+ * to tokens.json#semantic first.
+ */
 export type BadgeVariant =
   | "default"
   | "success"
@@ -30,16 +42,21 @@ const VARIANT: Record<BadgeVariant, string> = {
   purple: "badge-brand",
 };
 
+// Every dot resolves to a token var — never a Tailwind palette literal.
+// Off-token bg-emerald-500 / bg-amber-500 produced #10b981 / #f59e0b for
+// the dot while the pill variant painted the kit-canonical #2fbf71 /
+// #e9a23b via `badge-success` / `badge-warning`. Both shapes now bind
+// to --color-success / --color-warning so they paint identically.
 const DOT_BG: Record<BadgeVariant, string> = {
   default: "bg-[var(--text-muted)]",
-  success: "bg-emerald-500",
-  warning: "bg-amber-500",
+  success: "bg-[var(--color-success)]",
+  warning: "bg-[var(--color-warning)]",
   error: "bg-[var(--color-error)]",
-  info: "bg-[var(--org-primary)]",
+  info: "bg-[var(--color-info)]",
   brand: "bg-[var(--org-primary)]",
   "brand-soft": "bg-[var(--org-primary)]",
   muted: "bg-[var(--text-muted)]",
-  cyan: "bg-[var(--org-primary)]",
+  cyan: "bg-[var(--color-info)]",
   purple: "bg-[var(--org-primary)]",
 };
 

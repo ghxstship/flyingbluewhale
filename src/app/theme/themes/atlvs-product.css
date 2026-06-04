@@ -89,9 +89,16 @@
   --p-accent-weak: rgba(255, 46, 136, 0.12);
 
   /* ----------- LEGACY ALIAS CONTRACT --------------------------------
-     Every primitive in the codebase reads --bg / --surface / --accent /
-     --text — keep them satisfied so call sites paint correctly
-     without touching them. */
+   * SSOT lock for the ATLVS skin: the `--p-*` namespace (per the kit's
+   * product-theme.css) is the SINGLE source of truth. Every legacy
+   * token below (--bg, --surface, --text-*, --color-*, --accent,
+   * --background, --bg-secondary, --org-primary, --shadow-*, etc.)
+   * is bound here as `var(--p-*)` — never an independent hex. This
+   * means the two namespaces cannot drift: changing the kit value at
+   * its --p-* declaration above flows through every consumer in one
+   * pass. If you find yourself adding a hex literal to ANY token in
+   * this block, stop and add the value to the --p-* base first, then
+   * alias here. */
   --bg: var(--p-bg);
   --surface: var(--p-surface);
   --surface-2: var(--p-surface-2);

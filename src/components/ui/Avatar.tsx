@@ -16,8 +16,8 @@ const SIZE: Record<AvatarSize, string> = {
 export type AvatarPresence = "online" | "away" | "busy" | "offline";
 
 const PRESENCE: Record<AvatarPresence, string> = {
-  online: "bg-emerald-500",
-  away: "bg-amber-500",
+  online: "bg-[var(--color-success)]",
+  away: "bg-[var(--color-warning)]",
   busy: "bg-[var(--color-error)]",
   offline: "bg-[var(--text-muted)]",
 };

@@ -268,7 +268,7 @@ export function TrackerView({
                           variance > 0
                             ? "text-[var(--color-error)]"
                             : variance < 0
-                              ? "text-emerald-600"
+                              ? "text-[var(--color-success)]"
                               : "text-[var(--text-muted)]"
                         }`}
                       >

@@ -64,14 +64,14 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
         }}
       />
       <div className="mx-auto max-w-[8in] py-8 print:py-0">
-        <div className="no-print mb-6 flex items-center justify-between gap-3 rounded border border-black/20 bg-neutral-100 px-4 py-3 text-xs text-black">
+        <div className="no-print mb-6 flex items-center justify-between gap-3 rounded border border-black/20 bg-[var(--p-surface-2)] px-4 py-3 text-xs text-black">
           <div>
             Click <strong>Print / Save as PDF</strong>, then choose <em>Save as PDF</em> in your browser&apos;s print
             dialog.
           </div>
           <div className="flex items-center gap-3">
             <PrintTrigger />
-            <a href={`/offer/${token}`} className="text-blue-700 hover:underline">
+            <a href={`/offer/${token}`} className="text-[var(--color-info)] hover:underline">
               ← Back to letter
             </a>
           </div>

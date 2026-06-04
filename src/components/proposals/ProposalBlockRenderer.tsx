@@ -187,8 +187,8 @@ function CalloutBlock({ block }: { block: Extract<ProposalBlock, { type: "callou
       : block.kind === "gold"
         ? "border-[color:var(--color-warning)]/40 bg-[color:var(--color-warning)]/10"
         : block.kind === "teal"
-          ? "border-sky-500/30 bg-sky-500/10"
-          : "border-pink-500/30 bg-pink-500/10";
+          ? "border-[color-mix(in_srgb,var(--color-info)_30%,transparent)] bg-[color-mix(in_srgb,var(--color-info)_10%,transparent)]"
+          : "border-[color-mix(in_srgb,var(--org-primary)_30%,transparent)] bg-[color-mix(in_srgb,var(--org-primary)_10%,transparent)]";
   return (
     <div className={`mx-auto my-4 max-w-2xl rounded-lg border p-4 ${kindClass}`}>
       {block.title && <div className="text-xs font-semibold tracking-widest uppercase">{block.title}</div>}

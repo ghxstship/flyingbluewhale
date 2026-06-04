@@ -16,9 +16,9 @@ type Props = {
 export function eventToneClass(tone: CalendarEvent["tone"]): string {
   switch (tone) {
     case "success":
-      return "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/25";
+      return "bg-[color-mix(in_srgb,var(--color-success)_15%,transparent)] text-[var(--color-success)] hover:bg-[color-mix(in_srgb,var(--color-success)_25%,transparent)]";
     case "warn":
-      return "bg-amber-500/15 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25";
+      return "bg-[color-mix(in_srgb,var(--color-warning)_15%,transparent)] text-[var(--color-warning)] hover:bg-[color-mix(in_srgb,var(--color-warning)_25%,transparent)]";
     case "error":
       return "bg-[color:var(--color-error)]/10 text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/20";
     case "info":

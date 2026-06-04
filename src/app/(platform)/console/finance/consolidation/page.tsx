@@ -176,11 +176,13 @@ export default async function Page() {
               <div className="mt-3 flex items-center justify-between text-xs">
                 <span className="text-[var(--text-secondary)]">{b.invoice_count} invoices</span>
                 <span className="font-mono">
-                  <span className="text-amber-600">
+                  <span className="text-[var(--color-warning)]">
                     {formatMoney(b.outstanding_total, b.base_currency ?? orgCurrency)}
                   </span>
                   {" · "}
-                  <span className="text-emerald-600">{formatMoney(b.paid_total, b.base_currency ?? orgCurrency)}</span>
+                  <span className="text-[var(--color-success)]">
+                    {formatMoney(b.paid_total, b.base_currency ?? orgCurrency)}
+                  </span>
                 </span>
               </div>
             </Link>

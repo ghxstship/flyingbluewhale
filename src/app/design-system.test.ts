@@ -182,4 +182,49 @@ describe("Design system — component primitive adoption", () => {
     }
     expect(offenders, `\`window.confirm\` bypasses <Dialog>: ${offenders.join(", ")}`).toEqual([]);
   });
+
+  it("no raw Tailwind color-scale literals — token vars only", () => {
+    // Every paint must route through a CSS var (--color-success,
+    // --color-warning, --color-error, --color-info, --org-primary,
+    // --p-text-*, --p-border, --p-surface*, etc.). A hardcoded
+    // `bg-emerald-500` / `text-amber-700` / `bg-red-500/10` bypasses
+    // the token contract and silently drifts from the kit's canonical
+    // hex values (success #2fbf71 ≠ emerald #10b981, etc.). When the
+    // kit's product palette updates, those literals stay frozen.
+    //
+    // Pattern catches utilities of the form
+    //   {prefix}-{color}-{scale}[/opacity]
+    // for every Tailwind color-scale palette name. Neutrals (slate,
+    // gray, zinc, neutral, stone) are included — use --p-text-* /
+    // --p-border / --p-surface-* tokens instead.
+    const TAILWIND_PALETTE_RE =
+      /\b(bg|text|border|ring|fill|stroke|from|to|via|outline|decoration|caret|accent|divide|placeholder)-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone)-(50|100|200|300|400|500|600|700|800|900|950)\b/;
+    const ALLOW = new Set<string>([
+      // Print-medium pages set hex inline for the printed sheet; the
+      // on-screen banner above the print rules uses tokens already.
+      // (Update this allowlist only when the page truly cannot consume
+      // a CSS variable — e.g. @media print sheets.)
+    ]);
+    const offenders: string[] = [];
+    for (const file of ALL_FILES) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW.has(rel)) continue;
+      // Skip test files — they may reference these classes as test data.
+      if (/\.test\.tsx?$/.test(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      const lines = txt.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        // Skip pure-comment lines (// or *).
+        if (/^\s*(\/\/|\*)/.test(line)) continue;
+        if (TAILWIND_PALETTE_RE.test(line)) {
+          offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 120)}`);
+        }
+      }
+    }
+    expect(
+      offenders,
+      `Raw Tailwind palette literals — replace with token vars (var(--color-success) / var(--color-warning) / var(--color-error) / var(--color-info) / var(--org-primary) / var(--p-text-*) / var(--p-border) / var(--p-surface*)):\n${offenders.join("\n")}`,
+    ).toEqual([]);
+  });
 });

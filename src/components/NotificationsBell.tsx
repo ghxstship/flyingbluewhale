@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Bell, Check } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * <NotificationsBell> — closes the dead-zone flagged in IA audit §7 #4.
@@ -30,6 +30,7 @@ type Notification = {
 
 export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
   const fmt = useFormatters();
+  const t = useT();
   const [items, setItems] = useState<Notification[]>([]);
   const [unread, setUnread] = useState(0);
   const [open, setOpen] = useState(false);
@@ -95,7 +96,11 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
         <button
           type="button"
           className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-1 focus-visible:outline-none"
-          aria-label={unread > 0 ? `Notifications — ${unread} unread` : "Notifications"}
+          aria-label={
+            unread > 0
+              ? t("notifications.bellAriaUnread", { count: unread }, `Notifications — ${unread} unread`)
+              : t("notifications.bellAria", undefined, "Notifications")
+          }
         >
           <Bell size={16} aria-hidden="true" />
           {unread > 0 ? (
@@ -116,22 +121,24 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
         >
           <div className="flex items-center justify-between border-b border-[var(--border-color)] px-3 py-2">
             <span className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-              Notifications
+              {t("notifications.title", undefined, "Notifications")}
             </span>
             <button
               type="button"
               onClick={markAllRead}
               disabled={unread === 0}
               className="inline-flex items-center gap-1 text-xs hover:text-[var(--foreground)] disabled:opacity-40"
-              aria-label="Mark all as read"
+              aria-label={t("notifications.markAllReadAria", undefined, "Mark all as read")}
             >
               <Check size={12} aria-hidden="true" />
-              Mark all read
+              {t("notifications.markAllRead", undefined, "Mark all read")}
             </button>
           </div>
           <div className="max-h-[360px] overflow-y-auto p-1">
             {items.length === 0 ? (
-              <p className="px-3 py-6 text-center text-xs text-[var(--text-muted)]">You&apos;re all caught up.</p>
+              <p className="px-3 py-6 text-center text-xs text-[var(--text-muted)]">
+                {t("notifications.allCaughtUp", undefined, "You're all caught up.")}
+              </p>
             ) : (
               items.map((n) => {
                 const isUnread = !n.read_at;
@@ -184,7 +191,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
               onClick={() => setOpen(false)}
               className="text-xs text-[var(--text-muted)] hover:text-[var(--foreground)]"
             >
-              View All In Inbox →
+              {t("notifications.viewAllInInbox", undefined, "View all in inbox →")}
             </Link>
           </div>
         </Popover.Content>

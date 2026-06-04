@@ -11,6 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Initials-fallback tile palette — workspace identity discriminator.
@@ -101,6 +102,7 @@ type Workspace = { id: string; name: string; role: string; logoUrl: string | nul
 
 export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boolean; initialName?: string }) {
   const router = useRouter();
+  const t = useT();
   const [open, setOpen] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
   const [workspaces, setWorkspaces] = React.useState<Workspace[]>([]);
@@ -149,8 +151,13 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
   }
 
   const active = workspaces.find((w) => w.id === current);
-  const activeName = active?.name ?? initialName ?? "Workspace";
+  const activeName = active?.name ?? initialName ?? t("workspace.fallbackName", undefined, "Workspace");
   const activeLogoUrl = active?.logoUrl ?? null;
+  const switchAriaLabel = t(
+    "workspace.switchAriaLabel",
+    { name: activeName },
+    `Switch workspace (current: ${activeName})`,
+  );
 
   if (collapsed) {
     return (
@@ -158,7 +165,7 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label={`Switch workspace (current: ${activeName})`}
+            aria-label={switchAriaLabel}
             className="flex w-full items-center justify-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)]"
           >
             <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={28} />
@@ -174,7 +181,7 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label={`Switch workspace (current: ${activeName})`}
+          aria-label={switchAriaLabel}
           className="flex w-full items-center gap-2 rounded px-1 py-1 text-sm font-semibold tracking-tight hover:bg-[var(--surface-inset)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
         >
           <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={24} />
@@ -198,11 +205,12 @@ function WorkspaceMenu({
   switching: string | null;
   onSwitch: (id: string) => void;
 }) {
+  const t = useT();
   return (
     <DropdownMenuContent align="start" className="w-64">
-      <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
+      <DropdownMenuLabel>{t("workspace.menuLabel", undefined, "Workspaces")}</DropdownMenuLabel>
       {workspaces.length === 0 ? (
-        <div className="px-2 py-3 text-xs text-[var(--text-muted)]">Loading…</div>
+        <div className="px-2 py-3 text-xs text-[var(--text-muted)]">{t("common.loading", undefined, "Loading…")}</div>
       ) : (
         workspaces.map((w) => {
           const isActive = w.id === current;
@@ -234,7 +242,7 @@ function WorkspaceMenu({
         className="flex items-center gap-2 text-[var(--text-muted)]"
       >
         <Plus size={12} aria-hidden />
-        <span>Manage workspaces</span>
+        <span>{t("workspace.manage", undefined, "Manage workspaces")}</span>
       </DropdownMenuItem>
     </DropdownMenuContent>
   );

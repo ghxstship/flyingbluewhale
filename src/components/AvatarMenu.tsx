@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/DropdownMenu";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Top-right avatar menu — admin (Settings) lives here, not in the primary
@@ -22,12 +23,13 @@ import {
  * has its own 2-col layout under `/console/settings`.
  */
 export function AvatarMenu({ name, email, src }: { name: string; email?: string | null; src?: string | null }) {
+  const t = useT();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label="Open account menu"
+          aria-label={t("avatarMenu.openAriaLabel", undefined, "Open account menu")}
           className="rounded-full ring-offset-2 ring-offset-[var(--background)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)]"
         >
           <Avatar name={name} src={src} size="sm" />
@@ -42,20 +44,20 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
         <DropdownMenuItem asChild>
           <Link href="/me" className="flex items-center gap-2">
             <User size={14} aria-hidden="true" />
-            Account
+            {t("avatarMenu.account", undefined, "Account")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/me/preferences" className="flex items-center gap-2">
             <Sparkles size={14} aria-hidden="true" />
-            Preferences
+            {t("avatarMenu.preferences", undefined, "Preferences")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/console/settings" className="flex items-center gap-2">
             <Settings size={14} aria-hidden="true" />
-            Settings
+            {t("common.settings", undefined, "Settings")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -66,13 +68,13 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
           className="flex items-center gap-2"
         >
           <Keyboard size={14} aria-hidden="true" />
-          Keyboard Shortcuts
+          {t("avatarMenu.keyboardShortcuts", undefined, "Keyboard shortcuts")}
           <kbd className="ms-auto font-mono text-[10px] text-[var(--text-muted)]">?</kbd>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/help" className="flex items-center gap-2">
             <HelpCircle size={14} aria-hidden="true" />
-            Help
+            {t("common.help", undefined, "Help")}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -80,7 +82,7 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
           <form action="/auth/signout" method="POST">
             <button type="submit" className="flex w-full items-center gap-2">
               <LogOut size={14} aria-hidden="true" />
-              Sign Out
+              {t("common.signOut", undefined, "Sign out")}
             </button>
           </form>
         </DropdownMenuItem>

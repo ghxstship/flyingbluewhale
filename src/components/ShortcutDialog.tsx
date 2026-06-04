@@ -4,6 +4,7 @@ import * as React from "react";
 import { Search } from "lucide-react";
 import { useHotkeys, useShortcutRegistry, registerShortcut } from "@/lib/hooks/useHotkeys";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * <ShortcutDialog> — opens on `?` key. Lists every registered shortcut
@@ -25,6 +26,7 @@ export function ShortcutDialog() {
   const [query, setQuery] = React.useState("");
   const shortcuts = useShortcutRegistry();
   const searchRef = React.useRef<HTMLInputElement>(null);
+  const t = useT();
 
   React.useEffect(() => {
     return registerShortcut("?", "Show keyboard shortcuts", "Global");
@@ -69,14 +71,17 @@ export function ShortcutDialog() {
       <DialogContent size="md">
         <DialogHeader>
           <DialogTitle>
-            Keyboard shortcuts
+            {t("shortcuts.title", undefined, "Keyboard shortcuts")}
             <span className="ms-2 rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--text-muted)]">
               {shortcuts.length}
             </span>
           </DialogTitle>
           <DialogDescription>
-            Press <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">?</kbd> anywhere to open.
-            Press <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">Esc</kbd> to dismiss.
+            {t("shortcuts.hintPrefix", undefined, "Press")}{" "}
+            <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">?</kbd>{" "}
+            {t("shortcuts.hintOpen", undefined, "anywhere to open.")} {t("shortcuts.hintPrefix", undefined, "Press")}{" "}
+            <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">Esc</kbd>{" "}
+            {t("shortcuts.hintDismiss", undefined, "to dismiss.")}
           </DialogDescription>
         </DialogHeader>
 
@@ -87,8 +92,8 @@ export function ShortcutDialog() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Filter shortcuts…"
-            aria-label="Filter Shortcuts"
+            placeholder={t("shortcuts.filterPlaceholder", undefined, "Filter shortcuts…")}
+            aria-label={t("shortcuts.filterAria", undefined, "Filter shortcuts")}
             className="w-full bg-transparent text-xs outline-none"
           />
         </div>
@@ -113,7 +118,9 @@ export function ShortcutDialog() {
           ))}
           {filtered.length === 0 && (
             <div className="py-8 text-center text-xs text-[var(--text-muted)]">
-              {shortcuts.length === 0 ? "No shortcuts registered yet." : `No shortcuts match “${query}”.`}
+              {shortcuts.length === 0
+                ? t("shortcuts.emptyRegistry", undefined, "No shortcuts registered yet.")
+                : t("shortcuts.noMatch", { query }, `No shortcuts match “${query}”.`)}
             </div>
           )}
         </div>

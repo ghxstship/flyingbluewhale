@@ -1534,3 +1534,58 @@ export const ROLE_TABS: Record<MobileRole, NavItem[]> = {
 export function roleTabs(role: MobileRole): NavItem[] {
   return ROLE_TABS[role];
 }
+
+/**
+ * Per-role tools-drawer priority — the surfaces a role uses most.
+ * Composes with phase reordering: role-priority comes first, then
+ * phase-priority surfaces that aren't already in the role head, then
+ * the rest in default order.
+ *
+ * Admin gets no role-priority (they touch every surface, so the
+ * existing phase ordering is correct for them).
+ */
+const ROLE_PRIORITY_HREFS: Record<MobileRole, string[]> = {
+  performer: ["/m/shift", "/m/advances", "/m/feed", "/m/guide", "/m/inbox"],
+  crew: ["/m/shift", "/m/clock", "/m/ros", "/m/daily-log", "/m/punch", "/m/time-off", "/m/feed"],
+  driver: ["/m/driver", "/m/wayfind", "/m/ad", "/m/alerts", "/m/handover"],
+  medic: ["/m/medic", "/m/alerts", "/m/safeguarding", "/m/incidents"],
+  guard: ["/m/gate", "/m/incidents", "/m/incident", "/m/wallet", "/m/guard", "/m/alerts"],
+  admin: [],
+};
+
+/**
+ * Role × phase-aware tools-drawer ordering (ADR-0009).
+ *
+ * Composes phase reordering on top of role-relevant filtering. Order:
+ *   1. Role-priority surfaces (per ROLE_PRIORITY_HREFS).
+ *   2. Phase-priority surfaces (per PHASE_PRIORITY_HREFS) not already
+ *      in the role head.
+ *   3. Everything else in default `mobileSurfaces` order.
+ *
+ * Pass `role=undefined` to get just phase ordering (existing behavior).
+ * Pass `phase=undefined` to get just role ordering.
+ */
+export function mobileSurfacesForRole(role: MobileRole | undefined, phase?: string): NavItem[] {
+  if (!role) return mobileSurfacesForPhase(phase);
+  const rolePriority = ROLE_PRIORITY_HREFS[role];
+  const phasePriority = phase ? (PHASE_PRIORITY_HREFS[phase] ?? []) : [];
+  const seen = new Set<string>();
+  const head: NavItem[] = [];
+  const byHref = new Map(mobileSurfaces.map((i) => [i.href, i] as const));
+  for (const href of rolePriority) {
+    const item = byHref.get(href);
+    if (item && !seen.has(href)) {
+      head.push(item);
+      seen.add(href);
+    }
+  }
+  for (const href of phasePriority) {
+    const item = byHref.get(href);
+    if (item && !seen.has(href)) {
+      head.push(item);
+      seen.add(href);
+    }
+  }
+  const tail = mobileSurfaces.filter((i) => !seen.has(i.href));
+  return [...head, ...tail];
+}

@@ -34,12 +34,19 @@ if (!SUPABASE_URL || !ANON) {
   process.exit(1);
 }
 
+// Test users mapped to ADR-0009 MobileRole values. The platform `role`
+// field stays for legacy reporting; `mobileRole` is what the smoke
+// matrix uses to pick which surfaces to exercise per user. Run with
+// SMOKE_MODE=legacy to fall back to "every route × every user" — the
+// pre-ADR-0009 188-check matrix — for regression diffing.
 const TEST_USERS = [
-  { role: "owner", email: "performer@gvteway.test", password: "CompvssTest2026!" },
-  { role: "admin", email: "admin@gvteway.test", password: "CompvssTest2026!" },
-  { role: "manager", email: "mgmt@gvteway.test", password: "CompvssTest2026!" },
-  { role: "member", email: "crew@gvteway.test", password: "CompvssTest2026!" },
+  { role: "owner", mobileRole: "performer", email: "performer@gvteway.test", password: "CompvssTest2026!" },
+  { role: "admin", mobileRole: "admin", email: "admin@gvteway.test", password: "CompvssTest2026!" },
+  { role: "manager", mobileRole: "guard", email: "mgmt@gvteway.test", password: "CompvssTest2026!" },
+  { role: "member", mobileRole: "crew", email: "crew@gvteway.test", password: "CompvssTest2026!" },
 ];
+
+const SMOKE_MODE = process.env.SMOKE_MODE === "legacy" ? "legacy" : "role-matrix";
 
 // Every /m route under test. `expect` is the unique title text the page
 // must render (case-insensitive substring match against the response
@@ -101,6 +108,72 @@ const ROUTES = [
 ];
 
 const STUB_MARKER = /scaffolded but not yet wired/i;
+
+// ADR-0009 Migration #4 — role × surface matrix replaces the prior 47×4
+// "every route × every user" sweep. Each role's surface list is the
+// union of its tab bar + role-priority tools (from ROLE_PRIORITY_HREFS
+// in src/lib/nav.ts) + a handful of universally-needed surfaces (Home,
+// Inbox, Settings, Guide). Admin tests the full surface list since
+// their role is "touches everything".
+const UNIVERSAL_ROUTES = ["/m", "/m/inbox", "/m/alerts", "/m/settings", "/m/guide"];
+const ROLE_SURFACES = {
+  performer: [
+    ...UNIVERSAL_ROUTES,
+    "/m/performer",
+    "/m/shift",
+    "/m/advances",
+    "/m/feed",
+    "/m/time-off",
+    "/m/docs",
+    "/m/kudos",
+    "/m/learning",
+  ],
+  crew: [
+    ...UNIVERSAL_ROUTES,
+    "/m/crew",
+    "/m/shift",
+    "/m/clock",
+    "/m/ros",
+    "/m/daily-log",
+    "/m/punch",
+    "/m/time-off",
+    "/m/feed",
+    "/m/kudos",
+    "/m/docs",
+    "/m/directory",
+    "/m/learning",
+  ],
+  driver: [
+    ...UNIVERSAL_ROUTES,
+    "/m/driver",
+    "/m/wayfind",
+    "/m/ad",
+    "/m/handover",
+    "/m/coc",
+    "/m/wms",
+  ],
+  medic: [...UNIVERSAL_ROUTES, "/m/medic", "/m/medic/new", "/m/safeguarding", "/m/incidents"],
+  guard: [
+    ...UNIVERSAL_ROUTES,
+    "/m/guard",
+    "/m/gate",
+    "/m/incidents",
+    "/m/incidents/new",
+    "/m/incident",
+    "/m/incident/new",
+    "/m/wallet",
+    "/m/check-in",
+  ],
+  admin: null, // null = "test every route" — admin touches everything
+};
+
+function routesForUser(user) {
+  if (SMOKE_MODE === "legacy") return ROUTES;
+  const list = ROLE_SURFACES[user.mobileRole];
+  if (list === null || list === undefined) return ROUTES; // admin → full
+  const byPath = new Map(ROUTES.map((r) => [r.path, r]));
+  return list.map((p) => byPath.get(p) ?? { path: p, label: p, expect: "" }).filter(Boolean);
+}
 
 async function signIn(email, password) {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
@@ -174,8 +247,9 @@ for (const u of TEST_USERS) {
     continue;
   }
   const cookie = buildSupabaseCookies(signIn1.tokens);
-  const out = { role: u.role, email: u.email, routes: [] };
-  for (const r of ROUTES) {
+  const out = { role: u.role, mobileRole: u.mobileRole, email: u.email, routes: [] };
+  const targetRoutes = routesForUser(u);
+  for (const r of targetRoutes) {
     const expectRe = r.expect ? new RegExp(r.expect, "i") : null;
     const probe = await hit(r.path, cookie, expectRe);
     out.routes.push({ path: r.path, label: r.label, ...probe });
@@ -183,13 +257,18 @@ for (const u of TEST_USERS) {
   results.push(out);
 }
 
+const totalChecks = results.reduce((acc, r) => acc + (r.routes?.length ?? 0), 0);
 const summary = {
+  mode: SMOKE_MODE,
   total_routes: ROUTES.length,
   total_users: TEST_USERS.filter((u) => u.password).length,
+  total_checks: totalChecks,
   per_user: results.map((r) => ({
     role: r.role,
+    mobileRole: r.mobileRole,
     email: r.email,
     error: r.error,
+    routes_tested: r.routes?.length ?? 0,
     ok2xx: r.routes?.filter((x) => x.status >= 200 && x.status < 300 && !x.hasError).length ?? 0,
     redirect3xx: r.routes?.filter((x) => x.status >= 300 && x.status < 400).length ?? 0,
     server_error5xx: r.routes?.filter((x) => x.status >= 500).length ?? 0,

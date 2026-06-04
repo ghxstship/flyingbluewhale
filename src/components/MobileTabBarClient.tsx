@@ -3,7 +3,21 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Inbox, Clock, Bell, User, QrCode, BookOpen, CheckSquare } from "lucide-react";
+import {
+  Home,
+  Inbox,
+  Clock,
+  Bell,
+  User,
+  QrCode,
+  BookOpen,
+  CheckSquare,
+  Calendar,
+  Map,
+  ClipboardList,
+  Siren,
+  ShieldCheck,
+} from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -17,10 +31,27 @@ const ICONS: Record<string, typeof Home> = {
   "/m/alerts": Bell,
   "/m/settings": User,
   // Retained mappings so legacy tab bar configs (and persona-routed
-  // variants from ADR-0009 once it lands) render correctly.
+  // variants from ADR-0009) render correctly.
   "/m/check-in": QrCode,
   "/m/guide": BookOpen,
   "/m/tasks": CheckSquare,
+  // ADR-0009 per-role tab bar destinations. Role home routes
+  // (/m/performer, /m/crew, /m/admin) map to Home; specialist roles
+  // that have static surfaces (/m/driver, /m/medic, /m/guard) reuse
+  // existing icons for their primary verbs.
+  "/m/performer": Home,
+  "/m/crew": Home,
+  "/m/admin": Home,
+  "/m/driver": Map,
+  "/m/medic": ClipboardList,
+  "/m/guard": ShieldCheck,
+  "/m/gate": QrCode,
+  "/m/incidents": Siren,
+  "/m/incident": Siren,
+  "/m/wayfind": Map,
+  // Schedule lives on /m/shift for the existing surface — but the
+  // performer tab bar labels it "Schedule"; the same href works.
+  "/m/schedule": Calendar,
 };
 
 export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges?: Record<string, number> }) {

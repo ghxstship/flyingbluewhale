@@ -1,46 +1,45 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ProposalBlockRenderer } from "@/components/proposals/ProposalBlockRenderer";
 import { SignatureBlock } from "./SignatureBlock";
 import { ProposalTopBar } from "./ProposalTopBar";
 import type { ProposalBlock } from "@/lib/proposals/types";
 import type { Proposal } from "@/lib/supabase/types";
+import { resolveProposalShareLink } from "@/lib/proposals/share";
 
 export const dynamic = "force-dynamic";
-
-async function recordView(proposalId: string, token: string) {
-  const supabase = await createClient();
-  await supabase.from("proposal_events").insert({ proposal_id: proposalId, share_token: token, event_type: "viewed" });
-  await supabase.rpc;
-  // best-effort: bump view count
-  const { data: existing } = await supabase
-    .from("proposal_share_links")
-    .select("view_count")
-    .eq("token", token)
-    .maybeSingle();
-  const next = (existing?.view_count ?? 0) + 1;
-  await supabase
-    .from("proposal_share_links")
-    .update({
-      view_count: next,
-      last_viewed_at: new Date().toISOString(),
-    })
-    .eq("token", token);
-}
 
 export default async function PublicProposalPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   if (!hasSupabase) notFound();
-  const supabase = await createClient();
+  if (!isServiceClientAvailable()) notFound();
 
-  const { data: link } = await supabase.from("proposal_share_links").select("*").eq("token", token).maybeSingle();
-  if (!link || link.revoked_at || (link.expires_at && new Date(link.expires_at) < new Date())) notFound();
+  // HMAC-verify the token + atomic-consume the share-link row in one call.
+  // Falls back to a legacy plain-text token lookup for outstanding links
+  // minted before migration 0064 (those are rate-limited at the upstream
+  // action layer; for the read-only page view we don't have a per-action
+  // limiter, but the page view itself doesn't change any secret state).
+  const resolved = await resolveProposalShareLink({ token, allowLegacyTokenFallback: true });
+  if (!resolved.ok) notFound();
 
-  const { data: proposal } = await supabase.from("proposals").select("*").eq("id", link.proposal_id).maybeSingle();
+  // Reads use the service-role too — the public viewer has no Supabase
+  // session and proposals RLS gates on `is_org_member`. The share-link
+  // resolution above is the authorization for this proposal_id; service-
+  // role reads it past RLS.
+  const svc = createServiceClient();
+  const { data: proposal } = await svc.from("proposals").select("*").eq("id", resolved.link.proposal_id).maybeSingle();
   if (!proposal) notFound();
 
-  recordView(proposal.id, token).catch(() => {});
+  // Best-effort view event. The consume RPC already bumped view_count
+  // atomically; this gives the proposal_events timeline a row for
+  // analytics. Wrap in a no-throw so any insert failure can't 500 the
+  // public page.
+  void svc.from("proposal_events").insert({
+    proposal_id: resolved.link.proposal_id,
+    share_token: token,
+    event_type: "viewed",
+  });
 
   const blocks = (proposal.blocks ?? []) as ProposalBlock[];
   const theme = (proposal.theme as { primary: string; secondary: string }) ?? {

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo, toTitle } from "@/lib/format";
 import type { Proposal, ProposalShareLink } from "@/lib/supabase/types";
+import { mintProposalShareUrlToken } from "@/lib/proposals/share";
 import { ProposalEditor } from "./ProposalEditor";
 import { ShareLinkPanel } from "./ShareLinkPanel";
 import { SAMPLE_PROPOSAL_BLOCKS } from "./sample";
@@ -80,7 +81,18 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
             {links && links.length > 0 ? (
               <ul className="mt-4 space-y-2">
                 {(links as ProposalShareLink[]).map((l) => {
-                  const url = `/proposals/${l.token}`;
+                  // Always render the HMAC-signed URL for active links so
+                  // operators copying from this panel hand out the secure
+                  // form, not the legacy raw token. The resolver still
+                  // accepts the raw token for outstanding emailed links.
+                  // SHARE_LINK_SECRET env may be absent in some envs; guard.
+                  const urlToken = process.env.SHARE_LINK_SECRET
+                    ? mintProposalShareUrlToken({
+                        linkId: l.id,
+                        expiresAt: l.expires_at ? new Date(l.expires_at) : null,
+                      })
+                    : l.token;
+                  const url = `/proposals/${urlToken}`;
                   const revoked = !!l.revoked_at;
                   return (
                     <li key={l.id} className="surface-inset flex flex-wrap items-center justify-between gap-2 p-3">

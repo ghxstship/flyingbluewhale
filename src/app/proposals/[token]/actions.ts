@@ -1,8 +1,11 @@
 "use server";
 
 import { z } from "zod";
+import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import { ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
+import { resolveProposalShareLink } from "@/lib/proposals/share";
 
 const SignSchema = z.object({
   token: z.string().min(8),
@@ -28,15 +31,41 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
   const parsed = SignSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
-  const supabase = await createClient();
-  const { data: link } = await supabase
-    .from("proposal_share_links")
-    .select("*")
-    .eq("token", parsed.data.token)
-    .maybeSingle();
-  if (!link || link.revoked_at || (link.expires_at && new Date(link.expires_at) < new Date())) {
-    return { error: "Share link is invalid or expired" };
+  // IP-bucketed ratelimit on the public sign action. Without this, a
+  // crawler that scrapes share links can brute-force `signer_name` /
+  // `signer_email` values and rack up `signature_completed` events.
+  const hdrs = await headers();
+  const ip = hdrs.get("x-forwarded-for")?.split(",")[0]?.trim() ?? hdrs.get("x-real-ip") ?? "unknown";
+  const rate = await ratelimit({
+    key: `proposal-sign:${ip}:${parsed.data.token}`,
+    ...RATE_BUDGETS.auth,
+  });
+  if (!rate.ok) {
+    return { error: "Too many signing attempts — wait a moment and try again." };
   }
+
+  // HMAC-verify (with legacy fallback) before touching the proposal row.
+  // The consume RPC bumps view counters; signature is a side-effect of a
+  // successful resolve so the view-count bump matches the audit trail.
+  const resolved = await resolveProposalShareLink({
+    token: parsed.data.token,
+    allowLegacyTokenFallback: true,
+  });
+  if (!resolved.ok) {
+    return {
+      error:
+        resolved.reason === "expired"
+          ? "This share link has expired"
+          : resolved.reason === "revoked"
+            ? "This share link has been revoked"
+            : "Share link is invalid",
+    };
+  }
+
+  if (!isServiceClientAvailable()) {
+    return { error: "Signing is temporarily unavailable. Please try again later." };
+  }
+  const svc = createServiceClient();
 
   const hash = randomRef();
   const signedAt = new Date().toISOString();
@@ -45,7 +74,7 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
   // refuses to overwrite an existing signature — without it a second
   // signer (or a stale tab) would clobber the legally-binding signer
   // metadata + hash on a proposal that's already executed.
-  const { data: signed, error: updateErr } = await supabase
+  const { data: signed, error: updateErr } = await svc
     .from("proposals")
     .update({
       signed_at: signedAt,
@@ -55,7 +84,7 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
       signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
       status: "signed",
     })
-    .eq("id", link.proposal_id)
+    .eq("id", resolved.link.proposal_id)
     .neq("status", "signed")
     .select("id");
   if (updateErr) return { error: updateErr.message };
@@ -66,8 +95,8 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
   // Insert the signature audit row + event ONLY after the proposal
   // claims the signature. This way a re-attempt doesn't leave orphan
   // signature rows or duplicate signature_completed events.
-  await supabase.from("proposal_signatures").insert({
-    proposal_id: link.proposal_id,
+  await svc.from("proposal_signatures").insert({
+    proposal_id: resolved.link.proposal_id,
     share_token: parsed.data.token,
     signer_name: parsed.data.name,
     signer_email: parsed.data.email || null,
@@ -77,8 +106,8 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
     signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
   });
 
-  await supabase.from("proposal_events").insert({
-    proposal_id: link.proposal_id,
+  await svc.from("proposal_events").insert({
+    proposal_id: resolved.link.proposal_id,
     share_token: parsed.data.token,
     event_type: "signature_completed",
     metadata: { name: parsed.data.name, kind: parsed.data.kind },

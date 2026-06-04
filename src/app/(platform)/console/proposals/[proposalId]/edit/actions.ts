@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { validateBlocks } from "@/lib/proposals/validate";
+import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 
 const UpdateSchema = z.object({
@@ -98,7 +99,12 @@ export async function createShareLinkAction(
 ) {
   const session = await requireSession();
   const supabase = await createClient();
-  const token = Array.from(crypto.getRandomValues(new Uint8Array(24)))
+  // The DB still requires a non-null `token` (it's the legacy lookup column
+  // for outstanding links minted before migration 0064). Keep a random
+  // value there for back-compat reads, but the URL token we hand out is
+  // HMAC-signed via `mintProposalShareUrlToken` so the row id + expiry
+  // + nonce travel under a signature instead of just being raw entropy.
+  const legacyDbToken = Array.from(crypto.getRandomValues(new Uint8Array(24)))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
   const expires = new Date();
@@ -108,7 +114,7 @@ export async function createShareLinkAction(
     .from("proposal_share_links")
     .insert({
       proposal_id: proposalId,
-      token,
+      token: legacyDbToken,
       audience,
       created_by: session.userId,
       expires_at: expires.toISOString(),
@@ -117,21 +123,33 @@ export async function createShareLinkAction(
     .single();
   if (error) return { error: error.message };
 
+  const { mintProposalShareUrlToken } = await import("@/lib/proposals/share");
+  const urlToken = mintProposalShareUrlToken({ linkId: data.id, expiresAt: expires });
+  const url = urlFor("marketing", `/proposals/${urlToken}`);
+
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.proposal_share.created",
+    targetTable: "proposal_share_links",
+    targetId: data.id,
+    metadata: { proposal_id: proposalId, audience, expires_at: data.expires_at, sent_to: recipientEmail ?? null },
+  });
+
   if (recipientEmail) {
     const { sendProposalShareEmail } = await import("@/lib/email");
     const { data: p } = await supabase.from("proposals").select("title").eq("id", proposalId).maybeSingle();
-    // Public proposal-share URL is unauthenticated and lives on the apex
-    // marketing host so the recipient never lands on an auth-walled subdomain.
     await sendProposalShareEmail({
       to: recipientEmail,
       proposalTitle: p?.title ?? "Proposal",
-      url: urlFor("marketing", `/proposals/${data.token}`),
+      url,
       senderName: session.email,
     });
   }
 
   revalidatePath(`/console/proposals/${proposalId}/edit`);
-  return { ok: { token: data.token, url: `/proposals/${data.token}`, expires: data.expires_at } };
+  return { ok: { token: urlToken, url: `/proposals/${urlToken}`, expires: data.expires_at } };
 }
 
 export async function revokeShareLinkAction(linkId: string, proposalId: string) {
@@ -150,12 +168,25 @@ export async function revokeShareLinkAction(linkId: string, proposalId: string) 
   const ownerOrgId = (link as unknown as { proposals?: { org_id?: string } } | null)?.proposals?.org_id;
   if (!link || ownerOrgId !== session.orgId) return { error: "Share link not found" };
 
-  const { error } = await supabase
+  const { data: revoked, error } = await supabase
     .from("proposal_share_links")
     .update({ revoked_at: new Date().toISOString() })
     .eq("id", linkId)
-    .is("revoked_at", null);
+    .is("revoked_at", null)
+    .select("id")
+    .maybeSingle();
   if (error) return { error: error.message };
+  if (revoked) {
+    await emitAudit({
+      actorId: session.userId,
+      orgId: session.orgId,
+      actorEmail: session.email,
+      action: "auth.proposal_share.revoked",
+      targetTable: "proposal_share_links",
+      targetId: linkId,
+      metadata: { proposal_id: proposalId },
+    });
+  }
   revalidatePath(`/console/proposals/${proposalId}/edit`);
   return { ok: true as const };
 }

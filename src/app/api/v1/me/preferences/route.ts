@@ -30,9 +30,21 @@ const PatchSchema = z.object({
   // ADR-0006: console sidebar shape. "domain" = 7-group domain-noun nav
   // (operator default); "xpms" = ADR-0004 XPMS-numeric spine (power user).
   nav_mode: z.enum(["domain", "xpms"]).optional(),
+  // ADR-0009: persisted mobile role for persona-routed COMPVSS.
+  mobile_role: z.enum(["performer", "crew", "driver", "medic", "guard", "admin"]).optional(),
+  // ADR-0007: last-visited portal slug for the app switcher's GVTEWAY entry.
+  last_portal_slug: z.string().min(1).max(64).optional(),
 });
 
-const UI_STATE_KEYS = ["palette_recents", "sidebar_width", "sidebar_pinned", "sidebar_collapsed", "nav_mode"] as const;
+const UI_STATE_KEYS = [
+  "palette_recents",
+  "sidebar_width",
+  "sidebar_pinned",
+  "sidebar_collapsed",
+  "nav_mode",
+  "mobile_role",
+  "last_portal_slug",
+] as const;
 
 export async function GET() {
   const supabase = await createClient();

@@ -1242,7 +1242,25 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       { label: "Training", href: `${base}/training` },
       privacy,
     ],
-    crew: [{ label: "Call Sheet", href: `${base}/call-sheet` }, { label: "Time", href: `${base}/time` }, privacy],
+    // ADR-0008 Move 2 — Connecteam-parity surfaces backfilled into the
+    // portal crew persona so desktop crew users don't have to install
+    // the PWA. Same data as /m/* surfaces; shared component extraction
+    // (ADR-0008 Move 1) lifts the rendering pattern in a follow-up. v1
+    // at 11 items is over Miller's ceiling — future cut splits into
+    // Crew/Engagement + Crew/Operations sub-sections.
+    crew: [
+      { label: "Call Sheet", href: `${base}/call-sheet` },
+      { label: "Schedule", href: `${base}/schedule` },
+      { label: "Time", href: `${base}/time` },
+      { label: "Time Off", href: `${base}/time-off` },
+      { label: "Feed", href: `${base}/feed` },
+      { label: "Chat", href: `${base}/chat` },
+      { label: "Learning", href: `${base}/learning` },
+      { label: "Kudos", href: `${base}/kudos` },
+      { label: "Docs", href: `${base}/docs` },
+      { label: "Directory", href: `${base}/directory` },
+      privacy,
+    ],
     volunteer: [
       { label: "Application", href: `${base}/application` },
       { label: "Training", href: `${base}/training` },
@@ -1387,4 +1405,94 @@ export function mobileSurfacesForPhase(phase?: string): NavItem[] {
   }
   const tail = mobileSurfaces.filter((i) => !seen.has(i.href));
   return [...head, ...tail];
+}
+
+/**
+ * Persona-routed mobile (ADR-0009 scaffold).
+ *
+ * Mobile roles drive per-role tab bars + role-relevant Tools drawer
+ * ordering. Each role has a home at `/m/[role]` that lands them on a
+ * dashboard scoped to their work. Existing `/m/*` surfaces continue to
+ * resolve during the three-month grace window (ADR-0009 §"Migration
+ * rules" #1) — this is scaffold only; the URL move per surface is a
+ * dedicated PR.
+ */
+export type MobileRole = "performer" | "crew" | "driver" | "medic" | "guard" | "admin";
+
+export const MOBILE_ROLES: MobileRole[] = ["performer", "crew", "driver", "medic", "guard", "admin"];
+
+/**
+ * Resolve the best default mobile role for a session. Operators with
+ * an admin/owner role land on the admin home (full surface drawer);
+ * personas map by their guide-side mapping plus the deskless extension.
+ * Stored override at `user_preferences.ui_state.mobile_role` wins over
+ * the inferred default — read at the layout level.
+ */
+export function mapSessionToMobileRole(role: string | null, persona: string | null): MobileRole {
+  if (role === "owner" || role === "admin" || role === "manager") return "admin";
+  switch (persona) {
+    case "artist":
+    case "athlete":
+      return "performer";
+    case "crew":
+    case "contractor":
+    case "collaborator":
+      return "crew";
+    default:
+      return "crew";
+  }
+}
+
+/**
+ * Per-role mobile tab bar. Five tabs each; role-relevant primary tools
+ * surface first. Universal surfaces (Inbox, Alerts, Me) appear under
+ * every role so the operator never gets stranded.
+ */
+export const ROLE_TABS: Record<MobileRole, NavItem[]> = {
+  performer: [
+    { label: "Home", href: "/m/performer" },
+    { label: "Schedule", href: "/m/shift" },
+    { label: "Inbox", href: "/m/inbox" },
+    { label: "Alerts", href: "/m/alerts" },
+    { label: "Me", href: "/m/settings" },
+  ],
+  crew: [
+    { label: "Home", href: "/m/crew" },
+    { label: "Shift", href: "/m/shift" },
+    { label: "Inbox", href: "/m/inbox" },
+    { label: "Alerts", href: "/m/alerts" },
+    { label: "Me", href: "/m/settings" },
+  ],
+  driver: [
+    { label: "Home", href: "/m/driver" },
+    { label: "Run", href: "/m/driver" },
+    { label: "Wayfind", href: "/m/wayfind" },
+    { label: "Alerts", href: "/m/alerts" },
+    { label: "Me", href: "/m/settings" },
+  ],
+  medic: [
+    { label: "Home", href: "/m/medic" },
+    { label: "Log", href: "/m/medic" },
+    { label: "Queue", href: "/m/alerts" },
+    { label: "Alerts", href: "/m/alerts" },
+    { label: "Me", href: "/m/settings" },
+  ],
+  guard: [
+    { label: "Home", href: "/m/guard" },
+    { label: "Gate", href: "/m/gate" },
+    { label: "Incident", href: "/m/incidents" },
+    { label: "Alerts", href: "/m/alerts" },
+    { label: "Me", href: "/m/settings" },
+  ],
+  admin: [
+    { label: "Home", href: "/m/admin" },
+    { label: "Inbox", href: "/m/inbox" },
+    { label: "Shift", href: "/m/shift" },
+    { label: "Alerts", href: "/m/alerts" },
+    { label: "Me", href: "/m/settings" },
+  ],
+};
+
+export function roleTabs(role: MobileRole): NavItem[] {
+  return ROLE_TABS[role];
 }

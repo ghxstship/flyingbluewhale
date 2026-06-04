@@ -21,6 +21,12 @@ export type UserPreferences = {
   /** ADR-0006: console sidebar mode. "domain" = 7-group domain-noun
    *  (operator default); "xpms" = ADR-0004 XPMS-numeric spine. */
   nav_mode?: "domain" | "xpms";
+  /** ADR-0009: persisted mobile role. Drives the tab bar + role home
+   *  on COMPVSS once the dedicated persona-routing PR lands. */
+  mobile_role?: "performer" | "crew" | "driver" | "medic" | "guard" | "admin";
+  /** ADR-0007: last-visited portal slug — used by the app switcher to
+   *  deep-link the GVTEWAY entry to where the user was last. */
+  last_portal_slug?: string;
 };
 
 let cache: UserPreferences | null = null;

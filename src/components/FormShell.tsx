@@ -24,6 +24,7 @@ import {
   DialogDescription,
 } from "@/components/ui/Dialog";
 import { useAnnounce } from "@/components/ui/LiveRegion";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type FormState = {
   error?: string;
@@ -51,18 +52,20 @@ type FormShellProps = {
 
 export function FormShell({
   action,
-  submitLabel = "Save",
+  submitLabel,
   cancelHref,
   children,
   dirtyGuard,
   className = "surface space-y-4 p-6",
   ...formProps
 }: FormShellProps) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
   const formRef = useRef<HTMLFormElement>(null);
   const errorId = useId();
   const announce = useAnnounce();
   const router = useRouter();
+  const resolvedSubmitLabel = submitLabel ?? t("common.save", undefined, "Save");
 
   const [dirty, setDirty] = useState(false);
   const dirtyRef = useRef(false);
@@ -108,7 +111,8 @@ export function FormShell({
   // Announce error/success
   useEffect(() => {
     if (state?.error) announce(state.error, "assertive");
-    if (state?.ok) announce("Saved", "polite");
+    if (state?.ok) announce(t("common.savedToast", undefined, "Saved"), "polite");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, announce]);
 
   // Restore submitted values after a validation failure. React server-actions
@@ -163,11 +167,11 @@ export function FormShell({
         <div className="flex items-center justify-end gap-2">
           {cancelHref && (
             <Button href={cancelHref} variant="ghost">
-              Cancel
+              {t("common.cancel", undefined, "Cancel")}
             </Button>
           )}
           <Button type="submit" loading={pending}>
-            {pending ? "Saving" : submitLabel}
+            {pending ? t("common.saving", undefined, "Saving") : resolvedSubmitLabel}
           </Button>
         </div>
       </form>
@@ -176,12 +180,18 @@ export function FormShell({
       <Dialog open={blockedUrl !== null} onOpenChange={(v) => !v && setBlockedUrl(null)}>
         <DialogContent size="sm">
           <DialogHeader>
-            <DialogTitle>Leave without saving?</DialogTitle>
-            <DialogDescription>You have unsaved changes. If you leave now, they will be lost.</DialogDescription>
+            <DialogTitle>{t("formShell.leavePrompt.title", undefined, "Leave without saving?")}</DialogTitle>
+            <DialogDescription>
+              {t(
+                "formShell.leavePrompt.body",
+                undefined,
+                "You have unsaved changes. If you leave now, they will be lost.",
+              )}
+            </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setBlockedUrl(null)}>
-              Stay on this page
+              {t("formShell.leavePrompt.stay", undefined, "Stay on this page")}
             </Button>
             <Button
               variant="danger"
@@ -196,7 +206,7 @@ export function FormShell({
                 }
               }}
             >
-              Leave anyway
+              {t("formShell.leavePrompt.leave", undefined, "Leave anyway")}
             </Button>
           </DialogFooter>
         </DialogContent>

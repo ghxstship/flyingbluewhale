@@ -4,11 +4,13 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateSettings } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function PersonalSettings() {
+  const { t } = await getRequestT();
   let prefs: { density?: string | null; locale?: string | null; timezone?: string | null } = {};
   if (hasSupabase) {
     const session = await requireSession();
@@ -22,40 +24,53 @@ export default async function PersonalSettings() {
   }
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">{t("me.settings.title", undefined, "Settings")}</h1>
       <div className="surface mt-6 p-6">
-        <div className="text-sm font-semibold">Appearance</div>
+        <div className="text-sm font-semibold">{t("me.settings.appearance.title", undefined, "Appearance")}</div>
         <div className="mt-3">
           <ThemeToggle />
         </div>
       </div>
       <div className="surface mt-6 p-6">
-        <h2 className="text-sm font-semibold">Workspace Preferences</h2>
+        <h2 className="text-sm font-semibold">
+          {t("me.settings.workspace.title", undefined, "Workspace Preferences")}
+        </h2>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Density, locale, and timezone apply across every workspace you belong to.
+          {t(
+            "me.settings.workspace.blurb",
+            undefined,
+            "Density, locale, and timezone apply across every workspace you belong to.",
+          )}
         </p>
         <div className="mt-4 max-w-md">
-          <FormShell action={updateSettings} submitLabel="Save Preferences">
+          <FormShell
+            action={updateSettings}
+            submitLabel={t("me.settings.workspace.submit", undefined, "Save Preferences")}
+          >
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Density</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("me.settings.workspace.density.label", undefined, "Density")}
+              </label>
               <select name="density" defaultValue={prefs.density ?? "comfortable"} className="input-base mt-1.5 w-full">
-                <option value="compact">Compact</option>
-                <option value="comfortable">Comfortable</option>
-                <option value="spacious">Spacious</option>
+                <option value="compact">{t("me.settings.workspace.density.compact", undefined, "Compact")}</option>
+                <option value="comfortable">
+                  {t("me.settings.workspace.density.comfortable", undefined, "Comfortable")}
+                </option>
+                <option value="spacious">{t("me.settings.workspace.density.spacious", undefined, "Spacious")}</option>
               </select>
             </div>
             <Input
-              label="Locale (e.g. en, en-US, es)"
+              label={t("me.settings.workspace.locale.label", undefined, "Locale (e.g. en, en-US, es)")}
               name="locale"
               maxLength={8}
               defaultValue={prefs.locale ?? "en-US"}
             />
             <Input
-              label="Timezone (IANA, e.g. America/New_York)"
+              label={t("me.settings.workspace.timezone.label", undefined, "Timezone (IANA, e.g. America/New_York)")}
               name="timezone"
               maxLength={64}
               defaultValue={prefs.timezone ?? ""}
-              placeholder="Auto-detected if blank"
+              placeholder={t("me.settings.workspace.timezone.placeholder", undefined, "Auto-detected if blank")}
             />
           </FormShell>
         </div>

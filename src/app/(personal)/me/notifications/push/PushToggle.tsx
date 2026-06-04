@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/Alert";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { timeAgo } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   currentPermission,
   detectPushSupport,
@@ -37,6 +38,7 @@ export function PushToggle({
   vapidPublicKey: string;
   initialDevices: RegisteredDevice[];
 }) {
+  const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [permission, setPermission] = useState<NotificationPermission>("default");
@@ -54,14 +56,27 @@ export function PushToggle({
   }, []);
 
   if (supportReason) {
-    return <Alert kind="warning">Push notifications aren&apos;t available in this browser. {supportReason}</Alert>;
+    return (
+      <Alert kind="warning">
+        {t(
+          "me.notifications.push.unsupported",
+          { reason: supportReason },
+          "Push notifications aren't available in this browser.",
+        )}{" "}
+        {supportReason}
+      </Alert>
+    );
   }
 
   if (!vapidPublicKey) {
     return (
       <EmptyState
-        title="Push not configured"
-        description="A server admin must set VAPID keys before push can be enabled."
+        title={t("me.notifications.push.notConfigured.title", undefined, "Push not configured")}
+        description={t(
+          "me.notifications.push.notConfigured.description",
+          undefined,
+          "A server admin must set VAPID keys before push can be enabled.",
+        )}
       />
     );
   }
@@ -71,12 +86,26 @@ export function PushToggle({
     const granted = await requestPushPermission();
     setPermission(granted);
     if (granted !== "granted") {
-      setStatus({ kind: "error", message: "Permission denied. You can re-enable in browser settings." });
+      setStatus({
+        kind: "error",
+        message: t(
+          "me.notifications.push.errors.permissionDenied",
+          undefined,
+          "Permission denied. You can re-enable in browser settings.",
+        ),
+      });
       return;
     }
     const sub = await getOrCreateSubscription(vapidPublicKey);
     if (!sub) {
-      setStatus({ kind: "error", message: "Couldn't subscribe with the browser's push service." });
+      setStatus({
+        kind: "error",
+        message: t(
+          "me.notifications.push.errors.subscribeFailed",
+          undefined,
+          "Couldn't subscribe with the browser's push service.",
+        ),
+      });
       return;
     }
     const res = await fetch("/api/v1/push/subscriptions", {
@@ -85,7 +114,14 @@ export function PushToggle({
       body: JSON.stringify({ ...sub, userAgent: navigator.userAgent.slice(0, 500) }),
     });
     if (!res.ok) {
-      setStatus({ kind: "error", message: "Server rejected the subscription. Try again." });
+      setStatus({
+        kind: "error",
+        message: t(
+          "me.notifications.push.errors.serverRejected",
+          undefined,
+          "Server rejected the subscription. Try again.",
+        ),
+      });
       return;
     }
     const json = (await res.json()) as { ok: boolean; data?: { subscription: RegisteredDevice } };
@@ -94,7 +130,10 @@ export function PushToggle({
         const without = d.filter((x) => x.endpoint !== json.data!.subscription.endpoint);
         return [json.data!.subscription, ...without];
       });
-      setStatus({ kind: "success", message: "This device is now subscribed." });
+      setStatus({
+        kind: "success",
+        message: t("me.notifications.push.success.subscribed", undefined, "This device is now subscribed."),
+      });
     }
     startTransition(() => router.refresh());
   }
@@ -103,7 +142,14 @@ export function PushToggle({
     setStatus({ kind: "idle" });
     const endpoint = await unsubscribeCurrent();
     if (!endpoint) {
-      setStatus({ kind: "info", message: "No active subscription on this browser." });
+      setStatus({
+        kind: "info",
+        message: t(
+          "me.notifications.push.info.noActiveSubscription",
+          undefined,
+          "No active subscription on this browser.",
+        ),
+      });
       return;
     }
     await fetch("/api/v1/push/subscriptions", {
@@ -112,7 +158,10 @@ export function PushToggle({
       body: JSON.stringify({ endpoint }),
     });
     setDevices((d) => d.filter((x) => x.endpoint !== endpoint));
-    setStatus({ kind: "success", message: "Unsubscribed on this browser." });
+    setStatus({
+      kind: "success",
+      message: t("me.notifications.push.success.unsubscribed", undefined, "Unsubscribed on this browser."),
+    });
     startTransition(() => router.refresh());
   }
 
@@ -124,11 +173,17 @@ export function PushToggle({
       body: JSON.stringify({ id }),
     });
     if (!res.ok) {
-      setStatus({ kind: "error", message: "Couldn't remove device." });
+      setStatus({
+        kind: "error",
+        message: t("me.notifications.push.errors.removeFailed", undefined, "Couldn't remove device."),
+      });
       return;
     }
     setDevices((d) => d.filter((x) => x.id !== id));
-    setStatus({ kind: "success", message: "Device removed." });
+    setStatus({
+      kind: "success",
+      message: t("me.notifications.push.success.deviceRemoved", undefined, "Device removed."),
+    });
     startTransition(() => router.refresh());
   }
 
@@ -141,13 +196,20 @@ export function PushToggle({
       error?: { message: string };
     } | null;
     if (!res.ok || !json?.ok) {
-      setStatus({ kind: "error", message: json?.error?.message ?? "Test push failed." });
+      setStatus({
+        kind: "error",
+        message: json?.error?.message ?? t("me.notifications.push.errors.testFailed", undefined, "Test push failed."),
+      });
       return;
     }
     const { sent = 0, failed = 0, disabled = 0 } = json.data ?? {};
     setStatus({
       kind: sent > 0 ? "success" : "info",
-      message: `Sent: ${sent} · Failed: ${failed} · Removed: ${disabled}`,
+      message: t(
+        "me.notifications.push.testResult",
+        { sent, failed, disabled },
+        `Sent: ${sent} · Failed: ${failed} · Removed: ${disabled}`,
+      ),
     });
   }
 
@@ -164,9 +226,11 @@ export function PushToggle({
       <section className="surface p-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-base font-semibold">This Browser</h2>
+            <h2 className="text-base font-semibold">
+              {t("me.notifications.push.thisBrowser.title", undefined, "This Browser")}
+            </h2>
             <p className="mt-1 text-sm text-[var(--text-muted)]">
-              Permission:{" "}
+              {t("me.notifications.push.thisBrowser.permissionLabel", undefined, "Permission:")}{" "}
               <Badge variant={permission === "granted" ? "success" : permission === "denied" ? "error" : "muted"}>
                 {permission}
               </Badge>
@@ -174,19 +238,23 @@ export function PushToggle({
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {showEnable ? (
-              <Button onClick={handleEnable} disabled={pending} aria-label="Enable push notifications">
+              <Button
+                onClick={handleEnable}
+                disabled={pending}
+                aria-label={t("me.notifications.push.actions.enableAria", undefined, "Enable push notifications")}
+              >
                 <BellRing size={14} aria-hidden="true" />
-                <span className="ms-1">Enable Push</span>
+                <span className="ms-1">{t("me.notifications.push.actions.enable", undefined, "Enable Push")}</span>
               </Button>
             ) : (
               <>
                 <Button variant="secondary" onClick={handleSendTest} disabled={pending}>
                   <Send size={14} aria-hidden="true" />
-                  <span className="ms-1">Send Test</span>
+                  <span className="ms-1">{t("me.notifications.push.actions.sendTest", undefined, "Send Test")}</span>
                 </Button>
                 <Button variant="ghost" onClick={handleDisableThisBrowser} disabled={pending}>
                   <BellOff size={14} aria-hidden="true" />
-                  <span className="ms-1">Disable</span>
+                  <span className="ms-1">{t("me.notifications.push.actions.disable", undefined, "Disable")}</span>
                 </Button>
               </>
             )}
@@ -195,24 +263,37 @@ export function PushToggle({
       </section>
 
       <section>
-        <h2 className="mb-2 text-base font-semibold">Registered Devices</h2>
+        <h2 className="mb-2 text-base font-semibold">
+          {t("me.notifications.push.devices.title", undefined, "Registered Devices")}
+        </h2>
         {devices.length === 0 ? (
-          <EmptyState title="No devices yet" description="Enable push on this browser to register your first device." />
+          <EmptyState
+            title={t("me.notifications.push.devices.empty.title", undefined, "No devices yet")}
+            description={t(
+              "me.notifications.push.devices.empty.description",
+              undefined,
+              "Enable push on this browser to register your first device.",
+            )}
+          />
         ) : (
           <ul className="surface divide-y divide-[var(--border-color)]">
             {devices.map((d) => (
               <li key={d.id} className="flex items-start justify-between gap-3 px-4 py-3">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{shortUserAgent(d.user_agent)}</p>
+                  <p className="truncate text-sm font-medium">{shortUserAgent(d.user_agent, t)}</p>
                   <p className="mt-1 text-xs text-[var(--text-muted)]">
-                    Last seen {timeAgo(d.last_seen_at)} · added {timeAgo(d.created_at)}
+                    {t(
+                      "me.notifications.push.devices.timestamps",
+                      { lastSeen: timeAgo(d.last_seen_at), added: timeAgo(d.created_at) },
+                      `Last seen ${timeAgo(d.last_seen_at)} · added ${timeAgo(d.created_at)}`,
+                    )}
                   </p>
                   <p className="mt-1 truncate font-mono text-[10px] text-[var(--text-muted)]">{d.endpoint}</p>
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
-                  aria-label="Remove device"
+                  aria-label={t("me.notifications.push.devices.removeAria", undefined, "Remove device")}
                   onClick={() => handleRemoveDevice(d.id)}
                   disabled={pending}
                 >
@@ -227,8 +308,11 @@ export function PushToggle({
   );
 }
 
-function shortUserAgent(ua: string | null): string {
-  if (!ua) return "Unknown device";
+function shortUserAgent(
+  ua: string | null,
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+): string {
+  if (!ua) return t("me.notifications.push.devices.unknown", undefined, "Unknown device");
   // Trim to a recognisable browser+OS hint without leaking the full UA.
   const browser = /(Edg|OPR|Chrome|Safari|Firefox)\/[\d.]+/.exec(ua)?.[0] ?? "Browser";
   const os = /(Mac OS X [\d_]+|Windows NT [\d.]+|Android [\d.]+|iPhone OS [\d_]+|Linux)/.exec(ua)?.[0] ?? "";

@@ -12,6 +12,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import type { ReactNode } from "react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function SortableList<T extends { id: string }>({
   items,
@@ -53,6 +54,7 @@ export function SortableList<T extends { id: string }>({
 
 function SortableRow({ id, children }: { id: string; children: ReactNode }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const t = useT();
   return (
     <li
       ref={setNodeRef}
@@ -69,7 +71,7 @@ function SortableRow({ id, children }: { id: string; children: ReactNode }) {
         {...attributes}
         {...listeners}
         className="flex w-8 shrink-0 cursor-grab items-center justify-center rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] active:cursor-grabbing"
-        aria-label="Drag to reorder"
+        aria-label={t("ui.sortable.dragToReorder", undefined, "Drag to reorder")}
       >
         <GripVertical size={14} />
       </button>

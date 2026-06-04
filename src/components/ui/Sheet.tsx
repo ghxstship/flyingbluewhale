@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Sheet — side-mounted dialog (a.k.a. drawer).
@@ -45,6 +46,7 @@ export const SheetContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { side?: Side }
 >(function SheetContent({ className = "", side = "right", children, ...props }, ref) {
+  const t = useT();
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -55,7 +57,7 @@ export const SheetContent = React.forwardRef<
       >
         {children}
         <DialogPrimitive.Close
-          aria-label="Close"
+          aria-label={t("common.close", undefined, "Close")}
           className="focus-ring absolute end-4 top-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100"
         >
           <X size={16} />

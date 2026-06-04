@@ -5,6 +5,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { timeAgo } from "@/lib/format";
 import { listMyAssignments, type AssignmentListRow } from "@/lib/db/assignments";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -14,11 +15,14 @@ type Row = AssignmentListRow & {
 };
 
 export default async function MyTicketsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-2xl font-semibold">My Tickets</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">Configure Supabase.</p>
+        <h1 className="text-2xl font-semibold">{t("me.tickets.title", undefined, "My Tickets")}</h1>
+        <p className="mt-2 text-sm text-[var(--text-muted)]">
+          {t("me.tickets.configureSupabase", undefined, "Configure Supabase.")}
+        </p>
       </div>
     );
   }
@@ -56,22 +60,24 @@ export default async function MyTicketsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">My Tickets</h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">Tickets issued to {session.email}</p>
+      <h1 className="text-2xl font-semibold tracking-tight">{t("me.tickets.title", undefined, "My Tickets")}</h1>
+      <p className="mt-2 text-sm text-[var(--text-muted)]">
+        {t("me.tickets.subtitle", { email: session.email }, `Tickets issued to ${session.email}`)}
+      </p>
       <div className="mt-6">
         <DataTable<Row>
           rows={rows}
-          emptyLabel="No tickets yet"
+          emptyLabel={t("me.tickets.empty", undefined, "No tickets yet")}
           columns={[
             {
               key: "code",
-              header: "Code",
+              header: t("me.tickets.columns.code", undefined, "Code"),
               render: (r) => <span className="font-mono text-xs">{r.scan_code ?? "—"}</span>,
               accessor: (r) => r.scan_code ?? null,
             },
             {
               key: "tier",
-              header: "Tier",
+              header: t("me.tickets.columns.tier", undefined, "Tier"),
               render: (r) => r.tier_code ?? "—",
               accessor: (r) => r.tier_code,
               filterable: true,
@@ -79,7 +85,7 @@ export default async function MyTicketsPage() {
             },
             {
               key: "state",
-              header: "State",
+              header: t("me.tickets.columns.state", undefined, "State"),
               render: (r) => <StatusBadge status={r.fulfillment_state} />,
               accessor: (r) => r.fulfillment_state,
               filterable: true,
@@ -87,14 +93,14 @@ export default async function MyTicketsPage() {
             },
             {
               key: "issued",
-              header: "Issued",
+              header: t("me.tickets.columns.issued", undefined, "Issued"),
               render: (r) => (r.issued_at ? timeAgo(r.issued_at) : "—"),
               className: "font-mono text-xs",
               accessor: (r) => r.issued_at,
             },
             {
               key: "redeemed",
-              header: "Redeemed",
+              header: t("me.tickets.columns.redeemed", undefined, "Redeemed"),
               render: (r) => (r.fulfilled_at ? timeAgo(r.fulfilled_at) : "—"),
               className: "font-mono text-xs",
               accessor: (r) => r.fulfilled_at ?? null,

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data } = await supabase
     .from("open_call_submissions")
     .select("*")
@@ -35,23 +37,33 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">Submission</div>
+      <div className="text-label text-[var(--color-text-tertiary)]">
+        {t("me.submissions.detail.eyebrow", undefined, "Submission")}
+      </div>
       <div className="mt-1 flex items-center gap-2">
         <h1 className="text-display text-3xl">#{s.id.slice(0, 8)}</h1>
         <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Submitted {new Date(s.submitted_at).toLocaleString()}
+        {t(
+          "me.submissions.detail.submittedAt",
+          { when: new Date(s.submitted_at).toLocaleString() },
+          "Submitted {when}",
+        )}
       </p>
 
       <div className="mt-6 space-y-4">
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Cover note</div>
+          <div className="text-label text-[var(--color-text-tertiary)]">
+            {t("me.submissions.detail.coverNote", undefined, "Cover note")}
+          </div>
           <div className="mt-1 text-sm whitespace-pre-wrap">{s.cover_note ?? "—"}</div>
         </div>
         {s.fee_proposed_cents && (
           <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">Proposed fee</div>
+            <div className="text-label text-[var(--color-text-tertiary)]">
+              {t("me.submissions.detail.proposedFee", undefined, "Proposed fee")}
+            </div>
             <div className="mt-1 font-mono text-sm">{formatMoney(s.fee_proposed_cents)}</div>
           </div>
         )}

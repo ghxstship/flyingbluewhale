@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,8 @@ type Row = {
 };
 
 export default async function Page() {
-  if (!hasSupabase) return <div>Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase) return <div>{t("me.reviews.configure", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -43,36 +45,44 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">My reviews</div>
-        <h1 className="text-display mt-1 text-3xl">Reviews</h1>
+        <div className="text-label text-[var(--color-text-tertiary)]">
+          {t("me.reviews.eyebrow", undefined, "My reviews")}
+        </div>
+        <h1 className="text-display mt-1 text-3xl">{t("me.reviews.title", undefined, "Reviews")}</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-          Reviews remain hidden until both sides post. No retaliation surface.
+          {t("me.reviews.subtitle", undefined, "Reviews remain hidden until both sides post. No retaliation surface.")}
         </p>
       </header>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Received</h2>
+        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+          {t("me.reviews.received", undefined, "Received")}
+        </h2>
         {received.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">No public reviews yet.</div>
+          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+            {t("me.reviews.emptyReceived", undefined, "No public reviews yet.")}
+          </div>
         ) : (
           <ul className="space-y-2">
             {received.map((r) => (
-              <ReviewLi key={r.id} r={r} />
+              <ReviewLi key={r.id} r={r} t={t} />
             ))}
           </ul>
         )}
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Written</h2>
+        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+          {t("me.reviews.written", undefined, "Written")}
+        </h2>
         {written.length === 0 ? (
           <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
-            You haven't written any reviews yet.
+            {t("me.reviews.emptyWritten", undefined, "You haven't written any reviews yet.")}
           </div>
         ) : (
           <ul className="space-y-2">
             {written.map((r) => (
-              <ReviewLi key={r.id} r={r} />
+              <ReviewLi key={r.id} r={r} t={t} />
             ))}
           </ul>
         )}
@@ -81,7 +91,13 @@ export default async function Page() {
   );
 }
 
-function ReviewLi({ r }: { r: Row }) {
+function ReviewLi({
+  r,
+  t,
+}: {
+  r: Row;
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+}) {
   return (
     <li className="card-elevated p-4">
       <div className="flex items-center gap-2 text-sm">
@@ -89,9 +105,9 @@ function ReviewLi({ r }: { r: Row }) {
         <Badge variant="muted">{r.subject_kind}</Badge>
         <Badge variant="muted">{r.transaction_type}</Badge>
         {r.released_at ? (
-          <Badge variant="success">released</Badge>
+          <Badge variant="success">{t("me.reviews.status.released", undefined, "released")}</Badge>
         ) : (
-          <Badge variant="warning">hidden — waiting on counterpart</Badge>
+          <Badge variant="warning">{t("me.reviews.status.hidden", undefined, "hidden — waiting on counterpart")}</Badge>
         )}
       </div>
       {r.body && <p className="mt-2 text-sm whitespace-pre-wrap">{r.body}</p>}

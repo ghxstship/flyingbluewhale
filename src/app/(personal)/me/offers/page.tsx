@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,8 @@ type Offer = {
 };
 
 export default async function Page() {
-  if (!hasSupabase) return <div>Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase) return <div>{t("me.offers.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -40,17 +42,27 @@ export default async function Page() {
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">My offers</div>
-      <h1 className="text-display mt-1 text-3xl">Booking Offers</h1>
+      <div className="text-label text-[var(--color-text-tertiary)]">
+        {t("me.offers.eyebrow", undefined, "My offers")}
+      </div>
+      <h1 className="text-display mt-1 text-3xl">{t("me.offers.title", undefined, "Booking Offers")}</h1>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Offers sent to acts you're attached to. Default 60/40, balance on load-in.
+        {t(
+          "me.offers.subtitle",
+          undefined,
+          "Offers sent to acts you're attached to. Default 60/40, balance on load-in.",
+        )}
       </p>
 
       {offers.length === 0 ? (
         <div className="mt-6">
           <EmptyState
-            title="No offers yet"
-            description="Booking offers sent to your acts will appear here. Default terms: 60% deposit on signature, 40% balance on load-in."
+            title={t("me.offers.empty.title", undefined, "No offers yet")}
+            description={t(
+              "me.offers.empty.description",
+              undefined,
+              "Booking offers sent to your acts will appear here. Default terms: 60% deposit on signature, 40% balance on load-in.",
+            )}
           />
         </div>
       ) : (
@@ -60,7 +72,11 @@ export default async function Page() {
               <div>
                 <p className="text-sm font-semibold">{o.performance_date}</p>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  {formatMoney(o.fee_cents)} · {o.deposit_pct}% deposit
+                  {t(
+                    "me.offers.feeDeposit",
+                    { fee: formatMoney(o.fee_cents), pct: o.deposit_pct },
+                    "{fee} · {pct}% deposit",
+                  )}
                 </p>
               </div>
               <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>

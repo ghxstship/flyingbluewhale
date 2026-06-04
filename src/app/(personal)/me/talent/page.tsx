@@ -5,6 +5,7 @@ import { hasSupabase } from "@/lib/env";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
+import { getRequestT } from "@/lib/i18n/request";
 import { upsertMyTalentAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +24,8 @@ type Talent = {
 };
 
 export default async function Page() {
-  if (!hasSupabase) return <div>Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase) return <div>{t("me.talent.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
   // Scope to the active org. A user may belong to multiple orgs and have
@@ -39,60 +41,96 @@ export default async function Page() {
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();
-  const t = (data ?? null) as Talent | null;
+  const talent = (data ?? null) as Talent | null;
 
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">My talent profile</div>
-        <h1 className="text-display mt-1 text-3xl">EPK</h1>
+        <div className="text-label text-[var(--color-text-tertiary)]">
+          {t("me.talent.eyebrow", undefined, "My talent profile")}
+        </div>
+        <h1 className="text-display mt-1 text-3xl">{t("me.talent.title", undefined, "EPK")}</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-          Public when toggled. Discovered via{" "}
+          {t("me.talent.descriptionPrefix", undefined, "Public when toggled. Discovered via")}{" "}
           <Link className="text-[var(--brand-color)]" href="/marketplace/talent">
             /marketplace/talent
           </Link>
           .
-          {t?.public_handle && t?.is_public && (
+          {talent?.public_handle && talent?.is_public && (
             <>
               {" "}
-              Live at{" "}
-              <Link className="font-mono text-[var(--brand-color)]" href={`/marketplace/talent/${t.public_handle}`}>
-                /marketplace/talent/{t.public_handle}
+              {t("me.talent.liveAt", undefined, "Live at")}{" "}
+              <Link
+                className="font-mono text-[var(--brand-color)]"
+                href={`/marketplace/talent/${talent.public_handle}`}
+              >
+                /marketplace/talent/{talent.public_handle}
               </Link>
             </>
           )}
         </p>
       </header>
 
-      {t?.is_public && (
+      {talent?.is_public && (
         <div className="card-elevated p-3">
-          <Badge variant="success">live</Badge>
-          <span className="ms-3 text-sm text-[var(--color-text-secondary)]">Your EPK is published.</span>
+          <Badge variant="success">{t("me.talent.liveBadge", undefined, "live")}</Badge>
+          <span className="ms-3 text-sm text-[var(--color-text-secondary)]">
+            {t("me.talent.publishedNotice", undefined, "Your EPK is published.")}
+          </span>
         </div>
       )}
 
-      <FormShell action={upsertMyTalentAction} submitLabel="Save EPK">
-        <Input label="Act Name" name="act_name" required maxLength={200} defaultValue={t?.act_name ?? ""} />
-        <Input label="Tagline" name="tagline" maxLength={200} defaultValue={t?.tagline ?? ""} />
+      <FormShell action={upsertMyTalentAction} submitLabel={t("me.talent.submit", undefined, "Save EPK")}>
+        <Input
+          label={t("me.talent.fields.actName", undefined, "Act Name")}
+          name="act_name"
+          required
+          maxLength={200}
+          defaultValue={talent?.act_name ?? ""}
+        />
+        <Input
+          label={t("me.talent.fields.tagline", undefined, "Tagline")}
+          name="tagline"
+          maxLength={200}
+          defaultValue={talent?.tagline ?? ""}
+        />
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">Bio</label>
+          <label className="text-xs font-medium text-[var(--text-secondary)]">
+            {t("me.talent.fields.bio", undefined, "Bio")}
+          </label>
           <textarea
             name="bio"
             rows={6}
             maxLength={8000}
             className="input-base mt-1.5 w-full"
-            defaultValue={t?.bio ?? ""}
+            defaultValue={talent?.bio ?? ""}
           />
         </div>
-        <Input label="Genre Tags (comma-separated)" name="genre_tags" defaultValue={t?.genre_tags.join(", ") ?? ""} />
+        <Input
+          label={t("me.talent.fields.genreTags", undefined, "Genre Tags (comma-separated)")}
+          name="genre_tags"
+          defaultValue={talent?.genre_tags.join(", ") ?? ""}
+        />
         <div className="grid grid-cols-2 gap-3">
-          <Input label="Fee Min" name="fee_min" defaultValue={t?.fee_min_cents ? String(t.fee_min_cents / 100) : ""} />
-          <Input label="Fee Max" name="fee_max" defaultValue={t?.fee_max_cents ? String(t.fee_max_cents / 100) : ""} />
+          <Input
+            label={t("me.talent.fields.feeMin", undefined, "Fee Min")}
+            name="fee_min"
+            defaultValue={talent?.fee_min_cents ? String(talent.fee_min_cents / 100) : ""}
+          />
+          <Input
+            label={t("me.talent.fields.feeMax", undefined, "Fee Max")}
+            name="fee_max"
+            defaultValue={talent?.fee_max_cents ? String(talent.fee_max_cents / 100) : ""}
+          />
         </div>
-        <Input label="Reel URL" name="video_reel_url" defaultValue={t?.video_reel_url ?? ""} />
+        <Input
+          label={t("me.talent.fields.reelUrl", undefined, "Reel URL")}
+          name="video_reel_url"
+          defaultValue={talent?.video_reel_url ?? ""}
+        />
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="is_public" defaultChecked={t?.is_public ?? false} />
-          Publish to /marketplace/talent
+          <input type="checkbox" name="is_public" defaultChecked={talent?.is_public ?? false} />
+          {t("me.talent.fields.publishToMarketplace", undefined, "Publish to /marketplace/talent")}
         </label>
       </FormShell>
     </div>

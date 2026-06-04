@@ -4,6 +4,7 @@ import { hasSupabase } from "@/lib/env";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
+import { getRequestT } from "@/lib/i18n/request";
 import { addAvailabilityAction, deleteAvailabilityAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -18,8 +19,9 @@ type Slot = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div>Configure Supabase.</div>;
+    return <div>{t("me.availability.configureSupabase", undefined, "Configure Supabase.")}</div>;
   }
   const session = await requireSession();
   const supabase = await createClient();
@@ -34,39 +36,60 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">Availability</div>
-        <h1 className="text-display mt-1 text-3xl">Booking Calendar</h1>
+        <div className="text-label text-[var(--color-text-tertiary)]">
+          {t("me.availability.eyebrow", undefined, "Availability")}
+        </div>
+        <h1 className="text-display mt-1 text-3xl">{t("me.availability.title", undefined, "Booking Calendar")}</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-          Holds, confirms, and blocks. Booking surfaces (gigs, talent offers) read from here when checking your fit.
+          {t(
+            "me.availability.subtitle",
+            undefined,
+            "Holds, confirms, and blocks. Booking surfaces (gigs, talent offers) read from here when checking your fit.",
+          )}
         </p>
       </header>
 
       <section className="card-elevated p-4">
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Add slot</h2>
-        <FormShell action={addAvailabilityAction} submitLabel="Add">
+        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+          {t("me.availability.addSlot", undefined, "Add slot")}
+        </h2>
+        <FormShell action={addAvailabilityAction} submitLabel={t("common.add", undefined, "Add")}>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium">Kind</label>
+              <label className="text-xs font-medium">{t("me.availability.kind", undefined, "Kind")}</label>
               <select name="kind" className="input-base mt-1.5 w-full" defaultValue="hold">
-                <option value="hold">Hold (auto-release on TTL)</option>
-                <option value="confirm">Confirm (locked)</option>
-                <option value="block">Block (unavailable)</option>
+                <option value="hold">{t("me.availability.kind.hold", undefined, "Hold (auto-release on TTL)")}</option>
+                <option value="confirm">{t("me.availability.kind.confirm", undefined, "Confirm (locked)")}</option>
+                <option value="block">{t("me.availability.kind.block", undefined, "Block (unavailable)")}</option>
               </select>
             </div>
-            <Input label="Label" name="label" placeholder="MMW26 deck build" />
-            <Input label="Starts" name="starts_at" type="datetime-local" required />
-            <Input label="Ends" name="ends_at" type="datetime-local" required />
+            <Input
+              label={t("me.availability.label", undefined, "Label")}
+              name="label"
+              placeholder={t("me.availability.labelPlaceholder", undefined, "MMW26 deck build")}
+            />
+            <Input
+              label={t("me.availability.starts", undefined, "Starts")}
+              name="starts_at"
+              type="datetime-local"
+              required
+            />
+            <Input label={t("me.availability.ends", undefined, "Ends")} name="ends_at" type="datetime-local" required />
           </div>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="all_day" /> All-day
+            <input type="checkbox" name="all_day" /> {t("me.availability.allDay", undefined, "All-day")}
           </label>
         </FormShell>
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Upcoming</h2>
+        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+          {t("me.availability.upcoming", undefined, "Upcoming")}
+        </h2>
         {slots.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">No availability slots yet.</div>
+          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+            {t("me.availability.empty", undefined, "No availability slots yet.")}
+          </div>
         ) : (
           <ul className="space-y-2">
             {slots.map((s) => (
@@ -88,7 +111,7 @@ export default async function Page() {
                 >
                   <input type="hidden" name="slot_id" value={s.id} />
                   <button type="submit" className="btn btn-ghost text-xs">
-                    Remove
+                    {t("common.remove", undefined, "Remove")}
                   </button>
                 </form>
               </li>

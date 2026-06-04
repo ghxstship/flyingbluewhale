@@ -5,6 +5,7 @@ import { toTitle } from "@/lib/format";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
+import { getRequestT } from "@/lib/i18n/request";
 import { createSavedSearchAction, deleteSavedSearchAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +22,8 @@ type Row = {
 };
 
 export default async function Page() {
-  if (!hasSupabase) return <div>Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase) return <div>{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -35,30 +37,47 @@ export default async function Page() {
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">Saved searches</div>
-        <h1 className="text-display mt-1 text-3xl">Saved Searches</h1>
+        <div className="text-label text-[var(--color-text-tertiary)]">
+          {t("me.savedSearches.eyebrow", undefined, "Saved searches")}
+        </div>
+        <h1 className="text-display mt-1 text-3xl">{t("me.savedSearches.title", undefined, "Saved Searches")}</h1>
         <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-          Subscriptions across marketplace surfaces. Email + push alerts when new matches drop.
+          {t(
+            "me.savedSearches.subtitle",
+            undefined,
+            "Subscriptions across marketplace surfaces. Email + push alerts when new matches drop.",
+          )}
         </p>
       </header>
 
       <section className="card-elevated p-4">
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Add subscription</h2>
-        <FormShell action={createSavedSearchAction} submitLabel="Save">
+        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+          {t("me.savedSearches.add.title", undefined, "Add subscription")}
+        </h2>
+        <FormShell action={createSavedSearchAction} submitLabel={t("common.save", undefined, "Save")}>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Kind</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("me.savedSearches.fields.kind", undefined, "Kind")}
+            </label>
             <select name="kind" required className="input-base mt-1.5 w-full">
-              <option value="gig">Gig</option>
-              <option value="rfq">RFQ</option>
-              <option value="talent_call">Talent Call</option>
-              <option value="talent">Talent</option>
-              <option value="crew">Crew</option>
-              <option value="vendor">Vendor</option>
+              <option value="gig">{t("me.savedSearches.kinds.gig", undefined, "Gig")}</option>
+              <option value="rfq">{t("me.savedSearches.kinds.rfq", undefined, "RFQ")}</option>
+              <option value="talent_call">{t("me.savedSearches.kinds.talentCall", undefined, "Talent Call")}</option>
+              <option value="talent">{t("me.savedSearches.kinds.talent", undefined, "Talent")}</option>
+              <option value="crew">{t("me.savedSearches.kinds.crew", undefined, "Crew")}</option>
+              <option value="vendor">{t("me.savedSearches.kinds.vendor", undefined, "Vendor")}</option>
             </select>
           </div>
-          <Input label="Name" name="name" required placeholder="A1 / Lighting Programmer · FL" />
+          <Input
+            label={t("me.savedSearches.fields.name", undefined, "Name")}
+            name="name"
+            required
+            placeholder={t("me.savedSearches.fields.namePlaceholder", undefined, "A1 / Lighting Programmer · FL")}
+          />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">Query (JSON)</label>
+            <label className="text-xs font-medium text-[var(--text-secondary)]">
+              {t("me.savedSearches.fields.query", undefined, "Query (JSON)")}
+            </label>
             <textarea
               name="query"
               rows={4}
@@ -69,19 +88,25 @@ export default async function Page() {
           </div>
           <div className="flex gap-4 text-sm">
             <label className="flex items-center gap-2">
-              <input type="checkbox" name="alert_email" /> Email alerts
+              <input type="checkbox" name="alert_email" />{" "}
+              {t("me.savedSearches.fields.emailAlerts", undefined, "Email alerts")}
             </label>
             <label className="flex items-center gap-2">
-              <input type="checkbox" name="alert_push" /> Push alerts
+              <input type="checkbox" name="alert_push" />{" "}
+              {t("me.savedSearches.fields.pushAlerts", undefined, "Push alerts")}
             </label>
           </div>
         </FormShell>
       </section>
 
       <section>
-        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">Active subscriptions</h2>
+        <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">
+          {t("me.savedSearches.active.title", undefined, "Active subscriptions")}
+        </h2>
         {rows.length === 0 ? (
-          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">No saved searches yet.</div>
+          <div className="card-elevated p-6 text-sm text-[var(--color-text-secondary)]">
+            {t("me.savedSearches.empty", undefined, "No saved searches yet.")}
+          </div>
         ) : (
           <ul className="space-y-2">
             {rows.map((r) => (
@@ -89,9 +114,13 @@ export default async function Page() {
                 <div className="flex items-center gap-3">
                   <Badge variant="muted">{toTitle(r.kind)}</Badge>
                   <span className="font-semibold">{r.name}</span>
-                  {r.alert_email && <Badge variant="info">email</Badge>}
-                  {r.alert_push && <Badge variant="info">push</Badge>}
-                  <span className="font-mono text-xs text-[var(--color-text-secondary)]">{r.match_count} matches</span>
+                  {r.alert_email && (
+                    <Badge variant="info">{t("me.savedSearches.badge.email", undefined, "email")}</Badge>
+                  )}
+                  {r.alert_push && <Badge variant="info">{t("me.savedSearches.badge.push", undefined, "push")}</Badge>}
+                  <span className="font-mono text-xs text-[var(--color-text-secondary)]">
+                    {t("me.savedSearches.matches", { count: r.match_count }, `${r.match_count} matches`)}
+                  </span>
                 </div>
                 <form
                   action={async (fd) => {
@@ -101,7 +130,7 @@ export default async function Page() {
                 >
                   <input type="hidden" name="search_id" value={r.id} />
                   <button type="submit" className="btn btn-ghost text-xs">
-                    Remove
+                    {t("common.remove", undefined, "Remove")}
                   </button>
                 </form>
               </li>

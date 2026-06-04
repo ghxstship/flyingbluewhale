@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { WifiOff, Wifi, AlertTriangle, Info, CheckCircle2, X } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Top-of-shell announcement banner. Replaces the mobile-only OfflineBanner
@@ -44,6 +45,7 @@ export function GlobalBanner({
   onDismiss?: () => void;
   persistent?: boolean;
 }) {
+  const t = useT();
   const { bg, fg, Icon } = KIND_STYLES[kind];
   return (
     <div
@@ -58,7 +60,7 @@ export function GlobalBanner({
         <button
           type="button"
           onClick={onDismiss}
-          aria-label="Dismiss banner"
+          aria-label={t("ui.banner.dismiss", undefined, "Dismiss banner")}
           className="ms-2 rounded p-0.5 hover:bg-black/10"
         >
           <X size={12} aria-hidden />
@@ -76,6 +78,7 @@ export function GlobalBanner({
 export function ConnectivityBanner() {
   const [online, setOnline] = React.useState(true);
   const [justReconnected, setJustReconnected] = React.useState(false);
+  const t = useT();
 
   React.useEffect(() => {
     setOnline(navigator.onLine);
@@ -98,14 +101,14 @@ export function ConnectivityBanner() {
   if (!online) {
     return (
       <GlobalBanner kind="offline" persistent>
-        You&rsquo;re offline — actions will queue and sync when you reconnect.
+        {t("ui.connectivity.offline", undefined, "You're offline — actions will queue and sync when you reconnect.")}
       </GlobalBanner>
     );
   }
   if (justReconnected) {
     return (
       <GlobalBanner kind="online" persistent>
-        Back online — syncing queued actions…
+        {t("ui.connectivity.backOnline", undefined, "Back online — syncing queued actions…")}
       </GlobalBanner>
     );
   }

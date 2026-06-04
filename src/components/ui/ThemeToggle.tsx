@@ -3,6 +3,7 @@
 import { Sun, Monitor, Moon } from "lucide-react";
 import { useThemeIfAvailable } from "@/app/theme/ThemeProvider";
 import { Hint } from "@/components/ui/Tooltip";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Light / System / Dark mode picker — icon-only segmented control.
@@ -21,20 +22,21 @@ export function ThemeToggle() {
   // (e.g., error boundaries or test environments). Was crashing the app
   // via a thrown error; the toggle is chrome — its absence is benign.
   const ctx = useThemeIfAvailable();
+  const t = useT();
   if (!ctx) return null;
   const { mode, setMode } = ctx;
 
   const presets = [
-    { key: "light" as const, icon: Sun, label: "Light" },
-    { key: "system" as const, icon: Monitor, label: "Match System" },
-    { key: "dark" as const, icon: Moon, label: "Dark" },
+    { key: "light" as const, icon: Sun, label: t("theme.toggle.light", undefined, "Light") },
+    { key: "system" as const, icon: Monitor, label: t("theme.toggle.system", undefined, "Match system") },
+    { key: "dark" as const, icon: Moon, label: t("theme.toggle.dark", undefined, "Dark") },
   ];
 
   return (
     <div
       className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5"
       role="radiogroup"
-      aria-label="Color mode"
+      aria-label={t("theme.toggle.colorTheme", undefined, "Color mode")}
     >
       {presets.map(({ key, icon: Icon, label }) => {
         const isActive = mode === key;

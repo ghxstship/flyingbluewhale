@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/auth";
 import { Badge } from "@/components/ui/Badge";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +18,14 @@ export const dynamic = "force-dynamic";
  * Each card is annotated with a live count where it's cheap to surface.
  */
 export default async function MePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-display text-3xl">My Dashboard</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Configure Supabase to sign in.</p>
+        <h1 className="text-display text-3xl">{t("me.dashboard.title", undefined, "My Dashboard")}</h1>
+        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+          {t("me.dashboard.configureSupabase", undefined, "Configure Supabase to sign in.")}
+        </p>
       </div>
     );
   }
@@ -57,32 +61,42 @@ export default async function MePage() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-label text-[var(--color-text-tertiary)]">My dashboard</div>
+          <div className="text-label text-[var(--color-text-tertiary)]">
+            {t("me.dashboard.eyebrow", undefined, "My dashboard")}
+          </div>
           <h1 className="text-display mt-1 text-3xl">{session.email}</h1>
         </div>
         <form action="/auth/signout" method="post">
           <button className="btn btn-ghost text-xs" type="submit">
-            Sign Out
+            {t("common.signOut", undefined, "Sign Out")}
           </button>
         </form>
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Role</div>
+          <div className="text-label text-[var(--color-text-tertiary)]">
+            {t("me.dashboard.role", undefined, "Role")}
+          </div>
           <div className="mt-2">
             <Badge variant="info">{session.role}</Badge>
           </div>
         </div>
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Tier</div>
+          <div className="text-label text-[var(--color-text-tertiary)]">
+            {t("me.dashboard.tier", undefined, "Tier")}
+          </div>
           <div className="mt-2">
             <Badge variant="cyan">{session.tier}</Badge>
           </div>
         </div>
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Organization</div>
-          <div className="text-mono mt-2 text-xs">{session.orgSlug || session.orgId || "None"}</div>
+          <div className="text-label text-[var(--color-text-tertiary)]">
+            {t("me.dashboard.organization", undefined, "Organization")}
+          </div>
+          <div className="text-mono mt-2 text-xs">
+            {session.orgSlug || session.orgId || t("me.dashboard.noOrg", undefined, "None")}
+          </div>
         </div>
       </div>
 
@@ -90,9 +104,11 @@ export default async function MePage() {
         <div className="mt-8">
           <Link href="/console" className="card flex items-center justify-between p-6">
             <div>
-              <div className="text-label text-[var(--brand-color)]">Open console →</div>
+              <div className="text-label text-[var(--brand-color)]">
+                {t("me.dashboard.openConsole", undefined, "Open console →")}
+              </div>
               <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-                Projects, finance, procurement, production, people, AI.
+                {t("me.dashboard.consoleBlurb", undefined, "Projects, finance, procurement, production, people, AI.")}
               </p>
             </div>
             <Badge variant="info">{session.role}</Badge>
@@ -100,48 +116,86 @@ export default async function MePage() {
         </div>
       )}
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">Marketplace</h2>
+      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">
+        {t("me.dashboard.marketplaceHeading", undefined, "Marketplace")}
+      </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <MeCard
           href="/me/applications"
-          label="My Applications"
-          blurb="Job applications you've submitted."
+          label={t("me.cards.applications.label", undefined, "My Applications")}
+          blurb={t("me.cards.applications.blurb", undefined, "Job applications you've submitted.")}
           count={appCount}
         />
         <MeCard
           href="/me/submissions"
-          label="My Submissions"
-          blurb="Open-call submissions to casting + RFP."
+          label={t("me.cards.submissions.label", undefined, "My Submissions")}
+          blurb={t("me.cards.submissions.blurb", undefined, "Open-call submissions to casting + RFP.")}
           count={submissionCount}
         />
         <MeCard
           href="/me/availability"
-          label="Availability"
-          blurb="Holds, confirms, blocks. Drives booking fit."
+          label={t("me.cards.availability.label", undefined, "Availability")}
+          blurb={t("me.cards.availability.blurb", undefined, "Holds, confirms, blocks. Drives booking fit.")}
           count={slotCount}
         />
         <MeCard
           href="/me/talent"
-          label="Talent EPK"
-          blurb={talent ? (talent.is_public ? "Public profile live." : "Profile in draft.") : "Create your EPK."}
+          label={t("me.cards.talent.label", undefined, "Talent EPK")}
+          blurb={
+            talent
+              ? talent.is_public
+                ? t("me.cards.talent.blurbLive", undefined, "Public profile live.")
+                : t("me.cards.talent.blurbDraft", undefined, "Profile in draft.")
+              : t("me.cards.talent.blurbNew", undefined, "Create your EPK.")
+          }
           badge={talent ? (talent.is_public ? "live" : "draft") : "new"}
         />
-        <MeCard href="/me/offers" label="Booking Offers" blurb="Offers addressed to acts you're attached to." />
+        <MeCard
+          href="/me/offers"
+          label={t("me.cards.offers.label", undefined, "Booking Offers")}
+          blurb={t("me.cards.offers.blurb", undefined, "Offers addressed to acts you're attached to.")}
+        />
         <MeCard
           href="/me/reviews"
-          label="My Reviews"
-          blurb="Bidirectional reviews — released after counterpart posts."
+          label={t("me.cards.reviews.label", undefined, "My Reviews")}
+          blurb={t("me.cards.reviews.blurb", undefined, "Bidirectional reviews — released after counterpart posts.")}
         />
       </div>
 
-      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">Account</h2>
+      <h2 className="text-label mt-10 mb-3 text-[var(--color-text-tertiary)]">
+        {t("me.dashboard.accountHeading", undefined, "Account")}
+      </h2>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <MeCard href="/me/profile" label="Profile" blurb="Identity, avatar, contact." />
-        <MeCard href="/me/notifications" label="Notifications" blurb="Channel + push preferences." />
-        <MeCard href="/me/security" label="Security" blurb="Password, 2FA, sessions, tokens." />
-        <MeCard href="/me/organizations" label="Organizations" blurb="Memberships and switcher." />
-        <MeCard href="/me/tickets" label="My Tickets" blurb="Purchased and scanned tickets." />
-        <MeCard href="/me/settings" label="Settings" blurb="Preferences, timezone, locale." />
+        <MeCard
+          href="/me/profile"
+          label={t("me.cards.profile.label", undefined, "Profile")}
+          blurb={t("me.cards.profile.blurb", undefined, "Identity, avatar, contact.")}
+        />
+        <MeCard
+          href="/me/notifications"
+          label={t("me.cards.notifications.label", undefined, "Notifications")}
+          blurb={t("me.cards.notifications.blurb", undefined, "Channel + push preferences.")}
+        />
+        <MeCard
+          href="/me/security"
+          label={t("me.cards.security.label", undefined, "Security")}
+          blurb={t("me.cards.security.blurb", undefined, "Password, 2FA, sessions, tokens.")}
+        />
+        <MeCard
+          href="/me/organizations"
+          label={t("me.cards.organizations.label", undefined, "Organizations")}
+          blurb={t("me.cards.organizations.blurb", undefined, "Memberships and switcher.")}
+        />
+        <MeCard
+          href="/me/tickets"
+          label={t("me.cards.tickets.label", undefined, "My Tickets")}
+          blurb={t("me.cards.tickets.blurb", undefined, "Purchased and scanned tickets.")}
+        />
+        <MeCard
+          href="/me/settings"
+          label={t("me.cards.settings.label", undefined, "Settings")}
+          blurb={t("me.cards.settings.blurb", undefined, "Preferences, timezone, locale.")}
+        />
       </div>
     </div>
   );

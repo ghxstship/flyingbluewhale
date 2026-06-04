@@ -3,6 +3,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { getRequestT } from "@/lib/i18n/request";
 import { InboxClient, type InboxNotification, type InboxTab } from "./InboxClient";
 
 export const dynamic = "force-dynamic";
@@ -22,20 +23,32 @@ type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 export default async function InboxPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const tab = parseTab(params.tab);
+  const { t } = await getRequestT();
 
   if (!hasSupabase) {
     return (
       <div>
         <header className="mb-6">
-          <h1 className="text-2xl font-semibold tracking-tight">Inbox</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("me.inbox.title", undefined, "Inbox")}</h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">
-            All your activity across the platform — assignments, mentions, status changes.
+            {t(
+              "me.inbox.subtitle",
+              undefined,
+              "All your activity across the platform — assignments, mentions, status changes.",
+            )}
           </p>
         </header>
-        <EmptyState title="Inbox unavailable" description="Supabase is not configured in this environment." />
+        <EmptyState
+          title={t("me.inbox.unavailable.title", undefined, "Inbox unavailable")}
+          description={t(
+            "me.inbox.unavailable.description",
+            undefined,
+            "Supabase is not configured in this environment.",
+          )}
+        />
         <p className="mt-4 text-xs text-[var(--text-muted)]">
           <Link href="/me/notifications" className="underline">
-            Manage notification preferences
+            {t("me.inbox.managePreferences", undefined, "Manage notification preferences")}
           </Link>
         </p>
       </div>

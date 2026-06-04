@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import { savePreferencesAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -26,12 +27,18 @@ const DEFAULTS: Prefs = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="My Account" title="Preferences" />
+        <ModuleHeader
+          eyebrow={t("me.preferences.eyebrow", undefined, "My Account")}
+          title={t("me.preferences.title", undefined, "Preferences")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase to manage preferences.</div>
+          <div className="surface p-6 text-sm">
+            {t("me.preferences.supabaseRequired", undefined, "Configure Supabase to manage preferences.")}
+          </div>
         </div>
       </>
     );
@@ -57,41 +64,52 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="My Account"
-        title="Preferences"
-        subtitle="Theme, density, locale, and consent."
-        breadcrumbs={[{ label: "My Account", href: "/me" }, { label: "Preferences" }]}
+        eyebrow={t("me.preferences.eyebrow", undefined, "My Account")}
+        title={t("me.preferences.title", undefined, "Preferences")}
+        subtitle={t("me.preferences.subtitle", undefined, "Theme, density, locale, and consent.")}
+        breadcrumbs={[
+          { label: t("me.preferences.breadcrumbs.account", undefined, "My Account"), href: "/me" },
+          { label: t("me.preferences.title", undefined, "Preferences") },
+        ]}
       />
       <div className="page-content max-w-2xl">
-        <FormShell action={savePreferencesAction} cancelHref="/me" submitLabel="Save Preferences">
+        <FormShell
+          action={savePreferencesAction}
+          cancelHref="/me"
+          submitLabel={t("me.preferences.submit", undefined, "Save Preferences")}
+        >
           <fieldset className="space-y-2">
             <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-              Appearance
+              {t("me.preferences.appearance.legend", undefined, "Appearance")}
             </legend>
 
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Theme</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("me.preferences.appearance.theme", undefined, "Theme")}
+              </label>
               <div className="mt-1.5 grid grid-cols-3 gap-1.5">
-                {(["light", "dark", "system"] as const).map((t) => (
+                {(["light", "dark", "system"] as const).map((themeOption) => (
                   <label
-                    key={t}
+                    key={themeOption}
                     className="surface hover-lift flex cursor-pointer items-center gap-2 px-3 py-2 text-sm"
                   >
                     <input
                       type="radio"
                       name="theme"
-                      value={t}
-                      defaultChecked={prefs.theme === t}
+                      value={themeOption}
+                      defaultChecked={prefs.theme === themeOption}
                       className="accent-[var(--org-primary)]"
                     />
-                    <span>{toTitle(t)}</span>
+                    <span>{toTitle(themeOption)}</span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">Density</label>
+              <label className="text-xs font-medium text-[var(--text-secondary)]">
+                {t("me.preferences.appearance.density", undefined, "Density")}
+              </label>
               <div className="mt-1.5 grid grid-cols-3 gap-1.5">
                 {(["compact", "comfortable", "spacious"] as const).map((d) => (
                   <label
@@ -113,36 +131,46 @@ export default async function Page() {
           </fieldset>
 
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Locale</legend>
+            <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+              {t("me.preferences.locale.legend", undefined, "Locale")}
+            </legend>
             <div className="grid grid-cols-2 gap-3">
               <Input
-                label="Language code"
+                label={t("me.preferences.locale.languageCode", undefined, "Language code")}
                 name="locale"
                 defaultValue={prefs.locale}
                 required
                 maxLength={8}
-                hint="e.g. en, es, fr-CA"
+                hint={t("me.preferences.locale.languageHint", undefined, "e.g. en, es, fr-CA")}
               />
               <Input
-                label="Timezone"
+                label={t("me.preferences.locale.timezone", undefined, "Timezone")}
                 name="timezone"
                 defaultValue={prefs.timezone}
                 required
                 maxLength={64}
-                hint="IANA, e.g. America/Los_Angeles"
+                hint={t("me.preferences.locale.timezoneHint", undefined, "IANA, e.g. America/Los_Angeles")}
               />
             </div>
           </fieldset>
 
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Consent</legend>
+            <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+              {t("me.preferences.consent.legend", undefined, "Consent")}
+            </legend>
 
             <label className="surface flex cursor-not-allowed items-start gap-3 p-3 text-sm opacity-70">
               <input type="checkbox" checked disabled className="mt-0.5 accent-[var(--org-primary)]" />
               <div>
-                <div className="font-medium">Essential cookies</div>
+                <div className="font-medium">
+                  {t("me.preferences.consent.essential.label", undefined, "Essential cookies")}
+                </div>
                 <div className="text-[11px] text-[var(--text-muted)]">
-                  Required to keep you signed in and to remember your workspace. Cannot be disabled.
+                  {t(
+                    "me.preferences.consent.essential.description",
+                    undefined,
+                    "Required to keep you signed in and to remember your workspace. Cannot be disabled.",
+                  )}
                 </div>
               </div>
             </label>
@@ -155,9 +183,13 @@ export default async function Page() {
                 className="mt-0.5 accent-[var(--org-primary)]"
               />
               <div>
-                <div className="font-medium">Analytics</div>
+                <div className="font-medium">{t("me.preferences.consent.analytics.label", undefined, "Analytics")}</div>
                 <div className="text-[11px] text-[var(--text-muted)]">
-                  Anonymous usage telemetry that helps us prioritize features and find regressions.
+                  {t(
+                    "me.preferences.consent.analytics.description",
+                    undefined,
+                    "Anonymous usage telemetry that helps us prioritize features and find regressions.",
+                  )}
                 </div>
               </div>
             </label>
@@ -170,9 +202,13 @@ export default async function Page() {
                 className="mt-0.5 accent-[var(--org-primary)]"
               />
               <div>
-                <div className="font-medium">Marketing</div>
+                <div className="font-medium">{t("me.preferences.consent.marketing.label", undefined, "Marketing")}</div>
                 <div className="text-[11px] text-[var(--text-muted)]">
-                  Occasional product announcements and feature releases. Easy to unsubscribe.
+                  {t(
+                    "me.preferences.consent.marketing.description",
+                    undefined,
+                    "Occasional product announcements and feature releases. Easy to unsubscribe.",
+                  )}
                 </div>
               </div>
             </label>

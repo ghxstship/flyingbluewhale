@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { saveNotificationPrefs } from "./actions";
 import { CHANNELS, EVENTS } from "./constants";
 
@@ -24,6 +25,7 @@ const DEFAULT_ON: Record<(typeof CHANNELS)[number], boolean> = {
 };
 
 export default async function NotificationsPrefs() {
+  const { t } = await getRequestT();
   let matrix: Record<string, Record<string, boolean>> = {};
   if (hasSupabase) {
     const session = await requireSession();
@@ -39,35 +41,45 @@ export default async function NotificationsPrefs() {
   const checked = (event: string, channel: (typeof CHANNELS)[number]) =>
     matrix[event]?.[channel] ?? DEFAULT_ON[channel];
 
+  const channelLabel = (c: (typeof CHANNELS)[number]) =>
+    t(`me.notifications.channels.${c}`, undefined, CHANNEL_LABELS[c]);
+
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Notifications</h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">Choose how you get updates for each workspace event.</p>
+      <h1 className="text-2xl font-semibold tracking-tight">
+        {t("me.notifications.title", undefined, "Notifications")}
+      </h1>
+      <p className="mt-2 text-sm text-[var(--text-muted)]">
+        {t("me.notifications.subtitle", undefined, "Choose how you get updates for each workspace event.")}
+      </p>
       <div className="surface mt-4 flex items-center justify-between gap-3 p-3">
         <div className="flex items-center gap-2">
           <Inbox size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
           <p className="text-sm text-[var(--text-secondary)]">
-            Looking for your inbox?{" "}
+            {t("me.notifications.inboxPrompt", undefined, "Looking for your inbox?")}{" "}
             <Link href="/me/notifications/inbox" className="font-medium text-[var(--foreground)] underline">
-              Open Inbox
+              {t("me.notifications.openInbox", undefined, "Open Inbox")}
             </Link>
             {" · "}
             <Link href="/me/notifications/push" className="font-medium text-[var(--foreground)] underline">
-              Push Devices
+              {t("me.notifications.pushDevices", undefined, "Push Devices")}
             </Link>
           </p>
         </div>
       </div>
       <div className="mt-6">
-        <FormShell action={saveNotificationPrefs} submitLabel="Save Preferences">
+        <FormShell
+          action={saveNotificationPrefs}
+          submitLabel={t("me.notifications.savePreferences", undefined, "Save Preferences")}
+        >
           <div className="surface -m-2 overflow-x-auto">
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>Event</th>
+                  <th>{t("me.notifications.columns.event", undefined, "Event")}</th>
                   {CHANNELS.map((c) => (
                     <th key={c} className="text-center">
-                      {CHANNEL_LABELS[c]}
+                      {channelLabel(c)}
                     </th>
                   ))}
                 </tr>

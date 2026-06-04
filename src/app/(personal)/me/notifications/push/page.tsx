@@ -5,11 +5,13 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
+import { getRequestT } from "@/lib/i18n/request";
 import { PushToggle, type RegisteredDevice } from "./PushToggle";
 
 export const dynamic = "force-dynamic";
 
 export default async function NotificationsPushPage() {
+  const { t } = await getRequestT();
   const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "";
   const serverConfigured = Boolean(vapidPublicKey);
 
@@ -17,7 +19,14 @@ export default async function NotificationsPushPage() {
     return (
       <div>
         <Header />
-        <EmptyState title="Push unavailable" description="Supabase is not configured in this environment." />
+        <EmptyState
+          title={t("me.notifications.push.unavailable.title", undefined, "Push unavailable")}
+          description={t(
+            "me.notifications.push.unavailable.description",
+            undefined,
+            "Supabase is not configured in this environment.",
+          )}
+        />
       </div>
     );
   }
@@ -64,19 +73,29 @@ export default async function NotificationsPushPage() {
       {!serverConfigured && (
         <div className="mb-4">
           <Alert kind="warning">
-            Push notifications are not yet enabled on this server. An administrator must set
+            {t(
+              "me.notifications.push.notConfigured.prefix",
+              undefined,
+              "Push notifications are not yet enabled on this server. An administrator must set",
+            )}
             <code className="mx-1 rounded bg-[var(--surface-inset)] px-1 font-mono text-xs">VAPID_*</code>
-            and
+            {t("me.notifications.push.notConfigured.and", undefined, "and")}
             <code className="mx-1 rounded bg-[var(--surface-inset)] px-1 font-mono text-xs">
               NEXT_PUBLIC_VAPID_PUBLIC_KEY
             </code>
-            environment variables.
+            {t("me.notifications.push.notConfigured.suffix", undefined, "environment variables.")}
           </Alert>
         </div>
       )}
       {error && (
         <div className="mb-4">
-          <Alert kind="error">Couldn&apos;t load registered devices: {error.message}</Alert>
+          <Alert kind="error">
+            {t(
+              "me.notifications.push.loadError",
+              { message: error.message },
+              `Couldn't load registered devices: ${error.message}`,
+            )}
+          </Alert>
         </div>
       )}
       <PushToggle vapidPublicKey={vapidPublicKey} initialDevices={devices} />
@@ -84,20 +103,27 @@ export default async function NotificationsPushPage() {
   );
 }
 
-function Header() {
+async function Header() {
+  const { t } = await getRequestT();
   return (
     <header className="mb-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Push Notifications</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">
+        {t("me.notifications.push.title", undefined, "Push Notifications")}
+      </h1>
       <p className="mt-2 text-sm text-[var(--text-muted)]">
-        Get notified in your browser even when the ATLVS tab is closed.
+        {t(
+          "me.notifications.push.subtitle",
+          undefined,
+          "Get notified in your browser even when the ATLVS tab is closed.",
+        )}
       </p>
       <div className="surface mt-4 flex items-center justify-between gap-3 p-3">
         <div className="flex items-center gap-2">
           <Inbox size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
           <p className="text-sm text-[var(--text-secondary)]">
-            Configure which events trigger push?{" "}
+            {t("me.notifications.push.configurePrompt", undefined, "Configure which events trigger push?")}{" "}
             <Link href="/me/notifications" className="font-medium text-[var(--foreground)] underline">
-              Edit Preferences
+              {t("me.notifications.push.editPreferences", undefined, "Edit Preferences")}
             </Link>
           </p>
         </div>

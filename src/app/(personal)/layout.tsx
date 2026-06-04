@@ -2,26 +2,27 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { requireSession } from "@/lib/auth";
-
-const tabs = [
-  { label: "Dashboard", href: "/me" },
-  { label: "Profile", href: "/me/profile" },
-  { label: "Appearance", href: "/me/settings/appearance" },
-  { label: "Settings", href: "/me/settings" },
-  { label: "Notifications", href: "/me/notifications" },
-  { label: "Security", href: "/me/security" },
-  { label: "Privacy", href: "/me/privacy" },
-  { label: "Tickets", href: "/me/tickets" },
-  { label: "Organizations", href: "/me/organizations" },
-];
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
   // Outer auth guard — matches (platform) and (mobile) shell convention.
   // Previously `/me/*` pages rendered chrome + empty forms to anon visitors,
   // leaking shell structure and risking partial data exposure through any
   // client component that assumed a session existed. UJV cell R1-R10·S1/S3.
-  await requireSession("/login");
+  await requireSession();
   const tenant = await resolveTenant();
+  const { t } = await getRequestT();
+  const tabs = [
+    { label: t("me.layout.tabs.dashboard", undefined, "Dashboard"), href: "/me" },
+    { label: t("me.layout.tabs.profile", undefined, "Profile"), href: "/me/profile" },
+    { label: t("me.layout.tabs.appearance", undefined, "Appearance"), href: "/me/settings/appearance" },
+    { label: t("me.layout.tabs.settings", undefined, "Settings"), href: "/me/settings" },
+    { label: t("me.layout.tabs.notifications", undefined, "Notifications"), href: "/me/notifications" },
+    { label: t("me.layout.tabs.security", undefined, "Security"), href: "/me/security" },
+    { label: t("me.layout.tabs.privacy", undefined, "Privacy"), href: "/me/privacy" },
+    { label: t("me.layout.tabs.tickets", undefined, "Tickets"), href: "/me/tickets" },
+    { label: t("me.layout.tabs.organizations", undefined, "Organizations"), href: "/me/organizations" },
+  ];
   const brandName = tenant.branding.productName ?? tenant.orgName ?? "A T L V S";
   const brandAria = tenant.branding.productName ?? tenant.orgName ?? "ATLVS Technologies";
   const isDefaultBrand = !tenant.branding.productName && !tenant.orgName;
@@ -50,9 +51,9 @@ export default async function PersonalLayout({ children }: { children: React.Rea
             <ThemeToggle />
           </div>
           <nav className="mt-4 flex flex-wrap gap-1 border-b border-[var(--border-color)] pb-2">
-            {tabs.map((t) => (
-              <Link key={t.href} href={t.href} className="nav-item text-sm">
-                {t.label}
+            {tabs.map((tab) => (
+              <Link key={tab.href} href={tab.href} className="nav-item text-sm">
+                {tab.label}
               </Link>
             ))}
           </nav>

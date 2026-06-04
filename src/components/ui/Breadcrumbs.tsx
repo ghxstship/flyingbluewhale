@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import { SITE } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * Unified breadcrumb primitive — used by every shell (platform console,
@@ -24,7 +25,7 @@ import { SITE } from "@/lib/seo";
 
 export type Crumb = { label: string; href?: string };
 
-export function Breadcrumbs({
+export async function Breadcrumbs({
   items,
   baseUrl,
   className = "",
@@ -38,6 +39,7 @@ export function Breadcrumbs({
 }) {
   if (items.length === 0) return null;
 
+  const { t } = await getRequestT();
   const resolvedBase = baseUrl ?? SITE.baseUrl;
 
   // Visual truncation: if > 4 crumbs, collapse middle entries into
@@ -58,7 +60,7 @@ export function Breadcrumbs({
     : null;
 
   return (
-    <nav aria-label="Breadcrumb" className={className}>
+    <nav aria-label={t("ui.breadcrumbs.ariaLabel", undefined, "Breadcrumb")} className={className}>
       <ol className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
         {visible.map((c, idx) => {
           const isLast = idx === visible.length - 1;
@@ -67,7 +69,7 @@ export function Breadcrumbs({
               <li key={`ellipsis-${idx}`} className="flex items-center gap-1.5">
                 <ChevronRight size={12} aria-hidden="true" className="opacity-50" />
                 <span
-                  aria-label="Collapsed breadcrumb segments"
+                  aria-label={t("ui.breadcrumbs.collapsedSegments", undefined, "Collapsed breadcrumb segments")}
                   className="inline-flex h-4 w-4 items-center justify-center rounded hover:bg-[var(--bg-secondary)]"
                 >
                   <MoreHorizontal size={12} aria-hidden="true" />

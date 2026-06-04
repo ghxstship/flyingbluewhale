@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatRelative } from "@/lib/i18n/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { enrollMfaAction, verifyEnrollmentAction, unenrollMfaAction, regenerateRecoveryCodesAction } from "./actions";
 
 type FactorRow = {
@@ -26,6 +27,7 @@ type EnrollState = {
 };
 
 export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[] }) {
+  const t = useT();
   const [factors, setFactors] = useState<FactorRow[]>(initialFactors);
   const [enroll, setEnroll] = useState<EnrollState | null>(null);
   const [code, setCode] = useState("");
@@ -83,12 +85,21 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
       ]);
       setEnroll(null);
       setRecoveryCodes(result.recoveryCodes);
-      toast.success("Authenticator app added");
+      toast.success(t("me.security.twoFactor.toast.added", undefined, "Authenticator app added"));
     });
   }
 
   function removeFactor(id: string) {
-    if (!confirm("Remove this authenticator? You'll need to re-enroll to sign in with TOTP.")) return;
+    if (
+      !confirm(
+        t(
+          "me.security.twoFactor.confirm.remove",
+          undefined,
+          "Remove this authenticator? You'll need to re-enroll to sign in with TOTP.",
+        ),
+      )
+    )
+      return;
     startTransition(async () => {
       const result = await unenrollMfaAction(id);
       if (result?.error) {
@@ -97,12 +108,21 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
       }
       setFactors((prev) => prev.filter((f) => f.id !== id));
       setRecoveryCodes(null);
-      toast.success("Removed");
+      toast.success(t("me.security.twoFactor.toast.removed", undefined, "Removed"));
     });
   }
 
   function regenerate() {
-    if (!confirm("Generating new codes invalidates all existing recovery codes. Continue?")) return;
+    if (
+      !confirm(
+        t(
+          "me.security.twoFactor.confirm.regenerate",
+          undefined,
+          "Generating new codes invalidates all existing recovery codes. Continue?",
+        ),
+      )
+    )
+      return;
     startTransition(async () => {
       const result = await regenerateRecoveryCodesAction();
       if ("error" in result) {
@@ -110,7 +130,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
         return;
       }
       setRecoveryCodes(result.recoveryCodes);
-      toast.success("New recovery codes generated");
+      toast.success(t("me.security.twoFactor.toast.regenerated", undefined, "New recovery codes generated"));
     });
   }
 
@@ -128,9 +148,15 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
     return (
       <div className="surface space-y-5 p-6">
         <div>
-          <div className="text-sm font-semibold">Scan this QR code</div>
+          <div className="text-sm font-semibold">
+            {t("me.security.twoFactor.enroll.title", undefined, "Scan this QR code")}
+          </div>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Use Google Authenticator, 1Password, Authy, or any TOTP-compatible app.
+            {t(
+              "me.security.twoFactor.enroll.subtitle",
+              undefined,
+              "Use Google Authenticator, 1Password, Authy, or any TOTP-compatible app.",
+            )}
           </p>
         </div>
 
@@ -143,18 +169,23 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                * ignored by the browser even if the SVG carried them.
                */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={enroll.qrSvg} alt="Two-factor enrollment QR code" width={240} height={240} />
+              <img
+                src={enroll.qrSvg}
+                alt={t("me.security.twoFactor.enroll.qrAlt", undefined, "Two-factor enrollment QR code")}
+                width={240}
+                height={240}
+              />
             </div>
           ) : (
             <div className="surface-inset flex h-[252px] w-[252px] items-center justify-center text-xs text-[var(--text-muted)]">
-              QR unavailable — paste the secret below
+              {t("me.security.twoFactor.enroll.qrUnavailable", undefined, "QR unavailable — paste the secret below")}
             </div>
           )}
 
           <div className="flex-1 space-y-3">
             <div>
               <div className="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
-                Or paste this secret
+                {t("me.security.twoFactor.enroll.pasteSecret", undefined, "Or paste this secret")}
               </div>
               <div className="mt-2 flex items-center gap-2">
                 <code className="surface-inset flex-1 rounded px-3 py-2 font-mono text-xs break-all">
@@ -166,9 +197,9 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                   size="sm"
                   onClick={() => {
                     void navigator.clipboard.writeText(enroll.secret);
-                    toast.success("Secret copied");
+                    toast.success(t("me.security.twoFactor.toast.secretCopied", undefined, "Secret copied"));
                   }}
-                  aria-label="Copy secret"
+                  aria-label={t("me.security.twoFactor.enroll.copySecret", undefined, "Copy secret")}
                 >
                   <Copy size={14} />
                 </Button>
@@ -179,7 +210,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
 
         <form onSubmit={submitVerification} className="space-y-3 border-t border-[var(--border-color)] pt-5">
           <Input
-            label="Enter the 6-digit code"
+            label={t("me.security.twoFactor.enroll.codeLabel", undefined, "Enter the 6-digit code")}
             name="code"
             inputMode="numeric"
             autoComplete="one-time-code"
@@ -188,14 +219,14 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
             required
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-            placeholder="123 456"
+            placeholder={t("me.security.twoFactor.enroll.codePlaceholder", undefined, "123 456")}
           />
           <div className="flex items-center justify-end gap-2">
             <Button type="button" variant="ghost" onClick={cancelEnroll} disabled={pending}>
-              Cancel
+              {t("common.cancel", undefined, "Cancel")}
             </Button>
             <Button type="submit" loading={pending} disabled={code.length !== 6}>
-              Verify and enable
+              {t("me.security.twoFactor.enroll.verifyButton", undefined, "Verify and enable")}
             </Button>
           </div>
         </form>
@@ -211,8 +242,12 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
       <div className="surface">
         {factors.length === 0 ? (
           <EmptyState
-            title="No Authenticator Enrolled"
-            description="Add an app like Google Authenticator, 1Password, or Authy to require a second factor at sign-in."
+            title={t("me.security.twoFactor.empty.title", undefined, "No Authenticator Enrolled")}
+            description={t(
+              "me.security.twoFactor.empty.description",
+              undefined,
+              "Add an app like Google Authenticator, 1Password, or Authy to require a second factor at sign-in.",
+            )}
             icon={<ShieldCheck size={32} />}
           />
         ) : (
@@ -223,20 +258,29 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                   <ShieldCheck size={16} className="text-[var(--color-success)]" aria-hidden="true" />
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium">{f.friendlyName ?? "Authenticator app"}</span>
+                      <span className="text-sm font-medium">
+                        {f.friendlyName ??
+                          t("me.security.twoFactor.factor.defaultName", undefined, "Authenticator app")}
+                      </span>
                       <Badge variant={f.status === "verified" ? "success" : "warning"}>
-                        {f.status === "verified" ? "Active" : "Pending"}
+                        {f.status === "verified"
+                          ? t("me.security.twoFactor.factor.statusActive", undefined, "Active")
+                          : t("me.security.twoFactor.factor.statusPending", undefined, "Pending")}
                       </Badge>
                     </div>
                     <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
-                      Added {formatRelative(f.createdAt)}
+                      {t(
+                        "me.security.twoFactor.factor.addedAt",
+                        { when: formatRelative(f.createdAt) },
+                        `Added ${formatRelative(f.createdAt)}`,
+                      )}
                     </div>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => removeFactor(f.id)}
-                  aria-label="Remove authenticator"
+                  aria-label={t("me.security.twoFactor.factor.remove", undefined, "Remove authenticator")}
                   className="rounded p-1 text-[var(--text-muted)] hover:text-[var(--color-error)]"
                 >
                   <Trash2 size={14} />
@@ -248,7 +292,9 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
         <div className="flex items-center justify-end gap-2 border-t border-[var(--border-color)] p-3">
           <Button onClick={startEnroll} loading={pending} size="sm">
             <ShieldCheck size={12} className="me-1" aria-hidden="true" />
-            {factors.length === 0 ? "Add authenticator" : "Add another"}
+            {factors.length === 0
+              ? t("me.security.twoFactor.addFirst", undefined, "Add authenticator")
+              : t("me.security.twoFactor.addAnother", undefined, "Add another")}
           </Button>
         </div>
       </div>
@@ -259,15 +305,20 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
             <div>
               <div className="flex items-center gap-2">
                 <KeyRound size={14} className="text-[var(--text-muted)]" aria-hidden="true" />
-                <span className="text-sm font-semibold">Recovery Codes</span>
+                <span className="text-sm font-semibold">
+                  {t("me.security.twoFactor.recovery.title", undefined, "Recovery Codes")}
+                </span>
               </div>
               <p className="mt-1 text-xs text-[var(--text-muted)]">
-                Single-use codes for when you lose access to your authenticator. Generating new codes invalidates all
-                existing codes.
+                {t(
+                  "me.security.twoFactor.recovery.description",
+                  undefined,
+                  "Single-use codes for when you lose access to your authenticator. Generating new codes invalidates all existing codes.",
+                )}
               </p>
             </div>
             <Button variant="secondary" size="sm" onClick={regenerate} loading={pending}>
-              Generate new codes
+              {t("me.security.twoFactor.recovery.generateButton", undefined, "Generate new codes")}
             </Button>
           </div>
         </div>
@@ -275,8 +326,11 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
 
       <Alert kind="info" hideIcon>
         <span className="text-xs">
-          Recovery codes are stored hashed — we can show them to you exactly once. Save them in a password manager
-          before leaving this page.
+          {t(
+            "me.security.twoFactor.recovery.hashedNotice",
+            undefined,
+            "Recovery codes are stored hashed — we can show them to you exactly once. Save them in a password manager before leaving this page.",
+          )}
         </span>
       </Alert>
     </div>
@@ -288,11 +342,12 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
 // ────────────────────────────────────────────────────────────────────
 
 function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => void }) {
+  const t = useT();
   const [confirmed, setConfirmed] = useState(false);
 
   function copy() {
     void navigator.clipboard.writeText(codes.join("\n"));
-    toast.success("Recovery codes copied");
+    toast.success(t("me.security.twoFactor.recovery.copied", undefined, "Recovery codes copied"));
   }
 
   function download() {
@@ -311,14 +366,22 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
     <div className="surface space-y-5 p-6">
       <div className="flex items-center gap-2">
         <KeyRound size={16} className="text-[var(--org-primary)]" aria-hidden="true" />
-        <h2 className="text-sm font-semibold tracking-[0.18em] uppercase">Save Your Recovery Codes</h2>
+        <h2 className="text-sm font-semibold tracking-[0.18em] uppercase">
+          {t("me.security.twoFactor.recovery.panelTitle", undefined, "Save Your Recovery Codes")}
+        </h2>
       </div>
       <p className="text-xs text-[var(--text-muted)]">
-        Store these somewhere safe. Each code works once — for example, if you lose your authenticator. We hash codes on
-        save, so this is the only time you&apos;ll see them.
+        {t(
+          "me.security.twoFactor.recovery.panelBlurb",
+          undefined,
+          "Store these somewhere safe. Each code works once — for example, if you lose your authenticator. We hash codes on save, so this is the only time you'll see them.",
+        )}
       </p>
 
-      <ul className="grid grid-cols-2 gap-2 font-mono text-sm" aria-label="Recovery codes">
+      <ul
+        className="grid grid-cols-2 gap-2 font-mono text-sm"
+        aria-label={t("me.security.twoFactor.recovery.listAria", undefined, "Recovery codes")}
+      >
         {codes.map((c) => (
           <li key={c} className="surface-inset rounded px-3 py-2 tracking-wider">
             {c}
@@ -329,10 +392,10 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-color)] pt-4">
         <div className="flex items-center gap-2">
           <Button type="button" variant="secondary" size="sm" onClick={copy}>
-            <Copy size={12} className="me-1" aria-hidden="true" /> Copy
+            <Copy size={12} className="me-1" aria-hidden="true" /> {t("common.copy", undefined, "Copy")}
           </Button>
           <Button type="button" variant="secondary" size="sm" onClick={download}>
-            <Download size={12} className="me-1" aria-hidden="true" /> Download
+            <Download size={12} className="me-1" aria-hidden="true" /> {t("common.download", undefined, "Download")}
           </Button>
         </div>
         <label className="flex items-center gap-2 text-xs">
@@ -342,13 +405,13 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
             onChange={(e) => setConfirmed(e.target.checked)}
             className="h-4 w-4 accent-[var(--org-primary)]"
           />
-          I&apos;ve saved these codes
+          {t("me.security.twoFactor.recovery.savedConfirm", undefined, "I've saved these codes")}
         </label>
       </div>
 
       <div className="flex justify-end">
         <Button onClick={onDone} disabled={!confirmed}>
-          Done
+          {t("common.done", undefined, "Done")}
         </Button>
       </div>
     </div>

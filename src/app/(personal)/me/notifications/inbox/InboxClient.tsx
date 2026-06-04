@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Alert } from "@/components/ui/Alert";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover";
 import { timeAgo } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { markReadAction, markAllReadAction, archiveAction, markDoneAction, snoozeAction, undoAction } from "./actions";
 
 export type InboxTab = "all" | "unread" | "mentioned" | "assigned" | "snoozed" | "done";
@@ -24,15 +25,6 @@ export type InboxNotification = {
   created_at: string;
   done_at?: string | null;
   snoozed_until?: string | null;
-};
-
-const TAB_LABELS: Record<InboxTab, string> = {
-  all: "All",
-  unread: "Unread",
-  mentioned: "@Mentioned",
-  assigned: "Assigned",
-  snoozed: "Snoozed",
-  done: "Done",
 };
 
 const TAB_ICONS: Record<InboxTab, React.ReactNode> = {
@@ -52,11 +44,11 @@ const TAB_ORDER: readonly InboxTab[] = ["all", "unread", "mentioned", "assigned"
  * client/server clock drift. "Tomorrow" + "Next Week" are computed
  * client-side at click time so they always land at 9am local.
  */
-const SNOOZE_PRESETS: ReadonlyArray<{ label: string; hint: string; hours: number }> = [
-  { label: "Later Today", hint: "+3h", hours: 3 },
-  { label: "Tomorrow", hint: "9am", hours: hoursUntilTomorrow9am() },
-  { label: "Next Week", hint: "Mon 9am", hours: hoursUntilNextMonday9am() },
-  { label: "Two Weeks", hint: "14d", hours: 24 * 14 },
+const SNOOZE_PRESETS: ReadonlyArray<{ key: string; label: string; hint: string; hours: number }> = [
+  { key: "laterToday", label: "Later Today", hint: "+3h", hours: 3 },
+  { key: "tomorrow", label: "Tomorrow", hint: "9am", hours: hoursUntilTomorrow9am() },
+  { key: "nextWeek", label: "Next Week", hint: "Mon 9am", hours: hoursUntilNextMonday9am() },
+  { key: "twoWeeks", label: "Two Weeks", hint: "14d", hours: 24 * 14 },
 ];
 
 function hoursUntilTomorrow9am(): number {
@@ -77,33 +69,6 @@ function hoursUntilNextMonday9am(): number {
   return Math.max(1, Math.round((target.getTime() - now.getTime()) / 3600 / 1000));
 }
 
-const EMPTY_COPY: Record<InboxTab, { title: string; description: string }> = {
-  all: {
-    title: "No notifications yet",
-    description: "Activity across the workspace will land here.",
-  },
-  unread: {
-    title: "Inbox zero",
-    description: "Everything is read. Take a breath.",
-  },
-  mentioned: {
-    title: "No mentions",
-    description: "When someone @-mentions you on a record, it shows up here.",
-  },
-  assigned: {
-    title: "Nothing assigned to you",
-    description: "Tasks, requests, and reviews routed your way will land here.",
-  },
-  snoozed: {
-    title: "Nothing snoozed",
-    description: "Snooze a row to defer it — it returns to your inbox at the chosen time.",
-  },
-  done: {
-    title: "Nothing marked done",
-    description: "Mark items done to clear them from the active inbox; they stay searchable here.",
-  },
-};
-
 export function InboxClient({
   tab,
   notifications,
@@ -115,9 +80,81 @@ export function InboxClient({
   unreadCount: number;
   loadError: string | null;
 }) {
+  const t = useT();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [pending, startTransition] = useTransition();
+
+  const TAB_LABELS: Record<InboxTab, string> = {
+    all: t("me.inbox.tabs.all", undefined, "All"),
+    unread: t("me.inbox.tabs.unread", undefined, "Unread"),
+    mentioned: t("me.inbox.tabs.mentioned", undefined, "@Mentioned"),
+    assigned: t("me.inbox.tabs.assigned", undefined, "Assigned"),
+    snoozed: t("me.inbox.tabs.snoozed", undefined, "Snoozed"),
+    done: t("me.inbox.tabs.done", undefined, "Done"),
+  };
+
+  const EMPTY_COPY: Record<InboxTab, { title: string; description: string }> = {
+    all: {
+      title: t("me.inbox.empty.all.title", undefined, "No notifications yet"),
+      description: t("me.inbox.empty.all.description", undefined, "Activity across the workspace will land here."),
+    },
+    unread: {
+      title: t("me.inbox.empty.unread.title", undefined, "Inbox zero"),
+      description: t("me.inbox.empty.unread.description", undefined, "Everything is read. Take a breath."),
+    },
+    mentioned: {
+      title: t("me.inbox.empty.mentioned.title", undefined, "No mentions"),
+      description: t(
+        "me.inbox.empty.mentioned.description",
+        undefined,
+        "When someone @-mentions you on a record, it shows up here.",
+      ),
+    },
+    assigned: {
+      title: t("me.inbox.empty.assigned.title", undefined, "Nothing assigned to you"),
+      description: t(
+        "me.inbox.empty.assigned.description",
+        undefined,
+        "Tasks, requests, and reviews routed your way will land here.",
+      ),
+    },
+    snoozed: {
+      title: t("me.inbox.empty.snoozed.title", undefined, "Nothing snoozed"),
+      description: t(
+        "me.inbox.empty.snoozed.description",
+        undefined,
+        "Snooze a row to defer it — it returns to your inbox at the chosen time.",
+      ),
+    },
+    done: {
+      title: t("me.inbox.empty.done.title", undefined, "Nothing marked done"),
+      description: t(
+        "me.inbox.empty.done.description",
+        undefined,
+        "Mark items done to clear them from the active inbox; they stay searchable here.",
+      ),
+    },
+  };
+
+  const SNOOZE_LABELS: Record<string, { label: string; hint: string }> = {
+    laterToday: {
+      label: t("me.inbox.snooze.laterToday.label", undefined, "Later Today"),
+      hint: t("me.inbox.snooze.laterToday.hint", undefined, "+3h"),
+    },
+    tomorrow: {
+      label: t("me.inbox.snooze.tomorrow.label", undefined, "Tomorrow"),
+      hint: t("me.inbox.snooze.tomorrow.hint", undefined, "9am"),
+    },
+    nextWeek: {
+      label: t("me.inbox.snooze.nextWeek.label", undefined, "Next Week"),
+      hint: t("me.inbox.snooze.nextWeek.hint", undefined, "Mon 9am"),
+    },
+    twoWeeks: {
+      label: t("me.inbox.snooze.twoWeeks.label", undefined, "Two Weeks"),
+      hint: t("me.inbox.snooze.twoWeeks.hint", undefined, "14d"),
+    },
+  };
 
   function tabHref(target: InboxTab): string {
     const params = new URLSearchParams(searchParams?.toString() ?? "");
@@ -200,9 +237,13 @@ export function InboxClient({
     <div>
       <header className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-2xl font-semibold tracking-tight">Inbox</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{t("me.inbox.title", undefined, "Inbox")}</h1>
           <p className="mt-2 text-sm text-[var(--text-muted)]">
-            All your activity across the platform — assignments, mentions, status changes.
+            {t(
+              "me.inbox.subtitle",
+              undefined,
+              "All your activity across the platform — assignments, mentions, status changes.",
+            )}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -210,7 +251,7 @@ export function InboxClient({
             href="/me/notifications"
             className="text-xs font-medium text-[var(--text-muted)] underline-offset-2 hover:text-[var(--foreground)] hover:underline"
           >
-            Preferences
+            {t("me.inbox.preferences", undefined, "Preferences")}
           </Link>
           {tab === "unread" && unreadCount > 0 && (
             <Button
@@ -218,10 +259,10 @@ export function InboxClient({
               size="sm"
               onClick={handleMarkAllRead}
               loading={pending}
-              aria-label="Mark all notifications as read"
+              aria-label={t("me.inbox.markAllRead.ariaLabel", undefined, "Mark all notifications as read")}
             >
               <Check size={14} aria-hidden="true" />
-              <span className="ms-1">Mark All Read</span>
+              <span className="ms-1">{t("me.inbox.markAllRead.label", undefined, "Mark All Read")}</span>
             </Button>
           )}
         </div>
@@ -233,13 +274,16 @@ export function InboxClient({
         </div>
       )}
 
-      <nav aria-label="Inbox filters" className="mb-4 flex items-center gap-1 border-b border-[var(--border-color)]">
-        {TAB_ORDER.map((t) => {
-          const active = t === tab;
+      <nav
+        aria-label={t("me.inbox.filters.ariaLabel", undefined, "Inbox filters")}
+        className="mb-4 flex items-center gap-1 border-b border-[var(--border-color)]"
+      >
+        {TAB_ORDER.map((tabKey) => {
+          const active = tabKey === tab;
           return (
             <Link
-              key={t}
-              href={tabHref(t)}
+              key={tabKey}
+              href={tabHref(tabKey)}
               aria-current={active ? "page" : undefined}
               className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors ${
                 active
@@ -247,10 +291,14 @@ export function InboxClient({
                   : "border-transparent text-[var(--text-muted)] hover:text-[var(--foreground)]"
               }`}
             >
-              {TAB_ICONS[t]}
-              <span>{TAB_LABELS[t]}</span>
-              {t === "unread" && unreadCount > 0 && (
-                <Badge variant="brand" shape="count" aria-label={`${unreadCount} unread`}>
+              {TAB_ICONS[tabKey]}
+              <span>{TAB_LABELS[tabKey]}</span>
+              {tabKey === "unread" && unreadCount > 0 && (
+                <Badge
+                  variant="brand"
+                  shape="count"
+                  aria-label={t("me.inbox.unreadCount.ariaLabel", { count: unreadCount }, `${unreadCount} unread`)}
+                >
                   {unreadCount > 99 ? "99+" : unreadCount}
                 </Badge>
               )}
@@ -298,10 +346,10 @@ export function InboxClient({
                     <Button
                       variant="ghost"
                       size="icon"
-                      aria-label="Restore to inbox"
+                      aria-label={t("me.inbox.actions.restore", undefined, "Restore to inbox")}
                       onClick={() => handleUndo(n.id)}
                       disabled={pending}
-                      title="Restore to inbox"
+                      title={t("me.inbox.actions.restore", undefined, "Restore to inbox")}
                     >
                       <Undo2 size={14} aria-hidden="true" />
                     </Button>
@@ -311,52 +359,61 @@ export function InboxClient({
                         <Button
                           variant="ghost"
                           size="icon"
-                          aria-label="Mark as read"
+                          aria-label={t("me.inbox.actions.markRead", undefined, "Mark as read")}
                           onClick={() => handleMarkRead(n.id)}
                           disabled={pending}
-                          title="Mark as read"
+                          title={t("me.inbox.actions.markRead", undefined, "Mark as read")}
                         >
                           <Check size={14} aria-hidden="true" />
                         </Button>
                       )}
                       <Popover>
                         <PopoverTrigger asChild>
-                          <Button variant="ghost" size="icon" aria-label="Snooze" disabled={pending} title="Snooze">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={t("me.inbox.actions.snooze", undefined, "Snooze")}
+                            disabled={pending}
+                            title={t("me.inbox.actions.snooze", undefined, "Snooze")}
+                          >
                             <Clock size={14} aria-hidden="true" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent align="end" className="w-44 p-1 text-sm">
-                          {SNOOZE_PRESETS.map((p) => (
-                            <button
-                              key={p.label}
-                              type="button"
-                              className="flex w-full items-center justify-between rounded px-3 py-1.5 text-start hover:bg-[var(--surface-inset)]"
-                              onClick={() => handleSnooze(n.id, p.hours)}
-                              disabled={pending}
-                            >
-                              <span>{p.label}</span>
-                              <span className="font-mono text-[10px] text-[var(--text-muted)]">{p.hint}</span>
-                            </button>
-                          ))}
+                          {SNOOZE_PRESETS.map((p) => {
+                            const labels = SNOOZE_LABELS[p.key] ?? { label: p.label, hint: p.hint };
+                            return (
+                              <button
+                                key={p.key}
+                                type="button"
+                                className="flex w-full items-center justify-between rounded px-3 py-1.5 text-start hover:bg-[var(--surface-inset)]"
+                                onClick={() => handleSnooze(n.id, p.hours)}
+                                disabled={pending}
+                              >
+                                <span>{labels.label}</span>
+                                <span className="font-mono text-[10px] text-[var(--text-muted)]">{labels.hint}</span>
+                              </button>
+                            );
+                          })}
                         </PopoverContent>
                       </Popover>
                       <Button
                         variant="ghost"
                         size="icon"
-                        aria-label="Mark done"
+                        aria-label={t("me.inbox.actions.markDone", undefined, "Mark done")}
                         onClick={() => handleMarkDone(n.id)}
                         disabled={pending}
-                        title="Mark done"
+                        title={t("me.inbox.actions.markDone", undefined, "Mark done")}
                       >
                         <CheckCheck size={14} aria-hidden="true" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        aria-label="Archive"
+                        aria-label={t("me.inbox.actions.archive", undefined, "Archive")}
                         onClick={() => handleArchive(n.id)}
                         disabled={pending}
-                        title="Archive"
+                        title={t("me.inbox.actions.archive", undefined, "Archive")}
                       >
                         <Archive size={14} aria-hidden="true" />
                       </Button>

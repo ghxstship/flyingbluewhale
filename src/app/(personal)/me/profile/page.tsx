@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/Input";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { updateProfile, updatePublicProfile } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -37,11 +38,14 @@ function linksToText(links: PublicProfile["links"]): string {
 }
 
 export default async function ProfilePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-2xl font-semibold">Profile</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">Configure Supabase.</p>
+        <h1 className="text-2xl font-semibold">{t("me.profile.title", undefined, "Profile")}</h1>
+        <p className="mt-2 text-sm text-[var(--text-muted)]">
+          {t("me.profile.configureSupabase", undefined, "Configure Supabase.")}
+        </p>
       </div>
     );
   }
@@ -61,10 +65,13 @@ export default async function ProfilePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Profile</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">{t("me.profile.title", undefined, "Profile")}</h1>
       <p className="mt-2 text-sm text-[var(--text-muted)]">
-        Display name + avatar are visible to teammates across all workspaces. The public profile below is what the
-        marketplace shows to anonymous visitors (only when public).
+        {t(
+          "me.profile.intro",
+          undefined,
+          "Display name + avatar are visible to teammates across all workspaces. The public profile below is what the marketplace shows to anonymous visitors (only when public).",
+        )}
       </p>
 
       <div className="surface mt-6 p-6">
@@ -75,14 +82,28 @@ export default async function ProfilePage() {
             size="lg"
           />
           <div>
-            <div className="text-sm font-semibold">{profile?.display_name ?? user?.name ?? "Unnamed"}</div>
+            <div className="text-sm font-semibold">
+              {profile?.display_name ?? user?.name ?? t("me.profile.unnamed", undefined, "Unnamed")}
+            </div>
             <div className="font-mono text-xs text-[var(--text-muted)]">{user?.email}</div>
             <div className="mt-1 flex flex-wrap items-center gap-1">
-              {profile?.is_public ? <Badge variant="success">Public</Badge> : <Badge variant="muted">Private</Badge>}
-              {profile?.available_for_work && <Badge variant="info">Available for work</Badge>}
-              {profile?.verified_email_at && <Badge variant="muted">Email verified</Badge>}
-              {profile?.verified_id_at && <Badge variant="muted">ID verified</Badge>}
-              {profile?.verified_payout_at && <Badge variant="muted">Payout verified</Badge>}
+              {profile?.is_public ? (
+                <Badge variant="success">{t("me.profile.badges.public", undefined, "Public")}</Badge>
+              ) : (
+                <Badge variant="muted">{t("me.profile.badges.private", undefined, "Private")}</Badge>
+              )}
+              {profile?.available_for_work && (
+                <Badge variant="info">{t("me.profile.badges.availableForWork", undefined, "Available for work")}</Badge>
+              )}
+              {profile?.verified_email_at && (
+                <Badge variant="muted">{t("me.profile.badges.emailVerified", undefined, "Email verified")}</Badge>
+              )}
+              {profile?.verified_id_at && (
+                <Badge variant="muted">{t("me.profile.badges.idVerified", undefined, "ID verified")}</Badge>
+              )}
+              {profile?.verified_payout_at && (
+                <Badge variant="muted">{t("me.profile.badges.payoutVerified", undefined, "Payout verified")}</Badge>
+              )}
             </div>
             {profile?.public_handle && (
               <div className="mt-1 text-xs">
@@ -104,13 +125,24 @@ export default async function ProfilePage() {
       </div>
 
       <div className="surface mt-6 p-6">
-        <h2 className="text-sm font-semibold">Workspace Identity</h2>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">Shown to teammates in every workspace you belong to.</p>
+        <h2 className="text-sm font-semibold">{t("me.profile.workspace.title", undefined, "Workspace Identity")}</h2>
+        <p className="mt-1 text-xs text-[var(--text-muted)]">
+          {t("me.profile.workspace.subtitle", undefined, "Shown to teammates in every workspace you belong to.")}
+        </p>
         <div className="mt-4 max-w-md">
-          <FormShell action={updateProfile} submitLabel="Save Workspace Profile">
-            <Input label="Display Name" name="name" maxLength={120} defaultValue={user?.name ?? ""} required />
+          <FormShell
+            action={updateProfile}
+            submitLabel={t("me.profile.workspace.submit", undefined, "Save Workspace Profile")}
+          >
             <Input
-              label="Avatar URL"
+              label={t("me.profile.workspace.displayName", undefined, "Display Name")}
+              name="name"
+              maxLength={120}
+              defaultValue={user?.name ?? ""}
+              required
+            />
+            <Input
+              label={t("me.profile.workspace.avatarUrl", undefined, "Avatar URL")}
               name="avatar_url"
               type="url"
               maxLength={500}
@@ -123,72 +155,106 @@ export default async function ProfilePage() {
 
       <div className="surface mt-6 p-6">
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold">Public Profile</h2>
+          <h2 className="text-sm font-semibold">{t("me.profile.public.title", undefined, "Public Profile")}</h2>
           <span className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">user_profiles</span>
         </div>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Marketplace-facing EPK. Only visible to anonymous visitors when <strong>Make profile public</strong> is
-          checked. Verification badges are awarded by the platform — they don&rsquo;t appear here as editable fields.
+          {t(
+            "me.profile.public.intro.before",
+            undefined,
+            "Marketplace-facing EPK. Only visible to anonymous visitors when ",
+          )}
+          <strong>{t("me.profile.public.intro.toggle", undefined, "Make profile public")}</strong>
+          {t(
+            "me.profile.public.intro.after",
+            undefined,
+            " is checked. Verification badges are awarded by the platform — they don’t appear here as editable fields.",
+          )}
         </p>
         <div className="mt-4 max-w-2xl">
-          <FormShell action={updatePublicProfile} submitLabel="Save Public Profile">
+          <FormShell
+            action={updatePublicProfile}
+            submitLabel={t("me.profile.public.submit", undefined, "Save Public Profile")}
+          >
             <Input
-              label="Public handle"
+              label={t("me.profile.public.handle.label", undefined, "Public handle")}
               name="public_handle"
               maxLength={64}
               defaultValue={profile?.public_handle ?? ""}
               placeholder="luna-rose"
               pattern="[a-z0-9_-]{3,64}"
-              hint="3–64 chars, lowercase letters / digits / underscore / hyphen. Unique across the platform."
+              hint={t(
+                "me.profile.public.handle.hint",
+                undefined,
+                "3–64 chars, lowercase letters / digits / underscore / hyphen. Unique across the platform.",
+              )}
             />
             <Input
-              label="Display name"
+              label={t("me.profile.public.displayName.label", undefined, "Display name")}
               name="display_name"
               maxLength={120}
               defaultValue={profile?.display_name ?? ""}
               placeholder="Luna Rose"
-              hint="Falls back to workspace display name when blank."
+              hint={t(
+                "me.profile.public.displayName.hint",
+                undefined,
+                "Falls back to workspace display name when blank.",
+              )}
             />
             <Input
-              label="Tagline"
+              label={t("me.profile.public.tagline.label", undefined, "Tagline")}
               name="tagline"
               maxLength={140}
               defaultValue={profile?.tagline ?? ""}
               placeholder="Production designer · Festival circuit · Brooklyn → Mexico City"
-              hint="One line. Shown under the name on /marketplace listings."
+              hint={t(
+                "me.profile.public.tagline.hint",
+                undefined,
+                "One line. Shown under the name on /marketplace listings.",
+              )}
             />
             <label className="block text-sm">
-              <span className="text-label">Bio</span>
+              <span className="text-label">{t("me.profile.public.bio.label", undefined, "Bio")}</span>
               <textarea
                 name="bio"
                 rows={5}
                 maxLength={2000}
                 className="input-base mt-1 w-full resize-y"
                 defaultValue={profile?.bio ?? ""}
-                placeholder="A few paragraphs about your practice."
+                placeholder={t("me.profile.public.bio.placeholder", undefined, "A few paragraphs about your practice.")}
               />
-              <span className="text-[10px] text-[var(--text-muted)]">Markdown not parsed — plain text only.</span>
+              <span className="text-[10px] text-[var(--text-muted)]">
+                {t("me.profile.public.bio.hint", undefined, "Markdown not parsed — plain text only.")}
+              </span>
             </label>
             <Input
-              label="Avatar URL"
+              label={t("me.profile.public.avatarUrl.label", undefined, "Avatar URL")}
               name="avatar_url"
               type="url"
               maxLength={500}
               defaultValue={profile?.avatar_url ?? ""}
               placeholder="https://…"
-              hint="Shown as the round portrait. Square images render best."
+              hint={t(
+                "me.profile.public.avatarUrl.hint",
+                undefined,
+                "Shown as the round portrait. Square images render best.",
+              )}
             />
             <Input
-              label="Hero URL"
+              label={t("me.profile.public.heroUrl.label", undefined, "Hero URL")}
               name="hero_url"
               type="url"
               maxLength={500}
               defaultValue={profile?.hero_url ?? ""}
               placeholder="https://…"
-              hint="16:9 banner at the top of /marketplace/<role>/<handle>."
+              hint={t(
+                "me.profile.public.heroUrl.hint",
+                undefined,
+                "16:9 banner at the top of /marketplace/<role>/<handle>.",
+              )}
             />
             <label className="block text-sm">
-              <span className="text-label">Links</span>
+              <span className="text-label">{t("me.profile.public.links.label", undefined, "Links")}</span>
               <textarea
                 name="links"
                 rows={4}
@@ -198,12 +264,14 @@ export default async function ProfilePage() {
                 placeholder={"Website|https://lunarose.studio\nInstagram|https://instagram.com/lunarose"}
               />
               <span className="text-[10px] text-[var(--text-muted)]">
-                One per line as <code>Label|URL</code>. Label optional (defaults to the host).
+                {t("me.profile.public.links.hint.before", undefined, "One per line as ")}
+                <code>Label|URL</code>
+                {t("me.profile.public.links.hint.after", undefined, ". Label optional (defaults to the host).")}
               </span>
             </label>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" name="is_public" value="true" defaultChecked={profile?.is_public ?? false} />
-              Make profile public on /marketplace
+              {t("me.profile.public.isPublic", undefined, "Make profile public on /marketplace")}
             </label>
             <label className="flex items-center gap-2 text-sm">
               <input
@@ -212,7 +280,7 @@ export default async function ProfilePage() {
                 value="true"
                 defaultChecked={profile?.available_for_work ?? false}
               />
-              Currently available for work
+              {t("me.profile.public.availableForWork", undefined, "Currently available for work")}
             </label>
           </FormShell>
         </div>

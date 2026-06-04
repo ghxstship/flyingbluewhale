@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { AlertCircle, AlertTriangle, CheckCircle2, Info, X } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Inline message block — replaces the hand-rolled
@@ -61,6 +62,7 @@ export function Alert({
   /** Optional CTA button slot (label + onClick). */
   action?: { label: string; onClick: () => void };
 }) {
+  const t = useT();
   const { border, bg, fg, Icon } = KIND_CLASS[kind];
   return (
     <div
@@ -85,7 +87,7 @@ export function Alert({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Dismiss"
+          aria-label={t("ui.alert.dismiss", undefined, "Dismiss")}
           className="-m-1 shrink-0 rounded p-1 opacity-60 hover:opacity-100"
         >
           <X size={12} aria-hidden />

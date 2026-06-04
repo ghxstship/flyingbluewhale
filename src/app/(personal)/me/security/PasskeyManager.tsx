@@ -8,6 +8,7 @@ import { Fingerprint, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatRelative } from "@/lib/i18n/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Credential = {
   id: string;
@@ -17,6 +18,7 @@ type Credential = {
 };
 
 export function PasskeyManager() {
+  const t = useT();
   const [creds, setCreds] = useState<Credential[]>([]);
   const [adding, setAdding] = useState(false);
   // Lazy initializer — `browserSupportsWebAuthn` is browser-only, so we
@@ -51,12 +53,19 @@ export function PasskeyManager() {
       const optsRes = await fetch("/api/v1/auth/webauthn/register/options", { method: "POST" });
       if (!optsRes.ok) {
         const j = await optsRes.json().catch(() => ({}));
-        throw new Error(j?.error?.message ?? "Couldn't start registration");
+        throw new Error(
+          j?.error?.message ??
+            t("me.security.passkeys.errors.startRegistration", undefined, "Couldn't start registration"),
+        );
       }
       const optsJson = (await optsRes.json()) as { ok: boolean; data: PublicKeyCredentialCreationOptionsJSON };
       const attestation = await startRegistration({ optionsJSON: optsJson.data });
 
-      const deviceName = prompt("Name this device (optional):", navigator.userAgent.split("(")[0].trim()) ?? null;
+      const deviceName =
+        prompt(
+          t("me.security.passkeys.prompts.deviceName", undefined, "Name this device (optional):"),
+          navigator.userAgent.split("(")[0].trim(),
+        ) ?? null;
 
       const verifyRes = await fetch("/api/v1/auth/webauthn/register/verify", {
         method: "POST",
@@ -65,12 +74,15 @@ export function PasskeyManager() {
       });
       if (!verifyRes.ok) {
         const j = await verifyRes.json().catch(() => ({}));
-        throw new Error(j?.error?.message ?? "Registration failed");
+        throw new Error(
+          j?.error?.message ?? t("me.security.passkeys.errors.registrationFailed", undefined, "Registration failed"),
+        );
       }
-      toast.success("Passkey added");
+      toast.success(t("me.security.passkeys.toasts.added", undefined, "Passkey added"));
       void refresh();
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Couldn't add passkey";
+      const msg =
+        e instanceof Error ? e.message : t("me.security.passkeys.errors.addFailed", undefined, "Couldn't add passkey");
       if (!msg.toLowerCase().includes("aborted")) toast.error(msg);
     } finally {
       setAdding(false);
@@ -78,23 +90,27 @@ export function PasskeyManager() {
   }
 
   async function remove(id: string) {
-    if (!confirm("Remove this passkey?")) return;
+    if (!confirm(t("me.security.passkeys.prompts.removeConfirm", undefined, "Remove this passkey?"))) return;
     try {
       const res = await fetch(`/api/v1/auth/webauthn/credentials?id=${encodeURIComponent(id)}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error();
-      toast.success("Removed");
+      toast.success(t("me.security.passkeys.toasts.removed", undefined, "Removed"));
       void refresh();
     } catch {
-      toast.error("Couldn't remove");
+      toast.error(t("me.security.passkeys.errors.removeFailed", undefined, "Couldn't remove"));
     }
   }
 
   if (!supported) {
     return (
       <div className="surface p-4 text-xs text-[var(--text-muted)]">
-        Your browser doesn&apos;t support passkeys yet. Use a modern Chrome, Safari, Edge, or Firefox.
+        {t(
+          "me.security.passkeys.unsupported",
+          undefined,
+          "Your browser doesn't support passkeys yet. Use a modern Chrome, Safari, Edge, or Firefox.",
+        )}
       </div>
     );
   }
@@ -103,8 +119,12 @@ export function PasskeyManager() {
     <div className={creds.length === 0 ? "" : "surface divide-y divide-[var(--border-color)]"}>
       {creds.length === 0 ? (
         <EmptyState
-          title="No Passkeys Yet"
-          description="Register a passkey to sign in without a password."
+          title={t("me.security.passkeys.empty.title", undefined, "No Passkeys Yet")}
+          description={t(
+            "me.security.passkeys.empty.description",
+            undefined,
+            "Register a passkey to sign in without a password.",
+          )}
           icon={<Fingerprint size={32} />}
         />
       ) : (
@@ -113,17 +133,24 @@ export function PasskeyManager() {
             <div className="flex items-center gap-3">
               <Fingerprint size={16} className="text-[var(--org-primary)]" aria-hidden="true" />
               <div>
-                <div className="text-sm font-medium">{c.device_name ?? "Unnamed device"}</div>
+                <div className="text-sm font-medium">
+                  {c.device_name ?? t("me.security.passkeys.unnamedDevice", undefined, "Unnamed device")}
+                </div>
                 <div className="text-[10px] text-[var(--text-muted)]">
-                  Added {formatRelative(c.created_at)}
-                  {c.last_used_at && ` · last used ${formatRelative(c.last_used_at)}`}
+                  {t(
+                    "me.security.passkeys.added",
+                    { when: formatRelative(c.created_at) },
+                    `Added ${formatRelative(c.created_at)}`,
+                  )}
+                  {c.last_used_at &&
+                    ` ${t("me.security.passkeys.lastUsed", { when: formatRelative(c.last_used_at) }, `· last used ${formatRelative(c.last_used_at)}`)}`}
                 </div>
               </div>
             </div>
             <button
               type="button"
               onClick={() => remove(c.id)}
-              aria-label="Remove passkey"
+              aria-label={t("me.security.passkeys.removeAria", undefined, "Remove passkey")}
               className="rounded p-1 text-[var(--text-muted)] hover:text-[var(--color-error)]"
             >
               <Trash2 size={14} />
@@ -133,7 +160,8 @@ export function PasskeyManager() {
       )}
       <div className="flex items-center justify-end gap-2 p-3">
         <Button onClick={add} loading={adding} size="sm">
-          <Plus size={12} className="me-1" aria-hidden="true" /> Add passkey
+          <Plus size={12} className="me-1" aria-hidden="true" />{" "}
+          {t("me.security.passkeys.addButton", undefined, "Add passkey")}
         </Button>
       </div>
     </div>

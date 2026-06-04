@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Accessible dialog primitive.
@@ -36,6 +37,7 @@ export const DialogContent = React.forwardRef<
     hideCloseButton?: boolean;
   }
 >(function DialogContent({ children, className = "", size = "md", hideCloseButton, ...props }, ref) {
+  const t = useT();
   const sizes: Record<NonNullable<typeof size>, string> = {
     sm: "max-w-sm",
     md: "max-w-md",
@@ -55,7 +57,7 @@ export const DialogContent = React.forwardRef<
         {!hideCloseButton && (
           <DialogPrimitive.Close
             className="focus-ring absolute end-4 top-4 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100"
-            aria-label="Close dialog"
+            aria-label={t("ui.dialog.close", undefined, "Close dialog")}
           >
             <X size={16} />
           </DialogPrimitive.Close>

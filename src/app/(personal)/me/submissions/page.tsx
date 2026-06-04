@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,8 @@ type Row = {
 };
 
 export default async function Page() {
-  if (!hasSupabase) return <div>Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase) return <div>{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
   const { data } = await supabase
@@ -31,16 +33,28 @@ export default async function Page() {
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">My submissions</div>
-      <h1 className="text-display mt-1 text-3xl">Submissions</h1>
-      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Open-call submissions you've made.</p>
+      <div className="text-label text-[var(--color-text-tertiary)]">
+        {t("me.submissions.eyebrow", undefined, "My submissions")}
+      </div>
+      <h1 className="text-display mt-1 text-3xl">{t("me.submissions.title", undefined, "Submissions")}</h1>
+      <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+        {t("me.submissions.subtitle", undefined, "Open-call submissions you've made.")}
+      </p>
 
       {rows.length === 0 ? (
         <div className="mt-6">
           <EmptyState
-            title="No submissions yet"
-            description="Open calls you've responded to will appear here."
-            action={<Button href="/marketplace/calls">Browse open calls</Button>}
+            title={t("me.submissions.empty.title", undefined, "No submissions yet")}
+            description={t(
+              "me.submissions.empty.description",
+              undefined,
+              "Open calls you've responded to will appear here.",
+            )}
+            action={
+              <Button href="/marketplace/calls">
+                {t("me.submissions.empty.action", undefined, "Browse open calls")}
+              </Button>
+            }
           />
         </div>
       ) : (
@@ -49,10 +63,14 @@ export default async function Page() {
             <li key={r.id} className="card-elevated flex items-center justify-between p-4">
               <div>
                 <Link href={`/me/submissions/${r.id}`} className="text-sm font-semibold">
-                  {r.open_call?.title ?? "(deleted call)"}
+                  {r.open_call?.title ?? t("me.submissions.deletedCall", undefined, "(deleted call)")}
                 </Link>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  Submitted {new Date(r.submitted_at).toLocaleDateString()}
+                  {t(
+                    "me.submissions.submittedOn",
+                    { date: new Date(r.submitted_at).toLocaleDateString() },
+                    `Submitted ${new Date(r.submitted_at).toLocaleDateString()}`,
+                  )}
                 </p>
               </div>
               <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

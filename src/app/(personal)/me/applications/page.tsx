@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,11 +21,12 @@ type AppRow = {
 };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <div>
-        <h1 className="text-display text-3xl">My Applications</h1>
-        <p className="mt-2 text-sm">Configure Supabase.</p>
+        <h1 className="text-display text-3xl">{t("me.applications.title", undefined, "My Applications")}</h1>
+        <p className="mt-2 text-sm">{t("me.applications.configureSupabase", undefined, "Configure Supabase.")}</p>
       </div>
     );
   }
@@ -40,18 +42,30 @@ export default async function Page() {
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">My applications</div>
-      <h1 className="text-display mt-1 text-3xl">Applications</h1>
+      <div className="text-label text-[var(--color-text-tertiary)]">
+        {t("me.applications.eyebrow", undefined, "My applications")}
+      </div>
+      <h1 className="text-display mt-1 text-3xl">{t("me.applications.heading", undefined, "Applications")}</h1>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Job applications you've submitted. Stage updates land here when an operator moves you through their ATS.
+        {t(
+          "me.applications.intro",
+          undefined,
+          "Job applications you've submitted. Stage updates land here when an operator moves you through their ATS.",
+        )}
       </p>
 
       {rows.length === 0 ? (
         <div className="mt-6">
           <EmptyState
-            title="No Applications Yet"
-            description="Browse open gigs and apply to start building your application history."
-            action={<Button href="/marketplace/gigs">Browse Gigs</Button>}
+            title={t("me.applications.empty.title", undefined, "No Applications Yet")}
+            description={t(
+              "me.applications.empty.description",
+              undefined,
+              "Browse open gigs and apply to start building your application history.",
+            )}
+            action={
+              <Button href="/marketplace/gigs">{t("me.applications.empty.action", undefined, "Browse Gigs")}</Button>
+            }
           />
         </div>
       ) : (
@@ -60,10 +74,14 @@ export default async function Page() {
             <li key={r.id} className="card-elevated flex items-center justify-between p-4">
               <div>
                 <Link href={`/me/applications/${r.id}`} className="text-sm font-semibold">
-                  {r.posting?.title ?? "Deleted Posting"}
+                  {r.posting?.title ?? t("me.applications.deletedPosting", undefined, "Deleted Posting")}
                 </Link>
                 <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
-                  Applied {new Date(r.applied_at).toLocaleDateString()}
+                  {t(
+                    "me.applications.appliedOn",
+                    { date: new Date(r.applied_at).toLocaleDateString() },
+                    `Applied ${new Date(r.applied_at).toLocaleDateString()}`,
+                  )}
                 </p>
               </div>
               <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

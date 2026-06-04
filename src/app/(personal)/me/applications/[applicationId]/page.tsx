@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +25,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data } = await supabase
     .from("job_applications")
     .select("*")
@@ -35,29 +37,47 @@ export default async function Page({ params }: { params: Promise<{ applicationId
 
   return (
     <div>
-      <div className="text-label text-[var(--color-text-tertiary)]">Application</div>
+      <div className="text-label text-[var(--color-text-tertiary)]">
+        {t("me.applications.detail.eyebrow", undefined, "Application")}
+      </div>
       <div className="mt-1 flex items-center gap-2">
         <h1 className="text-display text-3xl">{a.id.slice(0, 8)}</h1>
         <Badge variant={STATUS_TONE[a.status] ?? "muted"}>{toTitle(a.status)}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Applied {new Date(a.applied_at).toLocaleString()}
+        {t(
+          "me.applications.detail.appliedAt",
+          { when: new Date(a.applied_at).toLocaleString() },
+          `Applied ${new Date(a.applied_at).toLocaleString()}`,
+        )}
       </p>
 
       <div className="mt-6 space-y-4">
         <div className="card-elevated p-4">
-          <div className="text-label text-[var(--color-text-tertiary)]">Cover note</div>
+          <div className="text-label text-[var(--color-text-tertiary)]">
+            {t("me.applications.detail.coverNote", undefined, "Cover note")}
+          </div>
           <div className="mt-1 text-sm whitespace-pre-wrap">{a.cover_note ?? "—"}</div>
         </div>
         {a.day_rate_proposed_cents && (
           <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">Proposed day rate</div>
-            <div className="mt-1 font-mono text-sm">${(a.day_rate_proposed_cents / 100).toFixed(0)}/day</div>
+            <div className="text-label text-[var(--color-text-tertiary)]">
+              {t("me.applications.detail.proposedDayRate", undefined, "Proposed day rate")}
+            </div>
+            <div className="mt-1 font-mono text-sm">
+              {t(
+                "me.applications.detail.dayRateValue",
+                { amount: (a.day_rate_proposed_cents / 100).toFixed(0) },
+                `$${(a.day_rate_proposed_cents / 100).toFixed(0)}/day`,
+              )}
+            </div>
           </div>
         )}
         {a.resume_url && (
           <div className="card-elevated p-4">
-            <div className="text-label text-[var(--color-text-tertiary)]">Resume</div>
+            <div className="text-label text-[var(--color-text-tertiary)]">
+              {t("me.applications.detail.resume", undefined, "Resume")}
+            </div>
             <a
               className="mt-1 block text-sm text-[var(--brand-color)]"
               href={a.resume_url}

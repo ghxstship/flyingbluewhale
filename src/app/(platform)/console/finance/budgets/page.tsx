@@ -34,6 +34,9 @@ export default async function BudgetsPage() {
         subtitle={t("console.finance.budgets.countSubtitle", { count: rows.length }, `${rows.length} Budgets`)}
         action={
           <div className="flex items-center gap-2">
+            <Button href="/console/finance/budgets/import" variant="secondary">
+              {t("console.finance.budgets.importAction", undefined, "Import")}
+            </Button>
             <Button href="/console/finance/budgets/summary" variant="secondary">
               {t("console.finance.budgets.summaryAction", undefined, "Summary")}
             </Button>

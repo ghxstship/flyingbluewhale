@@ -3533,58 +3533,121 @@ export type Database = {
       }
       budgets: {
         Row: {
+          activation: string | null
+          actual_cents: number | null
           amount_cents: number
+          budget_status: string | null
           category: string | null
+          class: string | null
           code: string | null
           committed_cents: number
           created_at: string
           currency: string
+          department: string | null
+          discipline: Database["public"]["Enums"]["budget_discipline"] | null
           eac_cents: number
+          estimate_cents: number | null
+          event: string | null
+          external_notes: string | null
+          flag: boolean
           forecast_cents: number
           id: string
+          internal_notes: string | null
+          item: string | null
+          line_type: Database["public"]["Enums"]["budget_line_type"]
+          location: string | null
           name: string
           notes: string | null
           org_id: string
           project_id: string | null
+          quantity: number | null
+          rate_cents: number | null
           spent_cents: number
+          team: string | null
+          tier: Database["public"]["Enums"]["budget_tier"] | null
           updated_at: string
+          vendor: string | null
+          xpms_phase: string | null
           xtc_code: number | null
+          xyz: Database["public"]["Enums"]["budget_xyz"] | null
         }
         Insert: {
+          activation?: string | null
+          actual_cents?: number | null
           amount_cents?: number
+          budget_status?: string | null
           category?: string | null
+          class?: string | null
           code?: string | null
           committed_cents?: number
           created_at?: string
           currency?: string
+          department?: string | null
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
           eac_cents?: number
+          estimate_cents?: number | null
+          event?: string | null
+          external_notes?: string | null
+          flag?: boolean
           forecast_cents?: number
           id?: string
+          internal_notes?: string | null
+          item?: string | null
+          line_type?: Database["public"]["Enums"]["budget_line_type"]
+          location?: string | null
           name: string
           notes?: string | null
           org_id: string
           project_id?: string | null
+          quantity?: number | null
+          rate_cents?: number | null
           spent_cents?: number
+          team?: string | null
+          tier?: Database["public"]["Enums"]["budget_tier"] | null
           updated_at?: string
+          vendor?: string | null
+          xpms_phase?: string | null
           xtc_code?: number | null
+          xyz?: Database["public"]["Enums"]["budget_xyz"] | null
         }
         Update: {
+          activation?: string | null
+          actual_cents?: number | null
           amount_cents?: number
+          budget_status?: string | null
           category?: string | null
+          class?: string | null
           code?: string | null
           committed_cents?: number
           created_at?: string
           currency?: string
+          department?: string | null
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
           eac_cents?: number
+          estimate_cents?: number | null
+          event?: string | null
+          external_notes?: string | null
+          flag?: boolean
           forecast_cents?: number
           id?: string
+          internal_notes?: string | null
+          item?: string | null
+          line_type?: Database["public"]["Enums"]["budget_line_type"]
+          location?: string | null
           name?: string
           notes?: string | null
           org_id?: string
           project_id?: string | null
+          quantity?: number | null
+          rate_cents?: number | null
           spent_cents?: number
+          team?: string | null
+          tier?: Database["public"]["Enums"]["budget_tier"] | null
           updated_at?: string
+          vendor?: string | null
+          xpms_phase?: string | null
           xtc_code?: number | null
+          xyz?: Database["public"]["Enums"]["budget_xyz"] | null
         }
         Relationships: [
           {
@@ -9087,19 +9150,34 @@ export type Database = {
           base_amount_cents: number | null
           base_currency: string | null
           category: string | null
+          class: string | null
+          confirmation: string | null
           created_at: string
           currency: string
+          department: string | null
           description: string
+          discipline: Database["public"]["Enums"]["budget_discipline"] | null
+          due_date: string | null
           entity_id: string | null
+          expense_type: string | null
+          external_notes: string | null
+          flag: boolean
           fx_rate_to_base: number | null
           id: string
+          internal_notes: string | null
+          invoice: string | null
+          item: string | null
+          method_of_payment: string | null
           org_id: string
+          payment_date: string | null
           project_id: string | null
           receipt_path: string | null
           spent_at: string
           status: Database["public"]["Enums"]["expense_status"]
           submitter_id: string
           updated_at: string
+          vendor: string | null
+          xpms_phase: string | null
           xtc_code: number | null
         }
         Insert: {
@@ -9108,19 +9186,34 @@ export type Database = {
           base_amount_cents?: number | null
           base_currency?: string | null
           category?: string | null
+          class?: string | null
+          confirmation?: string | null
           created_at?: string
           currency?: string
+          department?: string | null
           description: string
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
+          due_date?: string | null
           entity_id?: string | null
+          expense_type?: string | null
+          external_notes?: string | null
+          flag?: boolean
           fx_rate_to_base?: number | null
           id?: string
+          internal_notes?: string | null
+          invoice?: string | null
+          item?: string | null
+          method_of_payment?: string | null
           org_id: string
+          payment_date?: string | null
           project_id?: string | null
           receipt_path?: string | null
           spent_at: string
           status?: Database["public"]["Enums"]["expense_status"]
           submitter_id: string
           updated_at?: string
+          vendor?: string | null
+          xpms_phase?: string | null
           xtc_code?: number | null
         }
         Update: {
@@ -9129,19 +9222,34 @@ export type Database = {
           base_amount_cents?: number | null
           base_currency?: string | null
           category?: string | null
+          class?: string | null
+          confirmation?: string | null
           created_at?: string
           currency?: string
+          department?: string | null
           description?: string
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
+          due_date?: string | null
           entity_id?: string | null
+          expense_type?: string | null
+          external_notes?: string | null
+          flag?: boolean
           fx_rate_to_base?: number | null
           id?: string
+          internal_notes?: string | null
+          invoice?: string | null
+          item?: string | null
+          method_of_payment?: string | null
           org_id?: string
+          payment_date?: string | null
           project_id?: string | null
           receipt_path?: string | null
           spent_at?: string
           status?: Database["public"]["Enums"]["expense_status"]
           submitter_id?: string
           updated_at?: string
+          vendor?: string | null
+          xpms_phase?: string | null
           xtc_code?: number | null
         }
         Relationships: [
@@ -17995,6 +18103,69 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      project_billing_draws: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          draw_name: string
+          drawn: boolean
+          drawn_at: string | null
+          id: string
+          org_id: string
+          percentage: number
+          project_id: string
+          sort_order: number
+          trigger_label: string | null
+          trigger_phase: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string
+          draw_name: string
+          drawn?: boolean
+          drawn_at?: string | null
+          id?: string
+          org_id: string
+          percentage: number
+          project_id: string
+          sort_order?: number
+          trigger_label?: string | null
+          trigger_phase?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          draw_name?: string
+          drawn?: boolean
+          drawn_at?: string | null
+          id?: string
+          org_id?: string
+          percentage?: number
+          project_id?: string
+          sort_order?: number
+          trigger_label?: string | null
+          trigger_phase?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_billing_draws_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_billing_draws_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       project_emails: {
         Row: {
@@ -34188,6 +34359,26 @@ export type Database = {
         | "gltf"
         | "fbx"
         | "dwg"
+      budget_discipline:
+        | "Live Entertainment"
+        | "Experiential"
+        | "Fabrication"
+        | "Construction"
+        | "Interior Design"
+        | "Procurement"
+        | "Broadcast & Content"
+        | "Corporate & Brand"
+        | "Hospitality & F&B"
+        | "Festival & Touring"
+      budget_line_type: "Scope" | "Fee" | "Contingency" | "Allowance" | "Markup"
+      budget_tier:
+        | "01 Social"
+        | "02 Digital"
+        | "03 Virtual"
+        | "04 Physical"
+        | "05 Experiential"
+        | "06 Theatrical"
+      budget_xyz: "X — Constant" | "Y — Variable" | "Z — Timeline/Phase"
       catalog_kind:
         | "credential"
         | "catering"
@@ -35240,6 +35431,28 @@ export const Constants = {
         "fbx",
         "dwg",
       ],
+      budget_discipline: [
+        "Live Entertainment",
+        "Experiential",
+        "Fabrication",
+        "Construction",
+        "Interior Design",
+        "Procurement",
+        "Broadcast & Content",
+        "Corporate & Brand",
+        "Hospitality & F&B",
+        "Festival & Touring",
+      ],
+      budget_line_type: ["Scope", "Fee", "Contingency", "Allowance", "Markup"],
+      budget_tier: [
+        "01 Social",
+        "02 Digital",
+        "03 Virtual",
+        "04 Physical",
+        "05 Experiential",
+        "06 Theatrical",
+      ],
+      budget_xyz: ["X — Constant", "Y — Variable", "Z — Timeline/Phase"],
       catalog_kind: [
         "credential",
         "catering",

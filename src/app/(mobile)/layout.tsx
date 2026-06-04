@@ -2,16 +2,23 @@ import { MobileTabBar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
 import { ConnectivityBanner } from "@/components/ui/GlobalBanner";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
-import { WorkspaceChrome, defaultSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
+import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { mobileTabs } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function MobileLayout({ children }: { children: React.ReactNode }) {
   // Protect the entire compvss shell — no session → redirect to /login.
   // Individual sub-pages may call requireSession() too; this is the outer guard.
   const session = await requireSession();
   const tenant = await resolveTenant();
-  const switcherEntries = defaultSwitcherEntries(session.role, null);
+  const supabase = await createClient();
+  const switcherEntries = await resolveSwitcherEntries({
+    supabase,
+    userId: session.userId,
+    role: session.role,
+    currentPortalSlug: null,
+  });
   return (
     <TenantShell tenant={tenant}>
       {/*

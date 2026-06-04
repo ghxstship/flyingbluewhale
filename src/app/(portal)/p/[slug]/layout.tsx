@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";
-import { WorkspaceChrome, defaultSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
+import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { getSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -40,7 +40,9 @@ export default async function PortalSlugLayout({
   // portal visitors still get the bare layout; chrome only renders when
   // a session exists so we don't surface bell/messages to non-users.
   const session = await getSession();
-  const switcherEntries = session ? defaultSwitcherEntries(session.role, slug) : [];
+  const switcherEntries = session
+    ? await resolveSwitcherEntries({ supabase, userId: session.userId, role: session.role, currentPortalSlug: slug })
+    : [];
 
   return (
     <div data-portal-slug={slug} data-theme="atlvs-product" data-platform="gvteway" style={style}>

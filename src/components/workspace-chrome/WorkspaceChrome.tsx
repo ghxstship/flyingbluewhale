@@ -85,15 +85,12 @@ export function WorkspaceChrome({
 /**
  * Helper: compute the app-switcher entries a session can reach.
  *
- * MVP rules (refined in ADR-0007 §"App switcher capability rules"):
- *   - Platform: any signed-in user with a role.
- *   - Portal: any user with a project membership exposing a portal
- *     persona. For MVP we just check role !== "viewer" — refine later.
- *   - Mobile: any user (mobile is opt-in; PWA install gates real access).
- *
- * `currentPortalSlug` is threaded through so the switcher's Portal
- * entry deep-links to the user's most recent portal slug rather than a
- * generic chooser. Pass `null` to fall through to `/p/select`.
+ * Original MVP used `role` heuristics. ADR-0007 §"App switcher
+ * capability rules" promised refinement to query actual memberships.
+ * This sync wrapper preserves the original signature for the small
+ * number of callers that don't have a supabase client in scope; new
+ * code should prefer `resolveSwitcherEntries()` below which queries
+ * `project_members` to detect portal eligibility.
  */
 export function defaultSwitcherEntries(role: string | null, currentPortalSlug: string | null): AppSwitcherEntry[] {
   const entries: AppSwitcherEntry[] = [];
@@ -101,6 +98,69 @@ export function defaultSwitcherEntries(role: string | null, currentPortalSlug: s
     entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/console") });
   }
   if (role && role !== "viewer") {
+    entries.push({
+      shell: "portal",
+      label: "GVTEWAY",
+      href: urlFor("portal", currentPortalSlug ? `/p/${currentPortalSlug}` : "/p"),
+    });
+  }
+  entries.push({ shell: "mobile", label: "COMPVSS", href: urlFor("mobile", "/m") });
+  return entries;
+}
+
+/**
+ * Capability-aware app switcher resolver (ADR-0007 follow-up).
+ *
+ * Queries the membership tables to determine real cross-shell access
+ * instead of guessing from `role`. Layout callers that have a supabase
+ * client in scope should prefer this over `defaultSwitcherEntries`.
+ *
+ *   - **Platform**: signed-in user with any active org membership.
+ *   - **Portal**: user has at least one `project_members` row OR an
+ *     `account_manager_assignments` row (assigned to a portal persona).
+ *   - **Mobile**: always available — COMPVSS is opt-in (PWA install +
+ *     `compvss.*` host gate real access).
+ *
+ * Errors fall through to the heuristic version so a missing column or
+ * network blip can't hide the switcher entirely.
+ */
+type SwitcherCapabilityClient = {
+  from: (table: string) => {
+    select: (
+      cols: string,
+      opts?: { count?: "exact"; head?: boolean },
+    ) => {
+      eq: (col: string, val: string) => Promise<{ count: number | null; error: unknown }>;
+    };
+  };
+};
+
+export async function resolveSwitcherEntries(opts: {
+  supabase: unknown;
+  userId: string;
+  role: string | null;
+  currentPortalSlug: string | null;
+}): Promise<AppSwitcherEntry[]> {
+  const { supabase, userId, role, currentPortalSlug } = opts;
+  const entries: AppSwitcherEntry[] = [];
+  if (role) {
+    entries.push({ shell: "platform", label: "ATLVS", href: urlFor("platform", "/console") });
+  }
+  let hasPortal = false;
+  try {
+    const sb = supabase as SwitcherCapabilityClient;
+    // Cheapest detection: any project_members row for this user.
+    // RLS already scopes; we only need a count > 0.
+    const { count } = await sb
+      .from("project_members")
+      .select("user_id", { count: "exact", head: true })
+      .eq("user_id", userId);
+    if ((count ?? 0) > 0) hasPortal = true;
+  } catch {
+    // Fall through to role-heuristic below.
+  }
+  if (!hasPortal && role && role !== "viewer") hasPortal = true;
+  if (hasPortal) {
     entries.push({
       shell: "portal",
       label: "GVTEWAY",

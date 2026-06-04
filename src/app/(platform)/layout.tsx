@@ -1,7 +1,7 @@
 import { PlatformSidebar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
 import { MobileNavDrawer } from "@/components/MobileNavDrawer";
-import { WorkspaceChrome, defaultSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
+import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { getPlatformNav, type NavMode } from "@/lib/nav";
@@ -41,7 +41,12 @@ export default async function PlatformLayout({ children }: { children: React.Rea
     name: (d.name as string) ?? "Untitled",
     href: `/console/dashboards/${d.id}`,
   }));
-  const switcherEntries = defaultSwitcherEntries(session.role, uiState?.last_portal_slug ?? null);
+  const switcherEntries = await resolveSwitcherEntries({
+    supabase,
+    userId: session.userId,
+    role: session.role,
+    currentPortalSlug: uiState?.last_portal_slug ?? null,
+  });
   return (
     <TenantShell tenant={tenant}>
       {/*

@@ -1233,6 +1233,12 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       privacy,
     ],
     // OPERATIONS (6) — labor + fulfillment.
+    // ADR-0008 Move 3 — Connecteam-parity surfaces backfilled into vendor
+    // alongside the existing engagement items. Same shared components
+    // crew uses; the desktop vendor user gets the full workflow without
+    // needing the PWA. 13 items pushes Miller's ceiling — ADR-0008
+    // §Open questions #1 recommends a Vendor/Engagement +
+    // Vendor/Operations split in the rail-renderer pass.
     vendor: [
       { label: "Submissions", href: `${base}/submissions` },
       { label: "Equipment Pull List", href: `${base}/equipment-pull-list` },
@@ -1240,6 +1246,13 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       { label: "Invoices", href: `${base}/invoices` },
       { label: "Credentials", href: `${base}/credentials` },
       { label: "Training", href: `${base}/training` },
+      { label: "Schedule", href: `${base}/schedule` },
+      { label: "Time Off", href: `${base}/time-off` },
+      { label: "Feed", href: `${base}/feed` },
+      { label: "Chat", href: `${base}/chat` },
+      { label: "Kudos", href: `${base}/kudos` },
+      { label: "Docs", href: `${base}/docs` },
+      { label: "Directory", href: `${base}/directory` },
       privacy,
     ],
     // ADR-0008 Move 2 — Connecteam-parity surfaces backfilled into the

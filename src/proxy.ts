@@ -181,24 +181,38 @@ export async function proxy(request: NextRequest) {
 
   // ADR-0009 grace window — role-prefixed mobile aliases.
   //
-  // Treat `/m/<role>/<surface>` as an alias of `/m/<surface>` so the
-  // canonical pages don't need to be duplicated under every role's
-  // namespace just to ship role-routed URLs. Per-role pages still take
-  // priority when they exist (e.g. /m/[role] for the role home — Next's
-  // static-match-wins-over-dynamic resolves it).
+  // The URL flip is partial: ten universal surfaces have explicit
+  // `/m/[role]/<surface>/page.tsx` re-exports (the ROLE_PREFIXED_PAGES
+  // set below) and serve from the role-prefixed canonical location.
+  // Everything else falls through to this alias, which rewrites
+  // `/m/<role>/<surface>` → `/m/<surface>` so the existing page bodies
+  // continue to serve role-prefixed URLs without per-role duplication.
   //
-  // Inverts the ADR's planned migration order: the canonical pages
-  // remain at /m/<surface>; new role-prefixed URLs are the aliases. The
-  // full migration (flip canonical to /m/[role]/<surface>) becomes a
-  // dedicated PR once the smoke harness + per-role page bodies land.
+  // As more surfaces get explicit role-prefixed pages, add their first
+  // segment to ROLE_PREFIXED_PAGES so the alias stops collapsing them.
+  // Per-role index pages (`/m/[role]/page.tsx`) and the role chooser
+  // (`/m/[role]/settings/role`) are also excluded from the alias.
   const MOBILE_ROLE_ALIAS = /^\/m\/(performer|crew|driver|medic|guard|admin)\/(.+)$/;
+  const ROLE_PREFIXED_PAGES = new Set([
+    "inbox",
+    "shift",
+    "alerts",
+    "settings",
+    "feed",
+    "kudos",
+    "learning",
+    "time-off",
+    "docs",
+    "directory",
+  ]);
   const targetPath = rewriteUrl?.pathname ?? pathname;
   const aliasMatch = targetPath.match(MOBILE_ROLE_ALIAS);
   if (aliasMatch) {
     const [, , rest] = aliasMatch;
-    // Skip the rewrite for `settings/role` — that's the role chooser,
-    // which IS a real role-prefixed surface and must not collapse.
-    if (rest !== "settings/role") {
+    const firstSegment = rest.split("/")[0];
+    const isExplicitRolePrefixed = ROLE_PREFIXED_PAGES.has(firstSegment);
+    const isRoleChooser = rest === "settings/role";
+    if (!isExplicitRolePrefixed && !isRoleChooser) {
       const aliasUrl = rewriteUrl ? new URL(rewriteUrl.toString()) : request.nextUrl.clone();
       aliasUrl.pathname = `/m/${rest}`;
       rewriteUrl = aliasUrl;

@@ -1486,48 +1486,53 @@ export function mapSessionToMobileRole(role: string | null, persona: string | nu
  * surface first. Universal surfaces (Inbox, Alerts, Me) appear under
  * every role so the operator never gets stranded.
  */
+// ADR-0009 URL flip — universal surfaces (inbox, shift, alerts, settings,
+// feed, kudos, learning, time-off, docs, directory) use role-prefixed
+// canonical URLs that map to thin re-exports under /m/[role]/<surface>.
+// Role-specific surfaces (gate, driver, medic, guard) still use static
+// paths because those pages are their role's home — not duplicated.
 export const ROLE_TABS: Record<MobileRole, NavItem[]> = {
   performer: [
     { label: "Home", href: "/m/performer" },
-    { label: "Schedule", href: "/m/shift" },
-    { label: "Inbox", href: "/m/inbox" },
-    { label: "Alerts", href: "/m/alerts" },
-    { label: "Me", href: "/m/settings" },
+    { label: "Schedule", href: "/m/performer/shift" },
+    { label: "Inbox", href: "/m/performer/inbox" },
+    { label: "Alerts", href: "/m/performer/alerts" },
+    { label: "Me", href: "/m/performer/settings" },
   ],
   crew: [
     { label: "Home", href: "/m/crew" },
-    { label: "Shift", href: "/m/shift" },
-    { label: "Inbox", href: "/m/inbox" },
-    { label: "Alerts", href: "/m/alerts" },
-    { label: "Me", href: "/m/settings" },
+    { label: "Shift", href: "/m/crew/shift" },
+    { label: "Inbox", href: "/m/crew/inbox" },
+    { label: "Alerts", href: "/m/crew/alerts" },
+    { label: "Me", href: "/m/crew/settings" },
   ],
   driver: [
     { label: "Home", href: "/m/driver" },
     { label: "Run", href: "/m/driver" },
     { label: "Wayfind", href: "/m/wayfind" },
-    { label: "Alerts", href: "/m/alerts" },
-    { label: "Me", href: "/m/settings" },
+    { label: "Alerts", href: "/m/driver/alerts" },
+    { label: "Me", href: "/m/driver/settings" },
   ],
   medic: [
     { label: "Home", href: "/m/medic" },
     { label: "Log", href: "/m/medic" },
-    { label: "Queue", href: "/m/alerts" },
-    { label: "Alerts", href: "/m/alerts" },
-    { label: "Me", href: "/m/settings" },
+    { label: "Queue", href: "/m/medic/alerts" },
+    { label: "Alerts", href: "/m/medic/alerts" },
+    { label: "Me", href: "/m/medic/settings" },
   ],
   guard: [
     { label: "Home", href: "/m/guard" },
     { label: "Gate", href: "/m/gate" },
     { label: "Incident", href: "/m/incidents" },
-    { label: "Alerts", href: "/m/alerts" },
-    { label: "Me", href: "/m/settings" },
+    { label: "Alerts", href: "/m/guard/alerts" },
+    { label: "Me", href: "/m/guard/settings" },
   ],
   admin: [
     { label: "Home", href: "/m/admin" },
-    { label: "Inbox", href: "/m/inbox" },
-    { label: "Shift", href: "/m/shift" },
-    { label: "Alerts", href: "/m/alerts" },
-    { label: "Me", href: "/m/settings" },
+    { label: "Inbox", href: "/m/admin/inbox" },
+    { label: "Shift", href: "/m/admin/shift" },
+    { label: "Alerts", href: "/m/admin/alerts" },
+    { label: "Me", href: "/m/admin/settings" },
   ],
 };
 

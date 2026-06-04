@@ -4,6 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -37,12 +38,18 @@ function metaToSizing(raw: unknown): Sizing {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Uniform" />
+        <ModuleHeader
+          eyebrow={t("p.volunteer.uniform.eyebrowShort", undefined, "Portal")}
+          title={t("p.volunteer.uniform.title", undefined, "Uniform")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.volunteer.uniform.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -64,60 +71,94 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Volunteer"
-        title="Uniform"
-        subtitle={member ? `Issue tracking for ${member.full_name}` : "Sign-in required"}
+        eyebrow={t("p.volunteer.uniform.eyebrow", undefined, "Portal · Volunteer")}
+        title={t("p.volunteer.uniform.title", undefined, "Uniform")}
+        subtitle={
+          member
+            ? t("p.volunteer.uniform.subtitle", { name: member.full_name }, `Issue tracking for ${member.full_name}`)
+            : t("p.volunteer.uniform.signInRequired", undefined, "Sign-in required")
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Volunteer", href: `/p/${slug}/volunteer` },
-          { label: "Uniform" },
+          { label: t("p.volunteer.uniform.crumbPortal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.volunteer.uniform.crumbVolunteer", undefined, "Volunteer"), href: `/p/${slug}/volunteer` },
+          { label: t("p.volunteer.uniform.crumbUniform", undefined, "Uniform") },
         ]}
         action={
           <Badge variant={sizing.pickup_status === "collected" ? "success" : ready ? "info" : "warning"}>
-            {sizing.pickup_status ?? (ready ? "ready" : "sizes needed")}
+            {sizing.pickup_status ??
+              (ready
+                ? t("p.volunteer.uniform.badge.ready", undefined, "ready")
+                : t("p.volunteer.uniform.badge.sizesNeeded", undefined, "sizes needed"))}
           </Badge>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Sizing on file" value={ready ? "Yes" : "No"} accent={ready} />
-          <MetricCard label="Pickup slot" value={sizing.pickup_slot ?? "TBD"} />
-          <MetricCard label="Status" value={sizing.pickup_status ?? "pending"} />
+          <MetricCard
+            label={t("p.volunteer.uniform.metric.sizingOnFile", undefined, "Sizing on file")}
+            value={
+              ready
+                ? t("p.volunteer.uniform.metric.yes", undefined, "Yes")
+                : t("p.volunteer.uniform.metric.no", undefined, "No")
+            }
+            accent={ready}
+          />
+          <MetricCard
+            label={t("p.volunteer.uniform.metric.pickupSlot", undefined, "Pickup slot")}
+            value={sizing.pickup_slot ?? t("p.volunteer.uniform.metric.tbd", undefined, "TBD")}
+          />
+          <MetricCard
+            label={t("p.volunteer.uniform.metric.status", undefined, "Status")}
+            value={sizing.pickup_status ?? t("p.volunteer.uniform.metric.pending", undefined, "pending")}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Your Sizing</h3>
+          <h3 className="text-sm font-semibold">{t("p.volunteer.uniform.sizing.heading", undefined, "Your Sizing")}</h3>
           {!member ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              Submit your volunteer application first — sizing data lives on your workforce profile.
+              {t(
+                "p.volunteer.uniform.sizing.applyFirst",
+                undefined,
+                "Submit your volunteer application first — sizing data lives on your workforce profile.",
+              )}
             </p>
           ) : (
             <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-muted)]">Top</dt>
+              <dt className="text-[var(--text-muted)]">{t("p.volunteer.uniform.sizing.top", undefined, "Top")}</dt>
               <dd>{sizing.size_top ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">Bottom</dt>
+              <dt className="text-[var(--text-muted)]">
+                {t("p.volunteer.uniform.sizing.bottom", undefined, "Bottom")}
+              </dt>
               <dd>{sizing.size_bottom ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">Shoes</dt>
+              <dt className="text-[var(--text-muted)]">{t("p.volunteer.uniform.sizing.shoes", undefined, "Shoes")}</dt>
               <dd>{sizing.size_shoes ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">Notes</dt>
+              <dt className="text-[var(--text-muted)]">{t("p.volunteer.uniform.sizing.notes", undefined, "Notes")}</dt>
               <dd className="text-xs">{sizing.notes ?? "—"}</dd>
             </dl>
           )}
         </section>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Pickup</h3>
+          <h3 className="text-sm font-semibold">{t("p.volunteer.uniform.pickup.heading", undefined, "Pickup")}</h3>
           <p className="mt-2 text-xs text-[var(--text-secondary)]">
-            Pickup happens at the Workforce Centre. Bring your ID and accreditation. Allow 30 minutes for fitting and
-            collection.
+            {t(
+              "p.volunteer.uniform.pickup.instructions",
+              undefined,
+              "Pickup happens at the Workforce Centre. Bring your ID and accreditation. Allow 30 minutes for fitting and collection.",
+            )}
           </p>
           {sizing.pickup_slot ? (
             <p className="mt-3 font-mono text-sm">
-              Slot: <strong>{sizing.pickup_slot}</strong>
+              {t("p.volunteer.uniform.pickup.slotLabel", undefined, "Slot:")} <strong>{sizing.pickup_slot}</strong>
             </p>
           ) : (
             <p className="mt-3 text-xs text-[var(--text-muted)]">
-              Slot not yet booked — your team lead will assign one based on your shift schedule.
+              {t(
+                "p.volunteer.uniform.pickup.notBooked",
+                undefined,
+                "Slot not yet booked — your team lead will assign one based on your shift schedule.",
+              )}
             </p>
           )}
         </section>

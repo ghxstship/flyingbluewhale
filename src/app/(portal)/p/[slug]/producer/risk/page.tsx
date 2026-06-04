@@ -5,7 +5,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { toTitle } from "@/lib/format";
 
@@ -31,7 +31,9 @@ const RISK_TONE: Record<string, "info" | "warning" | "error" | "success" | "mute
 };
 
 export default async function ProducerRisk({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return <div className="page-content">{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -65,30 +67,38 @@ export default async function ProducerRisk({ params }: { params: Promise<{ slug:
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Risk Register</h1>
+        <h1 className="text-2xl font-semibold">{t("p.producer.risk.title", undefined, "Risk Register")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Open + monitoring risks for {project?.name ?? "this project"}. Mitigation owners + due dates.
+          {t(
+            "p.producer.risk.subtitle",
+            { project: project?.name ?? t("p.producer.risk.thisProject", undefined, "this project") },
+            "Open + monitoring risks for {project}. Mitigation owners + due dates.",
+          )}
         </p>
 
         {rows.length === 0 ? (
           <div className="mt-5">
             <EmptyState
               size="compact"
-              title="No Risks Logged"
-              description="Risks raised on this project surface here."
+              title={t("p.producer.risk.empty.title", undefined, "No Risks Logged")}
+              description={t(
+                "p.producer.risk.empty.description",
+                undefined,
+                "Risks raised on this project surface here.",
+              )}
             />
           </div>
         ) : (
           <table className="data-table mt-5 w-full text-sm">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Likelihood</th>
-                <th>Impact</th>
-                <th>Owner</th>
-                <th>Due</th>
-                <th>Status</th>
+                <th>{t("p.producer.risk.col.title", undefined, "Title")}</th>
+                <th>{t("p.producer.risk.col.category", undefined, "Category")}</th>
+                <th>{t("p.producer.risk.col.likelihood", undefined, "Likelihood")}</th>
+                <th>{t("p.producer.risk.col.impact", undefined, "Impact")}</th>
+                <th>{t("p.producer.risk.col.owner", undefined, "Owner")}</th>
+                <th>{t("p.producer.risk.col.due", undefined, "Due")}</th>
+                <th>{t("p.producer.risk.col.status", undefined, "Status")}</th>
               </tr>
             </thead>
             <tbody>

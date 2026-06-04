@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -38,12 +38,18 @@ function maskPassport(pass: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Visa Cases" />
+        <ModuleHeader
+          eyebrow={t("p.delegation.visa.eyebrowShort", undefined, "Portal")}
+          title={t("p.delegation.visa.title", undefined, "Visa Cases")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.delegation.visa.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -67,52 +73,88 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Delegation"
-        title="Visa Cases"
-        subtitle={`${cases.length} Case${cases.length === 1 ? "" : "s"} · ${approved} Approved`}
+        eyebrow={t("p.delegation.visa.eyebrow", undefined, "Portal · Delegation")}
+        title={t("p.delegation.visa.title", undefined, "Visa Cases")}
+        subtitle={
+          cases.length === 1
+            ? t(
+                "p.delegation.visa.subtitleSingular",
+                { count: cases.length, approved },
+                `${cases.length} Case · ${approved} Approved`,
+              )
+            : t(
+                "p.delegation.visa.subtitlePlural",
+                { count: cases.length, approved },
+                `${cases.length} Cases · ${approved} Approved`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Delegation", href: `/p/${slug}/delegation` },
-          { label: "Visa" },
+          { label: t("p.delegation.visa.breadcrumbPortal", undefined, "Portal"), href: `/p/${slug}` },
+          {
+            label: t("p.delegation.visa.breadcrumbDelegation", undefined, "Delegation"),
+            href: `/p/${slug}/delegation`,
+          },
+          { label: t("p.delegation.visa.breadcrumbVisa", undefined, "Visa") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={fmt.number(approved)} accent={approved > 0} />
-          <MetricCard label="Letters Issued" value={fmt.number(lettersIssued)} />
-          <MetricCard label="Total" value={fmt.number(cases.length)} />
+          <MetricCard
+            label={t("p.delegation.visa.metric.approved", undefined, "Approved")}
+            value={fmt.number(approved)}
+            accent={approved > 0}
+          />
+          <MetricCard
+            label={t("p.delegation.visa.metric.lettersIssued", undefined, "Letters Issued")}
+            value={fmt.number(lettersIssued)}
+          />
+          <MetricCard
+            label={t("p.delegation.visa.metric.total", undefined, "Total")}
+            value={fmt.number(cases.length)}
+          />
         </div>
 
         <DataTable<Visa>
           rows={cases}
-          emptyLabel="No visa cases"
-          emptyDescription="Open cases for delegation members who need entry letters or visa support. We track status and store the issued letter for download."
+          emptyLabel={t("p.delegation.visa.empty.label", undefined, "No visa cases")}
+          emptyDescription={t(
+            "p.delegation.visa.empty.description",
+            undefined,
+            "Open cases for delegation members who need entry letters or visa support. We track status and store the issued letter for download.",
+          )}
           columns={[
-            { key: "name", header: "Person", render: (r) => r.person_name, accessor: (r) => r.person_name },
+            {
+              key: "name",
+              header: t("p.delegation.visa.col.person", undefined, "Person"),
+              render: (r) => r.person_name,
+              accessor: (r) => r.person_name,
+            },
             {
               key: "nat",
-              header: "Nationality",
+              header: t("p.delegation.visa.col.nationality", undefined, "Nationality"),
               render: (r) => r.nationality ?? "—",
               accessor: (r) => r.nationality ?? null,
             },
             {
               key: "passport",
-              header: "Passport",
+              header: t("p.delegation.visa.col.passport", undefined, "Passport"),
               render: (r) => <span className="font-mono text-[10px]">{maskPassport(r.passport_no)}</span>,
               accessor: (r) => r.passport_no ?? null,
             },
             {
               key: "delegation",
-              header: "Delegation",
+              header: t("p.delegation.visa.col.delegation", undefined, "Delegation"),
               render: (r) => r.delegation?.code ?? "—",
               accessor: (r) => r.delegation?.code ?? null,
             },
             {
               key: "letter",
-              header: "Letter",
+              header: t("p.delegation.visa.col.letter", undefined, "Letter"),
               render: (r) =>
                 r.letter_path ? (
-                  <span className="font-mono text-[10px] text-[var(--org-primary)]">on file</span>
+                  <span className="font-mono text-[10px] text-[var(--org-primary)]">
+                    {t("p.delegation.visa.letter.onFile", undefined, "on file")}
+                  </span>
                 ) : (
                   <span className="text-[var(--text-muted)]">—</span>
                 ),
@@ -120,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "status",
-              header: "Status",
+              header: t("p.delegation.visa.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,

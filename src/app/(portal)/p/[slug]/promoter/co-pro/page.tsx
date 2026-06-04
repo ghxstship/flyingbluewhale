@@ -5,7 +5,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { toTitle } from "@/lib/format";
 
@@ -28,7 +28,9 @@ type Offer = {
 };
 
 export default async function PromoterCoPro({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return <div className="page-content">{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -51,35 +53,46 @@ export default async function PromoterCoPro({ params }: { params: Promise<{ slug
     ? await supabase.from("talent_profiles").select("id, act_name").in("id", profileIds)
     : { data: [] };
   const profileMap = new Map(
-    ((profiles ?? []) as Array<{ id: string; act_name: string | null }>).map((p) => [p.id, p.act_name ?? "Untitled"]),
+    ((profiles ?? []) as Array<{ id: string; act_name: string | null }>).map((p) => [
+      p.id,
+      p.act_name ?? t("common.untitled", undefined, "Untitled"),
+    ]),
   );
 
   return (
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Co-Pro Splits</h1>
+        <h1 className="text-2xl font-semibold">{t("p.promoter.coPro.title", undefined, "Co-Pro Splits")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Deal terms across the talent offers on {project?.name ?? "this project"}.
+          {t(
+            "p.promoter.coPro.subtitle",
+            { project: project?.name ?? t("p.promoter.coPro.thisProject", undefined, "this project") },
+            "Deal terms across the talent offers on {project}.",
+          )}
         </p>
 
         {rows.length === 0 ? (
           <div className="mt-5">
             <EmptyState
               size="compact"
-              title="No Deals Yet"
-              description="Once talent offers are signed, the guarantee + split show up here."
+              title={t("p.promoter.coPro.empty.title", undefined, "No Deals Yet")}
+              description={t(
+                "p.promoter.coPro.empty.description",
+                undefined,
+                "Once talent offers are signed, the guarantee + split show up here.",
+              )}
             />
           </div>
         ) : (
           <table className="data-table mt-5 w-full text-sm">
             <thead>
               <tr>
-                <th>Talent</th>
-                <th>Show Date</th>
-                <th>Guarantee</th>
-                <th>Door %</th>
-                <th>Status</th>
+                <th>{t("p.promoter.coPro.col.talent", undefined, "Talent")}</th>
+                <th>{t("p.promoter.coPro.col.showDate", undefined, "Show Date")}</th>
+                <th>{t("p.promoter.coPro.col.guarantee", undefined, "Guarantee")}</th>
+                <th>{t("p.promoter.coPro.col.doorPct", undefined, "Door %")}</th>
+                <th>{t("p.promoter.coPro.col.status", undefined, "Status")}</th>
               </tr>
             </thead>
             <tbody>

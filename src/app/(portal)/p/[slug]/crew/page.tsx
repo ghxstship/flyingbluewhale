@@ -4,6 +4,7 @@ import { ModuleHeader, PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
 import { hasSupabase } from "@/lib/env";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -12,25 +13,42 @@ export default async function CrewHome({ params }: { params: Promise<{ slug: str
   if (!hasSupabase) notFound();
   const project = await projectIdFromSlug(slug);
   if (!project) notFound();
+  const { t } = await getRequestT();
   return (
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "crew")} />
       <div className="flex-1">
-        <ModuleHeader eyebrow={project.name} title="Crew Portal" subtitle="Call sheet, time, advances" />
+        <ModuleHeader
+          eyebrow={project.name}
+          title={t("p.crew.index.title", undefined, "Crew Portal")}
+          subtitle={t("p.crew.index.subtitle", undefined, "Call sheet, time, advances")}
+        />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-3">
             {[
-              { href: `/p/${slug}/crew/call-sheet`, label: "Call Sheet", desc: "Day-of info, parking, contacts" },
-              { href: `/p/${slug}/crew/time`, label: "Time", desc: "Submit hours worked" },
+              {
+                href: `/p/${slug}/crew/call-sheet`,
+                label: t("p.crew.index.callSheet.label", undefined, "Call Sheet"),
+                desc: t("p.crew.index.callSheet.desc", undefined, "Day-of info, parking, contacts"),
+              },
+              {
+                href: `/p/${slug}/crew/time`,
+                label: t("p.crew.index.time.label", undefined, "Time"),
+                desc: t("p.crew.index.time.desc", undefined, "Submit hours worked"),
+              },
               {
                 href: `/p/${slug}/crew/advances`,
-                label: "Advancing",
-                desc: "Catalog items assigned to you: credentials, catering, radios, tools, uniforms, travel, lodging, vehicles",
+                label: t("p.crew.index.advances.label", undefined, "Advancing"),
+                desc: t(
+                  "p.crew.index.advances.desc",
+                  undefined,
+                  "Catalog items assigned to you: credentials, catering, radios, tools, uniforms, travel, lodging, vehicles",
+                ),
               },
-            ].map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-                <div className="text-sm font-semibold">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.desc}</div>
+            ].map((tile) => (
+              <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
+                <div className="text-sm font-semibold">{tile.label}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.desc}</div>
               </Link>
             ))}
           </div>

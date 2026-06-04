@@ -5,7 +5,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,13 @@ type Approval = {
 };
 
 export default async function PromoterApprovals({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("p.promoter.approvals.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -57,9 +63,19 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Approvals</h1>
+        <h1 className="text-2xl font-semibold">{t("p.promoter.approvals.title", undefined, "Approvals")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          {pending.length} pending decision{pending.length === 1 ? "" : "s"} across this project&apos;s proposals.
+          {pending.length === 1
+            ? t(
+                "p.promoter.approvals.subtitle.one",
+                { count: pending.length },
+                `${pending.length} pending decision across this project's proposals.`,
+              )
+            : t(
+                "p.promoter.approvals.subtitle.other",
+                { count: pending.length },
+                `${pending.length} pending decisions across this project's proposals.`,
+              )}
         </p>
 
         <ul className="mt-5 space-y-2">
@@ -67,8 +83,12 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
             <li>
               <EmptyState
                 size="compact"
-                title="Nothing Pending"
-                description="Once a proposal routes a signature ceremony, it appears here."
+                title={t("p.promoter.approvals.empty.title", undefined, "Nothing Pending")}
+                description={t(
+                  "p.promoter.approvals.empty.description",
+                  undefined,
+                  "Once a proposal routes a signature ceremony, it appears here.",
+                )}
               />
             </li>
           ) : (
@@ -77,11 +97,14 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="text-sm font-semibold">
-                      {propMap.get(a.proposal_id) ?? "Proposal"} — {a.title ?? a.kind}
+                      {propMap.get(a.proposal_id) ?? t("p.promoter.approvals.proposalFallback", undefined, "Proposal")}{" "}
+                      — {a.title ?? a.kind}
                     </div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
                       {a.kind} · {fmt.date(a.created_at)}
-                      {a.due_at ? ` · due ${fmt.date(a.due_at)}` : ""}
+                      {a.due_at
+                        ? ` · ${t("p.promoter.approvals.due", { date: fmt.date(a.due_at) }, `due ${fmt.date(a.due_at)}`)}`
+                        : ""}
                     </div>
                   </div>
                   <Badge variant={a.state === "signed" ? "success" : a.state === "declined" ? "error" : "warning"}>

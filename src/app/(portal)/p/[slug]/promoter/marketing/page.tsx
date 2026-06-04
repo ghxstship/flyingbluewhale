@@ -5,7 +5,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +21,13 @@ type Campaign = {
 };
 
 export default async function PromoterMarketing({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("p.promoter.marketing.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -42,28 +48,36 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Marketing Milestones</h1>
+        <h1 className="text-2xl font-semibold">{t("p.promoter.marketing.title", undefined, "Marketing Milestones")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Onsale, presale, and ad-drop campaigns for {project?.name ?? "this project"}.
+          {t(
+            "p.promoter.marketing.subtitle",
+            { projectName: project?.name ?? t("p.promoter.marketing.thisProject", undefined, "this project") },
+            `Onsale, presale, and ad-drop campaigns for ${project?.name ?? "this project"}.`,
+          )}
         </p>
 
         {rows.length === 0 ? (
           <div className="mt-5">
             <EmptyState
               size="compact"
-              title="No Campaigns"
-              description="Promotional campaigns the marketing team launches on this project show up here."
+              title={t("p.promoter.marketing.empty.title", undefined, "No Campaigns")}
+              description={t(
+                "p.promoter.marketing.empty.description",
+                undefined,
+                "Promotional campaigns the marketing team launches on this project show up here.",
+              )}
             />
           </div>
         ) : (
           <table className="data-table mt-5 w-full text-sm">
             <thead>
               <tr>
-                <th>Campaign</th>
-                <th>Channel</th>
-                <th>Dates</th>
-                <th>Spend</th>
-                <th>Status</th>
+                <th>{t("p.promoter.marketing.table.campaign", undefined, "Campaign")}</th>
+                <th>{t("p.promoter.marketing.table.channel", undefined, "Channel")}</th>
+                <th>{t("p.promoter.marketing.table.dates", undefined, "Dates")}</th>
+                <th>{t("p.promoter.marketing.table.spend", undefined, "Spend")}</th>
+                <th>{t("p.promoter.marketing.table.status", undefined, "Status")}</th>
               </tr>
             </thead>
             <tbody>

@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,18 @@ function fmt(iso: string): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Training Bookings" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+          title={t("p.delegation.bookings.title", undefined, "Training Bookings")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.delegation.bookings.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -69,27 +75,55 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Delegation"
-        title="Training Bookings"
-        subtitle={`${bookings.length} Booking${bookings.length === 1 ? "" : "s"} · ${upcoming.length} Upcoming`}
+        eyebrow={t("p.delegation.bookings.eyebrow", undefined, "Portal · Delegation")}
+        title={t("p.delegation.bookings.title", undefined, "Training Bookings")}
+        subtitle={
+          bookings.length === 1
+            ? t(
+                "p.delegation.bookings.subtitle.single",
+                { count: bookings.length, upcoming: upcoming.length },
+                `${bookings.length} Booking · ${upcoming.length} Upcoming`,
+              )
+            : t(
+                "p.delegation.bookings.subtitle.plural",
+                { count: bookings.length, upcoming: upcoming.length },
+                `${bookings.length} Bookings · ${upcoming.length} Upcoming`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Delegation", href: `/p/${slug}/delegation` },
-          { label: "Bookings" },
+          { label: t("p.shared.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.delegation.breadcrumb.delegation", undefined, "Delegation"), href: `/p/${slug}/delegation` },
+          { label: t("p.delegation.bookings.breadcrumb.bookings", undefined, "Bookings") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming" value={fmtIntl.number(upcoming.length)} accent={upcoming.length > 0} />
-          <MetricCard label="Total" value={fmtIntl.number(bookings.length)} />
-          <MetricCard label="Past" value={fmtIntl.number(bookings.length - upcoming.length)} />
+          <MetricCard
+            label={t("p.delegation.bookings.metric.upcoming", undefined, "Upcoming")}
+            value={fmtIntl.number(upcoming.length)}
+            accent={upcoming.length > 0}
+          />
+          <MetricCard
+            label={t("p.delegation.bookings.metric.total", undefined, "Total")}
+            value={fmtIntl.number(bookings.length)}
+          />
+          <MetricCard
+            label={t("p.delegation.bookings.metric.past", undefined, "Past")}
+            value={fmtIntl.number(bookings.length - upcoming.length)}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Bookings</h3>
+          <h3 className="text-sm font-semibold">
+            {t("p.delegation.bookings.section.bookings", undefined, "Bookings")}
+          </h3>
           {bookings.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No training bookings yet. Submit a request via your delegation lead.
+              {t(
+                "p.delegation.bookings.empty",
+                undefined,
+                "No training bookings yet. Submit a request via your delegation lead.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">

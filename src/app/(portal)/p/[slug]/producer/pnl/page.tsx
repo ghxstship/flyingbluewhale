@@ -4,13 +4,17 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProducerPnL({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("p.producer.pnl.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -22,7 +26,14 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
       <div className="flex min-h-screen">
         <PortalRail group={portalNav(slug, "producer")} />
         <div className="flex-1 p-6">
-          <EmptyState title="No Project" description="P&L surfaces require a resolved project." />
+          <EmptyState
+            title={t("p.producer.pnl.noProject.title", undefined, "No Project")}
+            description={t(
+              "p.producer.pnl.noProject.description",
+              undefined,
+              "P&L surfaces require a resolved project.",
+            )}
+          />
         </div>
       </div>
     );
@@ -52,26 +63,36 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">P&amp;L</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">Headline roll-up for {project.name}.</p>
+        <h1 className="text-2xl font-semibold">{t("p.producer.pnl.title", undefined, "P&L")}</h1>
+        <p className="mt-1 text-xs text-[var(--text-muted)]">
+          {t("p.producer.pnl.subtitle", { projectName: project.name }, `Headline roll-up for ${project.name}.`)}
+        </p>
 
         <section className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Budget</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("p.producer.pnl.metrics.budget", undefined, "Budget")}
+            </div>
             <div className="mt-1 font-mono text-2xl font-semibold">
               {b?.budget_cents != null ? fmtMoney(b.budget_cents) : "—"}
             </div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Spent</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("p.producer.pnl.metrics.spent", undefined, "Spent")}
+            </div>
             <div className="mt-1 font-mono text-2xl font-semibold">{fmtMoney(b?.spent_cents ?? expenseTotal)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Revenue (paid)</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("p.producer.pnl.metrics.revenuePaid", undefined, "Revenue (paid)")}
+            </div>
             <div className="mt-1 font-mono text-2xl font-semibold">{fmtMoney(invoiceTotal)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Margin</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("p.producer.pnl.metrics.margin", undefined, "Margin")}
+            </div>
             <div
               className={`mt-1 font-mono text-2xl font-semibold ${
                 margin >= 0 ? "text-[var(--color-success)]" : "text-[var(--color-error)]"
@@ -83,7 +104,12 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
         </section>
 
         <p className="mt-5 text-xs text-[var(--text-muted)]">
-          Last updated {fmt.date(new Date().toISOString())}. Full breakdown on{" "}
+          {t(
+            "p.producer.pnl.lastUpdated",
+            { date: fmt.date(new Date().toISOString()) },
+            `Last updated ${fmt.date(new Date().toISOString())}.`,
+          )}{" "}
+          {t("p.producer.pnl.fullBreakdownOn", undefined, "Full breakdown on")}{" "}
           <a className="underline" href="/console/finance/reports">
             /console/finance/reports
           </a>

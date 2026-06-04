@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -38,12 +38,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { locale } = formatters.settings;
   const money = (cents: number, currency: string): string => formatMoney(cents, { locale, currency });
   const fmt = (iso: string): string => formatters.date(iso, "medium");
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Rate-card Orders" />
+        <ModuleHeader
+          eyebrow={t("p.delegation.ratecard.eyebrow.short", undefined, "Portal")}
+          title={t("p.delegation.ratecard.title", undefined, "Rate-card Orders")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.delegation.ratecard.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -65,28 +71,56 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Delegation"
-        title="Rate-card Orders"
-        subtitle={`${orders.length} Order${orders.length === 1 ? "" : "s"} · ${money(total, currency)} Total`}
+        eyebrow={t("p.delegation.ratecard.eyebrow", undefined, "Portal · Delegation")}
+        title={t("p.delegation.ratecard.title", undefined, "Rate-card Orders")}
+        subtitle={
+          orders.length === 1
+            ? t(
+                "p.delegation.ratecard.subtitle.one",
+                { count: orders.length, total: money(total, currency) },
+                `${orders.length} Order · ${money(total, currency)} Total`,
+              )
+            : t(
+                "p.delegation.ratecard.subtitle.other",
+                { count: orders.length, total: money(total, currency) },
+                `${orders.length} Orders · ${money(total, currency)} Total`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Delegation", href: `/p/${slug}/delegation` },
-          { label: "Rate-card" },
+          { label: t("p.delegation.ratecard.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          {
+            label: t("p.delegation.ratecard.breadcrumb.delegation", undefined, "Delegation"),
+            href: `/p/${slug}/delegation`,
+          },
+          { label: t("p.delegation.ratecard.breadcrumb.ratecard", undefined, "Rate-card") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Total Spend" value={money(total, currency)} accent />
-          <MetricCard label="Orders" value={fmtIntl.number(orders.length)} />
-          <MetricCard label="In Review" value={fmtIntl.number(inReview)} />
+          <MetricCard
+            label={t("p.delegation.ratecard.metrics.totalSpend", undefined, "Total Spend")}
+            value={money(total, currency)}
+            accent
+          />
+          <MetricCard
+            label={t("p.delegation.ratecard.metrics.orders", undefined, "Orders")}
+            value={fmtIntl.number(orders.length)}
+          />
+          <MetricCard
+            label={t("p.delegation.ratecard.metrics.inReview", undefined, "In Review")}
+            value={fmtIntl.number(inReview)}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Orders</h3>
+          <h3 className="text-sm font-semibold">{t("p.delegation.ratecard.orders.heading", undefined, "Orders")}</h3>
           {orders.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No orders yet. The rate-card service catalogue is published in <code>/console/programs/rate-card</code> —
-              your attaché will place orders against it.
+              {t(
+                "p.delegation.ratecard.orders.empty",
+                undefined,
+                "No orders yet. The rate-card service catalogue is published in /console/programs/rate-card — your attaché will place orders against it.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
@@ -95,7 +129,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="min-w-0">
                     <div className="font-medium">{o.catalog}</div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                      {o.delegation?.code ?? "—"} · placed {fmt(o.created_at)}
+                      {t(
+                        "p.delegation.ratecard.orders.placedAt",
+                        { code: o.delegation?.code ?? "—", date: fmt(o.created_at) },
+                        `${o.delegation?.code ?? "—"} · placed ${fmt(o.created_at)}`,
+                      )}
                     </div>
                     {o.notes && <p className="mt-1 text-xs text-[var(--text-secondary)]">{o.notes}</p>}
                   </div>

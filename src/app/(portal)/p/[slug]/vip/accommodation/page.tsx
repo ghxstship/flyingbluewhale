@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +28,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="VIP Accommodation" />
+        <ModuleHeader
+          eyebrow={t("p.vip.accommodation.eyebrowShort", undefined, "Portal")}
+          title={t("p.vip.accommodation.titleFull", undefined, "VIP Accommodation")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.vip.accommodation.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -56,33 +62,74 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · VIP"
-        title="Accommodation"
-        subtitle={`${blocks.length} Block${blocks.length === 1 ? "" : "s"} · ${confirmed}/${reserved} suites`}
+        eyebrow={t("p.vip.accommodation.eyebrow", undefined, "Portal · VIP")}
+        title={t("p.vip.accommodation.title", undefined, "Accommodation")}
+        subtitle={
+          blocks.length === 1
+            ? t(
+                "p.vip.accommodation.subtitle.one",
+                { count: blocks.length, confirmed, reserved },
+                `${blocks.length} Block · ${confirmed}/${reserved} suites`,
+              )
+            : t(
+                "p.vip.accommodation.subtitle.other",
+                { count: blocks.length, confirmed, reserved },
+                `${blocks.length} Blocks · ${confirmed}/${reserved} suites`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "VIP", href: `/p/${slug}/vip` },
-          { label: "Accommodation" },
+          { label: t("p.vip.accommodation.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.vip.accommodation.breadcrumb.vip", undefined, "VIP"), href: `/p/${slug}/vip` },
+          { label: t("p.vip.accommodation.breadcrumb.accommodation", undefined, "Accommodation") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Confirmed" value={fmtIntl.number(confirmed)} accent />
-          <MetricCard label="Reserved" value={fmtIntl.number(reserved)} />
-          <MetricCard label="Properties" value={fmtIntl.number(blocks.length)} />
+          <MetricCard
+            label={t("p.vip.accommodation.metric.confirmed", undefined, "Confirmed")}
+            value={fmtIntl.number(confirmed)}
+            accent
+          />
+          <MetricCard
+            label={t("p.vip.accommodation.metric.reserved", undefined, "Reserved")}
+            value={fmtIntl.number(reserved)}
+          />
+          <MetricCard
+            label={t("p.vip.accommodation.metric.properties", undefined, "Properties")}
+            value={fmtIntl.number(blocks.length)}
+          />
         </div>
 
         <DataTable<Block>
           rows={blocks}
-          emptyLabel="No VIP accommodation"
-          emptyDescription="VIP suite reservations land here once contracted with stakeholder_group = vip."
+          emptyLabel={t("p.vip.accommodation.empty.label", undefined, "No VIP accommodation")}
+          emptyDescription={t(
+            "p.vip.accommodation.empty.description",
+            undefined,
+            "VIP suite reservations land here once contracted with stakeholder_group = vip.",
+          )}
           columns={[
-            { key: "name", header: "Block", render: (r) => r.name, accessor: (r) => r.name },
-            { key: "property", header: "Property", render: (r) => r.property, accessor: (r) => r.property },
-            { key: "city", header: "City", render: (r) => r.city ?? "—", accessor: (r) => r.city ?? null },
+            {
+              key: "name",
+              header: t("p.vip.accommodation.col.block", undefined, "Block"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
+            {
+              key: "property",
+              header: t("p.vip.accommodation.col.property", undefined, "Property"),
+              render: (r) => r.property,
+              accessor: (r) => r.property,
+            },
+            {
+              key: "city",
+              header: t("p.vip.accommodation.col.city", undefined, "City"),
+              render: (r) => r.city ?? "—",
+              accessor: (r) => r.city ?? null,
+            },
             {
               key: "rooms",
-              header: "Suites",
+              header: t("p.vip.accommodation.col.suites", undefined, "Suites"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.rooms_confirmed}/{r.rooms_reserved}
@@ -92,7 +139,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "window",
-              header: "Window",
+              header: t("p.vip.accommodation.col.window", undefined, "Window"),
               render: (r) => (
                 <span className="font-mono text-[10px]">
                   {fmt(r.starts_on)} – {fmt(r.ends_on)}
@@ -102,7 +149,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "group",
-              header: "Group",
+              header: t("p.vip.accommodation.col.group", undefined, "Group"),
               render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
               filterable: true,
               groupable: true,

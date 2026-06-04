@@ -10,6 +10,7 @@ import { getGuideByPersona, PERSONA_TIERS } from "@/lib/db/guides";
 import { GuideView } from "@/components/guides/GuideView";
 import { GuideComments } from "@/components/guides/GuideComments";
 import { createClient } from "@/lib/supabase/server";
+import { getRequestT } from "@/lib/i18n/request";
 import type { GuideConfig } from "@/lib/guides/types";
 import type { GuidePersona, Persona } from "@/lib/supabase/types";
 import {
@@ -71,6 +72,7 @@ export default async function GuidePage({
 }) {
   const { slug } = await params;
   const sp = await searchParams;
+  const { t } = await getRequestT();
   if (!hasSupabase) notFound();
   const project = await projectIdFromSlug(slug);
   if (!project) notFound();
@@ -101,9 +103,9 @@ export default async function GuidePage({
     let best: GuidePersona | null = null;
     let bestTier = Infinity;
     for (const p of unlockedPersonas) {
-      const t = PERSONA_TIERS[p].tier;
-      if (t < bestTier) {
-        bestTier = t;
+      const tier = PERSONA_TIERS[p].tier;
+      if (tier < bestTier) {
+        bestTier = tier;
         best = p;
       }
     }
@@ -151,10 +153,18 @@ export default async function GuidePage({
   if (!guide || !guide.published) {
     return (
       <>
-        <ModuleHeader eyebrow={project.name} title="Event Guide" subtitle="Your Know-Before-You-Go" />
+        <ModuleHeader
+          eyebrow={project.name}
+          title={t("p.guide.title", undefined, "Event Guide")}
+          subtitle={t("p.guide.subtitle", undefined, "Your Know-Before-You-Go")}
+        />
         <div className="page-content">
           <div className="surface p-6 text-sm text-[var(--text-muted)]">
-            The production team hasn&apos;t published a guide for your role yet. Check back soon.
+            {t(
+              "p.guide.unpublished",
+              undefined,
+              "The production team hasn't published a guide for your role yet. Check back soon.",
+            )}
           </div>
         </div>
       </>
@@ -180,10 +190,10 @@ export default async function GuidePage({
           <Link
             href={`/api/v1/guides/${guide.id}/pdf`}
             className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
-            aria-label="Download this guide as a PDF"
+            aria-label={t("p.guide.downloadPdf.aria", undefined, "Download this guide as a PDF")}
           >
             <FileDown size={14} aria-hidden="true" />
-            Download PDF
+            {t("p.guide.downloadPdf.label", undefined, "Download PDF")}
           </Link>
         }
       />
@@ -233,7 +243,7 @@ const PREVIEW_PERSONAS: { value: GuidePersona; label: string }[] = [
   { value: "custom", label: "Temporary Access" }, // (parallel, uncounted)
 ];
 
-function PreviewSwitcher({
+async function PreviewSwitcher({
   slug,
   active,
   previewing,
@@ -248,11 +258,24 @@ function PreviewSwitcher({
   unlockedPersonas: GuidePersona[];
   hasOrgSession: boolean;
 }) {
+  const { t } = await getRequestT();
   // Visibility rules:
   //   - Org session / dev: anything at or below caller's permission tier.
   //   - Code-only viewer (no session): only personas they've unlocked, plus
   //     the public-tier personas (guest, custom) which are always visible.
   const unlockedSet = new Set(unlockedPersonas);
+  const personaLabel: Record<GuidePersona, string> = {
+    staff: t("p.guide.persona.staff", undefined, "Production"),
+    crew: t("p.guide.persona.crew", undefined, "Operations"),
+    vendor: t("p.guide.persona.vendor", undefined, "Food & Beverage"),
+    brand_ambassador: t("p.guide.persona.brandAmbassador", undefined, "Brand Ambassador"),
+    sponsor: t("p.guide.persona.sponsor", undefined, "Sponsors"),
+    artist: t("p.guide.persona.artist", undefined, "Talent"),
+    media_press: t("p.guide.persona.mediaPress", undefined, "Media & Press"),
+    guest: t("p.guide.persona.guest", undefined, "Guests"),
+    custom: t("p.guide.persona.custom", undefined, "Temporary Access"),
+    client: t("p.guide.persona.client", undefined, "Client"),
+  };
   const visible = PREVIEW_PERSONAS.filter((p) => {
     if (hasOrgSession) return PERSONA_TIERS[p.value].tier >= sessionTier;
     return unlockedSet.has(p.value) || p.value === "guest" || p.value === "custom";
@@ -260,7 +283,11 @@ function PreviewSwitcher({
   if (visible.length < 2) return null;
   return (
     <div className="surface mb-4 flex flex-wrap items-center gap-2 px-4 py-2.5 text-xs">
-      <span className="font-medium text-[var(--text-secondary)]">{previewing ? "Previewing as" : "Preview as"}</span>
+      <span className="font-medium text-[var(--text-secondary)]">
+        {previewing
+          ? t("p.guide.preview.previewingAs", undefined, "Previewing as")
+          : t("p.guide.preview.previewAs", undefined, "Preview as")}
+      </span>
       {visible.map((p) => {
         const isActive = p.value === active;
         return (
@@ -274,13 +301,13 @@ function PreviewSwitcher({
                 : "rounded-full bg-[var(--surface-inset)] px-2.5 py-1 text-[var(--text-secondary)] hover:bg-[var(--surface-raised)]"
             }
           >
-            {p.label}
+            {personaLabel[p.value] ?? p.label}
           </Link>
         );
       })}
       {previewing && (
         <Link href={`/p/${slug}/guide`} className="ms-auto text-[var(--text-muted)] underline-offset-2 hover:underline">
-          Exit preview
+          {t("p.guide.preview.exit", undefined, "Exit preview")}
         </Link>
       )}
     </div>

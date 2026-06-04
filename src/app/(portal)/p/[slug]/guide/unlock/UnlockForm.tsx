@@ -4,9 +4,11 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { GuidePersona } from "@/lib/supabase/types";
 
 export function UnlockForm({ slug, persona, from }: { slug: string; persona: GuidePersona; from: string }) {
+  const t = useT();
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -17,7 +19,7 @@ export function UnlockForm({ slug, persona, from }: { slug: string; persona: Gui
       onSubmit={(e) => {
         e.preventDefault();
         if (!code.trim()) {
-          setError("Enter your access code.");
+          setError(t("p.shared.guide.unlock.error.empty", undefined, "Enter your access code."));
           return;
         }
         setError(null);
@@ -36,8 +38,8 @@ export function UnlockForm({ slug, persona, from }: { slug: string; persona: Gui
             if (!res.ok || !json.ok) {
               const msg =
                 res.status === 429
-                  ? "Too many attempts. Try again in a minute."
-                  : (json.error?.message ?? "Invalid code.");
+                  ? t("p.shared.guide.unlock.error.rateLimited", undefined, "Too many attempts. Try again in a minute.")
+                  : (json.error?.message ?? t("p.shared.guide.unlock.error.invalid", undefined, "Invalid code."));
               setError(msg);
               return;
             }
@@ -47,7 +49,7 @@ export function UnlockForm({ slug, persona, from }: { slug: string; persona: Gui
             router.replace(target);
             router.refresh();
           } catch {
-            setError("Network error. Try again.");
+            setError(t("p.shared.guide.unlock.error.network", undefined, "Network error. Try again."));
           }
         });
       }}
@@ -57,15 +59,17 @@ export function UnlockForm({ slug, persona, from }: { slug: string; persona: Gui
         autoFocus
         value={code}
         onChange={(e) => setCode(e.target.value)}
-        placeholder="XXXX-XXXX-XX"
+        placeholder={t("p.shared.guide.unlock.placeholder", undefined, "XXXX-XXXX-XX")}
         autoComplete="one-time-code"
         spellCheck={false}
         className="font-mono tracking-wider uppercase"
-        aria-label="Access code"
+        aria-label={t("p.shared.guide.unlock.aria", undefined, "Access code")}
       />
       {error && <div className="text-sm text-[var(--color-error)]">{error}</div>}
       <Button type="submit" disabled={pending} className="w-full">
-        {pending ? "Unlocking…" : "Unlock guide"}
+        {pending
+          ? t("p.shared.guide.unlock.submitting", undefined, "Unlocking…")
+          : t("p.shared.guide.unlock.submit", undefined, "Unlock guide")}
       </Button>
     </form>
   );

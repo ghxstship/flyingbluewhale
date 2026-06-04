@@ -6,7 +6,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +27,9 @@ type AmAssignment = {
 };
 
 export default async function PortalMessages({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return <div className="page-content">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -63,12 +65,16 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
 
   return (
     <div className="flex">
-      <PortalRail group={portalNav(slug, "vendor")} title="Portal" />
+      <PortalRail group={portalNav(slug, "vendor")} title={t("p.shared.portal", undefined, "Portal")} />
       <div className="flex-1">
         <div className="page-content">
-          <h1 className="text-2xl font-semibold">Messages</h1>
+          <h1 className="text-2xl font-semibold">{t("p.shared.messages.title", undefined, "Messages")}</h1>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Direct thread with your account manager for {project?.name ?? "this project"}.
+            {t(
+              "p.shared.messages.subtitle",
+              { projectName: project?.name ?? t("p.shared.messages.thisProject", undefined, "this project") },
+              `Direct thread with your account manager for ${project?.name ?? "this project"}.`,
+            )}
           </p>
 
           <ul className="mt-5 space-y-3">
@@ -76,8 +82,12 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
               <li>
                 <EmptyState
                   size="compact"
-                  title="No Account Manager Yet"
-                  description="Once your account manager is assigned, you can DM them here. Reach the production team via your persona page for now."
+                  title={t("p.shared.messages.emptyTitle", undefined, "No Account Manager Yet")}
+                  description={t(
+                    "p.shared.messages.emptyDescription",
+                    undefined,
+                    "Once your account manager is assigned, you can DM them here. Reach the production team via your persona page for now.",
+                  )}
                 />
               </li>
             ) : (
@@ -88,7 +98,8 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <div className="truncate text-sm font-semibold">
-                          {managerMap.get(r.manager_user_id) ?? "Account Manager"}
+                          {managerMap.get(r.manager_user_id) ??
+                            t("p.shared.messages.accountManager", undefined, "Account Manager")}
                         </div>
                         <Badge variant="muted" className="mt-1">
                           {r.persona}
@@ -103,13 +114,13 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
                     <div className="mt-3 flex justify-end">
                       {r.chat_room_id ? (
                         <Link href={`/m/inbox/${r.chat_room_id}`} className="btn btn-primary btn-sm">
-                          Open Thread
+                          {t("p.shared.messages.openThread", undefined, "Open Thread")}
                         </Link>
                       ) : (
                         <form action={`/p/${slug}/messages/start`} method="post">
                           <input type="hidden" name="assignment_id" value={r.id} />
                           <button type="submit" className="btn btn-primary btn-sm">
-                            Start Thread
+                            {t("p.shared.messages.startThread", undefined, "Start Thread")}
                           </button>
                         </form>
                       )}

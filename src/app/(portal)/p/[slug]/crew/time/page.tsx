@@ -6,9 +6,11 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { fmtDateTime } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const project = await projectIdFromSlug(slug);
   const supabase = await createClient();
@@ -30,21 +32,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     rows = (data ?? []) as typeof rows;
   }
   return (
-    <PortalSubpage slug={slug} persona="crew" title="Time" subtitle="Your time entries for this project">
+    <PortalSubpage
+      slug={slug}
+      persona="crew"
+      title={t("p.crew.time.title", undefined, "Time")}
+      subtitle={t("p.crew.time.subtitle", undefined, "Your time entries for this project")}
+    >
       {rows.length === 0 ? (
         <EmptyState
-          title="No Time Logged Yet"
-          description="Clock in and out from the mobile PWA or the console Time module."
+          title={t("p.crew.time.empty.title", undefined, "No Time Logged Yet")}
+          description={t(
+            "p.crew.time.empty.description",
+            undefined,
+            "Clock in and out from the mobile PWA or the console Time module.",
+          )}
         />
       ) : (
         <table className="data-table w-full text-sm">
           <thead>
             <tr>
-              <th>Started</th>
-              <th>Ended</th>
-              <th>Hours</th>
-              <th>Billable</th>
-              <th>Notes</th>
+              <th>{t("p.crew.time.col.started", undefined, "Started")}</th>
+              <th>{t("p.crew.time.col.ended", undefined, "Ended")}</th>
+              <th>{t("p.crew.time.col.hours", undefined, "Hours")}</th>
+              <th>{t("p.crew.time.col.billable", undefined, "Billable")}</th>
+              <th>{t("p.crew.time.col.notes", undefined, "Notes")}</th>
             </tr>
           </thead>
           <tbody>
@@ -55,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <td className="font-mono text-xs">
                   {r.duration_minutes != null ? Math.round((r.duration_minutes / 60) * 10) / 10 : "—"}
                 </td>
-                <td>{r.billable ? "Yes" : "No"}</td>
+                <td>{r.billable ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</td>
                 <td className="text-[var(--text-muted)]">{r.description ?? "—"}</td>
               </tr>
             ))}

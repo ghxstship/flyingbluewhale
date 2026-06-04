@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="VIP Transport" />
+        <ModuleHeader
+          eyebrow={t("p.vip.transport.eyebrow.short", undefined, "Portal")}
+          title={t("p.vip.transport.title.fallback", undefined, "VIP Transport")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.vip.transport.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -71,27 +77,46 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · VIP"
-        title="Transport"
-        subtitle={`${runs.length} Run${runs.length === 1 ? "" : "s"} · ${upcoming} Active`}
+        eyebrow={t("p.vip.transport.eyebrow", undefined, "Portal · VIP")}
+        title={t("p.vip.transport.title", undefined, "Transport")}
+        subtitle={
+          runs.length === 1
+            ? t(
+                "p.vip.transport.subtitle.one",
+                { count: runs.length, active: upcoming },
+                `${runs.length} Run · ${upcoming} Active`,
+              )
+            : t(
+                "p.vip.transport.subtitle.other",
+                { count: runs.length, active: upcoming },
+                `${runs.length} Runs · ${upcoming} Active`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "VIP", href: `/p/${slug}/vip` },
-          { label: "Transport" },
+          { label: t("p.vip.transport.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.vip.transport.breadcrumb.vip", undefined, "VIP"), href: `/p/${slug}/vip` },
+          { label: t("p.vip.transport.breadcrumb.transport", undefined, "Transport") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active Runs" value={fmtIntl.number(upcoming)} accent={upcoming > 0} />
-          <MetricCard label="Total" value={fmtIntl.number(runs.length)} />
-          <MetricCard label="Fleet" value="T1" />
+          <MetricCard
+            label={t("p.vip.transport.metric.activeRuns", undefined, "Active Runs")}
+            value={fmtIntl.number(upcoming)}
+            accent={upcoming > 0}
+          />
+          <MetricCard
+            label={t("p.vip.transport.metric.total", undefined, "Total")}
+            value={fmtIntl.number(runs.length)}
+          />
+          <MetricCard label={t("p.vip.transport.metric.fleet", undefined, "Fleet")} value="T1" />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Schedule</h3>
+          <h3 className="text-sm font-semibold">{t("p.vip.transport.section.schedule", undefined, "Schedule")}</h3>
           {runs.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No T1 runs scheduled. Concierge will publish on confirmation.
+              {t("p.vip.transport.empty", undefined, "No T1 runs scheduled. Concierge will publish on confirmation.")}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">

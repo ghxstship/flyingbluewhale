@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,12 +24,18 @@ function tagsOf(raw: unknown): string[] {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Info on Demand" />
+        <ModuleHeader
+          eyebrow={t("p.media.info.eyebrowShort", undefined, "Portal")}
+          title={t("p.media.info.title", undefined, "Info on Demand")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.media.info.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -48,33 +54,49 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const articles = ((data ?? []) as unknown as Article[]) ?? [];
   const RELEVANT = new Set(["media", "press", "info_on_demand", "factsheet", "biography", "results"]);
-  const items = articles.filter((a) => tagsOf(a.tags).some((t) => RELEVANT.has(t)));
+  const items = articles.filter((a) => tagsOf(a.tags).some((tag) => RELEVANT.has(tag)));
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Media"
-        title="Info on Demand"
-        subtitle={`${items.length} document${items.length === 1 ? "" : "s"}`}
+        eyebrow={t("p.media.info.eyebrow", undefined, "Portal · Media")}
+        title={t("p.media.info.title", undefined, "Info on Demand")}
+        subtitle={
+          items.length === 1
+            ? t("p.media.info.subtitle.one", { count: items.length }, `${items.length} document`)
+            : t("p.media.info.subtitle.other", { count: items.length }, `${items.length} documents`)
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Media", href: `/p/${slug}/media` },
-          { label: "Info" },
+          { label: t("p.media.info.crumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.media.info.crumb.media", undefined, "Media"), href: `/p/${slug}/media` },
+          { label: t("p.media.info.crumb.info", undefined, "Info") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Documents" value={fmt.number(items.length)} />
-          <MetricCard label="Total KB" value={fmt.number(articles.length)} />
-          <MetricCard label="Last Updated" value={items[0]?.updated_at.slice(0, 10) ?? "—"} />
+          <MetricCard
+            label={t("p.media.info.metric.documents", undefined, "Documents")}
+            value={fmt.number(items.length)}
+          />
+          <MetricCard
+            label={t("p.media.info.metric.totalKb", undefined, "Total KB")}
+            value={fmt.number(articles.length)}
+          />
+          <MetricCard
+            label={t("p.media.info.metric.lastUpdated", undefined, "Last Updated")}
+            value={items[0]?.updated_at.slice(0, 10) ?? "—"}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Documents</h3>
+          <h3 className="text-sm font-semibold">{t("p.media.info.section.documents", undefined, "Documents")}</h3>
           {items.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No info-on-demand documents published yet. The producer publishes briefings and factsheets tagged Media or
-              Press; they appear here when ready.
+              {t(
+                "p.media.info.empty",
+                undefined,
+                "No info-on-demand documents published yet. The producer publishes briefings and factsheets tagged Media or Press; they appear here when ready.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
@@ -86,9 +108,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="flex items-center gap-1 font-mono text-[10px] text-[var(--text-muted)]">
                     {tagsOf(a.tags)
                       .slice(0, 3)
-                      .map((t) => (
-                        <Badge key={t} variant="muted">
-                          {t}
+                      .map((tag) => (
+                        <Badge key={tag} variant="muted">
+                          {tag}
                         </Badge>
                       ))}
                     <span className="ms-1">{fmtDate(a.updated_at)}</span>

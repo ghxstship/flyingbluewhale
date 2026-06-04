@@ -6,12 +6,14 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { formatMoney } from "@/lib/i18n/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Invoice } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const project = await projectIdFromSlug(slug);
   const supabase = await createClient();
   const rows = project
@@ -24,28 +26,38 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       ).data as Invoice[]) ?? [])
     : [];
   return (
-    <PortalSubpage slug={slug} persona="client" title="Invoices" subtitle="Pay invoices and download receipts">
+    <PortalSubpage
+      slug={slug}
+      persona="client"
+      title={t("p.client.invoices.title", undefined, "Invoices")}
+      subtitle={t("p.client.invoices.subtitle", undefined, "Pay invoices and download receipts")}
+    >
       <DataTable<Invoice>
         rows={rows}
-        emptyLabel="No invoices yet"
+        emptyLabel={t("p.client.invoices.empty", undefined, "No invoices yet")}
         columns={[
           {
             key: "number",
-            header: "Number",
+            header: t("p.client.invoices.col.number", undefined, "Number"),
             render: (r) => <span className="font-mono text-xs">{r.number}</span>,
             accessor: (r) => r.number ?? null,
           },
-          { key: "title", header: "Title", render: (r) => r.title, accessor: (r) => r.title },
+          {
+            key: "title",
+            header: t("p.client.invoices.col.title", undefined, "Title"),
+            render: (r) => r.title,
+            accessor: (r) => r.title,
+          },
           {
             key: "amount",
-            header: "Amount",
+            header: t("p.client.invoices.col.amount", undefined, "Amount"),
             render: (r) => formatMoney(r.amount_cents, r.currency),
             className: "font-mono text-xs",
             accessor: (r) => r.amount_cents ?? null,
           },
           {
             key: "status",
-            header: "Status",
+            header: t("p.client.invoices.col.status", undefined, "Status"),
             render: (r) => <StatusBadge status={r.status} />,
             accessor: (r) => r.status,
             filterable: true,
@@ -53,22 +65,26 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           },
           {
             key: "due",
-            header: "Due",
+            header: t("p.client.invoices.col.due", undefined, "Due"),
             render: (r) => r.due_at ?? "—",
             className: "font-mono text-xs",
             accessor: (r) => r.due_at ?? null,
           },
           {
             key: "download",
-            header: "PDF",
+            header: t("p.client.invoices.col.pdf", undefined, "PDF"),
             render: (r) => (
               <Link
                 href={`/api/v1/invoices/${r.id}/pdf`}
                 className="inline-flex items-center gap-1 text-xs hover:underline"
-                aria-label={`Download invoice ${r.number} as PDF`}
+                aria-label={t(
+                  "p.client.invoices.download.aria",
+                  { number: r.number ?? "" },
+                  `Download invoice ${r.number} as PDF`,
+                )}
               >
                 <FileDown size={12} aria-hidden="true" />
-                Download
+                {t("p.client.invoices.download", undefined, "Download")}
               </Link>
             ),
             accessor: (r) => r.id ?? null,

@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { PortalDocVault } from "@/components/portal/PortalDocVault";
 
@@ -13,12 +13,16 @@ export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Delegation" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+          title={t("p.delegation.title", undefined, "Delegation")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -38,72 +42,109 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const tiles = [
     {
       href: `/p/${slug}/delegation/entries`,
-      label: "Entries",
-      desc: "Roster of athletes and officials",
+      label: t("p.delegation.tiles.entries.label", undefined, "Entries"),
+      desc: t("p.delegation.tiles.entries.desc", undefined, "Roster of athletes and officials"),
       count: entries ?? 0,
     },
     {
       href: `/p/${slug}/delegation/accommodation`,
-      label: "Accommodation",
-      desc: "Room blocks and assignments",
+      label: t("p.delegation.tiles.accommodation.label", undefined, "Accommodation"),
+      desc: t("p.delegation.tiles.accommodation.desc", undefined, "Room blocks and assignments"),
       count: blocks ?? 0,
     },
-    { href: `/p/${slug}/delegation/transport`, label: "Transport", desc: "Vehicle bookings and dispatch" },
+    {
+      href: `/p/${slug}/delegation/transport`,
+      label: t("p.delegation.tiles.transport.label", undefined, "Transport"),
+      desc: t("p.delegation.tiles.transport.desc", undefined, "Vehicle bookings and dispatch"),
+    },
     {
       href: `/p/${slug}/delegation/visa`,
-      label: "Visa Cases",
-      desc: "Travel docs and entry letters",
+      label: t("p.delegation.tiles.visa.label", undefined, "Visa Cases"),
+      desc: t("p.delegation.tiles.visa.desc", undefined, "Travel docs and entry letters"),
       count: visas ?? 0,
     },
     {
       href: `/p/${slug}/delegation/ratecard`,
-      label: "Rate-card Orders",
-      desc: "Service catalog purchases",
+      label: t("p.delegation.tiles.ratecard.label", undefined, "Rate-card Orders"),
+      desc: t("p.delegation.tiles.ratecard.desc", undefined, "Service catalog purchases"),
       count: orders ?? 0,
     },
-    { href: `/p/${slug}/delegation/bookings`, label: "Bookings", desc: "Training venue bookings" },
-    { href: `/p/${slug}/delegation/meetings`, label: "Meetings", desc: "Team meetings, briefings" },
-    { href: `/p/${slug}/delegation/cases`, label: "Cases", desc: "Open issues and requests" },
-    { href: `/p/${slug}/delegation/privacy`, label: "Privacy", desc: "DSAR, consent, your data" },
+    {
+      href: `/p/${slug}/delegation/bookings`,
+      label: t("p.delegation.tiles.bookings.label", undefined, "Bookings"),
+      desc: t("p.delegation.tiles.bookings.desc", undefined, "Training venue bookings"),
+    },
+    {
+      href: `/p/${slug}/delegation/meetings`,
+      label: t("p.delegation.tiles.meetings.label", undefined, "Meetings"),
+      desc: t("p.delegation.tiles.meetings.desc", undefined, "Team meetings, briefings"),
+    },
+    {
+      href: `/p/${slug}/delegation/cases`,
+      label: t("p.delegation.tiles.cases.label", undefined, "Cases"),
+      desc: t("p.delegation.tiles.cases.desc", undefined, "Open issues and requests"),
+    },
+    {
+      href: `/p/${slug}/delegation/privacy`,
+      label: t("p.delegation.tiles.privacy.label", undefined, "Privacy"),
+      desc: t("p.delegation.tiles.privacy.desc", undefined, "DSAR, consent, your data"),
+    },
   ];
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal"
-        title="Delegation"
-        subtitle="Operations dashboard for delegation attachés"
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Delegation" }]}
+        eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+        title={t("p.delegation.title", undefined, "Delegation")}
+        subtitle={t("p.delegation.subtitle", undefined, "Operations dashboard for delegation attachés")}
+        breadcrumbs={[
+          { label: t("p.shared.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.delegation.title", undefined, "Delegation") },
+        ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Entries" value={fmt.number(entries ?? 0)} />
-          <MetricCard label="Visa Cases" value={fmt.number(visas ?? 0)} />
-          <MetricCard label="Orders" value={fmt.number(orders ?? 0)} />
+          <MetricCard
+            label={t("p.delegation.metrics.entries", undefined, "Entries")}
+            value={fmt.number(entries ?? 0)}
+          />
+          <MetricCard
+            label={t("p.delegation.metrics.visaCases", undefined, "Visa Cases")}
+            value={fmt.number(visas ?? 0)}
+          />
+          <MetricCard label={t("p.delegation.metrics.orders", undefined, "Orders")} value={fmt.number(orders ?? 0)} />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
+          {tiles.map((tile) => (
+            <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
               <div className="flex items-start justify-between gap-2">
-                <div className="text-sm font-semibold">{t.label}</div>
-                {t.count != null && <Badge variant="muted">{t.count}</Badge>}
+                <div className="text-sm font-semibold">{tile.label}</div>
+                {tile.count != null && <Badge variant="muted">{tile.count}</Badge>}
               </div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+              <p className="mt-1 text-xs text-[var(--text-secondary)]">{tile.desc}</p>
             </Link>
           ))}
         </div>
 
         <section>
-          <h2 className="text-sm font-semibold">Document Vault</h2>
+          <h2 className="text-sm font-semibold">{t("p.delegation.docVault.title", undefined, "Document Vault")}</h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Visa packages, credentials, and delegation-specific paperwork assigned to you.
+            {t(
+              "p.delegation.docVault.description",
+              undefined,
+              "Visa packages, credentials, and delegation-specific paperwork assigned to you.",
+            )}
           </p>
           <div className="surface mt-3 p-3">
             <PortalDocVault
               projectId={project?.id ?? null}
               types={["vendor_package", "safety_compliance"]}
-              emptyTitle="No Documents Yet"
-              emptyDescription="Visa packages and delegation paperwork submitted by you appear here. Issued credentials, travel, and lodging show up under /p/[slug]/crew/advances."
+              emptyTitle={t("p.delegation.docVault.emptyTitle", undefined, "No Documents Yet")}
+              emptyDescription={t(
+                "p.delegation.docVault.emptyDescription",
+                undefined,
+                "Visa packages and delegation paperwork submitted by you appear here. Issued credentials, travel, and lodging show up under /p/[slug]/crew/advances.",
+              )}
             />
           </div>
         </section>

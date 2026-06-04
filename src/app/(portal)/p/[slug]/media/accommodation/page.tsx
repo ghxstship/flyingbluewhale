@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +28,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Media Accommodation" />
+        <ModuleHeader
+          eyebrow={t("p.media.accommodation.eyebrowShort", undefined, "Portal")}
+          title={t("p.media.accommodation.titleFull", undefined, "Media Accommodation")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.media.accommodation.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -57,33 +63,66 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Media"
-        title="Accommodation"
-        subtitle={`${blocks.length} Block${blocks.length === 1 ? "" : "s"} · ${confirmed}/${reserved} rooms`}
+        eyebrow={t("p.media.accommodation.eyebrow", undefined, "Portal · Media")}
+        title={t("p.media.accommodation.title", undefined, "Accommodation")}
+        subtitle={t(
+          "p.media.accommodation.subtitle",
+          { count: blocks.length, blockLabel: blocks.length === 1 ? "Block" : "Blocks", confirmed, reserved },
+          `${blocks.length} Block${blocks.length === 1 ? "" : "s"} · ${confirmed}/${reserved} rooms`,
+        )}
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Media", href: `/p/${slug}/media` },
-          { label: "Accommodation" },
+          { label: t("p.media.accommodation.crumbs.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.media.accommodation.crumbs.media", undefined, "Media"), href: `/p/${slug}/media` },
+          { label: t("p.media.accommodation.crumbs.accommodation", undefined, "Accommodation") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Confirmed" value={fmtIntl.number(confirmed)} accent />
-          <MetricCard label="Reserved" value={fmtIntl.number(reserved)} />
-          <MetricCard label="Blocks" value={fmtIntl.number(blocks.length)} />
+          <MetricCard
+            label={t("p.media.accommodation.metrics.confirmed", undefined, "Confirmed")}
+            value={fmtIntl.number(confirmed)}
+            accent
+          />
+          <MetricCard
+            label={t("p.media.accommodation.metrics.reserved", undefined, "Reserved")}
+            value={fmtIntl.number(reserved)}
+          />
+          <MetricCard
+            label={t("p.media.accommodation.metrics.blocks", undefined, "Blocks")}
+            value={fmtIntl.number(blocks.length)}
+          />
         </div>
 
         <DataTable<Block>
           rows={blocks}
-          emptyLabel="No media accommodation blocks"
-          emptyDescription="Media hotel blocks land here once contracted. Each block is tagged with stakeholder_group = media."
+          emptyLabel={t("p.media.accommodation.empty.label", undefined, "No media accommodation blocks")}
+          emptyDescription={t(
+            "p.media.accommodation.empty.description",
+            undefined,
+            "Media hotel blocks land here once contracted. Each block is tagged with stakeholder_group = media.",
+          )}
           columns={[
-            { key: "name", header: "Block", render: (r) => r.name, accessor: (r) => r.name },
-            { key: "property", header: "Property", render: (r) => r.property, accessor: (r) => r.property },
-            { key: "city", header: "City", render: (r) => r.city ?? "—", accessor: (r) => r.city ?? null },
+            {
+              key: "name",
+              header: t("p.media.accommodation.columns.block", undefined, "Block"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
+            {
+              key: "property",
+              header: t("p.media.accommodation.columns.property", undefined, "Property"),
+              render: (r) => r.property,
+              accessor: (r) => r.property,
+            },
+            {
+              key: "city",
+              header: t("p.media.accommodation.columns.city", undefined, "City"),
+              render: (r) => r.city ?? "—",
+              accessor: (r) => r.city ?? null,
+            },
             {
               key: "rooms",
-              header: "Rooms",
+              header: t("p.media.accommodation.columns.rooms", undefined, "Rooms"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.rooms_confirmed}/{r.rooms_reserved}
@@ -93,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "window",
-              header: "Window",
+              header: t("p.media.accommodation.columns.window", undefined, "Window"),
               render: (r) => (
                 <span className="font-mono text-[10px]">
                   {fmt(r.starts_on)} – {fmt(r.ends_on)}
@@ -103,7 +142,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "group",
-              header: "Group",
+              header: t("p.media.accommodation.columns.group", undefined, "Group"),
               render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
               filterable: true,
               groupable: true,

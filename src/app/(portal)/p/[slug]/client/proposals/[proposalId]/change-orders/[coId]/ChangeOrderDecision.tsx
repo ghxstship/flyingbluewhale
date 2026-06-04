@@ -6,8 +6,10 @@ import { Alert } from "@/components/ui/Alert";
 import { SelectableCard } from "@/components/ui/SelectableCard";
 import { decideChangeOrderAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function ChangeOrderDecision({ slug, proposalId, coId }: { slug: string; proposalId: string; coId: string }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(decideChangeOrderAction, null);
   const [decision, setDecision] = useState<"approved" | "rejected">("approved");
 
@@ -17,34 +19,59 @@ export function ChangeOrderDecision({ slug, proposalId, coId }: { slug: string; 
       <input type="hidden" name="proposalId" value={proposalId} />
       <input type="hidden" name="coId" value={coId} />
       <input type="hidden" name="decision" value={decision} />
-      <div className="eyebrow text-xs text-[var(--text-muted)]">Your decision</div>
-      <h3 className="text-base font-semibold">Approve or Reject This Change Order</h3>
+      <div className="eyebrow text-xs text-[var(--text-muted)]">
+        {t("p.client.changeOrders.decision.eyebrow", undefined, "Your decision")}
+      </div>
+      <h3 className="text-base font-semibold">
+        {t("p.client.changeOrders.decision.title", undefined, "Approve or Reject This Change Order")}
+      </h3>
 
-      <div className="grid gap-2 md:grid-cols-2" role="radiogroup" aria-label="Change order decision">
+      <div
+        className="grid gap-2 md:grid-cols-2"
+        role="radiogroup"
+        aria-label={t("p.client.changeOrders.decision.radiogroupAria", undefined, "Change order decision")}
+      >
         <SelectableCard
           tone="success"
           selected={decision === "approved"}
           onClick={() => setDecision("approved")}
-          title="Approve"
-          description="Add to the contract; new total reflects on the overview."
+          title={t("p.client.changeOrders.decision.approve.title", undefined, "Approve")}
+          description={t(
+            "p.client.changeOrders.decision.approve.description",
+            undefined,
+            "Add to the contract; new total reflects on the overview.",
+          )}
         />
         <SelectableCard
           tone="error"
           selected={decision === "rejected"}
           onClick={() => setDecision("rejected")}
-          title="Reject"
-          description="Marks as declined; out of scope."
+          title={t("p.client.changeOrders.decision.reject.title", undefined, "Reject")}
+          description={t(
+            "p.client.changeOrders.decision.reject.description",
+            undefined,
+            "Marks as declined; out of scope.",
+          )}
         />
       </div>
 
-      <textarea name="note" rows={3} placeholder="Optional note for the team…" className="input-base w-full" />
+      <textarea
+        name="note"
+        rows={3}
+        placeholder={t("p.client.changeOrders.decision.notePlaceholder", undefined, "Optional note for the team…")}
+        className="input-base w-full"
+      />
 
       {state?.error && <Alert kind="error">{state.error}</Alert>}
-      {state?.ok && <Alert kind="success">Decision recorded.</Alert>}
+      {state?.ok && (
+        <Alert kind="success">{t("p.client.changeOrders.decision.recorded", undefined, "Decision recorded.")}</Alert>
+      )}
 
       <div className="flex justify-end">
         <Button type="submit" loading={pending} variant={decision === "rejected" ? "danger" : "primary"}>
-          {decision === "approved" ? "Approve change" : "Reject change"}
+          {decision === "approved"
+            ? t("p.client.changeOrders.decision.submit.approve", undefined, "Approve change")
+            : t("p.client.changeOrders.decision.submit.reject", undefined, "Reject change")}
         </Button>
       </div>
     </form>

@@ -6,12 +6,14 @@ import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Proposal } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const project = await projectIdFromSlug(slug);
   const supabase = await createClient();
   const rows = project
@@ -24,14 +26,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       ).data as unknown as Proposal[]) ?? [])
     : [];
   return (
-    <PortalSubpage slug={slug} persona="client" title="Proposals" subtitle="Review, approve, e-sign">
+    <PortalSubpage
+      slug={slug}
+      persona="client"
+      title={t("p.client.proposals.title", undefined, "Proposals")}
+      subtitle={t("p.client.proposals.subtitle", undefined, "Review, approve, e-sign")}
+    >
       <DataTable<Proposal>
         rows={rows}
-        emptyLabel="No proposals to review"
+        emptyLabel={t("p.client.proposals.empty", undefined, "No proposals to review")}
         columns={[
           {
             key: "title",
-            header: "Title",
+            header: t("p.client.proposals.col.title", undefined, "Title"),
             render: (r) => (
               <Link
                 href={`/p/${slug}/client/proposals/${r.id}`}
@@ -44,14 +51,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           },
           {
             key: "amount",
-            header: "Amount",
+            header: t("p.client.proposals.col.amount", undefined, "Amount"),
             render: (r) => formatMoney(r.amount_cents ?? 0),
             className: "font-mono text-xs",
             accessor: (r) => Number(r.amount_cents ?? 0),
           },
           {
             key: "status",
-            header: "Status",
+            header: t("p.client.proposals.col.status", undefined, "Status"),
             render: (r) => <StatusBadge status={r.status} />,
             accessor: (r) => r.status,
             filterable: true,
@@ -59,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           },
           {
             key: "sent",
-            header: "Sent",
+            header: t("p.client.proposals.col.sent", undefined, "Sent"),
             render: (r) => (r.sent_at ? timeAgo(r.sent_at) : "—"),
             className: "font-mono text-xs",
             accessor: (r) => r.sent_at ?? null,
@@ -72,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 href={`/p/${slug}/client/proposals/${r.id}`}
                 className="text-xs text-[var(--text-muted)] hover:text-[var(--org-primary)]"
               >
-                Open →
+                {t("p.client.proposals.open", undefined, "Open →")}
               </Link>
             ),
             className: "text-end",

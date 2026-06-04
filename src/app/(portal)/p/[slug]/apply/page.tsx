@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,16 @@ const VETTING_TONE: Record<string, "muted" | "info" | "warning" | "success" | "e
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Apply" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+          title={t("p.apply.title", undefined, "Apply")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -56,7 +60,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const fmt = await getRequestFormatters();
 
   function fmtDate(iso: string | null): string {
-    if (!iso) return "—";
+    if (!iso) return t("common.emDash", undefined, "—");
     return fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   }
   const { data } = await supabase
@@ -73,42 +77,64 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal"
-        title="Accreditation"
-        subtitle={`${apps.length} Application${apps.length === 1 ? "" : "s"} On File`}
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Apply" }]}
+        eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+        title={t("p.apply.headerTitle", undefined, "Accreditation")}
+        subtitle={
+          apps.length === 1
+            ? t(
+                "p.apply.subtitle.one",
+                { count: fmt.number(apps.length) },
+                `${fmt.number(apps.length)} Application On File`,
+              )
+            : t(
+                "p.apply.subtitle.other",
+                { count: fmt.number(apps.length) },
+                `${fmt.number(apps.length)} Applications On File`,
+              )
+        }
+        breadcrumbs={[
+          { label: t("p.shared.eyebrow.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.apply.title", undefined, "Apply") },
+        ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Issued" value={fmt.number(issued)} accent={issued > 0} />
-          <MetricCard label="In Review" value={fmt.number(inFlight)} />
-          <MetricCard label="Total" value={fmt.number(apps.length)} />
+          <MetricCard
+            label={t("p.apply.metric.issued", undefined, "Issued")}
+            value={fmt.number(issued)}
+            accent={issued > 0}
+          />
+          <MetricCard label={t("p.apply.metric.inReview", undefined, "In Review")} value={fmt.number(inFlight)} />
+          <MetricCard label={t("p.apply.metric.total", undefined, "Total")} value={fmt.number(apps.length)} />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Start a New Application</h3>
+          <h3 className="text-sm font-semibold">{t("p.apply.start.title", undefined, "Start a New Application")}</h3>
           <p className="mt-1 text-xs text-[var(--text-secondary)]">
-            Apply for accreditation against any of the project's published categories. We verify identity, check zone
-            access, and issue your card on approval.
+            {t(
+              "p.apply.start.description",
+              undefined,
+              "Apply for accreditation against any of the project's published categories. We verify identity, check zone access, and issue your card on approval.",
+            )}
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href={`/p/${slug}/apply/changes`} className="btn btn-secondary btn-sm">
-              Request a category change
+              {t("p.apply.start.requestChange", undefined, "Request a category change")}
             </Link>
             <Link
               href={`mailto:accreditation@atlvs.pro?subject=New%20application%20—%20${slug}`}
               className="btn btn-primary btn-sm"
             >
-              Email producer
+              {t("p.apply.start.emailProducer", undefined, "Email producer")}
             </Link>
           </div>
         </section>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Your Applications</h3>
+          <h3 className="text-sm font-semibold">{t("p.apply.list.title", undefined, "Your Applications")}</h3>
           {apps.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No applications yet — your producer will invite you.
+              {t("p.apply.list.empty", undefined, "No applications yet — your producer will invite you.")}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
@@ -117,7 +143,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div>
                     <div className="font-medium">{a.person_name}</div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                      {a.category?.code ?? "—"} · {a.category?.name ?? ""}
+                      {a.category?.code ?? t("common.emDash", undefined, "—")} · {a.category?.name ?? ""}
                       {a.valid_from && a.valid_to ? ` · ${fmtDate(a.valid_from)} – ${fmtDate(a.valid_to)}` : ""}
                     </div>
                   </div>

@@ -5,7 +5,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,13 @@ type Approval = {
 };
 
 export default async function ProducerApprovals({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("p.producer.approvals.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -53,9 +59,19 @@ export default async function ProducerApprovals({ params }: { params: Promise<{ 
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Approvals</h1>
+        <h1 className="text-2xl font-semibold">{t("p.producer.approvals.title", undefined, "Approvals")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          {pendingCount} pending across {propIds.length} proposal{propIds.length === 1 ? "" : "s"}.
+          {propIds.length === 1
+            ? t(
+                "p.producer.approvals.summary.one",
+                { count: pendingCount },
+                `${pendingCount} pending across 1 proposal.`,
+              )
+            : t(
+                "p.producer.approvals.summary.other",
+                { count: pendingCount, total: propIds.length },
+                `${pendingCount} pending across ${propIds.length} proposals.`,
+              )}
         </p>
 
         <ul className="mt-5 space-y-2">
@@ -63,8 +79,12 @@ export default async function ProducerApprovals({ params }: { params: Promise<{ 
             <li>
               <EmptyState
                 size="compact"
-                title="No Approvals"
-                description="Proposal approval steps appear here as they're routed."
+                title={t("p.producer.approvals.empty.title", undefined, "No Approvals")}
+                description={t(
+                  "p.producer.approvals.empty.description",
+                  undefined,
+                  "Proposal approval steps appear here as they're routed.",
+                )}
               />
             </li>
           ) : (
@@ -73,16 +93,21 @@ export default async function ProducerApprovals({ params }: { params: Promise<{ 
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="text-sm font-semibold">
-                      {propMap.get(a.proposal_id) ?? "Proposal"} — {a.title ?? a.kind}
+                      {propMap.get(a.proposal_id) ?? t("p.producer.approvals.proposalFallback", undefined, "Proposal")}{" "}
+                      — {a.title ?? a.kind}
                     </div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
                       {a.kind} · {fmt.date(a.created_at)}
-                      {a.signed_at ? ` · signed ${fmt.date(a.signed_at)}` : ""}
-                      {a.due_at ? ` · due ${fmt.date(a.due_at)}` : ""}
+                      {a.signed_at
+                        ? ` · ${t("p.producer.approvals.signedAt", { date: fmt.date(a.signed_at) }, `signed ${fmt.date(a.signed_at)}`)}`
+                        : ""}
+                      {a.due_at
+                        ? ` · ${t("p.producer.approvals.dueAt", { date: fmt.date(a.due_at) }, `due ${fmt.date(a.due_at)}`)}`
+                        : ""}
                     </div>
                   </div>
                   <Badge variant={a.state === "signed" ? "success" : a.state === "declined" ? "error" : "info"}>
-                    {a.state}
+                    {t(`p.producer.approvals.state.${a.state}`, undefined, a.state)}
                   </Badge>
                 </div>
               </li>

@@ -7,11 +7,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
 import { fmtDate } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data } = await supabase
     .from("credentials")
     .select("id, kind, number, issued_on, expires_on, file_path")
@@ -27,21 +29,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }>;
   const now = Date.now();
   return (
-    <PortalSubpage slug={slug} persona="vendor" title="Credentials" subtitle="COI, W-9, safety cards">
+    <PortalSubpage
+      slug={slug}
+      persona="vendor"
+      title={t("p.vendor.credentials.title", undefined, "Credentials")}
+      subtitle={t("p.vendor.credentials.subtitle", undefined, "COI, W-9, safety cards")}
+    >
       {items.length === 0 ? (
         <EmptyState
-          title="No Credentials on File"
-          description="Upload a COI and W-9 before your first invoice. Expired credentials block payouts."
+          title={t("p.vendor.credentials.empty.title", undefined, "No Credentials on File")}
+          description={t(
+            "p.vendor.credentials.empty.description",
+            undefined,
+            "Upload a COI and W-9 before your first invoice. Expired credentials block payouts.",
+          )}
         />
       ) : (
         <table className="data-table w-full text-sm">
           <thead>
             <tr>
-              <th>Kind</th>
-              <th>Number</th>
-              <th>Issued</th>
-              <th>Expires</th>
-              <th>Status</th>
+              <th>{t("p.vendor.credentials.col.kind", undefined, "Kind")}</th>
+              <th>{t("p.vendor.credentials.col.number", undefined, "Number")}</th>
+              <th>{t("p.vendor.credentials.col.issued", undefined, "Issued")}</th>
+              <th>{t("p.vendor.credentials.col.expires", undefined, "Expires")}</th>
+              <th>{t("p.vendor.credentials.col.status", undefined, "Status")}</th>
             </tr>
           </thead>
           <tbody>
@@ -56,7 +67,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <td className="font-mono text-xs">{fmtDate(c.expires_on)}</td>
                   <td>
                     <StatusChip tone={state === "expired" ? "danger" : state === "expiring" ? "warning" : "success"}>
-                      {state}
+                      {state === "expired"
+                        ? t("p.vendor.credentials.state.expired", undefined, "expired")
+                        : state === "expiring"
+                          ? t("p.vendor.credentials.state.expiring", undefined, "expiring")
+                          : t("p.vendor.credentials.state.active", undefined, "active")}
                     </StatusChip>
                   </td>
                 </tr>

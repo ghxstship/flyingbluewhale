@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -41,12 +41,18 @@ function fmt(iso: string): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Press Conferences" />
+        <ModuleHeader
+          eyebrow={t("p.media.pressconf.eyebrow.short", undefined, "Portal")}
+          title={t("p.media.pressconf.title", undefined, "Press Conferences")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.media.pressconf.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -71,28 +77,53 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Media"
-        title="Press Conferences"
-        subtitle={`${conferences.length} press conference${conferences.length === 1 ? "" : "s"}`}
+        eyebrow={t("p.media.pressconf.eyebrow", undefined, "Portal · Media")}
+        title={t("p.media.pressconf.title", undefined, "Press Conferences")}
+        subtitle={
+          conferences.length === 1
+            ? t(
+                "p.media.pressconf.subtitle.one",
+                { count: conferences.length },
+                `${conferences.length} press conference`,
+              )
+            : t(
+                "p.media.pressconf.subtitle.other",
+                { count: conferences.length },
+                `${conferences.length} press conferences`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Media", href: `/p/${slug}/media` },
-          { label: "Press Conferences" },
+          { label: t("p.media.pressconf.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.media.pressconf.breadcrumb.media", undefined, "Media"), href: `/p/${slug}/media` },
+          { label: t("p.media.pressconf.breadcrumb.current", undefined, "Press Conferences") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming" value={fmtIntl.number(upcoming.length)} accent={upcoming.length > 0} />
-          <MetricCard label="Scheduled" value={fmtIntl.number(conferences.length)} />
-          <MetricCard label="Past" value={fmtIntl.number(conferences.length - upcoming.length)} />
+          <MetricCard
+            label={t("p.media.pressconf.metric.upcoming", undefined, "Upcoming")}
+            value={fmtIntl.number(upcoming.length)}
+            accent={upcoming.length > 0}
+          />
+          <MetricCard
+            label={t("p.media.pressconf.metric.scheduled", undefined, "Scheduled")}
+            value={fmtIntl.number(conferences.length)}
+          />
+          <MetricCard
+            label={t("p.media.pressconf.metric.past", undefined, "Past")}
+            value={fmtIntl.number(conferences.length - upcoming.length)}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Schedule</h3>
+          <h3 className="text-sm font-semibold">{t("p.media.pressconf.schedule.heading", undefined, "Schedule")}</h3>
           {conferences.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No press conferences scheduled. Producer publishes events containing "press conference" or "media
-              briefing" in the name.
+              {t(
+                "p.media.pressconf.schedule.empty",
+                undefined,
+                'No press conferences scheduled. Producer publishes events containing "press conference" or "media briefing" in the name.',
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
@@ -114,11 +145,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </section>
 
         <p className="text-xs text-[var(--text-muted)]">
-          To RSVP, email{" "}
+          {t("p.media.pressconf.rsvp.prefix", undefined, "To RSVP, email")}{" "}
           <a className="text-[var(--org-primary)]" href="mailto:press@atlvs.pro">
             press@atlvs.pro
           </a>{" "}
-          with your accreditation number and the conference name.
+          {t("p.media.pressconf.rsvp.suffix", undefined, "with your accreditation number and the conference name.")}
         </p>
       </div>
     </>

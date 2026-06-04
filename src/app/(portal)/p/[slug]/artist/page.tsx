@@ -5,6 +5,7 @@ import { portalNav } from "@/lib/nav";
 import { hasSupabase } from "@/lib/env";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { PortalDocVault } from "@/components/portal/PortalDocVault";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -13,46 +14,79 @@ export default async function ArtistHome({ params }: { params: Promise<{ slug: s
   if (!hasSupabase) notFound();
   const project = await projectIdFromSlug(slug);
   if (!project) notFound();
+  const { t } = await getRequestT();
   return (
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "artist")} />
       <div className="flex-1">
         <ModuleHeader
           eyebrow={project.name}
-          title="Artist Portal"
-          subtitle="Submit riders, input lists, catering, travel, and schedule"
+          title={t("p.artist.home.title", undefined, "Artist Portal")}
+          subtitle={t(
+            "p.artist.home.subtitle",
+            undefined,
+            "Submit riders, input lists, catering, travel, and schedule",
+          )}
         />
         <div className="page-content">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
                 href: `/p/${slug}/artist/advancing`,
-                label: "Advancing",
-                desc: "Technical rider · hospitality · stage plot · guest list",
+                label: t("p.artist.home.advancing.label", undefined, "Advancing"),
+                desc: t(
+                  "p.artist.home.advancing.desc",
+                  undefined,
+                  "Technical rider · hospitality · stage plot · guest list",
+                ),
               },
-              { href: `/p/${slug}/artist/catering`, label: "Catering", desc: "Meals, dietary preferences, green room" },
-              { href: `/p/${slug}/artist/venue`, label: "Venue", desc: "Load-in, power, dimensions" },
-              { href: `/p/${slug}/artist/schedule`, label: "Schedule", desc: "Show day timing" },
-              { href: `/p/${slug}/artist/travel`, label: "Travel", desc: "Flights, hotel, ground transport" },
-            ].map((t) => (
-              <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-                <div className="text-sm font-semibold">{t.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t.desc}</div>
+              {
+                href: `/p/${slug}/artist/catering`,
+                label: t("p.artist.home.catering.label", undefined, "Catering"),
+                desc: t("p.artist.home.catering.desc", undefined, "Meals, dietary preferences, green room"),
+              },
+              {
+                href: `/p/${slug}/artist/venue`,
+                label: t("p.artist.home.venue.label", undefined, "Venue"),
+                desc: t("p.artist.home.venue.desc", undefined, "Load-in, power, dimensions"),
+              },
+              {
+                href: `/p/${slug}/artist/schedule`,
+                label: t("p.artist.home.schedule.label", undefined, "Schedule"),
+                desc: t("p.artist.home.schedule.desc", undefined, "Show day timing"),
+              },
+              {
+                href: `/p/${slug}/artist/travel`,
+                label: t("p.artist.home.travel.label", undefined, "Travel"),
+                desc: t("p.artist.home.travel.desc", undefined, "Flights, hotel, ground transport"),
+              },
+            ].map((item) => (
+              <Link key={item.href} href={item.href} className="surface hover-lift p-5">
+                <div className="text-sm font-semibold">{item.label}</div>
+                <div className="mt-1 text-xs text-[var(--text-muted)]">{item.desc}</div>
               </Link>
             ))}
           </div>
 
           <section className="mt-6">
-            <h2 className="text-sm font-semibold">Document Vault</h2>
+            <h2 className="text-sm font-semibold">{t("p.artist.home.vault.title", undefined, "Document Vault")}</h2>
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Riders, stage plots, and input lists you&apos;ve submitted or had assigned to you.
+              {t(
+                "p.artist.home.vault.description",
+                undefined,
+                "Riders, stage plots, and input lists you've submitted or had assigned to you.",
+              )}
             </p>
             <div className="surface mt-3 p-3">
               <PortalDocVault
                 projectId={project.id}
                 types={["technical_rider", "hospitality_rider", "input_list", "stage_plot"]}
-                emptyTitle="No Documents Yet"
-                emptyDescription="Once you submit a rider or have one assigned, it appears here."
+                emptyTitle={t("p.artist.home.vault.emptyTitle", undefined, "No Documents Yet")}
+                emptyDescription={t(
+                  "p.artist.home.vault.emptyDescription",
+                  undefined,
+                  "Once you submit a rider or have one assigned, it appears here.",
+                )}
               />
             </div>
           </section>

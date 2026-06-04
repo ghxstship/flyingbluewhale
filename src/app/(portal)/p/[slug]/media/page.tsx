@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { PortalDocVault } from "@/components/portal/PortalDocVault";
 
@@ -12,12 +12,16 @@ export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Media" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow", undefined, "Portal")}
+          title={t("p.media.title", undefined, "Media")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -32,47 +36,88 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   ]);
 
   const tiles = [
-    { href: `/p/${slug}/media/info`, label: "Info on Demand", desc: "Project briefings, fact sheets, biographies" },
-    { href: `/p/${slug}/media/pressconf`, label: "Press Conferences", desc: "Schedule and RSVP" },
-    { href: `/p/${slug}/media/services`, label: "Media Services", desc: "Studios, mixed zones, working areas" },
-    { href: `/p/${slug}/media/transport`, label: "Transport", desc: "Media shuttle (T2)" },
-    { href: `/p/${slug}/media/accommodation`, label: "Accommodation", desc: "Media hotel allocations" },
+    {
+      href: `/p/${slug}/media/info`,
+      label: t("p.media.tiles.info.label", undefined, "Info on Demand"),
+      desc: t("p.media.tiles.info.desc", undefined, "Project briefings, fact sheets, biographies"),
+    },
+    {
+      href: `/p/${slug}/media/pressconf`,
+      label: t("p.media.tiles.pressconf.label", undefined, "Press Conferences"),
+      desc: t("p.media.tiles.pressconf.desc", undefined, "Schedule and RSVP"),
+    },
+    {
+      href: `/p/${slug}/media/services`,
+      label: t("p.media.tiles.services.label", undefined, "Media Services"),
+      desc: t("p.media.tiles.services.desc", undefined, "Studios, mixed zones, working areas"),
+    },
+    {
+      href: `/p/${slug}/media/transport`,
+      label: t("p.media.tiles.transport.label", undefined, "Transport"),
+      desc: t("p.media.tiles.transport.desc", undefined, "Media shuttle (T2)"),
+    },
+    {
+      href: `/p/${slug}/media/accommodation`,
+      label: t("p.media.tiles.accommodation.label", undefined, "Accommodation"),
+      desc: t("p.media.tiles.accommodation.desc", undefined, "Media hotel allocations"),
+    },
   ];
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal"
-        title="Media"
-        subtitle="Working areas, services, and editorial info for accredited media"
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Media" }]}
+        eyebrow={t("p.shared.eyebrow", undefined, "Portal")}
+        title={t("p.media.title", undefined, "Media")}
+        subtitle={t("p.media.subtitle", undefined, "Working areas, services, and editorial info for accredited media")}
+        breadcrumbs={[
+          { label: t("p.shared.eyebrow", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.media.title", undefined, "Media") },
+        ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Info Articles" value={fmt.number(kbCount ?? 0)} />
-          <MetricCard label="Status" value="Live" accent />
-          <MetricCard label="Last Updated" value="today" />
+          <MetricCard
+            label={t("p.media.metrics.infoArticles", undefined, "Info Articles")}
+            value={fmt.number(kbCount ?? 0)}
+          />
+          <MetricCard
+            label={t("p.media.metrics.status", undefined, "Status")}
+            value={t("p.media.metrics.statusLive", undefined, "Live")}
+            accent
+          />
+          <MetricCard
+            label={t("p.media.metrics.lastUpdated", undefined, "Last Updated")}
+            value={t("p.media.metrics.today", undefined, "today")}
+          />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-              <div className="text-sm font-semibold">{t.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+          {tiles.map((tile) => (
+            <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
+              <div className="text-sm font-semibold">{tile.label}</div>
+              <p className="mt-1 text-xs text-[var(--text-secondary)]">{tile.desc}</p>
             </Link>
           ))}
         </div>
 
         <section>
-          <h2 className="text-sm font-semibold">Document Vault</h2>
+          <h2 className="text-sm font-semibold">{t("p.media.docVault.title", undefined, "Document Vault")}</h2>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Credentials and editorial collateral assigned to you for this project.
+            {t(
+              "p.media.docVault.description",
+              undefined,
+              "Credentials and editorial collateral assigned to you for this project.",
+            )}
           </p>
           <div className="surface mt-3 p-3">
             <PortalDocVault
               projectId={project?.id ?? null}
               types={["vendor_package", "comms_plan"]}
-              emptyTitle="No Documents Yet"
-              emptyDescription="Press packages submitted by you appear here. Issued press credentials show up under /p/[slug]/crew/advances."
+              emptyTitle={t("p.media.docVault.emptyTitle", undefined, "No Documents Yet")}
+              emptyDescription={t(
+                "p.media.docVault.emptyDescription",
+                undefined,
+                "Press packages submitted by you appear here. Issued press credentials show up under /p/[slug]/crew/advances.",
+              )}
             />
           </div>
         </section>

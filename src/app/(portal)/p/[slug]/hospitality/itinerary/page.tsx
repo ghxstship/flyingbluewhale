@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -21,12 +21,16 @@ type EventRow = {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Itinerary" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+          title={t("p.hospitality.itinerary.title", undefined, "Itinerary")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -60,25 +64,54 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Hospitality"
-        title="Itinerary"
-        subtitle={`${events.length} Event${events.length === 1 ? "" : "s"} across ${days.length} day${days.length === 1 ? "" : "s"}`}
+        eyebrow={t("p.hospitality.itinerary.eyebrow", undefined, "Portal · Hospitality")}
+        title={t("p.hospitality.itinerary.title", undefined, "Itinerary")}
+        subtitle={
+          events.length === 1
+            ? t(
+                "p.hospitality.itinerary.subtitle.singularEvent",
+                { days: days.length, dayLabel: days.length === 1 ? "day" : "days" },
+                `${events.length} Event across ${days.length} ${days.length === 1 ? "day" : "days"}`,
+              )
+            : t(
+                "p.hospitality.itinerary.subtitle.pluralEvents",
+                { events: events.length, days: days.length, dayLabel: days.length === 1 ? "day" : "days" },
+                `${events.length} Events across ${days.length} ${days.length === 1 ? "day" : "days"}`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Hospitality", href: `/p/${slug}/hospitality` },
-          { label: "Itinerary" },
+          { label: t("p.shared.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          {
+            label: t("p.hospitality.breadcrumb.hospitality", undefined, "Hospitality"),
+            href: `/p/${slug}/hospitality`,
+          },
+          { label: t("p.hospitality.itinerary.breadcrumb", undefined, "Itinerary") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming Events" value={fmt.number(events.length)} accent={events.length > 0} />
-          <MetricCard label="Days" value={fmt.number(days.length)} />
-          <MetricCard label="Status" value="Confirmed" />
+          <MetricCard
+            label={t("p.hospitality.itinerary.metric.upcomingEvents", undefined, "Upcoming Events")}
+            value={fmt.number(events.length)}
+            accent={events.length > 0}
+          />
+          <MetricCard
+            label={t("p.hospitality.itinerary.metric.days", undefined, "Days")}
+            value={fmt.number(days.length)}
+          />
+          <MetricCard
+            label={t("p.hospitality.itinerary.metric.status", undefined, "Status")}
+            value={t("p.hospitality.itinerary.metric.statusConfirmed", undefined, "Confirmed")}
+          />
         </div>
 
         {events.length === 0 ? (
           <div className="surface p-6 text-sm text-[var(--text-muted)]">
-            No events on your itinerary yet. Check back closer to the date — confirmed events publish here.
+            {t(
+              "p.hospitality.itinerary.empty",
+              undefined,
+              "No events on your itinerary yet. Check back closer to the date — confirmed events publish here.",
+            )}
           </div>
         ) : (
           <div className="space-y-6">
@@ -96,7 +129,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                           <div>
                             <div className="text-sm font-medium">{e.name}</div>
                             <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                              until {fmtTime(e.ends_at)}
+                              {t(
+                                "p.hospitality.itinerary.until",
+                                { time: fmtTime(e.ends_at) },
+                                `until ${fmtTime(e.ends_at)}`,
+                              )}
                               {e.location?.name ? ` · ${e.location.name}` : ""}
                             </div>
                           </div>

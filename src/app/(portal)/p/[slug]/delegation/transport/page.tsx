@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Transport" />
+        <ModuleHeader
+          eyebrow={t("p.delegation.transport.eyebrowShort", undefined, "Portal")}
+          title={t("p.delegation.transport.title", undefined, "Transport")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.delegation.transport.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -73,27 +79,46 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Delegation"
-        title="Transport"
-        subtitle={`${runs.length} Run${runs.length === 1 ? "" : "s"} · ${upcoming} Active`}
+        eyebrow={t("p.delegation.transport.eyebrow", undefined, "Portal · Delegation")}
+        title={t("p.delegation.transport.title", undefined, "Transport")}
+        subtitle={
+          runs.length === 1
+            ? t("p.delegation.transport.subtitleOne", { upcoming }, `${runs.length} Run · ${upcoming} Active`)
+            : t(
+                "p.delegation.transport.subtitleMany",
+                { count: runs.length, upcoming },
+                `${runs.length} Runs · ${upcoming} Active`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Delegation", href: `/p/${slug}/delegation` },
-          { label: "Transport" },
+          { label: t("p.delegation.transport.crumbPortal", undefined, "Portal"), href: `/p/${slug}` },
+          {
+            label: t("p.delegation.transport.crumbDelegation", undefined, "Delegation"),
+            href: `/p/${slug}/delegation`,
+          },
+          { label: t("p.delegation.transport.crumbTransport", undefined, "Transport") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="T1 Runs" value={fmtIntl.number(t1)} />
-          <MetricCard label="T2 Runs" value={fmtIntl.number(t2)} />
-          <MetricCard label="Active" value={fmtIntl.number(upcoming)} accent={upcoming > 0} />
+          <MetricCard label={t("p.delegation.transport.t1Runs", undefined, "T1 Runs")} value={fmtIntl.number(t1)} />
+          <MetricCard label={t("p.delegation.transport.t2Runs", undefined, "T2 Runs")} value={fmtIntl.number(t2)} />
+          <MetricCard
+            label={t("p.delegation.transport.active", undefined, "Active")}
+            value={fmtIntl.number(upcoming)}
+            accent={upcoming > 0}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Schedule</h3>
+          <h3 className="text-sm font-semibold">{t("p.delegation.transport.schedule", undefined, "Schedule")}</h3>
           {runs.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No runs scheduled. Dispatch will publish closer to event.
+              {t(
+                "p.delegation.transport.empty",
+                undefined,
+                "No runs scheduled. Dispatch will publish closer to event.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
@@ -108,7 +133,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                       {r.vehicle_ref ? ` · ${r.vehicle_ref}` : ""}
                     </div>
                   </div>
-                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>
+                    {t(`p.delegation.transport.status.${r.status}`, undefined, toTitle(r.status))}
+                  </Badge>
                 </li>
               ))}
             </ul>

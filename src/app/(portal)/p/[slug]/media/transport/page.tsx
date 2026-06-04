@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Media Transport" />
+        <ModuleHeader
+          eyebrow={t("p.media.transport.eyebrowShort", undefined, "Portal")}
+          title={t("p.media.transport.fallbackTitle", undefined, "Media Transport")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.media.transport.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -70,26 +76,47 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Media"
-        title="Transport"
-        subtitle={`${runs.length} Run${runs.length === 1 ? "" : "s"} · ${upcoming} Active`}
+        eyebrow={t("p.media.transport.eyebrow", undefined, "Portal · Media")}
+        title={t("p.media.transport.title", undefined, "Transport")}
+        subtitle={
+          runs.length === 1
+            ? t(
+                "p.media.transport.subtitleSingular",
+                { count: runs.length, upcoming },
+                `${runs.length} Run · ${upcoming} Active`,
+              )
+            : t(
+                "p.media.transport.subtitlePlural",
+                { count: runs.length, upcoming },
+                `${runs.length} Runs · ${upcoming} Active`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Media", href: `/p/${slug}/media` },
-          { label: "Transport" },
+          { label: t("p.media.transport.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.media.transport.breadcrumb.media", undefined, "Media"), href: `/p/${slug}/media` },
+          { label: t("p.media.transport.breadcrumb.transport", undefined, "Transport") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active Runs" value={fmtIntl.number(upcoming)} accent={upcoming > 0} />
-          <MetricCard label="Total" value={fmtIntl.number(runs.length)} />
-          <MetricCard label="Fleet" value="T2 / Media" />
+          <MetricCard
+            label={t("p.media.transport.metrics.activeRuns", undefined, "Active Runs")}
+            value={fmtIntl.number(upcoming)}
+            accent={upcoming > 0}
+          />
+          <MetricCard
+            label={t("p.media.transport.metrics.total", undefined, "Total")}
+            value={fmtIntl.number(runs.length)}
+          />
+          <MetricCard label={t("p.media.transport.metrics.fleet", undefined, "Fleet")} value="T2 / Media" />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Schedule</h3>
+          <h3 className="text-sm font-semibold">{t("p.media.transport.schedule.heading", undefined, "Schedule")}</h3>
           {runs.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No media shuttle runs scheduled.</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("p.media.transport.schedule.empty", undefined, "No media shuttle runs scheduled.")}
+            </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
               {runs.map((r) => (

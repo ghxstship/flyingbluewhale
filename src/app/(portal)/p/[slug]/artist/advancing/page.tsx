@@ -8,15 +8,19 @@ import { listDeliverables, projectIdFromSlug, TALENT_TYPES, labelForType } from 
 import { AdvancingForm } from "./AdvancingForm";
 import { formatDate } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function ArtistAdvancingPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <div className="page-content">
-        <div className="surface p-6 text-sm">Configure Supabase.</div>
+        <div className="surface p-6 text-sm">
+          {t("p.artist.advancing.configureSupabase", undefined, "Configure Supabase.")}
+        </div>
       </div>
     );
   }
@@ -24,11 +28,11 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
   const project = await projectIdFromSlug(slug);
   if (!project) notFound();
 
-  const talentTypes = TALENT_TYPES.map((t) => t.type);
+  const talentTypes = TALENT_TYPES.map((tt) => tt.type);
   const deliverables = await listDeliverables(project.id, talentTypes);
 
-  const byType = talentTypes.reduce<Record<string, typeof deliverables>>((acc, t) => {
-    acc[t] = deliverables.filter((d) => d.type === t);
+  const byType = talentTypes.reduce<Record<string, typeof deliverables>>((acc, tt) => {
+    acc[tt] = deliverables.filter((d) => d.type === tt);
     return acc;
   }, {});
 
@@ -38,26 +42,42 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
       <div className="flex-1">
         <ModuleHeader
           eyebrow={project.name}
-          title="Advancing"
-          subtitle="Upload riders, input lists, stage plots, guest lists, and crew manifests"
+          title={t("p.artist.advancing.title", undefined, "Advancing")}
+          subtitle={t(
+            "p.artist.advancing.subtitle",
+            undefined,
+            "Upload riders, input lists, stage plots, guest lists, and crew manifests",
+          )}
         />
         <div className="page-content space-y-6">
           <AdvancingForm slug={slug} />
 
           <section className="surface">
             <div className="border-b border-[var(--border-color)] px-5 py-3">
-              <h2 className="text-sm font-semibold">Talent Deliverables</h2>
+              <h2 className="text-sm font-semibold">
+                {t("p.artist.advancing.deliverables.title", undefined, "Talent Deliverables")}
+              </h2>
             </div>
             <div className="divide-y divide-[var(--border-color)]">
-              {TALENT_TYPES.map((t) => {
-                const rows = byType[t.type] ?? [];
+              {TALENT_TYPES.map((tt) => {
+                const rows = byType[tt.type] ?? [];
                 return (
-                  <div key={t.type} className="px-5 py-4">
+                  <div key={tt.type} className="px-5 py-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="text-sm font-medium">{t.label}</div>
+                        <div className="text-sm font-medium">{tt.label}</div>
                         <div className="text-xs text-[var(--text-muted)]">
-                          {rows.length} submission{rows.length === 1 ? "" : "s"}
+                          {rows.length === 1
+                            ? t(
+                                "p.artist.advancing.deliverables.submissionCount.one",
+                                { count: rows.length },
+                                `${rows.length} submission`,
+                              )
+                            : t(
+                                "p.artist.advancing.deliverables.submissionCount.other",
+                                { count: rows.length },
+                                `${rows.length} submissions`,
+                              )}
                         </div>
                       </div>
                     </div>
@@ -68,8 +88,18 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                             <div>
                               <div className="text-sm">{d.title ?? labelForType(d.type)}</div>
                               <div className="text-xs text-[var(--text-muted)]">
-                                v{d.version} · submitted {timeAgo(d.submitted_at ?? d.created_at)}
-                                {d.deadline ? ` · due ${formatDate(d.deadline, "medium")}` : ""}
+                                {t(
+                                  "p.artist.advancing.deliverables.versionSubmitted",
+                                  { version: d.version, time: timeAgo(d.submitted_at ?? d.created_at) },
+                                  `v${d.version} · submitted ${timeAgo(d.submitted_at ?? d.created_at)}`,
+                                )}
+                                {d.deadline
+                                  ? t(
+                                      "p.artist.advancing.deliverables.dueSuffix",
+                                      { date: formatDate(d.deadline, "medium") },
+                                      ` · due ${formatDate(d.deadline, "medium")}`,
+                                    )
+                                  : ""}
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -79,7 +109,7 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                                   href={`/api/v1/deliverables/${d.id}/download`}
                                   className="font-mono text-xs text-[var(--org-primary)]"
                                 >
-                                  Download
+                                  {t("common.download", undefined, "Download")}
                                 </Link>
                               )}
                             </div>

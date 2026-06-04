@@ -6,6 +6,7 @@ import { ExecutiveDashboard } from "@/components/xpms/dashboards";
 import type { DashboardSection } from "@/components/xpms/dashboards";
 import { hasSupabase } from "@/lib/env";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function PromoterHome({ params }: { params: Promise<{ slug:
   const project = await projectIdFromSlug(slug);
   if (!project) notFound();
 
+  const { t } = await getRequestT();
   const nav = portalNav(slug, "promoter");
   const tile = (href: string, label: string, desc: string) => (
     <Link key={href} href={href} className="surface hover-lift block p-4">
@@ -31,31 +33,55 @@ export default async function PromoterHome({ params }: { params: Promise<{ slug:
   const sections: DashboardSection[] = [
     {
       key: "co-pro",
-      title: "Co-Pro Splits",
-      description: "Your share of the deal — fees, expenses, settlement basis.",
+      title: t("p.promoter.home.coPro.title", undefined, "Co-Pro Splits"),
+      description: t(
+        "p.promoter.home.coPro.description",
+        undefined,
+        "Your share of the deal — fees, expenses, settlement basis.",
+      ),
       body: (
         <div className="grid gap-2 sm:grid-cols-2">
-          {tile(`/p/${slug}/promoter/co-pro`, "Splits", "Headline + walkout terms")}
-          {tile(`/p/${slug}/promoter/settlements`, "Settlements", "Show-night reconciliation")}
+          {tile(
+            `/p/${slug}/promoter/co-pro`,
+            t("p.promoter.home.coPro.splits.label", undefined, "Splits"),
+            t("p.promoter.home.coPro.splits.desc", undefined, "Headline + walkout terms"),
+          )}
+          {tile(
+            `/p/${slug}/promoter/settlements`,
+            t("p.promoter.home.coPro.settlements.label", undefined, "Settlements"),
+            t("p.promoter.home.coPro.settlements.desc", undefined, "Show-night reconciliation"),
+          )}
         </div>
       ),
     },
     {
       key: "show-economy",
-      title: "Show Economy",
-      description: "Tour-level P&L and milestone tracking.",
+      title: t("p.promoter.home.showEconomy.title", undefined, "Show Economy"),
+      description: t("p.promoter.home.showEconomy.description", undefined, "Tour-level P&L and milestone tracking."),
       body: (
         <div className="grid gap-2 sm:grid-cols-2">
-          {tile(`/p/${slug}/promoter/tour-pnl`, "Tour P&L", "Routing economics")}
-          {tile(`/p/${slug}/promoter/marketing`, "Marketing Milestones", "Onsale, pre-sale, drops")}
+          {tile(
+            `/p/${slug}/promoter/tour-pnl`,
+            t("p.promoter.home.showEconomy.tourPnl.label", undefined, "Tour P&L"),
+            t("p.promoter.home.showEconomy.tourPnl.desc", undefined, "Routing economics"),
+          )}
+          {tile(
+            `/p/${slug}/promoter/marketing`,
+            t("p.promoter.home.showEconomy.marketing.label", undefined, "Marketing Milestones"),
+            t("p.promoter.home.showEconomy.marketing.desc", undefined, "Onsale, pre-sale, drops"),
+          )}
         </div>
       ),
     },
     {
       key: "approvals",
-      title: "Approvals",
-      description: "Decisions still waiting on you.",
-      body: tile(`/p/${slug}/promoter/approvals`, "Pending", "Review and sign"),
+      title: t("p.promoter.home.approvals.title", undefined, "Approvals"),
+      description: t("p.promoter.home.approvals.description", undefined, "Decisions still waiting on you."),
+      body: tile(
+        `/p/${slug}/promoter/approvals`,
+        t("p.promoter.home.approvals.pending.label", undefined, "Pending"),
+        t("p.promoter.home.approvals.pending.desc", undefined, "Review and sign"),
+      ),
     },
   ];
 
@@ -63,7 +89,11 @@ export default async function PromoterHome({ params }: { params: Promise<{ slug:
     <div className="flex min-h-screen">
       <PortalRail group={nav} />
       <div className="flex-1 p-6">
-        <ExecutiveDashboard title="Promoter Portal" subtitle={project.name} sections={sections} />
+        <ExecutiveDashboard
+          title={t("p.promoter.home.title", undefined, "Promoter Portal")}
+          subtitle={project.name}
+          sections={sections}
+        />
       </div>
     </div>
   );

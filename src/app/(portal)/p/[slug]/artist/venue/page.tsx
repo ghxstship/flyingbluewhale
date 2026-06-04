@@ -4,9 +4,11 @@ import { PortalSubpage } from "@/components/PortalSubpage";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const project = await projectIdFromSlug(slug);
   type Row = { id: string; name: string; address: string | null; city: string | null };
   const venues: Row[] = [];
@@ -27,11 +29,20 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     }
   }
   return (
-    <PortalSubpage slug={slug} persona="artist" title="Venue" subtitle="Address, room setup, access, parking">
+    <PortalSubpage
+      slug={slug}
+      persona="artist"
+      title={t("p.artist.venue.title", undefined, "Venue")}
+      subtitle={t("p.artist.venue.subtitle", undefined, "Address, room setup, access, parking")}
+    >
       {venues.length === 0 ? (
         <EmptyState
-          title="Awaiting Venue Details"
-          description="Venue info posts as soon as production locks the schedule."
+          title={t("p.artist.venue.empty.title", undefined, "Awaiting Venue Details")}
+          description={t(
+            "p.artist.venue.empty.description",
+            undefined,
+            "Venue info posts as soon as production locks the schedule.",
+          )}
         />
       ) : (
         <ul className="space-y-2">

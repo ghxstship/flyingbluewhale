@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { toTitle } from "@/lib/format";
 import { CATALOG_KINDS, CATALOG_KIND_LABEL_SINGULAR, listMyAssignments, type CatalogKind } from "@/lib/db/assignments";
@@ -36,8 +36,13 @@ const STATE_TONE: Record<string, "info" | "success" | "warning" | "error" | "mut
 };
 
 export default async function CrewAdvancesPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">Configure Supabase.</div>;
+    return (
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+        {t("p.crew.advances.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   }
   const { slug } = await params;
   const session = await requireSession();
@@ -55,18 +60,28 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Portal</div>
-      <h1 className="mt-1 text-2xl font-semibold">My Assignments</h1>
+      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        {t("p.crew.advances.eyebrow", undefined, "Portal")}
+      </div>
+      <h1 className="mt-1 text-2xl font-semibold">{t("p.crew.advances.title", undefined, "My Assignments")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
-        Your tickets, credentials, catering, radios, tools, uniforms, travel, lodging, and vehicles for this show.
+        {t(
+          "p.crew.advances.subtitle",
+          undefined,
+          "Your tickets, credentials, catering, radios, tools, uniforms, travel, lodging, and vehicles for this show.",
+        )}
       </p>
 
       {rows.length === 0 ? (
         <div className="mt-5">
           <EmptyState
             size="compact"
-            title="Nothing Assigned Yet"
-            description="When your production team pins something to you, it lands here."
+            title={t("p.crew.advances.empty.title", undefined, "Nothing Assigned Yet")}
+            description={t(
+              "p.crew.advances.empty.description",
+              undefined,
+              "When your production team pins something to you, it lands here.",
+            )}
           />
         </div>
       ) : (
@@ -83,11 +98,17 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
                     <li key={d.id} className="surface p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <div className="truncate text-sm font-semibold">{d.title ?? "Untitled"}</div>
+                          <div className="truncate text-sm font-semibold">
+                            {d.title ?? t("p.crew.advances.item.untitled", undefined, "Untitled")}
+                          </div>
                           <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
                             v{d.version}
-                            {d.deadline ? ` · due ${fmt.date(d.deadline)}` : ""}
-                            {d.issued_at ? ` · issued ${fmt.date(d.issued_at)}` : ""}
+                            {d.deadline
+                              ? ` · ${t("p.crew.advances.item.due", { date: fmt.date(d.deadline) }, `due ${fmt.date(d.deadline)}`)}`
+                              : ""}
+                            {d.issued_at
+                              ? ` · ${t("p.crew.advances.item.issued", { date: fmt.date(d.issued_at) }, `issued ${fmt.date(d.issued_at)}`)}`
+                              : ""}
                             {d.fulfilled_at ? ` · ${fmt.date(d.fulfilled_at)}` : ""}
                           </div>
                         </div>
@@ -105,9 +126,9 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
       )}
 
       <p className="mt-6 text-xs text-[var(--text-muted)]">
-        Issue with anything here? Reach your production coordinator via{" "}
+        {t("p.crew.advances.footer.lead", undefined, "Issue with anything here? Reach your production coordinator via")}{" "}
         <Link className="underline" href={`/p/${slug}/crew`}>
-          your call-sheet
+          {t("p.crew.advances.footer.callSheet", undefined, "your call-sheet")}
         </Link>
         .
       </p>

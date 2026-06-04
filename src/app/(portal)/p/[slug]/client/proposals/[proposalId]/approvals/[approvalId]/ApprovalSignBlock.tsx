@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { signApprovalAction, declineApprovalAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export function ApprovalSignBlock({
   slug,
@@ -15,6 +16,7 @@ export function ApprovalSignBlock({
   proposalId: string;
   approvalId: string;
 }) {
+  const t = useT();
   const [mode, setMode] = useState<"sign" | "decline">("sign");
   const action = mode === "sign" ? signApprovalAction : declineApprovalAction;
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
@@ -35,7 +37,7 @@ export function ApprovalSignBlock({
               : "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           }`}
         >
-          Sign
+          {t("p.client.proposals.approvals.sign.tab", undefined, "Sign")}
         </button>
         <button
           type="button"
@@ -46,7 +48,7 @@ export function ApprovalSignBlock({
               : "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
           }`}
         >
-          Decline
+          {t("p.client.proposals.approvals.decline.tab", undefined, "Decline")}
         </button>
       </div>
 
@@ -54,42 +56,52 @@ export function ApprovalSignBlock({
         <>
           <div>
             <label htmlFor="signedLabel" className="text-sm font-medium">
-              Type your full name to sign
+              {t("p.client.proposals.approvals.sign.nameLabel", undefined, "Type your full name to sign")}
             </label>
             <input
               id="signedLabel"
               name="signedLabel"
               required
-              placeholder="Julian Clarkson"
+              placeholder={t("p.client.proposals.approvals.sign.namePlaceholder", undefined, "Julian Clarkson")}
               className="input-base mt-1.5 w-full"
             />
             <p className="mt-1.5 text-xs text-[var(--text-muted)]">
-              By typing your name, you agree this constitutes an electronic signature.
+              {t(
+                "p.client.proposals.approvals.sign.consent",
+                undefined,
+                "By typing your name, you agree this constitutes an electronic signature.",
+              )}
             </p>
           </div>
         </>
       ) : (
         <div>
           <label htmlFor="reason" className="text-sm font-medium">
-            Reason for decline
+            {t("p.client.proposals.approvals.decline.reasonLabel", undefined, "Reason for decline")}
           </label>
           <textarea
             id="reason"
             name="reason"
             required
             rows={3}
-            placeholder="What needs to change before this can be signed?"
+            placeholder={t(
+              "p.client.proposals.approvals.decline.reasonPlaceholder",
+              undefined,
+              "What needs to change before this can be signed?",
+            )}
             className="input-base mt-1.5 w-full"
           />
         </div>
       )}
 
       {state?.error && <Alert kind="error">{state.error}</Alert>}
-      {state?.ok && <Alert kind="success">Recorded.</Alert>}
+      {state?.ok && <Alert kind="success">{t("p.client.proposals.approvals.recorded", undefined, "Recorded.")}</Alert>}
 
       <div className="flex justify-end">
         <Button type="submit" loading={pending} variant={mode === "decline" ? "danger" : "primary"}>
-          {mode === "sign" ? "Sign approval" : "Decline approval"}
+          {mode === "sign"
+            ? t("p.client.proposals.approvals.sign.submit", undefined, "Sign approval")
+            : t("p.client.proposals.approvals.decline.submit", undefined, "Decline approval")}
         </Button>
       </div>
     </form>

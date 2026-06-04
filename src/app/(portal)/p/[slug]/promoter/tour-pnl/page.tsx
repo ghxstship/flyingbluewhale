@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,14 +16,18 @@ export const dynamic = "force-dynamic";
 
 export default async function PromoterTourPnL({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   return (
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Tour P&amp;L</h1>
+        <h1 className="text-2xl font-semibold">{t("p.promoter.tour-pnl.title", undefined, "Tour P&L")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Routing economics across the legs on this engagement. For the audited finance roll-up your AM owns the numbers
-          — request the closing pack from{" "}
+          {t(
+            "p.promoter.tour-pnl.intro",
+            undefined,
+            "Routing economics across the legs on this engagement. For the audited finance roll-up your AM owns the numbers — request the closing pack from",
+          )}{" "}
           <Link className="underline" href={`/p/${slug}/messages`}>
             /p/{slug}/messages
           </Link>
@@ -31,15 +36,27 @@ export default async function PromoterTourPnL({ params }: { params: Promise<{ sl
 
         <section className="mt-5 grid gap-3 sm:grid-cols-2">
           <Link href={`/p/${slug}/promoter/co-pro`} className="surface hover-lift block p-5">
-            <div className="text-sm font-semibold">Co-Pro Splits</div>
+            <div className="text-sm font-semibold">
+              {t("p.promoter.tour-pnl.coPro.title", undefined, "Co-Pro Splits")}
+            </div>
             <div className="mt-1 text-xs text-[var(--text-muted)]">
-              Per-show guarantee + walkout split that drives net.
+              {t(
+                "p.promoter.tour-pnl.coPro.description",
+                undefined,
+                "Per-show guarantee + walkout split that drives net.",
+              )}
             </div>
           </Link>
           <Link href={`/p/${slug}/promoter/settlements`} className="surface hover-lift block p-5">
-            <div className="text-sm font-semibold">Settlements</div>
+            <div className="text-sm font-semibold">
+              {t("p.promoter.tour-pnl.settlements.title", undefined, "Settlements")}
+            </div>
             <div className="mt-1 text-xs text-[var(--text-muted)]">
-              Show-night gross, paid attendance, comps, payout, balance due.
+              {t(
+                "p.promoter.tour-pnl.settlements.description",
+                undefined,
+                "Show-night gross, paid attendance, comps, payout, balance due.",
+              )}
             </div>
           </Link>
         </section>
@@ -47,8 +64,12 @@ export default async function PromoterTourPnL({ params }: { params: Promise<{ sl
         <div className="mt-6">
           <EmptyState
             size="compact"
-            title="Detailed Tour P&L"
-            description="The line-item rollup with COGS, marketing spend, and routing variance lives in the org-side finance reports. Ask your AM for the closing pack."
+            title={t("p.promoter.tour-pnl.empty.title", undefined, "Detailed Tour P&L")}
+            description={t(
+              "p.promoter.tour-pnl.empty.description",
+              undefined,
+              "The line-item rollup with COGS, marketing spend, and routing variance lives in the org-side finance reports. Ask your AM for the closing pack.",
+            )}
           />
         </div>
       </div>

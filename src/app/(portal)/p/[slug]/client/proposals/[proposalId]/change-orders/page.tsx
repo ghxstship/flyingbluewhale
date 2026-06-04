@@ -6,6 +6,7 @@ import { resolveProposalContext, listChangeOrders } from "@/lib/proposals/portal
 import { CO_STATE_LABEL, CO_STATE_VARIANT } from "@/lib/proposals/portal/types";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -15,23 +16,33 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   if (!ctx) notFound();
   const cos = await listChangeOrders(proposalId);
   const base = `/p/${slug}/client/proposals/${proposalId}/change-orders`;
+  const { t } = await getRequestT();
 
   return (
     <div className="space-y-4 p-6">
       <header className="surface flex items-end justify-between gap-4 p-5">
         <div>
-          <div className="eyebrow text-xs text-[var(--text-muted)]">Change orders</div>
-          <h1 className="text-lg font-semibold">Scope Changes After May 12 Lock</h1>
+          <div className="eyebrow text-xs text-[var(--text-muted)]">
+            {t("p.client.changeOrders.eyebrow", undefined, "Change orders")}
+          </div>
+          <h1 className="text-lg font-semibold">
+            {t("p.client.changeOrders.title", undefined, "Scope Changes After May 12 Lock")}
+          </h1>
           <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
-            Anything that wasn't in the signed SOW. Each change order moves through requested → priced → client
-            decision.
+            {t(
+              "p.client.changeOrders.description",
+              undefined,
+              "Anything that wasn't in the signed SOW. Each change order moves through requested → priced → client decision.",
+            )}
           </p>
         </div>
-        <Button href={`${base}/new`}>Request a Change</Button>
+        <Button href={`${base}/new`}>{t("p.client.changeOrders.requestChange", undefined, "Request a Change")}</Button>
       </header>
 
       {cos.length === 0 ? (
-        <div className="surface p-12 text-center text-[var(--text-muted)]">No change orders yet.</div>
+        <div className="surface p-12 text-center text-[var(--text-muted)]">
+          {t("p.client.changeOrders.empty", undefined, "No change orders yet.")}
+        </div>
       ) : (
         <ul className="space-y-3">
           {cos.map((co) => (
@@ -50,10 +61,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                     <div className="font-mono text-sm font-semibold">{formatMoney(co.delta_cents ?? 0)}</div>
                     <div className="mt-1 text-xs text-[var(--text-muted)]">
                       {co.decided_at
-                        ? `Decided ${timeAgo(co.decided_at)}`
+                        ? t(
+                            "p.client.changeOrders.decidedAgo",
+                            { time: timeAgo(co.decided_at) },
+                            `Decided ${timeAgo(co.decided_at)}`,
+                          )
                         : co.priced_at
-                          ? `Priced ${timeAgo(co.priced_at)}`
-                          : `Requested ${timeAgo(co.created_at)}`}
+                          ? t(
+                              "p.client.changeOrders.pricedAgo",
+                              { time: timeAgo(co.priced_at) },
+                              `Priced ${timeAgo(co.priced_at)}`,
+                            )
+                          : t(
+                              "p.client.changeOrders.requestedAgo",
+                              { time: timeAgo(co.created_at) },
+                              `Requested ${timeAgo(co.created_at)}`,
+                            )}
                     </div>
                   </div>
                 </div>

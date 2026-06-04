@@ -3,6 +3,7 @@ import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +18,19 @@ type Row = {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const project = await projectIdFromSlug(slug);
   if (!project) {
     return (
-      <PortalSubpage slug={slug} persona="guest" title="Tickets" subtitle="Your tickets for this event">
-        <p className="text-sm text-[var(--text-muted)]">Project not found.</p>
+      <PortalSubpage
+        slug={slug}
+        persona="guest"
+        title={t("p.guest.tickets.title", undefined, "Tickets")}
+        subtitle={t("p.guest.tickets.subtitle", undefined, "Your tickets for this event")}
+      >
+        <p className="text-sm text-[var(--text-muted)]">
+          {t("p.guest.tickets.projectNotFound", undefined, "Project not found.")}
+        </p>
       </PortalSubpage>
     );
   }
@@ -68,20 +77,25 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   });
 
   return (
-    <PortalSubpage slug={slug} persona="guest" title="Tickets" subtitle="Your tickets for this event">
+    <PortalSubpage
+      slug={slug}
+      persona="guest"
+      title={t("p.guest.tickets.title", undefined, "Tickets")}
+      subtitle={t("p.guest.tickets.subtitle", undefined, "Your tickets for this event")}
+    >
       <DataTable<Row>
         rows={rows}
-        emptyLabel="No tickets yet — buy or claim to get started"
+        emptyLabel={t("p.guest.tickets.empty", undefined, "No tickets yet — buy or claim to get started")}
         columns={[
           {
             key: "code",
-            header: "Code",
+            header: t("p.guest.tickets.columns.code", undefined, "Code"),
             render: (r) => <span className="font-mono text-xs">{r.scan_code ?? "—"}</span>,
             accessor: (r) => r.scan_code ?? null,
           },
           {
             key: "tier",
-            header: "Tier",
+            header: t("p.guest.tickets.columns.tier", undefined, "Tier"),
             render: (r) => r.tier_code ?? "—",
             accessor: (r) => r.tier_code,
             filterable: true,
@@ -89,13 +103,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           },
           {
             key: "holder",
-            header: "Holder",
+            header: t("p.guest.tickets.columns.holder", undefined, "Holder"),
             render: (r) => r.holder_name ?? "—",
             accessor: (r) => r.holder_name ?? null,
           },
           {
             key: "state",
-            header: "State",
+            header: t("p.guest.tickets.columns.state", undefined, "State"),
             render: (r) => <StatusBadge status={r.fulfillment_state} />,
             accessor: (r) => r.fulfillment_state,
             filterable: true,

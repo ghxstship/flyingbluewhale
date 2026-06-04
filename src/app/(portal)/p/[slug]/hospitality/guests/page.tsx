@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -41,12 +41,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Guests" />
+        <ModuleHeader
+          eyebrow={t("p.hospitality.guests.eyebrowShort", undefined, "Portal")}
+          title={t("p.hospitality.guests.title", undefined, "Guests")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.hospitality.guests.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -97,42 +103,70 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Hospitality"
-        title="Guests"
-        subtitle={`${guests.length} Guest${guests.length === 1 ? "" : "s"} · ${checkedIn} checked in`}
+        eyebrow={t("p.hospitality.guests.eyebrow", undefined, "Portal · Hospitality")}
+        title={t("p.hospitality.guests.title", undefined, "Guests")}
+        subtitle={t(
+          "p.hospitality.guests.subtitle",
+          {
+            count: guests.length,
+            guestLabel:
+              guests.length === 1
+                ? t("p.hospitality.guests.guestSingular", undefined, "Guest")
+                : t("p.hospitality.guests.guestPlural", undefined, "Guests"),
+            checkedIn,
+          },
+          `${guests.length} Guest${guests.length === 1 ? "" : "s"} · ${checkedIn} checked in`,
+        )}
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Hospitality", href: `/p/${slug}/hospitality` },
-          { label: "Guests" },
+          { label: t("p.hospitality.guests.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          {
+            label: t("p.hospitality.guests.breadcrumb.hospitality", undefined, "Hospitality"),
+            href: `/p/${slug}/hospitality`,
+          },
+          { label: t("p.hospitality.guests.breadcrumb.guests", undefined, "Guests") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Active" value={fmtIntl.number(active)} />
-          <MetricCard label="Checked In" value={fmtIntl.number(checkedIn)} accent={checkedIn > 0} />
-          <MetricCard label="Total" value={fmtIntl.number(guests.length)} />
+          <MetricCard
+            label={t("p.hospitality.guests.metric.active", undefined, "Active")}
+            value={fmtIntl.number(active)}
+          />
+          <MetricCard
+            label={t("p.hospitality.guests.metric.checkedIn", undefined, "Checked In")}
+            value={fmtIntl.number(checkedIn)}
+            accent={checkedIn > 0}
+          />
+          <MetricCard
+            label={t("p.hospitality.guests.metric.total", undefined, "Total")}
+            value={fmtIntl.number(guests.length)}
+          />
         </div>
 
         <DataTable<Row>
           rows={guests}
-          emptyLabel="No guests yet"
-          emptyDescription="Hospitality and VIP tickets land here. Add guests to your party via the producer or upload a manifest."
+          emptyLabel={t("p.hospitality.guests.emptyLabel", undefined, "No guests yet")}
+          emptyDescription={t(
+            "p.hospitality.guests.emptyDescription",
+            undefined,
+            "Hospitality and VIP tickets land here. Add guests to your party via the producer or upload a manifest.",
+          )}
           columns={[
             {
               key: "name",
-              header: "Guest",
+              header: t("p.hospitality.guests.column.guest", undefined, "Guest"),
               render: (r) => r.holder_name ?? "—",
               accessor: (r) => r.holder_name ?? null,
             },
             {
               key: "email",
-              header: "Email",
+              header: t("p.hospitality.guests.column.email", undefined, "Email"),
               render: (r) => <span className="text-xs">{r.holder_email ?? "—"}</span>,
               accessor: (r) => r.holder_email ?? null,
             },
             {
               key: "tier",
-              header: "Tier",
+              header: t("p.hospitality.guests.column.tier", undefined, "Tier"),
               render: (r) => <Badge variant="muted">{r.tier_code ?? "—"}</Badge>,
               accessor: (r) => r.tier_code ?? null,
               filterable: true,
@@ -140,19 +174,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "code",
-              header: "Code",
+              header: t("p.hospitality.guests.column.code", undefined, "Code"),
               render: (r) => <span className="font-mono text-[10px]">{r.code ? r.code.slice(-8) : "—"}</span>,
               accessor: (r) => r.code,
             },
             {
               key: "scanned",
-              header: "Checked in",
+              header: t("p.hospitality.guests.column.checkedIn", undefined, "Checked in"),
               render: (r) => <span className="font-mono text-xs">{fmt(r.fulfilled_at)}</span>,
               accessor: (r) => r.fulfilled_at ?? null,
             },
             {
               key: "state",
-              header: "State",
+              header: t("p.hospitality.guests.column.state", undefined, "State"),
               render: (r) => (
                 <Badge variant={STATE_TONE[r.fulfillment_state] ?? "muted"}>{toTitle(r.fulfillment_state)}</Badge>
               ),

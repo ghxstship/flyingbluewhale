@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/Button";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { fmtDateTime } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const project = await projectIdFromSlug(slug);
   type Event = {
     id: string;
@@ -28,19 +30,34 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     events = (data ?? []) as unknown as Event[];
   }
   return (
-    <PortalSubpage slug={slug} persona="crew" title="Call Sheet" subtitle="Day-of info, load-in, parking, contacts">
+    <PortalSubpage
+      slug={slug}
+      persona="crew"
+      title={t("p.crew.call-sheet.title", undefined, "Call Sheet")}
+      subtitle={t("p.crew.call-sheet.subtitle", undefined, "Day-of info, load-in, parking, contacts")}
+    >
       {events.length === 0 ? (
         <EmptyState
-          title="Awaiting Call Sheet"
-          description="Production publishes the call sheet the day before each show."
+          title={t("p.crew.call-sheet.empty.title", undefined, "Awaiting Call Sheet")}
+          description={t(
+            "p.crew.call-sheet.empty.description",
+            undefined,
+            "Production publishes the call sheet the day before each show.",
+          )}
         />
       ) : (
         <>
           <div className="mb-3 flex items-center justify-between">
             <p className="text-xs text-[var(--text-muted)]">
-              {events.length} upcoming call{events.length === 1 ? "" : "s"}
+              {events.length === 1
+                ? t("p.crew.call-sheet.upcomingOne", { count: events.length }, `${events.length} upcoming call`)
+                : t("p.crew.call-sheet.upcomingMany", { count: events.length }, `${events.length} upcoming calls`)}
             </p>
-            {project && <Button href={`/api/v1/projects/${project.id}/call-sheet`}>Download PDF</Button>}
+            {project && (
+              <Button href={`/api/v1/projects/${project.id}/call-sheet`}>
+                {t("p.crew.call-sheet.downloadPdf", undefined, "Download PDF")}
+              </Button>
+            )}
           </div>
           <ul className="space-y-2">
             {events.map((e) => (

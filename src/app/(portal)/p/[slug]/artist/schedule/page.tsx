@@ -6,9 +6,11 @@ import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { fmtDateTime } from "@/components/detail/DetailShell";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const project = await projectIdFromSlug(slug);
   let events: Array<{ id: string; name: string; starts_at: string; ends_at: string; status: string }> = [];
   if (project) {
@@ -21,11 +23,20 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     events = (data ?? []) as typeof events;
   }
   return (
-    <PortalSubpage slug={slug} persona="artist" title="Show Schedule" subtitle="Set times, load-in, sound-check">
+    <PortalSubpage
+      slug={slug}
+      persona="artist"
+      title={t("p.artist.schedule.title", undefined, "Show Schedule")}
+      subtitle={t("p.artist.schedule.subtitle", undefined, "Set times, load-in, sound-check")}
+    >
       {events.length === 0 ? (
         <EmptyState
-          title="Awaiting Schedule"
-          description="Your schedule posts as soon as production confirms set times."
+          title={t("p.artist.schedule.empty.title", undefined, "Awaiting Schedule")}
+          description={t(
+            "p.artist.schedule.empty.description",
+            undefined,
+            "Your schedule posts as soon as production confirms set times.",
+          )}
         />
       ) : (
         <ul className="space-y-2">

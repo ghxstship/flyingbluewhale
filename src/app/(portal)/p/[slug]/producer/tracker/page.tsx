@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { SELECT_COLUMNS, TrackerView, type TrackerRow } from "@/components/xpms/TrackerView";
 import { AtomDrillIn } from "@/components/xpms/AtomDrillIn";
 import { fetchAtomDrillIn } from "@/lib/xpms/drill-in";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,11 @@ export default async function ProducerTracker({
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ atom?: string }>;
 }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">{t("p.producer.tracker.configureSupabase", undefined, "Configure Supabase.")}</div>
+    );
   const { slug } = await params;
   const { atom: focusedAtomId } = await searchParams;
   const project = await projectIdFromSlug(slug);
@@ -42,9 +47,19 @@ export default async function ProducerTracker({
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Tracker</h1>
+        <h1 className="text-2xl font-semibold">{t("p.producer.tracker.title", undefined, "Tracker")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          {atoms.length} atom{atoms.length === 1 ? "" : "s"} across the project WBS.
+          {atoms.length === 1
+            ? t(
+                "p.producer.tracker.atomCount.one",
+                { count: atoms.length },
+                `${atoms.length} atom across the project WBS.`,
+              )
+            : t(
+                "p.producer.tracker.atomCount.other",
+                { count: atoms.length },
+                `${atoms.length} atoms across the project WBS.`,
+              )}
         </p>
         <div className="mt-5">
           <TrackerView
@@ -52,7 +67,7 @@ export default async function ProducerTracker({
             atomHrefBuilder={(id) => `/p/${slug}/producer/tracker?atom=${id}`}
             emptyAction={
               <Link className="text-sm text-[var(--org-primary)]" href={`/p/${slug}/producer`}>
-                ← Back to overview
+                {t("p.producer.tracker.backToOverview", undefined, "← Back to overview")}
               </Link>
             }
           />

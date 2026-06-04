@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -37,12 +37,16 @@ function maskPassport(pass: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Visa Cases" />
+        <ModuleHeader
+          eyebrow={t("p.shared.portal", undefined, "Portal")}
+          title={t("p.athlete.visa.title", undefined, "Visa Cases")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -69,28 +73,50 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Athlete"
-        title="Visa Cases"
-        subtitle={`${cases.length} Case${cases.length === 1 ? "" : "s"} · ${pending} in progress`}
+        eyebrow={t("p.athlete.visa.eyebrow", undefined, "Portal · Athlete")}
+        title={t("p.athlete.visa.title", undefined, "Visa Cases")}
+        subtitle={
+          cases.length === 1
+            ? t(
+                "p.athlete.visa.subtitleOne",
+                { pending: fmt.number(pending) },
+                `${cases.length} Case · ${pending} in progress`,
+              )
+            : t(
+                "p.athlete.visa.subtitleMany",
+                { count: fmt.number(cases.length), pending: fmt.number(pending) },
+                `${cases.length} Cases · ${pending} in progress`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Athlete", href: `/p/${slug}/athlete` },
-          { label: "Visa" },
+          { label: t("p.shared.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.athlete.breadcrumb", undefined, "Athlete"), href: `/p/${slug}/athlete` },
+          { label: t("p.athlete.visa.breadcrumb", undefined, "Visa") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Approved" value={fmt.number(approved)} accent={approved > 0} />
-          <MetricCard label="In Progress" value={fmt.number(pending)} />
-          <MetricCard label="Total" value={fmt.number(cases.length)} />
+          <MetricCard
+            label={t("p.athlete.visa.metric.approved", undefined, "Approved")}
+            value={fmt.number(approved)}
+            accent={approved > 0}
+          />
+          <MetricCard
+            label={t("p.athlete.visa.metric.inProgress", undefined, "In Progress")}
+            value={fmt.number(pending)}
+          />
+          <MetricCard label={t("p.athlete.visa.metric.total", undefined, "Total")} value={fmt.number(cases.length)} />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Your Visa Cases</h3>
+          <h3 className="text-sm font-semibold">{t("p.athlete.visa.section.title", undefined, "Your Visa Cases")}</h3>
           {cases.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No cases on file. Your delegation lead opens these on your behalf — they'll request your passport details
-              directly.
+              {t(
+                "p.athlete.visa.empty",
+                undefined,
+                "No cases on file. Your delegation lead opens these on your behalf — they'll request your passport details directly.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
@@ -99,14 +125,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="min-w-0">
                     <div className="font-medium">{c.person_name}</div>
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                      {c.nationality ?? "—"} · passport {maskPassport(c.passport_no)}
+                      {c.nationality ?? "—"} · {t("p.athlete.visa.passportLabel", undefined, "passport")}{" "}
+                      {maskPassport(c.passport_no)}
                       {c.delegation?.name ? ` · ${c.delegation.name}` : ""}
                     </div>
                     {c.letter_path && (
-                      <div className="mt-1 font-mono text-[10px] text-[var(--org-primary)]">letter on file</div>
+                      <div className="mt-1 font-mono text-[10px] text-[var(--org-primary)]">
+                        {t("p.athlete.visa.letterOnFile", undefined, "letter on file")}
+                      </div>
                     )}
                     <div className="font-mono text-[10px] text-[var(--text-muted)]">
-                      updated {fmtDate(c.updated_at)}
+                      {t("p.athlete.visa.updated", { date: fmtDate(c.updated_at) }, `updated ${fmtDate(c.updated_at)}`)}
                     </div>
                   </div>
                   <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
@@ -117,11 +146,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </section>
 
         <p className="text-xs text-[var(--text-muted)]">
-          Passport numbers are masked on screen but retained for letter generation. Email{" "}
+          {t(
+            "p.athlete.visa.footer.prefix",
+            undefined,
+            "Passport numbers are masked on screen but retained for letter generation. Email",
+          )}{" "}
           <a className="text-[var(--org-primary)]" href="mailto:visas@atlvs.pro">
             visas@atlvs.pro
           </a>{" "}
-          if your case isn't progressing.
+          {t("p.athlete.visa.footer.suffix", undefined, "if your case isn't progressing.")}
         </p>
       </div>
     </>

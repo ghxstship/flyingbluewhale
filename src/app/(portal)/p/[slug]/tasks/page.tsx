@@ -6,7 +6,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { toTitle } from "@/lib/format";
 
@@ -31,7 +31,9 @@ type Item = {
 };
 
 export default async function PortalTasks({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return <div className="page-content">{t("p.shared.config.supabase", undefined, "Configure Supabase.")}</div>;
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -68,7 +70,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
     }>) {
       items.push({
         kind: "assignment",
-        title: `${toTitle(a.catalog_kind)}: ${a.title ?? "Untitled"}`,
+        title: `${toTitle(a.catalog_kind)}: ${a.title ?? t("p.shared.tasks.untitled", undefined, "Untitled")}`,
         state: a.fulfillment_state,
         due: a.deadline,
         href: `/p/${slug}/crew/advances`,
@@ -95,7 +97,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
       }>) {
         items.push({
           kind: "approval",
-          title: `${a.title ?? a.kind}: ${propMap.get(a.proposal_id) ?? "Proposal"}`,
+          title: `${a.title ?? a.kind}: ${propMap.get(a.proposal_id) ?? t("p.shared.tasks.proposalFallback", undefined, "Proposal")}`,
           state: a.state,
           due: a.due_at,
           href: `/p/${slug}/client/proposals/${a.proposal_id}/approvals`,
@@ -111,7 +113,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
     for (const o of (onboarding ?? []) as Array<{ id: string; flow_id: string; assignment_phase: string }>) {
       items.push({
         kind: "onboarding",
-        title: flowMap.get(o.flow_id) ?? "Onboarding",
+        title: flowMap.get(o.flow_id) ?? t("p.shared.tasks.onboardingFallback", undefined, "Onboarding"),
         state: o.assignment_phase,
         due: null,
         href: `/m/onboarding/${o.id}`,
@@ -130,12 +132,16 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="flex">
-      <PortalRail group={portalNav(slug, "crew")} title="Portal" />
+      <PortalRail group={portalNav(slug, "crew")} title={t("p.shared.rail.title", undefined, "Portal")} />
       <div className="flex-1">
         <div className="page-content">
-          <h1 className="text-2xl font-semibold">My Tasks</h1>
+          <h1 className="text-2xl font-semibold">{t("p.shared.tasks.title", undefined, "My Tasks")}</h1>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            What you owe the production team across this project — advancing items, approvals, and onboarding.
+            {t(
+              "p.shared.tasks.subtitle",
+              undefined,
+              "What you owe the production team across this project — advancing items, approvals, and onboarding.",
+            )}
           </p>
 
           <ul className="mt-5 space-y-2">
@@ -143,8 +149,12 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
               <li>
                 <EmptyState
                   size="compact"
-                  title="All Clear"
-                  description="Nothing waiting on you on this project. Check /p/[slug]/inbox for notifications."
+                  title={t("p.shared.tasks.empty.title", undefined, "All Clear")}
+                  description={t(
+                    "p.shared.tasks.empty.description",
+                    undefined,
+                    "Nothing waiting on you on this project. Check /p/[slug]/inbox for notifications.",
+                  )}
                 />
               </li>
             ) : (
@@ -156,12 +166,16 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
                           <Badge variant="muted">{toTitle(it.kind)}</Badge>
-                          {overdue && <Badge variant="error">Overdue</Badge>}
+                          {overdue && (
+                            <Badge variant="error">{t("p.shared.tasks.overdue", undefined, "Overdue")}</Badge>
+                          )}
                         </div>
                         <div className="mt-1 truncate text-sm font-semibold">{it.title}</div>
                         <div className="font-mono text-[10px] text-[var(--text-muted)]">
                           {it.state}
-                          {it.due ? ` · due ${fmt.date(it.due)}` : ""}
+                          {it.due
+                            ? ` · ${t("p.shared.tasks.duePrefix", { date: fmt.date(it.due) }, `due ${fmt.date(it.due)}`)}`
+                            : ""}
                         </div>
                       </div>
                     </Link>

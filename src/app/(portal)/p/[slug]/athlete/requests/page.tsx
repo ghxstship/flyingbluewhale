@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -49,12 +49,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Service Requests" />
+        <ModuleHeader
+          eyebrow={t("p.athlete.requests.eyebrow.short", undefined, "Portal")}
+          title={t("p.athlete.requests.title", undefined, "Service Requests")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.athlete.requests.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -79,32 +85,54 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Athlete"
-        title="Service Requests"
-        subtitle={`${rows.length} Request${rows.length === 1 ? "" : "s"} · ${open} Open`}
+        eyebrow={t("p.athlete.requests.eyebrow", undefined, "Portal · Athlete")}
+        title={t("p.athlete.requests.title", undefined, "Service Requests")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "p.athlete.requests.subtitle.singular",
+                { count: rows.length, open },
+                `${rows.length} Request · ${open} Open`,
+              )
+            : t(
+                "p.athlete.requests.subtitle.plural",
+                { count: rows.length, open },
+                `${rows.length} Requests · ${open} Open`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Athlete", href: `/p/${slug}/athlete` },
-          { label: "Requests" },
+          { label: t("p.athlete.requests.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.athlete.requests.breadcrumb.athlete", undefined, "Athlete"), href: `/p/${slug}/athlete` },
+          { label: t("p.athlete.requests.breadcrumb.requests", undefined, "Requests") },
         ]}
         action={
           <Link href={`/m/requests/new`} className="btn btn-primary btn-sm">
-            + New Request
+            {t("p.athlete.requests.actions.new", undefined, "+ New Request")}
           </Link>
         }
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Open" value={fmtIntl.number(open)} />
-          <MetricCard label="Resolved" value={fmtIntl.number(rows.length - open)} />
-          <MetricCard label="SLA Breached" value={fmtIntl.number(breached)} />
+          <MetricCard label={t("p.athlete.requests.metrics.open", undefined, "Open")} value={fmtIntl.number(open)} />
+          <MetricCard
+            label={t("p.athlete.requests.metrics.resolved", undefined, "Resolved")}
+            value={fmtIntl.number(rows.length - open)}
+          />
+          <MetricCard
+            label={t("p.athlete.requests.metrics.slaBreached", undefined, "SLA Breached")}
+            value={fmtIntl.number(breached)}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Your Requests</h3>
+          <h3 className="text-sm font-semibold">{t("p.athlete.requests.list.heading", undefined, "Your Requests")}</h3>
           {rows.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--text-muted)]">
-              No requests filed. Use the mobile app or the link above to log a new one.
+              {t(
+                "p.athlete.requests.empty",
+                undefined,
+                "No requests filed. Use the mobile app or the link above to log a new one.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
@@ -114,14 +142,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     <div className="font-medium">{r.category}</div>
                     {r.description && <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{r.description}</p>}
                     <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                      opened {fmt(r.opened_at)}
-                      {r.resolved_at ? ` · resolved ${fmt(r.resolved_at)}` : ""}
+                      {t("p.athlete.requests.row.opened", { date: fmt(r.opened_at) }, `opened ${fmt(r.opened_at)}`)}
+                      {r.resolved_at
+                        ? t(
+                            "p.athlete.requests.row.resolvedSuffix",
+                            { date: fmt(r.resolved_at) },
+                            ` · resolved ${fmt(r.resolved_at)}`,
+                          )
+                        : ""}
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                     <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
-                    {(r.sla_response_breached || r.sla_resolution_breached) && <Badge variant="error">SLA</Badge>}
+                    {(r.sla_response_breached || r.sla_resolution_breached) && (
+                      <Badge variant="error">{t("p.athlete.requests.badge.sla", undefined, "SLA")}</Badge>
+                    )}
                   </div>
                 </li>
               ))}
@@ -130,8 +166,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </section>
 
         <p className="text-xs text-[var(--text-muted)]">
-          Service requests cover medical, transport, room, dietary, equipment, and accreditation issues. Urgent medical
-          concerns should always go through your medical lead first.
+          {t(
+            "p.athlete.requests.footnote",
+            undefined,
+            "Service requests cover medical, transport, room, dietary, equipment, and accreditation issues. Urgent medical concerns should always go through your medical lead first.",
+          )}
         </p>
       </div>
     </>

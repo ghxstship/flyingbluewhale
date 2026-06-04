@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { toggleGateAction, approvePhaseAction } from "./actions";
 
 type GateRow = { id: string; label: string; is_done: boolean };
@@ -21,6 +22,7 @@ export function PhaseGateForm({
   gateItems: GateRow[];
   canApprove: boolean;
 }) {
+  const t = useT();
   const [pending, startTransition] = useTransition();
 
   function handleToggle(id: string, next: boolean) {
@@ -69,10 +71,18 @@ export function PhaseGateForm({
       </ul>
       {canApprove && (
         <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-3">
-          {!allDone && <Alert kind="info">Check every gate item to advance the phase.</Alert>}
+          {!allDone && (
+            <Alert kind="info">
+              {t(
+                "p.client.proposals.lifecycle.gate.allDoneHint",
+                undefined,
+                "Check every gate item to advance the phase.",
+              )}
+            </Alert>
+          )}
           <div className="ms-auto">
             <Button onClick={handleApprove} disabled={!allDone || pending} loading={pending}>
-              Approve phase & unlock next →
+              {t("p.client.proposals.lifecycle.gate.approveCta", undefined, "Approve phase & unlock next →")}
             </Button>
           </div>
         </div>

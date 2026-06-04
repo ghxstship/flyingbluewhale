@@ -6,7 +6,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -42,7 +42,13 @@ const PHASE_ORDER = [
 ];
 
 export default async function ProducerPortfolio({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("p.producer.portfolio.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -69,17 +75,30 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Portfolio</h1>
+        <h1 className="text-2xl font-semibold">{t("p.producer.portfolio.title", undefined, "Portfolio")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          {rows.length} project{rows.length === 1 ? "" : "s"} across {byPhase.size} phase
-          {byPhase.size === 1 ? "" : "s"}.
+          {rows.length === 1
+            ? t(
+                "p.producer.portfolio.summary.one",
+                { phases: byPhase.size },
+                `1 project across ${byPhase.size} phase${byPhase.size === 1 ? "" : "s"}.`,
+              )
+            : t(
+                "p.producer.portfolio.summary.other",
+                { count: rows.length, phases: byPhase.size },
+                `${rows.length} projects across ${byPhase.size} phase${byPhase.size === 1 ? "" : "s"}.`,
+              )}
         </p>
 
         {rows.length === 0 ? (
           <div className="mt-5">
             <EmptyState
-              title="No Projects"
-              description="Projects you have producer visibility on appear here grouped by lifecycle phase."
+              title={t("p.producer.portfolio.empty.title", undefined, "No Projects")}
+              description={t(
+                "p.producer.portfolio.empty.description",
+                undefined,
+                "Projects you have producer visibility on appear here grouped by lifecycle phase.",
+              )}
             />
           </div>
         ) : (

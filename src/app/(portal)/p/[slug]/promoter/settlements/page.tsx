@@ -5,7 +5,7 @@ import { portalNav } from "@/lib/nav";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { toTitle } from "@/lib/format";
 
@@ -32,7 +32,13 @@ type Settlement = {
 };
 
 export default async function PromoterSettlements({ params }: { params: Promise<{ slug: string }> }) {
-  if (!hasSupabase) return <div className="page-content">Configure Supabase.</div>;
+  const { t } = await getRequestT();
+  if (!hasSupabase)
+    return (
+      <div className="page-content">
+        {t("p.promoter.settlements.configureSupabase", undefined, "Configure Supabase.")}
+      </div>
+    );
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
@@ -68,10 +74,19 @@ export default async function PromoterSettlements({ params }: { params: Promise<
     <div className="flex min-h-screen">
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
-        <h1 className="text-2xl font-semibold">Settlements</h1>
+        <h1 className="text-2xl font-semibold">{t("p.promoter.settlements.title", undefined, "Settlements")}</h1>
         <p className="mt-1 text-xs text-[var(--text-muted)]">
-          Show-night reconciliation across this co-pro engagement. {rows.length} show
-          {rows.length === 1 ? "" : "s"} settled.
+          {rows.length === 1
+            ? t(
+                "p.promoter.settlements.subtitle.one",
+                { count: rows.length },
+                "Show-night reconciliation across this co-pro engagement. 1 show settled.",
+              )
+            : t(
+                "p.promoter.settlements.subtitle.other",
+                { count: rows.length },
+                "Show-night reconciliation across this co-pro engagement. {count} shows settled.",
+              )}
         </p>
 
         <section className="mt-5 grid grid-cols-3 gap-2">
@@ -79,28 +94,34 @@ export default async function PromoterSettlements({ params }: { params: Promise<
             <div className="font-mono text-2xl font-semibold">
               {(totalGross / 100).toLocaleString("en-US", { style: "currency", currency: rows[0]?.currency ?? "USD" })}
             </div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Total Gross</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("p.promoter.settlements.metrics.totalGross", undefined, "Total Gross")}
+            </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{fmt.number(totalPaid)}</div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Paid Attendance</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("p.promoter.settlements.metrics.paidAttendance", undefined, "Paid Attendance")}
+            </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{rows.filter((r) => r.status === "final").length}</div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">Finalized</div>
+            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              {t("p.promoter.settlements.metrics.finalized", undefined, "Finalized")}
+            </div>
           </div>
         </section>
 
         <table className="data-table mt-6 w-full text-sm">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Gross</th>
-              <th>Paid</th>
-              <th>Comps</th>
-              <th>Artist Payout</th>
-              <th>Balance Due</th>
-              <th>Status</th>
+              <th>{t("p.promoter.settlements.table.date", undefined, "Date")}</th>
+              <th>{t("p.promoter.settlements.table.gross", undefined, "Gross")}</th>
+              <th>{t("p.promoter.settlements.table.paid", undefined, "Paid")}</th>
+              <th>{t("p.promoter.settlements.table.comps", undefined, "Comps")}</th>
+              <th>{t("p.promoter.settlements.table.artistPayout", undefined, "Artist Payout")}</th>
+              <th>{t("p.promoter.settlements.table.balanceDue", undefined, "Balance Due")}</th>
+              <th>{t("p.promoter.settlements.table.status", undefined, "Status")}</th>
             </tr>
           </thead>
           <tbody>
@@ -109,8 +130,12 @@ export default async function PromoterSettlements({ params }: { params: Promise<
                 <td colSpan={7}>
                   <EmptyState
                     size="compact"
-                    title="No Settlements Yet"
-                    description="Settled show-night numbers will appear here once ops closes the books."
+                    title={t("p.promoter.settlements.empty.title", undefined, "No Settlements Yet")}
+                    description={t(
+                      "p.promoter.settlements.empty.description",
+                      undefined,
+                      "Settled show-night numbers will appear here once ops closes the books.",
+                    )}
                   />
                 </td>
               </tr>

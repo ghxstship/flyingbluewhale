@@ -5,16 +5,7 @@ import { ModuleHeader, PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
 import { hasSupabase } from "@/lib/env";
 import { resolveProposalContext } from "@/lib/proposals/portal/queries";
-
-const SUBNAV: { href: string; label: string }[] = [
-  { href: "", label: "Overview" },
-  { href: "/lifecycle", label: "Lifecycle" },
-  { href: "/change-orders", label: "Change Orders" },
-  { href: "/revisions", label: "Revisions" },
-  { href: "/approvals", label: "Approvals" },
-  { href: "/files", label: "Files" },
-  { href: "/activity", label: "Activity" },
-];
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function ProposalPortalLayout({
   params,
@@ -28,6 +19,18 @@ export default async function ProposalPortalLayout({
   const ctx = await resolveProposalContext(slug, proposalId);
   if (!ctx) notFound();
 
+  const { t } = await getRequestT();
+
+  const SUBNAV: { href: string; label: string }[] = [
+    { href: "", label: t("p.client.proposals.nav.overview", undefined, "Overview") },
+    { href: "/lifecycle", label: t("p.client.proposals.nav.lifecycle", undefined, "Lifecycle") },
+    { href: "/change-orders", label: t("p.client.proposals.nav.changeOrders", undefined, "Change Orders") },
+    { href: "/revisions", label: t("p.client.proposals.nav.revisions", undefined, "Revisions") },
+    { href: "/approvals", label: t("p.client.proposals.nav.approvals", undefined, "Approvals") },
+    { href: "/files", label: t("p.client.proposals.nav.files", undefined, "Files") },
+    { href: "/activity", label: t("p.client.proposals.nav.activity", undefined, "Activity") },
+  ];
+
   const base = `/p/${slug}/client/proposals/${proposalId}`;
 
   return (
@@ -37,7 +40,11 @@ export default async function ProposalPortalLayout({
         <ModuleHeader
           eyebrow={ctx.project.name}
           title={ctx.proposal.title}
-          subtitle={`Status: ${ctx.proposal.status}`}
+          subtitle={t(
+            "p.client.proposals.layout.statusSubtitle",
+            { status: ctx.proposal.status },
+            `Status: ${ctx.proposal.status}`,
+          )}
         />
         <div className="px-6 pt-2">
           <nav className="flex flex-wrap gap-1 border-b border-[var(--border-color)]">
@@ -54,7 +61,7 @@ export default async function ProposalPortalLayout({
               href={`/p/${slug}/client/proposals`}
               className="nav-item ms-auto rounded-t px-3 py-2 text-xs text-[var(--text-muted)] hover:bg-[var(--surface-inset)]"
             >
-              ← All proposals
+              {t("p.client.proposals.layout.allProposals", undefined, "← All proposals")}
             </Link>
           </nav>
         </div>

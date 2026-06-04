@@ -4,7 +4,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -40,12 +40,16 @@ function fmt(iso: string): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Training" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+          title={t("p.athlete.training.title", undefined, "Training")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -71,34 +75,57 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Athlete"
-        title="Training"
-        subtitle={`${sessions.length} session${sessions.length === 1 ? "" : "s"} · ${upcoming.length} Upcoming`}
+        eyebrow={t("p.athlete.training.eyebrow", undefined, "Portal · Athlete")}
+        title={t("p.athlete.training.title", undefined, "Training")}
+        subtitle={
+          sessions.length === 1
+            ? t(
+                "p.athlete.training.subtitle.one",
+                { count: sessions.length, upcoming: upcoming.length },
+                `${sessions.length} session · ${upcoming.length} Upcoming`,
+              )
+            : t(
+                "p.athlete.training.subtitle.other",
+                { count: sessions.length, upcoming: upcoming.length },
+                `${sessions.length} sessions · ${upcoming.length} Upcoming`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Athlete", href: `/p/${slug}/athlete` },
-          { label: "Training" },
+          { label: t("p.shared.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.athlete.breadcrumb.athlete", undefined, "Athlete"), href: `/p/${slug}/athlete` },
+          { label: t("p.athlete.training.breadcrumb", undefined, "Training") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Upcoming" value={fmtIntl.number(upcoming.length)} accent={upcoming.length > 0} />
           <MetricCard
-            label="This Week"
+            label={t("p.athlete.training.metric.upcoming", undefined, "Upcoming")}
+            value={fmtIntl.number(upcoming.length)}
+            accent={upcoming.length > 0}
+          />
+          <MetricCard
+            label={t("p.athlete.training.metric.thisWeek", undefined, "This Week")}
             value={fmtIntl.number(
               sessions.filter((s) => {
-                const t = new Date(s.starts_at).getTime();
-                return t >= Date.now() && t < Date.now() + 7 * 86_400_000;
+                const ts = new Date(s.starts_at).getTime();
+                return ts >= Date.now() && ts < Date.now() + 7 * 86_400_000;
               }).length,
             )}
           />
-          <MetricCard label="Completed" value={fmtIntl.number(past.length)} />
+          <MetricCard
+            label={t("p.athlete.training.metric.completed", undefined, "Completed")}
+            value={fmtIntl.number(past.length)}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Upcoming Sessions</h3>
+          <h3 className="text-sm font-semibold">
+            {t("p.athlete.training.upcoming.heading", undefined, "Upcoming Sessions")}
+          </h3>
           {upcoming.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">No training sessions scheduled.</p>
+            <p className="mt-2 text-xs text-[var(--text-muted)]">
+              {t("p.athlete.training.upcoming.empty", undefined, "No training sessions scheduled.")}
+            </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
               {upcoming.map((s) => (
@@ -119,7 +146,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         {past.length > 0 && (
           <section className="surface p-5 opacity-70">
-            <h3 className="text-sm font-semibold">Recent Sessions</h3>
+            <h3 className="text-sm font-semibold">
+              {t("p.athlete.training.recent.heading", undefined, "Recent Sessions")}
+            </h3>
             <ul className="mt-3 divide-y divide-[var(--border-color)]">
               {past.slice(0, 10).map((s) => (
                 <li key={s.id} className="flex items-center justify-between py-2 text-xs">
@@ -135,8 +164,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         )}
 
         <p className="text-xs text-[var(--text-muted)]">
-          Training sessions are events tagged via name (training / practice / drill / warm-up). Producer authors them in{" "}
-          <code>/console/programs/training</code>; this view is filtered for athletes.
+          {t(
+            "p.athlete.training.footer.prefix",
+            undefined,
+            "Training sessions are events tagged via name (training / practice / drill / warm-up). Producer authors them in",
+          )}{" "}
+          <code>/console/programs/training</code>
+          {t("p.athlete.training.footer.suffix", undefined, "; this view is filtered for athletes.")}
         </p>
       </div>
     </>

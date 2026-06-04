@@ -4,18 +4,22 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Hospitality" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+          title={t("p.hospitality.title", undefined, "Hospitality")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -35,38 +39,63 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   ]);
 
   const tiles = [
-    { href: `/p/${slug}/hospitality/itinerary`, label: "Itinerary", desc: "Day-by-day schedule for your party" },
-    { href: `/p/${slug}/hospitality/guests`, label: "Guests", desc: "Roster, tickets, allocations" },
+    {
+      href: `/p/${slug}/hospitality/itinerary`,
+      label: t("p.hospitality.tiles.itinerary.label", undefined, "Itinerary"),
+      desc: t("p.hospitality.tiles.itinerary.desc", undefined, "Day-by-day schedule for your party"),
+    },
+    {
+      href: `/p/${slug}/hospitality/guests`,
+      label: t("p.hospitality.tiles.guests.label", undefined, "Guests"),
+      desc: t("p.hospitality.tiles.guests.desc", undefined, "Roster, tickets, allocations"),
+    },
   ];
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal"
-        title="Hospitality"
-        subtitle="Premium guest experience — itinerary, transfers, dining, accommodation"
-        breadcrumbs={[{ label: "Portal", href: `/p/${slug}` }, { label: "Hospitality" }]}
+        eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+        title={t("p.hospitality.title", undefined, "Hospitality")}
+        subtitle={t(
+          "p.hospitality.subtitle",
+          undefined,
+          "Premium guest experience — itinerary, transfers, dining, accommodation",
+        )}
+        breadcrumbs={[
+          { label: t("p.shared.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.hospitality.title", undefined, "Hospitality") },
+        ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Tickets" value={fmt.number(tickets ?? 0)} />
-          <MetricCard label="Room Blocks" value={fmt.number(blocks ?? 0)} />
-          <MetricCard label="Status" value="Live" accent />
+          <MetricCard
+            label={t("p.hospitality.metric.tickets", undefined, "Tickets")}
+            value={fmt.number(tickets ?? 0)}
+          />
+          <MetricCard
+            label={t("p.hospitality.metric.roomBlocks", undefined, "Room Blocks")}
+            value={fmt.number(blocks ?? 0)}
+          />
+          <MetricCard
+            label={t("p.hospitality.metric.status", undefined, "Status")}
+            value={t("p.hospitality.metric.statusLive", undefined, "Live")}
+            accent
+          />
         </div>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="surface hover-lift p-5">
-              <div className="text-sm font-semibold">{t.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.desc}</p>
+          {tiles.map((tile) => (
+            <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
+              <div className="text-sm font-semibold">{tile.label}</div>
+              <p className="mt-1 text-xs text-[var(--text-secondary)]">{tile.desc}</p>
             </Link>
           ))}
         </div>
         <p className="text-xs text-[var(--text-muted)]">
-          Need a change to your booking? Email{" "}
+          {t("p.hospitality.footer.prefix", undefined, "Need a change to your booking? Email")}{" "}
           <a className="text-[var(--org-primary)]" href="mailto:hospitality@atlvs.pro">
             hospitality@atlvs.pro
           </a>{" "}
-          and reference your booking ID.
+          {t("p.hospitality.footer.suffix", undefined, "and reference your booking ID.")}
         </p>
       </div>
     </>

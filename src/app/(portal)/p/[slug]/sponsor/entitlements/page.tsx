@@ -6,7 +6,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -30,12 +30,16 @@ const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success"> = {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Entitlements" />
+        <ModuleHeader
+          eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+          title={t("p.sponsor.entitlements.title", undefined, "Entitlements")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -66,26 +70,50 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal"
-        title="Entitlements"
-        subtitle={`${rows.length} contracted item${rows.length === 1 ? "" : "s"} · ${pct}% delivered`}
+        eyebrow={t("p.shared.eyebrow.portal", undefined, "Portal")}
+        title={t("p.sponsor.entitlements.title", undefined, "Entitlements")}
+        subtitle={
+          rows.length === 1
+            ? t(
+                "p.sponsor.entitlements.subtitle.one",
+                { count: rows.length, pct },
+                `${rows.length} contracted item · ${pct}% delivered`,
+              )
+            : t(
+                "p.sponsor.entitlements.subtitle.other",
+                { count: rows.length, pct },
+                `${rows.length} contracted items · ${pct}% delivered`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Sponsor", href: `/p/${slug}/sponsor` },
-          { label: "Entitlements" },
+          { label: t("p.shared.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          { label: t("p.sponsor.breadcrumb.sponsor", undefined, "Sponsor"), href: `/p/${slug}/sponsor` },
+          { label: t("p.sponsor.entitlements.breadcrumb", undefined, "Entitlements") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Delivered" value={`${fmt.number(totalDelivered)} / ${fmt.number(totalQty)}`} accent />
-          <MetricCard label="Items at Risk" value={fmt.number(atRisk)} />
-          <MetricCard label="Total Items" value={fmt.number(rows.length)} />
+          <MetricCard
+            label={t("p.sponsor.entitlements.metric.delivered", undefined, "Delivered")}
+            value={`${fmt.number(totalDelivered)} / ${fmt.number(totalQty)}`}
+            accent
+          />
+          <MetricCard
+            label={t("p.sponsor.entitlements.metric.atRisk", undefined, "Items at Risk")}
+            value={fmt.number(atRisk)}
+          />
+          <MetricCard
+            label={t("p.sponsor.entitlements.metric.total", undefined, "Total Items")}
+            value={fmt.number(rows.length)}
+          />
         </div>
 
         {rows.length > 0 && (
           <section className="surface p-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Overall Delivery</h3>
+              <h3 className="text-sm font-semibold">
+                {t("p.sponsor.entitlements.overallDelivery", undefined, "Overall Delivery")}
+              </h3>
               <span className="font-mono text-xs">{pct}%</span>
             </div>
             <ProgressBar value={pct} className="mt-3" />
@@ -94,13 +122,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <DataTable<EntitlementRow>
           rows={rows}
-          emptyLabel="No entitlements on file"
-          emptyDescription="Once your sponsorship contract is signed, the deliverables breakdown lands here with quantity and due dates."
+          emptyLabel={t("p.sponsor.entitlements.empty.label", undefined, "No entitlements on file")}
+          emptyDescription={t(
+            "p.sponsor.entitlements.empty.description",
+            undefined,
+            "Once your sponsorship contract is signed, the deliverables breakdown lands here with quantity and due dates.",
+          )}
           columns={[
-            { key: "title", header: "Entitlement", render: (r) => r.title, accessor: (r) => r.title },
+            {
+              key: "title",
+              header: t("p.sponsor.entitlements.col.entitlement", undefined, "Entitlement"),
+              render: (r) => r.title,
+              accessor: (r) => r.title,
+            },
             {
               key: "qty",
-              header: "Quantity",
+              header: t("p.sponsor.entitlements.col.quantity", undefined, "Quantity"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.delivered}/{r.quantity}
@@ -110,13 +147,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "due",
-              header: "Due",
+              header: t("p.sponsor.entitlements.col.due", undefined, "Due"),
               render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_by)}</span>,
               accessor: (r) => r.due_by ?? null,
             },
             {
               key: "status",
-              header: "Status",
+              header: t("p.sponsor.entitlements.col.status", undefined, "Status"),
               render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
@@ -124,10 +161,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "evidence",
-              header: "Evidence",
+              header: t("p.sponsor.entitlements.col.evidence", undefined, "Evidence"),
               render: (r) =>
                 r.evidence_path ? (
-                  <span className="font-mono text-[10px] text-[var(--org-primary)]">attached</span>
+                  <span className="font-mono text-[10px] text-[var(--org-primary)]">
+                    {t("p.sponsor.entitlements.attached", undefined, "attached")}
+                  </span>
                 ) : (
                   <span className="text-[var(--text-muted)]">—</span>
                 ),
@@ -137,8 +176,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         />
 
         <p className="text-xs text-[var(--text-muted)]">
-          Evidence — proof of delivery (photo, link, signed receipt) — is attached as items are fulfilled. Disputes
-          should be raised within 30 days of the listed due date.
+          {t(
+            "p.sponsor.entitlements.footnote",
+            undefined,
+            "Evidence — proof of delivery (photo, link, signed receipt) — is attached as items are fulfilled. Disputes should be raised within 30 days of the listed due date.",
+          )}
         </p>
       </div>
     </>

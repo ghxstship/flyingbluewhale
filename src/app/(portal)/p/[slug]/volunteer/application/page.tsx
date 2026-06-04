@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -20,22 +20,27 @@ type Member = {
   created_at: string;
 };
 
-const STATUS_LABEL: Record<string, string> = {
-  pending: "Application received",
-  in_review: "Under review",
-  approved: "Approved — onboarding",
-  active: "Active volunteer",
-  declined: "Declined",
-};
-
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
+  const STATUS_LABEL: Record<string, string> = {
+    pending: t("p.volunteer.application.status.pending", undefined, "Application received"),
+    in_review: t("p.volunteer.application.status.in_review", undefined, "Under review"),
+    approved: t("p.volunteer.application.status.approved", undefined, "Approved — onboarding"),
+    active: t("p.volunteer.application.status.active", undefined, "Active volunteer"),
+    declined: t("p.volunteer.application.status.declined", undefined, "Declined"),
+  };
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Volunteer Application" />
+        <ModuleHeader
+          eyebrow={t("p.volunteer.application.eyebrowShort", undefined, "Portal")}
+          title={t("p.volunteer.application.titleFull", undefined, "Volunteer Application")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.volunteer.application.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -59,38 +64,61 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Volunteer"
-        title="Application"
+        eyebrow={t("p.volunteer.application.eyebrow", undefined, "Portal · Volunteer")}
+        title={t("p.volunteer.application.title", undefined, "Application")}
         subtitle={STATUS_LABEL[status]}
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Volunteer", href: `/p/${slug}/volunteer` },
-          { label: "Application" },
+          { label: t("p.volunteer.application.breadcrumb.portal", undefined, "Portal"), href: `/p/${slug}` },
+          {
+            label: t("p.volunteer.application.breadcrumb.volunteer", undefined, "Volunteer"),
+            href: `/p/${slug}/volunteer`,
+          },
+          { label: t("p.volunteer.application.breadcrumb.application", undefined, "Application") },
         ]}
         action={<Badge variant={member ? "success" : "warning"}>{status}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Status" value={STATUS_LABEL[status]} accent={Boolean(member)} />
-          <MetricCard label="Role" value={member?.role ?? "TBD"} />
-          <MetricCard label="Joined" value={member ? fmtDate(member.created_at) : "—"} />
+          <MetricCard
+            label={t("p.volunteer.application.metric.status", undefined, "Status")}
+            value={STATUS_LABEL[status]}
+            accent={Boolean(member)}
+          />
+          <MetricCard
+            label={t("p.volunteer.application.metric.role", undefined, "Role")}
+            value={member?.role ?? t("p.volunteer.application.tbd", undefined, "TBD")}
+          />
+          <MetricCard
+            label={t("p.volunteer.application.metric.joined", undefined, "Joined")}
+            value={member ? fmtDate(member.created_at) : "—"}
+          />
         </div>
 
         {member ? (
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Your Profile</h3>
+            <h3 className="text-sm font-semibold">
+              {t("p.volunteer.application.profile.title", undefined, "Your Profile")}
+            </h3>
             <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-muted)]">Name</dt>
+              <dt className="text-[var(--text-muted)]">
+                {t("p.volunteer.application.profile.name", undefined, "Name")}
+              </dt>
               <dd>{member.full_name}</dd>
-              <dt className="text-[var(--text-muted)]">Email</dt>
+              <dt className="text-[var(--text-muted)]">
+                {t("p.volunteer.application.profile.email", undefined, "Email")}
+              </dt>
               <dd className="font-mono text-xs">{member.email ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">Phone</dt>
+              <dt className="text-[var(--text-muted)]">
+                {t("p.volunteer.application.profile.phone", undefined, "Phone")}
+              </dt>
               <dd className="font-mono text-xs">{member.phone ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">Role</dt>
-              <dd>{member.role ?? "TBD"}</dd>
+              <dt className="text-[var(--text-muted)]">
+                {t("p.volunteer.application.profile.role", undefined, "Role")}
+              </dt>
+              <dd>{member.role ?? t("p.volunteer.application.tbd", undefined, "TBD")}</dd>
             </dl>
             <p className="mt-4 text-xs text-[var(--text-muted)]">
-              Need to update your details? Email{" "}
+              {t("p.volunteer.application.profile.updatePrompt", undefined, "Need to update your details? Email")}{" "}
               <a className="text-[var(--org-primary)]" href="mailto:volunteers@atlvs.pro">
                 volunteers@atlvs.pro
               </a>
@@ -99,17 +127,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </section>
         ) : (
           <section className="surface p-5">
-            <h3 className="text-sm font-semibold">Submit Your Application</h3>
+            <h3 className="text-sm font-semibold">
+              {t("p.volunteer.application.submit.title", undefined, "Submit Your Application")}
+            </h3>
             <p className="mt-1 text-xs text-[var(--text-secondary)]">
-              We're recruiting volunteers for the upcoming event window. Applications take ~10 minutes — you'll need
-              your contact details, availability, and any relevant skills.
+              {t(
+                "p.volunteer.application.submit.description",
+                undefined,
+                "We're recruiting volunteers for the upcoming event window. Applications take ~10 minutes — you'll need your contact details, availability, and any relevant skills.",
+              )}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
                 href={`mailto:volunteers@atlvs.pro?subject=Volunteer%20application%20—%20${slug}`}
                 className="btn btn-primary btn-sm"
               >
-                Email volunteer team
+                {t("p.volunteer.application.submit.emailCta", undefined, "Email volunteer team")}
               </Link>
             </div>
           </section>

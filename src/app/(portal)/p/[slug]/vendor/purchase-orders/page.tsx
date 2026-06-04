@@ -6,11 +6,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { money, fmtDate } from "@/components/detail/DetailShell";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const session = await requireSession();
   const supabase = await createClient();
+  const { t } = await getRequestT();
   const { data } = await supabase
     .from("purchase_orders")
     .select("id, number, title, amount_cents, status, created_at")
@@ -27,21 +29,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     created_at: string;
   }>;
   return (
-    <PortalSubpage slug={slug} persona="vendor" title="Purchase Orders" subtitle="Open + paid POs">
+    <PortalSubpage
+      slug={slug}
+      persona="vendor"
+      title={t("p.vendor.purchaseOrders.title", undefined, "Purchase Orders")}
+      subtitle={t("p.vendor.purchaseOrders.subtitle", undefined, "Open + paid POs")}
+    >
       {rows.length === 0 ? (
         <EmptyState
-          title="No Purchase Orders"
-          description="POs routed to your vendor profile appear here. Ack a PO to move it forward."
+          title={t("p.vendor.purchaseOrders.empty.title", undefined, "No Purchase Orders")}
+          description={t(
+            "p.vendor.purchaseOrders.empty.description",
+            undefined,
+            "POs routed to your vendor profile appear here. Ack a PO to move it forward.",
+          )}
         />
       ) : (
         <table className="data-table w-full text-sm">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Title</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Created</th>
+              <th>{t("p.vendor.purchaseOrders.col.number", undefined, "#")}</th>
+              <th>{t("p.vendor.purchaseOrders.col.title", undefined, "Title")}</th>
+              <th>{t("p.vendor.purchaseOrders.col.amount", undefined, "Amount")}</th>
+              <th>{t("p.vendor.purchaseOrders.col.status", undefined, "Status")}</th>
+              <th>{t("p.vendor.purchaseOrders.col.created", undefined, "Created")}</th>
             </tr>
           </thead>
           <tbody>

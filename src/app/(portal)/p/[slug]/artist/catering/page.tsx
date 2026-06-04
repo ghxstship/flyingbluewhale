@@ -4,9 +4,11 @@ import { PortalSubpage } from "@/components/PortalSubpage";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   const project = await projectIdFromSlug(slug);
   type Row = { id: string; title: string | null; data: unknown; updated_at: string };
   let items: Row[] = [];
@@ -22,17 +24,28 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     items = (data ?? []) as Row[];
   }
   return (
-    <PortalSubpage slug={slug} persona="artist" title="Catering" subtitle="Hospitality rider + dietary notes">
+    <PortalSubpage
+      slug={slug}
+      persona="artist"
+      title={t("p.artist.catering.title", undefined, "Catering")}
+      subtitle={t("p.artist.catering.subtitle", undefined, "Hospitality rider + dietary notes")}
+    >
       {items.length === 0 ? (
         <EmptyState
-          title="Submit Your Catering Rider"
-          description="The rider you post on the Advancing tab surfaces here so the venue's kitchen can prep ahead."
+          title={t("p.artist.catering.empty.title", undefined, "Submit Your Catering Rider")}
+          description={t(
+            "p.artist.catering.empty.description",
+            undefined,
+            "The rider you post on the Advancing tab surfaces here so the venue's kitchen can prep ahead.",
+          )}
         />
       ) : (
         <ul className="space-y-2">
           {items.map((r) => (
             <li key={r.id} className="surface p-4 text-sm">
-              <div className="font-medium">{r.title ?? "Hospitality rider"}</div>
+              <div className="font-medium">
+                {r.title ?? t("p.artist.catering.defaultTitle", undefined, "Hospitality rider")}
+              </div>
               <pre className="mt-2 overflow-x-auto text-xs text-[var(--text-muted)]">
                 {JSON.stringify(r.data, null, 2)}
               </pre>

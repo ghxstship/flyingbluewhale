@@ -7,6 +7,7 @@ import { APPROVAL_STATE_LABEL, APPROVAL_STATE_VARIANT } from "@/lib/proposals/po
 import { timeAgo } from "@/lib/format";
 import { ApprovalSignBlock } from "./ApprovalSignBlock";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,11 +22,12 @@ export default async function Page({
   const approval = await getApproval(approvalId);
   if (!approval || approval.proposal_id !== proposalId) notFound();
   const base = `/p/${slug}/client/proposals/${proposalId}/approvals`;
+  const { t } = await getRequestT();
 
   return (
     <div className="space-y-4 p-6">
       <Link href={base} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
-        ← All approvals
+        {t("p.client.proposals.approvals.detail.backLink", undefined, "← All approvals")}
       </Link>
 
       <header className="surface p-6">
@@ -40,13 +42,18 @@ export default async function Page({
       </header>
 
       {approval.state === "signed" && (
-        <Alert kind="success" title="Signed">
-          Counter-signed by {approval.signed_label ?? "—"} {timeAgo(approval.signed_at!)}.
+        <Alert kind="success" title={t("p.client.proposals.approvals.detail.signed.title", undefined, "Signed")}>
+          {t(
+            "p.client.proposals.approvals.detail.signed.body",
+            { label: approval.signed_label ?? "—", ago: timeAgo(approval.signed_at!) },
+            `Counter-signed by ${approval.signed_label ?? "—"} ${timeAgo(approval.signed_at!)}.`,
+          )}
         </Alert>
       )}
       {approval.state === "declined" && (
-        <Alert kind="error" title="Declined">
-          {approval.decline_reason ?? "No reason provided."}
+        <Alert kind="error" title={t("p.client.proposals.approvals.detail.declined.title", undefined, "Declined")}>
+          {approval.decline_reason ??
+            t("p.client.proposals.approvals.detail.declined.noReason", undefined, "No reason provided.")}
         </Alert>
       )}
 

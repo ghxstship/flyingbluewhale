@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
 import { PortalRail } from "@/components/Shell";
 import { portalNav } from "@/lib/nav";
@@ -34,8 +34,9 @@ type Row = {
 const PORTAL_AUDIENCES = ["all", "contractors", "vendors"];
 
 export default async function PortalAnnouncementsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
-    return <div className="page-content">Configure Supabase.</div>;
+    return <div className="page-content">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>;
   }
   const { slug } = await params;
   const session = await requireSession();
@@ -57,12 +58,19 @@ export default async function PortalAnnouncementsPage({ params }: { params: Prom
 
   return (
     <div className="flex">
-      <PortalRail group={portalNav(slug, "crew")} title="Portal" />
+      <PortalRail group={portalNav(slug, "crew")} title={t("p.shared.rail.title", undefined, "Portal")} />
       <div className="flex-1">
         <div className="page-content">
-          <h1 className="text-2xl font-semibold">Updates</h1>
+          <h1 className="text-2xl font-semibold">{t("p.shared.announcements.title", undefined, "Updates")}</h1>
           <p className="mt-1 text-xs text-[var(--text-muted)]">
-            Broadcasts from the production team. {rows.length} active for {project?.name ?? "this project"}.
+            {t(
+              "p.shared.announcements.subtitle",
+              {
+                count: rows.length,
+                project: project?.name ?? t("p.shared.announcements.thisProject", undefined, "this project"),
+              },
+              "Broadcasts from the production team. {count} active for {project}.",
+            )}
           </p>
 
           <ul className="mt-5 space-y-3">
@@ -70,8 +78,12 @@ export default async function PortalAnnouncementsPage({ params }: { params: Prom
               <li>
                 <EmptyState
                   size="compact"
-                  title="No Updates"
-                  description="Production-team broadcasts will appear here as they're published."
+                  title={t("p.shared.announcements.empty.title", undefined, "No Updates")}
+                  description={t(
+                    "p.shared.announcements.empty.description",
+                    undefined,
+                    "Production-team broadcasts will appear here as they're published.",
+                  )}
                 />
               </li>
             ) : (
@@ -79,7 +91,9 @@ export default async function PortalAnnouncementsPage({ params }: { params: Prom
                 <li key={a.id} className="surface p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      {a.pinned && <Badge variant="warning">Pinned</Badge>}
+                      {a.pinned && (
+                        <Badge variant="warning">{t("p.shared.announcements.pinned", undefined, "Pinned")}</Badge>
+                      )}
                       <Badge variant="muted">{toTitle(a.audience)}</Badge>
                     </div>
                     <span className="font-mono text-xs text-[var(--text-muted)]">

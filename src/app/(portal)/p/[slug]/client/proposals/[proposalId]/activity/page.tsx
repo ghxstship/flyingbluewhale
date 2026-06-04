@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { resolveProposalContext, listActivity } from "@/lib/proposals/portal/queries";
 import { timeAgo } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -9,19 +10,30 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   const ctx = await resolveProposalContext(slug, proposalId);
   if (!ctx) notFound();
   const activity = await listActivity(proposalId, 200);
+  const { t } = await getRequestT();
 
   return (
     <div className="space-y-4 p-6">
       <header className="surface p-5">
-        <div className="eyebrow text-xs text-[var(--text-muted)]">Activity log</div>
-        <h1 className="text-lg font-semibold">Full Audit Trail</h1>
+        <div className="eyebrow text-xs text-[var(--text-muted)]">
+          {t("p.client.proposals.activity.eyebrow", undefined, "Activity log")}
+        </div>
+        <h1 className="text-lg font-semibold">
+          {t("p.client.proposals.activity.title", undefined, "Full Audit Trail")}
+        </h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">
-          Every gate check, change order decision, revision round, approval, and file upload — chronological.
+          {t(
+            "p.client.proposals.activity.description",
+            undefined,
+            "Every gate check, change order decision, revision round, approval, and file upload — chronological.",
+          )}
         </p>
       </header>
 
       {activity.length === 0 ? (
-        <div className="surface p-12 text-center text-[var(--text-muted)]">No activity yet.</div>
+        <div className="surface p-12 text-center text-[var(--text-muted)]">
+          {t("p.client.proposals.activity.empty", undefined, "No activity yet.")}
+        </div>
       ) : (
         <ol className="space-y-2">
           {activity.map((e) => (
@@ -33,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
               <div className="min-w-0 flex-1">
                 <div className="text-sm">{e.summary}</div>
                 <div className="mt-0.5 text-xs text-[var(--text-muted)]">
-                  {e.actor_label ?? "—"} · {timeAgo(e.occurred_at)}
+                  {e.actor_label ?? t("common.dash", undefined, "—")} · {timeAgo(e.occurred_at)}
                 </div>
               </div>
               <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{e.kind}</span>

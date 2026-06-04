@@ -4,12 +4,13 @@ import { PortalSubpage } from "@/components/PortalSubpage";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const project = await projectIdFromSlug(slug);
   const fmt = await getRequestFormatters();
+  const { t } = await getRequestT();
   let scans = 0;
   let tickets = 0;
   if (project) {
@@ -42,20 +43,33 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     }
   }
   return (
-    <PortalSubpage slug={slug} persona="sponsor" title="Reporting" subtitle="Attendance + activation metrics">
+    <PortalSubpage
+      slug={slug}
+      persona="sponsor"
+      title={t("p.sponsor.reporting.title", undefined, "Reporting")}
+      subtitle={t("p.sponsor.reporting.subtitle", undefined, "Attendance + activation metrics")}
+    >
       {scans === 0 && tickets === 0 ? (
         <EmptyState
-          title="Reporting Starts After the First Scan"
-          description="Real-time counts appear here once doors open."
+          title={t("p.sponsor.reporting.empty.title", undefined, "Reporting Starts After the First Scan")}
+          description={t(
+            "p.sponsor.reporting.empty.description",
+            undefined,
+            "Real-time counts appear here once doors open.",
+          )}
         />
       ) : (
         <dl className="grid gap-3 sm:grid-cols-2">
           <div className="surface p-5">
-            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Tickets issued</dt>
+            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              {t("p.sponsor.reporting.tickets_issued", undefined, "Tickets issued")}
+            </dt>
             <dd className="mt-2 text-3xl font-semibold">{fmt.number(tickets)}</dd>
           </div>
           <div className="surface p-5">
-            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">Scans recorded</dt>
+            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              {t("p.sponsor.reporting.scans_recorded", undefined, "Scans recorded")}
+            </dt>
             <dd className="mt-2 text-3xl font-semibold">{fmt.number(scans)}</dd>
           </div>
         </dl>

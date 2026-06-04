@@ -6,7 +6,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,12 +29,18 @@ function fmt(iso: string | null): string {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Accommodation" />
+        <ModuleHeader
+          eyebrow={t("p.delegation.accommodation.eyebrowShort", undefined, "Portal")}
+          title={t("p.delegation.accommodation.title", undefined, "Accommodation")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("p.delegation.accommodation.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -57,26 +63,53 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Delegation"
-        title="Accommodation"
-        subtitle={`${blocks.length} Block${blocks.length === 1 ? "" : "s"} · ${confirmed}/${reserved} rooms confirmed`}
+        eyebrow={t("p.delegation.accommodation.eyebrow", undefined, "Portal · Delegation")}
+        title={t("p.delegation.accommodation.title", undefined, "Accommodation")}
+        subtitle={
+          blocks.length === 1
+            ? t(
+                "p.delegation.accommodation.subtitleOne",
+                { confirmed, reserved },
+                `${blocks.length} Block · ${confirmed}/${reserved} rooms confirmed`,
+              )
+            : t(
+                "p.delegation.accommodation.subtitleMany",
+                { count: blocks.length, confirmed, reserved },
+                `${blocks.length} Blocks · ${confirmed}/${reserved} rooms confirmed`,
+              )
+        }
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
-          { label: "Delegation", href: `/p/${slug}/delegation` },
-          { label: "Accommodation" },
+          { label: t("p.delegation.accommodation.crumbPortal", undefined, "Portal"), href: `/p/${slug}` },
+          {
+            label: t("p.delegation.accommodation.crumbDelegation", undefined, "Delegation"),
+            href: `/p/${slug}/delegation`,
+          },
+          { label: t("p.delegation.accommodation.title", undefined, "Accommodation") },
         ]}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Confirmed" value={fmtIntl.number(confirmed)} accent />
-          <MetricCard label="Reserved" value={fmtIntl.number(reserved)} />
-          <MetricCard label="Blocks" value={fmtIntl.number(blocks.length)} />
+          <MetricCard
+            label={t("p.delegation.accommodation.metricConfirmed", undefined, "Confirmed")}
+            value={fmtIntl.number(confirmed)}
+            accent
+          />
+          <MetricCard
+            label={t("p.delegation.accommodation.metricReserved", undefined, "Reserved")}
+            value={fmtIntl.number(reserved)}
+          />
+          <MetricCard
+            label={t("p.delegation.accommodation.metricBlocks", undefined, "Blocks")}
+            value={fmtIntl.number(blocks.length)}
+          />
         </div>
 
         {reserved > 0 && (
           <section className="surface p-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Confirmation Rate</h3>
+              <h3 className="text-sm font-semibold">
+                {t("p.delegation.accommodation.confirmationRate", undefined, "Confirmation Rate")}
+              </h3>
               <span className="font-mono text-xs">{pct}%</span>
             </div>
             <ProgressBar value={pct} className="mt-3" />
@@ -85,15 +118,34 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <DataTable<Block>
           rows={blocks}
-          emptyLabel="No accommodation blocks"
-          emptyDescription="Hotel and athletes' village blocks land here once contracted. Each block tracks reserved vs confirmed rooms."
+          emptyLabel={t("p.delegation.accommodation.emptyLabel", undefined, "No accommodation blocks")}
+          emptyDescription={t(
+            "p.delegation.accommodation.emptyDescription",
+            undefined,
+            "Hotel and athletes' village blocks land here once contracted. Each block tracks reserved vs confirmed rooms.",
+          )}
           columns={[
-            { key: "name", header: "Block", render: (r) => r.name, accessor: (r) => r.name },
-            { key: "property", header: "Property", render: (r) => r.property, accessor: (r) => r.property },
-            { key: "city", header: "City", render: (r) => r.city ?? "—", accessor: (r) => r.city ?? null },
+            {
+              key: "name",
+              header: t("p.delegation.accommodation.colBlock", undefined, "Block"),
+              render: (r) => r.name,
+              accessor: (r) => r.name,
+            },
+            {
+              key: "property",
+              header: t("p.delegation.accommodation.colProperty", undefined, "Property"),
+              render: (r) => r.property,
+              accessor: (r) => r.property,
+            },
+            {
+              key: "city",
+              header: t("p.delegation.accommodation.colCity", undefined, "City"),
+              render: (r) => r.city ?? "—",
+              accessor: (r) => r.city ?? null,
+            },
             {
               key: "rooms",
-              header: "Rooms",
+              header: t("p.delegation.accommodation.colRooms", undefined, "Rooms"),
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.rooms_confirmed}/{r.rooms_reserved}
@@ -103,7 +155,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "window",
-              header: "Window",
+              header: t("p.delegation.accommodation.colWindow", undefined, "Window"),
               render: (r) => (
                 <span className="font-mono text-[10px]">
                   {fmt(r.starts_on)} – {fmt(r.ends_on)}
@@ -113,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "group",
-              header: "Group",
+              header: t("p.delegation.accommodation.colGroup", undefined, "Group"),
               render: (r) => (r.stakeholder_group ? <Badge variant="muted">{r.stakeholder_group}</Badge> : "—"),
               filterable: true,
               groupable: true,

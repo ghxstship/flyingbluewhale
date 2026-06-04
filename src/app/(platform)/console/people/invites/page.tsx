@@ -25,14 +25,22 @@ export default async function InvitesPage() {
   const isAdmin = sessionIsAdmin(session);
 
   const supabase = await createClient();
-  const { data: invites } = await supabase
-    .from("invites")
-    .select("id, email, role, status, expires_at, accepted_at, created_at, token")
-    .eq("org_id", session.orgId)
-    .order("created_at", { ascending: false });
+  const [{ data: rawInvites }, { data: projects }] = await Promise.all([
+    supabase
+      .from("invites")
+      .select("id, email, role, status, expires_at, accepted_at, created_at, token, project_id, project_role")
+      .eq("org_id", session.orgId)
+      .order("created_at", { ascending: false }),
+    supabase.from("projects").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
+  ]);
+  const invites = rawInvites ?? [];
 
-  const pending = (invites ?? []).filter((i) => i.status === "pending");
-  const history = (invites ?? []).filter((i) => i.status !== "pending");
+  // Build project name lookup so the table can show "<role> on <project>" for
+  // scoped invites without an extra join.
+  const projectName = new Map<string, string>((projects ?? []).map((p) => [p.id, p.name]));
+
+  const pending = invites.filter((i) => i.status === "pending");
+  const history = invites.filter((i) => i.status !== "pending");
 
   return (
     <>
@@ -45,7 +53,7 @@ export default async function InvitesPage() {
               They&apos;ll get an email with a link to accept. Expires in 7 days.
             </p>
             <div className="mt-4">
-              <InviteForm />
+              <InviteForm projects={(projects ?? []) as Array<{ id: string; name: string }>} />
             </div>
           </section>
         )}
@@ -73,6 +81,11 @@ export default async function InvitesPage() {
                     <td>{i.email}</td>
                     <td>
                       <Badge variant="brand">{i.role}</Badge>
+                      {i.project_id && (
+                        <span className="ms-2 text-xs text-[var(--text-muted)]">
+                          + {i.project_role} on {projectName.get(i.project_id) ?? "project"}
+                        </span>
+                      )}
                     </td>
                     <td className="text-[var(--text-muted)]">{relTime(i.expires_at)}</td>
                     <td>

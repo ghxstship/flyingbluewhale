@@ -1,0 +1,153 @@
+"use client";
+
+import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
+import { addProjectMemberAction, removeProjectMemberAction, updateProjectMemberRoleAction } from "./actions";
+import { PROJECT_ROLES, type ProjectRole } from "@/lib/supabase/types";
+import type { FormState } from "@/components/FormShell";
+
+export type Candidate = { user_id: string; email: string; name: string | null };
+export type MemberRowData = {
+  user_id: string;
+  role: ProjectRole;
+  email: string;
+  name: string | null;
+};
+
+export function AddMemberForm({ projectId, candidates }: { projectId: string; candidates: Candidate[] }) {
+  const router = useRouter();
+  const action = addProjectMemberAction.bind(null, projectId);
+  const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
+
+  useEffect(() => {
+    if (state?.ok) {
+      toast.success("Member added");
+      router.refresh();
+    } else if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state, router]);
+
+  if (candidates.length === 0) {
+    return (
+      <Alert kind="info">
+        No org members available to add. Invite someone via{" "}
+        <a href="/console/people/invites" className="underline">
+          People → Invites
+        </a>{" "}
+        first.
+      </Alert>
+    );
+  }
+
+  return (
+    <form action={formAction} className="surface space-y-4 p-4">
+      <div className="grid gap-3 sm:grid-cols-[2fr_1fr_auto]">
+        <label className="space-y-1 text-xs">
+          <div className="tracking-wide text-[var(--text-muted)] uppercase">Org Member</div>
+          <select
+            name="userId"
+            required
+            className="w-full rounded-md border border-[var(--border)] bg-[var(--surface)] p-2 text-sm"
+          >
+            <option value="">Select a member…</option>
+            {candidates.map((c) => (
+              <option key={c.user_id} value={c.user_id}>
+                {c.name ? `${c.name} (${c.email})` : c.email}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="space-y-1 text-xs">
+          <div className="tracking-wide text-[var(--text-muted)] uppercase">Project Role</div>
+          <select
+            name="role"
+            defaultValue="contributor"
+            required
+            className="w-full rounded-md border border-[var(--border)] bg-[var(--surface)] p-2 text-sm"
+          >
+            {PROJECT_ROLES.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="flex items-end">
+          <Button type="submit" loading={pending}>
+            {pending ? "Adding" : "Add"}
+          </Button>
+        </div>
+      </div>
+      {state?.error && !state?.ok && <Alert kind="error">{state.error}</Alert>}
+    </form>
+  );
+}
+
+export function MemberRow({
+  projectId,
+  member,
+  currentUserId,
+}: {
+  projectId: string;
+  member: MemberRowData;
+  currentUserId: string;
+}) {
+  const router = useRouter();
+  const updateAction = updateProjectMemberRoleAction.bind(null, projectId);
+  const [, updateFormAction, updating] = useActionState<FormState, FormData>(updateAction, null);
+  const [removing, setRemoving] = useState(false);
+
+  async function onChangeRole(role: string) {
+    const fd = new FormData();
+    fd.set("userId", member.user_id);
+    fd.set("role", role);
+    updateFormAction(fd);
+  }
+
+  async function onRemove() {
+    if (!confirm(`Remove ${member.name ?? member.email} from this project?`)) return;
+    setRemoving(true);
+    try {
+      await removeProjectMemberAction(projectId, member.user_id);
+      toast.success("Member removed");
+      router.refresh();
+    } finally {
+      setRemoving(false);
+    }
+  }
+
+  const isSelf = member.user_id === currentUserId;
+
+  return (
+    <tr>
+      <td>
+        <div className="font-medium">{member.name ?? member.email}</div>
+        {member.name && <div className="text-xs text-[var(--text-muted)]">{member.email}</div>}
+      </td>
+      <td>
+        <select
+          aria-label={`Role for ${member.email}`}
+          defaultValue={member.role}
+          disabled={updating}
+          onChange={(e) => onChangeRole(e.currentTarget.value)}
+          className="rounded-md border border-[var(--border)] bg-[var(--surface)] p-1 text-xs"
+        >
+          {PROJECT_ROLES.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td className="text-right">
+        <Button type="button" variant="ghost" size="sm" onClick={onRemove} loading={removing} disabled={removing}>
+          {isSelf ? "Leave" : "Remove"}
+        </Button>
+      </td>
+    </tr>
+  );
+}

@@ -52,6 +52,7 @@ export default async function ProjectLayout({
     { label: "Budget", href: `/console/projects/${projectId}/budget` },
     { label: "P&L", href: `/console/projects/${projectId}/finance` },
     { label: "Crew", href: `/console/projects/${projectId}/crew` },
+    { label: "Members", href: `/console/projects/${projectId}/members` },
     { label: "Advancing", href: `/console/projects/${projectId}/advancing` },
     { label: "Guides", href: `/console/projects/${projectId}/guides` },
     { label: "Sustainability", href: `/console/projects/${projectId}/sustainability` },

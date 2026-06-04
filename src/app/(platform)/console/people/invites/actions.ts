@@ -6,14 +6,31 @@ import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email";
+import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
-import { PLATFORM_ROLES } from "@/lib/supabase/types";
+import { PLATFORM_ROLES, PROJECT_ROLES } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
 
-const CreateSchema = z.object({
-  email: z.string().email("Enter a valid email"),
-  role: z.enum(PLATFORM_ROLES),
-});
+const CreateSchema = z
+  .object({
+    email: z.string().email("Enter a valid email"),
+    role: z.enum(PLATFORM_ROLES),
+    // Optional project scope. The form sends empty string when "Org-wide" is
+    // selected; coerce that to undefined so .optional() treats it as absent.
+    projectId: z
+      .string()
+      .uuid()
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
+    projectRole: z
+      .enum(PROJECT_ROLES)
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
+  })
+  .refine((v) => (v.projectId ? !!v.projectRole : true), {
+    message: "Pick a project role when scoping to a project",
+    path: ["projectRole"],
+  });
 
 export async function createInviteAction(_: FormState, fd: FormData): Promise<FormState> {
   const session = await requireSession();
@@ -23,6 +40,21 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const supabase = await createClient();
+
+  // Guard: a project_id from the form must belong to this org. Without
+  // this check a manager+ in org A could insert an invite scoped to a
+  // project in org B (RLS on `invites` only checks org_id, not project_id).
+  if (parsed.data.projectId) {
+    const { data: proj } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", parsed.data.projectId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!proj) return { error: "That project doesn't belong to your org." };
+  }
+
   const { data: invite, error } = await supabase
     .from("invites")
     .insert({
@@ -30,8 +62,10 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
       email: parsed.data.email.toLowerCase(),
       role: parsed.data.role,
       invited_by: session.userId,
-    })
-    .select("token")
+      project_id: parsed.data.projectId ?? null,
+      project_role: parsed.data.projectId ? parsed.data.projectRole : null,
+    } as never)
+    .select("id, token")
     .single();
 
   if (error) {
@@ -61,6 +95,21 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
       </div>`,
   });
 
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.invite.created",
+    targetTable: "invites",
+    targetId: invite.id,
+    metadata: {
+      email: parsed.data.email.toLowerCase(),
+      role: parsed.data.role,
+      project_id: parsed.data.projectId ?? null,
+      project_role: parsed.data.projectRole ?? null,
+    },
+  });
+
   revalidatePath("/console/people/invites");
   redirect("/console/people/invites");
 }
@@ -83,6 +132,15 @@ export async function revokeInviteAction(id: string): Promise<FormState> {
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Only a pending invite can be revoked" };
+
+  await emitAudit({
+    actorId: session.userId,
+    orgId: session.orgId,
+    actorEmail: session.email,
+    action: "auth.invite.revoked",
+    targetTable: "invites",
+    targetId: id,
+  });
 
   revalidatePath("/console/people/invites");
   return { ok: true };

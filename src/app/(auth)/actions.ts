@@ -5,6 +5,7 @@ import { z, type ZodIssue } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { urlFor } from "@/lib/urls";
+import { emitAudit } from "@/lib/audit";
 import type { FormState } from "@/components/FormShell";
 
 // NOTE: Next.js server-action files (`"use server"`) cannot re-export types —
@@ -61,11 +62,18 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
   }
 
   const supabase = await createClient();
-  const emailRedirectTo = urlFor("auth", `/auth/callback?next=${encodeURIComponent("/auth/resolve")}`);
+  // Carry orgName through email confirmation so the org bootstrap also works
+  // for the confirm-flow path — see /auth/callback consumes the `org` query.
+  const orgName = parsed.data.orgName?.trim() || "";
+  const nextPath = orgName ? `/auth/resolve?org=${encodeURIComponent(orgName)}` : "/auth/resolve";
+  const emailRedirectTo = urlFor("auth", `/auth/callback?next=${encodeURIComponent(nextPath)}`);
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
-    options: { data: { name: parsed.data.name }, emailRedirectTo },
+    options: {
+      data: { name: parsed.data.name, pending_org_name: orgName || null },
+      emailRedirectTo,
+    },
   });
   if (error) {
     // Duplicate email — surface as field error
@@ -86,7 +94,36 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
     redirect(`/verify-email?email=${encodeURIComponent(parsed.data.email)}`);
   }
 
+  // Auto-confirm dev mode: session is live immediately. Bootstrap the org
+  // here so the user lands in /console on first redirect.
+  if (orgName) {
+    await bootstrapOrgIfNeeded(supabase, orgName);
+  }
   redirect("/auth/resolve");
+}
+
+// Shared helper — calls the create_org_with_owner RPC for the current
+// signed-in user. No-op-safe: if the user already has a real-org membership,
+// /auth/resolve will surface that org and the bootstrap is harmless if it
+// runs (a second org will exist, switcher can move between).
+async function bootstrapOrgIfNeeded(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  orgName: string,
+): Promise<{ orgId: string; orgSlug: string } | null> {
+  const trimmed = orgName.trim();
+  if (!trimmed) return null;
+  const { data, error } = await (
+    supabase.rpc as unknown as (
+      fn: string,
+      args: Record<string, unknown>,
+    ) => Promise<{ data: Array<{ org_id: string; org_slug: string }> | null; error: { message: string } | null }>
+  )("create_org_with_owner", { p_name: trimmed, p_slug: "" });
+  if (error || !data || data.length === 0) {
+    // Don't fail the signup over org-bootstrap — the user can re-enter the
+    // name on /onboarding/org. They have an authenticated session either way.
+    return null;
+  }
+  return { orgId: data[0].org_id, orgSlug: data[0].org_slug };
 }
 
 export async function resendVerificationAction(_: FormState, formData: FormData): Promise<FormState> {
@@ -134,53 +171,51 @@ export async function acceptInviteAction(_: FormState, formData: FormData): Prom
     redirect(`/login?next=${encodeURIComponent(`/accept-invite/${token}`)}`);
   }
 
-  // RLS allows recipient to select a pending, unexpired invite whose email
-  // matches auth.users.email. If zero rows, either the token is invalid,
-  // the invite expired, or it was addressed to another email.
-  const { data: invite, error: fetchError } = await supabase
-    .from("invites")
-    .select("id, org_id, email, role, status, expires_at")
-    .eq("token", token)
-    .eq("status", "pending")
-    .maybeSingle();
+  // SECURITY DEFINER RPC handles validation + membership upsert + invite
+  // status flip atomically. The previous direct-from-session upsert was
+  // blocked by `memberships_insert_admin` (invitee isn't admin yet); the
+  // RPC fences the writes so the invite-accept loop closes in one round
+  // trip and stale `deleted_at != null` memberships get restored cleanly.
+  type AcceptResult = {
+    out_org_id: string;
+    out_org_slug: string;
+    out_role: string;
+    out_project_id: string | null;
+    out_project_role: string | null;
+  };
+  const { data: rpcData, error: rpcError } = await (
+    supabase.rpc as unknown as (
+      fn: string,
+      args: Record<string, unknown>,
+    ) => Promise<{ data: AcceptResult[] | null; error: { message: string; code?: string } | null }>
+  )("accept_invite", { p_token: token });
 
-  if (fetchError) return { error: fetchError.message };
-  if (!invite) {
-    return {
-      error: "This invite is invalid, expired, or addressed to a different email. Ask the org admin to resend.",
-    };
+  if (rpcError) {
+    const msg = rpcError.message || "";
+    if (msg.includes("invite_invalid_or_expired")) {
+      return { error: "This invite is invalid or expired. Ask the org admin to resend." };
+    }
+    if (msg.includes("invite_email_mismatch")) {
+      return { error: "This invite was addressed to a different email. Sign in with that account." };
+    }
+    return { error: `Couldn't join org: ${msg}` };
   }
 
-  // Upsert the membership (role taken from the invite). The unique
-  // index on (org_id, user_id) rejected a plain insert with "duplicate"
-  // when a soft-deleted membership existed — but the prior code
-  // treated that as success without restoring access, so a
-  // re-invited user landed on /accept-invite, saw "joined!", then
-  // bounced on every page because their membership stayed
-  // deleted_at != null. Use upsert with deleted_at: null to
-  // restore previously-offboarded users on re-invite.
-  const { error: membershipError } = await supabase
-    .from("memberships")
-    .upsert(
-      { org_id: invite.org_id, user_id: user.id, role: invite.role, deleted_at: null },
-      { onConflict: "org_id,user_id" },
-    );
-  if (membershipError) {
-    return { error: `Couldn't join org: ${membershipError.message}` };
+  const result = rpcData?.[0];
+  if (result) {
+    await emitAudit({
+      actorId: user.id,
+      orgId: result.out_org_id,
+      actorEmail: user.email ?? null,
+      action: "auth.invite.accepted",
+      targetTable: "invites",
+      metadata: {
+        role: result.out_role,
+        project_id: result.out_project_id,
+        project_role: result.out_project_role,
+      },
+    });
   }
-
-  // Mark the invite accepted. RLS policy invites_accept_recipient constrains
-  // the WITH CHECK to status='accepted' + accepted_by=auth.uid().
-  const { error: updateError } = await supabase
-    .from("invites")
-    .update({
-      status: "accepted",
-      accepted_at: new Date().toISOString(),
-      accepted_by: user.id,
-    })
-    .eq("id", invite.id);
-
-  if (updateError) return { error: `Membership created but invite update failed: ${updateError.message}` };
 
   redirect("/auth/resolve");
 }

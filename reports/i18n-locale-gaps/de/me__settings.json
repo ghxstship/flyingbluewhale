@@ -1,0 +1,13 @@
+{
+  "me.settings.title": "Settings",
+  "me.settings.appearance.title": "Appearance",
+  "me.settings.workspace.title": "Workspace Preferences",
+  "me.settings.workspace.submit": "Save Preferences",
+  "me.settings.workspace.density.label": "Density",
+  "me.settings.workspace.density.compact": "Compact",
+  "me.settings.workspace.density.comfortable": "Comfortable",
+  "me.settings.workspace.density.spacious": "Spacious",
+  "me.settings.workspace.locale.label": "Locale (e.g. en, en-US, es)",
+  "me.settings.workspace.timezone.label": "Timezone (IANA, e.g. America/New_York)",
+  "me.settings.workspace.timezone.placeholder": "Auto-detected if blank"
+}

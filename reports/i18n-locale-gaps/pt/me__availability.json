@@ -1,0 +1,14 @@
+{
+  "me.availability.configureSupabase": "Configure Supabase.",
+  "me.availability.eyebrow": "Availability",
+  "me.availability.title": "Booking Calendar",
+  "me.availability.addSlot": "Add slot",
+  "me.availability.kind": "Kind",
+  "me.availability.label": "Label",
+  "me.availability.labelPlaceholder": "MMW26 deck build",
+  "me.availability.starts": "Starts",
+  "me.availability.ends": "Ends",
+  "me.availability.allDay": "All-day",
+  "me.availability.upcoming": "Upcoming",
+  "me.availability.empty": "No availability slots yet."
+}

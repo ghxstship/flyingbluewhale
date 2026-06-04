@@ -1,0 +1,9 @@
+{
+  "m.handover.eyebrow": "Mobile",
+  "m.handover.title": "Handover",
+  "m.handover.needsWalk": "Needs walk",
+  "m.handover.empty.title": "All Venues Handed Over",
+  "m.handover.empty.description": "Nothing pending today.",
+  "m.handover.capAbbrev": "cap",
+  "m.handover.handedOver": "Handed over"
+}

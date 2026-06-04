@@ -1,0 +1,5 @@
+{
+  "m.notFound.title": "Surface not found",
+  "m.notFound.description": "This mobile screen isn't in the manifest.",
+  "m.notFound.homeCta": "Home"
+}

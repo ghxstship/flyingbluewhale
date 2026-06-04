@@ -1,0 +1,17 @@
+{
+  "console.risk.eyebrow": "Programs",
+  "console.risk.title": "Risk Scores",
+  "console.risk.configureSupabase": "Configure Supabase.",
+  "console.risk.runBatch": "Run risk batch",
+  "console.risk.metric.critical": "Critical",
+  "console.risk.metric.high": "High",
+  "console.risk.metric.projectsScored": "Projects Scored",
+  "console.risk.empty.label": "No risk scores yet",
+  "console.risk.col.project": "Project",
+  "console.risk.col.category": "Category",
+  "console.risk.col.score": "Score",
+  "console.risk.col.trend7d": "Δ 7d",
+  "console.risk.col.trend30d": "Δ 30d",
+  "console.risk.col.severity": "Severity",
+  "console.risk.col.scored": "Scored"
+}

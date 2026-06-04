@@ -1,0 +1,12 @@
+{
+  "m.guard.configureSupabase": "Configure Supabase.",
+  "m.guard.eyebrow": "Field",
+  "m.guard.title": "Guard",
+  "m.guard.noToursAssigned": "No tours assigned to you.",
+  "m.guard.empty.title": "No Assigned Tours",
+  "m.guard.empty.action": "Open guard tours",
+  "m.guard.venue.assigned": "Assigned venue",
+  "m.guard.venue.any": "Any venue",
+  "m.guard.cadenceSuffix": " · every ${r.cadence_minutes}m",
+  "m.guard.badge.next": "Next ${fmtTime(r.next_run_at)}"
+}

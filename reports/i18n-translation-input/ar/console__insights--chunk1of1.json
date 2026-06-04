@@ -1,0 +1,16 @@
+{
+  "console.insights.eyebrow": "Insights",
+  "console.insights.title": "Booking Pool",
+  "console.insights.configureSupabase": "Configure Supabase.",
+  "console.insights.subtitle": "Anonymized monthly aggregates by genre.",
+  "console.insights.contributing": "contributing",
+  "console.insights.notContributing": "not contributing",
+  "console.insights.optInPrefix": "Your org isn't contributing to the booking pool. Enable",
+  "console.insights.emptyLabel": "No aggregates yet",
+  "console.insights.columns.month": "Month",
+  "console.insights.columns.genre": "Genre",
+  "console.insights.columns.shows": "Shows",
+  "console.insights.columns.avgGross": "Avg Gross",
+  "console.insights.columns.avgAttendance": "Avg Attendance",
+  "console.insights.columns.avgArtistPayout": "Avg Artist Payout"
+}

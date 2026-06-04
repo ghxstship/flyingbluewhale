@@ -1,0 +1,17 @@
+{
+  "m.inventory.scan.toast.failed": "Scan failed",
+  "m.inventory.scan.toast.notFound": "No equipment with that tag",
+  "m.inventory.scan.announce.notFound": "Asset not found",
+  "m.inventory.scan.assetTag": "Asset Tag",
+  "m.inventory.scan.placeholder": "Scan or type",
+  "m.inventory.scan.toggle": "Toggle",
+  "m.inventory.scan.checkIn": "Check in",
+  "m.inventory.scan.checkOut": "Check out",
+  "m.inventory.scan.recent": "Recent",
+  "m.inventory.scan.empty.title": "No Scans Yet",
+  "m.inventory.scan.badge.notFound": "not found",
+  "m.inventory.scan.badge.error": "error",
+  "m.inventory.scan.eyebrow": "Field",
+  "m.inventory.scan.title": "Inventory Scan",
+  "m.inventory.scan.subtitle": "Scan or type an asset tag to check in / out."
+}

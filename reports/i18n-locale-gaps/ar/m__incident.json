@@ -1,0 +1,14 @@
+{
+  "m.incident.new.eyebrow": "Field",
+  "m.incident.new.title": "Quick File",
+  "m.incident.new.openFullForm": "Open it",
+  "m.incident.new.summaryLabel": "What happened?",
+  "m.incident.new.fileNow": "File Now",
+  "m.incident.new.subtitle": "Log a safety issue — admin and EHS lead are notified immediately.",
+  "m.incident.eyebrow": "Field",
+  "m.incident.title": "My Incidents",
+  "m.incident.subtitle": "Reports you filed. {count} open. See the org-wide queue at",
+  "m.incident.quickFile": "Quick-file (one field)",
+  "m.incident.fullReport": "Full report",
+  "m.incident.empty.title": "No Reports Yet"
+}

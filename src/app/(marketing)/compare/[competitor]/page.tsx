@@ -107,16 +107,16 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
             <table className="data-table w-full text-sm">
               <thead>
                 <tr className="border-b border-[var(--border-color)] bg-[var(--surface-inset)]">
-                  <th className="eyebrow px-4 py-3 text-left">
+                  <th className="eyebrow px-4 py-3 text-start">
                     {t("marketing.pages.compare.detail.features.columnFeature")}
                   </th>
                   <th
-                    className="px-4 py-3 text-left text-[11px] font-semibold tracking-[0.2em] uppercase"
+                    className="px-4 py-3 text-start text-[11px] font-semibold tracking-[0.2em] uppercase"
                     style={{ color: "var(--org-primary)" }}
                   >
                     ATLVS
                   </th>
-                  <th className="eyebrow px-4 py-3 text-left">{c.competitor}</th>
+                  <th className="eyebrow px-4 py-3 text-start">{c.competitor}</th>
                 </tr>
               </thead>
               <tbody>
@@ -198,7 +198,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
           {t("marketing.pages.compare.detail.migration.subtitle", { competitor: c.competitor })}
         </p>
         <div className="surface mt-6 p-6">
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-[var(--text-secondary)]">
+          <ol className="list-decimal space-y-2 ps-5 text-sm text-[var(--text-secondary)]">
             {c.migration.map((m) => (
               <li key={m}>{m}</li>
             ))}

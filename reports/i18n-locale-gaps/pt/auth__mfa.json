@@ -1,0 +1,9 @@
+{
+  "auth.mfa.recoveryCode": "Recovery code",
+  "auth.mfa.recoveryHint": "Enter one of the recovery codes you saved when you enrolled.",
+  "auth.mfa.authenticatorCode": "Authenticator code",
+  "auth.mfa.submitting": "Verifying",
+  "auth.mfa.submit": "Verify",
+  "auth.mfa.useAuthenticator": "Use authenticator code",
+  "auth.mfa.useRecovery": "Use a recovery code"
+}

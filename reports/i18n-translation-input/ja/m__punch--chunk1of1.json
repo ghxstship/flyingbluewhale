@@ -1,0 +1,10 @@
+{
+  "m.punch.eyebrow": "Field",
+  "m.punch.title": "Punch List",
+  "m.punch.noOpenItems": "No open items assigned to you.",
+  "m.punch.openCount": "${rows.length} open",
+  "m.punch.empty.title": "Punch List Clear",
+  "m.punch.empty.action": "Open Tasks",
+  "m.punch.overdue": "Overdue",
+  "m.punch.due": "Due ${r.due_at}"
+}

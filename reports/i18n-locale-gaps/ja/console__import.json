@@ -1,0 +1,12 @@
+{
+  "console.import.noOrg.title": "No organization",
+  "console.import.noOrg.description": "Switch to an org to view import jobs.",
+  "console.import.eyebrow": "Import",
+  "console.import.title": "IMPORT CENTER",
+  "console.import.newImport": "New Import",
+  "console.import.empty.title": "No imports yet",
+  "console.import.stats.total": "Total",
+  "console.import.stats.succeeded": "Succeeded",
+  "console.import.stats.failed": "Failed",
+  "console.import.errors.rowPrefix": "Row ${e.row}"
+}

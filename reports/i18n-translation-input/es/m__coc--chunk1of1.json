@@ -1,0 +1,11 @@
+{
+  "m.coc.eyebrow": "Field",
+  "m.coc.title": "Chain of Custody",
+  "m.coc.actions.logIncident": "+ Log incident",
+  "m.coc.actions.scanAsset": "Scan asset",
+  "m.coc.recent.heading": "My recent custody events",
+  "m.coc.empty.title": "Nothing in the Last 7 Days",
+  "m.coc.badge.audit": "Audit",
+  "m.coc.desktopPrompt": "Need the desktop view?",
+  "m.coc.desktopLink": "Open Chain of Custody"
+}

@@ -1,0 +1,19 @@
+{
+  "p.guide.title": "Event Guide",
+  "p.guide.subtitle": "Your Know-Before-You-Go",
+  "p.guide.downloadPdf.aria": "Download this guide as a PDF",
+  "p.guide.downloadPdf.label": "Download PDF",
+  "p.guide.persona.staff": "Production",
+  "p.guide.persona.crew": "Operations",
+  "p.guide.persona.vendor": "Food & Beverage",
+  "p.guide.persona.brandAmbassador": "Brand Ambassador",
+  "p.guide.persona.sponsor": "Sponsors",
+  "p.guide.persona.artist": "Talent",
+  "p.guide.persona.mediaPress": "Media & Press",
+  "p.guide.persona.guest": "Guests",
+  "p.guide.persona.custom": "Temporary Access",
+  "p.guide.persona.client": "Client",
+  "p.guide.preview.previewingAs": "Previewing as",
+  "p.guide.preview.previewAs": "Preview as",
+  "p.guide.preview.exit": "Exit preview"
+}

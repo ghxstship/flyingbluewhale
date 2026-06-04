@@ -93,7 +93,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               );
             if (block.kind === "ul")
               return (
-                <ul key={i} className="ml-5 list-disc space-y-1.5">
+                <ul key={i} className="ms-5 list-disc space-y-1.5">
                   {block.items.map((item, j) => (
                     <li key={j}>{item}</li>
                   ))}
@@ -101,7 +101,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               );
             if (block.kind === "ol")
               return (
-                <ol key={i} className="ml-5 list-decimal space-y-1.5">
+                <ol key={i} className="ms-5 list-decimal space-y-1.5">
                   {block.items.map((item, j) => (
                     <li key={j}>{item}</li>
                   ))}
@@ -109,7 +109,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               );
             if (block.kind === "quote")
               return (
-                <blockquote key={i} className="border-l-2 border-[var(--org-primary)] pl-4 italic">
+                <blockquote key={i} className="border-s-2 border-[var(--org-primary)] ps-4 italic">
                   {block.text}
                   {block.cite && (
                     <cite className="mt-1 block text-xs text-[var(--text-muted)] not-italic">— {block.cite}</cite>

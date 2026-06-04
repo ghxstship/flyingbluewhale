@@ -175,7 +175,7 @@ export default async function RoadmapPage() {
                   <div className="text-sm font-semibold">{t(item.titleKey)}</div>
                   {item.tagKey ? (
                     <span className="rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-muted)]">
-                      <Clock size={9} className="mr-1 inline-block" aria-hidden="true" />
+                      <Clock size={9} className="me-1 inline-block" aria-hidden="true" />
                       {t(item.tagKey)}
                     </span>
                   ) : null}

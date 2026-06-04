@@ -1,0 +1,13 @@
+{
+  "m.wms.eyebrow": "Field",
+  "m.wms.title": "Warehouse",
+  "m.wms.subtitle": "Pick, put-away, and check-in/out via scan.",
+  "m.wms.scanAsset": "Scan asset",
+  "m.wms.assetRegister": "Asset register",
+  "m.wms.inMaintenance": "In Maintenance",
+  "m.wms.empty.maintenance": "No Items in Maintenance",
+  "m.wms.empty.returns": "No Returns Scheduled",
+  "m.wms.noTag": "no tag",
+  "m.wms.returnsDue": "Returns Due",
+  "m.wms.due": "Due ${fmtDay(r.ends_at)}"
+}

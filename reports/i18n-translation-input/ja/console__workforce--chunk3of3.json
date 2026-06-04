@@ -1,0 +1,18 @@
+{
+  "console.workforce.volunteers.new.fullName": "Full Name",
+  "console.workforce.volunteers.new.email": "Email",
+  "console.workforce.volunteers.new.phone": "Phone",
+  "console.workforce.volunteers.new.role": "Role",
+  "console.workforce.volunteers.new.rolePlaceholder": "e.g. Wayfinding, Transport",
+  "console.workforce.volunteers.eyebrowFallback": "Workspace",
+  "console.workforce.volunteers.title": "Volunteers",
+  "console.workforce.volunteers.configureSupabase": "Configure Supabase.",
+  "console.workforce.volunteers.eyebrow": "Workforce",
+  "console.workforce.volunteers.subtitleOne": "${rows.length} Record",
+  "console.workforce.volunteers.subtitleOther": "${rows.length} Records",
+  "console.workforce.volunteers.addVolunteer": "+ Add volunteer",
+  "console.workforce.volunteers.emptyLabel": "No volunteers",
+  "console.workforce.volunteers.columns.name": "Name",
+  "console.workforce.volunteers.columns.role": "Role",
+  "console.workforce.volunteers.columns.email": "Email"
+}

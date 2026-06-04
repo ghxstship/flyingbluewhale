@@ -1,0 +1,9 @@
+{
+  "m.guide.eyebrow": "Field Guide",
+  "m.guide.noActiveProject.title": "No Active Project",
+  "m.guide.noActiveProject.body": "Check back when you're assigned to a show.",
+  "m.guide.pending.title": "Guide Pending",
+  "m.guide.pending.body": "Production hasn't published a guide for your role yet.",
+  "m.guide.downloadPdf.ariaLabel": "Download this guide as a PDF",
+  "m.guide.downloadPdf.label": "Download PDF"
+}

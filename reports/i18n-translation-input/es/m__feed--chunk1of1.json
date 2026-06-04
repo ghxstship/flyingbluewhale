@@ -1,0 +1,10 @@
+{
+  "m.feed.eyebrow": "Mobile",
+  "m.feed.title": "Updates",
+  "m.feed.noUpdatesYet": "No updates yet.",
+  "m.feed.unreadOfTotal": "${unread} unread of ${rows.length}",
+  "m.feed.empty.title": "No Updates",
+  "m.feed.empty.description": "Org announcements will appear here.",
+  "m.feed.pinned": "Pinned",
+  "m.feed.markRead": "Mark Read"
+}

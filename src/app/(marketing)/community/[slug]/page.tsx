@@ -115,7 +115,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-4xl px-6 py-12">
         <div className="surface relative p-10">
-          <Quote size={48} className="absolute top-6 left-6 text-[var(--org-primary)] opacity-20" />
+          <Quote size={48} className="absolute start-6 top-6 text-[var(--org-primary)] opacity-20" />
           <blockquote className="mt-4 text-xl text-[var(--text-primary)] italic">"{c.quote.text}"</blockquote>
           <cite className="mt-4 block text-sm text-[var(--text-muted)] not-italic">— {c.quote.attribution}</cite>
         </div>

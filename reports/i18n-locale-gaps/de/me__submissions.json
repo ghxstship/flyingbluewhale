@@ -1,0 +1,11 @@
+{
+  "me.submissions.detail.eyebrow": "Submission",
+  "me.submissions.detail.coverNote": "Cover note",
+  "me.submissions.detail.proposedFee": "Proposed fee",
+  "me.submissions.eyebrow": "My submissions",
+  "me.submissions.title": "Submissions",
+  "me.submissions.subtitle": "Open-call submissions you've made.",
+  "me.submissions.empty.title": "No submissions yet",
+  "me.submissions.empty.action": "Browse open calls",
+  "me.submissions.deletedCall": "(deleted call)"
+}

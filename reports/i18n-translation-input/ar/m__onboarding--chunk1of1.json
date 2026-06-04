@@ -1,0 +1,9 @@
+{
+  "m.onboarding.title": "Onboarding",
+  "m.onboarding.markDone": "Mark Done",
+  "m.onboarding.completed": "✓ Completed",
+  "m.onboarding.finish": "Finish Onboarding",
+  "m.onboarding.eyebrow": "Mobile",
+  "m.onboarding.empty.title": "No Active Flows",
+  "m.onboarding.fallbackFlowName": "Onboarding"
+}

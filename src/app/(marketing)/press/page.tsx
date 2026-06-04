@@ -84,7 +84,7 @@ export default async function PressPage() {
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">{t("marketing.pages.press.kit.body")}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href="/contact" variant="secondary">
-              <Download size={14} className="mr-1.5" aria-hidden="true" />
+              <Download size={14} className="me-1.5" aria-hidden="true" />
               {t("marketing.pages.press.kit.cta")}
             </Button>
           </div>

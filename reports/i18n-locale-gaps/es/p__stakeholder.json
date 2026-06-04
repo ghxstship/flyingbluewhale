@@ -1,0 +1,19 @@
+{
+  "p.stakeholder.home.portfolioPnl.title": "Portfolio & P&L",
+  "p.stakeholder.home.portfolio.label": "Portfolio",
+  "p.stakeholder.home.portfolio.desc": "Active projects + stages",
+  "p.stakeholder.home.pnl.label": "P&L",
+  "p.stakeholder.home.pnl.desc": "Roll-up across portfolio",
+  "p.stakeholder.home.governance.title": "Governance",
+  "p.stakeholder.home.committees.label": "Committees",
+  "p.stakeholder.home.committees.desc": "Charters + cadence",
+  "p.stakeholder.home.esg.title": "Sustainability",
+  "p.stakeholder.home.esg.description": "ESG reporting + sustainability posture.",
+  "p.stakeholder.home.esg.label": "ESG",
+  "p.stakeholder.home.esg.desc": "Carbon + community impact",
+  "p.stakeholder.home.audit.title": "Audit Trail",
+  "p.stakeholder.home.audit.description": "Every privileged action, time-stamped.",
+  "p.stakeholder.home.auditLog.label": "Audit Log",
+  "p.stakeholder.home.auditLog.desc": "Read-only ledger",
+  "p.stakeholder.home.title": "Stakeholder Portal"
+}

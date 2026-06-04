@@ -163,7 +163,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
           {t("marketing.pages.alternatives.competitor.migrate.body", { competitor: c.competitor })}
         </p>
         <div className="surface mt-6 p-6">
-          <ol className="list-decimal space-y-2 pl-5 text-sm text-[var(--text-secondary)]">
+          <ol className="list-decimal space-y-2 ps-5 text-sm text-[var(--text-secondary)]">
             {c.migration.map((m) => (
               <li key={m}>{m}</li>
             ))}

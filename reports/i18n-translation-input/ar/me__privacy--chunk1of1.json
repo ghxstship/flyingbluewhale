@@ -1,0 +1,16 @@
+{
+  "me.privacy.errors.deleteFailed": "Couldn't delete",
+  "me.privacy.toast.scheduled": "Account scheduled for deletion in 30 days.",
+  "me.privacy.export.title": "Export My Data",
+  "me.privacy.export.action": "Download",
+  "me.privacy.cookies.title": "Cookie Preferences",
+  "me.privacy.cookies.action": "Manage cookies",
+  "me.privacy.delete.title": "Delete My Account",
+  "me.privacy.delete.action": "Delete account",
+  "me.privacy.dialog.title": "Delete Your Account?",
+  "me.privacy.dialog.descriptionSuffix": "below.",
+  "me.privacy.dialog.placeholder": "delete my account",
+  "me.privacy.dialog.ariaLabel": "Type the Confirmation Phrase",
+  "me.privacy.eyebrow": "Account",
+  "me.privacy.title": "Privacy & data"
+}

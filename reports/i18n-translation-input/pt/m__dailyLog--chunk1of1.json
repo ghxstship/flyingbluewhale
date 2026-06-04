@@ -1,0 +1,10 @@
+{
+  "m.dailyLog.eyebrow": "Field",
+  "m.dailyLog.title": "Daily Log",
+  "m.dailyLog.subtitle": "Quick capture from the floor",
+  "m.dailyLog.todaysLog": "Today's log — {date}",
+  "m.dailyLog.selectProject": "Select a project…",
+  "m.dailyLog.weatherPlaceholder": "Weather (e.g. 78°F, sunny)",
+  "m.dailyLog.saveLog": "Save log",
+  "m.dailyLog.recent": "Recent"
+}

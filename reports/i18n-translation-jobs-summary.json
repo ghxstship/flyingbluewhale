@@ -1,0 +1,30 @@
+{
+  "locales": {
+    "es": {
+      "jobs": 272,
+      "keys": 11254
+    },
+    "fr": {
+      "jobs": 272,
+      "keys": 11254
+    },
+    "de": {
+      "jobs": 272,
+      "keys": 11254
+    },
+    "pt": {
+      "jobs": 272,
+      "keys": 11254
+    },
+    "ja": {
+      "jobs": 272,
+      "keys": 11254
+    },
+    "ar": {
+      "jobs": 272,
+      "keys": 11254
+    }
+  },
+  "totalJobs": 1632,
+  "chunkSize": 200
+}

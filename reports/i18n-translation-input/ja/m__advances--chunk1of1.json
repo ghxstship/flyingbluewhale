@@ -1,0 +1,10 @@
+{
+  "m.advances.eyebrow": "Mobile",
+  "m.advances.title": "My Assignments",
+  "m.advances.empty.title": "Nothing Assigned Yet",
+  "m.advances.untitled": "Untitled",
+  "m.advances.projectFallback": "Project",
+  "m.advances.singleShow.prompt": "Working a single show?",
+  "m.advances.singleShow.link": "Open your shift",
+  "m.advances.singleShow.suffix": "to see today's call."
+}

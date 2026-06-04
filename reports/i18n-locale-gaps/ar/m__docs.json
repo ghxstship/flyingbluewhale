@@ -1,0 +1,23 @@
+{
+  "m.docs.download.openError": "Couldn't open document",
+  "m.docs.download.openFailed": "Open failed",
+  "m.docs.download.opening": "Opening…",
+  "m.docs.download.label": "Download",
+  "m.docs.new.configureSupabase": "Configure Supabase.",
+  "m.docs.new.title": "Upload Document",
+  "m.docs.new.label": "Label",
+  "m.docs.new.labelPlaceholder": "e.g. Driver's License",
+  "m.docs.new.kind": "Kind",
+  "m.docs.new.kindId": "ID",
+  "m.docs.new.kindLicense": "License / certification",
+  "m.docs.new.kindTax": "Tax form",
+  "m.docs.new.kindContract": "Contract",
+  "m.docs.new.kindMedical": "Medical",
+  "m.docs.new.kindOther": "Other",
+  "m.docs.new.file": "File",
+  "m.docs.new.upload": "Upload",
+  "m.docs.eyebrow": "Mobile",
+  "m.docs.title": "My Documents",
+  "m.docs.uploadCta": "+ Upload",
+  "m.docs.empty.title": "No Documents"
+}

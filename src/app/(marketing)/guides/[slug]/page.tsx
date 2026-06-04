@@ -91,7 +91,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
                 ),
               )}
               {s.list && (
-                <ul className="mt-4 ml-5 list-disc space-y-1.5">
+                <ul className="ms-5 mt-4 list-disc space-y-1.5">
                   {s.list.map((item) => (
                     <li key={item}>{item}</li>
                   ))}

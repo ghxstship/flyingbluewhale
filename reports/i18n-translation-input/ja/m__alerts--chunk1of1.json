@@ -1,0 +1,9 @@
+{
+  "m.alerts.eyebrow": "Mobile",
+  "m.alerts.title": "Alerts",
+  "m.alerts.noneActive": "No active alerts.",
+  "m.alerts.empty.title": "No Active Alerts",
+  "m.alerts.scheduled": "scheduled",
+  "m.alerts.acknowledgedAt": "Acknowledged ${fmt.time(ack)}",
+  "m.alerts.acknowledge": "Acknowledge"
+}

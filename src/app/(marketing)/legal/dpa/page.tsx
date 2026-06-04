@@ -8,7 +8,7 @@ export default function DpaPage() {
           Our DPA incorporates the EU SCCs and UK IDTA. It auto-applies when you subscribe. Request a counter-signed
           copy from Settings → Compliance.
         </p>
-        <ul className="list-disc space-y-1 pl-5">
+        <ul className="list-disc space-y-1 ps-5">
           <li>Roles: you are the Controller; we are the Processor.</li>
           <li>Subprocessors: Supabase, Stripe, Anthropic, Vercel.</li>
           <li>Breach notification: within 48 hours of confirmation.</li>

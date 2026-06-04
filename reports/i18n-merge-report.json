@@ -1,0 +1,287 @@
+{
+  "totalKeys": 10275,
+  "added": 9618,
+  "skippedAlreadyExact": 72,
+  "skippedDifferentValue": 5,
+  "skippedIntermediateConflict": 580,
+  "differentValues": [
+    {
+      "key": "common.retry",
+      "existing": "Retry",
+      "incoming": "Try again"
+    },
+    {
+      "key": "auth.signup.subtitle",
+      "existing": "Start free in under two minutes",
+      "incoming": "Free for Life on the Access tier. No credit card."
+    },
+    {
+      "key": "auth.verifyEmail.subtitleWithEmail",
+      "existing": "We sent a verification link to {email}.",
+      "incoming": "We sent a verification link to ${email}."
+    },
+    {
+      "key": "auth.verifyEmail.resendCooldown",
+      "existing": "Resend in {seconds}s",
+      "incoming": "Resend in ${cooldown}s"
+    },
+    {
+      "key": "theme.toggle.colorTheme",
+      "existing": "Color theme",
+      "incoming": "Color mode"
+    }
+  ],
+  "differentValueCountTotal": 5,
+  "intermediateConflicts": [
+    {
+      "key": "me.availability.kind.hold",
+      "reason": "intermediate-leaf",
+      "at": "me.availability.kind"
+    },
+    {
+      "key": "me.availability.kind.confirm",
+      "reason": "intermediate-leaf",
+      "at": "me.availability.kind"
+    },
+    {
+      "key": "me.availability.kind.block",
+      "reason": "intermediate-leaf",
+      "at": "me.availability.kind"
+    },
+    {
+      "key": "console.accommodation.village.eyebrow",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.title",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.configureSupabase",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.villageSingular",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.villagePlural",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.bedSingular",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.bedPlural",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.newVenue",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.emptyLabel",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.col.name",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.col.cluster",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.col.beds",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accommodation.village.col.handover",
+      "reason": "intermediate-leaf",
+      "at": "console.accommodation.village"
+    },
+    {
+      "key": "console.accreditation.categories",
+      "reason": "object-vs-leaf",
+      "at": "console.accreditation.categories"
+    },
+    {
+      "key": "console.accreditation.changes",
+      "reason": "object-vs-leaf",
+      "at": "console.accreditation.changes"
+    },
+    {
+      "key": "console.accreditation.policy.eyebrow",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.title",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.configureSupabase",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.categorySingular",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.categoryPlural",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.zoneSingular",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.zonePlural",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.coverageSuffix",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.manageCategories",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.emptyTitle",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.newCategory",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.openVenues",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.zoneVenueHeader",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.allowed",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.policy.notAllowed",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.policy"
+    },
+    {
+      "key": "console.accreditation.scans.eyebrow",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.title",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.configureSupabase",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.subtitleOne",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.subtitleOther",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.columns.result",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.columns.reason",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.columns.gate",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.scans.columns.at",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.scans"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.titleWithName",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.titleFallback",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.eyebrow",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.personName",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.email",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.vettingState",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.validFrom",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    },
+    {
+      "key": "console.accreditation.vetting.edit.validTo",
+      "reason": "intermediate-leaf",
+      "at": "console.accreditation.vetting"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "m.tasks.eyebrow": "Field",
+  "m.tasks.title": "My Tasks",
+  "m.tasks.empty": "No tasks assigned",
+  "m.tasks.dueLabel": "Due ${formatDate(task.due_at)}",
+  "m.tasks.detail.back": "← Tasks",
+  "m.tasks.detail.dueLabel": "Due ${formatDate(task.due_at)}",
+  "m.tasks.detail.updateStatus": "Update Status"
+}

@@ -1,0 +1,13 @@
+{
+  "me.applications.detail.eyebrow": "Application",
+  "me.applications.detail.coverNote": "Cover note",
+  "me.applications.detail.proposedDayRate": "Proposed day rate",
+  "me.applications.detail.resume": "Resume",
+  "me.applications.title": "My Applications",
+  "me.applications.configureSupabase": "Configure Supabase.",
+  "me.applications.eyebrow": "My applications",
+  "me.applications.heading": "Applications",
+  "me.applications.empty.title": "No Applications Yet",
+  "me.applications.empty.action": "Browse Gigs",
+  "me.applications.deletedPosting": "Deleted Posting"
+}

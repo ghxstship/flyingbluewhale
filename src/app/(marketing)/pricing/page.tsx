@@ -590,20 +590,20 @@ export default async function PricingPage() {
           .
         </p>
         <div className="mt-8 overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left">
+          <table className="w-full min-w-[720px] text-start">
             <thead>
               <tr className="border-b border-[var(--border)] text-xs tracking-wider text-[var(--text-muted)] uppercase">
-                <th className="py-3 pr-4 font-semibold">{t("marketing.pages.pricing.comparison.headers.module")}</th>
-                <th className="py-3 pr-4 text-center font-semibold">
+                <th className="py-3 pe-4 font-semibold">{t("marketing.pages.pricing.comparison.headers.module")}</th>
+                <th className="py-3 pe-4 text-center font-semibold">
                   {t("marketing.pages.pricing.comparison.headers.free")}
                 </th>
-                <th className="py-3 pr-4 text-center font-semibold">
+                <th className="py-3 pe-4 text-center font-semibold">
                   {t("marketing.pages.pricing.comparison.headers.crew")}
                 </th>
-                <th className="py-3 pr-4 text-center font-semibold">
+                <th className="py-3 pe-4 text-center font-semibold">
                   {t("marketing.pages.pricing.comparison.headers.production")}
                 </th>
-                <th className="py-3 pr-4 text-center font-semibold">
+                <th className="py-3 pe-4 text-center font-semibold">
                   {t("marketing.pages.pricing.comparison.headers.festival")}
                 </th>
               </tr>
@@ -614,24 +614,24 @@ export default async function PricingPage() {
                   <tr key={cat.category} className="bg-[var(--surface-inset)]">
                     <td
                       colSpan={5}
-                      className="py-2 pl-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
+                      className="py-2 ps-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
                     >
                       {cat.category}
                     </td>
                   </tr>
                   {cat.rows.map((r) => (
                     <tr key={cat.category + r.feature} className="border-b border-[var(--border)]">
-                      <td className="py-3 pr-4 text-sm">{r.feature}</td>
-                      <td className="py-3 pr-4 text-center">
+                      <td className="py-3 pe-4 text-sm">{r.feature}</td>
+                      <td className="py-3 pe-4 text-center">
                         <Cell value={r.free} />
                       </td>
-                      <td className="py-3 pr-4 text-center">
+                      <td className="py-3 pe-4 text-center">
                         <Cell value={r.crew} />
                       </td>
-                      <td className="py-3 pr-4 text-center">
+                      <td className="py-3 pe-4 text-center">
                         <Cell value={r.production} />
                       </td>
-                      <td className="py-3 pr-4 text-center">
+                      <td className="py-3 pe-4 text-center">
                         <Cell value={r.festival} />
                       </td>
                     </tr>

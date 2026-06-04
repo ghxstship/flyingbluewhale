@@ -1,0 +1,13 @@
+{
+  "console.photos.eyebrow": "Operations",
+  "console.photos.title": "Project Photos",
+  "console.photos.photosLabel": "photos",
+  "console.photos.albumLabel": "album",
+  "console.photos.upload": "+ Upload",
+  "console.photos.metrics.photos": "Photos",
+  "console.photos.metrics.albums": "Albums",
+  "console.photos.metrics.projectsCovered": "Projects Covered",
+  "console.photos.albums.all": "All",
+  "console.photos.empty.title": "No photos yet",
+  "console.photos.unalbumed": "Unalbumed"
+}

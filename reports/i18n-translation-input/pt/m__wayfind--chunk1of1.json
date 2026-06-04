@@ -1,0 +1,8 @@
+{
+  "m.wayfind.otherCluster": "Other",
+  "m.wayfind.eyebrow": "Field",
+  "m.wayfind.title": "Wayfinding",
+  "m.wayfind.subtitle": "Pick a venue to view its zones, gates, and meet-points.",
+  "m.wayfind.empty.title": "No Venues Yet",
+  "m.wayfind.empty.action": "Open Venues"
+}

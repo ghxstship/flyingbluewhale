@@ -1,0 +1,12 @@
+{
+  "me.reviews.configure": "Configure Supabase.",
+  "me.reviews.eyebrow": "My reviews",
+  "me.reviews.title": "Reviews",
+  "me.reviews.subtitle": "Reviews remain hidden until both sides post. No retaliation surface.",
+  "me.reviews.received": "Received",
+  "me.reviews.emptyReceived": "No public reviews yet.",
+  "me.reviews.written": "Written",
+  "me.reviews.emptyWritten": "You haven't written any reviews yet.",
+  "me.reviews.status.released": "released",
+  "me.reviews.status.hidden": "hidden — waiting on counterpart"
+}

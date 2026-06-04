@@ -98,7 +98,7 @@ export default async function ChangelogPage() {
                 </div>
                 <div className="hed-lg mt-3 tracking-tight">{e.title}</div>
                 <p className="mt-2 text-sm text-[var(--text-secondary)]">{e.body}</p>
-                <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-[var(--text-secondary)]">
+                <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-[var(--text-secondary)]">
                   {e.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}

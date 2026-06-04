@@ -1,0 +1,7 @@
+{
+  "m.polls.title": "Polls",
+  "m.polls.empty.title": "No Active Polls",
+  "m.polls.empty.description": "Live polls will appear here.",
+  "m.polls.liveBadge": "Live",
+  "m.polls.voteButton": "Vote"
+}

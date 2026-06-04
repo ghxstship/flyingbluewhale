@@ -1,0 +1,7 @@
+{
+  "me.appearance.eyebrow": "Settings",
+  "me.appearance.title": "Appearance",
+  "me.appearance.colorMode.label": "Color mode",
+  "me.appearance.colorMode.hint": "Light, dark, or follow your OS setting.",
+  "me.appearance.density.label": "Density"
+}

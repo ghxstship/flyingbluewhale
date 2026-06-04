@@ -1,0 +1,9 @@
+{
+  "m.incidents.eyebrow": "Terrain",
+  "m.incidents.title": "Incident",
+  "m.incidents.noneLast30": "Aucun incident consigné ces 30 derniers jours.",
+  "m.incidents.summary": "${rows.length} sur les 30 derniers jours · ${open} ouverts",
+  "m.incidents.criticalSuffix": "${critical} critiques",
+  "m.incidents.reportCta": "+ Signaler un incident",
+  "m.incidents.empty.title": "Tout est calme"
+}

@@ -1,0 +1,9 @@
+{
+  "m.guide.eyebrow": "Guide Terrain",
+  "m.guide.noActiveProject.title": "Aucun Projet Actif",
+  "m.guide.noActiveProject.body": "Reviens quand tu seras affecté à un show.",
+  "m.guide.pending.title": "Guide En Attente",
+  "m.guide.pending.body": "La production n'a pas encore publié de guide pour ton rôle.",
+  "m.guide.downloadPdf.ariaLabel": "Télécharger ce guide en PDF",
+  "m.guide.downloadPdf.label": "Télécharger le PDF"
+}

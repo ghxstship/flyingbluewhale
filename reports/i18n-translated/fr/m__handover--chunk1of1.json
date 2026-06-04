@@ -1,0 +1,9 @@
+{
+  "m.handover.eyebrow": "Mobile",
+  "m.handover.title": "Passation",
+  "m.handover.needsWalk": "Visite requise",
+  "m.handover.empty.title": "Tous les sites transmis",
+  "m.handover.empty.description": "Rien en attente aujourd'hui.",
+  "m.handover.capAbbrev": "cap.",
+  "m.handover.handedOver": "Transmis"
+}

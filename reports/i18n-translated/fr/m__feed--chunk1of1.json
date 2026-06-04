@@ -1,0 +1,10 @@
+{
+  "m.feed.eyebrow": "Mobile",
+  "m.feed.title": "Actualités",
+  "m.feed.noUpdatesYet": "Aucune actualité pour le moment.",
+  "m.feed.unreadOfTotal": "${unread} non lues sur ${rows.length}",
+  "m.feed.empty.title": "Aucune Actualité",
+  "m.feed.empty.description": "Les annonces de l'organisation apparaîtront ici.",
+  "m.feed.pinned": "Épinglé",
+  "m.feed.markRead": "Marquer Comme Lu"
+}

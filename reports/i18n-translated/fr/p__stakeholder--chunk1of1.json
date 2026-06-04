@@ -1,0 +1,19 @@
+{
+  "p.stakeholder.home.portfolioPnl.title": "Portefeuille et P&L",
+  "p.stakeholder.home.portfolio.label": "Portefeuille",
+  "p.stakeholder.home.portfolio.desc": "Projets actifs et phases",
+  "p.stakeholder.home.pnl.label": "P&L",
+  "p.stakeholder.home.pnl.desc": "Consolidation sur l'ensemble du portefeuille",
+  "p.stakeholder.home.governance.title": "Gouvernance",
+  "p.stakeholder.home.committees.label": "Comités",
+  "p.stakeholder.home.committees.desc": "Chartes et cadence",
+  "p.stakeholder.home.esg.title": "Durabilité",
+  "p.stakeholder.home.esg.description": "Reporting ESG et posture de durabilité.",
+  "p.stakeholder.home.esg.label": "ESG",
+  "p.stakeholder.home.esg.desc": "Carbone et impact communautaire",
+  "p.stakeholder.home.audit.title": "Piste d'Audit",
+  "p.stakeholder.home.audit.description": "Chaque action privilégiée, horodatée.",
+  "p.stakeholder.home.auditLog.label": "Journal d'Audit",
+  "p.stakeholder.home.auditLog.desc": "Registre en lecture seule",
+  "p.stakeholder.home.title": "Portail Parties Prenantes"
+}

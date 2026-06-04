@@ -1,0 +1,5 @@
+{
+  "p.overview.title": "Vue d'ensemble du projet",
+  "p.overview.subtitle": "Choisissez votre portail pour continuer",
+  "p.overview.openPortal": "Ouvrir le portail ${toTitle(persona)} →"
+}

@@ -1,0 +1,22 @@
+{
+  "me.savedSearches.eyebrow": "Recherches enregistrées",
+  "me.savedSearches.title": "Recherches Enregistrées",
+  "me.savedSearches.add.title": "Ajouter un Abonnement",
+  "me.savedSearches.fields.kind": "Type",
+  "me.savedSearches.fields.name": "Nom",
+  "me.savedSearches.fields.namePlaceholder": "A1 / Programmeur Lumière · FL",
+  "me.savedSearches.fields.query": "Requête (JSON)",
+  "me.savedSearches.fields.emailAlerts": "Alertes E-mail",
+  "me.savedSearches.fields.pushAlerts": "Alertes Push",
+  "me.savedSearches.kinds.gig": "Mission",
+  "me.savedSearches.kinds.rfq": "RFQ",
+  "me.savedSearches.kinds.talentCall": "Appel Talents",
+  "me.savedSearches.kinds.talent": "Talent",
+  "me.savedSearches.kinds.crew": "Équipe",
+  "me.savedSearches.kinds.vendor": "Fournisseur",
+  "me.savedSearches.active.title": "Abonnements Actifs",
+  "me.savedSearches.empty": "Aucune recherche enregistrée.",
+  "me.savedSearches.badge.email": "e-mail",
+  "me.savedSearches.badge.push": "push",
+  "me.savedSearches.matches": "${r.match_count} résultats"
+}

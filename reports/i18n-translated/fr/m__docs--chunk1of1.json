@@ -1,0 +1,23 @@
+{
+  "m.docs.download.openError": "Impossible d'ouvrir le document",
+  "m.docs.download.openFailed": "Échec d'ouverture",
+  "m.docs.download.opening": "Ouverture…",
+  "m.docs.download.label": "Télécharger",
+  "m.docs.new.configureSupabase": "Configurez Supabase.",
+  "m.docs.new.title": "Téléverser un Document",
+  "m.docs.new.label": "Libellé",
+  "m.docs.new.labelPlaceholder": "ex. Permis de Conduire",
+  "m.docs.new.kind": "Type",
+  "m.docs.new.kindId": "Pièce d'identité",
+  "m.docs.new.kindLicense": "Permis / certification",
+  "m.docs.new.kindTax": "Formulaire fiscal",
+  "m.docs.new.kindContract": "Contrat",
+  "m.docs.new.kindMedical": "Médical",
+  "m.docs.new.kindOther": "Autre",
+  "m.docs.new.file": "Fichier",
+  "m.docs.new.upload": "Téléverser",
+  "m.docs.eyebrow": "Mobile",
+  "m.docs.title": "Mes Documents",
+  "m.docs.uploadCta": "+ Téléverser",
+  "m.docs.empty.title": "Aucun Document"
+}

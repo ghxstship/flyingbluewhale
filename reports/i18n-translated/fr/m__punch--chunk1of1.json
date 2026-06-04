@@ -1,0 +1,10 @@
+{
+  "m.punch.eyebrow": "Terrain",
+  "m.punch.title": "Punch List",
+  "m.punch.noOpenItems": "Aucun élément ouvert ne vous est assigné.",
+  "m.punch.openCount": "${rows.length} ouverts",
+  "m.punch.empty.title": "Punch List soldée",
+  "m.punch.empty.action": "Tâches ouvertes",
+  "m.punch.overdue": "En retard",
+  "m.punch.due": "Échéance ${r.due_at}"
+}

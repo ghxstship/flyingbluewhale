@@ -1,0 +1,9 @@
+{
+  "m.surveys.title": "Sondages",
+  "m.surveys.empty.title": "Aucun sondage actif",
+  "m.surveys.empty.description": "Les sondages ouverts apparaîtront ici.",
+  "m.surveys.badge.submitted": "Envoyé",
+  "m.surveys.badge.open": "Ouvert",
+  "m.surveys.badge.anonymous": "Anonyme",
+  "m.surveys.closesAt": "clôture le ${fmt.date(s.closes_at)}"
+}

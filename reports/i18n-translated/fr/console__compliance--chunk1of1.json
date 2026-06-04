@@ -1,0 +1,14 @@
+{
+  "console.compliance.coc.eyebrow": "Conformité",
+  "console.compliance.coc.title": "Chaîne de Possession",
+  "console.compliance.coc.configureSupabase": "Configurer Supabase.",
+  "console.compliance.coc.subtitle": "Piste d'audit pour preuves et échantillons.",
+  "console.compliance.coc.mobileCapture": "Capture Mobile",
+  "console.compliance.coc.metrics.events24h": "Événements · 24h",
+  "console.compliance.coc.metrics.events30d": "Événements · 30j",
+  "console.compliance.coc.metrics.distinctActors": "Acteurs Distincts",
+  "console.compliance.coc.byTarget": "Par Cible",
+  "console.compliance.coc.recentEvents": "Événements Récents",
+  "console.compliance.coc.empty.title": "Aucun événement COC sur les 30 derniers jours",
+  "console.compliance.coc.system": "système"
+}

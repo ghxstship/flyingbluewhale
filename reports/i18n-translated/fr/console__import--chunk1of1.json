@@ -1,0 +1,12 @@
+{
+  "console.import.noOrg.title": "Aucune organisation",
+  "console.import.noOrg.description": "Basculez vers une organisation pour consulter les tâches d'import.",
+  "console.import.eyebrow": "Import",
+  "console.import.title": "CENTRE D'IMPORT",
+  "console.import.newImport": "Nouvel import",
+  "console.import.empty.title": "Aucun import pour l'instant",
+  "console.import.stats.total": "Total",
+  "console.import.stats.succeeded": "Réussis",
+  "console.import.stats.failed": "Échoués",
+  "console.import.errors.rowPrefix": "Ligne ${e.row}"
+}

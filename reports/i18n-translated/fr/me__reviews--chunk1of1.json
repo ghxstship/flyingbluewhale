@@ -1,0 +1,12 @@
+{
+  "me.reviews.configure": "Configurez Supabase.",
+  "me.reviews.eyebrow": "Mes avis",
+  "me.reviews.title": "Avis",
+  "me.reviews.subtitle": "Les avis restent masqués tant que les deux parties n'ont pas publié. Aucune surface de représailles.",
+  "me.reviews.received": "Reçus",
+  "me.reviews.emptyReceived": "Aucun avis public pour le moment.",
+  "me.reviews.written": "Rédigés",
+  "me.reviews.emptyWritten": "Vous n'avez encore rédigé aucun avis.",
+  "me.reviews.status.released": "publié",
+  "me.reviews.status.hidden": "masqué — en attente de la contrepartie"
+}

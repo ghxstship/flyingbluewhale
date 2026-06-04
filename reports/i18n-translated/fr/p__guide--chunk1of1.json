@@ -1,0 +1,19 @@
+{
+  "p.guide.title": "Guide de l'événement",
+  "p.guide.subtitle": "Votre Know-Before-You-Go",
+  "p.guide.downloadPdf.aria": "Télécharger ce guide au format PDF",
+  "p.guide.downloadPdf.label": "Télécharger le PDF",
+  "p.guide.persona.staff": "Production",
+  "p.guide.persona.crew": "Opérations",
+  "p.guide.persona.vendor": "Restauration",
+  "p.guide.persona.brandAmbassador": "Ambassadeur de marque",
+  "p.guide.persona.sponsor": "Sponsors",
+  "p.guide.persona.artist": "Talent",
+  "p.guide.persona.mediaPress": "Médias et presse",
+  "p.guide.persona.guest": "Invités",
+  "p.guide.persona.custom": "Accès temporaire",
+  "p.guide.persona.client": "Client",
+  "p.guide.preview.previewingAs": "Aperçu en tant que",
+  "p.guide.preview.previewAs": "Aperçu en tant que",
+  "p.guide.preview.exit": "Quitter l'aperçu"
+}

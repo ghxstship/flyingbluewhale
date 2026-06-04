@@ -1,0 +1,14 @@
+{
+  "m.incident.new.eyebrow": "Terrain",
+  "m.incident.new.title": "Signalement express",
+  "m.incident.new.openFullForm": "Ouvrir",
+  "m.incident.new.summaryLabel": "Que s'est-il passé ?",
+  "m.incident.new.fileNow": "Déposer maintenant",
+  "m.incident.new.subtitle": "Signalez un problème de sécurité — l'admin et le responsable EHS sont notifiés immédiatement.",
+  "m.incident.eyebrow": "Terrain",
+  "m.incident.title": "Mes signalements",
+  "m.incident.subtitle": "Rapports que vous avez déposés. {count} ouverts. Consultez la file de l'organisation sur",
+  "m.incident.quickFile": "Signalement express (un seul champ)",
+  "m.incident.fullReport": "Rapport complet",
+  "m.incident.empty.title": "Aucun rapport pour l'instant"
+}

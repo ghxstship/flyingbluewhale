@@ -1,0 +1,17 @@
+{
+  "console.risk.eyebrow": "Programmes",
+  "console.risk.title": "Scores de Risque",
+  "console.risk.configureSupabase": "Configurer Supabase.",
+  "console.risk.runBatch": "Lancer le Batch de Risque",
+  "console.risk.metric.critical": "Critique",
+  "console.risk.metric.high": "Élevé",
+  "console.risk.metric.projectsScored": "Projets Notés",
+  "console.risk.empty.label": "Aucun score de risque pour le moment",
+  "console.risk.col.project": "Projet",
+  "console.risk.col.category": "Catégorie",
+  "console.risk.col.score": "Score",
+  "console.risk.col.trend7d": "Δ 7 j",
+  "console.risk.col.trend30d": "Δ 30 j",
+  "console.risk.col.severity": "Sévérité",
+  "console.risk.col.scored": "Noté le"
+}

@@ -1,0 +1,13 @@
+{
+  "me.dashboard.title": "Mon tableau de bord",
+  "me.dashboard.configureSupabase": "Configurez Supabase pour vous connecter.",
+  "me.dashboard.eyebrow": "Mon tableau de bord",
+  "me.dashboard.role": "Rôle",
+  "me.dashboard.tier": "Formule",
+  "me.dashboard.organization": "Organisation",
+  "me.dashboard.noOrg": "Aucune",
+  "me.dashboard.openConsole": "Ouvrir la console →",
+  "me.dashboard.consoleBlurb": "Projets, finance, achats, production, équipes, IA.",
+  "me.dashboard.marketplaceHeading": "Marketplace",
+  "me.dashboard.accountHeading": "Compte"
+}

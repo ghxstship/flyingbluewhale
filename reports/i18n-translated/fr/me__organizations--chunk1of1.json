@@ -1,0 +1,6 @@
+{
+  "me.organizations.title": "Organisations",
+  "me.organizations.configureSupabase": "Configurez Supabase.",
+  "me.organizations.subtitle": "Toutes les organisations dont vous êtes membre",
+  "me.organizations.empty.title": "Aucune adhésion pour l'instant"
+}

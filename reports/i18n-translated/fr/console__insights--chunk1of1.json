@@ -1,0 +1,16 @@
+{
+  "console.insights.eyebrow": "Insights",
+  "console.insights.title": "Pool de Booking",
+  "console.insights.configureSupabase": "Configurer Supabase.",
+  "console.insights.subtitle": "Agrégats mensuels anonymisés par genre.",
+  "console.insights.contributing": "contribue",
+  "console.insights.notContributing": "ne contribue pas",
+  "console.insights.optInPrefix": "Votre org ne contribue pas au pool de booking. Activez",
+  "console.insights.emptyLabel": "Aucun agrégat pour l'instant",
+  "console.insights.columns.month": "Mois",
+  "console.insights.columns.genre": "Genre",
+  "console.insights.columns.shows": "Shows",
+  "console.insights.columns.avgGross": "Brut Moyen",
+  "console.insights.columns.avgAttendance": "Affluence Moyenne",
+  "console.insights.columns.avgArtistPayout": "Cachet Artiste Moyen"
+}

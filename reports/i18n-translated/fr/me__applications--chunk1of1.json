@@ -1,0 +1,13 @@
+{
+  "me.applications.detail.eyebrow": "Candidature",
+  "me.applications.detail.coverNote": "Lettre de motivation",
+  "me.applications.detail.proposedDayRate": "Tarif journalier proposé",
+  "me.applications.detail.resume": "CV",
+  "me.applications.title": "Mes Candidatures",
+  "me.applications.configureSupabase": "Configurer Supabase.",
+  "me.applications.eyebrow": "Mes candidatures",
+  "me.applications.heading": "Candidatures",
+  "me.applications.empty.title": "Aucune Candidature",
+  "me.applications.empty.action": "Parcourir les Missions",
+  "me.applications.deletedPosting": "Annonce Supprimée"
+}

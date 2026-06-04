@@ -1,0 +1,7 @@
+{
+  "m.polls.title": "Sondages",
+  "m.polls.empty.title": "Aucun sondage actif",
+  "m.polls.empty.description": "Les sondages en direct apparaîtront ici.",
+  "m.polls.liveBadge": "En direct",
+  "m.polls.voteButton": "Voter"
+}

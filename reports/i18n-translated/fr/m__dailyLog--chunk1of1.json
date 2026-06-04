@@ -1,0 +1,10 @@
+{
+  "m.dailyLog.eyebrow": "Terrain",
+  "m.dailyLog.title": "Journal Quotidien",
+  "m.dailyLog.subtitle": "Capture rapide depuis le plateau",
+  "m.dailyLog.todaysLog": "Journal du jour — {date}",
+  "m.dailyLog.selectProject": "Sélectionner un projet…",
+  "m.dailyLog.weatherPlaceholder": "Météo (ex. 26°C, ensoleillé)",
+  "m.dailyLog.saveLog": "Enregistrer le journal",
+  "m.dailyLog.recent": "Récents"
+}

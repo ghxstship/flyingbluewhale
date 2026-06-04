@@ -1,0 +1,9 @@
+{
+  "m.onboarding.title": "Intégration",
+  "m.onboarding.markDone": "Marquer comme terminé",
+  "m.onboarding.completed": "✓ Terminé",
+  "m.onboarding.finish": "Terminer l'intégration",
+  "m.onboarding.eyebrow": "Mobile",
+  "m.onboarding.empty.title": "Aucun parcours actif",
+  "m.onboarding.fallbackFlowName": "Intégration"
+}

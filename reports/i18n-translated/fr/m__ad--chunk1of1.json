@@ -1,0 +1,14 @@
+{
+  "m.ad.eyebrow": "Mobile",
+  "m.ad.title": "Arrivées et départs",
+  "m.ad.todayPrefix": "Aujourd'hui",
+  "m.ad.arrivalsHeading": "Arrivées",
+  "m.ad.noArrivals": "Aucune Arrivée Aujourd'hui",
+  "m.ad.eta": "ETA",
+  "m.ad.partyOf": "Groupe de ${m.party_size}",
+  "m.ad.landedAt": "atterri à ${fmtClock(m.actual_at)}",
+  "m.ad.departuresHeading": "Départs",
+  "m.ad.noDepartures": "Aucun Départ Aujourd'hui",
+  "m.ad.etd": "ETD",
+  "m.ad.departedAt": "parti à ${fmtClock(m.actual_at)}"
+}

@@ -1,0 +1,9 @@
+{
+  "m.tasks.eyebrow": "Terrain",
+  "m.tasks.title": "Mes tâches",
+  "m.tasks.empty": "Aucune tâche assignée",
+  "m.tasks.dueLabel": "Échéance ${formatDate(task.due_at)}",
+  "m.tasks.detail.back": "← Tâches",
+  "m.tasks.detail.dueLabel": "Échéance ${formatDate(task.due_at)}",
+  "m.tasks.detail.updateStatus": "Mettre à jour le statut"
+}

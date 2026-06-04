@@ -1,0 +1,5 @@
+{
+  "m.notFound.title": "Surface introuvable",
+  "m.notFound.description": "Cet écran mobile n'est pas au manifeste.",
+  "m.notFound.homeCta": "Accueil"
+}

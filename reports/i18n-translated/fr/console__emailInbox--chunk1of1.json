@@ -1,0 +1,16 @@
+{
+  "console.emailInbox.eyebrow": "Correspondance Projet",
+  "console.emailInbox.title": "Boîte de Réception",
+  "console.emailInbox.configureSupabase": "Configurer Supabase.",
+  "console.emailInbox.metric.unrouted": "Non Routés",
+  "console.emailInbox.metric.promoted": "Promus",
+  "console.emailInbox.metric.total": "Total",
+  "console.emailInbox.emptyLabel": "Aucun e-mail entrant",
+  "console.emailInbox.column.received": "Reçu",
+  "console.emailInbox.column.from": "De",
+  "console.emailInbox.column.subject": "Objet",
+  "console.emailInbox.column.project": "Projet",
+  "console.emailInbox.column.routedTo": "Routé Vers",
+  "console.emailInbox.noSubject": "(sans objet)",
+  "console.emailInbox.unrouted": "Non Routé"
+}

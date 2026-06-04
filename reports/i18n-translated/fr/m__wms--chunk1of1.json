@@ -1,0 +1,13 @@
+{
+  "m.wms.eyebrow": "Terrain",
+  "m.wms.title": "Entrepôt",
+  "m.wms.subtitle": "Picking, rangement et check-in/out par scan.",
+  "m.wms.scanAsset": "Scanner l'actif",
+  "m.wms.assetRegister": "Registre des actifs",
+  "m.wms.inMaintenance": "En Maintenance",
+  "m.wms.empty.maintenance": "Aucun Article en Maintenance",
+  "m.wms.empty.returns": "Aucun Retour Programmé",
+  "m.wms.noTag": "sans tag",
+  "m.wms.returnsDue": "Retours à Rendre",
+  "m.wms.due": "À rendre le ${fmtDay(r.ends_at)}"
+}

@@ -1,0 +1,11 @@
+{
+  "m.coc.eyebrow": "Terrain",
+  "m.coc.title": "Chaîne de traçabilité",
+  "m.coc.actions.logIncident": "+ Consigner un incident",
+  "m.coc.actions.scanAsset": "Scanner l'actif",
+  "m.coc.recent.heading": "Mes événements de traçabilité récents",
+  "m.coc.empty.title": "Rien sur les 7 derniers jours",
+  "m.coc.badge.audit": "Audit",
+  "m.coc.desktopPrompt": "Besoin de la vue bureau ?",
+  "m.coc.desktopLink": "Ouvrir la chaîne de traçabilité"
+}

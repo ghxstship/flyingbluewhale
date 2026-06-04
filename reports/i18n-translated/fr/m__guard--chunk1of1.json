@@ -1,0 +1,12 @@
+{
+  "m.guard.configureSupabase": "Configurez Supabase.",
+  "m.guard.eyebrow": "Terrain",
+  "m.guard.title": "Sécurité",
+  "m.guard.noToursAssigned": "Aucune ronde ne vous est assignée.",
+  "m.guard.empty.title": "Aucune ronde assignée",
+  "m.guard.empty.action": "Ouvrir les rondes de sécurité",
+  "m.guard.venue.assigned": "Site assigné",
+  "m.guard.venue.any": "Tout site",
+  "m.guard.cadenceSuffix": " · toutes les ${r.cadence_minutes}min",
+  "m.guard.badge.next": "Prochaine ${fmtTime(r.next_run_at)}"
+}

@@ -1,0 +1,14 @@
+{
+  "me.availability.configureSupabase": "Configurez Supabase.",
+  "me.availability.eyebrow": "Disponibilité",
+  "me.availability.title": "Calendrier de réservation",
+  "me.availability.addSlot": "Ajouter un créneau",
+  "me.availability.kind": "Type",
+  "me.availability.label": "Libellé",
+  "me.availability.labelPlaceholder": "Montage scène MMW26",
+  "me.availability.starts": "Début",
+  "me.availability.ends": "Fin",
+  "me.availability.allDay": "Toute la journée",
+  "me.availability.upcoming": "À venir",
+  "me.availability.empty": "Aucun créneau de disponibilité pour le moment."
+}

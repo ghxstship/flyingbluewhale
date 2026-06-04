@@ -1,0 +1,13 @@
+{
+  "m.wallet.configureSupabase": "Configurez Supabase.",
+  "m.wallet.eyebrow": "Mobile",
+  "m.wallet.title": "Mon Accréditation",
+  "m.wallet.subtitle": "Présentez cet écran à l'entrée. Gardez-le actif jusqu'à la fin de votre shift.",
+  "m.wallet.empty.title": "Aucune Accréditation Émise",
+  "m.wallet.defaultCategoryCode": "ACC",
+  "m.wallet.cardBarcode": "Code-Barres de la Carte",
+  "m.wallet.validFrom": "Valide À Partir Du",
+  "m.wallet.validTo": "Valide Jusqu'au",
+  "m.wallet.otherCards": "Autres Cartes",
+  "m.wallet.openProfile": "Ouvrir le profil →"
+}

@@ -1,0 +1,17 @@
+{
+  "m.inventory.scan.toast.failed": "Échec du scan",
+  "m.inventory.scan.toast.notFound": "Aucun équipement avec ce tag",
+  "m.inventory.scan.announce.notFound": "Actif introuvable",
+  "m.inventory.scan.assetTag": "Tag d'actif",
+  "m.inventory.scan.placeholder": "Scannez ou saisissez",
+  "m.inventory.scan.toggle": "Basculer",
+  "m.inventory.scan.checkIn": "Retour",
+  "m.inventory.scan.checkOut": "Sortie",
+  "m.inventory.scan.recent": "Récents",
+  "m.inventory.scan.empty.title": "Aucun Scan",
+  "m.inventory.scan.badge.notFound": "introuvable",
+  "m.inventory.scan.badge.error": "erreur",
+  "m.inventory.scan.eyebrow": "Terrain",
+  "m.inventory.scan.title": "Scan Inventaire",
+  "m.inventory.scan.subtitle": "Scannez ou saisissez un tag d'actif pour gérer sortie / retour."
+}

@@ -1,0 +1,4 @@
+{
+  "ui.connectivity.offline": "Vous êtes hors ligne — les actions seront mises en file d'attente et synchronisées à la reconnexion.",
+  "ui.connectivity.backOnline": "De retour en ligne — synchronisation des actions en file d'attente…"
+}

@@ -1,0 +1,19 @@
+{
+  "m.timeOff.new.title": "Nouvelle demande de congé",
+  "m.timeOff.new.policy": "Politique",
+  "m.timeOff.new.startsOn": "Débute le",
+  "m.timeOff.new.endsOn": "Se termine le",
+  "m.timeOff.new.hoursRequested": "Heures demandées",
+  "m.timeOff.new.reason": "Motif",
+  "m.timeOff.title": "Congés",
+  "m.timeOff.balancesHeading": "Soldes (${year})",
+  "m.timeOff.noPolicies": "Aucune politique attribuée pour le moment.",
+  "m.timeOff.policyFallback": "Politique",
+  "m.timeOff.hours": "${b.balance_hours} h",
+  "m.timeOff.available": "disponibles",
+  "m.timeOff.newRequest": "Nouvelle demande",
+  "m.timeOff.recentRequests": "Demandes récentes",
+  "m.timeOff.empty.title": "Aucune demande",
+  "m.timeOff.empty.description": "Vos demandes de congé apparaîtront ici.",
+  "m.timeOff.timeOffFallback": "Congé"
+}

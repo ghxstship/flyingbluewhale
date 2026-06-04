@@ -1,0 +1,10 @@
+{
+  "m.advances.eyebrow": "Mobile",
+  "m.advances.title": "Mes affectations",
+  "m.advances.empty.title": "Rien d'assigné pour l'instant",
+  "m.advances.untitled": "Sans titre",
+  "m.advances.projectFallback": "Projet",
+  "m.advances.singleShow.prompt": "Un seul show au programme ?",
+  "m.advances.singleShow.link": "Ouvrir votre shift",
+  "m.advances.singleShow.suffix": "pour voir l'appel du jour."
+}

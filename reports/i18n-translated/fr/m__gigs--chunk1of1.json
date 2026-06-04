@@ -1,0 +1,8 @@
+{
+  "m.gigs.eyebrow": "Marketplace",
+  "m.gigs.title": "Missions ouvertes",
+  "m.gigs.countOne": "${rows.length} mission en cours sur le réseau.",
+  "m.gigs.countOther": "${rows.length} missions en cours sur le réseau.",
+  "m.gigs.empty": "Aucune mission en cours pour le moment.",
+  "m.gigs.travelPaid": "déplacements pris en charge"
+}

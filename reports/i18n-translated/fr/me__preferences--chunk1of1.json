@@ -1,0 +1,20 @@
+{
+  "me.preferences.eyebrow": "Mon compte",
+  "me.preferences.title": "Préférences",
+  "me.preferences.supabaseRequired": "Configurez Supabase pour gérer les préférences.",
+  "me.preferences.subtitle": "Thème, densité, langue et consentement.",
+  "me.preferences.breadcrumbs.account": "Mon compte",
+  "me.preferences.submit": "Enregistrer les préférences",
+  "me.preferences.appearance.legend": "Apparence",
+  "me.preferences.appearance.theme": "Thème",
+  "me.preferences.appearance.density": "Densité",
+  "me.preferences.locale.legend": "Langue et région",
+  "me.preferences.locale.languageCode": "Code de langue",
+  "me.preferences.locale.languageHint": "ex. en, es, fr-CA",
+  "me.preferences.locale.timezone": "Fuseau horaire",
+  "me.preferences.locale.timezoneHint": "IANA, ex. America/Los_Angeles",
+  "me.preferences.consent.legend": "Consentement",
+  "me.preferences.consent.essential.label": "Cookies essentiels",
+  "me.preferences.consent.analytics.label": "Analytique",
+  "me.preferences.consent.marketing.label": "Marketing"
+}

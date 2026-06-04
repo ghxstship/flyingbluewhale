@@ -1,0 +1,8 @@
+{
+  "m.wayfind.otherCluster": "Autre",
+  "m.wayfind.eyebrow": "Terrain",
+  "m.wayfind.title": "Orientation",
+  "m.wayfind.subtitle": "Choisissez un site pour voir ses zones, portes et points de rendez-vous.",
+  "m.wayfind.empty.title": "Aucun Site",
+  "m.wayfind.empty.action": "Ouvrir Sites"
+}

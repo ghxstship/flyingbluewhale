@@ -1,0 +1,16 @@
+{
+  "me.privacy.errors.deleteFailed": "Suppression impossible",
+  "me.privacy.toast.scheduled": "Compte programmé pour suppression dans 30 jours.",
+  "me.privacy.export.title": "Exporter mes données",
+  "me.privacy.export.action": "Télécharger",
+  "me.privacy.cookies.title": "Préférences de cookies",
+  "me.privacy.cookies.action": "Gérer les cookies",
+  "me.privacy.delete.title": "Supprimer mon compte",
+  "me.privacy.delete.action": "Supprimer le compte",
+  "me.privacy.dialog.title": "Supprimer votre compte ?",
+  "me.privacy.dialog.descriptionSuffix": "ci-dessous.",
+  "me.privacy.dialog.placeholder": "supprimer mon compte",
+  "me.privacy.dialog.ariaLabel": "Saisissez la phrase de confirmation",
+  "me.privacy.eyebrow": "Compte",
+  "me.privacy.title": "Confidentialité et données"
+}

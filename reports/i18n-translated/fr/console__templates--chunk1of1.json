@@ -1,0 +1,20 @@
+{
+  "console.templates.new.eyebrow": "Nouveau projet depuis un modèle",
+  "console.templates.new.cardTitle": "Détails du projet",
+  "console.templates.new.projectNameLabel": "Nom du projet",
+  "console.templates.new.slugLabel": "Slug",
+  "console.templates.new.modulesLabel": "Modules à activer",
+  "console.templates.new.willBeCreatedLabel": "Sera créé",
+  "console.templates.new.createProjectButton": "Créer le projet",
+  "console.templates.category.festival": "Festival",
+  "console.templates.category.activation": "Activation",
+  "console.templates.category.tour": "Tournée",
+  "console.templates.category.corporate": "Corporate",
+  "console.templates.category.sponsor": "Sponsor",
+  "console.templates.category.custom": "Sur mesure",
+  "console.templates.eyebrow": "Modèles",
+  "console.templates.title": "MODÈLES DE PROJET",
+  "console.templates.empty.title": "Aucun modèle pour l’instant",
+  "console.templates.useTemplateAria": "Utiliser le modèle ${tpl.name}",
+  "console.templates.officialBadge": "Officiel"
+}

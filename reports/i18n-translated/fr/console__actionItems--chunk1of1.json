@@ -1,0 +1,16 @@
+{
+  "console.actionItems.eyebrow": "Espace de travail",
+  "console.actionItems.title": "Actions à mener",
+  "console.actionItems.subtitle": "Consolidation transversale des balles dans votre camp.",
+  "console.actionItems.filter.all": "Tout",
+  "console.actionItems.filter.mineOnly": "Les miennes uniquement",
+  "console.actionItems.metrics.openItems": "Éléments ouverts",
+  "console.actionItems.metrics.overdue": "En retard",
+  "console.actionItems.metrics.acrossKinds": "Tous types confondus",
+  "console.actionItems.empty.label": "Boîte vide",
+  "console.actionItems.columns.kind": "Type",
+  "console.actionItems.columns.title": "Titre",
+  "console.actionItems.columns.status": "Statut",
+  "console.actionItems.columns.due": "Échéance",
+  "console.actionItems.columns.priority": "Priorité"
+}

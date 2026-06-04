@@ -1,0 +1,11 @@
+{
+  "me.submissions.detail.eyebrow": "Candidature",
+  "me.submissions.detail.coverNote": "Note d'accompagnement",
+  "me.submissions.detail.proposedFee": "Cachet proposé",
+  "me.submissions.eyebrow": "Mes candidatures",
+  "me.submissions.title": "Candidatures",
+  "me.submissions.subtitle": "Candidatures déposées aux appels ouverts.",
+  "me.submissions.empty.title": "Aucune candidature pour l'instant",
+  "me.submissions.empty.action": "Parcourir les appels ouverts",
+  "me.submissions.deletedCall": "(appel supprimé)"
+}

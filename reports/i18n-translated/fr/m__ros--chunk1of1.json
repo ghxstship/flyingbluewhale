@@ -1,0 +1,15 @@
+{
+  "m.ros.show.configureSupabase": "Configurez Supabase.",
+  "m.ros.show.backToAll": "← Tous les tops",
+  "m.ros.show.eyebrow": "Show",
+  "m.ros.show.liveLabel": "Live",
+  "m.ros.show.startedAt": "lancé ${fmtTime(live.scheduled_at)}",
+  "m.ros.show.upcomingHeading": "À venir · ${upcoming.length}",
+  "m.ros.show.noMoreCues": "Plus aucun top en file.",
+  "m.ros.show.completedHeading": "Terminés · ${done.length}",
+  "m.ros.show.doneBadge": "Terminé",
+  "m.ros.eyebrow": "Mobile",
+  "m.ros.title": "Run of Show",
+  "m.ros.noneToday": "Aucun top programmé aujourd'hui.",
+  "m.ros.empty.title": "Aucun Top Aujourd'hui"
+}

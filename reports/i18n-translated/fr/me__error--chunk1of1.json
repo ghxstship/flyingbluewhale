@@ -1,0 +1,6 @@
+{
+  "me.error.title": "Une Erreur Est Survenue",
+  "me.error.fallbackMessage": "Nous avons rencontré une erreur lors du chargement de la vue de votre compte.",
+  "me.error.ref": "Réf : ${error.digest}",
+  "me.error.backToYourSpace": "Retour À Votre Espace"
+}

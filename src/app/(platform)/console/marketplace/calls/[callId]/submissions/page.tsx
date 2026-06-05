@@ -48,6 +48,19 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   const call = callResp.data as { id: string; title: string; submission_count: number };
   const rows = (subsResp.data ?? []) as Row[];
 
+  // Lead Insights — GigSalad parity: competitive intelligence at a glance
+  const total = rows.length;
+  const byStatus = rows.reduce<Record<string, number>>((acc, r) => {
+    acc[r.status] = (acc[r.status] ?? 0) + 1;
+    return acc;
+  }, {});
+  const scoredRows = rows.filter((r) => r.score != null);
+  const avgScore = scoredRows.length ? Math.round(scoredRows.reduce((s, r) => s + (r.score ?? 0), 0) / scoredRows.length) : null;
+  const feeRows = rows.filter((r) => r.fee_proposed_cents != null);
+  const avgFee = feeRows.length ? Math.round(feeRows.reduce((s, r) => s + (r.fee_proposed_cents ?? 0), 0) / feeRows.length) : null;
+  const dates = rows.map((r) => new Date(r.submitted_at).getTime()).sort((a, b) => a - b);
+  const velocityDays = dates.length >= 2 ? Math.round((dates[dates.length - 1] - dates[0]) / 86_400_000) : null;
+
   return (
     <>
       <ModuleHeader
@@ -60,6 +73,57 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         )}
       />
       <div className="page-content space-y-5">
+        {total > 0 && (
+          <div className="surface rounded-xl p-5 border border-[var(--border)]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-4">
+              {t("console.marketplace.calls.submissions.insights.heading", undefined, "Lead Insights")}
+            </p>
+            <div className="metric-grid">
+              <div>
+                <p className="text-2xl font-bold tabular-nums">{total}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  {t("console.marketplace.calls.submissions.insights.total", undefined, "Total Submissions")}
+                </p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold tabular-nums">{byStatus["submitted"] ?? 0}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  {t("console.marketplace.calls.submissions.insights.pending", undefined, "Pending Review")}
+                </p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold tabular-nums">{byStatus["shortlisted"] ?? 0}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  {t("console.marketplace.calls.submissions.insights.shortlisted", undefined, "Shortlisted")}
+                </p>
+              </div>
+              {avgScore != null && (
+                <div>
+                  <p className="text-2xl font-bold tabular-nums">{avgScore}</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    {t("console.marketplace.calls.submissions.insights.avgScore", undefined, "Avg Score")}
+                  </p>
+                </div>
+              )}
+              {avgFee != null && (
+                <div>
+                  <p className="text-2xl font-bold tabular-nums">{formatMoney(avgFee)}</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    {t("console.marketplace.calls.submissions.insights.avgFee", undefined, "Avg Proposed Fee")}
+                  </p>
+                </div>
+              )}
+              {velocityDays != null && (
+                <div>
+                  <p className="text-2xl font-bold tabular-nums">{velocityDays}d</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    {t("console.marketplace.calls.submissions.insights.spread", undefined, "Response Spread")}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/marketplace/calls/${call.id}/submissions/${r.id}`}

@@ -49,6 +49,23 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
   const posting = postingResp.data as { id: string; title: string; applicant_count: number; status: string };
   const rows = (appsResp.data ?? []) as AppRow[];
 
+  // Lead Insights — GigSalad parity: competitive intelligence on applicant pool
+  const total = rows.length;
+  const byStatus = rows.reduce<Record<string, number>>((acc, r) => {
+    acc[r.status] = (acc[r.status] ?? 0) + 1;
+    return acc;
+  }, {});
+  const scoredRows = rows.filter((r) => r.score != null);
+  const avgScore = scoredRows.length
+    ? Math.round(scoredRows.reduce((s, r) => s + (r.score ?? 0), 0) / scoredRows.length)
+    : null;
+  const rateRows = rows.filter((r) => r.day_rate_proposed_cents != null);
+  const avgRate = rateRows.length
+    ? Math.round(rateRows.reduce((s, r) => s + (r.day_rate_proposed_cents ?? 0), 0) / rateRows.length)
+    : null;
+  const dates = rows.map((r) => new Date(r.applied_at).getTime()).sort((a, b) => a - b);
+  const velocityDays = dates.length >= 2 ? Math.round((dates[dates.length - 1] - dates[0]) / 86_400_000) : null;
+
   return (
     <>
       <ModuleHeader
@@ -61,6 +78,63 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         )}
       />
       <div className="page-content space-y-5">
+        {total > 0 && (
+          <div className="surface rounded-xl p-5 border border-[var(--border)]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-4">
+              {t("console.marketplace.postings.applicants.insights.heading", undefined, "Lead Insights")}
+            </p>
+            <div className="metric-grid">
+              <div>
+                <p className="text-2xl font-bold tabular-nums">{total}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  {t("console.marketplace.postings.applicants.insights.total", undefined, "Total Applicants")}
+                </p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold tabular-nums">{byStatus["new"] ?? 0}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  {t("console.marketplace.postings.applicants.insights.pending", undefined, "Awaiting Review")}
+                </p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold tabular-nums">{byStatus["phone"] ?? 0}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  {t("console.marketplace.postings.applicants.insights.interview", undefined, "In Interview")}
+                </p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold tabular-nums">{byStatus["booked"] ?? 0}</p>
+                <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                  {t("console.marketplace.postings.applicants.insights.booked", undefined, "Booked")}
+                </p>
+              </div>
+              {avgScore != null && (
+                <div>
+                  <p className="text-2xl font-bold tabular-nums">{avgScore}</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    {t("console.marketplace.postings.applicants.insights.avgScore", undefined, "Avg Score")}
+                  </p>
+                </div>
+              )}
+              {avgRate != null && (
+                <div>
+                  <p className="text-2xl font-bold tabular-nums">${Math.round(avgRate / 100)}</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    {t("console.marketplace.postings.applicants.insights.avgRate", undefined, "Avg Day Rate")}
+                  </p>
+                </div>
+              )}
+              {velocityDays != null && (
+                <div>
+                  <p className="text-2xl font-bold tabular-nums">{velocityDays}d</p>
+                  <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                    {t("console.marketplace.postings.applicants.insights.spread", undefined, "Application Spread")}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         <DataTable<AppRow>
           rows={rows}
           rowHref={(r) => `/console/marketplace/postings/${posting.id}/applicants/${r.id}`}

@@ -11,6 +11,10 @@ const Schema = z.object({
   vendor_id: z.string().uuid().optional().or(z.literal("")),
   project_id: z.string().uuid().optional().or(z.literal("")),
   amount: z.string().min(1),
+  po_kind: z.enum(["goods", "labor", "services"]).default("goods"),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+  contractor_name: z.string().max(200).optional().or(z.literal("")),
+  role_title: z.string().max(200).optional().or(z.literal("")),
 });
 
 export type State = { error?: string } | null;
@@ -49,17 +53,23 @@ export async function createPoAction(_: State, fd: FormData): Promise<State> {
     if (!vendor) return { error: "Vendor not found in your organization" };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const insertPayload: any = {
+    org_id: session.orgId,
+    number: generateNumber("PO"),
+    title: parsed.data.title,
+    vendor_id: vendorId,
+    project_id: projectId,
+    amount_cents: dollarsToCents(parsed.data.amount),
+    created_by: session.userId,
+    po_kind: parsed.data.po_kind,
+    notes: parsed.data.notes || null,
+    contractor_name: parsed.data.contractor_name || null,
+    role_title: parsed.data.role_title || null,
+  };
   const { data, error } = await supabase
     .from("purchase_orders")
-    .insert({
-      org_id: session.orgId,
-      number: generateNumber("PO"),
-      title: parsed.data.title,
-      vendor_id: vendorId,
-      project_id: projectId,
-      amount_cents: dollarsToCents(parsed.data.amount),
-      created_by: session.userId,
-    })
+    .insert(insertPayload)
     .select()
     .single();
   if (error) return { error: error.message };

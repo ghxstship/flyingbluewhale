@@ -45,9 +45,14 @@ export default async function TimePage() {
           `${rows.length} Entries  · ${fmtMinutes(totalMin)} logged`,
         )}
         action={
-          <Button href="/console/finance/time/new">
-            {t("console.finance.time.newEntry", undefined, "+ New Entry")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/console/finance/time/anomalies" variant="secondary" size="sm">
+              {t("console.finance.time.scanAnomalies", undefined, "Scan Anomalies")}
+            </Button>
+            <Button href="/console/finance/time/new">
+              {t("console.finance.time.newEntry", undefined, "+ New Entry")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content">

@@ -49,9 +49,9 @@ test.describe("marketing", () => {
     // COMPARE_LIST in src/lib/compare.ts now carries 21 competitor cards;
     // each card is a Link whose accessible name includes the competitor.
     // Assert the three canonical comparisons still resolve uniquely.
-    await expect(page.getByRole("link", { name: /asana/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /monday/i })).toBeVisible();
-    await expect(page.getByRole("link", { name: /spreadsheets/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /asana/i }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /monday/i }).first()).toBeVisible();
+    await expect(page.getByRole("link", { name: /spreadsheets/i }).first()).toBeVisible();
   });
 
   test("guides + blog + community each list at least one entry", async ({ page }) => {

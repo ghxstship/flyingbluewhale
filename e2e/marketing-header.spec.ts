@@ -31,16 +31,16 @@ test.describe("marketing-header/theme-toggle", () => {
     await page.goto("/");
     // ThemeToggle uses aria-label="Color mode" on the radiogroup with
     // three radios labelled exactly "Light" / "Match System" / "Dark".
-    const group = page.getByRole("radiogroup", { name: /color mode/i });
+    const group = page.getByRole("radiogroup", { name: /color theme/i });
     await expect(group).toBeVisible();
     await expect(group.getByRole("radio", { name: "Light", exact: true })).toBeVisible();
-    await expect(group.getByRole("radio", { name: "Match System", exact: true })).toBeVisible();
+    await expect(group.getByRole("radio", { name: "Match system", exact: true })).toBeVisible();
     await expect(group.getByRole("radio", { name: "Dark", exact: true })).toBeVisible();
     // The middle preset's accessible name MUST contain "System" (M1-01
     // canon) — not "Auto". The radio buttons are icon-only, so we read
     // the aria-label rather than text content.
-    const systemRadio = group.getByRole("radio", { name: "Match System", exact: true });
-    await expect(systemRadio).toHaveAttribute("aria-label", /System/);
+    const systemRadio = group.getByRole("radio", { name: "Match system", exact: true });
+    await expect(systemRadio).toHaveAttribute("aria-label", /system/i);
     await expect(systemRadio).not.toHaveAttribute("aria-label", /^Auto$/);
   });
 
@@ -62,14 +62,14 @@ test.describe("marketing-header/theme-toggle", () => {
     await expect(page.locator("html")).toHaveAttribute("data-mode", "light");
   });
 
-  test("mode cookie (fbw_mode) persists the choice", async ({ page, context }) => {
+  test("mode cookie (atlvs_mode) persists the choice", async ({ page, context }) => {
     await dismissConsent(context);
     await page.goto("/");
     await page.getByRole("radio", { name: "Dark", exact: true }).click();
     await expect
       .poll(async () => {
         const cookies = await context.cookies();
-        return cookies.find((c) => c.name === "fbw_mode")?.value;
+        return cookies.find((c) => c.name === "atlvs_mode")?.value;
       })
       .toBe("dark");
   });
@@ -138,7 +138,7 @@ test.describe("marketing-header/mobile-nav (M1-05)", () => {
 
     // Color-mode + language controls are also in the sheet (single source of
     // truth). The theme-gallery trigger was retired with the two-skin canon.
-    await expect(page.getByRole("radiogroup", { name: /color mode/i })).toBeVisible();
+    await expect(page.getByRole("radiogroup", { name: /color theme/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /change language/i })).toBeVisible();
   });
 

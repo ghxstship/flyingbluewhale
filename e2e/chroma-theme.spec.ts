@@ -62,9 +62,9 @@ test.describe("CHROMA BEACON", () => {
     // now exposes the orthogonal color-mode (Light / Match system / Dark) and
     // Density (Compact/Default/Spacious) radiogroups. ThemeToggle labels its
     // radiogroup "Color theme" (theme.toggle.colorTheme); DensityToggle "Density".
-    const mode = page.getByRole("radiogroup", { name: "Color theme", exact: true });
+    const mode = page.getByRole("main").getByRole("radiogroup", { name: "Color theme", exact: true });
     await expect(mode.getByRole("radio")).toHaveCount(3);
-    const density = page.getByRole("radiogroup", { name: "Density", exact: true });
+    const density = page.getByRole("main").getByRole("radiogroup", { name: "Density", exact: true });
     await expect(density.getByRole("radio")).toHaveCount(3);
   });
 
@@ -75,7 +75,7 @@ test.describe("CHROMA BEACON", () => {
 
     // Pick Dark explicitly — mode is applied as data-mode (orthogonal to the
     // data-theme palette slug).
-    await page.getByRole("radio", { name: "Dark", exact: true }).click();
+    await page.getByRole("main").getByRole("radio", { name: "Dark", exact: true }).click();
     await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
 
     // Reload — mode must persist (cookie + localStorage).
@@ -102,7 +102,7 @@ test.describe("CHROMA BEACON", () => {
     await loginAs(page, "owner");
     await page.goto("/me/settings/appearance");
 
-    const group = page.getByRole("radiogroup", { name: "Color theme", exact: true });
+    const group = page.getByRole("main").getByRole("radiogroup", { name: "Color theme", exact: true });
     const firstCard = group.getByRole("radio").first();
     await firstCard.focus();
     await page.keyboard.press("ArrowRight");
@@ -119,11 +119,11 @@ test.describe("CHROMA BEACON", () => {
 
     // Pick Dark first, then Match system — data-mode resolves to whatever the
     // OS prefers (light or dark), so just assert it's one of the two.
-    await page.getByRole("radio", { name: "Dark", exact: true }).click();
+    await page.getByRole("main").getByRole("radio", { name: "Dark", exact: true }).click();
     await expect(page.locator("html")).toHaveAttribute("data-mode", "dark");
 
     // The system preset's radio is labelled "Match system" (theme.toggle.system).
-    await page.getByRole("radio", { name: "Match system", exact: true }).click();
+    await page.getByRole("main").getByRole("radio", { name: "Match system", exact: true }).click();
     const dataMode = await page.getAttribute("html", "data-mode");
     expect(["light", "dark"]).toContain(dataMode);
   });

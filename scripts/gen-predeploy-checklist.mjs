@@ -19,6 +19,9 @@ const INTERACTIVE = new Set([
   "/console/comms/announcements/new","/console/comms/announcements/[announcementId]","/console/comms/announcements/[id]",
   "/console/guides","/marketplace","/marketplace/talent",
   "/p/[slug]/overview","/p/[slug]/artist","/p/[slug]/artist/advancing","/p/[slug]/guide",
+  "/console/comms/polls","/console/comms/polls/new","/console/comms/polls/[pollId]","/console/comms/polls/[id]",
+  "/console/settings/account-managers","/console/settings/account-managers/new","/console/settings/account-managers/[id]","/console/settings/account-managers/[assignmentId]",
+  "/console/finance/invoices","/console/finance/invoices/new","/console/finance/invoices/[invoiceId]","/console/finance/invoices/[id]",
 ]);
 // /m shell validated via compvss smoke harness (92/92 renders + 28/28 RLS mutations)
 const SMOKE_M = true;

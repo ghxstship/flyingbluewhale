@@ -197,3 +197,11 @@ The dev server process died between rounds (preview wrapper reported "no running
 Every `page.tsx` in the codebase is now enumerated + validated in writing in **[PREDEPLOY_UI_CHECKLIST.md](PREDEPLOY_UI_CHECKLIST.md)** (967 pages across 6 shells). Method: an authenticated HTTP sweep as the Wynwood owner (`scripts/ui-http-sweep.mjs`, real seeded IDs for dynamic params) + the `/m` smoke harnesses + the interactive browser sessions in this report.
 
 **Result: 962/967 → HTTP 200.** The 5 non-200 are all expected token/param routes with no seeded instance (`/m/driver/run/[runId]`, `/forms/[slug]`, `/msa/[token]/print`, `/offer/[token]/print`, `/proposals/[token]`) — they correctly 404 on a placeholder token, not page defects. Per-shell: auth 8/8 (static), marketing 52/52, personal 21/21, platform console 375/375 static + 258 dynamic, portal 123 dynamic, mobile 54/54 static (+ smoke 92/92). **No real render/RLS failure exists across the entire UI surface.** Regenerate anytime with `node scripts/gen-predeploy-checklist.mjs`.
+
+### Round 9 — comms polls · account-managers · finance invoice lifecycle (in-browser)
+
+- **Comms → Polls:** created "Preferred crew meal time?" with 3 options → **published (Live)**; admin view shows the live tally (0%/option) + Close Poll. Poll mechanic confirmed.
+- **Settings → Account Managers:** created an AM assignment (portal user `admin` ↔ manager `Maykol Sanchez`, persona Crew, project La Corriente) → detail "admin ↔ Maykol Sanchez". AM pairing CRUD confirmed.
+- **Finance → Invoices (full receivables lifecycle):** created INV-2623320 ($231,000, La Corriente, multi-currency form) → **Send Invoice (draft→sent)** → **Mark Paid (sent→paid)**. Each transition clean, next-action surfaced correctly. AR lifecycle confirmed end-to-end.
+
+These routes are now marked `interactive` in [PREDEPLOY_UI_CHECKLIST.md](PREDEPLOY_UI_CHECKLIST.md).

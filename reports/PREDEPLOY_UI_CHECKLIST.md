@@ -250,9 +250,9 @@ Every `page.tsx` in `src/app` is enumerated below with its URL route and validat
 | `/console/comms/announcements/[id]`                                    | Detail (dynamic) | ✅ 200 · 🖱 interactive · (param=\_) |
 | `/console/comms/announcements/[id]/edit`                               | Edit form        | ✅ 200 · (param=\_)                  |
 | `/console/comms/announcements/new`                                     | Create form      | ✅ 200 · 🖱 interactive              |
-| `/console/comms/polls`                                                 | Polls            | ✅ 200                               |
-| `/console/comms/polls/[id]`                                            | Detail (dynamic) | ✅ 200 · (param=\_)                  |
-| `/console/comms/polls/new`                                             | Create form      | ✅ 200                               |
+| `/console/comms/polls`                                                 | Polls            | ✅ 200 · 🖱 interactive              |
+| `/console/comms/polls/[id]`                                            | Detail (dynamic) | ✅ 200 · 🖱 interactive · (param=\_) |
+| `/console/comms/polls/new`                                             | Create form      | ✅ 200 · 🖱 interactive              |
 | `/console/comms/surveys`                                               | Surveys          | ✅ 200                               |
 | `/console/comms/surveys/[id]`                                          | Detail (dynamic) | ✅ 200 · (param=\_)                  |
 | `/console/comms/surveys/new`                                           | Create form      | ✅ 200                               |
@@ -292,12 +292,12 @@ Every `page.tsx` in `src/app` is enumerated below with its URL route and validat
 | `/console/finance/expenses/new`                                        | Create form      | ✅ 200                               |
 | `/console/finance/forecasts`                                           | Forecasts        | ✅ 200                               |
 | `/console/finance/forecasts/new`                                       | Create form      | ✅ 200                               |
-| `/console/finance/invoices`                                            | Invoices         | ✅ 200                               |
-| `/console/finance/invoices/[invoiceId]`                                | Detail (dynamic) | ✅ 200 · (param=\_)                  |
+| `/console/finance/invoices`                                            | Invoices         | ✅ 200 · 🖱 interactive              |
+| `/console/finance/invoices/[invoiceId]`                                | Detail (dynamic) | ✅ 200 · 🖱 interactive · (param=\_) |
 | `/console/finance/invoices/[invoiceId]/activity`                       | Activity         | ✅ 200 · (param=\_)                  |
 | `/console/finance/invoices/[invoiceId]/edit`                           | Edit form        | ✅ 200 · (param=\_)                  |
 | `/console/finance/invoices/[invoiceId]/line-items`                     | Line Items       | ✅ 200 · (param=\_)                  |
-| `/console/finance/invoices/new`                                        | Create form      | ✅ 200                               |
+| `/console/finance/invoices/new`                                        | Create form      | ✅ 200 · 🖱 interactive              |
 | `/console/finance/lien-waivers`                                        | Lien Waivers     | ✅ 200                               |
 | `/console/finance/lien-waivers/[id]`                                   | Detail (dynamic) | ✅ 200 · (param=\_)                  |
 | `/console/finance/lien-waivers/new`                                    | Create form      | ✅ 200                               |
@@ -657,9 +657,9 @@ Every `page.tsx` in `src/app` is enumerated below with its URL route and validat
 | `/console/services/requests/[requestId]`                               | Detail (dynamic) | ✅ 200 · (param=\_)                  |
 | `/console/services/requests/new`                                       | Create form      | ✅ 200                               |
 | `/console/settings`                                                    | Settings         | ✅ 200                               |
-| `/console/settings/account-managers`                                   | Account Managers | ✅ 200                               |
-| `/console/settings/account-managers/[id]`                              | Detail (dynamic) | ✅ 200 · (param=\_)                  |
-| `/console/settings/account-managers/new`                               | Create form      | ✅ 200                               |
+| `/console/settings/account-managers`                                   | Account Managers | ✅ 200 · 🖱 interactive              |
+| `/console/settings/account-managers/[id]`                              | Detail (dynamic) | ✅ 200 · 🖱 interactive · (param=\_) |
+| `/console/settings/account-managers/new`                               | Create form      | ✅ 200 · 🖱 interactive              |
 | `/console/settings/api`                                                | Api              | ✅ 200                               |
 | `/console/settings/audit`                                              | Audit            | ✅ 200                               |
 | `/console/settings/billing`                                            | Billing          | ✅ 200                               |

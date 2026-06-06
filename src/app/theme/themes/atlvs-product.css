@@ -121,7 +121,7 @@
      subtree still reads in-canon. */
   --p-accent: #ff2e88;
   --p-accent-hover: #e61e76;
-  --p-accent-text: #d11668;
+  --p-accent-text: #be0f5a;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
 
   /* CTA fill — solid accent buttons with a foreground LABEL (e.g. the
@@ -262,7 +262,7 @@
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff2e88;
   --p-accent-hover: #e61e76;
-  --p-accent-text: #d11668;
+  --p-accent-text: #be0f5a;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
   --p-accent-cta: #d11668; /* white label = 5.2:1 */
   --p-accent-cta-contrast: #ffffff;

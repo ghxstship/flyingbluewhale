@@ -80,19 +80,19 @@
 [data-theme="ghxstship"] [data-platform="atlvs"] {
   --org-primary: #ff2e88; /* nebula */
   --org-secondary: #b11a5e;
-  --org-accent: #ff5ca1; /* lighter pop for hover/chip */
+  --org-accent: #c4185f; /* AA-on-light brand pink (used as eyebrow/link text) */
   --org-on-primary: #fbfaf6; /* bone */
 }
 [data-theme="ghxstship"] [data-platform="compvss"] {
   --org-primary: #e9a23b; /* brass */
   --org-secondary: #b6772a;
-  --org-accent: #ffc23c;
+  --org-accent: #8a6300; /* AA-on-light deep brass (eyebrow/link text) */
   --org-on-primary: #0a0e27; /* ink */
 }
 [data-theme="ghxstship"] [data-platform="gvteway"] {
   --org-primary: #21d4d4; /* plasma */
   --org-secondary: #0fa9a9;
-  --org-accent: #5ee9e9;
+  --org-accent: #0e7878; /* AA-on-light deep teal (eyebrow/link text) */
   --org-on-primary: #0a0e27; /* ink */
 }
 /* GHXSTSHIP parent (used by the umbrella marketing wrapper if/when the

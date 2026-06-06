@@ -1,6 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -9,6 +10,7 @@ import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { scoreSubmissionsAction } from "./scoreActions";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +49,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   if (!callResp.data) return notFound();
   const call = callResp.data as { id: string; title: string; submission_count: number };
   const rows = (subsResp.data ?? []) as Row[];
+  const unscored = rows.filter((r) => r.score == null).length;
 
   return (
     <>
@@ -58,6 +61,20 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           { total: rows.length, unreviewed: rows.filter((r) => r.status === "submitted").length },
           `${rows.length} Total · ${rows.filter((r) => r.status === "submitted").length} unreviewed`,
         )}
+        actions={
+          unscored > 0 ? (
+            <form action={scoreSubmissionsAction}>
+              <input type="hidden" name="call_id" value={callId} />
+              <Button type="submit" variant="secondary" size="sm">
+                {t(
+                  "console.marketplace.calls.submissions.scoreAi",
+                  { count: unscored },
+                  `Score ${unscored} with AI`,
+                )}
+              </Button>
+            </form>
+          ) : undefined
+        }
       />
       <div className="page-content space-y-5">
         <DataTable<Row>
@@ -93,10 +110,19 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             },
             {
               key: "score",
-              header: t("console.marketplace.calls.submissions.col.score", undefined, "Score"),
-              render: (r) => (r.score == null ? "—" : `${r.score}`),
+              header: t("console.marketplace.calls.submissions.col.score", undefined, "AI Score"),
+              render: (r) =>
+                r.score == null ? (
+                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                ) : (
+                  <Badge
+                    variant={r.score >= 75 ? "success" : r.score >= 50 ? "info" : "muted"}
+                    title={`AI match score: ${r.score}/100`}
+                  >
+                    {r.score}
+                  </Badge>
+                ),
               accessor: (r) => Number(r.score ?? 0),
-              className: "font-mono text-xs tabular-nums",
             },
             {
               key: "fee",

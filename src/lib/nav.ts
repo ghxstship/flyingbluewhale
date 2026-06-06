@@ -28,6 +28,7 @@ export type IconName =
   | "FileText"
   // Run
   | "Calendar"
+  | "CalendarPlus"
   | "Telescope"
   | "ScrollText"
   | "ListTodo"
@@ -419,6 +420,7 @@ export const platformNavXpms: NavGroup[] = [
           { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
           { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
           { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+          { label: "Open Shifts", href: "/console/workforce/open-shifts", icon: "CalendarPlus" },
           { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
           { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
@@ -669,6 +671,7 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
           { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+          { label: "Open Shifts", href: "/console/workforce/open-shifts", icon: "CalendarPlus" },
           { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
           { label: "Resource Forecast", href: "/console/workforce/forecast", icon: "TrendingUp" },
@@ -1390,6 +1393,9 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Chain of Custody", href: "/m/coc" },
   { label: "Wayfind", href: "/m/wayfind" },
   { label: "Open Gigs", href: "/m/gigs" },
+  { label: "Open Shifts", href: "/m/open-shifts" },
+  { label: "Meals", href: "/m/meals" },
+  { label: "My Credentials", href: "/m/credentials" },
   // Connecteam-parity surfaces (0046).
   { label: "Updates", href: "/m/feed" },
   { label: "Inbox", href: "/m/inbox" },

@@ -24,7 +24,7 @@ import {
   Clock,
   ExternalLink,
 } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
 import { platformNav, portalNav, mobileTabs, mobileSurfaces, settingsNav } from "@/lib/nav";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
@@ -345,7 +345,12 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent size="lg" hideCloseButton className="p-0" aria-label="Command palette">
+      <DialogContent size="lg" hideCloseButton className="p-0">
+        {/* Radix requires a Title (and looks for a Description) descendant for
+            an accessible name; the palette has no visible heading, so render
+            both visually hidden. */}
+        <DialogTitle className="sr-only">Command Palette</DialogTitle>
+        <DialogDescription className="sr-only">Search for pages and run commands.</DialogDescription>
         <Command
           ref={cmdkRef}
           label="Command Menu"

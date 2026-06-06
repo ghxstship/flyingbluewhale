@@ -8,7 +8,7 @@ import { SettingsSidebar } from "./SettingsSidebar";
  */
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-full flex-1 flex-col gap-0 lg:flex-row">
+    <div className="flex min-h-full flex-1 flex-col gap-0 md:flex-row">
       <SettingsSidebar />
       <div className="min-w-0 flex-1">{children}</div>
     </div>

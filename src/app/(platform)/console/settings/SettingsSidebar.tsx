@@ -13,7 +13,7 @@ export function SettingsSidebar() {
   return (
     <aside
       aria-label={t("console.settings.sidebar.ariaLabel", undefined, "Settings")}
-      className="w-full shrink-0 border-e border-[var(--border-color)] bg-[var(--bg-secondary)] lg:w-[240px]"
+      className="w-full shrink-0 border-e border-[var(--border-color)] bg-[var(--bg-secondary)] md:w-[240px]"
     >
       <div className="flex h-full flex-col">
         <div className="border-b border-[var(--border-color)] px-3 py-3">

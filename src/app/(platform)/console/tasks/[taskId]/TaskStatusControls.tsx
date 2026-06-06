@@ -22,6 +22,7 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
     <div className="flex gap-2">
       {next && (
         <Button
+          size="sm"
           disabled={pending}
           onClick={() =>
             start(async () => {
@@ -37,6 +38,7 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
       {status !== "blocked" && status !== "done" && (
         <Button
           variant="secondary"
+          size="sm"
           disabled={pending}
           onClick={() =>
             start(async () => {

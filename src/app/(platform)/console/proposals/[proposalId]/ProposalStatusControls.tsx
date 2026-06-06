@@ -23,6 +23,7 @@ export function ProposalStatusControls({ id, status }: { id: string; status: Pro
   return (
     <Button
       variant="secondary"
+      size="sm"
       disabled={pending}
       onClick={() =>
         start(async () => {

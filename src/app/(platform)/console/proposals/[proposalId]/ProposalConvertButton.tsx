@@ -12,6 +12,7 @@ export function ProposalConvertButton({ id }: { id: string }) {
   return (
     <Button
       variant="primary"
+      size="sm"
       disabled={pending}
       onClick={() =>
         start(async () => {

@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           p.publish_state === "live" ? (
             <form action={closePoll}>
               <input type="hidden" name="id" value={p.id} />
-              <button type="submit" className="btn btn-secondary">
+              <button type="submit" className="btn btn-secondary btn-sm">
                 {t("console.comms.polls.detail.closePoll", undefined, "Close Poll")}
               </button>
             </form>

@@ -30,6 +30,7 @@ export function PoStatusControls({ id, status }: { id: string; status: POStatus 
     <div className="flex gap-2">
       {next && (
         <Button
+          size="sm"
           disabled={pending}
           onClick={() =>
             start(async () => {
@@ -48,6 +49,7 @@ export function PoStatusControls({ id, status }: { id: string; status: POStatus 
       {status !== "cancelled" && status !== "fulfilled" && (
         <Button
           variant="danger"
+          size="sm"
           disabled={pending}
           onClick={() =>
             start(async () => {

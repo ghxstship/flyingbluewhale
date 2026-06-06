@@ -27,6 +27,7 @@ export function InvoiceStatusControls({ id, status }: { id: string; status: Invo
     <div className="flex gap-2">
       {transition && (
         <Button
+          size="sm"
           disabled={pending}
           onClick={() =>
             start(async () => {
@@ -49,6 +50,7 @@ export function InvoiceStatusControls({ id, status }: { id: string; status: Invo
       {status !== "voided" && (
         <Button
           variant="danger"
+          size="sm"
           disabled={pending}
           onClick={() =>
             start(async () => {

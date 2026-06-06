@@ -111,12 +111,17 @@ export default async function Page() {
         <DataTable<DealRow>
           rows={rows}
           rowHref={(r) => `/console/bookings/deals/${r.id}`}
-          emptyLabel={t("console.bookings.deals.empty.label", undefined, "No deals yet")}
+          emptyLabel={t("console.bookings.deals.empty.label", undefined, "No Deals Yet")}
           emptyDescription={t(
             "console.bookings.deals.empty.description",
             undefined,
-            "A deal is the booking-side view of a talent_offer. Create one from /console/marketplace/offers/new.",
+            "A deal is the booking-side view of a talent offer — track fees, guarantees, deposits, and stage as each booking moves to contracted.",
           )}
+          emptyAction={
+            <Button href="/console/marketplace/offers/new" size="sm">
+              {t("console.bookings.deals.createFirst", undefined, "Start Your First Deal")}
+            </Button>
+          }
           columns={[
             {
               key: "date",

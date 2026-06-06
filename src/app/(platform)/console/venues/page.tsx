@@ -42,12 +42,17 @@ export default async function Page() {
         <DataTable
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           rowHref={(r) => `/console/venues/${r.id}`}
-          emptyLabel={t("console.venues.emptyLabel", undefined, "No venues")}
+          emptyLabel={t("console.venues.emptyLabel", undefined, "No Venues Yet")}
           emptyDescription={t(
             "console.venues.emptyDescription",
             undefined,
-            "Author each venue with kind, cluster, and capacity. Handover state tracks readiness through bump-out.",
+            "Author each venue with its kind, cluster, and capacity — handover state then tracks readiness from build through bump-out.",
           )}
+          emptyAction={
+            <Button href="/console/venues/new" size="sm">
+              {t("console.venues.createFirst", undefined, "Add Your First Venue")}
+            </Button>
+          }
           columns={[
             {
               key: "name",

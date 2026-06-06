@@ -175,7 +175,17 @@ export default async function Page() {
         <DataTable<IncidentRow>
           rows={rows}
           rowHref={(r) => `/console/operations/incidents/${r.id}`}
-          emptyLabel={t("console.safety.incidents.empty", undefined, "No incidents in the last 30 days")}
+          emptyLabel={t("console.safety.incidents.empty", undefined, "No Incidents in the Last 30 Days")}
+          emptyDescription={t(
+            "console.safety.incidents.emptyDescription",
+            undefined,
+            "This is your unified feed of safety, operations, cyber, and medical incidents — file one to start the record.",
+          )}
+          emptyAction={
+            <Button href="/console/operations/incidents/new" size="sm">
+              {t("console.safety.incidents.reportFirst", undefined, "Report an Incident")}
+            </Button>
+          }
           columns={[
             {
               key: "summary",

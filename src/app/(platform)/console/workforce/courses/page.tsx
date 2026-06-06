@@ -67,12 +67,17 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/workforce/courses/${r.id}`}
-          emptyLabel={t("console.workforce.courses.emptyLabel", undefined, "No courses yet")}
+          emptyLabel={t("console.workforce.courses.emptyLabel", undefined, "No Courses Yet")}
           emptyDescription={t(
             "console.workforce.courses.emptyDescription",
             undefined,
-            "Author micro-learning content with lessons + a quiz. Assign to crew via /m/learning.",
+            "Author micro-learning content with lessons and a quiz, then assign it to crew — they complete it from the COMPVSS learning tab.",
           )}
+          emptyAction={
+            <Button href="/console/workforce/courses/new" size="sm">
+              {t("console.workforce.courses.createFirst", undefined, "Create Your First Course")}
+            </Button>
+          }
           columns={[
             {
               key: "title",

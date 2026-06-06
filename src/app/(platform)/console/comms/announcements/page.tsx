@@ -68,12 +68,17 @@ export default async function AnnouncementsPage() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/comms/announcements/${r.id}`}
-          emptyLabel={t("console.comms.announcements.emptyLabel", undefined, "No announcements yet")}
+          emptyLabel={t("console.comms.announcements.emptyLabel", undefined, "No Announcements Yet")}
           emptyDescription={t(
             "console.comms.announcements.emptyDescription",
             undefined,
-            "Push org-wide updates to crew, contractors, vendors, or admins. They land in COMPVSS /m/feed.",
+            "Push org-wide updates to crew, contractors, vendors, or admins — published announcements land in the COMPVSS field feed.",
           )}
+          emptyAction={
+            <Button href="/console/comms/announcements/new" size="sm">
+              {t("console.comms.announcements.createFirst", undefined, "Post Your First Announcement")}
+            </Button>
+          }
           columns={[
             {
               key: "title",

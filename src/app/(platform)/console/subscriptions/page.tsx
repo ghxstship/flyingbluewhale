@@ -84,12 +84,17 @@ export default async function SubscriptionsPage() {
               accessor: (r) => r.started_at,
             },
           ]}
-          emptyLabel={t("console.subscriptions.emptyLabel", undefined, "No subscriptions yet")}
+          emptyLabel={t("console.subscriptions.emptyLabel", undefined, "No Subscriptions Yet")}
           emptyDescription={t(
             "console.subscriptions.emptyDescription",
             undefined,
-            "Track recurring relationships — members, retainers, recurring sponsors. Stripe webhook events advance state automatically.",
+            "Track recurring relationships — members, retainers, and recurring sponsors — with billing state that advances automatically from Stripe.",
           )}
+          emptyAction={
+            <Button href="/console/subscriptions/new" size="sm">
+              {t("console.subscriptions.createFirst", undefined, "New Subscription")}
+            </Button>
+          }
         />
       </div>
     </>

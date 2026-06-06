@@ -34,7 +34,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     >
       <DataTable<Invoice>
         rows={rows}
-        emptyLabel={t("p.client.invoices.empty", undefined, "No invoices yet")}
+        emptyLabel={t("p.client.invoices.empty", undefined, "No Invoices Yet")}
+        emptyDescription={t(
+          "p.client.invoices.emptyDescription",
+          undefined,
+          "Invoices for this project appear here as your producer issues them — you can pay and download receipts straight from this list.",
+        )}
         columns={[
           {
             key: "number",

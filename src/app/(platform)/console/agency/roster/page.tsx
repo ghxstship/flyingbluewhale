@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
@@ -64,12 +65,17 @@ export default async function Page() {
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/agency/roster/${r.id}`}
-          emptyLabel={t("console.agency.roster.emptyLabel", undefined, "No roster yet")}
+          emptyLabel={t("console.agency.roster.emptyLabel", undefined, "No Roster Yet")}
           emptyDescription={t(
             "console.agency.roster.emptyDescription",
             undefined,
-            "Add an active agency_artist row to put a talent_profile on this agency's roster.",
+            "Sign a talent profile to this agency to set its commission and exclusivity — signed acts then appear on the roster here.",
           )}
+          emptyAction={
+            <Button href="/console/marketplace/talent/new" size="sm">
+              {t("console.agency.roster.createFirst", undefined, "Add Talent")}
+            </Button>
+          }
           columns={[
             {
               key: "act",

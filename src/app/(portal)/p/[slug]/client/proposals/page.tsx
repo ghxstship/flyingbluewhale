@@ -34,7 +34,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     >
       <DataTable<Proposal>
         rows={rows}
-        emptyLabel={t("p.client.proposals.empty", undefined, "No proposals to review")}
+        emptyLabel={t("p.client.proposals.empty", undefined, "No Proposals to Review")}
+        emptyDescription={t(
+          "p.client.proposals.emptyDescription",
+          undefined,
+          "When your producer sends a proposal for this project, it lands here for you to review, approve, and e-sign.",
+        )}
         columns={[
           {
             key: "title",

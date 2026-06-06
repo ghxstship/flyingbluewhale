@@ -22,7 +22,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     >
       <DataTable<Deliverable>
         rows={rows}
-        emptyLabel={t("p.client.deliverables.empty", undefined, "No deliverables yet")}
+        emptyLabel={t("p.client.deliverables.empty", undefined, "No Deliverables Yet")}
+        emptyDescription={t(
+          "p.client.deliverables.emptyDescription",
+          undefined,
+          "Documents and assets your producer shares for this project will appear here as they are delivered.",
+        )}
         columns={[
           {
             key: "title",

@@ -1,0 +1,874 @@
+{
+  "runId": "E2E_LRP_2026_06_05",
+  "orgId": "ea7f1a31-8088-42b6-a9f7-2874a35a1b2c",
+  "results": [
+    {
+      "event": "T1",
+      "gate": "Discovery",
+      "touchpoint": "client.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Discovery",
+      "touchpoint": "lead.create+qualify",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Discovery",
+      "touchpoint": "project.create(discovery)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Discovery",
+      "touchpoint": "accounting_period.open",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Discovery",
+      "touchpoint": "party+uis_role.engagement(discovered)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Design",
+      "touchpoint": "proposal.draft→sent→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Design",
+      "touchpoint": "budget.lines(XPMS 6-axis)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Design",
+      "touchpoint": "deliverables.brief(specs)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Design",
+      "touchpoint": "project→concept/active",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Advance",
+      "touchpoint": "vendor.create(W-9 compliant)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Advance",
+      "touchpoint": "crew_member.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Advance",
+      "touchpoint": "master_catalog_items(5 kinds)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Advance",
+      "touchpoint": "ADVANCING assignments brief→approved (+events)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Advance",
+      "touchpoint": "project_billing_draws(50/30/20|60/40)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Advance",
+      "touchpoint": "uis_role→committed→confirmed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Advance",
+      "touchpoint": "project→advance",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Procurement",
+      "touchpoint": "requisition.draft→approved→converted",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Procurement",
+      "touchpoint": "purchase_order+lines(committed)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Build",
+      "touchpoint": "fabrication_order(production_phase)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Build",
+      "touchpoint": "deliverables→submitted→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Build",
+      "touchpoint": "project→build",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Install",
+      "touchpoint": "deliverables→delivered",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Install",
+      "touchpoint": "ROS cues.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Operate",
+      "touchpoint": "event.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Operate",
+      "touchpoint": "cues fire pending→done",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Operate",
+      "touchpoint": "uis_role→active · project→show",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Close",
+      "touchpoint": "invoice+lines draft→paid",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Close",
+      "touchpoint": "payment_application",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Close",
+      "touchpoint": "accounting_period OPEN→CLOSED",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Close",
+      "touchpoint": "project→wrap/complete · proposal→signed · uis→closed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T1",
+      "gate": "Close",
+      "touchpoint": "RECONCILE budget↔actuals",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Discovery",
+      "touchpoint": "client.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Discovery",
+      "touchpoint": "lead.create+qualify",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Discovery",
+      "touchpoint": "project.create(discovery)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Discovery",
+      "touchpoint": "accounting_period.open",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Discovery",
+      "touchpoint": "party+uis_role.engagement(discovered)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Design",
+      "touchpoint": "proposal.draft→sent→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Design",
+      "touchpoint": "budget.lines(XPMS 6-axis)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Design",
+      "touchpoint": "deliverables.brief(specs)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Design",
+      "touchpoint": "project→concept/active",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Advance",
+      "touchpoint": "vendor.create(W-9 compliant)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Advance",
+      "touchpoint": "crew_member.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Advance",
+      "touchpoint": "master_catalog_items(5 kinds)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Advance",
+      "touchpoint": "ADVANCING assignments brief→approved (+events)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Advance",
+      "touchpoint": "project_billing_draws(50/30/20|60/40)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Advance",
+      "touchpoint": "uis_role→committed→confirmed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Advance",
+      "touchpoint": "project→advance",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Procurement",
+      "touchpoint": "requisition.draft→approved→converted",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Procurement",
+      "touchpoint": "purchase_order+lines(committed)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Build",
+      "touchpoint": "fabrication_order(production_phase)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Build",
+      "touchpoint": "deliverables→submitted→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Build",
+      "touchpoint": "project→build",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Install",
+      "touchpoint": "deliverables→delivered",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Install",
+      "touchpoint": "ROS cues.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Operate",
+      "touchpoint": "event.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Operate",
+      "touchpoint": "cues fire pending→done",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Operate",
+      "touchpoint": "uis_role→active · project→show",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Close",
+      "touchpoint": "invoice+lines draft→paid",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Close",
+      "touchpoint": "payment_application",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Close",
+      "touchpoint": "accounting_period OPEN→CLOSED",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Close",
+      "touchpoint": "project→wrap/complete · proposal→signed · uis→closed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T2",
+      "gate": "Close",
+      "touchpoint": "RECONCILE budget↔actuals",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Discovery",
+      "touchpoint": "client.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Discovery",
+      "touchpoint": "lead.create+qualify",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Discovery",
+      "touchpoint": "project.create(discovery)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Discovery",
+      "touchpoint": "accounting_period.open",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Discovery",
+      "touchpoint": "party+uis_role.engagement(discovered)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Design",
+      "touchpoint": "proposal.draft→sent→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Design",
+      "touchpoint": "budget.lines(XPMS 6-axis)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Design",
+      "touchpoint": "deliverables.brief(specs)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Design",
+      "touchpoint": "project→concept/active",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Advance",
+      "touchpoint": "vendor.create(W-9 compliant)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Advance",
+      "touchpoint": "crew_member.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Advance",
+      "touchpoint": "master_catalog_items(5 kinds)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Advance",
+      "touchpoint": "ADVANCING assignments brief→approved (+events)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Advance",
+      "touchpoint": "project_billing_draws(50/30/20|60/40)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Advance",
+      "touchpoint": "uis_role→committed→confirmed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Advance",
+      "touchpoint": "project→advance",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Procurement",
+      "touchpoint": "requisition.draft→approved→converted",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Procurement",
+      "touchpoint": "purchase_order+lines(committed)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Build",
+      "touchpoint": "fabrication_order(production_phase)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Build",
+      "touchpoint": "deliverables→submitted→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Build",
+      "touchpoint": "project→build",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Install",
+      "touchpoint": "deliverables→delivered",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Install",
+      "touchpoint": "ROS cues.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Operate",
+      "touchpoint": "event.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Operate",
+      "touchpoint": "cues fire pending→done",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Operate",
+      "touchpoint": "uis_role→active · project→show",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Close",
+      "touchpoint": "invoice+lines draft→paid",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Close",
+      "touchpoint": "payment_application",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Close",
+      "touchpoint": "accounting_period OPEN→CLOSED",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Close",
+      "touchpoint": "project→wrap/complete · proposal→signed · uis→closed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T3",
+      "gate": "Close",
+      "touchpoint": "RECONCILE budget↔actuals",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Discovery",
+      "touchpoint": "client.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Discovery",
+      "touchpoint": "lead.create+qualify",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Discovery",
+      "touchpoint": "project.create(discovery)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Discovery",
+      "touchpoint": "accounting_period.open",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Discovery",
+      "touchpoint": "party+uis_role.engagement(discovered)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Design",
+      "touchpoint": "proposal.draft→sent→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Design",
+      "touchpoint": "budget.lines(XPMS 6-axis)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Design",
+      "touchpoint": "deliverables.brief(specs)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Design",
+      "touchpoint": "project→concept/active",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Advance",
+      "touchpoint": "vendor.create(W-9 compliant)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Advance",
+      "touchpoint": "crew_member.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Advance",
+      "touchpoint": "master_catalog_items(5 kinds)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Advance",
+      "touchpoint": "ADVANCING assignments brief→approved (+events)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Advance",
+      "touchpoint": "project_billing_draws(50/30/20|60/40)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Advance",
+      "touchpoint": "uis_role→committed→confirmed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Advance",
+      "touchpoint": "project→advance",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Procurement",
+      "touchpoint": "requisition.draft→approved→converted",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Procurement",
+      "touchpoint": "purchase_order+lines(committed)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Build",
+      "touchpoint": "fabrication_order(production_phase)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Build",
+      "touchpoint": "deliverables→submitted→approved",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Build",
+      "touchpoint": "project→build",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Install",
+      "touchpoint": "deliverables→delivered",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Install",
+      "touchpoint": "ROS cues.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Operate",
+      "touchpoint": "event.create",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Operate",
+      "touchpoint": "cues fire pending→done",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Operate",
+      "touchpoint": "uis_role→active · project→show",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Close",
+      "touchpoint": "invoice+lines draft→paid",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Close",
+      "touchpoint": "payment_application",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Close",
+      "touchpoint": "accounting_period OPEN→CLOSED",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Close",
+      "touchpoint": "project→wrap/complete · proposal→signed · uis→closed",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "event": "T4",
+      "gate": "Close",
+      "touchpoint": "RECONCILE budget↔actuals",
+      "status": "PASS",
+      "detail": ""
+    }
+  ]
+}

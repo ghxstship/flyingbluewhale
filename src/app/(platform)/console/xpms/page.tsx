@@ -5,7 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
-import { XPMS_CLASSES, XPMS_TIERS, XPMS_PHASES } from "@/lib/xpms";
+import { XPMS_CLASSES, XPMS_TIERS, XPMS_ATOM_PHASES } from "@/lib/xpms";
 
 export const dynamic = "force-dynamic";
 
@@ -136,7 +136,7 @@ export default async function XpmsOverviewPage() {
             />
             <CardBody>
               <ol className="space-y-2 text-sm">
-                {XPMS_PHASES.map((p) => (
+                {XPMS_ATOM_PHASES.map((p) => (
                   <li key={p.id} className="flex items-center justify-between">
                     <span>
                       <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{p.num}</span>

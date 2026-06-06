@@ -1,0 +1,5 @@
+{
+  "auth.sso.errorTitle": "تعذّر بدء الدخول الموحّد",
+  "auth.sso.errorSubtitle": "تعذّر تحويلك إلى ${provider}.",
+  "auth.sso.noRedirect": "لم يُعَد أي رابط تحويل."
+}

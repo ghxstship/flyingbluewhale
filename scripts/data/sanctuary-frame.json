@@ -1,0 +1,608 @@
+{
+  "_comment": "Shared venue + process frame for The Sanctuary (7610 Biscayne Blvd). The permanent build-out foundation all Casa events flex within — reused across all four tiers by scripts/seed-casa-kits.mjs. external_example data.",
+  "venue": { "name": "The Sanctuary — 7610 Biscayne Blvd, Miami FL 33138", "code": "SANCT", "sqft": 14139 },
+  "zones": [
+    {
+      "zoneCode": "ZON-LOBBY",
+      "name": "Façade / Lobby",
+      "dimensions": "~900 sq ft",
+      "capacity": 60,
+      "powerNotes": "2x 20A circuits at check-in",
+      "avNotes": "Entry mural + reception screen",
+      "loadinNotes": "Biscayne Blvd frontage; no vehicle access — hand-carry"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "name": "Main Stage & Bar",
+      "dimensions": "~4200 sq ft",
+      "capacity": 300,
+      "powerNotes": "200A 3-phase isolated AV ground",
+      "avNotes": "House A10 PA + Astera/Aputure/Robe grid + GrandMA3",
+      "loadinNotes": "South loading door, 8' clear"
+    },
+    {
+      "zoneCode": "ZON-PODCAST",
+      "name": "Podcast / Interview Studio",
+      "dimensions": "~600 sq ft",
+      "capacity": 50,
+      "powerNotes": "UPS-backed broadcast circuit",
+      "avNotes": "4x MKH 416 booms, acoustic panels, 4K switcher",
+      "loadinNotes": "Interior; cart access from BOH"
+    },
+    {
+      "zoneCode": "ZON-EXHIB",
+      "name": "Exhibition Room",
+      "dimensions": "~1100 sq ft",
+      "capacity": 80,
+      "powerNotes": "Track lighting + 4x 20A",
+      "avNotes": "Rotating content walls, projector-ready",
+      "loadinNotes": "Interior; double doors"
+    },
+    {
+      "zoneCode": "ZON-GREEN",
+      "name": "Green Room(s)",
+      "dimensions": "~500 sq ft",
+      "capacity": 12,
+      "powerNotes": "Standard + vanity circuits",
+      "avNotes": "Program monitor feed",
+      "loadinNotes": "Private corridor from BOH"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "name": "Patio / Outdoor",
+      "dimensions": "~2000 sq ft",
+      "capacity": 120,
+      "powerNotes": "Weatherproof distro, generator tie-in",
+      "avNotes": "String rig + satellite PA",
+      "loadinNotes": "North gate; vehicle-accessible"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "name": "IT / Server Room",
+      "dimensions": "~200 sq ft",
+      "capacity": 4,
+      "powerNotes": "UPS + 1Gbps fiber + LTE failover",
+      "avNotes": "Broadcast + streaming rack",
+      "loadinNotes": "Interior; secured"
+    },
+    {
+      "zoneCode": "ZON-BOH",
+      "name": "Staff / Back of House",
+      "dimensions": "~1500 sq ft",
+      "capacity": 40,
+      "powerNotes": "Kitchen + storage circuits",
+      "avNotes": "Comms base, radio rack",
+      "loadinNotes": "South loading door"
+    }
+  ],
+  "touchpoints": [
+    {
+      "zoneCode": "ZON-LOBBY",
+      "sense": "sight",
+      "designIntent": "Branded mural sets the cultural tone before a word is spoken",
+      "deliveringElement": "Tension-fabric mural + spaced wordmark"
+    },
+    {
+      "zoneCode": "ZON-LOBBY",
+      "sense": "sound",
+      "designIntent": "Low pre-show bed eases arrival",
+      "deliveringElement": "Lobby ceiling speakers on a curated playlist"
+    },
+    {
+      "zoneCode": "ZON-LOBBY",
+      "sense": "scent",
+      "designIntent": "Signature scent marks threshold-crossing",
+      "deliveringElement": "HVAC-integrated diffuser"
+    },
+    {
+      "zoneCode": "ZON-LOBBY",
+      "sense": "touch",
+      "designIntent": "Tactile check-in feels considered",
+      "deliveringElement": "Wood reception desk + textile lanyards"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "sense": "sight",
+      "designIntent": "Stage focal point reads instantly",
+      "deliveringElement": "Backdrop + lighting key/wash"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "sense": "sound",
+      "designIntent": "Even, intelligible coverage at every seat",
+      "deliveringElement": "L-Acoustics A10 + KS21 subs tuned to room"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "sense": "taste",
+      "designIntent": "Bar program anchors the room socially",
+      "deliveringElement": "Main bar service"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "sense": "touch",
+      "designIntent": "Seating/standing comfort tuned to format",
+      "deliveringElement": "Configurable furniture + rugs"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "sense": "scent",
+      "designIntent": "Atmosphere haze carries a subtle warmth",
+      "deliveringElement": "Low-fog / haze on cue"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "sense": "taste",
+      "designIntent": "Outdoor F&B rooted in the moment's culture",
+      "deliveringElement": "Satellite bar + local-vendor bites"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "sense": "sight",
+      "designIntent": "Golden-hour warmth after dark",
+      "deliveringElement": "String lights + warm uplight"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "sense": "touch",
+      "designIntent": "Lounge invites lingering",
+      "deliveringElement": "Soft outdoor seating"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "sense": "scent",
+      "designIntent": "Open-air freshness + culinary aroma",
+      "deliveringElement": "Live cooking station"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "sense": "sound",
+      "designIntent": "Energy without overpowering conversation",
+      "deliveringElement": "Satellite PA at conversational SPL"
+    },
+    {
+      "zoneCode": "ZON-GREEN",
+      "sense": "touch",
+      "designIntent": "Artist comfort + calm before stage",
+      "deliveringElement": "Vanity, soft seating, climate control"
+    },
+    {
+      "zoneCode": "ZON-GREEN",
+      "sense": "taste",
+      "designIntent": "Rider hospitality exactly to spec",
+      "deliveringElement": "Stocked mini-fridge per advance"
+    },
+    {
+      "zoneCode": "ZON-GREEN",
+      "sense": "sight",
+      "designIntent": "Mirror + vanity light for prep",
+      "deliveringElement": "Vanity lighting"
+    },
+    {
+      "zoneCode": "ZON-EXHIB",
+      "sense": "sight",
+      "designIntent": "Rotating artist content tells the story",
+      "deliveringElement": "Content walls + lighting"
+    },
+    {
+      "zoneCode": "ZON-EXHIB",
+      "sense": "touch",
+      "designIntent": "Interactive moment fans document",
+      "deliveringElement": "Photo / signature installation"
+    },
+    {
+      "zoneCode": "ZON-EXHIB",
+      "sense": "sound",
+      "designIntent": "Intimate audio pocket distinct from main",
+      "deliveringElement": "Local speaker zone"
+    },
+    {
+      "zoneCode": "ZON-PODCAST",
+      "sense": "sound",
+      "designIntent": "Broadcast-clean capture",
+      "deliveringElement": "MKH 416 booms + treated room"
+    },
+    {
+      "zoneCode": "ZON-PODCAST",
+      "sense": "sight",
+      "designIntent": "Camera-ready set",
+      "deliveringElement": "Interview set + key light"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "sense": "sight",
+      "designIntent": "Ordered, labeled, fault-findable",
+      "deliveringElement": "Labeled rack + signal-flow chart"
+    },
+    {
+      "zoneCode": "ZON-BOH",
+      "sense": "sound",
+      "designIntent": "Clear comms backbone",
+      "deliveringElement": "Radio rack on assigned channels"
+    },
+    {
+      "zoneCode": "ZON-BOH",
+      "sense": "taste",
+      "designIntent": "Crew fed and watered",
+      "deliveringElement": "Crew catering + hydration"
+    },
+    {
+      "zoneCode": "ZON-LOBBY",
+      "sense": "taste",
+      "designIntent": "Welcome refreshment signals hospitality from the threshold",
+      "deliveringElement": "Coffee / water station at check-in"
+    },
+    {
+      "zoneCode": "ZON-GREEN",
+      "sense": "sound",
+      "designIntent": "Quiet, controllable monitor only — calm before stage",
+      "deliveringElement": "Program feed at artist's chosen level"
+    },
+    {
+      "zoneCode": "ZON-GREEN",
+      "sense": "scent",
+      "designIntent": "Neutral, allergen-safe air per rider",
+      "deliveringElement": "Unscented HVAC; no diffuser"
+    },
+    {
+      "zoneCode": "ZON-EXHIB",
+      "sense": "taste",
+      "designIntent": "Optional tasting tie-in to the content theme",
+      "deliveringElement": "Curated bite where themed"
+    },
+    {
+      "zoneCode": "ZON-EXHIB",
+      "sense": "scent",
+      "designIntent": "Subtle scent reinforces the narrative",
+      "deliveringElement": "Zone diffuser tuned to theme"
+    },
+    {
+      "zoneCode": "ZON-PODCAST",
+      "sense": "taste",
+      "designIntent": "Host/guest hydration on set",
+      "deliveringElement": "Water + branded mugs"
+    },
+    {
+      "zoneCode": "ZON-PODCAST",
+      "sense": "touch",
+      "designIntent": "Comfortable, on-camera-stable seating",
+      "deliveringElement": "Interview chairs + desk"
+    },
+    {
+      "zoneCode": "ZON-PODCAST",
+      "sense": "scent",
+      "designIntent": "Neutral studio air for long sessions",
+      "deliveringElement": "Filtered HVAC only"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "sense": "sound",
+      "designIntent": "Low fan noise, no bleed into capture",
+      "deliveringElement": "Acoustic isolation + quiet rack fans"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "sense": "taste",
+      "designIntent": "Crew hydration only",
+      "deliveringElement": "Water at the rack"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "sense": "touch",
+      "designIntent": "Tool-ready, labeled, fault-findable access",
+      "deliveringElement": "Rack handles + labeled cable trays"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "sense": "scent",
+      "designIntent": "Clean, dust-controlled air for gear",
+      "deliveringElement": "Filtered HVAC"
+    },
+    {
+      "zoneCode": "ZON-BOH",
+      "sense": "sight",
+      "designIntent": "Clear signage + posted ROS and evac map",
+      "deliveringElement": "Wayfinding + printed ROS/evac boards"
+    },
+    {
+      "zoneCode": "ZON-BOH",
+      "sense": "touch",
+      "designIntent": "Functional, safe crew flow",
+      "deliveringElement": "Anti-fatigue mats + clear paths"
+    },
+    {
+      "zoneCode": "ZON-BOH",
+      "sense": "scent",
+      "designIntent": "Kitchen-managed, ventilated air",
+      "deliveringElement": "Exhaust + ventilation"
+    }
+  ],
+  "phaseGates": [
+    {
+      "phase": "Discovery",
+      "objective": "Brief intake, stakeholder alignment, venue walkthrough, go/no-go",
+      "ownerRole": "Producer / GM",
+      "gateState": "pending",
+      "keyDeliverables": ["Brief doc", "Risk register", "Go decision"],
+      "exitChecklist": [
+        { "item": "Brief approved", "doneWhen": "Client sign-off recorded" },
+        { "item": "Venue walkthrough complete", "doneWhen": "Zone capacities + load-in confirmed" }
+      ]
+    },
+    {
+      "phase": "Design",
+      "objective": "Creative direction, moodboard, space plan, lighting/AV design, scope lock",
+      "ownerRole": "Production Manager",
+      "gateState": "pending",
+      "keyDeliverables": ["Concept deck", "CAD + lx plot", "ROS v0", "Technical rider v0"],
+      "exitChecklist": [
+        { "item": "Design package approved", "doneWhen": "Client approves concept + space plan" },
+        { "item": "Scope locked", "doneWhen": "BOM baselined, no open scope questions" }
+      ]
+    },
+    {
+      "phase": "Advance",
+      "objective": "Contracts, POs, talent advance, deposit cleared, budget baselined",
+      "ownerRole": "Production Manager",
+      "gateState": "pending",
+      "keyDeliverables": ["Executed contracts", "Vendor POs", "Talent advance pack", "Deposit confirmation"],
+      "exitChecklist": [
+        { "item": "Contracts & POs issued", "doneWhen": "All vendor + talent agreements countersigned" },
+        { "item": "Budget baselined", "doneWhen": "Deposit cleared" }
+      ]
+    },
+    {
+      "phase": "Procurement",
+      "objective": "Long-lead purchasing committed",
+      "ownerRole": "Logistics",
+      "gateState": "pending",
+      "keyDeliverables": ["Committed PO bundle", "Lead-time tracker"],
+      "exitChecklist": [
+        { "item": "Long-lead items committed", "doneWhen": "Deposits paid on critical-path rentals/builds" }
+      ]
+    },
+    {
+      "phase": "Build",
+      "objective": "Shop builds, print, fabrication, in-shop QC",
+      "ownerRole": "Install / Strike Lead",
+      "gateState": "pending",
+      "keyDeliverables": ["Build photo log", "QC sign-off"],
+      "exitChecklist": [{ "item": "Fab complete + QC passed", "doneWhen": "Shop lead signs QC on all built elements" }]
+    },
+    {
+      "phase": "Install",
+      "objective": "Freight, load-in, rig, focus, sound check, commission, walkthrough",
+      "ownerRole": "Technical Director",
+      "gateState": "pending",
+      "keyDeliverables": [
+        "Inbound inventory",
+        "Focus + line-check log",
+        "Client walkthrough sign-off",
+        "Balance cleared"
+      ],
+      "exitChecklist": [
+        { "item": "Installed + commissioned", "doneWhen": "All systems checked, punch closed" },
+        { "item": "Walkthrough accepted", "doneWhen": "Client signs off; balance cleared" }
+      ]
+    },
+    {
+      "phase": "Operate",
+      "objective": "Run the show + strike",
+      "ownerRole": "Producer / GM",
+      "gateState": "pending",
+      "keyDeliverables": ["Show captured", "Strike log", "Incident log"],
+      "exitChecklist": [
+        { "item": "Show operated to ROS", "doneWhen": "Final cue called, guests out safely" },
+        { "item": "Struck", "doneWhen": "Venue restored to baseline" }
+      ]
+    },
+    {
+      "phase": "Close",
+      "objective": "Return freight, reconciliation, final invoice, AAR",
+      "ownerRole": "Producer / GM",
+      "gateState": "pending",
+      "keyDeliverables": ["Asset register", "Final invoice", "AAR memo", "Capture delivery"],
+      "exitChecklist": [{ "item": "Reconciled", "doneWhen": "Final cost report filed, variance ≤ tolerance" }]
+    }
+  ],
+  "ros": [
+    {
+      "scheduledAt": "08:00",
+      "lane": "show",
+      "ownerRole": "Producer / GM",
+      "phase": "Install",
+      "label": "Crew call + safety brief",
+      "doneWhen": "All crew checked in, brief delivered",
+      "durationSeconds": 1800
+    },
+    {
+      "scheduledAt": "08:30",
+      "lane": "show",
+      "ownerRole": "Install / Strike Lead",
+      "phase": "Install",
+      "label": "Scenic load-in begins",
+      "doneWhen": "Scenic set + tensioned",
+      "dependsOn": "Crew call + safety brief"
+    },
+    {
+      "scheduledAt": "11:00",
+      "lane": "lights",
+      "ownerRole": "Lighting Designer",
+      "phase": "Install",
+      "label": "Rig focus + program",
+      "doneWhen": "Cues programmed, looks approved"
+    },
+    {
+      "scheduledAt": "13:00",
+      "lane": "audio",
+      "ownerRole": "Audio (A1/A2)",
+      "phase": "Install",
+      "label": "PA tune + line check",
+      "doneWhen": "System rung out, inputs verified"
+    },
+    {
+      "scheduledAt": "14:00",
+      "lane": "video",
+      "ownerRole": "Video / LED",
+      "phase": "Install",
+      "label": "Video/LED + capture set",
+      "doneWhen": "Sources mapped, capture armed"
+    },
+    {
+      "scheduledAt": "15:30",
+      "lane": "talent",
+      "ownerRole": "Talent / Artist Liaison",
+      "phase": "Install",
+      "label": "Artist arrival + sound check",
+      "doneWhen": "Sound check complete, artist to green room"
+    },
+    {
+      "scheduledAt": "17:30",
+      "lane": "show",
+      "ownerRole": "Hospitality / F&B Lead",
+      "phase": "Operate",
+      "label": "Bar + F&B set, staff brief",
+      "doneWhen": "Service points stocked, staff briefed"
+    },
+    {
+      "scheduledAt": "18:00",
+      "lane": "safety",
+      "ownerRole": "Security Lead",
+      "phase": "Operate",
+      "label": "Security posts + door brief",
+      "doneWhen": "Posts set, scanners tested"
+    },
+    {
+      "scheduledAt": "18:30",
+      "lane": "show",
+      "ownerRole": "Producer / GM",
+      "phase": "Operate",
+      "label": "Client walkthrough sign-off",
+      "doneWhen": "Client accepts room"
+    },
+    {
+      "scheduledAt": "19:00",
+      "lane": "show",
+      "ownerRole": "Front of House",
+      "phase": "Operate",
+      "label": "Doors",
+      "doneWhen": "Guests flowing, count tracking",
+      "dependsOn": "Client walkthrough sign-off"
+    },
+    {
+      "scheduledAt": "19:30",
+      "lane": "show",
+      "ownerRole": "Stage Manager",
+      "phase": "Operate",
+      "label": "Show start (program cue 1)",
+      "doneWhen": "Program underway on ROS"
+    },
+    {
+      "scheduledAt": "20:30",
+      "lane": "talent",
+      "ownerRole": "Talent / Artist Liaison",
+      "phase": "Operate",
+      "label": "Set changeover / M&G as configured",
+      "doneWhen": "Changeover/M&G complete per format"
+    },
+    {
+      "scheduledAt": "22:00",
+      "lane": "safety",
+      "ownerRole": "Medical / Safety",
+      "phase": "Operate",
+      "label": "Last call + egress readiness",
+      "doneWhen": "Egress paths clear, medical standing by"
+    },
+    {
+      "scheduledAt": "22:15",
+      "lane": "show",
+      "ownerRole": "Install / Strike Lead",
+      "phase": "Operate",
+      "label": "Strike begins",
+      "doneWhen": "Reverse of load-in complete",
+      "dependsOn": "Show start (program cue 1)"
+    },
+    {
+      "scheduledAt": "00:30",
+      "lane": "transport",
+      "ownerRole": "Logistics",
+      "phase": "Operate",
+      "label": "Return freight + restore to baseline",
+      "doneWhen": "Venue restored, assets manifested"
+    }
+  ],
+  "rider": [
+    {
+      "zoneCode": "ZON-MAIN",
+      "phase": "Install",
+      "category": "rigging",
+      "requirement": "Truss + motor points rated for lighting/LED load; rig plot signed off"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "phase": "Install",
+      "category": "power",
+      "requirement": "200A 3-phase with isolated AV ground; distro to FOH + stage"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "phase": "Install",
+      "category": "acoustic",
+      "requirement": "Room tuning + SPL limit set at property line for permit"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "phase": "Operate",
+      "category": "av",
+      "requirement": "FOH console + monitor world; redundant playback for walk-in"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "phase": "Install",
+      "category": "power",
+      "requirement": "Weatherproof distro + generator tie-in for satellite PA + bar"
+    },
+    {
+      "zoneCode": "ZON-PATIO",
+      "phase": "Install",
+      "category": "structural",
+      "requirement": "Wind-rated structures/tenting; lightning hold plan"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "phase": "Install",
+      "category": "network",
+      "requirement": "1Gbps symmetric fiber + LTE failover; streaming uplink tested"
+    },
+    {
+      "zoneCode": "ZON-IT",
+      "phase": "Operate",
+      "category": "rf",
+      "requirement": "RF coordination for mics/IEM/comms; intermod scan clean"
+    },
+    {
+      "zoneCode": "ZON-PODCAST",
+      "phase": "Install",
+      "category": "acoustic",
+      "requirement": "Acoustic panel treatment; HVAC noise floor verified for capture"
+    },
+    {
+      "zoneCode": "ZON-MAIN",
+      "phase": "Build",
+      "category": "electrical",
+      "requirement": "Scenic practicals on dedicated circuits; LED accent power planned"
+    },
+    {
+      "zoneCode": "ZON-BOH",
+      "phase": "Operate",
+      "category": "rf",
+      "requirement": "Motorola CP200d comms: ch1 production / ch2 security / ch3 medical"
+    },
+    {
+      "zoneCode": "ZON-GREEN",
+      "phase": "Install",
+      "category": "electrical",
+      "requirement": "Vanity + climate circuits; program monitor feed"
+    }
+  ]
+}

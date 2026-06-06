@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { urlFor } from "@/lib/urls";
 import { createRevisionRound, decideRevisionRound } from "@/lib/proposals/portal/mutations";
 import type { RevisionState } from "@/lib/proposals/portal/types";
 import type { FormState } from "@/components/FormShell";
@@ -13,7 +14,7 @@ function actor(session: { userId: string; orgId: string; email: string }) {
 
 export async function createRevisionRoundAction(_prev: FormState, fd: FormData): Promise<FormState> {
   const session = await getSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(urlFor("auth", "/login"));
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");
   const title = String(fd.get("title") ?? "").trim();
@@ -32,7 +33,7 @@ export async function createRevisionRoundAction(_prev: FormState, fd: FormData):
 
 export async function decideRevisionAction(_prev: FormState, fd: FormData): Promise<FormState> {
   const session = await getSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(urlFor("auth", "/login"));
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");
   const roundId = String(fd.get("roundId") ?? "");

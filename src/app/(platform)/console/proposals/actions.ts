@@ -300,7 +300,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
       name: proposal.title,
       description: proposal.notes ?? null,
       project_state: "active",
-      xpms_phase: "discovery",
+      xpms_phase: "Discovery",
       client_id: proposal.client_id,
       budget_cents: proposal.amount_cents,
       proposal_id: proposalId,

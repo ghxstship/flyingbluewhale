@@ -8,7 +8,7 @@ import {
   XPMS_DASHBOARD_TEMPLATES,
   type PortalPersona,
 } from "@/lib/nav";
-import { XPMS_CLASSES, XPMS_PHASES } from "@/lib/xpms";
+import { XPMS_CLASSES, XPMS_PHASES, XPMS_ATOM_PHASES } from "@/lib/xpms";
 
 /**
  * Validates ADR-0004 portal mapping invariants:
@@ -101,9 +101,23 @@ describe("XPMS portal mapping (ADR-0004)", () => {
     ]);
   });
 
-  it("XPMS_PHASES is the 8-phase lifecycle in published order", () => {
+  it("XPMS_PHASES is the v08 8-gate project lifecycle in macro-arc order", () => {
     expect(XPMS_PHASES).toHaveLength(8);
     expect(XPMS_PHASES.map((p) => p.id)).toEqual([
+      "Discovery",
+      "Design",
+      "Advance",
+      "Procurement",
+      "Build",
+      "Install",
+      "Operate",
+      "Close",
+    ]);
+  });
+
+  it("XPMS_ATOM_PHASES is the Eight Production Phases (atom-level axis)", () => {
+    expect(XPMS_ATOM_PHASES).toHaveLength(8);
+    expect(XPMS_ATOM_PHASES.map((p) => p.id)).toEqual([
       "discovery",
       "concept",
       "development",

@@ -1,0 +1,4 @@
+{
+  "auth.verifyEmail.failedTitle": "فشل التحقق",
+  "auth.verifyEmail.failedSubtitle": "تعذّر علينا التحقق من بريدك الإلكتروني عبر هذا الرابط."
+}

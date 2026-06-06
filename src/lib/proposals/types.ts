@@ -56,10 +56,19 @@ export type DocDeliverableType =
   | "signage_grid"
   | "custom";
 
-// Mirrors public.xpms_phase. Phase blocks may declare which point on
-// the project lifecycle they correspond to so workback-schedule seeding
-// stays aligned with the project's `xpms_phase` cursor.
-export type XpmsPhaseKey = "discovery" | "concept" | "development" | "advance" | "build" | "show" | "strike" | "wrap";
+// Mirrors public.xpms_phase — the XPMS v08 8-Gate Lifecycle (migration
+// 20260605170000). Phase blocks may declare which point on the project
+// lifecycle they correspond to so workback-schedule seeding stays aligned
+// with the project's `xpms_phase` cursor.
+export type XpmsPhaseKey =
+  | "Discovery"
+  | "Design"
+  | "Advance"
+  | "Procurement"
+  | "Build"
+  | "Install"
+  | "Operate"
+  | "Close";
 
 // Canonical line-item shape used by investment_table, equipment_manifest,
 // change_orders, and the new phase.items[] field. Free-form

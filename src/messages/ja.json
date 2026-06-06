@@ -74,9 +74,9 @@
     "send": "送信",
     "time": {
       "justNow": "たった今",
-      "minutesShort": "${min}分",
-      "hoursShort": "${hr}時間",
-      "daysShort": "${day}日"
+      "minutesShort": "{n}分",
+      "hoursShort": "{n}時間",
+      "daysShort": "{n}日"
     },
     "tryAgain": "再試行",
     "untitled": "無題",
@@ -112,8 +112,8 @@
     "foo": {
       "bar": "フーバー"
     },
-    "pin": "${itemLabel}をピン留め",
-    "unpin": "${itemLabel}のピン留めを解除"
+    "pin": "{name}をピン留め",
+    "unpin": "{name}のピン留めを解除"
   },
   "marketing": {
     "header": {
@@ -3362,7 +3362,7 @@
     },
     "error": {
       "title": "サインインエラー",
-      "ref": "リファレンス: ${error.digest}"
+      "ref": "リファレンス: {digest}"
     },
     "mfa": {
       "recoveryCode": "リカバリーコード",
@@ -3388,7 +3388,7 @@
     },
     "sso": {
       "errorTitle": "SSOを開始できませんでした",
-      "errorSubtitle": "${provider}へリダイレクトできませんでした。",
+      "errorSubtitle": "{provider}へリダイレクトできませんでした。",
       "noRedirect": "リダイレクトURLが返されませんでした。"
     }
   },
@@ -3665,7 +3665,7 @@
         "network": "ネットワークエラー"
       },
       "toast": {
-        "queued": "${label}（キュー登録済み — オンライン復帰時に同期します）",
+        "queued": "{label}（キュー登録済み — オンライン復帰時に同期します）",
         "checkedIn": "チェックイン完了",
         "breakStarted": "休憩を開始しました",
         "clockedOut": "退勤しました",
@@ -3705,12 +3705,12 @@
       "arrivalsHeading": "到着",
       "noArrivals": "本日の到着はありません",
       "eta": "到着予定",
-      "partyOf": "${m.party_size}名",
-      "landedAt": "${fmtClock(m.actual_at)}着",
+      "partyOf": "{count}名",
+      "landedAt": "{time}着",
       "departuresHeading": "出発",
       "noDepartures": "本日の出発はありません",
       "etd": "出発予定",
-      "departedAt": "${fmtClock(m.actual_at)}発"
+      "departedAt": "{time}発"
     },
     "advances": {
       "eyebrow": "モバイル",
@@ -3734,13 +3734,13 @@
         "title": "有効なアラートなし"
       },
       "scheduled": "予定",
-      "acknowledgedAt": "${fmt.time(ack)} に確認済み",
+      "acknowledgedAt": "{time} に確認済み",
       "acknowledge": "確認する"
     },
     "checkIn": {
       "announce": {
-        "error": "エラー: ${json.error.message}",
-        "accepted": "受付完了: ${name}",
+        "error": "エラー: {message}",
+        "accepted": "受付完了: {name}",
         "duplicate": "重複チケット — 既にスキャン済み",
         "voided": "無効チケット — 拒否",
         "notFound": "チケットが見つかりません"
@@ -3791,7 +3791,7 @@
       "eyebrow": "現場チェックイン",
       "title": "チケットをスキャン",
       "scan": {
-        "eyebrow": "スキャン中 · ${slug}",
+        "eyebrow": "スキャン中 · {slug}",
         "title": "QRスキャン"
       },
       "configureSupabase": "Supabaseを設定してください。",
@@ -3805,7 +3805,7 @@
       "unassignedVenue": "未割当の会場",
       "badge": {
         "mealCredited": "ミール控除済み",
-        "breakMinutes": "休憩 ${s.break_minutes}分"
+        "breakMinutes": "休憩 {minutes}分"
       }
     },
     "coc": {
@@ -3858,7 +3858,7 @@
     "directory": {
       "eyebrow": "モバイル",
       "title": "ディレクトリ",
-      "peopleCount": "組織に${members.length}名",
+      "peopleCount": "組織に{count}名",
       "empty": {
         "title": "メンバーなし",
         "description": "組織メンバーを追加するとここに表示されます。"
@@ -3917,11 +3917,11 @@
         "eyebrow": "運行",
         "depart": "出発",
         "arrive": "到着",
-        "manifestHeading": "マニフェスト · ${manifest.length}",
+        "manifestHeading": "マニフェスト · {count}",
         "noPassengers": "搭乗者の登録はありません。",
-        "passengerFallback": "搭乗者 ${i + 1}",
-        "pickupPrefix": "ピックアップ ${m.pickup}",
-        "dropoffPrefix": "ドロップオフ ${m.dropoff}"
+        "passengerFallback": "搭乗者 {index}",
+        "pickupPrefix": "ピックアップ {location}",
+        "dropoffPrefix": "ドロップオフ {location}"
       }
     },
     "error": {
@@ -3933,7 +3933,7 @@
       "eyebrow": "モバイル",
       "title": "アップデート",
       "noUpdatesYet": "アップデートはまだありません。",
-      "unreadOfTotal": "${rows.length}件中${unread}件未読",
+      "unreadOfTotal": "{total}件中{unread}件未読",
       "empty": {
         "title": "アップデートなし",
         "description": "組織のお知らせはここに表示されます。"
@@ -3954,9 +3954,9 @@
       "gateFallback": "ゲート",
       "scan": {
         "announce": {
-          "error": "エラー：${json.error.message}",
-          "warn": "警告：${warnReason}",
-          "deny": "拒否：${denyReason}"
+          "error": "エラー：{message}",
+          "warn": "警告：{reason}",
+          "deny": "拒否：{reason}"
         },
         "result": {
           "allow": "許可"
@@ -3992,8 +3992,8 @@
     "gigs": {
       "eyebrow": "マーケットプレイス",
       "title": "公開中の案件",
-      "countOne": "ネットワーク全体で${rows.length}件の公開中案件。",
-      "countOther": "ネットワーク全体で${rows.length}件の公開中案件。",
+      "countOne": "ネットワーク全体で{count}件の公開中案件。",
+      "countOther": "ネットワーク全体で{count}件の公開中案件。",
       "empty": "現在公開中の案件はありません。",
       "travelPaid": "交通費支給"
     },
@@ -4010,9 +4010,9 @@
         "assigned": "担当会場",
         "any": "全会場"
       },
-      "cadenceSuffix": " · ${r.cadence_minutes}分ごと",
+      "cadenceSuffix": " · {minutes}分ごと",
       "badge": {
-        "next": "次回 ${fmtTime(r.next_run_at)}"
+        "next": "次回 {time}"
       }
     },
     "guide": {
@@ -4164,7 +4164,7 @@
       "configureSupabase": "Supabase を構成してください。",
       "eyebrow": "モバイル",
       "title": "受信トレイ",
-      "count": "${list.length} 件の会話",
+      "count": "{n} 件の会話",
       "empty": {
         "title": "会話なし"
       },
@@ -4193,8 +4193,8 @@
       "eyebrow": "現場",
       "title": "インシデント",
       "noneLast30": "直近30日間にインシデントの記録はありません。",
-      "summary": "直近30日で${rows.length}件 · 未対応${open}件",
-      "criticalSuffix": "重大${critical}件",
+      "summary": "直近30日で{count}件 · 未対応{open}件",
+      "criticalSuffix": "重大{critical}件",
       "reportCta": "+ インシデントを報告",
       "empty": {
         "title": "異常なし"
@@ -4240,23 +4240,23 @@
         "description": "表彰投稿はここに表示されます。"
       },
       "someone": "誰か",
-      "points": "${p.points} pt",
-      "reactWith": "${emoji} でリアクション"
+      "points": "{count} pt",
+      "reactWith": "{emoji} でリアクション"
     },
     "learning": {
       "course": {
-        "lessonLabel": "レッスン ${l.ordinal}",
+        "lessonLabel": "レッスン {ordinal}",
         "quizHeading": "クイズ",
         "passed": "合格",
         "didNotPass": "不合格"
       },
       "title": "ラーニング",
-      "coursesAssigned": "${rows.length} 件のコースが割り当てられています",
+      "coursesAssigned": "{count} 件のコースが割り当てられています",
       "empty": {
         "title": "コースなし",
         "description": "研修の割り当てはこちらに表示されます。"
       },
-      "dueDate": "期限 ${fmt.date(a.due_at)}",
+      "dueDate": "期限 {date}",
       "courseFallback": "コース"
     },
     "medic": {
@@ -4304,8 +4304,8 @@
       "eyebrow": "フィールド",
       "title": "メディック",
       "empty24h": "過去24時間の対応記録はありません。",
-      "countIn24h": "過去24時間で${rows.length}件",
-      "openCount": "${open}件対応中",
+      "countIn24h": "過去24時間で{count}件",
+      "openCount": "{count}件対応中",
       "newEncounter": "+ 新規対応",
       "emptyState": {
         "title": "対応記録なし"
@@ -4350,13 +4350,13 @@
       "eyebrow": "現場",
       "title": "パンチリスト",
       "noOpenItems": "あなたに割り当てられた未対応項目はありません。",
-      "openCount": "${rows.length} 件未対応",
+      "openCount": "{count} 件未対応",
       "empty": {
         "title": "パンチリストは完了済み",
         "action": "未対応タスクを開く"
       },
       "overdue": "期限超過",
-      "due": "期限 ${r.due_at}"
+      "due": "期限 {date}"
     },
     "requests": {
       "detail": {
@@ -4410,10 +4410,10 @@
         "backToAll": "← すべてのキュー",
         "eyebrow": "ショー",
         "liveLabel": "ライブ",
-        "startedAt": "${fmtTime(live.scheduled_at)}に開始",
-        "upcomingHeading": "今後の予定 · ${upcoming.length}",
+        "startedAt": "{time}に開始",
+        "upcomingHeading": "今後の予定 · {count}",
         "noMoreCues": "キュー待ちはありません。",
-        "completedHeading": "完了 · ${done.length}",
+        "completedHeading": "完了 · {count}",
         "doneBadge": "完了"
       },
       "eyebrow": "モバイル",
@@ -4480,7 +4480,7 @@
     "shift": {
       "eyebrow": "モバイル",
       "title": "マイシフト",
-      "greeting": "こんにちは、${wfm.full_name}さん。",
+      "greeting": "こんにちは、{name}さん。",
       "welcome": "ようこそ。",
       "useBefore": "出退勤と休憩は",
       "useLink": "チェックイン",
@@ -4488,7 +4488,7 @@
       "today": "本日",
       "noShiftToday": "本日のシフトはありません",
       "unassignedVenue": "会場未割当",
-      "breakMinutes": "休憩 ${s.break_minutes}分",
+      "breakMinutes": "休憩 {n}分",
       "mealCredit": "食事クレジット",
       "upcomingThisWeek": "今週の予定",
       "checkIn": "チェックイン",
@@ -4516,16 +4516,16 @@
         "open": "公開中",
         "anonymous": "匿名"
       },
-      "closesAt": "${fmt.date(s.closes_at)}に締切"
+      "closesAt": "{date}に締切"
     },
     "tasks": {
       "eyebrow": "現場",
       "title": "マイタスク",
       "empty": "割り当てられたタスクはありません",
-      "dueLabel": "期限 ${formatDate(task.due_at)}",
+      "dueLabel": "期限 {date}",
       "detail": {
         "back": "← タスク",
-        "dueLabel": "期限 ${formatDate(task.due_at)}",
+        "dueLabel": "期限 {date}",
         "updateStatus": "ステータスを更新"
       }
     },
@@ -4539,10 +4539,10 @@
         "reason": "理由"
       },
       "title": "休暇",
-      "balancesHeading": "残高（${year}年）",
+      "balancesHeading": "残高（{year}年）",
       "noPolicies": "ポリシーが未割当です。",
       "policyFallback": "ポリシー",
-      "hours": "${b.balance_hours}時間",
+      "hours": "{hours}時間",
       "available": "利用可能",
       "newRequest": "新規申請",
       "recentRequests": "最近の申請",
@@ -4606,7 +4606,7 @@
       },
       "noTag": "タグなし",
       "returnsDue": "返却期限",
-      "due": "期限 ${fmtDay(r.ends_at)}"
+      "due": "期限 {date}"
     }
   },
   "avatarMenu": {
@@ -4620,7 +4620,7 @@
       "blocks": {
         "edit": {
           "eyebrow": "宿泊",
-          "title": "${row.name} を編集",
+          "title": "{name} を編集",
           "name": "名称",
           "property": "施設",
           "city": "都市",
@@ -4654,8 +4654,8 @@
         "title": "グループブロック",
         "configureSupabase": "Supabase を設定してください。",
         "eyebrow": "宿泊",
-        "subtitleOne": "${rows.length} 件のブロック",
-        "subtitleOther": "${rows.length} 件のブロック",
+        "subtitleOne": "{count} 件のブロック",
+        "subtitleOther": "{count} 件のブロック",
         "newBlock": "+ 新規ブロック",
         "emptyLabel": "ルームブロックはまだありません",
         "columns": {
@@ -4715,7 +4715,7 @@
         "edit": {
           "fallbackKind": "認証変更",
           "eyebrow": "認証変更",
-          "title": "${kindValue} を編集",
+          "title": "{kind} を編集",
           "kindLabel": "種別",
           "statusLabel": "ステータス",
           "noteLabel": "備考"
@@ -4872,8 +4872,8 @@
         "eyebrow": "エージェンシー",
         "title": "ロスター",
         "configureSupabase": "Supabase を設定してください。",
-        "subtitleOne": "稼働中アーティスト ${rows.length} 組",
-        "subtitleOther": "稼働中アーティスト ${rows.length} 組",
+        "subtitleOne": "稼働中アーティスト {count} 組",
+        "subtitleOther": "稼働中アーティスト {count} 組",
         "emptyLabel": "ロスターはまだありません",
         "column": {
           "act": "アクト",
@@ -4993,7 +4993,7 @@
           "title": "実行履歴",
           "configureSupabase": "Supabaseを設定してください。",
           "countOne": "1件の実行",
-          "countOther": "${runs.length}件の実行",
+          "countOther": "{count}件の実行",
           "crumb": {
             "automations": "自動化",
             "runs": "実行履歴"
@@ -5024,9 +5024,9 @@
           "triggerWebhook": "Webhook",
           "triggerEvent": "イベント"
         },
-        "relativeMinutes": "${min}分前",
-        "relativeHours": "${hr}時間前",
-        "relativeDays": "${days}日前",
+        "relativeMinutes": "{value}分前",
+        "relativeHours": "{value}時間前",
+        "relativeDays": "{value}日前",
         "title": "自動化",
         "subtitleAutomationOne": "件の自動化",
         "subtitleAutomationOther": "件の自動化",
@@ -5067,7 +5067,7 @@
         "body": "本文",
         "resolutionNote": "解決メモ",
         "metadata": "メタデータ",
-        "repliesCount": "返信（${replies.length}）",
+        "repliesCount": "返信（{count}）",
         "noReplies": "まだ返信はありません。",
         "backToAll": "← すべての注釈へ戻る"
       },
@@ -5132,14 +5132,14 @@
     "bim": {
       "detail": {
         "projectFallback": "プロジェクト",
-        "hotLinkCount": "${links.length}件のホットリンク",
+        "hotLinkCount": "{count}件のホットリンク",
         "open3dViewer": "3Dビューアを開く",
         "allModels": "← すべてのモデル",
         "uploadedLabel": "アップロード済み",
         "urnPrefix": "URN",
         "markReady": "準備完了にする",
         "storageHeading": "ストレージ",
-        "hotLinksHeading": "ホットリンク (${links.length})",
+        "hotLinksHeading": "ホットリンク ({count})",
         "linkType": {
           "rfi": "RFI",
           "submittal": "サブミッタル",
@@ -5166,8 +5166,8 @@
           "ready": "準備完了"
         },
         "statusLabel": "ステータス",
-        "meshesCount": "${elementCount}メッシュ",
-        "modelLabel": "モデル ${modelId.slice(0, 8)}…",
+        "meshesCount": "{count}メッシュ",
+        "modelLabel": "モデル {id}…",
         "canvasAriaLabel": "3D BIMビューアキャンバス",
         "loadingViewer": "3Dビューアを読み込み中…"
       },
@@ -5241,11 +5241,11 @@
         "milestoneSingular": "マイルストーン",
         "milestonePlural": "マイルストーン",
         "empty": "今後のホールドまたはマイルストーンはありません。",
-        "tierHold": "T${it.row.tier} ホールド"
+        "tierHold": "T{tier} ホールド"
       },
       "deals": {
         "detail": {
-          "eyebrow": "ブッキング · ${d.deal_type}",
+          "eyebrow": "ブッキング · {dealType}",
           "offerView": "オファー表示",
           "openSettlement": "セトルメントを開く",
           "startSettlement": "セトルメントを開始",
@@ -5260,7 +5260,7 @@
           "avgTicket": "平均チケット単価",
           "estimatedExpenses": "概算費用",
           "breakEvenAtAvg": "平均単価での損益分岐点",
-          "seatsCount": "${breakEven} 席",
+          "seatsCount": "{count} 席",
           "ticketScaling": "チケットスケーリング",
           "noScalingDefined": "スケーリング未設定。",
           "tierHeader": "ティア",
@@ -5268,7 +5268,7 @@
           "countHeader": "数量",
           "subtotalHeader": "小計",
           "coProPartners": "コ・プロパートナー",
-          "pctAllocated": "${totalSplit}% 配分済み",
+          "pctAllocated": "{pct}% 配分済み",
           "settledBadge": "決済済み",
           "addPartner": "パートナーを追加",
           "partnerName": "パートナー名",
@@ -5555,7 +5555,7 @@
     "clients": {
       "edit": {
         "eyebrow": "クライアント",
-        "title": "${row.name}を編集",
+        "title": "{name}を編集",
         "submit": "変更を保存",
         "fields": {
           "name": "名称",
@@ -5642,8 +5642,8 @@
       "title": "クライアント",
       "configureSupabase": "Supabaseを構成してクライアントを読み込んでください。",
       "eyebrow": "セールス",
-      "subtitleOne": "${rows.length}件のクライアント",
-      "subtitleMany": "${rows.length}件のクライアント",
+      "subtitleOne": "{count}件のクライアント",
+      "subtitleMany": "{count}件のクライアント",
       "newClient": "+ 新規クライアント",
       "columns": {
         "name": "名称",
@@ -5658,7 +5658,7 @@
         "edit": {
           "fallbackName": "ホスピタリティパッケージ",
           "eyebrow": "ホスピタリティパッケージ",
-          "title": "${packageName}を編集",
+          "title": "{name}を編集",
           "fields": {
             "name": "名称",
             "sku": "SKU",
@@ -5702,7 +5702,7 @@
         "trademarkSingular": "商標",
         "trademarkPlural": "商標",
         "activeLabel": "有効",
-        "expiringInDays": "${SOON_DAYS}日以内に失効",
+        "expiringInDays": "{days}日以内に失効",
         "legalIpAction": "リーガル · IP",
         "metricActive": "有効",
         "metricExpiring": "失効間近 · 90日",
@@ -5740,7 +5740,7 @@
       "sponsors": {
         "edit": {
           "eyebrow": "スポンサー権利",
-          "titleWithName": "${rowTitle}を編集",
+          "titleWithName": "{name}を編集",
           "titleFallback": "スポンサー権利を編集",
           "fields": {
             "title": "タイトル",
@@ -5755,7 +5755,7 @@
           "title": "権利",
           "configureSupabase": "Supabaseを設定してください。",
           "eyebrowFull": "コマーシャル · スポンサー権利",
-          "subtitleDue": "期限 ${fmtDate(dueBy)}",
+          "subtitleDue": "期限 {date}",
           "sectionEntitlement": "権利",
           "fieldTitle": "タイトル",
           "fieldStatus": "ステータス",
@@ -5785,8 +5785,8 @@
         "title": "スポンサー権利",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "コマーシャル",
-        "subtitleOne": "${rows.length}件のレコード",
-        "subtitleOther": "${rows.length}件のレコード",
+        "subtitleOne": "{count}件のレコード",
+        "subtitleOther": "{count}件のレコード",
         "newSponsor": "+ 新規スポンサー",
         "emptyLabel": "スポンサー権利なし",
         "columns": {
@@ -5806,7 +5806,7 @@
       "announcements": {
         "edit": {
           "eyebrow": "アナウンス",
-          "title": "編集 · ${a.title}",
+          "title": "編集 · {title}",
           "titleLabel": "タイトル",
           "bodyLabel": "本文",
           "audienceLabel": "配信対象",
@@ -5823,7 +5823,7 @@
           "configureSupabase": "Supabase を設定してください。",
           "eyebrow": "アナウンス",
           "pinned": "固定済み",
-          "readCount": "${readCount ?? 0} 件既読",
+          "readCount": "{count} 件既読",
           "publish": "公開",
           "archive": "アーカイブ"
         },
@@ -5845,8 +5845,8 @@
         "eyebrow": "Comms",
         "title": "アナウンス",
         "configureSupabase": "Supabase を設定してください。",
-        "subtitleOne": "アナウンス ${rows.length} 件",
-        "subtitleOther": "アナウンス ${rows.length} 件",
+        "subtitleOne": "アナウンス {count} 件",
+        "subtitleOther": "アナウンス {count} 件",
         "emptyLabel": "アナウンスはまだありません",
         "columns": {
           "title": "タイトル",
@@ -5859,7 +5859,7 @@
         "detail": {
           "configureSupabase": "Supabase を設定してください。",
           "eyebrow": "投票",
-          "votesCount": "${total} 票",
+          "votesCount": "{count} 票",
           "closePoll": "投票を締切"
         },
         "new": {
@@ -5879,8 +5879,8 @@
         "eyebrow": "Comms",
         "title": "投票",
         "configureSupabase": "Supabase を設定してください。",
-        "subtitleOne": "投票 ${rows.length} 件",
-        "subtitleOther": "投票 ${rows.length} 件",
+        "subtitleOne": "投票 {count} 件",
+        "subtitleOther": "投票 {count} 件",
         "newPoll": "+ 新規投票",
         "emptyLabel": "投票はまだありません",
         "col": {
@@ -5926,8 +5926,8 @@
         "eyebrow": "Comms",
         "title": "アンケート",
         "configureSupabase": "Supabase を設定してください。",
-        "subtitleOne": "アンケート ${rows.length} 件",
-        "subtitleOther": "アンケート ${rows.length} 件",
+        "subtitleOne": "アンケート {count} 件",
+        "subtitleOther": "アンケート {count} 件",
         "newSurvey": "+ 新規アンケート",
         "emptyLabel": "アンケートはまだありません",
         "columns": {
@@ -5998,7 +5998,7 @@
       "subtitle": "オペレーションダッシュボード",
       "notConfigured": "未設定",
       "envMissingPrefix": "Supabase の環境変数が未設定です。コピーしてください",
-      "loggedInAs": "${session.email} としてログイン中",
+      "loggedInAs": "{email} としてログイン中",
       "noOrg": {
         "title": "組織がまだありません",
         "createOrg": "組織を作成",
@@ -6079,8 +6079,8 @@
         "public": "パブリック"
       },
       "widgetCount": {
-        "one": "${widgetCount} 個のウィジェット",
-        "other": "${widgetCount} 個のウィジェット"
+        "one": "{count} 個のウィジェット",
+        "other": "{count} 個のウィジェット"
       }
     },
     "drawings": {
@@ -6088,7 +6088,7 @@
         "projectFallback": "プロジェクト",
         "allSheetSets": "← シートセット一覧",
         "versions": "バージョン",
-        "versionsCount": "全${versionRows.length}件",
+        "versionsCount": "全{count}件",
         "noActiveVersion": "有効バージョンなし",
         "active": "有効",
         "addVersion": "+ バージョンを追加",
@@ -6194,7 +6194,7 @@
     "error": {
       "eyebrow": "エラー",
       "title": "問題が発生しました",
-      "ref": "参照: ${error.digest}",
+      "ref": "参照: {digest}",
       "fallbackMessage": "予期しないエラーが発生しました。",
       "tryAgain": "再試行",
       "backToWorkspace": "ワークスペースへ戻る"
@@ -6239,7 +6239,7 @@
     "events": {
       "edit": {
         "eyebrow": "イベント",
-        "title": "${row.name} を編集",
+        "title": "{name} を編集",
         "submitLabel": "変更を保存",
         "name": "名称",
         "description": "概要",
@@ -6331,7 +6331,7 @@
       "budgets": {
         "edit": {
           "eyebrow": "予算",
-          "title": "${row.name}を編集",
+          "title": "{name}を編集",
           "submit": "変更を保存",
           "name": "名称",
           "category": "カテゴリー",
@@ -6369,7 +6369,7 @@
         },
         "title": "予算",
         "configureSupabase": "Supabaseを設定してください。",
-        "countSubtitle": "${rows.length}件の予算",
+        "countSubtitle": "{count}件の予算",
         "newBudget": "+ 新規予算",
         "col": {
           "name": "名称",
@@ -6498,7 +6498,7 @@
       "expenses": {
         "edit": {
           "eyebrow": "経費",
-          "title": "${row.description}を編集",
+          "title": "{description}を編集",
           "descriptionLabel": "摘要",
           "amountCentsLabel": "金額(セント)",
           "currencyLabel": "通貨",
@@ -6616,7 +6616,7 @@
         },
         "edit": {
           "eyebrow": "請求書",
-          "title": "${row.title}を編集",
+          "title": "{title}を編集",
           "fields": {
             "title": "タイトル",
             "number": "番号",
@@ -7130,7 +7130,7 @@
       "edit": {
         "title": "フォームを編集",
         "configureSupabase": "Supabaseを設定してください。",
-        "headerTitle": "編集 · ${form.title}",
+        "headerTitle": "編集 · {title}",
         "subtitle": "タイトル、スラッグ、ステータス、JSONスキーマを更新します。",
         "breadcrumb": "編集",
         "submit": "フォームを保存",
@@ -7146,7 +7146,7 @@
       "detail": {
         "fallbackTitle": "フォーム",
         "configureSupabase": "Supabaseを設定してください。",
-        "updatedAt": "更新日 ${fmt(form.updated_at)}",
+        "updatedAt": "更新日 {date}",
         "metric": {
           "fields": "項目数",
           "status": "ステータス",
@@ -7168,8 +7168,8 @@
       },
       "title": "フォーム",
       "configureSupabase": "Supabaseを設定してください。",
-      "countSingular": "${rows.length}件のフォーム",
-      "countPlural": "${rows.length}件のフォーム",
+      "countSingular": "{count}件のフォーム",
+      "countPlural": "{count}件のフォーム",
       "newForm": "+ 新規フォーム",
       "emptyLabel": "フォームがまだありません",
       "column": {
@@ -7183,8 +7183,8 @@
       "eyebrow": "ナレッジ",
       "title": "ガイド",
       "configureSupabase": "Supabaseを設定してください。",
-      "subtitleSingular": "プロジェクト全体で${rows.length}件のガイド",
-      "subtitlePlural": "プロジェクト全体で${rows.length}件のガイド",
+      "subtitleSingular": "プロジェクト全体で{count}件のガイド",
+      "subtitlePlural": "プロジェクト全体で{count}件のガイド",
       "empty": {
         "title": "イベントガイドはまだありません",
         "openProjects": "プロジェクトを開く →"
@@ -7213,7 +7213,7 @@
         "failed": "失敗"
       },
       "errors": {
-        "rowPrefix": "行 ${e.row}"
+        "rowPrefix": "行 {row}"
       }
     },
     "inbox": {
@@ -7221,10 +7221,10 @@
       "title": "メッセージ",
       "configureSupabase": "Supabase を構成してください。",
       "conversationCount": {
-        "one": "${list.length} 件のスレッド",
-        "other": "${list.length} 件のスレッド"
+        "one": "{count} 件のスレッド",
+        "other": "{count} 件のスレッド"
       },
-      "unreadSuffix": "未読 ${unreadCount} 件",
+      "unreadSuffix": "未読 {count} 件",
       "empty": {
         "title": "スレッドがありません"
       },
@@ -7318,7 +7318,7 @@
     "knowledge": {
       "eyebrow": "ナレッジ",
       "edit": {
-        "title": "編集 · ${article.title}",
+        "title": "編集 · {title}",
         "crumb": "編集",
         "submit": "記事を保存",
         "fields": {
@@ -7354,12 +7354,12 @@
         "tagsLabel": "タグ"
       },
       "title": "ナレッジベース",
-      "subtitleTaggedOne": "「${sp.tag}」タグの記事 ${rows.length}件",
-      "subtitleOne": "記事 ${rows.length}件",
-      "subtitleMany": "記事 ${rows.length}件",
+      "subtitleTaggedOne": "「{tag}」タグの記事 1件",
+      "subtitleOne": "記事 1件",
+      "subtitleMany": "記事 {count}件",
       "newArticle": "+ 新規記事",
       "filterAll": "すべて",
-      "emptyTitleTagged": "「${sp.tag}」タグの記事はありません",
+      "emptyTitleTagged": "「{tag}」タグの記事はありません",
       "emptyTitle": "記事はまだありません",
       "createFirstArticle": "+ 最初の記事を作成"
     },
@@ -7368,9 +7368,9 @@
     },
     "leads": {
       "stageMover": {
-        "movedToast": "${next}に移動しました",
+        "movedToast": "{stage}に移動しました",
         "updating": "更新中…",
-        "moveTo": "${next}に移動"
+        "moveTo": "{stage}に移動"
       },
       "activity": {
         "eyebrow": "リード",
@@ -7386,7 +7386,7 @@
       },
       "edit": {
         "eyebrow": "リード",
-        "title": "${row.name}を編集",
+        "title": "{name}を編集",
         "fields": {
           "name": "氏名",
           "email": "メールアドレス",
@@ -7440,8 +7440,8 @@
       "configureSupabase": "Supabaseを設定してください。",
       "eyebrow": "セールス",
       "subtitle": {
-        "one": "${rows.length}件のリード",
-        "other": "${rows.length}件のリード"
+        "one": "{count}件のリード",
+        "other": "{count}件のリード"
       },
       "newLead": "+ 新規リード",
       "columns": {
@@ -7458,7 +7458,7 @@
         "edit": {
           "policyFallback": "保険証券",
           "eyebrow": "法務 · 保険",
-          "title": "${policyNo} を編集",
+          "title": "{policyNo} を編集",
           "submit": "変更を保存",
           "carrierLabel": "保険会社",
           "policyNoLabel": "証券番号",
@@ -7505,8 +7505,8 @@
         "title": "保険証券",
         "configureSupabase": "Supabase を設定してください。",
         "eyebrow": "法務",
-        "subtitleOne": "${rows.length} 件",
-        "subtitleOther": "${rows.length} 件",
+        "subtitleOne": "{count} 件",
+        "subtitleOther": "{count} 件",
         "newPolicy": "+ 新規証券",
         "emptyLabel": "保険証券はありません",
         "columns": {
@@ -7520,7 +7520,7 @@
       "ip": {
         "edit": {
           "eyebrow": "商標",
-          "title": "${row.mark} を編集",
+          "title": "{mark} を編集",
           "submit": "変更を保存",
           "mark": "標章",
           "jurisdiction": "管轄",
@@ -7587,8 +7587,8 @@
           "eyebrow": "ワークスペース",
           "title": "同意記録",
           "configureSupabase": "Supabase を設定してください。",
-          "subtitleOne": "${rows.length} 件",
-          "subtitleOther": "${rows.length} 件",
+          "subtitleOne": "{count} 件",
+          "subtitleOther": "{count} 件",
           "columns": {
             "purpose": "目的",
             "granted": "付与",
@@ -7614,7 +7614,7 @@
           "edit": {
             "fallbackTitle": "DSAR リクエスト",
             "eyebrow": "DSAR リクエスト",
-            "title": "${requesterEmail} を編集",
+            "title": "{name} を編集",
             "requesterEmailLabel": "申請者メール",
             "kindLabel": "種別",
             "statusLabel": "ステータス",
@@ -7646,8 +7646,8 @@
           "eyebrow": "法務 · プライバシー",
           "title": "DSAR リクエスト",
           "recordCount": {
-            "one": "${rows.length} 件",
-            "other": "${rows.length} 件"
+            "one": "{count} 件",
+            "other": "{count} 件"
           },
           "logRequest": "+ リクエストを記録",
           "emptyLabel": "DSAR リクエストはありません",
@@ -7665,7 +7665,7 @@
     "locations": {
       "edit": {
         "eyebrow": "ロケーション",
-        "title": "${row.name}を編集",
+        "title": "{name}を編集",
         "submit": "変更を保存",
         "fields": {
           "name": "名称",
@@ -7711,8 +7711,8 @@
       "configureSupabase": "Supabaseを設定してください。",
       "eyebrow": "ワーク",
       "subtitle": {
-        "one": "${rows.length}件のロケーション",
-        "other": "${rows.length}件のロケーション"
+        "one": "{count}件のロケーション",
+        "other": "{count}件のロケーション"
       },
       "add": "+ ロケーションを追加",
       "emptyLabel": "ロケーション未登録",
@@ -7758,7 +7758,7 @@
         "edit": {
           "fallbackTitle": "出荷",
           "eyebrow": "出荷",
-          "title": "${shipmentTitle}を編集",
+          "title": "{name}を編集",
           "fields": {
             "title": "タイトル",
             "number": "番号",
@@ -7816,7 +7816,7 @@
         "edit": {
           "fallbackName": "レートカード項目",
           "eyebrow": "レートカード項目",
-          "title": "${itemName}を編集",
+          "title": "{name}を編集",
           "name": "名称",
           "sku": "SKU",
           "description": "説明",
@@ -7846,8 +7846,8 @@
         "title": "レートカード項目",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ロジスティクス",
-        "subtitleOne": "${rows.length}件",
-        "subtitleOther": "${rows.length}件",
+        "subtitleOne": "{count}件",
+        "subtitleOther": "{count}件",
         "newRate": "+ 新規レート",
         "emptyLabel": "レートカード項目はまだありません",
         "columns": {
@@ -7880,8 +7880,8 @@
       },
       "title": "概要",
       "configureSupabase": "Supabaseを設定してください。",
-      "subtitleOne": "${rows.length}件の今後のマイルストーン",
-      "subtitleOther": "${rows.length}件の今後のマイルストーン",
+      "subtitleOne": "{count}件の今後のマイルストーン",
+      "subtitleOther": "{count}件の今後のマイルストーン",
       "metrics": {
         "onsales": "オンセール",
         "presales": "プレセール",
@@ -7909,7 +7909,7 @@
         },
         "edit": {
           "eyebrow": "マーケットプレイス・募集",
-          "title": "編集・${c.title}",
+          "title": "編集・{title}",
           "submit": "変更を保存",
           "fields": {
             "title": "タイトル",
@@ -7960,7 +7960,7 @@
             "statusLabel": "ステータス",
             "scoreInputLabel": "スコア (0-100)"
           },
-          "eyebrow": "募集・${call.title}",
+          "eyebrow": "募集・{title}",
           "title": "応募一覧",
           "emptyLabel": "まだ応募はありません",
           "col": {
@@ -8137,7 +8137,7 @@
             "reelLabel": "リール:",
             "proposedRateLabel": "提示レート:",
             "reviewerNotesHeading": "レビュアーメモ",
-            "scoreLine": "スコア: ${a.score}",
+            "scoreLine": "スコア: {score}",
             "moveApplicantHeading": "応募者を移動",
             "stageLabel": "ステージ",
             "scoreInputLabel": "スコア (0-100)",
@@ -8157,7 +8157,7 @@
         },
         "edit": {
           "eyebrow": "マーケットプレイス・求人",
-          "title": "編集・${p.title}",
+          "title": "編集・{title}",
           "fields": {
             "title": "タイトル",
             "description": "概要",
@@ -8292,7 +8292,7 @@
         },
         "edit": {
           "eyebrow": "マーケットプレイス・タレント",
-          "title": "編集・${talent.act_name}",
+          "title": "編集・{actName}",
           "actName": "アクト名",
           "tagline": "タグライン",
           "bio": "バイオ",
@@ -8391,7 +8391,7 @@
       "edit": {
         "fallbackName": "ミーティング",
         "eyebrow": "ミーティング",
-        "title": "${meetingName} を編集",
+        "title": "{name} を編集",
         "submit": "変更を保存",
         "fields": {
           "title": "タイトル",
@@ -8703,7 +8703,7 @@
         "edit": {
           "fallbackName": "代表団",
           "eyebrow": "代表団",
-          "title": "${delegationName}を編集",
+          "title": "{name}を編集",
           "fields": {
             "name": "名称",
             "code": "コード",
@@ -8785,8 +8785,8 @@
         "title": "エントリー",
         "configureSupabase": "Supabaseを設定してください。",
         "recordCount": {
-          "one": "${rows.length}件のレコード",
-          "other": "${rows.length}件のレコード"
+          "one": "{count}件のレコード",
+          "other": "{count}件のレコード"
         },
         "newEntry": "+ 新規エントリー",
         "emptyLabel": "参加者エントリーはありません",
@@ -8802,7 +8802,7 @@
         "edit": {
           "fallbackName": "ビザ案件",
           "eyebrow": "ビザ案件",
-          "title": "${personName}を編集",
+          "title": "{name}を編集",
           "personName": "氏名",
           "nationality": "国籍",
           "passportNo": "旅券番号",
@@ -8840,8 +8840,8 @@
         "eyebrowWorkspace": "ワークスペース",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "参加者",
-        "recordCountOne": "${rows.length}件のレコード",
-        "recordCountOther": "${rows.length}件のレコード",
+        "recordCountOne": "{count}件のレコード",
+        "recordCountOther": "{count}件のレコード",
         "newCase": "+ 新規案件",
         "emptyLabel": "ビザ案件はありません",
         "columnName": "氏名",
@@ -8940,8 +8940,8 @@
           "expiresOnLabel": "失効日"
         },
         "configureSupabase": "Supabaseを設定してください。",
-        "subtitleCertsTracked": "${rows.length}件の認証を管理中",
-        "subtitleExpiring": "${expiringSoon}件が60日以内に失効",
+        "subtitleCertsTracked": "{count}件の認証を管理中",
+        "subtitleExpiring": "{count}件が60日以内に失効",
         "addCredential": "+ 資格・証明を追加",
         "col": {
           "kind": "種別",
@@ -8950,7 +8950,7 @@
           "expires": "失効日"
         },
         "expired": "失効",
-        "daysShort": "${daysUntil}日"
+        "daysShort": "{count}日"
       },
       "documents": {
         "eyebrow": "メンバー",
@@ -9011,7 +9011,7 @@
       "crew": {
         "edit": {
           "eyebrow": "クルー",
-          "title": "${row.name}を編集",
+          "title": "{name}を編集",
           "fields": {
             "name": "氏名",
             "role": "役割",
@@ -9050,8 +9050,8 @@
         "title": "クルー",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "メンバー",
-        "subtitleSingular": "${rows.length}名のクルー",
-        "subtitlePlural": "${rows.length}名のクルー",
+        "subtitleSingular": "{count}名のクルー",
+        "subtitlePlural": "{count}名のクルー",
         "addCrew": "+ クルーを追加",
         "col": {
           "name": "氏名",
@@ -9079,7 +9079,7 @@
         "title": "招待",
         "subtitle": "保留中の組織招待",
         "inviteSomeone": "招待を送る",
-        "pendingHeading": "保留中 (${pending.length})",
+        "pendingHeading": "保留中 ({count})",
         "empty": {
           "title": "保留中の招待なし",
           "adminDescription": "上から招待を送って始めましょう。"
@@ -9260,8 +9260,8 @@
       "title": "ディレクトリ",
       "configureSupabase": "Supabaseを設定してください。",
       "eyebrow": "メンバー",
-      "subtitleOne": "${rows.length}名",
-      "subtitleOther": "${rows.length}名",
+      "subtitleOne": "{count}名",
+      "subtitleOther": "{count}名",
       "inviteMember": "+ メンバーを招待",
       "emptyLabel": "メンバーはまだいません",
       "columns": {
@@ -9344,7 +9344,7 @@
           "configureSupabase": "Supabaseを設定してください。",
           "editTeam": "チームを編集",
           "editTeamHintSuffix": " ハンドル。",
-          "membersCount": "メンバー (${members.length})",
+          "membersCount": "メンバー ({count})",
           "noMembersTitle": "メンバーはまだいません",
           "colMember": "メンバー",
           "colRole": "役割",
@@ -9617,7 +9617,7 @@
         "breadcrumb": "事前資格審査"
       },
       "purchaseOrders": {
-        "statusToast": "PO ${next.next}",
+        "statusToast": "PO {status}",
         "cancelledToast": "POをキャンセルしました",
         "title": "発注書",
         "checklist": {
@@ -9631,7 +9631,7 @@
         },
         "edit": {
           "eyebrow": "発注書",
-          "title": "${row.title} を編集",
+          "title": "{title} を編集",
           "submit": "変更を保存",
           "titleLabel": "タイトル",
           "numberLabel": "番号",
@@ -9668,7 +9668,7 @@
       "requisitions": {
         "edit": {
           "eyebrow": "購買依頼",
-          "title": "${row.title} を編集",
+          "title": "{title} を編集",
           "submit": "変更を保存",
           "fields": {
             "title": "タイトル",
@@ -9724,7 +9724,7 @@
         "title": "購買依頼",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "調達",
-        "subtitle": "${rows.length} 件の依頼",
+        "subtitle": "{count} 件の依頼",
         "newRequest": "+ 新規依頼",
         "emptyLabel": "購買依頼はありません",
         "col": {
@@ -9752,7 +9752,7 @@
         },
         "breadcrumb": "RFQ",
         "publish": {
-          "eyebrow": "調達 · ${r.title}",
+          "eyebrow": "調達 · {title}",
           "title": "RFQを公開",
           "subtitle": "パブリックマーケットプレイスに公開します。",
           "submit": "公開設定を更新",
@@ -9879,7 +9879,7 @@
         "requisitionPlural": "購買依頼",
         "activePoSingular": "アクティブPO",
         "activePoPlural": "アクティブPO",
-        "percentConverted": "${conversionRate}% 変換済み",
+        "percentConverted": "{pct}% 変換済み",
         "newRequisition": "+ 新規購買依頼",
         "metric": {
           "openRequisitions": "未処理の購買依頼",
@@ -9901,7 +9901,7 @@
       "vendors": {
         "edit": {
           "eyebrow": "ベンダー",
-          "title": "${row.name} を編集",
+          "title": "{name} を編集",
           "nameLabel": "名称",
           "categoryLabel": "カテゴリ",
           "contactEmailLabel": "連絡先メール",
@@ -10006,8 +10006,8 @@
         },
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "調達",
-        "subtitleOne": "${rows.length} 件のベンダー",
-        "subtitleOther": "${rows.length} 件のベンダー",
+        "subtitleOne": "{count} 件のベンダー",
+        "subtitleOther": "{count} 件のベンダー",
         "newVendor": "+ 新規ベンダー",
         "emptyLabel": "ベンダーはまだいません",
         "columns": {
@@ -10115,7 +10115,7 @@
           "eyebrow": "プロダクション",
           "title": "ディスパッチラン",
           "configureSupabase": "Supabaseを構成してください。",
-          "minutesLate": "${diffMin}分遅延",
+          "minutesLate": "{minutes}分遅延",
           "onTime": "オンタイム",
           "metric": {
             "passengers": "搭乗者",
@@ -10164,7 +10164,7 @@
       "equipment": {
         "edit": {
           "eyebrow": "機材",
-          "title": "${row.name}を編集",
+          "title": "{name}を編集",
           "submit": "変更を保存",
           "fields": {
             "name": "名称",
@@ -10183,7 +10183,7 @@
             "qr": "QR"
           },
           "notFound": "見つかりません。",
-          "markStatus": "${toTitle(to)}にマーク",
+          "markStatus": "{status}にマーク",
           "qr": "QR",
           "field": {
             "status": "ステータス",
@@ -10197,7 +10197,7 @@
             "title": "移動台帳",
             "system": "システム",
             "initial": "初期",
-            "by": "${who}による"
+            "by": "{who}による"
           },
           "lifecycle": "ライフサイクル",
           "retireRemove": "退役・削除"
@@ -10222,9 +10222,9 @@
           "eyebrow": "機材 · QRステッカー",
           "downloadPng": "PNGをダウンロード",
           "printHint": "印刷は⌘P",
-          "qrAlt": "${name}のQRコード",
-          "assetLabel": "アセット: ${assetTag}",
-          "serialLabel": "SN: ${serial}"
+          "qrAlt": "{name}のQRコード",
+          "assetLabel": "アセット: {assetTag}",
+          "serialLabel": "SN: {serial}"
         },
         "rentals": {
           "eyebrow": "機材",
@@ -10295,7 +10295,7 @@
         },
         "edit": {
           "eyebrow": "製作オーダー",
-          "title": "${row.title}を編集",
+          "title": "{title}を編集",
           "titleLabel": "タイトル",
           "descriptionLabel": "説明",
           "dueAtLabel": "期日"
@@ -10413,7 +10413,7 @@
         "title": "レンタル",
         "configureSupabase": "Supabaseを構成してください。",
         "eyebrow": "プロダクション",
-        "subtitle": "稼働中レンタル ${rows.length}件",
+        "subtitle": "稼働中レンタル {count}件",
         "newRental": "+ 新規レンタル",
         "emptyLabel": "稼働中のレンタルはありません",
         "columns": {
@@ -10437,12 +10437,12 @@
         "eyebrow": "プロダクション",
         "title": "ROS",
         "configureSupabase": "Supabaseを構成してください。",
-        "subtitleOne": "ショープランのキュー ${rows.length}件",
-        "subtitleOther": "ショープランのキュー ${rows.length}件",
+        "subtitleOne": "ショープランのキュー {count}件",
+        "subtitleOther": "ショープランのキュー {count}件",
         "addCue": "キューを追加",
         "empty": "キューはまだありません — 上から作成してください。",
-        "countOne": "キュー ${cues.length}件",
-        "countOther": "キュー ${cues.length}件",
+        "countOne": "キュー {count}件",
+        "countOther": "キュー {count}件",
         "col": {
           "time": "時刻",
           "lane": "レーン",
@@ -10541,7 +10541,7 @@
         "edit": {
           "fallbackName": "セレモニー",
           "eyebrow": "セレモニー",
-          "title": "${ceremonyName}を編集",
+          "title": "{name}を編集",
           "fields": {
             "title": "タイトル",
             "description": "説明",
@@ -10589,25 +10589,25 @@
       "portfolio": {
         "title": "ポートフォリオ健全性",
         "legend": {
-          "onTrack": "順調 ${counts.green}",
-          "watch": "要注視 ${counts.amber}",
-          "atRisk": "リスクあり ${counts.red}"
+          "onTrack": "順調 {count}",
+          "watch": "要注視 {count}",
+          "atRisk": "リスクあり {count}"
         },
         "schedule": {
           "noEnd": "終了日未設定",
-          "daysOver": "${-days}日超過",
+          "daysOver": "{days}日超過",
           "endsToday": "本日終了",
-          "daysLeft": "残り${days}日"
+          "daysLeft": "残り{days}日"
         }
       },
       "statusToggle": {
-        "markedToast": "${next}としてマークしました",
+        "markedToast": "{state}としてマークしました",
         "updating": "更新中…",
-        "markAction": "${next}としてマーク"
+        "markAction": "{state}としてマーク"
       },
       "advancing": {
         "transition": {
-          "movedToast": "${toTitle(to)}へ移動しました",
+          "movedToast": "{state}へ移動しました",
           "failedToast": "遷移に失敗しました"
         },
         "assignments": {
@@ -10746,7 +10746,7 @@
           "activity": {
             "title": "アクティビティ",
             "empty": "アクティビティの記録はありません。",
-            "by": "${actor}による"
+            "by": "{actor}による"
           },
           "system": "システム"
         }
@@ -10794,7 +10794,7 @@
       "crew": {
         "eyebrowFallback": "プロジェクト",
         "title": "クルー",
-        "subtitleOne": "${crew?.length ?? 0}名のロスター",
+        "subtitleOne": "{count}名のロスター",
         "breadcrumbProjects": "プロジェクト",
         "emptyTitle": "ロスターにクルーがいません",
         "columnName": "氏名",
@@ -10804,7 +10804,7 @@
       },
       "edit": {
         "eyebrow": "プロジェクト",
-        "title": "${row.name}を編集",
+        "title": "{name}を編集",
         "submit": "変更を保存",
         "fields": {
           "name": "名称",
@@ -10873,7 +10873,7 @@
           "expensesCommitted": "経費コミット済",
           "posCommitted": "POコミット済"
         },
-        "marginPctSentence": "本プロジェクトは入金売上に対し${marginPct}%のマージンです。",
+        "marginPctSentence": "本プロジェクトは入金売上に対し{pct}%のマージンです。",
         "budget": {
           "title": "予算枠",
           "open": "予算を開く →",
@@ -10998,11 +10998,11 @@
         "addingButton": "追加中",
         "addButton": "追加",
         "removedToast": "メンバーを削除しました",
-        "roleForAria": "${member.email}のロール",
+        "roleForAria": "{email}のロール",
         "leaveButton": "脱退",
         "removeButton": "削除",
         "title": "メンバー",
-        "subtitleOne": "${members.length}名のプロジェクトメンバー",
+        "subtitleOne": "{count}名のプロジェクトメンバー",
         "emptyTitle": "プロジェクトメンバーはいません",
         "colMember": "メンバー",
         "colRole": "ロール"
@@ -11137,7 +11137,7 @@
       "stagePlots": {
         "edit": {
           "eyebrow": "ステージプロット",
-          "title": "${row.name}を編集",
+          "title": "{name}を編集",
           "nameLabel": "名称",
           "widthLabel": "幅(フィート)",
           "depthLabel": "奥行(フィート)",
@@ -11235,7 +11235,7 @@
       },
       "title": "プロジェクト",
       "configureSupabase": "プロジェクトを読み込むにはSupabaseを設定してください。",
-      "totalCount": "${projects.length}件",
+      "totalCount": "{count}件",
       "newProject": "+ 新規プロジェクト",
       "emptyTitle": "プロジェクトはまだありません",
       "createFirst": "最初のプロジェクトを作成",
@@ -11259,7 +11259,7 @@
         "markApproved": "承認済みにする",
         "markSigned": "署名済みにする",
         "redraft": "再ドラフト",
-        "updatedToast": "提案書 ${transition.next}",
+        "updatedToast": "提案書 {status}",
         "updating": "更新中…"
       },
       "edit": {
@@ -11293,12 +11293,12 @@
         "blocksJson": "ブロック JSON",
         "save": "提案書を保存",
         "describe": {
-          "lineItems": "${count} 件の明細",
-          "signers": "${b.parties.length} 名の署名者",
-          "panels": "${b.panels.length} 枚のパネル",
-          "exclusions": "${b.items.length} 件の除外事項",
-          "items": "${b.items.length} 件の項目",
-          "terms": "${b.items.length} 件の条件"
+          "lineItems": "{count} 件の明細",
+          "signers": "{count} 名の署名者",
+          "panels": "{count} 枚のパネル",
+          "exclusions": "{count} 件の除外事項",
+          "items": "{count} 件の項目",
+          "terms": "{count} 件の条件"
         },
         "shareLink": {
           "copiedToast": "共有リンクをクリップボードにコピー",
@@ -11307,12 +11307,12 @@
           "generic": "+ 汎用リンク"
         },
         "eyebrow": "提案書",
-        "title": "編集 · ${proposal.title}",
+        "title": "編集 · {title}",
         "backToDetail": "詳細に戻る",
         "shareLinks": "共有リンク",
         "revoked": "失効",
         "active": "有効",
-        "viewsCount": "${l.view_count} 回閲覧"
+        "viewsCount": "{count} 回閲覧"
       },
       "detail": {
         "eyebrow": "提案書",
@@ -11345,13 +11345,13 @@
         "expires": "有効期限",
         "notes": "メモ / スコープ",
         "eyebrow": "セールス",
-        "prefilledFrom": "「${template.name}」から自動入力済み"
+        "prefilledFrom": "「{name}」から自動入力済み"
       },
       "title": "提案書",
       "configureSupabase": "Supabase を設定してください。",
       "eyebrow": "セールス",
-      "countOne": "${rows.length} 件の提案書",
-      "countOther": "${rows.length} 件の提案書",
+      "countOne": "{count} 件の提案書",
+      "countOther": "{count} 件の提案書",
       "newAction": "+ 新規提案書",
       "columns": {
         "title": "タイトル",
@@ -11365,7 +11365,7 @@
           "eyebrowSystem": "テンプレート · システム",
           "eyebrowOrg": "テンプレート · 組織",
           "useTemplate": "テンプレートを使用",
-          "skippedInvalid": "· ${invalid} 件スキップ(無効)"
+          "skippedInvalid": "· {count} 件スキップ(無効)"
         },
         "breadcrumb": {
           "templates": "テンプレート"
@@ -11453,7 +11453,7 @@
           "created": "作成日"
         },
         "openSuffix": "オープン",
-        "deleteConfirm": "「${r.name}」を削除しますか?",
+        "deleteConfirm": "「{name}」を削除しますか?",
         "createHeading": "リストを作成",
         "namePlaceholder": "MMW Day 1 Punch",
         "projectPlaceholder": "— プロジェクト —",
@@ -11483,7 +11483,7 @@
       "eyebrow": "オペレーション",
       "title": "パンチリスト",
       "configureSupabase": "Supabaseを構成してください。",
-      "titleFiltered": "パンチ · ${activeList.name}",
+      "titleFiltered": "パンチ · {name}",
       "subtitleFiltered": "1件のリストにフィルタ済み。全項目を表示するにはクリアしてください。",
       "subtitle": "ショーレディチェックリスト。",
       "clearFilter": "フィルタをクリア",
@@ -11804,8 +11804,8 @@
         "title": "環境イベント",
         "configureSupabase": "Supabase を設定してください。",
         "eyebrow": "セーフティ",
-        "subtitleOne": "${rows.length} 件",
-        "subtitleMany": "${rows.length} 件",
+        "subtitleOne": "{count} 件",
+        "subtitleMany": "{count} 件",
         "logEvent": "+ イベントを記録",
         "emptyLabel": "環境イベントはありません",
         "columns": {
@@ -11877,7 +11877,7 @@
         "edit": {
           "fallbackName": "重大インシデント",
           "eyebrow": "重大インシデント",
-          "title": "${incidentName} を編集",
+          "title": "{name} を編集",
           "nameLabel": "名称",
           "statusLabel": "ステータス",
           "openedAtLabel": "開始日時",
@@ -11983,7 +11983,7 @@
           "venueSingular": "会場",
           "venuePlural": "会場",
           "haveMedicalCapacityRecorded": "が医療キャパシティを登録済み",
-          "coverageSuffix": "${coveragePct}% カバー率",
+          "coverageSuffix": "{pct}% カバー率",
           "newPlan": "+ 新規計画",
           "venuesHeading": "医療対応が必要な会場",
           "col": {
@@ -12000,7 +12000,7 @@
       },
       "osha": {
         "eyebrow": "セーフティ",
-        "title": "OSHA 300 — ${year}",
+        "title": "OSHA 300 — {year}",
         "subtitle": "29 CFR 1904 に基づく OSHA 記録対象インシデント。",
         "exportCsv": "300/300A/301 をエクスポート(CSV)",
         "metrics": {
@@ -12011,7 +12011,7 @@
         "fatalityRecord": "死亡記録",
         "fatalityRecords": "死亡記録",
         "fatalityNotice": "OSHA への通報は 8 時間以内に必要です。",
-        "emptyLabel": "${year} の記録対象インシデントはありません。",
+        "emptyLabel": "{year} の記録対象インシデントはありません。",
         "columns": {
           "date": "日付",
           "description": "内容",
@@ -12042,7 +12042,7 @@
       "baselines": {
         "gantt": {
           "projectFallback": "プロジェクト",
-          "title": "${b.name} · ガント",
+          "title": "{name} · ガント",
           "backToBaseline": "← ベースラインに戻る",
           "lookahead": "先読み",
           "lookaheadFull": "全期間",
@@ -12117,8 +12117,8 @@
       "configureSupabase": "Supabaseを設定してください。",
       "eyebrow": "オペレーション",
       "masterTitle": "マスタースケジュール",
-      "subtitleOne": "${rows.length}件のイベント",
-      "subtitleOther": "${rows.length}件のイベント",
+      "subtitleOne": "{count}件のイベント",
+      "subtitleOther": "{count}件のイベント",
       "exportIcs": ".icsをエクスポート",
       "newEvent": "+ 新規イベント",
       "col": {
@@ -12366,7 +12366,7 @@
         "edit": {
           "configureSupabase": "Supabaseを構成してください。",
           "eyebrow": "カタログ",
-          "title": "${item.name}を編集",
+          "title": "{name}を編集",
           "kindLabel": "種別",
           "kind": {
             "credential": "クレデンシャル",
@@ -12593,7 +12593,7 @@
         "summary": {
           "inserted": "挿入済み",
           "skipped": "スキップ",
-          "rowLabel": "行 ${row.rowIdx}"
+          "rowLabel": "行 {idx}"
         },
         "eyebrow": "設定",
         "title": "インポート",
@@ -13088,7 +13088,7 @@
       },
       "edit": {
         "eyebrow": "クリエイティブ · サイトプラン",
-        "title": "編集 · ${sp.atom_id ?? sp.code}",
+        "title": "編集 · {ref}",
         "subtitle": "Atom-IDセグメントは作成後に変更できません。",
         "breadcrumbs": {
           "sitePlans": "サイトプラン"
@@ -13123,11 +13123,11 @@
           "venue": "会場",
           "notes": "備考"
         },
-        "tierOption": "ティア ${tier}"
+        "tierOption": "ティア {tier}"
       },
       "markup": {
         "eyebrow": "図面",
-        "title": "${sheet.code} · マークアップ",
+        "title": "{code} · マークアップ",
         "backToSheet": "← シートに戻る",
         "noPdfAndSet": "を設定し、",
         "noPdfToKey": "をそのキーに設定してください。",
@@ -13147,11 +13147,11 @@
         "eyebrow": "クリエイティブ · サイトプラン",
         "breadcrumb": "サイトプラン",
         "noAtomId": "— atom idなし —",
-        "revPrefix": "改訂 ${sp.revision_letter}",
+        "revPrefix": "改訂 {rev}",
         "sheet": "シート",
         "xpmsClass": "XPMSクラス",
         "tier": "ティア",
-        "tierValue": "ティア ${sp.tier_primary}",
+        "tierValue": "ティア {tier}",
         "sheetType": "シート種別",
         "code": "コード",
         "shell": "シェル",
@@ -13373,7 +13373,7 @@
           "stamp": "スタンプ",
           "stampNotes": "スタンプ備考"
         },
-        "stampRound": "スタンプ ラウンド #${current.round}",
+        "stampRound": "スタンプ ラウンド #{round}",
         "stamp": {
           "approved": "承認",
           "approvedWithComments": "コメント付き承認",
@@ -13541,7 +13541,7 @@
           "source": "ソース",
           "method": "算定方法"
         },
-        "scopeLabel": "Scope ${r.scope}"
+        "scopeLabel": "Scope {scope}"
       },
       "title": "サステナビリティ"
     },
@@ -13595,14 +13595,14 @@
         "emptyTitle": "タスクはまだありません"
       },
       "status": {
-        "movedToast": "${next} に移動しました",
-        "advanceLabel": "→ ${toTitle(next)}",
+        "movedToast": "{status} に移動しました",
+        "advanceLabel": "→ {next}",
         "blockedToast": "ブロックしました",
         "block": "ブロック"
       },
       "edit": {
         "eyebrow": "タスク",
-        "title": "${row.title} を編集",
+        "title": "{title} を編集",
         "submit": "変更を保存",
         "fields": {
           "title": "タイトル",
@@ -13613,7 +13613,7 @@
         }
       },
       "detail": {
-        "eyebrow": "P${task.priority} タスク",
+        "eyebrow": "P{priority} タスク",
         "dueLabel": "期限",
         "status": "ステータス",
         "priority": "優先度",
@@ -13674,7 +13674,7 @@
       "empty": {
         "title": "テンプレートはまだありません"
       },
-      "useTemplateAria": "テンプレート ${tpl.name} を使用",
+      "useTemplateAria": "テンプレート {name} を使用",
       "officialBadge": "公式"
     },
     "transmittals": {
@@ -13755,7 +13755,7 @@
         "edit": {
           "fallbackName": "到着・出発マニフェスト",
           "eyebrow": "到着・出発マニフェスト",
-          "title": "${flightRef} を編集",
+          "title": "{name} を編集",
           "kindLabel": "種別",
           "statusLabel": "ステータス",
           "flightRefLabel": "フライト番号",
@@ -13789,8 +13789,8 @@
         "title": "A&D マニフェスト",
         "configureSupabase": "Supabase を設定してください。",
         "eyebrow": "輸送",
-        "subtitleOne": "${rows.length} 件",
-        "subtitleMany": "${rows.length} 件",
+        "subtitleOne": "{count} 件",
+        "subtitleMany": "{count} 件",
         "newManifest": "+ 新規マニフェスト",
         "emptyLabel": "A&D マニフェストはまだありません",
         "columns": {
@@ -13804,7 +13804,7 @@
       "dispatch": {
         "edit": {
           "eyebrow": "ディスパッチ便",
-          "titleNamed": "${vehicleRef} を編集",
+          "titleNamed": "{name} を編集",
           "titleFallback": "ディスパッチ便を編集",
           "vehicleRefLabel": "車両番号",
           "fleetLabel": "フリート",
@@ -13900,7 +13900,7 @@
         "empty": {
           "title": "ワークフォース シャトルの予定はまだありません"
         },
-        "runCountOne": "${dayRuns.length} 便",
+        "runCountOne": "{count} 便",
         "col": {
           "depart": "出発",
           "arrive": "到着",
@@ -13917,9 +13917,9 @@
         "eyebrow": "会場",
         "title": "ビルド",
         "configureSupabase": "Supabaseを構成してください。",
-        "titleWithName": "${venue.name} — ビルド",
-        "subtitleOne": "ログ${logs.length}件",
-        "subtitleOther": "ログ${logs.length}件",
+        "titleWithName": "{name} — ビルド",
+        "subtitleOne": "ログ{count}件",
+        "subtitleOther": "ログ{count}件",
         "breadcrumbVenues": "会場",
         "breadcrumbBuild": "ビルド",
         "metric": {
@@ -13928,12 +13928,12 @@
           "daysWithBlockers": "障害発生日数"
         },
         "blockerSrLabel": "障害: ",
-        "tradesCount": "${l.trades_onsite}職種"
+        "tradesCount": "{count}職種"
       },
       "certifications": {
         "eyebrow": "会場",
         "title": "認証",
-        "headerTitle": "${venue.name} — 認証",
+        "headerTitle": "{name} — 認証",
         "metrics": {
           "active": "有効",
           "expiring": "失効間近(≤30日)",
@@ -13956,7 +13956,7 @@
         "eyebrow": "会場",
         "title": "クローズアウト",
         "configureSupabase": "Supabaseを構成してください。",
-        "headerTitle": "${venue.name} — クローズアウト",
+        "headerTitle": "{name} — クローズアウト",
         "metric": {
           "complete": "完了",
           "open": "未対応",
@@ -13977,7 +13977,7 @@
         "eyebrow": "会場",
         "title": "デザイン",
         "configureSupabase": "Supabaseを構成してください。",
-        "headerTitle": "${venue.name} — デザイン",
+        "headerTitle": "{name} — デザイン",
         "metric": {
           "approved": "承認済み",
           "inReview": "レビュー中",
@@ -14000,7 +14000,7 @@
       "edit": {
         "fallbackName": "会場",
         "eyebrow": "会場",
-        "title": "${venueName}を編集",
+        "title": "{name}を編集",
         "fields": {
           "name": "名称",
           "kind": "種別",
@@ -14013,9 +14013,9 @@
         "eyebrow": "会場",
         "title": "引渡し",
         "configureSupabase": "Supabaseを構成してください。",
-        "titleWithVenue": "${venue.name} — 引渡し",
-        "subtitleOne": "コミッショニング項目${items.length}件",
-        "subtitleOther": "コミッショニング項目${items.length}件",
+        "titleWithVenue": "{name} — 引渡し",
+        "subtitleOne": "コミッショニング項目{count}件",
+        "subtitleOther": "コミッショニング項目{count}件",
         "breadcrumb": "引渡し",
         "metrics": {
           "passed": "合格",
@@ -14067,8 +14067,8 @@
         "eyebrow": "会場",
         "title": "会場運営計画",
         "configureSupabase": "Supabaseを構成してください。",
-        "headerTitle": "${venue.name} — 会場運営計画",
-        "headerSubtitle": "セクション承認 ${approved}/${total}",
+        "headerTitle": "{name} — 会場運営計画",
+        "headerSubtitle": "セクション承認 {approved}/{total}",
         "breadcrumb": "VOP",
         "metrics": {
           "approved": "承認済み",
@@ -14082,7 +14082,7 @@
         "eyebrow": "会場",
         "title": "ゾーン",
         "configureSupabase": "Supabaseを構成してください。",
-        "titleWithName": "${venue.name} — ゾーン",
+        "titleWithName": "{name} — ゾーン",
         "breadcrumbVenues": "会場",
         "breadcrumbZones": "ゾーン",
         "emptyLabel": "ゾーンはまだありません",
@@ -14191,7 +14191,7 @@
         "edit": {
           "fallbackName": "業務委託",
           "eyebrow": "業務委託",
-          "title": "${displayName} を編集",
+          "title": "{name} を編集",
           "submit": "変更を保存",
           "fullName": "氏名",
           "email": "メール",
@@ -14220,8 +14220,8 @@
         "title": "業務委託",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ワークフォース",
-        "subtitleOne": "${rows.length} 件のレコード",
-        "subtitleOther": "${rows.length} 件のレコード",
+        "subtitleOne": "{count} 件のレコード",
+        "subtitleOther": "{count} 件のレコード",
         "addAction": "+ 業務委託を追加",
         "emptyLabel": "業務委託はいません",
         "columnName": "氏名",
@@ -14269,8 +14269,8 @@
         "eyebrow": "ワークフォース",
         "title": "コース",
         "configureSupabase": "Supabaseを設定してください。",
-        "subtitleOne": "${rows.length} 件のコース",
-        "subtitleOther": "${rows.length} 件のコース",
+        "subtitleOne": "{count} 件のコース",
+        "subtitleOther": "{count} 件のコース",
         "newCourse": "+ 新規コース",
         "emptyLabel": "コースはまだありません",
         "columns": {
@@ -14310,8 +14310,8 @@
         "title": "配置",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ワークフォース",
-        "subtitleOne": "${rows.length} 件のレコード",
-        "subtitleMany": "${rows.length} 件のレコード",
+        "subtitleOne": "{count} 件のレコード",
+        "subtitleMany": "{count} 件のレコード",
         "planDeployment": "+ 配置を計画",
         "emptyLabel": "計画中の配置はありません",
         "columns": {
@@ -14461,7 +14461,7 @@
         "unspecified": "未指定",
         "deploymentSingular": "件の配置",
         "deploymentPlural": "件の配置",
-        "filledSuffix": "${fillRate}% 充足",
+        "filledSuffix": "{pct}% 充足",
         "openDeployment": "配置を開く",
         "plannedFte": "計画FTE",
         "actualFte": "実績FTE",
@@ -14500,7 +14500,7 @@
         "edit": {
           "fallbackName": "ロースター",
           "eyebrow": "ロースター",
-          "title": "${rosterName} を編集",
+          "title": "{name} を編集",
           "submit": "変更を保存",
           "fields": {
             "name": "名称",
@@ -14542,8 +14542,8 @@
         "title": "ロースター",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ワークフォース",
-        "subtitleOne": "${rows.length} 件のレコード",
-        "subtitleOther": "${rows.length} 件のレコード",
+        "subtitleOne": "{count} 件のレコード",
+        "subtitleOther": "{count} 件のレコード",
         "newRoster": "+ 新規ロースター",
         "emptyLabel": "ロースターはありません",
         "col": {
@@ -14624,8 +14624,8 @@
         "title": "有給スタッフ",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ワークフォース",
-        "subtitleOne": "${rows.length} 件のレコード",
-        "subtitleMany": "${rows.length} 件のレコード",
+        "subtitleOne": "{count} 件のレコード",
+        "subtitleMany": "{count} 件のレコード",
         "addStaff": "+ スタッフを追加",
         "emptyLabel": "有給スタッフはいません",
         "columnName": "氏名",
@@ -14662,7 +14662,7 @@
         "edit": {
           "fallbackTitle": "トレーニングコース",
           "eyebrow": "トレーニングコース",
-          "title": "${courseTitle} を編集",
+          "title": "{title} を編集",
           "submit": "変更を保存",
           "fields": {
             "title": "タイトル",
@@ -14691,7 +14691,7 @@
           "issued": "発行日",
           "expires": "有効期限"
         },
-        "daysShort": "${days}日"
+        "daysShort": "{days}日"
       },
       "uniforms": {
         "eyebrow": "ワークフォース",
@@ -14716,7 +14716,7 @@
         "edit": {
           "fallbackName": "ボランティア",
           "eyebrow": "ボランティア",
-          "title": "${displayName} を編集",
+          "title": "{name} を編集",
           "submit": "変更を保存",
           "fullName": "氏名",
           "email": "メール",
@@ -14745,8 +14745,8 @@
         "title": "ボランティア",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ワークフォース",
-        "subtitleOne": "${rows.length} 件のレコード",
-        "subtitleOther": "${rows.length} 件のレコード",
+        "subtitleOne": "{count} 件のレコード",
+        "subtitleOther": "{count} 件のレコード",
         "addVolunteer": "+ ボランティアを追加",
         "emptyLabel": "ボランティアはいません",
         "columns": {
@@ -14761,7 +14761,7 @@
         "title": "アトム",
         "configureSupabase": "Supabaseを構成してください。",
         "eyebrow": "XPMS · アトミック・プロダクション・システム",
-        "loadError": "アトムを読み込めませんでした：${error.message}",
+        "loadError": "アトムを読み込めませんでした：{message}",
         "emptyLabel": "アトムはまだありません",
         "columns": {
           "identifier": "識別子",
@@ -14832,7 +14832,7 @@
       },
       "tiers": {
         "title": "6段階の体験ティア",
-        "pairedWith": "${tier.pair}と組み合わせ",
+        "pairedWith": "{pair}と組み合わせ",
         "openLink": "ティア構成を開く →",
         "configureSupabase": "Supabaseを構成してください。",
         "eyebrow": "XPMS · 6段階の体験ティア",
@@ -14857,8 +14857,8 @@
         "title": "プロビナンス・グラフ",
         "configureSupabase": "Supabaseを構成してください。",
         "eyebrow": "XPMS · プロビナンス",
-        "subtitleOne": "${edges.length}件のエッジ",
-        "subtitleOther": "${edges.length}件のエッジ",
+        "subtitleOne": "{count}件のエッジ",
+        "subtitleOther": "{count}件のエッジ",
         "emptyLabel": "プロビナンス・エッジはまだありません",
         "columns": {
           "edge": "エッジ",
@@ -15032,7 +15032,7 @@
     "error": {
       "title": "問題が発生しました",
       "fallbackMessage": "アカウント画面の読み込み中にエラーが発生しました。",
-      "ref": "参照: ${error.digest}",
+      "ref": "参照: {digest}",
       "backToYourSpace": "マイスペースに戻る"
     },
     "inbox": {
@@ -15094,7 +15094,7 @@
         "ariaLabel": "受信トレイのフィルター"
       },
       "unreadCount": {
-        "ariaLabel": "未読 ${unreadCount} 件"
+        "ariaLabel": "未読 {count} 件"
       },
       "actions": {
         "restore": "受信トレイに戻す",
@@ -15372,7 +15372,7 @@
         "email": "メール",
         "push": "プッシュ"
       },
-      "matches": "${r.match_count} 件一致"
+      "matches": "{count} 件一致"
     },
     "security": {
       "passkeys": {
@@ -15394,7 +15394,7 @@
           "title": "パスキーはまだありません"
         },
         "unnamedDevice": "名称未設定のデバイス",
-        "lastUsed": "· 最終使用 ${formatRelative(c.last_used_at)}",
+        "lastUsed": "· 最終使用 {when}",
         "removeAria": "パスキーを削除",
         "addButton": "パスキーを追加",
         "title": "パスキー"
@@ -15529,7 +15529,7 @@
     "tickets": {
       "title": "マイチケット",
       "configureSupabase": "Supabaseを設定してください。",
-      "subtitle": "${session.email} に発行されたチケット",
+      "subtitle": "{email} に発行されたチケット",
       "empty": "チケットはまだありません",
       "columns": {
         "code": "コード",
@@ -15557,7 +15557,7 @@
   "notifications": {
     "allCaughtUp": "すべて確認済みです。",
     "bellAria": "通知",
-    "bellAriaUnread": "通知 — 未読 ${unread} 件",
+    "bellAriaUnread": "通知 — 未読 {count} 件",
     "markAllRead": "すべて既読にする",
     "markAllReadAria": "すべて既読にする",
     "title": "通知",
@@ -15589,7 +15589,7 @@
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ポータル · 申請",
         "subtitle": {
-          "one": "${changes.length}件の申請 · ${open}件未処理"
+          "one": "1件の申請 · {open}件未処理"
         },
         "breadcrumbs": {
           "portal": "ポータル",
@@ -15608,8 +15608,8 @@
           "title": "あなたの申請",
           "empty": "カード変更申請はまだありません。"
         },
-        "filed": "提出 ${fmtDate(c.created_at)}",
-        "decided": "決定 ${fmtDate(c.decided_at)}"
+        "filed": "提出 {date}",
+        "decided": "決定 {date}"
       },
       "title": "申請",
       "headerTitle": "アクレディテーション",
@@ -15641,7 +15641,7 @@
         },
         "toast": {
           "submitted": "提出物を送信しました",
-          "applied": "${tpl.name} を適用しました"
+          "applied": "{name} を適用しました"
         },
         "form": {
           "newDeliverable": "新規提出物",
@@ -15785,7 +15785,7 @@
           "heading": "あなたのリクエスト"
         },
         "row": {
-          "opened": "起票 ${fmt(r.opened_at)}"
+          "opened": "起票 {date}"
         },
         "badge": {
           "sla": "SLA"
@@ -15845,7 +15845,7 @@
         },
         "passportLabel": "パスポート",
         "letterOnFile": "レター保管済み",
-        "updated": "更新 ${fmtDate(c.updated_at)}",
+        "updated": "更新 {date}",
         "footer": {
           "suffix": "案件が進展しない場合は。"
         }
@@ -16071,7 +16071,7 @@
           "title": "クリエイティブ成果物を判断する",
           "openRound": "ラウンドを開始",
           "empty": "改訂ラウンドはまだありません。",
-          "roundLabel": "ラウンド ${r.round_num}"
+          "roundLabel": "ラウンド {num}"
         },
         "title": "提案",
         "subtitle": "レビュー、承認、電子署名",
@@ -16088,7 +16088,7 @@
         "eyebrow": "承認",
         "title": "署名、サインオフ、判断",
         "empty": "記録された承認はありません。",
-        "dueAt": "期日 ${timeAgo(a.due_at)}"
+        "dueAt": "期日 {when}"
       },
       "changeOrders": {
         "decision": {
@@ -16129,9 +16129,9 @@
       },
       "revisions": {
         "backToList": "← 改訂ラウンド一覧へ",
-        "round": "ラウンド ${round.round_num}",
-        "opened": "開始 ${timeAgo(round.created_at)}",
-        "decidedSuffix": "・判断 ${timeAgo(round.decided_at)}",
+        "round": "ラウンド {num}",
+        "opened": "開始 {when}",
+        "decidedSuffix": "・判断 {when}",
         "proofsHeader": "このラウンドの校正",
         "noProofs": "校正はまだアップロードされていません。",
         "previewPlaceholder": "プレビュープレースホルダー",
@@ -16148,8 +16148,8 @@
         },
         "item": {
           "untitled": "無題",
-          "due": "期限 ${fmt.date(d.deadline)}",
-          "issued": "発行 ${fmt.date(d.issued_at)}"
+          "due": "期限 {date}",
+          "issued": "発行 {date}"
         },
         "footer": {
           "lead": "ご不明点はプロダクションコーディネーターまで。連絡先は",
@@ -16162,8 +16162,8 @@
         "empty": {
           "title": "コールシート待ち"
         },
-        "upcomingOne": "予定コール ${events.length}件",
-        "upcomingMany": "予定コール ${events.length}件",
+        "upcomingOne": "予定コール {count}件",
+        "upcomingMany": "予定コール {count}件",
         "downloadPdf": "PDFをダウンロード"
       },
       "index": {
@@ -16240,7 +16240,7 @@
         "title": "案件",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ポータル · デリゲーション",
-        "subtitleOne": "${cases.length}件 · ${open}件 オープン",
+        "subtitleOne": "{count}件 · {open}件 オープン",
         "breadcrumb": {
           "portal": "ポータル",
           "delegation": "デリゲーション",
@@ -16370,7 +16370,7 @@
         "title": "輸送",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ポータル · デリゲーション",
-        "subtitleOne": "${runs.length}便 · ${upcoming}便 稼働中",
+        "subtitleOne": "1便 · {upcoming}便 稼働中",
         "crumbPortal": "ポータル",
         "crumbDelegation": "デリゲーション",
         "crumbTransport": "輸送",
@@ -16584,8 +16584,8 @@
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ポータル · メディア",
         "subtitle": {
-          "one": "${items.length}件のドキュメント",
-          "other": "${items.length}件のドキュメント"
+          "one": "{count}件のドキュメント",
+          "other": "{count}件のドキュメント"
         },
         "crumb": {
           "portal": "ポータル",
@@ -16710,7 +16710,7 @@
     "overview": {
       "title": "プロジェクト概要",
       "subtitle": "続行するポータルをお選びください",
-      "openPortal": "${toTitle(persona)}ポータルを開く →"
+      "openPortal": "{persona}ポータルを開く →"
     },
     "producer": {
       "approvals": {
@@ -16720,8 +16720,8 @@
           "title": "承認案件はありません"
         },
         "proposalFallback": "提案書",
-        "signedAt": "署名日 ${fmt.date(a.signed_at)}",
-        "dueAt": "期限 ${fmt.date(a.due_at)}",
+        "signedAt": "署名日 {date}",
+        "dueAt": "期限 {date}",
         "tile": {
           "label": "承認",
           "desc": "保留中の決裁"
@@ -16750,7 +16750,7 @@
         "noProject": {
           "title": "プロジェクトはありません"
         },
-        "subtitle": "${project.name} のヘッドラインロールアップ。",
+        "subtitle": "{projectName} のヘッドラインロールアップ。",
         "metrics": {
           "budget": "予算",
           "spent": "支出",
@@ -16813,7 +16813,7 @@
           "title": "保留中の案件はありません"
         },
         "proposalFallback": "提案書",
-        "due": "期限 ${fmt.date(a.due_at)}"
+        "due": "期限 {date}"
       },
       "coPro": {
         "title": "共同プロモートの取り分",
@@ -16946,7 +16946,7 @@
           "submitting": "ロック解除中…",
           "submit": "ガイドのロックを解除",
           "title": "アクセスコードを入力",
-          "tierLine": "ティア ${tier} · ${personaLabel}"
+          "tierLine": "ティア {tier} · {personaLabel}"
         },
         "persona": {
           "staff": "制作",
@@ -16965,7 +16965,7 @@
         "configureSupabase": "Supabaseを設定してください。",
         "railTitle": "ポータル",
         "title": "受信トレイ",
-        "unreadOf": "${rows.length}件中${unread}件が未読です。",
+        "unreadOf": "{total}件中{unread}件が未読です。",
         "empty": {
           "title": "通知はありません"
         },
@@ -16973,7 +16973,7 @@
         "new": "新規"
       },
       "layout": {
-        "srPortalLink": "${data.name ?? slug}ポータル"
+        "srPortalLink": "{name}ポータル"
       },
       "messages": {
         "title": "メッセージ",
@@ -17008,7 +17008,7 @@
           "label": "クルー",
           "desc": "コールシート、勤怠、アドバンシング"
         },
-        "subtitle": "/${slug}での連携方法を選択してください"
+        "subtitle": "/{slug}での連携方法を選択してください"
       },
       "config": {
         "supabase": "Supabaseを設定してください。"
@@ -17022,7 +17022,7 @@
           "title": "完了済み"
         },
         "overdue": "期限超過",
-        "duePrefix": "期限 ${fmt.date(it.due)}"
+        "duePrefix": "期限 {date}"
       }
     },
     "sponsor": {
@@ -17242,8 +17242,8 @@
         },
         "titleShort": "トレーニング",
         "subtitle": {
-          "one": "${courses.length}件の必須コース",
-          "other": "${courses.length}件の必須コース"
+          "one": "{count}件の必須コース",
+          "other": "{count}件の必須コース"
         },
         "metric": {
           "requiredCourses": "必須コース",
@@ -17295,7 +17295,7 @@
         "metricStatus": "ステータス",
         "statusConfirmed": "確定",
         "empty": "今後の行程に予定はありません。",
-        "until": "${fmtTime(e.ends_at)}まで"
+        "until": "{time}まで"
       },
       "eyebrow": "ポータル",
       "title": "VIP",
@@ -17472,7 +17472,7 @@
         "title": "ユニフォーム",
         "configureSupabase": "Supabaseを設定してください。",
         "eyebrow": "ポータル · ボランティア",
-        "subtitle": "${member.full_name}の支給管理",
+        "subtitle": "{name}の支給管理",
         "signInRequired": "サインインが必要です",
         "crumbPortal": "ポータル",
         "crumbVolunteer": "ボランティア",
@@ -17507,7 +17507,7 @@
   "rootError": {
     "eyebrow": "エラー",
     "fallback": "予期しないエラーが発生しました。",
-    "ref": "ref: ${error.digest}",
+    "ref": "ref: {digest}",
     "title": "問題が発生しました"
   },
   "shortcuts": {
@@ -17517,7 +17517,7 @@
     "hintDismiss": "閉じる。",
     "hintOpen": "どこからでも開く。",
     "hintPrefix": "押す",
-    "noMatch": "「${query}」に一致するショートカットはありません。",
+    "noMatch": "「{query}」に一致するショートカットはありません。",
     "title": "キーボードショートカット"
   },
   "ui": {

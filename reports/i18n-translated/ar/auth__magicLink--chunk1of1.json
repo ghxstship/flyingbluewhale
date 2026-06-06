@@ -1,0 +1,5 @@
+{
+  "auth.magicLink.expiredTitle": "انتهت صلاحية الرابط أو غير صالح",
+  "auth.magicLink.expiredSubtitle": "تعذّر علينا تسجيل دخولك عبر هذا الرابط.",
+  "auth.magicLink.sendAnother": "أرسل رابطًا سحريًا آخر"
+}

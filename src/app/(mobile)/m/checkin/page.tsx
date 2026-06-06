@@ -74,9 +74,9 @@ export default async function CheckinPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
-        {t("m.checkIn.eyebrow", undefined, "Field")}
+        {t("m.checkInSummary.eyebrow", undefined, "Field")}
       </div>
-      <h1 className="mt-1 text-2xl font-semibold">{t("m.checkIn.title", undefined, "Check-in Summary")}</h1>
+      <h1 className="mt-1 text-2xl font-semibold">{t("m.checkInSummary.title", undefined, "Check-in Summary")}</h1>
       <p className="mt-1 text-xs text-[var(--text-muted)]">
         {t("m.checkIn.subtitlePrefix", undefined, "Today's clock activity, breaks, and meal credits. Use")}{" "}
         <a className="underline" href="/m/clock">

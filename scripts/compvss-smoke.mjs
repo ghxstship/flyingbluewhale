@@ -72,7 +72,7 @@ const ROUTES = [
   { path: "/m/docs/new", label: "Upload doc form", expect: "upload document" },
   { path: "/m/directory", label: "Directory", expect: "directory" },
   { path: "/m/onboarding", label: "Onboarding", expect: "onboarding" },
-  { path: "/m/advances", label: "My advancing (mobile)", expect: "my advancing" },
+  { path: "/m/advances", label: "My advancing (mobile)", expect: "my assignments" },
   { path: "/m/settings/notifications", label: "Notif prefs", expect: "notifications" },
   // Existing field-ops surfaces
   { path: "/m/clock", label: "Time clock", expect: "check-in" },

@@ -112,10 +112,39 @@ export const XPMS_TIERS: { id: XpmsTier; num: string; label: string; pair: XpmsT
   { id: "theatrical", num: "06", label: "Theatrical", pair: "experiential" },
 ];
 
-export type XpmsPhase = "discovery" | "concept" | "development" | "advance" | "build" | "show" | "strike" | "wrap";
+/**
+ * XPMS v08 8-Gate Lifecycle (locked Jun 2026) — the project macro-phase axis.
+ * Mirrors the `public.xpms_phase` enum (`projects.xpms_phase`) and
+ * `budgets.xpms_phase` (migration 0070). Order is the sequential macro arc.
+ *
+ * Distinct from the atom-level Eight Production Phases (`XPMS_ATOM_PHASES`
+ * below / `public.xpms_atom_phase`) — see migration
+ * 20260605170000_xpms_phase_v08_alignment.
+ */
+export type XpmsPhase = "Discovery" | "Design" | "Advance" | "Procurement" | "Build" | "Install" | "Operate" | "Close";
 
-/** Whitepaper §9 — Eight Production Phases. */
+/** v08 8-Gate Lifecycle — the project macro-phase. */
 export const XPMS_PHASES: { id: XpmsPhase; num: number; label: string; platform: string }[] = [
+  { id: "Discovery", num: 1, label: "Discovery", platform: "ATLVS" },
+  { id: "Design", num: 2, label: "Design", platform: "ATLVS" },
+  { id: "Advance", num: 3, label: "Advance", platform: "ATLVS · COMPVSS" },
+  { id: "Procurement", num: 4, label: "Procurement", platform: "ATLVS" },
+  { id: "Build", num: 5, label: "Build", platform: "COMPVSS" },
+  { id: "Install", num: 6, label: "Install", platform: "COMPVSS" },
+  { id: "Operate", num: 7, label: "Operate", platform: "COMPVSS · GVTEWAY" },
+  { id: "Close", num: 8, label: "Close", platform: "ATLVS" },
+];
+
+/**
+ * Whitepaper §9 — Eight Production Phases. The atom-level temporal axis,
+ * mirroring the `public.xpms_atom_phase` enum (`xpms_atoms.phase`). Every XTC
+ * atom carries one of these. Kept distinct from the v08 project macro-phase
+ * (`XPMS_PHASES`) per migration 20260605170000.
+ */
+export type XpmsAtomPhase = "discovery" | "concept" | "development" | "advance" | "build" | "show" | "strike" | "wrap";
+
+/** Whitepaper §9 — Eight Production Phases (atom-level axis). */
+export const XPMS_ATOM_PHASES: { id: XpmsAtomPhase; num: number; label: string; platform: string }[] = [
   { id: "discovery", num: 1, label: "Discovery", platform: "ATLVS" },
   { id: "concept", num: 2, label: "Concept", platform: "ATLVS" },
   { id: "development", num: 3, label: "Development", platform: "ATLVS" },

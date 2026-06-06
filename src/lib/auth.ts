@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { apiError } from "./api";
 import { createClient } from "./supabase/server";
 import { hasSupabase } from "./env";
+import { urlFor } from "./urls";
 import type { Persona, PlatformRole, ProjectRole, Tier } from "./supabase/types";
 
 const DEMO_ORG_SLUG = "demo";
@@ -161,9 +162,17 @@ function guestSession(userId: string, email: string): Session {
   };
 }
 
-export async function requireSession(redirectTo = "/login"): Promise<Session> {
+export async function requireSession(redirectTo?: string): Promise<Session> {
   const s = await getSession();
-  if (!s) redirect(redirectTo);
+  // Default redirect goes through urlFor("auth", "/login") so subdomain shells
+  // (app.atlvs.pro, gvteway.atlvs.pro, compvss.atlvs.pro) bounce to the apex
+  // where the auth shell actually lives. A bare "/login" here 404s on every
+  // subdomain — that's the bug this default exists to prevent. Callers passing
+  // a relative path get the same treatment.
+  if (!s) {
+    const target = redirectTo ?? urlFor("auth", "/login");
+    redirect(target);
+  }
   return s;
 }
 

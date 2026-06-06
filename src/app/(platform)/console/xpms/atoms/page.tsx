@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
-import { XPMS_CLASS_BY_CODE, XPMS_PHASES, formatXtcCode } from "@/lib/xpms";
+import { XPMS_CLASS_BY_CODE, XPMS_ATOM_PHASES, formatXtcCode } from "@/lib/xpms";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ type AtomRow = {
   unit: string | null;
 };
 
-const PHASE_NUM = Object.fromEntries(XPMS_PHASES.map((p) => [p.id, p.num]));
+const PHASE_NUM = Object.fromEntries(XPMS_ATOM_PHASES.map((p) => [p.id, p.num]));
 
 export default async function AtomsPage() {
   const { t } = await getRequestT();

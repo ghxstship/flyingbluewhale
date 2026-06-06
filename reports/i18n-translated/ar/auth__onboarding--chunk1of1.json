@@ -1,0 +1,10 @@
+{
+  "auth.onboarding.title": "اختر اسم مساحة العمل",
+  "auth.onboarding.workspaceName": "اسم مساحة العمل",
+  "auth.onboarding.workspaceNamePlaceholder": "Acme Productions",
+  "auth.onboarding.workspaceNameHint": "يمكنك تغيير الاسم لاحقًا من الإعدادات.",
+  "auth.onboarding.submitting": "جارٍ إنشاء مساحة العمل",
+  "auth.onboarding.submit": "إنشاء مساحة العمل",
+  "auth.onboarding.ownerNotePrefix": "ستصبح المالك. يمكنك دعوة زملاء الفريق من",
+  "auth.onboarding.ownerNoteSuffix": "بمجرد دخولك."
+}

@@ -52,7 +52,8 @@ const DocDeliverableType = z.enum([
   "custom",
 ]);
 
-const XpmsPhaseKey = z.enum(["discovery", "concept", "development", "advance", "build", "show", "strike", "wrap"]);
+// XPMS v08 8-Gate Lifecycle — mirrors public.xpms_phase (migration 20260605170000).
+const XpmsPhaseKey = z.enum(["Discovery", "Design", "Advance", "Procurement", "Build", "Install", "Operate", "Close"]);
 
 const PhaseDeliverable = z
   .object({

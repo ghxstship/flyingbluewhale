@@ -2794,6 +2794,7 @@ export type Database = {
           occurred_at: string
           operation: string | null
           org_id: string
+          pii_redacted_at: string | null
           request_id: string | null
           subsystem_origin: string
           target_id: string | null
@@ -2815,6 +2816,7 @@ export type Database = {
           occurred_at?: string
           operation?: string | null
           org_id: string
+          pii_redacted_at?: string | null
           request_id?: string | null
           subsystem_origin?: string
           target_id?: string | null
@@ -2836,6 +2838,7 @@ export type Database = {
           occurred_at?: string
           operation?: string | null
           org_id?: string
+          pii_redacted_at?: string | null
           request_id?: string | null
           subsystem_origin?: string
           target_id?: string | null
@@ -3562,6 +3565,7 @@ export type Database = {
           project_id: string | null
           quantity: number | null
           rate_cents: number | null
+          scope: string
           spent_cents: number
           team: string | null
           tier: Database["public"]["Enums"]["budget_tier"] | null
@@ -3601,6 +3605,7 @@ export type Database = {
           project_id?: string | null
           quantity?: number | null
           rate_cents?: number | null
+          scope?: string
           spent_cents?: number
           team?: string | null
           tier?: Database["public"]["Enums"]["budget_tier"] | null
@@ -3640,6 +3645,7 @@ export type Database = {
           project_id?: string | null
           quantity?: number | null
           rate_cents?: number | null
+          scope?: string
           spent_cents?: number
           team?: string | null
           tier?: Database["public"]["Enums"]["budget_tier"] | null
@@ -6852,54 +6858,89 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          depends_on_cue_id: string | null
           description: string | null
+          done_when: string | null
           duration_seconds: number | null
           event_id: string | null
           id: string
+          kit_id: string | null
           label: string
           lane: string
           org_id: string
           owner_id: string | null
+          owner_role: string | null
+          persona: string | null
           scheduled_at: string
+          scope: string
           status: string
           updated_at: string
+          xpms_phase: string | null
         }
         Insert: {
           created_at?: string
           created_by?: string | null
+          depends_on_cue_id?: string | null
           description?: string | null
+          done_when?: string | null
           duration_seconds?: number | null
           event_id?: string | null
           id?: string
+          kit_id?: string | null
           label: string
           lane?: string
           org_id: string
           owner_id?: string | null
+          owner_role?: string | null
+          persona?: string | null
           scheduled_at: string
+          scope?: string
           status?: string
           updated_at?: string
+          xpms_phase?: string | null
         }
         Update: {
           created_at?: string
           created_by?: string | null
+          depends_on_cue_id?: string | null
           description?: string | null
+          done_when?: string | null
           duration_seconds?: number | null
           event_id?: string | null
           id?: string
+          kit_id?: string | null
           label?: string
           lane?: string
           org_id?: string
           owner_id?: string | null
+          owner_role?: string | null
+          persona?: string | null
           scheduled_at?: string
+          scope?: string
           status?: string
           updated_at?: string
+          xpms_phase?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "cues_depends_on_cue_id_fkey"
+            columns: ["depends_on_cue_id"]
+            isOneToOne: false
+            referencedRelation: "cues"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "cues_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cues_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "event_kits"
             referencedColumns: ["id"]
           },
           {
@@ -7831,6 +7872,7 @@ export type Database = {
           rendered_xlsx_path: string | null
           reviewed_at: string | null
           reviewed_by: string | null
+          scope: string
           submitted_at: string | null
           submitted_by: string | null
           title: string | null
@@ -7858,6 +7900,7 @@ export type Database = {
           rendered_xlsx_path?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          scope?: string
           submitted_at?: string | null
           submitted_by?: string | null
           title?: string | null
@@ -7885,6 +7928,7 @@ export type Database = {
           rendered_xlsx_path?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
+          scope?: string
           submitted_at?: string | null
           submitted_by?: string | null
           title?: string | null
@@ -8873,6 +8917,87 @@ export type Database = {
           },
         ]
       }
+      event_kits: {
+        Row: {
+          atom_namespace: string | null
+          budget_band_high_cents: number | null
+          budget_band_low_cents: number | null
+          created_at: string
+          created_by: string | null
+          generated_from: string | null
+          id: string
+          kit_scale: string
+          kit_state: string
+          kit_version: string
+          name: string
+          org_id: string
+          params: Json
+          project_id: string | null
+          scope: string
+          updated_at: string
+          venue_address: string | null
+          venue_name: string | null
+          xpms_tier_default: Database["public"]["Enums"]["budget_tier"] | null
+        }
+        Insert: {
+          atom_namespace?: string | null
+          budget_band_high_cents?: number | null
+          budget_band_low_cents?: number | null
+          created_at?: string
+          created_by?: string | null
+          generated_from?: string | null
+          id?: string
+          kit_scale: string
+          kit_state?: string
+          kit_version?: string
+          name: string
+          org_id: string
+          params?: Json
+          project_id?: string | null
+          scope?: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+          xpms_tier_default?: Database["public"]["Enums"]["budget_tier"] | null
+        }
+        Update: {
+          atom_namespace?: string | null
+          budget_band_high_cents?: number | null
+          budget_band_low_cents?: number | null
+          created_at?: string
+          created_by?: string | null
+          generated_from?: string | null
+          id?: string
+          kit_scale?: string
+          kit_state?: string
+          kit_version?: string
+          name?: string
+          org_id?: string
+          params?: Json
+          project_id?: string | null
+          scope?: string
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+          xpms_tier_default?: Database["public"]["Enums"]["budget_tier"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_kits_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_kits_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_milestones: {
         Row: {
           created_at: string
@@ -9172,6 +9297,7 @@ export type Database = {
           payment_date: string | null
           project_id: string | null
           receipt_path: string | null
+          receipt_state: Database["public"]["Enums"]["expense_status"] | null
           spent_at: string
           status: Database["public"]["Enums"]["expense_status"]
           submitter_id: string
@@ -9208,6 +9334,7 @@ export type Database = {
           payment_date?: string | null
           project_id?: string | null
           receipt_path?: string | null
+          receipt_state?: Database["public"]["Enums"]["expense_status"] | null
           spent_at: string
           status?: Database["public"]["Enums"]["expense_status"]
           submitter_id: string
@@ -9244,6 +9371,7 @@ export type Database = {
           payment_date?: string | null
           project_id?: string | null
           receipt_path?: string | null
+          receipt_state?: Database["public"]["Enums"]["expense_status"] | null
           spent_at?: string
           status?: Database["public"]["Enums"]["expense_status"]
           submitter_id?: string
@@ -12742,6 +12870,485 @@ export type Database = {
         }
         Relationships: []
       }
+      kit_lines: {
+        Row: {
+          atom_id: string | null
+          catalog_item_id: string | null
+          class: string | null
+          created_at: string
+          department: string | null
+          description: string | null
+          discipline: Database["public"]["Enums"]["budget_discipline"] | null
+          estimate_cents: number | null
+          id: string
+          item: string
+          kit_id: string
+          line_type: Database["public"]["Enums"]["budget_line_type"]
+          org_id: string
+          quantity: number | null
+          rate_cents: number | null
+          scope: string
+          sort_order: number
+          team: string | null
+          tier: Database["public"]["Enums"]["budget_tier"] | null
+          touchpoint_id: string | null
+          updated_at: string
+          urid: string | null
+          vendor: string | null
+          xpms_phase: string | null
+          xyz: Database["public"]["Enums"]["budget_xyz"] | null
+          zone_id: string | null
+        }
+        Insert: {
+          atom_id?: string | null
+          catalog_item_id?: string | null
+          class?: string | null
+          created_at?: string
+          department?: string | null
+          description?: string | null
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
+          estimate_cents?: number | null
+          id?: string
+          item: string
+          kit_id: string
+          line_type?: Database["public"]["Enums"]["budget_line_type"]
+          org_id: string
+          quantity?: number | null
+          rate_cents?: number | null
+          scope?: string
+          sort_order?: number
+          team?: string | null
+          tier?: Database["public"]["Enums"]["budget_tier"] | null
+          touchpoint_id?: string | null
+          updated_at?: string
+          urid?: string | null
+          vendor?: string | null
+          xpms_phase?: string | null
+          xyz?: Database["public"]["Enums"]["budget_xyz"] | null
+          zone_id?: string | null
+        }
+        Update: {
+          atom_id?: string | null
+          catalog_item_id?: string | null
+          class?: string | null
+          created_at?: string
+          department?: string | null
+          description?: string | null
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
+          estimate_cents?: number | null
+          id?: string
+          item?: string
+          kit_id?: string
+          line_type?: Database["public"]["Enums"]["budget_line_type"]
+          org_id?: string
+          quantity?: number | null
+          rate_cents?: number | null
+          scope?: string
+          sort_order?: number
+          team?: string | null
+          tier?: Database["public"]["Enums"]["budget_tier"] | null
+          touchpoint_id?: string | null
+          updated_at?: string
+          urid?: string | null
+          vendor?: string | null
+          xpms_phase?: string | null
+          xyz?: Database["public"]["Enums"]["budget_xyz"] | null
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_lines_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "master_catalog_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_lines_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "v_catalog_inventory"
+            referencedColumns: ["catalog_item_id"]
+          },
+          {
+            foreignKeyName: "kit_lines_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "event_kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_lines_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_lines_touchpoint_id_fkey"
+            columns: ["touchpoint_id"]
+            isOneToOne: false
+            referencedRelation: "kit_touchpoints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_lines_urid_fkey"
+            columns: ["urid"]
+            isOneToOne: false
+            referencedRelation: "xpms_registry"
+            referencedColumns: ["urid"]
+          },
+          {
+            foreignKeyName: "kit_lines_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "kit_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kit_options: {
+        Row: {
+          active: boolean
+          catalog_item_id: string | null
+          code: string
+          cost_delta_cents: number
+          created_at: string
+          department: string | null
+          depends_on: string[]
+          description: string | null
+          discipline: Database["public"]["Enums"]["budget_discipline"] | null
+          id: string
+          lead_time_days: number | null
+          name: string
+          option_type: string
+          org_id: string
+          package_id: string | null
+          scope: string
+          sense: string | null
+          updated_at: string
+          urid: string | null
+          xpms_phase: string | null
+          zone_ref: string | null
+        }
+        Insert: {
+          active?: boolean
+          catalog_item_id?: string | null
+          code: string
+          cost_delta_cents?: number
+          created_at?: string
+          department?: string | null
+          depends_on?: string[]
+          description?: string | null
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
+          id?: string
+          lead_time_days?: number | null
+          name: string
+          option_type: string
+          org_id: string
+          package_id?: string | null
+          scope?: string
+          sense?: string | null
+          updated_at?: string
+          urid?: string | null
+          xpms_phase?: string | null
+          zone_ref?: string | null
+        }
+        Update: {
+          active?: boolean
+          catalog_item_id?: string | null
+          code?: string
+          cost_delta_cents?: number
+          created_at?: string
+          department?: string | null
+          depends_on?: string[]
+          description?: string | null
+          discipline?: Database["public"]["Enums"]["budget_discipline"] | null
+          id?: string
+          lead_time_days?: number | null
+          name?: string
+          option_type?: string
+          org_id?: string
+          package_id?: string | null
+          scope?: string
+          sense?: string | null
+          updated_at?: string
+          urid?: string | null
+          xpms_phase?: string | null
+          zone_ref?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_options_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "master_catalog_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_options_catalog_item_id_fkey"
+            columns: ["catalog_item_id"]
+            isOneToOne: false
+            referencedRelation: "v_catalog_inventory"
+            referencedColumns: ["catalog_item_id"]
+          },
+          {
+            foreignKeyName: "kit_options_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_options_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "kit_packages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_options_urid_fkey"
+            columns: ["urid"]
+            isOneToOne: false
+            referencedRelation: "xpms_registry"
+            referencedColumns: ["urid"]
+          },
+        ]
+      }
+      kit_packages: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          kit_scale: string
+          name: string
+          org_id: string
+          scope: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          kit_scale: string
+          name: string
+          org_id: string
+          scope?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          kit_scale?: string
+          name?: string
+          org_id?: string
+          scope?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_packages_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kit_phase_gates: {
+        Row: {
+          created_at: string
+          exit_checklist: Json
+          gate_state: string
+          id: string
+          key_deliverables: Json
+          kit_id: string
+          objective: string | null
+          org_id: string
+          owner_role: string | null
+          scope: string
+          sort_order: number
+          updated_at: string
+          xpms_phase: string
+        }
+        Insert: {
+          created_at?: string
+          exit_checklist?: Json
+          gate_state?: string
+          id?: string
+          key_deliverables?: Json
+          kit_id: string
+          objective?: string | null
+          org_id: string
+          owner_role?: string | null
+          scope?: string
+          sort_order?: number
+          updated_at?: string
+          xpms_phase: string
+        }
+        Update: {
+          created_at?: string
+          exit_checklist?: Json
+          gate_state?: string
+          id?: string
+          key_deliverables?: Json
+          kit_id?: string
+          objective?: string | null
+          org_id?: string
+          owner_role?: string | null
+          scope?: string
+          sort_order?: number
+          updated_at?: string
+          xpms_phase?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_phase_gates_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "event_kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_phase_gates_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kit_touchpoints: {
+        Row: {
+          created_at: string
+          delivering_element: string | null
+          design_intent: string
+          id: string
+          kit_id: string
+          org_id: string
+          scope: string
+          sense: string
+          sort_order: number
+          zone_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          delivering_element?: string | null
+          design_intent: string
+          id?: string
+          kit_id: string
+          org_id: string
+          scope?: string
+          sense: string
+          sort_order?: number
+          zone_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          delivering_element?: string | null
+          design_intent?: string
+          id?: string
+          kit_id?: string
+          org_id?: string
+          scope?: string
+          sense?: string
+          sort_order?: number
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_touchpoints_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "event_kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_touchpoints_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_touchpoints_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "kit_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kit_zones: {
+        Row: {
+          av_notes: string | null
+          capacity: number | null
+          created_at: string
+          dimensions: string | null
+          id: string
+          kit_id: string
+          loadin_notes: string | null
+          name: string
+          org_id: string
+          power_notes: string | null
+          scope: string
+          sort_order: number
+          zone_code: string
+        }
+        Insert: {
+          av_notes?: string | null
+          capacity?: number | null
+          created_at?: string
+          dimensions?: string | null
+          id?: string
+          kit_id: string
+          loadin_notes?: string | null
+          name: string
+          org_id: string
+          power_notes?: string | null
+          scope?: string
+          sort_order?: number
+          zone_code: string
+        }
+        Update: {
+          av_notes?: string | null
+          capacity?: number | null
+          created_at?: string
+          dimensions?: string | null
+          id?: string
+          kit_id?: string
+          loadin_notes?: string | null
+          name?: string
+          org_id?: string
+          power_notes?: string | null
+          scope?: string
+          sort_order?: number
+          zone_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kit_zones_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "event_kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kit_zones_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       kpi_definitions: {
         Row: {
           created_at: string
@@ -13347,6 +13954,7 @@ export type Database = {
           kind: Database["public"]["Enums"]["catalog_kind"]
           name: string
           org_id: string
+          scope: string
           supplier_id: string | null
           unit_cost_cents: number | null
           updated_at: string
@@ -13363,6 +13971,7 @@ export type Database = {
           kind: Database["public"]["Enums"]["catalog_kind"]
           name: string
           org_id: string
+          scope?: string
           supplier_id?: string | null
           unit_cost_cents?: number | null
           updated_at?: string
@@ -13379,6 +13988,7 @@ export type Database = {
           kind?: Database["public"]["Enums"]["catalog_kind"]
           name?: string
           org_id?: string
+          scope?: string
           supplier_id?: string | null
           unit_cost_cents?: number | null
           updated_at?: string
@@ -19747,15 +20357,19 @@ export type Database = {
         Row: {
           amount_cents: number
           contract_id: string | null
+          contractor_name: string | null
           created_at: string
           created_by: string | null
           currency: string
           deleted_at: string | null
           id: string
+          notes: string | null
           number: string
           org_id: string
+          po_kind: string
           project_id: string | null
           requisition_id: string | null
+          role_title: string | null
           state: Database["public"]["Enums"]["upo_state"]
           status: Database["public"]["Enums"]["po_status"]
           title: string
@@ -19765,15 +20379,19 @@ export type Database = {
         Insert: {
           amount_cents?: number
           contract_id?: string | null
+          contractor_name?: string | null
           created_at?: string
           created_by?: string | null
           currency?: string
           deleted_at?: string | null
           id?: string
+          notes?: string | null
           number: string
           org_id: string
+          po_kind?: string
           project_id?: string | null
           requisition_id?: string | null
+          role_title?: string | null
           state?: Database["public"]["Enums"]["upo_state"]
           status?: Database["public"]["Enums"]["po_status"]
           title: string
@@ -19783,15 +20401,19 @@ export type Database = {
         Update: {
           amount_cents?: number
           contract_id?: string | null
+          contractor_name?: string | null
           created_at?: string
           created_by?: string | null
           currency?: string
           deleted_at?: string | null
           id?: string
+          notes?: string | null
           number?: string
           org_id?: string
+          po_kind?: string
           project_id?: string | null
           requisition_id?: string | null
+          role_title?: string | null
           state?: Database["public"]["Enums"]["upo_state"]
           status?: Database["public"]["Enums"]["po_status"]
           title?: string
@@ -19849,6 +20471,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      push_send_failures: {
+        Row: {
+          attempt: number
+          created_at: string
+          id: string
+          last_error: string | null
+          last_status: number | null
+          max_attempts: number
+          next_attempt_at: string
+          payload: Json
+          subscription_id: string
+          user_id: string
+        }
+        Insert: {
+          attempt?: number
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_status?: number | null
+          max_attempts?: number
+          next_attempt_at?: string
+          payload: Json
+          subscription_id: string
+          user_id: string
+        }
+        Update: {
+          attempt?: number
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_status?: number | null
+          max_attempts?: number
+          next_attempt_at?: string
+          payload?: Json
+          subscription_id?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       push_subscriptions: {
         Row: {
@@ -29999,6 +30660,33 @@ export type Database = {
           },
         ]
       }
+      webhook_events: {
+        Row: {
+          action_key: string
+          event_id: string
+          id: string
+          payload: Json | null
+          processed_at: string
+          provider: string
+        }
+        Insert: {
+          action_key: string
+          event_id: string
+          id?: string
+          payload?: Json | null
+          processed_at?: string
+          provider: string
+        }
+        Update: {
+          action_key?: string
+          event_id?: string
+          id?: string
+          payload?: Json | null
+          processed_at?: string
+          provider?: string
+        }
+        Relationships: []
+      }
       wip_snapshots: {
         Row: {
           approved_change_orders: number
@@ -31074,6 +31762,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      xpms_registry: {
+        Row: {
+          created_at: string
+          default_discipline: string | null
+          department: string
+          id: string
+          level: string
+          notes: string | null
+          scope: string
+          team: string | null
+          urid: string
+        }
+        Insert: {
+          created_at?: string
+          default_discipline?: string | null
+          department: string
+          id?: string
+          level: string
+          notes?: string | null
+          scope?: string
+          team?: string | null
+          urid: string
+        }
+        Update: {
+          created_at?: string
+          default_discipline?: string | null
+          department?: string
+          id?: string
+          level?: string
+          notes?: string | null
+          scope?: string
+          team?: string | null
+          urid?: string
+        }
+        Relationships: []
       }
       xpms_variance_ledger: {
         Row: {
@@ -33134,6 +33858,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      audit_log_pii_pending_count: {
+        Args: { p_max_age_days?: number }
+        Returns: number
+      }
       auth_team_ids: { Args: never; Returns: string[] }
       can_record: {
         Args: { p_id: string; p_op: string; p_table: string }
@@ -35140,14 +35868,14 @@ export type Database = {
         | "produces"
       xpms_geo_scope: "local" | "regional" | "national" | "international"
       xpms_phase:
-        | "discovery"
-        | "concept"
-        | "development"
-        | "advance"
-        | "build"
-        | "show"
-        | "strike"
-        | "wrap"
+        | "Discovery"
+        | "Design"
+        | "Advance"
+        | "Procurement"
+        | "Build"
+        | "Install"
+        | "Operate"
+        | "Close"
       xpms_production_style:
         | "editorial"
         | "documentary"
@@ -36292,14 +37020,14 @@ export const Constants = {
       ],
       xpms_geo_scope: ["local", "regional", "national", "international"],
       xpms_phase: [
-        "discovery",
-        "concept",
-        "development",
-        "advance",
-        "build",
-        "show",
-        "strike",
-        "wrap",
+        "Discovery",
+        "Design",
+        "Advance",
+        "Procurement",
+        "Build",
+        "Install",
+        "Operate",
+        "Close",
       ],
       xpms_production_style: [
         "editorial",

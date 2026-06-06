@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { XPMS_PHASES } from "@/lib/xpms";
 
 export const dynamic = "force-dynamic";
 
@@ -27,19 +28,9 @@ type Project = {
   end_date: string | null;
 };
 
-// Sequential macro-arc per LDP. Earlier phases first.
-const PHASE_ORDER = [
-  "discovery",
-  "concept",
-  "engineering",
-  "pre_production",
-  "fabrication",
-  "logistics",
-  "install",
-  "show",
-  "strike",
-  "wrap",
-];
+// Sequential macro-arc per LDP — the XPMS v08 8-gate lifecycle, in order.
+// Mirrors projects.xpms_phase (migration 20260605170000).
+const PHASE_ORDER = XPMS_PHASES.map((p) => p.id);
 
 export default async function ProducerPortfolio({ params }: { params: Promise<{ slug: string }> }) {
   const { t } = await getRequestT();

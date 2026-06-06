@@ -177,7 +177,17 @@ export type ProjectMember = {
   updated_at: string;
 };
 
-export type XpmsPhaseEnum = "discovery" | "concept" | "development" | "advance" | "build" | "show" | "strike" | "wrap";
+// Mirrors public.xpms_phase — the XPMS v08 8-Gate Lifecycle (migration
+// 20260605170000). Project macro-phase axis.
+export type XpmsPhaseEnum =
+  | "Discovery"
+  | "Design"
+  | "Advance"
+  | "Procurement"
+  | "Build"
+  | "Install"
+  | "Operate"
+  | "Close";
 export type GeographicScope = "local" | "regional" | "national" | "international";
 export type TourStructure = "single_stop" | "multi_stop_sequential" | "simultaneous_multi_city";
 export type ProductionStyle = "editorial" | "documentary" | "narrative" | "spectacle" | "intimate" | "brutalist";

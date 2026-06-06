@@ -47,13 +47,30 @@ export function interpolate(template: string, vars?: Record<string, string | num
  * staleness.
  */
 const __missingKeyOnce = new Set<string>();
+
+// A catalog value is only usable if it doesn't carry the JS template-literal
+// placeholder syntax `${…}`. Some machine-generated catalog entries captured
+// the call-site fallback verbatim (e.g. "Mark ${next}", "${days}d left",
+// "${projects.length} Total"). Our interpolator only resolves `{name}` braces,
+// so a `${…}` value would leak the raw literal to the UI (or strand a stray
+// `$`). Treat those as "missing" so lookup falls through to the next catalog
+// and ultimately the call-site `fallback` arg — which is the real JS template
+// literal, already evaluated to the correct string by the time it reaches t().
+function usableCatalogValue(raw: string | undefined): raw is string {
+  return raw !== undefined && !raw.includes("${");
+}
+
 export function makeT(messages: Messages, fallbacks: Messages[] = []) {
   return function t(key: string, vars?: Record<string, string | number>, fallback?: string): string {
     let raw = getByPath(messages, key);
-    if (raw === undefined) {
+    if (!usableCatalogValue(raw)) {
+      raw = undefined;
       for (const fb of fallbacks) {
-        raw = getByPath(fb, key);
-        if (raw !== undefined) break;
+        const v = getByPath(fb, key);
+        if (usableCatalogValue(v)) {
+          raw = v;
+          break;
+        }
       }
     }
     if (raw === undefined) {

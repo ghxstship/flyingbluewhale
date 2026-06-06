@@ -1,0 +1,9 @@
+{
+  "auth.mfa.recoveryCode": "رمز الاسترداد",
+  "auth.mfa.recoveryHint": "أدخل أحد رموز الاسترداد التي حفظتها عند التسجيل.",
+  "auth.mfa.authenticatorCode": "رمز المُصادِق",
+  "auth.mfa.submitting": "جارٍ التحقق",
+  "auth.mfa.submit": "تحقق",
+  "auth.mfa.useAuthenticator": "استخدم رمز المُصادِق",
+  "auth.mfa.useRecovery": "استخدم رمز استرداد"
+}

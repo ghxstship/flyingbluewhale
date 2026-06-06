@@ -74,9 +74,9 @@
     "send": "Envoyer",
     "time": {
       "justNow": "à l'instant",
-      "minutesShort": "${min} min",
-      "hoursShort": "${hr} h",
-      "daysShort": "${day} j"
+      "minutesShort": "{n} min",
+      "hoursShort": "{n} h",
+      "daysShort": "{n} j"
     },
     "tryAgain": "Réessayer",
     "untitled": "Sans titre",
@@ -112,8 +112,8 @@
     "foo": {
       "bar": "Foo Bar"
     },
-    "pin": "Épingler ${itemLabel}",
-    "unpin": "Détacher ${itemLabel}"
+    "pin": "Épingler {name}",
+    "unpin": "Détacher {name}"
   },
   "marketing": {
     "header": {
@@ -3362,7 +3362,7 @@
     },
     "error": {
       "title": "Erreur de connexion",
-      "ref": "Réf : ${error.digest}"
+      "ref": "Réf : {digest}"
     },
     "mfa": {
       "recoveryCode": "Code de récupération",
@@ -3388,7 +3388,7 @@
     },
     "sso": {
       "errorTitle": "Impossible de lancer le SSO",
-      "errorSubtitle": "Impossible de vous rediriger vers ${provider}.",
+      "errorSubtitle": "Impossible de vous rediriger vers {provider}.",
       "noRedirect": "Aucune URL de redirection renvoyée."
     }
   },
@@ -3669,7 +3669,7 @@
       "blocks": {
         "edit": {
           "eyebrow": "Hébergement",
-          "title": "Modifier ${row.name}",
+          "title": "Modifier {name}",
           "name": "Nom",
           "property": "Établissement",
           "city": "Ville",
@@ -3703,8 +3703,8 @@
         "title": "Blocs de Groupe",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Hébergement",
-        "subtitleOne": "${rows.length} bloc",
-        "subtitleOther": "${rows.length} blocs",
+        "subtitleOne": "{count} bloc",
+        "subtitleOther": "{count} blocs",
         "newBlock": "+ Nouveau Bloc",
         "emptyLabel": "Aucun bloc de chambres pour l'instant",
         "columns": {
@@ -3764,7 +3764,7 @@
         "edit": {
           "fallbackKind": "Modification d'accréditation",
           "eyebrow": "Modification d'Accréditation",
-          "title": "Modifier ${kindValue}",
+          "title": "Modifier {kind}",
           "kindLabel": "Type",
           "statusLabel": "Statut",
           "noteLabel": "Note"
@@ -3921,8 +3921,8 @@
         "eyebrow": "Agence",
         "title": "Roster",
         "configureSupabase": "Configurer Supabase.",
-        "subtitleOne": "${rows.length} artiste actif",
-        "subtitleOther": "${rows.length} artistes actifs",
+        "subtitleOne": "{count} artiste actif",
+        "subtitleOther": "{count} artistes actifs",
         "emptyLabel": "Aucun roster pour l'instant",
         "column": {
           "act": "Act",
@@ -4042,7 +4042,7 @@
           "title": "Historique des exécutions",
           "configureSupabase": "Configurer Supabase.",
           "countOne": "1 exécution",
-          "countOther": "${runs.length} exécutions",
+          "countOther": "{count} exécutions",
           "crumb": {
             "automations": "Automatisations",
             "runs": "Exécutions"
@@ -4073,9 +4073,9 @@
           "triggerWebhook": "Webhook",
           "triggerEvent": "Événement"
         },
-        "relativeMinutes": "il y a ${min} min",
-        "relativeHours": "il y a ${hr} h",
-        "relativeDays": "il y a ${days} j",
+        "relativeMinutes": "il y a {value} min",
+        "relativeHours": "il y a {value} h",
+        "relativeDays": "il y a {value} j",
         "title": "Automatisations",
         "subtitleAutomationOne": "automatisation",
         "subtitleAutomationOther": "automatisations",
@@ -4116,7 +4116,7 @@
         "body": "Corps",
         "resolutionNote": "Note de résolution",
         "metadata": "Métadonnées",
-        "repliesCount": "Réponses (${replies.length})",
+        "repliesCount": "Réponses ({count})",
         "noReplies": "Aucune réponse pour l'instant.",
         "backToAll": "← Retour à toutes les annotations"
       },
@@ -4181,14 +4181,14 @@
     "bim": {
       "detail": {
         "projectFallback": "Projet",
-        "hotLinkCount": "${links.length} lien actif${links.length === 1 ? \"\" : \"s\"}",
+        "hotLinkCount": "{count} lien actifs",
         "open3dViewer": "Ouvrir la visionneuse 3D",
         "allModels": "← Tous les modèles",
         "uploadedLabel": "Téléversé",
         "urnPrefix": "URN",
         "markReady": "Marquer prêt",
         "storageHeading": "Stockage",
-        "hotLinksHeading": "Liens actifs (${links.length})",
+        "hotLinksHeading": "Liens actifs ({count})",
         "linkType": {
           "rfi": "RFI",
           "submittal": "Soumission",
@@ -4215,8 +4215,8 @@
           "ready": "Prêt"
         },
         "statusLabel": "Statut",
-        "meshesCount": "${elementCount} maillages",
-        "modelLabel": "modèle ${modelId.slice(0, 8)}…",
+        "meshesCount": "{count} maillages",
+        "modelLabel": "modèle {id}…",
         "canvasAriaLabel": "Canevas de la visionneuse BIM 3D",
         "loadingViewer": "Chargement de la visionneuse 3D…"
       },
@@ -4290,11 +4290,11 @@
         "milestoneSingular": "jalon",
         "milestonePlural": "jalons",
         "empty": "Aucun hold ni jalon à venir.",
-        "tierHold": "Hold T${it.row.tier}"
+        "tierHold": "Hold T{tier}"
       },
       "deals": {
         "detail": {
-          "eyebrow": "Bookings · ${d.deal_type}",
+          "eyebrow": "Bookings · {dealType}",
           "offerView": "Vue offre",
           "openSettlement": "Ouvrir le Settlement",
           "startSettlement": "Lancer le Settlement",
@@ -4309,7 +4309,7 @@
           "avgTicket": "Billet moyen",
           "estimatedExpenses": "Dépenses estimées",
           "breakEvenAtAvg": "Seuil @ moyen",
-          "seatsCount": "${breakEven} places",
+          "seatsCount": "{count} places",
           "ticketScaling": "Grille tarifaire",
           "noScalingDefined": "Aucune grille définie.",
           "tierHeader": "Tier",
@@ -4317,7 +4317,7 @@
           "countHeader": "Quantité",
           "subtotalHeader": "Sous-total",
           "coProPartners": "Partenaires Co-Pro",
-          "pctAllocated": "${totalSplit}% alloués",
+          "pctAllocated": "{pct}% alloués",
           "settledBadge": "réglé",
           "addPartner": "Ajouter un partenaire",
           "partnerName": "Nom du partenaire",
@@ -4604,7 +4604,7 @@
     "clients": {
       "edit": {
         "eyebrow": "Client",
-        "title": "Modifier ${row.name}",
+        "title": "Modifier {name}",
         "submit": "Enregistrer les Modifications",
         "fields": {
           "name": "Nom",
@@ -4691,8 +4691,8 @@
       "title": "Clients",
       "configureSupabase": "Configurer Supabase pour charger les clients.",
       "eyebrow": "Ventes",
-      "subtitleOne": "${rows.length} Client",
-      "subtitleMany": "${rows.length} Clients",
+      "subtitleOne": "{count} Client",
+      "subtitleMany": "{count} Clients",
       "newClient": "+ Nouveau Client",
       "columns": {
         "name": "Nom",
@@ -4707,7 +4707,7 @@
         "edit": {
           "fallbackName": "Forfait hospitalité",
           "eyebrow": "Forfait Hospitalité",
-          "title": "Modifier ${packageName}",
+          "title": "Modifier {name}",
           "fields": {
             "name": "Nom",
             "sku": "SKU",
@@ -4751,7 +4751,7 @@
         "trademarkSingular": "Marque",
         "trademarkPlural": "Marques",
         "activeLabel": "Actif",
-        "expiringInDays": "Expire Dans ${SOON_DAYS}j",
+        "expiringInDays": "Expire Dans {days}j",
         "legalIpAction": "Juridique · PI",
         "metricActive": "Actif",
         "metricExpiring": "Expire · 90j",
@@ -4789,7 +4789,7 @@
       "sponsors": {
         "edit": {
           "eyebrow": "Droit Sponsor",
-          "titleWithName": "Modifier ${rowTitle}",
+          "titleWithName": "Modifier {name}",
           "titleFallback": "Modifier droit Sponsor",
           "fields": {
             "title": "Intitulé",
@@ -4804,7 +4804,7 @@
           "title": "Droit",
           "configureSupabase": "Configurer Supabase.",
           "eyebrowFull": "Commercial · Droits Sponsor",
-          "subtitleDue": "Échéance ${fmtDate(dueBy)}",
+          "subtitleDue": "Échéance {date}",
           "sectionEntitlement": "Droit",
           "fieldTitle": "Intitulé",
           "fieldStatus": "Statut",
@@ -4834,8 +4834,8 @@
         "title": "Droits Sponsor",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Commercial",
-        "subtitleOne": "${rows.length} Fiche",
-        "subtitleOther": "${rows.length} Fiches",
+        "subtitleOne": "{count} Fiche",
+        "subtitleOther": "{count} Fiches",
         "newSponsor": "+ Nouveau Sponsor",
         "emptyLabel": "Aucun droit sponsor",
         "columns": {
@@ -4855,7 +4855,7 @@
       "announcements": {
         "edit": {
           "eyebrow": "Annonce",
-          "title": "Modifier · ${a.title}",
+          "title": "Modifier · {title}",
           "titleLabel": "Titre",
           "bodyLabel": "Corps",
           "audienceLabel": "Audience",
@@ -4872,7 +4872,7 @@
           "configureSupabase": "Configurez Supabase.",
           "eyebrow": "Annonce",
           "pinned": "Épinglée",
-          "readCount": "${readCount ?? 0} lus",
+          "readCount": "{count} lus",
           "publish": "Publier",
           "archive": "Archiver"
         },
@@ -4894,8 +4894,8 @@
         "eyebrow": "Comms",
         "title": "Annonces",
         "configureSupabase": "Configurez Supabase.",
-        "subtitleOne": "${rows.length} annonce",
-        "subtitleOther": "${rows.length} annonces",
+        "subtitleOne": "{count} annonce",
+        "subtitleOther": "{count} annonces",
         "emptyLabel": "Aucune annonce pour l'instant",
         "columns": {
           "title": "Titre",
@@ -4908,7 +4908,7 @@
         "detail": {
           "configureSupabase": "Configurez Supabase.",
           "eyebrow": "Sondage",
-          "votesCount": "${total} votes",
+          "votesCount": "{count} votes",
           "closePoll": "Clôturer Le Sondage"
         },
         "new": {
@@ -4928,8 +4928,8 @@
         "eyebrow": "Comms",
         "title": "Sondages",
         "configureSupabase": "Configurez Supabase.",
-        "subtitleOne": "${rows.length} sondage",
-        "subtitleOther": "${rows.length} sondages",
+        "subtitleOne": "{count} sondage",
+        "subtitleOther": "{count} sondages",
         "newPoll": "+ Nouveau Sondage",
         "emptyLabel": "Aucun sondage pour l'instant",
         "col": {
@@ -4975,8 +4975,8 @@
         "eyebrow": "Comms",
         "title": "Enquêtes",
         "configureSupabase": "Configurez Supabase.",
-        "subtitleOne": "${rows.length} enquête",
-        "subtitleOther": "${rows.length} enquêtes",
+        "subtitleOne": "{count} enquête",
+        "subtitleOther": "{count} enquêtes",
         "newSurvey": "+ Nouvelle Enquête",
         "emptyLabel": "Aucune enquête pour l'instant",
         "columns": {
@@ -5047,7 +5047,7 @@
       "subtitle": "Tableau de bord opérationnel",
       "notConfigured": "Non configuré",
       "envMissingPrefix": "Les variables d'environnement Supabase sont absentes. Copiez",
-      "loggedInAs": "Connecté en tant que ${session.email}",
+      "loggedInAs": "Connecté en tant que {email}",
       "noOrg": {
         "title": "Aucune organisation pour le moment",
         "createOrg": "Créer une organisation",
@@ -5128,8 +5128,8 @@
         "public": "Public"
       },
       "widgetCount": {
-        "one": "${widgetCount} widget",
-        "other": "${widgetCount} widgets"
+        "one": "{count} widget",
+        "other": "{count} widgets"
       }
     },
     "drawings": {
@@ -5137,7 +5137,7 @@
         "projectFallback": "Projet",
         "allSheetSets": "← Tous les jeux de plans",
         "versions": "Versions",
-        "versionsCount": "${versionRows.length} au total",
+        "versionsCount": "{count} au total",
         "noActiveVersion": "aucune version active",
         "active": "actif",
         "addVersion": "+ Ajouter une version",
@@ -5243,7 +5243,7 @@
     "error": {
       "eyebrow": "Erreur",
       "title": "Une erreur est survenue",
-      "ref": "Réf : ${error.digest}",
+      "ref": "Réf : {digest}",
       "fallbackMessage": "Une erreur inattendue s'est produite.",
       "tryAgain": "Réessayer",
       "backToWorkspace": "Retour à l'espace de travail"
@@ -5288,7 +5288,7 @@
     "events": {
       "edit": {
         "eyebrow": "Événement",
-        "title": "Modifier ${row.name}",
+        "title": "Modifier {name}",
         "submitLabel": "Enregistrer les modifications",
         "name": "Nom",
         "description": "Description",
@@ -5380,7 +5380,7 @@
       "budgets": {
         "edit": {
           "eyebrow": "Budget",
-          "title": "Modifier ${row.name}",
+          "title": "Modifier {name}",
           "submit": "Enregistrer les modifications",
           "name": "Nom",
           "category": "Catégorie",
@@ -5418,7 +5418,7 @@
         },
         "title": "Budgets",
         "configureSupabase": "Configurer Supabase.",
-        "countSubtitle": "${rows.length} Budgets",
+        "countSubtitle": "{count} Budgets",
         "newBudget": "+ Nouveau budget",
         "col": {
           "name": "Nom",
@@ -5547,7 +5547,7 @@
       "expenses": {
         "edit": {
           "eyebrow": "Dépense",
-          "title": "Modifier ${row.description}",
+          "title": "Modifier {description}",
           "descriptionLabel": "Description",
           "amountCentsLabel": "Montant (centimes)",
           "currencyLabel": "Devise",
@@ -5665,7 +5665,7 @@
         },
         "edit": {
           "eyebrow": "Facture",
-          "title": "Modifier ${row.title}",
+          "title": "Modifier {title}",
           "fields": {
             "title": "Titre",
             "number": "Numéro",
@@ -6179,7 +6179,7 @@
       "edit": {
         "title": "Modifier le formulaire",
         "configureSupabase": "Configurez Supabase.",
-        "headerTitle": "Modifier · ${form.title}",
+        "headerTitle": "Modifier · {title}",
         "subtitle": "Mettez à jour le titre, le slug, le statut et le schéma JSON.",
         "breadcrumb": "Modifier",
         "submit": "Enregistrer le formulaire",
@@ -6195,7 +6195,7 @@
       "detail": {
         "fallbackTitle": "Formulaire",
         "configureSupabase": "Configurez Supabase.",
-        "updatedAt": "mis à jour ${fmt(form.updated_at)}",
+        "updatedAt": "mis à jour {date}",
         "metric": {
           "fields": "Champs",
           "status": "Statut",
@@ -6217,8 +6217,8 @@
       },
       "title": "Formulaires",
       "configureSupabase": "Configurez Supabase.",
-      "countSingular": "${rows.length} formulaire",
-      "countPlural": "${rows.length} formulaires",
+      "countSingular": "{count} formulaire",
+      "countPlural": "{count} formulaires",
       "newForm": "+ Nouveau Formulaire",
       "emptyLabel": "Aucun formulaire",
       "column": {
@@ -6232,8 +6232,8 @@
       "eyebrow": "Connaissances",
       "title": "Guides",
       "configureSupabase": "Configurez Supabase.",
-      "subtitleSingular": "${rows.length} Guide à travers vos projets",
-      "subtitlePlural": "${rows.length} Guides à travers vos projets",
+      "subtitleSingular": "{count} Guide à travers vos projets",
+      "subtitlePlural": "{count} Guides à travers vos projets",
       "empty": {
         "title": "Aucun Guide d'Événement",
         "openProjects": "Ouvrir les Projets →"
@@ -6262,7 +6262,7 @@
         "failed": "Échoués"
       },
       "errors": {
-        "rowPrefix": "Ligne ${e.row}"
+        "rowPrefix": "Ligne {row}"
       }
     },
     "inbox": {
@@ -6270,10 +6270,10 @@
       "title": "Messages",
       "configureSupabase": "Configurer Supabase.",
       "conversationCount": {
-        "one": "${list.length} conversation",
-        "other": "${list.length} conversations"
+        "one": "{count} conversation",
+        "other": "{count} conversations"
       },
-      "unreadSuffix": "${unreadCount} non lus",
+      "unreadSuffix": "{count} non lus",
       "empty": {
         "title": "Aucune Conversation"
       },
@@ -6367,7 +6367,7 @@
     "knowledge": {
       "eyebrow": "Base de connaissances",
       "edit": {
-        "title": "Modifier · ${article.title}",
+        "title": "Modifier · {title}",
         "crumb": "Modifier",
         "submit": "Enregistrer l'article",
         "fields": {
@@ -6403,12 +6403,12 @@
         "tagsLabel": "Étiquettes"
       },
       "title": "Base de connaissances",
-      "subtitleTaggedOne": "${rows.length} article étiqueté « ${sp.tag} »",
-      "subtitleOne": "${rows.length} article",
-      "subtitleMany": "${rows.length} articles",
+      "subtitleTaggedOne": "1 article étiqueté « {tag} »",
+      "subtitleOne": "1 article",
+      "subtitleMany": "{count} articles",
       "newArticle": "+ Nouvel article",
       "filterAll": "Tous",
-      "emptyTitleTagged": "Aucun article étiqueté « ${sp.tag} »",
+      "emptyTitleTagged": "Aucun article étiqueté « {tag} »",
       "emptyTitle": "Aucun article pour le moment",
       "createFirstArticle": "+ Créer le premier article"
     },
@@ -6417,9 +6417,9 @@
     },
     "leads": {
       "stageMover": {
-        "movedToast": "Déplacé vers ${next}",
+        "movedToast": "Déplacé vers {stage}",
         "updating": "Mise à jour…",
-        "moveTo": "Déplacer vers ${next}"
+        "moveTo": "Déplacer vers {stage}"
       },
       "activity": {
         "eyebrow": "Lead",
@@ -6435,7 +6435,7 @@
       },
       "edit": {
         "eyebrow": "Lead",
-        "title": "Modifier ${row.name}",
+        "title": "Modifier {name}",
         "fields": {
           "name": "Nom",
           "email": "E-mail",
@@ -6489,8 +6489,8 @@
       "configureSupabase": "Configurer Supabase.",
       "eyebrow": "Ventes",
       "subtitle": {
-        "one": "${rows.length} Lead",
-        "other": "${rows.length} Leads"
+        "one": "{count} Lead",
+        "other": "{count} Leads"
       },
       "newLead": "+ Nouveau Lead",
       "columns": {
@@ -6507,7 +6507,7 @@
         "edit": {
           "policyFallback": "Police",
           "eyebrow": "Juridique · Assurance",
-          "title": "Modifier ${policyNo}",
+          "title": "Modifier {policyNo}",
           "submit": "Enregistrer les Modifications",
           "carrierLabel": "Assureur",
           "policyNoLabel": "Numéro de Police",
@@ -6554,8 +6554,8 @@
         "title": "Polices d'Assurance",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Juridique",
-        "subtitleOne": "${rows.length} Enregistrement",
-        "subtitleOther": "${rows.length} Enregistrements",
+        "subtitleOne": "{count} Enregistrement",
+        "subtitleOther": "{count} Enregistrements",
         "newPolicy": "+ Nouvelle Police",
         "emptyLabel": "Aucune police d'assurance",
         "columns": {
@@ -6569,7 +6569,7 @@
       "ip": {
         "edit": {
           "eyebrow": "Marque",
-          "title": "Modifier ${row.mark}",
+          "title": "Modifier {mark}",
           "submit": "Enregistrer les Modifications",
           "mark": "Marque",
           "jurisdiction": "Juridiction",
@@ -6636,8 +6636,8 @@
           "eyebrow": "Espace de Travail",
           "title": "Registres de Consentement",
           "configureSupabase": "Configurer Supabase.",
-          "subtitleOne": "${rows.length} Enregistrement",
-          "subtitleOther": "${rows.length} Enregistrements",
+          "subtitleOne": "{count} Enregistrement",
+          "subtitleOther": "{count} Enregistrements",
           "columns": {
             "purpose": "Finalité",
             "granted": "Accordé",
@@ -6663,7 +6663,7 @@
           "edit": {
             "fallbackTitle": "Requête DSAR",
             "eyebrow": "Requête DSAR",
-            "title": "Modifier ${requesterEmail}",
+            "title": "Modifier {name}",
             "requesterEmailLabel": "E-mail du Demandeur",
             "kindLabel": "Type",
             "statusLabel": "Statut",
@@ -6695,8 +6695,8 @@
           "eyebrow": "Juridique · Vie Privée",
           "title": "Requêtes DSAR",
           "recordCount": {
-            "one": "${rows.length} Enregistrement",
-            "other": "${rows.length} Enregistrements"
+            "one": "{count} Enregistrement",
+            "other": "{count} Enregistrements"
           },
           "logRequest": "+ Consigner une requête",
           "emptyLabel": "Aucune requête DSAR",
@@ -6714,7 +6714,7 @@
     "locations": {
       "edit": {
         "eyebrow": "Lieu",
-        "title": "Modifier ${row.name}",
+        "title": "Modifier {name}",
         "submit": "Enregistrer les modifications",
         "fields": {
           "name": "Nom",
@@ -6760,8 +6760,8 @@
       "configureSupabase": "Configurer Supabase.",
       "eyebrow": "Travail",
       "subtitle": {
-        "one": "${rows.length} lieu",
-        "other": "${rows.length} lieux"
+        "one": "{count} lieu",
+        "other": "{count} lieux"
       },
       "add": "+ Ajouter un lieu",
       "emptyLabel": "Aucun lieu pour le moment",
@@ -6807,7 +6807,7 @@
         "edit": {
           "fallbackTitle": "Expédition",
           "eyebrow": "Expédition",
-          "title": "Modifier ${shipmentTitle}",
+          "title": "Modifier {name}",
           "fields": {
             "title": "Titre",
             "number": "Numéro",
@@ -6865,7 +6865,7 @@
         "edit": {
           "fallbackName": "Article du tarif catalogue",
           "eyebrow": "Article du Tarif Catalogue",
-          "title": "Modifier ${itemName}",
+          "title": "Modifier {name}",
           "name": "Nom",
           "sku": "SKU",
           "description": "Description",
@@ -6895,8 +6895,8 @@
         "title": "Articles du Tarif Catalogue",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Logistique",
-        "subtitleOne": "${rows.length} Article",
-        "subtitleOther": "${rows.length} Articles",
+        "subtitleOne": "{count} Article",
+        "subtitleOther": "{count} Articles",
         "newRate": "+ Nouveau Tarif",
         "emptyLabel": "Aucun article au tarif catalogue pour le moment",
         "columns": {
@@ -6929,8 +6929,8 @@
       },
       "title": "Vue d'ensemble",
       "configureSupabase": "Configurer Supabase.",
-      "subtitleOne": "${rows.length} jalon à venir",
-      "subtitleOther": "${rows.length} jalons à venir",
+      "subtitleOne": "{count} jalon à venir",
+      "subtitleOther": "{count} jalons à venir",
       "metrics": {
         "onsales": "Mises en vente",
         "presales": "Préventes",
@@ -6958,7 +6958,7 @@
         },
         "edit": {
           "eyebrow": "Marketplace · Appel",
-          "title": "Modifier · ${c.title}",
+          "title": "Modifier · {title}",
           "submit": "Enregistrer les Modifications",
           "fields": {
             "title": "Titre",
@@ -7009,7 +7009,7 @@
             "statusLabel": "Statut",
             "scoreInputLabel": "Score (0-100)"
           },
-          "eyebrow": "Appel · ${call.title}",
+          "eyebrow": "Appel · {title}",
           "title": "Candidatures",
           "emptyLabel": "Aucune candidature pour le moment",
           "col": {
@@ -7186,7 +7186,7 @@
             "reelLabel": "Démo :",
             "proposedRateLabel": "Taux proposé :",
             "reviewerNotesHeading": "Notes du Réviseur",
-            "scoreLine": "Score : ${a.score}",
+            "scoreLine": "Score : {score}",
             "moveApplicantHeading": "Déplacer le candidat",
             "stageLabel": "Étape",
             "scoreInputLabel": "Score (0-100)",
@@ -7206,7 +7206,7 @@
         },
         "edit": {
           "eyebrow": "Marketplace · Annonce",
-          "title": "Modifier · ${p.title}",
+          "title": "Modifier · {title}",
           "fields": {
             "title": "Titre",
             "description": "Description",
@@ -7341,7 +7341,7 @@
         },
         "edit": {
           "eyebrow": "Marketplace · Talent",
-          "title": "Modifier · ${talent.act_name}",
+          "title": "Modifier · {actName}",
           "actName": "Nom d'Artiste",
           "tagline": "Slogan",
           "bio": "Bio",
@@ -7440,7 +7440,7 @@
       "edit": {
         "fallbackName": "Réunion",
         "eyebrow": "Réunion",
-        "title": "Modifier ${meetingName}",
+        "title": "Modifier {name}",
         "submit": "Enregistrer les modifications",
         "fields": {
           "title": "Titre",
@@ -7752,7 +7752,7 @@
         "edit": {
           "fallbackName": "Délégation",
           "eyebrow": "Délégation",
-          "title": "Modifier ${delegationName}",
+          "title": "Modifier {name}",
           "fields": {
             "name": "Nom",
             "code": "Code",
@@ -7834,8 +7834,8 @@
         "title": "Inscriptions",
         "configureSupabase": "Configurer Supabase.",
         "recordCount": {
-          "one": "${rows.length} Fiche",
-          "other": "${rows.length} Fiches"
+          "one": "{count} Fiche",
+          "other": "{count} Fiches"
         },
         "newEntry": "+ Nouvelle Inscription",
         "emptyLabel": "Aucune inscription de participant",
@@ -7851,7 +7851,7 @@
         "edit": {
           "fallbackName": "Dossier visa",
           "eyebrow": "Dossier Visa",
-          "title": "Modifier ${personName}",
+          "title": "Modifier {name}",
           "personName": "Nom de la personne",
           "nationality": "Nationalité",
           "passportNo": "N° de passeport",
@@ -7889,8 +7889,8 @@
         "eyebrowWorkspace": "Espace de travail",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Participants",
-        "recordCountOne": "${rows.length} Fiche",
-        "recordCountOther": "${rows.length} Fiches",
+        "recordCountOne": "{count} Fiche",
+        "recordCountOther": "{count} Fiches",
         "newCase": "+ Nouveau Dossier",
         "emptyLabel": "Aucun dossier visa",
         "columnName": "Nom",
@@ -7989,8 +7989,8 @@
           "expiresOnLabel": "Expire Le"
         },
         "configureSupabase": "Configurer Supabase.",
-        "subtitleCertsTracked": "${rows.length} certifications suivies",
-        "subtitleExpiring": "${expiringSoon} expirent sous 60j",
+        "subtitleCertsTracked": "{count} certifications suivies",
+        "subtitleExpiring": "{count} expirent sous 60j",
         "addCredential": "+ Ajouter une accréditation",
         "col": {
           "kind": "Type",
@@ -7999,7 +7999,7 @@
           "expires": "Expire"
         },
         "expired": "Expirée",
-        "daysShort": "${daysUntil}j"
+        "daysShort": "{count}j"
       },
       "documents": {
         "eyebrow": "Personne",
@@ -8060,7 +8060,7 @@
       "crew": {
         "edit": {
           "eyebrow": "Équipe",
-          "title": "Modifier ${row.name}",
+          "title": "Modifier {name}",
           "fields": {
             "name": "Nom",
             "role": "Rôle",
@@ -8099,8 +8099,8 @@
         "title": "Équipe",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "People",
-        "subtitleSingular": "${rows.length} Membre d'Équipe",
-        "subtitlePlural": "${rows.length} Membres d'Équipe",
+        "subtitleSingular": "{count} Membre d'Équipe",
+        "subtitlePlural": "{count} Membres d'Équipe",
         "addCrew": "+ Ajouter à l'Équipe",
         "col": {
           "name": "Nom",
@@ -8128,7 +8128,7 @@
         "title": "Invitations",
         "subtitle": "Invitations en attente dans l'organisation",
         "inviteSomeone": "Inviter Quelqu'un",
-        "pendingHeading": "En Attente (${pending.length})",
+        "pendingHeading": "En Attente ({count})",
         "empty": {
           "title": "Aucune Invitation en Attente",
           "adminDescription": "Envoyez-en une ci-dessus pour démarrer."
@@ -8309,8 +8309,8 @@
       "title": "Annuaire",
       "configureSupabase": "Configurer Supabase.",
       "eyebrow": "People",
-      "subtitleOne": "${rows.length} membre",
-      "subtitleOther": "${rows.length} membres",
+      "subtitleOne": "{count} membre",
+      "subtitleOther": "{count} membres",
       "inviteMember": "+ Inviter un membre",
       "emptyLabel": "Aucun membre pour l'instant",
       "columns": {
@@ -8393,7 +8393,7 @@
           "configureSupabase": "Configurer Supabase.",
           "editTeam": "Modifier l'Équipe",
           "editTeamHintSuffix": " handle.",
-          "membersCount": "Membres (${members.length})",
+          "membersCount": "Membres ({count})",
           "noMembersTitle": "Aucun Membre",
           "colMember": "Membre",
           "colRole": "Rôle",
@@ -8666,7 +8666,7 @@
         "breadcrumb": "Préqualification"
       },
       "purchaseOrders": {
-        "statusToast": "BC ${next.next}",
+        "statusToast": "BC {status}",
         "cancelledToast": "BC annulé",
         "title": "Bons de Commande",
         "checklist": {
@@ -8680,7 +8680,7 @@
         },
         "edit": {
           "eyebrow": "Bon de Commande",
-          "title": "Éditer ${row.title}",
+          "title": "Éditer {title}",
           "submit": "Enregistrer les Modifications",
           "titleLabel": "Titre",
           "numberLabel": "Numéro",
@@ -8717,7 +8717,7 @@
       "requisitions": {
         "edit": {
           "eyebrow": "Réquisition",
-          "title": "Éditer ${row.title}",
+          "title": "Éditer {title}",
           "submit": "Enregistrer les Modifications",
           "fields": {
             "title": "Titre",
@@ -8773,7 +8773,7 @@
         "title": "Réquisitions",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Approvisionnement",
-        "subtitle": "${rows.length} Demandes",
+        "subtitle": "{count} Demandes",
         "newRequest": "+ Nouvelle Demande",
         "emptyLabel": "Aucune réquisition",
         "col": {
@@ -8801,7 +8801,7 @@
         },
         "breadcrumb": "RFQ",
         "publish": {
-          "eyebrow": "Approvisionnement · ${r.title}",
+          "eyebrow": "Approvisionnement · {title}",
           "title": "Publier la RFQ",
           "subtitle": "Publier sur la marketplace publique.",
           "submit": "Mettre à Jour la Visibilité",
@@ -8928,7 +8928,7 @@
         "requisitionPlural": "Réquisitions",
         "activePoSingular": "BC Actif",
         "activePoPlural": "BC Actifs",
-        "percentConverted": "${conversionRate}% convertis",
+        "percentConverted": "{pct}% convertis",
         "newRequisition": "+ Nouvelle Réquisition",
         "metric": {
           "openRequisitions": "Réquisitions Ouvertes",
@@ -8950,7 +8950,7 @@
       "vendors": {
         "edit": {
           "eyebrow": "Fournisseur",
-          "title": "Éditer ${row.name}",
+          "title": "Éditer {name}",
           "nameLabel": "Nom",
           "categoryLabel": "Catégorie",
           "contactEmailLabel": "Email de Contact",
@@ -9055,8 +9055,8 @@
         },
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Approvisionnement",
-        "subtitleOne": "${rows.length} Fournisseur",
-        "subtitleOther": "${rows.length} Fournisseurs",
+        "subtitleOne": "{count} Fournisseur",
+        "subtitleOther": "{count} Fournisseurs",
         "newVendor": "+ Nouveau Fournisseur",
         "emptyLabel": "Aucun fournisseur pour l'instant",
         "columns": {
@@ -9164,7 +9164,7 @@
           "eyebrow": "Production",
           "title": "Trajet de Dispatch",
           "configureSupabase": "Configurer Supabase.",
-          "minutesLate": "${diffMin}m de retard",
+          "minutesLate": "{minutes}m de retard",
           "onTime": "À l'heure",
           "metric": {
             "passengers": "Passagers",
@@ -9213,7 +9213,7 @@
       "equipment": {
         "edit": {
           "eyebrow": "Équipement",
-          "title": "Modifier ${row.name}",
+          "title": "Modifier {name}",
           "submit": "Enregistrer les Modifications",
           "fields": {
             "name": "Nom",
@@ -9232,7 +9232,7 @@
             "qr": "QR"
           },
           "notFound": "Introuvable.",
-          "markStatus": "Marquer ${toTitle(to)}",
+          "markStatus": "Marquer {status}",
           "qr": "QR",
           "field": {
             "status": "Statut",
@@ -9246,7 +9246,7 @@
             "title": "Registre des Mouvements",
             "system": "système",
             "initial": "initial",
-            "by": "par ${who}"
+            "by": "par {who}"
           },
           "lifecycle": "Cycle de Vie",
           "retireRemove": "Retirer et supprimer"
@@ -9271,9 +9271,9 @@
           "eyebrow": "Équipement · Sticker QR",
           "downloadPng": "Télécharger PNG",
           "printHint": "⌘P pour imprimer",
-          "qrAlt": "Code QR pour ${name}",
-          "assetLabel": "Actif : ${assetTag}",
-          "serialLabel": "SN : ${serial}"
+          "qrAlt": "Code QR pour {name}",
+          "assetLabel": "Actif : {assetTag}",
+          "serialLabel": "SN : {serial}"
         },
         "rentals": {
           "eyebrow": "Équipement",
@@ -9344,7 +9344,7 @@
         },
         "edit": {
           "eyebrow": "Ordre de Fabrication",
-          "title": "Modifier ${row.title}",
+          "title": "Modifier {title}",
           "titleLabel": "Titre",
           "descriptionLabel": "Description",
           "dueAtLabel": "Échéance"
@@ -9462,7 +9462,7 @@
         "title": "Locations",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Production",
-        "subtitle": "${rows.length} locations actives",
+        "subtitle": "{count} locations actives",
         "newRental": "+ Nouvelle Location",
         "emptyLabel": "Aucune location active",
         "columns": {
@@ -9486,12 +9486,12 @@
         "eyebrow": "Production",
         "title": "Run of Show",
         "configureSupabase": "Configurer Supabase.",
-        "subtitleOne": "${rows.length} cue dans le plan du show",
-        "subtitleOther": "${rows.length} cues dans le plan du show",
+        "subtitleOne": "{count} cue dans le plan du show",
+        "subtitleOther": "{count} cues dans le plan du show",
         "addCue": "Ajouter un Cue",
         "empty": "Aucun cue pour l'instant — créez-en un ci-dessus.",
-        "countOne": "${cues.length} cue",
-        "countOther": "${cues.length} cues",
+        "countOne": "{count} cue",
+        "countOther": "{count} cues",
         "col": {
           "time": "Heure",
           "lane": "Lane",
@@ -9590,7 +9590,7 @@
         "edit": {
           "fallbackName": "Cérémonie",
           "eyebrow": "Cérémonie",
-          "title": "Modifier ${ceremonyName}",
+          "title": "Modifier {name}",
           "fields": {
             "title": "Titre",
             "description": "Description",
@@ -9638,25 +9638,25 @@
       "portfolio": {
         "title": "Santé du portefeuille",
         "legend": {
-          "onTrack": "Sur les rails ${counts.green}",
-          "watch": "À surveiller ${counts.amber}",
-          "atRisk": "À risque ${counts.red}"
+          "onTrack": "Sur les rails {count}",
+          "watch": "À surveiller {count}",
+          "atRisk": "À risque {count}"
         },
         "schedule": {
           "noEnd": "sans fin",
-          "daysOver": "${-days} j de retard",
+          "daysOver": "{days} j de retard",
           "endsToday": "se termine aujourd'hui",
-          "daysLeft": "${days} j restants"
+          "daysLeft": "{days} j restants"
         }
       },
       "statusToggle": {
-        "markedToast": "Marqué ${next}",
+        "markedToast": "Marqué {state}",
         "updating": "Mise à jour…",
-        "markAction": "Marquer ${next}"
+        "markAction": "Marquer {state}"
       },
       "advancing": {
         "transition": {
-          "movedToast": "Déplacé vers ${toTitle(to)}",
+          "movedToast": "Déplacé vers {state}",
           "failedToast": "Échec de la transition"
         },
         "assignments": {
@@ -9795,7 +9795,7 @@
           "activity": {
             "title": "Activité",
             "empty": "Aucune activité enregistrée.",
-            "by": "par ${actor}"
+            "by": "par {actor}"
           },
           "system": "système"
         }
@@ -9843,7 +9843,7 @@
       "crew": {
         "eyebrowFallback": "Projet",
         "title": "Équipe",
-        "subtitleOne": "${crew?.length ?? 0} membre du roster",
+        "subtitleOne": "{count} membre du roster",
         "breadcrumbProjects": "Projets",
         "emptyTitle": "Aucune équipe au roster",
         "columnName": "Nom",
@@ -9853,7 +9853,7 @@
       },
       "edit": {
         "eyebrow": "Projet",
-        "title": "Modifier ${row.name}",
+        "title": "Modifier {name}",
         "submit": "Enregistrer les modifications",
         "fields": {
           "name": "Nom",
@@ -9922,7 +9922,7 @@
           "expensesCommitted": "Dépenses engagées",
           "posCommitted": "Bons de commande engagés"
         },
-        "marginPctSentence": "Ce projet affiche ${marginPct} % de marge sur le revenu encaissé.",
+        "marginPctSentence": "Ce projet affiche {pct} % de marge sur le revenu encaissé.",
         "budget": {
           "title": "Enveloppe budgétaire",
           "open": "Ouvrir le budget →",
@@ -10047,11 +10047,11 @@
         "addingButton": "Ajout",
         "addButton": "Ajouter",
         "removedToast": "Membre retiré",
-        "roleForAria": "Rôle pour ${member.email}",
+        "roleForAria": "Rôle pour {email}",
         "leaveButton": "Quitter",
         "removeButton": "Retirer",
         "title": "Membres",
-        "subtitleOne": "${members.length} membre du projet",
+        "subtitleOne": "{count} membre du projet",
         "emptyTitle": "Aucun membre de projet",
         "colMember": "Membre",
         "colRole": "Rôle"
@@ -10186,7 +10186,7 @@
       "stagePlots": {
         "edit": {
           "eyebrow": "Plan de scène",
-          "title": "Modifier ${row.name}",
+          "title": "Modifier {name}",
           "nameLabel": "Nom",
           "widthLabel": "Largeur (ft)",
           "depthLabel": "Profondeur (ft)",
@@ -10284,7 +10284,7 @@
       },
       "title": "Projets",
       "configureSupabase": "Configurez Supabase pour charger les projets.",
-      "totalCount": "${projects.length} au total",
+      "totalCount": "{count} au total",
       "newProject": "+ Nouveau projet",
       "emptyTitle": "Aucun projet pour l'instant",
       "createFirst": "Créer votre premier projet",
@@ -10308,7 +10308,7 @@
         "markApproved": "Marquer approuvée",
         "markSigned": "Marquer signée",
         "redraft": "Réécrire",
-        "updatedToast": "Proposition ${transition.next}",
+        "updatedToast": "Proposition {status}",
         "updating": "Mise à jour…"
       },
       "edit": {
@@ -10342,12 +10342,12 @@
         "blocksJson": "JSON des blocs",
         "save": "Enregistrer la proposition",
         "describe": {
-          "lineItems": "${count} lignes",
-          "signers": "${b.parties.length} signataire(s)",
-          "panels": "${b.panels.length} panneau(x)",
-          "exclusions": "${b.items.length} exclusions",
-          "items": "${b.items.length} éléments",
-          "terms": "${b.items.length} clauses"
+          "lineItems": "{count} lignes",
+          "signers": "{count} signataire(s)",
+          "panels": "{count} panneau(x)",
+          "exclusions": "{count} exclusions",
+          "items": "{count} éléments",
+          "terms": "{count} clauses"
         },
         "shareLink": {
           "copiedToast": "Lien de partage copié dans le presse-papiers",
@@ -10356,12 +10356,12 @@
           "generic": "+ Lien générique"
         },
         "eyebrow": "Proposition",
-        "title": "Modifier · ${proposal.title}",
+        "title": "Modifier · {title}",
         "backToDetail": "Retour au détail",
         "shareLinks": "Liens de partage",
         "revoked": "Révoqué",
         "active": "Actif",
-        "viewsCount": "${l.view_count} vues"
+        "viewsCount": "{count} vues"
       },
       "detail": {
         "eyebrow": "Proposition",
@@ -10394,13 +10394,13 @@
         "expires": "Expire le",
         "notes": "Notes / périmètre",
         "eyebrow": "Ventes",
-        "prefilledFrom": "Pré-rempli à partir de « ${template.name} »"
+        "prefilledFrom": "Pré-rempli à partir de « {name} »"
       },
       "title": "Propositions",
       "configureSupabase": "Configurez Supabase.",
       "eyebrow": "Ventes",
-      "countOne": "${rows.length} Proposition",
-      "countOther": "${rows.length} Propositions",
+      "countOne": "{count} Proposition",
+      "countOther": "{count} Propositions",
       "newAction": "+ Nouvelle proposition",
       "columns": {
         "title": "Titre",
@@ -10414,7 +10414,7 @@
           "eyebrowSystem": "Modèle · Système",
           "eyebrowOrg": "Modèle · Org",
           "useTemplate": "Utiliser le modèle",
-          "skippedInvalid": "· ${invalid} ignoré(s) (invalide)"
+          "skippedInvalid": "· {count} ignoré(s) (invalide)"
         },
         "breadcrumb": {
           "templates": "Modèles"
@@ -10502,7 +10502,7 @@
           "created": "Créée"
         },
         "openSuffix": "ouverts",
-        "deleteConfirm": "Supprimer « ${r.name} » ?",
+        "deleteConfirm": "Supprimer « {name} » ?",
         "createHeading": "Créer une Liste",
         "namePlaceholder": "MMW Jour 1 Punch",
         "projectPlaceholder": "— Projet —",
@@ -10532,7 +10532,7 @@
       "eyebrow": "Opérations",
       "title": "Punch List",
       "configureSupabase": "Configurer Supabase.",
-      "titleFiltered": "Punch · ${activeList.name}",
+      "titleFiltered": "Punch · {name}",
       "subtitleFiltered": "Filtré sur une seule liste. Effacer pour tout voir.",
       "subtitle": "Check-list show-ready.",
       "clearFilter": "Effacer le Filtre",
@@ -10853,8 +10853,8 @@
         "title": "Événements environnementaux",
         "configureSupabase": "Configurez Supabase.",
         "eyebrow": "Sécurité",
-        "subtitleOne": "${rows.length} enregistrement",
-        "subtitleMany": "${rows.length} enregistrements",
+        "subtitleOne": "{count} enregistrement",
+        "subtitleMany": "{count} enregistrements",
         "logEvent": "+ Consigner un événement",
         "emptyLabel": "Aucun événement environnemental",
         "columns": {
@@ -10926,7 +10926,7 @@
         "edit": {
           "fallbackName": "Incident majeur",
           "eyebrow": "Incident majeur",
-          "title": "Modifier ${incidentName}",
+          "title": "Modifier {name}",
           "nameLabel": "Nom",
           "statusLabel": "Statut",
           "openedAtLabel": "Ouvert le",
@@ -11032,7 +11032,7 @@
           "venueSingular": "Site",
           "venuePlural": "Sites",
           "haveMedicalCapacityRecorded": "ont une capacité médicale enregistrée",
-          "coverageSuffix": "${coveragePct} % de couverture",
+          "coverageSuffix": "{pct} % de couverture",
           "newPlan": "+ Nouveau plan",
           "venuesHeading": "Sites nécessitant une couverture médicale",
           "col": {
@@ -11049,7 +11049,7 @@
       },
       "osha": {
         "eyebrow": "Sécurité",
-        "title": "OSHA 300 — ${year}",
+        "title": "OSHA 300 — {year}",
         "subtitle": "Incidents OSHA enregistrables selon 29 CFR 1904.",
         "exportCsv": "Exporter 300/300A/301 (CSV)",
         "metrics": {
@@ -11060,7 +11060,7 @@
         "fatalityRecord": "décès enregistré",
         "fatalityRecords": "décès enregistrés",
         "fatalityNotice": "Notification OSHA requise dans les 8 heures.",
-        "emptyLabel": "Aucun incident enregistrable pour ${year}.",
+        "emptyLabel": "Aucun incident enregistrable pour {year}.",
         "columns": {
           "date": "Date",
           "description": "Description",
@@ -11091,7 +11091,7 @@
       "baselines": {
         "gantt": {
           "projectFallback": "Projet",
-          "title": "${b.name} · Gantt",
+          "title": "{name} · Gantt",
           "backToBaseline": "← Retour à la Référence",
           "lookahead": "Anticipation",
           "lookaheadFull": "Complet",
@@ -11166,8 +11166,8 @@
       "configureSupabase": "Configurer Supabase.",
       "eyebrow": "Opérations",
       "masterTitle": "Planning Maître",
-      "subtitleOne": "${rows.length} Événement",
-      "subtitleOther": "${rows.length} Événements",
+      "subtitleOne": "{count} Événement",
+      "subtitleOther": "{count} Événements",
       "exportIcs": "Exporter .ics",
       "newEvent": "+ Nouvel Événement",
       "col": {
@@ -11415,7 +11415,7 @@
         "edit": {
           "configureSupabase": "Configurez Supabase.",
           "eyebrow": "Catalogue",
-          "title": "Modifier ${item.name}",
+          "title": "Modifier {name}",
           "kindLabel": "Type",
           "kind": {
             "credential": "Accréditation",
@@ -11642,7 +11642,7 @@
         "summary": {
           "inserted": "insérés",
           "skipped": "ignorés",
-          "rowLabel": "Ligne ${row.rowIdx}"
+          "rowLabel": "Ligne {idx}"
         },
         "eyebrow": "Paramètres",
         "title": "Imports",
@@ -12137,7 +12137,7 @@
       },
       "edit": {
         "eyebrow": "Création · Plans de Site",
-        "title": "Édition · ${sp.atom_id ?? sp.code}",
+        "title": "Édition · {ref}",
         "subtitle": "Les segments Atom-ID sont immuables une fois créés.",
         "breadcrumbs": {
           "sitePlans": "Plans de Site"
@@ -12172,11 +12172,11 @@
           "venue": "Lieu",
           "notes": "Notes"
         },
-        "tierOption": "Niveau ${tier}"
+        "tierOption": "Niveau {tier}"
       },
       "markup": {
         "eyebrow": "Dessins",
-        "title": "${sheet.code} · Annotation",
+        "title": "{code} · Annotation",
         "backToSheet": "← Retour à la Feuille",
         "noPdfAndSet": "et définir",
         "noPdfToKey": "à cette clé.",
@@ -12196,11 +12196,11 @@
         "eyebrow": "Création · Plans de Site",
         "breadcrumb": "Plans de Site",
         "noAtomId": "— aucun atom id —",
-        "revPrefix": "Rév ${sp.revision_letter}",
+        "revPrefix": "Rév {rev}",
         "sheet": "Feuille",
         "xpmsClass": "Classe XPMS",
         "tier": "Niveau",
-        "tierValue": "Niveau ${sp.tier_primary}",
+        "tierValue": "Niveau {tier}",
         "sheetType": "Type de Feuille",
         "code": "Code",
         "shell": "Coque",
@@ -12422,7 +12422,7 @@
           "stamp": "Tampon",
           "stampNotes": "Notes de Tampon"
         },
-        "stampRound": "Tour de Tampon n°${current.round}",
+        "stampRound": "Tour de Tampon n°{round}",
         "stamp": {
           "approved": "Approuvé",
           "approvedWithComments": "Approuvé Avec Commentaires",
@@ -12590,7 +12590,7 @@
           "source": "Source",
           "method": "Méthode"
         },
-        "scopeLabel": "Scope ${r.scope}"
+        "scopeLabel": "Scope {scope}"
       },
       "title": "Durabilité"
     },
@@ -12644,14 +12644,14 @@
         "emptyTitle": "Aucune tâche pour l'instant"
       },
       "status": {
-        "movedToast": "Déplacée vers ${next}",
-        "advanceLabel": "→ ${toTitle(next)}",
+        "movedToast": "Déplacée vers {status}",
+        "advanceLabel": "→ {next}",
         "blockedToast": "Bloquée",
         "block": "Bloquer"
       },
       "edit": {
         "eyebrow": "Tâche",
-        "title": "Modifier ${row.title}",
+        "title": "Modifier {title}",
         "submit": "Enregistrer les modifications",
         "fields": {
           "title": "Titre",
@@ -12662,7 +12662,7 @@
         }
       },
       "detail": {
-        "eyebrow": "Tâche P${task.priority}",
+        "eyebrow": "Tâche P{priority}",
         "dueLabel": "échéance",
         "status": "Statut",
         "priority": "Priorité",
@@ -12723,7 +12723,7 @@
       "empty": {
         "title": "Aucun modèle pour l’instant"
       },
-      "useTemplateAria": "Utiliser le modèle ${tpl.name}",
+      "useTemplateAria": "Utiliser le modèle {name}",
       "officialBadge": "Officiel"
     },
     "transmittals": {
@@ -12804,7 +12804,7 @@
         "edit": {
           "fallbackName": "Manifeste A/D",
           "eyebrow": "Manifeste A/D",
-          "title": "Modifier ${flightRef}",
+          "title": "Modifier {name}",
           "kindLabel": "Type",
           "statusLabel": "Statut",
           "flightRefLabel": "Référence du Vol",
@@ -12838,8 +12838,8 @@
         "title": "Manifestes A&D",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Transport",
-        "subtitleOne": "${rows.length} Enregistrement",
-        "subtitleMany": "${rows.length} Enregistrements",
+        "subtitleOne": "{count} Enregistrement",
+        "subtitleMany": "{count} Enregistrements",
         "newManifest": "+ Nouveau Manifeste",
         "emptyLabel": "Aucun manifeste A&D pour l'instant",
         "columns": {
@@ -12853,7 +12853,7 @@
       "dispatch": {
         "edit": {
           "eyebrow": "Course de Dispatch",
-          "titleNamed": "Modifier ${vehicleRef}",
+          "titleNamed": "Modifier {name}",
           "titleFallback": "Modifier la Course de Dispatch",
           "vehicleRefLabel": "Référence du Véhicule",
           "fleetLabel": "Flotte",
@@ -12949,7 +12949,7 @@
         "empty": {
           "title": "Aucune Navette Personnel Planifiée"
         },
-        "runCountOne": "${dayRuns.length} course",
+        "runCountOne": "{count} course",
         "col": {
           "depart": "Départ",
           "arrive": "Arrivée",
@@ -12966,9 +12966,9 @@
         "eyebrow": "Site",
         "title": "Construction",
         "configureSupabase": "Configurer Supabase.",
-        "titleWithName": "${venue.name} — Construction",
-        "subtitleOne": "${logs.length} entrée de journal",
-        "subtitleOther": "${logs.length} entrées de journal",
+        "titleWithName": "{name} — Construction",
+        "subtitleOne": "{count} entrée de journal",
+        "subtitleOther": "{count} entrées de journal",
         "breadcrumbVenues": "Sites",
         "breadcrumbBuild": "Construction",
         "metric": {
@@ -12977,12 +12977,12 @@
           "daysWithBlockers": "Jours avec blocages"
         },
         "blockerSrLabel": "Blocage : ",
-        "tradesCount": "${l.trades_onsite} corps de métier"
+        "tradesCount": "{count} corps de métier"
       },
       "certifications": {
         "eyebrow": "Site",
         "title": "Certifications",
-        "headerTitle": "${venue.name} — Certifications",
+        "headerTitle": "{name} — Certifications",
         "metrics": {
           "active": "Actives",
           "expiring": "Expirant (≤30 j)",
@@ -13005,7 +13005,7 @@
         "eyebrow": "Site",
         "title": "Clôture",
         "configureSupabase": "Configurer Supabase.",
-        "headerTitle": "${venue.name} — Clôture",
+        "headerTitle": "{name} — Clôture",
         "metric": {
           "complete": "Terminés",
           "open": "Ouverts",
@@ -13026,7 +13026,7 @@
         "eyebrow": "Site",
         "title": "Design",
         "configureSupabase": "Configurer Supabase.",
-        "headerTitle": "${venue.name} — Design",
+        "headerTitle": "{name} — Design",
         "metric": {
           "approved": "Approuvés",
           "inReview": "En revue",
@@ -13049,7 +13049,7 @@
       "edit": {
         "fallbackName": "Site",
         "eyebrow": "Site",
-        "title": "Modifier ${venueName}",
+        "title": "Modifier {name}",
         "fields": {
           "name": "Nom",
           "kind": "Type",
@@ -13062,9 +13062,9 @@
         "eyebrow": "Site",
         "title": "Remise",
         "configureSupabase": "Configurer Supabase.",
-        "titleWithVenue": "${venue.name} — Remise",
-        "subtitleOne": "${items.length} élément de mise en service",
-        "subtitleOther": "${items.length} éléments de mise en service",
+        "titleWithVenue": "{name} — Remise",
+        "subtitleOne": "{count} élément de mise en service",
+        "subtitleOther": "{count} éléments de mise en service",
         "breadcrumb": "Remise",
         "metrics": {
           "passed": "Validés",
@@ -13116,8 +13116,8 @@
         "eyebrow": "Site",
         "title": "Plan d'exploitation du site",
         "configureSupabase": "Configurer Supabase.",
-        "headerTitle": "${venue.name} — Plan d'exploitation du site",
-        "headerSubtitle": "${approved}/${total} sections approuvées",
+        "headerTitle": "{name} — Plan d'exploitation du site",
+        "headerSubtitle": "{approved}/{total} sections approuvées",
         "breadcrumb": "VOP",
         "metrics": {
           "approved": "Approuvées",
@@ -13131,7 +13131,7 @@
         "eyebrow": "Site",
         "title": "Zones",
         "configureSupabase": "Configurer Supabase.",
-        "titleWithName": "${venue.name} — Zones",
+        "titleWithName": "{name} — Zones",
         "breadcrumbVenues": "Sites",
         "breadcrumbZones": "Zones",
         "emptyLabel": "Aucune zone pour l'instant",
@@ -13240,7 +13240,7 @@
         "edit": {
           "fallbackName": "Prestataire",
           "eyebrow": "Prestataire",
-          "title": "Modifier ${displayName}",
+          "title": "Modifier {name}",
           "submit": "Enregistrer les Modifications",
           "fullName": "Nom Complet",
           "email": "E-mail",
@@ -13269,8 +13269,8 @@
         "title": "Prestataires",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Effectifs",
-        "subtitleOne": "${rows.length} Fiche",
-        "subtitleOther": "${rows.length} Fiches",
+        "subtitleOne": "{count} Fiche",
+        "subtitleOther": "{count} Fiches",
         "addAction": "+ Ajouter un prestataire",
         "emptyLabel": "Aucun prestataire",
         "columnName": "Nom",
@@ -13318,8 +13318,8 @@
         "eyebrow": "Effectifs",
         "title": "Formations",
         "configureSupabase": "Configurer Supabase.",
-        "subtitleOne": "${rows.length} formation",
-        "subtitleOther": "${rows.length} formations",
+        "subtitleOne": "{count} formation",
+        "subtitleOther": "{count} formations",
         "newCourse": "+ Nouvelle Formation",
         "emptyLabel": "Aucune formation pour l'instant",
         "columns": {
@@ -13359,8 +13359,8 @@
         "title": "Déploiement",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Effectifs",
-        "subtitleOne": "${rows.length} Fiche",
-        "subtitleMany": "${rows.length} Fiches",
+        "subtitleOne": "{count} Fiche",
+        "subtitleMany": "{count} Fiches",
         "planDeployment": "+ Planifier un déploiement",
         "emptyLabel": "Aucun déploiement planifié",
         "columns": {
@@ -13510,7 +13510,7 @@
         "unspecified": "Non Spécifié",
         "deploymentSingular": "déploiement",
         "deploymentPlural": "déploiements",
-        "filledSuffix": "${fillRate}% pourvus",
+        "filledSuffix": "{pct}% pourvus",
         "openDeployment": "Ouvrir le déploiement",
         "plannedFte": "ETP Prévus",
         "actualFte": "ETP Réels",
@@ -13549,7 +13549,7 @@
         "edit": {
           "fallbackName": "Roster",
           "eyebrow": "Roster",
-          "title": "Modifier ${rosterName}",
+          "title": "Modifier {name}",
           "submit": "Enregistrer les Modifications",
           "fields": {
             "name": "Nom",
@@ -13591,8 +13591,8 @@
         "title": "Rosters",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Effectifs",
-        "subtitleOne": "${rows.length} Fiche",
-        "subtitleOther": "${rows.length} Fiches",
+        "subtitleOne": "{count} Fiche",
+        "subtitleOther": "{count} Fiches",
         "newRoster": "+ Nouveau Roster",
         "emptyLabel": "Aucun roster",
         "col": {
@@ -13673,8 +13673,8 @@
         "title": "Personnel Salarié",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Effectifs",
-        "subtitleOne": "${rows.length} Fiche",
-        "subtitleMany": "${rows.length} Fiches",
+        "subtitleOne": "{count} Fiche",
+        "subtitleMany": "{count} Fiches",
         "addStaff": "+ Ajouter du personnel",
         "emptyLabel": "Aucun personnel salarié",
         "columnName": "Nom",
@@ -13711,7 +13711,7 @@
         "edit": {
           "fallbackTitle": "Cours de formation",
           "eyebrow": "Cours de Formation",
-          "title": "Modifier ${courseTitle}",
+          "title": "Modifier {title}",
           "submit": "Enregistrer les Modifications",
           "fields": {
             "title": "Titre",
@@ -13740,7 +13740,7 @@
           "issued": "Délivrée",
           "expires": "Expire"
         },
-        "daysShort": "${days}j"
+        "daysShort": "{days}j"
       },
       "uniforms": {
         "eyebrow": "Effectifs",
@@ -13765,7 +13765,7 @@
         "edit": {
           "fallbackName": "Bénévole",
           "eyebrow": "Bénévole",
-          "title": "Modifier ${displayName}",
+          "title": "Modifier {name}",
           "submit": "Enregistrer les Modifications",
           "fullName": "Nom Complet",
           "email": "E-mail",
@@ -13794,8 +13794,8 @@
         "title": "Bénévoles",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Effectifs",
-        "subtitleOne": "${rows.length} Fiche",
-        "subtitleOther": "${rows.length} Fiches",
+        "subtitleOne": "{count} Fiche",
+        "subtitleOther": "{count} Fiches",
         "addVolunteer": "+ Ajouter un bénévole",
         "emptyLabel": "Aucun bénévole",
         "columns": {
@@ -13810,7 +13810,7 @@
         "title": "Atomes",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "XPMS · Système de Production Atomique",
-        "loadError": "Impossible de charger les atomes : ${error.message}",
+        "loadError": "Impossible de charger les atomes : {message}",
         "emptyLabel": "Aucun Atome Pour l'Instant",
         "columns": {
           "identifier": "Identifiant",
@@ -13881,7 +13881,7 @@
       },
       "tiers": {
         "title": "Six Niveaux d'Expérience",
-        "pairedWith": "associé à ${tier.pair}",
+        "pairedWith": "associé à {pair}",
         "openLink": "Ouvrir la composition du niveau →",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "XPMS · Six Niveaux d'Expérience",
@@ -13906,8 +13906,8 @@
         "title": "Graphe de Provenance",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "XPMS · Provenance",
-        "subtitleOne": "${edges.length} Arête",
-        "subtitleOther": "${edges.length} Arêtes",
+        "subtitleOne": "{count} Arête",
+        "subtitleOther": "{count} Arêtes",
         "emptyLabel": "Aucune arête de provenance pour l'instant",
         "columns": {
           "edge": "Arête",
@@ -13947,12 +13947,12 @@
       "arrivalsHeading": "Arrivées",
       "noArrivals": "Aucune Arrivée Aujourd'hui",
       "eta": "ETA",
-      "partyOf": "Groupe de ${m.party_size}",
-      "landedAt": "atterri à ${fmtClock(m.actual_at)}",
+      "partyOf": "Groupe de {count}",
+      "landedAt": "atterri à {time}",
       "departuresHeading": "Départs",
       "noDepartures": "Aucun Départ Aujourd'hui",
       "etd": "ETD",
-      "departedAt": "parti à ${fmtClock(m.actual_at)}"
+      "departedAt": "parti à {time}"
     },
     "advances": {
       "eyebrow": "Mobile",
@@ -13976,13 +13976,13 @@
         "title": "Aucune Alerte Active"
       },
       "scheduled": "programmée",
-      "acknowledgedAt": "Acquittée ${fmt.time(ack)}",
+      "acknowledgedAt": "Acquittée {time}",
       "acknowledge": "Acquitter"
     },
     "checkIn": {
       "announce": {
-        "error": "Erreur : ${json.error.message}",
-        "accepted": "Accepté : ${name}",
+        "error": "Erreur : {message}",
+        "accepted": "Accepté : {name}",
         "duplicate": "Billet en doublon — déjà scanné",
         "voided": "Billet annulé — refusé",
         "notFound": "Billet introuvable"
@@ -14033,7 +14033,7 @@
       "eyebrow": "Pointage Terrain",
       "title": "Scanner les Billets",
       "scan": {
-        "eyebrow": "Scan · ${slug}",
+        "eyebrow": "Scan · {slug}",
         "title": "Scan QR"
       },
       "configureSupabase": "Configurez Supabase.",
@@ -14047,7 +14047,7 @@
       "unassignedVenue": "Lieu non attribué",
       "badge": {
         "mealCredited": "Repas crédité",
-        "breakMinutes": "${s.break_minutes} min de pause"
+        "breakMinutes": "{minutes} min de pause"
       }
     },
     "clock": {
@@ -14056,7 +14056,7 @@
         "network": "Erreur réseau"
       },
       "toast": {
-        "queued": "${label} (en file — synchronisation à la reconnexion)",
+        "queued": "{label} (en file — synchronisation à la reconnexion)",
         "checkedIn": "Pointé à l'arrivée",
         "breakStarted": "Pause démarrée",
         "clockedOut": "Pointé en sortie",
@@ -14139,7 +14139,7 @@
     "directory": {
       "eyebrow": "Mobile",
       "title": "Annuaire",
-      "peopleCount": "${members.length} personnes dans votre organisation",
+      "peopleCount": "{count} personnes dans votre organisation",
       "empty": {
         "title": "Aucun membre",
         "description": "Les membres de l'organisation apparaissent ici une fois ajoutés."
@@ -14198,11 +14198,11 @@
         "eyebrow": "Tournée",
         "depart": "Départ",
         "arrive": "Arrivée",
-        "manifestHeading": "Manifeste · ${manifest.length}",
+        "manifestHeading": "Manifeste · {count}",
         "noPassengers": "Aucun passager listé.",
-        "passengerFallback": "Passager ${i + 1}",
-        "pickupPrefix": "embarquement ${m.pickup}",
-        "dropoffPrefix": "dépose ${m.dropoff}"
+        "passengerFallback": "Passager {index}",
+        "pickupPrefix": "embarquement {location}",
+        "dropoffPrefix": "dépose {location}"
       }
     },
     "error": {
@@ -14214,7 +14214,7 @@
       "eyebrow": "Mobile",
       "title": "Actualités",
       "noUpdatesYet": "Aucune actualité pour le moment.",
-      "unreadOfTotal": "${unread} non lues sur ${rows.length}",
+      "unreadOfTotal": "{unread} non lues sur {total}",
       "empty": {
         "title": "Aucune Actualité",
         "description": "Les annonces de l'organisation apparaîtront ici."
@@ -14235,9 +14235,9 @@
       "gateFallback": "Accès",
       "scan": {
         "announce": {
-          "error": "Erreur : ${json.error.message}",
-          "warn": "Alerte : ${warnReason}",
-          "deny": "Refus : ${denyReason}"
+          "error": "Erreur : {message}",
+          "warn": "Alerte : {reason}",
+          "deny": "Refus : {reason}"
         },
         "result": {
           "allow": "Autoriser"
@@ -14273,8 +14273,8 @@
     "gigs": {
       "eyebrow": "Marketplace",
       "title": "Missions ouvertes",
-      "countOne": "${rows.length} mission en cours sur le réseau.",
-      "countOther": "${rows.length} missions en cours sur le réseau.",
+      "countOne": "{count} mission en cours sur le réseau.",
+      "countOther": "{count} missions en cours sur le réseau.",
       "empty": "Aucune mission en cours pour le moment.",
       "travelPaid": "déplacements pris en charge"
     },
@@ -14291,9 +14291,9 @@
         "assigned": "Site assigné",
         "any": "Tout site"
       },
-      "cadenceSuffix": " · toutes les ${r.cadence_minutes}min",
+      "cadenceSuffix": " · toutes les {minutes}min",
       "badge": {
-        "next": "Prochaine ${fmtTime(r.next_run_at)}"
+        "next": "Prochaine {time}"
       }
     },
     "guide": {
@@ -14445,7 +14445,7 @@
       "configureSupabase": "Configurer Supabase.",
       "eyebrow": "Mobile",
       "title": "Boîte de Réception",
-      "count": "${list.length} conversations",
+      "count": "{n} conversations",
       "empty": {
         "title": "Aucune Conversation"
       },
@@ -14474,8 +14474,8 @@
       "eyebrow": "Terrain",
       "title": "Incident",
       "noneLast30": "Aucun incident consigné ces 30 derniers jours.",
-      "summary": "${rows.length} sur les 30 derniers jours · ${open} ouverts",
-      "criticalSuffix": "${critical} critiques",
+      "summary": "{count} sur les 30 derniers jours · {open} ouverts",
+      "criticalSuffix": "{critical} critiques",
       "reportCta": "+ Signaler un incident",
       "empty": {
         "title": "Tout est calme"
@@ -14521,23 +14521,23 @@
         "description": "Les publications de reconnaissance apparaîtront ici."
       },
       "someone": "Quelqu'un",
-      "points": "${p.points} pts",
-      "reactWith": "Réagir avec ${emoji}"
+      "points": "{count} pts",
+      "reactWith": "Réagir avec {emoji}"
     },
     "learning": {
       "course": {
-        "lessonLabel": "Leçon ${l.ordinal}",
+        "lessonLabel": "Leçon {ordinal}",
         "quizHeading": "Quiz",
         "passed": "Réussi",
         "didNotPass": "Échoué"
       },
       "title": "Formation",
-      "coursesAssigned": "${rows.length} cours assignés",
+      "coursesAssigned": "{count} cours assignés",
       "empty": {
         "title": "Aucun Cours",
         "description": "Les formations assignées apparaîtront ici."
       },
-      "dueDate": "à rendre le ${fmt.date(a.due_at)}",
+      "dueDate": "à rendre le {date}",
       "courseFallback": "Cours"
     },
     "medic": {
@@ -14585,8 +14585,8 @@
       "eyebrow": "Terrain",
       "title": "Médic",
       "empty24h": "Aucune consultation consignée sur les 24 dernières heures.",
-      "countIn24h": "${rows.length} sur 24 h",
-      "openCount": "${open} en cours",
+      "countIn24h": "{count} sur 24 h",
+      "openCount": "{count} en cours",
       "newEncounter": "+ Nouvelle Consultation",
       "emptyState": {
         "title": "Aucune Consultation"
@@ -14631,13 +14631,13 @@
       "eyebrow": "Terrain",
       "title": "Punch List",
       "noOpenItems": "Aucun élément ouvert ne vous est assigné.",
-      "openCount": "${rows.length} ouverts",
+      "openCount": "{count} ouverts",
       "empty": {
         "title": "Punch List soldée",
         "action": "Tâches ouvertes"
       },
       "overdue": "En retard",
-      "due": "Échéance ${r.due_at}"
+      "due": "Échéance {date}"
     },
     "requests": {
       "detail": {
@@ -14691,10 +14691,10 @@
         "backToAll": "← Tous les tops",
         "eyebrow": "Show",
         "liveLabel": "Live",
-        "startedAt": "lancé ${fmtTime(live.scheduled_at)}",
-        "upcomingHeading": "À venir · ${upcoming.length}",
+        "startedAt": "lancé {time}",
+        "upcomingHeading": "À venir · {count}",
         "noMoreCues": "Plus aucun top en file.",
-        "completedHeading": "Terminés · ${done.length}",
+        "completedHeading": "Terminés · {count}",
         "doneBadge": "Terminé"
       },
       "eyebrow": "Mobile",
@@ -14761,7 +14761,7 @@
     "shift": {
       "eyebrow": "Mobile",
       "title": "Mon Shift",
-      "greeting": "Bonjour, ${wfm.full_name}.",
+      "greeting": "Bonjour, {name}.",
       "welcome": "Bienvenue.",
       "useBefore": "Utilisez",
       "useLink": "check-in",
@@ -14769,7 +14769,7 @@
       "today": "Aujourd'hui",
       "noShiftToday": "Aucun Shift Aujourd'hui",
       "unassignedVenue": "Lieu non assigné",
-      "breakMinutes": "Pause ${s.break_minutes} min",
+      "breakMinutes": "Pause {n} min",
       "mealCredit": "Crédit Repas",
       "upcomingThisWeek": "À Venir Cette Semaine",
       "checkIn": "Pointer",
@@ -14797,16 +14797,16 @@
         "open": "Ouvert",
         "anonymous": "Anonyme"
       },
-      "closesAt": "clôture le ${fmt.date(s.closes_at)}"
+      "closesAt": "clôture le {date}"
     },
     "tasks": {
       "eyebrow": "Terrain",
       "title": "Mes tâches",
       "empty": "Aucune tâche assignée",
-      "dueLabel": "Échéance ${formatDate(task.due_at)}",
+      "dueLabel": "Échéance {date}",
       "detail": {
         "back": "← Tâches",
-        "dueLabel": "Échéance ${formatDate(task.due_at)}",
+        "dueLabel": "Échéance {date}",
         "updateStatus": "Mettre à jour le statut"
       }
     },
@@ -14820,10 +14820,10 @@
         "reason": "Motif"
       },
       "title": "Congés",
-      "balancesHeading": "Soldes (${year})",
+      "balancesHeading": "Soldes ({year})",
       "noPolicies": "Aucune politique attribuée pour le moment.",
       "policyFallback": "Politique",
-      "hours": "${b.balance_hours} h",
+      "hours": "{hours} h",
       "available": "disponibles",
       "newRequest": "Nouvelle demande",
       "recentRequests": "Demandes récentes",
@@ -14887,7 +14887,7 @@
       },
       "noTag": "sans tag",
       "returnsDue": "Retours à Rendre",
-      "due": "À rendre le ${fmtDay(r.ends_at)}"
+      "due": "À rendre le {date}"
     }
   },
   "me": {
@@ -15032,7 +15032,7 @@
     "error": {
       "title": "Une Erreur Est Survenue",
       "fallbackMessage": "Nous avons rencontré une erreur lors du chargement de la vue de votre compte.",
-      "ref": "Réf : ${error.digest}",
+      "ref": "Réf : {digest}",
       "backToYourSpace": "Retour À Votre Espace"
     },
     "inbox": {
@@ -15094,7 +15094,7 @@
         "ariaLabel": "Filtres de la boîte de réception"
       },
       "unreadCount": {
-        "ariaLabel": "${unreadCount} non lus"
+        "ariaLabel": "{count} non lus"
       },
       "actions": {
         "restore": "Restaurer dans la boîte",
@@ -15372,7 +15372,7 @@
         "email": "e-mail",
         "push": "push"
       },
-      "matches": "${r.match_count} résultats"
+      "matches": "{count} résultats"
     },
     "security": {
       "passkeys": {
@@ -15394,7 +15394,7 @@
           "title": "Aucune Passkey"
         },
         "unnamedDevice": "Appareil sans nom",
-        "lastUsed": "· dernière utilisation ${formatRelative(c.last_used_at)}",
+        "lastUsed": "· dernière utilisation {when}",
         "removeAria": "Supprimer la passkey",
         "addButton": "Ajouter une passkey",
         "title": "Passkeys"
@@ -15529,7 +15529,7 @@
     "tickets": {
       "title": "Mes billets",
       "configureSupabase": "Configurez Supabase.",
-      "subtitle": "Billets émis à ${session.email}",
+      "subtitle": "Billets émis à {email}",
       "empty": "Aucun billet pour le moment",
       "columns": {
         "code": "Code",
@@ -15557,7 +15557,7 @@
   "notifications": {
     "allCaughtUp": "Vous êtes à jour.",
     "bellAria": "Notifications",
-    "bellAriaUnread": "Notifications — ${unread} non lues",
+    "bellAriaUnread": "Notifications — {count} non lues",
     "markAllRead": "Tout marquer comme lu",
     "markAllReadAria": "Tout marquer comme lu",
     "title": "Notifications",
@@ -15589,7 +15589,7 @@
         "configureSupabase": "Configurez Supabase.",
         "eyebrow": "Portail · Demandes",
         "subtitle": {
-          "one": "${changes.length} Demande · ${open} Ouverte"
+          "one": "1 Demande · {open} Ouverte"
         },
         "breadcrumbs": {
           "portal": "Portail",
@@ -15608,8 +15608,8 @@
           "title": "Vos Demandes",
           "empty": "Aucune demande de modification de pass au dossier pour l'instant."
         },
-        "filed": "déposée le ${fmtDate(c.created_at)}",
-        "decided": "tranchée le ${fmtDate(c.decided_at)}"
+        "filed": "déposée le {date}",
+        "decided": "tranchée le {date}"
       },
       "title": "Demandes",
       "headerTitle": "Accréditation",
@@ -15641,7 +15641,7 @@
         },
         "toast": {
           "submitted": "Livrable soumis",
-          "applied": "${tpl.name} appliqué"
+          "applied": "{name} appliqué"
         },
         "form": {
           "newDeliverable": "Nouveau livrable",
@@ -15785,7 +15785,7 @@
           "heading": "Vos Demandes"
         },
         "row": {
-          "opened": "ouverte le ${fmt(r.opened_at)}"
+          "opened": "ouverte le {date}"
         },
         "badge": {
           "sla": "SLA"
@@ -15845,7 +15845,7 @@
         },
         "passportLabel": "passeport",
         "letterOnFile": "lettre au dossier",
-        "updated": "mis à jour le ${fmtDate(c.updated_at)}",
+        "updated": "mis à jour le {date}",
         "footer": {
           "suffix": "si votre dossier n'avance pas."
         }
@@ -16071,7 +16071,7 @@
           "title": "Décider Des Livrables Créatifs",
           "openRound": "Ouvrir Un Tour",
           "empty": "Aucun tour de révision pour le moment.",
-          "roundLabel": "Tour ${r.round_num}"
+          "roundLabel": "Tour {num}"
         },
         "title": "Propositions",
         "subtitle": "Examiner, approuver, signer électroniquement",
@@ -16088,7 +16088,7 @@
         "eyebrow": "Approbations",
         "title": "Signatures, validations et décisions",
         "empty": "Aucune approbation au dossier.",
-        "dueAt": "Échéance ${timeAgo(a.due_at)}"
+        "dueAt": "Échéance {when}"
       },
       "changeOrders": {
         "decision": {
@@ -16129,9 +16129,9 @@
       },
       "revisions": {
         "backToList": "← Tous les tours de révision",
-        "round": "Tour ${round.round_num}",
-        "opened": "Ouvert ${timeAgo(round.created_at)}",
-        "decidedSuffix": "· Décidé ${timeAgo(round.decided_at)}",
+        "round": "Tour {num}",
+        "opened": "Ouvert {when}",
+        "decidedSuffix": "· Décidé {when}",
         "proofsHeader": "BAT de ce tour",
         "noProofs": "Aucun BAT téléversé pour le moment.",
         "previewPlaceholder": "Espace réservé à l'aperçu",
@@ -16148,8 +16148,8 @@
         },
         "item": {
           "untitled": "Sans Titre",
-          "due": "échéance ${fmt.date(d.deadline)}",
-          "issued": "émis le ${fmt.date(d.issued_at)}"
+          "due": "échéance {date}",
+          "issued": "émis le {date}"
         },
         "footer": {
           "lead": "Un souci avec quoi que ce soit ici ? Contactez votre coordinateur de production via",
@@ -16162,8 +16162,8 @@
         "empty": {
           "title": "Feuille de Service en Attente"
         },
-        "upcomingOne": "${events.length} convocation à venir",
-        "upcomingMany": "${events.length} convocations à venir",
+        "upcomingOne": "{count} convocation à venir",
+        "upcomingMany": "{count} convocations à venir",
         "downloadPdf": "Télécharger le PDF"
       },
       "index": {
@@ -16240,7 +16240,7 @@
         "title": "Dossiers",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Portail · Délégation",
-        "subtitleOne": "${cases.length} Dossier · ${open} Ouvert",
+        "subtitleOne": "{count} Dossier · {open} Ouvert",
         "breadcrumb": {
           "portal": "Portail",
           "delegation": "Délégation",
@@ -16370,7 +16370,7 @@
         "title": "Transport",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Portail · Délégation",
-        "subtitleOne": "${runs.length} Trajet · ${upcoming} Actif",
+        "subtitleOne": "1 Trajet · {upcoming} Actif",
         "crumbPortal": "Portail",
         "crumbDelegation": "Délégation",
         "crumbTransport": "Transport",
@@ -16584,8 +16584,8 @@
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Portail · Médias",
         "subtitle": {
-          "one": "${items.length} document",
-          "other": "${items.length} documents"
+          "one": "{count} document",
+          "other": "{count} documents"
         },
         "crumb": {
           "portal": "Portail",
@@ -16710,7 +16710,7 @@
     "overview": {
       "title": "Vue d'ensemble du projet",
       "subtitle": "Choisissez votre portail pour continuer",
-      "openPortal": "Ouvrir le portail ${toTitle(persona)} →"
+      "openPortal": "Ouvrir le portail {persona} →"
     },
     "producer": {
       "approvals": {
@@ -16720,8 +16720,8 @@
           "title": "Aucune approbation"
         },
         "proposalFallback": "Proposition",
-        "signedAt": "signé le ${fmt.date(a.signed_at)}",
-        "dueAt": "échéance ${fmt.date(a.due_at)}",
+        "signedAt": "signé le {date}",
+        "dueAt": "échéance {date}",
         "tile": {
           "label": "Approbations",
           "desc": "Décisions en attente"
@@ -16750,7 +16750,7 @@
         "noProject": {
           "title": "Aucun projet"
         },
-        "subtitle": "Consolidation principale pour ${project.name}.",
+        "subtitle": "Consolidation principale pour {projectName}.",
         "metrics": {
           "budget": "Budget",
           "spent": "Dépensé",
@@ -16813,7 +16813,7 @@
           "title": "Rien En Attente"
         },
         "proposalFallback": "Proposition",
-        "due": "à rendre le ${fmt.date(a.due_at)}"
+        "due": "à rendre le {date}"
       },
       "coPro": {
         "title": "Splits Co-Pro",
@@ -16946,7 +16946,7 @@
           "submitting": "Déverrouillage…",
           "submit": "Déverrouiller le guide",
           "title": "Saisir le code d'accès",
-          "tierLine": "Niveau ${tier} · ${personaLabel}"
+          "tierLine": "Niveau {tier} · {personaLabel}"
         },
         "persona": {
           "staff": "Production",
@@ -16965,7 +16965,7 @@
         "configureSupabase": "Configurez Supabase.",
         "railTitle": "Portail",
         "title": "Boîte de Réception",
-        "unreadOf": "${unread} non lus sur ${rows.length}.",
+        "unreadOf": "{unread} non lus sur {total}.",
         "empty": {
           "title": "Aucune Notification"
         },
@@ -16973,7 +16973,7 @@
         "new": "Nouveau"
       },
       "layout": {
-        "srPortalLink": "Portail ${data.name ?? slug}"
+        "srPortalLink": "Portail {name}"
       },
       "messages": {
         "title": "Messages",
@@ -17008,7 +17008,7 @@
           "label": "Équipe",
           "desc": "Feuille de service, temps, advances"
         },
-        "subtitle": "Choisissez votre mode de collaboration sur /${slug}"
+        "subtitle": "Choisissez votre mode de collaboration sur /{slug}"
       },
       "config": {
         "supabase": "Configurez Supabase."
@@ -17022,7 +17022,7 @@
           "title": "Tout est en Ordre"
         },
         "overdue": "En Retard",
-        "duePrefix": "à rendre le ${fmt.date(it.due)}"
+        "duePrefix": "à rendre le {date}"
       }
     },
     "sponsor": {
@@ -17242,8 +17242,8 @@
         },
         "titleShort": "Formation",
         "subtitle": {
-          "one": "${courses.length} cours requis",
-          "other": "${courses.length} cours requis"
+          "one": "{count} cours requis",
+          "other": "{count} cours requis"
         },
         "metric": {
           "requiredCourses": "Cours Requis",
@@ -17295,7 +17295,7 @@
         "metricStatus": "Statut",
         "statusConfirmed": "Confirmé",
         "empty": "Aucun événement à venir dans votre itinéraire.",
-        "until": "jusqu'à ${fmtTime(e.ends_at)}"
+        "until": "jusqu'à {time}"
       },
       "eyebrow": "Portail",
       "title": "VIP",
@@ -17472,7 +17472,7 @@
         "title": "Uniforme",
         "configureSupabase": "Configurer Supabase.",
         "eyebrow": "Portail · Bénévole",
-        "subtitle": "Suivi de dotation pour ${member.full_name}",
+        "subtitle": "Suivi de dotation pour {name}",
         "signInRequired": "Connexion requise",
         "crumbPortal": "Portail",
         "crumbVolunteer": "Bénévole",
@@ -17507,7 +17507,7 @@
   "rootError": {
     "eyebrow": "Erreur",
     "fallback": "Une erreur inattendue est survenue.",
-    "ref": "réf : ${error.digest}",
+    "ref": "réf : {digest}",
     "title": "Une erreur est survenue"
   },
   "shortcuts": {
@@ -17517,7 +17517,7 @@
     "hintDismiss": "pour fermer.",
     "hintOpen": "n'importe où pour ouvrir.",
     "hintPrefix": "Appuyez sur",
-    "noMatch": "Aucun raccourci ne correspond à « ${query} ».",
+    "noMatch": "Aucun raccourci ne correspond à « {query} ».",
     "title": "Raccourcis clavier"
   },
   "ui": {

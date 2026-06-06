@@ -4,11 +4,11 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { createClient } from "@/lib/supabase/server";
-import { XPMS_PHASES, XPMS_CLASSES, type XpmsPhase } from "@/lib/xpms";
+import { XPMS_ATOM_PHASES, XPMS_CLASSES, type XpmsAtomPhase } from "@/lib/xpms";
 
 export const dynamic = "force-dynamic";
 
-type AtomPhaseRow = { phase: XpmsPhase; class_code: number; state: "uac" | "tpc" };
+type AtomPhaseRow = { phase: XpmsAtomPhase; class_code: number; state: "uac" | "tpc" };
 
 export default async function PhasesPage() {
   const { t } = await getRequestT();
@@ -29,7 +29,7 @@ export default async function PhasesPage() {
   const { data } = await supabase.from("xpms_atoms").select("phase, class_code, state").eq("org_id", session.orgId);
   const rows = (data ?? []) as AtomPhaseRow[];
 
-  const byPhase = new Map<XpmsPhase, { uac: number; tpc: number; byClass: Record<number, number> }>();
+  const byPhase = new Map<XpmsAtomPhase, { uac: number; tpc: number; byClass: Record<number, number> }>();
   rows.forEach((r) => {
     const cur = byPhase.get(r.phase) ?? { uac: 0, tpc: 0, byClass: {} };
     if (r.state === "tpc") cur.tpc++;
@@ -46,7 +46,7 @@ export default async function PhasesPage() {
         subtitle={t("console.xpms.phases.subtitle", undefined, "Temporal spine across project lifecycle.")}
       />
       <div className="page-content grid grid-cols-1 gap-4 md:grid-cols-2">
-        {XPMS_PHASES.map((p) => {
+        {XPMS_ATOM_PHASES.map((p) => {
           const stat = byPhase.get(p.id) ?? { uac: 0, tpc: 0, byClass: {} };
           const total = stat.uac + stat.tpc;
           return (

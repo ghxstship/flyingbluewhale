@@ -1,0 +1,6 @@
+{
+  "auth.signup.organization": "المؤسسة",
+  "auth.signup.organizationHelp": "يمكنك إنشاؤها لاحقًا من الإعدادات.",
+  "auth.signup.tosPrefix": "بإنشائك لحساب فإنك توافق على",
+  "auth.signup.privacyPolicy": "سياسة الخصوصية"
+}

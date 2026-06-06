@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
+import { urlFor } from "@/lib/urls";
 import { toggleGateItem, approvePhase } from "@/lib/proposals/portal/mutations";
 
 type ActionState = { error?: string; ok?: true } | null;
@@ -17,7 +18,7 @@ function actorFromSession(session: { userId: string; orgId: string; email: strin
 
 export async function toggleGateAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   const session = await getSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(urlFor("auth", "/login"));
   const gateItemId = String(fd.get("gateItemId") ?? "");
   const isDone = fd.get("isDone") === "true";
   const slug = String(fd.get("slug") ?? "");
@@ -35,7 +36,7 @@ export async function toggleGateAction(_prev: ActionState, fd: FormData): Promis
 
 export async function approvePhaseAction(_prev: ActionState, fd: FormData): Promise<ActionState> {
   const session = await getSession();
-  if (!session) redirect("/login");
+  if (!session) redirect(urlFor("auth", "/login"));
   const phaseStateId = String(fd.get("phaseStateId") ?? "");
   const slug = String(fd.get("slug") ?? "");
   const proposalId = String(fd.get("proposalId") ?? "");

@@ -112,7 +112,7 @@ async function main() {
   manifest.org_id = orgInsert.data.id;
 
   // -------------------------------------------------------------------------
-  // 2. PROJECT — synthetic episode, xpms_phase = ADVANCE (mid-lifecycle)
+  // 2. PROJECT — synthetic episode, xpms_phase = Advance (mid-lifecycle)
   // -------------------------------------------------------------------------
 
   const projectInsert = await supabase
@@ -122,7 +122,7 @@ async function main() {
       name: `E2E-LRP Synthetic Episode 1 — ${SEED_RUN_ID}`,
       slug: manifest.project_slug,
       status: "active",
-      xpms_phase: "advance",
+      xpms_phase: "Advance",
       starts_at: "2026-06-01T00:00:00Z",
       ends_at: "2026-06-15T00:00:00Z",
       metadata: { seed_run_id: SEED_RUN_ID },

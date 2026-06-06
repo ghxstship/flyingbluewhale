@@ -205,3 +205,19 @@ Every `page.tsx` in the codebase is now enumerated + validated in writing in **[
 - **Finance → Invoices (full receivables lifecycle):** created INV-2623320 ($231,000, La Corriente, multi-currency form) → **Send Invoice (draft→sent)** → **Mark Paid (sent→paid)**. Each transition clean, next-action surfaced correctly. AR lifecycle confirmed end-to-end.
 
 These routes are now marked `interactive` in [PREDEPLOY_UI_CHECKLIST.md](PREDEPLOY_UI_CHECKLIST.md).
+
+## Round 10 — UI polish fixes (4 parallel agents) + Playwright coverage engine
+
+Resolved four UI/UX issues spotted in screenshots, via four parallel worktree-isolated agents; all confirmed REAL and fixed, integrated to main, typecheck clean:
+
+| Issue                                                     | Root cause (confirmed)                                                                                                                                      | Fix                                                                                                |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Settings detail stacks **below** the nav at tablet widths | Breakpoint bug — settings two-column split used `lg` (1024px) while the console rail switches at `md` (768px); 768–1023px stacked. Confirmed live at 768px. | `lg`→`md` in `settings/layout.tsx` + `SettingsSidebar.tsx`                                         |
+| Bare settings landing                                     | Thin partial tile grid, no real overview                                                                                                                    | Rebuilt `settings/page.tsx` as a complete grouped overview from the nav SSOT                       |
+| Mismatched action-row button heights                      | `*StatusControls` omitted `size` → defaulted to `md` next to `sm` Edit/Delete                                                                               | Normalized all detail action-row buttons to one size                                               |
+| Empty states                                              | `EmptyState` primitive is already best-in-class; gap is adoption (90 tables w/o CTA) + engineer strings leaking into copy                                   | `reports/EMPTY_STATE_AUDIT.md` + fixed 10 worst dead-ends                                          |
+| **Parentheses in non-body copy** (new durable rule)       | App-authored labels/titles/options used `( )`                                                                                                               | **445 replacements across 157 files** → em-dash/middot/badge/reword; nav, i18n catalog, JSX labels |
+
+### Playwright = the documented-coverage engine
+
+Manual one-page-at-a-time browser driving kept wedging on hydration and can't scale to 967 pages. The repo already has a **37-spec Playwright suite** (~250 tests: marketplace, booking, forms, portal, mobile, auth, RLS, roles, a11y, i18n) whose auto-waiting eliminates the hydration races. Added **`e2e/console-core-flows.spec.ts`** (7 tests) covering the console-core flows the suite didn't: Projects/Tasks create, **Finance invoice draft→sent→paid**, **Procurement vendor→PO + W-9/COI gate**, Proposals draft→sent→approved, Comms announcement + poll publish. **Result: 7/7 passed (1.2m)** as the seeded `owner` fixture — deterministic and repeatable where manual driving wedged. The full suite is the durable documented-coverage record going forward (`npm run e2e`).

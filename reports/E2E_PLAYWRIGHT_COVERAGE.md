@@ -22,12 +22,13 @@ Run: `npx playwright test e2e/*.spec.ts --grep-invert "a11y ·"` (excludes the `
 
 **86% pass on a cold single-worker run with 0 retries.**
 
-### Console interactive specs added this session (29 flows, all green)
+### Console interactive specs added this session (51 flows, all green)
 
 - [`e2e/console-core-flows.spec.ts`](../e2e/console-core-flows.spec.ts) — **7/7**: Projects/Tasks create, Finance invoice draft→sent→paid, Procurement vendor→PO + W-9/COI gate, Proposals draft→sent→approved, Comms announcement/poll publish.
-- [`e2e/console-modules.spec.ts`](../e2e/console-modules.spec.ts) — **22/22**: create flows across Sales (clients, leads), Operations (events, meetings, RFIs), Production (equipment, fabrication), Finance (expenses, cost codes), Settings (master catalog), Workforce (courses, staff, volunteers), Safety (crisis, threats, briefings), Knowledge, Programs (risk), Marketing (campaigns), Specs, Legal (IP), and sponsor deliverables. A tolerant helper fills named + remaining-required fields by type, then asserts the create redirected off `/new` with no error surface.
+- [`e2e/console-modules.spec.ts`](../e2e/console-modules.spec.ts) — **22/22**: Sales (clients, leads), Operations (events, meetings, RFIs), Production (equipment, fabrication), Finance (expenses, cost codes), Settings (catalog), Workforce (courses, staff, volunteers), Safety (crisis, threats, briefings), Knowledge, Programs (risk), Marketing (campaigns), Specs, Legal (IP), sponsor deliverables.
+- [`e2e/console-modules-b4.spec.ts`](../e2e/console-modules-b4.spec.ts) — **22/22**: Accommodation blocks, Accreditation categories, AI automations, Reality captures, Comms surveys, Drawings, Estimates, Finance (entities, forecasts, mileage, periods, time), Forms, Locations, Logistics rate card, ITIL changes/problems, Participants (delegations, visa), People crew, Procurement RFQ, Programs review.
 
-These cover the console-core modules the pre-existing suite did not drive interactively.
+A shared tolerant helper ([`e2e/helpers/forms.ts`](../e2e/helpers/forms.ts)) fills named fields + auto-satisfies remaining required fields by input type, then asserts the create redirected off `/new` with no error surface. This brings repeatable interactive coverage to **51 console create/lifecycle flows** the pre-existing suite did not drive — ~46% of the 110 console `/new` routes, growing each batch.
 
 ## The 55 failures are all pre-existing / environmental — zero regressions from this session
 

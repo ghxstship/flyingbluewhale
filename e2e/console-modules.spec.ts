@@ -62,9 +62,22 @@ async function createInModule(page: Page, route: string, fields: Record<string, 
         .locator("option")
         .evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value).filter(Boolean));
       if (vals[0]) await el.selectOption(vals[0]);
-    } else {
-      await fillSmart(el, "E2E Test");
+      continue;
     }
+    // type-appropriate default so date/datetime/number/email required fields
+    // don't get filled with an invalid generic string.
+    const type = (await el.getAttribute("type")) || "text";
+    const defaults: Record<string, string> = {
+      date: "2030-01-01",
+      "datetime-local": "2030-01-01T10:00",
+      time: "10:00",
+      number: "100",
+      email: "e2e@test.example",
+      url: "https://example.com",
+      tel: "305-555-0100",
+    };
+    if (type === "checkbox") await el.check();
+    else await el.fill(defaults[type] ?? "E2E Test");
   }
   await page
     .locator("main form")

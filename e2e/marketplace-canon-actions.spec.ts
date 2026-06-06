@@ -214,7 +214,7 @@ test.describe("Marketplace canon · form actions", () => {
     await page.getByLabel("Title").fill(title);
     await page.getByLabel("City").fill("Atlanta");
     await page.getByLabel("Region/State").fill("GA");
-    await page.getByLabel("Roles (comma-separated)").fill("A1, Stage Tech");
+    await page.getByLabel(/Roles/).fill("A1, Stage Tech");
     await page.getByRole("button", { name: /^Save Draft$/i }).click();
     await page.waitForURL(/\/console\/marketplace\/postings\/[0-9a-f-]+$/, { timeout: 15_000 });
 
@@ -238,7 +238,7 @@ test.describe("Marketplace canon · form actions", () => {
 
     await page.goto("/console/marketplace/calls/new");
     await page.getByLabel("Title").fill(title);
-    await page.getByLabel("Genre Tags (comma-separated)").fill("disco, italo");
+    await page.getByLabel(/Genre Tags/).fill("disco, italo");
     await page.getByRole("button", { name: /^Save Draft$/i }).click();
     await page.waitForURL(/\/console\/marketplace\/calls\/[0-9a-f-]+$/, { timeout: 15_000 });
 
@@ -260,7 +260,7 @@ test.describe("Marketplace canon · form actions", () => {
     await page.goto("/console/marketplace/talent/new");
     await page.getByLabel("Act Name").fill(actName);
     await page.getByLabel("Tagline").fill("End-to-end test seed.");
-    await page.getByLabel("Genre Tags (comma-separated)").fill("test-genre");
+    await page.getByLabel(/Genre Tags/).fill("test-genre");
     await page.getByRole("button", { name: /^Save Profile$/i }).click();
     await page.waitForURL(/\/console\/marketplace\/talent\/[0-9a-f-]+$/, { timeout: 15_000 });
 

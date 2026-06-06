@@ -83,7 +83,7 @@ test.describe("Booking canon · extras", () => {
     await page.goto(`/console/marketplace/postings/${FX.posting}/applicants/${FX.application}`);
     await expect(page.locator("h1")).toContainText(/#/);
     await page.locator('select[name="status"]').selectOption("reviewed");
-    await page.getByLabel("Score (0-100)").fill("82");
+    await page.getByLabel(/Score/).fill("82");
     await page.locator('textarea[name="reviewer_notes"]').fill("E2E reviewer note");
     await page.getByRole("button", { name: /Update Stage/i }).click();
     await page.waitForLoadState("networkidle");
@@ -96,7 +96,7 @@ test.describe("Booking canon · extras", () => {
     await page.goto(`/console/marketplace/calls/${FX.call}/submissions/${FX.submission}`);
     await expect(page.locator("h1")).toContainText(/#/);
     await page.locator('select[name="status"]').selectOption("shortlisted");
-    await page.getByLabel("Score (0-100)").fill("90");
+    await page.getByLabel(/Score/).fill("90");
     await page.getByRole("button", { name: /Update Status/i }).click();
     await page.waitForLoadState("networkidle");
     await page.goto(`/console/marketplace/calls/${FX.call}/submissions/${FX.submission}`);
@@ -160,7 +160,7 @@ test.describe("Booking canon · extras", () => {
     const tagline = `E2E crew tagline ${Date.now()}`;
     await page.getByLabel("Name").fill(`E2E Crew Self ${Date.now()}`);
     await page.getByLabel("Tagline").fill(tagline);
-    await page.getByLabel("Roles (comma-separated)").fill("A1, Lighting Programmer");
+    await page.getByLabel(/Roles/).fill("A1, Lighting Programmer");
     await page.getByRole("button", { name: /Save Profile/i }).click();
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(500);

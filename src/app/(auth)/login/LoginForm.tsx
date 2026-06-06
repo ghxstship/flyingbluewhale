@@ -28,7 +28,7 @@ export function LoginForm() {
       footer={
         <>
           {t("auth.login.noAccount", undefined, "Don't have an account?")}{" "}
-          <Link href="/signup" className="text-[var(--org-primary)] underline underline-offset-4">
+          <Link href="/signup" className="text-[var(--org-accent)] underline underline-offset-4">
             {t("auth.login.createOne", undefined, "Create one")}
           </Link>
         </>

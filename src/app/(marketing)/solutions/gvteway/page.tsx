@@ -151,7 +151,7 @@ export default async function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div className="surface p-8">
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
               <Share2 size={14} /> {t("marketing.pages.solutions.gvteway.features.proposals.eyebrow")}
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -162,13 +162,13 @@ export default async function GvtewayPage() {
             </p>
             <Link
               href="/features/proposals"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-accent)]"
             >
               {t("marketing.pages.solutions.gvteway.features.proposals.link")}
             </Link>
           </div>
           <div className="surface p-8">
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
               <BookOpen size={14} /> {t("marketing.pages.solutions.gvteway.features.kbyg.eyebrow")}
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">
@@ -179,7 +179,7 @@ export default async function GvtewayPage() {
             </p>
             <Link
               href="/features/guides"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-primary)]"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-accent)]"
             >
               {t("marketing.pages.solutions.gvteway.features.kbyg.link")}
             </Link>
@@ -191,7 +191,7 @@ export default async function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
               {t("marketing.pages.solutions.gvteway.security.eyebrow")}
             </div>
             <h3 className="mt-3 text-3xl font-semibold tracking-tight">

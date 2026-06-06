@@ -108,7 +108,11 @@
   --p-border-2: #d3d8e0;
   --p-text-1: #181b23;
   --p-text-2: #5b6472;
-  --p-text-3: #8c95a3;
+  /* WCAG 1.4.3 — lowest-emphasis text + placeholders. Was #8c95a3
+     (3.0:1 on white, fails AA). Deepened to #656d7a (5.2:1 on white,
+     4.7:1 on --p-surface-2) so muted micro-labels meet 4.5:1. Still
+     reads clearly below --p-text-2 in the type hierarchy. */
+  --p-text-3: #656d7a;
   --p-accent-contrast: #ffffff;
 
   /* Accent stays inert until a [data-platform] subtree narrows it.
@@ -119,6 +123,16 @@
   --p-accent-hover: #e61e76;
   --p-accent-text: #d11668;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
+
+  /* CTA fill — solid accent buttons with a foreground LABEL (e.g. the
+     "Start Free" primary). The bright --p-accent (#ff2e88) only reaches
+     ~3.5:1 with white text, failing WCAG 1.4.3 for non-large labels.
+     This deepened, same-hue fill clears 4.5:1 with white, so filled CTAs
+     stay on-brand AND accessible. Decorative accent (top-bars, large
+     display text, focus halos) keeps the bright --p-accent. Pairs with
+     --p-accent-cta-contrast for the label color. */
+  --p-accent-cta: #d11668;
+  --p-accent-cta-contrast: #ffffff;
 
   /* ----------- LEGACY ALIAS CONTRACT --------------------------------
    * SSOT lock for the ATLVS skin: the `--p-*` namespace (per the kit's
@@ -229,7 +243,10 @@
   --p-border-2: #3a404c;
   --p-text-1: #f2f4f8;
   --p-text-2: #a6aebc;
-  --p-text-3: #6e7682;
+  /* WCAG 1.4.3 — was #6e7682 (3.7:1 on --p-surface, fails AA).
+     Lightened to #9098a4 (5.8:1 on --p-surface, 5.1:1 on
+     --p-surface-2) so dark-mode muted text meets 4.5:1. */
+  --p-text-3: #9098a4;
   --p-accent-contrast: #0e1014;
   color-scheme: dark;
 }
@@ -247,11 +264,16 @@
   --p-accent-hover: #e61e76;
   --p-accent-text: #d11668;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
+  --p-accent-cta: #d11668; /* white label = 5.2:1 */
+  --p-accent-cta-contrast: #ffffff;
 }
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff4d9b;
   --p-accent-text: #ff6fae;
   --p-accent-weak: rgba(255, 46, 136, 0.18);
+  /* Dark: the bright accent + dark ink label clears AA (6.1:1). */
+  --p-accent-cta: #ff4d9b;
+  --p-accent-cta-contrast: #0e1014;
 }
 
 /* COMPVSS — crew · vendor · talent · amber */
@@ -261,12 +283,17 @@
   --p-accent-text: #9a6512;
   --p-accent-weak: rgba(233, 162, 59, 0.14);
   --p-accent-contrast: #1b1305;
+  --p-accent-cta: #8a5a0f; /* white label = 5.9:1 */
+  --p-accent-cta-contrast: #ffffff;
 }
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
   --p-accent: #f0b255;
   --p-accent-text: #f0b255;
   --p-accent-weak: rgba(233, 162, 59, 0.2);
   --p-accent-contrast: #1b1305;
+  /* Dark: bright amber + dark ink label (the kit's amber-on-black). */
+  --p-accent-cta: #f0b255;
+  --p-accent-cta-contrast: #1b1305;
 }
 
 /* GVTEWAY — guest · client · cyan */
@@ -275,11 +302,16 @@
   --p-accent-hover: #0e9e9e;
   --p-accent-text: #0b7e7e;
   --p-accent-weak: rgba(33, 212, 212, 0.14);
+  --p-accent-cta: #0a7373; /* white label = 5.7:1 */
+  --p-accent-cta-contrast: #ffffff;
 }
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
   --p-accent: #2bd6d6;
   --p-accent-text: #3fe0e0;
   --p-accent-weak: rgba(33, 212, 212, 0.18);
+  /* Dark: bright teal + dark ink label clears AA. */
+  --p-accent-cta: #2bd6d6;
+  --p-accent-cta-contrast: #0e1014;
 }
 
 /* Per-product accent → alias contract refresh (so legacy primitives
@@ -294,6 +326,22 @@
   --org-accent: var(--p-accent-text);
   --org-on-primary: var(--p-accent-contrast);
   --ring-color: var(--p-accent);
+}
+
+/* Filled primary buttons (.btn-primary / .badge-brand) carry a foreground
+   LABEL, so they need the AA-safe CTA fill — not the bright display accent
+   (white-on-#ff2e88 is only ~3.5:1, failing WCAG 1.4.3). The bright accent
+   stays for fills WITHOUT text (top-bars, progress, focus halos) and for
+   large display text where 3:1 suffices. Scoped to the product skin so the
+   8 legacy CHROMA themes keep their own primary-button paint. */
+[data-theme="atlvs-product"] .btn-primary {
+  background: var(--p-accent-cta);
+  color: var(--p-accent-cta-contrast);
+  border-color: var(--p-accent-cta);
+}
+[data-theme="atlvs-product"] .badge-brand {
+  background: var(--p-accent-cta);
+  color: var(--p-accent-cta-contrast);
 }
 
 /* SaaS apps use plain ERP language — no UPPERCASE or display-condensed

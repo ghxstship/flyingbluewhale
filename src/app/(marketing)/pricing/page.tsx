@@ -584,7 +584,7 @@ export default async function PricingPage() {
         </h2>
         <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
           {t("marketing.pages.pricing.comparison.intro")}{" "}
-          <a className="text-[var(--org-primary)] underline underline-offset-2" href="/contact">
+          <a className="text-[var(--org-accent)] underline underline-offset-2" href="/contact">
             {t("marketing.pages.pricing.comparison.talkToStudio")}
           </a>
           .

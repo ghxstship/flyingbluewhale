@@ -119,7 +119,7 @@ export default async function CompvssPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
               <Wifi size={14} /> {t("marketing.pages.solutions.compvss.offlineFirst.eyebrow")}
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight">

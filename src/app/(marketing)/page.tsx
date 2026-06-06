@@ -149,6 +149,11 @@ export default async function Home() {
     },
   ];
 
+  // `color` is the bright brand fill (decorative accent bars / large display).
+  // `textColor` is the per-product AA-deepened text variant (matches the
+  // theme's --p-accent-text) so brand-colored text on white surfaces still
+  // clears WCAG 1.4.3 4.5:1 — the bright fills (#ff2e88 etc.) only reach
+  // ~2.2–3.5:1 as text. Same hue, darker value; brand mark colors unchanged.
   const PRODUCTS = [
     {
       slug: "atlvs",
@@ -158,6 +163,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.atlvs.body"),
       href: "/solutions/atlvs",
       color: "#FF2E88",
+      textColor: "#D11668",
     },
     {
       slug: "compvss",
@@ -167,6 +173,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.compvss.body"),
       href: "/solutions/compvss",
       color: "#E9A23B",
+      textColor: "#8A5A0F",
     },
     {
       slug: "gvteway",
@@ -176,6 +183,7 @@ export default async function Home() {
       body: t("marketing.pages.home.products.gvteway.body"),
       href: "/solutions/gvteway",
       color: "#12B5B5",
+      textColor: "#0B7E7E",
     },
   ];
 
@@ -344,7 +352,7 @@ export default async function Home() {
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
                   href="/signup"
-                  className="rounded-md bg-[var(--p-accent)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
+                  className="rounded-md bg-[var(--p-accent-cta)] px-5 py-2.5 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition hover:brightness-95"
                 >
                   {t("marketing.pages.home.hero.ctaPrimary")}
                 </Link>
@@ -365,7 +373,7 @@ export default async function Home() {
                 {PRODUCTS.map((p) => (
                   <div key={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
                     <div className="flex items-baseline justify-between gap-3">
-                      <span className="text-lg font-semibold tracking-tight" style={{ color: p.color }}>
+                      <span className="text-lg font-semibold tracking-tight" style={{ color: p.textColor }}>
                         {p.title}
                       </span>
                       <span className="text-[10px] font-medium tracking-[0.08em] text-[var(--p-text-3)] uppercase">
@@ -421,10 +429,10 @@ export default async function Home() {
                   className="absolute inset-x-0 top-0 h-1 rounded-t-xl"
                   style={{ background: p.color }}
                 />
-                <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: p.color }}>
+                <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: p.textColor }}>
                   {p.audience}
                 </p>
-                <h3 className="mt-2 text-3xl font-bold tracking-tight" style={{ color: p.color }}>
+                <h3 className="mt-2 text-3xl font-bold tracking-tight" style={{ color: p.textColor }}>
                   {p.title}
                 </h3>
                 <p className="mt-1 text-xs font-medium text-[var(--p-text-3)] uppercase">{p.tag}</p>
@@ -657,7 +665,7 @@ export default async function Home() {
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/signup"
-              className="rounded-md bg-[var(--p-accent)] px-6 py-3 text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
+              className="rounded-md bg-[var(--p-accent-cta)] px-6 py-3 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition hover:brightness-95"
             >
               {t("marketing.pages.home.cta.ctaPrimary")}
             </Link>

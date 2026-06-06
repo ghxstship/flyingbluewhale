@@ -146,7 +146,7 @@ export default async function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
               {t("marketing.pages.solutions.atlvs.architecture.eyebrow")}
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight">

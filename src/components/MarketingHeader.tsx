@@ -192,7 +192,7 @@ export function MarketingHeader() {
           </Link>
           <Link
             href="/signup"
-            className="rounded-md bg-[var(--p-accent)] px-4 py-2 text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
+            className="rounded-md bg-[var(--p-accent-cta)] px-4 py-2 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition hover:brightness-95"
           >
             {t("common.startFree")}
           </Link>
@@ -253,7 +253,7 @@ export function MarketingHeader() {
               </Link>
               <Link
                 href="/signup"
-                className="w-full justify-center rounded-md bg-[var(--p-accent)] px-4 py-2 text-center text-sm font-semibold text-[var(--p-accent-contrast)] transition hover:brightness-95"
+                className="w-full justify-center rounded-md bg-[var(--p-accent-cta)] px-4 py-2 text-center text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition hover:brightness-95"
                 onClick={() => setMobileOpen(false)}
               >
                 {t("common.startFree")}

@@ -116,7 +116,11 @@ export function MarketingGrid({
 // ---------------------------------------------------------------------------
 // MarketingPageShell — stacks a hero + N sections with canonical rhythm.
 // Purely a layout convenience; the h1 / h2 styling lives on the primitives.
+//
+// Renders a plain <div>, NOT <main>: the marketing layout already wraps
+// page content in a single <main> landmark. A nested <main> here would
+// produce two main landmarks (axe `landmark-no-duplicate-main`, WCAG 1.3.1).
 // ---------------------------------------------------------------------------
 export function MarketingPageShell({ children }: { children: React.ReactNode }) {
-  return <main className="space-y-6 pb-24 md:space-y-10 lg:space-y-14">{children}</main>;
+  return <div className="space-y-6 pb-24 md:space-y-10 lg:space-y-14">{children}</div>;
 }

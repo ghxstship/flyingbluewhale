@@ -130,7 +130,7 @@ export function PricingCalculator() {
 
           <a
             href="/signup"
-            className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-semibold text-[var(--org-primary)] underline underline-offset-4"
+            className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-semibold text-[var(--org-accent)] underline underline-offset-4"
           >
             Sign up free <ArrowRight size={12} className="cta-nudge" aria-hidden />
           </a>
@@ -210,7 +210,7 @@ function Tile({ label, value, tone }: { label: string; value: string; tone?: "ac
     <div>
       <div className="font-mono text-[10px] tracking-wide text-[var(--text-muted)] uppercase">{label}</div>
       <div
-        className={`mt-1 font-mono tabular-nums ${tone === "accent" ? "text-[var(--org-primary)]" : ""} text-lg font-semibold`}
+        className={`mt-1 font-mono tabular-nums ${tone === "accent" ? "text-[var(--org-accent)]" : ""} text-lg font-semibold`}
       >
         {value}
       </div>

@@ -1386,9 +1386,14 @@ pre,
     text-transform: uppercase;
     color: var(--text-muted);
   }
+  /* WCAG color-contrast (1.4.3): eyebrows are ~11px small text, so they
+     need 4.5:1. The raw fill accent (--org-primary, e.g. ATLVS pink
+     #ff2e88 = 3.5:1 on white) fails as text — use the per-product
+     deepened text variant (--org-accent → --p-accent-text, AA-tuned in
+     the theme) which preserves the brand hue while passing AA. */
   .eyebrow-accent,
   .eyebrow-brand {
-    color: var(--org-primary);
+    color: var(--org-accent);
   }
 
   /* `.kinetic-display` — large-format display text with a subtle slide-up

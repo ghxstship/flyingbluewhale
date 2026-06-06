@@ -97,7 +97,7 @@ export default async function AboutPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-accent)] uppercase">
           {t("marketing.pages.about.hero.eyebrow")}
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">

@@ -85,7 +85,7 @@ export default async function ContactPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-accent)] uppercase">
           {t("marketing.pages.contact.hero.eyebrow")}
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
@@ -110,7 +110,7 @@ export default async function ContactPage() {
               <div>
                 <div className="text-sm font-semibold">{title}</div>
                 <p className="mt-1 text-sm text-[var(--text-secondary)]">{body}</p>
-                <div className="mt-2 font-mono text-xs text-[var(--org-primary)]">{cta}</div>
+                <div className="mt-2 font-mono text-xs text-[var(--org-accent)]">{cta}</div>
               </div>
             </a>
           ))}

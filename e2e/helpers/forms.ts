@@ -24,22 +24,15 @@ const TYPE_DEFAULTS: Record<string, string> = {
 async function fillSmart(el: Locator, value: string) {
   const tag = await el.evaluate((e) => e.tagName);
   if (tag === "SELECT") {
-    const ok = await el.selectOption(value).then(
-      () => true,
-      () => false,
-    );
-    if (!ok) {
-      const byLabel = await el.selectOption({ label: value }).then(
-        () => true,
-        () => false,
-      );
-      if (!byLabel) {
-        const vals = await el
-          .locator("option")
-          .evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value).filter(Boolean));
-        if (vals[0]) await el.selectOption(vals[0]);
-      }
-    }
+    // Resolve the target option WITHOUT a failing selectOption (which would
+    // retry for the full action timeout). Match the passed value by option
+    // value or label; otherwise pick the first non-empty option.
+    const opts = await el
+      .locator("option")
+      .evaluateAll((os) => os.map((o) => ({ v: (o as HTMLOptionElement).value, l: (o.textContent || "").trim() })));
+    const match = opts.find((o) => o.v === value || o.l === value);
+    const target = match?.v ?? opts.find((o) => o.v)?.v;
+    if (target) await el.selectOption(target);
     return;
   }
   const type = (await el.getAttribute("type")) || "text";

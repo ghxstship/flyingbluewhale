@@ -4,6 +4,8 @@
 
 Every `page.tsx` in `src/app` is enumerated below with its URL route and validation status. This is the living pre-deployment gate — we keep filling it until every page is validated in writing.
 
+**Coverage layers:** (1) render — this checklist, **962/967 pages → HTTP 200** as the authed owner. (2) interactive/functional — the Playwright suite, **515 functional+interactive tests passing**, see [E2E_PLAYWRIGHT_COVERAGE.md](E2E_PLAYWRIGHT_COVERAGE.md) (incl. `console-core-flows` 7/7). (3) `/m` write paths — compvss smoke (92/92 + 28/28).
+
 ## Methodology / legend
 
 - **✅ 200** — authenticated HTTP sweep (`scripts/ui-http-sweep.mjs`, as org owner `casa.wynwood@atlvs.pro`) returned HTTP 200: the page renders server-side without 404/500/redirect.

@@ -134,4 +134,83 @@ test.describe("console modules — create flows", () => {
   test("Sales · sponsor deliverable create", async ({ page }) => {
     await createInModule(page, "/console/commercial/sponsors/new", { title: `E2E Sponsor ${stamp()}` });
   });
+
+  // Batch 3 — more single-entity creates across safety, ops, knowledge, programs,
+  // marketing, finance, legal, workforce.
+  test("Safety · crisis create", async ({ page }) => {
+    await createInModule(page, "/console/safety/crisis/new", { title: `E2E Crisis ${stamp()}` });
+  });
+
+  test("Safety · threat create", async ({ page }) => {
+    await createInModule(page, "/console/safety/threats/new", { title: `E2E Threat ${stamp()}` });
+  });
+
+  test("Safety · briefing create", async ({ page }) => {
+    await createInModule(page, "/console/safety/briefings/new", {
+      topic: `E2E Briefing ${stamp()}`,
+      scheduled_for: "2030-01-01T10:00",
+    });
+  });
+
+  test("Operations · meeting create", async ({ page }) => {
+    await createInModule(page, "/console/meetings/new", {
+      title: `E2E Meeting ${stamp()}`,
+      starts_at: "2030-01-01T10:00",
+      ends_at: "2030-01-01T11:00",
+    });
+  });
+
+  test("Knowledge · article create", async ({ page }) => {
+    const s = stamp();
+    await createInModule(page, "/console/knowledge/new", {
+      title: `E2E Article ${s}`,
+      slug: `e2e-article-${s}`,
+      body_markdown: "E2E article body content.",
+    });
+  });
+
+  test("Programs · risk create", async ({ page }) => {
+    await createInModule(page, "/console/programs/risk/new", { title: `E2E Risk ${stamp()}` });
+  });
+
+  test("Marketing · campaign create", async ({ page }) => {
+    await createInModule(page, "/console/campaigns/new", { name: `E2E Campaign ${stamp()}` });
+  });
+
+  test("Finance · cost code create", async ({ page }) => {
+    const s = stamp();
+    await createInModule(page, "/console/finance/cost-codes/new", {
+      code: `E2E-${s}`,
+      name: `E2E Cost Code ${s}`,
+      description: "E2E cost code",
+    });
+  });
+
+  test("Specs · spec section create", async ({ page }) => {
+    const s = stamp();
+    await createInModule(page, "/console/specs/new", {
+      section_number: `09 ${s.slice(-4)}`,
+      title: `E2E Spec ${s}`,
+    });
+  });
+
+  test("Legal · IP / trademark create", async ({ page }) => {
+    await createInModule(page, "/console/legal/ip/new", { mark: `E2E Mark ${stamp()}` });
+  });
+
+  test("Workforce · staff create", async ({ page }) => {
+    const s = stamp();
+    await createInModule(page, "/console/workforce/staff/new", {
+      full_name: `E2E Staff ${s}`,
+      email: `e2e-staff-${s}@test.example`,
+    });
+  });
+
+  test("Workforce · volunteer create", async ({ page }) => {
+    const s = stamp();
+    await createInModule(page, "/console/workforce/volunteers/new", {
+      full_name: `E2E Volunteer ${s}`,
+      email: `e2e-vol-${s}@test.example`,
+    });
+  });
 });

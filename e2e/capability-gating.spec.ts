@@ -83,10 +83,10 @@ test.describe("capability/check-in:write", () => {
   const UNAUTHORIZED: string[] = ["client", "community", "viewer"];
 
   for (const role of UNAUTHORIZED) {
-    test(`${role} cannot POST /api/v1/tickets/scan → 403 forbidden`, async ({ page, context }) => {
+    test(`${role} cannot POST /api/v1/scan → 403 forbidden`, async ({ page, context }) => {
       await dismissConsent(context);
       await login(page, role);
-      const r = await page.request.post("/api/v1/tickets/scan", {
+      const r = await page.request.post("/api/v1/scan", {
         data: { code: `probe-${Date.now()}` },
       });
       expect(r.status()).toBe(403);
@@ -97,10 +97,10 @@ test.describe("capability/check-in:write", () => {
     });
   }
 
-  test("crew CAN POST /api/v1/tickets/scan (no forbidden error)", async ({ page, context }) => {
+  test("crew CAN POST /api/v1/scan (no forbidden error)", async ({ page, context }) => {
     await dismissConsent(context);
     await login(page, "crew");
-    const r = await page.request.post("/api/v1/tickets/scan", {
+    const r = await page.request.post("/api/v1/scan", {
       data: { code: `probe-${Date.now()}` },
     });
     // May 404 (no such ticket), 200, or 500 on downstream but NOT 403.

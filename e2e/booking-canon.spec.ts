@@ -153,17 +153,17 @@ test.describe("Booking canon · IA — Bookings group + ticketing in settings", 
     await dismissConsent(page);
     await loginAsOwner(page);
     await page.goto("/console/bookings");
-    for (const path of [
-      "/console/bookings",
-      "/console/bookings/deals",
-      "/console/bookings/holds",
-      "/console/bookings/calendar",
-      "/console/bookings/settlements",
-      "/console/agency/tours",
-      "/console/marketing",
-      "/console/insights",
-    ]) {
+    // The Talent/Bookings IA consolidated Deals/Holds/Calendar/Settlements into
+    // tabs WITHIN the /console/bookings hub (see src/lib/nav.ts §300 "Bookings
+    // is a tabbed landing"). The primary sidebar exposes the hub entries, not
+    // the per-tab sub-routes.
+    for (const path of ["/console/bookings", "/console/agency/tours", "/console/marketing", "/console/insights"]) {
       await expect(page.locator(`aside a[href="${path}"]`).first()).toBeVisible();
+    }
+    // The consolidated sub-tabs still render as pages under the hub.
+    for (const tab of ["/console/bookings/deals", "/console/bookings/holds"]) {
+      await page.goto(tab);
+      await expect(page.locator("h1").first()).toBeVisible({ timeout: 15000 });
     }
   });
 });

@@ -460,8 +460,10 @@ test.describe("Marketplace canon · IA discoverability", () => {
     await page.goto("/console/marketplace");
     // Marketplace overview link present in the primary sidebar.
     await expect(page.locator('aside a[href="/console/marketplace"]').first()).toBeVisible();
-    // Sub-items live in the same sidebar (under Commerce).
-    await expect(page.locator('aside a[href="/console/marketplace/postings"]').first()).toBeVisible();
+    // Sub-items live in the same sidebar (under Commerce). Postings + Open
+    // Calls consolidated into the /console/marketplace hub (see src/lib/nav.ts
+    // §320); Talent Roster + Offers remain discrete sidebar entries.
+    await expect(page.locator('aside a[href="/console/marketplace/talent"]').first()).toBeVisible();
     await expect(page.locator('aside a[href="/console/marketplace/offers"]').first()).toBeVisible();
     // Reviews moved to Settings sidebar; not in primary platformNav anymore.
     const reviewsInPrimary = page.locator('aside a[href="/console/marketplace/reviews"]');

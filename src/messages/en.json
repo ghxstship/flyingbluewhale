@@ -1211,7 +1211,7 @@
               "desc": "Incidents, OSHA, medical, crisis, BC/DR, cyber-IR, safeguarding, environmental."
             },
             "guides": {
-              "title": "Event guides (KBYG)",
+              "title": "Event Guides — KBYG",
               "desc": "One project, six personas, 17 section types — schedule, SOPs, PPE, radio, evac."
             },
             "ai": {
@@ -1579,7 +1579,7 @@
             "compliance": {
               "title": "Compliance Gates",
               "prequalification": "Prequalification",
-              "insurance": "Insurance (COI)",
+              "insurance": "Insurance — COI",
               "w9": "W-9 / W-8",
               "nda": "NDA acceptance"
             },
@@ -2275,7 +2275,7 @@
           "atlvs": {
             "projectsTasks": "Projects, tasks, schedule, ROS",
             "rfisSubmittals": "RFIs · submittals · daily logs · punch",
-            "inspections": "Inspections (10 categories)",
+            "inspections": "Inspections — 10 Categories",
             "finance": "Finance — invoices, budgets, expenses",
             "procurement": "Procurement — RFQs, POs, vendor scorecards",
             "production": "Production — equipment, rentals, fab orders",
@@ -2314,7 +2314,7 @@
             "selfExpiringShares": "Self-expiring file shares",
             "rateLimited": "Rate-limited endpoints",
             "strictHeaders": "Strict edge security headers",
-            "sso": "SSO (SAML / OIDC)",
+            "sso": "SSO — SAML / OIDC",
             "soc2": "SOC-2 attestation pack",
             "customDpa": "Custom DPA",
             "dataResidency": "Data residency"
@@ -2833,7 +2833,7 @@
               "body": "Training bookings, resident services, safeguarding, visa, privacy self-service."
             },
             "privacy": {
-              "title": "Privacy (all)",
+              "title": "Privacy — All",
               "body": "Every persona gets DSAR self-service + consent management. GDPR, handled."
             }
           },
@@ -3663,7 +3663,7 @@
     "provider": "Provider",
     "externalEventId": "External Event ID",
     "label": "Label",
-    "apiKey": "API Key (encrypted)",
+    "apiKey": "API Key — Encrypted",
     "lastSync": "Last Sync",
     "active": "Active",
     "off": "Off"
@@ -3980,7 +3980,7 @@
       "subtitle": "Quick capture from the floor",
       "todaysLog": "Today's log — {date}",
       "selectProject": "Select a project…",
-      "weatherPlaceholder": "Weather (e.g. 78°F, sunny)",
+      "weatherPlaceholder": "Weather — e.g. 78°F, Sunny",
       "saveLog": "Save log",
       "recent": "Recent"
     },
@@ -4176,7 +4176,7 @@
       "eyebrow": "Field",
       "title": "My Incidents",
       "subtitle": "Reports you filed. {count} open. See the org-wide queue at",
-      "quickFile": "Quick-file (one field)",
+      "quickFile": "Quick-file — One Field",
       "fullReport": "Full report",
       "empty": {
         "title": "No Reports Yet"
@@ -4227,7 +4227,7 @@
       "give": "Give Kudos",
       "to": "To",
       "message": "Message",
-      "valueTag": "Value (optional tag)",
+      "valueTag": "Value · Optional Tag",
       "empty": {
         "title": "No Kudos Yet",
         "description": "Recognition posts will appear here."
@@ -4702,12 +4702,12 @@
         "name": "Name",
         "tagline": "Tagline",
         "bio": "Bio",
-        "roles": "Roles (comma-separated)",
+        "roles": "Roles — Comma-separated",
         "unions": "Unions",
         "certifications": "Certifications",
         "dayRateMin": "Day Rate Min",
         "dayRateMax": "Day Rate Max",
-        "travelRadius": "Travel Radius (km)",
+        "travelRadius": "Travel Radius — km",
         "reelUrl": "Reel URL"
       },
       "placeholders": {
@@ -5065,7 +5065,7 @@
         "kind": "Kind",
         "name": "Name",
         "namePlaceholder": "A1 / Lighting Programmer · FL",
-        "query": "Query (JSON)",
+        "query": "Query — JSON",
         "emailAlerts": "Email alerts",
         "pushAlerts": "Push alerts"
       },
@@ -5207,10 +5207,10 @@
           "spacious": "Spacious"
         },
         "locale": {
-          "label": "Locale (e.g. en, en-US, es)"
+          "label": "Locale — e.g. en, en-US, es"
         },
         "timezone": {
-          "label": "Timezone (IANA, e.g. America/New_York)",
+          "label": "Timezone — IANA, e.g. America/New_York",
           "placeholder": "Auto-detected if blank"
         }
       }
@@ -5243,7 +5243,7 @@
         "actName": "Act Name",
         "tagline": "Tagline",
         "bio": "Bio",
-        "genreTags": "Genre Tags (comma-separated)",
+        "genreTags": "Genre Tags — Comma-separated",
         "feeMin": "Fee Min",
         "feeMax": "Fee Max",
         "reelUrl": "Reel URL",
@@ -5352,7 +5352,7 @@
           "nameLabel": "Name",
           "namePlaceholder": "e.g. Athletes",
           "descriptionLabel": "Description",
-          "colorLabel": "Color (hex or token)",
+          "colorLabel": "Color — Hex or Token",
           "colorPlaceholder": "hex or var(--token)"
         },
         "eyebrowWorkspace": "Workspace",
@@ -5558,7 +5558,7 @@
           "exclusive": "exclusive",
           "nonExclusive": "non-exclusive",
           "endedBadge": "ended",
-          "commissionLabel": "Commission (bps; 1000 = 10%)",
+          "commissionLabel": "Commission — bps · 1000 = 10%",
           "signedDateLabel": "Signed date",
           "exclusiveAgencyLabel": "Exclusive agency",
           "endRelationship": "End relationship"
@@ -5600,7 +5600,7 @@
             "name": "Tour Name",
             "talent": "Talent",
             "talentPlaceholder": "Select an act…",
-            "agencyOptional": "Agency (optional)",
+            "agencyOptional": "Agency · Optional",
             "starts": "Starts",
             "ends": "Ends",
             "description": "Description"
@@ -5717,7 +5717,7 @@
           "description": "Description",
           "trigger": "Trigger",
           "triggerManual": "Manual",
-          "triggerSchedule": "Schedule (cron)",
+          "triggerSchedule": "Schedule — Cron",
           "triggerWebhook": "Webhook",
           "triggerEvent": "Event"
         },
@@ -5847,7 +5847,7 @@
         },
         "placeholder": {
           "targetUuid": "Target UUID",
-          "note": "Note (optional)"
+          "note": "Note · Optional"
         },
         "addLink": "+ Add Link"
       },
@@ -5871,14 +5871,14 @@
       "new": {
         "sourceType": {
           "ifc": "IFC",
-          "ifcZip": "IFC (zipped)",
-          "rvt": "Revit (RVT)",
-          "nwd": "Navisworks (NWD)",
-          "nwc": "Navisworks Cache (NWC)",
-          "glb": "glTF binary (GLB)",
+          "ifcZip": "IFC — Zipped",
+          "rvt": "Revit — RVT",
+          "nwd": "Navisworks — NWD",
+          "nwc": "Navisworks Cache — NWC",
+          "glb": "glTF Binary — GLB",
           "gltf": "glTF",
           "fbx": "FBX",
-          "dwg": "AutoCAD (DWG)"
+          "dwg": "AutoCAD — DWG"
         },
         "discipline": {
           "multi": "Multi-discipline",
@@ -5990,7 +5990,7 @@
           "bar": "Bar",
           "merch": "Merch",
           "other": "Other",
-          "deductions": "Deductions (NBOR inputs)",
+          "deductions": "Deductions — NBOR Inputs",
           "salesTax": "Sales Tax",
           "amusementTax": "Amusement Tax",
           "ccFees": "CC Fees",
@@ -6030,7 +6030,7 @@
           "subtitle": "Tier 1 = first refusal.",
           "submitLabel": "Place Hold",
           "tierLabel": "Tier",
-          "tier1": "Tier 1 (first refusal)",
+          "tier1": "Tier 1 — First Refusal",
           "tier2": "Tier 2",
           "tier3": "Tier 3",
           "tier4": "Tier 4",
@@ -6040,8 +6040,8 @@
           "startsLabel": "Starts",
           "endsLabel": "Ends",
           "autoReleaseLabel": "Auto-release on",
-          "venueLabel": "Venue (optional)",
-          "talentLabel": "Talent (optional)"
+          "venueLabel": "Venue · Optional",
+          "talentLabel": "Talent · Optional"
         },
         "eyebrow": "Bookings",
         "title": "Holds",
@@ -6175,7 +6175,7 @@
           "kind": "Kind",
           "startsOn": "Starts On",
           "endsOn": "Ends On",
-          "budgetCents": "Budget (cents)"
+          "budgetCents": "Budget — Cents"
         },
         "placeholders": {
           "name": "Spring launch · 2026",
@@ -6224,9 +6224,9 @@
         "project": "Project",
         "source": "Source",
         "captureDate": "Capture date",
-        "panoramas": "Panoramas (approx)",
+        "panoramas": "Panoramas — Approx",
         "viewerUrl": "Viewer URL",
-        "externalId": "External ID (vendor's job/space ID)",
+        "externalId": "External ID — Vendor's Job/Space ID",
         "notes": "Notes"
       },
       "eyebrow": "Field",
@@ -6360,7 +6360,7 @@
             "name": "Name",
             "sku": "SKU",
             "description": "Description",
-            "unitPriceCents": "Unit Price (Cents)",
+            "unitPriceCents": "Unit Price — Cents",
             "currency": "Currency"
           }
         },
@@ -6560,7 +6560,7 @@
           "eyebrow": "Polls",
           "title": "New Poll",
           "questionLabel": "Question",
-          "optionsLabel": "Options (one per line, max 8)",
+          "optionsLabel": "Options — One per Line, Max 8",
           "optionsPlaceholder": "Yes\nNo\nUnsure",
           "audienceLabel": "Audience",
           "audienceAll": "All",
@@ -6660,8 +6660,8 @@
       "contractWordPlural": "contracts",
       "newContract": "+ New Contract",
       "metrics": {
-        "activeAll": "Active (all)",
-        "activeConstruction": "Active (Construction)",
+        "activeAll": "Active — All",
+        "activeConstruction": "Active — Construction",
         "paidYtd": "Paid YTD"
       },
       "scope": {
@@ -6717,7 +6717,7 @@
         "openRfis": "Open RFIs",
         "openPunch": "Open Punch",
         "openInspections": "Open Inspections",
-        "recordables30d": "Recordables (30d)",
+        "recordables30d": "Recordables — 30d",
         "budget": "Budget",
         "spent": "Spent"
       },
@@ -6755,7 +6755,7 @@
         "columnCode": "Code",
         "columnTitle": "Title",
         "columnType": "Type",
-        "columnRev": "Rev (at publish)",
+        "columnRev": "Rev — At Publish",
         "columnDocState": "Doc State",
         "selectSheet": "Select a sheet…",
         "addSheet": "+ Add Sheet"
@@ -6984,7 +6984,7 @@
           "submit": "Save Changes",
           "name": "Name",
           "category": "Category",
-          "amountCents": "Amount (cents)"
+          "amountCents": "Amount — Cents"
         },
         "detail": {
           "title": "Budget",
@@ -7011,7 +7011,7 @@
         "new": {
           "submit": "Create Budget",
           "name": "Name",
-          "amount": "Amount (USD)",
+          "amount": "Amount — USD",
           "category": "Category",
           "eyebrow": "Finance",
           "title": "New Budget"
@@ -7112,7 +7112,7 @@
             "baseCurrency": "Base Currency",
             "jurisdiction": "Jurisdiction",
             "taxId": "Tax ID / EIN",
-            "parentEntity": "Parent Entity (consolidates into)",
+            "parentEntity": "Parent Entity — Consolidates Into",
             "consolidationMethod": "Consolidation Method",
             "consolidationState": "Consolidation State",
             "effectiveFrom": "Effective From",
@@ -7149,7 +7149,7 @@
           "eyebrow": "Expense",
           "title": "Edit {description}",
           "descriptionLabel": "Description",
-          "amountCentsLabel": "Amount (cents)",
+          "amountCentsLabel": "Amount — Cents",
           "currencyLabel": "Currency",
           "categoryLabel": "Category",
           "statusLabel": "Status",
@@ -7182,11 +7182,11 @@
         "new": {
           "submit": "Log Expense",
           "description": "Description",
-          "amount": "Amount (USD)",
+          "amount": "Amount — USD",
           "date": "Date",
           "category": "Category",
           "categoryPlaceholder": "Travel, meals, equipment…",
-          "projectOptional": "Project (optional)",
+          "projectOptional": "Project · Optional",
           "noProject": "— No project —",
           "title": "Log Expense"
         },
@@ -7223,7 +7223,7 @@
           "notesLabel": "Notes"
         },
         "eyebrow": "Finance",
-        "title": "Forecasts (EAC)",
+        "title": "EAC Forecasts",
         "configureSupabase": "Configure Supabase.",
         "forecastSingular": "forecast",
         "forecastPlural": "forecasts",
@@ -7269,7 +7269,7 @@
           "fields": {
             "title": "Title",
             "number": "Number",
-            "amountCents": "Amount (cents)",
+            "amountCents": "Amount — Cents",
             "currency": "Currency",
             "issued": "Issued",
             "due": "Due",
@@ -7369,7 +7369,7 @@
           "subVendor": "Sub / Vendor",
           "type": "Type",
           "scope": "Scope",
-          "amountUsd": "Amount (USD)",
+          "amountUsd": "Amount — USD",
           "throughDate": "Through date",
           "stateJurisdiction": "State jurisdiction",
           "notes": "Notes"
@@ -7404,7 +7404,7 @@
           "origin": "Origin",
           "destination": "Destination",
           "miles": "Miles",
-          "rateCents": "Rate (cents/mile)",
+          "rateCents": "Rate — Cents/Mile",
           "loggedOn": "Logged On",
           "notes": "Notes"
         },
@@ -7546,7 +7546,7 @@
           "agencyReport": "Agency report",
           "agency": {
             "none": "None",
-            "wh347": "WH-347 (Federal Davis-Bacon)",
+            "wh347": "WH-347 — Federal Davis-Bacon",
             "caDir": "CA DIR",
             "nyPwa": "NY PWA",
             "waLni": "WA L&I",
@@ -7650,7 +7650,7 @@
         "eyebrow": "Finance",
         "subtitle": "Live P&L from current books",
         "metrics": {
-          "revenuePaid": "Revenue (paid)",
+          "revenuePaid": "Revenue — Paid",
           "expenses": "Expenses",
           "grossMargin": "Gross Margin"
         },
@@ -7672,7 +7672,7 @@
             "description": "Description",
             "startedAt": "Started At",
             "endedAt": "Ended At",
-            "durationMinutes": "Duration (minutes)",
+            "durationMinutes": "Duration — Minutes",
             "billable": "Billable"
           }
         },
@@ -7756,15 +7756,15 @@
         "downloadLatestPdf": "Download Latest WIP PDF",
         "metric": {
           "aggregateContract": "Aggregate Contract",
-          "overBilledLatest": "Over-billed (latest)",
-          "underBilledLatest": "Under-billed (latest)"
+          "overBilledLatest": "Over-billed — Latest",
+          "underBilledLatest": "Under-billed — Latest"
         },
         "emptyLabel": "No WIP snapshots yet",
         "addSnapshot": "+ Snapshot",
         "col": {
           "project": "Project",
           "snapshot": "Snapshot",
-          "contract": "Contract (incl. CO)",
+          "contract": "Contract — Incl. CO",
           "pctComp": "% Comp",
           "earned": "Earned",
           "billed": "Billed",
@@ -7788,7 +7788,7 @@
           "slug": "Slug",
           "description": "Description",
           "status": "Status",
-          "schemaJson": "Schema (JSON)",
+          "schemaJson": "Schema — JSON",
           "schemaShapeLabel": "Shape:"
         }
       },
@@ -7982,7 +7982,7 @@
             "hint": "Comma-separated"
           },
           "body": {
-            "label": "Body (markdown)"
+            "label": "Body — Markdown"
           }
         }
       },
@@ -7999,7 +7999,7 @@
         "submitLabel": "Publish Article",
         "slugLabel": "Slug",
         "titleLabel": "Title",
-        "bodyLabel": "Body (Markdown)",
+        "bodyLabel": "Body — Markdown",
         "tagsLabel": "Tags"
       },
       "title": "Knowledge Base",
@@ -8038,7 +8038,7 @@
           "email": "Email",
           "phone": "Phone",
           "source": "Source",
-          "estimatedValueCents": "Estimated Value (Cents)",
+          "estimatedValueCents": "Estimated Value — Cents",
           "notes": "Notes"
         },
         "stageHint": "Stage transitions are managed from the lead detail."
@@ -8077,7 +8077,7 @@
         "source": "Source",
         "sourcePlaceholder": "Referral, web, event…",
         "stage": "Stage",
-        "estimatedValue": "Estimated Value (USD)",
+        "estimatedValue": "Estimated Value — USD",
         "notes": "Notes",
         "eyebrow": "Sales",
         "title": "New Lead"
@@ -8387,7 +8387,7 @@
         "metric": {
           "pending": "Pending Disposition",
           "retired": "Retired",
-          "replacementValue": "Replacement Value (Est.)"
+          "replacementValue": "Replacement Value — Est."
         },
         "empty": {
           "label": "Nothing pending disposition"
@@ -8409,7 +8409,7 @@
             "title": "Title",
             "number": "Number",
             "status": "Status",
-            "amountCents": "Amount (cents)",
+            "amountCents": "Amount — Cents",
             "currency": "Currency"
           }
         },
@@ -8466,7 +8466,7 @@
           "name": "Name",
           "sku": "SKU",
           "description": "Description",
-          "unitPriceCents": "Unit Price (Cents)",
+          "unitPriceCents": "Unit Price — Cents",
           "currency": "Currency",
           "catalog": "Catalog"
         },
@@ -8484,7 +8484,7 @@
             "skuPlaceholder": "e.g. PA-MAIN-V2",
             "name": "Name",
             "description": "Description",
-            "unitPrice": "Unit Price (USD)",
+            "unitPrice": "Unit Price — USD",
             "currency": "Currency"
           }
         },
@@ -8566,7 +8566,7 @@
             "region": "Region",
             "venueType": "Venue Type",
             "performanceDate": "Performance Date",
-            "slotLengthMin": "Slot (min)",
+            "slotLengthMin": "Slot — Min",
             "deadline": "Deadline",
             "feeMin": "Fee Min",
             "feeMax": "Fee Max",
@@ -8604,7 +8604,7 @@
             "moveSubmission": "Move submission",
             "updateStatus": "Update Status",
             "statusLabel": "Status",
-            "scoreInputLabel": "Score (0-100)"
+            "scoreInputLabel": "Score — 0-100"
           },
           "eyebrow": "Call · {title}",
           "title": "Submissions",
@@ -8627,11 +8627,11 @@
             "title": "Title",
             "kind": "Kind",
             "description": "Description",
-            "genreTags": "Genre Tags (comma-separated)",
+            "genreTags": "Genre Tags — Comma-separated",
             "region": "Region",
             "venueType": "Venue Type",
             "performanceDate": "Performance Date",
-            "slotMin": "Slot (min)",
+            "slotMin": "Slot — Min",
             "deadline": "Deadline",
             "feeMin": "Fee Min",
             "feeMax": "Fee Max",
@@ -8710,7 +8710,7 @@
           "submit": "Save Draft",
           "talentLabel": "Talent",
           "talentPlaceholder": "Select a talent profile…",
-          "projectLabel": "Project (optional)",
+          "projectLabel": "Project · Optional",
           "performanceDate": "Performance Date",
           "slotStart": "Slot Start",
           "slotEnd": "Slot End",
@@ -8786,7 +8786,7 @@
             "scoreLine": "Score: {score}",
             "moveApplicantHeading": "Move applicant",
             "stageLabel": "Stage",
-            "scoreInputLabel": "Score (0-100)",
+            "scoreInputLabel": "Score — 0-100",
             "reviewerNotesLabel": "Reviewer Notes"
           },
           "eyebrowPrefix": "Marketplace",
@@ -8866,7 +8866,7 @@
             "city": "City",
             "region": "Region/State",
             "country": "Country",
-            "roles": "Roles (comma-separated)",
+            "roles": "Roles — Comma-separated",
             "certsRequired": "Certifications Required",
             "unionsRequired": "Unions Required",
             "dayRateMin": "Day Rate Min",
@@ -8942,11 +8942,11 @@
           "actName": "Act Name",
           "tagline": "Tagline",
           "bio": "Bio",
-          "genreTags": "Genre Tags (comma-separated)",
+          "genreTags": "Genre Tags — Comma-separated",
           "feeMin": "Fee Min",
           "feeMax": "Fee Max",
           "currency": "Currency",
-          "travelRadius": "Travel Radius (km)",
+          "travelRadius": "Travel Radius — km",
           "depositPct": "Deposit %",
           "reelUrl": "Reel URL",
           "agentName": "Agent Name",
@@ -8986,7 +8986,7 @@
             "kindLabel": "Kind",
             "titleLabel": "Title",
             "bodyLabel": "Body",
-            "fileUrlLabel": "File URL (optional)"
+            "fileUrlLabel": "File URL · Optional"
           },
           "title": "Riders",
           "newRider": "+ New Rider",
@@ -9000,12 +9000,12 @@
           "actName": "Act Name",
           "tagline": "Tagline",
           "bio": "Bio",
-          "genreTags": "Genre Tags (comma-separated)",
+          "genreTags": "Genre Tags — Comma-separated",
           "genreTagsPlaceholder": "indie-rock, post-punk",
           "feeMin": "Fee Min",
           "feeMax": "Fee Max",
           "currency": "Currency",
-          "travelRadius": "Travel Radius (km)",
+          "travelRadius": "Travel Radius — km",
           "depositPct": "Deposit %",
           "reelUrl": "Reel URL",
           "agentName": "Agent Name",
@@ -9071,7 +9071,7 @@
           "endsAt": "Ends at",
           "location": "Location",
           "meetingUrl": "Meeting URL",
-          "agenda": "Agenda (Markdown)"
+          "agenda": "Agenda — Markdown"
         },
         "placeholders": {
           "title": "OAC Weekly #14",
@@ -9079,7 +9079,7 @@
         },
         "kinds": {
           "kickoff": "Kickoff",
-          "oac": "Owner-Architect-Contractor (OAC)",
+          "oac": "Owner-Architect-Contractor — OAC",
           "subMeeting": "Sub Meeting",
           "safety": "Safety",
           "punchWalk": "Punch Walk",
@@ -9313,7 +9313,7 @@
               "workforce": "Workforce member"
             },
             "targetId": {
-              "label": "Target ID (Optional)"
+              "label": "Target ID · Optional"
             }
           }
         },
@@ -9325,7 +9325,7 @@
         "description": "Triage with SLAs"
       },
       "toc": {
-        "title": "TOC (ITIL)"
+        "title": "TOC — ITIL"
       },
       "safetyIncidents": {
         "title": "Safety incidents"
@@ -9657,7 +9657,7 @@
             "role": "Role",
             "email": "Email",
             "phone": "Phone",
-            "dayRateCents": "Day Rate (Cents)",
+            "dayRateCents": "Day Rate — Cents",
             "notes": "Notes"
           }
         },
@@ -9683,7 +9683,7 @@
           "rolePlaceholder": "Gaffer, rigger, audio engineer…",
           "email": "Email",
           "phone": "Phone",
-          "dayRate": "Day Rate (USD)",
+          "dayRate": "Day Rate — USD",
           "eyebrow": "People",
           "title": "Add Crew Member"
         },
@@ -9712,7 +9712,7 @@
         "submit": "Send Invite",
         "emailLabel": "Email",
         "platformRole": "Platform role",
-        "scopeProject": "Scope to a project (optional)",
+        "scopeProject": "Scope to a Project · Optional",
         "orgWide": "— Org-wide invite —",
         "projectRole": "Project role",
         "eyebrow": "People",
@@ -9814,7 +9814,7 @@
             "terms": "Terms Override"
           },
           "triState": {
-            "inherit": "Inherit (org default)"
+            "inherit": "Inherit — Org Default"
           }
         },
         "letterEmailComposer": {
@@ -9966,7 +9966,7 @@
           "memberLabel": "Member",
           "selectPlaceholder": "Select an org member…",
           "teamRoleLabel": "Team role",
-          "adminOption": "Admin (can manage this team's members)"
+          "adminOption": "Admin — Can Manage This Team's Members"
         },
         "roles": {
           "member": "Member",
@@ -10068,7 +10068,7 @@
       "metrics": {
         "openValue": "Open Value",
         "weighted": "Weighted",
-        "wonOpen": "Won (Open)"
+        "wonOpen": "Won — Open"
       },
       "noStages": {
         "title": "No Stages"
@@ -10204,7 +10204,7 @@
           "titleLabel": "Title",
           "reason": "Reason",
           "amount": "Amount ($)",
-          "scheduleImpact": "Schedule impact (days)"
+          "scheduleImpact": "Schedule Impact — Days"
         },
         "eyebrow": "Procurement",
         "title": "PO Change Orders",
@@ -10221,7 +10221,7 @@
           "coNumber": "CO #",
           "title": "Title",
           "amount": "Amount",
-          "scheduleDelta": "Schedule Δ (days)",
+          "scheduleDelta": "Schedule Δ — Days",
           "status": "Status"
         }
       },
@@ -10275,7 +10275,7 @@
           "submit": "Save Changes",
           "titleLabel": "Title",
           "numberLabel": "Number",
-          "amountLabel": "Amount (cents)",
+          "amountLabel": "Amount — Cents",
           "currencyLabel": "Currency"
         },
         "detail": {
@@ -10291,7 +10291,7 @@
           "noVendor": "— No vendor —",
           "projectLabel": "Project",
           "noProject": "— No project —",
-          "amountLabel": "Amount (USD)",
+          "amountLabel": "Amount — USD",
           "eyebrow": "Procurement",
           "title": "New Purchase Order"
         },
@@ -10313,7 +10313,7 @@
           "fields": {
             "title": "Title",
             "description": "Description",
-            "estimatedCents": "Estimated (cents)",
+            "estimatedCents": "Estimated — Cents",
             "status": "Status"
           }
         },
@@ -10358,7 +10358,7 @@
           "submit": "Create Requisition",
           "title": "Title",
           "description": "Description",
-          "estimatedCost": "Estimated Cost (USD)",
+          "estimatedCost": "Estimated Cost — USD",
           "eyebrow": "Procurement"
         },
         "title": "Requisitions",
@@ -10765,10 +10765,10 @@
           },
           "unassigned": "Unassigned",
           "scheduleHeading": "Schedule",
-          "departScheduled": "Depart (scheduled)",
-          "departActual": "Depart (actual)",
-          "arriveScheduled": "Arrive (scheduled)",
-          "arriveActual": "Arrive (actual)",
+          "departScheduled": "Depart — Scheduled",
+          "departActual": "Depart — Actual",
+          "arriveScheduled": "Arrive — Scheduled",
+          "arriveActual": "Arrive — Actual",
           "manifestHeading": "Manifest",
           "noPassengers": "No passengers on this run."
         },
@@ -10812,7 +10812,7 @@
             "category": "Category",
             "assetTag": "Asset Tag",
             "serial": "Serial",
-            "dailyRateCents": "Daily Rate (Cents)",
+            "dailyRateCents": "Daily Rate — Cents",
             "notes": "Notes"
           }
         },
@@ -10886,7 +10886,7 @@
           "categoryPlaceholder": "Lighting, audio, video…",
           "assetTag": "Asset Tag",
           "serial": "Serial",
-          "dailyRate": "Daily Rate (USD)",
+          "dailyRate": "Daily Rate — USD",
           "eyebrow": "Production",
           "title": "Add Equipment"
         },
@@ -11001,7 +11001,7 @@
           "submit": "Save Changes",
           "startsAt": "Starts At",
           "endsAt": "Ends At",
-          "rateCents": "Rate (cents)",
+          "rateCents": "Rate — Cents",
           "notes": "Notes"
         },
         "detail": {
@@ -11047,7 +11047,7 @@
           "endsLabel": "Ends",
           "projectLabel": "Project",
           "projectNone": "— No project —",
-          "rateLabel": "Rate (USD)",
+          "rateLabel": "Rate — USD",
           "eyebrow": "Production",
           "title": "New Rental"
         },
@@ -11070,7 +11070,7 @@
           "lane": "Lane",
           "label": "Label",
           "labelPlaceholder": "e.g. House lights down",
-          "durationSec": "Duration (sec)",
+          "durationSec": "Duration — Sec",
           "optional": "optional",
           "description": "Description",
           "addCue": "Add Cue"
@@ -11260,7 +11260,7 @@
             "titleLabel": "Title",
             "assignee": "Assignee",
             "deadline": "Deadline",
-            "notes": "Notes (optional)"
+            "notes": "Notes · Optional"
           },
           "eyebrow": "Advancing",
           "title": "Individual Assignments",
@@ -11320,8 +11320,8 @@
           "ticket": {
             "title": "Ticket Details",
             "tier": "Tier",
-            "zones": "Zones (comma)",
-            "gates": "Gates (comma)",
+            "zones": "Zones — Comma",
+            "gates": "Gates — Comma",
             "validFrom": "Valid from",
             "validUntil": "Valid until",
             "section": "Section",
@@ -11507,8 +11507,8 @@
           "projects": "Projects"
         },
         "metrics": {
-          "revenue": "Revenue (paid)",
-          "spent": "Spent (committed)",
+          "revenue": "Revenue — Paid",
+          "spent": "Spent — Committed",
           "margin": "Margin",
           "outstanding": "Outstanding Invoiced",
           "expensesCommitted": "Expenses Committed",
@@ -11552,8 +11552,8 @@
           "titleLabel": "Title",
           "subtitleLabel": "Subtitle",
           "classificationLabel": "Classification Banner",
-          "publishedLabel": "Published (visible in portal + mobile)",
-          "configLabel": "Config (JSON)",
+          "publishedLabel": "Published — Visible in Portal + Mobile",
+          "configLabel": "Config — JSON",
           "sectionsLabel": "Sections:",
           "saving": "Saving…",
           "saveButton": "Save guide"
@@ -11561,7 +11561,7 @@
         "access": {
           "issueTitle": "Issue a new code",
           "labelField": "Label",
-          "expiresField": "Expires in (days)",
+          "expiresField": "Expires in — Days",
           "expiresPlaceholder": "optional",
           "maxUsesField": "Max uses",
           "maxUsesPlaceholder": "unlimited",
@@ -11780,8 +11780,8 @@
           "eyebrow": "Stage Plot",
           "title": "Edit {name}",
           "nameLabel": "Name",
-          "widthLabel": "Width (ft)",
-          "depthLabel": "Depth (ft)",
+          "widthLabel": "Width — ft",
+          "depthLabel": "Depth — ft",
           "notesLabel": "Notes"
         },
         "detail": {
@@ -11845,7 +11845,7 @@
         "client": "Client",
         "none": "— None —",
         "primaryVenue": "Primary Venue",
-        "budgetUsd": "Budget (USD)",
+        "budgetUsd": "Budget — USD",
         "budgetPlaceholder": "e.g. 1500000",
         "geographicScope": "Geographic Scope",
         "scope": {
@@ -11982,7 +11982,7 @@
         "noClient": "— No client —",
         "project": "Project",
         "noProject": "— No project —",
-        "amount": "Amount (USD)",
+        "amount": "Amount — USD",
         "expires": "Expires",
         "notes": "Notes / scope",
         "eyebrow": "Sales",
@@ -12098,7 +12098,7 @@
         "createHeading": "Create List",
         "namePlaceholder": "MMW Day 1 Punch",
         "projectPlaceholder": "— Project —",
-        "categoryPlaceholder": "Category (optional)",
+        "categoryPlaceholder": "Category · Optional",
         "createButton": "Create List"
       },
       "new": {
@@ -12284,7 +12284,7 @@
           "signIn": "Sign In",
           "orgMemberOption": "— Org member —",
           "crewMemberOption": "— Crew member —",
-          "notePlaceholder": "Note (optional)",
+          "notePlaceholder": "Note · Optional",
           "markAcknowledged": "Mark already acknowledged",
           "addAttendee": "Add Attendee"
         },
@@ -12464,9 +12464,9 @@
           "nameLabel": "Name",
           "namePlaceholder": "Perimeter sweep — Stadium A",
           "descriptionLabel": "Description",
-          "venueLabel": "Venue (optional)",
+          "venueLabel": "Venue · Optional",
           "venueNone": "— None / multi-venue —",
-          "cadenceLabel": "Cadence (minutes)"
+          "cadenceLabel": "Cadence — Minutes"
         },
         "eyebrow": "Safety",
         "title": "Guard Tours",
@@ -12487,7 +12487,7 @@
         "eyebrow": "Safety",
         "title": "Incidents",
         "configureSupabase": "Configure Supabase.",
-        "unifiedTitle": "Incidents (unified)",
+        "unifiedTitle": "Incidents — Unified",
         "subtitle": "Cross-domain incident feed.",
         "reportIncident": "+ Report incident",
         "metric": {
@@ -12561,10 +12561,10 @@
             "eyebrow": "Medical · Encounter",
             "title": "Edit Encounter",
             "triageLabel": "Triage",
-            "triageGreen": "Green (minor)",
-            "triageYellow": "Yellow (urgent)",
-            "triageRed": "Red (immediate)",
-            "triageBlack": "Black (deceased)",
+            "triageGreen": "Green — Minor",
+            "triageYellow": "Yellow — Urgent",
+            "triageRed": "Red — Immediate",
+            "triageBlack": "Black — Deceased",
             "patientRefLabel": "Patient Reference",
             "chiefComplaintLabel": "Chief Complaint",
             "dispositionLabel": "Disposition"
@@ -12579,10 +12579,10 @@
             "title": "Log Encounter",
             "submit": "Log Encounter",
             "triage": "Triage",
-            "triageGreen": "Green (minor)",
-            "triageYellow": "Yellow (urgent)",
-            "triageRed": "Red (immediate)",
-            "triageBlack": "Black (deceased)",
+            "triageGreen": "Green — Minor",
+            "triageYellow": "Yellow — Urgent",
+            "triageRed": "Red — Immediate",
+            "triageBlack": "Black — Deceased",
             "patientRef": "Patient Reference",
             "patientRefPlaceholder": "Pseudonymous ID",
             "chiefComplaint": "Chief Complaint",
@@ -12643,7 +12643,7 @@
         "eyebrow": "Safety",
         "title": "OSHA 300 — {year}",
         "subtitle": "OSHA-recordable incidents per 29 CFR 1904.",
-        "exportCsv": "Export 300/300A/301 (CSV)",
+        "exportCsv": "Export 300/300A/301 — CSV",
         "metrics": {
           "recordables": "Recordables",
           "daysAway": "Days Away",
@@ -12720,8 +12720,8 @@
             "activity": "Activity",
             "start": "Start",
             "finish": "Finish",
-            "duration": "Dur (d)",
-            "float": "Float (d)",
+            "duration": "Dur — d",
+            "float": "Float — d",
             "critical": "Critical",
             "percent": "%"
           }
@@ -12800,15 +12800,15 @@
           "categorySecurity": "Security",
           "categoryOther": "Other",
           "severityLabel": "Severity",
-          "severityP2": "P2 — urgent (15m ack, 4h resolve)",
-          "severityP3": "P3 — standard (1h ack, 1d resolve)",
-          "severityP4": "P4 — low (4h ack, 3d resolve)",
+          "severityP2": "P2 — Urgent · 15m Ack, 4h Resolve",
+          "severityP3": "P3 — Standard · 1h Ack, 1d Resolve",
+          "severityP4": "P4 — Low · 4h Ack, 3d Resolve",
           "summaryLabel": "Summary",
           "summaryPlaceholder": "One-line description",
           "descriptionLabel": "Description",
-          "projectLabel": "Project (optional)",
+          "projectLabel": "Project · Optional",
           "noneOption": "— none —",
-          "venueLabel": "Venue (optional)"
+          "venueLabel": "Venue · Optional"
         },
         "eyebrow": "Services",
         "configureSupabase": "Configure Supabase.",
@@ -12853,8 +12853,8 @@
           "portalUserLabel": "Portal user",
           "personaLabel": "Persona",
           "managerLabel": "Account manager",
-          "projectLabel": "Project (optional)",
-          "projectOrgWide": "Org-wide (any project)"
+          "projectLabel": "Project · Optional",
+          "projectOrgWide": "Org-wide · Any Project"
         },
         "eyebrow": "Settings",
         "title": "Account Managers",
@@ -12887,14 +12887,14 @@
         "generateKey": "Generate key",
         "endpoints": {
           "health": "Liveness probe",
-          "listProjects": "List projects (org-scoped)",
+          "listProjects": "List Projects — Org-scoped",
           "createProject": "Create project",
           "getProject": "Get a project",
           "updateProject": "Update project",
-          "scan": "Scan an assignment code (race-safe, any catalog kind)",
+          "scan": "Scan an Assignment Code — Race-safe, Any Catalog Kind",
           "createRisk": "Create RAID register entry",
           "crisisAlert": "Broadcast crisis alert",
-          "deliverableDownload": "Signed download URL (60s)",
+          "deliverableDownload": "Signed Download URL — 60s",
           "aiChat": "Streaming Anthropic chat",
           "stripeWebhook": "Stripe webhook receiver",
           "heading": "Endpoints"
@@ -12925,7 +12925,7 @@
       },
       "eyebrow": "Settings",
       "audit": {
-        "actorLabel": "Actor (UUID prefix)",
+        "actorLabel": "Actor — UUID Prefix",
         "actionLabel": "Action",
         "allActions": "All actions",
         "targetTableLabel": "Target Table",
@@ -12976,7 +12976,7 @@
         "identity": {
           "title": "Identity",
           "productNameLabel": "Product Name Override",
-          "logoUrlLabel": "Logo URL (HTTPS)"
+          "logoUrlLabel": "Logo URL — HTTPS"
         },
         "color": {
           "title": "Color",
@@ -13023,7 +13023,7 @@
           "codeLabel": "Code",
           "nameLabel": "Name",
           "descriptionLabel": "Description",
-          "unitCostLabel": "Unit cost (USD)",
+          "unitCostLabel": "Unit Cost — USD",
           "inventoryQtyLabel": "Inventory quantity"
         },
         "detail": {
@@ -13044,7 +13044,7 @@
           "codeHint": "Short identifier. Lowercase, dashes ok.",
           "nameLabel": "Name",
           "descriptionLabel": "Description",
-          "unitCostLabel": "Unit cost (USD)",
+          "unitCostLabel": "Unit Cost — USD",
           "inventoryQtyLabel": "Inventory quantity"
         },
         "kind": {
@@ -13078,8 +13078,8 @@
       },
       "compliance": {
         "savedToast": "Compliance settings saved",
-        "auditLogRetentionLabel": "Audit-Log Retention (Days)",
-        "appLogRetentionLabel": "Application-Log Retention (Days)",
+        "auditLogRetentionLabel": "Audit-Log Retention — Days",
+        "appLogRetentionLabel": "Application-Log Retention — Days",
         "encryptionAtRestTitle": "Encryption at rest",
         "encryptionAtRestHint": "AES-256 via Supabase",
         "dpaSignedTitle": "DPA signed",
@@ -13087,7 +13087,7 @@
         "dataResidencyLabel": "Data Residency",
         "residencyUs": "United States",
         "residencyEu": "European Union",
-        "residencyGlobal": "Global (any region)",
+        "residencyGlobal": "Global — Any Region",
         "saveButton": "Save Compliance Settings",
         "eyebrow": "Settings",
         "title": "Compliance",
@@ -13382,7 +13382,7 @@
             "submitLabel": "Connect",
             "providerLabel": "Provider",
             "labelFieldLabel": "Label",
-            "apiKeyLabel": "API Key (encrypted)"
+            "apiKeyLabel": "API Key — Encrypted"
           },
           "eyebrowShort": "Settings",
           "title": "Ticketing",
@@ -13516,7 +13516,7 @@
         "upsert": {
           "heading": "Add / Update Override",
           "requestsPlaceholder": "Requests",
-          "windowPlaceholder": "Window (sec)"
+          "windowPlaceholder": "Window — Sec"
         },
         "unconfigured": {
           "heading": "Unconfigured Buckets"
@@ -13581,8 +13581,8 @@
           "p4": "P4 — Low"
         },
         "placeholder": {
-          "response": "Response (min)",
-          "resolution": "Resolution (min)"
+          "response": "Response — Min",
+          "resolution": "Resolution — Min"
         },
         "busHours": "Bus. hours",
         "savePolicy": "Save Policy",
@@ -13627,11 +13627,11 @@
         "new": {
           "title": "New Zone",
           "name": "Name",
-          "projectOptional": "Project (optional)",
+          "projectOptional": "Project · Optional",
           "projectNone": "None — org-wide",
           "centerLat": "Center latitude",
           "centerLng": "Center longitude",
-          "radius": "Radius (meters)"
+          "radius": "Radius — Meters"
         },
         "title": "Time-Clock Zones",
         "configureSupabase": "Configure Supabase.",
@@ -13688,7 +13688,7 @@
           "signatureWhere": "where",
           "signatureStripeStyle": "Stripe-style.",
           "endpointUrlLabel": "Endpoint URL",
-          "descriptionLabel": "Description (optional)",
+          "descriptionLabel": "Description · Optional",
           "eventsLabel": "Events",
           "registering": "Registering…",
           "registerEndpoint": "Register endpoint",
@@ -13750,9 +13750,9 @@
           "tier": "Tier",
           "shellType": "Shell Type",
           "orientationDeg": "Orientation (°)",
-          "lengthIn": "Length (in)",
-          "widthIn": "Width (in)",
-          "heightIn": "Height (in)",
+          "lengthIn": "Length — in",
+          "widthIn": "Width — in",
+          "heightIn": "Height — in",
           "scale": "Scale",
           "sustainability": "Sustainability",
           "accessibility": "Accessibility",
@@ -13839,7 +13839,7 @@
         "loads": "Loads",
         "circuit": "Circuit",
         "addDrop": "+ Drop",
-        "loadsComma": "Loads (comma)",
+        "loadsComma": "Loads — Comma",
         "adjacencies": "Adjacencies · §4.7",
         "missingEdgesPrefix": "Missing edges:",
         "relationship": "Relationship",
@@ -13874,11 +13874,11 @@
           "tier": "Tier",
           "shellType": "Shell Type",
           "orientation": "Orientation (° true-north)",
-          "lengthIn": "Length (in)",
-          "widthIn": "Width (in)",
-          "heightIn": "Height (in)",
+          "lengthIn": "Length — in",
+          "widthIn": "Width — in",
+          "heightIn": "Height — in",
           "scale": "Scale",
-          "preset": "Instantiate from preset (optional)",
+          "preset": "Instantiate from Preset · Optional",
           "project": "Project",
           "event": "Event",
           "venue": "Venue",
@@ -13899,7 +13899,7 @@
       "draft": "Draft",
       "newSheet": "+ New Sheet",
       "totalSheets": "Total Sheets",
-      "issuedIfc": "Issued (IFC)",
+      "issuedIfc": "Issued — IFC",
       "emptyLabel": "No site plans yet",
       "columns": {
         "atomId": "Atom ID",
@@ -13930,9 +13930,9 @@
       "new": {
         "format": {
           "masterformat_2026": "CSI MasterFormat 2026",
-          "masterformat_1995": "CSI MasterFormat 1995 (16-div)",
-          "uniformat_2_2": "Uniformat II (ASTM E1557)",
-          "nrm2": "RICS NRM2 (UK)",
+          "masterformat_1995": "CSI MasterFormat 1995 — 16-div",
+          "uniformat_2_2": "Uniformat II — ASTM E1557",
+          "nrm2": "RICS NRM2 — UK",
           "custom": "Custom"
         },
         "eyebrow": "Creative",
@@ -13944,7 +13944,7 @@
           "project": "Project",
           "format": "Format",
           "division": "Division",
-          "bodyMarkdown": "Body (Markdown)"
+          "bodyMarkdown": "Body — Markdown"
         },
         "placeholders": {
           "title": "Low-Voltage Transformers",
@@ -14098,10 +14098,10 @@
         "subtitle": "Recurring member, retainer, or sponsor.",
         "labelField": "Label",
         "kind": "Kind",
-        "party": "Party (optional UUID)",
-        "renewalCadence": "Renewal cadence (months)",
+        "party": "Party — Optional UUID",
+        "renewalCadence": "Renewal Cadence — Months",
         "renewalCadencePlaceholder": "e.g. 12",
-        "trialDays": "Trial days (optional, starts as TRIAL state)",
+        "trialDays": "Trial Days · Optional · Starts as TRIAL State",
         "trialDaysPlaceholder": "e.g. 14",
         "submit": "Create Subscription"
       },
@@ -14125,7 +14125,7 @@
             "title": "Monthly Emissions vs Target",
             "empty": "No measurements yet.",
             "actual": "Actual",
-            "target": "Target (5% reduction)"
+            "target": "Target — 5% Reduction"
           },
           "scope": {
             "title": "Emissions by Scope",
@@ -14195,9 +14195,9 @@
           "name": "Name",
           "project": "Project",
           "unit": "Unit",
-          "sheet": "Sheet (optional)",
-          "costCode": "Cost code (optional)",
-          "calibration": "Calibration (inches per foot)",
+          "sheet": "Sheet · Optional",
+          "costCode": "Cost Code · Optional",
+          "calibration": "Calibration — Inches per Foot",
           "notes": "Notes"
         },
         "placeholders": {
@@ -14249,7 +14249,7 @@
           "title": "Title",
           "description": "Description",
           "status": "Status",
-          "priority": "Priority (0-3)",
+          "priority": "Priority — 0-3",
           "dueAt": "Due At"
         }
       },
@@ -14367,7 +14367,7 @@
         "subject": "Subject",
         "project": "Project",
         "responseDue": "Response due",
-        "bodyMarkdown": "Body (Markdown)"
+        "bodyMarkdown": "Body — Markdown"
       },
       "eyebrow": "Operations",
       "title": "Transmittals",
@@ -14787,10 +14787,10 @@
           "vendor": "Vendor / Warrantor",
           "start": "Start",
           "end": "End",
-          "duration": "Duration (months)",
+          "duration": "Duration — Months",
           "warrantorEmail": "Warrantor email",
           "warrantorPhone": "Warrantor phone",
-          "coverageSummary": "Coverage summary (Markdown)"
+          "coverageSummary": "Coverage Summary — Markdown"
         }
       },
       "eyebrow": "Closeout",
@@ -14821,7 +14821,7 @@
           "codeLabel": "Code",
           "codeHint": "Short identifier — lowercase, dashes ok.",
           "nameLabel": "Name",
-          "iconLabel": "Icon (emoji)",
+          "iconLabel": "Icon — Emoji",
           "descriptionLabel": "Description"
         },
         "eyebrow": "Workforce",
@@ -14903,7 +14903,7 @@
           "fields": {
             "title": "Title",
             "summary": "Summary",
-            "duration": "Duration (minutes)",
+            "duration": "Duration — Minutes",
             "requiredForRole": "Required for role"
           }
         },
@@ -15123,7 +15123,7 @@
           "recipientLabel": "Recipient",
           "pickTeammate": "— Pick A Teammate —",
           "messageLabel": "Message",
-          "valueTagLabel": "Value Tag (Optional)",
+          "valueTagLabel": "Value Tag · Optional",
           "cancel": "Cancel",
           "submit": "Send Kudos"
         },
@@ -15308,7 +15308,7 @@
           "fields": {
             "title": "Title",
             "slug": "Slug",
-            "body": "Body (markdown)"
+            "body": "Body — Markdown"
           }
         },
         "course": {
@@ -15467,8 +15467,8 @@
       "subtitle": "Atomic production catalog.",
       "metric": {
         "atoms": "Atoms",
-        "uac": "UAC (planned)",
-        "tpc": "TPC (deployed)",
+        "uac": "UAC — Planned",
+        "tpc": "TPC — Deployed",
         "variance": "Variance entries"
       },
       "tiers": {
@@ -15519,7 +15519,7 @@
           "reason": "Reason",
           "entries": "Entries",
           "qtyDelta": "Qty Δ",
-          "costDelta": "Cost Δ (cents)"
+          "costDelta": "Cost Δ — Cents"
         }
       }
     },
@@ -15672,7 +15672,7 @@
           "zone_add": "Add zone",
           "zone_remove": "Remove zone",
           "replacement": "Card replacement",
-          "reissue": "Reissue (lost / damaged)",
+          "reissue": "Reissue — Lost / Damaged",
           "name_change": "Name change",
           "photo_update": "Photo update"
         },
@@ -15748,7 +15748,7 @@
             "label": "Notes"
           },
           "file": {
-            "label": "File (optional, ≤25MB)"
+            "label": "File · Optional · ≤25MB"
           },
           "deadline": {
             "label": "Deadline"
@@ -16704,7 +16704,7 @@
         },
         "transport": {
           "label": "Transport",
-          "desc": "Media shuttle (T2)"
+          "desc": "Media Shuttle — T2"
         },
         "accommodation": {
           "label": "Accommodation",
@@ -16837,7 +16837,7 @@
         "metrics": {
           "budget": "Budget",
           "spent": "Spent",
-          "revenuePaid": "Revenue (paid)",
+          "revenuePaid": "Revenue — Paid",
           "margin": "Margin"
         },
         "fullBreakdownOn": "Full breakdown on"

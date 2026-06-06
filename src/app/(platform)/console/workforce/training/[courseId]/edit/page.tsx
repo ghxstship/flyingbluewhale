@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--text-secondary)]">
-              {t("console.workforce.training.edit.fields.body", undefined, "Body (markdown)")}
+              {t("console.workforce.training.edit.fields.body", undefined, "Body — Markdown")}
             </span>
             <textarea
               name="body_markdown"

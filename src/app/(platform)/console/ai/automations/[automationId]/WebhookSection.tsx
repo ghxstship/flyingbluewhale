@@ -59,7 +59,7 @@ export function WebhookSection({
             : t(
                 "console.ai.automations.webhook.noSecretConfigured",
                 undefined,
-                "No secret configured (unsigned posts accepted)",
+                "No Secret Configured — Unsigned Posts Accepted",
               )}
         </span>
         <form

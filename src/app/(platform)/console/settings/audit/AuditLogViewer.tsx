@@ -42,7 +42,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
       <div className="flex flex-wrap items-end gap-2 border-b border-[var(--border-color)] px-4 py-3">
         <div className="min-w-[180px] flex-1">
           <Input
-            label={t("console.settings.audit.actorLabel", undefined, "Actor (UUID prefix)")}
+            label={t("console.settings.audit.actorLabel", undefined, "Actor — UUID Prefix")}
             value={actorFilter}
             onChange={(e) => setActorFilter(e.target.value)}
             placeholder="af75a33d…"

@@ -206,7 +206,7 @@ export default async function Page() {
               placeholder={t(
                 "console.settings.sso.form.supabaseIdPlaceholder",
                 undefined,
-                "Supabase Auth SSO provider ID (optional)",
+                "Supabase Auth SSO Provider ID · Optional",
               )}
               className="input-base sm:col-span-3"
             />
@@ -217,7 +217,7 @@ export default async function Page() {
               placeholder={t(
                 "console.settings.sso.form.logoutUrlPlaceholder",
                 undefined,
-                "Single-logout URL (optional)",
+                "Single-logout URL · Optional",
               )}
               className="input-base sm:col-span-3"
             />
@@ -226,7 +226,7 @@ export default async function Page() {
               {t(
                 "console.settings.sso.form.enabledLabel",
                 undefined,
-                "Enabled on save (uncheck to draft without activating)",
+                "Enabled on Save — Uncheck to Draft Without Activating",
               )}
             </label>
             <div className="flex justify-end sm:col-span-6">

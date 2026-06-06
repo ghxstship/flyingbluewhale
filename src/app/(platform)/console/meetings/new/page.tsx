@@ -64,7 +64,7 @@ export default async function Page() {
               <select name="kind" className={INPUT} defaultValue="other">
                 <option value="kickoff">{t("console.meetings.new.kinds.kickoff", undefined, "Kickoff")}</option>
                 <option value="owner_architect_contractor">
-                  {t("console.meetings.new.kinds.oac", undefined, "Owner-Architect-Contractor (OAC)")}
+                  {t("console.meetings.new.kinds.oac", undefined, "Owner-Architect-Contractor — OAC")}
                 </option>
                 <option value="sub_meeting">
                   {t("console.meetings.new.kinds.subMeeting", undefined, "Sub Meeting")}
@@ -107,7 +107,7 @@ export default async function Page() {
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>{t("console.meetings.new.fields.agenda", undefined, "Agenda (Markdown)")}</span>
+            <span className={LBL}>{t("console.meetings.new.fields.agenda", undefined, "Agenda — Markdown")}</span>
             <textarea name="agenda_md" rows={5} className={INPUT} />
           </label>
         </FormShell>

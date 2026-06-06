@@ -57,7 +57,7 @@ export default async function Page() {
           </div>
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              {t("console.safety.guardTours.new.venueLabel", undefined, "Venue (optional)")}
+              {t("console.safety.guardTours.new.venueLabel", undefined, "Venue · Optional")}
             </label>
             <select name="venue_id" defaultValue="" className="input-base mt-1.5 w-full">
               <option value="">
@@ -71,7 +71,7 @@ export default async function Page() {
             </select>
           </div>
           <Input
-            label={t("console.safety.guardTours.new.cadenceLabel", undefined, "Cadence (minutes)")}
+            label={t("console.safety.guardTours.new.cadenceLabel", undefined, "Cadence — Minutes")}
             name="cadence_minutes"
             type="number"
             min={0}

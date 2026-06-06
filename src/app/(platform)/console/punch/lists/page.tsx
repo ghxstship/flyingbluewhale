@@ -281,7 +281,7 @@ export default async function Page() {
             <input
               name="category"
               maxLength={80}
-              placeholder={t("console.punch.lists.categoryPlaceholder", undefined, "Category (optional)")}
+              placeholder={t("console.punch.lists.categoryPlaceholder", undefined, "Category · Optional")}
               className="input-base sm:col-span-1"
             />
             <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">

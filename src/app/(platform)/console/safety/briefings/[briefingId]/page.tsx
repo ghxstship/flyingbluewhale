@@ -307,7 +307,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
             </select>
             <input
               name="notes"
-              placeholder={t("console.safety.briefings.detail.notePlaceholder", undefined, "Note (optional)")}
+              placeholder={t("console.safety.briefings.detail.notePlaceholder", undefined, "Note · Optional")}
               maxLength={500}
               className="input-base sm:col-span-2"
             />

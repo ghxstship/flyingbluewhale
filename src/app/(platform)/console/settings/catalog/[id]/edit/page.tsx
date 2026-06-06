@@ -102,7 +102,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
           </div>
           <Input
-            label={t("console.settings.catalog.edit.unitCostLabel", undefined, "Unit cost (USD)")}
+            label={t("console.settings.catalog.edit.unitCostLabel", undefined, "Unit Cost — USD")}
             name="unit_cost_usd"
             type="number"
             step="0.01"

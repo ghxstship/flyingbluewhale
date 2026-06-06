@@ -75,7 +75,7 @@ export default async function Page() {
           />
           <Input label={t("console.campaigns.new.fields.endsOn", undefined, "Ends On")} name="ends_on" type="date" />
           <Input
-            label={t("console.campaigns.new.fields.budgetCents", undefined, "Budget (cents)")}
+            label={t("console.campaigns.new.fields.budgetCents", undefined, "Budget — Cents")}
             name="budget_cents"
             type="number"
             min={0}

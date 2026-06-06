@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ crewId: strin
             maxLength={40}
           />
           <Input
-            label={t("console.people.crew.edit.fields.dayRateCents", undefined, "Day Rate (Cents)")}
+            label={t("console.people.crew.edit.fields.dayRateCents", undefined, "Day Rate — Cents")}
             name="day_rate_cents"
             type="number"
             defaultValue={row.day_rate_cents != null ? String(row.day_rate_cents) : ""}

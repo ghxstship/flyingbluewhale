@@ -97,7 +97,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow={t("console.safety.incidents.eyebrow", undefined, "Safety")}
-        title={t("console.safety.incidents.unifiedTitle", undefined, "Incidents (unified)")}
+        title={t("console.safety.incidents.unifiedTitle", undefined, "Incidents — Unified")}
         subtitle={t("console.safety.incidents.subtitle", undefined, "Cross-domain incident feed.")}
         action={
           <Button href="/console/operations/incidents/new" size="sm">

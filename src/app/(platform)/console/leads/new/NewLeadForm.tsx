@@ -41,7 +41,7 @@ export function NewLeadForm() {
         </div>
       </div>
       <Input
-        label={t("console.leads.new.estimatedValue", undefined, "Estimated Value (USD)")}
+        label={t("console.leads.new.estimatedValue", undefined, "Estimated Value — USD")}
         name="estimated_value"
         type="number"
         inputMode="decimal"

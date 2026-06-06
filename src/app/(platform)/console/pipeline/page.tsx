@@ -178,7 +178,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
             accent
           />
           <MetricCard
-            label={t("console.pipeline.metrics.wonOpen", undefined, "Won (Open)")}
+            label={t("console.pipeline.metrics.wonOpen", undefined, "Won — Open")}
             value={formatMoney(wonValue)}
           />
         </div>

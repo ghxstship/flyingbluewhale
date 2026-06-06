@@ -170,7 +170,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     placeholder={t(
                       "console.finance.lienWaivers.detail.envelopePlaceholder",
                       undefined,
-                      "DocuSign envelope ID (optional)",
+                      "DocuSign Envelope ID · Optional",
                     )}
                     className={`${INPUT} w-72 text-xs`}
                   />
@@ -217,7 +217,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     {t(
                       "console.finance.lienWaivers.detail.releasePaymentCleared",
                       undefined,
-                      "Release (Payment Cleared)",
+                      "Release — Payment Cleared",
                     )}
                   </Button>
                 </form>

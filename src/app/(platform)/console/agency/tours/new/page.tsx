@@ -80,7 +80,7 @@ export default async function Page() {
           {agencies.length > 0 && (
             <div>
               <label className="text-xs font-medium text-[var(--text-secondary)]">
-                {t("console.agency.tours.new.fields.agencyOptional", undefined, "Agency (optional)")}
+                {t("console.agency.tours.new.fields.agencyOptional", undefined, "Agency · Optional")}
               </label>
               <select name="agency_id" className="input-base mt-1.5 w-full">
                 <option value="">—</option>

@@ -652,7 +652,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 name: "loads",
-                label: t("console.sitePlans.detail.loadsComma", undefined, "Loads (comma)"),
+                label: t("console.sitePlans.detail.loadsComma", undefined, "Loads — Comma"),
                 placeholder: "CONV-1, RI-REF",
                 maxLength: 400,
               },

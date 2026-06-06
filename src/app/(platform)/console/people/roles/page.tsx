@@ -57,7 +57,7 @@ export default async function RolesPage() {
         subtitle={t(
           "console.people.roles.subtitle",
           undefined,
-          "Platform roles (billing) · project roles (operations) · custom overlays",
+          "Platform Roles — Billing · Project Roles — Operations · Custom Overlays",
         )}
       />
       <div className="page-content max-w-5xl space-y-6">

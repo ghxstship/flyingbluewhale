@@ -214,7 +214,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   {t(
                     "console.settings.integrations.submissions.detail.publishLabel",
                     undefined,
-                    "Publish (live on /integrations/partners)",
+                    "Publish — Live on /integrations/partners",
                   )}
                 </span>
                 <select
@@ -254,7 +254,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 {t(
                   "console.settings.integrations.submissions.detail.rejectionReasonLabel",
                   undefined,
-                  "Rejection reason (only if Rejected)",
+                  "Rejection Reason · Only if Rejected",
                 )}
               </span>
               <textarea

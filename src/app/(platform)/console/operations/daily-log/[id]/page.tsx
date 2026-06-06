@@ -299,7 +299,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 placeholder={t(
                   "console.operations.dailyLog.detail.captionPlaceholder",
                   undefined,
-                  "Caption (optional)",
+                  "Caption · Optional",
                 )}
                 maxLength={280}
                 className="input-base sm:col-span-1"

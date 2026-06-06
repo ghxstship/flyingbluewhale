@@ -70,7 +70,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
       {showChapter624 && (
         <div className="space-y-3 rounded border border-[var(--border-default)] bg-[var(--surface-inset)] p-4">
           <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            NSCB License (Chapter 624)
+            NSCB License — Chapter 624
           </h3>
           <p className="text-xs text-[var(--text-muted)]">
             Required for trade scopes that fall within NRS Chapter 624 (carpentry, electrical, rigging, etc.). Skip if
@@ -97,7 +97,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
         </span>
       </label>
 
-      <FormField name="signature" label="Signature (type your full legal name)" required>
+      <FormField name="signature" label="Signature · Type Your Full Legal Name" required>
         <TextInput
           name="signature"
           placeholder="Your full legal name"

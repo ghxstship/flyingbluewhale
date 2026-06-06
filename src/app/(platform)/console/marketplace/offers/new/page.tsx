@@ -68,7 +68,7 @@ export default async function Page() {
           </div>
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              {t("console.marketplace.offers.new.projectLabel", undefined, "Project (optional)")}
+              {t("console.marketplace.offers.new.projectLabel", undefined, "Project · Optional")}
             </label>
             <select name="project_id" className="input-base mt-1.5 w-full">
               <option value="">—</option>

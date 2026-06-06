@@ -90,7 +90,7 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.takeoffs.new.fields.sheet", undefined, "Sheet (optional)")}</span>
+              <span className={LBL}>{t("console.takeoffs.new.fields.sheet", undefined, "Sheet · Optional")}</span>
               <select name="site_plan_id" className={INPUT}>
                 <option value="">—</option>
                 {((sheets ?? []) as Array<{ id: string; code: string; title: string }>).map((s) => (
@@ -102,7 +102,7 @@ export default async function Page() {
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("console.takeoffs.new.fields.costCode", undefined, "Cost code (optional)")}
+                {t("console.takeoffs.new.fields.costCode", undefined, "Cost Code · Optional")}
               </span>
               <select name="cost_code_id" className={INPUT}>
                 <option value="">—</option>
@@ -116,7 +116,7 @@ export default async function Page() {
           </div>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              {t("console.takeoffs.new.fields.calibration", undefined, "Calibration (inches per foot)")}
+              {t("console.takeoffs.new.fields.calibration", undefined, "Calibration — Inches per Foot")}
             </span>
             <input
               type="number"

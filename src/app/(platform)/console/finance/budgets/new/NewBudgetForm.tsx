@@ -104,7 +104,7 @@ export function NewBudgetForm() {
           />
           <Select label={t("console.finance.budgets.new.tier", undefined, "Tier")} name="tier" options={XPMS_TIERS} />
           <Select
-            label={t("console.finance.budgets.new.xyz", undefined, "XYZ (cost behaviour)")}
+            label={t("console.finance.budgets.new.xyz", undefined, "XYZ — Cost Behaviour")}
             name="xyz"
             options={XPMS_XYZ}
           />
@@ -137,7 +137,7 @@ export function NewBudgetForm() {
             step="0.01"
           />
           <Input
-            label={t("console.finance.budgets.new.rate", undefined, "Rate (USD)")}
+            label={t("console.finance.budgets.new.rate", undefined, "Rate — USD")}
             name="rate"
             type="number"
             inputMode="decimal"
@@ -145,7 +145,7 @@ export function NewBudgetForm() {
             hint={t("console.finance.budgets.new.rateHint", undefined, "Estimate = Quantity × Rate (computed by DB)")}
           />
           <Input
-            label={t("console.finance.budgets.new.amount", undefined, "Budget (USD)")}
+            label={t("console.finance.budgets.new.amount", undefined, "Budget — USD")}
             name="amount"
             type="number"
             inputMode="decimal"

@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             required
           />
           <Input
-            label={t("console.production.rentals.edit.rateCents", undefined, "Rate (cents)")}
+            label={t("console.production.rentals.edit.rateCents", undefined, "Rate — Cents")}
             name="rate_cents"
             type="number"
             defaultValue={row.rate_cents != null ? String(row.rate_cents) : ""}

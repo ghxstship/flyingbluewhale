@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
               name="note"
               rows={2}
               maxLength={300}
-              placeholder="Why this person earned it (optional)"
+              placeholder="Why this person earned it · optional"
               className="input-base w-full"
             />
             <button type="submit" className="btn btn-primary btn-sm">

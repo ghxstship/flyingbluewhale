@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ shipmentId: s
             </select>
           </label>
           <Input
-            label={t("console.logistics.freight.edit.fields.amountCents", undefined, "Amount (cents)")}
+            label={t("console.logistics.freight.edit.fields.amountCents", undefined, "Amount — Cents")}
             name="amount_cents"
             type="number"
             defaultValue={row.amount_cents != null ? String(row.amount_cents) : ""}

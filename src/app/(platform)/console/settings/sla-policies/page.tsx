@@ -193,7 +193,7 @@ export default async function Page() {
               required
               min="1"
               max="100000"
-              placeholder={t("console.settings.slaPolicies.placeholder.response", undefined, "Response (min)")}
+              placeholder={t("console.settings.slaPolicies.placeholder.response", undefined, "Response — Min")}
               className="input-base sm:col-span-2"
             />
             <input
@@ -202,7 +202,7 @@ export default async function Page() {
               required
               min="1"
               max="1000000"
-              placeholder={t("console.settings.slaPolicies.placeholder.resolution", undefined, "Resolution (min)")}
+              placeholder={t("console.settings.slaPolicies.placeholder.resolution", undefined, "Resolution — Min")}
               className="input-base sm:col-span-2"
             />
             <label className="flex items-center gap-2 text-xs sm:col-span-1">

@@ -72,7 +72,7 @@ export default async function MyIncidentsPage() {
 
       <div className="mt-4 flex flex-wrap gap-2">
         <Link href="/m/incident/new" className="btn btn-primary btn-sm">
-          {t("m.incident.quickFile", undefined, "Quick-file (one field)")}
+          {t("m.incident.quickFile", undefined, "Quick-file — One Field")}
         </Link>
         <Link href="/m/incidents/new" className="btn btn-secondary btn-sm">
           {t("m.incident.fullReport", undefined, "Full report")}

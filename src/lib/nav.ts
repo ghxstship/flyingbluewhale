@@ -230,7 +230,7 @@ export const platformNavXpms: NavGroup[] = [
           { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
           // WIP + EAC forecasts (round 41).
           { label: "WIP", href: "/console/finance/wip", icon: "FileSpreadsheet" },
-          { label: "Forecasts (EAC)", href: "/console/finance/forecasts", icon: "TrendingUp" },
+          { label: "EAC Forecasts", href: "/console/finance/forecasts", icon: "TrendingUp" },
           { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
           { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
         ],
@@ -405,7 +405,7 @@ export const platformNavXpms: NavGroup[] = [
           { label: "Email Inbox", href: "/console/email-inbox", icon: "Inbox" },
           { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
           { label: "Service Desk", href: "/console/services/requests", icon: "ConciergeBell" },
-          { label: "TOC (ITIL)", href: "/console/ops/toc", icon: "Network" },
+          { label: "TOC — ITIL", href: "/console/ops/toc", icon: "Network" },
         ],
       },
       {
@@ -748,7 +748,7 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Budgets", href: "/console/finance/budgets", icon: "PiggyBank" },
           { label: "WIP", href: "/console/finance/wip", icon: "FileSpreadsheet" },
-          { label: "Forecasts (EAC)", href: "/console/finance/forecasts", icon: "TrendingUp" },
+          { label: "EAC Forecasts", href: "/console/finance/forecasts", icon: "TrendingUp" },
           { label: "Periods", href: "/console/finance/periods", icon: "CalendarDays" },
           { label: "Reports", href: "/console/finance/reports", icon: "ChartBar" },
         ],
@@ -835,7 +835,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Email Inbox", href: "/console/email-inbox", icon: "Inbox" },
           { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
           { label: "Service Desk", href: "/console/services/requests", icon: "ConciergeBell" },
-          { label: "TOC (ITIL)", href: "/console/ops/toc", icon: "Network" },
+          { label: "TOC — ITIL", href: "/console/ops/toc", icon: "Network" },
         ],
       },
       {

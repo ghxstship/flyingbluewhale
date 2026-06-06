@@ -227,7 +227,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 placeholder={t(
                   "console.transmittals.detail.descriptionPlaceholder",
                   undefined,
-                  "Description (optional)",
+                  "Description · Optional",
                 )}
                 className={`${INPUT} text-xs`}
               />

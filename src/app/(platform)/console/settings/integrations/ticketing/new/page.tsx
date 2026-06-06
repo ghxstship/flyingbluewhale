@@ -36,7 +36,7 @@ export default async function Page() {
             label={t(
               "console.settings.integrations.ticketing.new.externalEventIdLabel",
               undefined,
-              "External Event ID (optional)",
+              "External Event ID · Optional",
             )}
             name="external_event_id"
             placeholder={t(
@@ -55,7 +55,7 @@ export default async function Page() {
             )}
           />
           <Input
-            label={t("console.settings.integrations.ticketing.new.apiKeyLabel", undefined, "API Key (encrypted)")}
+            label={t("console.settings.integrations.ticketing.new.apiKeyLabel", undefined, "API Key — Encrypted")}
             name="api_key"
             type="password"
             placeholder="••••"

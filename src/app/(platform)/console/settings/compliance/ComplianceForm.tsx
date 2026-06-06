@@ -31,7 +31,7 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
     <form action={action} className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label={t("console.settings.compliance.auditLogRetentionLabel", undefined, "Audit-Log Retention (Days)")}
+          label={t("console.settings.compliance.auditLogRetentionLabel", undefined, "Audit-Log Retention — Days")}
           name="retention_audit_days"
           type="number"
           defaultValue={initial.retention_audit_days ?? 365}
@@ -39,7 +39,7 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
           max={3650}
         />
         <Input
-          label={t("console.settings.compliance.appLogRetentionLabel", undefined, "Application-Log Retention (Days)")}
+          label={t("console.settings.compliance.appLogRetentionLabel", undefined, "Application-Log Retention — Days")}
           name="retention_logs_days"
           type="number"
           defaultValue={initial.retention_logs_days ?? 90}
@@ -83,7 +83,7 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
           <option value="us">{t("console.settings.compliance.residencyUs", undefined, "United States")}</option>
           <option value="eu">{t("console.settings.compliance.residencyEu", undefined, "European Union")}</option>
           <option value="global">
-            {t("console.settings.compliance.residencyGlobal", undefined, "Global (any region)")}
+            {t("console.settings.compliance.residencyGlobal", undefined, "Global — Any Region")}
           </option>
         </select>
       </div>

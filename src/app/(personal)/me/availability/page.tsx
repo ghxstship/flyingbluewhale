@@ -58,9 +58,9 @@ export default async function Page() {
             <div>
               <label className="text-xs font-medium">{t("me.availability.kind", undefined, "Kind")}</label>
               <select name="kind" className="input-base mt-1.5 w-full" defaultValue="hold">
-                <option value="hold">{t("me.availability.kind.hold", undefined, "Hold (auto-release on TTL)")}</option>
-                <option value="confirm">{t("me.availability.kind.confirm", undefined, "Confirm (locked)")}</option>
-                <option value="block">{t("me.availability.kind.block", undefined, "Block (unavailable)")}</option>
+                <option value="hold">{t("me.availability.kind.hold", undefined, "Hold — Auto-release on TTL")}</option>
+                <option value="confirm">{t("me.availability.kind.confirm", undefined, "Confirm — Locked")}</option>
+                <option value="block">{t("me.availability.kind.block", undefined, "Block — Unavailable")}</option>
               </select>
             </div>
             <Input

@@ -70,7 +70,7 @@ export function CarbonCharts({
             />
             <Line
               dataKey="target"
-              name={t("console.sustainability.carbon.charts.monthly.target", undefined, "Target (5% reduction)")}
+              name={t("console.sustainability.carbon.charts.monthly.target", undefined, "Target — 5% Reduction")}
               type="monotone"
               stroke="var(--text-muted)"
               strokeDasharray="4 4"

@@ -34,7 +34,7 @@ export default async function Page() {
             placeholder="Safety Star"
           />
           <Input
-            label={t("console.workforce.badges.new.iconLabel", undefined, "Icon (emoji)")}
+            label={t("console.workforce.badges.new.iconLabel", undefined, "Icon — Emoji")}
             name="icon"
             maxLength={4}
             placeholder="🛡️"

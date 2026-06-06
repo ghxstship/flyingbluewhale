@@ -301,7 +301,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 key: "rev",
-                header: t("console.drawings.detail.columnRev", undefined, "Rev (at publish)"),
+                header: t("console.drawings.detail.columnRev", undefined, "Rev — At Publish"),
                 render: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? "—",
                 accessor: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? null,
                 className: "font-mono text-xs",

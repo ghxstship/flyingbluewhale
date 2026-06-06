@@ -204,7 +204,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
               placeholder={t(
                 "console.proposals.edit.lineage.budgetCategoryPlaceholder",
                 undefined,
-                "Budget category (defaults to label)",
+                "Budget Category · Defaults to Label",
               )}
             />
           </div>

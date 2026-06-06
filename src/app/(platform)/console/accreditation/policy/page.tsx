@@ -110,7 +110,7 @@ export default async function Page() {
               <thead>
                 <tr>
                   <th className="text-start">
-                    {t("console.accreditation.policy.zoneVenueHeader", undefined, "Zone (venue)")}
+                    {t("console.accreditation.policy.zoneVenueHeader", undefined, "Zone — Venue")}
                   </th>
                   {categories.map((c) => (
                     <th key={c.id} className="text-center">

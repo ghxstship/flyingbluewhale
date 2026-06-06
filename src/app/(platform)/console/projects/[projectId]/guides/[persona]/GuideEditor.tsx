@@ -49,11 +49,11 @@ export function GuideEditor({
       />
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" name="published" defaultChecked={defaultValues.published} />
-        {t("console.projects.guides.editor.publishedLabel", undefined, "Published (visible in portal + mobile)")}
+        {t("console.projects.guides.editor.publishedLabel", undefined, "Published — Visible in Portal + Mobile")}
       </label>
       <div>
         <label className="text-xs font-medium text-[var(--text-secondary)]">
-          {t("console.projects.guides.editor.configLabel", undefined, "Config (JSON)")}
+          {t("console.projects.guides.editor.configLabel", undefined, "Config — JSON")}
         </label>
         <textarea
           name="config"

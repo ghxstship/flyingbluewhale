@@ -60,7 +60,7 @@ export default async function ReportsPage() {
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label={t("console.finance.reports.metrics.revenuePaid", undefined, "Revenue (paid)")}
+            label={t("console.finance.reports.metrics.revenuePaid", undefined, "Revenue — Paid")}
             value={formatMoney(revenue)}
             sparkline={sparklineRevenue}
             accent

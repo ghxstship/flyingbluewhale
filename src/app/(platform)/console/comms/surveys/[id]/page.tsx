@@ -218,7 +218,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 placeholder={t(
                   "console.comms.surveys.detail.optionsPlaceholder",
                   undefined,
-                  "Options (one per line) — only for choice/scale",
+                  "Options — One per Line · Only for Choice/Scale",
                 )}
                 className="input-base w-full"
               />

@@ -123,7 +123,7 @@ function WebhookConfig({
         </code>
       </div>
       <Input
-        label="Shared secret (HMAC)"
+        label="Shared Secret — HMAC"
         placeholder="optional — falls back to per-automation secret"
         value={secret}
         onChange={(e) => onChange({ ...config, secret: e.target.value })}

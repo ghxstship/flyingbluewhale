@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             <textarea name="content" rows={10} maxLength={20000} className="input-base mt-1.5 w-full" />
           </div>
           <Input
-            label={t("console.marketplace.talent.riders.new.fileUrlLabel", undefined, "File URL (optional)")}
+            label={t("console.marketplace.talent.riders.new.fileUrlLabel", undefined, "File URL · Optional")}
             name="file_url"
             placeholder="https://…/rider.pdf"
           />

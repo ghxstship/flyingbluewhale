@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
             maxLength={80}
           />
           <Input
-            label={t("console.finance.invoices.edit.fields.amountCents", undefined, "Amount (cents)")}
+            label={t("console.finance.invoices.edit.fields.amountCents", undefined, "Amount — Cents")}
             name="amount_cents"
             type="number"
             defaultValue={String(row.amount_cents ?? 0)}

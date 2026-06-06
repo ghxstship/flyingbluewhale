@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ itemId: strin
             />
           </label>
           <Input
-            label={t("console.logistics.ratecard.edit.unitPriceCents", undefined, "Unit Price (Cents)")}
+            label={t("console.logistics.ratecard.edit.unitPriceCents", undefined, "Unit Price — Cents")}
             name="unit_price_cents"
             type="number"
             defaultValue={row.unit_price_cents != null ? String(row.unit_price_cents) : ""}

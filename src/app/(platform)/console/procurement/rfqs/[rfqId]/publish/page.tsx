@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             label={t(
               "console.procurement.rfqs.publish.tradeCategoriesLabel",
               undefined,
-              "Trade Categories (comma-separated)",
+              "Trade Categories — Comma-separated",
             )}
             name="trade_categories"
             defaultValue={r.trade_categories.join(", ")}

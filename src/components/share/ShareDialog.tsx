@@ -184,7 +184,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
           <h2 className="text-sm font-semibold tracking-tight">Create a link</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="text-xs">
-              <span className="mb-1 block font-medium">Label (optional)</span>
+              <span className="mb-1 block font-medium">Label · Optional</span>
               <input
                 type="text"
                 value={label}
@@ -209,7 +209,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
               </select>
             </label>
             <label className="text-xs">
-              <span className="mb-1 block font-medium">Passcode (optional)</span>
+              <span className="mb-1 block font-medium">Passcode · Optional</span>
               <input
                 type="text"
                 value={passcode}
@@ -221,7 +221,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
               />
             </label>
             <label className="text-xs">
-              <span className="mb-1 block font-medium">Max uses (optional)</span>
+              <span className="mb-1 block font-medium">Max Uses · Optional</span>
               <input
                 type="number"
                 value={maxUses}
@@ -239,8 +239,8 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                 onChange={(e) => setRole(e.target.value as "viewer" | "commenter")}
                 className="input-base w-full"
               >
-                <option value="viewer">Viewer (read-only)</option>
-                <option value="commenter">Commenter (can leave annotations)</option>
+                <option value="viewer">Viewer · Read-only</option>
+                <option value="commenter">Commenter · Can Leave Annotations</option>
               </select>
             </label>
           </div>

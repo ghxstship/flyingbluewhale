@@ -140,12 +140,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       <div className="page-content space-y-6">
         <div className="metric-grid-3">
           <MetricCard
-            label={t("console.projects.finance.metrics.revenue", undefined, "Revenue (paid)")}
+            label={t("console.projects.finance.metrics.revenue", undefined, "Revenue — Paid")}
             value={formatMoney(revenue, currency)}
             accent
           />
           <MetricCard
-            label={t("console.projects.finance.metrics.spent", undefined, "Spent (committed)")}
+            label={t("console.projects.finance.metrics.spent", undefined, "Spent — Committed")}
             value={formatMoney(spent, currency)}
           />
           <MetricCard

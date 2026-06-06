@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
             </select>
           </label>
           <Input
-            label={t("console.tasks.edit.fields.priority", undefined, "Priority (0-3)")}
+            label={t("console.tasks.edit.fields.priority", undefined, "Priority — 0-3")}
             name="priority"
             type="number"
             min={0}

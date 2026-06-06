@@ -50,7 +50,7 @@ export function NewPoForm({
         </div>
       </div>
       <Input
-        label={t("console.procurement.purchaseOrders.new.amountLabel", undefined, "Amount (USD)")}
+        label={t("console.procurement.purchaseOrders.new.amountLabel", undefined, "Amount — USD")}
         name="amount"
         type="number"
         step="0.01"

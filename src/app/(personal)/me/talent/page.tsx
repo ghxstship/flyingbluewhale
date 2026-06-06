@@ -107,7 +107,7 @@ export default async function Page() {
           />
         </div>
         <Input
-          label={t("me.talent.fields.genreTags", undefined, "Genre Tags (comma-separated)")}
+          label={t("me.talent.fields.genreTags", undefined, "Genre Tags — Comma-separated")}
           name="genre_tags"
           defaultValue={talent?.genre_tags.join(", ") ?? ""}
         />

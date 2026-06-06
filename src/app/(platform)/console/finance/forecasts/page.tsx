@@ -32,7 +32,7 @@ export default async function Page() {
       <>
         <ModuleHeader
           eyebrow={t("console.finance.forecasts.eyebrow", undefined, "Finance")}
-          title={t("console.finance.forecasts.title", undefined, "Forecasts (EAC)")}
+          title={t("console.finance.forecasts.title", undefined, "EAC Forecasts")}
         />
         <div className="page-content">
           <div className="surface p-6 text-sm">
@@ -92,7 +92,7 @@ export default async function Page() {
     <>
       <ModuleHeader
         eyebrow={t("console.finance.forecasts.eyebrow", undefined, "Finance")}
-        title={t("console.finance.forecasts.title", undefined, "Forecasts (EAC)")}
+        title={t("console.finance.forecasts.title", undefined, "EAC Forecasts")}
         subtitle={t(
           "console.finance.forecasts.subtitle",
           {

@@ -44,7 +44,7 @@ export default async function Page() {
           />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              {t("console.settings.timeClockZones.new.projectOptional", undefined, "Project (optional)")}
+              {t("console.settings.timeClockZones.new.projectOptional", undefined, "Project · Optional")}
             </label>
             <select name="project_id" className="input-base mt-1.5 w-full" defaultValue="">
               <option value="">
@@ -81,7 +81,7 @@ export default async function Page() {
             required
           />
           <Input
-            label={t("console.settings.timeClockZones.new.radius", undefined, "Radius (meters)")}
+            label={t("console.settings.timeClockZones.new.radius", undefined, "Radius — Meters")}
             name="radius_m"
             type="number"
             step="1"

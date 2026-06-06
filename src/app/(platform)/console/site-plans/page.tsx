@@ -111,7 +111,7 @@ export default async function Page() {
             accent
           />
           <MetricCard
-            label={t("console.sitePlans.issuedIfc", undefined, "Issued (IFC)")}
+            label={t("console.sitePlans.issuedIfc", undefined, "Issued — IFC")}
             value={fmt.number(issuedCount)}
           />
           <MetricCard

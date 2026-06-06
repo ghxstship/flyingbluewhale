@@ -70,7 +70,7 @@ export function NewProposalForm({
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label={t("console.proposals.new.amount", undefined, "Amount (USD)")}
+          label={t("console.proposals.new.amount", undefined, "Amount — USD")}
           name="amount"
           type="number"
           inputMode="decimal"

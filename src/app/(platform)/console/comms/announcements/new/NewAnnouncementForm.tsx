@@ -75,7 +75,7 @@ export function NewAnnouncementForm({
             </span>
             <select name="project_id" className="input-base focus-ring w-full" defaultValue="">
               <option value="">
-                {t("console.comms.announcements.new.project.any", undefined, "Org-wide (any project)")}
+                {t("console.comms.announcements.new.project.any", undefined, "Org-wide · Any Project")}
               </option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>

@@ -122,12 +122,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
           <MetricCard
-            label={t("console.contracts.metrics.activeAll", undefined, "Active (all)")}
+            label={t("console.contracts.metrics.activeAll", undefined, "Active — All")}
             value={fmt.number(activeCount)}
             accent
           />
           <MetricCard
-            label={t("console.contracts.metrics.activeConstruction", undefined, "Active (Construction)")}
+            label={t("console.contracts.metrics.activeConstruction", undefined, "Active — Construction")}
             value={fmt.number(constructionActiveCount)}
           />
           <MetricCard

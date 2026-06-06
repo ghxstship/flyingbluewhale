@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
             defaultValue={dateTimeLocal(row.ended_at)}
           />
           <Input
-            label={t("console.finance.time.edit.fields.durationMinutes", undefined, "Duration (minutes)")}
+            label={t("console.finance.time.edit.fields.durationMinutes", undefined, "Duration — Minutes")}
             name="duration_minutes"
             type="number"
             defaultValue={row.duration_minutes != null ? String(row.duration_minutes) : ""}

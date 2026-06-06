@@ -173,7 +173,7 @@ export async function KudosSurface({
             />
           </label>
           <label className="block text-xs font-semibold">
-            {t("m.kudos.valueTag", undefined, "Value (optional tag)")}
+            {t("m.kudos.valueTag", undefined, "Value · Optional Tag")}
             <input
               type="text"
               name="value_tag"

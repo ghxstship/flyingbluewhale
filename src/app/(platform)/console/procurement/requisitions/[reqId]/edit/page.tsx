@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             />
           </label>
           <Input
-            label={t("console.procurement.requisitions.edit.fields.estimatedCents", undefined, "Estimated (cents)")}
+            label={t("console.procurement.requisitions.edit.fields.estimatedCents", undefined, "Estimated — Cents")}
             name="estimated_cents"
             type="number"
             defaultValue={row.estimated_cents != null ? String(row.estimated_cents) : ""}

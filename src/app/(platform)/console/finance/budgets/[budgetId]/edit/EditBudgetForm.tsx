@@ -161,7 +161,7 @@ export function EditBudgetForm({
             defaultValue={get("tier")}
           />
           <Select
-            label={t("console.finance.budgets.edit.xyz", undefined, "XYZ (cost behaviour)")}
+            label={t("console.finance.budgets.edit.xyz", undefined, "XYZ — Cost Behaviour")}
             name="xyz"
             options={XPMS_XYZ}
             defaultValue={get("xyz")}
@@ -189,7 +189,7 @@ export function EditBudgetForm({
             defaultValue={get("quantity")}
           />
           <Input
-            label={t("console.finance.budgets.edit.rate", undefined, "Rate (USD)")}
+            label={t("console.finance.budgets.edit.rate", undefined, "Rate — USD")}
             name="rate"
             type="number"
             inputMode="decimal"
@@ -198,7 +198,7 @@ export function EditBudgetForm({
             hint={t("console.finance.budgets.edit.rateHint", undefined, "Estimate = Quantity × Rate (computed by DB)")}
           />
           <Input
-            label={t("console.finance.budgets.edit.amount", undefined, "Budget (USD)")}
+            label={t("console.finance.budgets.edit.amount", undefined, "Budget — USD")}
             name="amount"
             type="number"
             inputMode="decimal"

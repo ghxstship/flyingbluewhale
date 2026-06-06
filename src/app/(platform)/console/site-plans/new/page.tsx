@@ -214,15 +214,15 @@ export default async function Page() {
             </div>
             <div className="grid grid-cols-4 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.lengthIn", undefined, "Length (in)")}</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.lengthIn", undefined, "Length — in")}</span>
                 <input name="shell_length_in" type="number" min={1} className={INPUT} placeholder="480" />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.widthIn", undefined, "Width (in)")}</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.widthIn", undefined, "Width — in")}</span>
                 <input name="shell_width_in" type="number" min={1} className={INPUT} placeholder="120" />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.heightIn", undefined, "Height (in)")}</span>
+                <span className={LBL}>{t("console.sitePlans.new.label.heightIn", undefined, "Height — in")}</span>
                 <input name="shell_height_in" type="number" min={0} className={INPUT} placeholder="120" />
               </label>
               <label className="flex flex-col gap-1.5">
@@ -239,7 +239,7 @@ export default async function Page() {
             </h3>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("console.sitePlans.new.label.preset", undefined, "Instantiate from preset (optional)")}
+                {t("console.sitePlans.new.label.preset", undefined, "Instantiate from Preset · Optional")}
               </span>
               <select name="preset_code" defaultValue="" className={INPUT}>
                 <option value="">{t("console.sitePlans.new.option.none", undefined, "— None —")}</option>

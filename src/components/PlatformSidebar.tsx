@@ -178,7 +178,7 @@ export function PlatformSidebar({
             <WorkspaceSwitcher collapsed={collapsed} initialName={workspaceName} />
           </div>
           {!collapsed && (
-            <Hint label="Collapse sidebar (⌘B)" side="right">
+            <Hint label="Collapse sidebar · ⌘B" side="right">
               <button
                 type="button"
                 onClick={() => {
@@ -292,7 +292,7 @@ export function PlatformSidebar({
             toggle, since the rail header is reserved for the workspace
             tile per Linear/Notion convention. */}
         {collapsed ? (
-          <Hint label="Expand sidebar (⌘B)" side="right">
+          <Hint label="Expand sidebar · ⌘B" side="right">
             <button
               type="button"
               onClick={() => {

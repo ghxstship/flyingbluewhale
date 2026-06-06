@@ -138,7 +138,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               </select>
             </div>
             <Input
-              label={t("console.marketplace.postings.applicants.detail.scoreInputLabel", undefined, "Score (0-100)")}
+              label={t("console.marketplace.postings.applicants.detail.scoreInputLabel", undefined, "Score — 0-100")}
               name="score"
               type="number"
               min={0}

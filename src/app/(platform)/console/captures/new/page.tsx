@@ -100,7 +100,7 @@ export default async function Page() {
               <input type="date" name="capture_date" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.captures.new.panoramas", undefined, "Panoramas (approx)")}</span>
+              <span className={LBL}>{t("console.captures.new.panoramas", undefined, "Panoramas — Approx")}</span>
               <input type="number" min="0" name="panorama_count" className={INPUT} />
             </label>
           </div>
@@ -110,7 +110,7 @@ export default async function Page() {
           </label>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
-              {t("console.captures.new.externalId", undefined, "External ID (vendor's job/space ID)")}
+              {t("console.captures.new.externalId", undefined, "External ID — Vendor's Job/Space ID")}
             </span>
             <input name="external_id" className={`${INPUT} font-mono text-xs`} />
           </label>

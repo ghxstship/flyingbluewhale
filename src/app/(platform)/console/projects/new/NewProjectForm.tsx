@@ -60,7 +60,7 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
         </div>
       </div>
       <Input
-        label={t("console.projects.new.budgetUsd", undefined, "Budget (USD)")}
+        label={t("console.projects.new.budgetUsd", undefined, "Budget — USD")}
         name="budget"
         type="number"
         min="0"

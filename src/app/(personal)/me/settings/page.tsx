@@ -60,13 +60,13 @@ export default async function PersonalSettings() {
               </select>
             </div>
             <Input
-              label={t("me.settings.workspace.locale.label", undefined, "Locale (e.g. en, en-US, es)")}
+              label={t("me.settings.workspace.locale.label", undefined, "Locale — e.g. en, en-US, es")}
               name="locale"
               maxLength={8}
               defaultValue={prefs.locale ?? "en-US"}
             />
             <Input
-              label={t("me.settings.workspace.timezone.label", undefined, "Timezone (IANA, e.g. America/New_York)")}
+              label={t("me.settings.workspace.timezone.label", undefined, "Timezone — IANA, e.g. America/New_York")}
               name="timezone"
               maxLength={64}
               defaultValue={prefs.timezone ?? ""}

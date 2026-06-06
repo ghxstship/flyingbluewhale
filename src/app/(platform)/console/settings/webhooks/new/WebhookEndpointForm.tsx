@@ -128,7 +128,7 @@ export function WebhookEndpointForm() {
         required
       />
       <Input
-        label={t("console.settings.webhooks.new.descriptionLabel", undefined, "Description (optional)")}
+        label={t("console.settings.webhooks.new.descriptionLabel", undefined, "Description · Optional")}
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder={t(

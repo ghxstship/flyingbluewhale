@@ -58,7 +58,7 @@ export function NewExpenseForm({
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label={t("console.finance.expenses.new.amount", undefined, "Amount (USD)")}
+          label={t("console.finance.expenses.new.amount", undefined, "Amount — USD")}
           name="amount"
           type="number"
           inputMode="decimal"
@@ -78,7 +78,7 @@ export function NewExpenseForm({
           off department + project_id to write into budgets.actual_cents. */}
       <div className="grid gap-3 sm:grid-cols-2">
         <XpmsSelect
-          label={t("console.finance.expenses.new.department", undefined, "Department (XPMS)")}
+          label={t("console.finance.expenses.new.department", undefined, "Department — XPMS")}
           name="department"
           options={XPMS_DEPARTMENTS}
         />
@@ -95,7 +95,7 @@ export function NewExpenseForm({
         <Input label={t("console.finance.expenses.new.item", undefined, "Item")} name="item" maxLength={120} />
         <Input label={t("console.finance.expenses.new.vendor", undefined, "Vendor")} name="vendor" maxLength={160} />
         <Input
-          label={t("console.finance.expenses.new.category", undefined, "Category (legacy)")}
+          label={t("console.finance.expenses.new.category", undefined, "Category — Legacy")}
           name="category"
           placeholder={t("console.finance.expenses.new.categoryPlaceholder", undefined, "Travel, meals, equipment…")}
         />
@@ -103,7 +103,7 @@ export function NewExpenseForm({
       {projects.length > 0 && (
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">
-            {t("console.finance.expenses.new.projectOptional", undefined, "Project (optional)")}
+            {t("console.finance.expenses.new.projectOptional", undefined, "Project · Optional")}
           </label>
           <select
             name="project_id"

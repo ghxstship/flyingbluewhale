@@ -73,7 +73,7 @@ function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: strin
         <select name="role" className="input-base focus-ring w-full" defaultValue="member">
           <option value="member">{t("console.people.teams.roles.member", undefined, "Member")}</option>
           <option value="admin">
-            {t("console.people.teams.addMember.adminOption", undefined, "Admin (can manage this team's members)")}
+            {t("console.people.teams.addMember.adminOption", undefined, "Admin — Can Manage This Team's Members")}
           </option>
         </select>
       </label>

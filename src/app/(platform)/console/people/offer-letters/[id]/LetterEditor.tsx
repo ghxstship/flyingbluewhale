@@ -216,7 +216,7 @@ export function LetterEditor({
                     {t(
                       "console.people.offerLetters.editor.compensation.basis.perDay",
                       undefined,
-                      "Per day (rate × engagement days)",
+                      "Per Day — Rate × Engagement Days",
                     )}
                   </option>
                   <option value="per_show_day">
@@ -226,7 +226,7 @@ export function LetterEditor({
                     {t(
                       "console.people.offerLetters.editor.compensation.basis.flatFee",
                       undefined,
-                      "Flat project fee (uses rate card unit price)",
+                      "Flat Project Fee — Uses Rate Card Unit Price",
                     )}
                   </option>
                   <option value="hourly">
@@ -242,7 +242,7 @@ export function LetterEditor({
                 label={t(
                   "console.people.offerLetters.editor.compensation.overrideTotal",
                   undefined,
-                  "Override Total (USD)",
+                  "Override Total — USD",
                 )}
                 hint={t(
                   "console.people.offerLetters.editor.compensation.overrideTotalHint",
@@ -263,7 +263,7 @@ export function LetterEditor({
                 label={t(
                   "console.people.offerLetters.editor.compensation.overridePerDiem",
                   undefined,
-                  "Override Per Diem (USD/Day)",
+                  "Override Per Diem — USD/Day",
                 )}
                 hint={t(
                   "console.people.offerLetters.editor.compensation.overridePerDiemHint",
@@ -437,7 +437,7 @@ function TriStateSelect({ name, label, value }: { name: string; label: string; v
     <FormField name={name} label={label}>
       <NativeSelect name={name} defaultValue={v}>
         <option value="">
-          {t("console.people.offerLetters.editor.triState.inherit", undefined, "Inherit (org default)")}
+          {t("console.people.offerLetters.editor.triState.inherit", undefined, "Inherit — Org Default")}
         </option>
         <option value="true">{t("common.yes", undefined, "Yes")}</option>
         <option value="false">{t("common.no", undefined, "No")}</option>

@@ -143,13 +143,13 @@ export default async function BudgetSummaryPage() {
       />
       <div className="page-content space-y-8">
         <RollupTable
-          title="By Department (XPMS Class)"
+          title="By Department — XPMS Class"
           rollups={byDept}
           totalLabel="TOTAL"
           fmt={(c) => fmt.money(c / 100)}
         />
         <RollupTable
-          title="By Phase (8-Gate Lifecycle — Scope only)"
+          title="By Phase — 8-Gate Lifecycle · Scope Only"
           rollups={byPhase}
           totalLabel="TOTAL"
           fmt={(c) => fmt.money(c / 100)}
@@ -163,13 +163,13 @@ export default async function BudgetSummaryPage() {
           showPercent
         />
         <RollupTable
-          title="By Discipline (Scope only)"
+          title="By Discipline — Scope Only"
           rollups={byDiscipline}
           totalLabel="TOTAL"
           fmt={(c) => fmt.money(c / 100)}
         />
         <RollupTable
-          title="By XYZ (cost behaviour — all-in)"
+          title="By XYZ — Cost Behaviour · All-in"
           rollups={byXyz}
           totalLabel="TOTAL"
           fmt={(c) => fmt.money(c / 100)}

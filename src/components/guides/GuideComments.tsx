@@ -71,7 +71,7 @@ export function GuideComments({
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Your name (optional)"
+          placeholder="Your name · optional"
           aria-label="Your Name"
           className="input-base text-sm"
         />

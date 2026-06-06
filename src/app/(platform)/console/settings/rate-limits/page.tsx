@@ -242,7 +242,7 @@ export default async function Page() {
               required
               min="1"
               max="3600"
-              placeholder={t("console.settings.rateLimits.upsert.windowPlaceholder", undefined, "Window (sec)")}
+              placeholder={t("console.settings.rateLimits.upsert.windowPlaceholder", undefined, "Window — Sec")}
               defaultValue="60"
               className="input-base sm:col-span-1"
             />

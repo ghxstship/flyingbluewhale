@@ -168,7 +168,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                       placeholder={t(
                         "console.services.requests.detail.resolutionNotePlaceholder",
                         undefined,
-                        "Resolution note (optional)",
+                        "Resolution Note · Optional",
                       )}
                       maxLength={2000}
                       className="input-base me-2 inline-block w-64 align-middle"

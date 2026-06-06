@@ -253,7 +253,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               placeholder={t(
                 "console.workforce.courses.detail.quiz.choicesPlaceholder",
                 undefined,
-                "Choices (one per line) — first 4",
+                "Choices — One per Line · First 4",
               )}
               required
               className="input-base w-full"

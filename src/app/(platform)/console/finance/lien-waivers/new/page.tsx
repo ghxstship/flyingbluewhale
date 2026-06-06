@@ -96,7 +96,7 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.finance.lienWaivers.new.amountUsd", undefined, "Amount (USD)")}</span>
+              <span className={LBL}>{t("console.finance.lienWaivers.new.amountUsd", undefined, "Amount — USD")}</span>
               <input type="number" step="0.01" name="amount" placeholder="0.00" className={`${INPUT} font-mono`} />
             </label>
             <label className="flex flex-col gap-1.5">

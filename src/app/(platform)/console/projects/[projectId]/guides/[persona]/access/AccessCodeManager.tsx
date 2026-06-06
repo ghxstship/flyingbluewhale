@@ -66,7 +66,7 @@ export function AccessCodeManager({
           </div>
           <div>
             <label className="text-xs text-[var(--text-muted)]">
-              {t("console.projects.guides.access.expiresField", undefined, "Expires in (days)")}
+              {t("console.projects.guides.access.expiresField", undefined, "Expires in — Days")}
             </label>
             <Input
               name="expires_in_days"

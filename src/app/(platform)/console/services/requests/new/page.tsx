@@ -81,13 +81,13 @@ export default async function Page() {
                 )}
               </option>
               <option value="P2">
-                {t("console.services.requests.new.severityP2", undefined, "P2 — urgent (15m ack, 4h resolve)")}
+                {t("console.services.requests.new.severityP2", undefined, "P2 — Urgent · 15m Ack, 4h Resolve")}
               </option>
               <option value="P3">
-                {t("console.services.requests.new.severityP3", undefined, "P3 — standard (1h ack, 1d resolve)")}
+                {t("console.services.requests.new.severityP3", undefined, "P3 — Standard · 1h Ack, 1d Resolve")}
               </option>
               <option value="P4">
-                {t("console.services.requests.new.severityP4", undefined, "P4 — low (4h ack, 3d resolve)")}
+                {t("console.services.requests.new.severityP4", undefined, "P4 — Low · 4h Ack, 3d Resolve")}
               </option>
             </select>
           </div>
@@ -107,7 +107,7 @@ export default async function Page() {
           {projects.length > 0 && (
             <div>
               <label className="text-xs font-medium text-[var(--text-secondary)]">
-                {t("console.services.requests.new.projectLabel", undefined, "Project (optional)")}
+                {t("console.services.requests.new.projectLabel", undefined, "Project · Optional")}
               </label>
               <select name="project_id" defaultValue="" className="input-base mt-1.5 w-full">
                 <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>
@@ -122,7 +122,7 @@ export default async function Page() {
           {venues.length > 0 && (
             <div>
               <label className="text-xs font-medium text-[var(--text-secondary)]">
-                {t("console.services.requests.new.venueLabel", undefined, "Venue (optional)")}
+                {t("console.services.requests.new.venueLabel", undefined, "Venue · Optional")}
               </label>
               <select name="venue_id" defaultValue="" className="input-base mt-1.5 w-full">
                 <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>

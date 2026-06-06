@@ -31,7 +31,7 @@ export default async function Page() {
             <textarea name="summary" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
           </div>
           <Input
-            label={t("console.workforce.courses.new.fields.duration", undefined, "Duration (minutes)")}
+            label={t("console.workforce.courses.new.fields.duration", undefined, "Duration — Minutes")}
             name="duration_minutes"
             type="number"
             min="1"

@@ -45,7 +45,7 @@ export function CueForm() {
         placeholder={t("console.production.ros.cueForm.labelPlaceholder", undefined, "e.g. House lights down")}
       />
       <Input
-        label={t("console.production.ros.cueForm.durationSec", undefined, "Duration (sec)")}
+        label={t("console.production.ros.cueForm.durationSec", undefined, "Duration — Sec")}
         name="duration_seconds"
         type="number"
         min={0}

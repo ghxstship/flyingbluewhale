@@ -105,7 +105,7 @@ export default async function Page() {
           />
         </div>
         <Input
-          label={t("me.crew.fields.roles", undefined, "Roles (comma-separated)")}
+          label={t("me.crew.fields.roles", undefined, "Roles — Comma-separated")}
           name="roles"
           defaultValue={c?.roles.join(", ") ?? ""}
           placeholder={t("me.crew.placeholders.roles", undefined, "A1, A2, Lighting Programmer")}
@@ -134,7 +134,7 @@ export default async function Page() {
             defaultValue={dollars(c?.day_rate_max_cents ?? null)}
           />
           <Input
-            label={t("me.crew.fields.travelRadius", undefined, "Travel Radius (km)")}
+            label={t("me.crew.fields.travelRadius", undefined, "Travel Radius — km")}
             name="travel_radius_km"
             type="number"
             defaultValue={c?.travel_radius_km ?? ""}

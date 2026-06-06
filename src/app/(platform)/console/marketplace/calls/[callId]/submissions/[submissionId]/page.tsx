@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               </select>
             </div>
             <Input
-              label={t("console.marketplace.calls.submissions.detail.scoreInputLabel", undefined, "Score (0-100)")}
+              label={t("console.marketplace.calls.submissions.detail.scoreInputLabel", undefined, "Score — 0-100")}
               name="score"
               type="number"
               min={0}

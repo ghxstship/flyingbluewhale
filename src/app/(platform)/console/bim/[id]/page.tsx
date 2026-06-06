@@ -230,7 +230,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
             <input
               name="note"
-              placeholder={t("console.bim.detail.placeholder.note", undefined, "Note (optional)")}
+              placeholder={t("console.bim.detail.placeholder.note", undefined, "Note · Optional")}
               className={`${INPUT} text-xs`}
             />
             <Button type="submit" size="sm" variant="secondary">

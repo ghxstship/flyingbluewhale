@@ -106,7 +106,7 @@ export default async function Page() {
             />
           </label>
           <Input
-            label={t("console.workforce.recognition.new.valueTagLabel", undefined, "Value Tag (Optional)")}
+            label={t("console.workforce.recognition.new.valueTagLabel", undefined, "Value Tag · Optional")}
             name="value_tag"
             maxLength={40}
             placeholder={t(

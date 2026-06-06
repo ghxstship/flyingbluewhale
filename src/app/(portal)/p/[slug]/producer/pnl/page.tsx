@@ -97,7 +97,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
           </div>
           <div className="surface p-4">
             <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
-              {t("p.producer.pnl.metrics.revenuePaid", undefined, "Revenue (paid)")}
+              {t("p.producer.pnl.metrics.revenuePaid", undefined, "Revenue — Paid")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">{fmtMoney(invoiceTotal)}</div>
           </div>

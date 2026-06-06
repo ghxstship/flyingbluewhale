@@ -105,7 +105,7 @@ export function AdvancingForm({ slug }: { slug: string }) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="text-xs font-medium text-[var(--text-secondary)]">
-            {t("p.artist.advancing.form.file.label", undefined, "File (optional, ≤25MB)")}
+            {t("p.artist.advancing.form.file.label", undefined, "File · Optional · ≤25MB")}
           </label>
           <input
             type="file"

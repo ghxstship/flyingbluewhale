@@ -23,13 +23,13 @@ export default async function Page() {
     },
     {
       value: "masterformat_1995",
-      label: t("console.specs.new.format.masterformat_1995", undefined, "CSI MasterFormat 1995 (16-div)"),
+      label: t("console.specs.new.format.masterformat_1995", undefined, "CSI MasterFormat 1995 — 16-div"),
     },
     {
       value: "uniformat_2_2",
-      label: t("console.specs.new.format.uniformat_2_2", undefined, "Uniformat II (ASTM E1557)"),
+      label: t("console.specs.new.format.uniformat_2_2", undefined, "Uniformat II — ASTM E1557"),
     },
-    { value: "nrm2", label: t("console.specs.new.format.nrm2", undefined, "RICS NRM2 (UK)") },
+    { value: "nrm2", label: t("console.specs.new.format.nrm2", undefined, "RICS NRM2 — UK") },
     { value: "custom", label: t("console.specs.new.format.custom", undefined, "Custom") },
   ];
   const { data: projects } = await supabase
@@ -115,7 +115,7 @@ export default async function Page() {
             </span>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className={LBL}>{t("console.specs.new.fields.bodyMarkdown", undefined, "Body (Markdown)")}</span>
+            <span className={LBL}>{t("console.specs.new.fields.bodyMarkdown", undefined, "Body — Markdown")}</span>
             <textarea
               name="body_md"
               rows={8}

@@ -76,7 +76,7 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
         </Button>
       </div>
       <FormShell action={action} submitLabel="Sign and Accept" className="space-y-4">
-        <FormField name="signature" label="Typed Signature (Full Legal Name)" required>
+        <FormField name="signature" label="Typed Signature · Full Legal Name" required>
           <TextInput
             name="signature"
             defaultValue={defaultName}

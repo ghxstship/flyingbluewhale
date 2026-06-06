@@ -699,7 +699,7 @@ function InvestmentSummary() {
             ))}
 
             <tr className="heat-row-section">
-              <td>Retainer Tier (Pick One)</td>
+              <td>Retainer Tier · Pick One</td>
               <td className="right">Monthly · Annual</td>
             </tr>
             {HEAT_RETAINER_TIERS.map((rt) => (

@@ -139,7 +139,7 @@ export default function Page() {
               />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className={LBL}>Capabilities (one per line)</span>
+              <span className={LBL}>Capabilities — One per Line</span>
               <textarea
                 name="capabilities"
                 rows={4}

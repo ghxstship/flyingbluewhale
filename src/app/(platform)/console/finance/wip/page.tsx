@@ -113,11 +113,11 @@ export default async function Page() {
             accent
           />
           <MetricCard
-            label={t("console.finance.wip.metric.overBilledLatest", undefined, "Over-billed (latest)")}
+            label={t("console.finance.wip.metric.overBilledLatest", undefined, "Over-billed — Latest")}
             value={fmtMoney(overBilled)}
           />
           <MetricCard
-            label={t("console.finance.wip.metric.underBilledLatest", undefined, "Under-billed (latest)")}
+            label={t("console.finance.wip.metric.underBilledLatest", undefined, "Under-billed — Latest")}
             value={fmtMoney(underBilled)}
           />
         </div>
@@ -153,7 +153,7 @@ export default async function Page() {
             },
             {
               key: "contract",
-              header: t("console.finance.wip.col.contract", undefined, "Contract (incl. CO)"),
+              header: t("console.finance.wip.col.contract", undefined, "Contract — Incl. CO"),
               render: (r) => fmtMoney(Number(r.revised_contract_amount)),
               accessor: (r) => Number(r.revised_contract_amount),
               className: "font-mono text-xs text-right",

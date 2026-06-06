@@ -81,7 +81,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
               {year + 1} →
             </Button>
             <Button href={`/api/v1/exports/osha?year=${year}`} size="sm">
-              {t("console.safety.osha.exportCsv", undefined, "Export 300/300A/301 (CSV)")}
+              {t("console.safety.osha.exportCsv", undefined, "Export 300/300A/301 — CSV")}
             </Button>
           </div>
         }

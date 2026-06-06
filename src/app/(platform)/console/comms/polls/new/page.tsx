@@ -26,7 +26,7 @@ export default async function Page() {
           />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              {t("console.comms.polls.new.optionsLabel", undefined, "Options (one per line, max 8)")}
+              {t("console.comms.polls.new.optionsLabel", undefined, "Options — One per Line, Max 8")}
             </label>
             <textarea
               name="options"

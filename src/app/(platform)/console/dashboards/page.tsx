@@ -198,7 +198,7 @@ export default async function Page() {
               },
               {
                 key: "recordable_30d",
-                header: t("console.dashboards.columns.recordables30d", undefined, "Recordables (30d)"),
+                header: t("console.dashboards.columns.recordables30d", undefined, "Recordables — 30d"),
                 render: (k) => k.recordable_30d,
                 accessor: (k) => k.recordable_30d,
                 tabular: true,

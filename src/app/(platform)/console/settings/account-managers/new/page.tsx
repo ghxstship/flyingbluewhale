@@ -116,11 +116,11 @@ export default async function Page() {
           </div>
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              {t("console.settings.accountManagers.new.projectLabel", undefined, "Project (optional)")}
+              {t("console.settings.accountManagers.new.projectLabel", undefined, "Project · Optional")}
             </label>
             <select name="project_id" className="input-base mt-1.5 w-full" defaultValue="">
               <option value="">
-                {t("console.settings.accountManagers.new.projectOrgWide", undefined, "Org-wide (any project)")}
+                {t("console.settings.accountManagers.new.projectOrgWide", undefined, "Org-wide · Any Project")}
               </option>
               {projectList.map((p) => (
                 <option key={p.id} value={p.id}>

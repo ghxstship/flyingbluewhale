@@ -62,7 +62,7 @@ export function NewRentalForm({
           </select>
         </div>
         <Input
-          label={t("console.production.rentals.new.rateLabel", undefined, "Rate (USD)")}
+          label={t("console.production.rentals.new.rateLabel", undefined, "Rate — USD")}
           name="rate"
           type="number"
           step="0.01"

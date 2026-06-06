@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     {
       href: `/p/${slug}/media/transport`,
       label: t("p.media.tiles.transport.label", undefined, "Transport"),
-      desc: t("p.media.tiles.transport.desc", undefined, "Media shuttle (T2)"),
+      desc: t("p.media.tiles.transport.desc", undefined, "Media Shuttle — T2"),
     },
     {
       href: `/p/${slug}/media/accommodation`,

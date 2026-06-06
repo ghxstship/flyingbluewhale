@@ -160,19 +160,19 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
           </h3>
           <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
             <dt className="text-[var(--text-muted)]">
-              {t("console.production.dispatch.detail.departScheduled", undefined, "Depart (scheduled)")}
+              {t("console.production.dispatch.detail.departScheduled", undefined, "Depart — Scheduled")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_depart)}</dd>
             <dt className="text-[var(--text-muted)]">
-              {t("console.production.dispatch.detail.departActual", undefined, "Depart (actual)")}
+              {t("console.production.dispatch.detail.departActual", undefined, "Depart — Actual")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_depart)}</dd>
             <dt className="text-[var(--text-muted)]">
-              {t("console.production.dispatch.detail.arriveScheduled", undefined, "Arrive (scheduled)")}
+              {t("console.production.dispatch.detail.arriveScheduled", undefined, "Arrive — Scheduled")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_arrive)}</dd>
             <dt className="text-[var(--text-muted)]">
-              {t("console.production.dispatch.detail.arriveActual", undefined, "Arrive (actual)")}
+              {t("console.production.dispatch.detail.arriveActual", undefined, "Arrive — Actual")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_arrive)}</dd>
           </dl>

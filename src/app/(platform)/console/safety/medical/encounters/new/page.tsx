@@ -24,16 +24,16 @@ export default async function Page() {
             </label>
             <select name="triage" defaultValue="green" className="input-base mt-1.5 w-full">
               <option value="green">
-                {t("console.safety.medical.encounters.new.triageGreen", undefined, "Green (minor)")}
+                {t("console.safety.medical.encounters.new.triageGreen", undefined, "Green — Minor")}
               </option>
               <option value="yellow">
-                {t("console.safety.medical.encounters.new.triageYellow", undefined, "Yellow (urgent)")}
+                {t("console.safety.medical.encounters.new.triageYellow", undefined, "Yellow — Urgent")}
               </option>
               <option value="red">
-                {t("console.safety.medical.encounters.new.triageRed", undefined, "Red (immediate)")}
+                {t("console.safety.medical.encounters.new.triageRed", undefined, "Red — Immediate")}
               </option>
               <option value="black">
-                {t("console.safety.medical.encounters.new.triageBlack", undefined, "Black (deceased)")}
+                {t("console.safety.medical.encounters.new.triageBlack", undefined, "Black — Deceased")}
               </option>
             </select>
           </div>

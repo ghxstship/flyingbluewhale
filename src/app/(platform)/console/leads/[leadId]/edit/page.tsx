@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
             maxLength={120}
           />
           <Input
-            label={t("console.leads.edit.fields.estimatedValueCents", undefined, "Estimated Value (Cents)")}
+            label={t("console.leads.edit.fields.estimatedValueCents", undefined, "Estimated Value — Cents")}
             name="estimated_value_cents"
             type="number"
             defaultValue={row.estimated_value_cents != null ? String(row.estimated_value_cents) : ""}

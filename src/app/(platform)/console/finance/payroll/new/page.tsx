@@ -86,7 +86,7 @@ export default async function Page() {
               <select name="agency_report_type" className={INPUT} defaultValue="none">
                 <option value="none">{t("console.finance.payroll.new.agency.none", undefined, "None")}</option>
                 <option value="wh_347">
-                  {t("console.finance.payroll.new.agency.wh347", undefined, "WH-347 (Federal Davis-Bacon)")}
+                  {t("console.finance.payroll.new.agency.wh347", undefined, "WH-347 — Federal Davis-Bacon")}
                 </option>
                 <option value="ca_dir">{t("console.finance.payroll.new.agency.caDir", undefined, "CA DIR")}</option>
                 <option value="ny_pwa">{t("console.finance.payroll.new.agency.nyPwa", undefined, "NY PWA")}</option>

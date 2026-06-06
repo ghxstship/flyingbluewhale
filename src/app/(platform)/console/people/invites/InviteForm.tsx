@@ -54,7 +54,7 @@ export function InviteForm({ projects }: { projects: ProjectOption[] }) {
 
       <label className="block text-xs font-medium">
         <span className="mb-1 block">
-          {t("console.people.invites.scopeProject", undefined, "Scope to a project (optional)")}
+          {t("console.people.invites.scopeProject", undefined, "Scope to a Project · Optional")}
         </span>
         <select
           name="projectId"

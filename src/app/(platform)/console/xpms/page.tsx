@@ -56,8 +56,8 @@ export default async function XpmsOverviewPage() {
             label={t("console.xpms.metric.atoms", undefined, "Atoms")}
             value={String(atoms.data?.length ?? 0)}
           />
-          <MetricCard label={t("console.xpms.metric.uac", undefined, "UAC (planned)")} value={String(uacCount)} />
-          <MetricCard label={t("console.xpms.metric.tpc", undefined, "TPC (deployed)")} value={String(tpcCount)} />
+          <MetricCard label={t("console.xpms.metric.uac", undefined, "UAC — Planned")} value={String(uacCount)} />
+          <MetricCard label={t("console.xpms.metric.tpc", undefined, "TPC — Deployed")} value={String(tpcCount)} />
           <MetricCard
             label={t("console.xpms.metric.variance", undefined, "Variance entries")}
             value={String(variance.data?.length ?? 0)}

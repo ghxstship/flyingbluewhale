@@ -24,7 +24,7 @@ export function NewEquipmentForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label={t("console.production.equipment.new.serial", undefined, "Serial")} name="serial" />
         <Input
-          label={t("console.production.equipment.new.dailyRate", undefined, "Daily Rate (USD)")}
+          label={t("console.production.equipment.new.dailyRate", undefined, "Daily Rate — USD")}
           name="daily_rate"
           type="number"
           step="0.01"

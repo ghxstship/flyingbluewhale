@@ -159,7 +159,7 @@ export function AddressField(props: AddressFieldProps) {
         {showStreet2 ? (
           <div className="sm:col-span-2">
             <Input
-              label="Apt / Suite (optional)"
+              label="Apt / Suite · Optional"
               name={`${name}_street2`}
               value={state.street2 ?? ""}
               disabled={disabled}

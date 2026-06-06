@@ -254,14 +254,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               />
               <DetailInput
                 name="zone_codes"
-                label={t("console.projects.assignments.detail.ticket.zones", undefined, "Zones (comma)")}
+                label={t("console.projects.assignments.detail.ticket.zones", undefined, "Zones — Comma")}
                 className="sm:col-span-2"
                 defaultValue={((detail as TicketDetails | null)?.zone_codes ?? []).join(", ")}
                 placeholder="main_stage, bar_b"
               />
               <DetailInput
                 name="gate_codes"
-                label={t("console.projects.assignments.detail.ticket.gates", undefined, "Gates (comma)")}
+                label={t("console.projects.assignments.detail.ticket.gates", undefined, "Gates — Comma")}
                 className="sm:col-span-2"
                 defaultValue={((detail as TicketDetails | null)?.gate_codes ?? []).join(", ")}
                 placeholder="gate_a, gate_c"
@@ -344,7 +344,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 label={t(
                   "console.projects.assignments.detail.credential.parent",
                   undefined,
-                  "Parent credential (assignment UUID)",
+                  "Parent Credential — Assignment UUID",
                 )}
                 className="sm:col-span-3"
                 defaultValue={(detail as CredentialDetails | null)?.parent_assignment_id ?? ""}
@@ -446,7 +446,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 label={t(
                   "console.projects.assignments.detail.lodging.roommate",
                   undefined,
-                  "Roommate (assignment UUID)",
+                  "Roommate — Assignment UUID",
                 )}
                 className="sm:col-span-6"
                 defaultValue={(detail as LodgingDetails | null)?.roommate_assignment_id ?? ""}

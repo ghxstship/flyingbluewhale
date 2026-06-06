@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
               defaultValue={String(row.miles ?? 0)}
             />
             <Input
-              label={t("console.finance.mileage.edit.rateCents", undefined, "Rate (cents/mile)")}
+              label={t("console.finance.mileage.edit.rateCents", undefined, "Rate — Cents/Mile")}
               name="rate_cents"
               type="number"
               defaultValue={String(row.rate_cents ?? 0)}

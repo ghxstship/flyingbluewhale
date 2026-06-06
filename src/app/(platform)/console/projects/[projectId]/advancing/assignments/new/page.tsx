@@ -166,7 +166,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           />
           <div>
             <label className="text-xs font-medium text-[var(--text-secondary)]">
-              {t("console.projects.advancing.assignments.new.notes", undefined, "Notes (optional)")}
+              {t("console.projects.advancing.assignments.new.notes", undefined, "Notes · Optional")}
             </label>
             <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
           </div>

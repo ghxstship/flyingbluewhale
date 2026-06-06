@@ -82,7 +82,7 @@ export function PerDiemCalculator() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="eyebrow">Daily rate (USD)</label>
+                <label className="eyebrow">Daily Rate — USD</label>
                 <input
                   type="number"
                   min={0}

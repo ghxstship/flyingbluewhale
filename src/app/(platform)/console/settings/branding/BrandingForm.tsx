@@ -55,7 +55,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             placeholder="ATLVS Technologies"
           />
           <Input
-            label={t("console.settings.branding.identity.logoUrlLabel", undefined, "Logo URL (HTTPS)")}
+            label={t("console.settings.branding.identity.logoUrlLabel", undefined, "Logo URL — HTTPS")}
             name="logoUrl"
             type="url"
             value={logoUrl}

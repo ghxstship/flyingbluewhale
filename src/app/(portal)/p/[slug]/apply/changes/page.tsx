@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     zone_add: t("p.apply.changes.kind.zone_add", undefined, "Add zone"),
     zone_remove: t("p.apply.changes.kind.zone_remove", undefined, "Remove zone"),
     replacement: t("p.apply.changes.kind.replacement", undefined, "Card replacement"),
-    reissue: t("p.apply.changes.kind.reissue", undefined, "Reissue (lost / damaged)"),
+    reissue: t("p.apply.changes.kind.reissue", undefined, "Reissue — Lost / Damaged"),
     name_change: t("p.apply.changes.kind.name_change", undefined, "Name change"),
     photo_update: t("p.apply.changes.kind.photo_update", undefined, "Photo update"),
   };

@@ -58,7 +58,7 @@ export default async function Page() {
           </select>
           <input
             name="weather_summary"
-            placeholder={t("m.dailyLog.weatherPlaceholder", undefined, "Weather (e.g. 78°F, sunny)")}
+            placeholder={t("m.dailyLog.weatherPlaceholder", undefined, "Weather — e.g. 78°F, Sunny")}
             className={INPUT}
           />
           <textarea

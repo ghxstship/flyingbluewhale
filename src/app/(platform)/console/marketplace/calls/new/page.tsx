@@ -47,7 +47,7 @@ export default async function Page() {
             <textarea name="description" rows={6} maxLength={8000} className="input-base mt-1.5 w-full" />
           </div>
           <Input
-            label={t("console.marketplace.calls.new.fields.genreTags", undefined, "Genre Tags (comma-separated)")}
+            label={t("console.marketplace.calls.new.fields.genreTags", undefined, "Genre Tags — Comma-separated")}
             name="genre_tags"
             placeholder={t(
               "console.marketplace.calls.new.placeholders.genreTags",
@@ -59,7 +59,7 @@ export default async function Page() {
             label={t(
               "console.marketplace.calls.new.fields.tradeCategories",
               undefined,
-              "Trade Categories (comma-separated)",
+              "Trade Categories — Comma-separated",
             )}
             name="trade_categories"
             placeholder={t(
@@ -88,7 +88,7 @@ export default async function Page() {
               type="date"
             />
             <Input
-              label={t("console.marketplace.calls.new.fields.slotMin", undefined, "Slot (min)")}
+              label={t("console.marketplace.calls.new.fields.slotMin", undefined, "Slot — Min")}
               name="slot_length_min"
               type="number"
             />

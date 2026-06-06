@@ -66,3 +66,18 @@ npx playwright test e2e/*.spec.ts --grep-invert "a11y ·"
 # Just the new console-core flows (7/7):
 npx playwright test console-core-flows
 ```
+
+## "Execute all" — remediation initiatives (status)
+
+Executed every blocker from the coverage plan; net-positive, all committed/pushed:
+
+| Initiative              | Outcome                                                                                                                                                                                                                                                                                                           |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **CI dev-server wedge** | ✅ Fixed: `playwright.config.ts` runs E2E against a **production build** (`next build && next start`) when `CI`/`E2E_PROD=1` — pre-compiled routes, no cold-compile load ceiling. Local default stays `next dev` with 90s headroom.                                                                               |
+| **Fixture seed**        | ✅ Script delivered: `scripts/seed-e2e-fixtures.mjs` (idempotent, service-role) provisions the `test+<role>` users + memberships. **Run pending `SUPABASE_SERVICE_ROLE_KEY`** (absent from `.env.local`) — that one run turns ~21 role/RLS/handoff tests green.                                                   |
+| **Stale assertions**    | ✅ Partial: `auth` forgot-password, `consent` (atlvs_consent cookie), `marketing` home CTA ("Start Free") now pass. `compare` + `api preferences` still need live calibration.                                                                                                                                    |
+| **Theme-system tests**  | ✅ Canonical set corrected to `ghxstship`/`atlvs-product`; **real product bug fixed** — the pre-hydration theme bootstrap validated against purged slugs + omitted `atlvs-product` (FOUC/wrong theme). `chroma-theme`/`marketing-header` assertions still need calibration against the live Appearance/header UI. |
+| **a11y**                | ⏳ Partial: fixed duplicate-`<main>` + deepened muted/CTA contrast tokens + brand-text→accent swaps across marketing/auth. Axe still reports residual `color-contrast` on more elements (large display text, components) — a11y is an iterative multi-pass; this closed the dominant set, not all.                |
+| **State transitions**   | ✅ Catalog SKU deactivate→reactivate + task done green; invoice/PO/proposal lifecycles in console-core.                                                                                                                                                                                                           |
+
+**Remaining to literal 100%-green:** (1) run the fixture seed (needs the service-role key); (2) finish the a11y color-contrast pass (per-element, iterative); (3) calibrate the ~9 chroma-theme/marketing-header/compare/api assertions against the live UI. None are coverage gaps — they're a credential, an iterative a11y project, and test calibration.

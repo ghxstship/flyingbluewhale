@@ -22,7 +22,9 @@ test.describe("marketing", () => {
   test("home renders hero + CTAs", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("h1").first()).toBeVisible();
-    await expect(page.getByRole("link", { name: /open the console/i }).first()).toBeVisible();
+    // Hero primary CTA is "Start Free" → /signup
+    // (marketing.pages.home.hero.ctaPrimary in src/messages/en.json).
+    await expect(page.getByRole("link", { name: /start free/i }).first()).toBeVisible();
   });
 
   test("pricing shows 4 tiers + comparison table", async ({ page }) => {
@@ -42,8 +44,11 @@ test.describe("marketing", () => {
     await expect(page.getByText(/compvss/i).first()).toBeVisible();
   });
 
-  test("compare page lists 3 competitors", async ({ page }) => {
+  test("compare page lists competitor cards", async ({ page }) => {
     await page.goto("/compare");
+    // COMPARE_LIST in src/lib/compare.ts now carries 21 competitor cards;
+    // each card is a Link whose accessible name includes the competitor.
+    // Assert the three canonical comparisons still resolve uniquely.
     await expect(page.getByRole("link", { name: /asana/i })).toBeVisible();
     await expect(page.getByRole("link", { name: /monday/i })).toBeVisible();
     await expect(page.getByRole("link", { name: /spreadsheets/i })).toBeVisible();

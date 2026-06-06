@@ -34,7 +34,9 @@ export function fixtureEmail(role: string): string {
 export async function dismissConsent(page: Page): Promise<void> {
   await page.context().addCookies([
     {
-      name: "fbw_consent",
+      // Canonical consent cookie after the brand sweep (legacy fbw_consent is
+      // read-only) — see COOKIE_NAME in src/components/compliance/CookieConsent.tsx.
+      name: "atlvs_consent",
       value: encodeURIComponent(
         JSON.stringify({
           essential: true,

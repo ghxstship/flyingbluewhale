@@ -1,8 +1,8 @@
 /**
  * Visual regression snapshots (audit m4).
  *
- * Narrow scope — Chromium only, 4 flagship routes × 3 themes × 2
- * breakpoints = 24 baselines. A full cross-browser/theme baseline tree
+ * Narrow scope — Chromium only, 4 flagship routes × 2 themes × 2
+ * breakpoints = 16 baselines. A full cross-browser/theme baseline tree
  * would add ~1,500 PNGs to the repo; Playwright's `toHaveScreenshot()`
  * tolerates pixel diffs so we only need coverage on the high-signal
  * combos. The full PNG-per-cell artifact trail still lives in
@@ -14,7 +14,8 @@
  */
 import { expect, test, type Page } from "playwright/test";
 
-const SNAPSHOT_THEMES = ["bermuda-triangle", "kinetic", "cyber", "earthy"] as const;
+// Canonical two-skin set — see THEME_SLUGS in src/app/theme/themes.config.ts.
+const SNAPSHOT_THEMES = ["ghxstship", "atlvs-product"] as const;
 const SNAPSHOT_BREAKPOINTS = [
   { name: "mobile-s", width: 375, height: 667 },
   { name: "desktop", width: 1280, height: 800 },
@@ -29,7 +30,9 @@ const SNAPSHOT_ROUTES = [
 async function setTheme(page: Page, theme: string) {
   await page.context().addCookies([
     {
-      name: "fbw_consent",
+      // Canonical consent cookie (legacy fbw_consent is read-only) — see
+      // COOKIE_NAME in src/components/compliance/CookieConsent.tsx.
+      name: "atlvs_consent",
       value: encodeURIComponent(
         '{"essential":true,"analytics":false,"marketing":false,"decidedAt":"2026-04-20T00:00:00Z"}',
       ),

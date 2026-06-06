@@ -6,17 +6,11 @@
  * by `docs/audits/AUDIT_THEMES_RESPONSIVE_*.md` as the reported matrix.
  */
 
-export const THEMES = [
-  "bermuda-triangle",
-  "glass",
-  "brutal",
-  "bento",
-  "kinetic",
-  "copilot",
-  "cyber",
-  "soft",
-  "earthy",
-] as const;
+// Canonical two-skin set — mirrors THEME_SLUGS in
+// src/app/theme/themes.config.ts. The v3 GHXSTSHIP brand sweep purged the
+// pre-v3 CHROMA exploration slugs (bermuda-triangle, glass, brutal, bento,
+// kinetic, copilot, cyber, soft, earthy); only these two carry CSS blocks.
+export const THEMES = ["ghxstship", "atlvs-product"] as const;
 export type Theme = (typeof THEMES)[number];
 
 export const BREAKPOINTS = [

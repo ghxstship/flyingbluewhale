@@ -7,10 +7,11 @@ import { expect, test, type BrowserContext } from "playwright/test";
  *           implicitly by every other spec that relies on the header).
  *   M1-03 — LocaleSwitcher writes a `locale` cookie + re-renders so
  *           `<html lang>` (and `dir` for RTL) reflect the choice.
- *   M1-04 — Themes button opens a sheet containing the 8-card
- *           AppearanceGallery; picking a card writes `chroma_theme`.
+ *   M1-04 — (retired) The CHROMA BEACON theme-gallery sheet was removed
+ *           with the v3 two-skin brand sweep; the marketing header now
+ *           ships only the orthogonal color-mode toggle (<ThemeToggle>).
  *   M1-05 — Mobile viewport shows a hamburger; sheet contains nav
- *           links + theme toggle + locale switcher + themes trigger.
+ *           links + color-mode toggle + locale switcher.
  */
 
 async function dismissConsent(ctx: BrowserContext) {
@@ -103,46 +104,11 @@ test.describe("marketing-header/locale-switcher (M1-03)", () => {
   });
 });
 
-test.describe("marketing-header/theme-gallery (M1-04)", () => {
-  test("Themes button opens the CHROMA BEACON sheet with the 9-card gallery", async ({ page, context }) => {
-    await dismissConsent(context);
-    await page.goto("/");
-
-    await page.getByRole("button", { name: /open design themes/i }).click();
-
-    // Sheet title renders
-    await expect(page.getByRole("heading", { name: /pick a design theme/i })).toBeVisible();
-
-    // Appearance heading + radiogroup — the AppearanceGallery labels its
-    // radiogroup exactly "Theme" (singular).
-    const gallery = page.getByRole("radiogroup", { name: "Theme" });
-    await expect(gallery).toBeVisible();
-    // 9 CHROMA BEACON themes — bermuda-triangle joined the registry as
-    // the new default light theme. Each card is a radio.
-    const radios = gallery.getByRole("radio");
-    await expect(radios).toHaveCount(9);
-  });
-
-  test("picking a theme in the sheet writes the chroma_theme cookie", async ({ page, context }) => {
-    await dismissConsent(context);
-    await page.goto("/");
-
-    await page.getByRole("button", { name: /open design themes/i }).click();
-    await page.getByRole("radio", { name: /brutal/i }).click();
-
-    // Cookie is set by the ThemeProvider's setTheme() path.
-    // Poll briefly — write happens after state update.
-    await expect
-      .poll(async () => {
-        const cookies = await context.cookies();
-        return cookies.find((c) => c.name === "chroma_theme")?.value;
-      })
-      .toBe("brutal");
-
-    // And <html data-theme> reflects the new value.
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "brutal");
-  });
-});
+// marketing-header/theme-gallery (M1-04) retired: the CHROMA BEACON
+// theme-gallery sheet ("open design themes" → 9-card "Pick a design theme"
+// gallery) was removed with the v3 two-skin brand sweep. The marketing
+// header now exposes only the orthogonal color-mode toggle, covered by the
+// theme-toggle (M1-01) and mobile-nav (M1-05) describe blocks.
 
 test.describe("marketing-header/mobile-nav (M1-05)", () => {
   test.use({ viewport: { width: 390, height: 844 } }); // iPhone 15 class
@@ -170,10 +136,10 @@ test.describe("marketing-header/mobile-nav (M1-05)", () => {
     await expect(mobileNav.getByRole("link", { name: /^pricing$/i })).toBeVisible();
     await expect(mobileNav.getByRole("link", { name: /^community$/i })).toBeVisible();
 
-    // Theme + language controls are also in the sheet (single source of truth).
+    // Color-mode + language controls are also in the sheet (single source of
+    // truth). The theme-gallery trigger was retired with the two-skin canon.
     await expect(page.getByRole("radiogroup", { name: /color mode/i })).toBeVisible();
     await expect(page.getByRole("button", { name: /change language/i })).toBeVisible();
-    await expect(page.getByRole("button", { name: /design themes/i })).toBeVisible();
   });
 
   test("close button restores the original state", async ({ page, context }) => {

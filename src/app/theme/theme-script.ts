@@ -18,7 +18,13 @@ export const MODE_STORAGE_KEY = "chroma.mode";
 export const themeScript = `
 (function() {
   try {
-    var valid = ['ghxstship','bermuda-triangle','glass','brutal','bento','kinetic','copilot','cyber','soft','earthy'];
+    // Canonical two-skin set — MUST mirror THEME_SLUGS in
+    // src/app/theme/themes.config.ts. The v3 GHXSTSHIP brand sweep purged
+    // the pre-v3 CHROMA exploration slugs (bermuda-triangle, glass, brutal,
+    // bento, kinetic, copilot, cyber, soft, earthy); validating against the
+    // SSOT here keeps the client bootstrap in lock-step with the SSR
+    // isValidThemeSlug() check in layout.tsx so there's no FOUC swap.
+    var valid = ['ghxstship','atlvs-product'];
     var validModes = ['light','dark','system'];
     // Themes whose family is intrinsically dark (mirrors
     // colorSchemeFor() in src/app/theme/themes.config.ts). The script
@@ -26,7 +32,8 @@ export const themeScript = `
     // and the client bootstrap then overwrites it with light, the
     // page flashes light scrollbars + form controls before the React
     // tree hydrates. Hard-code the list rather than ship a JSON blob.
-    var darkThemes = ['ghxstship','cyber','glass'];
+    // ghxstship.family = dark; atlvs-product.family = light.
+    var darkThemes = ['ghxstship'];
 
     // Theme slug (palette). Default = ghxstship (Deep Space Voyage) —
     // the GHXSTSHIP canon since the rebrand. Falls back to legacy

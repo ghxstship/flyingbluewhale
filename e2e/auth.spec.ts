@@ -37,7 +37,8 @@ test.describe("auth routes", () => {
 
   test("forgot-password form renders", async ({ page }) => {
     await page.goto("/forgot-password");
-    await expect(page.getByRole("heading", { name: "Reset password" })).toBeVisible();
+    // AuthShell renders the title as <h1>; auth.forgotPassword.title = "Forgot password".
+    await expect(page.getByRole("heading", { name: "Forgot password" })).toBeVisible();
     await expect(page.getByRole("textbox", { name: "Email" })).toBeVisible();
   });
 

@@ -13,6 +13,9 @@ import {
 import { Hint } from "@/components/ui/Tooltip";
 import type { SavedView, ViewConfigRow, ViewScope } from "@/lib/views/types";
 import { SaveViewDialog, type SaveViewSubmit } from "./SaveViewDialog";
+import { useT } from "@/lib/i18n/LocaleProvider";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 /**
  * SavedViewSelector — dropdown listing the named saved views the caller
@@ -69,6 +72,7 @@ export function SavedViewSelector({
   onSetDefault,
   modified,
 }: SavedViewSelectorProps) {
+  const t = useT();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<ViewConfigRow | null>(null);
 
@@ -76,16 +80,22 @@ export function SavedViewSelector({
 
   const grouped = React.useMemo(() => groupByScope(views), [views]);
 
-  const triggerLabel = active ? active.name : "Default View";
+  const triggerLabel = active ? active.name : t("savedViews.selector.defaultView", undefined, "Default View");
 
   return (
     <>
       <DropdownMenu>
-        <Hint label={modified ? "Saved view · current state has unsaved changes" : "Switch saved view"}>
+        <Hint
+          label={
+            modified
+              ? t("savedViews.selector.modifiedHint", undefined, "Saved view · current state has unsaved changes")
+              : t("savedViews.selector.switchHint", undefined, "Switch saved view")
+          }
+        >
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              aria-label="Saved view selector"
+              aria-label={t("savedViews.selector.aria", undefined, "Saved view selector")}
               className={`${TRIGGER_BASE} ${active ? TRIGGER_ACTIVE : ""}`}
             >
               <Bookmark size={12} aria-hidden="true" />
@@ -94,7 +104,7 @@ export function SavedViewSelector({
                 <span
                   aria-hidden="true"
                   className="ms-1 inline-block h-1.5 w-1.5 rounded-full bg-[var(--p-accent)]"
-                  title="Unsaved changes"
+                  title={t("savedViews.selector.unsavedChanges", undefined, "Unsaved changes")}
                 />
               )}
             </button>
@@ -105,9 +115,13 @@ export function SavedViewSelector({
             <span className="flex w-full items-center justify-between">
               <span className="flex items-center gap-1.5">
                 {!activeId && <Check size={12} aria-hidden="true" />}
-                <span className={!activeId ? "" : "ms-[18px]"}>Default View</span>
+                <span className={!activeId ? "" : "ms-[18px]"}>
+                  {t("savedViews.selector.defaultView", undefined, "Default View")}
+                </span>
               </span>
-              <span className="text-[10px] text-[var(--p-text-2)]">Auto-Saved</span>
+              <span className="text-[10px] text-[var(--p-text-2)]">
+                {t("savedViews.selector.autoSaved", undefined, "Auto-Saved")}
+              </span>
             </span>
           </DropdownMenuItem>
 
@@ -118,7 +132,7 @@ export function SavedViewSelector({
               <React.Fragment key={scope}>
                 <DropdownMenuSeparator />
                 <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
-                  {headingForScope(scope)}
+                  {headingForScope(scope, t)}
                 </div>
                 {rows.map((view) => (
                   <SavedViewRow
@@ -133,13 +147,26 @@ export function SavedViewSelector({
                     onDelete={
                       onDelete
                         ? async () => {
-                            if (!confirm(`Delete "${view.name}"? This cannot be undone.`)) return;
+                            if (
+                              !confirm(
+                                t(
+                                  "savedViews.selector.deleteConfirm",
+                                  { name: view.name },
+                                  `Delete "${view.name}"? This cannot be undone.`,
+                                ),
+                              )
+                            )
+                              return;
                             try {
                               await onDelete(view.id);
-                              toast.success("View Deleted");
+                              toast.success(t("savedViews.selector.toast.deleted", undefined, "View Deleted"));
                               if (activeId === view.id) onLoad(null);
                             } catch (err) {
-                              toast.error(err instanceof Error ? err.message : "Could not delete view");
+                              toast.error(
+                                err instanceof Error
+                                  ? err.message
+                                  : t("savedViews.selector.toast.deleteFailed", undefined, "Could not delete view"),
+                              );
                             }
                           }
                         : undefined
@@ -149,9 +176,15 @@ export function SavedViewSelector({
                         ? async () => {
                             try {
                               await onSetDefault(view.id);
-                              toast.success("Default Updated");
+                              toast.success(
+                                t("savedViews.selector.toast.defaultUpdated", undefined, "Default Updated"),
+                              );
                             } catch (err) {
-                              toast.error(err instanceof Error ? err.message : "Could not set default");
+                              toast.error(
+                                err instanceof Error
+                                  ? err.message
+                                  : t("savedViews.selector.toast.defaultFailed", undefined, "Could not set default"),
+                              );
                             }
                           }
                         : undefined
@@ -170,7 +203,7 @@ export function SavedViewSelector({
             }}
           >
             <Plus size={12} aria-hidden="true" className="me-1.5" />
-            Save Current View…
+            {t("savedViews.selector.saveCurrent", undefined, "Save Current View…")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -202,6 +235,7 @@ function SavedViewRow({
   onDelete?: () => Promise<void> | void;
   onSetDefault?: () => Promise<void> | void;
 }) {
+  const t = useT();
   return (
     <div className="group relative flex items-center justify-between gap-1 px-2 py-1 hover:bg-[var(--p-surface-2)]">
       <button type="button" onClick={onLoad} className="flex flex-1 items-center gap-1.5 truncate text-start text-sm">
@@ -209,17 +243,20 @@ function SavedViewRow({
         <span className="truncate">{view.name}</span>
         {view.isDefault && <Star size={10} aria-hidden="true" className="text-[var(--p-accent)]" />}
         {view.isLocked && (
-          <span className="text-[10px] text-[var(--p-text-2)]" aria-label="Locked view">
-            (locked)
+          <span
+            className="text-[10px] text-[var(--p-text-2)]"
+            aria-label={t("savedViews.selector.lockedAria", undefined, "Locked view")}
+          >
+            {t("savedViews.selector.locked", undefined, "(locked)")}
           </span>
         )}
       </button>
       <span className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100">
         {onSetDefault && !view.isDefault && (
-          <Hint label="Set as default for this scope">
+          <Hint label={t("savedViews.selector.setDefaultHint", undefined, "Set as default for this scope")}>
             <button
               type="button"
-              aria-label={`Set "${view.name}" as default`}
+              aria-label={t("savedViews.selector.setDefaultAria", { name: view.name }, `Set "${view.name}" as default`)}
               onClick={() => void onSetDefault()}
               className="rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-bg)] hover:text-[var(--p-text-1)]"
             >
@@ -227,10 +264,10 @@ function SavedViewRow({
             </button>
           </Hint>
         )}
-        <Hint label="Edit name / scope">
+        <Hint label={t("savedViews.selector.editHint", undefined, "Edit name / scope")}>
           <button
             type="button"
-            aria-label={`Edit "${view.name}"`}
+            aria-label={t("savedViews.selector.editAria", { name: view.name }, `Edit "${view.name}"`)}
             onClick={onEdit}
             className="rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-bg)] hover:text-[var(--p-text-1)]"
           >
@@ -238,10 +275,10 @@ function SavedViewRow({
           </button>
         </Hint>
         {onDelete && (
-          <Hint label="Delete view">
+          <Hint label={t("savedViews.selector.deleteHint", undefined, "Delete view")}>
             <button
               type="button"
-              aria-label={`Delete "${view.name}"`}
+              aria-label={t("savedViews.selector.deleteAria", { name: view.name }, `Delete "${view.name}"`)}
               onClick={() => void onDelete()}
               className="rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-bg)] hover:text-[var(--danger,red)]"
             >
@@ -264,13 +301,7 @@ function groupByScope(views: ViewConfigRow[]): Map<ViewScope, ViewConfigRow[]> {
   return map;
 }
 
-function headingForScope(scope: ViewScope): string {
-  switch (scope) {
-    case "private":
-      return "My Views";
-    case "org":
-      return "Shared";
-    case "public":
-      return "Public";
-  }
+function headingForScope(scope: ViewScope, t: Translator): string {
+  const fallbacks: Record<ViewScope, string> = { private: "My Views", org: "Shared", public: "Public" };
+  return t(`savedViews.selector.scopeHeadings.${scope}`, undefined, fallbacks[scope]);
 }

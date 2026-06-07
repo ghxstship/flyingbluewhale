@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import type { CreateShareLinkInput, ShareLink } from "@/lib/share/types";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Reusable Share dialog. Shows existing links for a (resource_table,
@@ -40,7 +41,10 @@ const EXPIRY_DAYS: Record<ExpiryPreset, number | null> = {
   never: null,
 };
 
-const EXPIRY_LABEL: Record<ExpiryPreset, string> = {
+// Expiry preset keys; the user-facing labels resolve through the catalog at
+// render time (shareDialog.expiry.*) so they localize.
+const EXPIRY_PRESETS: ExpiryPreset[] = ["1h", "24h", "7d", "30d", "never"];
+const EXPIRY_FALLBACK: Record<ExpiryPreset, string> = {
   "1h": "1 hour",
   "24h": "24 hours",
   "7d": "7 days",
@@ -60,6 +64,7 @@ type ShareDialogProps = {
 };
 
 export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceLabel, children }: ShareDialogProps) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [links, setLinks] = useState<ShareLink[]>(initialLinks ?? []);
   const [loading, setLoading] = useState(false);
@@ -83,16 +88,16 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
       );
       const json = (await r.json()) as { ok: boolean; data?: { links: ShareLink[] }; error?: { message: string } };
       if (!r.ok || !json.ok) {
-        setError(json.error?.message ?? "Failed to load links");
+        setError(json.error?.message ?? t("shareDialog.errors.loadFailed", undefined, "Failed to load links"));
         return;
       }
       setLinks(json.data?.links ?? []);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load links");
+      setError(e instanceof Error ? e.message : t("shareDialog.errors.loadFailed", undefined, "Failed to load links"));
     } finally {
       setLoading(false);
     }
-  }, [resourceTable, resourceId]);
+  }, [resourceTable, resourceId, t]);
 
   useEffect(() => {
     if (open && !initialLinks) {
@@ -125,7 +130,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
         error?: { message: string };
       };
       if (!r.ok || !json.ok || !json.data) {
-        setError(json.error?.message ?? "Failed to create link");
+        setError(json.error?.message ?? t("shareDialog.errors.createFailed", undefined, "Failed to create link"));
         return;
       }
       setJustCreatedUrl(json.data.url);
@@ -134,29 +139,34 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
       setPasscode("");
       setMaxUses("");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to create link");
+      setError(
+        e instanceof Error ? e.message : t("shareDialog.errors.createFailed", undefined, "Failed to create link"),
+      );
     } finally {
       setLoading(false);
     }
-  }, [expiry, label, maxUses, passcode, resourceId, resourceTable, role]);
+  }, [expiry, label, maxUses, passcode, resourceId, resourceTable, role, t]);
 
-  const onRevoke = useCallback(async (id: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const r = await fetch(`/api/v1/share-links/${encodeURIComponent(id)}`, { method: "DELETE" });
-      const json = (await r.json()) as { ok: boolean; error?: { message: string } };
-      if (!r.ok || !json.ok) {
-        setError(json.error?.message ?? "Failed to revoke");
-        return;
+  const onRevoke = useCallback(
+    async (id: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const r = await fetch(`/api/v1/share-links/${encodeURIComponent(id)}`, { method: "DELETE" });
+        const json = (await r.json()) as { ok: boolean; error?: { message: string } };
+        if (!r.ok || !json.ok) {
+          setError(json.error?.message ?? t("shareDialog.errors.revokeFailed", undefined, "Failed to revoke"));
+          return;
+        }
+        setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, revoked_at: new Date().toISOString() } : l)));
+      } catch (e) {
+        setError(e instanceof Error ? e.message : t("shareDialog.errors.revokeFailed", undefined, "Failed to revoke"));
+      } finally {
+        setLoading(false);
       }
-      setLinks((prev) => prev.map((l) => (l.id === id ? { ...l, revoked_at: new Date().toISOString() } : l)));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to revoke");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [t],
+  );
 
   const activeLinks = useMemo(() => links.filter((l) => !l.revoked_at), [links]);
 
@@ -165,15 +175,25 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
       <DialogTrigger asChild>
         {children ?? (
           <Button variant="secondary" size="sm">
-            <Link2 size={14} aria-hidden /> Share
+            <Link2 size={14} aria-hidden /> {t("shareDialog.shareButton", undefined, "Share")}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent size="lg">
         <DialogHeader>
-          <DialogTitle>Share {resourceLabel ?? "this resource"}</DialogTitle>
+          <DialogTitle>
+            {t(
+              "shareDialog.title",
+              { label: resourceLabel ?? t("shareDialog.titleFallback", undefined, "this resource") },
+              `Share ${resourceLabel ?? "this resource"}`,
+            )}
+          </DialogTitle>
           <DialogDescription>
-            Create a public link anyone with the URL can open. Add a passcode or expiry to scope access.
+            {t(
+              "shareDialog.description",
+              undefined,
+              "Create a public link anyone with the URL can open. Add a passcode or expiry to scope access.",
+            )}
           </DialogDescription>
         </DialogHeader>
 
@@ -181,66 +201,76 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
 
         {/* Create form */}
         <section className="space-y-3 border-b border-[var(--p-border)] pb-4">
-          <h2 className="text-sm font-semibold tracking-tight">Create a link</h2>
+          <h2 className="text-sm font-semibold tracking-tight">
+            {t("shareDialog.createHeading", undefined, "Create a link")}
+          </h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="text-xs">
-              <span className="mb-1 block font-medium">Label · Optional</span>
+              <span className="mb-1 block font-medium">
+                {t("shareDialog.labelField", undefined, "Label · Optional")}
+              </span>
               <input
                 type="text"
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
-                placeholder="e.g. Producer preview"
+                placeholder={t("shareDialog.labelPlaceholder", undefined, "e.g. Producer preview")}
                 maxLength={120}
                 className="ps-input w-full"
               />
             </label>
             <label className="text-xs">
-              <span className="mb-1 block font-medium">Expires in</span>
+              <span className="mb-1 block font-medium">{t("shareDialog.expiresIn", undefined, "Expires in")}</span>
               <select
                 value={expiry}
                 onChange={(e) => setExpiry(e.target.value as ExpiryPreset)}
                 className="ps-input w-full"
               >
-                {(Object.keys(EXPIRY_LABEL) as ExpiryPreset[]).map((k) => (
+                {EXPIRY_PRESETS.map((k) => (
                   <option key={k} value={k}>
-                    {EXPIRY_LABEL[k]}
+                    {t(`shareDialog.expiry.${k}`, undefined, EXPIRY_FALLBACK[k])}
                   </option>
                 ))}
               </select>
             </label>
             <label className="text-xs">
-              <span className="mb-1 block font-medium">Passcode · Optional</span>
+              <span className="mb-1 block font-medium">
+                {t("shareDialog.passcodeField", undefined, "Passcode · Optional")}
+              </span>
               <input
                 type="text"
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
-                placeholder="Leave blank for none"
+                placeholder={t("shareDialog.passcodePlaceholder", undefined, "Leave blank for none")}
                 minLength={4}
                 maxLength={128}
                 className="ps-input w-full"
               />
             </label>
             <label className="text-xs">
-              <span className="mb-1 block font-medium">Max Uses · Optional</span>
+              <span className="mb-1 block font-medium">
+                {t("shareDialog.maxUsesField", undefined, "Max Uses · Optional")}
+              </span>
               <input
                 type="number"
                 value={maxUses}
                 onChange={(e) => setMaxUses(e.target.value)}
-                placeholder="Unlimited"
+                placeholder={t("shareDialog.maxUsesPlaceholder", undefined, "Unlimited")}
                 min={1}
                 max={10000}
                 className="ps-input w-full"
               />
             </label>
             <label className="text-xs sm:col-span-2">
-              <span className="mb-1 block font-medium">Access</span>
+              <span className="mb-1 block font-medium">{t("shareDialog.access", undefined, "Access")}</span>
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as "viewer" | "commenter")}
                 className="ps-input w-full"
               >
-                <option value="viewer">Viewer · Read-only</option>
-                <option value="commenter">Commenter · Can Leave Annotations</option>
+                <option value="viewer">{t("shareDialog.roleViewer", undefined, "Viewer · Read-only")}</option>
+                <option value="commenter">
+                  {t("shareDialog.roleCommenter", undefined, "Commenter · Can Leave Annotations")}
+                </option>
               </select>
             </label>
           </div>
@@ -260,52 +290,67 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                   void navigator.clipboard.writeText(justCreatedUrl);
                 }}
               >
-                <Copy size={14} aria-hidden /> Copy
+                <Copy size={14} aria-hidden /> {t("shareDialog.copy", undefined, "Copy")}
               </Button>
             </div>
           )}
 
           <div className="flex justify-end">
             <Button onClick={onCreate} loading={loading}>
-              Create link
+              {t("shareDialog.createLink", undefined, "Create link")}
             </Button>
           </div>
         </section>
 
         {/* Existing links */}
         <section className="space-y-2 pt-2">
-          <h2 className="text-sm font-semibold tracking-tight">Active links</h2>
-          {loading && links.length === 0 && <p className="text-xs text-[var(--p-text-2)]">Loading…</p>}
+          <h2 className="text-sm font-semibold tracking-tight">
+            {t("shareDialog.activeHeading", undefined, "Active links")}
+          </h2>
+          {loading && links.length === 0 && (
+            <p className="text-xs text-[var(--p-text-2)]">{t("shareDialog.loading", undefined, "Loading…")}</p>
+          )}
           {!loading && activeLinks.length === 0 && (
-            <p className="text-xs text-[var(--p-text-2)]">No active links yet.</p>
+            <p className="text-xs text-[var(--p-text-2)]">
+              {t("shareDialog.noLinks", undefined, "No active links yet.")}
+            </p>
           )}
           <ul className="divide-y divide-[var(--p-border)]">
             {activeLinks.map((l) => (
               <li key={l.id} className="flex items-start justify-between gap-3 py-2">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="truncate font-medium">{l.label ?? "(unlabeled)"}</span>
+                    <span className="truncate font-medium">
+                      {l.label ?? t("shareDialog.unlabeled", undefined, "(unlabeled)")}
+                    </span>
                     {l.has_passcode && (
                       <Badge variant="warning" icon={<Lock size={10} aria-hidden />}>
-                        passcode
+                        {t("shareDialog.passcodeBadge", undefined, "passcode")}
                       </Badge>
                     )}
                     <Badge variant="muted">{l.role}</Badge>
                   </div>
                   <p className="mt-0.5 text-xs text-[var(--p-text-2)]">
-                    {l.uses} use{l.uses === 1 ? "" : "s"}
-                    {l.max_uses !== null && ` / ${l.max_uses}`}
-                    {l.expires_at && ` · expires ${new Date(l.expires_at).toLocaleString()}`}
-                    {!l.expires_at && " · no expiry"}
+                    {l.uses === 1
+                      ? t("shareDialog.useSingular", { count: l.uses }, `${l.uses} use`)
+                      : t("shareDialog.usePlural", { count: l.uses }, `${l.uses} uses`)}
+                    {l.max_uses !== null && t("shareDialog.maxSuffix", { max: l.max_uses }, ` / ${l.max_uses}`)}
+                    {l.expires_at &&
+                      t(
+                        "shareDialog.expiresSuffix",
+                        { date: new Date(l.expires_at).toLocaleString() },
+                        ` · expires ${new Date(l.expires_at).toLocaleString()}`,
+                      )}
+                    {!l.expires_at && t("shareDialog.noExpiry", undefined, " · no expiry")}
                   </p>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => onRevoke(l.id)}
-                  aria-label={`Revoke link ${l.label ?? l.id}`}
+                  aria-label={t("shareDialog.revokeAria", { name: l.label ?? l.id }, `Revoke link ${l.label ?? l.id}`)}
                 >
-                  <Trash2 size={14} aria-hidden /> Revoke
+                  <Trash2 size={14} aria-hidden /> {t("shareDialog.revoke", undefined, "Revoke")}
                 </Button>
               </li>
             ))}
@@ -314,7 +359,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
 
         <DialogFooter>
           <Button variant="ghost" onClick={() => setOpen(false)}>
-            Done
+            {t("shareDialog.done", undefined, "Done")}
           </Button>
         </DialogFooter>
       </DialogContent>

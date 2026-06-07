@@ -18427,6 +18427,79 @@
       "gantt": "Gantt",
       "card": "Card",
       "form": "Form"
+    },
+    "selector": {
+      "modifiedHint": "Saved view · current state has unsaved changes",
+      "switchHint": "Switch saved view",
+      "aria": "Saved view selector",
+      "unsavedChanges": "Unsaved changes",
+      "defaultView": "Default View",
+      "autoSaved": "Auto-Saved",
+      "saveCurrent": "Save Current View…",
+      "deleteConfirm": "Delete \"{name}\"? This cannot be undone.",
+      "toast": {
+        "deleted": "View Deleted",
+        "deleteFailed": "Could not delete view",
+        "defaultUpdated": "Default Updated",
+        "defaultFailed": "Could not set default"
+      },
+      "locked": "(locked)",
+      "lockedAria": "Locked view",
+      "setDefaultHint": "Set as default for this scope",
+      "setDefaultAria": "Set \"{name}\" as default",
+      "editHint": "Edit name / scope",
+      "editAria": "Edit \"{name}\"",
+      "deleteHint": "Delete view",
+      "deleteAria": "Delete \"{name}\"",
+      "scopeHeadings": {
+        "private": "My Views",
+        "org": "Shared",
+        "public": "Public"
+      }
     }
+  },
+  "shareDialog": {
+    "shareButton": "Share",
+    "expiry": {
+      "1h": "1 hour",
+      "24h": "24 hours",
+      "7d": "7 days",
+      "30d": "30 days",
+      "never": "Never expires"
+    },
+    "errors": {
+      "loadFailed": "Failed to load links",
+      "createFailed": "Failed to create link",
+      "revokeFailed": "Failed to revoke"
+    },
+    "title": "Share {label}",
+    "titleFallback": "this resource",
+    "description": "Create a public link anyone with the URL can open. Add a passcode or expiry to scope access.",
+    "createHeading": "Create a link",
+    "labelField": "Label · Optional",
+    "labelPlaceholder": "e.g. Producer preview",
+    "expiresIn": "Expires in",
+    "passcodeField": "Passcode · Optional",
+    "passcodePlaceholder": "Leave blank for none",
+    "maxUsesField": "Max Uses · Optional",
+    "maxUsesPlaceholder": "Unlimited",
+    "access": "Access",
+    "roleViewer": "Viewer · Read-only",
+    "roleCommenter": "Commenter · Can Leave Annotations",
+    "copy": "Copy",
+    "createLink": "Create link",
+    "activeHeading": "Active links",
+    "loading": "Loading…",
+    "noLinks": "No active links yet.",
+    "unlabeled": "(unlabeled)",
+    "passcodeBadge": "passcode",
+    "useSingular": "{count} use",
+    "usePlural": "{count} uses",
+    "maxSuffix": " / {max}",
+    "expiresSuffix": " · expires {date}",
+    "noExpiry": " · no expiry",
+    "revokeAria": "Revoke link {name}",
+    "revoke": "Revoke",
+    "done": "Done"
   }
 }

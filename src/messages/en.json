@@ -3475,6 +3475,10 @@
           "capabilities": "Capabilities — One per Line",
           "homepageUrl": "Homepage URL",
           "docsUrl": "Integration Docs URL"
+        },
+        "placeholders": {
+          "shortDescription": "Field-report capture with auto-sync to ATLVS daily logs.",
+          "longDescription": "What it does, who it’s for, how it integrates with ATLVS."
         }
       },
       "detail": {
@@ -3825,6 +3829,81 @@
           "overview": "Overview",
           "logoKit": "Logo Kit"
         }
+      }
+    },
+    "pricingCalculator": {
+      "eyebrow": "What it actually costs",
+      "heading": "Run the math.",
+      "intro": "Plug in shows per year, crew at peak, and what you spend monthly on the fragmented stack. We’ll show you annual spend and per-show cost on both sides. Math is conservative — no integration tax, no per-seat overruns counted.",
+      "showsPerYear": "Shows per year",
+      "showOne": "show",
+      "showMany": "shows",
+      "crewAtPeak": "Crew at peak",
+      "personOne": "person",
+      "personMany": "people",
+      "stackMonthly": "Current stack — monthly",
+      "perMo": "/ mo",
+      "stackNote": "Default $1,400/mo = Asana + Eventbrite + DocuSign + QuickBooks + Dropbox + Slack + PO tool.",
+      "stackAnnual": "Current stack — annual",
+      "atlvsAnnual": "ATLVS Production — annual",
+      "annualSavings": "Annual savings",
+      "currentPerShow": "Current per show",
+      "atlvsPerShow": "ATLVS per show",
+      "ratio": "Stack ÷ ATLVS",
+      "signUpFree": "Sign up free"
+    },
+    "perDiemCalculator": {
+      "presets": {
+        "standardLabel": "Standard CONUS",
+        "standardHint": "Most US cities",
+        "tier1Label": "Tier 1 Metro",
+        "tier1Hint": "NYC, SF, LA, Chicago",
+        "tier2Label": "Tier 2 Metro",
+        "tier2Hint": "Major regional cities",
+        "intlLabel": "International — avg",
+        "intlHint": "DSSR baseline"
+      },
+      "leg": "Leg {n}",
+      "removeLeg": "Remove leg",
+      "cityVenue": "City / venue",
+      "cityPlaceholder": "e.g. Las Vegas",
+      "days": "Days",
+      "headcount": "Headcount",
+      "dailyRate": "Daily Rate — USD",
+      "legTotal": "Leg total",
+      "addLeg": "Add leg",
+      "total": "Total",
+      "summaryOne": "{days} crew-days across {legs} leg",
+      "summaryMany": "{days} crew-days across {legs} legs"
+    },
+    "logoKit": {
+      "eyebrow": "ATLVS Technologies · Brand",
+      "title": "The Logo Kit",
+      "intro": "The ATLVS mark is a waypoint — an eight-point navigational star with a center void, the navigation system rendered as one geometric glyph. Neutral SaaS register; recolors per product. Distinct from the cosmic GHXSTSHIP ghost-ship skull — the parent-company mark.",
+      "primaryLockup": "Primary Lockup",
+      "appIcons": "Product app-icons — one mark, three accents",
+      "favicon": "Favicon / Min-size — the mark holds at every scale",
+      "clearspace": "Clearspace — keep margin = ½ mark height on all sides",
+      "endorsement": "Endorsement — ATLVS + GHXSTSHIP parent",
+      "parentCompany": "Industries company",
+      "doDont": "Do · Don’t",
+      "do": "Do",
+      "dont": "Don’t",
+      "do1": "Recolor the tile to the product accent; keep the mark white — or ink on light.",
+      "do2": "Maintain clearspace = ½ mark height.",
+      "do3": "Use the bare mark at ≤16px; the tiled icon at ≥32px.",
+      "do4Prefix": "Pair with the spaced",
+      "do4Suffix": "wordmark, nowrap.",
+      "dont1": "Recolor or gradient the star itself — only the tile carries color.",
+      "dont2": "Rotate, stretch, or add the cosmic halftone/skull to it.",
+      "dont3": "Set the wordmark unspaced or lowercase.",
+      "dont4": "Place the mark on a busy photo without the solid tile.",
+      "back": "← Back to the brand kit",
+      "markAlt": "ATLVS mark",
+      "iconAlt": "{label} icon",
+      "meta": {
+        "title": "ATLVS Logo Kit · The Waypoint",
+        "description": "The ATLVS mark is the Waypoint — an 8-point navigational star with a centered void. Primary lockup, per-product app-icons, clearspace, endorsement, do/don't."
       }
     }
   },

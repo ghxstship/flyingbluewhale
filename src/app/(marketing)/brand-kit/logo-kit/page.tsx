@@ -20,14 +20,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { getRequestT } from "@/lib/i18n/request";
 import "./logo-kit.css";
 
-export const metadata: Metadata = {
-  title: "ATLVS Logo Kit · The Waypoint",
-  description:
-    "The ATLVS mark is the Waypoint — an 8-point navigational star with a centered void. Primary lockup, per-product app-icons, clearspace, endorsement, do/don't.",
-  alternates: { canonical: "/brand-kit/logo-kit" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return {
+    title: t("marketing.logoKit.meta.title", undefined, "ATLVS Logo Kit · The Waypoint"),
+    description: t(
+      "marketing.logoKit.meta.description",
+      undefined,
+      "The ATLVS mark is the Waypoint — an 8-point navigational star with a centered void. Primary lockup, per-product app-icons, clearspace, endorsement, do/don't.",
+    ),
+    alternates: { canonical: "/brand-kit/logo-kit" },
+  };
+}
 
 type ProductIcon = {
   slug: "atlvs" | "compvss" | "gvteway" | "ink";
@@ -61,35 +68,44 @@ const SIZES: Array<{ px: number; label: string; useTile: boolean }> = [
 // reference's typographic affordance.
 const TECHNOLOGIES = "TECHNOLOGIES".split("");
 
-export default function LogoKitPage() {
+export default async function LogoKitPage() {
+  const { t } = await getRequestT();
   return (
     <div className="lk-root" data-theme="atlvs-product">
       <div className="lk-wrap">
         <header className="lk-head">
-          <p className="lk-eb">ATLVS Technologies · Brand</p>
-          <h1>The Logo Kit</h1>
+          <p className="lk-eb">{t("marketing.logoKit.eyebrow", undefined, "ATLVS Technologies · Brand")}</p>
+          <h1>{t("marketing.logoKit.title", undefined, "The Logo Kit")}</h1>
           <p>
-            The ATLVS mark is a <b>waypoint</b> — an eight-point navigational star with a center void, the navigation
-            system rendered as one geometric glyph. Neutral SaaS register; recolors per product. Distinct from the
-            cosmic GHXSTSHIP ghost-ship skull (the parent-company mark).
+            {t(
+              "marketing.logoKit.intro",
+              undefined,
+              "The ATLVS mark is a waypoint — an eight-point navigational star with a center void, the navigation system rendered as one geometric glyph. Neutral SaaS register; recolors per product. Distinct from the cosmic GHXSTSHIP ghost-ship skull — the parent-company mark.",
+            )}
           </p>
         </header>
 
         <section className="lk-section">
-          <h2>Primary Lockup</h2>
+          <h2>{t("marketing.logoKit.primaryLockup", undefined, "Primary Lockup")}</h2>
           <div className="lk-row">
-            <PrimaryLockup variant="light" />
-            <PrimaryLockup variant="dark" />
+            <PrimaryLockup variant="light" markAlt={t("marketing.logoKit.markAlt", undefined, "ATLVS mark")} />
+            <PrimaryLockup variant="dark" markAlt={t("marketing.logoKit.markAlt", undefined, "ATLVS mark")} />
           </div>
         </section>
 
         <section className="lk-section">
-          <h2>Product app-icons — one mark, three accents</h2>
+          <h2>{t("marketing.logoKit.appIcons", undefined, "Product app-icons — one mark, three accents")}</h2>
           <div className="lk-card lk-card--pad">
             <div className="lk-icons">
               {PRODUCT_ICONS.map((icon) => (
                 <div key={icon.slug} className="lk-iconcell">
-                  <Image src={icon.src} alt={`${icon.label} icon`} width={88} height={88} className="lk-icon-tile" />
+                  <Image
+                    src={icon.src}
+                    alt={t("marketing.logoKit.iconAlt", { label: icon.label }, `${icon.label} icon`)}
+                    width={88}
+                    height={88}
+                    className="lk-icon-tile"
+                  />
                   <div className="lk-cap">
                     {icon.label}
                     <br />
@@ -102,7 +118,7 @@ export default function LogoKitPage() {
         </section>
 
         <section className="lk-section">
-          <h2>Favicon / Min-size — the mark holds at every scale</h2>
+          <h2>{t("marketing.logoKit.favicon", undefined, "Favicon / Min-size — the mark holds at every scale")}</h2>
           <div className="lk-card lk-card--pad">
             <div className="lk-sizes">
               {SIZES.map((s) => (
@@ -124,7 +140,9 @@ export default function LogoKitPage() {
         </section>
 
         <section className="lk-section">
-          <h2>Clearspace — keep margin = ½ mark height on all sides</h2>
+          <h2>
+            {t("marketing.logoKit.clearspace", undefined, "Clearspace — keep margin = ½ mark height on all sides")}
+          </h2>
           <div className="lk-clearbox">
             <div className="lk-clearbox-inner">
               <Image src="/brand/atlvs-mark.svg" alt="" width={54} height={54} />
@@ -136,7 +154,7 @@ export default function LogoKitPage() {
         </section>
 
         <section className="lk-section">
-          <h2>Endorsement — ATLVS + GHXSTSHIP parent</h2>
+          <h2>{t("marketing.logoKit.endorsement", undefined, "Endorsement — ATLVS + GHXSTSHIP parent")}</h2>
           <div className="lk-card lk-endorse">
             <Image src="/brand/atlvs-mark.svg" alt="" width={44} height={44} />
             <div className="lk-wm" style={{ fontSize: 22 }}>
@@ -147,32 +165,50 @@ export default function LogoKitPage() {
             <div className="lk-mono lk-endorse-cap">
               a G H X S T S H I P
               <br />
-              Industries company
+              {t("marketing.logoKit.parentCompany", undefined, "Industries company")}
             </div>
           </div>
         </section>
 
         <section className="lk-section">
-          <h2>Do · Don&apos;t</h2>
+          <h2>{t("marketing.logoKit.doDont", undefined, "Do · Don’t")}</h2>
           <div className="lk-dd">
             <div className="lk-do">
-              <b>Do</b>
+              <b>{t("marketing.logoKit.do", undefined, "Do")}</b>
               <ul>
-                <li>Recolor the tile to the product accent; keep the mark white (or ink on light).</li>
-                <li>Maintain clearspace = ½ mark height.</li>
-                <li>Use the bare mark at ≤16px; the tiled icon at ≥32px.</li>
                 <li>
-                  Pair with the spaced <b>A&nbsp;T&nbsp;L&nbsp;V&nbsp;S</b> wordmark, nowrap.
+                  {t(
+                    "marketing.logoKit.do1",
+                    undefined,
+                    "Recolor the tile to the product accent; keep the mark white — or ink on light.",
+                  )}
+                </li>
+                <li>{t("marketing.logoKit.do2", undefined, "Maintain clearspace = ½ mark height.")}</li>
+                <li>{t("marketing.logoKit.do3", undefined, "Use the bare mark at ≤16px; the tiled icon at ≥32px.")}</li>
+                <li>
+                  {t("marketing.logoKit.do4Prefix", undefined, "Pair with the spaced")}{" "}
+                  <b>A&nbsp;T&nbsp;L&nbsp;V&nbsp;S</b>{" "}
+                  {t("marketing.logoKit.do4Suffix", undefined, "wordmark, nowrap.")}
                 </li>
               </ul>
             </div>
             <div className="lk-dont">
-              <b>Don&apos;t</b>
+              <b>{t("marketing.logoKit.dont", undefined, "Don’t")}</b>
               <ul>
-                <li>Recolor or gradient the star itself — only the tile carries color.</li>
-                <li>Rotate, stretch, or add the cosmic halftone/skull to it.</li>
-                <li>Set the wordmark unspaced or lowercase.</li>
-                <li>Place the mark on a busy photo without the solid tile.</li>
+                <li>
+                  {t(
+                    "marketing.logoKit.dont1",
+                    undefined,
+                    "Recolor or gradient the star itself — only the tile carries color.",
+                  )}
+                </li>
+                <li>
+                  {t("marketing.logoKit.dont2", undefined, "Rotate, stretch, or add the cosmic halftone/skull to it.")}
+                </li>
+                <li>{t("marketing.logoKit.dont3", undefined, "Set the wordmark unspaced or lowercase.")}</li>
+                <li>
+                  {t("marketing.logoKit.dont4", undefined, "Place the mark on a busy photo without the solid tile.")}
+                </li>
               </ul>
             </div>
           </div>
@@ -180,7 +216,7 @@ export default function LogoKitPage() {
 
         <p className="lk-foot">
           <Link href="/brand-kit" className="lk-link">
-            ← Back to the brand kit
+            {t("marketing.logoKit.back", undefined, "← Back to the brand kit")}
           </Link>
         </p>
       </div>
@@ -188,13 +224,13 @@ export default function LogoKitPage() {
   );
 }
 
-function PrimaryLockup({ variant }: { variant: "light" | "dark" }) {
+function PrimaryLockup({ variant, markAlt }: { variant: "light" | "dark"; markAlt: string }) {
   const isDark = variant === "dark";
   return (
     <div className={["lk-card", "lk-lockup", isDark ? "lk-lockup--dark" : null].filter(Boolean).join(" ")}>
       <Image
         src={isDark ? "/brand/atlvs-mark-white.svg" : "/brand/atlvs-mark.svg"}
-        alt="ATLVS mark"
+        alt={markAlt}
         width={64}
         height={64}
       />

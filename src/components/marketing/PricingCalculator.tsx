@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Calculator, ArrowRight } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * `<PricingCalculator>` — total-cost-of-ownership calculator for /pricing.
@@ -29,6 +30,7 @@ function formatUsd(n: number) {
 }
 
 export function PricingCalculator() {
+  const t = useT();
   const [shows, setShows] = useState(12);
   const [crew, setCrew] = useState(25);
   const [stackMonthly, setStackMonthly] = useState(1400);
@@ -57,47 +59,64 @@ export function PricingCalculator() {
       <div className="grid gap-10 md:grid-cols-2 md:items-start">
         <div>
           <div className="eyebrow eyebrow-accent flex items-center gap-2">
-            <Calculator size={12} aria-hidden /> What it actually costs
+            <Calculator size={12} aria-hidden />{" "}
+            {t("marketing.pricingCalculator.eyebrow", undefined, "What it actually costs")}
           </div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Run the math.</h2>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+            {t("marketing.pricingCalculator.heading", undefined, "Run the math.")}
+          </h2>
           <p className="mt-3 text-sm text-[var(--p-text-2)]">
-            Plug in shows per year, crew at peak, and what you spend monthly on the fragmented stack. We&apos;ll show
-            you annual spend and per-show cost on both sides. Math is conservative — no integration tax, no per-seat
-            overruns counted.
+            {t(
+              "marketing.pricingCalculator.intro",
+              undefined,
+              "Plug in shows per year, crew at peak, and what you spend monthly on the fragmented stack. We’ll show you annual spend and per-show cost on both sides. Math is conservative — no integration tax, no per-seat overruns counted.",
+            )}
           </p>
 
           <div className="mt-6 space-y-5">
             <Field
-              label="Shows per year"
+              label={t("marketing.pricingCalculator.showsPerYear", undefined, "Shows per year")}
               value={shows}
               onChange={setShows}
               min={1}
               max={60}
               step={1}
-              suffix={shows === 1 ? "show" : "shows"}
+              suffix={
+                shows === 1
+                  ? t("marketing.pricingCalculator.showOne", undefined, "show")
+                  : t("marketing.pricingCalculator.showMany", undefined, "shows")
+              }
             />
             <Field
-              label="Crew at peak"
+              label={t("marketing.pricingCalculator.crewAtPeak", undefined, "Crew at peak")}
               value={crew}
               onChange={setCrew}
               min={1}
               max={500}
               step={1}
-              suffix={crew === 1 ? "person" : "people"}
+              suffix={
+                crew === 1
+                  ? t("marketing.pricingCalculator.personOne", undefined, "person")
+                  : t("marketing.pricingCalculator.personMany", undefined, "people")
+              }
             />
             <Field
-              label="Current stack — monthly"
+              label={t("marketing.pricingCalculator.stackMonthly", undefined, "Current stack — monthly")}
               value={stackMonthly}
               onChange={setStackMonthly}
               min={0}
               max={10000}
               step={50}
               prefix="$"
-              suffix="/ mo"
+              suffix={t("marketing.pricingCalculator.perMo", undefined, "/ mo")}
             />
           </div>
           <p className="mt-5 font-mono text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">
-            Default $1,400/mo = Asana + Eventbrite + DocuSign + QuickBooks + Dropbox + Slack + PO tool.
+            {t(
+              "marketing.pricingCalculator.stackNote",
+              undefined,
+              "Default $1,400/mo = Asana + Eventbrite + DocuSign + QuickBooks + Dropbox + Slack + PO tool.",
+            )}
           </p>
         </div>
 
@@ -111,18 +130,40 @@ export function PricingCalculator() {
           </div>
 
           <dl className="mt-4 space-y-3">
-            <Row label="Current stack — annual" value={formatUsd(numbers.stackAnnual)} tone="dim" />
-            <Row label="ATLVS Production — annual" value={formatUsd(numbers.atlvsAnnual)} tone="accent" />
-            <Row label="Annual savings" value={formatUsd(numbers.savings)} tone="ok" emphasize />
+            <Row
+              label={t("marketing.pricingCalculator.stackAnnual", undefined, "Current stack — annual")}
+              value={formatUsd(numbers.stackAnnual)}
+              tone="dim"
+            />
+            <Row
+              label={t("marketing.pricingCalculator.atlvsAnnual", undefined, "ATLVS Production — annual")}
+              value={formatUsd(numbers.atlvsAnnual)}
+              tone="accent"
+            />
+            <Row
+              label={t("marketing.pricingCalculator.annualSavings", undefined, "Annual savings")}
+              value={formatUsd(numbers.savings)}
+              tone="ok"
+              emphasize
+            />
           </dl>
 
           <div className="mt-5 grid grid-cols-2 gap-3 border-t border-[var(--p-border)] pt-4">
-            <Tile label="Current per show" value={formatUsd(numbers.stackPerShow)} />
-            <Tile label="ATLVS per show" value={formatUsd(numbers.atlvsPerShow)} tone="accent" />
+            <Tile
+              label={t("marketing.pricingCalculator.currentPerShow", undefined, "Current per show")}
+              value={formatUsd(numbers.stackPerShow)}
+            />
+            <Tile
+              label={t("marketing.pricingCalculator.atlvsPerShow", undefined, "ATLVS per show")}
+              value={formatUsd(numbers.atlvsPerShow)}
+              tone="accent"
+            />
           </div>
 
           <div className="mt-5 flex items-center justify-between border-t border-[var(--p-border)] pt-4">
-            <div className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">Stack ÷ ATLVS</div>
+            <div className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
+              {t("marketing.pricingCalculator.ratio", undefined, "Stack ÷ ATLVS")}
+            </div>
             <div className="font-mono text-2xl font-semibold text-[var(--p-accent)]">
               {numbers.multiple > 0 ? `${numbers.multiple.toFixed(1)}×` : "—"}
             </div>
@@ -132,7 +173,8 @@ export function PricingCalculator() {
             href="/signup"
             className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-semibold text-[var(--p-accent-text)] underline underline-offset-4"
           >
-            Sign up free <ArrowRight size={12} className="cta-nudge" aria-hidden />
+            {t("marketing.pricingCalculator.signUpFree", undefined, "Sign up free")}{" "}
+            <ArrowRight size={12} className="cta-nudge" aria-hidden />
           </a>
         </div>
       </div>

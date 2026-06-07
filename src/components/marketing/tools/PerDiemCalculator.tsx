@@ -2,19 +2,42 @@
 
 import { useState, useMemo } from "react";
 import { Plus, X } from "lucide-react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Leg = { id: string; city: string; days: number; rate: number; headcount: number };
 
 const DEFAULT_RATE = 79;
 
-const GSA_TIER_PRESETS: Array<{ label: string; rate: number; hint: string }> = [
-  { label: "Standard CONUS", rate: 79, hint: "Most US cities" },
-  { label: "Tier 1 Metro", rate: 92, hint: "NYC, SF, LA, Chicago" },
-  { label: "Tier 2 Metro", rate: 86, hint: "Major regional cities" },
-  { label: "International (avg)", rate: 145, hint: "DSSR baseline" },
-];
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+function gsaTierPresets(t: Translator): Array<{ label: string; rate: number; hint: string }> {
+  return [
+    {
+      label: t("marketing.perDiemCalculator.presets.standardLabel", undefined, "Standard CONUS"),
+      rate: 79,
+      hint: t("marketing.perDiemCalculator.presets.standardHint", undefined, "Most US cities"),
+    },
+    {
+      label: t("marketing.perDiemCalculator.presets.tier1Label", undefined, "Tier 1 Metro"),
+      rate: 92,
+      hint: t("marketing.perDiemCalculator.presets.tier1Hint", undefined, "NYC, SF, LA, Chicago"),
+    },
+    {
+      label: t("marketing.perDiemCalculator.presets.tier2Label", undefined, "Tier 2 Metro"),
+      rate: 86,
+      hint: t("marketing.perDiemCalculator.presets.tier2Hint", undefined, "Major regional cities"),
+    },
+    {
+      label: t("marketing.perDiemCalculator.presets.intlLabel", undefined, "International — avg"),
+      rate: 145,
+      hint: t("marketing.perDiemCalculator.presets.intlHint", undefined, "DSSR baseline"),
+    },
+  ];
+}
 
 export function PerDiemCalculator() {
+  const t = useT();
+  const GSA_TIER_PRESETS = gsaTierPresets(t);
   const [legs, setLegs] = useState<Leg[]>([{ id: "1", city: "", days: 5, rate: DEFAULT_RATE, headcount: 6 }]);
 
   const total = useMemo(
@@ -38,13 +61,13 @@ export function PerDiemCalculator() {
         {legs.map((l, idx) => (
           <div key={l.id} className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4">
             <div className="mb-3 flex items-center justify-between">
-              <div className="eyebrow">Leg {idx + 1}</div>
+              <div className="eyebrow">{t("marketing.perDiemCalculator.leg", { n: idx + 1 }, `Leg ${idx + 1}`)}</div>
               {legs.length > 1 ? (
                 <button
                   type="button"
                   onClick={() => remove(l.id)}
                   className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
-                  aria-label="Remove leg"
+                  aria-label={t("marketing.perDiemCalculator.removeLeg", undefined, "Remove leg")}
                 >
                   <X size={14} aria-hidden="true" />
                 </button>
@@ -52,17 +75,19 @@ export function PerDiemCalculator() {
             </div>
             <div className="grid gap-3 sm:grid-cols-4">
               <div className="sm:col-span-2">
-                <label className="eyebrow">City / venue</label>
+                <label className="eyebrow">
+                  {t("marketing.perDiemCalculator.cityVenue", undefined, "City / venue")}
+                </label>
                 <input
                   type="text"
                   value={l.city}
                   onChange={(e) => update(l.id, { city: e.target.value })}
-                  placeholder="e.g. Las Vegas"
+                  placeholder={t("marketing.perDiemCalculator.cityPlaceholder", undefined, "e.g. Las Vegas")}
                   className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 />
               </div>
               <div>
-                <label className="eyebrow">Days</label>
+                <label className="eyebrow">{t("marketing.perDiemCalculator.days", undefined, "Days")}</label>
                 <input
                   type="number"
                   min={0}
@@ -72,7 +97,7 @@ export function PerDiemCalculator() {
                 />
               </div>
               <div>
-                <label className="eyebrow">Headcount</label>
+                <label className="eyebrow">{t("marketing.perDiemCalculator.headcount", undefined, "Headcount")}</label>
                 <input
                   type="number"
                   min={0}
@@ -82,7 +107,9 @@ export function PerDiemCalculator() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="eyebrow">Daily Rate — USD</label>
+                <label className="eyebrow">
+                  {t("marketing.perDiemCalculator.dailyRate", undefined, "Daily Rate — USD")}
+                </label>
                 <input
                   type="number"
                   min={0}
@@ -105,7 +132,7 @@ export function PerDiemCalculator() {
                 </div>
               </div>
               <div className="sm:col-span-2">
-                <label className="eyebrow">Leg total</label>
+                <label className="eyebrow">{t("marketing.perDiemCalculator.legTotal", undefined, "Leg total")}</label>
                 <div className="mt-1 rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 font-mono text-sm">
                   ${(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount)).toLocaleString()}
                 </div>
@@ -118,16 +145,26 @@ export function PerDiemCalculator() {
           onClick={add}
           className="ps-btn ps-btn--ghost ps-btn--sm inline-flex items-center gap-1.5"
         >
-          <Plus size={14} aria-hidden="true" /> Add leg
+          <Plus size={14} aria-hidden="true" /> {t("marketing.perDiemCalculator.addLeg", undefined, "Add leg")}
         </button>
       </div>
 
       <div className="mt-6 border-t border-[var(--p-border)] pt-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="eyebrow">Total</div>
+            <div className="eyebrow">{t("marketing.perDiemCalculator.total", undefined, "Total")}</div>
             <div className="mt-1 text-[10px] text-[var(--p-text-2)]">
-              {totalDays} crew-days across {legs.length} leg{legs.length === 1 ? "" : "s"}
+              {legs.length === 1
+                ? t(
+                    "marketing.perDiemCalculator.summaryOne",
+                    { days: totalDays, legs: legs.length },
+                    `${totalDays} crew-days across ${legs.length} leg`,
+                  )
+                : t(
+                    "marketing.perDiemCalculator.summaryMany",
+                    { days: totalDays, legs: legs.length },
+                    `${totalDays} crew-days across ${legs.length} legs`,
+                  )}
             </div>
           </div>
           <div className="font-mono text-2xl font-semibold">${total.toLocaleString()}</div>

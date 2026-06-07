@@ -159,7 +159,11 @@ export default async function Page() {
                 name="short_description"
                 required
                 maxLength={200}
-                placeholder="Field-report capture with auto-sync to ATLVS daily logs."
+                placeholder={t(
+                  "marketing.integrations.submit.placeholders.shortDescription",
+                  undefined,
+                  "Field-report capture with auto-sync to ATLVS daily logs.",
+                )}
                 className={INPUT}
               />
             </label>
@@ -171,7 +175,11 @@ export default async function Page() {
                 name="long_description"
                 rows={4}
                 maxLength={2000}
-                placeholder="What it does, who it's for, how it integrates with ATLVS."
+                placeholder={t(
+                  "marketing.integrations.submit.placeholders.longDescription",
+                  undefined,
+                  "What it does, who it’s for, how it integrates with ATLVS.",
+                )}
                 className={INPUT}
               />
             </label>

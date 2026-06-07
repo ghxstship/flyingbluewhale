@@ -44,13 +44,9 @@ test.describe("console modules — create flows (batch 7)", () => {
     });
   });
 
-  // Skipped: the required project_id <select> renders 0 options in the test org
-  // even though it has 4 projects — the daily-log page applies a project filter
-  // (state/eligibility) the seed projects don't satisfy, so there's no project to
-  // pick. (log_date also needs a unique past value — daily_logs is UNIQUE on
-  // org_id+project_id+log_date — handled, but moot without a project.) Needs a
-  // fixture project that matches the daily-log eligibility filter.
-  test.skip("Operations · daily log create", async ({ page }) => {
+  test("Operations · daily log create", async ({ page }) => {
+    // log_date must be a unique PAST value — daily_logs is UNIQUE on
+    // (org_id, project_id, log_date) and the helper picks the same first project.
     const d = new Date(2000, 0, 1);
     d.setDate(d.getDate() + (Date.now() % 8000));
     await createInModule(page, "/console/operations/daily-log/new", {

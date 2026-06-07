@@ -16,11 +16,16 @@ export default async function Page() {
   const session = await requireSession();
   const { t } = await getRequestT();
   const supabase = await createClient();
+  // NOTE: `projects` has no `status` column (LDP canon uses `project_state` /
+  // `xpms_phase`); the old `.in("status", …)` filter referenced a non-existent
+  // column, which errored the query and left the project picker empty — so no
+  // daily log could ever be created. Select org projects like the other
+  // project-pickers (e.g. inspections/new) do.
   const { data: projects } = await supabase
     .from("projects")
     .select("id, name")
     .eq("org_id", session.orgId)
-    .in("status", ["active", "draft"])
+    .is("deleted_at", null)
     .order("name");
 
   const today = new Date().toISOString().slice(0, 10);

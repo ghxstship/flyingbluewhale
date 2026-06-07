@@ -162,9 +162,11 @@ export function MarketingHeader() {
           <Wordmark word="ATLVS" subtitle="TECHNOLOGIES" style={{ fontSize: 18, fontWeight: 500 }} />
         </Link>
 
-        {/* Desktop primary nav — 3 dropdowns + 2 direct links = 5 visible items,
-            matching Linear / Vercel / Stripe / ClickUp / Notion convention. */}
-        <nav className="hidden items-center gap-1 xl:flex" aria-label={t("marketing.header.primaryAriaLabel")}>
+        {/* Desktop primary nav — 3 dropdowns + 3 direct links. Switches in at
+            the standard desktop breakpoint (lg, 1024px) matching Linear /
+            Vercel / Stripe / ClickUp / Notion convention. Below 1024px the
+            hamburger sheet takes over. */}
+        <nav className="hidden items-center gap-1 lg:flex" aria-label={t("marketing.header.primaryAriaLabel")}>
           <NavDropdown group={PRODUCT} />
           <NavDropdown group={INDUSTRIES} />
           <Link href="/marketplace" className="nav-item">
@@ -181,7 +183,7 @@ export function MarketingHeader() {
 
         {/* Desktop right cluster — utility icons (locale / mode) +
             Log In (secondary text link) + Start free (primary CTA). */}
-        <div className="hidden items-center gap-2 xl:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <LocaleSwitcher />
           <ThemeToggle />
           <div aria-hidden="true" className="mx-1 h-5 w-px bg-[var(--p-border)]" />
@@ -199,22 +201,30 @@ export function MarketingHeader() {
           </Link>
         </div>
 
-        {/* Mobile trigger */}
-        <button
-          type="button"
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label={mobileOpen ? t("marketing.header.closeMenu") : t("marketing.header.openMenu")}
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-nav-sheet"
-          className="ps-btn ps-btn--ghost ps-btn--sm xl:hidden"
-        >
-          {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
-        </button>
+        {/* Mobile trigger — wrapped in a span so visibility is governed by the
+            wrapper's `lg:hidden`, not the button itself. The kit's
+            `[data-ui="saas"] .ps-btn { display: inline-flex }` rule has
+            higher specificity than Tailwind's `.lg:hidden`, so applying
+            `lg:hidden` directly to the .ps-btn button does NOT hide it at
+            desktop widths. Hiding the wrapper short-circuits the button's
+            display entirely. */}
+        <span className="lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label={mobileOpen ? t("marketing.header.closeMenu") : t("marketing.header.openMenu")}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-sheet"
+            className="ps-btn ps-btn--ghost ps-btn--sm"
+          >
+            {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
+          </button>
+        </span>
       </div>
 
       {/* Mobile sheet */}
       {mobileOpen && (
-        <div id="mobile-nav-sheet" className="border-t border-[var(--p-border)] bg-[var(--p-bg)] xl:hidden">
+        <div id="mobile-nav-sheet" className="border-t border-[var(--p-border)] bg-[var(--p-bg)] lg:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5">
             <MobileNavSection group={PRODUCT} onClick={() => setMobileOpen(false)} />
             <MobileNavSection group={INDUSTRIES} onClick={() => setMobileOpen(false)} />

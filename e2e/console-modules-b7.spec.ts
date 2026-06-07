@@ -8,7 +8,7 @@
  * each test fills the primary field it knows + auto-satisfies the rest by input
  * type, then asserts the create redirected off /new with no error surface.
  */
-import { test } from "playwright/test";
+import { expect, test } from "playwright/test";
 import { authedSetup } from "./helpers/auth";
 import { createInModule, stamp } from "./helpers/forms";
 
@@ -69,17 +69,40 @@ test.describe("console modules — create flows (batch 7)", () => {
     await createInModule(page, "/console/punch/new", { title: `E2E Punch ${stamp()}` });
   });
 
-  test.skip("Settings · webhook create — WebhookEndpointForm needs an explicit event-type selection", async ({
-    page,
-  }) => {
-    await createInModule(page, "/console/settings/webhooks/new", {
-      url: "https://example.com/webhook",
-      description: `E2E Webhook ${stamp()}`,
+  test("Settings · webhook create", async ({ page }) => {
+    // WebhookEndpointForm is a client form (not FormShell): https url + ≥1 event
+    // checkbox + a type=button "Register endpoint". On success it reveals the
+    // signing secret in place (no redirect).
+    await page.goto("/console/settings/webhooks/new");
+    await page.locator('input[type="url"]').first().fill(`https://example.com/webhook-${stamp()}`);
+    await page.locator('input[type="checkbox"]').first().check();
+    await page.getByRole("button", { name: /register endpoint/i }).click();
+    await expect(page.getByText(/registered|secret|copy/i).first()).toBeVisible({ timeout: 15000 });
+  });
+
+  // Skipped: site-plans/new is a composite-coded sheet form (org_code · evt_code ·
+  // year · ven_code · zon_code · sheet_type · primary_class compose a canonical
+  // sheet id) with cross-field validation the generic placeholder codes don't
+  // satisfy, so the submit doesn't land. Needs a composite-code-aware spec.
+  test.skip("Site plans · create", async ({ page }) => {
+    const s = stamp().slice(-4);
+    await createInModule(page, "/console/site-plans/new", {
+      title: `E2E Site Plan ${stamp()}`,
+      code: `SP${s}`,
+      org_code: "ORG",
+      evt_code: "EVT",
+      year: "2026",
+      ven_code: "VEN",
+      zon_code: "ZON",
     });
   });
 
-  test.skip("Site plans · create — needs a seeded event + composite preset/org/evt code", async ({ page }) => {
-    await createInModule(page, "/console/site-plans/new", { name: `E2E Site Plan ${stamp()}` });
+  // Skipped: crew options resolve (6), but the create submit stays on /new with
+  // no error surface — the msa/new form isn't a standard <main> FormShell (custom
+  // submit / silent precondition), so the generic requestSubmit doesn't land.
+  // Needs an msa-form-aware spec.
+  test.skip("People · MSA create", async ({ page }) => {
+    await createInModule(page, "/console/people/msas/new", {});
   });
 
   test("Warranties · create", async ({ page }) => {

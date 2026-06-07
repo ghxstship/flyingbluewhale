@@ -65,6 +65,18 @@ async function login(page: Page, role: RoleKey) {
   await loginAs(page, role);
 }
 
+// test-professional-show lives in the Test Professional org. Org-internal guides
+// (client/vendor tiers) gate behind an access code UNLESS the viewer's ACTIVE
+// workspace is the project's org (page.tsx: isOrgMemberOfProject = session.orgId
+// === project.org_id). Fixture users belong to all four test orgs, but
+// session.orgId resolves to just one — so a guide viewer must pin their
+// workspace to the project's org to read it as a recognized member.
+const PROFESSIONAL_ORG_ID = "f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7";
+async function loginInProjectOrg(page: Page, role: RoleKey) {
+  await loginAs(page, role);
+  await page.request.patch("/api/v1/me/workspaces", { data: { orgId: PROFESSIONAL_ORG_ID } });
+}
+
 // ---------------------------------------------------------------------------
 // Handoff 1 — /auth/resolve: session.persona → shell landing
 // ---------------------------------------------------------------------------
@@ -147,7 +159,7 @@ test.describe("handoff/atlvs→gvteway: guide render in portal", () => {
   for (const role of PORTAL_VIEWERS) {
     test(`${role} reads /p/${SLUG}/guide and sees ${PERSONA_FOR_ROLE[role]} marker`, async ({ page }) => {
       await dismissConsent(page);
-      await login(page, role);
+      await loginInProjectOrg(page, role);
       await page.goto(`/p/${SLUG}/guide`);
       // Portal shell chrome
       await expect(page.locator('[data-platform="gvteway"]').first()).toBeVisible({ timeout: 10_000 });
@@ -220,7 +232,7 @@ test.describe("handoff/persona-consistency: same role sees same persona in both 
 
   test("client sees client persona in BOTH portal and mobile", async ({ page }) => {
     await dismissConsent(page);
-    await login(page, "client");
+    await loginInProjectOrg(page, "client");
 
     await page.goto("/p/test-professional-show/guide");
     await expect(page.locator("body")).toContainText("HANDOFF:client:test-professional-show", { timeout: 10_000 });

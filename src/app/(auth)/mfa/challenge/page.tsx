@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { getCurrentAal, getEnrolledFactors } from "@/lib/auth/mfa";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { MfaChallengeForm } from "./MfaChallengeForm";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata = {
-  title: "Two-Factor Verification",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return { title: t("auth.mfa.pageTitle", undefined, "Two-Factor Verification") };
+}
 
 type Props = {
   searchParams: Promise<{ next?: string }>;
@@ -47,10 +50,16 @@ export default async function MfaChallengePage({ searchParams }: Props) {
   const verified = factors.find((f) => f.factorType === "totp" && f.status === "verified");
   if (!verified) redirect("/me/security/two-factor?enroll=1");
 
+  const { t } = await getRequestT();
+
   return (
     <AuthShell
-      title="Two-Factor Verification"
-      subtitle="Enter the six-digit code from your authenticator app to continue."
+      title={t("auth.mfa.pageTitle", undefined, "Two-Factor Verification")}
+      subtitle={t(
+        "auth.mfa.pageSubtitle",
+        undefined,
+        "Enter the six-digit code from your authenticator app to continue.",
+      )}
     >
       <MfaChallengeForm factorId={verified.id} next={next} />
     </AuthShell>

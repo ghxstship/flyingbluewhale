@@ -59,6 +59,7 @@ import { Hint } from "@/components/ui/Tooltip";
 import type { SavedView, ViewConfigRow, ViewScope, ViewType } from "@/lib/views/types";
 import { SavedViewSelector } from "@/components/views/SavedViewSelector";
 import type { SaveViewSubmit } from "@/components/views/SaveViewDialog";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Shared toolbar trigger className — every dropdown trigger and action
@@ -201,7 +202,7 @@ export type InteractiveTableProps = {
 export function DataTableInteractive({
   rows,
   columns,
-  emptyLabel = "No records yet",
+  emptyLabel,
   searchable,
   pageSize,
   density: densityProp = "comfortable",
@@ -223,6 +224,7 @@ export function DataTableInteractive({
   // alt renderers (Kanban, Calendar, Timeline, Map, Chart) can switch off
   // it without another props change.
   void viewType;
+  const t = useT();
   const router = useRouter();
   const { prefs, setPrefs } = useUserPreferences();
   const savedView = tableId ? (prefs.table_views as Record<string, SavedView> | undefined)?.[tableId] : undefined;
@@ -373,11 +375,11 @@ export function DataTableInteractive({
     try {
       const url = window.location.href;
       await navigator.clipboard.writeText(url);
-      toast.success("View Link Copied");
+      toast.success(t("dataTable.toast.linkCopied", undefined, "View Link Copied"));
     } catch {
-      toast.error("Could not copy link");
+      toast.error(t("dataTable.toast.copyFailed", undefined, "Could not copy link"));
     }
-  }, []);
+  }, [t]);
   const handleResetView = React.useCallback(() => {
     setQuery("");
     setSortKey("");
@@ -393,8 +395,8 @@ export function DataTableInteractive({
     setCollapsed(new Set());
     // Reset also drops back to the unsaved working-copy (Default View)
     setActiveViewIdLocal(null);
-    toast.success("View Reset");
-  }, [columns, densityProp, setQuery, setSortKey, setSortDir, setPage]);
+    toast.success(t("dataTable.toast.viewReset", undefined, "View Reset"));
+  }, [columns, densityProp, setQuery, setSortKey, setSortDir, setPage, t]);
   const handleImportClick = React.useCallback(() => {
     fileInputRef.current?.click();
   }, []);
@@ -404,14 +406,14 @@ export function DataTableInteractive({
       if (!file || !onImport) return;
       try {
         await onImport(file);
-        toast.success(`Imported ${file.name}`);
+        toast.success(t("dataTable.toast.imported", { name: file.name }, `Imported ${file.name}`));
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Import failed");
+        toast.error(err instanceof Error ? err.message : t("dataTable.toast.importFailed", undefined, "Import failed"));
       } finally {
         e.target.value = "";
       }
     },
-    [onImport],
+    [onImport, t],
   );
 
   // Filter — first by free-text query, then by per-column include-only filters
@@ -595,7 +597,11 @@ export function DataTableInteractive({
   const allVisibleSelected = flatVisible.length > 0 && flatVisible.every((r) => selected.has(r.id));
 
   if (rows.length === 0) {
-    return <div className="px-6 py-10 text-center text-sm text-[var(--p-text-2)]">{emptyLabel}</div>;
+    return (
+      <div className="px-6 py-10 text-center text-sm text-[var(--p-text-2)]">
+        {emptyLabel ?? t("dataTable.emptyLabel", undefined, "No records yet")}
+      </div>
+    );
   }
 
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
@@ -633,15 +639,15 @@ export function DataTableInteractive({
                   setQuery(e.target.value);
                   setPage(0);
                 }}
-                placeholder="Search"
+                placeholder={t("dataTable.search", undefined, "Search")}
                 className="w-32 bg-transparent text-sm text-[var(--p-text-1)] outline-none placeholder:text-[var(--p-text-2)] sm:w-48"
-                aria-label="Filter Rows"
+                aria-label={t("dataTable.filterRows", undefined, "Filter Rows")}
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery("")}
-                  aria-label="Clear search"
+                  aria-label={t("dataTable.clearSearch", undefined, "Clear search")}
                   className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
                 >
                   <X size={12} />
@@ -650,7 +656,10 @@ export function DataTableInteractive({
             </div>
           )}
           <span className="font-mono text-[10px] text-[var(--p-text-2)] tabular-nums">
-            {sorted.length} {sorted.length === 1 ? "row" : "rows"}
+            {sorted.length}{" "}
+            {sorted.length === 1
+              ? t("dataTable.rowSingular", undefined, "row")
+              : t("dataTable.rowPlural", undefined, "rows")}
           </span>
         </div>
 
@@ -725,29 +734,33 @@ export function DataTableInteractive({
             />
           )}
           <ViewMenu customizationActive={customizationActive} onReset={handleResetView} />
-          <ToolbarIconButton icon={Share2} label="Share view link" onClick={handleShare} />
-          <Hint label="Export visible rows to CSV">
+          <ToolbarIconButton
+            icon={Share2}
+            label={t("dataTable.shareViewLink", undefined, "Share view link")}
+            onClick={handleShare}
+          />
+          <Hint label={t("dataTable.exportCsv", undefined, "Export visible rows to CSV")}>
             <button
               type="button"
               onClick={() => exportCsv(renderedCols, sorted, tableId)}
-              aria-label="Export visible rows to CSV"
+              aria-label={t("dataTable.exportCsv", undefined, "Export visible rows to CSV")}
               className={TOOLBAR_TRIGGER_BASE}
             >
               <Download size={12} aria-hidden="true" />
-              Export
+              {t("dataTable.exportButton", undefined, "Export")}
             </button>
           </Hint>
           {onImport && (
             <>
-              <Hint label="Import rows from a file — CSV / TSV / JSON / XLSX">
+              <Hint label={t("dataTable.importFile", undefined, "Import rows from a file — CSV / TSV / JSON / XLSX")}>
                 <button
                   type="button"
                   onClick={handleImportClick}
-                  aria-label="Import rows from a file"
+                  aria-label={t("dataTable.importFileAria", undefined, "Import rows from a file")}
                   className={TOOLBAR_TRIGGER_BASE}
                 >
                   <Upload size={12} aria-hidden="true" />
-                  Import
+                  {t("dataTable.importButton", undefined, "Import")}
                 </button>
               </Hint>
               <input
@@ -763,7 +776,7 @@ export function DataTableInteractive({
           )}
           <ToolbarIconButton
             icon={RefreshCw}
-            label="Refresh table data"
+            label={t("dataTable.refresh", undefined, "Refresh table data")}
             onClick={handleRefresh}
             spinning={refreshing}
           />
@@ -803,7 +816,7 @@ export function DataTableInteractive({
                     type="checkbox"
                     checked={allVisibleSelected}
                     onChange={toggleAll}
-                    aria-label="Select all on this page"
+                    aria-label={t("dataTable.selectAllPage", undefined, "Select all on this page")}
                   />
                 </th>
               )}
@@ -825,7 +838,7 @@ export function DataTableInteractive({
                           type="button"
                           onClick={(e) => toggleSort(c.key, e)}
                           className="inline-flex items-center gap-1 hover:text-[var(--p-text-1)]"
-                          title="Click to sort · shift-click for multi-sort"
+                          title={t("dataTable.sortHint", undefined, "Click to sort · shift-click for multi-sort")}
                         >
                           {c.header}
                           {isPrimarySort ? (
@@ -994,7 +1007,7 @@ export function DataTableInteractive({
                 totals={columnTotals}
                 bulk={!!bulkActions}
                 showActions={hasRowActions}
-                label="Total"
+                label={t("dataTable.total", undefined, "Total")}
                 variant="footer"
               />
             </tfoot>
@@ -1013,7 +1026,7 @@ export function DataTableInteractive({
               type="button"
               onClick={() => setPage((p) => Math.max(0, Number(p) - 1))}
               disabled={Number(page) === 0}
-              aria-label="Previous page"
+              aria-label={t("dataTable.prevPage", undefined, "Previous page")}
               className="rounded p-1 hover:bg-[var(--p-surface-2)] disabled:opacity-30"
             >
               <ChevronLeft size={14} />
@@ -1022,7 +1035,7 @@ export function DataTableInteractive({
               type="button"
               onClick={() => setPage((p) => Math.min(pageCount - 1, Number(p) + 1))}
               disabled={Number(page) >= pageCount - 1}
-              aria-label="Next page"
+              aria-label={t("dataTable.nextPage", undefined, "Next page")}
               className="rounded p-1 hover:bg-[var(--p-surface-2)] disabled:opacity-30"
             >
               <ChevronRight size={14} />
@@ -1035,7 +1048,7 @@ export function DataTableInteractive({
       {bulkActions && anySelected && (
         <div
           role="toolbar"
-          aria-label="Bulk actions"
+          aria-label={t("dataTable.bulkActions", undefined, "Bulk actions")}
           className="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] px-4 py-2"
         >
           <span className="text-xs text-[var(--p-text-2)]">{selected.size} selected</span>
@@ -1059,7 +1072,7 @@ export function DataTableInteractive({
           <button
             type="button"
             onClick={() => setSelected(new Set())}
-            aria-label="Clear selection"
+            aria-label={t("dataTable.clearSelection", undefined, "Clear selection")}
             className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           >
             <X size={14} />
@@ -1268,6 +1281,7 @@ function DensityToggle({
   value: "comfortable" | "compact";
   onChange: (v: "comfortable" | "compact") => void;
 }) {
+  const t = useT();
   // Segmented pill — visual language matches the top-bar theme toggle
   // (rounded-full container with bg-bg-secondary, segments are h-7 w-7
   // squares that fill with bg-background when active). Tooltips on each
@@ -1275,27 +1289,27 @@ function DensityToggle({
   return (
     <div
       role="radiogroup"
-      aria-label="Row density"
+      aria-label={t("dataTable.density.aria", undefined, "Row density")}
       className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5"
     >
-      <Hint label="Comfortable density">
+      <Hint label={t("dataTable.density.comfortable", undefined, "Comfortable density")}>
         <button
           type="button"
           role="radio"
           aria-checked={value === "comfortable"}
-          aria-label="Comfortable density"
+          aria-label={t("dataTable.density.comfortable", undefined, "Comfortable density")}
           onClick={() => onChange("comfortable")}
           className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "comfortable" ? "bg-[var(--p-bg)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"}`}
         >
           <Rows3 size={13} aria-hidden="true" strokeWidth={2.25} />
         </button>
       </Hint>
-      <Hint label="Compact density">
+      <Hint label={t("dataTable.density.compact", undefined, "Compact density")}>
         <button
           type="button"
           role="radio"
           aria-checked={value === "compact"}
-          aria-label="Compact density"
+          aria-label={t("dataTable.density.compact", undefined, "Compact density")}
           onClick={() => onChange("compact")}
           className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "compact" ? "bg-[var(--p-bg)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"}`}
         >
@@ -1315,25 +1329,38 @@ function GroupByMenu({
   groupBy: string;
   setGroupBy: (v: string) => void;
 }) {
+  const t = useT();
   const groupable = columns.filter((c) => c.groupable);
   if (groupable.length === 0) return null;
   const active = columns.find((c) => c.key === groupBy);
   return (
     <DropdownMenu>
-      <Hint label={active ? `Grouped by ${active.header}` : "Group rows by a column"}>
+      <Hint
+        label={
+          active
+            ? t("dataTable.group.groupedBy", { header: active.header }, `Grouped by ${active.header}`)
+            : t("dataTable.group.groupByColumn", undefined, "Group rows by a column")
+        }
+      >
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label={active ? `Grouped by ${active.header}` : "Group by column"}
+            aria-label={
+              active
+                ? t("dataTable.group.groupedBy", { header: active.header }, `Grouped by ${active.header}`)
+                : t("dataTable.group.groupByAria", undefined, "Group by column")
+            }
             className={`${TOOLBAR_TRIGGER_BASE} ${active ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
           >
             <Layers size={12} aria-hidden="true" />
-            {active ? active.header : "Group"}
+            {active ? active.header : t("dataTable.group.groupLabel", undefined, "Group")}
           </button>
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem onSelect={() => setGroupBy("")}>No grouping</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => setGroupBy("")}>
+          {t("dataTable.group.noGrouping", undefined, "No grouping")}
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         {groupable.map((c) => (
           <DropdownMenuItem key={c.key} onSelect={() => setGroupBy(c.key)}>
@@ -1362,12 +1389,19 @@ function FilteredEmptyRow({
   colSpan: number;
   onClearFilters: () => void;
 }) {
+  const t = useT();
   const hasQuery = query.trim().length > 0;
   const message = hasQuery
-    ? `No rows match "${query}"${filterCount > 0 ? ` with the active filter${filterCount === 1 ? "" : "s"}` : ""}`
+    ? filterCount > 0
+      ? filterCount === 1
+        ? t("dataTable.empty.queryAndFilter", { query }, `No rows match "${query}" with the active filter`)
+        : t("dataTable.empty.queryAndFilters", { query }, `No rows match "${query}" with the active filters`)
+      : t("dataTable.empty.query", { query }, `No rows match "${query}"`)
     : filterCount > 0
-      ? `No rows match the active filter${filterCount === 1 ? "" : "s"}`
-      : "No rows to display";
+      ? filterCount === 1
+        ? t("dataTable.empty.filter", undefined, "No rows match the active filter")
+        : t("dataTable.empty.filters", undefined, "No rows match the active filters")
+      : t("dataTable.noRows", undefined, "No rows to display");
   return (
     <tr>
       <td colSpan={colSpan} className="px-6 py-10 text-center text-sm text-[var(--p-text-2)]">
@@ -1380,7 +1414,7 @@ function FilteredEmptyRow({
               className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
             >
               <X size={12} aria-hidden="true" />
-              Clear Filters
+              {t("dataTable.clearFilters", undefined, "Clear Filters")}
             </button>
           )}
         </div>
@@ -1438,6 +1472,7 @@ function FilterAddMenu({
   distinctValuesByKey: Map<string, Map<string, number>>;
   onChange: (next: Record<string, string[]>) => void;
 }) {
+  const t = useT();
   const filterable = columns.filter((c) => c.filterable);
   const [activeKey, setActiveKey] = React.useState<string>("");
   const activeColumn = filterable.find((c) => c.key === activeKey);
@@ -1454,22 +1489,40 @@ function FilterAddMenu({
 
   return (
     <DropdownMenu onOpenChange={(open) => !open && setActiveKey("")}>
-      <Hint label={activeFilterCount ? `Filters · ${activeFilterCount} active` : "Add a filter to narrow rows"}>
+      <Hint
+        label={
+          activeFilterCount
+            ? t("dataTable.filter.activeHint", { count: activeFilterCount }, `Filters · ${activeFilterCount} active`)
+            : t("dataTable.filter.addHint", undefined, "Add a filter to narrow rows")
+        }
+      >
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label={activeFilterCount ? `Filters (${activeFilterCount} active)` : "Add filter"}
+            aria-label={
+              activeFilterCount
+                ? t(
+                    "dataTable.filter.activeAria",
+                    { count: activeFilterCount },
+                    `Filters (${activeFilterCount} active)`,
+                  )
+                : t("dataTable.filter.addAria", undefined, "Add filter")
+            }
             className={`${TOOLBAR_TRIGGER_BASE} ${activeFilterCount ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
           >
             {activeFilterCount ? <Filter size={12} aria-hidden="true" /> : <Plus size={12} aria-hidden="true" />}
-            {activeFilterCount ? `Filter · ${activeFilterCount}` : "Filter"}
+            {activeFilterCount
+              ? t("dataTable.filter.activeLabel", { count: activeFilterCount }, `Filter · ${activeFilterCount}`)
+              : t("dataTable.filter.label", undefined, "Filter")}
           </button>
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="max-h-80 w-64 overflow-auto">
         {!activeColumn ? (
           <>
-            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Filter By</div>
+            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+              {t("dataTable.filter.filterBy", undefined, "Filter By")}
+            </div>
             {filterable.map((c) => {
               const count = filters[c.key]?.length ?? 0;
               return (
@@ -1491,7 +1544,9 @@ function FilterAddMenu({
             {activeFilterCount > 0 && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => onChange({})}>Clear All Filters</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => onChange({})}>
+                  {t("dataTable.filter.clearAll", undefined, "Clear All Filters")}
+                </DropdownMenuItem>
               </>
             )}
           </>
@@ -1500,7 +1555,7 @@ function FilterAddMenu({
             <div className="flex items-center gap-1 px-2 py-1">
               <button
                 type="button"
-                aria-label="Back to filter columns"
+                aria-label={t("dataTable.filter.backToColumns", undefined, "Back to filter columns")}
                 onClick={() => setActiveKey("")}
                 className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
               >
@@ -1512,7 +1567,9 @@ function FilterAddMenu({
             </div>
             <DropdownMenuSeparator />
             {!activeDistincts || activeDistincts.size === 0 ? (
-              <div className="px-2 py-2 text-xs text-[var(--p-text-2)]">No values</div>
+              <div className="px-2 py-2 text-xs text-[var(--p-text-2)]">
+                {t("dataTable.filter.noValues", undefined, "No values")}
+              </div>
             ) : (
               Array.from(activeDistincts.entries())
                 .sort((a, b) => a[0].localeCompare(b[0]))
@@ -1545,7 +1602,9 @@ function FilterAddMenu({
             {(filters[activeKey]?.length ?? 0) > 0 && (
               <>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setColumnFilter(activeKey, [])}>Clear This Column</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setColumnFilter(activeKey, [])}>
+                  {t("dataTable.filter.clearColumn", undefined, "Clear This Column")}
+                </DropdownMenuItem>
               </>
             )}
           </>
@@ -1576,6 +1635,7 @@ function SortStackMenu({
   onSetPrimary: (key: string, dir: "asc" | "desc") => void;
   onSetStack: (next: Array<{ key: string; dir: "asc" | "desc" }>) => void;
 }) {
+  const t = useT();
   const sortable = columns.filter((c) => c.sortable !== false);
   if (sortable.length === 0) return null;
   const headerByKey = new Map(columns.map((c) => [c.key, c.header]));
@@ -1620,25 +1680,47 @@ function SortStackMenu({
       <Hint
         label={
           totalSorts > 0
-            ? `Sorted by ${totalSorts} column${totalSorts === 1 ? "" : "s"} · shift-click any column header to add another sort`
-            : "Sort rows · shift-click column headers for multi-sort"
+            ? totalSorts === 1
+              ? t(
+                  "dataTable.sort.hintSingular",
+                  { count: totalSorts },
+                  `Sorted by ${totalSorts} column · shift-click any column header to add another sort`,
+                )
+              : t(
+                  "dataTable.sort.hintPlural",
+                  { count: totalSorts },
+                  `Sorted by ${totalSorts} columns · shift-click any column header to add another sort`,
+                )
+            : t("dataTable.sort.idleHint", undefined, "Sort rows · shift-click column headers for multi-sort")
         }
       >
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label={totalSorts > 0 ? `Sorted by ${totalSorts} column${totalSorts === 1 ? "" : "s"}` : "Add sort"}
+            aria-label={
+              totalSorts > 0
+                ? totalSorts === 1
+                  ? t("dataTable.sort.sortedBy", { count: totalSorts }, `Sorted by ${totalSorts} column`)
+                  : t("dataTable.sort.sortedByPlural", { count: totalSorts }, `Sorted by ${totalSorts} columns`)
+                : t("dataTable.sort.addAria", undefined, "Add sort")
+            }
             className={`${TOOLBAR_TRIGGER_BASE} ${totalSorts > 0 ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
           >
             <ArrowUpDown size={12} aria-hidden="true" />
-            {totalSorts > 0 ? `Sort · ${totalSorts}` : "Sort"}
+            {totalSorts > 0
+              ? t("dataTable.sort.activeLabel", { count: totalSorts }, `Sort · ${totalSorts}`)
+              : t("dataTable.sort.label", undefined, "Sort")}
           </button>
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="w-72">
-        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Sort By</div>
+        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+          {t("dataTable.sort.sortByLabel", undefined, "Sort By")}
+        </div>
         {stack.length === 0 ? (
-          <div className="px-2 py-1 text-xs text-[var(--p-text-2)]">No sort applied</div>
+          <div className="px-2 py-1 text-xs text-[var(--p-text-2)]">
+            {t("dataTable.sort.noSort", undefined, "No sort applied")}
+          </div>
         ) : (
           stack.map((s, idx) => (
             <div key={`${s.key}-${idx}`} className="flex items-center justify-between gap-2 px-2 py-1 text-xs">
@@ -1650,7 +1732,11 @@ function SortStackMenu({
                 <button
                   type="button"
                   onClick={() => flipDir(idx)}
-                  aria-label={`Toggle ${s.key} direction (${s.dir})`}
+                  aria-label={t(
+                    "dataTable.sort.toggleDir",
+                    { key: s.key, dir: s.dir },
+                    `Toggle ${s.key} direction (${s.dir})`,
+                  )}
                   className="rounded px-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                 >
                   {s.dir === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
@@ -1658,7 +1744,7 @@ function SortStackMenu({
                 <button
                   type="button"
                   onClick={() => removeSort(idx)}
-                  aria-label={`Remove sort on ${s.key}`}
+                  aria-label={t("dataTable.sort.removeSort", { key: s.key }, `Remove sort on ${s.key}`)}
                   className="rounded px-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                 >
                   <X size={12} />
@@ -1670,7 +1756,9 @@ function SortStackMenu({
         {sortable.some((c) => !stackKeys.has(c.key)) && (
           <>
             <DropdownMenuSeparator />
-            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Add Sort</div>
+            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+              {t("dataTable.sort.addSortLabel", undefined, "Add Sort")}
+            </div>
             {sortable
               .filter((c) => !stackKeys.has(c.key))
               .map((c) => (
@@ -1689,7 +1777,7 @@ function SortStackMenu({
                 onSetStack([]);
               }}
             >
-              Clear All Sorts
+              {t("dataTable.sort.clearAll", undefined, "Clear All Sorts")}
             </DropdownMenuItem>
           </>
         )}
@@ -1708,35 +1796,40 @@ function SortStackMenu({
  * `Record<viewName, SavedView>`.
  */
 function ViewMenu({ customizationActive, onReset }: { customizationActive: boolean; onReset: () => void }) {
+  const t = useT();
   return (
     <DropdownMenu>
       <Hint
         label={
           customizationActive
-            ? "View · auto-saved per table; click to reset to defaults"
-            : "Saved view · auto-saved per table"
+            ? t("dataTable.view.hintActive", undefined, "View · auto-saved per table; click to reset to defaults")
+            : t("dataTable.view.hintIdle", undefined, "Saved view · auto-saved per table")
         }
       >
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label="View options"
+            aria-label={t("dataTable.viewOptions", undefined, "View options")}
             className={`${TOOLBAR_TRIGGER_BASE} ${customizationActive ? TOOLBAR_TRIGGER_ACTIVE : ""}`}
           >
             <Bookmark size={12} aria-hidden="true" />
-            {customizationActive ? "View · Modified" : "View"}
+            {customizationActive
+              ? t("dataTable.view.modified", undefined, "View · Modified")
+              : t("dataTable.view.label", undefined, "View")}
           </button>
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="w-52">
-        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Saved View</div>
+        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
+          {t("dataTable.view.savedView", undefined, "Saved View")}
+        </div>
         <DropdownMenuItem disabled className="opacity-60">
-          Default · Auto-Saved
+          {t("dataTable.view.defaultAutoSaved", undefined, "Default · Auto-Saved")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={onReset} disabled={!customizationActive}>
           <RotateCcw size={12} aria-hidden="true" className="me-1.5 inline" />
-          Reset View To Defaults
+          {t("dataTable.view.resetToDefaults", undefined, "Reset View To Defaults")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -1758,6 +1851,7 @@ function ColumnFilterMenu({
   onChange: (vs: string[]) => void;
   activeCount: number;
 }) {
+  const t = useT();
   const sortedEntries = React.useMemo(
     () => Array.from(distincts.entries()).sort((a, b) => a[0].localeCompare(b[0])),
     [distincts],
@@ -1768,7 +1862,7 @@ function ColumnFilterMenu({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          aria-label={`Filter ${columnHeader}`}
+          aria-label={t("dataTable.filterColumn", { header: columnHeader }, `Filter ${columnHeader}`)}
           className={`inline-flex h-5 w-5 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)] ${
             activeCount ? "text-[var(--p-accent)]" : ""
           }`}
@@ -1778,7 +1872,9 @@ function ColumnFilterMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-h-72 w-56 overflow-auto">
         {sortedEntries.length === 0 ? (
-          <div className="px-2 py-1 text-xs text-[var(--p-text-2)]">No values</div>
+          <div className="px-2 py-1 text-xs text-[var(--p-text-2)]">
+            {t("dataTable.filter.noValues", undefined, "No values")}
+          </div>
         ) : (
           sortedEntries.map(([val, count]) => {
             const checked = sel.has(val);
@@ -1804,7 +1900,9 @@ function ColumnFilterMenu({
         {selected.length > 0 && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => onChange([])}>Clear filter</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => onChange([])}>
+              {t("dataTable.clearFilter", undefined, "Clear filter")}
+            </DropdownMenuItem>
           </>
         )}
       </DropdownMenuContent>
@@ -1823,6 +1921,7 @@ function ActiveFilterChips({
   onRemove: (key: string, val: string) => void;
   onClearAll: () => void;
 }) {
+  const t = useT();
   const entries = Object.entries(filters).flatMap(([k, vs]) => vs.map((v) => ({ k, v })));
   if (!entries.length) return null;
   const headerByKey = new Map(columns.map((c) => [c.key, c.header]));
@@ -1838,7 +1937,11 @@ function ActiveFilterChips({
           <button
             type="button"
             onClick={() => onRemove(k, v)}
-            aria-label={`Remove ${headerByKey.get(k) ?? k} filter ${v || "—"}`}
+            aria-label={t(
+              "dataTable.chips.remove",
+              { header: headerByKey.get(k) ?? k, value: v || "—" },
+              `Remove ${headerByKey.get(k) ?? k} filter ${v || "—"}`,
+            )}
             className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           >
             <X size={10} />
@@ -1846,7 +1949,7 @@ function ActiveFilterChips({
         </span>
       ))}
       <button type="button" onClick={onClearAll} className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
-        Clear all
+        {t("dataTable.chips.clearAll", undefined, "Clear all")}
       </button>
     </div>
   );
@@ -1869,6 +1972,7 @@ function ColumnMenu({
   onToggleHidden: (key: string) => void;
   onTogglePinned: (key: string) => void;
 }) {
+  const t = useT();
   const sensors = useSensors(useSensor(PointerSensor), useSensor(KeyboardSensor));
   const known = new Set(columns.map((c) => c.key));
   const orderedKeys = [
@@ -1888,11 +1992,11 @@ function ColumnMenu({
 
   return (
     <DropdownMenu>
-      <Hint label="Show / hide / pin / reorder columns">
+      <Hint label={t("dataTable.columns.hint", undefined, "Show / hide / pin / reorder columns")}>
         <DropdownMenuTrigger asChild>
           <button
             type="button"
-            aria-label="Column settings"
+            aria-label={t("dataTable.columns.settingsAria", undefined, "Column settings")}
             className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
           >
             <SlidersHorizontal size={12} aria-hidden="true" />
@@ -1921,9 +2025,11 @@ function ColumnMenu({
             columns.forEach((c) => hidden.has(c.key) && onToggleHidden(c.key));
           }}
         >
-          Show all columns
+          {t("dataTable.columns.showAll", undefined, "Show all columns")}
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => onReorder(columns.map((c) => c.key))}>Reset order</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => onReorder(columns.map((c) => c.key))}>
+          {t("dataTable.columns.resetOrder", undefined, "Reset order")}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

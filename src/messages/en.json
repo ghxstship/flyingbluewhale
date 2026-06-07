@@ -3955,7 +3955,9 @@
       "submitting": "Verifying",
       "submit": "Verify",
       "useAuthenticator": "Use authenticator code",
-      "useRecovery": "Use a recovery code"
+      "useRecovery": "Use a recovery code",
+      "pageTitle": "Two-Factor Verification",
+      "pageSubtitle": "Enter the six-digit code from your authenticator app to continue."
     },
     "notFound": {
       "title": "Auth path not found."
@@ -11736,7 +11738,36 @@
         "byStatus": "By Status",
         "drillIn": "Drill In"
       },
-      "eyebrow": "Production"
+      "eyebrow": "Production",
+      "hub": {
+        "eyebrow": "Production",
+        "title": "Production",
+        "subtitle": "Inventory, build, show systems.",
+        "sections": {
+          "inventory": "Inventory",
+          "build": "Build",
+          "show": "Show"
+        },
+        "cards": {
+          "equipment": "Equipment",
+          "equipmentDesc": "Owned assets + maintenance",
+          "equipmentUtil": "Equipment Utilization",
+          "equipmentUtilDesc": "30/90-day rollup + idle revenue",
+          "avInventory": "AV Inventory",
+          "rentals": "Rentals",
+          "fabrication": "Fabrication",
+          "compounds": "Compounds",
+          "yard": "Yard",
+          "punchList": "Punch List",
+          "realityCaptures": "Reality Captures",
+          "photoLog": "Photo Log",
+          "warranties": "Warranties",
+          "runOfShow": "Run of Show",
+          "runOfShowDesc": "Cue-by-cue timeline",
+          "liveDispatch": "Live Dispatch",
+          "productionLogistics": "Production Logistics"
+        }
+      }
     },
     "programs": {
       "cases": {
@@ -16113,6 +16144,38 @@
       "title": "Not Found",
       "subtitle": "That record doesn't exist, or you don't have access.",
       "backToWorkspace": "Back to Workspace"
+    },
+    "sales": {
+      "hub": {
+        "eyebrow": "Sales",
+        "title": "Sales",
+        "subtitle": "Pipeline, partnerships, marketplace, revenue.",
+        "sections": {
+          "pipeline": "Pipeline & Partners",
+          "hospitality": "Hospitality",
+          "marketplace": "Marketplace",
+          "revenue": "Revenue"
+        },
+        "cards": {
+          "leads": "Leads",
+          "leadsDesc": "Pipeline kanban + saved views",
+          "clients": "Clients",
+          "sponsors": "Sponsors",
+          "marketing": "Marketing",
+          "hospitality": "Hospitality",
+          "hospitalityDesc": "Talent · Sponsors · Athletes · Industry · Media & Press · VVIP",
+          "marketplace": "Marketplace",
+          "marketplaceDesc": "Postings, calls, talent, offers, reviews",
+          "bookings": "Bookings",
+          "bookingsDesc": "Deals, holds, calendar, settlements",
+          "tours": "Tours",
+          "talentRoster": "Talent Roster",
+          "offers": "Offers",
+          "tickets": "Tickets",
+          "analytics": "Analytics",
+          "analyticsDesc": "Cross-cutting BI rollup"
+        }
+      }
     }
   },
   "p": {
@@ -18138,6 +18201,130 @@
     },
     "sortable": {
       "dragToReorder": "Drag to reorder"
+    }
+  },
+  "cookieConsent": {
+    "title": "Cookies & privacy",
+    "description": "We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use analytics and marketing cookies to improve the product.",
+    "essential": {
+      "label": "Essential",
+      "description": "Auth, security, rate limiting.",
+      "alwaysOn": " · always on"
+    },
+    "analytics": {
+      "label": "Analytics",
+      "description": "Aggregate usage stats. We never sell or correlate to identity."
+    },
+    "marketing": {
+      "label": "Marketing",
+      "description": "Conversion tracking for the marketing site. None inside the product."
+    },
+    "customize": "Customize",
+    "hideDetails": "Hide Details",
+    "rejectAll": "Reject All",
+    "savePreferences": "Save Preferences",
+    "acceptAll": "Accept All",
+    "toggle": "Toggle {label}"
+  },
+  "dataTable": {
+    "emptyLabel": "No records yet",
+    "toast": {
+      "linkCopied": "View Link Copied",
+      "copyFailed": "Could not copy link",
+      "viewReset": "View Reset",
+      "importFailed": "Import failed",
+      "imported": "Imported {name}"
+    },
+    "search": "Search",
+    "filterRows": "Filter Rows",
+    "clearSearch": "Clear search",
+    "shareViewLink": "Share view link",
+    "exportCsv": "Export visible rows to CSV",
+    "importFile": "Import rows from a file — CSV / TSV / JSON / XLSX",
+    "importFileAria": "Import rows from a file",
+    "refresh": "Refresh table data",
+    "selectAllPage": "Select all on this page",
+    "sortHint": "Click to sort · shift-click for multi-sort",
+    "total": "Total",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "bulkActions": "Bulk actions",
+    "clearSelection": "Clear selection",
+    "density": {
+      "aria": "Row density",
+      "comfortable": "Comfortable density",
+      "compact": "Compact density"
+    },
+    "group": {
+      "groupedBy": "Grouped by {header}",
+      "groupByColumn": "Group rows by a column",
+      "groupByAria": "Group by column",
+      "noGrouping": "No grouping",
+      "groupLabel": "Group"
+    },
+    "noRows": "No rows to display",
+    "filter": {
+      "activeHint": "Filters · {count} active",
+      "addHint": "Add a filter to narrow rows",
+      "activeAria": "Filters ({count} active)",
+      "addAria": "Add filter",
+      "activeLabel": "Filter · {count}",
+      "label": "Filter",
+      "clearAll": "Clear All Filters",
+      "backToColumns": "Back to filter columns",
+      "clearColumn": "Clear This Column",
+      "filterBy": "Filter By",
+      "noValues": "No values"
+    },
+    "sort": {
+      "sortedBy": "Sorted by {count} column",
+      "sortedByPlural": "Sorted by {count} columns",
+      "addAria": "Add sort",
+      "hintSingular": "Sorted by {count} column · shift-click any column header to add another sort",
+      "hintPlural": "Sorted by {count} columns · shift-click any column header to add another sort",
+      "idleHint": "Sort rows · shift-click column headers for multi-sort",
+      "activeLabel": "Sort · {count}",
+      "label": "Sort",
+      "sortByLabel": "Sort By",
+      "noSort": "No sort applied",
+      "addSortLabel": "Add Sort",
+      "clearAll": "Clear All Sorts",
+      "toggleDir": "Toggle {key} direction ({dir})",
+      "removeSort": "Remove sort on {key}"
+    },
+    "viewOptions": "View options",
+    "clearFilter": "Clear filter",
+    "columns": {
+      "hint": "Show / hide / pin / reorder columns",
+      "settingsAria": "Column settings",
+      "resetOrder": "Reset order",
+      "showAll": "Show all columns"
+    },
+    "rowSingular": "row",
+    "rowPlural": "rows",
+    "exportButton": "Export",
+    "importButton": "Import",
+    "clearFilters": "Clear Filters",
+    "filterColumn": "Filter {header}",
+    "empty": {
+      "query": "No rows match \"{query}\"",
+      "queryAndFilter": "No rows match \"{query}\" with the active filter",
+      "queryAndFilters": "No rows match \"{query}\" with the active filters",
+      "filter": "No rows match the active filter",
+      "filters": "No rows match the active filters"
+    },
+    "view": {
+      "hintActive": "View · auto-saved per table; click to reset to defaults",
+      "hintIdle": "Saved view · auto-saved per table",
+      "modified": "View · Modified",
+      "label": "View",
+      "savedView": "Saved View",
+      "defaultAutoSaved": "Default · Auto-Saved",
+      "resetToDefaults": "Reset View To Defaults"
+    },
+    "chips": {
+      "remove": "Remove {header} filter {value}",
+      "clearAll": "Clear all"
     }
   }
 }

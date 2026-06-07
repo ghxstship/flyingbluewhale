@@ -10,6 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Consent = {
   essential: true; // always on
@@ -51,6 +52,7 @@ function writeConsent(c: Consent) {
 }
 
 export function CookieConsent() {
+  const t = useT();
   const [open, setOpen] = React.useState(false);
   const [analytics, setAnalytics] = React.useState(false);
   const [marketing, setMarketing] = React.useState(false);
@@ -78,25 +80,51 @@ export function CookieConsent() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent size="md" hideCloseButton>
         <DialogHeader>
-          <DialogTitle>Cookies & privacy</DialogTitle>
+          <DialogTitle>{t("cookieConsent.title", undefined, "Cookies & privacy")}</DialogTitle>
           <DialogDescription>
-            We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use
-            analytics and marketing cookies to improve the product.
+            {t(
+              "cookieConsent.description",
+              undefined,
+              "We use essential cookies to keep you signed in and protect your account. With your permission, we'd also use analytics and marketing cookies to improve the product.",
+            )}
           </DialogDescription>
         </DialogHeader>
 
         {showDetails && (
           <div className="mt-4 space-y-3 text-xs">
-            <Row label="Essential" required description="Auth, security, rate limiting." />
+            <Row
+              label={t("cookieConsent.essential.label", undefined, "Essential")}
+              required
+              requiredSuffix={t("cookieConsent.essential.alwaysOn", undefined, " · always on")}
+              description={t("cookieConsent.essential.description", undefined, "Auth, security, rate limiting.")}
+            />
             <ToggleRow
-              label="Analytics"
-              description="Aggregate usage stats. We never sell or correlate to identity."
+              label={t("cookieConsent.analytics.label", undefined, "Analytics")}
+              description={t(
+                "cookieConsent.analytics.description",
+                undefined,
+                "Aggregate usage stats. We never sell or correlate to identity.",
+              )}
+              toggleAria={t(
+                "cookieConsent.toggle",
+                { label: t("cookieConsent.analytics.label", undefined, "Analytics") },
+                "Toggle {label}",
+              )}
               checked={analytics}
               onChange={setAnalytics}
             />
             <ToggleRow
-              label="Marketing"
-              description="Conversion tracking for the marketing site. None inside the product."
+              label={t("cookieConsent.marketing.label", undefined, "Marketing")}
+              description={t(
+                "cookieConsent.marketing.description",
+                undefined,
+                "Conversion tracking for the marketing site. None inside the product.",
+              )}
+              toggleAria={t(
+                "cookieConsent.toggle",
+                { label: t("cookieConsent.marketing.label", undefined, "Marketing") },
+                "Toggle {label}",
+              )}
               checked={marketing}
               onChange={setMarketing}
             />
@@ -109,16 +137,22 @@ export function CookieConsent() {
             onClick={() => setShowDetails((v) => !v)}
             className="text-xs text-[var(--p-text-2)] underline-offset-4 hover:underline"
           >
-            {showDetails ? "Hide Details" : "Customize"}
+            {showDetails
+              ? t("cookieConsent.hideDetails", undefined, "Hide Details")
+              : t("cookieConsent.customize", undefined, "Customize")}
           </button>
           <div className="flex gap-2">
             <Button variant="ghost" onClick={() => decide({ analytics: false, marketing: false })}>
-              Reject All
+              {t("cookieConsent.rejectAll", undefined, "Reject All")}
             </Button>
             {showDetails ? (
-              <Button onClick={() => decide({ analytics, marketing })}>Save Preferences</Button>
+              <Button onClick={() => decide({ analytics, marketing })}>
+                {t("cookieConsent.savePreferences", undefined, "Save Preferences")}
+              </Button>
             ) : (
-              <Button onClick={() => decide({ analytics: true, marketing: true })}>Accept All</Button>
+              <Button onClick={() => decide({ analytics: true, marketing: true })}>
+                {t("cookieConsent.acceptAll", undefined, "Accept All")}
+              </Button>
             )}
           </div>
         </DialogFooter>
@@ -127,13 +161,23 @@ export function CookieConsent() {
   );
 }
 
-function Row({ label, required, description }: { label: string; required?: boolean; description: string }) {
+function Row({
+  label,
+  required,
+  requiredSuffix,
+  description,
+}: {
+  label: string;
+  required?: boolean;
+  requiredSuffix?: string;
+  description: string;
+}) {
   return (
     <div className="flex items-start justify-between gap-3">
       <div>
         <div className="font-medium">
           {label}
-          {required && " · always on"}
+          {required && requiredSuffix}
         </div>
         <div className="text-[var(--p-text-2)]">{description}</div>
       </div>
@@ -144,11 +188,13 @@ function Row({ label, required, description }: { label: string; required?: boole
 function ToggleRow({
   label,
   description,
+  toggleAria,
   checked,
   onChange,
 }: {
   label: string;
   description: string;
+  toggleAria: string;
   checked: boolean;
   onChange: (v: boolean) => void;
 }) {
@@ -163,7 +209,7 @@ function ToggleRow({
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(e.currentTarget.checked)}
-          aria-label={`Toggle ${label}`}
+          aria-label={toggleAria}
           className="h-4 w-4"
         />
       </label>

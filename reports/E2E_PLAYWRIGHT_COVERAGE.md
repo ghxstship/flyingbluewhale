@@ -114,6 +114,8 @@ The booking/marketplace families (the bulk of the remaining `Fixture-gap` bucket
 
 The environmental DB prerequisites are captured reproducibly in [`supabase/fixtures/e2e_marketplace_booking_refresh.sql`](../../supabase/fixtures/e2e_marketplace_booking_refresh.sql) so CI / a fresh checkout doesn't depend on one-off edits.
 
+**Capstone verification:** a clean full run of all three specs on a fresh server — `booking-canon` + `booking-canon-extras` + `marketplace-canon-actions` — is now **73 passed / 0 failed (4.9m)**, up from 62/73 before this pass. No fix regressed a previously-passing test.
+
 ### Final tally of the original 55
 
 - **Theme/api (20):** ✅ green + 1 real DB bug fixed.

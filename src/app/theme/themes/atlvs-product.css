@@ -42,12 +42,23 @@
    ========================================================================== */
 [data-ui="saas"],
 [data-theme="atlvs-product"] {
-  /* Type — Space Grotesk UI, Space Mono eyebrow. Brand display (Jost) is
-     reserved for the wordmark only. UPPERCASE retired; Title Case in source. */
+  /* Type — "Industrial Wide" (kit v2, 2026-06-07 revision).
+     - Body & UI: Space Grotesk. Tables, forms, inputs stay on the body face
+       for legibility.
+     - Headings & metrics: Archivo at the EXPANDED width axis (wdth:125).
+       Applied via three coordinated tokens so a heading just sets
+       `font-family: var(--p-heading); font-stretch: var(--p-heading-stretch);
+       font-weight: var(--p-heading-weight); letter-spacing: var(--p-heading-ls);`.
+       The .ps-h / .ps-pagehead / .ps-hero primitives below already bake this in.
+     - Eyebrow / IDs / coordinates: Space Mono.
+     - Wordmark: Jost (crossbar-less A). Reserved for the brand lockup. */
   --p-font:
     var(--font-space-grotesk), "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
     sans-serif;
-  --p-heading: var(--p-font);
+  --p-heading: var(--font-archivo), "Archivo", var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  --p-heading-stretch: 125%;
+  --p-heading-weight: 800;
+  --p-heading-ls: -0.015em;
   --p-mono: var(--font-space-mono), "Space Mono", ui-monospace, "SF Mono", monospace;
   --p-eyebrow: var(--p-mono);
   --p-wordmark: var(--font-jost), "Jost", var(--font-space-grotesk), "Space Grotesk", sans-serif;
@@ -334,7 +345,9 @@
   border-color: var(--p-accent-cta);
 }
 
-/* SaaS headings — Title Case, body family, no UPPERCASE. */
+/* SaaS headings — "Industrial Wide" canon. Archivo at the expanded width
+   axis (wdth:125) at weight 800, slightly tightened letter-spacing. Title
+   Case in source; UPPERCASE is retired. */
 [data-ui="saas"] h1,
 [data-ui="saas"] h2,
 [data-ui="saas"] h3,
@@ -344,9 +357,11 @@
 [data-theme="atlvs-product"] h3,
 [data-theme="atlvs-product"] h4 {
   text-transform: none;
-  letter-spacing: -0.01em;
   font-family: var(--p-heading);
-  font-weight: 700;
+  font-stretch: var(--p-heading-stretch);
+  font-weight: var(--p-heading-weight);
+  letter-spacing: var(--p-heading-ls);
+  line-height: 1.04;
   color: var(--p-text-1);
 }
 
@@ -1187,13 +1202,19 @@
   color: var(--p-text-2);
   font-weight: 500;
 }
+/* A4 · Metrics — Archivo expanded with tabular figures. Numbers lock into
+   columns; dashboards and reports get the kit's full structural register. */
 [data-ui="saas"] .ps-stat .v,
 [data-theme="atlvs-product"] .ps-stat .v {
-  font-size: 28px;
-  font-weight: 700;
+  font-family: var(--p-heading);
+  font-stretch: var(--p-heading-stretch);
+  font-weight: var(--p-heading-weight);
+  font-variant-numeric: tabular-nums;
+  font-size: 30px;
   color: var(--p-text-1);
   margin-top: 6px;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--p-heading-ls);
+  line-height: 1;
 }
 [data-ui="saas"] .ps-stat .d,
 [data-theme="atlvs-product"] .ps-stat .d {
@@ -1392,12 +1413,114 @@
   flex-wrap: wrap;
   align-items: center;
 }
+/* ============================================================================
+   TYPOGRAPHY TREATMENTS — "Industrial Wide" (kit v2)
+   --------------------------------------------------------------------------
+   Three sanctioned header treatments. Don't mix more than one per view.
+     .ps-h        — base display heading (Archivo expanded). Set size with font-size.
+     .ps-pagehead — A2 · everyday header: accent left-bar + live mono kicker + title.
+     .ps-hero     — A3 · hero title; wrap a word in .pop to take the product accent.
+   .ps-stat .v (already above) is A4 · metrics — Archivo expanded + tabular-nums.
+   ========================================================================== */
+
+/* Base display heading — wrap arbitrary text in <span class="ps-h"> or apply
+   to an explicit h-element to inherit the kit's Industrial Wide register. */
 [data-ui="saas"] .ps-h,
 [data-theme="atlvs-product"] .ps-h {
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--p-heading);
+  font-stretch: var(--p-heading-stretch);
+  font-weight: var(--p-heading-weight);
+  letter-spacing: var(--p-heading-ls);
+  line-height: 1.04;
   color: var(--p-text-1);
+  margin: 0;
 }
+
+/* A2 · Everyday page header — accent left-bar + live mono kicker + title.
+   Pair with workspace breadcrumbs and a pulsing live-dot for the canonical
+   app-chrome treatment per design_handoff_atlvs_kit/patterns.html. */
+[data-ui="saas"] .ps-pagehead,
+[data-theme="atlvs-product"] .ps-pagehead {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+[data-ui="saas"] .ps-pagehead .kick,
+[data-theme="atlvs-product"] .ps-pagehead .kick {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-accent-text);
+  margin: 0;
+}
+[data-ui="saas"] .ps-pagehead .kick .ps-livedot,
+[data-theme="atlvs-product"] .ps-pagehead .kick .ps-livedot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--p-accent);
+  flex: none;
+  display: inline-block;
+}
+[data-ui="saas"] .ps-pagehead .t,
+[data-theme="atlvs-product"] .ps-pagehead .t {
+  font-family: var(--p-heading);
+  font-stretch: var(--p-heading-stretch);
+  font-weight: var(--p-heading-weight);
+  letter-spacing: var(--p-heading-ls);
+  line-height: 1.02;
+  color: var(--p-text-1);
+  margin: 0;
+  font-size: 30px;
+  border-left: 5px solid var(--p-accent);
+  padding-left: 15px;
+}
+/* Drop the accent bar (some embedded contexts already provide their own affordance). */
+[data-ui="saas"] .ps-pagehead--plain .t,
+[data-theme="atlvs-product"] .ps-pagehead--plain .t {
+  border-left: 0;
+  padding-left: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  [data-ui="saas"] .ps-pagehead .ps-livedot,
+  [data-theme="atlvs-product"] .ps-pagehead .ps-livedot {
+    animation: ps-livedot 1.6s ease-in-out infinite;
+  }
+  @keyframes ps-livedot {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+  }
+}
+
+/* A3 · Hero title — two-tone accent word via .pop. Headlines self-brand:
+   "Run the <span class="pop">show</span>." pulls product accent into the word
+   under .pop while the rest stays on --p-text-1. */
+[data-ui="saas"] .ps-hero,
+[data-theme="atlvs-product"] .ps-hero {
+  font-family: var(--p-heading);
+  font-stretch: var(--p-heading-stretch);
+  font-weight: var(--p-heading-weight);
+  letter-spacing: var(--p-heading-ls);
+  line-height: 1;
+  color: var(--p-text-1);
+  margin: 0;
+  text-wrap: balance;
+}
+[data-ui="saas"] .ps-hero .pop,
+[data-theme="atlvs-product"] .ps-hero .pop {
+  color: var(--p-accent-text);
+}
+
 [data-ui="saas"] .ps-muted,
 [data-theme="atlvs-product"] .ps-muted {
   color: var(--p-text-2);

@@ -3,13 +3,14 @@ import {
   Inter,
   JetBrains_Mono,
   Space_Grotesk,
-  // ATLVS kit typography. Space Grotesk drives body + headings; Space Mono
-  // drives eyebrows / IDs / coordinates / mono code. Jost is reserved for
-  // the spaced crossbar-less wordmark (components/brand/Wordmark.tsx). The
-  // retired cosmic skin's display faces (Big Shoulders, Silkscreen) are no
-  // longer loaded — the kit is the sole typographic system.
+  // ATLVS kit typography ("Industrial Wide", 2026-06-07 revision).
+  // Archivo at the wdth:125 expanded axis drives headings + metrics; Space
+  // Grotesk drives body + UI; Space Mono drives eyebrows / IDs / coordinates;
+  // Jost is reserved for the spaced crossbar-less wordmark. Big Shoulders +
+  // Silkscreen (the retired cosmic display faces) are no longer loaded.
   Space_Mono,
   Jost,
+  Archivo,
 } from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
@@ -46,6 +47,18 @@ const jost = Jost({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
   variable: "--font-jost",
+  display: "swap",
+});
+// Archivo — kit canon heading face ("Industrial Wide"). Loaded as a variable
+// font with the wdth axis so consumers can request the expanded register via
+// `font-stretch: 125%`. weight=variable + axes=['wdth'] lets us slide both
+// axes from CSS — heading rules pull weight 800 + stretch 125% to land on the
+// kit's heavy expanded register. The body/UI face stays Space Grotesk.
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: "variable",
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -146,7 +159,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       data-theme={ssrTheme}
       data-ui="saas"
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${inter.variable} ${mono.variable} ${spaceGrot.variable} ${spaceMono.variable} ${jost.variable}`}
+      className={`h-full ${inter.variable} ${mono.variable} ${spaceGrot.variable} ${spaceMono.variable} ${jost.variable} ${archivo.variable}`}
       suppressHydrationWarning
     >
       <head>

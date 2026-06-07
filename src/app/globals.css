@@ -31,10 +31,16 @@
   --color-danger: var(--p-danger);
   --color-info: var(--p-info);
 
+  /* font-display points at Archivo so Tailwind `font-display` utility
+     resolves to the kit's Industrial Wide heading face. Per kit canon,
+     Archivo headings are applied with font-stretch:125% + font-weight:800;
+     bare `font-display` gives the font but not the wide register — use
+     the .ps-h / .ps-pagehead / .ps-hero / .hed-* classes (or set the
+     three --p-heading-* axes manually) to get the full kit look. */
   --font-sans: var(--font-space-grotesk);
   --font-mono: var(--font-space-mono);
-  --font-display: var(--font-space-grotesk);
-  --font-subdisplay: var(--font-space-grotesk);
+  --font-display: var(--font-archivo);
+  --font-subdisplay: var(--font-archivo);
   --font-body: var(--font-space-grotesk);
   --font-pixel: var(--font-space-mono);
 
@@ -1040,43 +1046,40 @@ pre,
    *   .hed-xl   → section h2       — 28 → 40 px
    *   .hed-lg   → card / subhead   — 20 → 24 px
    *   .hed-md   → small h4         — 16 px (mini-eyebrow inside cards) */
+  /* Kit "Industrial Wide" canon (v2) — .hed-* render Archivo at the expanded
+     wdth:125 axis at weight 800. Title Case authored in source. Sizes use
+     clamp() so the heading breathes through the breakpoint without `sm:` /
+     `md:` / `lg:` class clouds at the call site. */
   .hed-3xl,
   .hed-2xl,
   .hed-xl,
   .hed-lg,
   .hed-md {
-    /* Kit canon — SaaS skin heading family is the body font (Space Grotesk),
-       NOT a display face. UPPERCASE is retired; copy is authored Title Case
-       in source. font-weight stays at 700 for poster-loud display tier and
-       drops on the smaller tiers via per-tier overrides below. */
     font-family: var(--p-heading, var(--font-body, system-ui, sans-serif));
-    font-weight: 700;
+    font-stretch: var(--p-heading-stretch, 125%);
+    font-weight: var(--p-heading-weight, 800);
+    letter-spacing: var(--p-heading-ls, -0.015em);
     text-wrap: balance;
   }
   .hed-3xl {
     font-size: clamp(3rem, 4.5vw + 1.5rem, 5rem);
-    line-height: 1.02;
-    letter-spacing: -0.01em;
+    line-height: 1;
   }
   .hed-2xl {
     font-size: clamp(2.5rem, 3vw + 1.25rem, 3.75rem);
-    line-height: 1.05;
-    letter-spacing: -0.005em;
+    line-height: 1.02;
   }
   .hed-xl {
     font-size: clamp(1.75rem, 1.5vw + 1rem, 2.5rem);
-    line-height: 1.1;
-    letter-spacing: 0;
+    line-height: 1.05;
   }
   .hed-lg {
     font-size: clamp(1.25rem, 0.5vw + 1rem, 1.5rem);
-    line-height: 1.2;
-    letter-spacing: 0.005em;
+    line-height: 1.15;
   }
   .hed-md {
     font-size: 1rem;
     line-height: 1.25;
-    letter-spacing: 0.02em;
   }
 
   /* `.eyebrow` — canonical mono-uppercase trust label. Replaces the

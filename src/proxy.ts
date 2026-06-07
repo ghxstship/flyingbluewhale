@@ -205,6 +205,12 @@ export async function proxy(request: NextRequest) {
     "docs",
     "directory",
   ]);
+  // Role-OWNED real surfaces: pages that genuinely live at `/m/<role>/<surface>`
+  // (not universal `/m/<surface>` re-exports). Collapsing them would rewrite to a
+  // non-existent `/m/<surface>` and 404 — e.g. `/m/driver/run/[runId]` →
+  // `/m/run/...` and `/m/medic/new` → `/m/new`, neither of which exists. These
+  // must serve from their role-prefixed location, so exclude them from the alias.
+  const ROLE_OWNED_SURFACES = new Set(["run", "new"]);
   const targetPath = rewriteUrl?.pathname ?? pathname;
   const aliasMatch = targetPath.match(MOBILE_ROLE_ALIAS);
   if (aliasMatch) {
@@ -212,7 +218,8 @@ export async function proxy(request: NextRequest) {
     const firstSegment = rest.split("/")[0];
     const isExplicitRolePrefixed = ROLE_PREFIXED_PAGES.has(firstSegment);
     const isRoleChooser = rest === "settings/role";
-    if (!isExplicitRolePrefixed && !isRoleChooser) {
+    const isRoleOwned = ROLE_OWNED_SURFACES.has(firstSegment);
+    if (!isExplicitRolePrefixed && !isRoleChooser && !isRoleOwned) {
       const aliasUrl = rewriteUrl ? new URL(rewriteUrl.toString()) : request.nextUrl.clone();
       aliasUrl.pathname = `/m/${rest}`;
       rewriteUrl = aliasUrl;

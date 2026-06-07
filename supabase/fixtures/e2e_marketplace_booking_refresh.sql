@@ -69,3 +69,10 @@ where not exists (
   select 1 from public.proposals where project_id='f62d1228-dd83-49bf-baa4-b82242bd3056'
     and title='E2E Portal Proposal — Fixture'
 );
+
+-- Accreditation fixture (Professional org) so console-modules-b7's
+-- accreditation-change create can resolve the required accreditation_id FK.
+insert into public.accreditations (org_id, person_name)
+select 'f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7', 'E2E Accreditation Holder'
+where not exists (select 1 from public.accreditations
+  where org_id='f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7' and person_name='E2E Accreditation Holder');

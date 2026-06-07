@@ -16,14 +16,10 @@ test.describe("console modules — create flows (batch 7)", () => {
   test.describe.configure({ timeout: 120000 });
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
-  test.skip("Accreditation · change create — needs a seeded accreditation (accreditation_id is a required FK select)", async ({
-    page,
-  }) => {
-    const s = stamp();
-    await createInModule(page, "/console/accreditation/changes/new", {
-      code: `ACR-${s.slice(-5)}`,
-      title: `E2E Accred Change ${s}`,
-    });
+  test("Accreditation · change create", async ({ page }) => {
+    // accreditation_id is a required FK select; a fixture accreditation is seeded
+    // in the Professional org so the helper resolves the first option.
+    await createInModule(page, "/console/accreditation/changes/new", { note: `E2E Accred Change ${stamp()}` });
   });
 
   test("BIM · model create", async ({ page }) => {
@@ -38,16 +34,29 @@ test.describe("console modules — create flows (batch 7)", () => {
     await createInModule(page, "/console/finance/lien-waivers/new", { name: `E2E Lien Waiver ${stamp()}` });
   });
 
-  test.skip("Finance · payroll run create — pay_period_start/end must differ; the generic helper fills equal dates", async ({
-    page,
-  }) => {
-    await createInModule(page, "/console/finance/payroll/new", { name: `E2E Payroll ${stamp()}` });
+  test("Finance · payroll run create", async ({ page }) => {
+    // pay_period_start/end must differ + week_ending within range (generic helper
+    // would fill them all equal), so pass explicit distinct dates.
+    await createInModule(page, "/console/finance/payroll/new", {
+      pay_period_start: "2026-05-01",
+      pay_period_end: "2026-05-15",
+      week_ending: "2026-05-15",
+    });
   });
 
-  test.skip("Operations · daily log create — needs a seeded project (project_id required FK select)", async ({
-    page,
-  }) => {
-    await createInModule(page, "/console/operations/daily-log/new", { notes: `E2E Daily Log ${stamp()}` });
+  // Skipped: the required project_id <select> renders 0 options in the test org
+  // even though it has 4 projects — the daily-log page applies a project filter
+  // (state/eligibility) the seed projects don't satisfy, so there's no project to
+  // pick. (log_date also needs a unique past value — daily_logs is UNIQUE on
+  // org_id+project_id+log_date — handled, but moot without a project.) Needs a
+  // fixture project that matches the daily-log eligibility filter.
+  test.skip("Operations · daily log create", async ({ page }) => {
+    const d = new Date(2000, 0, 1);
+    d.setDate(d.getDate() + (Date.now() % 8000));
+    await createInModule(page, "/console/operations/daily-log/new", {
+      log_date: d.toISOString().slice(0, 10),
+      notes: `E2E Daily Log ${stamp()}`,
+    });
   });
 
   test("Operations · incident create", async ({ page }) => {

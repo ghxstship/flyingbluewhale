@@ -57,3 +57,15 @@ where talent_offer_id = 'ffffffff-0001-4001-8001-000000000001';
 -- rows for one deal; the settlement detail page reads `.maybeSingle()` and goes
 -- blank once duplicates exist. A `unique (talent_offer_id)` + an ON CONFLICT
 -- upsert in the action would make this self-healing. Tracked separately.
+
+-- Portal client-proposal lifecycle fixture: a proposal in test-professional-show
+-- so the client fixture user can reach /p/<slug>/client/proposals/[id]/* (the
+-- portal-proposal-lifecycle.spec render coverage). Idempotent on the fixed id.
+insert into public.proposals (id, org_id, project_id, title, amount_cents)
+select 'd56a3e7f-0f30-4cb0-b1e0-57ff7ae727b5'::uuid,
+       'f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7', 'f62d1228-dd83-49bf-baa4-b82242bd3056',
+       'E2E Portal Proposal — Fixture', 5000000
+where not exists (
+  select 1 from public.proposals where project_id='f62d1228-dd83-49bf-baa4-b82242bd3056'
+    and title='E2E Portal Proposal — Fixture'
+);

@@ -62,7 +62,7 @@ where talent_offer_id = 'ffffffff-0001-4001-8001-000000000001';
 -- so the client fixture user can reach /p/<slug>/client/proposals/[id]/* (the
 -- portal-proposal-lifecycle.spec render coverage). Idempotent on the fixed id.
 insert into public.proposals (id, org_id, project_id, title, amount_cents)
-select 'd56a3e7f-0f30-4cb0-b1e0-57ff7ae727b5'::uuid,
+select '3e7fbd4f-0f30-4cb0-b1e0-57ff7ae727b5'::uuid,  -- matches portal-proposal-lifecycle.spec PROPOSAL_ID
        'f4509a5f-6bcd-4a75-a6e8-01bfcc4ce5a7', 'f62d1228-dd83-49bf-baa4-b82242bd3056',
        'E2E Portal Proposal — Fixture', 5000000
 where not exists (

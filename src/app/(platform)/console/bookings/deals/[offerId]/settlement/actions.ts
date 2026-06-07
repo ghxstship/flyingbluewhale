@@ -77,25 +77,15 @@ export async function upsertSettlementAction(_: State, fd: FormData): Promise<St
     deposit_received_cents: toCents(parsed.data.deposit_received),
   };
 
-  // Upsert by talent_offer_id — one settlement per deal.
-  const existing = await supabase
-    .from("settlements")
-    .select("id")
-    .eq("talent_offer_id", parsed.data.offer_id)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
-
-  if (existing.data) {
-    const { error } = await supabase
-      .from("settlements")
-      .update(payload)
-      .eq("id", (existing.data as { id: string }).id)
-      .eq("org_id", session.orgId);
-    if (error) return { error: error.message };
-  } else {
-    const { error } = await supabase.from("settlements").insert({ ...payload, status: "draft" });
-    if (error) return { error: error.message };
-  }
+  // Upsert by talent_offer_id — one settlement per deal. onConflict resolves
+  // against the settlements_talent_offer_id_key UNIQUE constraint (migration
+  // 20260606150000), so concurrent saves collapse onto one row instead of
+  // accumulating duplicates (which then blanked the detail page's .maybeSingle()
+  // read). `status` is intentionally omitted: new rows take the DB default
+  // 'draft', and existing rows keep their state — a re-save must not un-finalize
+  // a settled deal.
+  const { error } = await supabase.from("settlements").upsert(payload, { onConflict: "talent_offer_id" });
+  if (error) return { error: error.message };
 
   revalidatePath(`/console/bookings/deals/${parsed.data.offer_id}/settlement`);
   revalidatePath("/console/bookings/settlements");

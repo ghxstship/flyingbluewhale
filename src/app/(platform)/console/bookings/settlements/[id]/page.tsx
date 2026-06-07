@@ -113,19 +113,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-3xl space-y-5">
         <section className="grid grid-cols-1 gap-3 md:grid-cols-3">
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">
+            <div className="text-label text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.gbor", undefined, "GBOR")}
             </div>
             <div className="font-mono text-lg">{formatMoney(s.gross_box_office_cents)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">
+            <div className="text-label text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.nbor", undefined, "NBOR")}
             </div>
             <div className="font-mono text-lg">{formatMoney(s.nbor_cents)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-label text-[var(--text-muted)]">
+            <div className="text-label text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.balanceDue", undefined, "Balance Due")}
             </div>
             <div className="font-mono text-lg">{formatMoney(s.balance_due_cents)}</div>
@@ -137,27 +137,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.bookings.settlements.detail.revenue", undefined, "Revenue")}
           </h2>
           <dl className="grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.paidAttendance", undefined, "Paid attendance")}
             </dt>
             <dd className="font-mono">{s.paid_attendance}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.comps", undefined, "Comps")}
             </dt>
             <dd className="font-mono">{s.comp_count}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.walkouts", undefined, "Walkouts")}
             </dt>
             <dd className="font-mono">{s.walkout_count}</dd>
-            <dt className="text-[var(--text-secondary)]">
-              {t("console.bookings.settlements.detail.bar", undefined, "Bar")}
-            </dt>
+            <dt className="text-[var(--p-text-2)]">{t("console.bookings.settlements.detail.bar", undefined, "Bar")}</dt>
             <dd className="font-mono">{formatMoney(s.bar_revenue_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.merch", undefined, "Merch")}
             </dt>
             <dd className="font-mono">{formatMoney(s.merch_revenue_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.other", undefined, "Other")}
             </dt>
             <dd className="font-mono">{formatMoney(s.other_revenue_cents)}</dd>
@@ -169,15 +167,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.bookings.settlements.detail.deductions", undefined, "Deductions")}
           </h2>
           <dl className="grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.salesTax", undefined, "Sales tax")}
             </dt>
             <dd className="font-mono">{formatMoney(s.sales_tax_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.amusementTax", undefined, "Amusement tax")}
             </dt>
             <dd className="font-mono">{formatMoney(s.amusement_tax_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.ccFees", undefined, "CC fees")}
             </dt>
             <dd className="font-mono">{formatMoney(s.cc_fee_cents)}</dd>
@@ -189,19 +187,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.bookings.settlements.detail.splits", undefined, "Splits")}
           </h2>
           <dl className="grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.artistPayout", undefined, "Artist payout")}
             </dt>
             <dd className="font-mono">{formatMoney(s.artist_payout_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.agentCommission", undefined, "Agent commission")}
             </dt>
             <dd className="font-mono">{formatMoney(s.agent_commission_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.supportAct", undefined, "Support act")}
             </dt>
             <dd className="font-mono">{formatMoney(s.support_act_payout_cents)}</dd>
-            <dt className="text-[var(--text-secondary)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.bookings.settlements.detail.depositReceived", undefined, "Deposit received")}
             </dt>
             <dd className="font-mono">{formatMoney(s.deposit_received_cents)}</dd>
@@ -213,7 +211,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <h2 className="text-sm font-semibold tracking-wide uppercase">
               {t("console.bookings.settlements.detail.lineItems", undefined, "Line Items")}
             </h2>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {lines.length === 1
                 ? t(
                     "console.bookings.settlements.detail.lineSummary.one",
@@ -228,7 +226,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           </div>
           {lines.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.bookings.settlements.detail.noLines",
                 undefined,
@@ -236,7 +234,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </p>
           ) : (
-            <table className="data-table mt-3 w-full">
+            <table className="ps-table mt-3 w-full">
               <thead>
                 <tr>
                   <th className="text-start">{t("console.bookings.settlements.detail.col.kind", undefined, "Kind")}</th>
@@ -283,7 +281,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               className="surface-inset mt-4 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-6"
             >
               <input type="hidden" name="settlementId" value={s.id} />
-              <select name="kind" required defaultValue="expense" className="input-base sm:col-span-1">
+              <select name="kind" required defaultValue="expense" className="ps-input sm:col-span-1">
                 <option value="revenue">
                   {t("console.bookings.settlements.detail.kind.revenue", undefined, "Revenue")}
                 </option>
@@ -301,13 +299,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 name="category"
                 placeholder={t("console.bookings.settlements.detail.placeholder.category", undefined, "Category")}
                 maxLength={80}
-                className="input-base sm:col-span-1"
+                className="ps-input sm:col-span-1"
               />
               <input
                 name="description"
                 placeholder={t("console.bookings.settlements.detail.placeholder.description", undefined, "Description")}
                 maxLength={240}
-                className="input-base sm:col-span-2"
+                className="ps-input sm:col-span-2"
               />
               <input
                 name="amount_dollars"
@@ -315,7 +313,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 step="0.01"
                 required
                 placeholder="0.00"
-                className="input-base sm:col-span-1"
+                className="ps-input sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
                 {t("console.bookings.settlements.detail.addLine", undefined, "Add Line")}
@@ -323,7 +321,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </form>
           )}
           {!editable && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.bookings.settlements.detail.finalizedLocked",
                 undefined,

@@ -57,7 +57,7 @@ function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: strin
     <FormShell action={bound} submitLabel={t("console.people.teams.addMember.submit", undefined, "Add Member")}>
       <label className="block text-xs font-medium">
         <span className="mb-1 block">{t("console.people.teams.addMember.memberLabel", undefined, "Member")}</span>
-        <select name="user_id" className="input-base focus-ring w-full" required defaultValue="">
+        <select name="user_id" className="ps-input focus-ring w-full" required defaultValue="">
           <option value="" disabled>
             {t("console.people.teams.addMember.selectPlaceholder", undefined, "Select an org member…")}
           </option>
@@ -70,7 +70,7 @@ function AddMember({ teamId, eligible }: { teamId: string; eligible: { id: strin
       </label>
       <label className="block text-xs font-medium">
         <span className="mb-1 block">{t("console.people.teams.addMember.teamRoleLabel", undefined, "Team role")}</span>
-        <select name="role" className="input-base focus-ring w-full" defaultValue="member">
+        <select name="role" className="ps-input focus-ring w-full" defaultValue="member">
           <option value="member">{t("console.people.teams.roles.member", undefined, "Member")}</option>
           <option value="admin">
             {t("console.people.teams.addMember.adminOption", undefined, "Admin — Can Manage This Team's Members")}
@@ -99,7 +99,7 @@ function UpdateMemberRole({
       <select
         name="role"
         defaultValue={defaultRole}
-        className="input-base focus-ring text-xs"
+        className="ps-input focus-ring text-xs"
         disabled={pending}
         onChange={(e) => e.currentTarget.form?.requestSubmit()}
       >
@@ -107,7 +107,7 @@ function UpdateMemberRole({
         <option value="admin">{t("console.people.teams.roles.admin", undefined, "Admin")}</option>
       </select>
       {state?.error && (
-        <span role="alert" className="text-[10px] text-[var(--color-error)]">
+        <span role="alert" className="text-[10px] text-[var(--p-danger)]">
           {state.error}
         </span>
       )}

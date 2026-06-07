@@ -39,22 +39,22 @@ export default async function TierDetail({ params }: { params: Promise<{ tier: s
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-12">
-          <nav className="mb-6 text-xs text-[var(--text-muted)]">
-            <Link href={paths.tiersRoot()} className="hover:text-[var(--text-primary)]">
+          <nav className="mb-6 text-xs text-[var(--p-text-2)]">
+            <Link href={paths.tiersRoot()} className="hover:text-[var(--p-text-1)]">
               Experience Modes
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-[var(--text-primary)]">{t.name}</span>
+            <span className="text-[var(--p-text-1)]">{t.name}</span>
           </nav>
           <h1 className="text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
             {t.name}
           </h1>
-          <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{t.definition}</p>
+          <p className="mt-6 max-w-3xl text-lg text-[var(--p-text-2)]">{t.definition}</p>
         </section>
 
         {services.length > 0 ? (
           <section className="mx-auto max-w-6xl px-6">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               {services.length} services anchor this experience mode
             </div>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -66,12 +66,12 @@ export default async function TierDetail({ params }: { params: Promise<{ tier: s
                       href={paths.serviceDetail(c.slug, s.slug)}
                       className="surface hover-lift flex h-full items-start gap-3 p-4"
                     >
-                      <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)]">
+                      <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)]">
                         {String(s.number).padStart(3, "0")}
                       </span>
                       <div>
                         <div className="text-sm">{s.name}</div>
-                        <div className="text-[10px] text-[var(--text-muted)] uppercase">{c.shortName}</div>
+                        <div className="text-[10px] text-[var(--p-text-2)] uppercase">{c.shortName}</div>
                       </div>
                     </Link>
                   </li>
@@ -81,10 +81,10 @@ export default async function TierDetail({ params }: { params: Promise<{ tier: s
           </section>
         ) : (
           <section className="mx-auto max-w-6xl px-6">
-            <div className="surface p-6 text-sm text-[var(--text-secondary)]">
-              <strong className="text-[var(--text-primary)]">Cross-cutting mode.</strong> Physical experiences anchor
-              the majority of services in the catalog — they&apos;re the default for in-person work. Browse the{" "}
-              <Link href={paths.servicesRoot()} className="underline hover:text-[var(--org-primary)]">
+            <div className="surface p-6 text-sm text-[var(--p-text-2)]">
+              <strong className="text-[var(--p-text-1)]">Cross-cutting mode.</strong> Physical experiences anchor the
+              majority of services in the catalog — they&apos;re the default for in-person work. Browse the{" "}
+              <Link href={paths.servicesRoot()} className="underline hover:text-[var(--p-accent)]">
                 full services catalog
               </Link>{" "}
               for the comprehensive view.

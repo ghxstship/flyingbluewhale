@@ -51,7 +51,7 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
             <Badge variant="default" className="text-base">
               {sub.state}
             </Badge>
-            <span className="text-sm text-[var(--text-secondary)]">
+            <span className="text-sm text-[var(--p-text-2)]">
               {t("console.subscriptions.detail.allowedNext", undefined, "Allowed next:")}{" "}
               {allowedNext.length === 0 ? "—" : allowedNext.join(", ")}
             </span>
@@ -105,18 +105,18 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
             )}
           </h2>
           {transitions.length === 0 ? (
-            <p className="text-sm text-[var(--text-secondary)]">
+            <p className="text-sm text-[var(--p-text-2)]">
               {t("console.subscriptions.detail.noTransitions", undefined, "No transitions logged yet.")}
             </p>
           ) : (
             <ul className="space-y-2 text-sm">
               {transitions.slice(0, 8).map((row) => (
-                <li key={row.id} className="border-b border-[var(--border-color)] pb-2 last:border-0">
+                <li key={row.id} className="border-b border-[var(--p-border)] pb-2 last:border-0">
                   <span className="font-mono text-xs">
                     {row.from_state ?? t("console.subscriptions.detail.initialState", undefined, "(initial)")} →{" "}
                     <strong>{row.to_state}</strong>
                   </span>{" "}
-                  · <span className="text-[var(--text-secondary)]">{timeAgo(row.transitioned_at)}</span>
+                  · <span className="text-[var(--p-text-2)]">{timeAgo(row.transitioned_at)}</span>
                   {row.reason ? <span className="ms-2">{row.reason}</span> : null}
                   {row.stripe_event_id ? (
                     <span className="ms-2 font-mono text-xs">[stripe:{row.stripe_event_id}]</span>
@@ -134,7 +134,7 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs tracking-wide text-[var(--text-secondary)] uppercase">{label}</dt>
+      <dt className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">{label}</dt>
       <dd className="font-mono text-xs">{value}</dd>
     </div>
   );

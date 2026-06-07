@@ -53,7 +53,7 @@ export default async function ClassesPage() {
               <div style={{ height: 4, background: c.accent }} />
               <CardHeader title={`${c.code}000 · ${c.name}`} subtitle={c.oneLine} />
               <CardBody>
-                <div className="mb-3 text-xs text-[var(--text-muted)]">{c.domain}</div>
+                <div className="mb-3 text-xs text-[var(--p-text-2)]">{c.domain}</div>
                 <div className="flex gap-4 font-mono text-xs">
                   <span>
                     {t("console.xpms.classes.uac", undefined, "UAC")} <strong>{ct.uac}</strong>
@@ -66,7 +66,7 @@ export default async function ClassesPage() {
                   </span>
                 </div>
                 <div className="mt-3 text-xs">
-                  <Link href={`/console/xpms/codebook#class-${c.code}`} className="text-[var(--org-primary)]">
+                  <Link href={`/console/xpms/codebook#class-${c.code}`} className="text-[var(--p-accent)]">
                     {t("console.xpms.classes.viewCodebookSection", undefined, "View codebook section →")}
                   </Link>
                 </div>

@@ -23,7 +23,7 @@ export default async function NotificationsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -55,11 +55,11 @@ export default async function NotificationsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.notifications.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.notifications.title", undefined, "Notifications")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.notifications.allCaughtUp", undefined, "All caught up.")
           : t(
@@ -68,7 +68,7 @@ export default async function NotificationsPage() {
               `${unread} unread of ${rows.length} recent`,
             )}
         {" · "}
-        <Link href="/me/notifications" className="text-[var(--org-primary)]">
+        <Link href="/me/notifications" className="text-[var(--p-accent)]">
           {t("m.notifications.settingsLink", undefined, "settings")}
         </Link>
       </p>
@@ -92,18 +92,18 @@ export default async function NotificationsPage() {
               <div className={`surface flex items-start gap-3 p-4 ${n.read_at ? "opacity-70" : ""}`}>
                 <div className="mt-1 flex-none">
                   <span
-                    className={`block h-2 w-2 rounded-full ${n.read_at ? "bg-[var(--text-muted)]" : "bg-[var(--org-primary)]"}`}
+                    className={`block h-2 w-2 rounded-full ${n.read_at ? "bg-[var(--p-text-2)]" : "bg-[var(--p-accent)]"}`}
                     aria-hidden
                   />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-sm leading-snug font-medium">{n.title}</div>
-                    <span className="flex-none font-mono text-xs text-[var(--text-muted)]">
+                    <span className="flex-none font-mono text-xs text-[var(--p-text-2)]">
                       {relativeTime(n.created_at)}
                     </span>
                   </div>
-                  {n.body && <p className="mt-1 text-xs text-[var(--text-secondary)]">{n.body}</p>}
+                  {n.body && <p className="mt-1 text-xs text-[var(--p-text-2)]">{n.body}</p>}
                   <div className="mt-2">
                     <Badge variant="muted">{toTitle(n.kind)}</Badge>
                   </div>

@@ -20,7 +20,7 @@ export default async function SurveyPage({ params }: { params: Promise<{ surveyI
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -48,7 +48,7 @@ export default async function SurveyPage({ params }: { params: Promise<{ surveyI
     <div className="px-4 pt-6 pb-24">
       <h1 className="text-xl font-semibold">{(survey as { title: string }).title}</h1>
       {(survey as { description: string | null }).description && (
-        <p className="mt-1 text-xs text-[var(--text-secondary)]">{(survey as { description: string }).description}</p>
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">{(survey as { description: string }).description}</p>
       )}
 
       <form action={submitSurvey} className="mt-5 space-y-4">
@@ -94,13 +94,13 @@ export default async function SurveyPage({ params }: { params: Promise<{ surveyI
                   name={`q_${q.id}`}
                   rows={3}
                   required={q.required}
-                  className="mt-2 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-xs"
+                  className="mt-2 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-xs"
                 />
               )}
             </fieldset>
           );
         })}
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="ps-btn w-full">
           {t("common.submit", undefined, "Submit")}
         </button>
       </form>

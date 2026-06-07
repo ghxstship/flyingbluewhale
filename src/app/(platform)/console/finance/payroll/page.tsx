@@ -131,7 +131,7 @@ export default async function Page() {
             value={fmtMoney(totalGross)}
           />
         </div>
-        <div className="text-[10px] text-[var(--text-muted)]">
+        <div className="text-[10px] text-[var(--p-text-2)]">
           {t(
             "console.finance.payroll.compliance",
             undefined,

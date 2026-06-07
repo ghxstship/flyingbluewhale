@@ -21,7 +21,7 @@ export function MapView({ pins }: { pins: MapPin[] }) {
   const t = useT();
   if (pins.length === 0) {
     return (
-      <div className="surface p-6 text-sm text-[var(--text-muted)]">
+      <div className="surface p-6 text-sm text-[var(--p-text-2)]">
         {t("console.projects.schedule.map.emptyPrefix", undefined, "No Events Carry A Location Yet. Set ")}
         <strong>location_id</strong>
         {t("console.projects.schedule.map.emptySuffix", undefined, " on an event to map it.")}
@@ -40,16 +40,16 @@ export function MapView({ pins }: { pins: MapPin[] }) {
       {Array.from(byLocation.entries()).map(([loc, items]) => (
         <div key={loc} className="surface rounded-md p-4">
           <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
-            <MapPin size={14} className="text-[var(--org-primary)]" aria-hidden />
+            <MapPin size={14} className="text-[var(--p-accent)]" aria-hidden />
             {loc}
-            <span className="ms-auto font-mono text-[10px] text-[var(--text-muted)]">{items.length}</span>
+            <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">{items.length}</span>
           </div>
           <ul className="space-y-1.5">
             {items.map((it) => (
               <li key={it.id}>
                 <Link href={`/console/events/${it.id}`} className="block text-xs hover:underline">
                   <span className="font-medium">{it.name}</span>{" "}
-                  <span className="font-mono text-[10px] text-[var(--text-muted)]">{it.when}</span>
+                  <span className="font-mono text-[10px] text-[var(--p-text-2)]">{it.when}</span>
                 </Link>
               </li>
             ))}

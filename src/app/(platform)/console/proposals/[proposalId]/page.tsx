@@ -55,13 +55,13 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
         ]}
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/proposals/${proposal.id}/edit`} className="btn btn-secondary btn-sm">
+            <Link href={`/console/proposals/${proposal.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("console.proposals.detail.editDocument", undefined, "Edit Document")}
             </Link>
             <ProposalStatusControls id={proposal.id} status={proposal.status} />
             {proposal.status === "signed" && !project && <ProposalConvertButton id={proposal.id} />}
             {project && (
-              <Link href={`/console/projects/${project.id}`} className="btn btn-primary btn-sm">
+              <Link href={`/console/projects/${project.id}`} className="ps-btn ps-btn--sm">
                 {t("console.proposals.detail.viewProject", undefined, "View Project")}
               </Link>
             )}
@@ -86,7 +86,7 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
         {proposal.notes && (
           <div className="surface p-5">
             <h3 className="text-base font-semibold">{t("console.proposals.detail.scope", undefined, "Scope")}</h3>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{proposal.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{proposal.notes}</p>
           </div>
         )}
       </div>
@@ -97,7 +97,7 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">{label}</div>
       <div className="mt-1 text-sm">{children}</div>
     </div>
   );

@@ -30,15 +30,15 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
         <button
           type="button"
           aria-label={t("avatarMenu.openAriaLabel", undefined, "Open account menu")}
-          className="rounded-full ring-offset-2 ring-offset-[var(--background)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)]"
+          className="rounded-full ring-offset-2 ring-offset-[var(--p-bg)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-accent)]"
         >
           <Avatar name={name} src={src} size="sm" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel className="px-2 py-1.5">
-          <div className="text-sm font-medium text-[var(--text-primary)]">{name}</div>
-          {email ? <div className="truncate text-xs text-[var(--text-muted)]">{email}</div> : null}
+          <div className="text-sm font-medium text-[var(--p-text-1)]">{name}</div>
+          {email ? <div className="truncate text-xs text-[var(--p-text-2)]">{email}</div> : null}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
@@ -69,7 +69,7 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
         >
           <Keyboard size={14} aria-hidden="true" />
           {t("avatarMenu.keyboardShortcuts", undefined, "Keyboard shortcuts")}
-          <kbd className="ms-auto font-mono text-[10px] text-[var(--text-muted)]">?</kbd>
+          <kbd className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">?</kbd>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/help" className="flex items-center gap-2">

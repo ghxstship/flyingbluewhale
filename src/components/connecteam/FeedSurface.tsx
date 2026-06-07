@@ -52,7 +52,7 @@ export async function FeedSurface({
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -89,9 +89,9 @@ export async function FeedSurface({
         table="announcements"
         filter={`org_id=eq.${session.orgId}`}
       />
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.feed.noUpdatesYet", undefined, "No updates yet.")
           : t("m.feed.unreadOfTotal", { unread, total: rows.length }, `${unread} unread of ${rows.length}`)}
@@ -116,17 +116,17 @@ export async function FeedSurface({
                     {a.pinned && <Badge variant="warning">{t("m.feed.pinned", undefined, "Pinned")}</Badge>}
                     <Badge variant="muted">{toTitle(a.audience)}</Badge>
                   </div>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {a.published_at ? fmt.date(a.published_at) : ""}
                   </span>
                 </div>
                 <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
-                <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{a.body}</p>
+                <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{a.body}</p>
                 {!read && (
                   <form action={markAnnouncementRead} className="mt-3 flex justify-end">
                     <input type="hidden" name="announcementId" value={a.id} />
                     <input type="hidden" name="revalidate" value={revalidate} />
-                    <button type="submit" className="btn btn-secondary btn-sm">
+                    <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                       {t("m.feed.markRead", undefined, "Mark Read")}
                     </button>
                   </form>

@@ -36,10 +36,10 @@ export default async function Page() {
             )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.talent.new.bio", undefined, "Bio")}
             </label>
-            <textarea name="bio" rows={6} maxLength={8000} className="input-base mt-1.5 w-full" />
+            <textarea name="bio" rows={6} maxLength={8000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.marketplace.talent.new.genreTags", undefined, "Genre Tags — Comma-separated")}

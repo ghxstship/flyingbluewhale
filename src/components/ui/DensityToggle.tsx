@@ -36,7 +36,7 @@ export function DensityToggle() {
   ];
   return (
     <div
-      className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5"
+      className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5"
       role="radiogroup"
       aria-label={t("ui.density.label", undefined, "Density")}
     >
@@ -50,8 +50,8 @@ export function DensityToggle() {
           onClick={() => setDensity(m.key)}
           className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
             density === m.key
-              ? "bg-[var(--background)] text-[var(--foreground)]"
-              : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
+              ? "bg-[var(--p-bg)] text-[var(--p-text-1)]"
+              : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           }`}
         >
           {m.label}

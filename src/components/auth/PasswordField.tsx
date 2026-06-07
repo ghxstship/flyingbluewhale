@@ -38,10 +38,10 @@ export function PasswordField({
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label htmlFor={id} className="text-xs font-medium text-[var(--text-secondary)]">
+        <label htmlFor={id} className="text-xs font-medium text-[var(--p-text-2)]">
           {label}
           {required && (
-            <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+            <span aria-hidden="true" className="ms-0.5 text-[var(--p-danger)]">
               *
             </span>
           )}
@@ -56,7 +56,7 @@ export function PasswordField({
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           aria-required={required || undefined}
-          className={`input-base focus-ring w-full pe-9 ${error ? "border-[var(--color-error)]" : ""} ${className}`}
+          className={`ps-input focus-ring w-full pe-9 ${error ? "border-[var(--p-danger)]" : ""} ${className}`}
           onChange={(e) => {
             setValue(e.currentTarget.value);
             onChange?.(e);
@@ -68,7 +68,7 @@ export function PasswordField({
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? "Hide password" : "Show password"}
           aria-pressed={visible}
-          className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-1 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+          className="absolute end-2 top-1/2 -translate-y-1/2 rounded p-1 text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           tabIndex={-1}
         >
           {visible ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -83,27 +83,27 @@ export function PasswordField({
                 className={`h-1 flex-1 rounded-full ${
                   i < score
                     ? score <= 1
-                      ? "bg-[var(--color-error)]"
+                      ? "bg-[var(--p-danger)]"
                       : score <= 2
-                        ? "bg-[var(--color-warning)]"
+                        ? "bg-[var(--p-warning)]"
                         : score <= 3
-                          ? "bg-[var(--color-warning)]"
-                          : "bg-[var(--color-success)]"
-                    : "bg-[var(--border-color)]"
+                          ? "bg-[var(--p-warning)]"
+                          : "bg-[var(--p-success)]"
+                    : "bg-[var(--p-border)]"
                 }`}
               />
             ))}
           </div>
-          <div className="text-[10px] text-[var(--text-muted)]">{labelForScore(score)}</div>
+          <div className="text-[10px] text-[var(--p-text-2)]">{labelForScore(score)}</div>
         </div>
       )}
       {error && (
-        <span id={errorId} role="alert" className="text-xs text-[var(--color-error)]">
+        <span id={errorId} role="alert" className="text-xs text-[var(--p-danger)]">
           {error}
         </span>
       )}
       {!error && hint && (
-        <span id={hintId} className="text-xs text-[var(--text-muted)]">
+        <span id={hintId} className="text-xs text-[var(--p-text-2)]">
           {hint}
         </span>
       )}

@@ -55,10 +55,10 @@ export function RouteTabs({
             // Match the underline-tab styling used by the Radix Tabs primitive
             // ([Tabs.tsx:35]) so the shell looks consistent regardless of
             // whether a page wires URL-state tabs or route-state tabs.
-            className={`relative inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)] ${
+            className={`relative inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)] ${
               isActive
-                ? "border-[var(--org-primary)] font-medium text-[var(--text-primary)]"
-                : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                ? "border-[var(--p-accent)] font-medium text-[var(--p-text-1)]"
+                : "border-transparent text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             }`}
           >
             {t.label}

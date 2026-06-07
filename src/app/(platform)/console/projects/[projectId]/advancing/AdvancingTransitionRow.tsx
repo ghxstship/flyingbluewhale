@@ -84,7 +84,7 @@ export function AdvancingTransitionRow({ id, status, fulfilled }: { id: string; 
 
   const buttons = (NEXT_BUTTONS[status] ?? []).filter((b) => !(b.to === "fulfilled" && fulfilled));
   if (buttons.length === 0) {
-    return <span className="text-xs text-[var(--text-muted)]">—</span>;
+    return <span className="text-xs text-[var(--p-text-2)]">—</span>;
   }
 
   async function transition(to: string) {
@@ -122,8 +122,8 @@ export function AdvancingTransitionRow({ id, status, fulfilled }: { id: string; 
           onClick={() => void transition(b.to)}
           className={`rounded px-2 py-0.5 text-[11px] font-medium transition-colors disabled:opacity-50 ${
             b.variant === "danger"
-              ? "text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/10"
-              : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+              ? "text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/10"
+              : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
           }`}
         >
           {pending === b.to ? "…" : t(b.labelKey, undefined, b.labelFallback)}

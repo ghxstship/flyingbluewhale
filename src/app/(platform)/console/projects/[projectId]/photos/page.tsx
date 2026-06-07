@@ -57,12 +57,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {rows.map((r) => (
               <div key={r.id} className="surface overflow-hidden">
-                <div className="aspect-video bg-[var(--surface-inset)]" aria-hidden="true" />
+                <div className="aspect-video bg-[var(--p-surface-2)]" aria-hidden="true" />
                 <div className="space-y-1 p-3">
                   <div className="text-xs font-medium">
                     {r.caption ?? t("console.projects.photos.untitled", undefined, "Untitled")}
                   </div>
-                  <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                  <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                     {r.album ? `${r.album} · ` : ""}
                     {formatDate(r.taken_at)}
                   </div>

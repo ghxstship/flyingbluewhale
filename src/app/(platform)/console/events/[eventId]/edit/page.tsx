@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.events.edit.description", undefined, "Description")}
             </span>
             <textarea
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
               defaultValue={row.description ?? ""}
               rows={4}
               maxLength={4000}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input
@@ -71,10 +71,10 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
             required
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.events.edit.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
               <option value="draft">{t("console.events.edit.statusDraft", undefined, "draft")}</option>
               <option value="scheduled">{t("console.events.edit.statusScheduled", undefined, "scheduled")}</option>
               <option value="live">{t("console.events.edit.statusLive", undefined, "live")}</option>

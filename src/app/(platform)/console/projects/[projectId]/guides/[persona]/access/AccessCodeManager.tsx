@@ -52,7 +52,7 @@ export function AccessCodeManager({
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="sm:col-span-3">
-            <label className="text-xs text-[var(--text-muted)]">
+            <label className="text-xs text-[var(--p-text-2)]">
               {t("console.projects.guides.access.labelField", undefined, "Label")}
             </label>
             <Input
@@ -65,7 +65,7 @@ export function AccessCodeManager({
             />
           </div>
           <div>
-            <label className="text-xs text-[var(--text-muted)]">
+            <label className="text-xs text-[var(--p-text-2)]">
               {t("console.projects.guides.access.expiresField", undefined, "Expires in — Days")}
             </label>
             <Input
@@ -77,7 +77,7 @@ export function AccessCodeManager({
             />
           </div>
           <div>
-            <label className="text-xs text-[var(--text-muted)]">
+            <label className="text-xs text-[var(--p-text-2)]">
               {t("console.projects.guides.access.maxUsesField", undefined, "Max uses")}
             </label>
             <Input
@@ -97,15 +97,15 @@ export function AccessCodeManager({
           </div>
         </div>
         {state && "error" in state && state.error && (
-          <div className="text-sm text-[var(--color-error)]">{state.error}</div>
+          <div className="text-sm text-[var(--p-danger)]">{state.error}</div>
         )}
         {state && "ok" in state && state.ok && (
-          <div className="surface-raised space-y-2 border border-[var(--org-primary)]/40 p-4">
-            <div className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+          <div className="surface-raised space-y-2 border border-[var(--p-accent)]/40 p-4">
+            <div className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.projects.guides.access.copyShareEyebrow", undefined, "Copy and share — shown once")}
             </div>
             <div className="font-mono text-xl tracking-[0.25em]">{state.plainCode}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.projects.guides.access.plaintextNotStored",
                 undefined,
@@ -134,7 +134,7 @@ export function AccessCodeManager({
           <div className="text-sm font-semibold">
             {t("console.projects.guides.access.activeCodes", undefined, "Active codes")}
           </div>
-          <div className="text-xs text-[var(--text-muted)]">
+          <div className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.projects.guides.access.activeRevokedCount",
               { active: active.length, revoked: revoked.length },
@@ -153,7 +153,7 @@ export function AccessCodeManager({
             )}
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.projects.guides.access.colPrefix", undefined, "Prefix")}</th>
@@ -168,13 +168,13 @@ export function AccessCodeManager({
               {active.map((c) => (
                 <tr key={c.id}>
                   <td className="font-mono">{c.code_prefix}-…</td>
-                  <td>{c.label ?? <span className="text-[var(--text-muted)]">—</span>}</td>
+                  <td>{c.label ?? <span className="text-[var(--p-text-2)]">—</span>}</td>
                   <td>{fmtDate(c.created_at)}</td>
                   <td>
                     {c.expires_at ? (
                       fmtDate(c.expires_at)
                     ) : (
-                      <span className="text-[var(--text-muted)]">
+                      <span className="text-[var(--p-text-2)]">
                         {t("console.projects.guides.access.never", undefined, "never")}
                       </span>
                     )}
@@ -224,7 +224,7 @@ export function AccessCodeManager({
               `Revoked codes (${revoked.length})`,
             )}
           </summary>
-          <table className="data-table mt-3 w-full text-sm">
+          <table className="ps-table mt-3 w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.projects.guides.access.colPrefix", undefined, "Prefix")}</th>
@@ -263,7 +263,7 @@ export function AccessCodeManager({
             )}
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.projects.guides.access.colWhen", undefined, "When")}</th>
@@ -278,10 +278,10 @@ export function AccessCodeManager({
                   <td>{fmtDateTime(r.redeemed_at)}</td>
                   <td>
                     <span className="font-mono">{r.code_prefix}-…</span>
-                    {r.code_label ? <span className="ms-2 text-[var(--text-muted)]">{r.code_label}</span> : null}
+                    {r.code_label ? <span className="ms-2 text-[var(--p-text-2)]">{r.code_label}</span> : null}
                   </td>
                   <td className="font-mono text-xs">{r.ip ?? "—"}</td>
-                  <td className="max-w-[18rem] truncate text-xs text-[var(--text-muted)]">{r.user_agent ?? "—"}</td>
+                  <td className="max-w-[18rem] truncate text-xs text-[var(--p-text-2)]">{r.user_agent ?? "—"}</td>
                 </tr>
               ))}
             </tbody>
@@ -289,7 +289,7 @@ export function AccessCodeManager({
         )}
       </div>
 
-      <div className="text-xs text-[var(--text-muted)]">
+      <div className="text-xs text-[var(--p-text-2)]">
         <Badge variant="muted">{t("console.projects.guides.access.tipBadge", undefined, "Tip")}</Badge>{" "}
         {t(
           "console.projects.guides.access.tipText",

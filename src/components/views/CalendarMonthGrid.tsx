@@ -27,12 +27,12 @@ export function CalendarMonthGrid({ cursor, weekStart, eventsByKey, today, onCre
 
   return (
     <div className="surface overflow-x-auto" role="grid" aria-label="Calendar month">
-      <div className="grid min-w-[640px] grid-cols-7 border-b border-[var(--border-color)]">
+      <div className="grid min-w-[640px] grid-cols-7 border-b border-[var(--p-border)]">
         {labels.map((d) => (
           <div
             key={d}
             role="columnheader"
-            className="px-2 py-1.5 text-[10px] font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase"
+            className="px-2 py-1.5 text-[10px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase"
           >
             {d}
           </div>
@@ -92,20 +92,20 @@ function DayCell({
       data-today={isToday || undefined}
       data-out-of-month={!inMonth || undefined}
       data-drop-over={isOver || undefined}
-      className={`group relative min-h-[96px] border-e border-b border-[var(--border-color)] p-1.5 transition-colors data-[drop-over]:bg-[var(--surface-inset)] ${
-        inMonth ? "" : "bg-[var(--surface-inset)]/40"
+      className={`group relative min-h-[96px] border-e border-b border-[var(--p-border)] p-1.5 transition-colors data-[drop-over]:bg-[var(--p-surface-2)] ${
+        inMonth ? "" : "bg-[var(--p-surface-2)]/40"
       }`}
       onDoubleClick={onCreate ? () => onCreate(dateKey) : undefined}
     >
       <div className="mb-1 flex items-center justify-between">
         <span
           className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-medium ${
-            isToday ? "today-marker" : inMonth ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]"
+            isToday ? "today-marker" : inMonth ? "text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"
           }`}
           style={
             isToday
               ? {
-                  background: "var(--org-primary)",
+                  background: "var(--p-accent)",
                   color: "white",
                 }
               : undefined
@@ -113,7 +113,7 @@ function DayCell({
         >
           {dayNumber}
         </span>
-        {events.length > 0 && <span className="font-mono text-[9px] text-[var(--text-muted)]">{events.length}</span>}
+        {events.length > 0 && <span className="font-mono text-[9px] text-[var(--p-text-2)]">{events.length}</span>}
       </div>
       <div className="flex flex-col gap-0.5">
         {visible.map((event) => (
@@ -123,7 +123,7 @@ function DayCell({
           <button
             type="button"
             onClick={() => setShowOverflow((prev) => !prev)}
-            className="px-1 text-start text-[9px] text-[var(--text-muted)] underline-offset-2 hover:underline"
+            className="px-1 text-start text-[9px] text-[var(--p-text-2)] underline-offset-2 hover:underline"
             aria-expanded={showOverflow}
           >
             +{overflow.length} more
@@ -132,7 +132,7 @@ function DayCell({
       </div>
       {showOverflow && overflow.length > 0 && (
         <div
-          className="elevation-2 absolute start-1 end-1 top-full z-20 mt-1 flex flex-col gap-1 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-1.5"
+          className="elevation-2 absolute start-1 end-1 top-full z-20 mt-1 flex flex-col gap-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-1.5"
           role="dialog"
           aria-label={`More events on ${dateKey}`}
         >
@@ -154,7 +154,7 @@ function DayCell({
           <button
             type="button"
             onClick={() => setShowOverflow(false)}
-            className="self-end px-1 text-[9px] text-[var(--text-muted)] hover:underline"
+            className="self-end px-1 text-[9px] text-[var(--p-text-2)] hover:underline"
           >
             Close
           </button>

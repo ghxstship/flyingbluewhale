@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: Promise<{ code: string 
       <div className="page-content space-y-5">
         <div style={{ height: 4, background: klass.accent }} className="rounded" />
 
-        <p className="text-sm text-[var(--text-secondary)]">{klass.domain}</p>
+        <p className="text-sm text-[var(--p-text-2)]">{klass.domain}</p>
 
         <div className="metric-grid-3">
           <MetricCard
@@ -99,7 +99,7 @@ export default async function Page({ params }: { params: Promise<{ code: string 
             </h3>
             <Link
               href={`/console/xpms/codebook#class-${klass.code}`}
-              className="text-xs text-[var(--org-primary)] hover:underline"
+              className="text-xs text-[var(--p-accent)] hover:underline"
             >
               {t("console.xpms.classes.detail.codebookSection", undefined, "Codebook section →")}
             </Link>

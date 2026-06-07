@@ -21,10 +21,10 @@ export function AddDomainForm() {
         />
       </div>
       <div className="min-w-[160px]">
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.settings.domains.addForm.purposeLabel", undefined, "Purpose")}
         </label>
-        <select name="purpose" defaultValue="portal" className="input-base mt-1.5 w-full">
+        <select name="purpose" defaultValue="portal" className="ps-input mt-1.5 w-full">
           <option value="portal">{t("console.settings.domains.addForm.purposePortal", undefined, "Portal")}</option>
           <option value="marketing">
             {t("console.settings.domains.addForm.purposeMarketing", undefined, "Marketing")}
@@ -36,7 +36,7 @@ export function AddDomainForm() {
         {t("common.add", undefined, "Add")}
       </Button>
       {state && "error" in state && state.error && (
-        <p className="basis-full text-xs text-[var(--color-error)]">{state.error}</p>
+        <p className="basis-full text-xs text-[var(--p-danger)]">{state.error}</p>
       )}
     </form>
   );

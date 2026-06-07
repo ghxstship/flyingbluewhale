@@ -219,20 +219,20 @@ export default async function Page() {
                     <form action={decideSwap}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="approved" />
-                      <button type="submit" className="btn btn-primary btn-xs">
+                      <button type="submit" className="ps-btn btn-xs">
                         {t("console.workforce.shiftSwaps.action.approve", undefined, "Approve")}
                       </button>
                     </form>
                     <form action={decideSwap}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="declined" />
-                      <button type="submit" className="btn btn-secondary btn-xs">
+                      <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
                         {t("console.workforce.shiftSwaps.action.decline", undefined, "Decline")}
                       </button>
                     </form>
                   </div>
                 ) : (
-                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                  <span className="text-xs text-[var(--p-text-2)]">—</span>
                 ),
               accessor: () => null,
             },

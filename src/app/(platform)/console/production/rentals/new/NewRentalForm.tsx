@@ -19,10 +19,10 @@ export function NewRentalForm({
       submitLabel={t("console.production.rentals.new.submit", undefined, "Reserve")}
     >
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.production.rentals.new.equipmentLabel", undefined, "Equipment")}
         </label>
-        <select name="equipment_id" className="input-base mt-1.5 w-full" required>
+        <select name="equipment_id" className="ps-input mt-1.5 w-full" required>
           <option value="">
             {t("console.production.rentals.new.equipmentPlaceholder", undefined, "Select equipment")}
           </option>
@@ -49,10 +49,10 @@ export function NewRentalForm({
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.production.rentals.new.projectLabel", undefined, "Project")}
           </label>
-          <select name="project_id" className="input-base mt-1.5 w-full">
+          <select name="project_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.production.rentals.new.projectNone", undefined, "— No project —")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>

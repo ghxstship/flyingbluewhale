@@ -81,7 +81,7 @@ export function DialogTitle({ children, className = "" }: { children: React.Reac
 
 export function DialogDescription({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <DialogPrimitive.Description className={`mt-1 text-sm text-[var(--text-secondary)] ${className}`}>
+    <DialogPrimitive.Description className={`mt-1 text-sm text-[var(--p-text-2)] ${className}`}>
       {children}
     </DialogPrimitive.Description>
   );

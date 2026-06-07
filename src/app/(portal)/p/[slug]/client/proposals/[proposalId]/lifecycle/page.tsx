@@ -19,13 +19,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   return (
     <div className="space-y-4 p-6">
       <header className="surface p-5">
-        <div className="eyebrow text-xs text-[var(--text-muted)]">
+        <div className="eyebrow text-xs text-[var(--p-text-2)]">
           {t("p.client.lifecycle.eyebrow", undefined, "Production lifecycle")}
         </div>
         <h1 className="text-lg font-semibold">
           {t("p.client.lifecycle.title", undefined, "8-phase progression with milestone gates")}
         </h1>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">
+        <p className="mt-1 text-sm text-[var(--p-text-2)]">
           {t(
             "p.client.lifecycle.description",
             undefined,
@@ -48,12 +48,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
             <li key={p.id} className="surface p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="font-mono text-2xl text-[var(--text-muted)]">
+                  <div className="font-mono text-2xl text-[var(--p-text-2)]">
                     {String(p.phase_num).padStart(2, "0")}
                   </div>
                   <div>
                     <h2 className="text-lg leading-tight font-semibold">{p.phase_name}</h2>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
+                    <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-[var(--p-text-2)]">
                       <Badge variant={variantMap[tone]}>{PHASE_STATUS_LABEL[p.status]}</Badge>
                       {p.started_at && (
                         <span>
@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
               {!isLocked && p.gateItems.length > 0 && (
                 <div className="mt-4">
-                  <div className="eyebrow mb-2 text-xs text-[var(--text-muted)]">
+                  <div className="eyebrow mb-2 text-xs text-[var(--p-text-2)]">
                     {t("p.client.lifecycle.milestoneGates", undefined, "Milestone gates")}
                   </div>
                   <PhaseGateForm
@@ -104,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 </div>
               )}
               {isLocked && p.gateItems.length > 0 && (
-                <div className="mt-4 rounded border border-dashed border-[var(--border-color)] bg-[var(--surface-inset)] p-4 text-sm text-[var(--text-muted)]">
+                <div className="mt-4 rounded border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-4 text-sm text-[var(--p-text-2)]">
                   {t(
                     "p.client.lifecycle.lockedNotice",
                     { phase: String(p.phase_num - 1).padStart(2, "0") },

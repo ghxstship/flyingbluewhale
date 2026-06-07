@@ -120,17 +120,17 @@ export async function PortalPrivacyPanel({
 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">Submit a Request</h3>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             Under your jurisdiction's privacy law (GDPR, CCPA, LGPD, etc.) you may request access, portability,
             correction, or erasure of personal data we process about you.
           </p>
           <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <Link href="/api/v1/me/export" className="btn btn-primary btn-sm w-full justify-center">
+            <Link href="/api/v1/me/export" className="ps-btn ps-btn--sm w-full justify-center">
               Download my data (JSON)
             </Link>
             <Link
               href={`mailto:privacy@atlvs.pro?subject=DSAR%20—%20${persona}%20${slug}`}
-              className="btn btn-secondary btn-sm w-full justify-center"
+              className="ps-btn ps-btn--ghost ps-btn--sm w-full justify-center"
             >
               Email a DSAR
             </Link>
@@ -140,16 +140,16 @@ export async function PortalPrivacyPanel({
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">Your Requests</h3>
           {dsars.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               No requests on record. New ones land here once submitted.
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {dsars.map((d) => (
                 <li key={d.id} className="flex items-center justify-between py-2 text-sm">
                   <div>
                     <div className="font-medium">{toTitle(d.kind)}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       filed {fmt(d.created_at)}
                       {d.due_by ? ` · due ${fmt(d.due_by)}` : ""}
                       {d.fulfilled_at ? ` · fulfilled ${fmt(d.fulfilled_at)}` : ""}
@@ -165,16 +165,16 @@ export async function PortalPrivacyPanel({
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">Consent Ledger</h3>
           {consents.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               No consent records yet. When you grant or revoke consent for a specific purpose, it lands here.
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {consents.map((c) => (
                 <li key={c.id} className="flex items-center justify-between py-2 text-sm">
                   <div>
                     <div className="font-medium">{c.purpose}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {c.granted_at ? `granted ${fmt(c.granted_at)}` : "—"}
                       {c.version ? ` · v${c.version}` : ""}
                       {c.revoked_at ? ` · revoked ${fmt(c.revoked_at)}` : ""}
@@ -189,7 +189,7 @@ export async function PortalPrivacyPanel({
           )}
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           Data we process about you depends on your role. As a <strong>{persona}</strong> you may have records in:
           accreditations, credentials, advancing rider, contracts, payments, scans, and signed disclosures. Requesting
           erasure may impact your active engagement — we'll confirm before processing.

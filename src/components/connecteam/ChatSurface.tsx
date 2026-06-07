@@ -37,7 +37,7 @@ export async function ChatSurface({
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.inbox.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -80,9 +80,9 @@ export async function ChatSurface({
 
   return (
     <div className={containerClass}>
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.inbox.count", { n: list.length }, `${list.length} conversations`)}
       </p>
 
@@ -115,7 +115,7 @@ export async function ChatSurface({
                       {r.name ?? t("m.inbox.directMessage", undefined, "Direct message")}
                     </div>
                   </div>
-                  <span className="shrink-0 font-mono text-xs text-[var(--text-muted)]">
+                  <span className="shrink-0 font-mono text-xs text-[var(--p-text-2)]">
                     {r.last_message_at ? fmt.time(r.last_message_at) : ""}
                   </span>
                 </Link>

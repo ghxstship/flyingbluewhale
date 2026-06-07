@@ -62,7 +62,7 @@ function WorkspaceTile({ name, logoUrl, size = 28 }: { name: string; logoUrl: st
   if (logoUrl) {
     return (
       <span
-        className="shrink-0 overflow-hidden bg-[var(--surface-inset)]"
+        className="shrink-0 overflow-hidden bg-[var(--p-surface-2)]"
         style={{ width: size, height: size, borderRadius: radius }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -166,7 +166,7 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
           <button
             type="button"
             aria-label={switchAriaLabel}
-            className="flex w-full items-center justify-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)]"
+            className="flex w-full items-center justify-center rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)]"
           >
             <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={28} />
           </button>
@@ -182,11 +182,11 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
         <button
           type="button"
           aria-label={switchAriaLabel}
-          className="flex w-full items-center gap-2 rounded px-1 py-1 text-sm font-semibold tracking-tight hover:bg-[var(--surface-inset)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+          className="flex w-full items-center gap-2 rounded px-1 py-1 text-sm font-semibold tracking-tight hover:bg-[var(--p-surface-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
         >
           <WorkspaceTile name={activeName} logoUrl={activeLogoUrl} size={24} />
           <span className="truncate">{activeName}</span>
-          <ChevronsUpDown size={12} className="ms-auto shrink-0 text-[var(--text-muted)]" aria-hidden />
+          <ChevronsUpDown size={12} className="ms-auto shrink-0 text-[var(--p-text-2)]" aria-hidden />
         </button>
       </DropdownMenuTrigger>
       <WorkspaceMenu workspaces={workspaces} current={current} switching={switching} onSwitch={switchTo} />
@@ -210,7 +210,7 @@ function WorkspaceMenu({
     <DropdownMenuContent align="start" className="w-64">
       <DropdownMenuLabel>{t("workspace.menuLabel", undefined, "Workspaces")}</DropdownMenuLabel>
       {workspaces.length === 0 ? (
-        <div className="px-2 py-3 text-xs text-[var(--text-muted)]">{t("common.loading", undefined, "Loading…")}</div>
+        <div className="px-2 py-3 text-xs text-[var(--p-text-2)]">{t("common.loading", undefined, "Loading…")}</div>
       ) : (
         workspaces.map((w) => {
           const isActive = w.id === current;
@@ -226,10 +226,10 @@ function WorkspaceMenu({
             >
               <WorkspaceTile name={w.name} logoUrl={w.logoUrl} size={20} />
               <span className="flex-1 truncate">
-                <span className="text-[var(--text-primary)]">{w.name}</span>
-                <span className="ms-2 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{w.role}</span>
+                <span className="text-[var(--p-text-1)]">{w.name}</span>
+                <span className="ms-2 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{w.role}</span>
               </span>
-              {isActive && <Check size={12} className="text-[var(--org-primary)]" aria-hidden />}
+              {isActive && <Check size={12} className="text-[var(--p-accent)]" aria-hidden />}
             </DropdownMenuItem>
           );
         })
@@ -239,7 +239,7 @@ function WorkspaceMenu({
         onSelect={() => {
           window.location.href = "/console/settings/organization";
         }}
-        className="flex items-center gap-2 text-[var(--text-muted)]"
+        className="flex items-center gap-2 text-[var(--p-text-2)]"
       >
         <Plus size={12} aria-hidden />
         <span>{t("workspace.manage", undefined, "Manage workspaces")}</span>

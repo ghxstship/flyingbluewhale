@@ -40,7 +40,7 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
     <nav
       aria-label="XPMS production phase"
       data-active-phase={currentPhase ?? "none"}
-      className="flex w-full items-center gap-1 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2 text-xs"
+      className="flex w-full items-center gap-1 border-b border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-xs"
     >
       <ol className="flex w-full items-center justify-between gap-1">
         {XPMS_PHASES.map((phase, idx) => {
@@ -48,18 +48,18 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
           const isPast = currentIndex >= 0 && idx < currentIndex;
           const isFuture = currentIndex >= 0 && idx > currentIndex;
           const stateClass = isCurrent
-            ? "text-[var(--text-primary)] font-medium"
+            ? "text-[var(--p-text-1)] font-medium"
             : isPast
-              ? "text-[var(--text-secondary)]"
+              ? "text-[var(--p-text-2)]"
               : isFuture
-                ? "text-[var(--text-muted)] opacity-60"
-                : "text-[var(--text-muted)]";
+                ? "text-[var(--p-text-2)] opacity-60"
+                : "text-[var(--p-text-2)]";
 
           const dotClass = isCurrent
-            ? "bg-[var(--org-primary)] text-white"
+            ? "bg-[var(--p-accent)] text-white"
             : isPast
-              ? "bg-[var(--text-secondary)] text-[var(--bg-secondary)]"
-              : "bg-[var(--surface-inset)] text-[var(--text-muted)]";
+              ? "bg-[var(--p-text-2)] text-[var(--p-surface)]"
+              : "bg-[var(--p-surface-2)] text-[var(--p-text-2)]";
 
           const inner = (
             <span className={`flex items-center gap-1.5 ${stateClass}`}>
@@ -83,7 +83,7 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
               {href ? (
                 <Link
                   href={href}
-                  className="flex min-w-0 items-center rounded px-1 py-0.5 hover:bg-[var(--surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+                  className="flex min-w-0 items-center rounded px-1 py-0.5 hover:bg-[var(--p-surface)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
                   aria-current={isCurrent ? "step" : undefined}
                   aria-label={`Phase ${phase.num}: ${phase.label}`}
                 >
@@ -101,7 +101,7 @@ export function PhaseStepper({ currentPhase, projectId, compact = false, hrefBas
               {idx < XPMS_PHASES.length - 1 && (
                 <span
                   aria-hidden="true"
-                  className={`h-px flex-1 ${isPast || isCurrent ? "bg-[var(--text-secondary)]" : "bg-[var(--border-color)]"}`}
+                  className={`h-px flex-1 ${isPast || isCurrent ? "bg-[var(--p-text-2)]" : "bg-[var(--p-border)]"}`}
                 />
               )}
             </li>

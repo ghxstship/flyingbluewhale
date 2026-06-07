@@ -43,7 +43,7 @@ export function LetterEditor({
         <h3 className="text-sm font-semibold tracking-wider uppercase">
           {t("console.people.offerLetters.editor.title", undefined, "Edit Letter")}
         </h3>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "console.people.offerLetters.editor.intro",
             undefined,
@@ -51,7 +51,7 @@ export function LetterEditor({
           )}
         </p>
         {isLocked && (
-          <p className="mt-1 text-xs text-[var(--color-warning)]">
+          <p className="mt-1 text-xs text-[var(--p-warning)]">
             {t(
               "console.people.offerLetters.editor.lockedNotice",
               { status: raw.status },
@@ -68,7 +68,7 @@ export function LetterEditor({
         >
           {/* ── IDENTITY ─────────────────────────────────────────────────── */}
           <fieldset className="space-y-3">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.people.offerLetters.editor.identity.legend", undefined, "Identity & Position")}
             </legend>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -166,7 +166,7 @@ export function LetterEditor({
 
           {/* ── COMPENSATION ─────────────────────────────────────────────── */}
           <fieldset className="space-y-3">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.people.offerLetters.editor.compensation.legend", undefined, "Compensation")}
             </legend>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -279,8 +279,8 @@ export function LetterEditor({
                   defaultValue={raw.override_per_diem_cents != null ? raw.override_per_diem_cents / 100 : ""}
                 />
               </FormField>
-              <div className="self-end rounded border border-[var(--border-default)] bg-[var(--surface-inset)] px-3 py-2 text-xs">
-                <div className="text-[var(--text-muted)]">
+              <div className="self-end rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] px-3 py-2 text-xs">
+                <div className="text-[var(--p-text-2)]">
                   {t("console.people.offerLetters.editor.compensation.effective", undefined, "Effective compensation")}
                 </div>
                 <div className="font-mono">
@@ -288,7 +288,7 @@ export function LetterEditor({
                     ? money(resolved.effective_compensation_cents)
                     : t("console.people.offerLetters.editor.compensation.tbdShort", undefined, "TBD")}
                 </div>
-                <div className="text-[var(--text-muted)]">
+                <div className="text-[var(--p-text-2)]">
                   {t(
                     "console.people.offerLetters.editor.compensation.days",
                     { count: resolved.engagement_days },
@@ -301,7 +301,7 @@ export function LetterEditor({
 
           {/* ── ENGAGEMENT WINDOW (4 dates) ──────────────────────────────── */}
           <fieldset className="space-y-3">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t(
                 "console.people.offerLetters.editor.engagement.legend",
                 undefined,
@@ -358,7 +358,7 @@ export function LetterEditor({
 
           {/* ── INCLUSIONS / OVERRIDES ────────────────────────────────────── */}
           <fieldset className="space-y-3">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t(
                 "console.people.offerLetters.editor.inclusions.legend",
                 undefined,

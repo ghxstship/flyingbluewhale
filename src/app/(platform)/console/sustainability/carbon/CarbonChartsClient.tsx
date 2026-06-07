@@ -12,12 +12,12 @@ import type { CarbonCharts as CarbonChartsType } from "./CarbonCharts";
  * The parent page is a server component, so the dynamic import lives
  * here in a "use client" wrapper.
  *
- * Why dynamic at all? recharts is ~100 KB gzipped. The dynamic + skeleton
+ * Why dynamic at all? recharts is ~100 KB gzipped. The dynamic + ps-skel
  * keeps it out of the parent route's initial JS payload.
  */
 const CarbonCharts = nextDynamic(() => import("./CarbonCharts").then((m) => m.CarbonCharts), {
   ssr: false,
-  loading: () => <div className="surface skeleton h-64" aria-busy="true" />,
+  loading: () => <div className="surface ps-skel h-64" aria-busy="true" />,
 });
 
 export function CarbonChartsClient(props: ComponentProps<typeof CarbonChartsType>) {

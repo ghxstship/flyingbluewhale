@@ -8,8 +8,8 @@ import { createTakeoff } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const UNITS = ["ea", "lf", "sf", "sy", "cy", "lb", "ton", "hr", "cf", "m", "m2", "m3"];
 
@@ -50,7 +50,7 @@ export default async function Page() {
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               {t("console.takeoffs.new.fields.name", undefined, "Name")}
-              <span className="ms-0.5 text-[var(--color-error)]">*</span>
+              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
             </span>
             <input
               name="name"
@@ -63,7 +63,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.takeoffs.new.fields.project", undefined, "Project")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
                 <option value="">{t("common.selectEllipsis", undefined, "Select…")}</option>
@@ -77,7 +77,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.takeoffs.new.fields.unit", undefined, "Unit")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <select name="unit" required className={INPUT} defaultValue="sf">
                 {UNITS.map((u) => (
@@ -125,7 +125,7 @@ export default async function Page() {
               placeholder={t("console.takeoffs.new.placeholders.calibration", undefined, "0.125 for 1/8\" = 1'")}
               className={INPUT}
             />
-            <span className="text-[10px] text-[var(--text-muted)]">
+            <span className="text-[10px] text-[var(--p-text-2)]">
               {t(
                 "console.takeoffs.new.hints.calibration",
                 undefined,

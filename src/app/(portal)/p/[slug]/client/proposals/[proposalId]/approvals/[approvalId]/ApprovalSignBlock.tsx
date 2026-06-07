@@ -33,8 +33,8 @@ export function ApprovalSignBlock({
           onClick={() => setMode("sign")}
           className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
             mode === "sign"
-              ? "bg-[var(--org-primary)] text-white"
-              : "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              ? "bg-[var(--p-accent)] text-white"
+              : "bg-[var(--p-surface-2)] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           }`}
         >
           {t("p.client.proposals.approvals.sign.tab", undefined, "Sign")}
@@ -44,8 +44,8 @@ export function ApprovalSignBlock({
           onClick={() => setMode("decline")}
           className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
             mode === "decline"
-              ? "bg-[color:var(--color-error)] text-white"
-              : "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              ? "bg-[color:var(--p-danger)] text-white"
+              : "bg-[var(--p-surface-2)] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           }`}
         >
           {t("p.client.proposals.approvals.decline.tab", undefined, "Decline")}
@@ -63,9 +63,9 @@ export function ApprovalSignBlock({
               name="signedLabel"
               required
               placeholder={t("p.client.proposals.approvals.sign.namePlaceholder", undefined, "Julian Clarkson")}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
             />
-            <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+            <p className="mt-1.5 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.client.proposals.approvals.sign.consent",
                 undefined,
@@ -89,7 +89,7 @@ export function ApprovalSignBlock({
               undefined,
               "What needs to change before this can be signed?",
             )}
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
           />
         </div>
       )}

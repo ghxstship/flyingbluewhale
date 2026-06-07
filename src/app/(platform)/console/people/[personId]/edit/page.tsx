@@ -54,10 +54,10 @@ export default async function Page({ params }: { params: Promise<{ personId: str
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={typed.updated_at} />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.people.edit.platformRole", undefined, "Platform role")}
             </span>
-            <select name="role" defaultValue={typed.role} required className="input-base focus-ring w-full">
+            <select name="role" defaultValue={typed.role} required className="ps-input focus-ring w-full">
               {PLATFORM_ROLES.map((r) => (
                 <option key={r} value={r}>
                   {r}
@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
             <input type="checkbox" name="is_developer" defaultChecked={typed.is_developer} className="mt-1 h-4 w-4" />
             <span>
               <span className="font-medium">{t("console.people.edit.developer", undefined, "Developer")}</span>
-              <span className="block text-xs text-[var(--text-muted)]">
+              <span className="block text-xs text-[var(--p-text-2)]">
                 {t(
                   "console.people.edit.developerHint",
                   undefined,
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
               </span>
             </span>
           </label>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.people.edit.profileHint",
               undefined,

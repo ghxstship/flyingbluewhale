@@ -24,7 +24,7 @@ export default function TiersHub() {
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             Experience Modes
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -32,7 +32,7 @@ export default function TiersHub() {
             <br />
             experiences it.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
             A festival main stage, a theatrical run, a livestream broadcast, and a sponsor activation village all
             deliver different kinds of audience experience. The mode shapes the design, the staffing, and the success
             metric. Most engagements span two or three modes at once.
@@ -50,12 +50,12 @@ export default function TiersHub() {
                 <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {t.name}
                 </div>
-                <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{t.definition}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-[var(--p-text-2)]">{t.definition}</p>
                 <div className="mt-4 flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase">
-                  <span className="text-[var(--text-muted)]">
+                  <span className="text-[var(--p-text-2)]">
                     {t.anchoredServices.length > 0 ? `${t.anchoredServices.length} anchored` : "Cross-cutting"}
                   </span>
-                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--text-muted)] group-hover:text-[var(--org-primary)]" />
+                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--p-text-2)] group-hover:text-[var(--p-accent)]" />
                 </div>
               </Link>
             ))}

@@ -98,7 +98,7 @@ export default async function Page() {
           <h2 className="text-sm font-semibold">
             {t("console.settings.sequences.activeHeading", undefined, "Active Sequences")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.sequences.activeIntroPrefix",
               undefined,
@@ -169,7 +169,7 @@ export default async function Page() {
           <h2 className="text-sm font-semibold">
             {t("console.settings.sequences.editHeading", undefined, "Edit / Pre-Seed")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.sequences.editIntro",
               undefined,
@@ -187,7 +187,7 @@ export default async function Page() {
               placeholder={t("console.settings.sequences.scopePlaceholder", undefined, "invoice")}
               pattern="[a-z0-9_]+"
               title={t("console.settings.sequences.scopeTitle", undefined, "Lowercase letters, digits, underscore")}
-              className="input-base sm:col-span-2"
+              className="ps-input sm:col-span-2"
             />
             <input
               name="format"
@@ -195,7 +195,7 @@ export default async function Page() {
               maxLength={128}
               placeholder="INV-{YYYY}-{seq:04}"
               defaultValue="{seq:04}"
-              className="input-base sm:col-span-3"
+              className="ps-input sm:col-span-3"
             />
             <input
               name="seed_val"
@@ -203,7 +203,7 @@ export default async function Page() {
               min="0"
               max="9999999999"
               placeholder={t("console.settings.sequences.seedPlaceholder", undefined, "Seed")}
-              className="input-base sm:col-span-1"
+              className="ps-input sm:col-span-1"
             />
             <div className="flex justify-end sm:col-span-6">
               <Button type="submit" size="sm" variant="secondary">
@@ -218,7 +218,7 @@ export default async function Page() {
             <h2 className="text-sm font-semibold">
               {t("console.settings.sequences.suggestedHeading", undefined, "Suggested Scopes")}
             </h2>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.settings.sequences.suggestedIntroPrefix",
                 undefined,
@@ -233,7 +233,7 @@ export default async function Page() {
                     <div className="text-sm font-semibold">
                       {t(`console.settings.sequences.scopeLabel.${h.scope}`, undefined, h.label)}
                     </div>
-                    <code className="font-mono text-xs text-[var(--text-muted)]">{h.suggested}</code>
+                    <code className="font-mono text-xs text-[var(--p-text-2)]">{h.suggested}</code>
                   </div>
                   <form action={upsertSequence}>
                     <input type="hidden" name="scope" value={h.scope} />

@@ -28,7 +28,7 @@ export const TEMPLATES: TemplateConfig[] = [
       "Per-stage ROS row template with cue, time, duration, department, note",
       "Changeover blocks with target durations",
       "Set time × artist roster table",
-      "Crew call sheet skeleton tied to ROS rows",
+      "Crew call sheet ps-skel tied to ROS rows",
       "21-day production calendar look-ahead",
     ],
     bestFor: ["Festival directors", "Stage managers", "Show callers"],

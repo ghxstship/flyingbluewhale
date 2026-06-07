@@ -19,10 +19,10 @@ export default async function Page() {
           submitLabel={t("console.safety.medical.encounters.new.submit", undefined, "Log Encounter")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.medical.encounters.new.triage", undefined, "Triage")}
             </label>
-            <select name="triage" defaultValue="green" className="input-base mt-1.5 w-full">
+            <select name="triage" defaultValue="green" className="ps-input mt-1.5 w-full">
               <option value="green">
                 {t("console.safety.medical.encounters.new.triageGreen", undefined, "Green — Minor")}
               </option>
@@ -44,10 +44,10 @@ export default async function Page() {
             placeholder={t("console.safety.medical.encounters.new.patientRefPlaceholder", undefined, "Pseudonymous ID")}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.medical.encounters.new.chiefComplaint", undefined, "Chief Complaint")}
             </label>
-            <textarea name="chief_complaint" rows={3} maxLength={500} className="input-base mt-1.5 w-full" />
+            <textarea name="chief_complaint" rows={3} maxLength={500} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.safety.medical.encounters.new.disposition", undefined, "Disposition")}

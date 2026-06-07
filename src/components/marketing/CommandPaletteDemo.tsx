@@ -78,17 +78,17 @@ export function CommandPaletteDemo() {
       onMouseLeave={() => setPaused(false)}
       aria-label="Command palette demo"
     >
-      <div className="flex items-center gap-3 border-b border-[var(--border-color)] bg-[var(--bg-secondary)] px-4 py-3">
-        <Search size={14} className="text-[var(--text-muted)]" aria-hidden />
+      <div className="flex items-center gap-3 border-b border-[var(--p-border)] bg-[var(--p-surface)] px-4 py-3">
+        <Search size={14} className="text-[var(--p-text-2)]" aria-hidden />
         <div className="flex-1 font-mono text-sm">
           <span aria-hidden>{typed}</span>
           <span
-            className="ms-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse bg-[var(--org-primary)]"
+            className="ms-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse bg-[var(--p-accent)]"
             aria-hidden
           />
           <span className="sr-only">{SCRIPT[scriptIdx].query}</span>
         </div>
-        <kbd className="hidden items-center gap-1 rounded border border-[var(--border-color)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--text-muted)] sm:inline-flex">
+        <kbd className="hidden items-center gap-1 rounded border border-[var(--p-border)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)] sm:inline-flex">
           <Command size={10} aria-hidden />K
         </kbd>
       </div>
@@ -100,15 +100,13 @@ export function CommandPaletteDemo() {
               key={r.label}
               role="option"
               aria-selected={isOn}
-              className={`flex items-center gap-3 px-4 py-2.5 transition-colors ${
-                isOn ? "bg-[var(--bg-secondary)]" : ""
-              }`}
+              className={`flex items-center gap-3 px-4 py-2.5 transition-colors ${isOn ? "bg-[var(--p-surface)]" : ""}`}
             >
               <span
                 className={`flex h-7 w-7 shrink-0 items-center justify-center rounded ${
                   r.icon === "ai"
-                    ? "bg-[color-mix(in_srgb,var(--org-primary)_12%,transparent)] text-[var(--org-primary)]"
-                    : "bg-[var(--surface-inset)] text-[var(--text-muted)]"
+                    ? "bg-[color-mix(in_srgb,var(--p-accent)_12%,transparent)] text-[var(--p-accent)]"
+                    : "bg-[var(--p-surface-2)] text-[var(--p-text-2)]"
                 }`}
                 aria-hidden
               >
@@ -116,10 +114,10 @@ export function CommandPaletteDemo() {
               </span>
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm">{r.label}</div>
-                <div className="font-mono text-[11px] tracking-wide text-[var(--text-muted)]">{r.hint}</div>
+                <div className="font-mono text-[11px] tracking-wide text-[var(--p-text-2)]">{r.hint}</div>
               </div>
               {isOn && (
-                <kbd className="hidden items-center gap-1 rounded border border-[var(--border-color)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--text-muted)] sm:inline-flex">
+                <kbd className="hidden items-center gap-1 rounded border border-[var(--p-border)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)] sm:inline-flex">
                   <CornerDownLeft size={10} aria-hidden />
                 </kbd>
               )}
@@ -127,7 +125,7 @@ export function CommandPaletteDemo() {
           );
         })}
       </ul>
-      <div className="flex items-center justify-between border-t border-[var(--border-color)] bg-[var(--bg-secondary)] px-4 py-2 font-mono text-[10px] tracking-wide text-[var(--text-muted)] uppercase">
+      <div className="flex items-center justify-between border-t border-[var(--p-border)] bg-[var(--p-surface)] px-4 py-2 font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
         <span>Press / for AI · ↑↓ to walk · ⏎ to open</span>
         <span aria-hidden>● live</span>
       </div>

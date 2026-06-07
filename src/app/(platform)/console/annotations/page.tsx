@@ -84,9 +84,7 @@ export default async function AnnotationsPage() {
                 <div className="flex flex-col gap-0.5">
                   <span className="font-medium">{r.title ?? r.body.slice(0, 80)}</span>
                   {r.tags.length > 0 ? (
-                    <span className="text-xs text-[var(--text-subtle)]">
-                      {r.tags.map((tag) => `#${tag}`).join(" ")}
-                    </span>
+                    <span className="text-xs text-[var(--p-text-3)]">{r.tags.map((tag) => `#${tag}`).join(" ")}</span>
                   ) : null}
                 </div>
               ),
@@ -130,7 +128,7 @@ export default async function AnnotationsPage() {
                     <Badge variant="warning">{t("console.annotations.needed", undefined, "Needed")}</Badge>
                   )
                 ) : (
-                  <span className="text-[var(--text-subtle)]">—</span>
+                  <span className="text-[var(--p-text-3)]">—</span>
                 ),
               accessor: (r) => (r.confirmation_required ? (r.confirmed_at ? 2 : 1) : 0),
             },
@@ -145,7 +143,7 @@ export default async function AnnotationsPage() {
         />
 
         {rows.length === 0 ? (
-          <div className="surface mt-6 p-6 text-sm text-[var(--text-subtle)]">
+          <div className="surface mt-6 p-6 text-sm text-[var(--p-text-3)]">
             {t("console.annotations.emptyPrefix", undefined, "No open annotations. Use")}{" "}
             <code className="font-mono">createAnnotation()</code>{" "}
             {t("console.annotations.emptyFrom", undefined, "from")}{" "}
@@ -156,7 +154,7 @@ export default async function AnnotationsPage() {
           </div>
         ) : null}
 
-        <div className="surface mt-6 p-4 text-xs text-[var(--text-subtle)]">
+        <div className="surface mt-6 p-4 text-xs text-[var(--p-text-3)]">
           {t(
             "console.annotations.infoIntro",
             undefined,

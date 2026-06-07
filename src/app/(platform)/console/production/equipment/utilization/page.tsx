@@ -90,7 +90,7 @@ export default async function Page() {
             value={fmt.money(totalIdleRevenue)}
           />
         </div>
-        <div className="text-[10px] text-[var(--text-muted)]">
+        <div className="text-[10px] text-[var(--p-text-2)]">
           {t(
             "console.production.equipment.utilization.helpText",
             undefined,

@@ -66,16 +66,16 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
           {t("marketing.pages.community.detail.hero.eyebrow")} · {c.industry}
         </div>
         <h1 className="hed-xl mt-4">{c.headline}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
-        <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{c.timeline}</div>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{c.hero}</p>
+        <div className="mt-3 font-mono text-xs text-[var(--p-text-2)]">{c.timeline}</div>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
           {c.stats.map((s) => (
             <div key={s.label} className="surface p-5">
-              <div className="hed-xl text-[var(--org-primary)]">{s.value}</div>
-              <div className="mt-2 text-[11px] tracking-wider text-[var(--text-muted)] uppercase">{s.label}</div>
+              <div className="hed-xl text-[var(--p-accent)]">{s.value}</div>
+              <div className="mt-2 text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">{s.label}</div>
             </div>
           ))}
         </div>
@@ -85,7 +85,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
         <div className="grid gap-8 md:grid-cols-3">
           <div className="surface p-6">
             <div className="eyebrow">{t("marketing.pages.community.detail.sections.challenge")}</div>
-            <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
+            <ul className="mt-4 space-y-3 text-sm text-[var(--p-text-2)]">
               {c.challenge.map((x) => (
                 <li key={x}>· {x}</li>
               ))}
@@ -93,7 +93,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
           </div>
           <div className="surface p-6">
             <div className="eyebrow">{t("marketing.pages.community.detail.sections.solution")}</div>
-            <ul className="mt-4 space-y-3 text-sm text-[var(--text-secondary)]">
+            <ul className="mt-4 space-y-3 text-sm text-[var(--p-text-2)]">
               {c.solution.map((x) => (
                 <li key={x}>· {x}</li>
               ))}
@@ -104,7 +104,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
             <ul className="mt-4 space-y-3 text-sm">
               {c.outcome.map((x) => (
                 <li key={x} className="flex items-start gap-2">
-                  <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-[var(--org-primary)]" />
+                  <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-[var(--p-accent)]" />
                   <span>{x}</span>
                 </li>
               ))}
@@ -115,9 +115,9 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       <section className="mx-auto max-w-4xl px-6 py-12">
         <div className="surface relative p-10">
-          <Quote size={48} className="absolute start-6 top-6 text-[var(--org-primary)] opacity-20" />
-          <blockquote className="mt-4 text-xl text-[var(--text-primary)] italic">"{c.quote.text}"</blockquote>
-          <cite className="mt-4 block text-sm text-[var(--text-muted)] not-italic">— {c.quote.attribution}</cite>
+          <Quote size={48} className="absolute start-6 top-6 text-[var(--p-accent)] opacity-20" />
+          <blockquote className="mt-4 text-xl text-[var(--p-text-1)] italic">"{c.quote.text}"</blockquote>
+          <cite className="mt-4 block text-sm text-[var(--p-text-2)] not-italic">— {c.quote.attribution}</cite>
         </div>
       </section>
 
@@ -137,7 +137,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
           <h2 className="hed-lg">{t("marketing.pages.community.detail.more.title")}</h2>
-          <Link href="/community" className="text-sm text-[var(--org-primary)]">
+          <Link href="/community" className="text-sm text-[var(--p-accent)]">
             {t("marketing.pages.community.detail.more.seeAll")}
           </Link>
         </div>
@@ -145,7 +145,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
           {COMMUNITY_LIST.filter((x) => x.slug !== c.slug).map((x) => (
             <Link key={x.slug} href={`/community/${x.slug}`} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{x.name}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{x.blurb}</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">{x.blurb}</div>
             </Link>
           ))}
         </div>

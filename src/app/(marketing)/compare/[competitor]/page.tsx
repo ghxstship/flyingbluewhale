@@ -40,10 +40,10 @@ export async function generateMetadata({ params }: { params: Promise<{ competito
 
 function CellMark({ value, yesLabel, noLabel }: { value: string | boolean; yesLabel: string; noLabel: string }) {
   if (value === true) return <Check size={16} className="text-[var(--success)]" aria-label={yesLabel} />;
-  if (value === false) return <X size={16} className="text-[var(--text-muted)]" aria-label={noLabel} />;
+  if (value === false) return <X size={16} className="text-[var(--p-text-2)]" aria-label={noLabel} />;
   return (
-    <span className="inline-flex items-center gap-1 text-xs text-[var(--text-secondary)]">
-      <Minus size={12} className="text-[var(--text-muted)]" />
+    <span className="inline-flex items-center gap-1 text-xs text-[var(--p-text-2)]">
+      <Minus size={12} className="text-[var(--p-text-2)]" />
       {value}
     </span>
   );
@@ -84,7 +84,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">ATLVS vs. {c.competitor}</div>
         <h1 className="hed-xl mt-4">{c.headline}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{c.hero}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{c.hero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -99,20 +99,20 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="hed-xl">{t("marketing.pages.compare.detail.features.title")}</h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.compare.detail.features.subtitle")}
         </p>
         <div className="surface mt-8 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
-                <tr className="border-b border-[var(--border-color)] bg-[var(--surface-inset)]">
+                <tr className="border-b border-[var(--p-border)] bg-[var(--p-surface-2)]">
                   <th className="eyebrow px-4 py-3 text-start">
                     {t("marketing.pages.compare.detail.features.columnFeature")}
                   </th>
                   <th
                     className="px-4 py-3 text-start text-[11px] font-semibold tracking-[0.2em] uppercase"
-                    style={{ color: "var(--org-primary)" }}
+                    style={{ color: "var(--p-accent)" }}
                   >
                     ATLVS
                   </th>
@@ -121,10 +121,10 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
               </thead>
               <tbody>
                 {c.features.map((row) => (
-                  <tr key={row.feature} className="border-b border-[var(--border-color)] last:border-b-0">
+                  <tr key={row.feature} className="border-b border-[var(--p-border)] last:border-b-0">
                     <td className="px-4 py-3 align-top">
                       <div className="font-medium">{row.feature}</div>
-                      {row.note ? <div className="mt-1 text-xs text-[var(--text-muted)]">{row.note}</div> : null}
+                      {row.note ? <div className="mt-1 text-xs text-[var(--p-text-2)]">{row.note}</div> : null}
                     </td>
                     <td className="px-4 py-3 align-top">
                       <CellMark
@@ -154,7 +154,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
           {c.whyWeWin.map((w) => (
             <div key={w.title} className="surface p-6">
               <div className="text-sm font-semibold">{w.title}</div>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{w.body}</p>
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{w.body}</p>
             </div>
           ))}
         </div>
@@ -165,13 +165,13 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
           <h2 className="hed-lg">
             {t("marketing.pages.compare.detail.whenTheyWin.title", { competitor: c.competitor })}
           </h2>
-          <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+          <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
             {t("marketing.pages.compare.detail.whenTheyWin.subtitle")}
           </p>
           <ul className="mt-6 space-y-3 text-sm">
             {c.whenTheyWin.map((w) => (
               <li key={w} className="flex items-start gap-2">
-                <span className="status-dot status-dot-warning mt-2" />
+                <span className="ps-dot ps-dot ps-dot--warn mt-2" />
                 <span>{w}</span>
               </li>
             ))}
@@ -185,7 +185,7 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
             <blockquote className="text-xl leading-relaxed font-medium tracking-tight text-balance sm:text-2xl">
               &ldquo;{c.quote.text}&rdquo;
             </blockquote>
-            <figcaption className="mt-4 text-xs tracking-wide text-[var(--text-muted)] uppercase">
+            <figcaption className="mt-4 text-xs tracking-wide text-[var(--p-text-2)] uppercase">
               — {c.quote.attribution}
             </figcaption>
           </figure>
@@ -194,18 +194,18 @@ export default async function CompareDetail({ params }: { params: Promise<{ comp
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="hed-lg">{t("marketing.pages.compare.detail.migration.title")}</h2>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.compare.detail.migration.subtitle", { competitor: c.competitor })}
         </p>
         <div className="surface mt-6 p-6">
-          <ol className="list-decimal space-y-2 ps-5 text-sm text-[var(--text-secondary)]">
+          <ol className="list-decimal space-y-2 ps-5 text-sm text-[var(--p-text-2)]">
             {c.migration.map((m) => (
               <li key={m}>{m}</li>
             ))}
           </ol>
         </div>
         <div className="mt-6">
-          <Link href={`/alternatives/${c.slug}`} className="text-sm font-medium text-[var(--org-primary)]">
+          <Link href={`/alternatives/${c.slug}`} className="text-sm font-medium text-[var(--p-accent)]">
             {t("marketing.pages.compare.detail.migration.longFormLink", { competitor: c.competitor })}
           </Link>
         </div>

@@ -22,10 +22,10 @@ export function CueForm() {
         required
       />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.production.ros.cueForm.lane", undefined, "Lane")}
         </label>
-        <select name="lane" defaultValue="show" className="input-base mt-1.5 w-full">
+        <select name="lane" defaultValue="show" className="ps-input mt-1.5 w-full">
           <option value="show">{t("console.production.ros.cueForm.lane.show", undefined, "Show")}</option>
           <option value="lights">{t("console.production.ros.cueForm.lane.lights", undefined, "Lights")}</option>
           <option value="audio">{t("console.production.ros.cueForm.lane.audio", undefined, "Audio")}</option>
@@ -53,12 +53,12 @@ export function CueForm() {
         placeholder={t("console.production.ros.cueForm.optional", undefined, "optional")}
       />
       <div className="md:col-span-2">
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.production.ros.cueForm.description", undefined, "Description")}
         </label>
-        <textarea name="description" rows={2} maxLength={2000} className="input-base mt-1.5 w-full" />
+        <textarea name="description" rows={2} maxLength={2000} className="ps-input mt-1.5 w-full" />
       </div>
-      {state?.error && <p className="text-xs text-[var(--color-error)] md:col-span-2">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--p-danger)] md:col-span-2">{state.error}</p>}
       <div className="flex justify-end md:col-span-2">
         <Button type="submit" loading={pending}>
           {t("console.production.ros.cueForm.addCue", undefined, "Add Cue")}
@@ -97,7 +97,7 @@ export function CueRow({ cue }: { cue: Cue }) {
       </td>
       <td>
         <div>{cue.label}</div>
-        {cue.description && <div className="text-xs text-[var(--text-muted)]">{cue.description}</div>}
+        {cue.description && <div className="text-xs text-[var(--p-text-2)]">{cue.description}</div>}
       </td>
       <td>
         <Badge variant={statusVariant(cue.status)}>{toTitle(cue.status)}</Badge>
@@ -114,8 +114,8 @@ export function CueRow({ cue }: { cue: Cue }) {
                 onClick={() => setPendingTo(b.to)}
                 className={`rounded px-2 py-0.5 text-[11px] font-medium transition-colors ${
                   b.to === "live"
-                    ? "bg-[var(--color-success)] text-white hover:bg-[color-mix(in_srgb,var(--color-success)_85%,black)]"
-                    : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                    ? "bg-[var(--p-success)] text-white hover:bg-[color-mix(in_srgb,var(--p-success)_85%,black)]"
+                    : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                 }`}
               >
                 {pendingTo === b.to ? "…" : t(`console.production.ros.cueForm.action.${b.to}`, undefined, b.label)}
@@ -126,7 +126,7 @@ export function CueRow({ cue }: { cue: Cue }) {
             <input type="hidden" name="id" value={cue.id} />
             <button
               type="submit"
-              className="rounded px-2 py-0.5 text-[11px] text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/10"
+              className="rounded px-2 py-0.5 text-[11px] text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/10"
             >
               {t("common.delete", undefined, "Delete")}
             </button>

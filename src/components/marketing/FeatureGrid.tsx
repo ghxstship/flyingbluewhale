@@ -17,14 +17,14 @@ export function FeatureGrid({ features, cols = 3 }: { features: Feature[]; cols?
           <div className="surface hover-lift h-full p-5">
             {Icon && (
               <div
-                className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--bg-secondary)]"
-                style={{ color: "var(--org-primary)" }}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--p-surface)]"
+                style={{ color: "var(--p-accent)" }}
               >
                 <Icon size={18} />
               </div>
             )}
             <div className="mt-3 text-sm font-semibold">{f.title}</div>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">{f.body}</p>
+            <p className="mt-2 text-sm text-[var(--p-text-2)]">{f.body}</p>
           </div>
         );
         if (f.href)

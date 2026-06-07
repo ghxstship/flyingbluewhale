@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.volunteer.uniform.sizing.heading", undefined, "Your Sizing")}</h3>
           {!member ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.volunteer.uniform.sizing.applyFirst",
                 undefined,
@@ -125,15 +125,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             </p>
           ) : (
             <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-muted)]">{t("p.volunteer.uniform.sizing.top", undefined, "Top")}</dt>
+              <dt className="text-[var(--p-text-2)]">{t("p.volunteer.uniform.sizing.top", undefined, "Top")}</dt>
               <dd>{sizing.size_top ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">
-                {t("p.volunteer.uniform.sizing.bottom", undefined, "Bottom")}
-              </dt>
+              <dt className="text-[var(--p-text-2)]">{t("p.volunteer.uniform.sizing.bottom", undefined, "Bottom")}</dt>
               <dd>{sizing.size_bottom ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">{t("p.volunteer.uniform.sizing.shoes", undefined, "Shoes")}</dt>
+              <dt className="text-[var(--p-text-2)]">{t("p.volunteer.uniform.sizing.shoes", undefined, "Shoes")}</dt>
               <dd>{sizing.size_shoes ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">{t("p.volunteer.uniform.sizing.notes", undefined, "Notes")}</dt>
+              <dt className="text-[var(--p-text-2)]">{t("p.volunteer.uniform.sizing.notes", undefined, "Notes")}</dt>
               <dd className="text-xs">{sizing.notes ?? "—"}</dd>
             </dl>
           )}
@@ -141,7 +139,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.volunteer.uniform.pickup.heading", undefined, "Pickup")}</h3>
-          <p className="mt-2 text-xs text-[var(--text-secondary)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t(
               "p.volunteer.uniform.pickup.instructions",
               undefined,
@@ -153,7 +151,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {t("p.volunteer.uniform.pickup.slotLabel", undefined, "Slot:")} <strong>{sizing.pickup_slot}</strong>
             </p>
           ) : (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.volunteer.uniform.pickup.notBooked",
                 undefined,

@@ -86,10 +86,10 @@ export function Combobox({
           aria-expanded={open}
           aria-controls={listboxId}
           aria-label={placeholder}
-          className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
+          className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
-          <span className={selectedLabel ? "" : "text-[var(--text-muted)]"}>{selectedLabel ?? placeholder}</span>
-          <ChevronsUpDown size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
+          <span className={selectedLabel ? "" : "text-[var(--p-text-2)]"}>{selectedLabel ?? placeholder}</span>
+          <ChevronsUpDown size={12} className="text-[var(--p-text-2)]" aria-hidden="true" />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
@@ -97,21 +97,21 @@ export function Combobox({
           id={listboxId}
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
+          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
         >
           {/* shouldFilter=false when async, so cmdk doesn't strip server results */}
           <CommandPrimitive className="flex flex-col" shouldFilter={!optionsLoader}>
-            <div className="flex items-center gap-2 border-b border-[var(--border-color)] px-3 py-2">
+            <div className="flex items-center gap-2 border-b border-[var(--p-border)] px-3 py-2">
               <CommandPrimitive.Input
                 placeholder={searchPlaceholder}
                 value={query}
                 onValueChange={setQuery}
-                className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
+                className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--p-text-2)]"
               />
-              {loading && <Spinner size="sm" className="shrink-0 text-[var(--text-muted)]" />}
+              {loading && <Spinner size="sm" className="shrink-0 text-[var(--p-text-2)]" />}
             </div>
             <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
-              <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--text-muted)]">
+              <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--p-text-2)]">
                 {loading ? "Loading…" : emptyLabel}
               </CommandPrimitive.Empty>
               {options.map((o) => (
@@ -124,11 +124,11 @@ export function Combobox({
                     setLastSelectedLabel(o.label);
                     setOpen(false);
                   }}
-                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm data-[disabled=true]:opacity-50 data-[selected=true]:bg-[var(--surface-inset)]"
+                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm data-[disabled=true]:opacity-50 data-[selected=true]:bg-[var(--p-surface-2)]"
                 >
                   <Check
                     size={12}
-                    className={value === o.value ? "text-[var(--org-primary)]" : "opacity-0"}
+                    className={value === o.value ? "text-[var(--p-accent)]" : "opacity-0"}
                     aria-hidden="true"
                   />
                   <span>{o.label}</span>
@@ -173,12 +173,12 @@ export function MultiCombobox({
           aria-expanded={open}
           aria-controls={listboxId}
           aria-label={placeholder}
-          className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
+          className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
-          <span className={selectedLabels.length ? "" : "text-[var(--text-muted)]"}>
+          <span className={selectedLabels.length ? "" : "text-[var(--p-text-2)]"}>
             {selectedLabels.length ? `${selectedLabels.length} selected` : placeholder}
           </span>
-          <ChevronsUpDown size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
+          <ChevronsUpDown size={12} className="text-[var(--p-text-2)]" aria-hidden="true" />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
@@ -186,17 +186,17 @@ export function MultiCombobox({
           id={listboxId}
           align="start"
           sideOffset={4}
-          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]"
+          className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
         >
           <CommandPrimitive>
-            <div className="border-b border-[var(--border-color)] px-3 py-2">
+            <div className="border-b border-[var(--p-border)] px-3 py-2">
               <CommandPrimitive.Input
                 placeholder={searchPlaceholder}
-                className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
+                className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--p-text-2)]"
               />
             </div>
             <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
-              <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--text-muted)]">
+              <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--p-text-2)]">
                 {emptyLabel}
               </CommandPrimitive.Empty>
               {options.map((o) => {
@@ -210,13 +210,13 @@ export function MultiCombobox({
                       const next = checked ? value.filter((v) => v !== o.value) : [...value, o.value];
                       onChange(next);
                     }}
-                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm data-[disabled=true]:opacity-50 data-[selected=true]:bg-[var(--surface-inset)]"
+                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 text-sm data-[disabled=true]:opacity-50 data-[selected=true]:bg-[var(--p-surface-2)]"
                   >
                     <span
                       className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded border ${
                         checked
-                          ? "border-[var(--org-primary)] bg-[var(--org-primary)] text-white"
-                          : "border-[var(--border-color)]"
+                          ? "border-[var(--p-accent)] bg-[var(--p-accent)] text-white"
+                          : "border-[var(--p-border)]"
                       }`}
                       aria-hidden="true"
                     >

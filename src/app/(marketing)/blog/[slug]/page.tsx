@@ -68,7 +68,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.blog.post.eyebrow")}</div>
         <h1 className="hed-xl mt-4">{post.title}</h1>
-        <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--text-muted)]">
+        <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-xs text-[var(--p-text-2)]">
           <span>{post.date}</span>
           <span>·</span>
           <span>{post.readingTime}</span>
@@ -76,18 +76,18 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           <span>{post.author}</span>
         </div>
 
-        <div className="mt-10 space-y-5 text-[15px] leading-7 text-[var(--text-secondary)]">
+        <div className="mt-10 space-y-5 text-[15px] leading-7 text-[var(--p-text-2)]">
           {post.body.map((block, i) => {
             if (block.kind === "p") return <p key={i}>{block.text}</p>;
             if (block.kind === "h2")
               return (
-                <h2 key={i} className="hed-lg mt-10 text-[var(--text-primary)]">
+                <h2 key={i} className="hed-lg mt-10 text-[var(--p-text-1)]">
                   {block.text}
                 </h2>
               );
             if (block.kind === "h3")
               return (
-                <h3 key={i} className="mt-8 text-lg font-semibold tracking-tight text-[var(--text-primary)]">
+                <h3 key={i} className="mt-8 text-lg font-semibold tracking-tight text-[var(--p-text-1)]">
                   {block.text}
                 </h3>
               );
@@ -109,10 +109,10 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               );
             if (block.kind === "quote")
               return (
-                <blockquote key={i} className="border-s-2 border-[var(--org-primary)] ps-4 italic">
+                <blockquote key={i} className="border-s-2 border-[var(--p-accent)] ps-4 italic">
                   {block.text}
                   {block.cite && (
-                    <cite className="mt-1 block text-xs text-[var(--text-muted)] not-italic">— {block.cite}</cite>
+                    <cite className="mt-1 block text-xs text-[var(--p-text-2)] not-italic">— {block.cite}</cite>
                   )}
                 </blockquote>
               );
@@ -126,11 +126,11 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           })}
         </div>
 
-        <div className="mt-12 flex flex-wrap gap-1.5 border-t border-[var(--border)] pt-6">
+        <div className="mt-12 flex flex-wrap gap-1.5 border-t border-[var(--p-border)] pt-6">
           {post.keywords.map((k) => (
             <span
               key={k}
-              className="rounded-full bg-[var(--surface-inset)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]"
+              className="rounded-full bg-[var(--p-surface-2)] px-2.5 py-1 text-[11px] text-[var(--p-text-2)]"
             >
               {k}
             </span>
@@ -138,7 +138,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </div>
 
         <div className="mt-8">
-          <Link href="/blog" className="text-sm text-[var(--org-primary)]">
+          <Link href="/blog" className="text-sm text-[var(--p-accent)]">
             {t("marketing.pages.blog.post.allPostsLink")}
           </Link>
         </div>

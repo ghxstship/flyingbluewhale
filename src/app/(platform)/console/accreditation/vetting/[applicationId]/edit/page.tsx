@@ -60,10 +60,10 @@ export default async function Page({ params }: { params: Promise<{ applicationId
             defaultValue={row.person_email ?? ""}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.vetting.edit.vettingState", undefined, "Vetting state")}
             </span>
-            <select name="vetting" defaultValue={row.vetting ?? ""} required className="input-base focus-ring w-full">
+            <select name="vetting" defaultValue={row.vetting ?? ""} required className="ps-input focus-ring w-full">
               <option value="pending">pending</option>
               <option value="in_progress">in_progress</option>
               <option value="clear">clear</option>

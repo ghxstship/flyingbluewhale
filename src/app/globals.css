@@ -6,109 +6,60 @@
    Brand overlay system (ATLVS/COMPVSS/GVTEWAY) via [data-platform].
    ═══════════════════════════════════════════════════════════════════ */
 
+/*
+ * Tailwind v4 @theme inline — exposes the kit's --p-* tokens as Tailwind
+ * utility classes (bg-surface / text-text-1 / border-border / etc.). The
+ * theme file at src/app/theme/themes/atlvs-product.css is the single
+ * source of truth for every --p-* value; this block is just the wiring
+ * Tailwind uses to generate the utility classes.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-tertiary: var(--bg-tertiary);
-  --color-text: var(--text-color);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-border: var(--border-color);
+  --color-bg: var(--p-bg);
+  --color-surface: var(--p-surface);
+  --color-surface-2: var(--p-surface-2);
+  --color-text-1: var(--p-text-1);
+  --color-text-2: var(--p-text-2);
+  --color-text-3: var(--p-text-3);
+  --color-border: var(--p-border);
+  --color-border-2: var(--p-border-2);
+  --color-accent: var(--p-accent);
+  --color-accent-text: var(--p-accent-text);
+  --color-accent-contrast: var(--p-accent-contrast);
+  --color-accent-weak: var(--p-accent-weak);
+  --color-success: var(--p-success);
+  --color-warning: var(--p-warning);
+  --color-danger: var(--p-danger);
+  --color-info: var(--p-info);
 
-  --color-org-primary: var(--org-primary);
-  --color-org-secondary: var(--org-secondary);
-  --color-org-accent: var(--org-accent);
-
-  /* Semantic palette — locked to the GHXSTSHIP kit (tokens.json#semantic).
-   * `--color-error` is the legacy alias used throughout the codebase; the
-   * kit names this swatch `danger` (matches `--flare`). Both are exposed
-   * so kit-aligned consumers (`text-[var(--color-danger)]`) and legacy
-   * consumers (`text-[var(--color-error)]`) paint the same color.
-   * `--color-info` is the plasma teal — same swatch as the GHXSTSHIP
-   * `--gx-plasma` signal. */
-  --color-success: #2fbf71;
-  --color-warning: #e9a23b;
-  --color-error: #f23a2f;
-  --color-danger: #f23a2f;
-  --color-info: #21d4d4;
-
-  /* Audit DS-T1: --font-sans previously bound to Inter directly, so Tailwind
-   * `font-sans` resolved to Inter regardless of the active theme. Now points
-   * at --font-body so `font-sans` always tracks the active theme's body font
-   * (each theme overrides --font-body on its own [data-theme] selector;
-   * cascade beats the :root-tier declaration here).
-   *
-   * Audit DS-T2: register --font-display / --font-subdisplay / --font-body
-   * so Tailwind v4 generates `font-display`, `font-subdisplay`, `font-body`
-   * utility classes — replaces the inline-style and legacy `font-serif`
-   * escapes scattered across proposals + offer-letters.
-   *
-   * Kit lock (2026-06-03): defaults bind to the canonical GHXSTSHIP
-   * four-family stack — Big Shoulders Display (poster headlines),
-   * Space Grotesk (UI + body), Silkscreen (8-bit/pixel labels), Space
-   * Mono (coordinates, specs, manifest metadata). The `ghxstship` theme
-   * file rebinds the same vars on its own selector for symmetry; any
-   * future theme that drops in without overrides will now inherit the
-   * kit instead of the dead Bermuda Triangle / HVRBOR stack. */
   --font-sans: var(--font-space-grotesk);
   --font-mono: var(--font-space-mono);
-  --font-display: var(--font-big-shoulders);
-  --font-subdisplay: var(--font-big-shoulders);
+  --font-display: var(--font-space-grotesk);
+  --font-subdisplay: var(--font-space-grotesk);
   --font-body: var(--font-space-grotesk);
-  --font-pixel: var(--font-silkscreen);
+  --font-pixel: var(--font-space-mono);
 
-  /* Audit T2 fix: breakpoints registered with Tailwind v4's `@theme` so
-     `sm:` / `md:` / `lg:` / `xl:` / `2xl:` utilities resolve from a single
-     source of truth. Hand-rolled `@media` queries below (e.g. `.metric-
-     grid`) reference the same canonical px values; do not drift these
-     without updating the call sites. CSS `@media` cannot consume CSS
-     variables natively, so the values are duplicated in literal form on
-     purpose — but only the values registered here count as the contract.
-     PostCSS pipeline doesn't include `postcss-custom-media`, so
-     `@custom-media` substitution is intentionally not available. */
+  /* Tailwind breakpoints — duplicated as literals inside @media queries
+     below because CSS @media can't read custom properties. Keep both
+     sites aligned if these ever drift. */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
 
-  /* Audit DS-R1: register Tailwind radius utilities against the design-
-   * system tokens. Without this, `rounded`, `rounded-md`, `rounded-lg`
-   * resolve to Tailwind's built-in defaults (0.25rem / 0.375rem / 0.5rem)
-   * and ignore the active theme — Bermuda Triangle's `--radius-md: 0`
-   * (sharp-corner canon) wouldn't apply to anything using inline
-   * `rounded-md` classes.
-   *
-   * Defaults below match the Bermuda Triangle canon (sharp). Themes
-   * that want non-zero radii (kinetic, soft, brutal etc.) override
-   * --radius-sm / --radius-md / --radius-lg on their [data-theme]
-   * selector; cascade picks up at runtime because @theme inline
-   * preserves var refs in the generated utility classes.
-   *
-   * --radius-full stays 9999px — pills are an intentional shape
-   * choice (badges, segmented controls, status dots) regardless of
-   * theme. */
-  --radius: var(--radius-sm);
+  /* Tailwind radius utilities sourced from the kit's --p-r-* tokens. */
+  --radius: var(--p-r-sm);
   --radius-xs: 0;
-  --radius-sm: var(--radius-sm);
-  --radius-md: var(--radius-md);
-  --radius-lg: var(--radius-lg);
-  --radius-xl: var(--radius-lg);
-  --radius-2xl: var(--radius-lg);
-  --radius-3xl: var(--radius-lg);
-  --radius-full: 9999px;
+  --radius-sm: var(--p-r-sm);
+  --radius-md: var(--p-r);
+  --radius-lg: var(--p-r-lg);
+  --radius-xl: var(--p-r-lg);
+  --radius-2xl: var(--p-r-lg);
+  --radius-3xl: var(--p-r-lg);
+  --radius-full: var(--p-r-pill);
 
-  /* Audit T1 fix: the `--transition-duration-*` and `--transition-timing-
-   * function-*` token namespaces were registered here so Tailwind v4
-   * `@theme` would expose `duration-fast` / `ease-default` utility classes,
-   * but no consumer in the codebase used them. The live API is `--motion-*`
-   * + `--ease-*` declared in `theme/primitives.css :root`. Removed to
-   * leave one source of truth for motion. */
-
-  /* Animations consume motion tokens so themes can dial timing per
-     personality — brutal stays at 200ms snap, soft stretches via
-     --motion-slow override, reduced-motion zeroes them all. */
+  /* Animation aliases — motion tokens (--motion-*, --ease-*) live in
+     atlvs-product.css under the kit scope; named animations expose them. */
   --animate-page-enter: page-enter var(--motion-slow) var(--ease-out) both;
   --animate-fade-in: fade-in var(--motion-normal) var(--ease-out) both;
   --animate-slide-up: slide-up var(--motion-normal) var(--ease-out) both;
@@ -116,45 +67,39 @@
   --animate-skeleton: skeleton-pulse var(--motion-skeleton) var(--ease-standard) infinite;
 }
 
-/* ───── Light theme (default) ─────
-   Text tokens audited for WCAG 2.2 AA across surfaces. */
+/*
+ * SSR cold-start defaults — used only when no [data-theme] / [data-ui]
+ * attribute has hit <html> yet. The pre-paint head script in
+ * theme-script.ts sets both before first paint so this block almost never
+ * paints in practice; mirrors the kit's light surfaces + atlvs pink accent
+ * so the un-attributed flash matches the canonical kit surface.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-  --bg-secondary: #f7f7f7;
-  --bg-tertiary: #f0f0f0;
-  --text-color: #1a1a1a;
-  --text-primary: #1a1a1a;
-  --text-secondary: #4b4b4b; /* ≥7:1 on white & inset surfaces */
-  --text-muted: #595959; /* ≥6:1 on white & inset surfaces */
-  --border-color: #e5e5e5;
-  --org-primary: #1a1a1a;
-  --org-secondary: #4b4b4b;
-  --org-accent: #1a1a1a;
+  --p-bg: #f7f8fa;
+  --p-surface: #ffffff;
+  --p-surface-2: #f1f3f6;
+  --p-border: #e4e7ec;
+  --p-border-2: #d3d8e0;
+  --p-text-1: #181b23;
+  --p-text-2: #5b6472;
+  --p-text-3: #656d7a;
+  --p-accent: #ff2e88;
+  --p-accent-hover: #e61e76;
+  --p-accent-text: #d11668;
+  --p-accent-contrast: #ffffff;
+  --p-accent-weak: rgba(255, 46, 136, 0.12);
+  --p-success: #2fa968;
+  --p-warning: #e0a12b;
+  --p-danger: #e5484d;
+  --p-info: #3b82e0;
   --sidebar-width: 16rem;
 }
-
-/* Removed: the legacy `[data-mode="dark"]` fallback that overrode every
- * CHROMA theme's `--background` with a generic black. CHROMA BEACON's
- * design intent is that each theme ships its own canonical palette —
- * brutal is always cream, bento is always pale grey, soft is always
- * gradient pink. Dark mode = pick `cyber` or `glass`; light mode = pick
- * any of the six light-family themes. The Sun/Monitor/Moon toggle in
- * the header is a preset picker (Sun → kinetic, Moon → cyber, Monitor
- * → system), not an orthogonal mode override. */
-
-/* ═════ Brand overlays per shell ═════
-   Moved to src/app/theme/index.css AFTER the CHROMA theme imports so
-   `[data-platform]` consistently wins over per-theme `--org-primary`
-   bindings — audit M1 resolution. Marketing (no data-platform) inherits
-   the active CHROMA theme's accent; platform/portal/mobile shells pin
-   to their brand red/amber/blue. */
 
 /* ───── Base ───── */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--p-bg);
+  color: var(--p-text-1);
   /* Body copy follows the active CHROMA theme's `--font-body`. Audit DS-T3:
      fallback chain dropped the legacy `Inter` literal and now ends in
      system-ui — themes that don't declare a body font get the OS sans rather
@@ -191,15 +136,15 @@ pre,
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: var(--p-border);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--p-text-2);
 }
 
 ::selection {
-  background: var(--org-accent);
+  background: var(--p-accent-text);
   color: white;
 }
 
@@ -281,7 +226,7 @@ pre,
 /* ─────────────────────────────────────────────────────────────────────
    Component layer.
    Every reusable class below (.btn, .badge, .nav-item, .surface-*,
-   .input-base, .data-table, grids, shells, elevations, dots, …) is
+   .ps-input, .data-table, grids, shells, elevations, dots, …) is
    scoped into `@layer components` so Tailwind utilities — which live in
    the `utilities` layer emitted after this block — always outrank them
    regardless of specificity. That's what lets `md:hidden` reliably
@@ -296,26 +241,26 @@ pre,
     height: 0.375rem;
     width: 100%;
     border-radius: 9999px;
-    background: var(--surface-inset);
+    background: var(--p-surface-2);
   }
   .progress-indicator {
     width: 100%;
     height: 100%;
     transition: transform var(--motion-slow) var(--ease-out);
-    background: var(--progress-fill, var(--org-primary));
+    background: var(--progress-fill, var(--p-accent));
   }
   .progress-root[data-severity="warn"] .progress-indicator {
     --progress-fill: #d97706;
   }
   .progress-root[data-severity="critical"] .progress-indicator {
-    --progress-fill: var(--color-error);
+    --progress-fill: var(--p-danger);
   }
   .progress-root[data-severity="success"] .progress-indicator {
     --progress-fill: #059669;
   }
   .progress-root[data-indeterminate] .progress-indicator {
     transform: none !important;
-    background: linear-gradient(90deg, transparent, var(--org-primary) 50%, transparent);
+    background: linear-gradient(90deg, transparent, var(--p-accent) 50%, transparent);
     background-size: 50% 100%;
     background-repeat: no-repeat;
     animation: progress-indeterminate 1.5s linear infinite;
@@ -522,8 +467,8 @@ pre,
     left: 0;
     z-index: var(--z-skip-link);
     padding: 0.5rem 1rem;
-    background: var(--org-primary);
-    color: var(--org-on-primary, white);
+    background: var(--p-accent);
+    color: var(--p-accent-contrast, white);
     font-weight: 600;
     font-size: 0.875rem;
   }
@@ -548,7 +493,7 @@ pre,
     outline: none;
   }
   .focus-ring:focus-visible {
-    outline: 2px solid var(--org-primary);
+    outline: 2px solid var(--p-accent);
     outline-offset: 2px;
     border-radius: inherit;
   }
@@ -556,16 +501,16 @@ pre,
     outline: none;
   }
   .focus-ring-strong:focus-visible {
-    outline: 2px solid var(--org-primary);
+    outline: 2px solid var(--p-accent);
     outline-offset: 2px;
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--background) 100%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--p-bg) 100%, transparent);
     border-radius: inherit;
   }
   a:focus-visible,
   button:focus-visible,
   [role="button"]:focus-visible,
   summary:focus-visible {
-    outline: 2px solid var(--org-primary);
+    outline: 2px solid var(--p-accent);
     outline-offset: 2px;
   }
 
@@ -573,8 +518,8 @@ pre,
    * Five-tier progression. Each tier consumes its own token so the scale
    * stays meaningful — small chips don't get the same brutal offset as
    * full cards. Audit DS-S1 fix: previously elevation-1 / elevation-2 both
-   * mapped to --shadow-elev and elevation-3 / elevation-4 / elevation-float
-   * all mapped to --shadow-elev-hover, collapsing the scale to two values.
+   * mapped to --p-elev-1 and elevation-3 / elevation-4 / elevation-float
+   * all mapped to --p-elev-2, collapsing the scale to two values.
    *
    * Bermuda Triangle assigns concrete progressive brutal values
    * (2/4/8/12px). Other CHROMA themes inherit a sensible fallback chain
@@ -584,19 +529,19 @@ pre,
     box-shadow: none;
   }
   .elevation-1 {
-    box-shadow: var(--shadow-1);
+    box-shadow: var(--p-elev-1);
   }
   .elevation-2 {
-    box-shadow: var(--shadow-2);
+    box-shadow: var(--p-elev-2);
   }
   .elevation-3 {
-    box-shadow: var(--shadow-3);
+    box-shadow: var(--p-elev-3);
   }
   .elevation-4 {
-    box-shadow: var(--shadow-4);
+    box-shadow: var(--p-elev-3);
   }
   .elevation-float {
-    box-shadow: var(--shadow-4);
+    box-shadow: var(--p-elev-3);
   }
 
   /* ───── Glass ───── */
@@ -606,21 +551,21 @@ pre,
  * was the cause of the sticky header looking identical in every theme;
  * each theme's accent + density should come through here. */
   .glass {
-    background: color-mix(in oklab, var(--background) 65%, transparent);
+    background: color-mix(in oklab, var(--p-bg) 65%, transparent);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border: var(--border-width) solid var(--border-color);
+    border: var(--p-border-width) solid var(--p-border);
   }
 
   .glass-nav {
-    background: color-mix(in oklab, var(--background) 82%, transparent);
+    background: color-mix(in oklab, var(--p-bg) 82%, transparent);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    /* Chrome rule, not structural — was --border-width (3px in Bermuda
+    /* Chrome rule, not structural — was --p-border-width (3px in Bermuda
        Triangle) which read as a heavy enclosure rather than a separator.
        Audit DS-B1 normalizes top-bar / sidebar / table-row separators to
        the chrome tier (1px). */
-    border-bottom: var(--border-width-chrome) solid var(--border-color);
+    border-bottom: var(--p-border-width) solid var(--p-border);
   }
 
   /* ───── Reduced-motion override ─────
@@ -654,11 +599,11 @@ pre,
   }
   .hover-lift:hover {
     transform: translateY(var(--hover-lift-y)) scale(var(--hover-scale));
-    /* Tier-2 (4px in BT) as the canonical hover lift — was --shadow-elev-hover
+    /* Tier-2 (4px in BT) as the canonical hover lift — was --p-elev-2
        (12px brutal) which thumped on every card and undermined the rule that
        the heavy brutal moment is reserved for Dialog + the hero CTA. Themes
-       that want a heavier card hover override `--shadow-card-hover` directly. */
-    box-shadow: var(--shadow-card-hover, var(--shadow-2));
+       that want a heavier card hover override `--p-elev-2` directly. */
+    box-shadow: var(--p-elev-2, var(--p-elev-2));
   }
   .hover-lift:active {
     transform: translateY(0) scale(var(--press-scale));
@@ -675,7 +620,7 @@ pre,
   }
   .hover-lift-strong:hover {
     transform: translateY(var(--hover-lift-y)) scale(var(--hover-scale));
-    box-shadow: var(--shadow-elev-hover);
+    box-shadow: var(--p-elev-2);
   }
   .hover-lift-strong:active {
     transform: translateY(0) scale(var(--press-scale));
@@ -714,27 +659,27 @@ pre,
      have no outer frame; stripping the surface border resolves that
      dual-system tension in favor of "data-fabric over enclosure." */
   .surface {
-    background: var(--background);
-    border-radius: var(--radius-md);
+    background: var(--p-bg);
+    border-radius: var(--p-r);
   }
 
   /* Raised — for Dialog and any element that genuinely needs to feel
      LIFTED off the page (modal, popover, fixed action bar). Keeps the
      full 3px ink + shadow enclosure. */
   .surface-raised {
-    background: var(--background);
-    border: var(--border-width) solid var(--border-color);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-elev);
+    background: var(--p-bg);
+    border: var(--p-border-width) solid var(--p-border);
+    border-radius: var(--p-r);
+    box-shadow: var(--p-elev-1);
   }
 
   .surface-inset {
-    background: var(--surface-inset);
+    background: var(--p-surface-2);
     /* Chrome-tier (1px) — surface-inset is a callout WITHIN flat content; the
        boundary marks the inset, not a lift, so it tracks chrome rules instead
        of the heavy 3px floating-lift weight reserved for .surface-raised. */
-    border: var(--border-width-chrome) solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border: var(--p-border-width) solid var(--p-border);
+    border-radius: var(--p-r-sm);
   }
 
   /* `.surface-terminal` — engineered/CLI surface variant. Mono type,
@@ -743,8 +688,8 @@ pre,
      Differentiates the system from generic SaaS chrome without breaking
      the brutal core elsewhere.
 
-     Bg uses --bg-secondary (the canonical "recessed below page bg" token
-     that every theme defines with real contrast) — not --surface-inset,
+     Bg uses --p-surface (the canonical "recessed below page bg" token
+     that every theme defines with real contrast) — not --p-surface-2,
      which is a thin color-mix that collapses to invisible on cyber's dark
      near-black palette. Scanline alpha is 6% so the texture reads as
      "engineered" without becoming a moiré pattern. */
@@ -752,44 +697,44 @@ pre,
     background:
       repeating-linear-gradient(
         to bottom,
-        color-mix(in oklab, var(--foreground) 6%, transparent) 0,
-        color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
+        color-mix(in oklab, var(--p-text-1) 6%, transparent) 0,
+        color-mix(in oklab, var(--p-text-1) 6%, transparent) 1px,
         transparent 1px,
         transparent 3px
       ),
-      var(--bg-secondary);
-    border: var(--border-width-chrome) solid var(--border-color);
-    border-radius: var(--radius-sm);
+      var(--p-surface);
+    border: var(--p-border-width) solid var(--p-border);
+    border-radius: var(--p-r-sm);
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 0.75rem;
     line-height: 1.6;
-    color: var(--foreground);
+    color: var(--p-text-1);
   }
   .surface-terminal .term-prompt {
-    color: var(--org-primary);
+    color: var(--p-accent);
     margin-right: 0.5rem;
     user-select: none;
   }
   .surface-terminal .term-dim {
-    color: var(--text-muted);
+    color: var(--p-text-2);
   }
   .surface-terminal .term-ok {
-    color: var(--color-success);
+    color: var(--p-success);
   }
   .surface-terminal .term-warn {
-    color: var(--color-warning);
+    color: var(--p-warning);
   }
   .surface-terminal .term-err {
-    color: var(--color-error);
+    color: var(--p-danger);
   }
   .surface-terminal .term-accent {
-    color: var(--org-primary);
+    color: var(--p-accent);
   }
 
   /* `.glow-accent` — accent-color glow on hover/focus. Replaces background
      fills as the brand-color affordance — color reads as energy/motion,
      not as decoration. Sub-brand colors (ATLVS red, GVTEWAY blue, COMPVSS
-     yellow) flow through via --org-primary at the shell scope. */
+     yellow) flow through via --p-accent at the shell scope. */
   .glow-accent {
     transition:
       box-shadow var(--motion-hover) var(--ease-hover),
@@ -798,176 +743,18 @@ pre,
   .glow-accent:hover,
   .glow-accent:focus-visible {
     box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--org-primary) 50%, transparent),
-      0 0 24px color-mix(in srgb, var(--org-primary) 25%, transparent);
+      0 0 0 1px color-mix(in srgb, var(--p-accent) 50%, transparent),
+      0 0 24px color-mix(in srgb, var(--p-accent) 25%, transparent);
   }
 
-  /* ───── Form input base ───── */
-
-  .input-base {
-    width: 100%;
-    border-radius: var(--radius-md);
-    /* Chrome-tier (1px) per unified weight canon — inputs are tactile but
-       not "lifted off the page", so they track the same 1px rule the
-       DataTable, segmented controls, and chrome separators use. The 3px
-       weight is reserved for .surface-raised floating overlays only. */
-    border: var(--border-width-chrome) solid var(--border-color);
-    background-color: var(--background);
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: var(--foreground);
-    transition:
-      border-color var(--motion-fast) var(--ease-standard),
-      box-shadow var(--motion-fast) var(--ease-standard);
-  }
-  .input-base::placeholder {
-    color: var(--text-muted);
-  }
-  .input-base:focus {
-    border-color: var(--org-primary);
-    outline: none;
-    /* Audit T4 fix: hardcoded `0 0 0 1px var(--org-primary)` replaced with
-       the tokenized ring so themes can scale focus visibility without
-       editing every input variant. Bermuda Triangle inherits 1px from
-       primitives; future themes can override --ring-width. */
-    box-shadow: 0 0 0 var(--ring-width) var(--ring-color);
-  }
-  .input-base:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: var(--bg-secondary);
-  }
-
-  /* ───── Buttons ───── */
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition:
-      background-color var(--motion-fast) var(--ease-standard),
-      border-color var(--motion-fast) var(--ease-standard),
-      transform var(--motion-fast) var(--ease-hover),
-      box-shadow var(--motion-fast) var(--ease-standard);
-    cursor: pointer;
-    /* Chrome-tier (1px) — buttons share the input weight so a Submit row
-       reads as one weight system. .btn-primary's filled background already
-       carries enough emphasis without a heavier border. */
-    border: var(--border-width-chrome) solid transparent;
-    white-space: nowrap;
-  }
-  .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  .btn-sm {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.8125rem;
-  }
-  .btn-lg {
-    padding: 0.625rem 1.25rem;
-    font-size: 0.9375rem;
-  }
-
-  .btn-primary {
-    background: var(--org-primary);
-    /* Consumes the per-platform `--org-on-primary` override so bermuda-triangle
-       can flip COMPVSS yellow buttons to black text while ATLVS/GVTEWAY stay
-       white. Falls through to `--background` so themes that haven't declared
-       the override (the 8 legacy CHROMA themes) keep their existing behaviour. */
-    color: var(--org-on-primary, var(--background));
-    border-color: var(--org-primary);
-  }
-  .btn-primary:hover:not(:disabled) {
-    filter: brightness(1.1);
-  }
-
-  .btn-secondary {
-    background: var(--background);
-    color: var(--foreground);
-    border-color: var(--border-color);
-  }
-  .btn-secondary:hover:not(:disabled) {
-    background: var(--bg-secondary);
-    border-color: var(--text-muted);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-secondary);
-  }
-  .btn-ghost:hover:not(:disabled) {
-    color: var(--foreground);
-    background: var(--bg-secondary);
-  }
-
-  .btn-danger {
-    background: transparent;
-    color: var(--color-error);
-    border-color: var(--color-error);
-  }
-  .btn-danger:hover:not(:disabled) {
-    background: color-mix(in srgb, var(--color-error) 10%, transparent);
-  }
-
-  /* ───── Badges ───── */
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.125rem 0.5rem;
-    border-radius: 9999px;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    line-height: 1;
-    /* Audit DS-TC1: Title Case canon — pills auto-capitalize their
-       content so enum values like "draft" / "active" / "in_progress"
-       (after _-replace) render as "Draft" / "Active" / "In Progress"
-       without callers having to wrap each <Badge>{x}</Badge> in a
-       title-case helper. CSS `capitalize` only affects the first
-       letter of each word — already-uppercase text (acronyms) is
-       unaffected. */
-    text-transform: capitalize;
-  }
-  .badge-success {
-    background: color-mix(in srgb, var(--color-success) 12%, transparent);
-    color: var(--color-success);
-  }
-  .badge-warning {
-    background: color-mix(in srgb, var(--color-warning) 12%, transparent);
-    color: var(--color-warning);
-  }
-  .badge-error {
-    background: color-mix(in srgb, var(--color-error) 12%, transparent);
-    color: var(--color-error);
-  }
-  .badge-info {
-    background: color-mix(in srgb, var(--color-info) 12%, transparent);
-    color: var(--color-info);
-  }
-  .badge-muted {
-    background: var(--bg-secondary);
-    color: var(--text-muted);
-  }
-  .badge-default {
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-  }
-  .badge-brand {
-    background: var(--org-primary);
-    color: var(--org-on-primary, #fff);
-  }
-  .badge-brand-soft {
-    background: color-mix(in srgb, var(--org-primary) 10%, transparent);
-    color: var(--org-primary);
-  }
+  /*
+   * Form inputs / buttons / badges — definitions live in the kit theme
+   * (.ps-input, .ps-btn, .ps-btn--*, .ps-badge, .ps-badge--* in
+   * src/app/theme/themes/atlvs-product.css). Legacy .btn / .btn-*
+   * / .badge / .badge-* / .input-base / .data-table / .status-dot* were
+   * stripped in the kit migration; all consumers were swept to the kit
+   * primitives.
+   */
 
   /* ───── Navigation ───── */
 
@@ -977,23 +764,23 @@ pre,
     gap: 0.625rem;
     padding: 0.5rem 0.75rem;
     /* Audit: was hardcoded 0.5rem, which bypassed bermuda-triangle's
-       `--radius-md: 0` (sharp-corner canon) and any future theme that
+       `--p-r: 0` (sharp-corner canon) and any future theme that
        deviates from the legacy 8px radius. Now follows the active theme. */
-    border-radius: var(--radius-md);
+    border-radius: var(--p-r);
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--p-text-2);
     transition:
       background var(--motion-fast) var(--ease-standard),
       color var(--motion-fast) var(--ease-standard);
     text-decoration: none;
   }
   .nav-item:hover {
-    background: var(--bg-secondary);
-    color: var(--foreground);
+    background: var(--p-surface);
+    color: var(--p-text-1);
   }
   .nav-item-active {
-    background: color-mix(in srgb, var(--org-primary) 10%, transparent);
-    color: var(--org-primary);
+    background: color-mix(in srgb, var(--p-accent) 10%, transparent);
+    color: var(--p-accent);
     font-weight: 500;
   }
 
@@ -1006,39 +793,12 @@ pre,
        Was forcing UPPERCASE which violated the Title Case rule for
        non-body text. Letter-spacing kept for visual hierarchy. */
     letter-spacing: 0.04em;
-    color: var(--text-muted);
+    color: var(--p-text-2);
   }
 
   /* ───── Tables ───── */
-
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-  .data-table thead tr {
-    border-bottom: 1px solid var(--border-color);
-  }
-  .data-table th {
-    padding: 0.625rem 0.875rem;
-    text-align: left;
-    font-size: 0.75rem;
-    font-weight: 600;
-    /* Audit DS-TC1: Title Case canon — column headers render the source
-       string as-typed (callers pass "Name", "Email", "Status", etc.).
-       Was forcing UPPERCASE which violated the Title Case rule for
-       non-body text. Letter-spacing kept for visual hierarchy. */
-    letter-spacing: 0.02em;
-    color: var(--text-muted);
-  }
-  .data-table td {
-    padding: 0.75rem 0.875rem;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--foreground);
-  }
-  .data-table tbody tr:hover {
-    background: var(--bg-secondary);
-  }
+  /* The .data-table rules were retired in the kit migration — consumers now
+     use the kit's .ps-table primitive (src/app/theme/themes/atlvs-product.css). */
 
   /* ───── Spotlight (conditional row formatting) ─────
      Per SmartSuite Spotlight — soft tinted background by tone token.
@@ -1047,45 +807,25 @@ pre,
      against the underlying surface without washing the row out, and falls
      within the WCAG contrast envelope used by the badge tones. */
   .data-spotlight-info {
-    background: color-mix(in srgb, var(--color-info) 14%, transparent);
+    background: color-mix(in srgb, var(--p-info) 14%, transparent);
   }
   .data-spotlight-warn {
-    background: color-mix(in srgb, var(--color-warning) 14%, transparent);
+    background: color-mix(in srgb, var(--p-warning) 14%, transparent);
   }
   .data-spotlight-error {
-    background: color-mix(in srgb, var(--color-error) 14%, transparent);
+    background: color-mix(in srgb, var(--p-danger) 14%, transparent);
   }
   .data-spotlight-success {
-    background: color-mix(in srgb, var(--color-success) 14%, transparent);
+    background: color-mix(in srgb, var(--p-success) 14%, transparent);
   }
   .data-spotlight-neutral {
-    background: var(--surface-inset);
+    background: var(--p-surface-2);
   }
 
   /* ───── Status dots ───── */
-
-  .status-dot {
-    display: inline-block;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 9999px;
-    flex-shrink: 0;
-  }
-  .status-dot-success {
-    background-color: var(--color-success);
-  }
-  .status-dot-warning {
-    background-color: var(--color-warning);
-  }
-  .status-dot-error {
-    background-color: var(--color-error);
-  }
-  .status-dot-neutral {
-    background-color: var(--text-muted);
-  }
-  .status-dot-pulse {
-    animation: status-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
+  /* Retired in the kit migration — consumers now use .ps-dot / .ps-dot--ok /
+     .ps-dot--warn / .ps-dot--danger / .ps-dot--info / .ps-dot--muted
+     (src/app/theme/themes/atlvs-product.css). */
 
   /* ───── Grids ───── */
 
@@ -1156,7 +896,7 @@ pre,
     display: flex;
     height: 100vh;
     overflow: hidden;
-    background: var(--background);
+    background: var(--p-bg);
   }
   .console-main {
     flex: 1;
@@ -1203,63 +943,39 @@ pre,
     }
   }
 
-  /* ───── v3 ATLVS Product theme — SaaS-scoped surface overrides ─────
-   *
-   * The cosmic ghxstship skin uses a translucent glass-blur header to
-   * read as a "ship's bridge" affordance. The neutral SaaS register
-   * (atlvs-product) is deliberately quieter — solid surface, hairline
-   * separator, no blur. Per design_handoff/ATLVS_PRODUCT/README.md
-   * "deliberately NOT the cosmic-voyage GHXSTSHIP marketing aesthetic". */
-  [data-theme="atlvs-product"] .glass-nav {
+  /*
+   * Chrome surface overrides — solid surface + hairline separator (the kit
+   * is deliberately quieter than the retired cosmic register). Scoped to
+   * `[data-ui="saas"]` (kit canon) so the whole platform picks them up.
+   */
+  [data-ui="saas"] .glass-nav {
     background: var(--p-surface);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border-bottom: 1px solid var(--p-border);
   }
-  [data-theme="atlvs-product"] .glass-card {
+  [data-ui="saas"] .glass-card {
     background: var(--p-surface);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border: 1px solid var(--p-border);
   }
 
-  /* Canonical nav-item active state — uses the v3 product accent-weak
-   * tint + accent-text color (per ui_kits/atlvs/dashboard.html .ni.on).
-   * Replaces the color-mix() fallback so the active row reads in exact
-   * canon (12% tint for atlvs/gvteway, 14% for compvss). */
-  [data-theme="atlvs-product"] .nav-item-active {
+  /*
+   * Canonical nav-item active state — accent-weak tint + accent-text color
+   * per design_handoff_atlvs_kit/patterns.html sidebar. Replaces the
+   * color-mix() fallback so the active row reads in exact kit canon
+   * (12% tint for atlvs/gvteway, 14% for compvss).
+   */
+  [data-ui="saas"] .nav-item-active {
     background: var(--p-accent-weak);
     color: var(--p-accent-text);
     font-weight: 600;
   }
 
-  /* Canonical data-table polish — per ui_kits/atlvs/dashboard.html. The
-   * thead text stays Title Case per the project's standing convention
-   * (feedback_title_case_default.md); the canonical pattern's UPPERCASE
-   * is explicitly NOT adopted. Everything else aligns: tinted thead
-   * background, no trailing border on the last row, secondary text
-   * tone on tbody td, surface-2 hover. */
-  [data-theme="atlvs-product"] .data-table thead tr {
-    background: var(--p-surface-2);
-  }
-  [data-theme="atlvs-product"] .data-table tbody tr:last-child td {
-    border-bottom: 0;
-  }
-  [data-theme="atlvs-product"] .data-table tbody td {
-    color: var(--p-text-2);
-  }
-  [data-theme="atlvs-product"] .data-table tbody td b,
-  [data-theme="atlvs-product"] .data-table tbody td strong {
-    color: var(--p-text-1);
-    font-weight: 600;
-  }
-  [data-theme="atlvs-product"] .data-table tbody tr:hover {
-    background: var(--p-surface-2);
-  }
-
   .page-shell {
     min-height: 100vh;
-    background: var(--background);
+    background: var(--p-bg);
   }
   .page-content {
     max-width: 80rem;
@@ -1268,9 +984,9 @@ pre,
   }
 
   .module-header {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--p-border);
     padding: 1.25rem 2rem;
-    background: var(--background);
+    background: var(--p-bg);
   }
   .module-header-inner {
     max-width: 80rem;
@@ -1282,18 +998,7 @@ pre,
     flex-wrap: wrap;
   }
 
-  /* ───── Skeleton ───── */
-
-  .skeleton {
-    background: linear-gradient(90deg, var(--bg-secondary) 25%, var(--bg-tertiary) 50%, var(--bg-secondary) 75%);
-    background-size: 200% 100%;
-    /* Audit T10 fix: was hardcoded `1.5s ease-in-out`, bypassing the motion
-       scale and the reduced-motion zero-out. Now reads --motion-skeleton +
-       --ease-standard so the shimmer respects user preferences and themes
-       can speed/slow it via a single token. */
-    animation: skeleton-shimmer var(--motion-skeleton) var(--ease-standard) infinite;
-    border-radius: var(--radius-sm);
-  }
+  /* Skeleton — moved to .ps-skel in src/app/theme/themes/atlvs-product.css. */
 
   /* ───── Typography ───── */
 
@@ -1340,9 +1045,12 @@ pre,
   .hed-xl,
   .hed-lg,
   .hed-md {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 600;
-    text-transform: uppercase;
+    /* Kit canon — SaaS skin heading family is the body font (Space Grotesk),
+       NOT a display face. UPPERCASE is retired; copy is authored Title Case
+       in source. font-weight stays at 700 for poster-loud display tier and
+       drops on the smaller tiers via per-tier overrides below. */
+    font-family: var(--p-heading, var(--font-body, system-ui, sans-serif));
+    font-weight: 700;
     text-wrap: balance;
   }
   .hed-3xl {
@@ -1384,16 +1092,16 @@ pre,
     font-weight: 600;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--text-muted);
+    color: var(--p-text-2);
   }
   /* WCAG color-contrast (1.4.3): eyebrows are ~11px small text, so they
-     need 4.5:1. The raw fill accent (--org-primary, e.g. ATLVS pink
+     need 4.5:1. The raw fill accent (--p-accent, e.g. ATLVS pink
      #ff2e88 = 3.5:1 on white) fails as text — use the per-product
-     deepened text variant (--org-accent → --p-accent-text, AA-tuned in
+     deepened text variant (--p-accent-text → --p-accent-text, AA-tuned in
      the theme) which preserves the brand hue while passing AA. */
   .eyebrow-accent,
   .eyebrow-brand {
-    color: var(--org-accent);
+    color: var(--p-accent-text);
   }
 
   /* `.kinetic-display` — large-format display text with a subtle slide-up
@@ -1409,12 +1117,12 @@ pre,
 
   /* ───── Density (compact / comfortable / spacious) ───── */
 
-  [data-density="compact"] .input-base {
+  [data-density="compact"] .ps-input {
     padding: 0.375rem 0.625rem;
     font-size: 0.8125rem;
   }
-  [data-density="compact"] .data-table th,
-  [data-density="compact"] .data-table td {
+  [data-density="compact"] .ps-table th,
+  [data-density="compact"] .ps-table td {
     padding-top: 0.375rem;
     padding-bottom: 0.375rem;
   }
@@ -1423,12 +1131,12 @@ pre,
     padding-bottom: 0.375rem;
   }
 
-  [data-density="spacious"] .input-base {
+  [data-density="spacious"] .ps-input {
     padding: 0.75rem 1rem;
     font-size: 0.9375rem;
   }
-  [data-density="spacious"] .data-table th,
-  [data-density="spacious"] .data-table td {
+  [data-density="spacious"] .ps-table th,
+  [data-density="spacious"] .ps-table td {
     padding-top: 0.875rem;
     padding-bottom: 0.875rem;
   }
@@ -1492,866 +1200,9 @@ pre,
   }
 
   /* ───── Iconography ─────
-   * Audit B6: Bermuda Triangle canon calls for "geometric thick-stroke"
-   * iconography. Lucide React renders icons with `class="lucide lucide-…"`
-   * and a default stroke-width of 2. Bumping to 2.25 here under the theme
-   * scope gave every Lucide icon a deliberate, geometric weight on the
-   * pre-v3 `bermuda-triangle` skin. That skin was purged in the v3 brand
-   * sweep, so the override is gone — Lucide ships with its default stroke
-   * width across both surviving skins (ghxstship, atlvs-product). If a
-   * future skin wants the chunkier weight, scope an override to its
-   * data-theme selector. */
-
-  /* ═══════════════════════════════════════════════════════════════════
-     GHXSTSHIP "Deep Space Voyage" component layer (gx-*)
-     ───────────────────────────────────────────────────────────────────
-     Pop art building blocks. Every primitive below maps 1:1 to the
-     GHXSTSHIP design handoff (project/components.css + project/terminal.css
-     + project/polish.css). Tokens come from the ghxstship theme file —
-     these classes paint with --gx-* values so they keep working when the
-     theme switches; under non-ghxstship themes the gx-* tokens are
-     undefined and call sites should opt in via [data-theme="ghxstship"].
-     ─────────────────────────────────────────────────────────────────── */
-
-  /* ── Typography helpers ─────────────────────────────────────────── */
-  .gx-eyebrow {
-    font-family: var(--font-pixel, var(--font-mono, ui-monospace, monospace));
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--gx-brass, var(--org-primary));
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-  }
-  .gx-eyebrow::before {
-    content: "◆";
-    color: var(--gx-nebula, var(--org-accent));
-    font-size: 10px;
-  }
-  .gx-eyebrow.no-dot::before {
-    content: none;
-  }
-  .gx-eyebrow-mono {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--gx-plasma, var(--org-primary));
-    margin: 0;
-  }
-
-  /* Display headings — Big Shoulders Display, condensed and poster-loud.
-     Sizes use clamp() so they breathe through the breakpoint without
-     `sm:` / `md:` class clouds at every call site. */
-  .gx-display-xl,
-  .gx-display-l,
-  .gx-display-m,
-  .gx-h1,
-  .gx-h2,
-  .gx-h3 {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    margin: 0;
-    color: var(--text);
-    text-wrap: balance;
-    line-height: 0.95;
-  }
-  .gx-display-xl {
-    font-size: clamp(56px, 9vw, 128px);
-    line-height: 0.84;
-    font-weight: 900;
-  }
-  .gx-display-l {
-    font-size: clamp(48px, 7vw, 88px);
-    line-height: 0.9;
-    font-weight: 900;
-  }
-  .gx-display-m {
-    font-size: clamp(40px, 6vw, 64px);
-    line-height: 0.92;
-  }
-  .gx-h1 {
-    font-size: clamp(32px, 4vw, 44px);
-    line-height: 1;
-  }
-  .gx-h2 {
-    font-size: clamp(24px, 2vw, 32px);
-    line-height: 1.05;
-  }
-  .gx-h3 {
-    font-size: 22px;
-    line-height: 1.1;
-    font-weight: 700;
-  }
-
-  /* ── Buttons ────────────────────────────────────────────────────── */
-  .gx-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    font-size: 18px;
-    line-height: 1;
-    padding: 14px 26px;
-    border: 3px solid var(--gx-ink, var(--border));
-    border-radius: 4px;
-    background: var(--gx-brass, var(--org-primary));
-    color: var(--gx-ink, var(--org-on-primary, #0a0e27));
-    box-shadow: 3px 3px 0 var(--gx-ink, var(--border));
-    cursor: pointer;
-    text-decoration: none;
-    transition:
-      transform 80ms ease,
-      box-shadow 80ms ease,
-      background 150ms ease;
-    user-select: none;
-  }
-  .gx-btn:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 5px 5px 0 var(--gx-ink, var(--border));
-  }
-  .gx-btn:active {
-    transform: translate(3px, 3px);
-    box-shadow: 0 0 0 var(--gx-ink, var(--border));
-  }
-  .gx-btn--nebula {
-    background: var(--gx-nebula, var(--org-accent));
-    color: var(--gx-bone, #fbfaf6);
-  }
-  .gx-btn--plasma {
-    background: var(--gx-plasma, #21d4d4);
-    color: var(--gx-ink, #0a0e27);
-  }
-  .gx-btn--ink {
-    background: var(--gx-ink, var(--border));
-    color: var(--gx-bone, #fbfaf6);
-    border-color: var(--gx-ink, var(--border));
-  }
-  .gx-btn--ghost {
-    background: transparent;
-    color: var(--gx-bone, var(--text));
-    border-color: var(--gx-bone, var(--text));
-    box-shadow: 3px 3px 0 var(--gx-brass, var(--org-primary));
-  }
-  .gx-btn--sm {
-    font-size: 14px;
-    padding: 9px 16px;
-  }
-  .gx-btn--lg {
-    font-size: 22px;
-    padding: 18px 34px;
-  }
-
-  /* ── Tags / chips / badges ──────────────────────────────────────── */
-  .gx-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-weight: 700;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    padding: 5px 12px;
-    border: 2px solid var(--gx-ink, var(--border));
-    border-radius: 999px;
-    background: var(--gx-bone, #fbfaf6);
-    color: var(--gx-ink, var(--border));
-    transition:
-      transform 100ms ease,
-      box-shadow 100ms ease;
-  }
-  .gx-tag:hover {
-    transform: translate(-1px, -1px);
-  }
-  .gx-tag--brass {
-    background: var(--gx-brass, var(--org-primary));
-    color: var(--gx-ink, var(--border));
-  }
-  .gx-tag--nebula {
-    background: var(--gx-nebula, var(--org-accent));
-    color: var(--gx-bone, #fbfaf6);
-    border-color: var(--gx-bone, #fbfaf6);
-  }
-  .gx-tag--plasma {
-    background: var(--gx-plasma, #21d4d4);
-    color: var(--gx-ink, var(--border));
-  }
-  .gx-tag--ghost {
-    background: transparent;
-    color: var(--gx-bone, var(--text));
-    border-color: var(--gx-ink-3, var(--border));
-  }
-  .gx-chip-pixel {
-    display: inline-block;
-    font-family: var(--font-pixel, var(--font-mono, ui-monospace, monospace));
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 7px 12px;
-    background: var(--gx-ink, var(--border));
-    color: var(--gx-brass, var(--org-primary));
-    box-shadow: 3px 3px 0 var(--gx-brass-deep, var(--org-secondary));
-  }
-
-  /* ── Panels & cards ─────────────────────────────────────────────── */
-  .gx-panel {
-    background: var(--gx-bone, var(--surface));
-    border: 4px solid var(--gx-ink, var(--border));
-    border-radius: 4px;
-    box-shadow: 6px 6px 0 var(--gx-ink, var(--border));
-    padding: 32px;
-    color: var(--gx-ink, var(--text));
-  }
-  .gx-panel--dark {
-    background: var(--gx-ink-2, var(--surface-2));
-    color: var(--gx-bone, var(--text));
-    border-color: var(--gx-bone, var(--border));
-    box-shadow: 6px 6px 0 var(--gx-brass-deep, var(--org-secondary));
-  }
-  .gx-card {
-    background: var(--gx-ink-2, var(--surface-2));
-    border: 3px solid var(--gx-ink-3, var(--border));
-    border-radius: 4px;
-    overflow: hidden;
-    transition:
-      transform 120ms ease,
-      border-color 120ms ease,
-      box-shadow 120ms ease;
-  }
-  .gx-card:hover {
-    transform: translate(-3px, -3px);
-    border-color: var(--gx-brass, var(--org-primary));
-    box-shadow: 8px 8px 0 var(--gx-ink, var(--border));
-  }
-
-  /* ── Halftone backgrounds (CSS-only Ben-Day dots) ──────────────── */
-  .gx-halftone {
-    background-image: var(--gx-halftone-ink);
-    background-size: var(--gx-dot-size) var(--gx-dot-size);
-  }
-  .gx-halftone-brass {
-    background-image: var(--gx-halftone-brass);
-    background-size: var(--gx-dot-size) var(--gx-dot-size);
-  }
-  .gx-halftone-nebula {
-    background-image: var(--gx-halftone-nebula);
-    background-size: var(--gx-dot-size) var(--gx-dot-size);
-  }
-  .gx-halftone-fade {
-    background-image: var(--gx-halftone-bone);
-    background-size: var(--gx-dot-size) var(--gx-dot-size);
-    -webkit-mask-image: linear-gradient(180deg, #000, transparent);
-    mask-image: linear-gradient(180deg, #000, transparent);
-  }
-  .gx-stripe {
-    background: var(--gx-stripe-brass);
-  }
-  .gx-rule {
-    height: 4px;
-    background: var(--gx-ink, var(--border));
-    border: 0;
-  }
-  .gx-rule--stripe {
-    height: 14px;
-    border: 0;
-    background: var(--gx-stripe-brass);
-  }
-
-  /* ── Coordinate stamp (nautical metadata) ──────────────────────── */
-  .gx-coords {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-subtle, var(--text-muted));
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .gx-coords::before {
-    content: "◆";
-    color: var(--gx-brass, var(--org-primary));
-  }
-
-  /* ── Booking stepper (5-step horizontal nav) ───────────────────── */
-  .gx-stepper {
-    background: var(--gx-ink, var(--surface));
-    border-top: 4px solid var(--gx-ink-3, var(--border));
-    border-bottom: 4px solid var(--gx-ink-3, var(--border));
-  }
-  .gx-stepper__row {
-    display: flex;
-    align-items: stretch;
-    flex-wrap: wrap;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 32px;
-  }
-  .gx-bstep {
-    flex: 1;
-    min-width: 190px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 22px 20px;
-    text-decoration: none;
-    border-right: 2px solid var(--gx-ink-3, var(--border));
-    transition: background 120ms ease;
-    color: inherit;
-  }
-  .gx-bstep:last-child {
-    border-right: 0;
-  }
-  .gx-bstep:hover {
-    background: var(--gx-ink-2, var(--surface-2));
-  }
-  .gx-bstep__n {
-    width: 38px;
-    height: 38px;
-    flex: none;
-    border-radius: 50%;
-    border: 3px solid var(--gx-brass, var(--org-primary));
-    color: var(--gx-brass, var(--org-primary));
-    display: grid;
-    place-items: center;
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-weight: 700;
-    font-size: 14px;
-  }
-  .gx-bstep.is-cta .gx-bstep__n {
-    background: var(--gx-brass, var(--org-primary));
-    color: var(--gx-ink, var(--background));
-  }
-  .gx-bstep__l {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-subtle, var(--text-muted));
-  }
-  .gx-bstep__t {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 800;
-    font-size: 18px;
-    text-transform: uppercase;
-    color: var(--text);
-    line-height: 1;
-    margin-top: 3px;
-    display: block;
-  }
-  @media (max-width: 880px) {
-    .gx-bstep {
-      min-width: 50%;
-    }
-  }
-
-  /* ── Marquee & trust bar (ticker) ──────────────────────────────── */
-  .gx-marquee {
-    background: var(--gx-brass, var(--org-primary));
-    border-top: 4px solid var(--gx-ink, var(--border));
-    border-bottom: 4px solid var(--gx-ink, var(--border));
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .gx-marquee__track {
-    display: inline-flex;
-    gap: 40px;
-    padding: 13px 0;
-    animation: gx-marquee-scroll 28s linear infinite;
-  }
-  .gx-marquee__track span {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 900;
-    font-size: 23px;
-    text-transform: uppercase;
-    color: var(--gx-ink, var(--background));
-    letter-spacing: 0.02em;
-    display: inline-flex;
-    align-items: center;
-    gap: 40px;
-  }
-  .gx-marquee__track span::after {
-    content: "✦";
-    color: var(--gx-nebula, var(--org-accent));
-  }
-  @keyframes gx-marquee-scroll {
-    to {
-      transform: translateX(-50%);
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .gx-marquee__track {
-      animation: none;
-    }
-  }
-  .gx-trustbar {
-    background: var(--gx-ink, var(--surface));
-    border-top: 3px solid var(--gx-ink-3, var(--border));
-    border-bottom: 3px solid var(--gx-ink-3, var(--border));
-    padding: 18px 0;
-  }
-  .gx-trustbar__lbl {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--text-subtle, var(--text-muted));
-    text-align: center;
-    margin: 0 0 12px;
-  }
-  .gx-trustbar__logos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 34px;
-    flex-wrap: wrap;
-  }
-  .gx-trustbar__logos span {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 900;
-    font-size: 19px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    opacity: 0.75;
-    transition:
-      opacity 150ms ease,
-      color 150ms ease;
-  }
-  .gx-trustbar__logos span:hover {
-    opacity: 1;
-    color: var(--gx-brass, var(--org-primary));
-  }
-
-  /* ── Boarding strip (live departures ticker) ──────────────────── */
-  .gx-boardingstrip {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    overflow: hidden;
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gx-plasma, var(--org-accent));
-    margin-bottom: 30px;
-    border: 1.5px solid var(--gx-ink, var(--border));
-    border-radius: 4px;
-    padding: 8px 14px;
-    background: #05060f;
-    box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.7);
-    flex-wrap: wrap;
-  }
-  .gx-boardingstrip__now {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--gx-nebula, var(--org-accent));
-    flex: none;
-    padding-right: 12px;
-    margin-right: 12px;
-    border-right: 1.5px solid var(--gx-ink-3, var(--border));
-  }
-  .gx-boardingstrip__now::before {
-    content: "●";
-    animation: gx-blink 1.1s steps(1) infinite;
-  }
-  .gx-boardingstrip__ticker {
-    flex: 1;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .gx-boardingstrip__ticker > span {
-    display: inline-block;
-    padding-left: 100%;
-    animation: gx-ticker 26s linear infinite;
-    color: var(--gx-plasma, var(--org-accent));
-    text-shadow: 0 0 8px rgba(33, 212, 212, 0.5);
-  }
-  @keyframes gx-ticker {
-    to {
-      transform: translateX(-100%);
-    }
-  }
-  @keyframes gx-blink {
-    50% {
-      opacity: 0.45;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .gx-boardingstrip__ticker > span {
-      animation: none;
-      padding-left: 0;
-    }
-  }
-
-  /* ── Subway strip-map (8-phase itinerary) ──────────────────────── */
-  .gx-smap__line {
-    display: flex;
-    gap: 0;
-  }
-  .gx-smap__stop {
-    flex: 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding-top: 48px;
-  }
-  .gx-smap__stop::before {
-    content: "";
-    position: absolute;
-    top: 18px;
-    left: 0;
-    width: 100%;
-    height: 6px;
-    background: var(--gx-brass, var(--org-primary));
-  }
-  .gx-smap__stop:first-child::before {
-    left: 50%;
-    width: 50%;
-  }
-  .gx-smap__stop:last-child::before {
-    width: 50%;
-  }
-  .gx-smap__dot {
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: var(--gx-void, var(--background));
-    border: 5px solid var(--gx-brass, var(--org-primary));
-    z-index: 2;
-    display: grid;
-    place-items: center;
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-weight: 700;
-    font-size: 11px;
-    color: var(--gx-brass, var(--org-primary));
-  }
-  .gx-smap__stop.is-terminus .gx-smap__dot {
-    background: var(--gx-brass, var(--org-primary));
-    color: var(--gx-ink, var(--background));
-  }
-  .gx-smap__name {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 800;
-    font-size: 15px;
-    text-transform: uppercase;
-    color: var(--text);
-    line-height: 1.02;
-    margin-top: 2px;
-    letter-spacing: 0.005em;
-  }
-  .gx-smap__sub {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 9px;
-    letter-spacing: 0.05em;
-    color: var(--text-subtle, var(--text-muted));
-    margin-top: 6px;
-    text-transform: uppercase;
-  }
-  @media (max-width: 880px) {
-    .gx-smap__line {
-      flex-direction: column;
-    }
-    .gx-smap__stop {
-      flex-direction: row;
-      text-align: left;
-      gap: 16px;
-      padding: 0 0 26px 0;
-      align-items: flex-start;
-    }
-    .gx-smap__stop::before {
-      top: 0;
-      left: 18px;
-      width: 6px;
-      height: 100%;
-    }
-    .gx-smap__stop:first-child::before {
-      top: 50%;
-      height: 50%;
-    }
-    .gx-smap__stop:last-child::before {
-      height: 50%;
-    }
-    .gx-smap__dot {
-      position: static;
-      transform: none;
-      flex: none;
-    }
-    .gx-smap__name {
-      margin-top: 3px;
-    }
-  }
-
-  /* ── FIDS departures board (Past Voyages / Archives) ───────────── */
-  .gx-fids {
-    background: #080a12;
-    border: 3px solid #000;
-    border-radius: 6px;
-    box-shadow: 6px 6px 0 var(--gx-ink, var(--border));
-    overflow: hidden;
-  }
-  .gx-fids__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--gx-brass, var(--org-primary));
-    padding: 12px 22px;
-    border-bottom: 3px solid #000;
-  }
-  .gx-fids__head .gx-fids__ttl {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 900;
-    font-size: 24px;
-    text-transform: uppercase;
-    color: var(--gx-ink, var(--background));
-    letter-spacing: 0.02em;
-  }
-  .gx-fids__head .gx-fids__clock {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-weight: 700;
-    font-size: 18px;
-    color: var(--gx-ink, var(--background));
-    letter-spacing: 0.08em;
-  }
-  .gx-fids__row {
-    display: grid;
-    grid-template-columns: 84px 1fr 150px 168px;
-    gap: 14px;
-    align-items: center;
-    padding: 12px 22px;
-    border-bottom: 1px solid #161b28;
-  }
-  .gx-fids__row--head {
-    background: #0b0e18;
-    border-bottom: 2px solid #222a3d;
-  }
-  .gx-fids__row--head span {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #667099;
-  }
-  .gx-flap {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-weight: 700;
-    font-size: 20px;
-    letter-spacing: 0.06em;
-    color: #f4c657;
-    background: #11141f;
-    border-radius: 3px;
-    padding: 7px 9px;
-    display: inline-block;
-    box-shadow:
-      inset 0 -2px 0 #000,
-      inset 0 1px 0 #2a2f40;
-    position: relative;
-  }
-  .gx-flap::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 1px;
-    background: rgba(0, 0, 0, 0.55);
-  }
-  .gx-fids__dest {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 800;
-    font-size: 22px;
-    text-transform: uppercase;
-    color: var(--gx-bone, var(--text));
-    letter-spacing: 0.01em;
-    line-height: 1;
-  }
-  .gx-fids__dest small {
-    display: block;
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    color: #667099;
-    margin-top: 3px;
-    font-weight: 400;
-    text-transform: uppercase;
-  }
-  .gx-fids__meta {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #9aa3c2;
-  }
-  .gx-status {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 6px 11px;
-    border-radius: 3px;
-    text-align: center;
-    display: inline-block;
-  }
-  .gx-status--boarding {
-    background: var(--gx-nebula, var(--org-accent));
-    color: #fff;
-    animation: gx-blink 1.1s steps(1) infinite;
-  }
-  .gx-status--ontime {
-    background: rgba(47, 191, 113, 0.16);
-    color: #3ee08a;
-    border: 1px solid rgba(47, 191, 113, 0.4);
-  }
-  .gx-status--final {
-    background: rgba(233, 162, 59, 0.16);
-    color: var(--gx-brass, var(--org-primary));
-    border: 1px solid rgba(233, 162, 59, 0.45);
-  }
-  .gx-status--departed {
-    background: #161b28;
-    color: #667099;
-    border: 1px solid #222a3d;
-  }
-  .gx-status--scheduled {
-    background: rgba(33, 212, 212, 0.14);
-    color: var(--gx-plasma, var(--org-accent));
-    border: 1px solid rgba(33, 212, 212, 0.4);
-  }
-  @media (max-width: 760px) {
-    .gx-fids__row {
-      grid-template-columns: 70px 1fr 100px;
-    }
-    .gx-fids__row > .gx-fids__meta {
-      display: none;
-    }
-    .gx-fids__row--head span:nth-child(3) {
-      display: none;
-    }
-  }
-
-  /* ── Gate placard ─────────────────────────────────────────────── */
-  .gx-gate {
-    background: var(--gx-ink, var(--surface));
-    border: 3px solid var(--gx-bone, var(--border));
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .gx-gate__top {
-    background: var(--gx-bone, var(--border));
-    color: var(--gx-ink, var(--background));
-    padding: 10px 20px;
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .gx-gate__mid {
-    padding: 26px 24px;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-  .gx-gate__num {
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 900;
-    font-size: 84px;
-    line-height: 0.8;
-    color: var(--gx-brass, var(--org-primary));
-    flex: none;
-  }
-  .gx-gate__now {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 11px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--gx-nebula, var(--org-accent));
-    margin: 0 0 6px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .gx-gate__now::before {
-    content: "●";
-    animation: gx-blink 1.1s steps(1) infinite;
-  }
-
-  /* ── Marketing nav — GHXSTSHIP wayfinding look ───────────────────
-     Override .nav-item under the ghxstship theme so the marketing
-     header reads as mono-uppercase wayfinding (Vercel/Linear neutral
-     style replaced by the design's punchier coordinate label).
-     Scoped to headers so console/portal/mobile sidebar nav-items keep
-     their own treatment. */
-  [data-theme="ghxstship"] header .nav-item {
-    font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 11px;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-  [data-theme="ghxstship"] header .nav-item:hover {
-    color: var(--gx-brass, var(--org-primary));
-    background: transparent;
-  }
-
-  /* ── Starburst "POW" badge (clip-path star) ───────────────────── */
-  .gx-burst {
-    display: grid;
-    place-items: center;
-    text-align: center;
-    width: 120px;
-    height: 120px;
-    color: var(--gx-ink, var(--background));
-    font-family: var(--font-display, system-ui, sans-serif);
-    font-weight: 900;
-    text-transform: uppercase;
-    background: var(--gx-nebula, var(--org-accent));
-    clip-path: polygon(
-      50% 0%,
-      61% 16%,
-      79% 8%,
-      79% 28%,
-      98% 28%,
-      86% 44%,
-      100% 56%,
-      82% 64%,
-      92% 82%,
-      72% 79%,
-      68% 98%,
-      52% 86%,
-      38% 100%,
-      33% 80%,
-      13% 86%,
-      20% 67%,
-      1% 60%,
-      16% 47%,
-      3% 31%,
-      22% 30%,
-      21% 10%,
-      39% 17%
-    );
-  }
+   * Lucide React ships with its default stroke-width of 2 across the
+   * canonical ATLVS kit skin. If a future surface wants a chunkier weight,
+   * scope an override under its data-theme or data-product selector. */
 } /* end @layer components */
 
 /* ───── RTL — bidirectional layout ─────

@@ -76,7 +76,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
             <div className="flex flex-wrap gap-1.5">
               <a
                 href="/console/photos"
-                className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-xs"
+                className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-xs"
               >
                 {t("console.photos.albums.all", undefined, "All")}
               </a>
@@ -84,7 +84,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
                 <a
                   key={a}
                   href={`/console/photos?album=${encodeURIComponent(a)}`}
-                  className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-xs"
+                  className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-xs"
                 >
                   {a}
                 </a>
@@ -109,10 +109,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
             {photos.map((p) => (
               <li key={p.id} className="surface overflow-hidden">
                 {/* Thumbnails are signed via /api/v1/photos/[id]/thumb when wired. */}
-                <div className="aspect-square bg-[var(--surface-inset)]" />
+                <div className="aspect-square bg-[var(--p-surface-2)]" />
                 <div className="p-2 text-[11px]">
                   <div className="truncate font-medium">{p.caption ?? "—"}</div>
-                  <div className="text-[var(--text-muted)]">
+                  <div className="text-[var(--p-text-2)]">
                     {p.album ?? t("console.photos.unalbumed", undefined, "Unalbumed")} · {fmt(p.taken_at)}
                   </div>
                 </div>

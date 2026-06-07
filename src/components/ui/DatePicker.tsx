@@ -69,17 +69,17 @@ export function DatePicker({
           type="button"
           disabled={disabled}
           aria-label={ariaLabel ?? placeholder}
-          className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
+          className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
-          <span className={selected ? "" : "text-[var(--text-muted)]"}>{display}</span>
-          <Calendar size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
+          <span className={selected ? "" : "text-[var(--p-text-2)]"}>{display}</span>
+          <Calendar size={12} className="text-[var(--p-text-2)]" aria-hidden="true" />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
           align="start"
           sideOffset={4}
-          className="z-50 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-3"
+          className="z-50 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-3"
         >
           <Calendar_
             month={viewMonth}
@@ -96,8 +96,8 @@ export function DatePicker({
             max={max}
           />
           {withTime && (
-            <div className="mt-2 flex items-center gap-2 border-t border-[var(--border-color)] pt-2">
-              <span className="text-xs text-[var(--text-muted)]">Time</span>
+            <div className="mt-2 flex items-center gap-2 border-t border-[var(--p-border)] pt-2">
+              <span className="text-xs text-[var(--p-text-2)]">Time</span>
               <input
                 type="time"
                 value={selected ? toTimeStr(selected) : ""}
@@ -108,7 +108,7 @@ export function DatePicker({
                   next.setHours(hh ?? 0, mm ?? 0, 0, 0);
                   commit(next);
                 }}
-                className="input-base flex-1 text-sm"
+                className="ps-input flex-1 text-sm"
               />
             </div>
           )}
@@ -119,7 +119,7 @@ export function DatePicker({
                 commit(null);
                 setOpen(false);
               }}
-              className="mt-2 w-full rounded px-2 py-1 text-xs text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+              className="mt-2 w-full rounded px-2 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
             >
               Clear
             </button>
@@ -194,7 +194,7 @@ function Calendar_({
           type="button"
           aria-label="Previous month"
           onClick={() => onMonthChange(addMonths(month, -1))}
-          className="rounded p-1 hover:bg-[var(--surface-inset)]"
+          className="rounded p-1 hover:bg-[var(--p-surface-2)]"
         >
           <ChevronLeft size={14} />
         </button>
@@ -203,12 +203,12 @@ function Calendar_({
           type="button"
           aria-label="Next month"
           onClick={() => onMonthChange(addMonths(month, 1))}
-          className="rounded p-1 hover:bg-[var(--surface-inset)]"
+          className="rounded p-1 hover:bg-[var(--p-surface-2)]"
         >
           <ChevronRight size={14} />
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-[var(--text-muted)] uppercase">
+      <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] font-semibold text-[var(--p-text-2)] uppercase">
         {weekdayLabels.map((w, i) => (
           <div key={i}>{w}</div>
         ))}
@@ -232,12 +232,12 @@ function Calendar_({
               onClick={() => !dis && onSelect(d)}
               className={`relative rounded px-0 py-1.5 text-xs transition-colors ${
                 isSelected
-                  ? "bg-[var(--org-primary)] font-medium text-white"
+                  ? "bg-[var(--p-accent)] font-medium text-white"
                   : inMonth
-                    ? "text-[var(--text-primary)] hover:bg-[var(--surface-inset)]"
-                    : "text-[var(--text-muted)] opacity-50 hover:bg-[var(--surface-inset)]"
+                    ? "text-[var(--p-text-1)] hover:bg-[var(--p-surface-2)]"
+                    : "text-[var(--p-text-2)] opacity-50 hover:bg-[var(--p-surface-2)]"
               } ${dis ? "pointer-events-none opacity-30" : ""} ${
-                isToday && !isSelected ? "ring-1 ring-[var(--org-primary)]/40" : ""
+                isToday && !isSelected ? "ring-1 ring-[var(--p-accent)]/40" : ""
               }`}
             >
               {d.getDate()}
@@ -336,19 +336,19 @@ export function RangeDatePicker({
         <button
           type="button"
           aria-label={placeholder}
-          className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
+          className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
-          <span className={value.from ? "" : "text-[var(--text-muted)]"}>{display}</span>
-          <Calendar size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
+          <span className={value.from ? "" : "text-[var(--p-text-2)]"}>{display}</span>
+          <Calendar size={12} className="text-[var(--p-text-2)]" aria-hidden="true" />
         </button>
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
           align="start"
           sideOffset={4}
-          className="z-50 flex gap-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-3"
+          className="z-50 flex gap-3 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-3"
         >
-          <div className="flex w-32 flex-col gap-0.5 border-e border-[var(--border-color)] pe-3 text-xs">
+          <div className="flex w-32 flex-col gap-0.5 border-e border-[var(--p-border)] pe-3 text-xs">
             {RANGE_PRESETS.map((p) => (
               <button
                 key={p.label}
@@ -358,7 +358,7 @@ export function RangeDatePicker({
                   setPickingEnd(false);
                   setOpen(false);
                 }}
-                className="rounded px-2 py-1 text-start text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                className="rounded px-2 py-1 text-start text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
               >
                 {p.label}
               </button>

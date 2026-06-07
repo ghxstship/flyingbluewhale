@@ -21,7 +21,7 @@ export default async function MobileTrackerPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.tracker.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -75,9 +75,9 @@ export default async function MobileTrackerPage() {
   return (
     <main className="space-y-4 px-4 pt-4 pb-24">
       <header>
-        <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">XPMS</div>
+        <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">XPMS</div>
         <h1 className="mt-1 text-xl font-semibold">{t("m.tracker.title", undefined, "Tracker")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {sections.length}{" "}
           {sections.length === 1
             ? t("m.tracker.projectSingular", undefined, "project")
@@ -107,7 +107,7 @@ export default async function MobileTrackerPage() {
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
                 <div className="truncate text-sm font-semibold">{project!.name}</div>
-                <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                   {atomCount}{" "}
                   {atomCount === 1
                     ? t("m.tracker.atomSingular", undefined, "atom")

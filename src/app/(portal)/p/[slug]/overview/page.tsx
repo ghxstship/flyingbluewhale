@@ -26,7 +26,7 @@ export default async function PortalOverview({ params }: { params: Promise<{ slu
           {["artist", "vendor", "client", "sponsor", "guest", "crew"].map((persona) => (
             <Link key={persona} href={`/p/${slug}/${persona}`} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{toTitle(persona)}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">
                 {t("p.overview.openPortal", { persona: toTitle(persona) }, `Open ${toTitle(persona)} Portal →`)}
               </div>
             </Link>

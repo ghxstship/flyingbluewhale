@@ -45,11 +45,11 @@ export default async function Page({ params }: { params: Promise<{ token: string
             href={`/msa/${token}/print`}
             target="_blank"
             rel="noreferrer"
-            className="rounded border border-[var(--border-default)] px-3 py-1.5 text-[var(--text-secondary)] hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+            className="rounded border border-[var(--border-default)] px-3 py-1.5 text-[var(--p-text-2)] hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
           >
             Download PDF / Print
           </a>
-          <span className="text-[var(--text-muted)]">Reference · MSA-{msa.id.slice(0, 8).toUpperCase()}</span>
+          <span className="text-[var(--p-text-2)]">Reference · MSA-{msa.id.slice(0, 8).toUpperCase()}</span>
         </div>
       </div>
 
@@ -57,10 +57,8 @@ export default async function Page({ params }: { params: Promise<{ token: string
 
       {!alreadySigned && (
         <div className="space-y-3">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            Sign &amp; Submit
-          </h2>
-          <p className="text-sm text-[var(--text-muted)]">
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Sign &amp; Submit</h2>
+          <p className="text-sm text-[var(--p-text-2)]">
             Once signed, this Agreement applies to every engagement letter we issue you, until revoked or superseded.
             You won&rsquo;t be asked to re-sign this for future productions — just the engagement letter for each one.
           </p>

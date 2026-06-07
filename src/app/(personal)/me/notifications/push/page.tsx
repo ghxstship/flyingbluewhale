@@ -78,9 +78,9 @@ export default async function NotificationsPushPage() {
               undefined,
               "Push notifications are not yet enabled on this server. An administrator must set",
             )}
-            <code className="mx-1 rounded bg-[var(--surface-inset)] px-1 font-mono text-xs">VAPID_*</code>
+            <code className="mx-1 rounded bg-[var(--p-surface-2)] px-1 font-mono text-xs">VAPID_*</code>
             {t("me.notifications.push.notConfigured.and", undefined, "and")}
-            <code className="mx-1 rounded bg-[var(--surface-inset)] px-1 font-mono text-xs">
+            <code className="mx-1 rounded bg-[var(--p-surface-2)] px-1 font-mono text-xs">
               NEXT_PUBLIC_VAPID_PUBLIC_KEY
             </code>
             {t("me.notifications.push.notConfigured.suffix", undefined, "environment variables.")}
@@ -110,7 +110,7 @@ async function Header() {
       <h1 className="text-2xl font-semibold tracking-tight">
         {t("me.notifications.push.title", undefined, "Push Notifications")}
       </h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.notifications.push.subtitle",
           undefined,
@@ -119,10 +119,10 @@ async function Header() {
       </p>
       <div className="surface mt-4 flex items-center justify-between gap-3 p-3">
         <div className="flex items-center gap-2">
-          <Inbox size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
-          <p className="text-sm text-[var(--text-secondary)]">
+          <Inbox size={16} className="text-[var(--p-text-2)]" aria-hidden="true" />
+          <p className="text-sm text-[var(--p-text-2)]">
             {t("me.notifications.push.configurePrompt", undefined, "Configure which events trigger push?")}{" "}
-            <Link href="/me/notifications" className="font-medium text-[var(--foreground)] underline">
+            <Link href="/me/notifications" className="font-medium text-[var(--p-text-1)] underline">
               {t("me.notifications.push.editPreferences", undefined, "Edit Preferences")}
             </Link>
           </p>

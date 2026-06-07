@@ -43,14 +43,14 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
             html, body { background: #fff; color: #000; }
             /* Force the letter document into a print-friendly palette */
             main[data-theme="light"] {
-              --surface-base: #ffffff;
-              --surface-raised: #ffffff;
-              --surface-inset: #f5f5f3;
-              --text-primary: #0a0a0a;
-              --text-secondary: #1a1a1a;
-              --text-muted: #6b6b6b;
+              --p-bg: #ffffff;
+              --p-surface: #ffffff;
+              --p-surface-2: #f5f5f3;
+              --p-text-1: #0a0a0a;
+              --p-text-2: #1a1a1a;
+              --p-text-2: #6b6b6b;
               --border-default: #d4d4d4;
-              --org-primary: #1a4dbb;
+              --p-accent: #1a4dbb;
               color: #0a0a0a;
             }
             main[data-theme="light"] article { color: #0a0a0a; }
@@ -71,7 +71,7 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
           </div>
           <div className="flex items-center gap-3">
             <PrintTrigger />
-            <a href={`/offer/${token}`} className="text-[var(--color-info)] hover:underline">
+            <a href={`/offer/${token}`} className="text-[var(--p-info)] hover:underline">
               ← Back to letter
             </a>
           </div>

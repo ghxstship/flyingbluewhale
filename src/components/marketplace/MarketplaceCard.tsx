@@ -24,7 +24,7 @@ export function MarketplaceCard({ href, title, subtitle, meta, tags, rating, bad
       <div className="flex items-start justify-between gap-2">
         <div className="flex flex-col gap-1">
           <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-          {subtitle && <p className="text-sm text-[var(--text-secondary)]">{subtitle}</p>}
+          {subtitle && <p className="text-sm text-[var(--p-text-2)]">{subtitle}</p>}
         </div>
         <div className="flex items-center gap-1.5">
           {verified && <Badge variant="success">verified</Badge>}
@@ -39,12 +39,12 @@ export function MarketplaceCard({ href, title, subtitle, meta, tags, rating, bad
               {t}
             </Badge>
           ))}
-          {tags.length > 4 && <span className="text-xs text-[var(--text-secondary)]">+{tags.length - 4}</span>}
+          {tags.length > 4 && <span className="text-xs text-[var(--p-text-2)]">+{tags.length - 4}</span>}
         </div>
       )}
 
       {meta && meta.some(Boolean) && (
-        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--text-secondary)]">
+        <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--p-text-2)]">
           {meta.filter(Boolean).map((m, i) => (
             <li key={i}>{m}</li>
           ))}
@@ -52,8 +52,8 @@ export function MarketplaceCard({ href, title, subtitle, meta, tags, rating, bad
       )}
 
       {rating && rating.count > 0 && (
-        <p className="text-xs text-[var(--text-secondary)]">
-          ★ {rating.avg ?? "—"} <span className="text-[var(--text-muted)]">({rating.count})</span>
+        <p className="text-xs text-[var(--p-text-2)]">
+          ★ {rating.avg ?? "—"} <span className="text-[var(--p-text-2)]">({rating.count})</span>
         </p>
       )}
     </Link>

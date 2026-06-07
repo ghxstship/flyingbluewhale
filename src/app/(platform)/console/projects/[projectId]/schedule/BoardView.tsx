@@ -22,7 +22,7 @@ export function BoardView({ cards }: { cards: BoardCard[] }) {
   const statuses = Array.from(new Set(cards.map((c) => c.status))).sort();
   if (statuses.length === 0) {
     return (
-      <div className="surface p-6 text-sm text-[var(--text-muted)]">
+      <div className="surface p-6 text-sm text-[var(--p-text-2)]">
         {t("console.projects.schedule.board.empty", undefined, "Nothing To Board.")}
       </div>
     );
@@ -41,7 +41,7 @@ export function BoardView({ cards }: { cards: BoardCard[] }) {
           <div key={s} className="surface-inset w-72 shrink-0 rounded-md p-2">
             <div className="mb-2 flex items-center justify-between px-1">
               <StatusBadge status={s} />
-              <span className="font-mono text-[10px] text-[var(--text-muted)]">{items.length}</span>
+              <span className="font-mono text-[10px] text-[var(--p-text-2)]">{items.length}</span>
             </div>
             <ul className="space-y-2">
               {items.map((c) => (
@@ -52,13 +52,13 @@ export function BoardView({ cards }: { cards: BoardCard[] }) {
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="font-medium">{c.title}</div>
-                      <span className="font-mono text-[10px] text-[var(--text-muted)] uppercase">
+                      <span className="font-mono text-[10px] text-[var(--p-text-2)] uppercase">
                         {c.kind === "task"
                           ? t("console.projects.schedule.board.kindTask", undefined, "T")
                           : t("console.projects.schedule.board.kindEvent", undefined, "E")}
                       </span>
                     </div>
-                    {c.due && <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">{c.due}</div>}
+                    {c.due && <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">{c.due}</div>}
                   </Link>
                 </li>
               ))}

@@ -35,9 +35,7 @@ export default async function CommunityPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.community.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.community.hero.title")}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.community.hero.subtitle")}
-        </p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.community.hero.subtitle")}</p>
       </section>
 
       {/* Community metric strip — lightweight trust signal on top of stories */}
@@ -50,8 +48,8 @@ export default async function CommunityPage() {
             { value: "34", label: t("marketing.pages.community.metrics.countries") },
           ].map((m) => (
             <div key={m.label}>
-              <div className="hed-lg text-[var(--org-primary)]">{m.value}</div>
-              <div className="mt-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{m.label}</div>
+              <div className="hed-lg text-[var(--p-accent)]">{m.value}</div>
+              <div className="mt-1 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{m.label}</div>
             </div>
           ))}
         </div>
@@ -61,7 +59,7 @@ export default async function CommunityPage() {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="hed-lg">{t("marketing.pages.community.stories.title")}</h2>
-            <p className="mt-1 text-sm text-[var(--text-muted)]">{t("marketing.pages.community.stories.subtitle")}</p>
+            <p className="mt-1 text-sm text-[var(--p-text-2)]">{t("marketing.pages.community.stories.subtitle")}</p>
           </div>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -69,12 +67,12 @@ export default async function CommunityPage() {
             <Link key={c.slug} href={`/community/${c.slug}`} className="surface hover-lift flex flex-col p-6">
               <div className="eyebrow">{c.industry}</div>
               <div className="hed-lg mt-3">{c.name}</div>
-              <div className="mt-2 flex-1 text-sm text-[var(--text-secondary)]">{c.blurb}</div>
+              <div className="mt-2 flex-1 text-sm text-[var(--p-text-2)]">{c.blurb}</div>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 {c.stats.slice(0, 2).map((s) => (
                   <div key={s.label} className="surface-inset p-3">
-                    <div className="text-xl font-semibold tracking-tight text-[var(--org-primary)]">{s.value}</div>
-                    <div className="mt-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{s.label}</div>
+                    <div className="text-xl font-semibold tracking-tight text-[var(--p-accent)]">{s.value}</div>
+                    <div className="mt-1 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -88,13 +86,13 @@ export default async function CommunityPage() {
           <div>
             <div className="eyebrow eyebrow-brand">{t("marketing.pages.community.join.eyebrow")}</div>
             <h3 className="hed-lg mt-3">{t("marketing.pages.community.join.title")}</h3>
-            <p className="mt-3 text-sm text-[var(--text-secondary)]">{t("marketing.pages.community.join.body")}</p>
+            <p className="mt-3 text-sm text-[var(--p-text-2)]">{t("marketing.pages.community.join.body")}</p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row md:justify-end">
-            <Link href="/contact?topic=community-story" className="btn btn-primary btn-md">
+            <Link href="/contact?topic=community-story" className="ps-btn btn-md">
               {t("marketing.pages.community.join.pitchCta")}
             </Link>
-            <Link href="/signup" className="btn btn-ghost btn-md">
+            <Link href="/signup" className="ps-btn ps-btn--ghost btn-md">
               {t("marketing.pages.community.join.startCta")}
             </Link>
           </div>

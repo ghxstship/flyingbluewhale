@@ -9,7 +9,7 @@ import { getRequestT } from "@/lib/i18n/request";
 import { updateExpense, type State } from "./actions";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 
-const SELECT_CLASS = "input-base focus-ring w-full";
+const SELECT_CLASS = "ps-input focus-ring w-full";
 
 function XpmsSelect({
   label,
@@ -24,7 +24,7 @@ function XpmsSelect({
 }) {
   return (
     <label className="flex flex-col gap-1.5">
-      <span className="text-xs font-medium text-[var(--text-secondary)]">{label}</span>
+      <span className="text-xs font-medium text-[var(--p-text-2)]">{label}</span>
       <select name={name} defaultValue={defaultValue ?? ""} className={SELECT_CLASS}>
         <option value="">—</option>
         {options.map((o) => (
@@ -128,10 +128,10 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
             />
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.finance.expenses.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
               <option value="pending">{t("console.finance.expenses.status.pending", undefined, "pending")}</option>
               <option value="approved">{t("console.finance.expenses.status.approved", undefined, "approved")}</option>
               <option value="rejected">{t("console.finance.expenses.status.rejected", undefined, "rejected")}</option>

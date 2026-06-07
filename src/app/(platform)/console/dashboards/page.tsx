@@ -280,7 +280,7 @@ export default async function Page() {
             <h2 className="pb-3 text-base font-semibold">
               {t("console.dashboards.sections.portfolioSnapshot", undefined, "Portfolio Snapshot")}
             </h2>
-            <div className="surface p-6 text-sm text-[var(--text-muted)]">
+            <div className="surface p-6 text-sm text-[var(--p-text-2)]">
               {t(
                 "console.dashboards.empty.noActiveProjectsHint",
                 undefined,
@@ -315,14 +315,12 @@ function DashboardCard({
   return (
     <Link href={`/console/dashboards/${dashboard.id}`} className="surface hover-lift block p-4">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-          {scopeLabel}
-        </span>
-        <span className="text-[10px] text-[var(--text-muted)]">{widgetLabel}</span>
+        <span className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{scopeLabel}</span>
+        <span className="text-[10px] text-[var(--p-text-2)]">{widgetLabel}</span>
       </div>
-      <div className="mt-2 text-base font-semibold tracking-tight text-[var(--foreground)]">{dashboard.name}</div>
+      <div className="mt-2 text-base font-semibold tracking-tight text-[var(--p-text-1)]">{dashboard.name}</div>
       {dashboard.description && (
-        <p className="mt-1 line-clamp-2 text-xs text-[var(--text-muted)]">{dashboard.description}</p>
+        <p className="mt-1 line-clamp-2 text-xs text-[var(--p-text-2)]">{dashboard.description}</p>
       )}
     </Link>
   );

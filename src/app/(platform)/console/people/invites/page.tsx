@@ -57,7 +57,7 @@ export default async function InvitesPage() {
             <h3 className="text-sm font-semibold">
               {t("console.people.invites.inviteSomeone", undefined, "Invite Someone")}
             </h3>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.people.invites.inviteSomeoneHint",
                 undefined,
@@ -88,7 +88,7 @@ export default async function InvitesPage() {
               }
             />
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.people.invites.col.email", undefined, "Email")}</th>
@@ -104,7 +104,7 @@ export default async function InvitesPage() {
                     <td>
                       <Badge variant="brand">{i.role}</Badge>
                       {i.project_id && (
-                        <span className="ms-2 text-xs text-[var(--text-muted)]">
+                        <span className="ms-2 text-xs text-[var(--p-text-2)]">
                           + {i.project_role}{" "}
                           {t(
                             "console.people.invites.onProject",
@@ -118,7 +118,7 @@ export default async function InvitesPage() {
                         </span>
                       )}
                     </td>
-                    <td className="text-[var(--text-muted)]">{relTime(i.expires_at)}</td>
+                    <td className="text-[var(--p-text-2)]">{relTime(i.expires_at)}</td>
                     <td>
                       <Button href={`/accept-invite/${i.token}`} variant="ghost" size="sm">
                         {t("console.people.invites.copyLink", undefined, "Copy link")}
@@ -134,7 +134,7 @@ export default async function InvitesPage() {
         {history.length > 0 && (
           <section className="surface p-5">
             <h3 className="text-sm font-semibold">{t("console.people.invites.history", undefined, "History")}</h3>
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.people.invites.col.email", undefined, "Email")}</th>
@@ -147,11 +147,11 @@ export default async function InvitesPage() {
                 {history.map((i) => (
                   <tr key={i.id}>
                     <td>{i.email}</td>
-                    <td className="text-[var(--text-muted)]">{i.role}</td>
+                    <td className="text-[var(--p-text-2)]">{i.role}</td>
                     <td>
                       <Badge variant={i.status === "accepted" ? "success" : "muted"}>{toTitle(i.status)}</Badge>
                     </td>
-                    <td className="text-[var(--text-muted)]">{relTime(i.accepted_at ?? i.created_at)}</td>
+                    <td className="text-[var(--p-text-2)]">{relTime(i.accepted_at ?? i.created_at)}</td>
                   </tr>
                 ))}
               </tbody>

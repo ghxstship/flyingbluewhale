@@ -1,9 +1,9 @@
 /**
  * Marketing-shell Suspense fallback.
  *
- * Returns `null` instead of a full skeleton so client-side `<Link>` nav
+ * Returns `null` instead of a full ps-skel so client-side `<Link>` nav
  * keeps the previous page painted until the new page's RSC payload is
- * ready, matching the Vercel / Linear / Stripe pattern. A heavy skeleton
+ * ready, matching the Vercel / Linear / Stripe pattern. A heavy ps-skel
  * here flashes jarringly on fast transitions (the prior version rendered
  * a 6-row PageSkeleton that was visible for ~150ms on every internal
  * nav even when the new page was static and fully pre-rendered).

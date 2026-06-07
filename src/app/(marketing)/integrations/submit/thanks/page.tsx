@@ -22,7 +22,7 @@ export default function Page() {
       <section className="mx-auto max-w-2xl px-6 pt-12 pb-20 text-center">
         <div className="eyebrow eyebrow-brand">Partner Program</div>
         <h1 className="hed-3xl mt-4">Submission Received.</h1>
-        <p className="mt-5 text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 text-lg text-[var(--p-text-2)]">
           Your proposal is in the queue. The ATLVS partner-AM team typically responds within 5 business days. Watch the
           inbox you submitted with — we&apos;ll reach out from <span className="font-mono">partners@atlvs.pro</span>.
         </p>

@@ -56,7 +56,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t.hero.eyebrow}</div>
         <h1 className="hed-2xl mt-4">{t.hero.title}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t.hero.body}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t.hero.body}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -71,7 +71,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
           {t.workflows.map((w) => (
             <div key={w.title} className="surface p-6">
               <div className="text-sm font-semibold">{w.title}</div>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{w.body}</p>
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{w.body}</p>
             </div>
           ))}
         </div>
@@ -85,8 +85,8 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
             <ul className="mt-6 space-y-3 text-sm">
               {t.painPoints.map((p) => (
                 <li key={p} className="flex items-start gap-2">
-                  <span className="status-dot status-dot-error mt-2" />
-                  <span className="text-[var(--text-secondary)]">{p}</span>
+                  <span className="ps-dot ps-dot ps-dot--danger mt-2" />
+                  <span className="text-[var(--p-text-2)]">{p}</span>
                 </li>
               ))}
             </ul>
@@ -107,7 +107,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
                 className="surface hover-lift group flex items-center justify-between p-4 text-sm"
               >
                 <span className="font-medium">{m.name}</span>
-                <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+                <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
               </Link>
             ))}
         </div>
@@ -127,7 +127,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
                   className="surface hover-lift group flex items-center justify-between p-4 text-sm"
                 >
                   <span className="font-medium">{x.info.name}</span>
-                  <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+                  <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
                 </Link>
               ))}
           </div>
@@ -151,7 +151,7 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
               className="surface hover-lift group flex items-center justify-between p-4 text-sm"
             >
               <span className="font-medium">{s.role}</span>
-              <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+              <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
             </Link>
           ))}
         </div>

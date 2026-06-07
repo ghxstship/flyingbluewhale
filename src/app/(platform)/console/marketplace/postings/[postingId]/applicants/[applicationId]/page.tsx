@@ -68,11 +68,11 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
             </h2>
             <dl className="space-y-1 text-sm">
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("console.marketplace.postings.applicants.detail.resumeLabel", undefined, "Resume:")}
                 </span>{" "}
                 {a.resume_url ? (
-                  <a className="font-mono text-[var(--org-primary)]" href={a.resume_url} target="_blank" rel="noopener">
+                  <a className="font-mono text-[var(--p-accent)]" href={a.resume_url} target="_blank" rel="noopener">
                     ↗
                   </a>
                 ) : (
@@ -80,11 +80,11 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
                 )}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("console.marketplace.postings.applicants.detail.reelLabel", undefined, "Reel:")}
                 </span>{" "}
                 {a.reel_url ? (
-                  <a className="font-mono text-[var(--org-primary)]" href={a.reel_url} target="_blank" rel="noopener">
+                  <a className="font-mono text-[var(--p-accent)]" href={a.reel_url} target="_blank" rel="noopener">
                     ↗
                   </a>
                 ) : (
@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
                 )}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("console.marketplace.postings.applicants.detail.proposedRateLabel", undefined, "Proposed rate:")}
                 </span>{" "}
                 {a.day_rate_proposed_cents ? `$${(a.day_rate_proposed_cents / 100).toFixed(0)}` : "—"}
@@ -126,10 +126,10 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           >
             <input type="hidden" name="application_id" value={a.id} />
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.applicants.detail.stageLabel", undefined, "Stage")}
               </label>
-              <select name="status" className="input-base mt-1.5 w-full" defaultValue={a.status}>
+              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={a.status}>
                 {JOB_APPLICATION_STATUSES.map((s) => (
                   <option key={s} value={s}>
                     {s}
@@ -146,14 +146,14 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               defaultValue={a.score ?? ""}
             />
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.applicants.detail.reviewerNotesLabel", undefined, "Reviewer Notes")}
               </label>
               <textarea
                 name="reviewer_notes"
                 rows={4}
                 maxLength={4000}
-                className="input-base mt-1.5 w-full"
+                className="ps-input mt-1.5 w-full"
                 defaultValue={a.reviewer_notes ?? ""}
               />
             </div>

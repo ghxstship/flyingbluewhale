@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             hint={t("console.knowledge.edit.fields.tags.hint", undefined, "Comma-separated")}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.knowledge.edit.fields.body.label", undefined, "Body — Markdown")}
             </span>
             <textarea
@@ -100,7 +100,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               defaultValue={article.body_markdown}
               rows={22}
               required
-              className="input-base focus-ring w-full font-mono text-sm"
+              className="ps-input focus-ring w-full font-mono text-sm"
             />
           </label>
         </FormShell>

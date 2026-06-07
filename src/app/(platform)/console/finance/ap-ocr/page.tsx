@@ -101,7 +101,7 @@ export default async function Page() {
           <h2 className="text-sm font-semibold">
             {t("console.finance.apOcr.upload.heading", undefined, "Upload an invoice PDF")}
           </h2>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.finance.apOcr.upload.description",
               undefined,

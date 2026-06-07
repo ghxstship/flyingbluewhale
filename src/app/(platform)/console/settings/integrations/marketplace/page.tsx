@@ -129,7 +129,7 @@ export default async function Page() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <div className="text-sm font-semibold">{c.name}</div>
-                        <p className="mt-1 text-xs text-[var(--text-muted)]">{c.desc}</p>
+                        <p className="mt-1 text-xs text-[var(--p-text-2)]">{c.desc}</p>
                       </div>
                       {isInstalled ? (
                         <Badge variant="success">
@@ -149,14 +149,14 @@ export default async function Page() {
                       {c.available ? (
                         <Link
                           href={isInstalled ? "/console/settings/integrations" : `/console/settings/integrations`}
-                          className="btn btn-secondary btn-sm w-full"
+                          className="ps-btn ps-btn--ghost ps-btn--sm w-full"
                         >
                           {isInstalled
                             ? t("console.settings.integrations.marketplace.manage", undefined, "Manage")
                             : t("console.settings.integrations.marketplace.install", undefined, "Install")}
                         </Link>
                       ) : (
-                        <button type="button" className="btn btn-secondary btn-sm w-full" disabled>
+                        <button type="button" className="ps-btn ps-btn--ghost ps-btn--sm w-full" disabled>
                           {t("console.settings.integrations.marketplace.notifyMe", undefined, "Notify me")}
                         </button>
                       )}

@@ -366,7 +366,7 @@ function DataTableEmpty({
 }) {
   return (
     <div className="relative overflow-x-auto" aria-label={title} role="status">
-      <table className="data-table" role="grid" aria-hidden="true">
+      <table className="ps-table" role="grid" aria-hidden="true">
         <thead>
           <tr>
             {columns.map((c) => (
@@ -381,7 +381,7 @@ function DataTableEmpty({
             <tr key={r} className="opacity-30" style={{ borderBottomStyle: "dashed" }}>
               {columns.map((c) => (
                 <td key={c.key} className={c.className}>
-                  <span className="text-[var(--text-muted)]">—</span>
+                  <span className="text-[var(--p-text-2)]">—</span>
                 </td>
               ))}
             </tr>
@@ -389,7 +389,7 @@ function DataTableEmpty({
         </tbody>
       </table>
       <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 px-4">
-        <div className="pointer-events-auto mx-auto max-w-sm rounded-md border border-[var(--border-color)] bg-[var(--background)]/95 backdrop-blur-md">
+        <div className="pointer-events-auto mx-auto max-w-sm rounded-md border border-[var(--p-border)] bg-[var(--p-bg)]/95 backdrop-blur-md">
           <EmptyState size="compact" title={title} description={description} action={action} />
         </div>
       </div>
@@ -400,12 +400,12 @@ function DataTableEmpty({
 function DataTableSkeleton({ columns, rows }: { columns: number; rows: number }) {
   return (
     <div className="overflow-x-auto" aria-busy="true" aria-label="Loading table">
-      <table className="data-table">
+      <table className="ps-table">
         <thead>
           <tr>
             {Array.from({ length: columns }).map((_, i) => (
               <th key={i}>
-                <div className="skeleton h-4 w-20 rounded" />
+                <div className="ps-skel h-4 w-20 rounded" />
               </th>
             ))}
           </tr>
@@ -415,7 +415,7 @@ function DataTableSkeleton({ columns, rows }: { columns: number; rows: number })
             <tr key={r}>
               {Array.from({ length: columns }).map((_, c) => (
                 <td key={c}>
-                  <div className="skeleton h-4 w-full max-w-[160px] rounded" />
+                  <div className="ps-skel h-4 w-full max-w-[160px] rounded" />
                 </td>
               ))}
             </tr>

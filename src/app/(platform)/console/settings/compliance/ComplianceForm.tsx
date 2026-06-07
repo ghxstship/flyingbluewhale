@@ -48,23 +48,23 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="flex items-center justify-between rounded-md border border-[var(--border-color)] p-3">
+        <div className="flex items-center justify-between rounded-md border border-[var(--p-border)] p-3">
           <div>
             <div className="text-sm font-medium">
               {t("console.settings.compliance.encryptionAtRestTitle", undefined, "Encryption at rest")}
             </div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.settings.compliance.encryptionAtRestHint", undefined, "AES-256 via Supabase")}
             </div>
           </div>
           <Switch name="encryption_at_rest" defaultChecked={initial.encryption_at_rest !== "off"} />
         </div>
-        <div className="flex items-center justify-between rounded-md border border-[var(--border-color)] p-3">
+        <div className="flex items-center justify-between rounded-md border border-[var(--p-border)] p-3">
           <div>
             <div className="text-sm font-medium">
               {t("console.settings.compliance.dpaSignedTitle", undefined, "DPA signed")}
             </div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.settings.compliance.dpaSignedHint", undefined, "GDPR data-processing agreement")}
             </div>
           </div>
@@ -72,14 +72,10 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
         </div>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.settings.compliance.dataResidencyLabel", undefined, "Data Residency")}
         </label>
-        <select
-          name="data_residency"
-          defaultValue={initial.data_residency ?? "us"}
-          className="input-base mt-1.5 w-full"
-        >
+        <select name="data_residency" defaultValue={initial.data_residency ?? "us"} className="ps-input mt-1.5 w-full">
           <option value="us">{t("console.settings.compliance.residencyUs", undefined, "United States")}</option>
           <option value="eu">{t("console.settings.compliance.residencyEu", undefined, "European Union")}</option>
           <option value="global">

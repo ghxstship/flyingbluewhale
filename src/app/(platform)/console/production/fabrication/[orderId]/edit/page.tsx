@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.production.fabrication.edit.descriptionLabel", undefined, "Description")}
             </span>
             <textarea
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
               defaultValue={row.description ?? ""}
               rows={5}
               maxLength={4000}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             type="datetime-local"
             defaultValue={dateTimeLocal(row.due_at)}
           />
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.production.fabrication.edit.statusHint",
               undefined,

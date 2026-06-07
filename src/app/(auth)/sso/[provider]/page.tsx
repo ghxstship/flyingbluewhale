@@ -52,14 +52,14 @@ export default async function Page({
       subtitle={t("auth.sso.errorSubtitle", { provider }, `We couldn't redirect you to ${provider}.`)}
     >
       <Alert kind="error">{error?.message ?? t("auth.sso.noRedirect", undefined, "No redirect URL returned.")}</Alert>
-      <p className="mt-4 text-sm text-[var(--text-secondary)]">
+      <p className="mt-4 text-sm text-[var(--p-text-2)]">
         {t(
           "auth.sso.body",
           undefined,
           "Make sure the provider is enabled for this workspace, or sign in with email instead.",
         )}
       </p>
-      <a href="/login" className="btn btn-primary mt-4 w-full">
+      <a href="/login" className="ps-btn mt-4 w-full">
         {t("auth.forgotPassword.backToLogin", undefined, "Back to sign in")}
       </a>
     </AuthShell>

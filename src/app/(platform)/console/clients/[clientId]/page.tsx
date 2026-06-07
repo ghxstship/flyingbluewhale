@@ -66,7 +66,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
         {client.notes && (
           <div className="surface p-5">
             <h3 className="text-sm font-semibold">{t("console.clients.detail.notes", undefined, "Notes")}</h3>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{client.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{client.notes}</p>
           </div>
         )}
       </div>
@@ -77,7 +77,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">{label}</div>
       <div className="mt-1 text-sm">{children}</div>
     </div>
   );

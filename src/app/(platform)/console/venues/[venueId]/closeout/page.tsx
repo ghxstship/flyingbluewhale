@@ -130,8 +130,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               <ul className="mt-4 grid grid-cols-1 gap-2 md:grid-cols-2">
                 {Object.entries(byCategory).map(([cat, stats]) => (
                   <li key={cat} className="flex items-center justify-between text-sm">
-                    <span className="text-[var(--text-secondary)]">{cat}</span>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                    <span className="text-[var(--p-text-2)]">{cat}</span>
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">
                       {stats.done}/{stats.total}
                     </span>
                   </li>

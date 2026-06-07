@@ -45,16 +45,16 @@ export default async function SecurityPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
         {t("me.security.eyebrow", undefined, "Account")}
       </div>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">{t("me.security.title", undefined, "Security")}</h1>
 
-      <div className="surface mt-8 divide-y divide-[var(--border-color)]">
+      <div className="surface mt-8 divide-y divide-[var(--p-border)]">
         <div className="flex items-center justify-between p-5">
           <div>
             <div className="text-sm font-semibold">{t("me.security.password.label", undefined, "Password")}</div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {t("me.security.password.hint", undefined, "Last changed when you signed up")}
             </div>
           </div>
@@ -65,11 +65,11 @@ export default async function SecurityPage() {
 
         <Link
           href="/me/security/two-factor"
-          className="flex items-center justify-between p-5 hover:bg-[var(--surface-inset)]"
+          className="flex items-center justify-between p-5 hover:bg-[var(--p-surface-2)]"
         >
           <div>
             <div className="flex items-center gap-2">
-              <ShieldCheck size={14} className="text-[var(--text-muted)]" aria-hidden="true" />
+              <ShieldCheck size={14} className="text-[var(--p-text-2)]" aria-hidden="true" />
               <span className="text-sm font-semibold">
                 {t("me.security.totp.label", undefined, "Authenticator app")}
               </span>
@@ -79,23 +79,23 @@ export default async function SecurityPage() {
                   : t("me.security.totp.inactive", undefined, "Not configured")}
               </Badge>
             </div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {verifiedTotp
                 ? t("me.security.totp.enabledHint", undefined, "TOTP second factor enabled.")
                 : t("me.security.totp.setupHint", undefined, "Add a six-digit code from an authenticator app.")}
             </div>
           </div>
-          <ChevronRight size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
+          <ChevronRight size={16} className="text-[var(--p-text-2)]" aria-hidden="true" />
         </Link>
 
         {verifiedTotp && (
           <Link
             href="/me/security/two-factor"
-            className="flex items-center justify-between p-5 hover:bg-[var(--surface-inset)]"
+            className="flex items-center justify-between p-5 hover:bg-[var(--p-surface-2)]"
           >
             <div>
               <div className="flex items-center gap-2">
-                <KeyRound size={14} className="text-[var(--text-muted)]" aria-hidden="true" />
+                <KeyRound size={14} className="text-[var(--p-text-2)]" aria-hidden="true" />
                 <span className="text-sm font-semibold">
                   {t("me.security.recovery.label", undefined, "Recovery codes")}
                 </span>
@@ -109,7 +109,7 @@ export default async function SecurityPage() {
                   </Badge>
                 )}
               </div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">
                 {t(
                   "me.security.recovery.hint",
                   undefined,
@@ -117,19 +117,19 @@ export default async function SecurityPage() {
                 )}
               </div>
             </div>
-            <ChevronRight size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
+            <ChevronRight size={16} className="text-[var(--p-text-2)]" aria-hidden="true" />
           </Link>
         )}
 
         <div className="flex items-center justify-between p-5">
           <div>
             <div className="text-sm font-semibold">{t("me.security.sessions.label", undefined, "Active Sessions")}</div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {t("me.security.sessions.hint", undefined, "Sign out of all other devices")}
             </div>
           </div>
           <form action="/auth/signout" method="post">
-            <button type="submit" className="btn btn-danger btn-sm">
+            <button type="submit" className="ps-btn ps-btn--danger ps-btn--sm">
               {t("me.security.sessions.signOutAll", undefined, "Sign out everywhere")}
             </button>
           </form>
@@ -140,7 +140,7 @@ export default async function SecurityPage() {
               <span className="text-sm font-semibold">{t("me.security.apiTokens.label", undefined, "API tokens")}</span>
               <Badge variant="muted">{t("me.security.apiTokens.badge", undefined, "On the Roadmap")}</Badge>
             </div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "me.security.apiTokens.hint",
                 undefined,
@@ -152,10 +152,10 @@ export default async function SecurityPage() {
       </div>
 
       <div className="mt-8">
-        <h2 className="text-sm font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+        <h2 className="text-sm font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
           {t("me.security.passkeys.title", undefined, "Passkeys")}
         </h2>
-        <p className="mt-2 text-xs text-[var(--text-muted)]">
+        <p className="mt-2 text-xs text-[var(--p-text-2)]">
           {t(
             "me.security.passkeys.hint",
             undefined,

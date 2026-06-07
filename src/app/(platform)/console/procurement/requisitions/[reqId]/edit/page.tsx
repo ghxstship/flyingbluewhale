@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.procurement.requisitions.edit.fields.description", undefined, "Description")}
             </span>
             <textarea
@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
               defaultValue={row.description ?? ""}
               rows={5}
               maxLength={4000}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input
@@ -58,10 +58,10 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             defaultValue={row.estimated_cents != null ? String(row.estimated_cents) : ""}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.procurement.requisitions.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
               <option value="draft">draft</option>
               <option value="submitted">submitted</option>
               <option value="approved">approved</option>

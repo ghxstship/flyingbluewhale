@@ -83,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
             {t("console.marketplace.postings.detail.description", undefined, "Description")}
           </h2>
-          <div className="text-sm whitespace-pre-wrap text-[var(--text-primary)]">{p.description ?? "—"}</div>
+          <div className="text-sm whitespace-pre-wrap text-[var(--p-text-1)]">{p.description ?? "—"}</div>
         </section>
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -98,15 +98,15 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               {t("console.marketplace.postings.detail.compensation", undefined, "Compensation")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.detail.dayRate", undefined, "Day rate")}
               </dt>
               <dd>{formatFeeRange(p.day_rate_min_cents, p.day_rate_max_cents, p.currency)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.detail.travelPaid", undefined, "Travel paid")}
               </dt>
               <dd>{p.travel_paid ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.detail.lodging", undefined, "Lodging")}
               </dt>
               <dd>
@@ -114,7 +114,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
                   ? t("console.marketplace.postings.detail.lodgingProvided", undefined, "Provided")
                   : t("console.marketplace.postings.detail.lodgingNotProvided", undefined, "Not provided")}
               </dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.detail.audience", undefined, "Audience")}
               </dt>
               <dd>
@@ -135,7 +135,7 @@ function Card({ title, items }: { title: string; items: string[] }) {
     <div className="surface p-5">
       <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">{title}</h2>
       {items.length === 0 ? (
-        <p className="text-sm text-[var(--text-secondary)]">—</p>
+        <p className="text-sm text-[var(--p-text-2)]">—</p>
       ) : (
         <div className="flex flex-wrap gap-1.5">
           {items.map((it) => (

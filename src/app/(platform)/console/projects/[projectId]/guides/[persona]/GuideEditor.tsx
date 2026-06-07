@@ -52,7 +52,7 @@ export function GuideEditor({
         {t("console.projects.guides.editor.publishedLabel", undefined, "Published — Visible in Portal + Mobile")}
       </label>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.projects.guides.editor.configLabel", undefined, "Config — JSON")}
         </label>
         <textarea
@@ -60,9 +60,9 @@ export function GuideEditor({
           rows={24}
           spellCheck={false}
           defaultValue={defaultValues.config}
-          className="input-base mt-1.5 w-full font-mono text-xs"
+          className="ps-input mt-1.5 w-full font-mono text-xs"
         />
-        <div className="mt-1 text-xs text-[var(--text-muted)]">
+        <div className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("console.projects.guides.editor.sectionsLabel", undefined, "Sections:")}{" "}
           <span className="font-mono">
             overview · schedule · set_times · timeline · credentials · contacts · faq · sops · ppe · radio · resources ·

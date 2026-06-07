@@ -174,7 +174,7 @@ export default async function Page() {
                 <li key={pkg.id} className="surface flex items-center justify-between p-3">
                   <div>
                     <div className="text-sm font-medium">{pkg.name}</div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">
                       {fmt.number(pkg.inventory_qty ?? 0)}{" "}
                       {t("console.commercial.hospitality.seats", undefined, "seats")} ·{" "}
                       {formatMoney(pkg.unit_cost_cents ?? 0, pkg.currency ?? "USD")}{" "}
@@ -204,7 +204,7 @@ export default async function Page() {
                 "Author sponsor entitlements with 'hospitality' in the title via the Commercial → Sponsors module.",
               )}
               action={
-                <Link href="/console/commercial/sponsors" className="btn btn-secondary btn-sm">
+                <Link href="/console/commercial/sponsors" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.commercial.hospitality.openSponsors", undefined, "Open sponsors")}
                 </Link>
               }
@@ -215,7 +215,7 @@ export default async function Page() {
                 <li key={e.id} className="surface flex items-center justify-between p-3">
                   <div>
                     <div className="text-sm font-medium">{e.title}</div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">
                       {e.delivered} / {e.quantity}{" "}
                       {t("console.commercial.hospitality.delivered", undefined, "delivered")}
                       {e.due_by ? ` · ${t("console.commercial.hospitality.due", undefined, "due")} ${e.due_by}` : ""}

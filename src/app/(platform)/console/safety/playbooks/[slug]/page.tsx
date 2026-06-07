@@ -113,10 +113,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         }
       />
       <div className="page-content space-y-5">
-        {pb.summary && <p className="text-sm text-[var(--text-secondary)]">{pb.summary}</p>}
+        {pb.summary && <p className="text-sm text-[var(--p-text-2)]">{pb.summary}</p>}
 
         {blocks.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t(
               "console.safety.playbooks.detail.emptyBlocks",
               undefined,
@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {blocks.map((block, i) => {
               if (typeof block === "string") {
                 return (
-                  <div key={i} className="surface p-5 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">
+                  <div key={i} className="surface p-5 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">
                     {block}
                   </div>
                 );
@@ -137,13 +137,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <section key={i} className="surface p-5">
                   {block.heading && <h3 className="text-base font-semibold">{block.heading}</h3>}
                   {block.body && (
-                    <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{block.body}</p>
+                    <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{block.body}</p>
                   )}
                   {block.items && block.items.length > 0 && (
                     <ul className="mt-3 space-y-1.5 text-sm">
                       {block.items.map((it, j) => (
                         <li key={j} className="flex gap-2">
-                          <span className="text-[var(--text-muted)]">·</span>
+                          <span className="text-[var(--p-text-2)]">·</span>
                           <span>{it}</span>
                         </li>
                       ))}

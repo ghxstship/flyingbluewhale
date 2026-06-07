@@ -25,10 +25,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.privacy.dsar.new.kind", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="access" className="input-base mt-1.5 w-full" required>
+            <select name="kind" defaultValue="access" className="ps-input mt-1.5 w-full" required>
               <option value="access">{t("console.legal.privacy.dsar.new.kindAccess", undefined, "Access")}</option>
               <option value="deletion">
                 {t("console.legal.privacy.dsar.new.kindDeletion", undefined, "Deletion")}
@@ -46,10 +46,10 @@ export default async function Page() {
           </div>
           <Input label={t("console.legal.privacy.dsar.new.dueBy", undefined, "Due By")} name="due_by" type="date" />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.privacy.dsar.new.notes", undefined, "Notes")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

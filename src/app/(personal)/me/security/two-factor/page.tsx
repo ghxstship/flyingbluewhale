@@ -21,13 +21,13 @@ export default async function TwoFactorPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
         {t("me.security.twoFactor.eyebrow", undefined, "Account · Security")}
       </div>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">
         {t("me.security.twoFactor.title", undefined, "Two-Factor Authentication")}
       </h1>
-      <p className="mt-3 max-w-prose text-sm text-[var(--text-secondary)]">
+      <p className="mt-3 max-w-prose text-sm text-[var(--p-text-2)]">
         {t(
           "me.security.twoFactor.intro",
           undefined,
@@ -49,7 +49,7 @@ export default async function TwoFactorPage() {
         />
       </div>
 
-      <div className="mt-8 text-xs text-[var(--text-muted)]">
+      <div className="mt-8 text-xs text-[var(--p-text-2)]">
         <Link href="/me/security" className="underline underline-offset-4">
           {t("me.security.twoFactor.backToSecurity", undefined, "Back to security")}
         </Link>

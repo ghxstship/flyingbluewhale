@@ -12,7 +12,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 const MapShell = dynamic(() => import("@/components/charts/MapShell").then((mod) => ({ default: mod.MapShell })), {
   ssr: false,
   loading: () => (
-    <div className="surface skeleton w-full" style={{ height: 420 }} aria-busy="true" aria-label="Loading live map" />
+    <div className="surface ps-skel w-full" style={{ height: 420 }} aria-busy="true" aria-label="Loading live map" />
   ),
 });
 

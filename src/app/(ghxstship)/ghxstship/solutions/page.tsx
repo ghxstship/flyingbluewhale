@@ -45,7 +45,7 @@ export default function SolutionsHub() {
 
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             Industries
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -53,7 +53,7 @@ export default function SolutionsHub() {
             <br />
             One studio.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
             Different industries draw on different services. A theme park ride launch and a museum gala both touch
             scenic fabrication, but the compliance posture, the audience, and the run-of-show look nothing alike. Browse
             by what you&apos;re building below; each industry page lists every service we anchor in that vertical, along
@@ -72,10 +72,10 @@ export default function SolutionsHub() {
                 <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {s.name}
                 </div>
-                <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{s.definition}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-[var(--p-text-2)]">{s.definition}</p>
                 <div className="mt-4 flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase">
-                  <span className="text-[var(--text-muted)]">{s.anchoredServices.length} anchored services</span>
-                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--text-muted)] group-hover:text-[var(--org-primary)]" />
+                  <span className="text-[var(--p-text-2)]">{s.anchoredServices.length} anchored services</span>
+                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--p-text-2)] group-hover:text-[var(--p-accent)]" />
                 </div>
               </Link>
             ))}

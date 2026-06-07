@@ -94,18 +94,18 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
               {t("console.settings.integrations.ticketing.connection.latestSnapshot", undefined, "Latest Snapshot")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.settings.integrations.ticketing.connection.sold", undefined, "Sold")}
               </dt>
               <dd className="font-mono">
                 {latest.total_sold}
                 {latest.total_capacity ? ` / ${latest.total_capacity}` : ""}
               </dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.settings.integrations.ticketing.connection.gross", undefined, "Gross")}
               </dt>
               <dd className="font-mono">{formatMoney(latest.total_gross_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.settings.integrations.ticketing.connection.asOf", undefined, "As of")}
               </dt>
               <dd className="font-mono">{new Date(latest.snapshot_at).toLocaleString()}</dd>
@@ -117,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
           <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
             {t("console.settings.integrations.ticketing.connection.recordSnapshot", undefined, "Record Snapshot")}
           </h2>
-          <p className="mb-3 text-xs text-[var(--text-secondary)]">
+          <p className="mb-3 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.integrations.ticketing.connection.manualEntryHelp",
               undefined,
@@ -177,7 +177,7 @@ export default async function Page({ params }: { params: Promise<{ connectionId:
             <ul className="divide-y divide-[var(--border-subtle)]">
               {snapshots.map((s) => (
                 <li key={s.id} className="flex items-center justify-between py-2 text-sm">
-                  <span className="font-mono text-xs text-[var(--text-secondary)]">
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {new Date(s.snapshot_at).toLocaleString()}
                   </span>
                   <span className="font-mono text-xs">

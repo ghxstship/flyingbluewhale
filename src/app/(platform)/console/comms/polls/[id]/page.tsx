@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           p.publish_state === "live" ? (
             <form action={closePoll}>
               <input type="hidden" name="id" value={p.id} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.comms.polls.detail.closePoll", undefined, "Close Poll")}
               </button>
             </form>
@@ -84,8 +84,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     {count} ({pct}%)
                   </span>
                 </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[var(--bg-inset)]">
-                  <div className="h-full rounded-full bg-[var(--org-primary)]" style={{ width: `${pct}%` }} />
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[var(--p-surface-2)]">
+                  <div className="h-full rounded-full bg-[var(--p-accent)]" style={{ width: `${pct}%` }} />
                 </div>
               </li>
             );

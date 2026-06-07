@@ -38,7 +38,7 @@ export default async function MobileRosPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -68,11 +68,11 @@ export default async function MobileRosPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.ros.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.ros.title", undefined, "Run of Show")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {cues.length === 0
           ? t("m.ros.noneToday", undefined, "No cues scheduled today.")
           : t(
@@ -102,12 +102,12 @@ export default async function MobileRosPage() {
             return (
               <li
                 key={c.id}
-                className={`surface flex items-start gap-3 p-3 ${isLive ? "ring-2 ring-[var(--color-error)]" : ""}`}
+                className={`surface flex items-start gap-3 p-3 ${isLive ? "ring-2 ring-[var(--p-danger)]" : ""}`}
               >
                 <div className="mt-0.5 flex flex-none flex-col items-center">
                   <span className="font-mono text-base font-semibold tabular-nums">{fmtTime(c.scheduled_at)}</span>
                   {c.duration_seconds != null && (
-                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                    <span className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmtDuration(c.duration_seconds)}
                     </span>
                   )}
@@ -117,7 +117,7 @@ export default async function MobileRosPage() {
                     <div className="text-sm leading-snug font-semibold">{c.label}</div>
                     <Badge variant={tone}>{toTitle(c.status)}</Badge>
                   </div>
-                  {c.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{c.description}</p>}
+                  {c.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{c.description}</p>}
                   <div className="mt-1.5">
                     <Badge variant="muted">{c.lane}</Badge>
                   </div>

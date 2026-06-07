@@ -67,7 +67,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">{t("p.producer.portfolio.title", undefined, "Portfolio")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {rows.length === 1
             ? t(
                 "p.producer.portfolio.summary.one",
@@ -100,7 +100,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
                 const list = byPhase.get(phase) ?? [];
                 return (
                   <section key={phase}>
-                    <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                    <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
                       {toTitle(phase)} <span>· {list.length}</span>
                     </h2>
                     <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -114,7 +114,7 @@ export default async function ProducerPortfolio({ params }: { params: Promise<{ 
                             <div className="mt-1 flex items-center gap-2">
                               {p.xpms_phase && <Badge variant="muted">{toTitle(p.xpms_phase)}</Badge>}
                               {p.start_date && (
-                                <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                                <span className="font-mono text-[10px] text-[var(--p-text-2)]">
                                   {fmt.date(p.start_date)}
                                   {p.end_date ? ` → ${fmt.date(p.end_date)}` : ""}
                                 </span>

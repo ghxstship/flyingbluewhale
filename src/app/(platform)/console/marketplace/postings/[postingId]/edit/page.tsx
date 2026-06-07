@@ -66,23 +66,23 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
             defaultValue={p.title}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.postings.edit.fields.description", undefined, "Description")}
             </label>
             <textarea
               name="description"
               rows={6}
               maxLength={8000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               defaultValue={p.description ?? ""}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.edit.fields.postingType", undefined, "Posting Type")}
               </label>
-              <select name="posting_type" className="input-base mt-1.5 w-full" defaultValue={p.posting_type}>
+              <select name="posting_type" className="ps-input mt-1.5 w-full" defaultValue={p.posting_type}>
                 <option value="single">
                   {t("console.marketplace.postings.edit.postingType.single", undefined, "Single")}
                 </option>
@@ -95,10 +95,10 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.edit.fields.employment", undefined, "Employment")}
               </label>
-              <select name="employment_type" className="input-base mt-1.5 w-full" defaultValue={p.employment_type}>
+              <select name="employment_type" className="ps-input mt-1.5 w-full" defaultValue={p.employment_type}>
                 <option value="1099">
                   {t("console.marketplace.postings.edit.employment.1099", undefined, "1099 Contractor")}
                 </option>

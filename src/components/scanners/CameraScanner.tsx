@@ -381,7 +381,7 @@ export function CameraScanner({
   const renderDefaultError = (msg: string) => (
     <div
       role="alert"
-      className="flex h-full w-full items-center justify-center rounded-lg border border-[color:var(--color-warning)]/40 bg-[color:var(--color-warning)]/10 p-4 text-center text-xs text-[color:var(--color-warning)]"
+      className="flex h-full w-full items-center justify-center rounded-lg border border-[color:var(--p-warning)]/40 bg-[color:var(--p-warning)]/10 p-4 text-center text-xs text-[color:var(--p-warning)]"
     >
       {msg}
     </div>

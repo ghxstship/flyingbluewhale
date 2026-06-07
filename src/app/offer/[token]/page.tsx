@@ -40,11 +40,11 @@ export default async function Page({ params }: { params: Promise<{ token: string
             href={`/offer/${token}/print`}
             target="_blank"
             rel="noreferrer"
-            className="rounded border border-[var(--border-default)] px-3 py-1.5 text-[var(--text-secondary)] hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+            className="rounded border border-[var(--border-default)] px-3 py-1.5 text-[var(--p-text-2)] hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
           >
             Download PDF / Print
           </a>
-          <span className="text-[var(--text-muted)]">Reference · OL-{letter.id.slice(0, 8).toUpperCase()}</span>
+          <span className="text-[var(--p-text-2)]">Reference · OL-{letter.id.slice(0, 8).toUpperCase()}</span>
         </div>
       </div>
 

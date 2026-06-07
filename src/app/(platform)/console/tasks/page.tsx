@@ -50,14 +50,14 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
         <div className="mb-3 flex items-center justify-end gap-1 text-xs">
           <a
             href="?view=list"
-            className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "list" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded border border-[var(--p-border)] px-2 py-1 ${view === "list" ? "bg-[var(--p-surface)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             aria-current={view === "list" ? "true" : undefined}
           >
             {t("console.tasks.view.list", undefined, "List")}
           </a>
           <a
             href="?view=kanban"
-            className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "kanban" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded border border-[var(--p-border)] px-2 py-1 ${view === "kanban" ? "bg-[var(--p-surface)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             aria-current={view === "kanban" ? "true" : undefined}
           >
             {t("console.tasks.view.kanban", undefined, "Kanban")}

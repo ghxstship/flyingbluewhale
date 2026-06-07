@@ -99,7 +99,7 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         {sorted.length === 0 ? (
-          <div className="surface p-8 text-center text-sm text-[var(--text-muted)]">
+          <div className="surface p-8 text-center text-sm text-[var(--p-text-2)]">
             {t(
               "console.transport.fleets.empty",
               undefined,
@@ -109,10 +109,10 @@ export default async function Page() {
         ) : (
           sorted.map((f) => (
             <section key={f.fleet} className="surface">
-              <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-3">
+              <header className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-3">
                 <div>
                   <h3 className="text-sm font-semibold">{FLEET_LABELS[f.fleet] ?? f.fleet}</h3>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {f.vehicles.size}{" "}
                     {f.vehicles.size === 1
                       ? t("console.transport.fleets.vehicleSingular", undefined, "vehicle")
@@ -125,7 +125,7 @@ export default async function Page() {
                 </div>
                 <Badge variant="muted">{toTitle(f.fleet)}</Badge>
               </header>
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th>{t("console.transport.fleets.vehicle", undefined, "Vehicle")}</th>

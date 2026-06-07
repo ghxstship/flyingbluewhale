@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
 
         {courses.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t(
               "p.vendor.training.empty",
               undefined,
@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             )}
           </div>
         ) : (
-          <ul className="divide-y divide-[var(--border-color)]">
+          <ul className="divide-y divide-[var(--p-border)]">
             {courses.map((c) => {
               const tags = tagsOf(c.tags);
               return (
@@ -109,11 +109,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <div className="min-w-0">
                     <Link
                       href={`/p/${slug}/vendor/training/${c.slug}`}
-                      className="font-medium hover:text-[var(--org-primary)]"
+                      className="font-medium hover:text-[var(--p-accent)]"
                     >
                       {c.title}
                     </Link>
-                    <div className="mt-1 flex flex-wrap items-center gap-1 font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="mt-1 flex flex-wrap items-center gap-1 font-mono text-[10px] text-[var(--p-text-2)]">
                       {tags.slice(0, 4).map((tag) => (
                         <Badge key={tag} variant="muted">
                           {tag}
@@ -134,7 +134,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </ul>
         )}
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "p.vendor.training.footer",
             undefined,

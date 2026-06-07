@@ -41,25 +41,25 @@ export function FormField({
   const describedBy = [error ? errorId : null, !error && hint ? hintId : null].filter(Boolean).join(" ") || undefined;
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className={`text-xs font-medium text-[var(--text-secondary)] ${hideLabel ? "sr-only" : ""}`}>
+      <label htmlFor={id} className={`text-xs font-medium text-[var(--p-text-2)] ${hideLabel ? "sr-only" : ""}`}>
         {label}
         {required && (
-          <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+          <span aria-hidden="true" className="ms-0.5 text-[var(--p-danger)]">
             *
           </span>
         )}
       </label>
-      {description && <div className="text-xs text-[var(--text-muted)]">{description}</div>}
+      {description && <div className="text-xs text-[var(--p-text-2)]">{description}</div>}
       <FormFieldContext.Provider value={{ id, errorId, hintId, describedBy, hasError: !!error, required }}>
         {children}
       </FormFieldContext.Provider>
       {error && (
-        <span id={errorId} role="alert" className="text-xs text-[var(--color-error)]">
+        <span id={errorId} role="alert" className="text-xs text-[var(--p-danger)]">
           {error}
         </span>
       )}
       {!error && hint && (
-        <span id={hintId} className="text-xs text-[var(--text-muted)]">
+        <span id={hintId} className="text-xs text-[var(--p-text-2)]">
           {hint}
         </span>
       )}
@@ -98,7 +98,7 @@ export function TextInput(
       aria-describedby={ctx.describedBy}
       aria-required={ctx.required || undefined}
       required={ctx.required}
-      className={`input-base focus-ring ${ctx.hasError ? "border-[var(--color-error)]" : ""}`}
+      className={`ps-input focus-ring ${ctx.hasError ? "border-[var(--p-danger)]" : ""}`}
       {...props}
     />
   );
@@ -115,7 +115,7 @@ export function TextArea(
       aria-describedby={ctx.describedBy}
       aria-required={ctx.required || undefined}
       required={ctx.required}
-      className={`input-base focus-ring ${ctx.hasError ? "border-[var(--color-error)]" : ""}`}
+      className={`ps-input focus-ring ${ctx.hasError ? "border-[var(--p-danger)]" : ""}`}
       {...props}
     />
   );
@@ -132,7 +132,7 @@ export function NativeSelect(
       aria-describedby={ctx.describedBy}
       aria-required={ctx.required || undefined}
       required={ctx.required}
-      className={`input-base focus-ring ${ctx.hasError ? "border-[var(--color-error)]" : ""}`}
+      className={`ps-input focus-ring ${ctx.hasError ? "border-[var(--p-danger)]" : ""}`}
       {...props}
     />
   );

@@ -37,7 +37,7 @@ export default async function MobileIncidentPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -72,17 +72,17 @@ export default async function MobileIncidentPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("m.incidents.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.incidents.title", undefined, "Incident")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.incidents.noneLast30", undefined, "No incidents logged in the last 30 days.")
           : `${t("m.incidents.summary", { count: rows.length, open }, `${rows.length} in last 30 days · ${open} open`)}${critical ? ` · ${t("m.incidents.criticalSuffix", { critical }, `${critical} critical`)}` : ""}`}
       </p>
 
-      <Link href="/m/incidents/new" className="btn btn-primary mt-5 w-full">
+      <Link href="/m/incidents/new" className="ps-btn mt-5 w-full">
         {t("m.incidents.reportCta", undefined, "+ Report incident")}
       </Link>
 
@@ -106,11 +106,11 @@ export default async function MobileIncidentPage() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-sm leading-snug font-semibold">{r.summary}</div>
-                    <span className="flex-none font-mono text-xs text-[var(--text-muted)]">
+                    <span className="flex-none font-mono text-xs text-[var(--p-text-2)]">
                       {relativeTime(r.occurred_at)}
                     </span>
                   </div>
-                  {r.location && <div className="mt-1 text-xs text-[var(--text-muted)]">{r.location}</div>}
+                  {r.location && <div className="mt-1 text-xs text-[var(--p-text-2)]">{r.location}</div>}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
                     <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

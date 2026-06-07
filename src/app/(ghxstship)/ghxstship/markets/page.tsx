@@ -37,7 +37,7 @@ export default function MarketsHub() {
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             Markets
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -45,7 +45,7 @@ export default function MarketsHub() {
             <br />
             Eight satellites.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
             Anchor markets get full local presence, dedicated team, and fabrication capacity. Satellites are serviced
             from anchors with deep venue and permit familiarity. National and international productions are handled from
             the closest anchor.
@@ -53,7 +53,7 @@ export default function MarketsHub() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
             Anchor Markets
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -66,14 +66,14 @@ export default function MarketsHub() {
                 <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {m.name}
                 </div>
-                <p className="mt-3 line-clamp-4 text-sm text-[var(--text-secondary)]">{m.blurb}</p>
+                <p className="mt-3 line-clamp-4 text-sm text-[var(--p-text-2)]">{m.blurb}</p>
               </Link>
             ))}
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             Satellite Markets
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -86,9 +86,9 @@ export default function MarketsHub() {
                 <div className="text-lg uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {m.name}
                 </div>
-                <p className="mt-3 line-clamp-4 text-xs text-[var(--text-secondary)]">{m.blurb}</p>
+                <p className="mt-3 line-clamp-4 text-xs text-[var(--p-text-2)]">{m.blurb}</p>
                 {m.servicedFrom && (
-                  <div className="mt-3 text-[10px] tracking-wide text-[var(--text-muted)] uppercase">
+                  <div className="mt-3 text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
                     Serviced from {m.servicedFrom.replace("-", " ")}
                   </div>
                 )}

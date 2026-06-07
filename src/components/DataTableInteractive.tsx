@@ -71,11 +71,11 @@ import type { SaveViewSubmit } from "@/components/views/SaveViewDialog";
  * input affordance or a group of related options.
  */
 const TOOLBAR_TRIGGER_BASE =
-  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]";
-const TOOLBAR_TRIGGER_ACTIVE = "bg-[var(--surface-inset)] text-[var(--text-primary)]";
+  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]";
+const TOOLBAR_TRIGGER_ACTIVE = "bg-[var(--p-surface-2)] text-[var(--p-text-1)]";
 
 function ToolbarDivider() {
-  return <span aria-hidden="true" className="h-5 w-px shrink-0 bg-[var(--border-color)] opacity-60" />;
+  return <span aria-hidden="true" className="h-5 w-px shrink-0 bg-[var(--p-border)] opacity-60" />;
 }
 
 /**
@@ -595,7 +595,7 @@ export function DataTableInteractive({
   const allVisibleSelected = flatVisible.length > 0 && flatVisible.every((r) => selected.has(r.id));
 
   if (rows.length === 0) {
-    return <div className="px-6 py-10 text-center text-sm text-[var(--text-muted)]">{emptyLabel}</div>;
+    return <div className="px-6 py-10 text-center text-sm text-[var(--p-text-2)]">{emptyLabel}</div>;
   }
 
   const rowPad = density === "compact" ? "py-1.5" : "py-2.5";
@@ -620,11 +620,11 @@ export function DataTableInteractive({
           dropdown triggers + action buttons read as borderless icons
           with hover affordance. Thin vertical dividers structure the
           four functional sections without per-button enclosure. */}
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-[var(--border-color)] px-1 py-1.5">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-[var(--p-border)] px-1 py-1.5">
         {/* ── Section 1 · Discover ── */}
         <div className="flex flex-1 items-center gap-2">
           {searchable && (
-            <div className="inline-flex items-center gap-1.5 rounded border border-[var(--border-color)] bg-[var(--background)] px-2 py-1 text-xs text-[var(--text-muted)] focus-within:border-[var(--org-primary)]">
+            <div className="inline-flex items-center gap-1.5 rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs text-[var(--p-text-2)] focus-within:border-[var(--p-accent)]">
               <Search size={12} aria-hidden="true" />
               <input
                 type="search"
@@ -634,7 +634,7 @@ export function DataTableInteractive({
                   setPage(0);
                 }}
                 placeholder="Search"
-                className="w-32 bg-transparent text-sm text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] sm:w-48"
+                className="w-32 bg-transparent text-sm text-[var(--p-text-1)] outline-none placeholder:text-[var(--p-text-2)] sm:w-48"
                 aria-label="Filter Rows"
               />
               {query && (
@@ -642,14 +642,14 @@ export function DataTableInteractive({
                   type="button"
                   onClick={() => setQuery("")}
                   aria-label="Clear search"
-                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
                 >
                   <X size={12} />
                 </button>
               )}
             </div>
           )}
-          <span className="font-mono text-[10px] text-[var(--text-muted)] tabular-nums">
+          <span className="font-mono text-[10px] text-[var(--p-text-2)] tabular-nums">
             {sorted.length} {sorted.length === 1 ? "row" : "rows"}
           </span>
         </div>
@@ -791,11 +791,11 @@ export function DataTableInteractive({
           without an outer card. Scroll bounds remain (70vh fallback when
           not paginated) and the header stays sticky. */}
       <div ref={scrollRef} className="overflow-auto" style={{ maxHeight: pageSizeEff ? "auto" : "70vh" }}>
-        <table className="data-table w-full" role="grid" aria-rowcount={sorted.length}>
-          {/* Sticky header bg switched from --surface to --background so
+        <table className="ps-table w-full" role="grid" aria-rowcount={sorted.length}>
+          {/* Sticky header bg switched from --p-surface to --p-bg so
               the sticky thead matches the underlying page paint now that
               there's no surface card behind the table. */}
-          <thead className="sticky top-0 z-10 bg-[var(--background)]">
+          <thead className="sticky top-0 z-10 bg-[var(--p-bg)]">
             <tr>
               {bulkActions && (
                 <th className="w-8 text-center">
@@ -816,7 +816,7 @@ export function DataTableInteractive({
                 return (
                   <th
                     key={c.key}
-                    className={`${c.className ?? ""} ${pinned ? "bg-[var(--surface-inset)]" : ""}`}
+                    className={`${c.className ?? ""} ${pinned ? "bg-[var(--p-surface-2)]" : ""}`}
                     aria-sort={isPrimarySort ? (sortDir === "asc" ? "ascending" : "descending") : "none"}
                   >
                     <div className="inline-flex items-center gap-1">
@@ -824,7 +824,7 @@ export function DataTableInteractive({
                         <button
                           type="button"
                           onClick={(e) => toggleSort(c.key, e)}
-                          className="inline-flex items-center gap-1 hover:text-[var(--text-primary)]"
+                          className="inline-flex items-center gap-1 hover:text-[var(--p-text-1)]"
                           title="Click to sort · shift-click for multi-sort"
                         >
                           {c.header}
@@ -877,7 +877,7 @@ export function DataTableInteractive({
                 const isCollapsed = collapsed.has(g.key);
                 return (
                   <React.Fragment key={`g-${g.key}`}>
-                    <tr className="bg-[var(--surface-inset)]">
+                    <tr className="bg-[var(--p-surface-2)]">
                       <td
                         colSpan={renderedCols.length + (bulkActions ? 1 : 0) + (hasRowActions ? 1 : 0)}
                         className="px-3 py-1.5"
@@ -892,12 +892,12 @@ export function DataTableInteractive({
                               return next;
                             })
                           }
-                          className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
                           aria-expanded={!isCollapsed}
                         >
                           {isCollapsed ? <ChevronRightIcon size={12} /> : <ChevronDown size={12} />}
                           {g.label}
-                          <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">{g.rows.length}</span>
+                          <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">{g.rows.length}</span>
                         </button>
                       </td>
                     </tr>
@@ -1004,7 +1004,7 @@ export function DataTableInteractive({
 
       {/* Pagination */}
       {pageSizeEff > 0 && pageCount > 1 && (
-        <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
+        <div className="flex items-center justify-between text-xs text-[var(--p-text-2)]">
           <span>
             Page {Number(page) + 1} of {pageCount} · {sorted.length} total
           </span>
@@ -1014,7 +1014,7 @@ export function DataTableInteractive({
               onClick={() => setPage((p) => Math.max(0, Number(p) - 1))}
               disabled={Number(page) === 0}
               aria-label="Previous page"
-              className="rounded p-1 hover:bg-[var(--surface-inset)] disabled:opacity-30"
+              className="rounded p-1 hover:bg-[var(--p-surface-2)] disabled:opacity-30"
             >
               <ChevronLeft size={14} />
             </button>
@@ -1023,7 +1023,7 @@ export function DataTableInteractive({
               onClick={() => setPage((p) => Math.min(pageCount - 1, Number(p) + 1))}
               disabled={Number(page) >= pageCount - 1}
               aria-label="Next page"
-              className="rounded p-1 hover:bg-[var(--surface-inset)] disabled:opacity-30"
+              className="rounded p-1 hover:bg-[var(--p-surface-2)] disabled:opacity-30"
             >
               <ChevronRight size={14} />
             </button>
@@ -1036,9 +1036,9 @@ export function DataTableInteractive({
         <div
           role="toolbar"
           aria-label="Bulk actions"
-          className="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--surface-raised)] px-4 py-2"
+          className="fixed bottom-4 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] px-4 py-2"
         >
-          <span className="text-xs text-[var(--text-muted)]">{selected.size} selected</span>
+          <span className="text-xs text-[var(--p-text-2)]">{selected.size} selected</span>
           {bulkActions.map((a) => (
             <button
               key={a.id}
@@ -1049,8 +1049,8 @@ export function DataTableInteractive({
               }}
               className={`rounded px-2 py-1 text-xs ${
                 a.variant === "danger"
-                  ? "text-[var(--color-error)] hover:bg-[var(--color-error)]/10"
-                  : "hover:bg-[var(--surface-inset)]"
+                  ? "text-[var(--p-danger)] hover:bg-[var(--p-danger)]/10"
+                  : "hover:bg-[var(--p-surface-2)]"
               }`}
             >
               {a.label}
@@ -1060,7 +1060,7 @@ export function DataTableInteractive({
             type="button"
             onClick={() => setSelected(new Set())}
             aria-label="Clear selection"
-            className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           >
             <X size={14} />
           </button>
@@ -1091,7 +1091,7 @@ function TableRow({
   onSelect: (id: string) => void;
   style?: React.CSSProperties;
 }) {
-  const trClass = [rowPad, selected ? "bg-[var(--surface-inset)]" : "", row.className].filter(Boolean).join(" ");
+  const trClass = [rowPad, selected ? "bg-[var(--p-surface-2)]" : "", row.className].filter(Boolean).join(" ");
   return (
     <tr className={trClass} aria-selected={selected || undefined} style={style}>
       {bulk && (
@@ -1112,7 +1112,7 @@ function TableRow({
         return (
           <td key={c.key} className={tdClass}>
             {row.href && i === 0 ? (
-              <Link href={row.href} className="text-[var(--foreground)] hover:underline">
+              <Link href={row.href} className="text-[var(--p-text-1)] hover:underline">
                 {cell}
               </Link>
             ) : (
@@ -1241,8 +1241,8 @@ function TotalsRow({
 }) {
   const trClass =
     variant === "footer"
-      ? "border-t border-[var(--border-color)] bg-[var(--background)] font-semibold"
-      : "bg-[var(--surface-inset)] text-xs font-semibold text-[var(--text-secondary)]";
+      ? "border-t border-[var(--p-border)] bg-[var(--p-bg)] font-semibold"
+      : "bg-[var(--p-surface-2)] text-xs font-semibold text-[var(--p-text-2)]";
   return (
     <tr className={trClass} data-totals-variant={variant}>
       {bulk && <td className="w-8" aria-hidden="true" />}
@@ -1252,7 +1252,7 @@ function TotalsRow({
         const className = [c.className, "tabular-nums"].filter(Boolean).join(" ");
         return (
           <td key={c.key} className={className}>
-            {t ? t.value : showLabel ? <span className="text-[var(--text-muted)]">{label}</span> : null}
+            {t ? t.value : showLabel ? <span className="text-[var(--p-text-2)]">{label}</span> : null}
           </td>
         );
       })}
@@ -1276,7 +1276,7 @@ function DensityToggle({
     <div
       role="radiogroup"
       aria-label="Row density"
-      className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5"
+      className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5"
     >
       <Hint label="Comfortable density">
         <button
@@ -1285,7 +1285,7 @@ function DensityToggle({
           aria-checked={value === "comfortable"}
           aria-label="Comfortable density"
           onClick={() => onChange("comfortable")}
-          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "comfortable" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "comfortable" ? "bg-[var(--p-bg)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"}`}
         >
           <Rows3 size={13} aria-hidden="true" strokeWidth={2.25} />
         </button>
@@ -1297,7 +1297,7 @@ function DensityToggle({
           aria-checked={value === "compact"}
           aria-label="Compact density"
           onClick={() => onChange("compact")}
-          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "compact" ? "bg-[var(--background)] text-[var(--foreground)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${value === "compact" ? "bg-[var(--p-bg)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"}`}
         >
           <Rows4 size={13} aria-hidden="true" strokeWidth={2.25} />
         </button>
@@ -1370,14 +1370,14 @@ function FilteredEmptyRow({
       : "No rows to display";
   return (
     <tr>
-      <td colSpan={colSpan} className="px-6 py-10 text-center text-sm text-[var(--text-muted)]">
+      <td colSpan={colSpan} className="px-6 py-10 text-center text-sm text-[var(--p-text-2)]">
         <div className="flex flex-col items-center gap-2">
           <span>{message}</span>
           {(hasQuery || filterCount > 0) && (
             <button
               type="button"
               onClick={onClearFilters}
-              className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+              className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
             >
               <X size={12} aria-hidden="true" />
               Clear Filters
@@ -1411,7 +1411,7 @@ function ToolbarIconButton({
         type="button"
         onClick={onClick}
         aria-label={label}
-        className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+        className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
       >
         <Icon size={12} aria-hidden="true" className={spinning ? "motion-safe:animate-spin" : undefined} />
       </button>
@@ -1469,7 +1469,7 @@ function FilterAddMenu({
       <DropdownMenuContent align="end" className="max-h-80 w-64 overflow-auto">
         {!activeColumn ? (
           <>
-            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Filter By</div>
+            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Filter By</div>
             {filterable.map((c) => {
               const count = filters[c.key]?.length ?? 0;
               return (
@@ -1483,7 +1483,7 @@ function FilterAddMenu({
                 >
                   <span className="truncate">{c.header}</span>
                   {count > 0 && (
-                    <span className="font-mono text-[10px] text-[var(--org-primary)] tabular-nums">{count}</span>
+                    <span className="font-mono text-[10px] text-[var(--p-accent)] tabular-nums">{count}</span>
                   )}
                 </DropdownMenuItem>
               );
@@ -1502,17 +1502,17 @@ function FilterAddMenu({
                 type="button"
                 aria-label="Back to filter columns"
                 onClick={() => setActiveKey("")}
-                className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
               >
                 <ChevronLeft size={12} aria-hidden="true" />
               </button>
-              <span className="text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">
+              <span className="text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
                 {activeColumn.header}
               </span>
             </div>
             <DropdownMenuSeparator />
             {!activeDistincts || activeDistincts.size === 0 ? (
-              <div className="px-2 py-2 text-xs text-[var(--text-muted)]">No values</div>
+              <div className="px-2 py-2 text-xs text-[var(--p-text-2)]">No values</div>
             ) : (
               Array.from(activeDistincts.entries())
                 .sort((a, b) => a[0].localeCompare(b[0]))
@@ -1537,7 +1537,7 @@ function FilterAddMenu({
                         <input type="checkbox" checked={checked} readOnly className="pointer-events-none" />
                         <span className="truncate">{val || "—"}</span>
                       </span>
-                      <span className="font-mono text-[10px] text-[var(--text-muted)]">{count}</span>
+                      <span className="font-mono text-[10px] text-[var(--p-text-2)]">{count}</span>
                     </DropdownMenuItem>
                   );
                 })
@@ -1636,14 +1636,14 @@ function SortStackMenu({
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="w-72">
-        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Sort By</div>
+        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Sort By</div>
         {stack.length === 0 ? (
-          <div className="px-2 py-1 text-xs text-[var(--text-muted)]">No sort applied</div>
+          <div className="px-2 py-1 text-xs text-[var(--p-text-2)]">No sort applied</div>
         ) : (
           stack.map((s, idx) => (
             <div key={`${s.key}-${idx}`} className="flex items-center justify-between gap-2 px-2 py-1 text-xs">
               <span className="flex items-center gap-2 truncate">
-                <span className="font-mono text-[10px] text-[var(--text-muted)] tabular-nums">{idx + 1}</span>
+                <span className="font-mono text-[10px] text-[var(--p-text-2)] tabular-nums">{idx + 1}</span>
                 <span className="truncate">{headerByKey.get(s.key) ?? s.key}</span>
               </span>
               <span className="flex items-center gap-1">
@@ -1651,7 +1651,7 @@ function SortStackMenu({
                   type="button"
                   onClick={() => flipDir(idx)}
                   aria-label={`Toggle ${s.key} direction (${s.dir})`}
-                  className="rounded px-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                  className="rounded px-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                 >
                   {s.dir === "asc" ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
                 </button>
@@ -1659,7 +1659,7 @@ function SortStackMenu({
                   type="button"
                   onClick={() => removeSort(idx)}
                   aria-label={`Remove sort on ${s.key}`}
-                  className="rounded px-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                  className="rounded px-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                 >
                   <X size={12} />
                 </button>
@@ -1670,7 +1670,7 @@ function SortStackMenu({
         {sortable.some((c) => !stackKeys.has(c.key)) && (
           <>
             <DropdownMenuSeparator />
-            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Add Sort</div>
+            <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Add Sort</div>
             {sortable
               .filter((c) => !stackKeys.has(c.key))
               .map((c) => (
@@ -1729,7 +1729,7 @@ function ViewMenu({ customizationActive, onReset }: { customizationActive: boole
         </DropdownMenuTrigger>
       </Hint>
       <DropdownMenuContent align="end" className="w-52">
-        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">Saved View</div>
+        <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">Saved View</div>
         <DropdownMenuItem disabled className="opacity-60">
           Default · Auto-Saved
         </DropdownMenuItem>
@@ -1769,8 +1769,8 @@ function ColumnFilterMenu({
         <button
           type="button"
           aria-label={`Filter ${columnHeader}`}
-          className={`inline-flex h-5 w-5 items-center justify-center rounded text-[var(--text-muted)] hover:text-[var(--text-primary)] ${
-            activeCount ? "text-[var(--org-primary)]" : ""
+          className={`inline-flex h-5 w-5 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)] ${
+            activeCount ? "text-[var(--p-accent)]" : ""
           }`}
         >
           <Filter size={11} aria-hidden="true" />
@@ -1778,7 +1778,7 @@ function ColumnFilterMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-h-72 w-56 overflow-auto">
         {sortedEntries.length === 0 ? (
-          <div className="px-2 py-1 text-xs text-[var(--text-muted)]">No values</div>
+          <div className="px-2 py-1 text-xs text-[var(--p-text-2)]">No values</div>
         ) : (
           sortedEntries.map(([val, count]) => {
             const checked = sel.has(val);
@@ -1796,7 +1796,7 @@ function ColumnFilterMenu({
                   <input type="checkbox" checked={checked} readOnly className="pointer-events-none" />
                   <span className="truncate">{val || "—"}</span>
                 </span>
-                <span className="font-mono text-[10px] text-[var(--text-muted)]">{count}</span>
+                <span className="font-mono text-[10px] text-[var(--p-text-2)]">{count}</span>
               </DropdownMenuItem>
             );
           })
@@ -1831,21 +1831,21 @@ function ActiveFilterChips({
       {entries.map(({ k, v }) => (
         <span
           key={`${k}=${v}`}
-          className="inline-flex items-center gap-1 rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-0.5"
+          className="inline-flex items-center gap-1 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5"
         >
-          <span className="text-[var(--text-muted)]">{headerByKey.get(k) ?? k}</span>
+          <span className="text-[var(--p-text-2)]">{headerByKey.get(k) ?? k}</span>
           <span>{v || "—"}</span>
           <button
             type="button"
             onClick={() => onRemove(k, v)}
             aria-label={`Remove ${headerByKey.get(k) ?? k} filter ${v || "—"}`}
-            className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+            className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           >
             <X size={10} />
           </button>
         </span>
       ))}
-      <button type="button" onClick={onClearAll} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+      <button type="button" onClick={onClearAll} className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
         Clear all
       </button>
     </div>
@@ -1893,7 +1893,7 @@ function ColumnMenu({
           <button
             type="button"
             aria-label="Column settings"
-            className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+            className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
           >
             <SlidersHorizontal size={12} aria-hidden="true" />
           </button>
@@ -1952,20 +1952,20 @@ function SortableColumnRow({
     <div
       ref={setNodeRef}
       style={style}
-      className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--bg-secondary)]"
+      className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"
     >
       <button
         type="button"
         aria-label={`Drag ${column.header}`}
         {...attributes}
         {...listeners}
-        className="cursor-grab text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+        className="cursor-grab text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
       >
         <GripVertical size={12} aria-hidden="true" />
       </button>
       <button type="button" onClick={onToggleHidden} className="flex flex-1 items-center gap-2 text-start">
         {isHidden ? (
-          <EyeOff size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
+          <EyeOff size={12} className="text-[var(--p-text-2)]" aria-hidden="true" />
         ) : (
           <Eye size={12} className="opacity-50" aria-hidden="true" />
         )}
@@ -1975,7 +1975,7 @@ function SortableColumnRow({
         type="button"
         onClick={onTogglePinned}
         aria-label={isPinned ? `Unpin ${column.header}` : `Pin ${column.header}`}
-        className="text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+        className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
       >
         {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
       </button>

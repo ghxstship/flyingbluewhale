@@ -11,7 +11,7 @@ import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
   draft: "muted",
@@ -89,7 +89,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <h3 className="text-sm font-semibold">
             {t("console.submittals.detail.revisionRounds", undefined, "Revision Rounds")}
           </h3>
-          <table className="data-table mt-3">
+          <table className="ps-table mt-3">
             <thead>
               <tr>
                 <th>{t("console.submittals.detail.col.round", undefined, "Round")}</th>
@@ -121,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={stampRevision.bind(null, id, current.id)} className="mt-3 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <label className="flex flex-col gap-1.5">
-                  <span className="text-xs font-medium text-[var(--text-secondary)]">
+                  <span className="text-xs font-medium text-[var(--p-text-2)]">
                     {t("console.submittals.detail.col.stamp", undefined, "Stamp")}
                   </span>
                   <select name="stamp" required className={INPUT}>

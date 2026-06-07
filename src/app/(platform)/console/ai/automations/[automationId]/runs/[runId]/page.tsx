@@ -192,8 +192,8 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         </div>
 
         {run.status === "failed" && run.error_summary && (
-          <section className="surface rounded border border-[var(--color-error)] p-4">
-            <h3 className="text-sm font-semibold text-[var(--color-error)]">
+          <section className="surface rounded border border-[var(--p-danger)] p-4">
+            <h3 className="text-sm font-semibold text-[var(--p-danger)]">
               {t("console.ai.automations.runs.detail.errorSummary", undefined, "Error Summary")}
             </h3>
             <pre className="mt-2 overflow-auto font-mono text-xs whitespace-pre-wrap">{run.error_summary}</pre>
@@ -204,7 +204,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
           <h3 className="text-sm font-semibold">
             {t("console.ai.automations.runs.detail.triggerPayload", undefined, "Trigger Payload")}
           </h3>
-          <pre className="mt-2 max-h-60 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
+          <pre className="mt-2 max-h-60 overflow-auto rounded bg-[var(--p-surface)] p-3 font-mono text-xs">
             {JSON.stringify(run.trigger_payload ?? {}, null, 2)}
           </pre>
         </section>
@@ -212,7 +212,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         <section className="surface p-4">
           <h3 className="text-sm font-semibold">
             {t("console.ai.automations.runs.detail.steps", undefined, "Steps")}{" "}
-            <span className="font-mono text-xs text-[var(--text-muted)]">({steps.length})</span>
+            <span className="font-mono text-xs text-[var(--p-text-2)]">({steps.length})</span>
           </h3>
           <div className="mt-3">
             <RunTimeline steps={steps} />
@@ -220,7 +220,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         </section>
 
         {inFlight && (
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.ai.automations.runs.detail.autoRefreshHint",
               undefined,

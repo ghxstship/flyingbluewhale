@@ -1,85 +1,81 @@
-# CHROMA BEACON — Theme System
+# ATLVS Theme System
 
-Eight-theme appearance gallery. Three-tier token architecture. Zero FOUC.
+One canonical kit skin (`atlvs-product`). Mode (light/dark), density (compact/comfortable/spacious), and accent intensity (soft/default/vivid) are orthogonal axes. Zero FOUC.
 
 ## Contract
 
-- **Slugs are immutable:** `glass`, `brutal`, `bento`, `kinetic`, `copilot`, `cyber`, `soft`, `earthy`
-- Used verbatim in `data-theme` attribute, `localStorage` key `chroma.theme`, cookie `chroma_theme`
-- Default: `kinetic` for light-system, `cyber` for dark-system
-- Theme persists per-user in `user_preferences.theme` when authenticated
+- **Slug is immutable:** `atlvs-product` (the design_handoff_atlvs_kit). Used verbatim in `data-theme`, `localStorage` key `chroma.theme`, cookie `chroma_theme`.
+- **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (pink), `compvss` (amber), `gvteway` (cyan).
+- **Mode** (`light`/`dark`/`system`) lives on `data-mode`, set by `theme-script.ts` before first paint.
+- **Density** (`compact`/`comfortable`/`spacious`) lives on `data-density`; `comfortable` is the default and strips the attribute.
+- **Accent intensity** (`soft`/`default`/`vivid`) lives on `data-accent`; `default` is implicit and strips the attribute.
 
 ## Files
 
 ```
 src/app/theme/
-  primitives.css              raw palette + spacing + motion + legacy aliases
+  primitives.css              raw palette + spacing + motion
   themes/
-    glass.css                 hybrid — translucent, refractive
-    brutal.css                light  — thick borders, offset shadows
-    bento.css                 light  — modular rounded cards
-    kinetic.css               light  — editorial, serif-forward
-    copilot.css               light  — editorial quiet, AI-adjacent
-    cyber.css                 dark   — electric neon
-    soft.css                  light  — pastel neumorphic
-    earthy.css                light  — warm cream, forest, terracotta
-  index.css                   orchestrated imports + default tokens
+    atlvs-product.css         the kit — tokens + accent + .ps-* component library
+  index.css                   orchestrated imports + SSR fallback :root
   themes.config.ts            registry (slug, label, family, essence, swatchColor)
   theme-script.ts             pre-hydration FOUC bootstrap string
   ThemeProvider.tsx           client provider + useTheme hook
 ```
 
-> The legacy 8-card AppearanceGallery picker was retired with the v3
-> ATLVS-kit lock — the platform now ships a fixed two-skin canon
-> (`ghxstship` on the parent-company marketing page, `atlvs-product`
-> on every app surface). Mode (light/dark) and density remain
-> user-tunable; theme slug is no longer user-pickable from the UI.
+## Token namespace
 
-## Adding a 9th theme
+The kit's `--p-*` namespace is the single source of truth.
 
-1. Add `src/app/theme/themes/newtheme.css` with all required tokens
-2. Add a registry entry to `themes.config.ts` (slug, label, family, essence, swatchColor)
-3. Add the slug literal to `ThemeSlug` union
-4. Add the slug to `THEME_SLUGS` and to the `valid` array in `theme-script.ts`
-5. Ship a contrast audit for `--text` on `--bg` and `--accent-contrast` on `--accent` — both must meet WCAG AA (4.5:1 normal, 3:1 large or bold)
-6. Add an entry to the e2e token-resolution loop in `e2e/chroma-theme.spec.ts`
+| Token group                                                | Examples                                                                                  |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Surface                                                    | `--p-bg` `--p-surface` `--p-surface-2` `--p-border` `--p-border-2`                        |
+| Text                                                       | `--p-text-1` `--p-text-2` `--p-text-3`                                                    |
+| Accent                                                     | `--p-accent` `--p-accent-hover` `--p-accent-text` `--p-accent-weak` `--p-accent-contrast` |
+| Accent CTA (AA-safe filled buttons)                        | `--p-accent-cta` `--p-accent-cta-contrast`                                                |
+| Semantic                                                   | `--p-success` `--p-warning` `--p-danger` `--p-info`                                       |
+| Radii                                                      | `--p-r-sm` `--p-r` `--p-r-lg` `--p-r-pill`                                                |
+| Spacing (4px grid)                                         | `--p-1` … `--p-8`                                                                         |
+| Elevation                                                  | `--p-elev-1` `--p-elev-2` `--p-elev-3` `--p-shadow-sm` `--p-shadow-lg`                    |
+| Motion                                                     | `--p-ease` `--motion-fast/normal/slow/hover/skeleton` `--ease-out/in/standard/hover`      |
+| Type                                                       | `--p-font` `--p-heading` `--p-mono` `--p-eyebrow` `--p-wordmark`                          |
+| Density (`--k-*`)                                          | `--k-ctl-py/px/fs` `--k-row-py/px` `--k-cell-fs` `--k-card-pad`                           |
+| Brand identity (mode-agnostic, for multi-product surfaces) | `--brand-atlvs` `--brand-compvss` `--brand-gvteway` (+ `-ink` text, `-on` contrast)       |
 
-## Contrast audit
+Tailwind v4 `@theme inline` (in `globals.css`) exposes a thin `--color-*` shim that resolves to the same `--p-*` values, so `bg-surface` / `text-text-1` / `border-border` Tailwind utility classes paint kit tokens directly.
 
-Measured: `--text` on `--bg`, `--accent-contrast` on `--accent`, `--text-muted` on `--surface-2`.
+## Component library (`.ps-*`)
 
-| Theme            | Text on bg   | White on accent                         | Muted on surface-2                          |
-| ---------------- | ------------ | --------------------------------------- | ------------------------------------------- |
-| bermuda-triangle | 21:1 (AAA)   | 21:1 (AAA — white on near-black)        | 7.7:1 (AAA, greyscale 600 on greyscale 100) |
-| glass            | 15.8:1 (AAA) | 4.6:1 (AA)                              | 6.2:1 (AA, rgba composed)                   |
-| brutal           | 21:1 (AAA)   | 7.6:1 (AAA, black on pink)              | 12.6:1 (AAA)                                |
-| bento            | 14.4:1 (AAA) | 4.9:1 (AA)                              | 4.7:1 (AA)                                  |
-| kinetic          | 16.0:1 (AAA) | 4.5:1 (AA — was 3.17 on spec, darkened) | 7.5:1 (AAA)                                 |
-| copilot          | 16.4:1 (AAA) | 5.3:1 (AA)                              | 7.6:1 (AAA)                                 |
-| cyber            | 21:1 (AAA)   | 4.8:1 (AA, on solid #ff0080)            | 8.3:1 (AAA)                                 |
-| soft             | 10.2:1 (AAA) | 4.5:1 (AA)                              | 5.9:1 (AA)                                  |
-| earthy           | 15.6:1 (AAA) | 7.7:1 (AAA, cream on forest)            | 6.4:1 (AA)                                  |
+Defined in `themes/atlvs-product.css`. The full set:
 
-Spec deviation: kinetic `--accent` changed from `#ff4d1a` → `#cc3d10`. The original
-failed the same spec's own WCAG AA mandate. Flagged rather than silently applied.
+- **Buttons** `.ps-btn` (+ `--ghost --soft --danger --icon --sm --lg`)
+- **Forms** `.ps-input` `.ps-inputgrp` `.ps-field` `.ps-label` `.ps-hint` (`--err`) `.ps-check` (`--radio`) `.ps-toggle` `.ps-seg` `.ps-slider`
+- **Badges + chips** `.ps-badge` (+ `--ok --warn --danger --info --neutral`) `.ps-chip` `.ps-tag` `.ps-dot` (+ `--ok --warn --danger --info --muted`)
+- **Avatars** `.ps-av` (+ `--sm --lg --sq --ghost`) `.ps-avstack`
+- **Nav** `.ps-tabs` `.ps-crumb` `.ps-page` `.ps-menu` (+ `.mi .sep .lbl`) `.ps-kbd`
+- **Data** `.ps-table` `.ps-progress` `.ps-meter` `.ps-stat` `.ps-steps`
+- **Feedback** `.ps-banner` (+ `--info --ok --warn --danger`) `.ps-toast` `.ps-tip` `.ps-modal` `.ps-empty` `.ps-skel` `.ps-spinner`
+- **Type** `.ps-eyebrow` `.ps-mono` `.ps-id` `.ps-h` `.ps-muted`
 
-## Known notes
+Every selector matches BOTH `[data-ui="saas"]` (kit canon) AND `[data-theme="atlvs-product"]` (codebase convention). All shells set both attributes.
 
-- `cyber` accent is a gradient. `--accent-solid` exposes `#ff0080` for cases where
-  a single color is needed (focus rings, swatch chips)
-- `glass` expects `--glass-blur` to be applied on surfaces that need the frosted look;
-  use `backdrop-filter: var(--glass-blur)` in consuming components
-- `.badge-brand` uses `--accent` as background (not tinted color-mix) so accent
-  text contrast always holds across all 8 themes
+## Wordmark
 
-## E2E coverage
+The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES" />` from `src/components/brand/Wordmark.tsx`) is the only legitimate consumer of `var(--p-wordmark)`. Reserved for the brand lockup; all other display + body type uses Space Grotesk via `--p-heading`/`--p-font`.
 
-See `e2e/chroma-theme.spec.ts`:
+## Contrast — WCAG 1.4.3
 
-- data-theme set before first paint (head script)
-- Invalid cookie falls back to default
-- Gallery renders 8 radio cards
-- Selecting + reload persists
-- All 8 themes resolve required tokens
-- Keyboard nav between cards + Enter selects
-- Match system resets
+| Surface                                   | Light                                 | Dark                                           |
+| ----------------------------------------- | ------------------------------------- | ---------------------------------------------- |
+| `--p-text-1` on `--p-bg`                  | `#181b23` on `#f7f8fa` → 16.0:1 (AAA) | `#f2f4f8` on `#111318` → 17.4:1 (AAA)          |
+| `--p-text-2` on `--p-surface`             | `#5b6472` on `#ffffff` → 7.3:1 (AAA)  | `#a6aebc` on `#1a1d24` → 9.4:1 (AAA)           |
+| `--p-text-3` on `--p-surface`             | `#656d7a` on `#ffffff` → 5.2:1 (AA)   | `#9098a4` on `#1a1d24` → 5.1:1 (AA)            |
+| white on `--p-accent-cta` (atlvs light)   | white on `#d11668` → 5.2:1 (AA)       | atlvs dark uses ink on `#ff4d9b` → 6.1:1 (AA)  |
+| white on `--p-accent-cta` (compvss light) | white on `#8a5a0f` → 5.9:1 (AA)       | compvss dark uses ink on `#f0b255` → kit canon |
+| white on `--p-accent-cta` (gvteway light) | white on `#0a7373` → 5.7:1 (AA)       | gvteway dark uses ink on `#2bd6d6` → kit canon |
+
+The bright display accents (`--p-accent`) deliberately fail AA as text — they're for fills, focus halos, and large display text where 3:1 suffices. Use `--p-accent-text` (deepened in light mode) for any small-text usage; or `--p-accent-cta` paired with `--p-accent-cta-contrast` for filled CTAs.
+
+## Legacy migration
+
+The pre-kit cosmic GHXSTSHIP skin and the CHROMA exploration set (bermuda-triangle, glass, brutal, bento, kinetic, copilot, cyber, soft, earthy) were stripped in the kit migration. Every legacy `--bg`/`--foreground`/`--org-*`/`--shadow-*`/`--radius-*`/`--color-*` reference was swept to `--p-*` across all `src/` files; legacy `.btn`/`.badge`/`.input-base`/`.data-table`/`.status-dot*` class definitions were removed from `globals.css`; consumers were migrated to `.ps-*` equivalents.

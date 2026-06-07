@@ -81,9 +81,7 @@ export default async function HomePT() {
           <br />
           {t("marketing.pages.pt-BR.hero.titleLine2")}
         </h1>
-        <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.pt-BR.hero.subtitle")}
-        </p>
+        <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.pt-BR.hero.subtitle")}</p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href} size="lg">
             {t("marketing.pages.pt-BR.hero.primaryCta")}
@@ -96,9 +94,7 @@ export default async function HomePT() {
 
       <section className="mx-auto max-w-6xl px-6 py-16">
         <h2 className="hed-xl">ATLVS · GVTEWAY · COMPVSS</h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-          {t("marketing.pages.pt-BR.apps.subtitle")}
-        </p>
+        <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.pt-BR.apps.subtitle")}</p>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {[
             {
@@ -119,8 +115,8 @@ export default async function HomePT() {
           ].map((app) => (
             <Link key={app.name} href={app.href} className="surface hover-lift p-6">
               <div className="text-sm font-semibold">{app.name}</div>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{app.body}</p>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{app.body}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("marketing.pages.pt-BR.apps.seeMore")} <ArrowRight size={12} />
               </div>
             </Link>

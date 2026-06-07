@@ -8,12 +8,12 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { createExpenseAction } from "../actions";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 
-const SELECT_CLASS = "w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm";
+const SELECT_CLASS = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm";
 
 function XpmsSelect({ label, name, options }: { label: string; name: string; options: readonly string[] }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">{label}</span>
+      <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">{label}</span>
       <select name={name} className={SELECT_CLASS} defaultValue="">
         <option value="">—</option>
         {options.map((opt) => (
@@ -102,12 +102,12 @@ export function NewExpenseForm({
       </div>
       {projects.length > 0 && (
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.expenses.new.projectOptional", undefined, "Project · Optional")}
           </label>
           <select
             name="project_id"
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
             value={projectId}
             onChange={(e) => setProjectId(e.target.value)}
           >

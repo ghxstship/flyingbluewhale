@@ -163,7 +163,7 @@ function Tile({ title, href, blurb, newHref }: { title: string; href: string; bl
           </Button>
         )}
       </div>
-      <p className="text-xs text-[var(--text-secondary)]">{blurb}</p>
+      <p className="text-xs text-[var(--p-text-2)]">{blurb}</p>
     </div>
   );
 }

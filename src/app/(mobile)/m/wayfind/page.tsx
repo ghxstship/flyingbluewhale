@@ -32,7 +32,7 @@ export default async function MobileWayfindPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -62,11 +62,11 @@ export default async function MobileWayfindPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.wayfind.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.wayfind.title", undefined, "Wayfinding")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.wayfind.subtitle", undefined, "Pick a venue to view its zones, gates, and meet-points.")}
       </p>
 
@@ -81,7 +81,7 @@ export default async function MobileWayfindPage() {
               "Author venues from Console → Venues. Each venue's zones become the routable points here.",
             )}
             action={
-              <Link href="/console/venues" className="btn btn-secondary btn-sm">
+              <Link href="/console/venues" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("m.wayfind.empty.action", undefined, "Open Venues")}
               </Link>
             }
@@ -91,7 +91,7 @@ export default async function MobileWayfindPage() {
         <div className="mt-5 space-y-5">
           {clusters.map(([cluster, list]) => (
             <section key={cluster}>
-              <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+              <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
                 <Compass className="me-1 inline-block" size={12} /> {cluster}
               </h2>
               <ul className="mt-2 space-y-2">
@@ -100,11 +100,11 @@ export default async function MobileWayfindPage() {
                     <Link href={`/console/venues/${v.id}`} className="surface flex items-center justify-between p-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 text-sm font-medium">
-                          <MapPin size={14} className="text-[var(--text-muted)]" />
+                          <MapPin size={14} className="text-[var(--p-text-2)]" />
                           {v.name}
                         </div>
                         {v.capacity != null && (
-                          <div className="ms-5 mt-0.5 font-mono text-xs text-[var(--text-muted)]">
+                          <div className="ms-5 mt-0.5 font-mono text-xs text-[var(--p-text-2)]">
                             {t(
                               "m.wayfind.capacity",
                               { count: fmt.number(v.capacity) },

@@ -25,30 +25,30 @@ export function MetricCard({
     return (
       <div className="surface p-4" aria-busy="true">
         <div className="flex items-center justify-between">
-          <div className="skeleton h-3 w-20 rounded" />
-          <div className="skeleton h-4 w-4 rounded" />
+          <div className="ps-skel h-3 w-20 rounded" />
+          <div className="ps-skel h-4 w-4 rounded" />
         </div>
-        <div className="skeleton mt-2 h-7 w-24 rounded" />
-        <div className="skeleton mt-2 h-3 w-16 rounded" />
+        <div className="ps-skel mt-2 h-7 w-24 rounded" />
+        <div className="ps-skel mt-2 h-3 w-16 rounded" />
       </div>
     );
   }
   return (
     <div className="surface p-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium tracking-wide text-[var(--text-muted)] uppercase">{label}</span>
+        <span className="text-xs font-medium tracking-wide text-[var(--p-text-2)] uppercase">{label}</span>
         {icon}
       </div>
       <div
         className={`mt-2 text-2xl font-semibold tracking-tight ${
-          accent ? "text-[var(--org-primary)]" : "text-[var(--foreground)]"
+          accent ? "text-[var(--p-accent)]" : "text-[var(--p-text-1)]"
         }`}
       >
         {value}
       </div>
       {delta && (
         <div
-          className={`mt-1 text-xs font-medium ${delta.positive ? "text-[var(--color-success)]" : "text-[var(--color-error)]"}`}
+          className={`mt-1 text-xs font-medium ${delta.positive ? "text-[var(--p-success)]" : "text-[var(--p-danger)]"}`}
         >
           <span aria-hidden="true">{delta.positive ? "↑" : "↓"} </span>
           <span className="sr-only">{delta.positive ? "increased" : "decreased"} by </span>

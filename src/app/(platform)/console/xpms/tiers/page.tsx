@@ -66,10 +66,10 @@ export default async function TierCompositionPage() {
                   <div key={tier.id}>
                     <div className="flex items-center justify-between text-sm">
                       <span>
-                        <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{tier.num}</span>
+                        <span className="me-2 font-mono text-[10px] text-[var(--p-text-2)]">{tier.num}</span>
                         {tier.label}
                       </span>
-                      <span className="font-mono text-xs text-[var(--text-muted)]">
+                      <span className="font-mono text-xs text-[var(--p-text-2)]">
                         {t(
                           "console.xpms.tiers.atomsShare",
                           { atoms: stat.atoms, share: (share * 100).toFixed(1) },

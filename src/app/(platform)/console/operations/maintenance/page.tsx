@@ -150,7 +150,7 @@ export default async function Page() {
       <div className="page-content space-y-5">
         {all.length === 0 ? (
           <div className="surface p-6 text-sm">
-            <p className="text-[var(--text-secondary)]">
+            <p className="text-[var(--p-text-2)]">
               {t(
                 "console.operations.maintenance.emptyBody",
                 undefined,
@@ -169,21 +169,21 @@ export default async function Page() {
             if (list.length === 0) return null;
             return (
               <section key={b.key} className="surface">
-                <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2.5">
+                <header className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-2.5">
                   <h3 className="text-sm font-semibold">{bucketLabel(b.key, b.label)}</h3>
                   <Badge variant={b.tone}>{list.length}</Badge>
                 </header>
-                <ul className="divide-y divide-[var(--border-color)]">
+                <ul className="divide-y divide-[var(--p-border)]">
                   {list.map((j) => (
                     <li key={j.id} className="px-4 py-3">
                       <Link
                         href={j.href}
-                        className="flex items-center justify-between gap-3 hover:bg-[var(--surface-inset)]"
+                        className="flex items-center justify-between gap-3 hover:bg-[var(--p-surface-2)]"
                       >
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2">
                             <Badge variant={KIND_TONE[j.kind]}>{toTitle(j.kind)}</Badge>
-                            <span className="font-mono text-[10px] text-[var(--text-muted)]">{j.target_kind}</span>
+                            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{j.target_kind}</span>
                             {j.source === "credential" && (
                               <Badge variant="muted">
                                 {t("console.operations.maintenance.autoBadge", undefined, "auto")}
@@ -192,7 +192,7 @@ export default async function Page() {
                           </div>
                           <div className="mt-1 text-sm">{j.title}</div>
                         </div>
-                        <span className="font-mono text-xs text-[var(--text-muted)]">
+                        <span className="font-mono text-xs text-[var(--p-text-2)]">
                           {new Date(j.due_at).toLocaleDateString()}
                         </span>
                       </Link>

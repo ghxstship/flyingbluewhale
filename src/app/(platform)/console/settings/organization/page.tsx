@@ -85,7 +85,7 @@ export default async function OrgSettingsPage() {
         </div>
 
         <div className="surface space-y-4 p-5">
-          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.settings.organization.profileHeading", undefined, "Organization profile")}
           </h3>
           {isAdmin ? (
@@ -96,7 +96,7 @@ export default async function OrgSettingsPage() {
                 required
                 minLength={2}
                 maxLength={120}
-                className="rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
+                className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
               />
               <Button type="submit" size="sm">
                 {t("common.save", undefined, "Save")}
@@ -128,10 +128,10 @@ export default async function OrgSettingsPage() {
         </div>
 
         <div className="surface space-y-3 p-5">
-          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.settings.organization.memberMgmtHeading", undefined, "Member management")}
           </h3>
-          <p className="text-xs text-[var(--text-secondary)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.organization.memberMgmtBlurb",
               undefined,
@@ -141,25 +141,25 @@ export default async function OrgSettingsPage() {
           <div className="flex flex-wrap gap-2">
             <Link
               href="/console/people"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkMemberDirectory", undefined, "Member directory →")}
             </Link>
             <Link
               href="/console/people/invites"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkInvites", { count: invites ?? 0 }, "Invites ({count} pending) →")}
             </Link>
             <Link
               href="/console/people/teams"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkTeams", undefined, "Teams →")}
             </Link>
             <Link
               href="/console/people/roles"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkRoles", undefined, "Roles →")}
             </Link>
@@ -167,37 +167,37 @@ export default async function OrgSettingsPage() {
         </div>
 
         <div className="surface space-y-3 p-5">
-          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.settings.organization.workspaceHeading", undefined, "Workspace settings")}
           </h3>
           <div className="flex flex-wrap gap-2">
             <Link
               href="/console/settings/branding"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkBranding", undefined, "Branding →")}
             </Link>
             <Link
               href="/console/settings/domains"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkDomains", undefined, "Domains →")}
             </Link>
             <Link
               href="/console/settings/billing"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkBilling", undefined, "Billing →")}
             </Link>
             <Link
               href="/console/settings/integrations"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkIntegrations", undefined, "Integrations →")}
             </Link>
             <Link
               href="/console/settings/audit"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.settings.organization.linkAudit", undefined, "Audit log →")}
             </Link>
@@ -210,8 +210,8 @@ export default async function OrgSettingsPage() {
 
 function Field({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
-    <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 last:border-none last:pb-0">
-      <div className="text-xs font-medium tracking-wide text-[var(--text-muted)] uppercase">{label}</div>
+    <div className="flex items-center justify-between border-b border-[var(--p-border)] pb-3 last:border-none last:pb-0">
+      <div className="text-xs font-medium tracking-wide text-[var(--p-text-2)] uppercase">{label}</div>
       <div className={`text-sm ${mono ? "font-mono" : ""}`}>{value}</div>
     </div>
   );

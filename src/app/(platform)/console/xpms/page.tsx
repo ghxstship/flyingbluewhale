@@ -82,9 +82,9 @@ export default async function XpmsOverviewPage() {
                   className="surface hover-lift block rounded-md p-4"
                   style={{ borderTop: `3px solid ${c.accent}` }}
                 >
-                  <div className="font-mono text-[10px] tracking-widest text-[var(--text-muted)]">{c.code}000</div>
+                  <div className="font-mono text-[10px] tracking-widest text-[var(--p-text-2)]">{c.code}000</div>
                   <div className="mt-1 text-sm font-semibold">{c.name}</div>
-                  <div className="mt-2 line-clamp-2 text-xs text-[var(--text-muted)]">{c.oneLine}</div>
+                  <div className="mt-2 line-clamp-2 text-xs text-[var(--p-text-2)]">{c.oneLine}</div>
                   <div className="mt-3 font-mono text-xs">
                     {t(
                       "console.xpms.classes.atomsCount",
@@ -113,17 +113,17 @@ export default async function XpmsOverviewPage() {
                 {XPMS_TIERS.map((tier) => (
                   <li key={tier.id} className="flex items-center justify-between">
                     <span>
-                      <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{tier.num}</span>
+                      <span className="me-2 font-mono text-[10px] text-[var(--p-text-2)]">{tier.num}</span>
                       {tier.label}
                     </span>
-                    <span className="text-xs text-[var(--text-muted)]">
+                    <span className="text-xs text-[var(--p-text-2)]">
                       {t("console.xpms.tiers.pairedWith", { pair: tier.pair }, `paired with ${tier.pair}`)}
                     </span>
                   </li>
                 ))}
               </ul>
               <div className="mt-3 text-xs">
-                <Link href="/console/xpms/tiers" className="text-[var(--org-primary)]">
+                <Link href="/console/xpms/tiers" className="text-[var(--p-accent)]">
                   {t("console.xpms.tiers.openLink", undefined, "Open tier composition →")}
                 </Link>
               </div>
@@ -139,15 +139,15 @@ export default async function XpmsOverviewPage() {
                 {XPMS_ATOM_PHASES.map((p) => (
                   <li key={p.id} className="flex items-center justify-between">
                     <span>
-                      <span className="me-2 font-mono text-[10px] text-[var(--text-muted)]">{p.num}</span>
+                      <span className="me-2 font-mono text-[10px] text-[var(--p-text-2)]">{p.num}</span>
                       {p.label}
                     </span>
-                    <span className="text-[11px] text-[var(--text-muted)]">{p.platform}</span>
+                    <span className="text-[11px] text-[var(--p-text-2)]">{p.platform}</span>
                   </li>
                 ))}
               </ol>
               <div className="mt-3 text-xs">
-                <Link href="/console/xpms/phases" className="text-[var(--org-primary)]">
+                <Link href="/console/xpms/phases" className="text-[var(--p-accent)]">
                   {t("console.xpms.phases.openLink", undefined, "Open phase view →")}
                 </Link>
               </div>
@@ -155,14 +155,14 @@ export default async function XpmsOverviewPage() {
           </Card>
         </div>
 
-        <div className="mt-6 text-xs text-[var(--text-muted)]">
+        <div className="mt-6 text-xs text-[var(--p-text-2)]">
           {t(
             "console.xpms.footer.compositionRows",
             { count: comp.data?.length ?? 0 },
             `Composition rows on file: ${comp.data?.length ?? 0}.`,
           )}{" "}
           {t("console.xpms.footer.codebookNote", undefined, "Codebook is global and append-only — see")}{" "}
-          <Link href="/console/xpms/codebook" className="text-[var(--org-primary)]">
+          <Link href="/console/xpms/codebook" className="text-[var(--p-accent)]">
             {t("console.xpms.footer.codebookLink", undefined, "XTC codebook")}
           </Link>
           .

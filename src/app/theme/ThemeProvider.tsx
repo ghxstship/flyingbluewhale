@@ -1,21 +1,28 @@
 "use client";
 
 import * as React from "react";
-import { THEMES, isValidThemeSlug, colorSchemeFor, type ThemeSlug, type ThemeFamily } from "./themes.config";
+import { THEMES, isValidThemeSlug, type ThemeSlug, type ThemeFamily } from "./themes.config";
 import {
   THEME_COOKIE_NAME,
   THEME_STORAGE_KEY,
   MODE_COOKIE_NAME,
   LEGACY_MODE_COOKIE_NAME,
   MODE_STORAGE_KEY,
+  ACCENT_COOKIE_NAME,
+  ACCENT_STORAGE_KEY,
 } from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
 export type Density = "compact" | "comfortable" | "spacious";
+export type AccentIntensity = "soft" | "default" | "vivid";
 
 const DENSITIES: Density[] = ["compact", "comfortable", "spacious"];
 function isValidDensity(v: unknown): v is Density {
   return typeof v === "string" && (DENSITIES as string[]).includes(v);
+}
+const ACCENTS: AccentIntensity[] = ["soft", "default", "vivid"];
+function isValidAccent(v: unknown): v is AccentIntensity {
+  return typeof v === "string" && (ACCENTS as string[]).includes(v);
 }
 
 export interface ThemeContextValue {
@@ -30,11 +37,13 @@ export interface ThemeContextValue {
   setDensity: (d: Density) => void;
   /**
    * Color mode — orthogonal to the design theme slug. `system` honors
-   * `prefers-color-scheme`. Applied as `data-mode` on <html>, independent
-   * of the `data-theme` attribute that carries the CHROMA BEACON slug.
+   * `prefers-color-scheme`. Applied as `data-mode` on <html>.
    */
   mode: ColorMode;
   setMode: (m: ColorMode) => void;
+  /** Kit axis — accent intensity (soft/default/vivid). Persists. */
+  accent: AccentIntensity;
+  setAccent: (a: AccentIntensity) => void;
 }
 
 const ThemeContext = React.createContext<ThemeContextValue | null>(null);
@@ -58,20 +67,16 @@ async function persistRemote(patch: { theme?: ThemeSlug; density?: Density }) {
 }
 
 function systemDefault(): ThemeSlug {
-  // GHXSTSHIP — Deep Space Voyage — is the canonical default after the
-  // GHXSTSHIP rebrand. We no longer flip to `cyber` on prefers-color-scheme:
-  // dark because the new default is itself a dark-family palette.
-  return "ghxstship";
+  // Single canonical kit skin.
+  return "atlvs-product";
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Initialize from the DOM attribute set by the head script — this is the
-  // "mount" value. Storage (and any remote pref) reconcile in the first
-  // effect to avoid hydration mismatch.
-  const [theme, setThemeState] = React.useState<ThemeSlug>("ghxstship");
+  const [theme, setThemeState] = React.useState<ThemeSlug>("atlvs-product");
   const [isSystemDriven, setSystemDriven] = React.useState(true);
   const [density, setDensityState] = React.useState<Density>("comfortable");
   const [mode, setModeState] = React.useState<ColorMode>("system");
+  const [accent, setAccentState] = React.useState<AccentIntensity>("default");
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -90,11 +95,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const storedDensity = localStorage.getItem("chroma.density");
     setDensityState(isValidDensity(storedDensity) ? storedDensity : "comfortable");
 
-    // Color mode hydration — cookie first, then localStorage, then default "system".
-    // Reads the canonical cookie, falling back to the pre-brand-sweep
-    // legacy name (`fbw_mode`) so existing users keep their preference for
-    // one deploy cycle. The next `setMode` call rewrites under the
-    // canonical name; the legacy cookie expires naturally.
     const cookieMode = (() => {
       const tryRead = (key: string) => {
         const re = new RegExp(`(?:^|;\\s*)${key}=([^;]+)`);
@@ -114,21 +114,31 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     })();
     setModeState(cookieMode ?? storedMode ?? "system");
 
+    const cookieAccent = (() => {
+      const re = new RegExp(`(?:^|;\\s*)${ACCENT_COOKIE_NAME}=([^;]+)`);
+      const m = document.cookie.match(re);
+      const v = m ? decodeURIComponent(m[1]) : null;
+      return isValidAccent(v) ? v : null;
+    })();
+    const storedAccent = (() => {
+      try {
+        const v = localStorage.getItem(ACCENT_STORAGE_KEY);
+        return isValidAccent(v) ? v : null;
+      } catch {
+        return null;
+      }
+    })();
+    setAccentState(cookieAccent ?? storedAccent ?? "default");
+
     setMounted(true);
   }, []);
 
-  // Re-apply data-theme when the palette slug changes client-side. Also
-  // re-derive color-scheme from the theme's intrinsic family — dark
-  // themes (cyber, glass) get dark scrollbars + form controls regardless
-  // of the user's mode preference. The previous implementation drove
-  // color-scheme from data-mode, which produced a mismatch (e.g. cyber
-  // theme + light mode → light scrollbars on a dark background), broke
-  // the CHROMA BEACON contract test, and disagreed with both the SSR
-  // helper colorSchemeFor() and the head bootstrap script.
   React.useEffect(() => {
     if (!mounted) return;
     document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.style.colorScheme = colorSchemeFor(theme);
+    // Mirror data-ui="saas" so kit-canon selectors paint alongside legacy
+    // [data-theme="atlvs-product"] scoping.
+    document.documentElement.setAttribute("data-ui", "saas");
   }, [theme, mounted]);
 
   React.useEffect(() => {
@@ -138,17 +148,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     else root.setAttribute("data-density", density);
   }, [density, mounted]);
 
-  // Color mode application — independent of the theme slug. Writes
-  // `data-mode="light|dark"` (resolving `system` against the media query)
-  // so CSS can gate token overrides on that attribute without clobbering
-  // `data-theme`. Does NOT touch color-scheme — that's the theme's
-  // domain, not the mode's.
   React.useEffect(() => {
     if (!mounted) return;
     const resolved =
       mode === "system" ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : mode;
     document.documentElement.setAttribute("data-mode", resolved);
+    document.documentElement.style.colorScheme = resolved === "dark" ? "dark" : "light";
   }, [mode, mounted]);
+
+  React.useEffect(() => {
+    if (!mounted) return;
+    const root = document.documentElement;
+    if (accent === "default") root.removeAttribute("data-accent");
+    else root.setAttribute("data-accent", accent);
+  }, [accent, mounted]);
 
   React.useEffect(() => {
     if (!mounted || mode !== "system") return;
@@ -156,12 +169,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     function onChange() {
       const next = mql.matches ? "dark" : "light";
       document.documentElement.setAttribute("data-mode", next);
+      document.documentElement.style.colorScheme = next;
     }
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
   }, [mode, mounted]);
 
-  // Cross-tab sync — listen for storage events from other tabs of the same app
   React.useEffect(() => {
     if (!mounted) return;
     function onStorage(e: StorageEvent) {
@@ -174,19 +187,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
   }, [mounted, theme]);
-
-  // System preference change — only applies while unpicked
-  React.useEffect(() => {
-    if (!mounted) return;
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    function onChange() {
-      if (!isSystemDriven) return;
-      const next = systemDefault();
-      setThemeState(next);
-    }
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, [mounted, isSystemDriven]);
 
   const setTheme = React.useCallback((slug: ThemeSlug) => {
     setThemeState(slug);
@@ -233,6 +233,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     writeCookie(MODE_COOKIE_NAME, m);
   }, []);
 
+  const setAccent = React.useCallback((a: AccentIntensity) => {
+    setAccentState(a);
+    try {
+      localStorage.setItem(ACCENT_STORAGE_KEY, a);
+    } catch {
+      /* ignore */
+    }
+    writeCookie(ACCENT_COOKIE_NAME, a);
+  }, []);
+
   const value = React.useMemo<ThemeContextValue>(
     () => ({
       theme,
@@ -244,8 +254,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setDensity,
       mode,
       setMode,
+      accent,
+      setAccent,
     }),
-    [theme, isSystemDriven, setTheme, resetToSystem, density, setDensity, mode, setMode],
+    [theme, isSystemDriven, setTheme, resetToSystem, density, setDensity, mode, setMode, accent, setAccent],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
@@ -253,7 +265,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
 export function useTheme(): ThemeContextValue {
   const ctx = React.useContext(ThemeContext);
-  if (!ctx) throw new Error("useTheme must be used within CHROMA BEACON ThemeProvider");
+  if (!ctx) throw new Error("useTheme must be used within ThemeProvider");
   return ctx;
 }
 
@@ -262,11 +274,6 @@ export function useTheme(): ThemeContextValue {
  * including error boundaries, test environments, and future global-error.tsx
  * paths that bypass the root layout. Returns `null` when no provider is
  * present so the consumer can decide whether to render nothing or a stub.
- *
- * Audit B4 fix: ThemeToggle / DensityToggle were crashing the entire app
- * when rendered outside the provider; switching them to this hook makes
- * them render-safe everywhere. `useTheme()` keeps throwing for code that
- * legitimately depends on the context value.
  */
 export function useThemeIfAvailable(): ThemeContextValue | null {
   return React.useContext(ThemeContext);

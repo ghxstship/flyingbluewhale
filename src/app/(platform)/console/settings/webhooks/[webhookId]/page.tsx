@@ -63,20 +63,20 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
         />
 
         <section className="surface">
-          <div className="border-b border-[var(--border-color)] px-5 py-3">
+          <div className="border-b border-[var(--p-border)] px-5 py-3">
             <h3 className="text-sm font-semibold">
               {t("console.settings.webhooks.detail.recentDeliveries", undefined, "Recent Deliveries")}
             </h3>
-            <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+            <p className="mt-0.5 text-xs text-[var(--p-text-2)]">
               {t("console.settings.webhooks.detail.last25", undefined, "Last 25 attempts")}
             </p>
           </div>
           {rows.length === 0 ? (
-            <div className="p-5 text-sm text-[var(--text-muted)]">
+            <div className="p-5 text-sm text-[var(--p-text-2)]">
               {t("console.settings.webhooks.detail.empty", undefined, "No deliveries recorded yet.")}
             </div>
           ) : (
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.settings.webhooks.detail.col.when", undefined, "When")}</th>
@@ -109,10 +109,7 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
                     </td>
                     <td className="font-mono text-xs">{d.last_status ?? "—"}</td>
                     <td className="font-mono text-xs">{d.attempts}</td>
-                    <td
-                      className="max-w-xs truncate text-xs text-[var(--color-error)]"
-                      title={d.last_error ?? undefined}
-                    >
+                    <td className="max-w-xs truncate text-xs text-[var(--p-danger)]" title={d.last_error ?? undefined}>
                       {d.last_error ?? ""}
                     </td>
                   </tr>

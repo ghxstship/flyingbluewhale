@@ -66,7 +66,7 @@ export default async function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-accent">ATLVS</div>
         <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">{t("marketing.pages.solutions.atlvs.hero.title")}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.solutions.atlvs.hero.subtitle")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -74,7 +74,7 @@ export default async function ATLVSPage() {
           <Button href="/contact" variant="secondary">
             {t("marketing.pages.solutions.atlvs.hero.ctaSecondary")}
           </Button>
-          <Link href="/pricing" className="btn btn-ghost">
+          <Link href="/pricing" className="ps-btn ps-btn--ghost">
             {t("marketing.pages.solutions.atlvs.hero.ctaPricing")}
           </Link>
         </div>
@@ -82,7 +82,7 @@ export default async function ATLVSPage() {
 
       {/* Modules */}
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+        <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
           {t("marketing.pages.solutions.atlvs.modules.eyebrow")}
         </div>
         <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
@@ -146,16 +146,16 @@ export default async function ATLVSPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
               {t("marketing.pages.solutions.atlvs.architecture.eyebrow")}
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight">
               {t("marketing.pages.solutions.atlvs.architecture.title")}
             </h2>
-            <p className="mt-4 text-sm text-[var(--text-secondary)]">
+            <p className="mt-4 text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.solutions.atlvs.architecture.body1")}
             </p>
-            <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            <p className="mt-3 text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.solutions.atlvs.architecture.body2")}
             </p>
           </div>
@@ -171,7 +171,7 @@ export default async function ATLVSPage() {
               t("marketing.pages.solutions.atlvs.architecture.bullets.sla"),
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
-                <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
+                <CheckCircle2 size={16} className="mt-0.5 text-[var(--p-accent)]" />
                 <span>{x}</span>
               </li>
             ))}
@@ -199,7 +199,7 @@ export default async function ATLVSPage() {
           ].map((p) => (
             <div key={p.role} className="surface p-5">
               <div className="text-sm font-semibold">{p.role}</div>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{p.body}</p>
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{p.body}</p>
             </div>
           ))}
         </div>

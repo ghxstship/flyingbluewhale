@@ -148,7 +148,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ m
               key: "due_at",
               header: t("console.actionItems.columns.due", undefined, "Due"),
               render: (r) => (
-                <span className={r.due_at && new Date(r.due_at) < new Date() ? "text-[var(--color-error)]" : ""}>
+                <span className={r.due_at && new Date(r.due_at) < new Date() ? "text-[var(--p-danger)]" : ""}>
                   {fmt(r.due_at)}
                 </span>
               ),

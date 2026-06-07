@@ -75,7 +75,7 @@ export default async function PromoterSettlements({ params }: { params: Promise<
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">{t("p.promoter.settlements.title", undefined, "Settlements")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {rows.length === 1
             ? t(
                 "p.promoter.settlements.subtitle.one",
@@ -94,25 +94,25 @@ export default async function PromoterSettlements({ params }: { params: Promise<
             <div className="font-mono text-2xl font-semibold">
               {(totalGross / 100).toLocaleString("en-US", { style: "currency", currency: rows[0]?.currency ?? "USD" })}
             </div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.promoter.settlements.metrics.totalGross", undefined, "Total Gross")}
             </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{fmt.number(totalPaid)}</div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.promoter.settlements.metrics.paidAttendance", undefined, "Paid Attendance")}
             </div>
           </div>
           <div className="surface p-3">
             <div className="font-mono text-2xl font-semibold">{rows.filter((r) => r.status === "final").length}</div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.promoter.settlements.metrics.finalized", undefined, "Finalized")}
             </div>
           </div>
         </section>
 
-        <table className="data-table mt-6 w-full text-sm">
+        <table className="ps-table mt-6 w-full text-sm">
           <thead>
             <tr>
               <th>{t("p.promoter.settlements.table.date", undefined, "Date")}</th>

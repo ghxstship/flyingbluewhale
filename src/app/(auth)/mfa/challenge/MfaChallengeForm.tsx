@@ -58,7 +58,7 @@ export function MfaChallengeForm({ factorId, next }: { factorId: string; next: s
         {pending ? t("auth.mfa.submitting", undefined, "Verifying") : t("auth.mfa.submit", undefined, "Verify")}
       </Button>
 
-      <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
+      <div className="flex items-center justify-between text-xs text-[var(--p-text-2)]">
         <button
           type="button"
           onClick={() => {
@@ -71,7 +71,7 @@ export function MfaChallengeForm({ factorId, next }: { factorId: string; next: s
             ? t("auth.mfa.useAuthenticator", undefined, "Use authenticator code")
             : t("auth.mfa.useRecovery", undefined, "Use a recovery code")}
         </button>
-        <Link href="/auth/signout" className="hover:text-[var(--text-primary)]">
+        <Link href="/auth/signout" className="hover:text-[var(--p-text-1)]">
           {t("common.signOut", undefined, "Sign out")}
         </Link>
       </div>

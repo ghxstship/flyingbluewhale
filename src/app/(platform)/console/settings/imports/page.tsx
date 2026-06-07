@@ -54,11 +54,11 @@ export default async function ImportsPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
             {t("console.settings.imports.recentRuns", undefined, "Recent runs")}
           </h3>
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.settings.imports.col.kind", undefined, "Kind")}</th>
@@ -72,7 +72,7 @@ export default async function ImportsPage() {
               <tbody>
                 {(runs ?? []).length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-6 text-center text-[var(--text-muted)]">
+                    <td colSpan={6} className="py-6 text-center text-[var(--p-text-2)]">
                       {t("console.settings.imports.empty", undefined, "No imports yet.")}
                     </td>
                   </tr>
@@ -80,7 +80,7 @@ export default async function ImportsPage() {
                   (runs ?? []).map((r) => (
                     <tr key={r.id}>
                       <td className="font-mono text-xs">{toTitle(r.kind)}</td>
-                      <td className="text-xs text-[var(--text-secondary)]">{r.filename ?? r.source}</td>
+                      <td className="text-xs text-[var(--p-text-2)]">{r.filename ?? r.source}</td>
                       <td className="font-mono text-xs">{r.rows_imported}</td>
                       <td className="font-mono text-xs">{r.rows_failed}</td>
                       <td>
@@ -99,8 +99,8 @@ export default async function ImportsPage() {
           </div>
         </section>
 
-        <section className="surface p-5 text-sm text-[var(--text-muted)]">
-          <h3 className="mb-2 text-sm font-semibold text-[var(--foreground)]">
+        <section className="surface p-5 text-sm text-[var(--p-text-2)]">
+          <h3 className="mb-2 text-sm font-semibold text-[var(--p-text-1)]">
             {t("console.settings.imports.columnReference", undefined, "Column Reference")}
           </h3>
           <p>

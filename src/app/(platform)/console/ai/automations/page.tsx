@@ -120,7 +120,7 @@ export default async function Page() {
               "Author AI-driven automations triggered manually, on a cron schedule, by webhooks, or by domain events.",
             )}
             action={
-              <Link href="/console/ai/automations/new" className="btn btn-primary btn-sm">
+              <Link href="/console/ai/automations/new" className="ps-btn ps-btn--sm">
                 {t("console.ai.automations.newAction", undefined, "+ New Automation")}
               </Link>
             }
@@ -142,9 +142,9 @@ export default async function Page() {
                       )}
                     </div>
                     {r.description && (
-                      <p className="mt-0.5 line-clamp-1 text-xs text-[var(--text-muted)]">{r.description}</p>
+                      <p className="mt-0.5 line-clamp-1 text-xs text-[var(--p-text-2)]">{r.description}</p>
                     )}
-                    <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                    <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t(
                         "console.ai.automations.lastRun",
                         { time: relativeTime(r.last_run_at, t) },

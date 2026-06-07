@@ -12,24 +12,23 @@ export const metadata: Metadata = {
 };
 
 /**
- * GHXSTSHIP marketing surface. Theme is LOCKED to the cosmic `ghxstship`
- * skin (Big Shoulders display, void ink ground, brass doubloon accent,
- * halftone dots, hard-offset shadows) regardless of any preference
- * inherited from the parent property — this surface IS the GHXSTSHIP
- * brand expression. Brass-default accent applies via data-platform.
- *
- * Pre-v3 this layout pinned the now-purged `bermuda-triangle` skin; that
- * was a legacy reference replaced in the v3 brand sweep.
+ * GHXSTSHIP parent-company marketing surface. Adopts the canonical ATLVS
+ * kit skin (Space Grotesk, neutral light/dark surfaces, brass accent via
+ * compvss data-product) for visual continuity with the product platform.
+ * The pre-kit cosmic `ghxstship` skin (Big Shoulders, void ink ground,
+ * halftone dots) was retired in the kit-only refactor.
  */
 export default function GhxstshipLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      data-theme="ghxstship"
+      data-ui="saas"
+      data-theme="atlvs-product"
+      data-product="compvss"
       data-platform="ghxstship"
       className="page-shell min-h-screen"
       style={{
-        background: "var(--bg)",
-        color: "var(--text)",
+        background: "var(--p-bg)",
+        color: "var(--p-text-1)",
         fontFamily: "var(--font-body)",
       }}
     >

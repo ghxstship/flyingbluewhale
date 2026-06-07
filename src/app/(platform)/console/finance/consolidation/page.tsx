@@ -157,9 +157,9 @@ export default async function Page() {
           />
         </div>
 
-        <div className="surface p-5 text-xs text-[var(--text-secondary)]">
+        <div className="surface p-5 text-xs text-[var(--p-text-2)]">
           <p>
-            <strong className="text-[var(--text-primary)]">
+            <strong className="text-[var(--p-text-1)]">
               {t("console.finance.consolidation.howItWorks.heading", undefined, "How consolidation works:")}
             </strong>{" "}
             {t("console.finance.consolidation.howItWorks.part1", undefined, "the view")}{" "}
@@ -194,7 +194,7 @@ export default async function Page() {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <div className="text-xs tracking-wider text-[var(--text-secondary)] uppercase">
+                  <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">
                     {b.short_code ?? t("console.finance.consolidation.unassigned", undefined, "Unassigned")}
                   </div>
                   <div className="mt-0.5 text-base font-semibold">
@@ -206,13 +206,13 @@ export default async function Page() {
               </div>
               <div className="mt-4 grid grid-cols-3 gap-3 text-xs">
                 <div>
-                  <div className="text-[var(--text-secondary)]">
+                  <div className="text-[var(--p-text-2)]">
                     {t("console.finance.consolidation.card.base", undefined, "Base")}
                   </div>
                   <div className="font-mono text-sm">{formatMoney(b.base_total, b.base_currency ?? orgCurrency)}</div>
                 </div>
                 <div>
-                  <div className="text-[var(--text-secondary)]">
+                  <div className="text-[var(--p-text-2)]">
                     {t("console.finance.consolidation.card.consolidated", undefined, "Consolidated")}
                   </div>
                   <div className="font-mono text-sm">
@@ -220,7 +220,7 @@ export default async function Page() {
                   </div>
                 </div>
                 <div>
-                  <div className="text-[var(--text-secondary)]">
+                  <div className="text-[var(--p-text-2)]">
                     {t("console.finance.consolidation.card.ownership", undefined, "Ownership")}
                   </div>
                   <div className="font-mono text-sm">
@@ -229,7 +229,7 @@ export default async function Page() {
                 </div>
               </div>
               <div className="mt-3 flex items-center justify-between text-xs">
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t(
                     "console.finance.consolidation.card.invoiceCount",
                     { count: b.invoice_count },
@@ -237,11 +237,11 @@ export default async function Page() {
                   )}
                 </span>
                 <span className="font-mono">
-                  <span className="text-[var(--color-warning)]">
+                  <span className="text-[var(--p-warning)]">
                     {formatMoney(b.outstanding_total, b.base_currency ?? orgCurrency)}
                   </span>
                   {" · "}
-                  <span className="text-[var(--color-success)]">
+                  <span className="text-[var(--p-success)]">
                     {formatMoney(b.paid_total, b.base_currency ?? orgCurrency)}
                   </span>
                 </span>
@@ -249,7 +249,7 @@ export default async function Page() {
             </Link>
           ))}
           {bucketList.length === 0 ? (
-            <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+            <div className="surface p-6 text-sm text-[var(--p-text-2)]">
               {t("console.finance.consolidation.empty.prefix", undefined, "No entities yet. Create one at")}{" "}
               <Link href="/console/finance/entities/new" className="underline">
                 /console/finance/entities/new

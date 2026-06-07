@@ -54,13 +54,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               "Project tasks land here once you add the first one.",
             )}
             action={
-              <Link className="text-sm font-medium text-[var(--org-primary)]" href="/console/tasks/new">
+              <Link className="text-sm font-medium text-[var(--p-accent)]" href="/console/tasks/new">
                 {t("console.projects.tasks.newTaskCta", undefined, "New Task →")}
               </Link>
             }
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.projects.tasks.colTitle", undefined, "Title")}</th>

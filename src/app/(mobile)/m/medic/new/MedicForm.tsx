@@ -42,36 +42,36 @@ export function MedicForm() {
   return (
     <form action={formAction} className="space-y-5">
       <fieldset className="space-y-2">
-        <legend className="text-xs font-medium text-[var(--text-secondary)]">
+        <legend className="text-xs font-medium text-[var(--p-text-2)]">
           {t("m.medic.new.triageLegend", undefined, "Triage *")}
         </legend>
         <div className="grid grid-cols-2 gap-2">
           {TRIAGE.map((tier) => (
             <label
               key={tier.value}
-              className="surface flex cursor-pointer flex-col gap-0.5 p-3 text-sm has-[:checked]:ring-2 has-[:checked]:ring-[var(--org-primary)]"
+              className="surface flex cursor-pointer flex-col gap-0.5 p-3 text-sm has-[:checked]:ring-2 has-[:checked]:ring-[var(--p-accent)]"
             >
               <span className="flex items-center gap-2">
-                <input type="radio" name="triage" value={tier.value} required className="accent-[var(--org-primary)]" />
+                <input type="radio" name="triage" value={tier.value} required className="accent-[var(--p-accent)]" />
                 <span className="font-semibold">{tier.label}</span>
               </span>
-              <span className="ms-5 text-xs text-[var(--text-muted)]">{tier.hint}</span>
+              <span className="ms-5 text-xs text-[var(--p-text-2)]">{tier.hint}</span>
             </label>
           ))}
         </div>
       </fieldset>
 
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("m.medic.new.patientRef.label", undefined, "Patient Reference")}
         </label>
         <input
           name="patient_ref"
           maxLength={120}
           placeholder={t("m.medic.new.patientRef.placeholder", undefined, "Pseudonymous ID — never a name")}
-          className="input-base mt-1.5 w-full"
+          className="ps-input mt-1.5 w-full"
         />
-        <p className="mt-1 text-[10px] text-[var(--text-muted)]">
+        <p className="mt-1 text-[10px] text-[var(--p-text-2)]">
           {t(
             "m.medic.new.patientRef.hint",
             undefined,
@@ -81,7 +81,7 @@ export function MedicForm() {
       </div>
 
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("m.medic.new.chiefComplaint.label", undefined, "Chief Complaint *")}
         </label>
         <textarea
@@ -90,12 +90,12 @@ export function MedicForm() {
           maxLength={2000}
           required
           placeholder={t("m.medic.new.chiefComplaint.placeholder", undefined, "What is the patient presenting with?")}
-          className="input-base mt-1.5 w-full"
+          className="ps-input mt-1.5 w-full"
         />
       </div>
 
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("m.medic.new.disposition.label", undefined, "Disposition")}
         </label>
         <input
@@ -106,13 +106,13 @@ export function MedicForm() {
             undefined,
             "e.g. Discharged, Hospital transfer, Refused care",
           )}
-          className="input-base mt-1.5 w-full"
+          className="ps-input mt-1.5 w-full"
         />
       </div>
 
       <div className="surface p-4">
         <SignatureField name="signature" label={t("m.medic.new.signature.label", undefined, "Clinician Signature")} />
-        <p className="mt-2 text-[10px] text-[var(--text-muted)]">
+        <p className="mt-2 text-[10px] text-[var(--p-text-2)]">
           {t(
             "m.medic.new.signature.hint",
             undefined,

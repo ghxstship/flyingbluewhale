@@ -35,7 +35,7 @@ export function NewMsaForm({ crew }: { crew: CrewMemberOption[] }) {
           ))}
         </NativeSelect>
       </FormField>
-      <p className="text-xs text-[var(--text-muted)]">
+      <p className="text-xs text-[var(--p-text-2)]">
         {t(
           "console.people.msas.new.helperText",
           undefined,

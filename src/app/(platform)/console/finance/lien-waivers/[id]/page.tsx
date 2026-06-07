@@ -46,7 +46,7 @@ const STATE_TONE: Record<WaiverState, "muted" | "info" | "warning" | "success" |
   voided: "error",
 };
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   if (!hasSupabase) return null;
@@ -84,19 +84,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[w.waiver_state]}>{toTitle(w.waiver_state)}</Badge>
           {w.state_jurisdiction && (
-            <span className="font-mono text-[var(--text-muted)]">
+            <span className="font-mono text-[var(--p-text-2)]">
               {t("console.finance.lienWaivers.detail.jdLabel", undefined, "JD")} · {w.state_jurisdiction}
             </span>
           )}
           {w.envelope_id && (
-            <span className="font-mono text-[10px] text-[var(--text-muted)]">
+            <span className="font-mono text-[10px] text-[var(--p-text-2)]">
               {t("console.finance.lienWaivers.detail.envelopeLabel", undefined, "Envelope")}{" "}
               {w.envelope_id.slice(0, 12)}…
             </span>
           )}
           {w.payment_application && (
             <a
-              className="text-[var(--accent)] underline"
+              className="text-[var(--p-accent)] underline"
               href={`/console/finance/pay-apps/${w.payment_application.id}`}
             >
               {t("console.finance.lienWaivers.detail.payAppLabel", undefined, "Pay-App")}{" "}
@@ -112,7 +112,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <ul className="space-y-1">
             {w.sent_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">
+                <span className="font-mono text-[var(--p-text-2)]">
                   {t("console.finance.lienWaivers.detail.sentLabel", undefined, "Sent")}
                 </span>{" "}
                 · {fmt.dateParts(w.sent_at, { year: "numeric", month: "short", day: "numeric" })}
@@ -120,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             )}
             {w.signed_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">
+                <span className="font-mono text-[var(--p-text-2)]">
                   {t("console.finance.lienWaivers.detail.signedLabel", undefined, "Signed")}
                 </span>{" "}
                 · {w.signer_name ?? "—"}
@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             )}
             {w.returned_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">
+                <span className="font-mono text-[var(--p-text-2)]">
                   {t("console.finance.lienWaivers.detail.returnedLabel", undefined, "Returned")}
                 </span>{" "}
                 · {fmt.dateParts(w.returned_at, { year: "numeric", month: "short", day: "numeric" })}
@@ -138,14 +138,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             )}
             {w.released_at && (
               <li>
-                <span className="font-mono text-[var(--text-muted)]">
+                <span className="font-mono text-[var(--p-text-2)]">
                   {t("console.finance.lienWaivers.detail.releasedLabel", undefined, "Released")}
                 </span>{" "}
                 · {fmt.dateParts(w.released_at, { year: "numeric", month: "short", day: "numeric" })}
               </li>
             )}
             {w.voided_at && (
-              <li className="text-[var(--color-error)]">
+              <li className="text-[var(--p-danger)]">
                 <span className="font-mono">
                   {t("console.finance.lienWaivers.detail.voidedLabel", undefined, "Voided")}
                 </span>{" "}
@@ -242,7 +242,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <h2 className="text-sm font-semibold">
               {t("console.finance.lienWaivers.detail.notesHeading", undefined, "Notes")}
             </h2>
-            <p className="text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{w.notes}</p>
+            <p className="text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{w.notes}</p>
           </section>
         )}
       </div>

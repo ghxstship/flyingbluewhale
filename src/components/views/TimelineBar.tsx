@@ -34,12 +34,12 @@ export type TimelineBarProps = {
  * fill via `color-mix` for tasteful translucency over the canvas grid.
  */
 const TONE_VAR: Record<TimelineBarTone, string> = {
-  accent: "var(--org-primary)",
-  info: "var(--color-info)",
-  success: "var(--color-success)",
-  warn: "var(--color-warning)",
-  error: "var(--color-error)",
-  neutral: "var(--text-muted)",
+  accent: "var(--p-accent)",
+  info: "var(--p-info)",
+  success: "var(--p-success)",
+  warn: "var(--p-warning)",
+  error: "var(--p-danger)",
+  neutral: "var(--p-text-2)",
 };
 
 /**
@@ -77,7 +77,7 @@ export function TimelineBar({
     left,
     width,
     transform: CSS.Translate.toString(transform),
-    background: `color-mix(in srgb, ${fill} 22%, var(--surface))`,
+    background: `color-mix(in srgb, ${fill} 22%, var(--p-surface))`,
     borderColor: fill,
     opacity: isDragging ? 0.55 : undefined,
     touchAction: "none",
@@ -90,9 +90,9 @@ export function TimelineBar({
 
   // Inner content — title + range. Reused inside Link wrapper if href set.
   const content = (
-    <span className="flex h-full items-center gap-2 truncate px-2 text-[11px] font-medium text-[var(--text-primary)]">
+    <span className="flex h-full items-center gap-2 truncate px-2 text-[11px] font-medium text-[var(--p-text-1)]">
       <span className="truncate">{title}</span>
-      <span className="ms-auto truncate font-mono text-[10px] text-[var(--text-muted)]" aria-hidden="true">
+      <span className="ms-auto truncate font-mono text-[10px] text-[var(--p-text-2)]" aria-hidden="true">
         {rangeLabel}
       </span>
     </span>
@@ -107,8 +107,8 @@ export function TimelineBar({
       style={style}
       className={[
         "absolute top-1 h-7 rounded-md border-[3px] select-none",
-        "focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--background)] focus-visible:outline-none",
-        "hover:[--bar-shadow:inset_0_0_0_1px_var(--surface)]",
+        "focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--p-bg)] focus-visible:outline-none",
+        "hover:[--bar-shadow:inset_0_0_0_1px_var(--p-surface)]",
         className,
       ].join(" ")}
       {...attributes}
@@ -122,7 +122,7 @@ export function TimelineBar({
           e.stopPropagation();
           onResizeStart?.("start", e.clientX);
         }}
-        className="absolute start-0 top-0 z-10 h-full w-2 cursor-ew-resize rounded-s-md hover:bg-[var(--surface-inset)]"
+        className="absolute start-0 top-0 z-10 h-full w-2 cursor-ew-resize rounded-s-md hover:bg-[var(--p-surface-2)]"
       />
       {/* Bar body */}
       {href ? (
@@ -153,7 +153,7 @@ export function TimelineBar({
           e.stopPropagation();
           onResizeStart?.("end", e.clientX);
         }}
-        className="absolute end-0 top-0 z-10 h-full w-2 cursor-ew-resize rounded-e-md hover:bg-[var(--surface-inset)]"
+        className="absolute end-0 top-0 z-10 h-full w-2 cursor-ew-resize rounded-e-md hover:bg-[var(--p-surface-2)]"
       />
     </div>
   );

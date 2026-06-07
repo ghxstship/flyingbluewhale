@@ -60,14 +60,12 @@ export function WorkspaceChrome({
   return (
     <header
       data-shell={shell}
-      className={`workspace-chrome glass-nav sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-[var(--border-color)] px-3 sm:px-4 ${heightClass}`}
+      className={`workspace-chrome glass-nav sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-[var(--p-border)] px-3 sm:px-4 ${heightClass}`}
     >
       {navDrawer}
       <AppSwitcher current={shell} entries={switcherEntries} />
       {workspaceLabel ? (
-        <span className="hidden truncate text-sm font-medium text-[var(--text-secondary)] sm:inline">
-          {workspaceLabel}
-        </span>
+        <span className="hidden truncate text-sm font-medium text-[var(--p-text-2)] sm:inline">{workspaceLabel}</span>
       ) : null}
       <div className="ms-auto flex items-center gap-0.5">
         <CommandPaletteTrigger />

@@ -37,9 +37,7 @@ export default async function GuidesPage() {
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.guides.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.guides.hero.title")}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.guides.hero.subtitle")}
-        </p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.guides.hero.subtitle")}</p>
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-8">
@@ -47,9 +45,9 @@ export default async function GuidesPage() {
           {MARKETING_GUIDE_LIST.map((g) => (
             <li key={g.slug}>
               <Link href={`/guides/${g.slug}`} className="surface hover-lift block p-6">
-                <div className="font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
+                <div className="font-mono text-xs text-[var(--p-text-2)]">{g.readingTime}</div>
                 <div className="hed-lg mt-3 tracking-tight">{g.title}</div>
-                <div className="mt-2 text-sm text-[var(--text-secondary)]">{g.blurb}</div>
+                <div className="mt-2 text-sm text-[var(--p-text-2)]">{g.blurb}</div>
               </Link>
             </li>
           ))}

@@ -5,7 +5,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   // the user's cosmic-marketing cookie pref. No data-platform here —
   // the theme's default accent (atlvs pink) is correct pre-session.
   return (
-    <div data-theme="atlvs-product" className="page-shell">
+    <div data-ui="saas" data-theme="atlvs-product" data-product="atlvs" className="page-shell">
       {children}
     </div>
   );

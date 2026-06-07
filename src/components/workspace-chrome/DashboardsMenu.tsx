@@ -27,7 +27,7 @@ export function DashboardsMenu({ entries }: { entries: DashboardEntry[] }) {
         <button
           type="button"
           aria-label="Dashboards"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
         >
           <ChartBar size={16} aria-hidden="true" />
         </button>
@@ -36,28 +36,25 @@ export function DashboardsMenu({ entries }: { entries: DashboardEntry[] }) {
         <Popover.Content
           align="end"
           sideOffset={6}
-          className="z-40 w-64 rounded-lg border border-[var(--border-color)] bg-[var(--background)] p-1 shadow-lg"
+          className="z-40 w-64 rounded-lg border border-[var(--p-border)] bg-[var(--p-bg)] p-1 shadow-lg"
         >
           {entries.length === 0 ? (
-            <div className="px-2 py-1.5 text-[11px] text-[var(--text-muted)]">No saved dashboards yet.</div>
+            <div className="px-2 py-1.5 text-[11px] text-[var(--p-text-2)]">No saved dashboards yet.</div>
           ) : (
             <div className="max-h-64 overflow-y-auto">
               {entries.map((d) => (
                 <Link
                   key={d.id}
                   href={d.href}
-                  className="block truncate rounded-md px-2 py-1.5 text-sm hover:bg-[var(--surface-raised)]"
+                  className="block truncate rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"
                 >
                   {d.name}
                 </Link>
               ))}
             </div>
           )}
-          <div className="my-1 border-t border-[var(--border-color)]" />
-          <Link
-            href="/console/dashboards"
-            className="block rounded-md px-2 py-1.5 text-sm hover:bg-[var(--surface-raised)]"
-          >
+          <div className="my-1 border-t border-[var(--p-border)]" />
+          <Link href="/console/dashboards" className="block rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]">
             All dashboards →
           </Link>
         </Popover.Content>

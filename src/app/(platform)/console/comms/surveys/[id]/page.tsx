@@ -114,7 +114,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {s.publish_state === "draft" && (
               <form action={publishSurvey}>
                 <input type="hidden" name="id" value={s.id} />
-                <button type="submit" className="btn btn-primary btn-sm">
+                <button type="submit" className="ps-btn ps-btn--sm">
                   {t("console.comms.surveys.detail.publish", undefined, "Publish")}
                 </button>
               </form>
@@ -122,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {s.publish_state === "published" && (
               <form action={closeSurvey}>
                 <input type="hidden" name="id" value={s.id} />
-                <button type="submit" className="btn btn-secondary btn-sm">
+                <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.comms.surveys.detail.close", undefined, "Close")}
                 </button>
               </form>
@@ -131,7 +131,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
       />
       <div className="page-content max-w-3xl space-y-4">
-        {s.description && <div className="surface p-4 text-sm text-[var(--text-secondary)]">{s.description}</div>}
+        {s.description && <div className="surface p-4 text-sm text-[var(--p-text-2)]">{s.description}</div>}
         <section className="surface p-4">
           <h2 className="text-sm font-semibold">
             {t("console.comms.surveys.detail.questions", undefined, "Questions")}
@@ -143,14 +143,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               const opts = Array.isArray(q.options) ? (q.options as string[]) : [];
               const isText = q.question_kind === "text";
               return (
-                <li key={q.id} className="rounded-md border border-[var(--border-color)] p-3">
+                <li key={q.id} className="rounded-md border border-[var(--p-border)] p-3">
                   <div className="flex items-center justify-between">
                     <Badge variant="muted">{q.question_kind}</Badge>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">#{q.ordinal}</span>
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">#{q.ordinal}</span>
                   </div>
                   <div className="mt-1 text-sm font-semibold">{q.prompt}</div>
                   {isText ? (
-                    <ul className="mt-2 space-y-1 text-xs text-[var(--text-secondary)]">
+                    <ul className="mt-2 space-y-1 text-xs text-[var(--p-text-2)]">
                       {(textSamples[q.id] ?? []).map((s, i) => (
                         <li key={i} className="italic">
                           &ldquo;{s}&rdquo;
@@ -175,11 +175,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                                 {count} ({pct}%)
                               </span>
                             </div>
-                            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[var(--bg-inset)]">
-                              <div
-                                className="h-full rounded-full bg-[var(--org-primary)]"
-                                style={{ width: `${pct}%` }}
-                              />
+                            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[var(--p-surface-2)]">
+                              <div className="h-full rounded-full bg-[var(--p-accent)]" style={{ width: `${pct}%` }} />
                             </div>
                           </li>
                         );
@@ -191,7 +188,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             })}
           </ol>
           {s.publish_state === "draft" && (
-            <form action={addQuestion} className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4">
+            <form action={addQuestion} className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4">
               <input type="hidden" name="surveyId" value={s.id} />
               <input
                 type="text"
@@ -199,9 +196,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 placeholder={t("console.comms.surveys.detail.promptPlaceholder", undefined, "Question prompt")}
                 required
                 maxLength={400}
-                className="input-base w-full"
+                className="ps-input w-full"
               />
-              <select name="question_kind" className="input-base w-full" defaultValue="single_choice">
+              <select name="question_kind" className="ps-input w-full" defaultValue="single_choice">
                 <option value="single_choice">
                   {t("console.comms.surveys.detail.kind.singleChoice", undefined, "Single choice")}
                 </option>
@@ -220,9 +217,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   undefined,
                   "Options — One per Line · Only for Choice/Scale",
                 )}
-                className="input-base w-full"
+                className="ps-input w-full"
               />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.comms.surveys.detail.addQuestion", undefined, "+ Add Question")}
               </button>
             </form>

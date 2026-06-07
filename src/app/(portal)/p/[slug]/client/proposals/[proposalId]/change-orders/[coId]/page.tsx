@@ -26,33 +26,33 @@ export default async function Page({
 
   return (
     <div className="space-y-4 p-6">
-      <Link href={base} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+      <Link href={base} className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
         {t("p.client.changeOrderDetail.backLink", undefined, "← All change orders")}
       </Link>
 
       <header className="surface p-6">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-sm text-[var(--text-muted)]">#{co.number}</span>
+          <span className="font-mono text-sm text-[var(--p-text-2)]">#{co.number}</span>
           <Badge variant={CO_STATE_VARIANT[co.state]}>{CO_STATE_LABEL[co.state]}</Badge>
         </div>
         <h1 className="mt-2 text-xl font-semibold">{co.title}</h1>
         <div className="mt-3 grid gap-3 md:grid-cols-3">
-          <div className="rounded border border-[var(--border-color)] p-3">
-            <div className="eyebrow text-xs text-[var(--text-muted)]">
+          <div className="rounded border border-[var(--p-border)] p-3">
+            <div className="eyebrow text-xs text-[var(--p-text-2)]">
               {t("p.client.changeOrderDetail.costDelta", undefined, "Cost delta")}
             </div>
             <div className="mt-1 font-mono text-lg font-semibold">{formatMoney(co.delta_cents ?? 0)}</div>
           </div>
-          <div className="rounded border border-[var(--border-color)] p-3">
-            <div className="eyebrow text-xs text-[var(--text-muted)]">
+          <div className="rounded border border-[var(--p-border)] p-3">
+            <div className="eyebrow text-xs text-[var(--p-text-2)]">
               {t("p.client.changeOrderDetail.requested", undefined, "Requested")}
             </div>
             <div className="mt-1 text-sm">
               {co.requested_label ?? "—"} · {timeAgo(co.created_at)}
             </div>
           </div>
-          <div className="rounded border border-[var(--border-color)] p-3">
-            <div className="eyebrow text-xs text-[var(--text-muted)]">
+          <div className="rounded border border-[var(--p-border)] p-3">
+            <div className="eyebrow text-xs text-[var(--p-text-2)]">
               {t("p.client.changeOrderDetail.decision", undefined, "Decision")}
             </div>
             <div className="mt-1 text-sm">
@@ -66,7 +66,7 @@ export default async function Page({
 
       {co.body && (
         <section className="surface p-6">
-          <div className="eyebrow mb-2 text-xs text-[var(--text-muted)]">
+          <div className="eyebrow mb-2 text-xs text-[var(--p-text-2)]">
             {t("p.client.changeOrderDetail.description", undefined, "Description")}
           </div>
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{co.body}</p>
@@ -75,7 +75,7 @@ export default async function Page({
 
       {co.decision_note && (
         <section className="surface p-6">
-          <div className="eyebrow mb-2 text-xs text-[var(--text-muted)]">
+          <div className="eyebrow mb-2 text-xs text-[var(--p-text-2)]">
             {t("p.client.changeOrderDetail.decisionNote", undefined, "Decision note")}
           </div>
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{co.decision_note}</p>

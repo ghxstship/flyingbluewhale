@@ -62,7 +62,7 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
     <nav
       role="navigation"
       aria-label={t("marketing.header.primaryAriaLabel", undefined, "Primary")}
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--border-color)] bg-[var(--background)]/95 backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--p-border)] bg-[var(--p-bg)]/95 backdrop-blur"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <ul className="grid grid-cols-5">
@@ -80,13 +80,13 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
                 {active && (
                   <span
                     aria-hidden="true"
-                    className="absolute inset-x-6 top-0 h-0.5 rounded-b-full bg-[var(--org-primary)]"
+                    className="absolute inset-x-6 top-0 h-0.5 rounded-b-full bg-[var(--p-accent)]"
                   />
                 )}
                 <span className="relative">
                   <Icon
                     size={18}
-                    className={active ? "text-[var(--org-primary)]" : "text-[var(--text-muted)]"}
+                    className={active ? "text-[var(--p-accent)]" : "text-[var(--p-text-2)]"}
                     aria-hidden="true"
                   />
                   {badgeCount > 0 && (
@@ -97,7 +97,7 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
                     </span>
                   )}
                 </span>
-                <span className={active ? "text-[var(--org-primary)]" : "text-[var(--text-muted)]"}>
+                <span className={active ? "text-[var(--p-accent)]" : "text-[var(--p-text-2)]"}>
                   {t(navItemKey(i), undefined, i.label)}
                 </span>
               </Link>

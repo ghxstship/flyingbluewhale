@@ -12,7 +12,7 @@ export default async function MobileTasks() {
   if (!hasSupabase) {
     return (
       <div className="px-4 pt-6 pb-24">
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-[var(--p-text-2)]">
           {t("common.configureSupabase", undefined, "Configure Supabase.")}
         </p>
       </div>

@@ -60,7 +60,7 @@ export default async function PartnersPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.partners.hero.eyebrow")}</div>
         <h1 className="hed-3xl mt-4">{t("marketing.pages.partners.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.partners.hero.body")}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.partners.hero.body")}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href="/contact">{t("marketing.pages.partners.hero.primaryCta")}</Button>
           <Button href={CANONICAL_CTAS.primary.href} variant="secondary">
@@ -76,7 +76,7 @@ export default async function PartnersPage() {
             <div key={track.key} className="surface p-6">
               <div className="eyebrow eyebrow-brand">{track.forWho}</div>
               <h3 className="mt-2 text-base font-semibold">{track.name}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{track.body}</p>
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{track.body}</p>
             </div>
           ))}
         </div>
@@ -86,11 +86,11 @@ export default async function PartnersPage() {
         <div className="surface relative overflow-hidden p-8 md:p-10">
           <span
             className="absolute inset-x-0 top-0 h-1"
-            style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+            style={{ background: "linear-gradient(90deg, var(--p-accent), var(--p-accent-text))" }}
           />
           <div className="eyebrow eyebrow-brand">{t("marketing.pages.partners.directory.eyebrow")}</div>
           <h2 className="hed-lg mt-3">{t("marketing.pages.partners.directory.title")}</h2>
-          <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+          <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
             {t("marketing.pages.partners.directory.body")}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">

@@ -20,7 +20,7 @@ export function AccountingPeriodStateControls({
 
   if (allowedNext.length === 0) {
     return (
-      <p className="text-sm text-[var(--text-secondary)]">
+      <p className="text-sm text-[var(--p-text-2)]">
         {t("console.finance.periods.controls.terminal", undefined, "Terminal state — no further transitions.")}
       </p>
     );
@@ -52,7 +52,7 @@ export function AccountingPeriodStateControls({
           </Button>
         </form>
       ))}
-      <span className="ms-2 self-center text-xs text-[var(--text-secondary)]">
+      <span className="ms-2 self-center text-xs text-[var(--p-text-2)]">
         {t("console.finance.periods.controls.from", undefined, "From")} <strong>{currentState}</strong>
       </span>
     </div>

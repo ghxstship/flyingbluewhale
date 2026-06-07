@@ -58,13 +58,13 @@ export default async function MobileGuide() {
   if (!active) {
     return (
       <div className="px-4 pt-6 pb-24">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
           {t("m.guide.eyebrow", undefined, "Field Guide")}
         </div>
         <h1 className="mt-1 text-2xl font-semibold">
           {t("m.guide.noActiveProject.title", undefined, "No Active Project")}
         </h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("m.guide.noActiveProject.body", undefined, "Check back when you're assigned to a show.")}
         </p>
       </div>
@@ -77,9 +77,9 @@ export default async function MobileGuide() {
   if (!guide) {
     return (
       <div className="px-4 pt-6 pb-24">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{active.name}</div>
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{active.name}</div>
         <h1 className="mt-1 text-2xl font-semibold">{t("m.guide.pending.title", undefined, "Guide Pending")}</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("m.guide.pending.body", undefined, "Production hasn't published a guide for your role yet.")}
         </p>
       </div>
@@ -98,7 +98,7 @@ export default async function MobileGuide() {
       <div className="mb-4 flex justify-end">
         <Link
           href={`/api/v1/guides/${guide.id}/pdf`}
-          className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
+          className="ps-btn ps-btn--ghost ps-btn--sm inline-flex items-center gap-1.5"
           aria-label={t("m.guide.downloadPdf.ariaLabel", undefined, "Download this guide as a PDF")}
         >
           <FileDown size={14} aria-hidden="true" />

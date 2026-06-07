@@ -16,7 +16,7 @@ export default async function Page() {
             <div className="text-sm font-medium">
               {t("console.operations.dispatch.title", undefined, "Dispatch matrix")}
             </div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {t("console.operations.dispatch.description", undefined, "Today across crews + venues + vehicles")}
             </div>
           </Link>
@@ -24,7 +24,7 @@ export default async function Page() {
             <div className="text-sm font-medium">
               {t("console.operations.maintenance.title", undefined, "Maintenance")}
             </div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {t("console.operations.maintenance.description", undefined, "PPM + cred-renewal queue")}
             </div>
           </Link>
@@ -35,7 +35,7 @@ export default async function Page() {
             <div className="text-sm font-medium">
               {t("console.operations.serviceRequests.title", undefined, "Service requests")}
             </div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">
               {t("console.operations.serviceRequests.description", undefined, "Triage with SLAs")}
             </div>
           </Link>

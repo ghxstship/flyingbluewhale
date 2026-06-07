@@ -40,7 +40,7 @@ export function AppSwitcher({ current, entries }: { current: AppSwitcherEntry["s
         <button
           type="button"
           aria-label="Switch app"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
         >
           <LayoutGrid size={16} aria-hidden="true" />
         </button>
@@ -49,7 +49,7 @@ export function AppSwitcher({ current, entries }: { current: AppSwitcherEntry["s
         <Popover.Content
           align="start"
           sideOffset={6}
-          className="z-40 w-56 rounded-lg border border-[var(--border-color)] bg-[var(--background)] p-1 shadow-lg"
+          className="z-40 w-56 rounded-lg border border-[var(--p-border)] bg-[var(--p-bg)] p-1 shadow-lg"
         >
           {entries.map((e) => {
             const active = e.shell === current;
@@ -57,11 +57,11 @@ export function AppSwitcher({ current, entries }: { current: AppSwitcherEntry["s
               <Link
                 key={e.shell}
                 href={e.href}
-                className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--surface-raised)]"
+                className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"
               >
                 <span aria-hidden="true" className={`h-2 w-2 rounded-full ${ACCENT[e.shell]}`} />
                 <span className="flex-1">{e.label}</span>
-                {active ? <Check size={14} aria-hidden="true" className="text-[var(--text-muted)]" /> : null}
+                {active ? <Check size={14} aria-hidden="true" className="text-[var(--p-text-2)]" /> : null}
               </Link>
             );
           })}

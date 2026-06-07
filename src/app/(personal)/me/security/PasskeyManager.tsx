@@ -105,7 +105,7 @@ export function PasskeyManager() {
 
   if (!supported) {
     return (
-      <div className="surface p-4 text-xs text-[var(--text-muted)]">
+      <div className="surface p-4 text-xs text-[var(--p-text-2)]">
         {t(
           "me.security.passkeys.unsupported",
           undefined,
@@ -116,7 +116,7 @@ export function PasskeyManager() {
   }
 
   return (
-    <div className={creds.length === 0 ? "" : "surface divide-y divide-[var(--border-color)]"}>
+    <div className={creds.length === 0 ? "" : "surface divide-y divide-[var(--p-border)]"}>
       {creds.length === 0 ? (
         <EmptyState
           title={t("me.security.passkeys.empty.title", undefined, "No Passkeys Yet")}
@@ -131,12 +131,12 @@ export function PasskeyManager() {
         creds.map((c) => (
           <div key={c.id} className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
-              <Fingerprint size={16} className="text-[var(--org-primary)]" aria-hidden="true" />
+              <Fingerprint size={16} className="text-[var(--p-accent)]" aria-hidden="true" />
               <div>
                 <div className="text-sm font-medium">
                   {c.device_name ?? t("me.security.passkeys.unnamedDevice", undefined, "Unnamed device")}
                 </div>
-                <div className="text-[10px] text-[var(--text-muted)]">
+                <div className="text-[10px] text-[var(--p-text-2)]">
                   {t(
                     "me.security.passkeys.added",
                     { when: formatRelative(c.created_at) },
@@ -151,7 +151,7 @@ export function PasskeyManager() {
               type="button"
               onClick={() => remove(c.id)}
               aria-label={t("me.security.passkeys.removeAria", undefined, "Remove passkey")}
-              className="rounded p-1 text-[var(--text-muted)] hover:text-[var(--color-error)]"
+              className="rounded p-1 text-[var(--p-text-2)] hover:text-[var(--p-danger)]"
             >
               <Trash2 size={14} />
             </button>

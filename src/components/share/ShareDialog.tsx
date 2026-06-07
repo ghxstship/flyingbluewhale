@@ -180,7 +180,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
         {error && <Alert kind="error">{error}</Alert>}
 
         {/* Create form */}
-        <section className="space-y-3 border-b border-[var(--border-color)] pb-4">
+        <section className="space-y-3 border-b border-[var(--p-border)] pb-4">
           <h2 className="text-sm font-semibold tracking-tight">Create a link</h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <label className="text-xs">
@@ -191,7 +191,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                 onChange={(e) => setLabel(e.target.value)}
                 placeholder="e.g. Producer preview"
                 maxLength={120}
-                className="input-base w-full"
+                className="ps-input w-full"
               />
             </label>
             <label className="text-xs">
@@ -199,7 +199,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
               <select
                 value={expiry}
                 onChange={(e) => setExpiry(e.target.value as ExpiryPreset)}
-                className="input-base w-full"
+                className="ps-input w-full"
               >
                 {(Object.keys(EXPIRY_LABEL) as ExpiryPreset[]).map((k) => (
                   <option key={k} value={k}>
@@ -217,7 +217,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                 placeholder="Leave blank for none"
                 minLength={4}
                 maxLength={128}
-                className="input-base w-full"
+                className="ps-input w-full"
               />
             </label>
             <label className="text-xs">
@@ -229,7 +229,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                 placeholder="Unlimited"
                 min={1}
                 max={10000}
-                className="input-base w-full"
+                className="ps-input w-full"
               />
             </label>
             <label className="text-xs sm:col-span-2">
@@ -237,7 +237,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value as "viewer" | "commenter")}
-                className="input-base w-full"
+                className="ps-input w-full"
               >
                 <option value="viewer">Viewer · Read-only</option>
                 <option value="commenter">Commenter · Can Leave Annotations</option>
@@ -275,11 +275,11 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
         {/* Existing links */}
         <section className="space-y-2 pt-2">
           <h2 className="text-sm font-semibold tracking-tight">Active links</h2>
-          {loading && links.length === 0 && <p className="text-xs text-[var(--text-muted)]">Loading…</p>}
+          {loading && links.length === 0 && <p className="text-xs text-[var(--p-text-2)]">Loading…</p>}
           {!loading && activeLinks.length === 0 && (
-            <p className="text-xs text-[var(--text-muted)]">No active links yet.</p>
+            <p className="text-xs text-[var(--p-text-2)]">No active links yet.</p>
           )}
-          <ul className="divide-y divide-[var(--border-color)]">
+          <ul className="divide-y divide-[var(--p-border)]">
             {activeLinks.map((l) => (
               <li key={l.id} className="flex items-start justify-between gap-3 py-2">
                 <div className="min-w-0 flex-1">
@@ -292,7 +292,7 @@ export function ShareDialog({ resourceTable, resourceId, initialLinks, resourceL
                     )}
                     <Badge variant="muted">{l.role}</Badge>
                   </div>
-                  <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+                  <p className="mt-0.5 text-xs text-[var(--p-text-2)]">
                     {l.uses} use{l.uses === 1 ? "" : "s"}
                     {l.max_uses !== null && ` / ${l.max_uses}`}
                     {l.expires_at && ` · expires ${new Date(l.expires_at).toLocaleString()}`}

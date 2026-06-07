@@ -45,7 +45,7 @@ export function ProposalTopBar({ proposal, blocks }: { proposal: Proposal; block
   return (
     <nav className="glass-nav sticky top-0 z-30 flex items-center justify-between border-b px-6 py-2.5">
       <div className="flex items-center gap-4">
-        <span className="font-mono text-[11px] text-[var(--text-muted)]">
+        <span className="font-mono text-[11px] text-[var(--p-text-2)]">
           {proposal.doc_number ?? proposal.id.slice(0, 8)} · v{proposal.version}
         </span>
         <span className="hidden text-xs font-semibold sm:inline">{proposal.title}</span>
@@ -55,7 +55,7 @@ export function ProposalTopBar({ proposal, blocks }: { proposal: Proposal; block
           <a
             key={s.i}
             href={`#section-${s.i}`}
-            className={`shrink-0 rounded-full px-3 py-1 text-[10px] font-semibold tracking-widest uppercase ${active === s.i ? "bg-[var(--org-primary)]/10 text-[var(--org-primary)]" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
+            className={`shrink-0 rounded-full px-3 py-1 text-[10px] font-semibold tracking-widest uppercase ${active === s.i ? "bg-[var(--p-accent)]/10 text-[var(--p-accent)]" : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"}`}
           >
             {s.label}
           </a>
@@ -63,7 +63,7 @@ export function ProposalTopBar({ proposal, blocks }: { proposal: Proposal; block
         <button
           type="button"
           onClick={() => window.print()}
-          className="print-hide ms-2 shrink-0 rounded-full border border-[var(--border-color)] px-3 py-1 text-[10px] font-semibold tracking-widest uppercase hover:bg-[var(--bg-secondary)]"
+          className="print-hide ms-2 shrink-0 rounded-full border border-[var(--p-border)] px-3 py-1 text-[10px] font-semibold tracking-widest uppercase hover:bg-[var(--p-surface)]"
         >
           Print / PDF
         </button>

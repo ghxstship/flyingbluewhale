@@ -78,7 +78,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
             <h3 className="text-sm font-semibold">
               {t("console.people.teams.detail.editTeam", undefined, "Edit Team")}
             </h3>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.people.teams.detail.editTeamHintPrefix",
                 undefined,
@@ -119,7 +119,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
               }
             />
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.people.teams.detail.colMember", undefined, "Member")}</th>
@@ -136,7 +136,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
                         <Avatar name={m.user?.name ?? m.user?.email ?? "?"} />
                         <div>
                           <div className="text-sm font-medium">{m.user?.name ?? "—"}</div>
-                          <div className="font-mono text-xs text-[var(--text-muted)]">{m.user?.email ?? "—"}</div>
+                          <div className="font-mono text-xs text-[var(--p-text-2)]">{m.user?.email ?? "—"}</div>
                         </div>
                       </div>
                     </td>
@@ -147,7 +147,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
                         <Badge variant={m.role === "admin" ? "brand" : "muted"}>{m.role}</Badge>
                       )}
                     </td>
-                    <td className="font-mono text-xs text-[var(--text-muted)]">{timeAgo(m.addedAt)}</td>
+                    <td className="font-mono text-xs text-[var(--p-text-2)]">{timeAgo(m.addedAt)}</td>
                     {canManage && (
                       <td className="text-right">
                         <TeamForms.RemoveMember teamId={team.id} userId={m.userId} />
@@ -165,7 +165,7 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
             <h3 className="text-sm font-semibold">
               {t("console.people.teams.detail.addMember", undefined, "Add Member")}
             </h3>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.people.teams.detail.addMemberHint",
                 { slug: team.slug },
@@ -179,11 +179,11 @@ export default async function TeamDetailPage({ params }: { params: Promise<{ tea
         )}
 
         {canManage && (
-          <section className="surface border-s-4 border-[var(--color-error)]/40 p-5">
-            <h3 className="text-sm font-semibold text-[var(--color-error)]">
+          <section className="surface border-s-4 border-[var(--p-danger)]/40 p-5">
+            <h3 className="text-sm font-semibold text-[var(--p-danger)]">
               {t("console.people.teams.detail.dangerZone", undefined, "Danger Zone")}
             </h3>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.people.teams.detail.dangerZoneHint",
                 undefined,

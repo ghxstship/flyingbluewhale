@@ -85,7 +85,7 @@ export async function LdpStateTimeline({
     return (
       <section className="surface p-4">
         <h2 className="text-sm font-semibold">{heading}</h2>
-        <p className="mt-2 text-xs text-[var(--text-muted)]">Couldn&rsquo;t load transitions: {error.message}</p>
+        <p className="mt-2 text-xs text-[var(--p-text-2)]">Couldn&rsquo;t load transitions: {error.message}</p>
       </section>
     );
   }
@@ -112,13 +112,13 @@ export async function LdpStateTimeline({
     <section className="surface p-4">
       <div className="flex items-baseline justify-between">
         <h2 className="text-sm font-semibold">{heading}</h2>
-        <span className="font-mono text-xs text-[var(--text-muted)]">
+        <span className="font-mono text-xs text-[var(--p-text-2)]">
           {rows.length} transition{rows.length === 1 ? "" : "s"}
         </span>
       </div>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">{subhead}</p>
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">{subhead}</p>
       {rows.length === 0 ? (
-        <p className="mt-3 text-xs text-[var(--text-muted)]">No transitions recorded yet.</p>
+        <p className="mt-3 text-xs text-[var(--p-text-2)]">No transitions recorded yet.</p>
       ) : (
         <ol className="mt-3 space-y-2 text-xs">
           {rows.map((r) => {
@@ -139,12 +139,10 @@ export async function LdpStateTimeline({
                       <Badge variant="muted">initial</Badge> → <Badge variant="info">{toTitle(r.to_state)}</Badge>
                     </>
                   )}
-                  <span className="text-[var(--text-muted)]">by {who}</span>
-                  {r.reason && <span className="text-[var(--text-secondary)]">— {r.reason}</span>}
+                  <span className="text-[var(--p-text-2)]">by {who}</span>
+                  {r.reason && <span className="text-[var(--p-text-2)]">— {r.reason}</span>}
                 </span>
-                <span className="font-mono text-[var(--text-muted)]">
-                  {new Date(r.transitioned_at).toLocaleString()}
-                </span>
+                <span className="font-mono text-[var(--p-text-2)]">{new Date(r.transitioned_at).toLocaleString()}</span>
               </li>
             );
           })}

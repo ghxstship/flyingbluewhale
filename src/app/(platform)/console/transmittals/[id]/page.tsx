@@ -56,7 +56,7 @@ const STATE_TONE: Record<TransmittalState, "muted" | "info" | "warning" | "succe
   voided: "error",
 };
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   if (!hasSupabase) return null;
@@ -126,13 +126,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[transmittal.transmittal_state]}>{toTitle(transmittal.transmittal_state)}</Badge>
           {transmittal.sent_at && (
-            <span className="font-mono text-[var(--text-muted)]">
+            <span className="font-mono text-[var(--p-text-2)]">
               {t("console.transmittals.detail.sent", undefined, "Sent")} ·{" "}
               {fmt.dateParts(transmittal.sent_at, { year: "numeric", month: "short", day: "numeric" })}
             </span>
           )}
           {transmittal.due_at && (
-            <span className="font-mono text-[var(--text-muted)]">
+            <span className="font-mono text-[var(--p-text-2)]">
               {t("console.transmittals.detail.due", undefined, "Due")} ·{" "}
               {fmt.dateParts(transmittal.due_at, { year: "numeric", month: "short", day: "numeric" })}
             </span>
@@ -160,9 +160,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {transmittal.body_md && (
           <section className="surface space-y-2 p-4">
             <h2 className="text-sm font-semibold">{t("console.transmittals.detail.body", undefined, "Body")}</h2>
-            <pre className="font-mono text-xs whitespace-pre-wrap text-[var(--text-secondary)]">
-              {transmittal.body_md}
-            </pre>
+            <pre className="font-mono text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{transmittal.body_md}</pre>
           </section>
         )}
 
@@ -171,7 +169,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.transmittals.detail.itemsHeading", undefined, "Items")} ({items.length})
           </h2>
           {items.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.transmittals.detail.noItems",
                 undefined,
@@ -182,11 +180,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <ul className="space-y-1">
               {items.map((it) => (
                 <li key={it.id} className="surface flex items-center gap-3 p-2 text-xs">
-                  <span className="font-mono text-[var(--text-muted)] uppercase">
-                    {it.item_type.replace(/_/g, " ")}
-                  </span>
+                  <span className="font-mono text-[var(--p-text-2)] uppercase">{it.item_type.replace(/_/g, " ")}</span>
                   <span className="font-mono">{it.item_id.slice(0, 8)}…</span>
-                  {it.description && <span className="text-[var(--text-secondary)]">{it.description}</span>}
+                  {it.description && <span className="text-[var(--p-text-2)]">{it.description}</span>}
                 </li>
               ))}
             </ul>
@@ -243,7 +239,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.transmittals.detail.recipientsHeading", undefined, "Recipients")} ({recipients.length})
           </h2>
           {recipients.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.transmittals.detail.noRecipients",
                 undefined,
@@ -262,10 +258,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       : (r.external_email ?? "—");
                 return (
                   <li key={r.id} className="surface flex items-center gap-3 p-2 text-xs">
-                    <span className="font-mono text-[var(--text-muted)] uppercase">{r.recipient_kind}</span>
+                    <span className="font-mono text-[var(--p-text-2)] uppercase">{r.recipient_kind}</span>
                     <span>{label}</span>
                     {r.cc && (
-                      <span className="text-[var(--text-muted)]">
+                      <span className="text-[var(--p-text-2)]">
                         {t("console.transmittals.detail.cc", undefined, "CC")}
                       </span>
                     )}

@@ -98,11 +98,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-6">
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[section.section_state]}>{toTitle(section.section_state)}</Badge>
-          <span className="text-[var(--text-muted)]">
+          <span className="text-[var(--p-text-2)]">
             {t("console.specs.detail.formatLabel", undefined, "Format")} · {section.format}
           </span>
           {section.issued_at && (
-            <span className="font-mono text-[var(--text-muted)]">
+            <span className="font-mono text-[var(--p-text-2)]">
               {t("console.specs.detail.issuedLabel", undefined, "Issued")} ·{" "}
               {fmt.dateParts(section.issued_at, { year: "numeric", month: "short", day: "numeric" })}
             </span>
@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {section.body_md && (
           <section className="surface space-y-2 p-4">
             <h2 className="text-sm font-semibold">{t("console.specs.detail.bodyHeading", undefined, "Body")}</h2>
-            <pre className="font-mono text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{section.body_md}</pre>
+            <pre className="font-mono text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{section.body_md}</pre>
           </section>
         )}
 
@@ -139,7 +139,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.specs.detail.linkedRfisHeading", { count: rfis.length }, "Linked RFIs")} ({rfis.length})
           </h2>
           {rfis.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t("console.specs.detail.noRfisLinked", undefined, "No RFIs linked to this section yet.")}
             </p>
           ) : (
@@ -149,7 +149,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <a href={`/console/rfis/${r.id}`} className="font-mono">
                     {r.code}
                   </a>{" "}
-                  · <span className="text-[var(--text-secondary)]">{r.title}</span>
+                  · <span className="text-[var(--p-text-2)]">{r.title}</span>
                 </li>
               ))}
             </ul>
@@ -162,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {submittals.length})
           </h2>
           {submittals.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t("console.specs.detail.noSubmittalsLinked", undefined, "No submittals linked to this section yet.")}
             </p>
           ) : (
@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <a href={`/console/submittals/${s.id}`} className="font-mono">
                     {s.code}
                   </a>{" "}
-                  · <span className="text-[var(--text-secondary)]">{s.title}</span>
+                  · <span className="text-[var(--p-text-2)]">{s.title}</span>
                 </li>
               ))}
             </ul>

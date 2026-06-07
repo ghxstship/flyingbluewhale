@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         </div>
 
         {logs.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t(
               "console.venues.build.emptyState",
               undefined,
@@ -106,15 +106,15 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             )}
           </div>
         ) : (
-          <ul className="divide-y divide-[var(--border-color)]">
+          <ul className="divide-y divide-[var(--p-border)]">
             {logs.map((l) => (
               <li key={l.id} className="py-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDay(l.log_date)}</div>
-                    <p className="mt-1 text-sm text-[var(--text-primary)]">{l.summary}</p>
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">{fmtDay(l.log_date)}</div>
+                    <p className="mt-1 text-sm text-[var(--p-text-1)]">{l.summary}</p>
                     {l.blockers && (
-                      <p className="mt-1 flex items-start gap-1.5 text-xs text-[var(--color-warning)]">
+                      <p className="mt-1 flex items-start gap-1.5 text-xs text-[var(--p-warning)]">
                         <AlertTriangle
                           size={12}
                           strokeWidth={2.5}
@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                       </p>
                     )}
                   </div>
-                  <div className="flex flex-col items-end gap-1 font-mono text-[10px] text-[var(--text-muted)]">
+                  <div className="flex flex-col items-end gap-1 font-mono text-[10px] text-[var(--p-text-2)]">
                     {l.trades_onsite != null && (
                       <span>
                         {t("console.venues.build.tradesCount", { count: l.trades_onsite }, `${l.trades_onsite} trades`)}

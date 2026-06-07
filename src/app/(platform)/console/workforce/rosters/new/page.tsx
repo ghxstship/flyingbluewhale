@@ -32,10 +32,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.rosters.new.state.label", undefined, "State")}
             </label>
-            <select name="state" defaultValue="draft" className="input-base mt-1.5 w-full">
+            <select name="state" defaultValue="draft" className="ps-input mt-1.5 w-full">
               <option value="draft">{t("console.workforce.rosters.new.state.draft", undefined, "Draft")}</option>
               <option value="published">
                 {t("console.workforce.rosters.new.state.published", undefined, "Published")}

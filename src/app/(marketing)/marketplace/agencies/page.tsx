@@ -48,14 +48,14 @@ export default async function Page() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">Marketplace · Agencies</div>
         <h1 className="hed-2xl mt-4">Agency Directory</h1>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">
           {rows.length} agenc{rows.length === 1 ? "y" : "ies"}
         </p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         {rows.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">No published agencies yet.</div>
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">No published agencies yet.</div>
         ) : (
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
             {rows.map((r) => (

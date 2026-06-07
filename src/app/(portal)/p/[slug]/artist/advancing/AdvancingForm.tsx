@@ -71,14 +71,14 @@ export function AdvancingForm({ slug }: { slug: string }) {
           onChange={(e) => setTitle(e.target.value)}
         />
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("p.artist.advancing.form.type.label", undefined, "Type")}
           </label>
           <select
             name="type"
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
             required
           >
             {TALENT.map((item) => (
@@ -90,7 +90,7 @@ export function AdvancingForm({ slug }: { slug: string }) {
         </div>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("p.artist.advancing.form.notes.label", undefined, "Notes")}
         </label>
         <textarea
@@ -99,18 +99,18 @@ export function AdvancingForm({ slug }: { slug: string }) {
           maxLength={4000}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          className="input-base mt-1.5 w-full"
+          className="ps-input mt-1.5 w-full"
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("p.artist.advancing.form.file.label", undefined, "File · Optional · ≤25MB")}
           </label>
           <input
             type="file"
             name="file"
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
             accept=".pdf,.png,.jpg,.jpeg,.svg,.txt,.doc,.docx,.csv"
           />
         </div>

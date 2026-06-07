@@ -151,13 +151,13 @@ export default async function Page() {
       />
       <div className="page-content space-y-3">
         {Object.keys(buckets).length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.operations.lookAhead.empty", undefined, "Nothing scheduled in the next 21 days.")}
           </div>
         ) : (
           Object.entries(buckets).map(([day, dayItems]) => (
             <section key={day} className="surface p-3">
-              <h3 className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+              <h3 className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
                 {fmt.dateParts(day + "T00:00:00", {
                   weekday: "long",
                   month: "long",
@@ -173,9 +173,9 @@ export default async function Page() {
                     <div className="flex items-center gap-2">
                       <Badge variant={KIND_TONE[it.kind] ?? "muted"}>{toTitle(it.kind)}</Badge>
                       <span>{it.title}</span>
-                      {it.project && <span className="text-xs text-[var(--text-muted)]">· {it.project}</span>}
+                      {it.project && <span className="text-xs text-[var(--p-text-2)]">· {it.project}</span>}
                     </div>
-                    <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmtDate(it.when)}</span>
+                    <span className="font-mono text-[10px] text-[var(--p-text-2)]">{fmtDate(it.when)}</span>
                   </li>
                 ))}
               </ul>

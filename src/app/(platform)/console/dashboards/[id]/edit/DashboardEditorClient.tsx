@@ -12,7 +12,7 @@ const DEBOUNCE_MS = 500;
  * Client wrapper for the dashboard editor — owns the debounced save loop
  * + the latest-known layout. Server data resolution (chart rows, saved
  * view embeds) doesn't run here; the editor renders widgets in their
- * "skeleton" shape since the canvas is the focus, not the live data.
+ * "ps-skel" shape since the canvas is the focus, not the live data.
  */
 export function DashboardEditorClient({
   dashboardId,
@@ -82,21 +82,17 @@ function SaveIndicator({
 }): React.ReactElement {
   const t = useT();
   if (status === "saving") {
-    return (
-      <span className="text-[var(--text-muted)]">{t("console.dashboards.edit.saving", undefined, "Saving…")}</span>
-    );
+    return <span className="text-[var(--p-text-2)]">{t("console.dashboards.edit.saving", undefined, "Saving…")}</span>;
   }
   if (status === "saved") {
-    return (
-      <span className="text-[var(--color-success)]">{t("console.dashboards.edit.saved", undefined, "Saved")}</span>
-    );
+    return <span className="text-[var(--p-success)]">{t("console.dashboards.edit.saved", undefined, "Saved")}</span>;
   }
   if (status === "error") {
     return (
-      <span className="text-[var(--color-error)]" role="alert">
+      <span className="text-[var(--p-danger)]" role="alert">
         {error ?? t("console.dashboards.edit.saveFailed", undefined, "Save failed")}
       </span>
     );
   }
-  return <span className="text-[var(--text-muted)]">{t("console.dashboards.edit.idle", undefined, "Idle")}</span>;
+  return <span className="text-[var(--p-text-2)]">{t("console.dashboards.edit.idle", undefined, "Idle")}</span>;
 }

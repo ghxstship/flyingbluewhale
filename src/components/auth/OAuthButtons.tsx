@@ -80,7 +80,7 @@ export function OAuthButtons({ next }: { next?: string }) {
           onClick={() => go(p.id)}
           disabled={pending !== null}
           aria-label={`Continue with ${p.label}`}
-          className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-xs font-medium text-[var(--text-primary)] transition-colors hover:bg-[var(--surface-inset)] disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-xs font-medium text-[var(--p-text-1)] transition-colors hover:bg-[var(--p-surface-2)] disabled:opacity-50"
         >
           {p.icon()}
           <span>{pending === p.id ? "…" : p.label}</span>
@@ -92,10 +92,10 @@ export function OAuthButtons({ next }: { next?: string }) {
 
 export function AuthDivider({ label = "or continue with email" }: { label?: string }) {
   return (
-    <div className="my-5 flex items-center gap-3 text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
-      <div className="h-px flex-1 bg-[var(--border-color)]" />
+    <div className="my-5 flex items-center gap-3 text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+      <div className="h-px flex-1 bg-[var(--p-border)]" />
       <span>{label}</span>
-      <div className="h-px flex-1 bg-[var(--border-color)]" />
+      <div className="h-px flex-1 bg-[var(--p-border)]" />
     </div>
   );
 }

@@ -67,7 +67,7 @@ export default async function LogisticsPage() {
             )}
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.production.logistics.table.rental", undefined, "Rental")}</th>
@@ -88,7 +88,7 @@ export default async function LogisticsPage() {
                   <td className="font-mono text-xs">{fmtDateTime(r.starts_at)}</td>
                   <td className="font-mono text-xs">{fmtDateTime(r.ends_at)}</td>
                   <td className="font-mono text-xs">{money(r.rate_cents)}</td>
-                  <td className="text-[var(--text-muted)]">{r.notes ?? "—"}</td>
+                  <td className="text-[var(--p-text-2)]">{r.notes ?? "—"}</td>
                 </tr>
               ))}
             </tbody>

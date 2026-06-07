@@ -22,7 +22,7 @@ export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools
       <div
         role="tablist"
         aria-label={t("m.home.tabs.ariaLabel", undefined, "Mobile home sections")}
-        className="mt-5 inline-flex w-full items-center gap-0.5 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-0.5"
+        className="mt-5 inline-flex w-full items-center gap-0.5 rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-0.5"
       >
         {(
           [
@@ -39,12 +39,12 @@ export function MobileHomeTabs({ today, tools, reports }: { today: Tile[]; tools
             onClick={() => setActive(key)}
             className={`flex-1 rounded px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--brand-color)] ${
               active === key
-                ? "bg-[var(--surface-raised)] text-[var(--text-primary)] shadow-sm"
-                : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                ? "bg-[var(--p-surface)] text-[var(--p-text-1)] shadow-sm"
+                : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             }`}
           >
             {label}
-            <span className="ms-1.5 text-[10px] text-[var(--text-muted)]">{count}</span>
+            <span className="ms-1.5 text-[10px] text-[var(--p-text-2)]">{count}</span>
           </button>
         ))}
       </div>

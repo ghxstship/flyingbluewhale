@@ -22,28 +22,28 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
     <article className="surface mx-auto max-w-3xl space-y-8 p-10 print:p-0 print:shadow-none">
       <header className="flex items-start justify-between border-b border-[var(--border-default)] pb-6">
         <div>
-          <div className="font-mono text-xs tracking-widest text-[var(--text-muted)] uppercase">{orgName}</div>
+          <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">{orgName}</div>
           <h1 className="mt-2 text-2xl leading-tight font-semibold">
             Independent Contractor Master Services Agreement
           </h1>
-          <div className="mt-1 text-sm text-[var(--text-muted)]">Version {msa.version}</div>
+          <div className="mt-1 text-sm text-[var(--p-text-2)]">Version {msa.version}</div>
         </div>
-        <div className="text-end text-xs text-[var(--text-muted)]">
+        <div className="text-end text-xs text-[var(--p-text-2)]">
           <div>Issued {issuedOn}</div>
           <div className="font-mono">REF · MSA-{msa.id.slice(0, 8).toUpperCase()}</div>
         </div>
       </header>
 
       <section className="space-y-2">
-        <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Contractor</div>
+        <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Contractor</div>
         <div className="text-base font-medium">{msa.crew_member_name}</div>
         {msa.crew_member_phone && (
-          <div className="font-mono text-xs text-[var(--text-muted)]">{msa.crew_member_phone}</div>
+          <div className="font-mono text-xs text-[var(--p-text-2)]">{msa.crew_member_phone}</div>
         )}
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">Recitals</h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Recitals</h2>
         <p className="text-sm leading-relaxed">
           This Master Services Agreement (this &ldquo;Agreement&rdquo;) is entered into between{" "}
           <strong>{orgName}</strong> (&ldquo;Company&rdquo;) and the contractor identified above
@@ -53,7 +53,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
           deal memo that references this Agreement. This Agreement governs the relationship between the Parties for all
           such engagements, until revoked or superseded.
         </p>
-        <p className="text-xs leading-relaxed text-[var(--text-muted)]">
+        <p className="text-xs leading-relaxed text-[var(--p-text-2)]">
           This Agreement is drafted to satisfy NRS 608.0155(1) — the five-criteria conclusive presumption for Nevada
           wage-and-hour purposes — and NRS 608.0155(2) where applicable to Chapter 624 trade scopes; it is aligned with
           the NRS 612.085 ABC test.
@@ -61,7 +61,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       </section>
 
       <section className="break-inside-avoid space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           1. Relationship of the Parties
         </h2>
         <div className="space-y-3 text-sm leading-relaxed">
@@ -118,7 +118,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
 
       {tcBody && (
         <section className="break-inside-avoid space-y-3">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             2. Terms &amp; Conditions
           </h2>
           <div className="space-y-3 text-sm leading-relaxed">
@@ -130,7 +130,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       )}
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           3. Governing Law &amp; Confidentiality
         </h2>
         <p className="text-sm leading-relaxed">
@@ -145,10 +145,10 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       </section>
 
       <section className="break-inside-avoid space-y-3 border-t border-[var(--border-default)] pt-6">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           Exhibit B — Other Clients
         </h2>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           Contractor represents that Contractor has performed substantially similar services for the following clients
           within the twenty-four (24) months preceding the effective date of this Agreement.
         </p>
@@ -164,10 +164,10 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       </section>
 
       <section className="break-inside-avoid space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           Exhibit C — Capital Investment Itemization
         </h2>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           Contractor&rsquo;s capital investment in Contractor&rsquo;s business relevant to the services may include,
           without limitation, business entity formation, insurance carried, software/equipment/tools owned,
           pre-engagement preparation and certifications, and trade-specific NSCB licensure where applicable.
@@ -181,8 +181,8 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
           ]}
         />
         {(msa.nscb_license_number || msa.nscb_classification) && (
-          <div className="mt-2 rounded border border-[var(--border-default)] bg-[var(--surface-inset)] p-3 text-xs leading-relaxed">
-            <div className="mb-1 font-medium tracking-wider text-[var(--text-secondary)] uppercase">
+          <div className="mt-2 rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-3 text-xs leading-relaxed">
+            <div className="mb-1 font-medium tracking-wider text-[var(--p-text-2)] uppercase">
               NSCB License (Chapter 624)
             </div>
             <div>
@@ -204,14 +204,14 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       <section className="border-t border-[var(--border-default)] pt-6">
         {msa.msa_state === "signed" && msa.signed_signature ? (
           <div className="space-y-2">
-            <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Signed</div>
+            <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Signed</div>
             <div className="font-subdisplay text-2xl tracking-wide">{msa.signed_signature}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               Counter-signed {msa.signed_at ? formatDateTime(msa.signed_at) : ""}
             </div>
           </div>
         ) : (
-          <div className="space-y-2 text-sm text-[var(--text-muted)]">
+          <div className="space-y-2 text-sm text-[var(--p-text-2)]">
             <div className="text-xs tracking-widest uppercase">Awaiting Counter-Signature</div>
             <div>
               Type your full legal name to formalize acceptance of this Master Services Agreement. Your typed signature,
@@ -219,9 +219,9 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
             </div>
           </div>
         )}
-        <div className="mt-6 grid grid-cols-2 gap-6 text-xs text-[var(--text-muted)]">
+        <div className="mt-6 grid grid-cols-2 gap-6 text-xs text-[var(--p-text-2)]">
           <div>
-            <div className="font-medium text-[var(--text-secondary)]">For {orgName}</div>
+            <div className="font-medium text-[var(--p-text-2)]">For {orgName}</div>
             <div className="font-subdisplay text-lg tracking-wide">Julian Clarkson</div>
             <div>Producer &amp; Operations Director</div>
           </div>
@@ -251,7 +251,7 @@ function ExhibitTable({
   return (
     <div className="overflow-hidden rounded border border-[var(--border-default)]">
       <table className="w-full text-xs">
-        <thead className="bg-[var(--surface-inset)] text-[var(--text-muted)]">
+        <thead className="bg-[var(--p-surface-2)] text-[var(--p-text-2)]">
           <tr>
             {columns.map((c) => (
               <th key={c.key} className="px-3 py-2 text-start font-medium tracking-wider uppercase">

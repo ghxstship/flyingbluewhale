@@ -357,28 +357,28 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
           className="flex flex-col"
           shouldFilter={false /* we filter with match-sorter */}
         >
-          <div className="flex items-center gap-2 border-b border-[var(--border-color)] px-4 py-3">
-            <Search size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
+          <div className="flex items-center gap-2 border-b border-[var(--p-border)] px-4 py-3">
+            <Search size={16} className="text-[var(--p-text-2)]" aria-hidden="true" />
             <Command.Input
               value={search}
               onValueChange={setSearch}
               placeholder="Search or run a command…"
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--text-muted)]"
+              className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--p-text-2)]"
               autoFocus
             />
-            <kbd className="hidden rounded border border-[var(--border-color)] px-1.5 py-0.5 text-[10px] text-[var(--text-muted)] sm:inline-block">
+            <kbd className="hidden rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[10px] text-[var(--p-text-2)] sm:inline-block">
               ESC
             </kbd>
           </div>
           <Command.List className="max-h-96 overflow-y-auto p-2">
-            <Command.Empty className="py-12 text-center text-sm text-[var(--text-muted)]">
+            <Command.Empty className="py-12 text-center text-sm text-[var(--p-text-2)]">
               No results for &quot;{search}&quot;
             </Command.Empty>
             {Object.entries(grouped).map(([group, items]) => (
               <Command.Group
                 key={group}
                 heading={group}
-                className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
+                className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase"
               >
                 {items.map((a) => {
                   const Icon = a.icon ?? (group === "Recent" ? Clock : ArrowRight);
@@ -388,19 +388,19 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
                       data-action-id={a.id}
                       value={a.id}
                       onSelect={() => run(a)}
-                      className="group flex cursor-pointer items-center gap-3 rounded px-3 py-2 text-sm text-[var(--text-primary)] data-[selected=true]:bg-[var(--surface-inset)]"
+                      className="group flex cursor-pointer items-center gap-3 rounded px-3 py-2 text-sm text-[var(--p-text-1)] data-[selected=true]:bg-[var(--p-surface-2)]"
                     >
                       <Icon size={14} />
                       <span className="flex-1">{a.label}</span>
-                      {a.hint && <span className="text-[11px] text-[var(--text-muted)]">{a.hint}</span>}
+                      {a.hint && <span className="text-[11px] text-[var(--p-text-2)]">{a.hint}</span>}
                       {a.performAlt && (
-                        <span className="hidden items-center gap-1 text-[10px] text-[var(--text-muted)] group-data-[selected=true]:inline-flex">
+                        <span className="hidden items-center gap-1 text-[10px] text-[var(--p-text-2)] group-data-[selected=true]:inline-flex">
                           <kbd className="font-mono">⌘↵</kbd>
                           <ExternalLink size={10} aria-hidden="true" />
                         </span>
                       )}
                       {a.shortcut && (
-                        <kbd className="rounded border border-[var(--border-color)] px-1 py-0.5 text-[10px] text-[var(--text-muted)]">
+                        <kbd className="rounded border border-[var(--p-border)] px-1 py-0.5 text-[10px] text-[var(--p-text-2)]">
                           {a.shortcut}
                         </kbd>
                       )}
@@ -410,7 +410,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
               </Command.Group>
             ))}
           </Command.List>
-          <div className="flex items-center justify-between border-t border-[var(--border-color)] px-4 py-2 text-[10px] text-[var(--text-muted)]">
+          <div className="flex items-center justify-between border-t border-[var(--p-border)] px-4 py-2 text-[10px] text-[var(--p-text-2)]">
             <span>↑↓ navigate · ↵ select · ⌘↵ open in new tab · esc close</span>
             <span>{actions.length} actions</span>
           </div>
@@ -440,12 +440,12 @@ export function CommandPaletteTrigger() {
       onClick={() => {
         window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
       }}
-      className="hidden items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-2.5 py-1 text-xs text-[var(--text-muted)] hover:bg-[var(--surface-inset)] sm:inline-flex"
+      className="hidden items-center gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] sm:inline-flex"
       aria-label="Open command palette"
     >
       <Search size={12} />
       <span>Search</span>
-      <kbd className="rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
+      <kbd className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
     </button>
   );
 }

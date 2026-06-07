@@ -127,8 +127,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {Object.entries(byDiscipline).map(([d, n]) => (
                 <li key={d} className="flex items-center justify-between text-sm">
-                  <span className="text-[var(--text-secondary)]">{d}</span>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{n}</span>
+                  <span className="text-[var(--p-text-2)]">{d}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{n}</span>
                 </li>
               ))}
             </ul>
@@ -175,11 +175,11 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               header: t("console.venues.design.col.bom", undefined, "BOM"),
               render: (r) =>
                 r.bom_requisition_id ? (
-                  <span className="font-mono text-[10px] text-[var(--org-primary)]">
+                  <span className="font-mono text-[10px] text-[var(--p-accent)]">
                     {t("console.venues.design.bom.linked", undefined, "linked")}
                   </span>
                 ) : (
-                  <span className="text-[var(--text-muted)]">—</span>
+                  <span className="text-[var(--p-text-2)]">—</span>
                 ),
               accessor: (r) => r.bom_requisition_id ?? null,
             },
@@ -194,7 +194,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.venues.design.footnote",
             undefined,

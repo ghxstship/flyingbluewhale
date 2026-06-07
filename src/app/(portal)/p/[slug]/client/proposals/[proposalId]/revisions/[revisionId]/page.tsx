@@ -27,20 +27,20 @@ export default async function Page({
 
   return (
     <div className="space-y-4 p-6">
-      <Link href={base} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+      <Link href={base} className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
         {t("p.client.revisions.backToList", undefined, "← All revision rounds")}
       </Link>
 
       <header className="surface p-6">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-sm text-[var(--text-muted)]">
+          <span className="font-mono text-sm text-[var(--p-text-2)]">
             {t("p.client.revisions.round", { num: round.round_num }, `Round ${round.round_num}`)}
           </span>
           <Badge variant={REV_STATE_VARIANT[round.state]}>{REV_STATE_LABEL[round.state]}</Badge>
         </div>
         <h1 className="mt-2 text-xl font-semibold">{round.title}</h1>
-        {round.summary && <p className="mt-2 text-sm text-[var(--text-muted)]">{round.summary}</p>}
-        <div className="mt-3 text-xs text-[var(--text-muted)]">
+        {round.summary && <p className="mt-2 text-sm text-[var(--p-text-2)]">{round.summary}</p>}
+        <div className="mt-3 text-xs text-[var(--p-text-2)]">
           {t("p.client.revisions.opened", { when: timeAgo(round.created_at) }, `Opened ${timeAgo(round.created_at)}`)}
           {round.decided_at &&
             ` ${t("p.client.revisions.decidedSuffix", { when: timeAgo(round.decided_at) }, `· Decided ${timeAgo(round.decided_at)}`)}`}
@@ -48,18 +48,18 @@ export default async function Page({
       </header>
 
       <section className="surface p-6">
-        <div className="eyebrow mb-3 text-xs text-[var(--text-muted)]">
+        <div className="eyebrow mb-3 text-xs text-[var(--p-text-2)]">
           {t("p.client.revisions.proofsHeader", undefined, "Proofs in this round")}
         </div>
         {revisions.length === 0 ? (
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--p-text-2)]">
             {t("p.client.revisions.noProofs", undefined, "No proofs uploaded yet.")}
           </p>
         ) : (
           <ol className="grid gap-3 md:grid-cols-3">
             {revisions.map((r) => (
-              <li key={r.id} className="rounded border border-[var(--border-color)] bg-[var(--surface)] p-4">
-                <div className="flex aspect-[4/3] items-center justify-center rounded bg-[var(--surface-inset)] text-xs text-[var(--text-muted)]">
+              <li key={r.id} className="rounded border border-[var(--p-border)] bg-[var(--p-surface)] p-4">
+                <div className="flex aspect-[4/3] items-center justify-center rounded bg-[var(--p-surface-2)] text-xs text-[var(--p-text-2)]">
                   {r.preview_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={r.preview_url} alt={r.label} className="h-full w-full rounded object-cover" />
@@ -68,7 +68,7 @@ export default async function Page({
                   )}
                 </div>
                 <div className="mt-3 text-sm font-semibold">{r.label}</div>
-                {r.note && <p className="mt-1 text-xs text-[var(--text-muted)]">{r.note}</p>}
+                {r.note && <p className="mt-1 text-xs text-[var(--p-text-2)]">{r.note}</p>}
               </li>
             ))}
           </ol>
@@ -77,7 +77,7 @@ export default async function Page({
 
       {round.decision_note && (
         <section className="surface p-6">
-          <div className="eyebrow mb-2 text-xs text-[var(--text-muted)]">
+          <div className="eyebrow mb-2 text-xs text-[var(--p-text-2)]">
             {t("p.client.revisions.decisionNote", undefined, "Decision note")}
           </div>
           <p className="text-sm leading-relaxed whitespace-pre-wrap">{round.decision_note}</p>

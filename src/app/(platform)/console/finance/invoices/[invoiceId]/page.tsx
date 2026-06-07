@@ -78,7 +78,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
         {invoice.notes && (
           <div className="surface p-5">
             <h3 className="text-base font-semibold">{t("console.finance.invoices.notes", undefined, "Notes")}</h3>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{invoice.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{invoice.notes}</p>
           </div>
         )}
       </div>
@@ -89,7 +89,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
 function Field({ label, children, mono }: { label: string; children: React.ReactNode; mono?: boolean }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">{label}</div>
       <div className={`mt-1 text-sm ${mono ? "font-mono" : ""}`}>{children}</div>
     </div>
   );

@@ -95,9 +95,9 @@ export default async function Page({
     <main className={`mx-auto max-w-2xl px-6 ${embed ? "py-4" : "py-12 sm:py-16"}`}>
       {!embed && (
         <header className="mb-8">
-          <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Form</div>
+          <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Form</div>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{form.title}</h1>
-          {form.description && <p className="mt-3 text-sm text-[var(--text-secondary)]">{form.description}</p>}
+          {form.description && <p className="mt-3 text-sm text-[var(--p-text-2)]">{form.description}</p>}
         </header>
       )}
 

@@ -24,7 +24,7 @@ export default function ConsoleError({ error, reset }: { error: Error & { digest
       />
       <div className="page-content">
         <div className="surface p-6">
-          <p className="text-sm text-[var(--text-secondary)]">
+          <p className="text-sm text-[var(--p-text-2)]">
             {error.message || t("console.error.fallbackMessage", undefined, "An unexpected error occurred.")}
           </p>
           <div className="mt-4 flex gap-2">

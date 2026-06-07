@@ -67,7 +67,7 @@ export default async function MePage() {
           <h1 className="text-display mt-1 text-3xl">{session.email}</h1>
         </div>
         <form action="/auth/signout" method="post">
-          <button className="btn btn-ghost text-xs" type="submit">
+          <button className="ps-btn ps-btn--ghost text-xs" type="submit">
             {t("common.signOut", undefined, "Sign Out")}
           </button>
         </form>

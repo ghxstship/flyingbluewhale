@@ -88,7 +88,7 @@ export default async function Page() {
               {statusEntries.map(([status, count]) => (
                 <li key={status} className="flex items-center justify-between text-sm">
                   <StatusBadge status={status} />
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{count}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{count}</span>
                 </li>
               ))}
             </ul>
@@ -100,12 +100,12 @@ export default async function Page() {
             <ul className="mt-3 space-y-1.5">
               {locationEntries.slice(0, 8).map(([loc, count]) => (
                 <li key={loc} className="flex items-center justify-between text-sm">
-                  <span className="text-[var(--text-secondary)]">{loc}</span>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{count}</span>
+                  <span className="text-[var(--p-text-2)]">{loc}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{count}</span>
                 </li>
               ))}
               {locationEntries.length > 8 && (
-                <li className="text-xs text-[var(--text-muted)]">
+                <li className="text-xs text-[var(--p-text-2)]">
                   {t(
                     "console.production.warehouse.inventory.moreLocations",
                     { count: locationEntries.length - 8 },
@@ -175,7 +175,7 @@ export default async function Page() {
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t("console.production.warehouse.inventory.footerPrefix", undefined, "Inventory is a roll-up of every ")}
           <Badge variant="muted">
             {t("console.production.warehouse.inventory.equipmentBadge", undefined, "Equipment")}

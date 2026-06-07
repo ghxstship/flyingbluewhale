@@ -41,10 +41,10 @@ export function Card({ children, className = "", interactive, elevated, href, on
 
 export function CardHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-[var(--border-color)] px-5 py-3.5">
+    <div className="flex items-start justify-between gap-4 border-b border-[var(--p-border)] px-5 py-3.5">
       <div>
-        <h3 className="text-sm font-semibold text-[var(--foreground)]">{title}</h3>
-        {subtitle && <p className="mt-0.5 text-xs text-[var(--text-muted)]">{subtitle}</p>}
+        <h3 className="text-sm font-semibold text-[var(--p-text-1)]">{title}</h3>
+        {subtitle && <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -58,7 +58,7 @@ export function CardBody({ children, className = "" }: { children: ReactNode; cl
 export function CardFooter({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <div
-      className={`flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-5 py-3 ${className}`.trim()}
+      className={`flex items-center justify-between gap-2 border-t border-[var(--p-border)] px-5 py-3 ${className}`.trim()}
     >
       {children}
     </div>

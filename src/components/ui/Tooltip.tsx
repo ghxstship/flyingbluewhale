@@ -16,7 +16,7 @@ export const TooltipContent = React.forwardRef<
       <TooltipPrimitive.Content
         ref={ref}
         sideOffset={sideOffset}
-        className={`data-[state=delayed-open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-w-xs rounded-md bg-[var(--foreground)] px-2.5 py-1.5 text-xs text-[var(--background)] ${className}`}
+        className={`data-[state=delayed-open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-w-xs rounded-md bg-[var(--p-text-1)] px-2.5 py-1.5 text-xs text-[var(--p-bg)] ${className}`}
         {...props}
       />
     </TooltipPrimitive.Portal>
@@ -44,7 +44,7 @@ export function Hint({
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent side={side} className="inline-flex items-center gap-1.5">
           <span>{label}</span>
-          {kbd && <kbd className="rounded bg-[var(--background)]/20 px-1 py-0.5 font-mono text-[10px]">{kbd}</kbd>}
+          {kbd && <kbd className="rounded bg-[var(--p-bg)]/20 px-1 py-0.5 font-mono text-[10px]">{kbd}</kbd>}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

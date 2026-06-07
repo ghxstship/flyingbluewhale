@@ -139,9 +139,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               return (
                 <section key={kind} className="surface p-4">
                   <h2 className="text-sm font-semibold">
-                    {CATALOG_KIND_LABEL[kind]} <span className="text-[var(--text-muted)]">· {items.length}</span>
+                    {CATALOG_KIND_LABEL[kind]} <span className="text-[var(--p-text-2)]">· {items.length}</span>
                   </h2>
-                  <table className="data-table mt-3 w-full text-sm">
+                  <table className="ps-table mt-3 w-full text-sm">
                     <thead>
                       <tr>
                         <th>{t("console.projects.advancing.assignments.columns.title", undefined, "Title")}</th>
@@ -173,7 +173,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                             <StatusBadge status={r.fulfillment_state} />
                           </td>
                           <td className="font-mono text-xs">{r.deadline ? fmt.date(r.deadline) : "—"}</td>
-                          <td className="font-mono text-xs text-[var(--text-muted)]">{fmt.date(r.updated_at)}</td>
+                          <td className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(r.updated_at)}</td>
                         </tr>
                       ))}
                     </tbody>

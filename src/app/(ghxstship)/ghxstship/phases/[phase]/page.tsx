@@ -40,31 +40,31 @@ export default async function PhaseDetail({ params }: { params: Promise<{ phase:
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-12">
-          <nav className="mb-6 text-xs text-[var(--text-muted)]">
-            <Link href={paths.phasesRoot()} className="hover:text-[var(--text-primary)]">
+          <nav className="mb-6 text-xs text-[var(--p-text-2)]">
+            <Link href={paths.phasesRoot()} className="hover:text-[var(--p-text-1)]">
               Phases
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-[var(--text-primary)]">{p.name}</span>
+            <span className="text-[var(--p-text-1)]">{p.name}</span>
           </nav>
-          <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-muted)]">Phase {p.number} of 08</div>
+          <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--p-text-2)]">Phase {p.number} of 08</div>
           <h1 className="mt-3 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
             {p.name}
           </h1>
-          <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{p.buyerIntent}</p>
+          <p className="mt-6 max-w-3xl text-lg text-[var(--p-text-2)]">{p.buyerIntent}</p>
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface p-6">
-            <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--org-primary)" }}>
+            <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
               What happens in this phase
             </div>
-            <p className="mt-3 text-[var(--text-secondary)]">{p.whatHappens}</p>
+            <p className="mt-3 text-[var(--p-text-2)]">{p.whatHappens}</p>
           </div>
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             {services.length} services active in {p.name}
           </div>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -76,12 +76,12 @@ export default async function PhaseDetail({ params }: { params: Promise<{ phase:
                     href={paths.serviceDetail(c.slug, s.slug)}
                     className="surface hover-lift flex h-full items-start gap-3 p-4"
                   >
-                    <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)]">
+                    <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)]">
                       {String(s.number).padStart(3, "0")}
                     </span>
                     <div>
                       <div className="text-sm">{s.name}</div>
-                      <div className="text-[10px] text-[var(--text-muted)] uppercase">{c.shortName}</div>
+                      <div className="text-[10px] text-[var(--p-text-2)] uppercase">{c.shortName}</div>
                     </div>
                   </Link>
                 </li>
@@ -92,7 +92,7 @@ export default async function PhaseDetail({ params }: { params: Promise<{ phase:
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface flex flex-wrap items-center justify-between gap-3 p-6">
-            <div className="text-sm text-[var(--text-secondary)]">Move through the lifecycle</div>
+            <div className="text-sm text-[var(--p-text-2)]">Move through the lifecycle</div>
             <div className="flex flex-wrap items-center gap-2">
               {PHASES.map((other) => {
                 const isCurrent = other.slug === p.slug;
@@ -100,7 +100,7 @@ export default async function PhaseDetail({ params }: { params: Promise<{ phase:
                   <Link
                     key={other.slug}
                     href={paths.phaseDetail(other.slug)}
-                    className={isCurrent ? "btn btn-primary btn-sm" : "btn btn-secondary btn-sm"}
+                    className={isCurrent ? "ps-btn ps-btn--sm" : "ps-btn ps-btn--ghost ps-btn--sm"}
                     title={other.name}
                   >
                     {other.name}

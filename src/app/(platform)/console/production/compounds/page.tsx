@@ -79,8 +79,8 @@ export default async function Page() {
             <ul className="mt-3 space-y-1.5">
               {COMPOUND_KINDS.map((k) => (
                 <li key={k} className="flex items-center justify-between text-sm">
-                  <span className="text-[var(--text-secondary)]">{KIND_LABEL[k] ?? k}</span>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{byKind[k] ?? 0}</span>
+                  <span className="text-[var(--p-text-2)]">{KIND_LABEL[k] ?? k}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{byKind[k] ?? 0}</span>
                 </li>
               ))}
             </ul>
@@ -140,7 +140,7 @@ export default async function Page() {
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.production.compounds.footerNote",
             undefined,

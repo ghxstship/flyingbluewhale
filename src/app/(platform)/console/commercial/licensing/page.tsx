@@ -106,14 +106,14 @@ export default async function Page() {
               "Track marks, registration numbers, jurisdictions, and renewal dates here. Royalty + merchandise revenue tracking lives alongside Sponsors.",
             )}
             action={
-              <Link href="/console/legal/ip" className="btn btn-secondary btn-sm">
+              <Link href="/console/legal/ip" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.commercial.licensing.openLegalIp", undefined, "Open Legal · IP")}
               </Link>
             }
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.commercial.licensing.colMark", undefined, "Mark")}</th>

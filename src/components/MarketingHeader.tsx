@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/DropdownMenu";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
+import { Wordmark } from "@/components/brand/Wordmark";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -109,22 +110,20 @@ function NavDropdown({ group }: { group: NavGroup }) {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="nav-item inline-flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--org-primary)]"
+          className="nav-item inline-flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)]"
         >
           {groupLabel}
-          <ChevronDown size={12} aria-hidden="true" className="text-[var(--text-muted)]" />
+          <ChevronDown size={12} aria-hidden="true" className="text-[var(--p-text-2)]" />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-64 p-2" style={{ background: "var(--background)" }}>
+      <DropdownMenuContent align="start" className="w-64 p-2" style={{ background: "var(--p-bg)" }}>
         <DropdownMenuLabel>{groupLabel}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {group.items.map((item) => (
           <DropdownMenuItem key={item.href} asChild className="cursor-pointer p-2">
             <Link href={item.href} className="flex w-full flex-col items-start gap-0.5">
-              <span className="text-sm font-medium text-[var(--foreground)]">{t(item.labelKey)}</span>
-              {item.descriptionKey && (
-                <span className="text-xs text-[var(--text-muted)]">{t(item.descriptionKey)}</span>
-              )}
+              <span className="text-sm font-medium text-[var(--p-text-1)]">{t(item.labelKey)}</span>
+              {item.descriptionKey && <span className="text-xs text-[var(--p-text-2)]">{t(item.descriptionKey)}</span>}
             </Link>
           </DropdownMenuItem>
         ))}
@@ -142,23 +141,25 @@ export function MarketingHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6 py-3">
         <Link
           href="/"
-          // Canonical ATLVS primary lockup — Waypoint mark + spaced
-          // wordmark per ui_kits/atlvs/logo-kit.html "Primary Lockup".
-          // The mark is the bare ink star (atlvs-mark.svg, 22px); the
-          // wordmark below stays nowrap so narrow viewports never break
-          // it letter-by-letter into a vertical stack.
-          //
-          // Inter at weight 800 + tight tracking is the ATLVS product
-          // canon — SaaS skin doesn't use Big Shoulders even for the
-          // wordmark. Brand display is reserved for the cosmic surface
-          // only. Aria-label still announces the wordmark form.
-          className="flex items-center gap-2.5 leading-none text-[var(--p-text-1)]"
+          // Canonical ATLVS Technologies primary lockup — Waypoint mark +
+          // Jost crossbar-less wordmark with TECHNOLOGIES subtitle, per
+          // design_handoff_atlvs_kit/wordmarks.html. The mark is the bare
+          // ink star (atlvs-mark.svg, 22px); the wordmark stays nowrap so
+          // narrow viewports never break it letter-by-letter.
+          className="flex items-end gap-2.5 leading-none text-[var(--p-text-1)]"
           onClick={() => setMobileOpen(false)}
           aria-label={t("marketing.header.brandAriaLabel")}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
-          <span className="text-[1.3rem] font-extrabold tracking-[0.04em] whitespace-nowrap uppercase">A T L V S</span>
+          {/* Waypoint mark, inlined so it inverts with the theme. The asset
+              atlvs-mark.svg is filled with the dark ink (#181B23) and vanishes on
+              the dark header (only its white center showed — the stray dot). Using
+              currentColor (the link's --p-text-1) keeps the star visible on both
+              light and dark; the center punches a hole with the surface color. */}
+          <svg viewBox="0 0 64 64" width={22} height={22} aria-hidden="true" className="shrink-0">
+            <path d="M32 5 L37 27 L59 32 L37 37 L32 59 L27 37 L5 32 L27 27 Z" fill="currentColor" />
+            <circle cx="32" cy="32" r="4.2" fill="var(--p-surface)" />
+          </svg>
+          <Wordmark word="ATLVS" subtitle="TECHNOLOGIES" style={{ fontSize: 18, fontWeight: 500 }} />
         </Link>
 
         {/* Desktop primary nav — 3 dropdowns + 2 direct links = 5 visible items,
@@ -183,10 +184,10 @@ export function MarketingHeader() {
         <div className="hidden items-center gap-2 xl:flex">
           <LocaleSwitcher />
           <ThemeToggle />
-          <div aria-hidden="true" className="mx-1 h-5 w-px bg-[var(--border-color)]" />
+          <div aria-hidden="true" className="mx-1 h-5 w-px bg-[var(--p-border)]" />
           <Link
             href="/login"
-            className="text-sm font-medium whitespace-nowrap text-[var(--text-secondary)] hover:text-[var(--foreground)]"
+            className="text-sm font-medium whitespace-nowrap text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           >
             {t("marketing.header.login")}
           </Link>
@@ -205,7 +206,7 @@ export function MarketingHeader() {
           aria-label={mobileOpen ? t("marketing.header.closeMenu") : t("marketing.header.openMenu")}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav-sheet"
-          className="btn btn-ghost btn-sm xl:hidden"
+          className="ps-btn ps-btn--ghost ps-btn--sm xl:hidden"
         >
           {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
         </button>
@@ -213,7 +214,7 @@ export function MarketingHeader() {
 
       {/* Mobile sheet */}
       {mobileOpen && (
-        <div id="mobile-nav-sheet" className="border-t border-[var(--border-color)] bg-[var(--background)] xl:hidden">
+        <div id="mobile-nav-sheet" className="border-t border-[var(--p-border)] bg-[var(--p-bg)] xl:hidden">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5">
             <MobileNavSection group={PRODUCT} onClick={() => setMobileOpen(false)} />
             <MobileNavSection group={INDUSTRIES} onClick={() => setMobileOpen(false)} />
@@ -229,24 +230,24 @@ export function MarketingHeader() {
               </Link>
             </nav>
             <MobileNavSection group={RESOURCES} onClick={() => setMobileOpen(false)} />
-            <div className="flex flex-col gap-2 border-t border-[var(--border-color)] pt-4">
+            <div className="flex flex-col gap-2 border-t border-[var(--p-border)] pt-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+                <span className="text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
                   {t("marketing.header.theme")}
                 </span>
                 <ThemeToggle />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+                <span className="text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
                   {t("marketing.header.language")}
                 </span>
                 <LocaleSwitcher />
               </div>
             </div>
-            <div className="flex flex-col gap-2 border-t border-[var(--border-color)] pt-4">
+            <div className="flex flex-col gap-2 border-t border-[var(--p-border)] pt-4">
               <Link
                 href="/login"
-                className="btn btn-ghost btn-sm w-full justify-center"
+                className="ps-btn ps-btn--ghost ps-btn--sm w-full justify-center"
                 onClick={() => setMobileOpen(false)}
               >
                 {t("marketing.header.login")}
@@ -271,7 +272,7 @@ function MobileNavSection({ group, onClick }: { group: NavGroup; onClick: () => 
   const groupLabel = t(group.labelKey);
   return (
     <details className="group" open>
-      <summary className="nav-item cursor-pointer list-none text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase [&::-webkit-details-marker]:hidden">
+      <summary className="nav-item cursor-pointer list-none text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase [&::-webkit-details-marker]:hidden">
         <span className="flex items-center justify-between">
           {groupLabel}
           <ChevronDown size={12} className="transition-transform group-open:rotate-180" aria-hidden="true" />

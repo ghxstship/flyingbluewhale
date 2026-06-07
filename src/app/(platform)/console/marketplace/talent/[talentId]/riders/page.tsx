@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
       />
       <div className="page-content space-y-5">
         {Object.keys(byKind).length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t(
               "console.marketplace.talent.riders.empty",
               undefined,
@@ -108,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
                           </Badge>
                         )}
                       </Link>
-                      <span className="font-mono text-xs text-[var(--text-secondary)]">
+                      <span className="font-mono text-xs text-[var(--p-text-2)]">
                         {new Date(r.created_at).toLocaleDateString()}
                       </span>
                     </li>

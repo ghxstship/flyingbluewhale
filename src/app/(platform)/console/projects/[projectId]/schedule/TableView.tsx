@@ -23,14 +23,14 @@ export function TableView({ rows }: { rows: TableRow[] }) {
   const t = useT();
   if (rows.length === 0) {
     return (
-      <div className="surface p-6 text-sm text-[var(--text-muted)]">
+      <div className="surface p-6 text-sm text-[var(--p-text-2)]">
         {t("console.projects.schedule.table.empty", undefined, "Nothing To Show.")}
       </div>
     );
   }
   return (
-    <div className="surface overflow-hidden rounded-md border border-[var(--border-color)]">
-      <table className="data-table w-full text-sm">
+    <div className="surface overflow-hidden rounded-md border border-[var(--p-border)]">
+      <table className="ps-table w-full text-sm">
         <thead>
           <tr>
             <th>{t("console.projects.schedule.table.title", undefined, "Title")}</th>
@@ -51,7 +51,7 @@ export function TableView({ rows }: { rows: TableRow[] }) {
                   {r.title}
                 </Link>
               </td>
-              <td className="font-mono text-xs text-[var(--text-muted)] uppercase">{toTitle(r.kind)}</td>
+              <td className="font-mono text-xs text-[var(--p-text-2)] uppercase">{toTitle(r.kind)}</td>
               <td>
                 <StatusBadge status={r.status} />
               </td>

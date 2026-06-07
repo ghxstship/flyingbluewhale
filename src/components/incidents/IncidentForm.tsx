@@ -116,8 +116,8 @@ export function IncidentForm({
   return (
     <form onSubmit={submit} className="space-y-5">
       <div>
-        <label className="block text-xs font-medium text-[var(--text-muted)]">
-          Summary <span className="text-[var(--color-error)]">*</span>
+        <label className="block text-xs font-medium text-[var(--p-text-2)]">
+          Summary <span className="text-[var(--p-danger)]">*</span>
         </label>
         <input
           required
@@ -125,17 +125,17 @@ export function IncidentForm({
           value={summary}
           onChange={(e) => setSummary(e.target.value)}
           placeholder="e.g. Slip on wet floor backstage"
-          className="input-base mt-1 w-full"
+          className="ps-input mt-1 w-full"
         />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="block text-xs font-medium text-[var(--text-muted)]">Severity</label>
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">Severity</label>
           <select
             value={severity}
             onChange={(e) => setSeverity(e.target.value as typeof severity)}
-            className="input-base mt-1 w-full"
+            className="ps-input mt-1 w-full"
           >
             <option value="near_miss">Near-miss</option>
             <option value="minor">Minor</option>
@@ -144,20 +144,20 @@ export function IncidentForm({
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-[var(--text-muted)]">Occurred At</label>
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">Occurred At</label>
           <input
             type="datetime-local"
             value={occurredAt}
             onChange={(e) => setOccurredAt(e.target.value)}
-            className="input-base mt-1 w-full"
+            className="ps-input mt-1 w-full"
           />
         </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="block text-xs font-medium text-[var(--text-muted)]">Project</label>
-          <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className="input-base mt-1 w-full">
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">Project</label>
+          <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className="ps-input mt-1 w-full">
             <option value="">— None —</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -167,31 +167,31 @@ export function IncidentForm({
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-[var(--text-muted)]">Location</label>
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">Location</label>
           <input
             maxLength={200}
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="e.g. Stage-right monitor world"
-            className="input-base mt-1 w-full"
+            className="ps-input mt-1 w-full"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-[var(--text-muted)]">Description</label>
+        <label className="block text-xs font-medium text-[var(--p-text-2)]">Description</label>
         <textarea
           maxLength={8000}
           rows={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="What happened, what was the response, witnesses…"
-          className="input-base mt-1 w-full"
+          className="ps-input mt-1 w-full"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-[var(--text-muted)]">Photos</label>
+        <label className="block text-xs font-medium text-[var(--p-text-2)]">Photos</label>
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -200,10 +200,10 @@ export function IncidentForm({
             e.preventDefault();
             if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
           }}
-          className="mt-1 rounded-md border-2 border-dashed border-[var(--border-color)] p-4"
+          className="mt-1 rounded-md border-2 border-dashed border-[var(--p-border)] p-4"
         >
           <div className="flex flex-wrap items-center gap-2">
-            <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs hover:bg-[var(--surface-inset)]">
+            <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs hover:bg-[var(--p-surface-2)]">
               <Upload size={12} />
               <span>Choose files</span>
               <input
@@ -214,7 +214,7 @@ export function IncidentForm({
                 onChange={(e) => e.target.files && handleFiles(e.target.files)}
               />
             </label>
-            <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs hover:bg-[var(--surface-inset)]">
+            <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs hover:bg-[var(--p-surface-2)]">
               <Camera size={12} />
               <span>Camera</span>
               <input
@@ -225,13 +225,13 @@ export function IncidentForm({
                 onChange={(e) => e.target.files && handleFiles(e.target.files)}
               />
             </label>
-            {uploading && <span className="text-xs text-[var(--text-muted)]">Uploading…</span>}
+            {uploading && <span className="text-xs text-[var(--p-text-2)]">Uploading…</span>}
           </div>
 
           {photos.length > 0 && (
             <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {photos.map((p, idx) => (
-                <li key={p.path} className="group relative overflow-hidden rounded border border-[var(--border-color)]">
+                <li key={p.path} className="group relative overflow-hidden rounded border border-[var(--p-border)]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={p.localPreview}
@@ -253,9 +253,9 @@ export function IncidentForm({
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] pt-4">
-        <div className="flex items-center gap-1 text-[11px] text-[var(--text-muted)]">
-          <AlertTriangle size={12} className="text-[var(--color-warning)]" />
+      <div className="flex items-center justify-between gap-2 border-t border-[var(--p-border)] pt-4">
+        <div className="flex items-center gap-1 text-[11px] text-[var(--p-text-2)]">
+          <AlertTriangle size={12} className="text-[var(--p-warning)]" />
           In emergencies, call local services first — then log here.
         </div>
         <Button type="submit" variant="danger" disabled={submitting || uploading}>

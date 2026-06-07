@@ -106,20 +106,18 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
           <div className="flex items-center gap-3">
             <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
             <Badge variant={STATUS[r.status]}>{toTitle(r.status)}</Badge>
-            <span className="font-mono text-xs text-[var(--text-muted)]">{r.category}</span>
+            <span className="font-mono text-xs text-[var(--p-text-2)]">{r.category}</span>
           </div>
-          {r.description && (
-            <p className="mt-4 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{r.description}</p>
-          )}
+          {r.description && <p className="mt-4 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{r.description}</p>}
           <dl className="mt-5 grid grid-cols-2 gap-3 text-xs">
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+              <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                 {t("console.services.requests.detail.opened", undefined, "Opened")}
               </dt>
               <dd className="font-mono">{fmt.dateTime(r.opened_at)}</dd>
             </div>
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+              <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                 {t("console.services.requests.detail.responseSla", undefined, "Response SLA")}
               </dt>
               <dd className="font-mono">
@@ -132,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
               </dd>
             </div>
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+              <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                 {t("console.services.requests.detail.resolutionSla", undefined, "Resolution SLA")}
               </dt>
               <dd className="font-mono">
@@ -145,7 +143,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
               </dd>
             </div>
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+              <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                 {t("console.services.requests.detail.acknowledged", undefined, "Acknowledged")}
               </dt>
               <dd className="font-mono">{r.acknowledged_at ? fmt.dateTime(r.acknowledged_at) : "—"}</dd>
@@ -171,7 +169,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                         "Resolution Note · Optional",
                       )}
                       maxLength={2000}
-                      className="input-base me-2 inline-block w-64 align-middle"
+                      className="ps-input me-2 inline-block w-64 align-middle"
                     />
                   )}
                   <Button type="submit" variant={tr.variant ?? "secondary"} size="sm">
@@ -189,7 +187,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
           </h3>
           <ol className="mt-3 space-y-3 text-xs">
             {events.length === 0 ? (
-              <li className="text-[var(--text-muted)]">
+              <li className="text-[var(--p-text-2)]">
                 {t("console.services.requests.detail.noEvents", undefined, "No events yet.")}
               </li>
             ) : (
@@ -202,13 +200,13 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
                 const transition = from && to ? `${String(from)} → ${String(to)}` : null;
                 return (
                   <li key={e.id} className="flex items-start gap-3">
-                    <span className="font-mono text-[var(--text-muted)]">
+                    <span className="font-mono text-[var(--p-text-2)]">
                       {new Date(e.occurred_at).toLocaleTimeString()}
                     </span>
                     <span className="flex-1">
                       <Badge variant="muted">{toTitle(e.kind)}</Badge>
                       {(transition || note) && (
-                        <span className="ms-2 text-[var(--text-secondary)]">
+                        <span className="ms-2 text-[var(--p-text-2)]">
                           {[transition, note].filter(Boolean).join(" · ")}
                         </span>
                       )}

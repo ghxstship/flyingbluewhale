@@ -10,11 +10,11 @@ export default async function MobileNewRequest() {
   const { t } = await getRequestT();
   return (
     <div className="px-4 pt-6 pb-24">
-      <Link href="/m/requests" className="text-xs text-[var(--text-muted)]">
+      <Link href="/m/requests" className="text-xs text-[var(--p-text-2)]">
         {t("m.requests.new.backLink", undefined, "← Requests")}
       </Link>
       <h1 className="mt-2 text-2xl font-semibold">{t("m.requests.new.title", undefined, "Open Request")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.requests.new.subtitle",
           undefined,
@@ -29,10 +29,10 @@ export default async function MobileNewRequest() {
         >
           <input type="hidden" name="shell" value="mobile" />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("m.requests.new.severity.label", undefined, "Severity")}
             </label>
-            <select name="severity" defaultValue="P3" className="input-base mt-1.5 w-full" required>
+            <select name="severity" defaultValue="P3" className="ps-input mt-1.5 w-full" required>
               <option value="P1">{t("m.requests.new.severity.p1", undefined, "P1 — live-event blocker")}</option>
               <option value="P2">{t("m.requests.new.severity.p2", undefined, "P2 — urgent")}</option>
               <option value="P3">{t("m.requests.new.severity.p3", undefined, "P3 — standard")}</option>
@@ -40,10 +40,10 @@ export default async function MobileNewRequest() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("m.requests.new.category.label", undefined, "Category")}
             </label>
-            <select name="category" defaultValue="repair" className="input-base mt-1.5 w-full" required>
+            <select name="category" defaultValue="repair" className="ps-input mt-1.5 w-full" required>
               <option value="AV">{t("m.requests.new.category.av", undefined, "AV")}</option>
               <option value="cleaning">{t("m.requests.new.category.cleaning", undefined, "Cleaning")}</option>
               <option value="repair">{t("m.requests.new.category.repair", undefined, "Repair")}</option>
@@ -61,14 +61,14 @@ export default async function MobileNewRequest() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("m.requests.new.detail.label", undefined, "Detail")}
             </label>
             <textarea
               name="description"
               rows={4}
               maxLength={4000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               placeholder={t("m.requests.new.detail.placeholder", undefined, "Where, what, who's affected")}
             />
           </div>

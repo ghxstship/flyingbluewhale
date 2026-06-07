@@ -54,14 +54,14 @@ export default async function Page({ params }: { params: Promise<{ packageId: st
             maxLength={80}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.commercial.hospitality.edit.fields.description", undefined, "Description")}
             </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
               rows={5}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input

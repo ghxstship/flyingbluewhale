@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
             {t("console.agency.tours.detail.legs.heading", undefined, "Legs")}
           </h2>
           {legs.length === 0 ? (
-            <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-[var(--text-secondary)]">
+            <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-[var(--p-text-2)]">
               <span>
                 {t(
                   "console.agency.tours.detail.legs.empty",

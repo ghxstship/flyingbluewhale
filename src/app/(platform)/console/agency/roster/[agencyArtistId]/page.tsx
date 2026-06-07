@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ agencyArtistI
             }}
           >
             <input type="hidden" name="agency_artist_id" value={e.id} />
-            <button type="submit" className="btn btn-ghost text-xs text-[var(--color-error)]">
+            <button type="submit" className="ps-btn ps-btn--ghost text-xs text-[var(--p-danger)]">
               {t("console.agency.roster.detail.endRelationship", undefined, "End relationship")}
             </button>
           </form>

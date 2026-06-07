@@ -6,11 +6,11 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Inline message block — replaces the hand-rolled
- * `rounded-lg border border-[var(--color-error)]/40 bg-[var(--color-error)]/10 …`
+ * `rounded-lg border border-[var(--p-danger)]/40 bg-[var(--p-danger)]/10 …`
  * pattern that had propagated across form error surfaces, API response
  * boxes, and permission-denied callouts.
  *
- * Kinds map to semantic tokens (`--color-error/warning/info/success`)
+ * Kinds map to semantic tokens (`--p-danger/warning/info/success`)
  * so every theme paints the same severity consistently.
  */
 
@@ -18,27 +18,27 @@ export type AlertKind = "error" | "warning" | "info" | "success";
 
 const KIND_CLASS: Record<AlertKind, { border: string; bg: string; fg: string; Icon: typeof AlertCircle }> = {
   error: {
-    border: "border-[color:var(--color-error)]/40",
-    bg: "bg-[color:var(--color-error)]/10",
-    fg: "text-[color:var(--color-error)]",
+    border: "border-[color:var(--p-danger)]/40",
+    bg: "bg-[color:var(--p-danger)]/10",
+    fg: "text-[color:var(--p-danger)]",
     Icon: AlertCircle,
   },
   warning: {
-    border: "border-[color:var(--color-warning)]/40",
-    bg: "bg-[color:var(--color-warning)]/10",
-    fg: "text-[color:var(--color-warning)]",
+    border: "border-[color:var(--p-warning)]/40",
+    bg: "bg-[color:var(--p-warning)]/10",
+    fg: "text-[color:var(--p-warning)]",
     Icon: AlertTriangle,
   },
   info: {
-    border: "border-[color:var(--color-info)]/40",
-    bg: "bg-[color:var(--color-info)]/10",
-    fg: "text-[color:var(--color-info)]",
+    border: "border-[color:var(--p-info)]/40",
+    bg: "bg-[color:var(--p-info)]/10",
+    fg: "text-[color:var(--p-info)]",
     Icon: Info,
   },
   success: {
-    border: "border-[color:var(--color-success)]/40",
-    bg: "bg-[color:var(--color-success)]/10",
-    fg: "text-[color:var(--color-success)]",
+    border: "border-[color:var(--p-success)]/40",
+    bg: "bg-[color:var(--p-success)]/10",
+    fg: "text-[color:var(--p-success)]",
     Icon: CheckCircle2,
   },
 };

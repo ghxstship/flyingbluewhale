@@ -75,8 +75,8 @@ export default async function SettingsHub() {
           return (
             <section key={group.label}>
               <div className="mb-3 flex items-center gap-2">
-                <Icon size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
-                <h2 className="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
+                <Icon size={16} className="text-[var(--p-text-2)]" aria-hidden="true" />
+                <h2 className="text-xs font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                   {group.label}
                 </h2>
               </div>
@@ -88,15 +88,13 @@ export default async function SettingsHub() {
                     className="surface hover-lift group flex items-start justify-between gap-3 p-4"
                   >
                     <div className="min-w-0">
-                      <div className="text-sm font-semibold text-[var(--text-primary)]">{item.label}</div>
-                      <div className="mt-1 text-xs text-[var(--text-muted)]">
-                        {DESCRIPTIONS[item.href] ?? item.label}
-                      </div>
+                      <div className="text-sm font-semibold text-[var(--p-text-1)]">{item.label}</div>
+                      <div className="mt-1 text-xs text-[var(--p-text-2)]">{DESCRIPTIONS[item.href] ?? item.label}</div>
                     </div>
                     <ChevronRight
                       size={16}
                       aria-hidden="true"
-                      className="mt-0.5 shrink-0 text-[var(--text-muted)] transition-transform group-hover:translate-x-0.5"
+                      className="mt-0.5 shrink-0 text-[var(--p-text-2)] transition-transform group-hover:translate-x-0.5"
                     />
                   </Link>
                 ))}

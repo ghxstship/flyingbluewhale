@@ -70,7 +70,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 
   const hasPrefix = !!prefix;
   const trailing = asyncValidating ? (
-    <Spinner size="sm" className="text-[var(--text-muted)]" />
+    <Spinner size="sm" className="text-[var(--p-text-2)]" />
   ) : clearable && currentValue ? (
     <button
       type="button"
@@ -79,12 +79,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         if (!controlled) setLocalValue("");
         onClear?.();
       }}
-      className="rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+      className="rounded p-0.5 text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
     >
       <X size={12} aria-hidden="true" />
     </button>
   ) : suffix ? (
-    <span className="pointer-events-none text-[var(--text-muted)]">{suffix}</span>
+    <span className="pointer-events-none text-[var(--p-text-2)]">{suffix}</span>
   ) : null;
 
   if (floating && label) {
@@ -95,7 +95,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <div className="flex flex-col gap-1.5">
         <div className="group relative flex items-center">
           {hasPrefix && (
-            <span className="pointer-events-none absolute start-2.5 z-10 text-[var(--text-muted)]">{prefix}</span>
+            <span className="pointer-events-none absolute start-2.5 z-10 text-[var(--p-text-2)]">{prefix}</span>
           )}
           <input
             ref={ref}
@@ -106,7 +106,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             aria-invalid={error ? true : undefined}
             aria-describedby={describedBy}
             aria-required={required || undefined}
-            className={`input-base focus-ring peer w-full pt-5 pb-1.5 ${hasPrefix ? "ps-7" : ""} ${trailing ? "pe-7" : ""} ${error ? "border-[var(--color-error)]" : ""} ${className}`}
+            className={`ps-input focus-ring peer w-full pt-5 pb-1.5 ${hasPrefix ? "ps-7" : ""} ${trailing ? "pe-7" : ""} ${error ? "border-[var(--p-danger)]" : ""} ${className}`}
             onChange={(e) => {
               if (!controlled) setLocalValue(e.target.value);
               rest.onChange?.(e);
@@ -115,11 +115,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           />
           <label
             htmlFor={id}
-            className={`pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-xs text-[var(--text-muted)] transition-[top,transform,font-size,color] duration-[var(--motion-fast)] ease-[var(--ease-out)] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-[var(--text-secondary)] peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px] ${hasPrefix ? "start-7" : ""}`}
+            className={`pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-xs text-[var(--p-text-2)] transition-[top,transform,font-size,color] duration-[var(--motion-fast)] ease-[var(--ease-out)] peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-[10px] peer-focus:text-[var(--p-text-2)] peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-[10px] ${hasPrefix ? "start-7" : ""}`}
           >
             {label}
             {required && (
-              <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+              <span aria-hidden="true" className="ms-0.5 text-[var(--p-danger)]">
                 *
               </span>
             )}
@@ -129,12 +129,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0 flex-1">
             {error && (
-              <span id={errorId} role="alert" className="text-xs text-[var(--color-error)]">
+              <span id={errorId} role="alert" className="text-xs text-[var(--p-danger)]">
                 {error}
               </span>
             )}
             {!error && hint && (
-              <span id={hintId} className="text-xs text-[var(--text-muted)]">
+              <span id={hintId} className="text-xs text-[var(--p-text-2)]">
                 {hint}
               </span>
             )}
@@ -143,7 +143,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             <span
               id={countId}
               className={`shrink-0 font-mono text-[10px] ${
-                currentValue.length >= maxLength ? "text-[var(--color-error)]" : "text-[var(--text-muted)]"
+                currentValue.length >= maxLength ? "text-[var(--p-danger)]" : "text-[var(--p-text-2)]"
               }`}
             >
               {currentValue.length} / {maxLength}
@@ -157,20 +157,17 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label
-          htmlFor={id}
-          className={`text-xs font-medium text-[var(--text-secondary)] ${hideLabel ? "sr-only" : ""}`}
-        >
+        <label htmlFor={id} className={`text-xs font-medium text-[var(--p-text-2)] ${hideLabel ? "sr-only" : ""}`}>
           {label}
           {required && (
-            <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+            <span aria-hidden="true" className="ms-0.5 text-[var(--p-danger)]">
               *
             </span>
           )}
         </label>
       )}
       <div className="relative flex items-center">
-        {hasPrefix && <span className="pointer-events-none absolute start-2.5 text-[var(--text-muted)]">{prefix}</span>}
+        {hasPrefix && <span className="pointer-events-none absolute start-2.5 text-[var(--p-text-2)]">{prefix}</span>}
         <input
           ref={ref}
           id={id}
@@ -179,7 +176,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
           aria-required={required || undefined}
-          className={`input-base focus-ring w-full ${hasPrefix ? "ps-7" : ""} ${trailing ? "pe-7" : ""} ${error ? "border-[var(--color-error)]" : ""} ${className}`}
+          className={`ps-input focus-ring w-full ${hasPrefix ? "ps-7" : ""} ${trailing ? "pe-7" : ""} ${error ? "border-[var(--p-danger)]" : ""} ${className}`}
           onChange={(e) => {
             if (!controlled) setLocalValue(e.target.value);
             rest.onChange?.(e);
@@ -196,12 +193,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0 flex-1">
             {error && (
-              <span id={errorId} role="alert" className="text-xs text-[var(--color-error)]">
+              <span id={errorId} role="alert" className="text-xs text-[var(--p-danger)]">
                 {error}
               </span>
             )}
             {!error && hint && (
-              <span id={hintId} className="text-xs text-[var(--text-muted)]">
+              <span id={hintId} className="text-xs text-[var(--p-text-2)]">
                 {hint}
               </span>
             )}
@@ -210,7 +207,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
             <span
               id={countId}
               className={`shrink-0 font-mono text-[10px] ${
-                currentValue.length >= maxLength ? "text-[var(--color-error)]" : "text-[var(--text-muted)]"
+                currentValue.length >= maxLength ? "text-[var(--p-danger)]" : "text-[var(--p-text-2)]"
               }`}
             >
               {currentValue.length} / {maxLength}

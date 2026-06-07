@@ -48,12 +48,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <div className="text-sm font-medium">
                   {i.title ?? t("p.vendor.equipmentPullList.fallbackTitle", undefined, "Pull list")}
                 </div>
-                <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(i.updated_at)}</div>
+                <div className="font-mono text-xs text-[var(--p-text-2)]">{fmtDate(i.updated_at)}</div>
               </div>
-              <a
-                href={`/api/v1/deliverables/${i.id}/pdf`}
-                className="mt-2 inline-block text-xs text-[var(--org-primary)]"
-              >
+              <a href={`/api/v1/deliverables/${i.id}/pdf`} className="mt-2 inline-block text-xs text-[var(--p-accent)]">
                 {t("p.vendor.equipmentPullList.downloadPdf", undefined, "Download PDF →")}
               </a>
             </li>

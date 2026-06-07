@@ -23,7 +23,7 @@ export default async function MobileShiftSwapPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -56,11 +56,11 @@ export default async function MobileShiftSwapPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.shift.swap.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.shift.swap.title", undefined, "Swap Shift")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.shift.swap.intro",
           undefined,
@@ -90,7 +90,7 @@ export default async function MobileShiftSwapPage() {
                 "Only shifts you haven't checked into can be swapped. See your roster on the Shift screen.",
               )}
               action={
-                <Link href="/m/shift" className="btn btn-secondary btn-sm">
+                <Link href="/m/shift" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("m.shift.swap.empty.action", undefined, "Open shift")}
                 </Link>
               }
@@ -104,7 +104,7 @@ export default async function MobileShiftSwapPage() {
                   <div className="text-sm font-semibold">
                     {s.venue?.name ?? t("m.shift.swap.unassignedVenue", undefined, "Unassigned venue")}
                   </div>
-                  <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                  <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                     {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
                     {s.role ? ` · ${s.role}` : ""}
                   </div>
@@ -119,9 +119,9 @@ export default async function MobileShiftSwapPage() {
                   maxLength={500}
                   required
                   placeholder={t("m.shift.swap.reasonPlaceholder", undefined, "Reason for swap…")}
-                  className="input-base w-full text-sm"
+                  className="ps-input w-full text-sm"
                 />
-                <button type="submit" className="btn btn-primary btn-sm w-full">
+                <button type="submit" className="ps-btn ps-btn--sm w-full">
                   {t("m.shift.swap.requestButton", undefined, "Request swap")}
                 </button>
               </form>

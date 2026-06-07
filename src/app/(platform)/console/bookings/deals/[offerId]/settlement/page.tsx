@@ -90,15 +90,15 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               {t("console.bookings.deals.settlement.computed", undefined, "Computed")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.settlement.nbor", undefined, "NBOR")}
               </dt>
               <dd className="font-mono">{formatMoney(s.nbor_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.settlement.balanceDue", undefined, "Balance Due")}
               </dt>
               <dd className="font-mono">{formatMoney(s.balance_due_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.settlement.totalAncillary", undefined, "Total Ancillary")}
               </dt>
               <dd className="font-mono">

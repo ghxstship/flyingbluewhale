@@ -191,20 +191,20 @@ export default async function TimeOffAdminPage() {
                     <form action={decideTimeOff}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="approved" />
-                      <button type="submit" className="btn btn-primary btn-xs">
+                      <button type="submit" className="ps-btn btn-xs">
                         {t("console.workforce.timeOff.action.approve", undefined, "Approve")}
                       </button>
                     </form>
                     <form action={decideTimeOff}>
                       <input type="hidden" name="id" value={r.id} />
                       <input type="hidden" name="decision" value="denied" />
-                      <button type="submit" className="btn btn-secondary btn-xs">
+                      <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
                         {t("console.workforce.timeOff.action.deny", undefined, "Deny")}
                       </button>
                     </form>
                   </div>
                 ) : (
-                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                  <span className="text-xs text-[var(--p-text-2)]">—</span>
                 ),
               accessor: () => null,
             },

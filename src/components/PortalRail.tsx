@@ -38,7 +38,7 @@ export async function PortalRail({
       : [{ label: title ?? "", items: items ?? [] }];
   const headerTitle = title ?? (group ? t(navGroupKey(group), undefined, group.label) : "");
   return (
-    <aside className="hidden w-56 shrink-0 flex-col border-e border-[var(--border-color)] bg-[var(--bg-secondary)] p-3 md:flex">
+    <aside className="hidden w-56 shrink-0 flex-col border-e border-[var(--p-border)] bg-[var(--p-surface)] p-3 md:flex">
       {/* Canonical SaaS brand row — cyan-tiled Waypoint app-icon + spaced
           wordmark per ui_kits/atlvs/dashboard.html .brandrow. Per v4
           logo-kit canon, the GVTEWAY app icon is the Waypoint on cyan. */}
@@ -52,7 +52,7 @@ export async function PortalRail({
           aria-hidden="true"
           className="rounded-md"
         />
-        <span className="text-base font-bold tracking-[-0.01em] text-[var(--org-primary)]">G V T E W A Y</span>
+        <span className="text-base font-bold tracking-[-0.01em] text-[var(--p-accent)]">G V T E W A Y</span>
       </div>
       {headerTitle ? <div className="nav-label">{headerTitle}</div> : null}
       {sections.map((section, idx) => {
@@ -60,7 +60,7 @@ export async function PortalRail({
         return (
           <div key={`${section.label}-${idx}`} className={idx === 0 ? "mt-0.5" : "mt-3"}>
             {idx > 0 && sectionLabel ? (
-              <div className="nav-label px-2 pb-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              <div className="nav-label px-2 pb-1 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
                 {sectionLabel}
               </div>
             ) : null}

@@ -76,7 +76,7 @@ export default function HomeES() {
           <br />
           Corre Sobre Esto.
         </h1>
-        <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
           La plataforma para trabajo en vivo. Del pitch al wrap, en un espacio de trabajo. Tres apps, un esquema, cada
           módulo — desde pre-producción hasta strike.
         </p>
@@ -92,7 +92,7 @@ export default function HomeES() {
 
       <section className="mx-auto max-w-6xl px-6 py-16">
         <h2 className="hed-xl">ATLVS · GVTEWAY · COMPVSS</h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
           Una base de datos. Tres superficies optimizadas. El mismo registro desde la oficina, el portal y el campo.
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -115,8 +115,8 @@ export default function HomeES() {
           ].map((app) => (
             <Link key={app.name} href={app.href} className="surface hover-lift p-6">
               <div className="text-sm font-semibold">{app.name}</div>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{app.body}</p>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{app.body}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 Ver más <ArrowRight size={12} />
               </div>
             </Link>

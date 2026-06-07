@@ -38,7 +38,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
         <h3 className="text-sm font-semibold">
           {t("console.settings.branding.identity.title", undefined, "Identity")}
         </h3>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "console.settings.branding.identity.description",
             undefined,
@@ -67,14 +67,14 @@ export function BrandingForm({ initial }: { initial: Initial }) {
 
       <section className="surface p-5">
         <h3 className="text-sm font-semibold">{t("console.settings.branding.color.title", undefined, "Color")}</h3>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("console.settings.branding.color.descriptionPrefix", undefined, "Overrides")}{" "}
-          <code className="font-mono">--org-primary</code>{" "}
+          <code className="font-mono">--p-accent</code>{" "}
           {t("console.settings.branding.color.descriptionSuffix", undefined, "across every branded surface + PDF.")}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="block text-xs font-medium text-[var(--text-muted)]">
+            <label className="block text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.branding.color.accentLabel", undefined, "Accent Color")}
             </label>
             <div className="mt-1 flex items-center gap-2">
@@ -82,7 +82,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
                 type="color"
                 value={accent}
                 onChange={(e) => setAccent(e.target.value)}
-                className="h-10 w-10 cursor-pointer rounded border border-[var(--border-color)]"
+                className="h-10 w-10 cursor-pointer rounded border border-[var(--p-border)]"
                 aria-label={t("console.settings.branding.color.pickAccentAria", undefined, "Pick Accent Color")}
               />
               <input
@@ -91,12 +91,12 @@ export function BrandingForm({ initial }: { initial: Initial }) {
                 value={accent}
                 onChange={(e) => setAccent(e.target.value)}
                 pattern="#[0-9a-fA-F]{6}"
-                className="input-base w-full font-mono"
+                className="ps-input w-full font-mono"
               />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-medium text-[var(--text-muted)]">
+            <label className="block text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.branding.color.foregroundLabel", undefined, "Text on Accent")}
             </label>
             <div className="mt-1 flex items-center gap-2">
@@ -104,7 +104,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
                 type="color"
                 value={foreground}
                 onChange={(e) => setForeground(e.target.value)}
-                className="h-10 w-10 cursor-pointer rounded border border-[var(--border-color)]"
+                className="h-10 w-10 cursor-pointer rounded border border-[var(--p-border)]"
                 aria-label={t("console.settings.branding.color.pickForegroundAria", undefined, "Pick Foreground Color")}
               />
               <input
@@ -113,7 +113,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
                 value={foreground}
                 onChange={(e) => setForeground(e.target.value)}
                 pattern="#[0-9a-fA-F]{6}"
-                className="input-base w-full font-mono"
+                className="ps-input w-full font-mono"
               />
             </div>
           </div>
@@ -122,7 +122,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
 
       <section className="surface p-5">
         <h3 className="text-sm font-semibold">{t("console.settings.branding.assets.title", undefined, "Assets")}</h3>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "console.settings.branding.assets.description",
             undefined,
@@ -156,10 +156,10 @@ export function BrandingForm({ initial }: { initial: Initial }) {
 
       <section
         className="surface p-5"
-        style={{ ["--org-primary" as string]: accent, ["--org-on-primary" as string]: foreground }}
+        style={{ ["--p-accent" as string]: accent, ["--p-accent-contrast" as string]: foreground }}
       >
         <h3 className="text-sm font-semibold">{t("console.settings.branding.preview.title", undefined, "Preview")}</h3>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "console.settings.branding.preview.description",
             undefined,
@@ -167,10 +167,10 @@ export function BrandingForm({ initial }: { initial: Initial }) {
           )}
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <button type="button" className="btn btn-primary btn-sm" disabled>
+          <button type="button" className="ps-btn ps-btn--sm" disabled>
             {productName || t("console.settings.branding.preview.primaryActionFallback", undefined, "Primary action")}
           </button>
-          <button type="button" className="btn btn-ghost btn-sm" disabled>
+          <button type="button" className="ps-btn ps-btn--ghost ps-btn--sm" disabled>
             {t("console.settings.branding.preview.ghost", undefined, "Ghost")}
           </button>
           <span className="text-xs" style={{ color: accent }}>

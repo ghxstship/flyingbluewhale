@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 accent
               />
             </div>
-            <div className="surface p-4 text-xs text-[var(--text-muted)]">
+            <div className="surface p-4 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.projects.sustainability.transparencyNote",
                 undefined,

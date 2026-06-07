@@ -59,7 +59,7 @@ export default async function TrackerPage({
           atoms={atoms}
           atomHrefBuilder={(id) => `/console/projects/${projectId}/tracker?atom=${id}`}
           emptyAction={
-            <Link className="text-sm text-[var(--org-primary)]" href="/console/xpms">
+            <Link className="text-sm text-[var(--p-accent)]" href="/console/xpms">
               {t("console.projects.tracker.openCatalog", undefined, "Open Catalog →")}
             </Link>
           }

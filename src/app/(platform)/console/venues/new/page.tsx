@@ -20,10 +20,10 @@ export default async function Page() {
         >
           <Input label={t("console.venues.new.name", undefined, "Name")} name="name" required maxLength={120} />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.venues.new.kind", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="competition" className="input-base mt-1.5 w-full">
+            <select name="kind" defaultValue="competition" className="ps-input mt-1.5 w-full">
               <option value="competition">{t("console.venues.new.kindCompetition", undefined, "Competition")}</option>
               <option value="training">{t("console.venues.new.kindTraining", undefined, "Training")}</option>
               <option value="live_site">{t("console.venues.new.kindLiveSite", undefined, "Live site")}</option>

@@ -46,18 +46,18 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <Link
               href={dataUrl}
               download={`equipment-${assetTag ?? equipmentId}.png`}
-              className="btn btn-secondary btn-sm"
+              className="ps-btn ps-btn--ghost ps-btn--sm"
             >
               {t("console.production.equipment.qr.downloadPng", undefined, "Download PNG")}
             </Link>
-            <span className="text-xs text-[var(--text-muted)]">
+            <span className="text-xs text-[var(--p-text-2)]">
               {t("console.production.equipment.qr.printHint", undefined, "⌘P to print")}
             </span>
           </div>
         }
       />
       <div className="page-content">
-        <div className="mx-auto flex max-w-md flex-col items-center gap-3 rounded-lg border-2 border-dashed border-[var(--border-color)] bg-white p-6 print:border-0 print:p-0">
+        <div className="mx-auto flex max-w-md flex-col items-center gap-3 rounded-lg border-2 border-dashed border-[var(--p-border)] bg-white p-6 print:border-0 print:p-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={dataUrl}
@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <div className="mt-1 font-mono text-[10px] text-black/40">{equipmentId.slice(0, 8)}…</div>
           </div>
         </div>
-        <p className="mx-auto mt-4 max-w-md text-center text-xs text-[var(--text-muted)] print:hidden">
+        <p className="mx-auto mt-4 max-w-md text-center text-xs text-[var(--p-text-2)] print:hidden">
           {t(
             "console.production.equipment.qr.scanHint",
             undefined,

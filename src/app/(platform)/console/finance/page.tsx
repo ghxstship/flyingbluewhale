@@ -83,7 +83,7 @@ export default async function FinanceHub() {
           {tiles.map((tile) => (
             <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{tile.label}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{t("common.openArrow", undefined, "Open →")}</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">{t("common.openArrow", undefined, "Open →")}</div>
             </Link>
           ))}
         </div>

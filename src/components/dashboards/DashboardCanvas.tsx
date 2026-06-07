@@ -37,7 +37,7 @@ import { WidgetPalette } from "./WidgetPalette";
 // the canvas is editor-only anyway (no SEO need).
 const ChartWidget = dynamic(() => import("./widgets/ChartWidget").then((m) => ({ default: m.ChartWidget })), {
   ssr: false,
-  loading: () => <div className="surface skeleton h-full w-full" aria-busy="true" />,
+  loading: () => <div className="surface ps-skel h-full w-full" aria-busy="true" />,
 });
 
 /**
@@ -270,7 +270,7 @@ function CanvasDropZone({
         setNodeRef(node);
       }}
       className={`relative w-full rounded-md border border-dashed border-transparent p-1 transition-colors ${
-        isOver ? "border-[var(--org-primary)] bg-[var(--surface-inset)]" : ""
+        isOver ? "border-[var(--p-accent)] bg-[var(--p-surface-2)]" : ""
       }`}
       style={{
         display: "grid",
@@ -319,7 +319,7 @@ function WidgetCell({
       className="relative"
     >
       {editable && (
-        <div className="pointer-events-none absolute inset-0 z-10 rounded-md ring-1 ring-[var(--border-color)]/40" />
+        <div className="pointer-events-none absolute inset-0 z-10 rounded-md ring-1 ring-[var(--p-border)]/40" />
       )}
       <div className="h-full w-full">{children}</div>
       {editable && (
@@ -327,7 +327,7 @@ function WidgetCell({
           <button
             type="button"
             aria-label={`Move ${widget.title ?? widget.type}`}
-            className="surface-raised flex h-6 w-6 cursor-grab items-center justify-center rounded text-[var(--text-muted)] hover:text-[var(--foreground)]"
+            className="surface-raised flex h-6 w-6 cursor-grab items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             {...attributes}
             {...listeners}
           >
@@ -337,7 +337,7 @@ function WidgetCell({
             type="button"
             aria-label={`Remove ${widget.title ?? widget.type}`}
             onClick={onRemove}
-            className="surface-raised flex h-6 w-6 items-center justify-center rounded text-[var(--text-muted)] hover:text-[var(--color-error)]"
+            className="surface-raised flex h-6 w-6 items-center justify-center rounded text-[var(--p-text-2)] hover:text-[var(--p-danger)]"
           >
             <XIcon />
           </button>

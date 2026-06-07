@@ -137,9 +137,9 @@ export function AddressField(props: AddressFieldProps) {
   return (
     <div className={className} role="group" aria-labelledby={`${name}-label`}>
       {label ? (
-        <div id={`${name}-label`} className="text-xs font-medium text-[var(--text-secondary)]">
+        <div id={`${name}-label`} className="text-xs font-medium text-[var(--p-text-2)]">
           {label}
-          {required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
+          {required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
         </div>
       ) : null}
 
@@ -197,9 +197,9 @@ export function AddressField(props: AddressFieldProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => update({ postal_code: e.target.value })}
         />
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             Country
-            {required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
+            {required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
           </label>
           <select
             name={`${name}_country_code`}
@@ -207,7 +207,7 @@ export function AddressField(props: AddressFieldProps) {
             disabled={Boolean(disabled || lockCountry)}
             required={required}
             onChange={(e) => update({ country_code: e.target.value })}
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
             autoComplete="country"
           >
             {COUNTRIES.map((c) => (
@@ -219,7 +219,7 @@ export function AddressField(props: AddressFieldProps) {
         </div>
       </div>
 
-      {hint ? <p className="mt-1.5 text-[11px] text-[var(--text-muted)]">{hint}</p> : null}
+      {hint ? <p className="mt-1.5 text-[11px] text-[var(--p-text-2)]">{hint}</p> : null}
 
       {/* Single-source-of-truth JSON for server actions that prefer the merged shape. */}
       <input type="hidden" name={`${name}_json`} value={json} />

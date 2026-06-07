@@ -80,7 +80,7 @@ export default async function SubscriptionsPage() {
               key: "started",
               header: t("console.subscriptions.columns.started", undefined, "Started"),
               render: (r) => (r.started_at ? timeAgo(r.started_at) : "—"),
-              className: "text-xs text-[var(--text-secondary)]",
+              className: "text-xs text-[var(--p-text-2)]",
               accessor: (r) => r.started_at,
             },
           ]}

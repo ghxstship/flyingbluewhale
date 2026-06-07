@@ -110,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.apply.start.title", undefined, "Start a New Application")}</h3>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.apply.start.description",
               undefined,
@@ -118,12 +118,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             )}
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href={`/p/${slug}/apply/changes`} className="btn btn-secondary btn-sm">
+            <Link href={`/p/${slug}/apply/changes`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("p.apply.start.requestChange", undefined, "Request a category change")}
             </Link>
             <Link
               href={`mailto:accreditation@atlvs.pro?subject=New%20application%20—%20${slug}`}
-              className="btn btn-primary btn-sm"
+              className="ps-btn ps-btn--sm"
             >
               {t("p.apply.start.emailProducer", undefined, "Email producer")}
             </Link>
@@ -133,16 +133,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.apply.list.title", undefined, "Your Applications")}</h3>
           {apps.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("p.apply.list.empty", undefined, "No applications yet — your producer will invite you.")}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {apps.map((a) => (
                 <li key={a.id} className="flex items-center justify-between py-3 text-sm">
                   <div>
                     <div className="font-medium">{a.person_name}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {a.category?.code ?? t("common.emDash", undefined, "—")} · {a.category?.name ?? ""}
                       {a.valid_from && a.valid_to ? ` · ${fmtDate(a.valid_from)} – ${fmtDate(a.valid_to)}` : ""}
                     </div>

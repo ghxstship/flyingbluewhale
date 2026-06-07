@@ -71,7 +71,7 @@ export default async function Page() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-8">
         <div className="eyebrow eyebrow-brand">Partner Program</div>
         <h1 className="hed-3xl mt-4">Built By Partners. Verified By Us.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">
           Third-party integrations that hit the ATLVS REST + GraphQL surface. Verified Partner integrations pass our
           technical review; Certified integrations also pass end-to-end QA on a live tenant. Build your own —{" "}
           <Link href="/integrations/submit" className="underline">
@@ -89,7 +89,7 @@ export default async function Page() {
 
       <section className="mx-auto max-w-6xl px-6 pb-12">
         {rows.length === 0 ? (
-          <div className="surface p-8 text-center text-sm text-[var(--text-secondary)]">
+          <div className="surface p-8 text-center text-sm text-[var(--p-text-2)]">
             No partner integrations are listed publicly yet.{" "}
             <Link href="/integrations/submit" className="underline">
               Be the first.
@@ -105,10 +105,10 @@ export default async function Page() {
                     {r.certification_tier === "certified" ? "Certified" : "Verified"}
                   </Badge>
                 </div>
-                <p className="mt-2 text-xs text-[var(--text-secondary)]">{r.short_description}</p>
+                <p className="mt-2 text-xs text-[var(--p-text-2)]">{r.short_description}</p>
                 <div className="mt-3 flex items-center justify-between text-[11px]">
-                  <span className="text-[var(--text-muted)]">by {r.partner_org_name}</span>
-                  <span className="inline-flex items-center gap-1 font-medium text-[var(--org-primary)]">
+                  <span className="text-[var(--p-text-2)]">by {r.partner_org_name}</span>
+                  <span className="inline-flex items-center gap-1 font-medium text-[var(--p-accent)]">
                     Details <ArrowRight size={11} />
                   </span>
                 </div>

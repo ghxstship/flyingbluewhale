@@ -79,10 +79,10 @@ export default async function ApiSettingsPage() {
       <div className="page-content max-w-3xl space-y-5">
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("console.settings.api.baseUrl", undefined, "Base URL")}</h3>
-          <pre className="mt-3 rounded-lg bg-[var(--bg-secondary)] p-3 font-mono text-xs">
+          <pre className="mt-3 rounded-lg bg-[var(--p-surface)] p-3 font-mono text-xs">
             https://your-domain.tld/api/v1
           </pre>
-          <p className="mt-2 text-xs text-[var(--text-muted)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t("console.settings.api.zodHintPrefix", undefined, "Every endpoint validates bodies with Zod and returns")}{" "}
             <code className="font-mono">{`{ ok, data }`}</code> {t("console.settings.api.zodHintOr", undefined, "or")}{" "}
             <code className="font-mono">{`{ ok: false, error }`}</code>.
@@ -94,7 +94,7 @@ export default async function ApiSettingsPage() {
             <h3 className="text-sm font-semibold">{t("console.settings.api.apiKeys", undefined, "API keys")}</h3>
             <CreateApiKeyForm />
           </div>
-          <table className="data-table mt-3 w-full text-sm">
+          <table className="ps-table mt-3 w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.settings.api.col.name", undefined, "Name")}</th>
@@ -108,7 +108,7 @@ export default async function ApiSettingsPage() {
             <tbody>
               {keys.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-6 text-center text-[var(--text-muted)]">
+                  <td colSpan={6} className="py-6 text-center text-[var(--p-text-2)]">
                     {t("console.settings.api.empty", undefined, "No API keys yet.")}
                   </td>
                 </tr>
@@ -119,7 +119,7 @@ export default async function ApiSettingsPage() {
                     <tr key={k.id}>
                       <td>{k.name}</td>
                       <td className="font-mono text-xs">{k.prefix}…</td>
-                      <td className="text-xs text-[var(--text-secondary)]">{(k.scopes ?? []).join(", ") || "—"}</td>
+                      <td className="text-xs text-[var(--p-text-2)]">{(k.scopes ?? []).join(", ") || "—"}</td>
                       <td className="font-mono text-xs">
                         {k.last_used_at
                           ? fmt.dateTime(k.last_used_at)
@@ -136,7 +136,7 @@ export default async function ApiSettingsPage() {
                         {!revoked && (
                           <form action={revokeApiKeyAction}>
                             <input type="hidden" name="id" value={k.id} />
-                            <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                            <button type="submit" className="text-xs text-[var(--p-danger)] hover:underline">
                               {t("console.settings.api.revoke", undefined, "Revoke")}
                             </button>
                           </form>
@@ -154,7 +154,7 @@ export default async function ApiSettingsPage() {
           <h3 className="text-sm font-semibold">
             {t("console.settings.api.endpoints.heading", undefined, "Endpoints")}
           </h3>
-          <table className="data-table mt-3 w-full text-sm">
+          <table className="ps-table mt-3 w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.settings.api.col.method", undefined, "Method")}</th>
@@ -169,7 +169,7 @@ export default async function ApiSettingsPage() {
                     <Badge variant="brand">{m}</Badge>
                   </td>
                   <td className="font-mono text-xs">{p}</td>
-                  <td className="text-[var(--text-secondary)]">{d}</td>
+                  <td className="text-[var(--p-text-2)]">{d}</td>
                 </tr>
               ))}
             </tbody>

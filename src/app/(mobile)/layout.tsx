@@ -38,7 +38,13 @@ export default async function MobileLayout({ children }: { children: React.React
        * the user's cosmic-marketing cookie pref.
        * data-platform="compvss" narrows the accent to brass amber.
        */}
-      <div data-theme="atlvs-product" data-platform="compvss" className="page-shell mobile-shell">
+      <div
+        data-ui="saas"
+        data-theme="atlvs-product"
+        data-product="compvss"
+        data-platform="compvss"
+        className="page-shell mobile-shell"
+      >
         <ConnectivityBanner />
         {/* ADR-0007: slim 44px chrome for mobile. Bottom tab bar still
             owns primary nav; this band hosts the app switcher + bell +

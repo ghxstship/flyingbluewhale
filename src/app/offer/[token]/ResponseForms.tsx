@@ -37,7 +37,7 @@ export function ResponseForms({
     return (
       <section className="surface space-y-3 p-6">
         <h3 className="text-sm font-semibold tracking-wider uppercase">Your Response</h3>
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-[var(--p-text-2)]">
           Review the letter above. When you&apos;re ready, accept with a typed signature or decline with a brief reason.
         </p>
         <div className="flex flex-wrap gap-2">
@@ -66,7 +66,7 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-sm font-semibold tracking-wider uppercase">Accept and Sign</h3>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--p-text-2)]">
             Type your full legal name to accept this engagement. Your typed signature, IP address, and timestamp are
             recorded as evidence of agreement.
           </p>
@@ -80,7 +80,7 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
           <TextInput
             name="signature"
             defaultValue={defaultName}
-            className="input-base focus-ring font-subdisplay text-2xl tracking-wide"
+            className="ps-input focus-ring font-subdisplay text-2xl tracking-wide"
           />
         </FormField>
       </FormShell>
@@ -97,7 +97,7 @@ function DeclineForm({ token, onCancel }: { token: string; onCancel: () => void 
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-sm font-semibold tracking-wider uppercase">Decline This Offer</h3>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--p-text-2)]">
             Share a brief reason so production can follow up if anything changes.
           </p>
         </div>

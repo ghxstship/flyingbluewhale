@@ -80,10 +80,10 @@ function TimelineBody({ items }: { items: ActivityItemType[] }) {
     <div className="space-y-5">
       {groups.map((group) => (
         <section key={group.label} aria-label={group.label}>
-          <h4 className="mb-2 text-[11px] font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+          <h4 className="mb-2 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
             {group.label}
           </h4>
-          <ol className="relative space-y-3 border-s border-[var(--border-color)] ps-2">
+          <ol className="relative space-y-3 border-s border-[var(--p-border)] ps-2">
             {group.items.map((item) => (
               <ActivityItem key={item.id} item={item} />
             ))}

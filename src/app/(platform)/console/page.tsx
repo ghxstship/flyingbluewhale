@@ -34,10 +34,10 @@ export default async function ConsoleDashboard() {
         />
         <div className="page-content">
           <div className="surface p-6">
-            <div className="text-xs font-semibold tracking-wider text-[var(--color-warning)] uppercase">
+            <div className="text-xs font-semibold tracking-wider text-[var(--p-warning)] uppercase">
               {t("console.dashboard.notConfigured", undefined, "Not configured")}
             </div>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+            <p className="mt-2 text-sm text-[var(--p-text-2)]">
               {t("console.dashboard.envMissingPrefix", undefined, "Supabase env vars are missing. Copy")}{" "}
               <code className="font-mono text-xs">.env.example</code> →{" "}
               <code className="font-mono text-xs">.env.local</code>{" "}
@@ -80,7 +80,7 @@ export default async function ConsoleDashboard() {
                 <Button href="/me/organizations">
                   {t("console.dashboard.noOrg.createOrg", undefined, "Create Organization")}
                 </Button>
-                <Link href="/me" className="text-xs text-[var(--org-primary)]">
+                <Link href="/me" className="text-xs text-[var(--p-accent)]">
                   {t("console.dashboard.noOrg.backToDashboard", undefined, "← Back To Dashboard")}
                 </Link>
               </div>
@@ -133,7 +133,7 @@ export default async function ConsoleDashboard() {
             <h2 className="text-base font-semibold">
               {t("console.dashboard.recentProjects", undefined, "Recent Projects")}
             </h2>
-            <Link href="/console/projects" className="text-xs font-medium text-[var(--org-primary)] hover:underline">
+            <Link href="/console/projects" className="text-xs font-medium text-[var(--p-accent)] hover:underline">
               {t("console.dashboard.viewAll", undefined, "View all →")}
             </Link>
           </div>

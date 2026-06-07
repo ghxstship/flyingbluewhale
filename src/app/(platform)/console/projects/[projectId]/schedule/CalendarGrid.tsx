@@ -50,11 +50,11 @@ export function CalendarGrid({
   const tasksByDay = bucketByDay(tasks, (task) => (task.due_at ? new Date(task.due_at) : null));
 
   return (
-    <div className="surface overflow-hidden rounded-md border border-[var(--border-color)]">
-      <div className="flex items-center justify-between border-b border-[var(--border-color)] p-3">
+    <div className="surface overflow-hidden rounded-md border border-[var(--p-border)]">
+      <div className="flex items-center justify-between border-b border-[var(--p-border)] p-3">
         <button
           type="button"
-          className="btn btn-sm"
+          className="ps-btn ps-btn--sm"
           onClick={() => setCursor(addMonths(cursor, -1))}
           aria-label={t("console.projects.schedule.calendar.previousMonth", undefined, "Previous Month")}
         >
@@ -63,14 +63,14 @@ export function CalendarGrid({
         <div className="text-sm font-semibold tracking-tight">{monthLabel}</div>
         <button
           type="button"
-          className="btn btn-sm"
+          className="ps-btn ps-btn--sm"
           onClick={() => setCursor(addMonths(cursor, 1))}
           aria-label={t("console.projects.schedule.calendar.nextMonth", undefined, "Next Month")}
         >
           →
         </button>
       </div>
-      <div className="grid grid-cols-7 border-b border-[var(--border-color)] bg-[var(--surface-inset)] text-[10px] font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+      <div className="grid grid-cols-7 border-b border-[var(--p-border)] bg-[var(--p-surface-2)] text-[10px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
         {[
           t("console.projects.schedule.calendar.weekday.sun", undefined, "Sun"),
           t("console.projects.schedule.calendar.weekday.mon", undefined, "Mon"),
@@ -95,11 +95,11 @@ export function CalendarGrid({
           return (
             <div
               key={key}
-              className={`min-h-[90px] border-e border-b border-[var(--border-color)] p-1.5 text-xs ${
-                inMonth ? "" : "bg-[var(--surface-inset)]/40 text-[var(--text-muted)]"
+              className={`min-h-[90px] border-e border-b border-[var(--p-border)] p-1.5 text-xs ${
+                inMonth ? "" : "bg-[var(--p-surface-2)]/40 text-[var(--p-text-2)]"
               }`}
             >
-              <div className={`mb-1 font-mono text-[10px] ${isToday ? "font-semibold text-[var(--org-primary)]" : ""}`}>
+              <div className={`mb-1 font-mono text-[10px] ${isToday ? "font-semibold text-[var(--p-accent)]" : ""}`}>
                 {d.getDate()}
               </div>
               <ul className="space-y-1">
@@ -107,7 +107,7 @@ export function CalendarGrid({
                   <li key={`e-${e.id}`}>
                     <Link
                       href={`/console/events/${e.id}`}
-                      className="block truncate rounded-sm bg-[var(--org-primary)]/15 px-1 py-0.5 text-[10px] hover:bg-[var(--org-primary)]/25"
+                      className="block truncate rounded-sm bg-[var(--p-accent)]/15 px-1 py-0.5 text-[10px] hover:bg-[var(--p-accent)]/25"
                       title={`${e.name} · ${e.status ?? t("console.projects.schedule.calendar.eventStatusDraft", undefined, "draft")}`}
                     >
                       {e.name}
@@ -118,7 +118,7 @@ export function CalendarGrid({
                   <li key={`t-${task.id}`}>
                     <Link
                       href={`/console/tasks/${task.id}`}
-                      className="block truncate rounded-sm bg-[var(--surface-inset)] px-1 py-0.5 text-[10px] hover:bg-[var(--surface)]"
+                      className="block truncate rounded-sm bg-[var(--p-surface-2)] px-1 py-0.5 text-[10px] hover:bg-[var(--p-surface)]"
                       title={`${task.title} · ${task.status ?? t("console.projects.schedule.calendar.taskStatusOpen", undefined, "open")}`}
                     >
                       ◇ {task.title}

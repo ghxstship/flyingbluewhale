@@ -27,9 +27,9 @@ export function PublishControls({
           <h2 className="text-sm font-semibold tracking-wide uppercase">
             {t("console.marketplace.postings.publish.visibility", undefined, "Visibility")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t("console.marketplace.postings.publish.publicUrl", undefined, "Public URL")}{" "}
-            <a className="font-mono text-[var(--org-primary)]" href={`/marketplace/gigs/${publicSlug}`}>
+            <a className="font-mono text-[var(--p-accent)]" href={`/marketplace/gigs/${publicSlug}`}>
               /marketplace/gigs/{publicSlug}
             </a>
           </p>

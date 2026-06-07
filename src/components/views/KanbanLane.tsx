@@ -49,20 +49,20 @@ export function KanbanLane({
   const padding = density === "compact" ? "p-2" : "p-3";
   const isEmpty = count === 0;
 
-  const dropHighlight = isOver && !locked ? "ring-2 ring-[var(--org-primary)]" : "";
+  const dropHighlight = isOver && !locked ? "ring-2 ring-[var(--p-accent)]" : "";
   const lockedClass = locked ? "opacity-70" : "";
 
   return (
     <section
       aria-label={`${title} lane, ${count} ${count === 1 ? "card" : "cards"}${locked ? ", locked" : ""}`}
-      className={`flex w-72 shrink-0 flex-col rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] ${lockedClass}`}
+      className={`flex w-72 shrink-0 flex-col rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] ${lockedClass}`}
     >
-      <header className="sticky top-0 z-10 flex items-center justify-between gap-2 rounded-t-md border-b border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-2 backdrop-blur">
+      <header className="sticky top-0 z-10 flex items-center justify-between gap-2 rounded-t-md border-b border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-2 backdrop-blur">
         <div className="flex min-w-0 items-center gap-2">
           <Badge variant={variant} className="text-[10px] tracking-wide uppercase">
             {title}
           </Badge>
-          <span className="font-mono text-xs text-[var(--text-muted)] tabular-nums">{count}</span>
+          <span className="font-mono text-xs text-[var(--p-text-2)] tabular-nums">{count}</span>
         </div>
         {typeof wipLimit === "number" && (
           <Badge
@@ -80,7 +80,7 @@ export function KanbanLane({
         aria-dropeffect={locked ? "none" : "move"}
       >
         {isEmpty ? (
-          <div className="flex min-h-[6rem] items-center justify-center rounded-md border-2 border-dashed border-[var(--border-color)] p-4 text-center text-xs text-[var(--text-muted)]">
+          <div className="flex min-h-[6rem] items-center justify-center rounded-md border-2 border-dashed border-[var(--p-border)] p-4 text-center text-xs text-[var(--p-text-2)]">
             {locked ? "Locked" : "Drop here"}
           </div>
         ) : (

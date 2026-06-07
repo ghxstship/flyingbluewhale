@@ -8,8 +8,8 @@ import { addResponse } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 export default async function Page({ params }: { params: Promise<{ reqId: string }> }) {
   const { reqId } = await params;
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               {t("console.procurement.requisitions.leveling.new.vendorLabel", undefined, "Vendor")}
-              <span className="ms-0.5 text-[var(--color-error)]">*</span>
+              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
             </span>
             <select name="vendor_id" required className={INPUT}>
               <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>

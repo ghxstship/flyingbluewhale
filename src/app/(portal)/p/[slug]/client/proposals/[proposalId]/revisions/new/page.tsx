@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   return (
     <div className="mx-auto max-w-2xl space-y-4 p-6">
       <header className="surface p-5">
-        <div className="eyebrow text-xs text-[var(--text-muted)]">
+        <div className="eyebrow text-xs text-[var(--p-text-2)]">
           {t("p.client.proposals.revisions.new.eyebrow", undefined, "Open revision round")}
         </div>
         <h1 className="text-lg font-semibold">
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
         <input type="hidden" name="slug" value={slug} />
         <input type="hidden" name="proposalId" value={proposalId} />
         <FormField label={t("p.client.proposals.revisions.new.targetLabel", undefined, "Round Target")}>
-          <select name="targetKind" defaultValue="proposal" className="input-base w-full">
+          <select name="targetKind" defaultValue="proposal" className="ps-input w-full">
             <option value="proposal">
               {t("p.client.proposals.revisions.new.target.proposal", undefined, "Proposal-wide")}
             </option>
@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
               "e.g. Greenery palette mockups",
             )}
             required
-            className="input-base w-full"
+            className="ps-input w-full"
           />
         </FormField>
         <FormField
@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
               undefined,
               "Reviewer guidance: how to choose, what to ignore, deadline…",
             )}
-            className="input-base w-full"
+            className="ps-input w-full"
           />
         </FormField>
       </FormShell>

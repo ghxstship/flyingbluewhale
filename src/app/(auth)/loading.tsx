@@ -1,6 +1,6 @@
 /**
  * Streaming loading state for the auth shell. Renders a centered form
- * skeleton so cold navigation to /login, /signup, /reset-password feels
+ * ps-skel so cold navigation to /login, /signup, /reset-password feels
  * branded instead of blank-white during the first server flush.
  */
 import { PageSkeleton } from "@/components/Shell";

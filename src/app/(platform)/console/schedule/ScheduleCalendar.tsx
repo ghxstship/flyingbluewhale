@@ -67,18 +67,18 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
       height={500}
       actions={
         <div className="flex items-center gap-2">
-          <div className="inline-flex overflow-hidden rounded-md border border-[var(--border-color)]">
+          <div className="inline-flex overflow-hidden rounded-md border border-[var(--p-border)]">
             <button
               type="button"
               onClick={() => setView("month")}
-              className={`px-2 py-1 text-xs ${view === "month" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+              className={`px-2 py-1 text-xs ${view === "month" ? "bg-[var(--p-surface-2)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             >
               {t("console.schedule.calendar.viewMonth", undefined, "Month")}
             </button>
             <button
               type="button"
               onClick={() => setView("week")}
-              className={`px-2 py-1 text-xs ${view === "week" ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+              className={`px-2 py-1 text-xs ${view === "week" ? "bg-[var(--p-surface-2)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             >
               {t("console.schedule.calendar.viewWeek", undefined, "Week")}
             </button>
@@ -87,7 +87,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
             type="button"
             onClick={() => shift(-1)}
             aria-label={t("common.previous", undefined, "Previous")}
-            className="rounded p-1 hover:bg-[var(--surface-inset)]"
+            className="rounded p-1 hover:bg-[var(--p-surface-2)]"
           >
             <ChevronLeft size={14} />
           </button>
@@ -98,7 +98,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
             type="button"
             onClick={() => shift(1)}
             aria-label={t("common.next", undefined, "Next")}
-            className="rounded p-1 hover:bg-[var(--surface-inset)]"
+            className="rounded p-1 hover:bg-[var(--p-surface-2)]"
           >
             <ChevronRight size={14} />
           </button>
@@ -107,11 +107,11 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
     >
       <div className="flex flex-col">
         {/* Weekday headers */}
-        <div className="grid grid-cols-7 border-b border-[var(--border-color)]">
+        <div className="grid grid-cols-7 border-b border-[var(--p-border)]">
           {WEEKDAYS.map((d) => (
             <div
               key={d}
-              className="px-2 py-1 text-[10px] font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase"
+              className="px-2 py-1 text-[10px] font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase"
             >
               {t(`console.schedule.calendar.weekday.${d.toLowerCase()}`, undefined, d)}
             </div>
@@ -126,24 +126,24 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
             return (
               <div
                 key={idx}
-                className={`min-h-[80px] border-e border-b border-[var(--border-color)] p-1.5 ${
-                  inMonth ? "" : "bg-[var(--surface-inset)]/40"
+                className={`min-h-[80px] border-e border-b border-[var(--p-border)] p-1.5 ${
+                  inMonth ? "" : "bg-[var(--p-surface-2)]/40"
                 }`}
               >
                 <div className="mb-1 flex items-center justify-between">
                   <span
                     className={`inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-medium ${
                       today
-                        ? "bg-[var(--org-primary)] text-white"
+                        ? "bg-[var(--p-accent)] text-white"
                         : inMonth
-                          ? "text-[var(--text-primary)]"
-                          : "text-[var(--text-muted)]"
+                          ? "text-[var(--p-text-1)]"
+                          : "text-[var(--p-text-2)]"
                     }`}
                   >
                     {day.getDate()}
                   </span>
                   {dayEvents.length > 0 && (
-                    <span className="font-mono text-[9px] text-[var(--text-muted)]">{dayEvents.length}</span>
+                    <span className="font-mono text-[9px] text-[var(--p-text-2)]">{dayEvents.length}</span>
                   )}
                 </div>
                 <div className="flex flex-col gap-0.5">
@@ -158,7 +158,7 @@ export function ScheduleCalendar({ events }: { events: CalendarEvent[] }) {
                     </Link>
                   ))}
                   {dayEvents.length > 3 && (
-                    <span className="px-1 text-[9px] text-[var(--text-muted)]">
+                    <span className="px-1 text-[9px] text-[var(--p-text-2)]">
                       {t(
                         "console.schedule.calendar.moreEvents",
                         { count: dayEvents.length - 3 },
@@ -233,14 +233,14 @@ function weekLabel(start: Date, end: Date): string {
 function eventTone(status: string): string {
   switch (status) {
     case "confirmed":
-      return "bg-[color-mix(in_srgb,var(--color-success)_15%,transparent)] text-[var(--color-success)] hover:bg-[color-mix(in_srgb,var(--color-success)_25%,transparent)]";
+      return "bg-[color-mix(in_srgb,var(--p-success)_15%,transparent)] text-[var(--p-success)] hover:bg-[color-mix(in_srgb,var(--p-success)_25%,transparent)]";
     case "live":
-      return "bg-[var(--org-primary)]/15 text-[var(--org-primary)] hover:bg-[var(--org-primary)]/25";
+      return "bg-[var(--p-accent)]/15 text-[var(--p-accent)] hover:bg-[var(--p-accent)]/25";
     case "completed":
-      return "bg-[var(--surface-inset)] text-[var(--text-muted)] hover:bg-[var(--surface-raised)]";
+      return "bg-[var(--p-surface-2)] text-[var(--p-text-2)] hover:bg-[var(--p-surface)]";
     case "cancelled":
-      return "bg-[color:var(--color-error)]/10 text-[color:var(--color-error)] line-through hover:bg-[color:var(--color-error)]/20";
+      return "bg-[color:var(--p-danger)]/10 text-[color:var(--p-danger)] line-through hover:bg-[color:var(--p-danger)]/20";
     default:
-      return "bg-[color-mix(in_srgb,var(--color-warning)_15%,transparent)] text-[var(--color-warning)] hover:bg-[color-mix(in_srgb,var(--color-warning)_25%,transparent)]";
+      return "bg-[color-mix(in_srgb,var(--p-warning)_15%,transparent)] text-[var(--p-warning)] hover:bg-[color-mix(in_srgb,var(--p-warning)_25%,transparent)]";
   }
 }

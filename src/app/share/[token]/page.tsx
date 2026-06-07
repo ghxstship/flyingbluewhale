@@ -59,7 +59,7 @@ function NotValid({ message }: { message: string }) {
     <main className="mx-auto flex min-h-[60vh] max-w-md items-center justify-center px-6 py-16">
       <div className="surface w-full p-6 text-center">
         <h1 className="text-lg font-semibold tracking-tight">Link not valid</h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">{message}</p>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">{message}</p>
       </div>
     </main>
   );
@@ -88,13 +88,13 @@ function SharedResourceCard({
   return (
     <main className="mx-auto flex min-h-[60vh] max-w-md items-center justify-center px-6 py-16">
       <div className="surface w-full p-6">
-        <p className="text-xs tracking-wide text-[var(--text-muted)] uppercase">{pretty}</p>
+        <p className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">{pretty}</p>
         <h1 className="mt-1 text-lg font-semibold tracking-tight">{label ?? "Shared with you"}</h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           This {pretty.toLowerCase()} has been shared with you. The interactive view for this resource type is coming
           soon.
         </p>
-        <dl className="mt-4 space-y-1 text-xs text-[var(--text-muted)]">
+        <dl className="mt-4 space-y-1 text-xs text-[var(--p-text-2)]">
           <div>
             <dt className="inline font-medium">Resource:</dt> <dd className="inline font-mono">{table}</dd>
           </div>

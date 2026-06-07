@@ -50,14 +50,14 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.meetings.edit.fields.description", undefined, "Description")}
             </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
               rows={5}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input
@@ -75,10 +75,10 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
             required
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.meetings.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="draft">{t("console.meetings.edit.status.draft", undefined, "draft")}</option>
               <option value="scheduled">{t("console.meetings.edit.status.scheduled", undefined, "scheduled")}</option>
               <option value="live">{t("console.meetings.edit.status.live", undefined, "live")}</option>

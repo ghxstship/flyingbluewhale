@@ -81,13 +81,13 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
         }
       />
       <div className="page-content max-w-3xl space-y-4">
-        {b.description && <div className="surface p-4 text-sm text-[var(--text-secondary)]">{b.description}</div>}
+        {b.description && <div className="surface p-4 text-sm text-[var(--p-text-2)]">{b.description}</div>}
 
         <section className="surface p-4">
           <h2 className="text-sm font-semibold">Award This Badge</h2>
           <form action={awardBadge} className="mt-3 space-y-2">
             <input type="hidden" name="badgeId" value={b.id} />
-            <select name="user_id" required className="input-base w-full">
+            <select name="user_id" required className="ps-input w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}
@@ -99,9 +99,9 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
               rows={2}
               maxLength={300}
               placeholder="Why this person earned it · optional"
-              className="input-base w-full"
+              className="ps-input w-full"
             />
-            <button type="submit" className="btn btn-primary btn-sm">
+            <button type="submit" className="ps-btn ps-btn--sm">
               Award
             </button>
           </form>
@@ -119,9 +119,9 @@ export default async function Page({ params }: { params: Promise<{ badgeId: stri
                 <li key={a.id} className="flex items-start justify-between text-xs">
                   <div>
                     <div className="font-semibold">{memberMap.get(a.user_id) ?? "Unknown"}</div>
-                    {a.note && <p className="text-[var(--text-secondary)]">{a.note}</p>}
+                    {a.note && <p className="text-[var(--p-text-2)]">{a.note}</p>}
                   </div>
-                  <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                  <span className="font-mono text-[10px] text-[var(--p-text-2)]">
                     {new Date(a.awarded_at).toLocaleDateString()}
                   </span>
                 </li>

@@ -59,7 +59,7 @@ export default async function GvtewayPage() {
         <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">
           {t("marketing.pages.solutions.gvteway.hero.title")}
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.solutions.gvteway.hero.body")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -75,7 +75,7 @@ export default async function GvtewayPage() {
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           {t("marketing.pages.solutions.gvteway.personas.title")}
         </h2>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.solutions.gvteway.personas.body")}
         </p>
         <div className="mt-8">
@@ -151,35 +151,35 @@ export default async function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-10 md:grid-cols-2 md:items-start">
           <div className="surface p-8">
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
               <Share2 size={14} /> {t("marketing.pages.solutions.gvteway.features.proposals.eyebrow")}
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">
               {t("marketing.pages.solutions.gvteway.features.proposals.title")}
             </h3>
-            <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            <p className="mt-3 text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.solutions.gvteway.features.proposals.body")}
             </p>
             <Link
               href="/features/proposals"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-accent)]"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--p-accent-text)]"
             >
               {t("marketing.pages.solutions.gvteway.features.proposals.link")}
             </Link>
           </div>
           <div className="surface p-8">
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
               <BookOpen size={14} /> {t("marketing.pages.solutions.gvteway.features.kbyg.eyebrow")}
             </div>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight">
               {t("marketing.pages.solutions.gvteway.features.kbyg.title")}
             </h3>
-            <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            <p className="mt-3 text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.solutions.gvteway.features.kbyg.body")}
             </p>
             <Link
               href="/features/guides"
-              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--org-accent)]"
+              className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-[var(--p-accent-text)]"
             >
               {t("marketing.pages.solutions.gvteway.features.kbyg.link")}
             </Link>
@@ -191,13 +191,13 @@ export default async function GvtewayPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-center">
           <div>
-            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
+            <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
               {t("marketing.pages.solutions.gvteway.security.eyebrow")}
             </div>
             <h3 className="mt-3 text-3xl font-semibold tracking-tight">
               {t("marketing.pages.solutions.gvteway.security.title")}
             </h3>
-            <p className="mt-4 text-sm text-[var(--text-secondary)]">
+            <p className="mt-4 text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.solutions.gvteway.security.body")}
             </p>
           </div>
@@ -211,7 +211,7 @@ export default async function GvtewayPage() {
               t("marketing.pages.solutions.gvteway.security.items.eSign"),
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
-                <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
+                <CheckCircle2 size={16} className="mt-0.5 text-[var(--p-accent)]" />
                 <span>{x}</span>
               </li>
             ))}

@@ -106,16 +106,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.delegation.meetings.schedule.title", undefined, "Schedule")}</h3>
           {meetings.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("p.delegation.meetings.empty", undefined, "No meetings scheduled.")}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {meetings.map((m) => (
                 <li key={m.id} className="flex items-center justify-between py-2 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{m.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmt(m.starts_at)}
                       {m.location?.name ? ` · ${m.location.name}` : ""}
                     </div>

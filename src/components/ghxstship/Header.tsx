@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/Button";
 
 /**
  * GHXSTSHIP marketing header. Same primitives as the ATLVS marketing
- * header (DropdownMenu, <Button>, .btn classes) so hover/active behavior
+ * header (DropdownMenu, <Button>, .ps-btn classes) so hover/active behavior
  * stays in lockstep — only the brand mark, nav groups, and accent color
  * differ.
  */
@@ -71,7 +71,7 @@ const ALL_GROUPS = [SERVICES, INDUSTRIES, STUDIO];
 function DesktopGroup({ group }: { group: NavGroup }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-1 rounded px-3 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+      <DropdownMenuTrigger className="flex items-center gap-1 rounded px-3 py-2 text-sm font-medium text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
         {group.label}
         <ChevronDown className="h-3.5 w-3.5" aria-hidden />
       </DropdownMenuTrigger>
@@ -82,7 +82,7 @@ function DesktopGroup({ group }: { group: NavGroup }) {
           <DropdownMenuItem key={item.href} asChild>
             <Link href={item.href} className="block w-full">
               <div className="text-sm font-medium">{item.label}</div>
-              {item.description && <div className="mt-0.5 text-xs text-[var(--text-muted)]">{item.description}</div>}
+              {item.description && <div className="mt-0.5 text-xs text-[var(--p-text-2)]">{item.description}</div>}
             </Link>
           </DropdownMenuItem>
         ))}
@@ -95,15 +95,15 @@ export function GhxstshipHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--border-color)] bg-[var(--bg)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg)]/85">
+    <header className="sticky top-0 z-40 border-b border-[var(--p-border)] bg-[var(--p-bg)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--p-bg)]/85">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3">
         <Link
           href="/ghxstship"
           className="flex items-center gap-2 text-sm font-semibold tracking-[0.18em] uppercase"
           aria-label="GHXSTSHIP Industries — home"
         >
-          <span aria-hidden className="inline-block h-2.5 w-2.5" style={{ background: "var(--org-accent)" }} />G H X S T
-          S H I P
+          <span aria-hidden className="inline-block h-2.5 w-2.5" style={{ background: "var(--p-accent-text)" }} />G H X
+          S T S H I P
         </Link>
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {ALL_GROUPS.map((g) => (
@@ -111,7 +111,7 @@ export function GhxstshipHeader() {
           ))}
           <Link
             href="/ghxstship/pricing"
-            className="rounded px-3 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            className="rounded px-3 py-2 text-sm font-medium text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           >
             Pricing
           </Link>
@@ -135,11 +135,11 @@ export function GhxstshipHeader() {
         </button>
       </div>
       {open && (
-        <div className="border-t border-[var(--border-color)] bg-[var(--bg)] md:hidden">
+        <div className="border-t border-[var(--p-border)] bg-[var(--p-bg)] md:hidden">
           <div className="mx-auto max-w-6xl space-y-6 px-6 py-6">
             {ALL_GROUPS.map((g) => (
               <div key={g.label}>
-                <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                   {g.label}
                 </div>
                 <ul className="mt-3 space-y-2">
@@ -148,7 +148,7 @@ export function GhxstshipHeader() {
                       <Link
                         href={item.href}
                         onClick={() => setOpen(false)}
-                        className="block text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                        className="block text-sm text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
                       >
                         {item.label}
                       </Link>

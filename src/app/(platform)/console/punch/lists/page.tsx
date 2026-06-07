@@ -170,7 +170,7 @@ export default async function Page() {
             {
               key: "project",
               header: t("console.punch.lists.col.project", undefined, "Project"),
-              render: (r) => r.project_name ?? <span className="text-[var(--text-muted)]">—</span>,
+              render: (r) => r.project_name ?? <span className="text-[var(--p-text-2)]">—</span>,
               accessor: (r) => r.project_name ?? "",
               filterable: true,
               groupable: true,
@@ -182,7 +182,7 @@ export default async function Page() {
                 r.category ? (
                   <Badge variant="muted">{r.category}</Badge>
                 ) : (
-                  <span className="text-[var(--text-muted)]">—</span>
+                  <span className="text-[var(--p-text-2)]">—</span>
                 ),
               accessor: (r) => r.category ?? "",
               filterable: true,
@@ -194,7 +194,7 @@ export default async function Page() {
               render: (r) => (
                 <span className="font-mono text-xs">
                   {r.open_count}/{r.item_count}{" "}
-                  <span className="text-[var(--text-muted)]">
+                  <span className="text-[var(--p-text-2)]">
                     {t("console.punch.lists.openSuffix", undefined, "open")}
                   </span>
                 </span>
@@ -250,7 +250,7 @@ export default async function Page() {
 
         <section className="surface p-5">
           <h2 className="text-sm font-semibold">{t("console.punch.lists.createHeading", undefined, "Create List")}</h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.punch.lists.createHelp",
               undefined,
@@ -266,9 +266,9 @@ export default async function Page() {
               required
               maxLength={160}
               placeholder={t("console.punch.lists.namePlaceholder", undefined, "MMW Day 1 Punch")}
-              className="input-base sm:col-span-2"
+              className="ps-input sm:col-span-2"
             />
-            <select name="project_id" required defaultValue="" className="input-base sm:col-span-2">
+            <select name="project_id" required defaultValue="" className="ps-input sm:col-span-2">
               <option value="" disabled>
                 {t("console.punch.lists.projectPlaceholder", undefined, "— Project —")}
               </option>
@@ -282,7 +282,7 @@ export default async function Page() {
               name="category"
               maxLength={80}
               placeholder={t("console.punch.lists.categoryPlaceholder", undefined, "Category · Optional")}
-              className="input-base sm:col-span-1"
+              className="ps-input sm:col-span-1"
             />
             <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
               {t("console.punch.lists.createButton", undefined, "Create List")}

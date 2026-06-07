@@ -62,14 +62,14 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
         <div className="mb-3 flex items-center justify-end gap-1 text-xs">
           <a
             href="?view=list"
-            className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "list" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded border border-[var(--p-border)] px-2 py-1 ${view === "list" ? "bg-[var(--p-surface)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             aria-current={view === "list" ? "true" : undefined}
           >
             {t("console.operations.incidents.viewList", undefined, "List")}
           </a>
           <a
             href="?view=kanban"
-            className={`rounded border border-[var(--border-color)] px-2 py-1 ${view === "kanban" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded border border-[var(--p-border)] px-2 py-1 ${view === "kanban" ? "bg-[var(--p-surface)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             aria-current={view === "kanban" ? "true" : undefined}
           >
             {t("console.operations.incidents.viewKanban", undefined, "Kanban")}
@@ -130,7 +130,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
                 key: "location",
                 header: t("console.operations.incidents.columns.location", undefined, "Location"),
                 render: (r) => r.location ?? "—",
-                className: "text-[var(--text-muted)]",
+                className: "text-[var(--p-text-2)]",
                 accessor: (r) => r.location ?? null,
               },
               {

@@ -61,13 +61,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       ) : (
         <dl className="grid gap-3 sm:grid-cols-2">
           <div className="surface p-5">
-            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            <dt className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               {t("p.sponsor.reporting.tickets_issued", undefined, "Tickets issued")}
             </dt>
             <dd className="mt-2 text-3xl font-semibold">{fmt.number(tickets)}</dd>
           </div>
           <div className="surface p-5">
-            <dt className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            <dt className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               {t("p.sponsor.reporting.scans_recorded", undefined, "Scans recorded")}
             </dt>
             <dd className="mt-2 text-3xl font-semibold">{fmt.number(scans)}</dd>

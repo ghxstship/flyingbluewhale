@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <form action={toggleActive}>
               <input type="hidden" name="id" value={a.id} />
               <input type="hidden" name="next" value={a.active ? "false" : "true"} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {a.active
                   ? t("console.settings.accountManagers.detail.deactivate", undefined, "Deactivate")
                   : t("console.settings.accountManagers.detail.reactivate", undefined, "Reactivate")}
@@ -110,19 +110,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-2xl space-y-3">
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.portalUserLabel", undefined, "Portal user")}
             </div>
             <div className="mt-1 font-mono">{portal?.email ?? a.portal_user_id}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.managerLabel", undefined, "Manager")}
             </div>
             <div className="mt-1 font-mono">{manager?.email ?? a.manager_user_id}</div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.chatRoomLabel", undefined, "Chat room")}
             </div>
             <div className="mt-1 font-mono">
@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.accountManagers.detail.createdLabel", undefined, "Created")}
             </div>
             <div className="mt-1 font-mono">{new Date(a.created_at).toLocaleString()}</div>

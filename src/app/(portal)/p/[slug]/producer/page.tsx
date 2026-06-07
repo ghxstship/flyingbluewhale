@@ -26,7 +26,7 @@ export default async function ProducerHome({ params }: { params: Promise<{ slug:
   const tile = (href: string, label: string, desc: string) => (
     <Link key={href} href={href} className="surface hover-lift block p-4">
       <div className="text-sm font-semibold">{label}</div>
-      <div className="mt-1 text-xs text-[var(--text-muted)]">{desc}</div>
+      <div className="mt-1 text-xs text-[var(--p-text-2)]">{desc}</div>
     </Link>
   );
 

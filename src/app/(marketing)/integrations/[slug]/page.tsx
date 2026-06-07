@@ -54,7 +54,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">Integration · {i.category}</div>
         <h1 className="hed-2xl mt-4">{i.name}.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{i.long}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{i.long}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -68,7 +68,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
         <ul className="mt-6 space-y-3 text-sm">
           {i.capabilities.map((c) => (
             <li key={c} className="flex items-start gap-2">
-              <span className="status-dot status-dot-success mt-2" />
+              <span className="ps-dot ps-dot ps-dot--ok mt-2" />
               <span>{c}</span>
             </li>
           ))}
@@ -78,7 +78,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-6">
           <div className="eyebrow">Technical Anchor</div>
-          <p className="mt-3 font-mono text-xs leading-relaxed text-[var(--text-secondary)]">{i.technicalAnchor}</p>
+          <p className="mt-3 font-mono text-xs leading-relaxed text-[var(--p-text-2)]">{i.technicalAnchor}</p>
         </div>
       </section>
 
@@ -96,7 +96,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
                   className="surface hover-lift group flex items-center justify-between p-4 text-sm"
                 >
                   <span className="font-medium">{m.name}</span>
-                  <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+                  <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
                 </Link>
               ))}
           </div>
@@ -115,7 +115,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
               className="surface hover-lift group flex items-center justify-between p-4 text-sm"
             >
               <span className="font-medium">{s.name}</span>
-              <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+              <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
             </Link>
           ))}
         </div>

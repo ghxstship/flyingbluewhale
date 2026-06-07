@@ -103,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {activities.length > 0 && (
               <a
                 href={`/console/schedule/baselines/${baseline.id}/gantt`}
-                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+                className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
               >
                 {t("console.schedule.baselines.detail.openGantt", undefined, "Open Gantt")}
               </a>
@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
           <Badge variant={STATE_TONE[baseline.baseline_state]}>{toTitle(baseline.baseline_state)}</Badge>
           {baseline.imported_from && (
-            <span className="font-mono text-[var(--text-muted)]">
+            <span className="font-mono text-[var(--p-text-2)]">
               {t(
                 "console.schedule.baselines.detail.importedFrom",
                 { source: baseline.imported_from },
@@ -127,7 +127,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           )}
           {baseline.snapshot_at && (
-            <span className="font-mono text-[var(--text-muted)]">
+            <span className="font-mono text-[var(--p-text-2)]">
               {t("console.schedule.baselines.detail.snapshotLabel", undefined, "Snapshot")} ·{" "}
               {fmt.dateParts(baseline.snapshot_at, { year: "numeric", month: "short", day: "numeric" })}
             </span>
@@ -181,7 +181,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <h2 className="text-sm font-semibold">
               {t("console.schedule.baselines.detail.import.title", undefined, "Import from P6 / MSP / Asta")}
             </h2>
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.schedule.baselines.detail.import.description",
                 undefined,

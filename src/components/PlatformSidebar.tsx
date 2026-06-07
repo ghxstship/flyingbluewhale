@@ -162,7 +162,7 @@ export function PlatformSidebar({
       // because its width swallows the entire phone viewport. The
       // MobileNavDrawer (top bar hamburger) replaces it for `< md`. See
       // (platform)/layout.tsx for the drawer mount.
-      className="relative hidden shrink-0 overflow-hidden border-e border-[var(--border-color)] bg-[var(--bg-secondary)] transition-[width] duration-[var(--motion-fast)] ease-[var(--ease-hover)] md:block"
+      className="relative hidden shrink-0 overflow-hidden border-e border-[var(--p-border)] bg-[var(--p-surface)] transition-[width] duration-[var(--motion-fast)] ease-[var(--ease-hover)] md:block"
       style={{ width: `${currentWidth}px` }}
     >
       <div className="flex h-full min-h-0 flex-col">
@@ -173,7 +173,7 @@ export function PlatformSidebar({
             workspace tile is the orientation anchor and gets the full
             56px-wide header to itself; the collapse toggle relocates to
             the rail footer (Linear / Notion convention). */}
-        <div className="flex min-h-14 items-center gap-1 border-b border-[var(--border-color)] px-2 py-2">
+        <div className="flex min-h-14 items-center gap-1 border-b border-[var(--p-border)] px-2 py-2">
           <div className={collapsed ? "flex w-full justify-center" : "min-w-0 flex-1"}>
             <WorkspaceSwitcher collapsed={collapsed} initialName={workspaceName} />
           </div>
@@ -185,7 +185,7 @@ export function PlatformSidebar({
                   setCollapsed(true);
                   void setPrefs({ sidebar_collapsed: true });
                 }}
-                className="shrink-0 rounded p-1 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+                className="shrink-0 rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
                 aria-label="Collapse sidebar"
               >
                 <PanelLeftClose size={14} />
@@ -196,10 +196,10 @@ export function PlatformSidebar({
 
         {/* Search */}
         {!collapsed && (
-          <div className="border-b border-[var(--border-color)] px-3 py-2">
+          <div className="border-b border-[var(--p-border)] px-3 py-2">
             {showSearch ? (
-              <div className="flex items-center gap-2 rounded-md bg-[var(--surface)] px-2 py-1">
-                <Search size={12} className="text-[var(--text-muted)]" aria-hidden="true" />
+              <div className="flex items-center gap-2 rounded-md bg-[var(--p-surface)] px-2 py-1">
+                <Search size={12} className="text-[var(--p-text-2)]" aria-hidden="true" />
                 <input
                   ref={searchRef}
                   type="search"
@@ -224,7 +224,7 @@ export function PlatformSidebar({
                   setShowSearch(true);
                   setTimeout(() => searchRef.current?.focus(), 50);
                 }}
-                className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1 text-xs text-[var(--text-muted)] hover:bg-[var(--surface)]"
+                className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface)]"
                 aria-label="Open sidebar search"
               >
                 <span className="flex items-center gap-2">
@@ -281,7 +281,7 @@ export function PlatformSidebar({
             );
           })}
           {query && filtered.length === 0 && (
-            <div className="px-2 py-4 text-center text-xs text-[var(--text-muted)]">No results</div>
+            <div className="px-2 py-4 text-center text-xs text-[var(--p-text-2)]">No results</div>
           )}
         </nav>
 
@@ -299,14 +299,14 @@ export function PlatformSidebar({
                 setCollapsed(false);
                 void setPrefs({ sidebar_collapsed: false });
               }}
-              className="flex w-full items-center justify-center border-t border-[var(--border-color)] py-3 text-[var(--text-muted)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+              className="flex w-full items-center justify-center border-t border-[var(--p-border)] py-3 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
               aria-label="Expand sidebar"
             >
               <PanelLeftOpen size={14} />
             </button>
           </Hint>
         ) : (
-          <div className="flex items-center justify-between gap-2 border-t border-[var(--border-color)] px-3 py-2.5">
+          <div className="flex items-center justify-between gap-2 border-t border-[var(--p-border)] px-3 py-2.5">
             {/* Canonical SaaS brand mark — accent tile + white skull +
                 name + product subtitle, mirrors ui_kits/atlvs/
                 dashboard.html .brandrow. Tile uses --p-accent (the
@@ -318,7 +318,7 @@ export function PlatformSidebar({
               <span
                 aria-hidden
                 className="grid h-7 w-7 flex-none place-items-center rounded-[7px]"
-                style={{ background: "var(--p-accent, var(--org-primary))" }}
+                style={{ background: "var(--p-accent, var(--p-accent))" }}
               >
                 {/* Kit v3 swap: the ATLVS product mark is the 8-point
                     Waypoint star (atlvs-mark-white.svg), not the GHXSTSHIP
@@ -328,10 +328,10 @@ export function PlatformSidebar({
                 <Image src="/brand/atlvs-mark-white.svg" alt="" width={18} height={18} />
               </span>
               <div className="min-w-0 leading-tight">
-                <div className="truncate text-sm font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--text-primary))]">
+                <div className="truncate text-sm font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--p-text-1))]">
                   {BRAND.products.console.name}
                 </div>
-                <div className="truncate font-mono text-[8px] tracking-[0.1em] text-[var(--p-text-3,var(--text-muted))] uppercase">
+                <div className="truncate font-mono text-[8px] tracking-[0.1em] text-[var(--p-text-3,var(--p-text-2))] uppercase">
                   {BRAND.products.console.subtitle}
                 </div>
               </div>
@@ -351,7 +351,7 @@ export function PlatformSidebar({
           role="separator"
           aria-orientation="vertical"
           aria-label="Resize sidebar"
-          className="absolute inset-y-0 end-0 w-1 cursor-col-resize hover:bg-[var(--org-primary)]/30 active:bg-[var(--org-primary)]"
+          className="absolute inset-y-0 end-0 w-1 cursor-col-resize hover:bg-[var(--p-accent)]/30 active:bg-[var(--p-accent)]"
           onPointerDown={onResizeStart}
           onPointerMove={onResizeMove}
           onPointerUp={onResizeEnd}
@@ -404,7 +404,7 @@ function SidebarGroup({
             onClick={() => onToggleGroup(label)}
             aria-expanded={isOpen}
             aria-controls={`${headerId}-items`}
-            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--text-muted)] transition-colors hover:bg-[var(--surface)] hover:text-[var(--text-secondary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+            className="group flex w-full items-center justify-between gap-1 rounded px-2 py-1 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] transition-colors hover:bg-[var(--p-surface)] hover:text-[var(--p-text-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
           >
             <span className="truncate">{groupLabelDisplay}</span>
             <ChevronDown
@@ -414,7 +414,7 @@ function SidebarGroup({
             />
           </button>
         ) : (
-          <div id={headerId} className="px-2 text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">
+          <div id={headerId} className="px-2 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">
             {groupLabelDisplay}
           </div>
         ))}
@@ -424,7 +424,7 @@ function SidebarGroup({
             {sections.map((s) => (
               <div key={s.label}>
                 {!collapsed && (
-                  <div className="mt-1.5 mb-0.5 px-2 text-[10px] font-medium tracking-[0.14em] text-[var(--text-muted)]/70 uppercase">
+                  <div className="mt-1.5 mb-0.5 px-2 text-[10px] font-medium tracking-[0.14em] text-[var(--p-text-2)]/70 uppercase">
                     {t(navGroupKey(s), undefined, s.label)}
                   </div>
                 )}
@@ -484,17 +484,14 @@ function SidebarItems({
             // Prefetch off — see SidebarGroup notes on RSC fetch storms.
             prefetch={false}
             aria-current={active ? "page" : undefined}
-            className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
+            className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
               active
-                ? "bg-[var(--surface)] font-medium text-[var(--text-primary)]"
-                : "text-[var(--text-secondary)] hover:bg-[var(--surface)] hover:text-[var(--text-primary)]"
+                ? "bg-[var(--p-surface)] font-medium text-[var(--p-text-1)]"
+                : "text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
             }`}
           >
             {active && (
-              <span
-                aria-hidden="true"
-                className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--org-primary)]"
-              />
+              <span aria-hidden="true" className="absolute inset-y-1 start-0 w-0.5 rounded-full bg-[var(--p-accent)]" />
             )}
             <span className="flex min-w-0 items-center gap-2 truncate ps-1">
               {Icon ? (
@@ -502,9 +499,7 @@ function SidebarItems({
                   size={14}
                   strokeWidth={2}
                   className={`shrink-0 ${
-                    active
-                      ? "text-[var(--text-primary)]"
-                      : "text-[var(--text-muted)] group-hover:text-[var(--text-primary)]"
+                    active ? "text-[var(--p-text-1)]" : "text-[var(--p-text-2)] group-hover:text-[var(--p-text-1)]"
                   }`}
                   aria-hidden="true"
                 />
@@ -525,7 +520,7 @@ function SidebarItems({
                     ? t("nav.unpin", { name: itemLabel }, `Unpin ${itemLabel}`)
                     : t("nav.pin", { name: itemLabel }, `Pin ${itemLabel}`)
                 }
-                className={`shrink-0 rounded p-0.5 text-[var(--text-muted)] hover:text-[var(--text-primary)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
+                className={`shrink-0 rounded p-0.5 text-[var(--p-text-2)] hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
                   isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                 }`}
               >

@@ -32,7 +32,7 @@ export function ConversationComposer({
         rows={3}
         required
         placeholder="Add a comment…"
-        className="w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
+        className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
       />
       {state?.error && <p className="text-xs text-[var(--error)]">{state.error}</p>}
       <div className="flex justify-end">

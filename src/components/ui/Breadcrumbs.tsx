@@ -67,7 +67,7 @@ export function Breadcrumbs({
 
   return (
     <nav aria-label="Breadcrumb" className={className}>
-      <ol className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
+      <ol className="flex items-center gap-1.5 text-xs text-[var(--p-text-2)]">
         {visible.map((c, idx) => {
           const isLast = idx === visible.length - 1;
           if (c.label === "…") {
@@ -76,7 +76,7 @@ export function Breadcrumbs({
                 <ChevronRight size={12} aria-hidden="true" className="opacity-50" />
                 <span
                   aria-label="Collapsed breadcrumb segments"
-                  className="inline-flex h-4 w-4 items-center justify-center rounded hover:bg-[var(--bg-secondary)]"
+                  className="inline-flex h-4 w-4 items-center justify-center rounded hover:bg-[var(--p-surface)]"
                 >
                   <MoreHorizontal size={12} aria-hidden="true" />
                 </span>
@@ -89,14 +89,14 @@ export function Breadcrumbs({
               {c.href && !isLast ? (
                 <Link
                   href={c.href}
-                  className="hover:text-[var(--foreground)] focus-visible:underline focus-visible:outline-none"
+                  className="hover:text-[var(--p-text-1)] focus-visible:underline focus-visible:outline-none"
                 >
                   {c.label}
                 </Link>
               ) : (
                 <span
                   aria-current={isLast ? "page" : undefined}
-                  className={isLast ? "font-medium text-[var(--foreground)]" : ""}
+                  className={isLast ? "font-medium text-[var(--p-text-1)]" : ""}
                 >
                   {c.label}
                 </span>

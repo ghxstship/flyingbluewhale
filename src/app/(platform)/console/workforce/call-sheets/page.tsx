@@ -87,14 +87,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
         <nav className="flex items-center gap-3 text-sm">
           <Link
             href={`/console/workforce/call-sheets?date=${prevDate}`}
-            className="text-[var(--org-primary)] hover:underline"
+            className="text-[var(--p-accent)] hover:underline"
           >
             ← {prevDate}
           </Link>
-          <span className="font-mono text-xs text-[var(--text-muted)]">{dateStr}</span>
+          <span className="font-mono text-xs text-[var(--p-text-2)]">{dateStr}</span>
           <Link
             href={`/console/workforce/call-sheets?date=${nextDate}`}
-            className="text-[var(--org-primary)] hover:underline"
+            className="text-[var(--p-accent)] hover:underline"
           >
             {nextDate} →
           </Link>
@@ -118,18 +118,18 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                   className="surface hover-lift p-4"
                 >
                   <div className="text-sm font-semibold">{m.full_name}</div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">{m.role ?? "—"}</div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{m.role ?? "—"}</div>
                   <div className="mt-3 flex items-baseline justify-between text-xs">
-                    <span className="text-[var(--text-secondary)]">Call</span>
+                    <span className="text-[var(--p-text-2)]">Call</span>
                     <span className="font-mono text-base font-semibold">{callTime ? fmt.time(callTime) : "—"}</span>
                   </div>
                   {first && last && first !== last && (
                     <div className="mt-1 flex items-baseline justify-between text-[10px]">
-                      <span className="text-[var(--text-muted)]">Wrap</span>
+                      <span className="text-[var(--p-text-2)]">Wrap</span>
                       <span className="font-mono">{fmt.time(last.ends_at)}</span>
                     </div>
                   )}
-                  <div className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">
+                  <div className="mt-2 font-mono text-[10px] text-[var(--p-text-2)]">
                     {ms.length} shift{ms.length === 1 ? "" : "s"}
                   </div>
                 </Link>

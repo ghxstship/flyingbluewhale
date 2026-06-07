@@ -47,10 +47,10 @@ export function ChartShell({
         // and letter-stacking the heading vertically. flex-1 + min-w-0 on
         // the title side lets it claim available space and ellipsis-truncate
         // long titles cleanly.
-        <header className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1 border-b border-[var(--border-color)] px-4 py-2.5">
+        <header className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1 border-b border-[var(--p-border)] px-4 py-2.5">
           <div className="min-w-0 flex-1">
-            {title && <h3 className="text-sm font-semibold text-[var(--text-primary)]">{title}</h3>}
-            {description && <p className="mt-0.5 text-xs text-[var(--text-muted)]">{description}</p>}
+            {title && <h3 className="text-sm font-semibold text-[var(--p-text-1)]">{title}</h3>}
+            {description && <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{description}</p>}
           </div>
           {actions && <div className="shrink-0">{actions}</div>}
         </header>
@@ -58,7 +58,7 @@ export function ChartShell({
       <div className="relative w-full p-3" style={{ minHeight: height }}>
         {loading ? (
           <div
-            className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs text-[var(--text-muted)]"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs text-[var(--p-text-2)]"
             role="status"
           >
             <Spinner size="lg" />
@@ -67,14 +67,14 @@ export function ChartShell({
         ) : errorMsg ? (
           <div
             role="alert"
-            className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center text-xs text-[var(--color-error)]"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center text-xs text-[var(--p-danger)]"
           >
             <AlertTriangle size={18} aria-hidden />
             <div className="font-medium">Could not load data</div>
-            <div className="max-w-sm text-[var(--text-muted)]">{errorMsg}</div>
+            <div className="max-w-sm text-[var(--p-text-2)]">{errorMsg}</div>
           </div>
         ) : empty ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs text-[var(--text-muted)]">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-xs text-[var(--p-text-2)]">
             <BarChart3 size={20} aria-hidden />
             {emptyLabel}
           </div>

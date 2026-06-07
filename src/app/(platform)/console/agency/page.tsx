@@ -69,7 +69,7 @@ export default async function Page() {
             <div className="text-sm font-semibold tracking-wide uppercase">
               {t("console.agency.cards.roster.title", undefined, "Roster")}
             </div>
-            <p className="mt-2 text-xs text-[var(--text-secondary)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.agency.cards.roster.description",
                 undefined,
@@ -81,7 +81,7 @@ export default async function Page() {
             <div className="text-sm font-semibold tracking-wide uppercase">
               {t("console.agency.cards.tours.title", undefined, "Tours")}
             </div>
-            <p className="mt-2 text-xs text-[var(--text-secondary)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.agency.cards.tours.description", undefined, "Multi-date P&L roll-up across linked deals.")}
             </p>
           </Link>
@@ -89,7 +89,7 @@ export default async function Page() {
             <div className="text-sm font-semibold tracking-wide uppercase">
               {t("console.agency.cards.commissions.title", undefined, "Commissions")}
             </div>
-            <p className="mt-2 text-xs text-[var(--text-secondary)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.agency.cards.commissions.description", undefined, "Per-period commission report.")}
             </p>
           </Link>

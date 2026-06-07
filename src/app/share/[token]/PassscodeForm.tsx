@@ -20,7 +20,7 @@ export function PassscodeForm({ token, label }: { token: string; label?: string 
       <input type="hidden" name="token" value={token} />
       <div>
         <h1 className="text-lg font-semibold tracking-tight">Passcode required</h1>
-        <p className="mt-1 text-sm text-[var(--text-secondary)]">
+        <p className="mt-1 text-sm text-[var(--p-text-2)]">
           {label
             ? `This shared link (“${label}”) is protected by a passcode.`
             : "This shared link is protected by a passcode."}
@@ -39,7 +39,7 @@ export function PassscodeForm({ token, label }: { token: string; label?: string 
           required
           minLength={1}
           maxLength={128}
-          className="input-base w-full"
+          className="ps-input w-full"
         />
       </div>
       {state?.error && <Alert kind="error">{state.error}</Alert>}

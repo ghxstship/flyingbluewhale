@@ -17,7 +17,7 @@ type DrawRow = {
   sort_order: number | null;
 };
 
-const INPUT_CLASS = "w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm";
+const INPUT_CLASS = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm";
 
 function formatPct(p: number | null): string {
   if (p === null || p === undefined) return "—";
@@ -60,18 +60,18 @@ export function DrawScheduleClient({
       {/* Totals strip */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div className="surface p-4">
-          <div className="text-xs text-[var(--text-muted)]">Project budget</div>
+          <div className="text-xs text-[var(--p-text-2)]">Project budget</div>
           <div className="mt-1 font-mono text-lg font-semibold">{totalBudgetFormatted}</div>
         </div>
         <div className="surface p-4">
-          <div className="text-xs text-[var(--text-muted)]">Total scheduled</div>
+          <div className="text-xs text-[var(--p-text-2)]">Total scheduled</div>
           <div className="mt-1 font-mono text-lg font-semibold">
             {formatMoneyCents(totalDrawCents)}{" "}
-            <span className="text-xs text-[var(--text-muted)]">({formatPct(totalPct)})</span>
+            <span className="text-xs text-[var(--p-text-2)]">({formatPct(totalPct)})</span>
           </div>
         </div>
         <div className="surface p-4">
-          <div className="text-xs text-[var(--text-muted)]">Drawn to date</div>
+          <div className="text-xs text-[var(--p-text-2)]">Drawn to date</div>
           <div className="mt-1 font-mono text-lg font-semibold">{formatMoneyCents(drawnCents)}</div>
         </div>
       </div>
@@ -79,7 +79,7 @@ export function DrawScheduleClient({
       {/* Existing draws */}
       <section>
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Draws</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Draws</h2>
           {rows.length === 0 && (
             <Button
               onClick={() =>
@@ -94,7 +94,7 @@ export function DrawScheduleClient({
           )}
         </div>
         <div className="surface mt-2 overflow-hidden">
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th className="px-3 py-2 text-left">Draw</th>
@@ -108,15 +108,15 @@ export function DrawScheduleClient({
             <tbody>
               {rows.length === 0 ? (
                 <tr>
-                  <td className="px-3 py-3 text-sm text-[var(--text-muted)]" colSpan={6}>
+                  <td className="px-3 py-3 text-sm text-[var(--p-text-2)]" colSpan={6}>
                     No draws scheduled yet. Seed the 50 / 30 / 20 default or add a custom draw below.
                   </td>
                 </tr>
               ) : (
                 rows.map((r) => (
-                  <tr key={r.id} className="border-t border-[var(--border-color)]">
+                  <tr key={r.id} className="border-t border-[var(--p-border)]">
                     <td className="px-3 py-2 font-medium">{r.draw_name}</td>
-                    <td className="px-3 py-2 text-xs text-[var(--text-muted)]">
+                    <td className="px-3 py-2 text-xs text-[var(--p-text-2)]">
                       {r.trigger_phase ? <Badge variant="muted">{r.trigger_phase}</Badge> : null}{" "}
                       {r.trigger_label ?? ""}
                     </td>
@@ -136,7 +136,7 @@ export function DrawScheduleClient({
                       >
                         {r.drawn ? "Mark pending" : "Mark drawn"}
                       </button>
-                      <span className="mx-2 text-[var(--text-muted)]">·</span>
+                      <span className="mx-2 text-[var(--p-text-2)]">·</span>
                       <button
                         type="button"
                         className="text-xs text-red-500 underline"
@@ -156,15 +156,15 @@ export function DrawScheduleClient({
 
       {/* Add custom draw */}
       <section>
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Add a draw</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Add a draw</h2>
         <form action={createAction} className="surface mt-2 space-y-3 p-4">
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">Draw name</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Draw name</span>
               <input name="draw_name" required maxLength={120} className={INPUT_CLASS} />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">Trigger label</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Trigger label</span>
               <input
                 name="trigger_label"
                 maxLength={200}
@@ -173,7 +173,7 @@ export function DrawScheduleClient({
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">Trigger phase</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Trigger phase</span>
               <select name="trigger_phase" className={INPUT_CLASS} defaultValue="">
                 <option value="">—</option>
                 {phaseOptions.map((p) => (
@@ -184,7 +184,7 @@ export function DrawScheduleClient({
               </select>
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">Percentage</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Percentage</span>
               <input
                 name="percentage"
                 required
@@ -196,7 +196,7 @@ export function DrawScheduleClient({
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">Sort order</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Sort order</span>
               <input name="sort_order" type="number" defaultValue={rows.length + 1} className={INPUT_CLASS} />
             </label>
           </div>

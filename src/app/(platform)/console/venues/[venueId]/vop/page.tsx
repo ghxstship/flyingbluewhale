@@ -128,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         </div>
 
         <div className="surface overflow-hidden">
-          <ul className="divide-y divide-[var(--border-color)]">
+          <ul className="divide-y divide-[var(--p-border)]">
             {SECTION_ORDER.map((key) => {
               const s = byKey.get(key);
               return (
@@ -137,9 +137,9 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                     <div className="text-sm font-medium">
                       {t(`console.venues.vop.sections.${key}`, undefined, SECTION_LABEL[key])}
                     </div>
-                    {s?.body && <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-secondary)]">{s.body}</p>}
+                    {s?.body && <p className="mt-0.5 line-clamp-2 text-xs text-[var(--p-text-2)]">{s.body}</p>}
                     {s?.approved_at && (
-                      <p className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                      <p className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
                         {t(
                           "console.venues.vop.approvedOn",
                           { date: fmtDate(s.approved_at) },
@@ -157,7 +157,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           </ul>
         </div>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.venues.vop.footerLead",
             undefined,

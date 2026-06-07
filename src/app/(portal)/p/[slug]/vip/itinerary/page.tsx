@@ -113,17 +113,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
 
         {events.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("p.vip.itinerary.empty", undefined, "No upcoming events on your itinerary.")}
           </div>
         ) : (
           <div className="space-y-6">
             {days.map((day) => (
               <section key={day}>
-                <h3 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  {fmtDay(day)}
-                </h3>
-                <ul className="mt-3 divide-y divide-[var(--border-color)]">
+                <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{fmtDay(day)}</h3>
+                <ul className="mt-3 divide-y divide-[var(--p-border)]">
                   {(byDay.get(day) ?? []).map((e) => (
                     <li key={e.id} className="flex items-start gap-3 py-2">
                       <div className="w-12 shrink-0 font-mono text-xs tabular-nums">{fmtTime(e.starts_at)}</div>
@@ -131,14 +129,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <div className="text-sm font-medium">{e.name}</div>
-                            <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                            <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                               {t("p.vip.itinerary.until", { time: fmtTime(e.ends_at) }, `until ${fmtTime(e.ends_at)}`)}
                               {e.location?.name ? ` · ${e.location.name}` : ""}
                             </div>
                           </div>
                           <Badge variant="muted">{toTitle(e.status)}</Badge>
                         </div>
-                        {e.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{e.description}</p>}
+                        {e.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{e.description}</p>}
                       </div>
                     </li>
                   ))}

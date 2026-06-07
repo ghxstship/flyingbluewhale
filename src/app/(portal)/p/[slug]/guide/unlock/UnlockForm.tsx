@@ -65,7 +65,7 @@ export function UnlockForm({ slug, persona, from }: { slug: string; persona: Gui
         className="font-mono tracking-wider uppercase"
         aria-label={t("p.shared.guide.unlock.aria", undefined, "Access code")}
       />
-      {error && <div className="text-sm text-[var(--color-error)]">{error}</div>}
+      {error && <div className="text-sm text-[var(--p-danger)]">{error}</div>}
       <Button type="submit" disabled={pending} className="w-full">
         {pending
           ? t("p.shared.guide.unlock.submitting", undefined, "Unlocking…")

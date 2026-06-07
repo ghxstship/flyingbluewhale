@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { importSchedule, type ImportState } from "./actions";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 /**
  * Client island that turns a file picker into the source_content needed by
@@ -39,22 +39,22 @@ export function ImportScheduleClient({ baselineId }: { baselineId: string }) {
         </Button>
       </div>
       {fileName && (
-        <p className="text-[10px] text-[var(--text-muted)]">
+        <p className="text-[10px] text-[var(--p-text-2)]">
           {t("console.schedule.baselines.import.selected", undefined, "Selected:")}{" "}
           <span className="font-mono">{fileName}</span> · {(fileText.length / 1024).toFixed(1)}{" "}
           {t("console.schedule.baselines.import.kb", undefined, "KB")}
         </p>
       )}
-      {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
       {state?.success && (
-        <p className="text-xs text-[var(--color-success)]">
+        <p className="text-xs text-[var(--p-success)]">
           {t(
             "console.schedule.baselines.import.imported",
             { activities: state.success.activities, dependencies: state.success.dependencies },
             `Imported ${state.success.activities} activities and ${state.success.dependencies} dependencies.`,
           )}
           {state.success.warnings.length > 0 && (
-            <span className="block text-[var(--text-muted)]">
+            <span className="block text-[var(--p-text-2)]">
               {state.success.warnings.map((w, i) => (
                 <span key={i} className="block">
                   ⚠ {w}

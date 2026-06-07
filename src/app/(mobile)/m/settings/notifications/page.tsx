@@ -22,7 +22,7 @@ export default async function NotifPrefsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -40,11 +40,11 @@ export default async function NotifPrefsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.settings.notifications.eyebrow", undefined, "Settings")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.settings.notifications.title", undefined, "Notifications")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.settings.notifications.descriptionPrefix",
           undefined,
@@ -59,14 +59,14 @@ export default async function NotifPrefsPage() {
       <form action={savePreferences} className="mt-5 space-y-4">
         <div className="surface p-4">
           <h2 className="text-sm font-semibold">{t("m.settings.notifications.digest.heading", undefined, "Digest")}</h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "m.settings.notifications.digest.description",
               undefined,
               "How often to batch quieter events instead of pinging immediately.",
             )}
           </p>
-          <select name="digest" defaultValue={digest} className="input-base mt-3 w-full">
+          <select name="digest" defaultValue={digest} className="ps-input mt-3 w-full">
             <option value="immediate">{t("m.settings.notifications.digest.immediate", undefined, "Immediate")}</option>
             <option value="hourly">{t("m.settings.notifications.digest.hourly", undefined, "Hourly digest")}</option>
             <option value="daily">{t("m.settings.notifications.digest.daily", undefined, "Daily digest")}</option>
@@ -77,7 +77,7 @@ export default async function NotifPrefsPage() {
           <h2 className="text-sm font-semibold">
             {t("m.settings.notifications.perKind.heading", undefined, "Per-Kind Toggles")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "m.settings.notifications.perKind.description",
               undefined,
@@ -86,7 +86,7 @@ export default async function NotifPrefsPage() {
           </p>
           <table className="mt-3 w-full text-sm">
             <thead>
-              <tr className="text-start text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+              <tr className="text-start text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
                 <th className="pb-2">{t("m.settings.notifications.perKind.colKind", undefined, "Kind")}</th>
                 <th className="pb-2 text-center">{t("m.settings.notifications.perKind.colPush", undefined, "Push")}</th>
                 <th className="pb-2 text-center">
@@ -100,10 +100,10 @@ export default async function NotifPrefsPage() {
                 const pushOn = cell.push !== false;
                 const emailOn = cell.email !== false;
                 return (
-                  <tr key={k.kind} className="border-t border-[var(--border-color)]">
+                  <tr key={k.kind} className="border-t border-[var(--p-border)]">
                     <td className="py-3">
                       <div className="text-sm font-semibold">{k.label}</div>
-                      <div className="text-xs text-[var(--text-muted)]">{k.description}</div>
+                      <div className="text-xs text-[var(--p-text-2)]">{k.description}</div>
                     </td>
                     <td className="text-center align-middle">
                       <input type="checkbox" name={`push_${k.kind}`} defaultChecked={pushOn} className="h-4 w-4" />
@@ -118,7 +118,7 @@ export default async function NotifPrefsPage() {
           </table>
         </div>
 
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="ps-btn w-full">
           {t("m.settings.notifications.savePreferences", undefined, "Save Preferences")}
         </button>
       </form>

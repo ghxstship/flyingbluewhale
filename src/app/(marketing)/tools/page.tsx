@@ -56,7 +56,7 @@ export default async function ToolsIndex() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.tools.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.tools.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.tools.hero.body")}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.tools.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
@@ -69,8 +69,8 @@ export default async function ToolsIndex() {
                   <span
                     className="inline-flex h-10 w-10 items-center justify-center rounded-lg"
                     style={{
-                      background: "color-mix(in oklab, var(--org-primary) 12%, transparent)",
-                      color: "var(--org-primary)",
+                      background: "color-mix(in oklab, var(--p-accent) 12%, transparent)",
+                      color: "var(--p-accent)",
                     }}
                   >
                     <Icon size={20} aria-hidden="true" />
@@ -79,8 +79,8 @@ export default async function ToolsIndex() {
                     <div className="text-base font-semibold">{tool.title}</div>
                   </div>
                 </div>
-                <p className="mt-3 text-sm text-[var(--text-secondary)]">{tool.short}</p>
-                <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+                <p className="mt-3 text-sm text-[var(--p-text-2)]">{tool.short}</p>
+                <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                   {t("marketing.pages.tools.card.cta")} <ArrowRight size={12} />
                 </div>
               </Link>

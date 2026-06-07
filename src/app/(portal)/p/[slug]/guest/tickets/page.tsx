@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         title={t("p.guest.tickets.title", undefined, "Tickets")}
         subtitle={t("p.guest.tickets.subtitle", undefined, "Your tickets for this event")}
       >
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-[var(--p-text-2)]">
           {t("p.guest.tickets.projectNotFound", undefined, "Project not found.")}
         </p>
       </PortalSubpage>

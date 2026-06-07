@@ -34,11 +34,11 @@ export function TalentVisibility({
                 : t("console.marketplace.talent.visibility.private", undefined, "Private")}
             </Badge>
           </div>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {publicHandle ? (
               <>
                 {t("console.marketplace.talent.visibility.publicUrl", undefined, "Public URL")}{" "}
-                <a className="font-mono text-[var(--org-primary)]" href={`/marketplace/talent/${publicHandle}`}>
+                <a className="font-mono text-[var(--p-accent)]" href={`/marketplace/talent/${publicHandle}`}>
                   /marketplace/talent/{publicHandle}
                 </a>
               </>

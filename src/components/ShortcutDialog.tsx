@@ -72,21 +72,21 @@ export function ShortcutDialog() {
         <DialogHeader>
           <DialogTitle>
             {t("shortcuts.title", undefined, "Keyboard shortcuts")}
-            <span className="ms-2 rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--text-muted)]">
+            <span className="ms-2 rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[11px] text-[var(--p-text-2)]">
               {shortcuts.length}
             </span>
           </DialogTitle>
           <DialogDescription>
             {t("shortcuts.hintPrefix", undefined, "Press")}{" "}
-            <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">?</kbd>{" "}
+            <kbd className="rounded border border-[var(--p-border)] px-1 text-xs">?</kbd>{" "}
             {t("shortcuts.hintOpen", undefined, "anywhere to open.")} {t("shortcuts.hintPrefix", undefined, "Press")}{" "}
-            <kbd className="rounded border border-[var(--border-color)] px-1 text-xs">Esc</kbd>{" "}
+            <kbd className="rounded border border-[var(--p-border)] px-1 text-xs">Esc</kbd>{" "}
             {t("shortcuts.hintDismiss", undefined, "to dismiss.")}
           </DialogDescription>
         </DialogHeader>
 
-        <div className="mt-4 flex items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-1.5">
-          <Search size={12} className="text-[var(--text-muted)]" aria-hidden />
+        <div className="mt-4 flex items-center gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-1.5">
+          <Search size={12} className="text-[var(--p-text-2)]" aria-hidden />
           <input
             ref={searchRef}
             type="search"
@@ -101,14 +101,12 @@ export function ShortcutDialog() {
         <div className="mt-4 max-h-[50vh] space-y-5 overflow-y-auto pe-1">
           {grouped.map(([group, items]) => (
             <div key={group}>
-              <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                {group}
-              </div>
+              <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">{group}</div>
               <ul className="mt-2 space-y-1">
                 {items.map((s) => (
                   <li key={`${s.group}::${s.combo}`} className="flex items-center justify-between gap-3 py-0.5 text-sm">
-                    <span className="text-[var(--text-primary)]">{s.description}</span>
-                    <kbd className="rounded border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-0.5 font-mono text-[11px]">
+                    <span className="text-[var(--p-text-1)]">{s.description}</span>
+                    <kbd className="rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 font-mono text-[11px]">
                       {formatCombo(s.combo)}
                     </kbd>
                   </li>
@@ -117,7 +115,7 @@ export function ShortcutDialog() {
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="py-8 text-center text-xs text-[var(--text-muted)]">
+            <div className="py-8 text-center text-xs text-[var(--p-text-2)]">
               {shortcuts.length === 0
                 ? t("shortcuts.emptyRegistry", undefined, "No shortcuts registered yet.")
                 : t("shortcuts.noMatch", { query }, `No shortcuts match “${query}”.`)}

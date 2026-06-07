@@ -178,7 +178,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             <h2 className="text-sm font-semibold">
               {t("console.procurement.rfqs.responses.detail.vendorNotes", undefined, "Vendor Notes")}
             </h2>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{response.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{response.notes}</p>
           </section>
         )}
 
@@ -187,7 +187,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             <h2 className="text-sm font-semibold tracking-wide uppercase">
               {t("console.procurement.rfqs.responses.detail.lineItems", undefined, "Line Items")}
             </h2>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.rfqs.responses.detail.linesCount",
                 { count: lines.length },
@@ -196,7 +196,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             </span>
           </div>
           {lines.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.rfqs.responses.detail.empty",
                 undefined,
@@ -204,7 +204,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
               )}
             </p>
           ) : (
-            <table className="data-table mt-3 w-full">
+            <table className="ps-table mt-3 w-full">
               <thead>
                 <tr>
                   <th className="w-12 text-start">#</th>
@@ -226,10 +226,10 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
               <tbody>
                 {lines.map((l) => (
                   <tr key={l.id}>
-                    <td className="font-mono text-xs text-[var(--text-muted)]">{l.position}</td>
+                    <td className="font-mono text-xs text-[var(--p-text-2)]">{l.position}</td>
                     <td>
                       <div className="text-sm">{l.description}</div>
-                      {l.notes && <div className="text-xs text-[var(--text-muted)]">{l.notes}</div>}
+                      {l.notes && <div className="text-xs text-[var(--p-text-2)]">{l.notes}</div>}
                     </td>
                     <td className="text-right font-mono">{Number(l.quantity).toFixed(2)}</td>
                     <td className="text-right font-mono">{formatMoney(l.unit_price_cents)}</td>
@@ -266,7 +266,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                 required
                 placeholder={t("console.procurement.rfqs.responses.detail.col.description", undefined, "Description")}
                 maxLength={500}
-                className="input-base sm:col-span-3"
+                className="ps-input sm:col-span-3"
               />
               <input
                 name="quantity"
@@ -276,7 +276,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                 required
                 placeholder={t("console.procurement.rfqs.responses.detail.col.qty", undefined, "Qty")}
                 defaultValue="1"
-                className="input-base sm:col-span-1"
+                className="ps-input sm:col-span-1"
               />
               <input
                 name="unit_price_dollars"
@@ -285,7 +285,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                 min="0"
                 required
                 placeholder={t("console.procurement.rfqs.responses.detail.placeholder.unitPrice", undefined, "Unit $")}
-                className="input-base sm:col-span-1"
+                className="ps-input sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
                 {t("console.procurement.rfqs.responses.detail.addLine", undefined, "Add Line")}

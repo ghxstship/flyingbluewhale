@@ -53,14 +53,14 @@ export default async function Page({ params }: { params: Promise<{ categoryId: s
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.categories.edit.descriptionLabel", undefined, "Description")}
             </label>
             <textarea
               name="description"
               rows={3}
               maxLength={500}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               defaultValue={(r.description as string | undefined) ?? ""}
             />
           </div>

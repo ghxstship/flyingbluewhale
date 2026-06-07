@@ -152,11 +152,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               header: t("p.delegation.visa.col.letter", undefined, "Letter"),
               render: (r) =>
                 r.letter_path ? (
-                  <span className="font-mono text-[10px] text-[var(--org-primary)]">
+                  <span className="font-mono text-[10px] text-[var(--p-accent)]">
                     {t("p.delegation.visa.letter.onFile", undefined, "on file")}
                   </span>
                 ) : (
-                  <span className="text-[var(--text-muted)]">—</span>
+                  <span className="text-[var(--p-text-2)]">—</span>
                 ),
               accessor: (r) => r.letter_path ?? null,
             },

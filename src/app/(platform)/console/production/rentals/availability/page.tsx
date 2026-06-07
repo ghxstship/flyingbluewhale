@@ -133,7 +133,7 @@ export default async function Page() {
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.production.rentals.availability.col.asset", undefined, "Asset")}</th>
@@ -150,7 +150,7 @@ export default async function Page() {
                   <tr key={eq.id}>
                     <td>
                       <div className="text-sm font-medium">{eq.name}</div>
-                      <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                         {eq.asset_tag ?? "—"} {eq.category ? `· ${eq.category}` : ""}
                       </div>
                     </td>
@@ -177,7 +177,7 @@ export default async function Page() {
               </tbody>
             </table>
             {eqList.length > 200 && (
-              <p className="px-4 py-3 text-xs text-[var(--text-muted)]">
+              <p className="px-4 py-3 text-xs text-[var(--p-text-2)]">
                 {t(
                   "console.production.rentals.availability.truncationNote",
                   undefined,

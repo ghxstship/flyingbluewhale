@@ -110,12 +110,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <div className="text-sm font-semibold">{tile.label}</div>
                 {tile.count != null && <Badge variant="muted">{tile.count}</Badge>}
               </div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{tile.desc}</p>
+              <p className="mt-1 text-xs text-[var(--p-text-2)]">{tile.desc}</p>
             </Link>
           ))}
         </div>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "p.athlete.footnote",
             undefined,

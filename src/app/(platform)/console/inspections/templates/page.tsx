@@ -108,7 +108,7 @@ export default async function Page() {
                   <Link href={`/console/inspections/templates`} className="block">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <div className="font-mono text-[11px] tracking-wider text-[var(--text-muted)] uppercase">
+                        <div className="font-mono text-[11px] tracking-wider text-[var(--p-text-2)] uppercase">
                           {row.code}
                         </div>
                         <div className="mt-1 truncate text-sm font-semibold">{row.name}</div>
@@ -121,7 +121,7 @@ export default async function Page() {
                     </div>
                     <div className="mt-2 flex items-center gap-2 text-[11px]">
                       <Badge variant="info">{CATEGORY_LABEL[row.category] ?? row.category}</Badge>
-                      <span className="text-[var(--text-muted)]">
+                      <span className="text-[var(--p-text-2)]">
                         {itemCount === 1
                           ? t("console.inspections.templates.itemCountOne", { count: itemCount }, `${itemCount} item`)
                           : t(
@@ -132,7 +132,7 @@ export default async function Page() {
                       </span>
                     </div>
                     {row.description && (
-                      <p className="mt-2 line-clamp-2 text-xs text-[var(--text-secondary)]">{row.description}</p>
+                      <p className="mt-2 line-clamp-2 text-xs text-[var(--p-text-2)]">{row.description}</p>
                     )}
                   </Link>
                 </li>

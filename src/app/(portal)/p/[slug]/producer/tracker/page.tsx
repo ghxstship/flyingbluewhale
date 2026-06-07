@@ -48,7 +48,7 @@ export default async function ProducerTracker({
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">{t("p.producer.tracker.title", undefined, "Tracker")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {atoms.length === 1
             ? t(
                 "p.producer.tracker.atomCount.one",
@@ -66,7 +66,7 @@ export default async function ProducerTracker({
             atoms={atoms}
             atomHrefBuilder={(id) => `/p/${slug}/producer/tracker?atom=${id}`}
             emptyAction={
-              <Link className="text-sm text-[var(--org-primary)]" href={`/p/${slug}/producer`}>
+              <Link className="text-sm text-[var(--p-accent)]" href={`/p/${slug}/producer`}>
                 {t("p.producer.tracker.backToOverview", undefined, "← Back to overview")}
               </Link>
             }

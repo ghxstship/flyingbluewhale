@@ -52,7 +52,7 @@ export function RunActions({ runId, status }: { runId: string; status: string })
           </form>
         )}
       </div>
-      {error && <p className="text-xs text-[var(--color-error)]">{error}</p>}
+      {error && <p className="text-xs text-[var(--p-danger)]">{error}</p>}
     </div>
   );
 }

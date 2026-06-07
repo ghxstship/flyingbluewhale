@@ -31,10 +31,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.sustainability.carbon.new.scope", undefined, "Scope")}
             </label>
-            <select name="scope" defaultValue="1" className="input-base mt-1.5 w-full">
+            <select name="scope" defaultValue="1" className="ps-input mt-1.5 w-full">
               <option value="1">{t("console.sustainability.carbon.new.scope1", undefined, "Scope 1 — direct")}</option>
               <option value="2">
                 {t("console.sustainability.carbon.new.scope2", undefined, "Scope 2 — purchased energy")}

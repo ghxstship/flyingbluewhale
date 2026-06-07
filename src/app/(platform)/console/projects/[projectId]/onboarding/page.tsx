@@ -82,14 +82,14 @@ export default async function ProjectOnboardingPage({ params }: { params: Promis
                 r.critical_path_open > 0 ? (
                   <Badge variant="warning">{r.critical_path_open}</Badge>
                 ) : (
-                  <span className="text-[var(--text-subtle)]">—</span>
+                  <span className="text-[var(--p-text-3)]">—</span>
                 ),
               accessor: (r) => r.critical_path_open,
               filterable: true,
             },
           ]}
         />
-        <div className="surface mt-6 p-4 text-xs text-[var(--text-subtle)]">
+        <div className="surface mt-6 p-4 text-xs text-[var(--p-text-3)]">
           {t(
             "console.projects.onboarding.footnote",
             undefined,

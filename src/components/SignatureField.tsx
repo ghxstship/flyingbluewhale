@@ -45,7 +45,7 @@ export function SignatureField({
     ctx.scale(ratio, ratio);
     const stroke =
       typeof window !== "undefined"
-        ? getComputedStyle(document.documentElement).getPropertyValue("--text-primary").trim()
+        ? getComputedStyle(document.documentElement).getPropertyValue("--p-text-1").trim()
         : "";
     ctx.strokeStyle = stroke || "rgb(17,17,17)";
     ctx.lineWidth = 2;
@@ -91,22 +91,22 @@ export function SignatureField({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {label}
-          {required && <span className="ms-1 text-[var(--color-error)]">*</span>}
+          {required && <span className="ms-1 text-[var(--p-danger)]">*</span>}
         </label>
-        <div className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5 text-xs">
+        <div className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5 text-xs">
           <button
             type="button"
             onClick={() => setMode("typed")}
-            className={`rounded-full px-3 py-1 ${mode === "typed" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 ${mode === "typed" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
           >
             Type
           </button>
           <button
             type="button"
             onClick={() => setMode("canvas")}
-            className={`rounded-full px-3 py-1 ${mode === "canvas" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 ${mode === "canvas" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
           >
             Draw
           </button>
@@ -122,7 +122,7 @@ export function SignatureField({
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
             placeholder="Type your full name"
-            className="input-base w-full"
+            className="ps-input w-full"
             required={required}
           />
           <input type="hidden" name={name} value={typed} />
@@ -140,13 +140,13 @@ export function SignatureField({
             />
           </div>
           <div className="flex items-center justify-between text-xs">
-            <button type="button" onClick={clear} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+            <button type="button" onClick={clear} className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
               Clear
             </button>
             {hasInk ? (
-              <span className="text-[var(--color-success)]">Captured</span>
+              <span className="text-[var(--p-success)]">Captured</span>
             ) : (
-              <span className="text-[var(--text-muted)]">Sign above</span>
+              <span className="text-[var(--p-text-2)]">Sign above</span>
             )}
           </div>
           <input type="hidden" name={name} value={canvasData} required={required} />

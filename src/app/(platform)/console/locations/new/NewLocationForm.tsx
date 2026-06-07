@@ -21,10 +21,10 @@ export function NewLocationForm() {
       </div>
       <Input label={t("console.locations.new.country", undefined, "Country")} name="country" />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.locations.new.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={2} className="input-base mt-1.5 w-full" />
+        <textarea name="notes" rows={2} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

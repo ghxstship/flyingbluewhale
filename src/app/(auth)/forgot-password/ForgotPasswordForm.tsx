@@ -24,13 +24,13 @@ export function ForgotPasswordForm() {
           : t("auth.forgotPassword.subtitle", undefined, "We'll email you a reset link")
       }
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
+        <Link href="/login" className="text-[var(--p-accent)] underline underline-offset-4">
           {t("auth.forgotPassword.backToLogin", undefined, "Back to sign in")}
         </Link>
       }
     >
       {sent ? (
-        <div role="status" aria-live="polite" className="surface p-4 text-sm text-[var(--text-secondary)]">
+        <div role="status" aria-live="polite" className="surface p-4 text-sm text-[var(--p-text-2)]">
           {t(
             "auth.forgotPassword.sentBody",
             undefined,

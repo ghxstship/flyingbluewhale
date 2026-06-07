@@ -36,22 +36,22 @@ export default async function ChangelogPage() {
   const KINDS: Record<EntryKind, { label: string; className: string; icon: typeof Sparkles }> = {
     feature: {
       label: t("marketing.pages.changelog.kinds.feature"),
-      className: "bg-[var(--org-primary)]/10 text-[var(--org-primary)]",
+      className: "bg-[var(--p-accent)]/10 text-[var(--p-accent)]",
       icon: Sparkles,
     },
     improvement: {
       label: t("marketing.pages.changelog.kinds.improvement"),
-      className: "bg-[var(--accent)]/10 text-[var(--accent)]",
+      className: "bg-[var(--p-accent)]/10 text-[var(--p-accent)]",
       icon: Wrench,
     },
     security: {
       label: t("marketing.pages.changelog.kinds.security"),
-      className: "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]",
+      className: "bg-[color-mix(in_srgb,var(--p-success)_10%,transparent)] text-[var(--p-success)]",
       icon: ShieldCheck,
     },
     performance: {
       label: t("marketing.pages.changelog.kinds.performance"),
-      className: "bg-[color-mix(in_srgb,var(--color-warning)_10%,transparent)] text-[var(--color-warning)]",
+      className: "bg-[color-mix(in_srgb,var(--p-warning)_10%,transparent)] text-[var(--p-warning)]",
       icon: Zap,
     },
   };
@@ -70,7 +70,7 @@ export default async function ChangelogPage() {
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.changelog.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.changelog.hero.title")}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.changelog.hero.bodyBefore")}{" "}
           <a className="underline" href="/changelog.rss">
             /changelog.rss
@@ -92,13 +92,13 @@ export default async function ChangelogPage() {
                   >
                     <Icon size={10} /> {kind.label}
                   </span>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {e.date} · {e.version}
                   </div>
                 </div>
                 <div className="hed-lg mt-3 tracking-tight">{e.title}</div>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">{e.body}</p>
-                <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-[var(--text-secondary)]">
+                <p className="mt-2 text-sm text-[var(--p-text-2)]">{e.body}</p>
+                <ul className="mt-3 list-disc space-y-1 ps-5 text-sm text-[var(--p-text-2)]">
                   {e.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}

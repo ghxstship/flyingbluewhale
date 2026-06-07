@@ -19,10 +19,10 @@ export default async function Page() {
           submitLabel={t("console.transport.dispatch.new.submit", undefined, "Schedule Run")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.dispatch.new.fleetLabel", undefined, "Fleet")}
             </label>
-            <select name="fleet" defaultValue="t1" className="input-base mt-1.5 w-full">
+            <select name="fleet" defaultValue="t1" className="ps-input mt-1.5 w-full">
               <option value="t1">{t("console.transport.dispatch.new.fleet.t1", undefined, "T1 — Athletes")}</option>
               <option value="t2">{t("console.transport.dispatch.new.fleet.t2", undefined, "T2 — Teams")}</option>
               <option value="t3">

@@ -15,7 +15,7 @@ export default async function Page() {
         title={t("console.operations.maintenance.schedules.new.title", undefined, "New Schedule")}
       />
       <div className="page-content max-w-xl">
-        <p className="mb-4 text-sm text-[var(--text-secondary)]">
+        <p className="mb-4 text-sm text-[var(--p-text-2)]">
           {t(
             "console.operations.maintenance.schedules.new.intro",
             undefined,
@@ -39,10 +39,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.maintenance.schedules.new.kind.label", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="inspection" className="input-base mt-1.5 w-full" required>
+            <select name="kind" defaultValue="inspection" className="ps-input mt-1.5 w-full" required>
               <option value="inspection">
                 {t(
                   "console.operations.maintenance.schedules.new.kind.inspection",
@@ -74,10 +74,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.maintenance.schedules.new.targetKind.label", undefined, "Target kind")}
             </label>
-            <select name="target_kind" defaultValue="venue" className="input-base mt-1.5 w-full" required>
+            <select name="target_kind" defaultValue="venue" className="ps-input mt-1.5 w-full" required>
               <option value="venue">
                 {t("console.operations.maintenance.schedules.new.targetKind.venue", undefined, "Venue")}
               </option>

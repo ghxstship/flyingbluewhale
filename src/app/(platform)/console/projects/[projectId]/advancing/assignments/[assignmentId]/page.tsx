@@ -209,7 +209,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         }
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/projects/${projectId}/advancing/assignments`} className="btn btn-ghost btn-sm">
+            <Link
+              href={`/console/projects/${projectId}/advancing/assignments`}
+              className="ps-btn ps-btn--ghost ps-btn--sm"
+            >
               {t("common.back", undefined, "Back")}
             </Link>
             <DeleteForm
@@ -229,7 +232,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <h2 className="text-sm font-semibold">
               {t("console.projects.assignments.detail.notes", undefined, "Notes")}
             </h2>
-            <p className="mt-2 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{notes}</p>
+            <p className="mt-2 text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{notes}</p>
           </section>
         )}
 
@@ -378,7 +381,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 {t("console.projects.assignments.detail.credential.mustReturn", undefined, "Must be returned")}
               </label>
               {(detail as CredentialDetails | null)?.returned_at && (
-                <p className="text-xs text-[var(--text-muted)] sm:col-span-6">
+                <p className="text-xs text-[var(--p-text-2)] sm:col-span-6">
                   {t(
                     "console.projects.assignments.detail.credential.returnedOn",
                     { date: fmt.date((detail as CredentialDetails).returned_at as string) },
@@ -484,7 +487,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 <select
                   name="mode"
                   defaultValue={(detail as TravelDetails | null)?.mode ?? ""}
-                  className="input-base mt-1 w-full"
+                  className="ps-input mt-1 w-full"
                 >
                   <option value="">—</option>
                   <option value="flight">
@@ -631,7 +634,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <h2 className="text-sm font-semibold">
               {t("console.projects.assignments.detail.advanceState.title", undefined, "Advance State")}
             </h2>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.projects.assignments.detail.advanceState.description",
                 undefined,
@@ -658,7 +661,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <h2 className="text-sm font-semibold">
               {t("console.projects.assignments.detail.reassign.title", undefined, "Reassign")}
             </h2>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.projects.assignments.detail.reassign.description",
                 undefined,
@@ -668,7 +671,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <form action={reassignAssignment} className="mt-3 flex items-end gap-2">
               <input type="hidden" name="projectId" value={projectId} />
               <input type="hidden" name="assignmentId" value={a.id} />
-              <select name="party_user_id" required defaultValue={a.party_user_id ?? ""} className="input-base flex-1">
+              <select name="party_user_id" required defaultValue={a.party_user_id ?? ""} className="ps-input flex-1">
                 {memberList.map((m) => (
                   <option key={m.id} value={m.id}>
                     {m.name ?? m.email}
@@ -686,7 +689,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           <h2 className="text-sm font-semibold">
             {t("console.projects.assignments.detail.comments.title", undefined, "Comments")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.projects.assignments.detail.comments.description",
               undefined,
@@ -695,14 +698,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           </p>
           <ol className="mt-3 space-y-3">
             {commentRows.length === 0 ? (
-              <li className="text-xs text-[var(--text-muted)]">
+              <li className="text-xs text-[var(--p-text-2)]">
                 {t("console.projects.assignments.detail.comments.empty", undefined, "No comments.")}
               </li>
             ) : (
               commentRows.map((c) => (
                 <li key={c.id} className="surface-inset rounded-md p-3">
-                  <div className="flex items-center justify-between text-xs text-[var(--text-muted)]">
-                    <span className="font-medium text-[var(--text-secondary)]">
+                  <div className="flex items-center justify-between text-xs text-[var(--p-text-2)]">
+                    <span className="font-medium text-[var(--p-text-2)]">
                       {c.actor?.name ??
                         c.actor?.email ??
                         t("console.projects.assignments.detail.unknown", undefined, "Unknown")}
@@ -727,7 +730,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 undefined,
                 "Add a comment for the assignee…",
               )}
-              className="input-base w-full resize-y"
+              className="ps-input w-full resize-y"
             />
             <div className="flex justify-end">
               <Button type="submit" variant="secondary" size="sm">
@@ -741,7 +744,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           <h2 className="text-sm font-semibold">
             {t("console.projects.assignments.detail.activity.title", undefined, "Activity")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.projects.assignments.detail.activity.description",
               undefined,
@@ -750,7 +753,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           </p>
           <ol className="mt-3 space-y-2 text-xs">
             {auditRows.length === 0 ? (
-              <li className="text-[var(--text-muted)]">
+              <li className="text-[var(--p-text-2)]">
                 {t("console.projects.assignments.detail.activity.empty", undefined, "No activity recorded.")}
               </li>
             ) : (
@@ -772,11 +775,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                           <Badge variant="info">{toTitle(e.to_state)}</Badge>{" "}
                         </>
                       ) : null}
-                      <span className="text-[var(--text-muted)]">
+                      <span className="text-[var(--p-text-2)]">
                         {t("console.projects.assignments.detail.activity.by", { actor }, `by ${actor}`)}
                       </span>
                     </span>
-                    <span className="font-mono text-[var(--text-muted)]">{fmt.date(e.at)}</span>
+                    <span className="font-mono text-[var(--p-text-2)]">{fmt.date(e.at)}</span>
                   </li>
                 );
               })
@@ -784,7 +787,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           </ol>
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.projects.assignments.detail.timestamps",
             { created: fmt.date(a.created_at), updated: fmt.date(a.updated_at) },
@@ -803,7 +806,7 @@ function KindPanel({ title, description, children }: { title: string; descriptio
   return (
     <section className="surface p-4">
       <h2 className="text-sm font-semibold">{title}</h2>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">{description}</p>
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">{description}</p>
       <div className="mt-3">{children}</div>
     </section>
   );
@@ -832,7 +835,7 @@ function DetailInput({
         type={type}
         defaultValue={defaultValue}
         placeholder={placeholder}
-        className="input-base mt-1 w-full"
+        className="ps-input mt-1 w-full"
       />
     </label>
   );

@@ -36,10 +36,10 @@ export function CommitteeForm() {
             maxLength={120}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.governance.forms.committee.cadence", undefined, "Cadence")}
             </label>
-            <select name="cadence" defaultValue="monthly" className="input-base mt-1.5 w-full">
+            <select name="cadence" defaultValue="monthly" className="ps-input mt-1.5 w-full">
               <option value="weekly">
                 {t("console.settings.governance.forms.committee.cadence.weekly", undefined, "Weekly")}
               </option>
@@ -55,12 +55,12 @@ export function CommitteeForm() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.governance.forms.committee.charter", undefined, "Charter")}
             </label>
-            <textarea name="charter" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+            <textarea name="charter" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
-          {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
+          {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
               {t("common.create", undefined, "Create")}
@@ -98,10 +98,10 @@ export function PolicyForm() {
             maxLength={160}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.governance.forms.policy.category", undefined, "Category")}
             </label>
-            <select name="category" defaultValue="operations" className="input-base mt-1.5 w-full">
+            <select name="category" defaultValue="operations" className="ps-input mt-1.5 w-full">
               <option value="finance">
                 {t("console.settings.governance.forms.policy.category.finance", undefined, "Finance")}
               </option>
@@ -117,7 +117,7 @@ export function PolicyForm() {
               </option>
             </select>
           </div>
-          {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
+          {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
               {t("common.create", undefined, "Create")}

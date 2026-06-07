@@ -61,10 +61,10 @@ export default async function Page() {
           submitLabel={t("console.accreditation.changes.new.submit", undefined, "Request Change")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.changes.new.fields.accreditation", undefined, "Accreditation")}
             </label>
-            <select name="accreditation_id" className="input-base mt-1.5 w-full" required>
+            <select name="accreditation_id" className="ps-input mt-1.5 w-full" required>
               {accreditations.map((a) => (
                 <option key={a.id} value={a.id}>
                   {a.person_name ?? a.person_email ?? a.id}
@@ -73,10 +73,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.changes.new.fields.kind", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="reissue" className="input-base mt-1.5 w-full" required>
+            <select name="kind" defaultValue="reissue" className="ps-input mt-1.5 w-full" required>
               <option value="reissue">{t("console.accreditation.changes.kinds.reissue", undefined, "Re-issue")}</option>
               <option value="role_change">
                 {t("console.accreditation.changes.kinds.roleChange", undefined, "Role change")}
@@ -94,14 +94,14 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.changes.new.fields.note", undefined, "Note")}
             </label>
             <textarea
               name="note"
               rows={3}
               maxLength={2000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               placeholder={t("console.accreditation.changes.new.fields.notePlaceholder", undefined, "Reason / detail")}
             />
           </div>

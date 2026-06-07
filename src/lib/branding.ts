@@ -40,11 +40,11 @@ export function safeBranding(input: unknown): Branding {
 
 /**
  * Returns CSS custom property overrides as an inline style object.
- * Accent color overrides --org-primary inside a scoped div.
+ * Accent color overrides --p-accent inside a scoped div.
  */
 export function brandingToCssVars(b: Branding): Record<string, string> {
   const v: Record<string, string> = {};
-  if (b.accentColor) v["--org-primary"] = b.accentColor;
-  if (b.accentForeground) v["--org-on-primary"] = b.accentForeground;
+  if (b.accentColor) v["--p-accent"] = b.accentColor;
+  if (b.accentForeground) v["--p-accent-contrast"] = b.accentForeground;
   return v;
 }

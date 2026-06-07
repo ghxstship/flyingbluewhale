@@ -83,7 +83,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
         <h1 className="hed-xl mt-4">
           {t("marketing.pages.alternatives.competitor.hero.title", { competitor: c.competitor })}
         </h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.alternatives.competitor.hero.body", { competitor: c.competitor })}
         </p>
       </section>
@@ -92,23 +92,23 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
         <h2 className="hed-xl">
           {t("marketing.pages.alternatives.competitor.pros.title", { competitor: c.competitor })}
         </h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.alternatives.competitor.pros.body", { competitor: c.competitor })}
         </p>
         <ul className="mt-6 space-y-3 text-sm">
           {pros.length > 0 ? (
             pros.map((p) => (
               <li key={p.feature} className="flex items-start gap-2">
-                <span className="status-dot status-dot-success mt-2" />
+                <span className="ps-dot ps-dot ps-dot--ok mt-2" />
                 <span>{p.feature}</span>
               </li>
             ))
           ) : (
-            <li className="text-[var(--text-muted)]">{t("marketing.pages.alternatives.competitor.pros.fallback")}</li>
+            <li className="text-[var(--p-text-2)]">{t("marketing.pages.alternatives.competitor.pros.fallback")}</li>
           )}
           {c.whenTheyWin.map((w) => (
             <li key={w} className="flex items-start gap-2">
-              <span className="status-dot status-dot-success mt-2" />
+              <span className="ps-dot ps-dot ps-dot--ok mt-2" />
               <span>{w}</span>
             </li>
           ))}
@@ -118,13 +118,13 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
       {cons.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <h2 className="hed-xl">{t("marketing.pages.alternatives.competitor.cons.title")}</h2>
-          <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+          <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
             {t("marketing.pages.alternatives.competitor.cons.body")}
           </p>
           <ul className="mt-6 space-y-3 text-sm">
             {cons.map((p) => (
               <li key={p.feature} className="flex items-start gap-2">
-                <span className="status-dot status-dot-error mt-2" />
+                <span className="ps-dot ps-dot ps-dot--danger mt-2" />
                 <span>{p.feature}</span>
               </li>
             ))}
@@ -136,21 +136,18 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
         <div className="surface p-8 md:p-10">
           <div className="eyebrow eyebrow-brand">{t("marketing.pages.alternatives.competitor.atlvsAlt.eyebrow")}</div>
           <h2 className="hed-lg mt-3">{c.headline}</h2>
-          <p className="mt-4 text-sm text-[var(--text-secondary)]">{c.hero}</p>
+          <p className="mt-4 text-sm text-[var(--p-text-2)]">{c.hero}</p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {c.whyWeWin.slice(0, 3).map((w) => (
-              <div
-                key={w.title}
-                className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-inset)] p-4"
-              >
+              <div key={w.title} className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4">
                 <div className="text-sm font-semibold">{w.title}</div>
-                <p className="mt-2 text-xs text-[var(--text-secondary)]">{w.body}</p>
+                <p className="mt-2 text-xs text-[var(--p-text-2)]">{w.body}</p>
               </div>
             ))}
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
-            <Link href={`/compare/${c.slug}`} className="btn btn-secondary">
+            <Link href={`/compare/${c.slug}`} className="ps-btn ps-btn--ghost">
               {t("marketing.pages.alternatives.competitor.atlvsAlt.compareLink")}
             </Link>
           </div>
@@ -159,11 +156,11 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="hed-lg">{t("marketing.pages.alternatives.competitor.migrate.title")}</h2>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.alternatives.competitor.migrate.body", { competitor: c.competitor })}
         </p>
         <div className="surface mt-6 p-6">
-          <ol className="list-decimal space-y-2 ps-5 text-sm text-[var(--text-secondary)]">
+          <ol className="list-decimal space-y-2 ps-5 text-sm text-[var(--p-text-2)]">
             {c.migration.map((m) => (
               <li key={m}>{m}</li>
             ))}
@@ -178,9 +175,7 @@ export default async function AlternativesPage({ params }: { params: Promise<{ c
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="hed-lg">{t("marketing.pages.alternatives.competitor.other.title")}</h2>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          {t("marketing.pages.alternatives.competitor.other.body")}
-        </p>
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">{t("marketing.pages.alternatives.competitor.other.body")}</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {COMPARE_LIST.filter((other) => other.slug !== c.slug)
             .slice(0, 12)

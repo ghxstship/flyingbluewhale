@@ -92,7 +92,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           <h2 className="text-base font-semibold">
             {t("console.projects.detail.descriptionHeading", undefined, "Description")}
           </h2>
-          <p className="mt-3 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">
+          <p className="mt-3 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">
             {project.description ||
               t("console.projects.detail.noDescriptionYet", undefined, "No description provided yet.")}
           </p>
@@ -102,7 +102,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           <h2 className="text-base font-semibold">
             {t("console.projects.detail.externalPortal.heading", undefined, "External Portal")}
           </h2>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">
+          <p className="mt-2 text-sm text-[var(--p-text-2)]">
             {t(
               "console.projects.detail.externalPortal.description",
               undefined,
@@ -111,7 +111,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           </p>
           <Link
             href={`/p/${project.slug}/overview`}
-            className="mt-3 inline-block font-mono text-xs text-[var(--org-primary)] hover:underline"
+            className="mt-3 inline-block font-mono text-xs text-[var(--p-accent)] hover:underline"
           >
             /p/{project.slug}/overview →
           </Link>
@@ -132,7 +132,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wide text-[var(--text-muted)]">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wide text-[var(--p-text-2)]">{label}</div>
       <div className="mt-1 text-sm">{children}</div>
     </div>
   );

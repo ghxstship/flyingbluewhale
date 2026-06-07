@@ -3,12 +3,13 @@ import {
   Inter,
   JetBrains_Mono,
   Space_Grotesk,
-  // GHXSTSHIP typography — Big Shoulders Display (cosmic /ghxstship-only),
-  // Space Grotesk (body — see above), Silkscreen (cosmic pixel labels),
-  // Space Mono (data/coordinates + SaaS eyebrows).
-  Big_Shoulders,
-  Silkscreen,
+  // ATLVS kit typography. Space Grotesk drives body + headings; Space Mono
+  // drives eyebrows / IDs / coordinates / mono code. Jost is reserved for
+  // the spaced crossbar-less wordmark (components/brand/Wordmark.tsx). The
+  // retired cosmic skin's display faces (Big Shoulders, Silkscreen) are no
+  // longer loaded — the kit is the sole typographic system.
   Space_Mono,
+  Jost,
 } from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
@@ -34,34 +35,17 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: "swap" });
 const spaceGrot = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
 
-// GHXSTSHIP — Deep Space Voyage brand stack (cosmic /ghxstship surface only).
-// Big Shoulders Display (poster display), Silkscreen (pixel labels), Space
-// Mono (coordinates / data + SaaS eyebrows). Space Grotesk for body is
-// already loaded above as `spaceGrot`; both ghxstship and atlvs-product
-// themes read it via the same `--font-space-grotesk` variable.
-//
-// Purged 2026-06-03: Anton, Bebas Neue, Share Tech, Share Tech Mono,
-// DM Sans (dead Bermuda Triangle / HVRBOR stack), Fraunces, Instrument
-// Serif, DM Serif Display, Bricolage, Geist, Geist Mono, Cormorant
-// Garamond (CHROMA BEACON 8-theme picker that was retired with the
-// two-skin lock). Zero call sites consume these vars; loading them
-// added network requests + CSS bytes for nothing.
-const bigShoulders = Big_Shoulders({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-big-shoulders",
-  display: "swap",
-});
-const silkscreen = Silkscreen({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-silkscreen",
-  display: "swap",
-});
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-space-mono",
+  display: "swap",
+});
+// Jost — wordmark face only. Light weights for the crossbar-less spaced caps.
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-jost",
   display: "swap",
 });
 
@@ -119,10 +103,10 @@ export const viewport: Viewport = {
   // paper #F5F2EC; dark paint is near-black ink. Native mobile chrome (status
   // bar, app switcher) follows the user's OS preference.
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf6" },
-    // GHXSTSHIP cosmic ink — matches --void on the default ghxstship theme
-    // so the native chrome / status bar / app switcher reads brand-on.
-    { media: "(prefers-color-scheme: dark)", color: "#060815" },
+    // ATLVS kit canon — --p-bg light / --p-bg dark. Native mobile chrome
+    // (status bar, app switcher) matches the kit's neutral canvas.
+    { media: "(prefers-color-scheme: light)", color: "#f7f8fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#111318" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -148,10 +132,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const fallbackMessages = locale === DEFAULT_LOCALE ? {} : await loadMessages(DEFAULT_LOCALE);
 
   // SSR theme from cookie (survives first paint with the right tokens).
-  // Client head script reconciles with localStorage on mount.
+  // Client head script reconciles with localStorage on mount. Default is
+  // the canonical kit skin — stale ghxstship cookies fall through.
   const cs = await cookies();
   const cookieTheme = cs.get(THEME_COOKIE_NAME)?.value;
-  const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "ghxstship";
+  const ssrTheme = isValidThemeSlug(cookieTheme) ? cookieTheme : "atlvs-product";
   const ssrColorScheme = colorSchemeFor(ssrTheme);
 
   return (
@@ -159,8 +144,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       lang={locale}
       dir={dir}
       data-theme={ssrTheme}
+      data-ui="saas"
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${inter.variable} ${mono.variable} ${spaceGrot.variable} ${bigShoulders.variable} ${silkscreen.variable} ${spaceMono.variable}`}
+      className={`h-full ${inter.variable} ${mono.variable} ${spaceGrot.variable} ${spaceMono.variable} ${jost.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -213,12 +199,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             classNames: {
               toast: "group toast",
               title: "font-medium",
-              description: "text-[var(--text-secondary)]",
+              description: "text-[var(--p-text-2)]",
               // Audit T7 fix: text-white was a raw value bypassing tokens.
-              // --org-on-primary is set per-platform overlay (white on
+              // --p-accent-contrast is set per-platform overlay (white on
               // pink/cyan/blue/red, black on yellow under bermuda-triangle).
-              actionButton: "bg-[var(--org-primary)] text-[var(--org-on-primary,white)]",
-              cancelButton: "bg-[var(--surface-inset)]",
+              actionButton: "bg-[var(--p-accent)] text-[var(--p-accent-contrast,white)]",
+              cancelButton: "bg-[var(--p-surface-2)]",
             },
           }}
         />

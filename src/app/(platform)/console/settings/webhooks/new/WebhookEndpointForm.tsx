@@ -80,7 +80,7 @@ export function WebhookEndpointForm() {
         <h3 className="text-sm font-semibold">
           {t("console.settings.webhooks.new.signingSecret", undefined, "Signing Secret")}
         </h3>
-        <p className="mt-2 text-xs text-[var(--text-muted)]">
+        <p className="mt-2 text-xs text-[var(--p-text-2)]">
           {t(
             "console.settings.webhooks.new.copyNowHint",
             undefined,
@@ -88,7 +88,7 @@ export function WebhookEndpointForm() {
           )}
         </p>
         <div className="mt-3 flex gap-2">
-          <pre className="flex-1 overflow-x-auto rounded bg-[var(--surface-inset)] p-3 font-mono text-xs">
+          <pre className="flex-1 overflow-x-auto rounded bg-[var(--p-surface-2)] p-3 font-mono text-xs">
             {createdSecret}
           </pre>
           <Button
@@ -101,7 +101,7 @@ export function WebhookEndpointForm() {
             {t("common.copy", undefined, "Copy")}
           </Button>
         </div>
-        <p className="mt-4 text-xs text-[var(--text-muted)]">
+        <p className="mt-4 text-xs text-[var(--p-text-2)]">
           {t("console.settings.webhooks.new.signaturePrefix", undefined, "Every delivery carries")}{" "}
           <code className="font-mono">x-atlvs-signature: t=&lt;ms&gt;,v1=&lt;hex&gt;</code>{" "}
           {t("console.settings.webhooks.new.signatureWhere", undefined, "where")}{" "}
@@ -138,15 +138,15 @@ export function WebhookEndpointForm() {
         )}
       />
       <div>
-        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+        <label className="text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
           {t("console.settings.webhooks.new.eventsLabel", undefined, "Events")}
         </label>
         <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           {EVENT_OPTIONS.map((ev) => (
             <label
               key={ev}
-              className={`flex cursor-pointer items-center gap-2 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs ${
-                events.has(ev) ? "bg-[var(--surface-inset)]" : ""
+              className={`flex cursor-pointer items-center gap-2 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs ${
+                events.has(ev) ? "bg-[var(--p-surface-2)]" : ""
               }`}
             >
               <input type="checkbox" checked={events.has(ev)} onChange={() => toggle(ev)} />

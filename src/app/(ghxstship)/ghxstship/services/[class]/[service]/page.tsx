@@ -79,18 +79,18 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
 
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-12">
-          <nav className="mb-6 text-xs text-[var(--text-muted)]">
-            <Link href={paths.servicesRoot()} className="hover:text-[var(--text-primary)]">
+          <nav className="mb-6 text-xs text-[var(--p-text-2)]">
+            <Link href={paths.servicesRoot()} className="hover:text-[var(--p-text-1)]">
               Services
             </Link>
             <span className="mx-2">/</span>
-            <Link href={paths.classDetail(c.slug)} className="hover:text-[var(--text-primary)]">
+            <Link href={paths.classDetail(c.slug)} className="hover:text-[var(--p-text-1)]">
               {c.shortName}
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-[var(--text-primary)]">{String(s.number).padStart(3, "0")}</span>
+            <span className="text-[var(--p-text-1)]">{String(s.number).padStart(3, "0")}</span>
           </nav>
-          <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-muted)]">
+          <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--p-text-2)]">
             Service {String(s.number).padStart(3, "0")} · {c.shortName}
             {crossClasses.length > 0 && ` × ${crossClasses.map((cc) => cc.shortName).join(" × ")}`}
           </div>
@@ -102,40 +102,28 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid gap-5 md:grid-cols-2">
             <div className="surface p-6">
-              <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
-              >
+              <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
                 What it is
               </div>
-              <p className="mt-3 text-[var(--text-secondary)]">{s.whatItIs}</p>
+              <p className="mt-3 text-[var(--p-text-2)]">{s.whatItIs}</p>
             </div>
             <div className="surface p-6">
-              <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
-              >
+              <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
                 When you need it
               </div>
-              <p className="mt-3 text-[var(--text-secondary)]">{s.whenYouNeed}</p>
+              <p className="mt-3 text-[var(--p-text-2)]">{s.whenYouNeed}</p>
             </div>
             <div className="surface p-6">
-              <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
-              >
+              <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
                 What you receive
               </div>
-              <p className="mt-3 text-[var(--text-secondary)]">{s.whatYouReceive}</p>
+              <p className="mt-3 text-[var(--p-text-2)]">{s.whatYouReceive}</p>
             </div>
             <div className="surface p-6">
-              <div
-                className="text-xs font-semibold tracking-[0.18em] uppercase"
-                style={{ color: "var(--org-primary)" }}
-              >
+              <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
                 Where it operates
               </div>
-              <p className="mt-3 text-[var(--text-secondary)]">{s.whereItOperates}</p>
+              <p className="mt-3 text-[var(--p-text-2)]">{s.whereItOperates}</p>
             </div>
           </div>
         </section>
@@ -143,12 +131,12 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid gap-5 md:grid-cols-3">
             <FactCard label="Primary phase">
-              <Link href={paths.phaseDetail(primaryPhase.slug)} className="hover:text-[var(--org-primary)]">
+              <Link href={paths.phaseDetail(primaryPhase.slug)} className="hover:text-[var(--p-accent)]">
                 {primaryPhase.name}
               </Link>
-              <p className="mt-2 text-xs text-[var(--text-muted)]">{primaryPhase.buyerIntent}</p>
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">{primaryPhase.buyerIntent}</p>
               {Array.isArray(s.secondaryPhases) && s.secondaryPhases.length > 0 && (
-                <div className="mt-3 text-[10px] tracking-wide text-[var(--text-muted)] uppercase">
+                <div className="mt-3 text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
                   Also active in:{" "}
                   {s.secondaryPhases
                     .map((p) => PHASE_BY_NUMBER[p as PhaseNumber]?.name)
@@ -157,7 +145,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
                 </div>
               )}
               {s.secondaryPhases === "all" && (
-                <div className="mt-3 text-[10px] tracking-wide text-[var(--text-muted)] uppercase">
+                <div className="mt-3 text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
                   Active across the full project lifecycle
                 </div>
               )}
@@ -173,7 +161,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
               <ul className="space-y-1 text-sm">
                 {tierObjects.map((t) => (
                   <li key={t.number}>
-                    <Link href={paths.tierDetail(t.slug)} className="hover:text-[var(--org-primary)]">
+                    <Link href={paths.tierDetail(t.slug)} className="hover:text-[var(--p-accent)]">
                       {t.name}
                     </Link>
                   </li>
@@ -185,7 +173,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
 
         {anchoredIn.length > 0 && (
           <section className="mx-auto max-w-6xl px-6">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               Industries where this service anchors
             </div>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -204,7 +192,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
 
         {siblings.length > 0 && (
           <section className="mx-auto max-w-6xl px-6">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               Related services in {c.shortName}
             </div>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -212,12 +200,12 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
                 <li key={sib.number}>
                   <Link href={paths.serviceDetail(c.slug, sib.slug)} className="surface hover-lift block p-4">
                     <div className="flex items-baseline gap-3">
-                      <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)]">
+                      <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)]">
                         {String(sib.number).padStart(3, "0")}
                       </span>
                       <span className="text-sm font-semibold">{sib.name}</span>
                     </div>
-                    <p className="mt-2 line-clamp-2 text-xs text-[var(--text-secondary)]">{sib.whatItIs}</p>
+                    <p className="mt-2 line-clamp-2 text-xs text-[var(--p-text-2)]">{sib.whatItIs}</p>
                   </Link>
                 </li>
               ))}
@@ -230,7 +218,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
               Add this to your engagement.
             </h2>
-            <p className="mt-3 max-w-xl text-[var(--text-secondary)]">
+            <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
               Most engagements bundle eight to forty services from the catalog. Tell us the brief; we&apos;ll come back
               with the scope, the engagement model, and the producer.
             </p>
@@ -252,7 +240,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
 function FactCard({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-5">
-      <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-3 text-sm">{children}</div>
     </div>
   );

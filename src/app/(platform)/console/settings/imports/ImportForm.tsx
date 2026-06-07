@@ -73,10 +73,10 @@ export function ImportForm() {
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3">
         <label className="flex flex-col gap-1 text-xs">
-          <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+          <span className="font-medium tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.settings.imports.targetLabel", undefined, "Target")}
           </span>
-          <select value={target} onChange={(e) => setTarget(e.target.value as Target)} className="input-base w-52">
+          <select value={target} onChange={(e) => setTarget(e.target.value as Target)} className="ps-input w-52">
             <option value="crew-members">
               {t("console.settings.imports.targets.crewMembers", undefined, "Crew roster")}
             </option>
@@ -86,20 +86,20 @@ export function ImportForm() {
         </label>
         {target === "tasks" ? (
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+            <span className="font-medium tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.imports.projectIdLabel", undefined, "Project id")}
             </span>
             <input
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
-              className="input-base w-80 font-mono text-xs"
+              className="ps-input w-80 font-mono text-xs"
               placeholder={t("console.settings.imports.projectIdPlaceholder", undefined, "uuid")}
             />
           </label>
         ) : null}
       </div>
       <label className="block">
-        <span className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+        <span className="text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
           {t("console.settings.imports.csvFileLabel", undefined, "CSV file")}
         </span>
         <input type="file" accept=".csv,text/csv" onChange={onFile} className="mt-1 block" />
@@ -110,7 +110,7 @@ export function ImportForm() {
           : t("console.settings.imports.importCta", undefined, "Import CSV")}
       </Button>
       {result ? (
-        <div className="rounded-md border border-[var(--border-color)] p-4 text-sm">
+        <div className="rounded-md border border-[var(--p-border)] p-4 text-sm">
           <p>
             <strong>{result.insertedCount}</strong>{" "}
             {t("console.settings.imports.summary.inserted", undefined, "inserted")} · {result.skippedCount}{" "}

@@ -49,7 +49,7 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">{t("p.promoter.marketing.title", undefined, "Marketing Milestones")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "p.promoter.marketing.subtitle",
             { projectName: project?.name ?? t("p.promoter.marketing.thisProject", undefined, "this project") },
@@ -70,7 +70,7 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
             />
           </div>
         ) : (
-          <table className="data-table mt-5 w-full text-sm">
+          <table className="ps-table mt-5 w-full text-sm">
             <thead>
               <tr>
                 <th>{t("p.promoter.marketing.table.campaign", undefined, "Campaign")}</th>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { uploadAndExtract, type UploadState } from "./actions";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 export function UploadInvoiceClient() {
   const t = useT();
@@ -43,22 +43,22 @@ export function UploadInvoiceClient() {
         </Button>
       </div>
       {fileName && (
-        <p className="text-[10px] text-[var(--text-muted)]">
+        <p className="text-[10px] text-[var(--p-text-2)]">
           {t("console.finance.apOcr.upload.selectedLabel", undefined, "Selected:")}{" "}
           <span className="font-mono">{fileName}</span> · {(fileSize / 1024).toFixed(1)}{" "}
           {t("console.finance.apOcr.upload.kb", undefined, "KB")}
         </p>
       )}
-      {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
       {state?.success && (
-        <p className="text-xs text-[var(--color-success)]">
+        <p className="text-xs text-[var(--p-success)]">
           {t(
             "console.finance.apOcr.upload.extractedConfidence",
             { pct: (state.success.confidence * 100).toFixed(0) },
             "Extracted. Confidence: {pct}%.",
           )}{" "}
           {state.success.vendor_name && (
-            <span className="text-[var(--text-secondary)]">
+            <span className="text-[var(--p-text-2)]">
               {t(
                 "console.finance.apOcr.upload.vendorLabel",
                 { vendor: state.success.vendor_name },

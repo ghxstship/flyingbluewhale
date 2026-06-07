@@ -165,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             value={formatMoney(poCommitted, currency)}
           />
         </div>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.projects.finance.marginExplainer",
             undefined,
@@ -188,12 +188,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               </h3>
               <Link
                 href={`/console/projects/${projectId}/budget`}
-                className="text-xs text-[var(--org-primary)] hover:underline"
+                className="text-xs text-[var(--p-accent)] hover:underline"
               >
                 {t("console.projects.finance.budget.open", undefined, "Open budget →")}
               </Link>
             </header>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+            <p className="mt-2 text-sm text-[var(--p-text-2)]">
               {t(
                 "console.projects.finance.budget.consumedPrefix",
                 { spent: formatMoney(budgetSpent, currency), total: formatMoney(budgetTotal, currency) },
@@ -219,7 +219,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <h3 className="text-sm font-semibold">
               {t("console.projects.finance.invoices.title", undefined, "Invoices")}
             </h3>
-            <Link href="/console/finance/invoices" className="text-xs text-[var(--org-primary)] hover:underline">
+            <Link href="/console/finance/invoices" className="text-xs text-[var(--p-accent)] hover:underline">
               {t("console.projects.finance.invoices.allLink", undefined, "All invoices →")}
             </Link>
           </header>
@@ -282,7 +282,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </h3>
             <Link
               href="/console/procurement/purchase-orders"
-              className="text-xs text-[var(--org-primary)] hover:underline"
+              className="text-xs text-[var(--p-accent)] hover:underline"
             >
               {t("console.projects.finance.purchaseOrders.allLink", undefined, "All POs →")}
             </Link>
@@ -333,7 +333,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <h3 className="text-sm font-semibold">
               {t("console.projects.finance.expenses.title", undefined, "Expenses")}
             </h3>
-            <Link href="/console/finance/expenses" className="text-xs text-[var(--org-primary)] hover:underline">
+            <Link href="/console/finance/expenses" className="text-xs text-[var(--p-accent)] hover:underline">
               {t("console.projects.finance.expenses.allLink", undefined, "All expenses →")}
             </Link>
           </header>

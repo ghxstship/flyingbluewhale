@@ -9,11 +9,11 @@ export default async function AuthNotFound() {
       {/* Waypoint brand anchor — auth-page 404 still carries the lockup. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/brand/atlvs-mark.svg" alt="" width={32} height={32} aria-hidden="true" className="mx-auto mb-6" />
-      <p className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">404</p>
+      <p className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">404</p>
       <h1 className="mt-4 text-3xl font-semibold tracking-tight">
         {t("auth.notFound.title", undefined, "Auth path not found.")}
       </h1>
-      <p className="mt-3 text-sm text-[var(--text-secondary)]">
+      <p className="mt-3 text-sm text-[var(--p-text-2)]">
         {t(
           "auth.notFound.body",
           undefined,
@@ -25,7 +25,7 @@ export default async function AuthNotFound() {
         <Button href="/signup" variant="secondary">
           {t("auth.signup.submit", undefined, "Create account")}
         </Button>
-        <Link href="/forgot-password" className="btn btn-ghost">
+        <Link href="/forgot-password" className="ps-btn ps-btn--ghost">
           {t("auth.forgotPassword.title", undefined, "Reset password")}
         </Link>
       </div>

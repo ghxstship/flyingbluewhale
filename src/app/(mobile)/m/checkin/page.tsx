@@ -32,7 +32,7 @@ export default async function CheckinPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.checkIn.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -73,11 +73,11 @@ export default async function CheckinPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.checkInSummary.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.checkInSummary.title", undefined, "Check-in Summary")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.checkIn.subtitlePrefix", undefined, "Today's clock activity, breaks, and meal credits. Use")}{" "}
         <a className="underline" href="/m/clock">
           /m/clock
@@ -98,25 +98,25 @@ export default async function CheckinPage() {
       <section className="mt-5 grid grid-cols-3 gap-2">
         <div className="surface p-3">
           <div className="font-mono text-2xl font-semibold">{shifts.length}</div>
-          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.checkIn.stats.today", undefined, "Today")}
           </div>
         </div>
         <div className="surface p-3">
           <div className="font-mono text-2xl font-semibold">{mealsCredited}</div>
-          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.checkIn.stats.meals", undefined, "Meals")}
           </div>
         </div>
         <div className="surface p-3">
           <div className="font-mono text-2xl font-semibold">{totalBreakMinutes}</div>
-          <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.checkIn.stats.breakMin", undefined, "Break min")}
           </div>
         </div>
       </section>
 
-      <p className="mt-3 text-xs text-[var(--text-muted)]">
+      <p className="mt-3 text-xs text-[var(--p-text-2)]">
         {t(
           "m.checkIn.shiftsClosed",
           { completed, total: shifts.length },
@@ -145,7 +145,7 @@ export default async function CheckinPage() {
                   <div className="truncate text-sm font-semibold">
                     {s.venue?.name ?? t("m.checkIn.unassignedVenue", undefined, "Unassigned venue")}
                   </div>
-                  <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                  <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                     {fmt.time(s.starts_at)} – {fmt.time(s.ends_at)}
                     {s.role ? ` · ${s.role}` : ""}
                   </div>

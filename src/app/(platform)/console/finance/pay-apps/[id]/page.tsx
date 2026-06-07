@@ -13,7 +13,7 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-24 rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1 text-xs";
+const INPUT = "w-24 rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs";
 
 const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
   draft: "muted",
@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               href={`/api/v1/pay-apps/${id}/pdf`}
               target="_blank"
               rel="noopener"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.finance.payApps.detail.aiaPdf", undefined, "AIA PDF")}
             </a>
@@ -111,13 +111,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-5">
         <section className="grid gap-3 md:grid-cols-4">
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.finance.payApps.detail.completed", undefined, "Completed")}
             </div>
             <div className="text-lg font-semibold">{formatMoney(app.total_completed_cents)}</div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.finance.payApps.detail.retention",
                 { pct: app.retention_pct },
@@ -127,13 +127,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <div className="text-lg font-semibold">{formatMoney(app.total_retention_cents)}</div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.finance.payApps.detail.previouslyPaid", undefined, "Previously paid")}
             </div>
             <div className="text-lg font-semibold">{formatMoney(app.total_previously_paid_cents)}</div>
           </div>
-          <div className="surface p-3 ring-2 ring-[var(--accent)]">
-            <div className="text-xs text-[var(--text-muted)]">
+          <div className="surface p-3 ring-2 ring-[var(--p-accent)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.finance.payApps.detail.dueThisPeriod", undefined, "Due this period")}
             </div>
             <div className="text-lg font-semibold">{formatMoney(app.total_due_cents)}</div>
@@ -144,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <h3 className="text-sm font-semibold">
             {t("console.finance.payApps.detail.scheduleOfValues", undefined, "Schedule of Values")}
           </h3>
-          <table className="data-table mt-3">
+          <table className="ps-table mt-3">
             <thead>
               <tr>
                 <th>{t("console.finance.payApps.detail.columns.description", undefined, "Description")}</th>
@@ -173,7 +173,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         />
                         <button
                           type="submit"
-                          className="rounded border border-[var(--border-color)] px-2 py-0.5 text-[10px]"
+                          className="rounded border border-[var(--p-border)] px-2 py-0.5 text-[10px]"
                         >
                           {t("console.finance.payApps.detail.set", undefined, "set")}
                         </button>

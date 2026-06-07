@@ -64,7 +64,7 @@ export default async function Page() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.calls.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.calls.hero.title")}</h1>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">
           {rows.length === 1
             ? t("marketing.pages.marketplace.calls.hero.countSingular", { count: String(rows.length) })
             : t("marketing.pages.marketplace.calls.hero.countPlural", { count: String(rows.length) })}
@@ -73,7 +73,7 @@ export default async function Page() {
 
       <section className="mx-auto max-w-6xl px-6 pb-16">
         {rows.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("marketing.pages.marketplace.calls.empty.message")}
           </div>
         ) : (

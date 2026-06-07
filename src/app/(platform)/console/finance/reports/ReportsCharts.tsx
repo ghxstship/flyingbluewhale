@@ -27,7 +27,7 @@ type CategoryRow = { name: string; value: number };
 
 // Phase 3.4 — config-driven cumulative revenue chart. Replaces the
 // hand-rolled AreaChart that used a custom linearGradient + DarkTooltip.
-// Tone "accent" binds to --org-primary so the brand overlay drives color.
+// Tone "accent" binds to --p-accent so the brand overlay drives color.
 // Title/description/series label localized at call site below.
 
 // Multi-hue categorical palette for the pie chart — these are data-encoded
@@ -35,12 +35,12 @@ type CategoryRow = { name: string; value: number };
 // quartet) are interleaved with neutral fallbacks chosen for hue separation
 // so the chart legend stays distinguishable in any theme.
 const PIE_COLORS = [
-  "var(--org-primary)",
-  "var(--color-success)",
+  "var(--p-accent)",
+  "var(--p-success)",
   "#a855f7", // purple — no semantic token; data-encoded distinct hue
-  "var(--color-warning)",
+  "var(--p-warning)",
   "#06b6d4", // teal
-  "var(--color-error)",
+  "var(--p-danger)",
   "#84cc16", // lime
   "#ec4899", // pink
 ];
@@ -83,26 +83,26 @@ export function ReportsCharts({
       >
         <ResponsiveContainer width="100%" height={260}>
           <ComposedChart data={monthly}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-            <XAxis dataKey="month" tick={{ fontSize: 10, fill: "var(--text-muted)" }} />
-            <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} tickFormatter={fmtAxis} />
-            <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--surface-inset)" }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />
+            <XAxis dataKey="month" tick={{ fontSize: 10, fill: "var(--p-text-2)" }} />
+            <YAxis tick={{ fontSize: 10, fill: "var(--p-text-2)" }} tickFormatter={fmtAxis} />
+            <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--p-surface-2)" }} />
             <Legend wrapperStyle={{ fontSize: 10 }} />
             <Bar
               dataKey="revenue"
               name={t("console.finance.reports.charts.revenueExpensesMargin.revenue", undefined, "Revenue")}
-              fill="var(--org-primary)"
+              fill="var(--p-accent)"
             />
             <Bar
               dataKey="expenses"
               name={t("console.finance.reports.charts.revenueExpensesMargin.expenses", undefined, "Expenses")}
-              fill="var(--color-error)"
+              fill="var(--p-danger)"
             />
             <Line
               dataKey="margin"
               name={t("console.finance.reports.charts.revenueExpensesMargin.margin", undefined, "Margin")}
               type="monotone"
-              stroke="var(--color-success)"
+              stroke="var(--p-success)"
               strokeWidth={2}
               dot={{ r: 2 }}
             />
@@ -121,10 +121,10 @@ export function ReportsCharts({
       >
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={aging.map((a) => ({ bucket: a.bucket, amount: a.amount / 100 }))}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-            <XAxis dataKey="bucket" tick={{ fontSize: 10, fill: "var(--text-muted)" }} />
-            <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} tickFormatter={fmtAxis} />
-            <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--surface-inset)" }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />
+            <XAxis dataKey="bucket" tick={{ fontSize: 10, fill: "var(--p-text-2)" }} />
+            <YAxis tick={{ fontSize: 10, fill: "var(--p-text-2)" }} tickFormatter={fmtAxis} />
+            <Tooltip content={<DarkTooltip />} cursor={{ fill: "var(--p-surface-2)" }} />
             <Bar
               dataKey="amount"
               name={t("console.finance.reports.charts.arAging.outstanding", undefined, "Outstanding")}
@@ -135,12 +135,12 @@ export function ReportsCharts({
                   key={a.bucket}
                   fill={
                     a.bucket === "Current"
-                      ? "var(--color-success)"
+                      ? "var(--p-success)"
                       : a.bucket === "1–30"
-                        ? "var(--org-primary)"
+                        ? "var(--p-accent)"
                         : a.bucket === "31–60"
-                          ? "var(--color-warning)"
-                          : "var(--color-error)"
+                          ? "var(--p-warning)"
+                          : "var(--p-danger)"
                   }
                 />
               ))}
@@ -176,7 +176,7 @@ export function ReportsCharts({
               outerRadius={80}
               innerRadius={45}
               paddingAngle={2}
-              stroke="var(--background)"
+              stroke="var(--p-bg)"
               strokeWidth={2}
             >
               {categories.map((_, i) => (
@@ -190,7 +190,7 @@ export function ReportsCharts({
       </ChartShell>
 
       {empty && (
-        <p className="col-span-full text-xs text-[var(--text-muted)]">
+        <p className="col-span-full text-xs text-[var(--p-text-2)]">
           {t(
             "console.finance.reports.charts.emptyState",
             undefined,
@@ -227,12 +227,12 @@ function DarkTooltip({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px]">
+    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[10px]">
       {label && <div className="mb-1 font-medium">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-1.5">
           <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
-          <span className="text-[var(--text-secondary)]">{p.name}:</span>
+          <span className="text-[var(--p-text-2)]">{p.name}:</span>
           <span className="font-mono">{typeof p.value === "number" ? fmtTooltip(p.value) : "—"}</span>
         </div>
       ))}

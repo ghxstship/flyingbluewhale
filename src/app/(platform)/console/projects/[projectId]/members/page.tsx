@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       />
       <div className="page-content max-w-4xl space-y-6">
         {!isAdmin && (
-          <div className="surface p-4 text-sm text-[var(--text-muted)]">
+          <div className="surface p-4 text-sm text-[var(--p-text-2)]">
             {t(
               "console.projects.members.viewOnlyNotice",
               undefined,
@@ -99,7 +99,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           />
         ) : (
           <div className="surface overflow-hidden">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.projects.members.colMember", undefined, "Member")}</th>

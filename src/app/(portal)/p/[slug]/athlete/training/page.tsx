@@ -123,16 +123,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t("p.athlete.training.upcoming.heading", undefined, "Upcoming Sessions")}
           </h3>
           {upcoming.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("p.athlete.training.upcoming.empty", undefined, "No training sessions scheduled.")}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {upcoming.map((s) => (
                 <li key={s.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{s.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmt(s.starts_at)} → {fmt(s.ends_at)}
                       {s.location?.name ? ` · ${s.location.name}` : ""}
                     </div>
@@ -149,12 +149,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h3 className="text-sm font-semibold">
               {t("p.athlete.training.recent.heading", undefined, "Recent Sessions")}
             </h3>
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {past.slice(0, 10).map((s) => (
                 <li key={s.id} className="flex items-center justify-between py-2 text-xs">
                   <div className="min-w-0">
                     <span className="font-medium">{s.name}</span>
-                    <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">{fmt(s.starts_at)}</span>
+                    <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">{fmt(s.starts_at)}</span>
                   </div>
                   <Badge variant="muted">{toTitle(s.status)}</Badge>
                 </li>
@@ -163,7 +163,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </section>
         )}
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "p.athlete.training.footer.prefix",
             undefined,

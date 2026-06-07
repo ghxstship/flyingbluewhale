@@ -68,7 +68,7 @@ export default async function Page() {
                 "Enable public marketplace surfaces for this org",
               )}
             </label>
-            <p className="text-xs text-[var(--text-secondary)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.marketplace.settings.enableHintPrefix",
                 undefined,
@@ -86,7 +86,7 @@ export default async function Page() {
             max={5000}
             defaultValue={String(org.marketplace_take_rate_bps)}
           />
-          <p className="text-xs text-[var(--text-secondary)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.marketplace.settings.takeRateHint",
               undefined,

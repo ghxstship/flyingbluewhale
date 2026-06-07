@@ -90,12 +90,12 @@ export default async function Page() {
           submitLabel={t("me.preferences.submit", undefined, "Save Preferences")}
         >
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("me.preferences.appearance.legend", undefined, "Appearance")}
             </legend>
 
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("me.preferences.appearance.theme", undefined, "Theme")}
               </label>
               <div className="mt-1.5 grid grid-cols-3 gap-1.5">
@@ -109,7 +109,7 @@ export default async function Page() {
                       name="theme"
                       value={themeOption}
                       defaultChecked={prefs.theme === themeOption}
-                      className="accent-[var(--org-primary)]"
+                      className="accent-[var(--p-accent)]"
                     />
                     <span>{toTitle(themeOption)}</span>
                   </label>
@@ -118,7 +118,7 @@ export default async function Page() {
             </div>
 
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("me.preferences.appearance.density", undefined, "Density")}
               </label>
               <div className="mt-1.5 grid grid-cols-3 gap-1.5">
@@ -132,7 +132,7 @@ export default async function Page() {
                       name="density"
                       value={d}
                       defaultChecked={prefs.density === d}
-                      className="accent-[var(--org-primary)]"
+                      className="accent-[var(--p-accent)]"
                     />
                     <span>{toTitle(d)}</span>
                   </label>
@@ -142,7 +142,7 @@ export default async function Page() {
           </fieldset>
 
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("me.preferences.locale.legend", undefined, "Locale")}
             </legend>
             <div className="grid grid-cols-2 gap-3">
@@ -166,17 +166,17 @@ export default async function Page() {
           </fieldset>
 
           <fieldset className="space-y-2">
-            <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("me.preferences.consent.legend", undefined, "Consent")}
             </legend>
 
             <label className="surface flex cursor-not-allowed items-start gap-3 p-3 text-sm opacity-70">
-              <input type="checkbox" checked disabled className="mt-0.5 accent-[var(--org-primary)]" />
+              <input type="checkbox" checked disabled className="mt-0.5 accent-[var(--p-accent)]" />
               <div>
                 <div className="font-medium">
                   {t("me.preferences.consent.essential.label", undefined, "Essential cookies")}
                 </div>
-                <div className="text-[11px] text-[var(--text-muted)]">
+                <div className="text-[11px] text-[var(--p-text-2)]">
                   {t(
                     "me.preferences.consent.essential.description",
                     undefined,
@@ -191,11 +191,11 @@ export default async function Page() {
                 type="checkbox"
                 name="analytics"
                 defaultChecked={prefs.consent?.analytics ?? false}
-                className="mt-0.5 accent-[var(--org-primary)]"
+                className="mt-0.5 accent-[var(--p-accent)]"
               />
               <div>
                 <div className="font-medium">{t("me.preferences.consent.analytics.label", undefined, "Analytics")}</div>
-                <div className="text-[11px] text-[var(--text-muted)]">
+                <div className="text-[11px] text-[var(--p-text-2)]">
                   {t(
                     "me.preferences.consent.analytics.description",
                     undefined,
@@ -210,11 +210,11 @@ export default async function Page() {
                 type="checkbox"
                 name="marketing"
                 defaultChecked={prefs.consent?.marketing ?? false}
-                className="mt-0.5 accent-[var(--org-primary)]"
+                className="mt-0.5 accent-[var(--p-accent)]"
               />
               <div>
                 <div className="font-medium">{t("me.preferences.consent.marketing.label", undefined, "Marketing")}</div>
-                <div className="text-[11px] text-[var(--text-muted)]">
+                <div className="text-[11px] text-[var(--p-text-2)]">
                   {t(
                     "me.preferences.consent.marketing.description",
                     undefined,

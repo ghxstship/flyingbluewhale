@@ -34,14 +34,14 @@ export default async function Page({ params }: { params: Promise<{ token: string
       subtitle={t("auth.magicLink.expiredSubtitle", undefined, "We couldn't sign you in with that link.")}
     >
       <Alert kind="error">{error.message}</Alert>
-      <p className="mt-4 text-sm text-[var(--text-secondary)]">
+      <p className="mt-4 text-sm text-[var(--p-text-2)]">
         {t(
           "auth.magicLink.expiredBody",
           undefined,
           "Magic links expire after a short window. Request a fresh one and try again.",
         )}
       </p>
-      <Link href="/magic-link" className="btn btn-primary mt-4 w-full">
+      <Link href="/magic-link" className="ps-btn mt-4 w-full">
         {t("auth.magicLink.sendAnother", undefined, "Send another magic link")}
       </Link>
     </AuthShell>

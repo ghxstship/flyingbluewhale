@@ -36,20 +36,20 @@ export function LetterDocument({
     <article className="surface mx-auto max-w-3xl space-y-8 p-10 print:p-0 print:shadow-none">
       <header className="flex items-start justify-between border-b border-[var(--border-default)] pb-6">
         <div>
-          <div className="font-mono text-xs tracking-widest text-[var(--text-muted)] uppercase">
+          <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">
             {EMPLOYER_LABEL[letter.employer]}
           </div>
           <h1 className="mt-2 text-2xl leading-tight font-semibold">Engagement Letter</h1>
-          <div className="mt-1 text-sm text-[var(--text-muted)]">{letter.project_name}</div>
+          <div className="mt-1 text-sm text-[var(--p-text-2)]">{letter.project_name}</div>
         </div>
-        <div className="text-end text-xs text-[var(--text-muted)]">
+        <div className="text-end text-xs text-[var(--p-text-2)]">
           <div>Issued {issuedOn}</div>
           <div className="font-mono">REF · OL-{letter.id.slice(0, 8).toUpperCase()}</div>
         </div>
       </header>
 
       <section className="space-y-2">
-        <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Recipient</div>
+        <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Recipient</div>
         <div className="text-base font-medium">{letter.recipient_name}</div>
       </section>
 
@@ -63,10 +63,10 @@ export function LetterDocument({
           are outlined below — please give it a read, then counter-sign at the bottom to make it official.
         </p>
         {letter.signing_authority_name && letter.signing_authority_email && (
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             Questions before signing? Reach{" "}
-            <strong className="text-[var(--text-secondary)]">{letter.signing_authority_name}</strong> at{" "}
-            <a className="text-[var(--org-primary)] hover:underline" href={`mailto:${letter.signing_authority_email}`}>
+            <strong className="text-[var(--p-text-2)]">{letter.signing_authority_name}</strong> at{" "}
+            <a className="text-[var(--p-accent)] hover:underline" href={`mailto:${letter.signing_authority_email}`}>
               {letter.signing_authority_email}
             </a>
             .
@@ -75,9 +75,7 @@ export function LetterDocument({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-          1. Engagement Summary
-        </h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">1. Engagement Summary</h2>
         <DefinitionList
           rows={[
             ["Role", letter.role_title],
@@ -94,7 +92,7 @@ export function LetterDocument({
         />
 
         <div className="mt-4 space-y-2">
-          <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">Engagement Window</div>
+          <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">Engagement Window</div>
           <div className="overflow-hidden rounded border border-[var(--border-default)]">
             <table className="w-full text-xs">
               <tbody>
@@ -110,8 +108,8 @@ export function LetterDocument({
             </table>
           </div>
           {letter.engagement_days > 0 && (
-            <div className="text-xs text-[var(--text-muted)]">
-              <strong className="text-[var(--text-primary)]">{letter.engagement_days}</strong> projected service day
+            <div className="text-xs text-[var(--p-text-2)]">
+              <strong className="text-[var(--p-text-1)]">{letter.engagement_days}</strong> projected service day
               {letter.engagement_days === 1 ? "" : "s"} on site.
             </div>
           )}
@@ -119,7 +117,7 @@ export function LetterDocument({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">2. Compensation</h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">2. Compensation</h2>
         <DefinitionList
           rows={[
             ["Basis", BASIS_LABEL[letter.compensation_basis]],
@@ -131,62 +129,58 @@ export function LetterDocument({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">3. Inclusions</h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">3. Inclusions</h2>
         <ul className="space-y-1 text-sm">
           {(letter.effective_inclusions ?? []).length === 0 && (
-            <li className="text-[var(--text-muted)]">No additional inclusions specified.</li>
+            <li className="text-[var(--p-text-2)]">No additional inclusions specified.</li>
           )}
           {(letter.effective_inclusions ?? []).map((item, i) => (
             <li key={i} className="flex gap-2">
-              <span className="text-[var(--text-muted)]">·</span>
+              <span className="text-[var(--p-text-2)]">·</span>
               <span>{item}</span>
             </li>
           ))}
           {letter.effective_travel_provided && (
             <li className="flex gap-2">
-              <span className="text-[var(--text-muted)]">·</span>
+              <span className="text-[var(--p-text-2)]">·</span>
               <span>Travel provided / arranged</span>
             </li>
           )}
           {letter.effective_lodging_provided && (
             <li className="flex gap-2">
-              <span className="text-[var(--text-muted)]">·</span>
+              <span className="text-[var(--p-text-2)]">·</span>
               <span>Lodging provided</span>
             </li>
           )}
           {letter.effective_meals_provided && (
             <li className="flex gap-2">
-              <span className="text-[var(--text-muted)]">·</span>
+              <span className="text-[var(--p-text-2)]">·</span>
               <span>Crew meals on call days</span>
             </li>
           )}
         </ul>
         {letter.effective_inclusions_footnote && (
-          <p className="text-xs text-[var(--text-muted)] italic">{letter.effective_inclusions_footnote}</p>
+          <p className="text-xs text-[var(--p-text-2)] italic">{letter.effective_inclusions_footnote}</p>
         )}
       </section>
 
       {letter.effective_expectations && (
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            4. Scope of Work
-          </h2>
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">4. Scope of Work</h2>
           <p className="text-sm leading-relaxed whitespace-pre-line">{letter.effective_expectations}</p>
         </section>
       )}
 
       {(letter.schedule_items?.length ?? 0) > 0 && (
         <section className="break-inside-avoid space-y-3">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-            5. Working Schedule
-          </h2>
-          <p className="text-xs text-[var(--text-muted)]">
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">5. Working Schedule</h2>
+          <p className="text-xs text-[var(--p-text-2)]">
             Project production schedule milestones. Dates and activities are subject to revision based on production
             circumstances; we&rsquo;ll let you know about material changes through standard production channels.
           </p>
           <div className="overflow-hidden rounded border border-[var(--border-default)]">
             <table className="w-full text-xs">
-              <thead className="bg-[var(--surface-inset)] text-[var(--text-muted)]">
+              <thead className="bg-[var(--p-surface-2)] text-[var(--p-text-2)]">
                 <tr>
                   <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">Date</th>
                   <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">Call</th>
@@ -199,7 +193,7 @@ export function LetterDocument({
                   <tr key={i} className="border-t border-[var(--border-default)] align-top">
                     <td className="px-3 py-2">
                       <div className="font-medium">{d.day_label}</div>
-                      <div className="font-mono text-[10px] text-[var(--text-muted)]">{d.date}</div>
+                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">{d.date}</div>
                     </td>
                     <td className="px-3 py-2 font-mono">{d.call_time}</td>
                     <td className="px-3 py-2 font-mono">{d.wrap_time}</td>
@@ -219,18 +213,18 @@ export function LetterDocument({
       )}
 
       <section className="break-inside-avoid space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           6. Onboarding Checklist
         </h2>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           A short list to get you ready. Try to close these out within 48 hours of acceptance so credentials can ship.
         </p>
         <ol className="space-y-2 text-sm">
           {!msaOnFile && msaSignerUrl && (
-            <li className="flex items-baseline gap-3 rounded border border-[var(--org-primary)] bg-[var(--surface-inset)] p-3">
+            <li className="flex items-baseline gap-3 rounded border border-[var(--p-accent)] bg-[var(--p-surface-2)] p-3">
               <span
                 aria-hidden
-                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--org-primary)] text-[10px] font-semibold text-[var(--org-primary)]"
+                className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--p-accent)] text-[10px] font-semibold text-[var(--p-accent)]"
               >
                 ★
               </span>
@@ -239,14 +233,14 @@ export function LetterDocument({
                   <strong>Sign your Master Services Agreement</strong>
                   <a
                     href={msaSignerUrl}
-                    className="ms-2 text-[10px] tracking-wider text-[var(--org-primary)] uppercase hover:underline"
+                    className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                     target="_blank"
                     rel="noreferrer"
                   >
                     Open MSA ↗
                   </a>
                 </span>
-                <span className="mt-0.5 block text-xs text-[var(--text-muted)]">
+                <span className="mt-0.5 block text-xs text-[var(--p-text-2)]">
                   One-time. Signs apply to every engagement we book you on — you won&rsquo;t see this step again.
                 </span>
               </span>
@@ -271,7 +265,7 @@ export function LetterDocument({
                           <a
                             key={i}
                             href={l.url}
-                            className="ms-2 text-[10px] tracking-wider text-[var(--org-primary)] uppercase hover:underline"
+                            className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -281,7 +275,7 @@ export function LetterDocument({
                       : item.link && (
                           <a
                             href={item.link}
-                            className="ms-2 text-[10px] tracking-wider text-[var(--org-primary)] uppercase hover:underline"
+                            className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                             target="_blank"
                             rel="noreferrer"
                           >
@@ -289,7 +283,7 @@ export function LetterDocument({
                           </a>
                         )}
                   </span>
-                  {item.note && <span className="mt-0.5 block text-xs text-[var(--text-muted)]">{item.note}</span>}
+                  {item.note && <span className="mt-0.5 block text-xs text-[var(--p-text-2)]">{item.note}</span>}
                 </span>
               </li>
             ))}
@@ -306,7 +300,7 @@ export function LetterDocument({
                   Review the Salvage City Production Guide
                   <a
                     href={letter.guide_url}
-                    className="ms-2 text-[10px] tracking-wider text-[var(--org-primary)] uppercase hover:underline"
+                    className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -322,14 +316,14 @@ export function LetterDocument({
       <section className="border-t border-[var(--border-default)] pt-6">
         {letter.status === "accepted" && letter.accepted_signature ? (
           <div className="space-y-2">
-            <div className="text-xs tracking-widest text-[var(--text-muted)] uppercase">Accepted</div>
+            <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Accepted</div>
             <div className="font-subdisplay text-2xl tracking-wide">{letter.accepted_signature}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               Counter-signed {letter.accepted_at ? formatDateTime(letter.accepted_at) : ""}
             </div>
           </div>
         ) : (
-          <div className="space-y-2 text-sm text-[var(--text-muted)]">
+          <div className="space-y-2 text-sm text-[var(--p-text-2)]">
             <div className="text-xs tracking-widest uppercase">Awaiting Counter-Signature</div>
             <div>
               Type your full legal name below to formalize acceptance. Your typed signature, IP address, and timestamp
@@ -337,9 +331,9 @@ export function LetterDocument({
             </div>
           </div>
         )}
-        <div className="mt-6 grid grid-cols-2 gap-6 text-xs text-[var(--text-muted)]">
+        <div className="mt-6 grid grid-cols-2 gap-6 text-xs text-[var(--p-text-2)]">
           <div>
-            <div className="font-medium text-[var(--text-secondary)]">For {EMPLOYER_LABEL[letter.employer]}</div>
+            <div className="font-medium text-[var(--p-text-2)]">For {EMPLOYER_LABEL[letter.employer]}</div>
             <div className="font-subdisplay text-lg tracking-wide">
               {letter.signing_authority_name ?? "Julian Clarkson"}
             </div>
@@ -353,14 +347,14 @@ export function LetterDocument({
         </div>
       </section>
 
-      <footer className="space-y-3 border-t border-[var(--border-default)] pt-6 text-xs text-[var(--text-muted)]">
+      <footer className="space-y-3 border-t border-[var(--border-default)] pt-6 text-xs text-[var(--p-text-2)]">
         {msaOnFile && activeMsa ? (
           <p>
             This engagement is subject to your <strong>Independent Contractor Master Services Agreement</strong> signed{" "}
             {formatDate(activeMsa.signed_at, "long")} (v{activeMsa.version}).{" "}
             {msaSignerUrl && (
               <a
-                className="text-[var(--org-primary)] hover:underline"
+                className="text-[var(--p-accent)] hover:underline"
                 href={msaSignerUrl}
                 target="_blank"
                 rel="noreferrer"
@@ -372,12 +366,7 @@ export function LetterDocument({
         ) : msaSignerUrl ? (
           <p>
             This engagement is subject to our <strong>Independent Contractor Master Services Agreement</strong> —{" "}
-            <a
-              className="text-[var(--org-primary)] hover:underline"
-              href={msaSignerUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a className="text-[var(--p-accent)] hover:underline" href={msaSignerUrl} target="_blank" rel="noreferrer">
               read &amp; sign your copy ↗
             </a>{" "}
             (one-time, applies to every future engagement).
@@ -418,7 +407,7 @@ function DefinitionList({ rows }: { rows: Array<[string, string]> }) {
     <dl className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {rows.map(([k, v]) => (
         <div key={k} className="space-y-0.5">
-          <dt className="text-xs tracking-wider text-[var(--text-muted)] uppercase">{k}</dt>
+          <dt className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">{k}</dt>
           <dd className="text-sm">{v}</dd>
         </div>
       ))}
@@ -430,7 +419,7 @@ function EngagementRow({ label, date, bold = false }: { label: string; date: str
   const display = date ? formatDate(date, "long") : "—";
   return (
     <tr className="border-t border-[var(--border-default)] first:border-t-0">
-      <td className="w-44 px-3 py-2 text-xs tracking-wider text-[var(--text-muted)] uppercase">{label}</td>
+      <td className="w-44 px-3 py-2 text-xs tracking-wider text-[var(--p-text-2)] uppercase">{label}</td>
       <td className={`px-3 py-2 text-sm ${bold ? "font-medium" : ""}`}>{display}</td>
     </tr>
   );

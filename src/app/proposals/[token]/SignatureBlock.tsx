@@ -54,7 +54,9 @@ export function SignatureBlock({
     // Proposal docs stay in light mode intentionally (for print); derive stroke
     // color from the computed foreground token rather than a hard-coded hex.
     const computedText =
-      typeof window !== "undefined" ? getComputedStyle(document.documentElement).getPropertyValue("--text").trim() : "";
+      typeof window !== "undefined"
+        ? getComputedStyle(document.documentElement).getPropertyValue("--p-text-1").trim()
+        : "";
     ctx.strokeStyle = computedText || "rgb(17,17,17)";
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
@@ -95,11 +97,9 @@ export function SignatureBlock({
     return (
       <section className="print-hide-sibling mx-auto my-12 max-w-4xl px-8">
         <div className="surface p-8 text-center">
-          <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--color-success)] uppercase">
-            Signed
-          </div>
+          <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-success)] uppercase">Signed</div>
           <div className="font-display mt-3 text-4xl tracking-tight">Thank you, {signerName ?? "signer"}</div>
-          <div className="mt-2 font-mono text-xs text-[var(--text-muted)]">Signed {formatDate(signedAt, "long")}</div>
+          <div className="mt-2 font-mono text-xs text-[var(--p-text-2)]">Signed {formatDate(signedAt, "long")}</div>
         </div>
       </section>
     );
@@ -108,17 +108,17 @@ export function SignatureBlock({
   return (
     <section id="authorize" className="mx-auto my-12 max-w-4xl px-8">
       <div className="surface p-8">
-        <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">Authorize</div>
+        <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">Authorize</div>
         <h2 className="font-display mt-3 text-4xl tracking-tight">Accept this proposal</h2>
-        {instructions && <p className="mt-2 text-sm text-[var(--text-secondary)]">{instructions}</p>}
+        {instructions && <p className="mt-2 text-sm text-[var(--p-text-2)]">{instructions}</p>}
 
         {parties.length > 1 && (
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {parties.map((p, i) => (
               <div key={i} className="surface p-3 text-xs">
-                <div className="font-semibold tracking-wider text-[var(--text-muted)] uppercase">{p.role}</div>
+                <div className="font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{p.role}</div>
                 <div className="mt-1">{p.name ?? "—"}</div>
-                {p.email && <div className="font-mono text-[11px] text-[var(--text-muted)]">{p.email}</div>}
+                {p.email && <div className="font-mono text-[11px] text-[var(--p-text-2)]">{p.email}</div>}
               </div>
             ))}
           </div>
@@ -133,18 +133,18 @@ export function SignatureBlock({
           </div>
           <Input label="Title / role" name="role" placeholder="Founder, Producer, COO…" />
 
-          <div className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5">
+          <div className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5">
             <button
               type="button"
               onClick={() => setMode("typed")}
-              className={`rounded-full px-3 py-1 text-xs ${mode === "typed" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+              className={`rounded-full px-3 py-1 text-xs ${mode === "typed" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
             >
               Type
             </button>
             <button
               type="button"
               onClick={() => setMode("canvas")}
-              className={`rounded-full px-3 py-1 text-xs ${mode === "canvas" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+              className={`rounded-full px-3 py-1 text-xs ${mode === "canvas" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
             >
               Draw
             </button>
@@ -156,7 +156,7 @@ export function SignatureBlock({
                 value={typed}
                 onChange={(e) => setTyped(e.target.value)}
                 placeholder="Type your signature"
-                className="input-base font-subdisplay w-full text-3xl tracking-wide"
+                className="ps-input font-subdisplay w-full text-3xl tracking-wide"
               />
               <input type="hidden" name="data" value={typed} />
             </>
@@ -173,7 +173,7 @@ export function SignatureBlock({
                 />
               </div>
               <CanvasSync canvasRef={canvasRef} hasInk={hasInk} />
-              <button type="button" onClick={clear} className="text-xs text-[var(--text-muted)] hover:underline">
+              <button type="button" onClick={clear} className="text-xs text-[var(--p-text-2)] hover:underline">
                 Clear
               </button>
             </>

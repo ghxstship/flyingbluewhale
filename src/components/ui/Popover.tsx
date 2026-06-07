@@ -21,11 +21,11 @@ export const PopoverContent = React.forwardRef<
         ref={ref}
         align={align}
         sideOffset={sideOffset}
-        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 w-72 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-4 outline-none ${className}`}
+        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 w-72 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-4 outline-none ${className}`}
         {...props}
       >
         {children}
-        {showArrow && <PopoverPrimitive.Arrow className="fill-[var(--surface-raised)]" width={10} height={5} />}
+        {showArrow && <PopoverPrimitive.Arrow className="fill-[var(--p-surface)]" width={10} height={5} />}
       </PopoverPrimitive.Content>
     </PopoverPrimitive.Portal>
   );

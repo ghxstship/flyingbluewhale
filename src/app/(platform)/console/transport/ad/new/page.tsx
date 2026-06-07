@@ -19,10 +19,10 @@ export default async function Page() {
           submitLabel={t("console.transport.ad.new.submit", undefined, "Add Manifest")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.ad.new.direction", undefined, "Direction")}
             </label>
-            <select name="kind" defaultValue="arrival" className="input-base mt-1.5 w-full">
+            <select name="kind" defaultValue="arrival" className="ps-input mt-1.5 w-full">
               <option value="arrival">{t("console.transport.ad.new.arrival", undefined, "Arrival")}</option>
               <option value="departure">{t("console.transport.ad.new.departure", undefined, "Departure")}</option>
             </select>
@@ -54,10 +54,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.ad.new.notes", undefined, "Notes")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

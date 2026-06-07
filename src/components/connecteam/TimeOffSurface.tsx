@@ -50,7 +50,7 @@ export async function TimeOffSurface({
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -88,13 +88,13 @@ export async function TimeOffSurface({
 
   return (
     <div className={containerClass}>
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
 
       <section className="mt-5">
         <h2 className="text-sm font-semibold">{t("m.timeOff.balancesHeading", { year }, `Balances (${year})`)}</h2>
         {balanceList.length === 0 ? (
-          <p className="mt-2 text-xs text-[var(--text-muted)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t("m.timeOff.noPolicies", undefined, "No policies assigned yet.")}
           </p>
         ) : (
@@ -107,7 +107,7 @@ export async function TimeOffSurface({
                     <div className="text-sm font-semibold">
                       {policy?.name ?? t("m.timeOff.policyFallback", undefined, "Policy")}
                     </div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">
                       {t(
                         "m.timeOff.accruedUsed",
                         { accrued: b.accrued_ytd_hours, used: b.used_ytd_hours },
@@ -119,7 +119,7 @@ export async function TimeOffSurface({
                     <div className="font-mono text-base font-semibold">
                       {t("m.timeOff.hours", { hours: b.balance_hours }, `${b.balance_hours}h`)}
                     </div>
-                    <div className="text-[10px] text-[var(--text-muted)]">
+                    <div className="text-[10px] text-[var(--p-text-2)]">
                       {t("m.timeOff.available", undefined, "available")}
                     </div>
                   </div>
@@ -131,7 +131,7 @@ export async function TimeOffSurface({
       </section>
 
       <div className="mt-5 flex justify-end">
-        <Link href={newRequestHref} className="btn btn-primary btn-sm">
+        <Link href={newRequestHref} className="ps-btn ps-btn--sm">
           {t("m.timeOff.newRequest", undefined, "New Request")}
         </Link>
       </div>
@@ -162,17 +162,17 @@ export async function TimeOffSurface({
                 <li key={r.id} className="surface p-3">
                   <div className="flex items-center justify-between">
                     <Badge variant={tone}>{r.request_state}</Badge>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.timeOff.hours", { hours: r.hours_requested }, `${r.hours_requested}h`)}
                     </span>
                   </div>
                   <div className="mt-1 text-sm font-semibold">
                     {policy?.name ?? t("m.timeOff.timeOffFallback", undefined, "Time off")}
                   </div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {fmt.date(r.starts_on)} → {fmt.date(r.ends_on)}
                   </div>
-                  {r.decision_note && <p className="mt-1 text-xs text-[var(--text-secondary)]">{r.decision_note}</p>}
+                  {r.decision_note && <p className="mt-1 text-xs text-[var(--p-text-2)]">{r.decision_note}</p>}
                 </li>
               );
             })

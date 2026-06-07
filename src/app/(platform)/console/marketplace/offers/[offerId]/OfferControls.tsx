@@ -16,7 +16,7 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
           <h2 className="text-sm font-semibold tracking-wide uppercase">
             {t("console.marketplace.offers.controls.stateHeading", undefined, "State")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.marketplace.offers.controls.stateFlow",
               undefined,

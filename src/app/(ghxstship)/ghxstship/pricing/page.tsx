@@ -60,7 +60,7 @@ export default function PricingPage() {
       <div className="space-y-24 pb-24">
         {/* HERO */}
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             Pricing
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -68,21 +68,21 @@ export default function PricingPage() {
             <br />
             to work with us.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
-            <strong className="text-[var(--text-primary)]">Per Project</strong> for a single brief. Five tiers scaled to
+          <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
+            <strong className="text-[var(--p-text-1)]">Per Project</strong> for a single brief. Five tiers scaled to
             scope, from a one-night activation to a multi-year mega-event.{" "}
-            <strong className="text-[var(--text-primary)]">Retainer</strong> for ongoing programs. Four bundles built
-            around team composition, from a coordinator pair to a senior team with 24/7 support. Add-ons stack on either
-            path. Production costs pass through at cost.
+            <strong className="text-[var(--p-text-1)]">Retainer</strong> for ongoing programs. Four bundles built around
+            team composition, from a coordinator pair to a senior team with 24/7 support. Add-ons stack on either path.
+            Production costs pass through at cost.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link href="#per-project" className="btn btn-secondary btn-sm">
+            <Link href="#per-project" className="ps-btn ps-btn--ghost ps-btn--sm">
               Per-Project
             </Link>
-            <Link href="#retainer" className="btn btn-secondary btn-sm">
+            <Link href="#retainer" className="ps-btn ps-btn--ghost ps-btn--sm">
               Retainer
             </Link>
-            <Link href="#stack" className="btn btn-secondary btn-sm">
+            <Link href="#stack" className="ps-btn ps-btn--ghost ps-btn--sm">
               Add-Ons
             </Link>
           </div>
@@ -92,7 +92,7 @@ export default function PricingPage() {
         <section id="per-project" className="mx-auto max-w-6xl scroll-mt-24 px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
                 Per Project
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -101,7 +101,7 @@ export default function PricingPage() {
                 One brief.
               </h2>
             </div>
-            <p className="max-w-xl text-sm text-[var(--text-secondary)]">
+            <p className="max-w-xl text-sm text-[var(--p-text-2)]">
               Tiers scale to scope. The Pop is a single zone. The Federation is a multi-year mega-event with full senior
               team. Pick by the work in front of you, not the aspiration.
             </p>
@@ -114,40 +114,40 @@ export default function PricingPage() {
                 className={`flex h-full flex-col p-6 ${tier.highlight ? "surface-raised" : "surface hover-lift"}`}
               >
                 {tier.highlight && (
-                  <div className="mb-3 inline-flex w-fit items-center gap-1 bg-[var(--org-primary)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--org-on-primary)] uppercase">
+                  <div className="mb-3 inline-flex w-fit items-center gap-1 bg-[var(--p-accent)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-accent-contrast)] uppercase">
                     Most engagements
                   </div>
                 )}
                 <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {tier.name}
                 </div>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">{tier.positioning}</p>
+                <p className="mt-1 text-sm text-[var(--p-text-2)]">{tier.positioning}</p>
                 <div className="mt-4 flex items-baseline gap-2">
                   <span className="text-4xl font-semibold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
                     {tier.startingFee}
                   </span>
-                  <span className="text-xs text-[var(--text-muted)]">starting fee</span>
+                  <span className="text-xs text-[var(--p-text-2)]">starting fee</span>
                 </div>
-                <div className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4 text-xs">
+                <div className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4 text-xs">
                   <Detail label="Scope band" value={tier.scopeBand} />
                 </div>
                 <ul className="mt-6 space-y-2 text-sm">
                   {tier.includes.map((line) => (
                     <li key={line} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--org-primary)" }} />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--p-accent)" }} />
                       <span>{line}</span>
                     </li>
                   ))}
                 </ul>
-                <div className="mt-6 border-t border-[var(--border-color)] pt-4 text-xs">
-                  <div className="font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">Best for</div>
-                  <ul className="mt-2 space-y-1 text-[var(--text-secondary)]">
+                <div className="mt-6 border-t border-[var(--p-border)] pt-4 text-xs">
+                  <div className="font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">Best for</div>
+                  <ul className="mt-2 space-y-1 text-[var(--p-text-2)]">
                     {tier.bestFor.map((b) => (
                       <li key={b}>· {b}</li>
                     ))}
                   </ul>
                 </div>
-                <p className="mt-6 border-s-[3px] border-[var(--org-accent)] ps-3 text-sm text-[var(--text-secondary)] italic">
+                <p className="mt-6 border-s-[3px] border-[var(--p-accent-text)] ps-3 text-sm text-[var(--p-text-2)] italic">
                   {tier.bestLine}
                 </p>
                 <div className="mt-auto pt-6">
@@ -164,7 +164,7 @@ export default function PricingPage() {
         <section id="retainer" className="mx-auto max-w-6xl scroll-mt-24 px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
                 Retainer
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -173,7 +173,7 @@ export default function PricingPage() {
                 team composition.
               </h2>
             </div>
-            <p className="max-w-xl text-sm text-[var(--text-secondary)]">
+            <p className="max-w-xl text-sm text-[var(--p-text-2)]">
               Each tier adds a senior role and a layer of always-on support. Ramp up between tiers as your program
               grows. Drop down between tiers in your slow season. Billed monthly in advance, cancellable on 60-day
               notice.
@@ -187,21 +187,21 @@ export default function PricingPage() {
                 className={`flex h-full flex-col p-6 ${tier.highlight ? "surface-raised" : "surface hover-lift"}`}
               >
                 {tier.highlight && (
-                  <div className="mb-3 inline-flex w-fit items-center gap-1 bg-[var(--org-primary)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--org-on-primary)] uppercase">
+                  <div className="mb-3 inline-flex w-fit items-center gap-1 bg-[var(--p-accent)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-accent-contrast)] uppercase">
                     Most retained
                   </div>
                 )}
                 <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {tier.name}
                 </div>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">{tier.positioning}</p>
+                <p className="mt-1 text-sm text-[var(--p-text-2)]">{tier.positioning}</p>
                 <div className="mt-4 flex items-baseline gap-2">
                   <span className="text-3xl font-semibold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
                     {tier.monthlyFee}
                   </span>
                 </div>
-                <div className="mt-4 border-t border-[var(--border-color)] pt-4">
-                  <div className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                <div className="mt-4 border-t border-[var(--p-border)] pt-4">
+                  <div className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                     <Users className="h-3 w-3" /> Your team
                   </div>
                   <ul className="mt-2 space-y-1 text-xs">
@@ -209,25 +209,25 @@ export default function PricingPage() {
                       <li key={role} className="flex items-start gap-2">
                         <span
                           className="mt-1.5 inline-block h-1 w-1 shrink-0"
-                          style={{ background: "var(--org-primary)" }}
+                          style={{ background: "var(--p-accent)" }}
                         />
                         <span className="font-semibold">{role}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="mt-4 border-t border-[var(--border-color)] pt-4 text-xs">
+                <div className="mt-4 border-t border-[var(--p-border)] pt-4 text-xs">
                   <Detail label="Cadence" value={tier.cadence} />
                 </div>
                 <ul className="mt-5 space-y-2 text-sm">
                   {tier.includes.map((line) => (
                     <li key={line} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--org-primary)" }} />
+                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--p-accent)" }} />
                       <span>{line}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-5 border-s-[3px] border-[var(--org-accent)] ps-3 text-sm text-[var(--text-secondary)] italic">
+                <p className="mt-5 border-s-[3px] border-[var(--p-accent-text)] ps-3 text-sm text-[var(--p-text-2)] italic">
                   {tier.bestLine}
                 </p>
                 <div className="mt-auto pt-6">
@@ -249,14 +249,14 @@ export default function PricingPage() {
         <section id="stack" className="mx-auto max-w-6xl scroll-mt-24 px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
                 Add-Ons
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
                 Stack on either path.
               </h2>
             </div>
-            <p className="max-w-xl text-sm text-[var(--text-secondary)]">
+            <p className="max-w-xl text-sm text-[var(--p-text-2)]">
               Sold a la carte at scope-of-work or change-order. Stamped engineering and federation liaison are the
               most-requested across all tiers.
             </p>
@@ -268,8 +268,8 @@ export default function PricingPage() {
                 <div className="text-lg uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {a.name}
                 </div>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">{a.description}</p>
-                <div className="mt-4 font-mono text-xs tracking-[0.18em]" style={{ color: "var(--org-primary)" }}>
+                <p className="mt-2 text-sm text-[var(--p-text-2)]">{a.description}</p>
+                <div className="mt-4 font-mono text-xs tracking-[0.18em]" style={{ color: "var(--p-accent)" }}>
                   {a.priceLine}
                 </div>
               </div>
@@ -282,44 +282,35 @@ export default function PricingPage() {
           <div className="surface-raised relative overflow-hidden p-10">
             <div
               className="absolute inset-x-0 top-0 h-1"
-              style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+              style={{ background: "linear-gradient(90deg, var(--p-accent), var(--p-accent-text))" }}
             />
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
               How billing works.
             </h2>
             <div className="mt-8 grid gap-8 md:grid-cols-3">
               <div>
-                <div
-                  className="text-xs font-semibold tracking-[0.18em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
-                >
+                <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
                   01 Professional Fee
                 </div>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                <p className="mt-2 text-sm text-[var(--p-text-2)]">
                   The fee on the card is what GHXSTSHIP charges to scope, plan, and operate the engagement. Locked at
                   scope-of-work, with a clear change-order framework if scope grows.
                 </p>
               </div>
               <div>
-                <div
-                  className="text-xs font-semibold tracking-[0.18em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
-                >
+                <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
                   02 Production Pass-Through
                 </div>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                <p className="mt-2 text-sm text-[var(--p-text-2)]">
                   Gear, labor, travel, fabrication, food and beverage, freight — all production costs pass through at
                   cost plus an agreed admin rate, typically 12 to 18 percent. Full receipts on every line.
                 </p>
               </div>
               <div>
-                <div
-                  className="text-xs font-semibold tracking-[0.18em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
-                >
+                <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
                   03 Schedule
                 </div>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                <p className="mt-2 text-sm text-[var(--p-text-2)]">
                   Per-project: 60% of the professional fee on signature, 40% at load-in. Retainers: monthly in advance.
                   Production pass-throughs invoiced as they accrue.
                 </p>
@@ -338,7 +329,7 @@ export default function PricingPage() {
 
         {/* FAQ */}
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
             Pricing FAQ
           </div>
           <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -351,7 +342,7 @@ export default function PricingPage() {
                   <span className="text-base font-semibold">{faq.q}</span>
                   <span className="mt-1 inline-block text-2xl leading-none transition-transform">+</span>
                 </summary>
-                <p className="mt-3 text-sm text-[var(--text-secondary)]">{faq.a}</p>
+                <p className="mt-3 text-sm text-[var(--p-text-2)]">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -364,8 +355,8 @@ export default function PricingPage() {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <div className="font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">{label}</div>
-      <div className="mt-0.5 text-[var(--text-secondary)]">{value}</div>
+      <div className="font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
+      <div className="mt-0.5 text-[var(--p-text-2)]">{value}</div>
     </div>
   );
 }

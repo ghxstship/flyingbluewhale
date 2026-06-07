@@ -73,7 +73,7 @@ export default async function FinancePeriodsPage() {
               key: "closed",
               header: t("console.finance.periods.cols.closed", undefined, "Closed"),
               render: (r) => (r.closed_at ? new Date(r.closed_at).toLocaleDateString() : "—"),
-              className: "text-xs text-[var(--text-secondary)]",
+              className: "text-xs text-[var(--p-text-2)]",
               accessor: (r) => r.closed_at,
             },
           ]}

@@ -40,12 +40,12 @@ export default async function CheckInPage({ params }: { params: Promise<{ token:
   return (
     <div className="space-y-6">
       <header>
-        <div className="text-xs tracking-widest text-(--text-muted) uppercase">Day-1 Check-in</div>
+        <div className="text-xs tracking-widest text-(--p-text-2) uppercase">Day-1 Check-in</div>
         <h1 className="text-3xl font-semibold">Welcome to Salvage City, {letter.recipient_name.split(" ")[0]}.</h1>
       </header>
       <div className="border-s-success bg-success-soft border-s-4 p-4">
         <p className="text-sm font-medium">You're checked in.</p>
-        <p className="text-xs text-(--text-secondary)">
+        <p className="text-xs text-(--p-text-2)">
           Production sees this immediately. Head to the production trailer for credentials and the safety briefing.
         </p>
       </div>
@@ -58,7 +58,7 @@ export default async function CheckInPage({ params }: { params: Promise<{ token:
           <strong>Project Director on call:</strong> Sarah Fry · (615) 708-3676
         </p>
       </div>
-      <div className="text-xs text-(--text-muted)">
+      <div className="text-xs text-(--p-text-2)">
         <Link href={`/offer/${token}/onboarding`} className="underline">
           See your onboarding tracker
         </Link>{" "}

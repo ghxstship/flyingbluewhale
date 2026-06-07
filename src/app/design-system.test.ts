@@ -32,7 +32,7 @@ function walk(dir: string): string[] {
 const ALL_FILES = walk(SRC_DIR).filter((f) => /\.(tsx?)$/.test(f));
 
 describe("Design system — component primitive adoption", () => {
-  it("no hand-rolled brand buttons (`bg-[var(--org-primary)]` + `text-white`)", () => {
+  it("no hand-rolled brand buttons (`bg-[var(--p-accent)]` + `text-white`)", () => {
     const ALLOW = new Set<string>([
       // Primitives themselves
       "src/components/ui/Button.tsx",
@@ -68,8 +68,8 @@ describe("Design system — component primitive adoption", () => {
       if (ALLOW.has(rel)) continue;
       const txt = readFileSync(file, "utf8");
       // The danger combination:
-      //   bg-[var(--org-primary)] … text-white  (accent button)
-      //   bg-[var(--color-error)] … text-white  (destructive button)
+      //   bg-[var(--p-accent)] … text-white  (accent button)
+      //   bg-[var(--p-danger)] … text-white  (destructive button)
       if (/bg-\[var\(--(?:org-primary|color-error)\)\][^"]*text-white/.test(txt)) {
         offenders.push(rel);
       }
@@ -80,7 +80,7 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
-  it("no hand-rolled form-error boxes (`border-[color:var(--color-error)]/40`)", () => {
+  it("no hand-rolled form-error boxes (`border-[color:var(--p-danger)]/40`)", () => {
     const ALLOW = new Set<string>(["src/components/ui/Alert.tsx", "src/app/design-system.test.ts"]);
     const offenders: string[] = [];
     for (const file of ALL_FILES) {
@@ -145,7 +145,7 @@ describe("Design system — component primitive adoption", () => {
       const rel = relative(REPO_ROOT, file);
       if (ALLOW.has(rel)) continue;
       const txt = readFileSync(file, "utf8");
-      if (/bg-\[var\(--org-primary\)\]\/10[^"]*text-\[var\(--org-primary\)\]/.test(txt)) {
+      if (/bg-\[var\(--p-accent\)\]\/10[^"]*text-\[var\(--p-accent\)\]/.test(txt)) {
         offenders.push(rel);
       }
     }
@@ -184,8 +184,8 @@ describe("Design system — component primitive adoption", () => {
   });
 
   it("no raw Tailwind color-scale literals — token vars only", () => {
-    // Every paint must route through a CSS var (--color-success,
-    // --color-warning, --color-error, --color-info, --org-primary,
+    // Every paint must route through a CSS var (--p-success,
+    // --p-warning, --p-danger, --p-info, --p-accent,
     // --p-text-*, --p-border, --p-surface*, etc.). A hardcoded
     // `bg-emerald-500` / `text-amber-700` / `bg-red-500/10` bypasses
     // the token contract and silently drifts from the kit's canonical
@@ -224,7 +224,7 @@ describe("Design system — component primitive adoption", () => {
     }
     expect(
       offenders,
-      `Raw Tailwind palette literals — replace with token vars (var(--color-success) / var(--color-warning) / var(--color-error) / var(--color-info) / var(--org-primary) / var(--p-text-*) / var(--p-border) / var(--p-surface*)):\n${offenders.join("\n")}`,
+      `Raw Tailwind palette literals — replace with token vars (var(--p-success) / var(--p-warning) / var(--p-danger) / var(--p-info) / var(--p-accent) / var(--p-text-*) / var(--p-border) / var(--p-surface*)):\n${offenders.join("\n")}`,
     ).toEqual([]);
   });
 

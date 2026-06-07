@@ -94,43 +94,43 @@ export function AtomDrillIn({
         <DialogHeader>
           <div className="flex items-center gap-2">
             <Badge variant={atom.state === "tpc" ? "brand" : "muted"}>{atom.state.toUpperCase()}</Badge>
-            <span className="font-mono text-[10px] text-[var(--text-muted)]">{atom.wbs_path}</span>
+            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{atom.wbs_path}</span>
           </div>
           <DialogTitle className="mt-1">{atom.name}</DialogTitle>
           <DialogDescription>
             <span className="font-mono text-xs">{atom.identifier}</span>
-            <span className="ms-2 text-xs text-[var(--text-muted)]">· {atom.phase}</span>
+            <span className="ms-2 text-xs text-[var(--p-text-2)]">· {atom.phase}</span>
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="tasks" className="mt-2">
           <TabsList scrollable>
             <TabsTrigger value="tasks">
-              Tasks <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{tasks.length}</span>
+              Tasks <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{tasks.length}</span>
             </TabsTrigger>
             <TabsTrigger value="submittals">
               Submittals{" "}
-              <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{deliverables.length}</span>
+              <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{deliverables.length}</span>
             </TabsTrigger>
             <TabsTrigger value="expenses">
-              Expenses <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{expenses.length}</span>
+              Expenses <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{expenses.length}</span>
             </TabsTrigger>
             <TabsTrigger value="pos">
-              POs <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{poLines.length}</span>
+              POs <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{poLines.length}</span>
             </TabsTrigger>
             <TabsTrigger value="variance">
-              Variance <span className="ms-1 font-mono text-[10px] text-[var(--text-muted)]">{variances.length}</span>
+              Variance <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{variances.length}</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="tasks" className="mt-3 space-y-1.5">
             {tasks.length === 0 ? (
-              <p className="text-xs text-[var(--text-muted)]">No tasks pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">No tasks pinned to this atom.</p>
             ) : (
               tasks.map((t) => (
                 <div key={t.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
                   <span className="truncate">{t.title}</span>
                   <div className="flex items-center gap-2">
-                    {t.due_at && <span className="font-mono text-[10px] text-[var(--text-muted)]">{t.due_at}</span>}
+                    {t.due_at && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{t.due_at}</span>}
                     <Badge variant={TASK_STATUS_TONE[t.status] ?? "muted"}>{t.status}</Badge>
                   </div>
                 </div>
@@ -140,7 +140,7 @@ export function AtomDrillIn({
 
           <TabsContent value="submittals" className="mt-3 space-y-1.5">
             {deliverables.length === 0 ? (
-              <p className="text-xs text-[var(--text-muted)]">No submittals pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">No submittals pinned to this atom.</p>
             ) : (
               deliverables.map((d) => {
                 const stateKey = d.fulfillment_state ?? d.status;
@@ -148,13 +148,11 @@ export function AtomDrillIn({
                   <div key={d.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
                     <div className="min-w-0">
                       <div className="truncate">{d.title ?? d.type}</div>
-                      <div className="font-mono text-[10px] text-[var(--text-muted)]">{d.type}</div>
+                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">{d.type}</div>
                     </div>
                     <div className="flex items-center gap-2">
                       {d.deadline && (
-                        <span className="font-mono text-[10px] text-[var(--text-muted)]">
-                          {d.deadline.slice(0, 10)}
-                        </span>
+                        <span className="font-mono text-[10px] text-[var(--p-text-2)]">{d.deadline.slice(0, 10)}</span>
                       )}
                       <Badge variant={DELIVERABLE_STATE_TONE[stateKey] ?? "muted"}>{stateKey}</Badge>
                     </div>
@@ -166,13 +164,13 @@ export function AtomDrillIn({
 
           <TabsContent value="expenses" className="mt-3 space-y-1.5">
             {expenses.length === 0 ? (
-              <p className="text-xs text-[var(--text-muted)]">No expenses pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">No expenses pinned to this atom.</p>
             ) : (
               expenses.map((e) => (
                 <div key={e.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
                   <div className="min-w-0">
                     <div className="truncate">{e.description}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">{e.spent_at}</div>
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">{e.spent_at}</div>
                   </div>
                   <span className="font-mono">{money(e.amount_cents)}</span>
                 </div>
@@ -182,13 +180,13 @@ export function AtomDrillIn({
 
           <TabsContent value="pos" className="mt-3 space-y-1.5">
             {poLines.length === 0 ? (
-              <p className="text-xs text-[var(--text-muted)]">No PO line items pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">No PO line items pinned to this atom.</p>
             ) : (
               poLines.map((p) => (
                 <div key={p.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
                   <div className="min-w-0">
                     <div className="truncate">{p.description}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {p.quantity} × {money(p.unit_price_cents)}
                     </div>
                   </div>
@@ -200,7 +198,7 @@ export function AtomDrillIn({
 
           <TabsContent value="variance" className="mt-3 space-y-1.5">
             {variances.length === 0 ? (
-              <p className="text-xs text-[var(--text-muted)]">No variance entries for this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">No variance entries for this atom.</p>
             ) : (
               variances.map((v) => (
                 <div key={v.id} className="surface p-2.5 text-sm">
@@ -210,8 +208,8 @@ export function AtomDrillIn({
                       <span className="font-mono text-xs">{money(v.cost_delta_cents)}</span>
                     )}
                   </div>
-                  {v.notes && <p className="mt-1.5 text-xs text-[var(--text-muted)]">{v.notes}</p>}
-                  <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                  {v.notes && <p className="mt-1.5 text-xs text-[var(--p-text-2)]">{v.notes}</p>}
+                  <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
                     {v.recorded_at.slice(0, 19).replace("T", " ")}
                   </div>
                 </div>

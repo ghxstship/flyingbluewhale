@@ -1,72 +1,59 @@
 /*
- * CHROMA BEACON — atlvs-product theme
- * Family: light (with [data-mode="dark"] flipping every surface).
+ * ATLVS Technologies — product theme (the SaaS skin)
  *
- * The neutral SaaS skin for the ATLVS · COMPVSS · GVTEWAY product
- * apps. Distinct from the cosmic GHXSTSHIP marketing brand: this is
- * Asana/ClickUp-adjacent ergonomic territory — clean surfaces,
- * generous spacing, soft shadows, per-product accent.
+ * Single source of truth for the entire platform's visual layer. Ports the
+ * design_handoff_atlvs_kit verbatim:
  *
- * Canon: project/product-theme.css from the v2 GHXSTSHIP design
- * handoff (design_handoff/ATLVS_PRODUCT/README.md). Hard rules:
- *   - Cosmic palette is LOCKED to (marketing). SaaS shells must
- *     paint with this theme regardless of the user's cookie pref.
- *   - Per-product accent reads from `data-platform` (already set by
- *     each shell layout): atlvs=pink, compvss=amber, gvteway=cyan.
- *     Each accent is tuned for AA on its mode (deepened in light
- *     for text/links, brightened in dark for fills).
- *   - Never transition a var-backed `background` across the theme
- *     swap — Chromium strands the old color. Transition `filter`
- *     or `opacity` instead, or recolor instantly. See `.ps-btn`.
- *   - Font: Space Grotesk for body; brand display (Big Shoulders)
- *     is RESERVED for the brand-kit / marketing surface only.
+ *   - product-theme.css   → tokens + accent (per product × mode)
+ *   - kit-components.css  → full .ps-* component library, --k-* density axis,
+ *                           accent-intensity axis
+ *   - kit.css :root       → --brand-* identity tokens (for "show all three"
+ *                           surfaces) + Jost wordmark base
+ *
+ * Selector model:
+ *
+ *   Every kit selector targets [data-ui="saas"] in the source. We accept
+ *   EITHER [data-ui="saas"] or [data-theme="atlvs-product"] so existing
+ *   shells (which set data-theme) and kit-canon authoring (which uses
+ *   data-ui) both paint identically. App shells set both.
+ *
+ *   Per-product accent reads data-product (kit canon) OR data-platform
+ *   (existing codebase convention). Same three values: atlvs · compvss · gvteway.
  */
 
-[data-theme="atlvs-product"] {
-  /* ----------- TYPE -------------------------------------------------- *
-   * Neutral product sans (Space Grotesk) so the UI recedes — kit canon
-   * per design_handoff/ATLVS_PRODUCT/README.md ("product UI font is Space
-   * Grotesk") and every reference HTML in ui_kits/atlvs/*.html. Brand
-   * display (Big Shoulders) is RESERVED for the cosmic marketing skin
-   * and must not appear on SaaS surfaces. --font-space-grotesk is loaded
-   * by next/font in src/app/layout.tsx. */
-  --p-font:
-    var(--font-space-grotesk), "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --p-mono: var(--font-space-mono), ui-monospace, "SF Mono", monospace;
+/* ============================================================================
+   :root brand-identity tokens (mode-agnostic, for multi-product displays)
+   ========================================================================== */
+:root {
+  --brand-atlvs: #ff2e88;
+  --brand-atlvs-ink: #d11668;
+  --brand-atlvs-on: #fff;
+  --brand-compvss: #e9a23b;
+  --brand-compvss-ink: #9a6512;
+  --brand-compvss-on: #1b1305;
+  --brand-gvteway: #12b5b5;
+  --brand-gvteway-ink: #0b7e7e;
+  --brand-gvteway-on: #fff;
+}
 
-  /* Kit v3 ratified ATLVS-skin house rules (tokens.json#saasThemeHouseRules,
-   * 2026-06-03 lockstep). Each token carries one of three intent slots so
-   * consumers don't reach for `--p-font` everywhere:
-   *   --p-heading  → headings on the SaaS skin = body family, NOT a loud
-   *                  display face (Big Shoulders is cosmic /ghxstship only).
-   *   --p-eyebrow  → eyebrow / micro-label family = Space Mono on the SaaS
-   *                  skin (Silkscreen pixel is cosmic-only).
-   *   --p-casing   → `none` — Title Case authored in source on the SaaS
-   *                  skin (NOT text-transform: uppercase). UPPERCASE renders
-   *                  brand names as "Atlvs/Compvss/Gvteway" and fights the
-   *                  wordmarks; remains valid on the cosmic skin only. */
+/* ============================================================================
+   BASE TYPE + RADII + SPACE + ELEVATION + MOTION
+   Applies to [data-ui="saas"] OR [data-theme="atlvs-product"].
+   ========================================================================== */
+[data-ui="saas"],
+[data-theme="atlvs-product"] {
+  /* Type — Space Grotesk UI, Space Mono eyebrow. Brand display (Jost) is
+     reserved for the wordmark only. UPPERCASE retired; Title Case in source. */
+  --p-font:
+    var(--font-space-grotesk), "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    sans-serif;
   --p-heading: var(--p-font);
+  --p-mono: var(--font-space-mono), "Space Mono", ui-monospace, "SF Mono", monospace;
   --p-eyebrow: var(--p-mono);
+  --p-wordmark: var(--font-jost), "Jost", var(--font-space-grotesk), "Space Grotesk", sans-serif;
   --p-casing: none;
 
-  /* Workspace-identity discriminator palette — 8 hash buckets so each
-   * org tile is stable across sessions before its logoUrl loads.
-   *
-   * Picked for AA-legible white text contrast at 600+ weight. NOT part
-   * of the semantic palette (success/warning/danger/info) — these are
-   * pure discriminators, like GitHub's avatar tints. Tenant branding
-   * can override any of the 8 per-org via the same custom-property
-   * cascade; see src/components/WorkspaceSwitcher.tsx for consumers. */
-  --p-avatar-1: #0ea5e9;
-  --p-avatar-2: #8b5cf6;
-  --p-avatar-3: #10b981;
-  --p-avatar-4: #f59e0b;
-  --p-avatar-5: #ef4444;
-  --p-avatar-6: #ec4899;
-  --p-avatar-7: #6366f1;
-  --p-avatar-8: #14b8a6;
-
-  /* Radii — productivity-tool friendly, not pop-art sharp. */
+  /* Radii — productivity-tool friendly. */
   --p-r-sm: 6px;
   --p-r: 8px;
   --p-r-lg: 12px;
@@ -81,17 +68,13 @@
   --p-6: 24px;
   --p-8: 32px;
 
-  /* Elevation scale — v3 canon, cool/tight 3-step (resting → hover →
-     popover/modal). Replaces v2's soft-cloud shadows. */
+  /* Elevation — 3-step (resting → hover → popover/modal). */
   --p-shadow-sm: 0 1px 2px rgba(16, 20, 30, 0.05);
   --p-shadow: 0 1px 2px rgba(16, 20, 30, 0.06), 0 2px 6px rgba(16, 20, 30, 0.05);
   --p-elev-1: 0 1px 2px rgba(16, 20, 30, 0.06);
   --p-elev-2: 0 2px 4px rgba(16, 20, 30, 0.06), 0 6px 16px rgba(16, 20, 30, 0.08);
   --p-elev-3: 0 8px 28px rgba(16, 20, 30, 0.14);
   --p-shadow-lg: var(--p-elev-3);
-
-  /* Canonical motion easing — quick, in-out, 140ms. Use for hover
-     elevation + transform on .ps-card--hover and friends. */
   --p-ease: 140ms cubic-bezier(0.2, 0.7, 0.2, 1);
 
   /* Semantic signals — mode-agnostic. */
@@ -100,7 +83,28 @@
   --p-danger: #e5484d;
   --p-info: #3b82e0;
 
-  /* ----------- LIGHT (default) -------------------------------------- */
+  /* Density token defaults (cozy). Overridden by [data-density="compact"]. */
+  --p-on-strong: #fff;
+  --k-ctl-py: 9px;
+  --k-ctl-px: 16px;
+  --k-ctl-fs: 14px;
+  --k-row-py: 13px;
+  --k-row-px: 16px;
+  --k-cell-fs: 14px;
+  --k-card-pad: 18px;
+  --k-gap: 14px;
+  --k-stack: 12px;
+
+  font-family: var(--p-font);
+  background: var(--p-bg);
+  color: var(--p-text-1);
+}
+
+/* ----------- LIGHT (default) -------------------------------------------- */
+[data-ui="saas"],
+[data-ui="saas"][data-mode="light"],
+[data-theme="atlvs-product"],
+[data-mode="light"] [data-theme="atlvs-product"] {
   --p-bg: #f7f8fa;
   --p-surface: #ffffff;
   --p-surface-2: #f1f3f6;
@@ -108,133 +112,15 @@
   --p-border-2: #d3d8e0;
   --p-text-1: #181b23;
   --p-text-2: #5b6472;
-  /* WCAG 1.4.3 — lowest-emphasis text + placeholders. Was #8c95a3
-     (3.0:1 on white, fails AA). Deepened to #656d7a (5.2:1 on white,
-     4.7:1 on --p-surface-2) so muted micro-labels meet 4.5:1. Still
-     reads clearly below --p-text-2 in the type hierarchy. */
+  /* WCAG 1.4.3 — deepened from kit #8c95a3 (3.0:1) to 4.5:1+ */
   --p-text-3: #656d7a;
   --p-accent-contrast: #ffffff;
-
-  /* Accent stays inert until a [data-platform] subtree narrows it.
-     The per-product blocks below own that paint. The default accent
-     here is the platform default (atlvs/pink) so an un-platformed
-     subtree still reads in-canon. */
-  --p-accent: #ff2e88;
-  --p-accent-hover: #e61e76;
-  --p-accent-text: #be0f5a;
-  --p-accent-weak: rgba(255, 46, 136, 0.12);
-
-  /* CTA fill — solid accent buttons with a foreground LABEL (e.g. the
-     "Start Free" primary). The bright --p-accent (#ff2e88) only reaches
-     ~3.5:1 with white text, failing WCAG 1.4.3 for non-large labels.
-     This deepened, same-hue fill clears 4.5:1 with white, so filled CTAs
-     stay on-brand AND accessible. Decorative accent (top-bars, large
-     display text, focus halos) keeps the bright --p-accent. Pairs with
-     --p-accent-cta-contrast for the label color. */
-  --p-accent-cta: #d11668;
-  --p-accent-cta-contrast: #ffffff;
-
-  /* ----------- LEGACY ALIAS CONTRACT --------------------------------
-   * SSOT lock for the ATLVS skin: the `--p-*` namespace (per the kit's
-   * product-theme.css) is the SINGLE source of truth. Every legacy
-   * token below (--bg, --surface, --text-*, --color-*, --accent,
-   * --background, --bg-secondary, --org-primary, --shadow-*, etc.)
-   * is bound here as `var(--p-*)` — never an independent hex. This
-   * means the two namespaces cannot drift: changing the kit value at
-   * its --p-* declaration above flows through every consumer in one
-   * pass. If you find yourself adding a hex literal to ANY token in
-   * this block, stop and add the value to the --p-* base first, then
-   * alias here. */
-  --bg: var(--p-bg);
-  --surface: var(--p-surface);
-  --surface-2: var(--p-surface-2);
-  --surface-inset: var(--p-surface-2);
-  --surface-raised: var(--p-surface);
-  --border: var(--p-border);
-  --border-color: var(--p-border);
-  --text: var(--p-text-1);
-  --text-color: var(--p-text-1);
-  --text-primary: var(--p-text-1);
-  --text-muted: var(--p-text-2);
-  --text-secondary: var(--p-text-2);
-  --text-subtle: var(--p-text-3);
-
-  /* Semantic palette — SaaS values (muted vs. the cosmic kit's loud
-     signals). Cosmic root-tier defaults (success #2FBF71, warning brass,
-     danger flare, info plasma) are kit-correct for marketing but bleed
-     into product surfaces unless overridden here. The two product apps
-     should never paint with brass/plasma/flare — they're brand-loud,
-     not status-loud. Per product-theme.css#semantic. */
-  --color-success: var(--p-success);
-  --color-warning: var(--p-warning);
-  --color-danger: var(--p-danger);
-  --color-error: var(--p-danger);
-  --color-info: var(--p-info);
-
-  /* Font utility overrides — the ATLVS product canon is single-family
-     Space Grotesk (the UI recedes; brand display reserved for the logo).
-     Without these, Tailwind `font-display` / `font-body` and any
-     unscoped `var(--font-display)` consumer would resolve to Big
-     Shoulders from globals.css @theme inline defaults. */
-  --font-sans: var(--font-space-grotesk);
-  --font-body: var(--font-space-grotesk);
-  --font-display: var(--font-space-grotesk);
-  --font-subdisplay: var(--font-space-grotesk);
-  --font-pixel: var(--font-space-mono);
-  --font-mono: var(--font-space-mono);
-
-  /* (Note: the previous --ink-soft alias bridge was removed in the
-     ATLVS-kit alignment pass — every product page now uses
-     --text-subtle directly, which routes through to --p-text-3 via
-     the legacy alias contract above.) */
-  --accent: var(--p-accent);
-  --accent-solid: var(--p-accent);
-  --accent-contrast: var(--p-accent-contrast);
-  --radius-sm: var(--p-r-sm);
-  --radius-md: var(--p-r);
-  --radius-lg: var(--p-r-lg);
-  --border-width: 1px;
-  /* 3-step canon: elev-1 = resting, elev-2 = hover, elev-3 = popover/modal.
-     Aliases collapse the old soft/elev/card-hover names onto the canonical
-     scale so legacy primitives keep painting without code edits. */
-  --shadow-elev: var(--p-elev-1);
-  --shadow-elev-hover: var(--p-elev-2);
-  --shadow-elev-soft: var(--p-shadow-sm);
-  --shadow-press: var(--p-shadow-sm);
-  --shadow-1: var(--p-elev-1);
-  --shadow-2: var(--p-elev-2);
-  --shadow-3: var(--p-elev-3);
-  --shadow-4: var(--p-elev-3);
-  --shadow-card-hover: var(--p-elev-2);
-  --ring-width: 2px;
-  --ring-color: var(--p-accent);
-  --glass-blur: blur(8px) saturate(1.1);
-
-  --background: var(--p-bg);
-  --foreground: var(--p-text-1);
-  --bg-secondary: var(--p-surface);
-  --bg-tertiary: var(--p-surface-2);
-  --org-primary: var(--p-accent);
-  --org-secondary: var(--p-accent-hover);
-  --org-accent: var(--p-accent-text);
-  --org-on-primary: var(--p-accent-contrast);
-
-  font-family: var(--p-font);
-  background: var(--p-bg);
-  color: var(--p-text-1);
   color-scheme: light;
 }
 
-/* ---- DARK (orthogonal to theme; chosen by ThemeProvider mode) -------
- * Cascade note: `data-mode` is written to <html> by theme-script.ts
- * (pre-paint) and ThemeProvider (post-mount). `data-theme="atlvs-product"`
- * lives on the product-shell <div> deeper in the tree. A compound
- * selector like `[data-theme="atlvs-product"][data-mode="dark"]` would
- * require both attributes on the same element and silently never match
- * the cross-boundary case. The descendant combinator below correctly
- * fires when <html data-mode="dark"> wraps a <div data-theme="atlvs-
- * product">. Specificity (0,2,0) still beats the single-attribute LIGHT
- * defaults (0,1,0), so cascade order is preserved without !important. */
+/* ----------- DARK -------------------------------------------------------- */
+[data-ui="saas"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"],
 [data-mode="dark"] [data-theme="atlvs-product"] {
   --p-bg: #111318;
   --p-surface: #1a1d24;
@@ -243,125 +129,233 @@
   --p-border-2: #3a404c;
   --p-text-1: #f2f4f8;
   --p-text-2: #a6aebc;
-  /* WCAG 1.4.3 — was #6e7682 (3.7:1 on --p-surface, fails AA).
-     Lightened to #9098a4 (5.8:1 on --p-surface, 5.1:1 on
-     --p-surface-2) so dark-mode muted text meets 4.5:1. */
+  /* WCAG — lightened from kit #6e7682 (3.7:1) */
   --p-text-3: #9098a4;
   --p-accent-contrast: #0e1014;
   color-scheme: dark;
 }
 
-/* ---- PER-PRODUCT ACCENT -------------------------------------------- *
- * accent      = fills / active states
- * accent-text = accent used as text/links (deepened in light for AA)
- * accent-weak = tint for selected rows, badges, focus halos
- * Reads `data-platform` (already set on each shell wrapper:
- *   (platform) → atlvs   (portal) → gvteway   (mobile) → compvss). */
+/* ============================================================================
+   PER-PRODUCT ACCENT — reads data-product (kit) OR data-platform (codebase).
+   ========================================================================== */
 
 /* ATLVS — internal · producer · pink */
+[data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff2e88;
   --p-accent-hover: #e61e76;
-  --p-accent-text: #be0f5a;
+  --p-accent-text: #d11668;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
-  --p-accent-cta: #d11668; /* white label = 5.2:1 */
+  --p-accent-cta: #d11668;
   --p-accent-cta-contrast: #ffffff;
 }
+[data-ui="saas"][data-product="atlvs"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff4d9b;
   --p-accent-text: #ff6fae;
   --p-accent-weak: rgba(255, 46, 136, 0.18);
-  /* Dark: the bright accent + dark ink label clears AA (6.1:1). */
   --p-accent-cta: #ff4d9b;
   --p-accent-cta-contrast: #0e1014;
 }
 
 /* COMPVSS — crew · vendor · talent · amber */
+[data-ui="saas"][data-product="compvss"],
 [data-theme="atlvs-product"][data-platform="compvss"] {
   --p-accent: #e9a23b;
   --p-accent-hover: #d08d27;
   --p-accent-text: #9a6512;
   --p-accent-weak: rgba(233, 162, 59, 0.14);
   --p-accent-contrast: #1b1305;
-  --p-accent-cta: #8a5a0f; /* white label = 5.9:1 */
+  --p-accent-cta: #8a5a0f;
   --p-accent-cta-contrast: #ffffff;
 }
+[data-ui="saas"][data-product="compvss"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="compvss"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
   --p-accent: #f0b255;
   --p-accent-text: #f0b255;
   --p-accent-weak: rgba(233, 162, 59, 0.2);
   --p-accent-contrast: #1b1305;
-  /* Dark: bright amber + dark ink label (the kit's amber-on-black). */
   --p-accent-cta: #f0b255;
   --p-accent-cta-contrast: #1b1305;
 }
 
 /* GVTEWAY — guest · client · cyan */
+[data-ui="saas"][data-product="gvteway"],
 [data-theme="atlvs-product"][data-platform="gvteway"] {
   --p-accent: #12b5b5;
   --p-accent-hover: #0e9e9e;
   --p-accent-text: #0b7e7e;
   --p-accent-weak: rgba(33, 212, 212, 0.14);
-  --p-accent-cta: #0a7373; /* white label = 5.7:1 */
+  --p-accent-cta: #0a7373;
   --p-accent-cta-contrast: #ffffff;
 }
+[data-ui="saas"][data-product="gvteway"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
   --p-accent: #2bd6d6;
   --p-accent-text: #3fe0e0;
   --p-accent-weak: rgba(33, 212, 212, 0.18);
-  /* Dark: bright teal + dark ink label clears AA. */
   --p-accent-cta: #2bd6d6;
   --p-accent-cta-contrast: #0e1014;
 }
 
-/* Per-product accent → alias contract refresh (so legacy primitives
-   that consume --accent / --org-* repaint when the platform changes
-   without each call site needing to know). */
-[data-theme="atlvs-product"][data-platform] {
-  --accent: var(--p-accent);
-  --accent-solid: var(--p-accent);
-  --accent-contrast: var(--p-accent-contrast);
-  --org-primary: var(--p-accent);
-  --org-secondary: var(--p-accent-hover);
-  --org-accent: var(--p-accent-text);
-  --org-on-primary: var(--p-accent-contrast);
-  --ring-color: var(--p-accent);
+/* ============================================================================
+   ACCENT INTENSITY — soft / default / vivid axis.
+   --k-acc / --k-acc-text capture the resolved per-product accent so the
+   intensity selectors can color-mix without a self-referential cycle.
+   ========================================================================== */
+[data-ui="saas"][data-product="atlvs"],
+[data-theme="atlvs-product"][data-platform="atlvs"] {
+  --k-acc: #ff2e88;
+  --k-acc-text: #d11668;
+}
+[data-ui="saas"][data-product="atlvs"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
+  --k-acc: #ff4d9b;
+  --k-acc-text: #ff6fae;
+}
+[data-ui="saas"][data-product="compvss"],
+[data-theme="atlvs-product"][data-platform="compvss"] {
+  --k-acc: #e9a23b;
+  --k-acc-text: #9a6512;
+}
+[data-ui="saas"][data-product="compvss"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="compvss"],
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
+  --k-acc: #f0b255;
+  --k-acc-text: #f0b255;
+}
+[data-ui="saas"][data-product="gvteway"],
+[data-theme="atlvs-product"][data-platform="gvteway"] {
+  --k-acc: #12b5b5;
+  --k-acc-text: #0b7e7e;
+}
+[data-ui="saas"][data-product="gvteway"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
+  --k-acc: #2bd6d6;
+  --k-acc-text: #3fe0e0;
 }
 
-/* Filled primary buttons (.btn-primary / .badge-brand) carry a foreground
-   LABEL, so they need the AA-safe CTA fill — not the bright display accent
-   (white-on-#ff2e88 is only ~3.5:1, failing WCAG 1.4.3). The bright accent
-   stays for fills WITHOUT text (top-bars, progress, focus halos) and for
-   large display text where 3:1 suffices. Scoped to the product skin so the
-   8 legacy CHROMA themes keep their own primary-button paint. */
-[data-theme="atlvs-product"] .btn-primary {
+[data-accent="soft"] {
+  --p-accent: color-mix(in oklab, var(--k-acc) 74%, var(--p-surface) 26%);
+  --p-accent-hover: color-mix(in oklab, var(--k-acc) 64%, var(--p-surface) 36%);
+  --p-accent-text: color-mix(in oklab, var(--k-acc-text) 80%, var(--p-text-2) 20%);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 8%, transparent);
+}
+[data-accent="vivid"] {
+  --p-accent: color-mix(in oklab, var(--k-acc) 90%, var(--p-text-1) 10%);
+  --p-accent-hover: color-mix(in oklab, var(--k-acc) 80%, var(--p-text-1) 20%);
+  --p-accent-text: var(--k-acc-text);
+  --p-accent-weak: color-mix(in oklab, var(--k-acc) 20%, transparent);
+}
+
+/* ============================================================================
+   DENSITY — compact tightens row + control padding. Cozy = default.
+   The codebase's three-tier density (compact/comfortable/spacious) maps:
+     compact     → kit compact (smaller --k-*)
+     comfortable → kit cozy    (default --k-*, no attribute)
+     spacious    → handled by existing .ps-input / .data-table compounds
+   ========================================================================== */
+[data-density="compact"] {
+  --k-ctl-py: 6px;
+  --k-ctl-px: 12px;
+  --k-ctl-fs: 13px;
+  --k-row-py: 8px;
+  --k-row-px: 12px;
+  --k-cell-fs: 13px;
+  --k-card-pad: 13px;
+  --k-gap: 10px;
+  --k-stack: 8px;
+}
+
+/* ============================================================================
+   ADJACENT TOKENS — discriminator palette, motion easing, ring, glass, font
+   variable shortcuts. These live alongside --p-* but aren't part of the
+   kit's own namespace (they're consumed by the .ps-* primitives + by app
+   chrome that needs motion or workspace-color hash buckets).
+   ========================================================================== */
+[data-ui="saas"],
+[data-theme="atlvs-product"] {
+  /* Font shortcuts — Tailwind utility classes (font-sans / font-mono / etc.)
+     resolve through these. */
+  --font-sans: var(--font-space-grotesk);
+  --font-body: var(--font-space-grotesk);
+  --font-display: var(--font-space-grotesk);
+  --font-subdisplay: var(--font-space-grotesk);
+  --font-pixel: var(--font-space-mono);
+  --font-mono: var(--font-space-mono);
+
+  /* Workspace-identity discriminator palette — 8 hash buckets so each org
+     tile is stable across sessions before its logoUrl loads. Pure
+     discriminators (like GitHub's avatar tints) — NOT part of the
+     semantic palette. */
+  --p-avatar-1: #0ea5e9;
+  --p-avatar-2: #8b5cf6;
+  --p-avatar-3: #10b981;
+  --p-avatar-4: #f59e0b;
+  --p-avatar-5: #ef4444;
+  --p-avatar-6: #ec4899;
+  --p-avatar-7: #6366f1;
+  --p-avatar-8: #14b8a6;
+
+  /* Motion tokens — paired with reduced-motion handling in globals.css.
+     Used by .hover-lift / .press-scale / animations. */
+  --motion-fast: 120ms;
+  --motion-normal: 200ms;
+  --motion-slow: 320ms;
+  --motion-hover: 140ms;
+  --motion-skeleton: 1400ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-hover: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --hover-lift-y: -2px;
+  --hover-scale: 1;
+  --press-scale: 0.98;
+
+  /* Chrome bits — Dialog backdrop, glass blur. */
+  --overlay-backdrop: rgba(16, 20, 30, 0.4);
+  --overlay-backdrop-strong: rgba(16, 20, 30, 0.6);
+  --glass-blur: blur(8px) saturate(1.1);
+  --p-border-width: 1px;
+  --ring-width: 2px;
+}
+
+/* Filled primary buttons + brand badges — use AA-safe CTA fill, not the
+   bright display accent. */
+[data-ui="saas"] .ps-btn--cta,
+[data-theme="atlvs-product"] .ps-btn--cta {
   background: var(--p-accent-cta);
   color: var(--p-accent-cta-contrast);
   border-color: var(--p-accent-cta);
 }
-[data-theme="atlvs-product"] .badge-brand {
-  background: var(--p-accent-cta);
-  color: var(--p-accent-cta-contrast);
-}
 
-/* SaaS apps use plain ERP language — no UPPERCASE or display-condensed
-   on headings (that's the marketing voice). Override the global
-   ghxstship-scoped uppercase rule so an accidental theme straddle
-   doesn't bleed cosmic typography in here. */
+/* SaaS headings — Title Case, body family, no UPPERCASE. */
+[data-ui="saas"] h1,
+[data-ui="saas"] h2,
+[data-ui="saas"] h3,
+[data-ui="saas"] h4,
 [data-theme="atlvs-product"] h1,
 [data-theme="atlvs-product"] h2,
 [data-theme="atlvs-product"] h3,
 [data-theme="atlvs-product"] h4 {
   text-transform: none;
   letter-spacing: -0.01em;
-  font-family: var(--p-font);
+  font-family: var(--p-heading);
   font-weight: 700;
   color: var(--p-text-1);
 }
 
 /* ============================================================================
-   .ps-* PRIMITIVES — minimal product UI atoms the SaaS apps can use.
-   ========================================================================= */
+   .ps-* PRIMITIVES — the full kit component library (atoms → molecules).
+   ========================================================================== */
+
+/* ---- card ---- */
+[data-ui="saas"] .ps-card,
 [data-theme="atlvs-product"] .ps-card {
   background: var(--p-surface);
   border: 1px solid var(--p-border);
@@ -371,43 +365,98 @@
     box-shadow var(--p-ease),
     transform var(--p-ease);
 }
+[data-ui="saas"] .ps-card--hover:hover,
 [data-theme="atlvs-product"] .ps-card--hover:hover {
   box-shadow: var(--p-elev-2);
   transform: translateY(-2px);
 }
 
+/* ---- button + variants ---- */
+[data-ui="saas"] .ps-btn,
 [data-theme="atlvs-product"] .ps-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: var(--p-font);
   font-weight: 600;
-  font-size: 14px;
-  padding: 9px 16px;
+  font-size: var(--k-ctl-fs);
+  padding: var(--k-ctl-py) var(--k-ctl-px);
   border-radius: var(--p-r-sm);
-  /* `background-color` (not the shorthand) — v2 canon. Pairs with the
-     `filter` hover technique below to dodge Chromium's strand-on-swap
-     bug when the theme changes mid-session. */
   background-color: var(--p-accent);
   color: var(--p-accent-contrast);
   border: 0;
   cursor: pointer;
   transition: filter 0.15s ease;
+  white-space: nowrap;
 }
+[data-ui="saas"] .ps-btn:hover,
 [data-theme="atlvs-product"] .ps-btn:hover {
   filter: brightness(0.92);
 }
+[data-ui="saas"] .ps-btn--sm,
+[data-theme="atlvs-product"] .ps-btn--sm {
+  padding: 5px 11px;
+  font-size: 12px;
+}
+[data-ui="saas"] .ps-btn--lg,
+[data-theme="atlvs-product"] .ps-btn--lg {
+  padding: 12px 22px;
+  font-size: 15px;
+}
+[data-ui="saas"] .ps-btn--ghost,
 [data-theme="atlvs-product"] .ps-btn--ghost {
   background-color: transparent;
   color: var(--p-text-2);
   border: 1px solid var(--p-border-2);
 }
+[data-ui="saas"] .ps-btn--ghost:hover,
 [data-theme="atlvs-product"] .ps-btn--ghost:hover {
   background-color: var(--p-surface-2);
   color: var(--p-text-1);
   filter: none;
 }
+[data-ui="saas"] .ps-btn--soft,
+[data-theme="atlvs-product"] .ps-btn--soft {
+  background: var(--p-accent-weak);
+  color: var(--p-accent-text);
+}
+[data-ui="saas"] .ps-btn--soft:hover,
+[data-theme="atlvs-product"] .ps-btn--soft:hover {
+  filter: none;
+  background: color-mix(in oklab, var(--p-accent-weak), var(--p-accent) 8%);
+}
+[data-ui="saas"] .ps-btn--danger,
+[data-theme="atlvs-product"] .ps-btn--danger {
+  background: var(--p-danger);
+  color: var(--p-on-strong);
+}
+[data-ui="saas"] .ps-btn--icon,
+[data-theme="atlvs-product"] .ps-btn--icon {
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+  background: transparent;
+  color: var(--p-text-2);
+  border: 1px solid var(--p-border-2);
+}
+[data-ui="saas"] .ps-btn--icon:hover,
+[data-theme="atlvs-product"] .ps-btn--icon:hover {
+  filter: none;
+  background: var(--p-surface-2);
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-btn:disabled,
+[data-ui="saas"] .ps-btn[aria-disabled="true"],
+[data-theme="atlvs-product"] .ps-btn:disabled,
+[data-theme="atlvs-product"] .ps-btn[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: none;
+}
 
+/* ---- input + group ---- */
+[data-ui="saas"] .ps-input,
 [data-theme="atlvs-product"] .ps-input {
   width: 100%;
   font-family: var(--p-font);
@@ -418,15 +467,246 @@
   border-radius: var(--p-r-sm);
   padding: 9px 12px;
 }
+[data-ui="saas"] .ps-input::placeholder,
 [data-theme="atlvs-product"] .ps-input::placeholder {
   color: var(--p-text-3);
 }
+[data-ui="saas"] .ps-input:focus,
 [data-theme="atlvs-product"] .ps-input:focus {
   outline: none;
   border-color: var(--p-accent);
   box-shadow: 0 0 0 3px var(--p-accent-weak);
 }
+[data-density="compact"] .ps-input {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+[data-ui="saas"] textarea.ps-input,
+[data-theme="atlvs-product"] textarea.ps-input {
+  min-height: 84px;
+  resize: vertical;
+  font-family: var(--p-font);
+}
+[data-ui="saas"] select.ps-input,
+[data-theme="atlvs-product"] select.ps-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' stroke='%238C95A3' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  padding-right: 30px;
+}
+[data-ui="saas"] .ps-inputgrp,
+[data-theme="atlvs-product"] .ps-inputgrp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--p-surface);
+  border: 1px solid var(--p-border-2);
+  border-radius: var(--p-r-sm);
+  padding: 0 12px;
+}
+[data-ui="saas"] .ps-inputgrp:focus-within,
+[data-theme="atlvs-product"] .ps-inputgrp:focus-within {
+  border-color: var(--p-accent);
+  box-shadow: 0 0 0 3px var(--p-accent-weak);
+}
+[data-ui="saas"] .ps-inputgrp input,
+[data-theme="atlvs-product"] .ps-inputgrp input {
+  flex: 1;
+  border: 0;
+  background: none;
+  outline: none;
+  font-family: var(--p-font);
+  font-size: 14px;
+  color: var(--p-text-1);
+  padding: 9px 0;
+}
 
+/* ---- field / label / hint ---- */
+[data-ui="saas"] .ps-field,
+[data-theme="atlvs-product"] .ps-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+[data-ui="saas"] .ps-label,
+[data-theme="atlvs-product"] .ps-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--p-text-2);
+}
+[data-ui="saas"] .ps-hint,
+[data-theme="atlvs-product"] .ps-hint {
+  font-size: 12px;
+  color: var(--p-text-3);
+}
+[data-ui="saas"] .ps-hint--err,
+[data-theme="atlvs-product"] .ps-hint--err {
+  color: var(--p-danger);
+}
+[data-ui="saas"] .ps-input--err,
+[data-theme="atlvs-product"] .ps-input--err {
+  border-color: var(--p-danger);
+}
+[data-ui="saas"] .ps-input--err:focus,
+[data-theme="atlvs-product"] .ps-input--err:focus {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--p-danger) 22%, transparent);
+}
+
+/* ---- check / radio / toggle ---- */
+[data-ui="saas"] .ps-check,
+[data-theme="atlvs-product"] .ps-check {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--p-border-2);
+  border-radius: 5px;
+  background: var(--p-surface);
+  cursor: pointer;
+  position: relative;
+  flex: none;
+}
+[data-ui="saas"] .ps-check:checked,
+[data-theme="atlvs-product"] .ps-check:checked {
+  background: var(--p-accent);
+  border-color: var(--p-accent);
+}
+[data-ui="saas"] .ps-check:checked::after,
+[data-theme="atlvs-product"] .ps-check:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1.5px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--p-accent-contrast);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+[data-ui="saas"] .ps-check--radio,
+[data-theme="atlvs-product"] .ps-check--radio {
+  border-radius: 50%;
+}
+[data-ui="saas"] .ps-check--radio:checked,
+[data-theme="atlvs-product"] .ps-check--radio:checked {
+  background: var(--p-surface);
+  border-color: var(--p-accent);
+}
+[data-ui="saas"] .ps-check--radio:checked::after,
+[data-theme="atlvs-product"] .ps-check--radio:checked::after {
+  content: "";
+  left: 3px;
+  top: 3px;
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--p-accent);
+  transform: none;
+}
+[data-ui="saas"] .ps-toggle,
+[data-theme="atlvs-product"] .ps-toggle {
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--p-border-2);
+  position: relative;
+  cursor: pointer;
+  flex: none;
+  transition: background var(--p-ease);
+  border: 0;
+  padding: 0;
+}
+[data-ui="saas"] .ps-toggle.on,
+[data-ui="saas"] .ps-toggle[aria-checked="true"],
+[data-theme="atlvs-product"] .ps-toggle.on,
+[data-theme="atlvs-product"] .ps-toggle[aria-checked="true"] {
+  background: var(--p-accent);
+}
+[data-ui="saas"] .ps-toggle::after,
+[data-theme="atlvs-product"] .ps-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--p-on-strong);
+  transition: left var(--p-ease);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+[data-ui="saas"] .ps-toggle.on::after,
+[data-ui="saas"] .ps-toggle[aria-checked="true"]::after,
+[data-theme="atlvs-product"] .ps-toggle.on::after,
+[data-theme="atlvs-product"] .ps-toggle[aria-checked="true"]::after {
+  left: 20px;
+}
+
+/* ---- segmented control ---- */
+[data-ui="saas"] .ps-seg,
+[data-theme="atlvs-product"] .ps-seg {
+  display: inline-flex;
+  gap: 3px;
+  background: var(--p-surface-2);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r);
+  padding: 3px;
+}
+[data-ui="saas"] .ps-seg button,
+[data-theme="atlvs-product"] .ps-seg button {
+  font-family: var(--p-font);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--p-text-2);
+  background: none;
+  border: 0;
+  padding: 6px 14px;
+  border-radius: var(--p-r-sm);
+  cursor: pointer;
+}
+[data-ui="saas"] .ps-seg button.on,
+[data-ui="saas"] .ps-seg button[aria-selected="true"],
+[data-theme="atlvs-product"] .ps-seg button.on,
+[data-theme="atlvs-product"] .ps-seg button[aria-selected="true"] {
+  background: var(--p-surface);
+  color: var(--p-text-1);
+  box-shadow: var(--p-elev-1);
+}
+
+/* ---- slider ---- */
+[data-ui="saas"] .ps-slider,
+[data-theme="atlvs-product"] .ps-slider {
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--p-surface-2);
+  outline: none;
+}
+[data-ui="saas"] .ps-slider::-webkit-slider-thumb,
+[data-theme="atlvs-product"] .ps-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--p-accent);
+  cursor: pointer;
+  border: 2px solid var(--p-surface);
+  box-shadow: var(--p-elev-1);
+}
+[data-ui="saas"] .ps-slider::-moz-range-thumb,
+[data-theme="atlvs-product"] .ps-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--p-accent);
+  cursor: pointer;
+  border: 2px solid var(--p-surface);
+}
+
+/* ---- chip / tag / badge / dot ---- */
+[data-ui="saas"] .ps-chip,
 [data-theme="atlvs-product"] .ps-chip {
   display: inline-flex;
   align-items: center;
@@ -438,6 +718,7 @@
   background: var(--p-accent-weak);
   color: var(--p-accent-text);
 }
+[data-ui="saas"] .ps-tag,
 [data-theme="atlvs-product"] .ps-tag {
   display: inline-flex;
   align-items: center;
@@ -450,42 +731,733 @@
   color: var(--p-text-2);
   border: 1px solid var(--p-border);
 }
+[data-ui="saas"] .ps-badge,
+[data-theme="atlvs-product"] .ps-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: var(--p-r-pill);
+  background: var(--p-accent-weak);
+  color: var(--p-accent-text);
+  line-height: 1.4;
+}
+[data-ui="saas"] .ps-badge--ok,
+[data-theme="atlvs-product"] .ps-badge--ok {
+  background: color-mix(in oklab, var(--p-success) 16%, transparent);
+  color: var(--p-success);
+}
+[data-ui="saas"] .ps-badge--warn,
+[data-theme="atlvs-product"] .ps-badge--warn {
+  background: color-mix(in oklab, var(--p-warning) 18%, transparent);
+  color: var(--p-warning);
+}
+[data-ui="saas"] .ps-badge--danger,
+[data-theme="atlvs-product"] .ps-badge--danger {
+  background: color-mix(in oklab, var(--p-danger) 15%, transparent);
+  color: var(--p-danger);
+}
+[data-ui="saas"] .ps-badge--info,
+[data-theme="atlvs-product"] .ps-badge--info {
+  background: color-mix(in oklab, var(--p-info) 15%, transparent);
+  color: var(--p-info);
+}
+[data-ui="saas"] .ps-badge--neutral,
+[data-theme="atlvs-product"] .ps-badge--neutral {
+  background: var(--p-surface-2);
+  color: var(--p-text-2);
+  border: 1px solid var(--p-border);
+}
+[data-ui="saas"] .ps-dot,
+[data-theme="atlvs-product"] .ps-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--p-accent);
+  flex: none;
+  display: inline-block;
+}
+[data-ui="saas"] .ps-dot--ok,
+[data-theme="atlvs-product"] .ps-dot--ok {
+  background: var(--p-success);
+}
+[data-ui="saas"] .ps-dot--warn,
+[data-theme="atlvs-product"] .ps-dot--warn {
+  background: var(--p-warning);
+}
+[data-ui="saas"] .ps-dot--danger,
+[data-theme="atlvs-product"] .ps-dot--danger {
+  background: var(--p-danger);
+}
+[data-ui="saas"] .ps-dot--info,
+[data-theme="atlvs-product"] .ps-dot--info {
+  background: var(--p-info);
+}
+[data-ui="saas"] .ps-dot--muted,
+[data-theme="atlvs-product"] .ps-dot--muted {
+  background: var(--p-text-3);
+}
 
-/* Plain anchor color — kit canon from product-theme.css.
- *
- * Two adjustments vs the kit's raw selector:
- *
- *   1. `:where()` collapses specificity to (0,0,0) so any single
- *      utility class beats it.
- *   2. `@layer components` parks the rule below `@layer utilities`
- *      in the cascade. Without the layer, the rule is "unlayered"
- *      and wins over EVERY layered rule regardless of specificity —
- *      which is why CTAs were painting --p-accent-text (the link
- *      color) on top of an --p-accent background, producing a low-
- *      contrast pink-on-pink. The Tailwind utility now wins:
- *
- *        .text-\[var\(--p-accent-contrast\)\]  ← inside @layer utilities
- *        :where([data-theme=...]) a            ← inside @layer components
- *
- *      Utilities are declared after components, so they take priority. */
+/* ---- avatar + stack ---- */
+[data-ui="saas"] .ps-av,
+[data-theme="atlvs-product"] .ps-av {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--p-accent);
+  color: var(--p-accent-contrast);
+  display: inline-grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex: none;
+  font-family: var(--p-font);
+}
+[data-ui="saas"] .ps-av--sq,
+[data-theme="atlvs-product"] .ps-av--sq {
+  border-radius: 9px;
+}
+[data-ui="saas"] .ps-av--sm,
+[data-theme="atlvs-product"] .ps-av--sm {
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+}
+[data-ui="saas"] .ps-av--lg,
+[data-theme="atlvs-product"] .ps-av--lg {
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
+}
+[data-ui="saas"] .ps-av--ghost,
+[data-theme="atlvs-product"] .ps-av--ghost {
+  background: var(--p-surface-2);
+  color: var(--p-text-2);
+  border: 1px solid var(--p-border);
+}
+[data-ui="saas"] .ps-avstack,
+[data-theme="atlvs-product"] .ps-avstack {
+  display: inline-flex;
+}
+[data-ui="saas"] .ps-avstack .ps-av,
+[data-theme="atlvs-product"] .ps-avstack .ps-av {
+  box-shadow: 0 0 0 2px var(--p-surface);
+  margin-left: -8px;
+}
+[data-ui="saas"] .ps-avstack .ps-av:first-child,
+[data-theme="atlvs-product"] .ps-avstack .ps-av:first-child {
+  margin-left: 0;
+}
+
+/* ---- eyebrow / mono label / record id ---- */
+[data-ui="saas"] .ps-eyebrow,
+[data-theme="atlvs-product"] .ps-eyebrow {
+  font-family: var(--p-eyebrow);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-text-3);
+}
+[data-ui="saas"] .ps-mono,
+[data-theme="atlvs-product"] .ps-mono {
+  font-family: var(--p-mono);
+}
+[data-ui="saas"] .ps-id,
+[data-theme="atlvs-product"] .ps-id {
+  font-family: var(--p-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--p-accent-text);
+  letter-spacing: 0.02em;
+}
+
+/* ---- tabs / breadcrumb / pagination ---- */
+[data-ui="saas"] .ps-tabs,
+[data-theme="atlvs-product"] .ps-tabs {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid var(--p-border);
+}
+[data-ui="saas"] .ps-tabs button,
+[data-theme="atlvs-product"] .ps-tabs button {
+  font-family: var(--p-font);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--p-text-3);
+  background: none;
+  border: 0;
+  padding: 10px 14px;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+[data-ui="saas"] .ps-tabs button:hover,
+[data-theme="atlvs-product"] .ps-tabs button:hover {
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-tabs button.on,
+[data-ui="saas"] .ps-tabs button[aria-selected="true"],
+[data-theme="atlvs-product"] .ps-tabs button.on,
+[data-theme="atlvs-product"] .ps-tabs button[aria-selected="true"] {
+  color: var(--p-accent-text);
+  border-bottom-color: var(--p-accent);
+}
+[data-ui="saas"] .ps-crumb,
+[data-theme="atlvs-product"] .ps-crumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--p-text-3);
+}
+[data-ui="saas"] .ps-crumb a,
+[data-theme="atlvs-product"] .ps-crumb a {
+  color: var(--p-text-3);
+}
+[data-ui="saas"] .ps-crumb a:hover,
+[data-theme="atlvs-product"] .ps-crumb a:hover {
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-crumb .sep,
+[data-theme="atlvs-product"] .ps-crumb .sep {
+  opacity: 0.5;
+}
+[data-ui="saas"] .ps-crumb b,
+[data-theme="atlvs-product"] .ps-crumb b {
+  color: var(--p-text-1);
+  font-weight: 600;
+}
+[data-ui="saas"] .ps-page,
+[data-theme="atlvs-product"] .ps-page {
+  display: inline-flex;
+  gap: 4px;
+}
+[data-ui="saas"] .ps-page button,
+[data-theme="atlvs-product"] .ps-page button {
+  min-width: 32px;
+  height: 32px;
+  border-radius: var(--p-r-sm);
+  border: 1px solid var(--p-border);
+  background: var(--p-surface);
+  color: var(--p-text-2);
+  font-family: var(--p-font);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+[data-ui="saas"] .ps-page button.on,
+[data-ui="saas"] .ps-page button[aria-current="page"],
+[data-theme="atlvs-product"] .ps-page button.on,
+[data-theme="atlvs-product"] .ps-page button[aria-current="page"] {
+  background: var(--p-accent);
+  color: var(--p-accent-contrast);
+  border-color: var(--p-accent);
+}
+[data-ui="saas"] .ps-page button:disabled,
+[data-theme="atlvs-product"] .ps-page button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---- menu / dropdown ---- */
+[data-ui="saas"] .ps-menu,
+[data-theme="atlvs-product"] .ps-menu {
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r);
+  box-shadow: var(--p-elev-3);
+  padding: 6px;
+  min-width: 200px;
+}
+[data-ui="saas"] .ps-menu .mi,
+[data-theme="atlvs-product"] .ps-menu .mi {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--p-r-sm);
+  font-size: 13px;
+  color: var(--p-text-1);
+  cursor: pointer;
+}
+[data-ui="saas"] .ps-menu .mi:hover,
+[data-theme="atlvs-product"] .ps-menu .mi:hover {
+  background: var(--p-accent-weak);
+  color: var(--p-accent-text);
+}
+[data-ui="saas"] .ps-menu .mi--danger,
+[data-theme="atlvs-product"] .ps-menu .mi--danger {
+  color: var(--p-danger);
+}
+[data-ui="saas"] .ps-menu .sep,
+[data-theme="atlvs-product"] .ps-menu .sep {
+  height: 1px;
+  background: var(--p-border);
+  margin: 6px 0;
+}
+[data-ui="saas"] .ps-menu .lbl,
+[data-theme="atlvs-product"] .ps-menu .lbl {
+  font-family: var(--p-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--p-text-3);
+  padding: 6px 10px 4px;
+}
+[data-ui="saas"] .ps-kbd,
+[data-theme="atlvs-product"] .ps-kbd {
+  font-family: var(--p-mono);
+  font-size: 11px;
+  color: var(--p-text-3);
+  background: var(--p-surface-2);
+  border: 1px solid var(--p-border);
+  border-radius: 5px;
+  padding: 1px 6px;
+  margin-left: auto;
+}
+
+/* ---- data table ---- */
+[data-ui="saas"] .ps-table,
+[data-theme="atlvs-product"] .ps-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r);
+  overflow: hidden;
+}
+[data-ui="saas"] .ps-table thead th,
+[data-theme="atlvs-product"] .ps-table thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--p-text-3);
+  padding: 11px var(--k-row-px);
+  border-bottom: 1px solid var(--p-border);
+  background: var(--p-surface-2);
+  white-space: nowrap;
+}
+[data-ui="saas"] .ps-table tbody td,
+[data-theme="atlvs-product"] .ps-table tbody td {
+  padding: var(--k-row-py) var(--k-row-px);
+  border-bottom: 1px solid var(--p-border);
+  font-size: var(--k-cell-fs);
+  color: var(--p-text-2);
+  vertical-align: middle;
+}
+[data-ui="saas"] .ps-table tbody tr:last-child td,
+[data-theme="atlvs-product"] .ps-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+[data-ui="saas"] .ps-table tbody tr:hover,
+[data-theme="atlvs-product"] .ps-table tbody tr:hover {
+  background: var(--p-surface-2);
+}
+[data-ui="saas"] .ps-table tbody tr.sel,
+[data-theme="atlvs-product"] .ps-table tbody tr.sel {
+  background: var(--p-accent-weak);
+}
+[data-ui="saas"] .ps-table b,
+[data-theme="atlvs-product"] .ps-table b {
+  color: var(--p-text-1);
+  font-weight: 600;
+}
+
+/* ---- progress / meter ---- */
+[data-ui="saas"] .ps-progress,
+[data-theme="atlvs-product"] .ps-progress {
+  height: 6px;
+  background: var(--p-surface-2);
+  border-radius: 999px;
+  overflow: hidden;
+  width: 100%;
+}
+[data-ui="saas"] .ps-progress > i,
+[data-theme="atlvs-product"] .ps-progress > i {
+  display: block;
+  height: 100%;
+  background: var(--p-accent);
+  border-radius: 999px;
+}
+[data-ui="saas"] .ps-meter,
+[data-theme="atlvs-product"] .ps-meter {
+  display: inline-block;
+  width: 90px;
+  vertical-align: middle;
+}
+
+/* ---- banner / toast / tip ---- */
+[data-ui="saas"] .ps-banner,
+[data-theme="atlvs-product"] .ps-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--p-r);
+  border: 1px solid var(--p-border);
+  background: var(--p-surface-2);
+  font-size: 13px;
+  color: var(--p-text-2);
+}
+[data-ui="saas"] .ps-banner b,
+[data-theme="atlvs-product"] .ps-banner b {
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-banner--info,
+[data-theme="atlvs-product"] .ps-banner--info {
+  background: color-mix(in oklab, var(--p-info) 9%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-info) 35%, var(--p-border));
+}
+[data-ui="saas"] .ps-banner--ok,
+[data-theme="atlvs-product"] .ps-banner--ok {
+  background: color-mix(in oklab, var(--p-success) 10%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-success) 35%, var(--p-border));
+}
+[data-ui="saas"] .ps-banner--warn,
+[data-theme="atlvs-product"] .ps-banner--warn {
+  background: color-mix(in oklab, var(--p-warning) 12%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-warning) 38%, var(--p-border));
+}
+[data-ui="saas"] .ps-banner--danger,
+[data-theme="atlvs-product"] .ps-banner--danger {
+  background: color-mix(in oklab, var(--p-danger) 9%, var(--p-surface));
+  border-color: color-mix(in oklab, var(--p-danger) 35%, var(--p-border));
+}
+[data-ui="saas"] .ps-toast,
+[data-theme="atlvs-product"] .ps-toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--p-r);
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  box-shadow: var(--p-elev-3);
+  font-size: 13px;
+  color: var(--p-text-1);
+  min-width: 280px;
+}
+[data-ui="saas"] .ps-tip,
+[data-theme="atlvs-product"] .ps-tip {
+  position: relative;
+  display: inline-flex;
+}
+[data-ui="saas"] .ps-tip .bub,
+[data-theme="atlvs-product"] .ps-tip .bub {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--p-text-1);
+  color: var(--p-bg);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  box-shadow: var(--p-elev-2);
+}
+[data-ui="saas"] .ps-tip .bub::after,
+[data-theme="atlvs-product"] .ps-tip .bub::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--p-text-1);
+}
+
+/* ---- stat / steps / empty / skel / spinner / modal ---- */
+[data-ui="saas"] .ps-stat,
+[data-theme="atlvs-product"] .ps-stat {
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r);
+  padding: var(--k-card-pad);
+  box-shadow: var(--p-elev-1);
+}
+[data-ui="saas"] .ps-stat .k,
+[data-theme="atlvs-product"] .ps-stat .k {
+  font-size: 12px;
+  color: var(--p-text-2);
+  font-weight: 500;
+}
+[data-ui="saas"] .ps-stat .v,
+[data-theme="atlvs-product"] .ps-stat .v {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--p-text-1);
+  margin-top: 6px;
+  letter-spacing: -0.02em;
+}
+[data-ui="saas"] .ps-stat .d,
+[data-theme="atlvs-product"] .ps-stat .d {
+  font-size: 11px;
+  margin-top: 4px;
+  font-weight: 600;
+  color: var(--p-success);
+}
+[data-ui="saas"] .ps-stat .d--down,
+[data-theme="atlvs-product"] .ps-stat .d--down {
+  color: var(--p-danger);
+}
+[data-ui="saas"] .ps-stat .d--flat,
+[data-theme="atlvs-product"] .ps-stat .d--flat {
+  color: var(--p-text-3);
+}
+[data-ui="saas"] .ps-steps,
+[data-theme="atlvs-product"] .ps-steps {
+  display: flex;
+  align-items: center;
+}
+[data-ui="saas"] .ps-steps .s,
+[data-theme="atlvs-product"] .ps-steps .s {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--p-text-3);
+  font-weight: 600;
+}
+[data-ui="saas"] .ps-steps .n,
+[data-theme="atlvs-product"] .ps-steps .n {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--p-border-2);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--p-text-3);
+  flex: none;
+}
+[data-ui="saas"] .ps-steps .s.done .n,
+[data-theme="atlvs-product"] .ps-steps .s.done .n {
+  background: var(--p-accent);
+  border-color: var(--p-accent);
+  color: var(--p-accent-contrast);
+}
+[data-ui="saas"] .ps-steps .s.on .n,
+[data-theme="atlvs-product"] .ps-steps .s.on .n {
+  border-color: var(--p-accent);
+  color: var(--p-accent-text);
+}
+[data-ui="saas"] .ps-steps .s.on,
+[data-theme="atlvs-product"] .ps-steps .s.on {
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-steps .ln,
+[data-theme="atlvs-product"] .ps-steps .ln {
+  width: 46px;
+  height: 2px;
+  background: var(--p-border-2);
+  margin: 0 10px;
+  flex: none;
+}
+[data-ui="saas"] .ps-steps .s.done + .ln,
+[data-theme="atlvs-product"] .ps-steps .s.done + .ln {
+  background: var(--p-accent);
+}
+[data-ui="saas"] .ps-empty,
+[data-theme="atlvs-product"] .ps-empty {
+  text-align: center;
+  padding: 40px 24px;
+  border: 1px dashed var(--p-border-2);
+  border-radius: var(--p-r);
+  background: var(--p-surface);
+}
+[data-ui="saas"] .ps-empty .ic,
+[data-theme="atlvs-product"] .ps-empty .ic {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--p-accent-weak);
+  color: var(--p-accent-text);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  margin: 0 auto 14px;
+}
+[data-ui="saas"] .ps-empty h4,
+[data-theme="atlvs-product"] .ps-empty h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--p-text-1);
+  margin: 0 0 4px;
+}
+[data-ui="saas"] .ps-empty p,
+[data-theme="atlvs-product"] .ps-empty p {
+  font-size: 13px;
+  color: var(--p-text-2);
+  margin: 0 auto 14px;
+  max-width: 320px;
+  line-height: 1.5;
+}
+[data-ui="saas"] .ps-skel,
+[data-theme="atlvs-product"] .ps-skel {
+  background: linear-gradient(
+    90deg,
+    var(--p-surface-2) 25%,
+    color-mix(in oklab, var(--p-surface-2), var(--p-border) 60%) 37%,
+    var(--p-surface-2) 63%
+  );
+  background-size: 400% 100%;
+  border-radius: 6px;
+  animation: ps-shimmer 1.4s ease infinite;
+}
+@keyframes ps-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ui="saas"] .ps-skel,
+  [data-theme="atlvs-product"] .ps-skel {
+    animation: none;
+  }
+}
+[data-ui="saas"] .ps-spinner,
+[data-theme="atlvs-product"] .ps-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid var(--p-surface-2);
+  border-top-color: var(--p-accent);
+  border-radius: 50%;
+  animation: ps-spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes ps-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+[data-ui="saas"] .ps-modal,
+[data-theme="atlvs-product"] .ps-modal {
+  background: var(--p-surface);
+  border: 1px solid var(--p-border);
+  border-radius: var(--p-r-lg);
+  box-shadow: var(--p-elev-3);
+  max-width: 440px;
+  overflow: hidden;
+}
+[data-ui="saas"] .ps-modal .mh,
+[data-theme="atlvs-product"] .ps-modal .mh {
+  padding: 18px 20px 0;
+}
+[data-ui="saas"] .ps-modal .mh h3,
+[data-theme="atlvs-product"] .ps-modal .mh h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--p-text-1);
+  margin: 0;
+}
+[data-ui="saas"] .ps-modal .mb,
+[data-theme="atlvs-product"] .ps-modal .mb {
+  padding: 10px 20px 18px;
+  font-size: 13px;
+  color: var(--p-text-2);
+  line-height: 1.55;
+}
+[data-ui="saas"] .ps-modal .mf,
+[data-theme="atlvs-product"] .ps-modal .mf {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--p-surface-2);
+  border-top: 1px solid var(--p-border);
+}
+
+/* ---- helpers ---- */
+[data-ui="saas"] .ps-divider,
+[data-theme="atlvs-product"] .ps-divider {
+  height: 1px;
+  background: var(--p-border);
+  border: 0;
+  margin: 0;
+}
+[data-ui="saas"] .ps-kbar,
+[data-theme="atlvs-product"] .ps-kbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+[data-ui="saas"] .ps-h,
+[data-theme="atlvs-product"] .ps-h {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--p-text-1);
+}
+[data-ui="saas"] .ps-muted,
+[data-theme="atlvs-product"] .ps-muted {
+  color: var(--p-text-2);
+}
+
+/* Plain anchor color — kit canon. Specificity-collapsed so any utility wins. */
 @layer components {
-  :where([data-theme="atlvs-product"] a, [data-theme="atlvs-product"] .ps-link) {
+  :where(
+    [data-ui="saas"] a,
+    [data-theme="atlvs-product"] a,
+    [data-ui="saas"] .ps-link,
+    [data-theme="atlvs-product"] .ps-link
+  ) {
     color: var(--p-accent-text);
     text-decoration: none;
   }
 }
 
+[data-ui="saas"] *:focus-visible,
 [data-theme="atlvs-product"] *:focus-visible {
   outline: 2px solid var(--p-accent);
   outline-offset: 2px;
   border-radius: var(--p-r-sm);
 }
 
-[data-theme="atlvs-product"] .ps-h {
-  font-weight: 700;
-  letter-spacing: -0.01em;
+/* ============================================================================
+   WORDMARK — Jost, spaced caps, crossbar-less A (the face's V flipped).
+   Built by <Wordmark /> React component. Theme-aware (inherits --p-text-1).
+   ========================================================================== */
+.wordmark {
+  display: inline-block;
+  font-family: var(--p-wordmark, "Jost", "Space Grotesk", sans-serif);
+  font-weight: var(--wm-w, 400);
   color: var(--p-text-1);
+  line-height: 1;
+  --wm-ls: 0.42em;
 }
-[data-theme="atlvs-product"] .ps-muted {
-  color: var(--p-text-2);
+.wordmark .wm-row {
+  display: inline-block;
+  white-space: nowrap;
+  letter-spacing: var(--wm-ls);
+  margin-right: calc(var(--wm-ls) * -1);
+}
+.wordmark .wm-A {
+  display: inline-block;
+}
+.wordmark .wm-A i {
+  display: inline-block;
+  transform: scaleY(-1);
+  font-style: normal;
+}
+.wordmark .wm-tag {
+  display: block;
+  width: 100%;
+  font-family: var(--p-mono);
+  font-size: 0.31em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--p-text-3);
+  text-align: justify;
+  text-align-last: justify;
+  margin-top: 0.5em;
 }

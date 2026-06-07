@@ -76,7 +76,7 @@
 }
 
 .bk-h1 {
-  font-family: var(--font-display, var(--font-big-shoulders), "Arial Narrow", system-ui, sans-serif);
+  font-family: var(--p-heading, system-ui, sans-serif);
   font-weight: 900;
   font-size: clamp(40px, 7vw, 76px);
   line-height: 0.86;
@@ -143,7 +143,7 @@
   color: var(--gx-nebula);
 }
 .bk-h2 {
-  font-family: var(--font-display, var(--font-big-shoulders), "Arial Narrow", system-ui, sans-serif);
+  font-family: var(--p-heading, system-ui, sans-serif);
   font-weight: 900;
   font-size: 34px;
   text-transform: uppercase;
@@ -209,7 +209,7 @@
 }
 
 .bk-card-title {
-  font-family: var(--font-display, var(--font-big-shoulders), "Arial Narrow", system-ui, sans-serif);
+  font-family: var(--p-heading, system-ui, sans-serif);
   font-weight: 800;
   font-size: 19px;
   text-transform: uppercase;

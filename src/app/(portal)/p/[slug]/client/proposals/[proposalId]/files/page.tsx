@@ -33,13 +33,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   return (
     <div className="space-y-4 p-6">
       <header className="surface p-5">
-        <div className="eyebrow text-xs text-[var(--text-muted)]">
+        <div className="eyebrow text-xs text-[var(--p-text-2)]">
           {t("p.client.proposals.files.eyebrow", undefined, "Files")}
         </div>
         <h1 className="text-lg font-semibold">
           {t("p.client.proposals.files.title", undefined, "Signed Documents, Proofs, and Reports")}
         </h1>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">
+        <p className="mt-1 text-sm text-[var(--p-text-2)]">
           {t(
             "p.client.proposals.files.subtitle",
             undefined,
@@ -49,12 +49,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {files.length === 0 ? (
-        <div className="surface p-12 text-center text-[var(--text-muted)]">
+        <div className="surface p-12 text-center text-[var(--p-text-2)]">
           {t("p.client.proposals.files.empty", undefined, "No files yet.")}
         </div>
       ) : (
         <div className="surface p-0">
-          <table className="data-table w-full">
+          <table className="ps-table w-full">
             <thead>
               <tr>
                 <th>{t("p.client.proposals.files.col.name", undefined, "Name")}</th>
@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                     <Badge variant="muted">{CATEGORY_LABEL[f.category] ?? f.category}</Badge>
                   </td>
                   <td className="font-mono text-xs">{formatBytes(f.size_bytes)}</td>
-                  <td className="font-mono text-xs text-[var(--text-muted)]">{timeAgo(f.created_at)}</td>
+                  <td className="font-mono text-xs text-[var(--p-text-2)]">{timeAgo(f.created_at)}</td>
                 </tr>
               ))}
             </tbody>

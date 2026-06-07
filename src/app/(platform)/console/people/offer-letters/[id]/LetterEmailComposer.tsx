@@ -28,7 +28,7 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
           <h3 className="text-sm font-semibold tracking-wider uppercase">
             {t("console.people.offerLetters.letterEmailComposer.title", undefined, "Email Template")}
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.people.offerLetters.letterEmailComposer.description.before",
               undefined,
@@ -46,19 +46,19 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
         </div>
         <a
           href={email.mailto}
-          className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+          className="rounded border border-[var(--border-default)] px-3 py-1.5 text-xs hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
         >
           {t("console.people.offerLetters.letterEmailComposer.openInMailClient", undefined, "Open in mail client →")}
         </a>
       </div>
 
       <div className="grid grid-cols-1 gap-2 text-xs sm:grid-cols-[80px_1fr_auto] sm:items-center">
-        <div className="tracking-wider text-[var(--text-muted)] uppercase">
+        <div className="tracking-wider text-[var(--p-text-2)] uppercase">
           {t("console.people.offerLetters.letterEmailComposer.to", undefined, "To")}
         </div>
         <div className="font-mono text-xs">{email.to}</div>
         <div />
-        <div className="tracking-wider text-[var(--text-muted)] uppercase">
+        <div className="tracking-wider text-[var(--p-text-2)] uppercase">
           {t("console.people.offerLetters.letterEmailComposer.subject", undefined, "Subject")}
         </div>
         <div className="font-mono text-xs">{email.subject}</div>
@@ -73,21 +73,21 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
         <button
           type="button"
           onClick={() => setTab("preview")}
-          className={`rounded px-2 py-1 ${tab === "preview" ? "bg-[var(--surface-inset)] font-medium" : "text-[var(--text-muted)]"}`}
+          className={`rounded px-2 py-1 ${tab === "preview" ? "bg-[var(--p-surface-2)] font-medium" : "text-[var(--p-text-2)]"}`}
         >
           {t("console.people.offerLetters.letterEmailComposer.preview", undefined, "Preview")}
         </button>
         <button
           type="button"
           onClick={() => setTab("plaintext")}
-          className={`rounded px-2 py-1 ${tab === "plaintext" ? "bg-[var(--surface-inset)] font-medium" : "text-[var(--text-muted)]"}`}
+          className={`rounded px-2 py-1 ${tab === "plaintext" ? "bg-[var(--p-surface-2)] font-medium" : "text-[var(--p-text-2)]"}`}
         >
           {t("console.people.offerLetters.letterEmailComposer.plainText", undefined, "Plain text")}
         </button>
         <button
           type="button"
           onClick={() => setTab("html")}
-          className={`rounded px-2 py-1 ${tab === "html" ? "bg-[var(--surface-inset)] font-medium" : "text-[var(--text-muted)]"}`}
+          className={`rounded px-2 py-1 ${tab === "html" ? "bg-[var(--p-surface-2)] font-medium" : "text-[var(--p-text-2)]"}`}
         >
           {t("console.people.offerLetters.letterEmailComposer.htmlSource", undefined, "HTML source")}
         </button>
@@ -117,12 +117,12 @@ export function LetterEmailComposer({ email }: { email: ComposedEmail }) {
         />
       )}
       {tab === "plaintext" && (
-        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--surface-inset)] p-4 text-xs whitespace-pre-wrap">
+        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4 text-xs whitespace-pre-wrap">
           {email.plaintext}
         </pre>
       )}
       {tab === "html" && (
-        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--surface-inset)] p-4 font-mono text-[10px] whitespace-pre-wrap">
+        <pre className="max-h-[480px] overflow-auto rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4 font-mono text-[10px] whitespace-pre-wrap">
           {email.html}
         </pre>
       )}

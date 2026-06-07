@@ -25,7 +25,7 @@ export const SelectLabel = React.forwardRef<
   return (
     <SelectPrimitive.Label
       ref={ref}
-      className={`px-2 py-1.5 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] ${className}`}
+      className={`px-2 py-1.5 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] ${className}`}
       {...props}
     />
   );
@@ -38,12 +38,12 @@ export const SelectTrigger = React.forwardRef<
   return (
     <SelectPrimitive.Trigger
       ref={ref}
-      className={`input-base focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
+      className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
       {...props}
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDown size={14} className="text-[var(--text-muted)]" aria-hidden="true" />
+        <ChevronDown size={14} className="text-[var(--p-text-2)]" aria-hidden="true" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -59,7 +59,7 @@ export const SelectContent = React.forwardRef<
         ref={ref}
         position={position}
         sideOffset={4}
-        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-h-[var(--radix-select-content-available-height)] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] ${className}`}
+        className={`data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out z-50 max-h-[var(--radix-select-content-available-height)] min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] ${className}`}
         {...props}
       >
         <SelectPrimitive.ScrollUpButton className="flex h-6 items-center justify-center">
@@ -81,12 +81,12 @@ export const SelectItem = React.forwardRef<
   return (
     <SelectPrimitive.Item
       ref={ref}
-      className={`relative flex cursor-default items-center rounded px-2 py-1.5 pe-8 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--surface-inset)] ${className}`}
+      className={`relative flex cursor-default items-center rounded px-2 py-1.5 pe-8 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-[var(--p-surface-2)] ${className}`}
       {...props}
     >
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator className="absolute end-2 inline-flex items-center">
-        <Check size={12} className="text-[var(--org-primary)]" aria-hidden="true" />
+        <Check size={12} className="text-[var(--p-accent)]" aria-hidden="true" />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
@@ -96,7 +96,5 @@ export const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(function SelectSeparator({ className = "", ...props }, ref) {
-  return (
-    <SelectPrimitive.Separator ref={ref} className={`my-1 h-px bg-[var(--border-color)] ${className}`} {...props} />
-  );
+  return <SelectPrimitive.Separator ref={ref} className={`my-1 h-px bg-[var(--p-border)] ${className}`} {...props} />;
 });

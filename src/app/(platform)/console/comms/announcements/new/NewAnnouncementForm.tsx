@@ -38,22 +38,22 @@ export function NewAnnouncementForm({
         maxLength={200}
       />
       <label className="flex flex-col gap-1.5">
-        <span className="text-xs font-medium text-[var(--text-secondary)]">
+        <span className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.comms.announcements.new.body", undefined, "Body")}
         </span>
-        <textarea name="body" rows={6} required maxLength={8000} className="input-base focus-ring w-full" />
+        <textarea name="body" rows={6} required maxLength={8000} className="ps-input focus-ring w-full" />
       </label>
 
-      <fieldset className="space-y-3 rounded-md border border-[var(--border-color)] p-3">
-        <legend className="px-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+      <fieldset className="space-y-3 rounded-md border border-[var(--p-border)] p-3">
+        <legend className="px-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
           {t("console.comms.announcements.new.audience", undefined, "Audience")}
         </legend>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.announcements.new.roleBand", undefined, "Role Band")}
             </span>
-            <select name="audience" className="input-base focus-ring w-full" defaultValue="all">
+            <select name="audience" className="ps-input focus-ring w-full" defaultValue="all">
               <option value="all">
                 {t("console.comms.announcements.new.roleBand.everyone", undefined, "Everyone")}
               </option>
@@ -70,10 +70,10 @@ export function NewAnnouncementForm({
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.announcements.new.project", undefined, "Project")}
             </span>
-            <select name="project_id" className="input-base focus-ring w-full" defaultValue="">
+            <select name="project_id" className="ps-input focus-ring w-full" defaultValue="">
               <option value="">
                 {t("console.comms.announcements.new.project.any", undefined, "Org-wide · Any Project")}
               </option>
@@ -85,10 +85,10 @@ export function NewAnnouncementForm({
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.announcements.new.team", undefined, "Team")}
             </span>
-            <select name="team_id" className="input-base focus-ring w-full" defaultValue="">
+            <select name="team_id" className="ps-input focus-ring w-full" defaultValue="">
               <option value="">{t("console.comms.announcements.new.team.any", undefined, "Any team")}</option>
               {teams.map((team) => (
                 <option key={team.id} value={team.id}>
@@ -98,7 +98,7 @@ export function NewAnnouncementForm({
             </select>
           </label>
         </div>
-        <p className="text-[11px] text-[var(--text-muted)]">
+        <p className="text-[11px] text-[var(--p-text-2)]">
           {t(
             "console.comms.announcements.new.filtersHint",
             undefined,

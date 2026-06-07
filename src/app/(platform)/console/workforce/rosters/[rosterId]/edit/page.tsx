@@ -57,10 +57,10 @@ export default async function Page({ params }: { params: Promise<{ rosterId: str
             required
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.rosters.edit.fields.state", undefined, "State")}
             </span>
-            <select name="state" defaultValue={row.state ?? ""} required className="input-base focus-ring w-full">
+            <select name="state" defaultValue={row.state ?? ""} required className="ps-input focus-ring w-full">
               <option value="draft">{t("console.workforce.rosters.edit.state.draft", undefined, "draft")}</option>
               <option value="published">
                 {t("console.workforce.rosters.edit.state.published", undefined, "published")}

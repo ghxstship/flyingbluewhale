@@ -5,11 +5,23 @@ import { Spinner } from "./Spinner";
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
+// Map this React API onto the kit's .ps-btn classes
+// (design_handoff_atlvs_kit/components.html). Primary = filled accent;
+// secondary/ghost = bordered/transparent ghost; danger = filled red;
+// icon = the kit's square icon button. The "soft" variant is intentionally
+// not exposed in this React API yet — add it only if a consumer needs it.
+const VARIANT_CLASS: Record<ButtonVariant, string> = {
+  primary: "ps-btn",
+  secondary: "ps-btn ps-btn--ghost",
+  ghost: "ps-btn ps-btn--ghost",
+  danger: "ps-btn ps-btn--danger",
+};
+
 const SIZE_CLASS: Record<ButtonSize, string> = {
-  sm: "btn-sm",
+  sm: "ps-btn--sm",
   md: "",
-  lg: "btn-lg",
-  icon: "btn-icon h-9 w-9 p-0 inline-flex items-center justify-center",
+  lg: "ps-btn--lg",
+  icon: "ps-btn--icon",
 };
 
 interface BaseProps {
@@ -52,7 +64,7 @@ export function Button(props: ButtonProps) {
     href?: string;
   } & Record<string, unknown>;
 
-  const cls = `btn btn-${variant} ${SIZE_CLASS[size]} press-scale ${className}`.trim();
+  const cls = `${VARIANT_CLASS[variant]} ${SIZE_CLASS[size]} ${className}`.replace(/\s+/g, " ").trim();
 
   // Dev-only enforcement: icon-only buttons MUST have aria-label.
   if (process.env.NODE_ENV !== "production") {

@@ -8,8 +8,8 @@ import { registerBimModel } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 export default async function Page() {
   if (!hasSupabase) return null;
@@ -66,7 +66,7 @@ export default async function Page() {
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               {t("console.bim.new.field.name", undefined, "Name")}
-              <span className="ms-0.5 text-[var(--color-error)]">*</span>
+              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
             </span>
             <input
               name="name"
@@ -79,7 +79,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.bim.new.field.project", undefined, "Project")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
                 <option value="">{t("console.bim.new.selectProject", undefined, "Select…")}</option>
@@ -105,7 +105,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.bim.new.field.sourceType", undefined, "Source type")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <select name="source_type" required className={INPUT} defaultValue="ifc">
                 {SOURCE_TYPES.map((s) => (
@@ -127,7 +127,7 @@ export default async function Page() {
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               {t("console.bim.new.field.storagePath", undefined, "Storage path")}
-              <span className="ms-0.5 text-[var(--color-error)]">*</span>
+              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
             </span>
             <input
               name="storage_path"
@@ -135,7 +135,7 @@ export default async function Page() {
               placeholder="<project-id>/bim/tower-a-arch-rev0.ifc"
               className={`${INPUT} font-mono text-xs`}
             />
-            <span className="text-[10px] text-[var(--text-muted)]">
+            <span className="text-[10px] text-[var(--p-text-2)]">
               {t(
                 "console.bim.new.storagePathHint",
                 undefined,

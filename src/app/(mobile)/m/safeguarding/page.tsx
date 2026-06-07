@@ -30,7 +30,7 @@ export default async function SafeguardingPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -49,11 +49,11 @@ export default async function SafeguardingPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("m.safeguarding.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.safeguarding.title", undefined, "Safeguarding")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.safeguarding.intro",
           undefined,
@@ -62,10 +62,10 @@ export default async function SafeguardingPage() {
       </p>
 
       <div className="mt-5">
-        <Link href="/console/safety/safeguarding/new" className="btn btn-danger w-full">
+        <Link href="/console/safety/safeguarding/new" className="ps-btn ps-btn--danger w-full">
           {t("m.safeguarding.fileNew", undefined, "File new report")}
         </Link>
-        <p className="mt-2 text-[10px] text-[var(--text-muted)]">
+        <p className="mt-2 text-[10px] text-[var(--p-text-2)]">
           {t(
             "m.safeguarding.desktopOnlyHint",
             undefined,
@@ -75,7 +75,7 @@ export default async function SafeguardingPage() {
       </div>
 
       <section className="mt-8">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.safeguarding.reportsFiledHeading", undefined, "Reports you've filed")}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -96,13 +96,13 @@ export default async function SafeguardingPage() {
               <li key={r.id} className="surface p-4">
                 <div className="flex items-start justify-between gap-3">
                   <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {fmt.dateParts(r.created_at, { month: "short", day: "numeric" })}
                   </span>
                 </div>
-                <p className="mt-2 line-clamp-3 text-xs text-[var(--text-secondary)]">{r.narrative}</p>
+                <p className="mt-2 line-clamp-3 text-xs text-[var(--p-text-2)]">{r.narrative}</p>
                 {r.subject_ref && (
-                  <div className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">
+                  <div className="mt-2 font-mono text-[10px] text-[var(--p-text-2)]">
                     {t("m.safeguarding.subjectLabel", undefined, "Subject:")} {r.subject_ref}
                   </div>
                 )}

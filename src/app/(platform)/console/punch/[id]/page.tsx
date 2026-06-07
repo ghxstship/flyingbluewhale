@@ -93,23 +93,23 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="surface p-4">
           <dl className="grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">
+              <dt className="text-xs text-[var(--p-text-2)]">
                 {t("console.punch.detail.priority", undefined, "Priority")}
               </dt>
               <dd className="font-medium">{toTitle(item.priority)}</dd>
             </div>
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">{t("console.punch.detail.due", undefined, "Due")}</dt>
+              <dt className="text-xs text-[var(--p-text-2)]">{t("console.punch.detail.due", undefined, "Due")}</dt>
               <dd className="font-mono">{fmt(item.due_at)}</dd>
             </div>
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">
+              <dt className="text-xs text-[var(--p-text-2)]">
                 {t("console.punch.detail.assignee", undefined, "Assignee")}
               </dt>
               <dd>{assignee?.name ?? assignee?.email ?? "—"}</dd>
             </div>
             <div>
-              <dt className="text-xs text-[var(--text-muted)]">
+              <dt className="text-xs text-[var(--p-text-2)]">
                 {t("console.punch.detail.vendor", undefined, "Vendor")}
               </dt>
               <dd>{vendor ?? "—"}</dd>

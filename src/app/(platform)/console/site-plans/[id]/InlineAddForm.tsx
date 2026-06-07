@@ -4,8 +4,8 @@ import { useActionState, useRef } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import type { State } from "./actions";
 
-const INPUT = "rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1.5 text-xs";
-const LBL = "text-[10px] uppercase tracking-wide text-[var(--text-muted)]";
+const INPUT = "rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-xs";
+const LBL = "text-[10px] uppercase tracking-wide text-[var(--p-text-2)]";
 
 type SelectOption = { value: string; label: string };
 
@@ -37,7 +37,7 @@ export function InlineAddForm({ action, sheetId, submitLabel, fields }: Props) {
   }, null);
 
   return (
-    <form ref={formRef} action={formAction} className="mt-3 border-t border-[var(--border-color)] pt-3">
+    <form ref={formRef} action={formAction} className="mt-3 border-t border-[var(--p-border)] pt-3">
       <div className="flex flex-wrap items-end gap-2">
         <input type="hidden" name="sheet_id" value={sheetId} />
         {fields.map((f) => (
@@ -46,12 +46,12 @@ export function InlineAddForm({ action, sheetId, submitLabel, fields }: Props) {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--bg-hover)] disabled:opacity-60"
+          className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--bg-hover)] disabled:opacity-60"
         >
           {pending ? t("common.loadingEllipsis", undefined, "…") : submitLabel}
         </button>
         {state?.error && (
-          <span className="text-[11px] text-[var(--color-error)]" role="alert">
+          <span className="text-[11px] text-[var(--p-danger)]" role="alert">
             {state.error}
           </span>
         )}

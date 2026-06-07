@@ -58,15 +58,15 @@ export function PunchKanban({ rows }: { rows: PunchKanbanRow[] }): React.ReactEl
       renderCard={(r) => (
         <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">
-            <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.code}</span>
+            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{r.code}</span>
             {r.show_ready_gate && (
               <span
                 title={t("console.punch.kanban.showReadyGate", undefined, "Show-ready gate")}
-                className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-error)]"
+                className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--p-danger)]"
               />
             )}
           </div>
-          <div className="line-clamp-2 text-sm font-medium text-[var(--foreground)]">{r.title}</div>
+          <div className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.title}</div>
           <div className="flex items-center justify-between gap-2">
             <Badge variant={PRIORITY_TONE[r.priority]} className="text-[10px] uppercase">
               {r.priority}

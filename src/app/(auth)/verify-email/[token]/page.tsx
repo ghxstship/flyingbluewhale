@@ -30,14 +30,14 @@ export default async function Page({ params }: { params: Promise<{ token: string
       subtitle={t("auth.verifyEmail.failedSubtitle", undefined, "We couldn't verify your email with that link.")}
     >
       <Alert kind="error">{error.message}</Alert>
-      <p className="mt-4 text-sm text-[var(--text-secondary)]">
+      <p className="mt-4 text-sm text-[var(--p-text-2)]">
         {t(
           "auth.verifyEmail.failedBody",
           undefined,
           "Verification links expire after 24 hours. Request a fresh one from the verify-email page.",
         )}
       </p>
-      <Link href="/verify-email" className="btn btn-primary mt-4 w-full">
+      <Link href="/verify-email" className="ps-btn mt-4 w-full">
         {t("auth.verifyEmail.resend", undefined, "Resend verification email")}
       </Link>
     </AuthShell>

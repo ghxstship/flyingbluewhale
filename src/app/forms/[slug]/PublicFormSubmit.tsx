@@ -25,9 +25,9 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
   if (state?.ok) {
     return (
       <div className="surface p-8 text-center">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Submitted</div>
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Submitted</div>
         <h2 className="mt-2 text-2xl font-semibold">Thanks — we received it.</h2>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">Your response was recorded. You can close this tab.</p>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">Your response was recorded. You can close this tab.</p>
       </div>
     );
   }
@@ -47,9 +47,9 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
         if (f.type === "textarea") {
           return (
             <div key={f.key}>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {f.label}
-                {f.required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
+                {f.required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
               </label>
               <textarea
                 name={name}
@@ -57,7 +57,7 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
                 placeholder={f.placeholder}
                 rows={4}
                 maxLength={5000}
-                className="input-base mt-1.5 w-full"
+                className="ps-input mt-1.5 w-full"
               />
             </div>
           );
@@ -65,11 +65,11 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
         if (f.type === "select") {
           return (
             <div key={f.key}>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {f.label}
-                {f.required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
+                {f.required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
               </label>
-              <select name={name} required={f.required} className="input-base mt-1.5 w-full" defaultValue="">
+              <select name={name} required={f.required} className="ps-input mt-1.5 w-full" defaultValue="">
                 <option value="" disabled>
                   {f.placeholder || "Select…"}
                 </option>
@@ -85,10 +85,10 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
         if (f.type === "checkbox") {
           return (
             <label key={f.key} className="surface hover-lift flex cursor-pointer items-start gap-3 p-3 text-sm">
-              <input type="checkbox" name={name} className="mt-0.5 accent-[var(--org-primary)]" />
+              <input type="checkbox" name={name} className="mt-0.5 accent-[var(--p-accent)]" />
               <div>
                 <div className="font-medium">{f.label}</div>
-                {f.placeholder && <div className="text-[11px] text-[var(--text-muted)]">{f.placeholder}</div>}
+                {f.placeholder && <div className="text-[11px] text-[var(--p-text-2)]">{f.placeholder}</div>}
               </div>
             </label>
           );

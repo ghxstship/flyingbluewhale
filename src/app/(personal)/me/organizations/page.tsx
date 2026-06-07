@@ -15,7 +15,7 @@ export default async function OrgsPage() {
     return (
       <div>
         <h1 className="text-2xl font-semibold">{t("me.organizations.title", undefined, "Organizations")}</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.organizations.configureSupabase", undefined, "Configure Supabase.")}
         </p>
       </div>
@@ -34,7 +34,7 @@ export default async function OrgsPage() {
       <h1 className="text-2xl font-semibold tracking-tight">
         {t("me.organizations.title", undefined, "Organizations")}
       </h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t("me.organizations.subtitle", undefined, "Every org you're a member of")}
       </p>
       {rows.length === 0 ? (
@@ -49,12 +49,12 @@ export default async function OrgsPage() {
           />
         </div>
       ) : (
-        <div className="surface mt-6 divide-y divide-[var(--border-color)]">
+        <div className="surface mt-6 divide-y divide-[var(--p-border)]">
           {rows.map((r) => (
             <div key={r.id} className="flex items-center justify-between p-5">
               <div>
                 <div className="text-sm font-semibold">{r.orgs?.name ?? "—"}</div>
-                <div className="font-mono text-xs text-[var(--text-muted)]">{r.orgs?.slug}</div>
+                <div className="font-mono text-xs text-[var(--p-text-2)]">{r.orgs?.slug}</div>
               </div>
               <div className="flex items-center gap-3">
                 <Badge variant="cyan">{r.orgs?.tier}</Badge>

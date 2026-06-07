@@ -167,11 +167,11 @@ export default async function Page() {
             {t("console.finance.treasury.byCurrency", undefined, "By Currency")}
           </h3>
           {byCurrency.size === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.finance.treasury.noInvoices", undefined, "No invoices issued yet.")}
             </p>
           ) : (
-            <table className="data-table mt-3 w-full text-sm">
+            <table className="ps-table mt-3 w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.finance.treasury.columns.currency", undefined, "Currency")}</th>
@@ -218,7 +218,7 @@ export default async function Page() {
                     {inv.number}
                   </Link>
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">
                       {t("console.finance.treasury.dueLabel", { date: fmtDate(inv.due_at) }, "due {date}")}
                     </span>
                     <span className="font-mono text-xs">{formatMoney(inv.amount_cents, inv.currency)}</span>
@@ -235,7 +235,7 @@ export default async function Page() {
             {HUB_TILES.map((tile) => (
               <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
                 <div className="text-sm font-medium">{tile.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.description}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{tile.description}</div>
               </Link>
             ))}
           </div>

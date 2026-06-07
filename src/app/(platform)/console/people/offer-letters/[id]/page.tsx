@@ -89,13 +89,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     <>
       <ModuleHeader
         eyebrow={
-          <Link href="/console/people/offer-letters" className="hover:text-[var(--org-primary)]">
+          <Link href="/console/people/offer-letters" className="hover:text-[var(--p-accent)]">
             {t("console.people.offerLetters.detail.eyebrow", undefined, "People · Offer Letters")}
           </Link>
         }
         title={resolved.recipient_name}
         subtitle={
-          <span className="flex flex-wrap items-center gap-2 text-xs text-[var(--text-muted)]">
+          <span className="flex flex-wrap items-center gap-2 text-xs text-[var(--p-text-2)]">
             <Badge variant={STATUS_VARIANT[raw.status]}>{STATUS_LABEL[raw.status]}</Badge>
             <span>{resolved.role_title}</span>
             <span>·</span>
@@ -115,11 +115,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             href={printUrl}
             target="_blank"
             rel="noreferrer"
-            className="rounded border border-[var(--border-default)] px-3 py-1.5 hover:border-[var(--org-primary)] hover:text-[var(--org-primary)]"
+            className="rounded border border-[var(--border-default)] px-3 py-1.5 hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
           >
             {t("console.people.offerLetters.detail.printLink", undefined, "Print / Save as PDF →")}
           </a>
-          <span className="text-[var(--text-muted)]">
+          <span className="text-[var(--p-text-2)]">
             {t(
               "console.people.offerLetters.detail.printHint",
               undefined,
@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </div>
 
         {raw.snapshot && (
-          <div className="surface px-4 py-3 text-xs text-[var(--text-muted)]">
+          <div className="surface px-4 py-3 text-xs text-[var(--p-text-2)]">
             <span className="tracking-wider uppercase">
               {t("console.people.offerLetters.detail.snapshotFrozen", undefined, "Snapshot Frozen")}
             </span>
@@ -198,16 +198,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 {t("console.people.offerLetters.detail.activity", undefined, "Activity")}
               </h3>
               {activity.length === 0 ? (
-                <div className="text-xs text-[var(--text-muted)]">
+                <div className="text-xs text-[var(--p-text-2)]">
                   {t("console.people.offerLetters.detail.noActivity", undefined, "No activity yet.")}
                 </div>
               ) : (
                 <ul className="space-y-3 text-xs">
                   {activity.map((a) => (
                     <li key={a.id} className="border-s-2 border-[var(--border-default)] ps-3">
-                      <div className="tracking-wider text-[var(--text-muted)] uppercase">{toTitle(a.kind)}</div>
-                      <div className="text-[var(--text-primary)]">{a.summary}</div>
-                      <div className="text-[var(--text-muted)]">
+                      <div className="tracking-wider text-[var(--p-text-2)] uppercase">{toTitle(a.kind)}</div>
+                      <div className="text-[var(--p-text-1)]">{a.summary}</div>
+                      <div className="text-[var(--p-text-2)]">
                         {a.actor_label ? `${a.actor_label} · ` : ""}
                         {fmt.dateTime(a.occurred_at)}
                       </div>
@@ -230,7 +230,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 function DefRow({ k, v }: { k: string; v: string }) {
   return (
     <div className="flex items-baseline gap-3 text-xs">
-      <div className="w-32 shrink-0 tracking-wider text-[var(--text-muted)] uppercase">{k}</div>
+      <div className="w-32 shrink-0 tracking-wider text-[var(--p-text-2)] uppercase">{k}</div>
       <div className="font-mono">{v}</div>
     </div>
   );

@@ -112,7 +112,7 @@ export default async function Page() {
                         </span>
                       </div>
                       {r.last_message_at && (
-                        <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                        <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
                           {new Date(r.last_message_at).toLocaleString()}
                         </div>
                       )}

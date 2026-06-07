@@ -9,7 +9,7 @@ export default async function NewDocPage() {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.docs.new.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -18,7 +18,7 @@ export default async function NewDocPage() {
   return (
     <div className="px-4 pt-6 pb-24">
       <h1 className="text-xl font-semibold">{t("m.docs.new.title", undefined, "Upload Document")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.docs.new.description",
           undefined,
@@ -35,7 +35,7 @@ export default async function NewDocPage() {
             required
             maxLength={200}
             placeholder={t("m.docs.new.labelPlaceholder", undefined, "e.g. Driver's License")}
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
           />
         </label>
         <label className="block text-xs font-semibold">
@@ -43,7 +43,7 @@ export default async function NewDocPage() {
           <select
             name="doc_kind"
             required
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
             defaultValue="id"
           >
             <option value="id">{t("m.docs.new.kindId", undefined, "ID")}</option>
@@ -58,7 +58,7 @@ export default async function NewDocPage() {
           {t("m.docs.new.file", undefined, "File")}
           <input type="file" name="file" required accept="image/*,.pdf,.doc,.docx" className="mt-1 w-full text-sm" />
         </label>
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="ps-btn w-full">
           {t("m.docs.new.upload", undefined, "Upload")}
         </button>
       </form>

@@ -19,10 +19,10 @@ export default async function Page() {
           submitLabel={t("common.create", undefined, "Create")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.catalog.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" required className="input-base mt-1.5 w-full" defaultValue="credential">
+            <select name="kind" required className="ps-input mt-1.5 w-full" defaultValue="credential">
               <option value="credential">
                 {t("console.settings.catalog.kind.credential", undefined, "Credential")}
               </option>
@@ -52,10 +52,10 @@ export default async function Page() {
             placeholder="Crew Pass (Tier 1)"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.catalog.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={1000} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={3} maxLength={1000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.settings.catalog.new.unitCostLabel", undefined, "Unit Cost — USD")}

@@ -69,14 +69,14 @@ export default async function GuidesIndex() {
               "Per-persona event guides — the Boarding Pass for crew, artists, vendors, sponsors, and guests — are authored from each project's detail page.",
             )}
             action={
-              <Link className="text-sm text-[var(--org-primary)]" href="/console/projects">
+              <Link className="text-sm text-[var(--p-accent)]" href="/console/projects">
                 {t("console.guides.empty.openProjects", undefined, "Open Projects →")}
               </Link>
             }
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.guides.table.project", undefined, "Project")}</th>
@@ -98,7 +98,7 @@ export default async function GuidesIndex() {
                     <td>
                       <Link
                         href={`/console/projects/${g.project_id}/guides/${g.persona}`}
-                        className="text-[var(--org-primary)] hover:underline"
+                        className="text-[var(--p-accent)] hover:underline"
                       >
                         {t("console.guides.editLink", undefined, "Edit →")}
                       </Link>

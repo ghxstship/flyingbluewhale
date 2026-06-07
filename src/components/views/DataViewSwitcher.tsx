@@ -68,7 +68,7 @@ export function DataViewSwitcher<T extends DataViewKind>({
     <div
       role="tablist"
       aria-label={ariaLabel}
-      className="inline-flex items-center gap-0.5 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-0.5"
+      className="inline-flex items-center gap-0.5 rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-0.5"
     >
       {allowed.map((v) => {
         const meta = REGISTRY[v];
@@ -81,10 +81,10 @@ export function DataViewSwitcher<T extends DataViewKind>({
             aria-selected={active}
             type="button"
             onClick={() => go(v)}
-            className={`inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)] ${
+            className={`inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
               active
-                ? "bg-[var(--surface)] text-[var(--text-primary)] shadow-sm"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                ? "bg-[var(--p-surface)] text-[var(--p-text-1)] shadow-sm"
+                : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             }`}
             title={label}
           >

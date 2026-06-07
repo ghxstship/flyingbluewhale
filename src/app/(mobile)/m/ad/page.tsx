@@ -33,7 +33,7 @@ export default async function MobileAdPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -68,16 +68,16 @@ export default async function MobileAdPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.ad.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.ad.title", undefined, "Arrivals & departures")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.ad.todayPrefix", undefined, "Today")} · {fmtDay(startOfWindow)}
       </p>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.ad.arrivalsHeading", undefined, "Arrivals")} · {arrivals.length}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -91,7 +91,7 @@ export default async function MobileAdPage() {
                 <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
-                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                    <span className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       {t("m.ad.eta", undefined, "ETA")}
                     </span>
                   </div>
@@ -99,11 +99,11 @@ export default async function MobileAdPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-sm leading-snug font-semibold">
                         {m.flight_ref ?? "—"}{" "}
-                        {m.carrier ? <span className="text-[var(--text-muted)]">· {m.carrier}</span> : null}
+                        {m.carrier ? <span className="text-[var(--p-text-2)]">· {m.carrier}</span> : null}
                       </div>
                       <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
                     </div>
-                    <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                    <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}
                       {m.actual_at &&
                         ` · ${t("m.ad.landedAt", { time: fmtClock(m.actual_at) }, `landed ${fmtClock(m.actual_at)}`)}`}
@@ -117,7 +117,7 @@ export default async function MobileAdPage() {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.ad.departuresHeading", undefined, "Departures")} · {departures.length}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -131,7 +131,7 @@ export default async function MobileAdPage() {
                 <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
-                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                    <span className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       {t("m.ad.etd", undefined, "ETD")}
                     </span>
                   </div>
@@ -139,11 +139,11 @@ export default async function MobileAdPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div className="text-sm leading-snug font-semibold">
                         {m.flight_ref ?? "—"}{" "}
-                        {m.carrier ? <span className="text-[var(--text-muted)]">· {m.carrier}</span> : null}
+                        {m.carrier ? <span className="text-[var(--p-text-2)]">· {m.carrier}</span> : null}
                       </div>
                       <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
                     </div>
-                    <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                    <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}
                       {m.actual_at &&
                         ` · ${t("m.ad.departedAt", { time: fmtClock(m.actual_at) }, `departed ${fmtClock(m.actual_at)}`)}`}

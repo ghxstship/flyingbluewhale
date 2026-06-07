@@ -74,10 +74,10 @@ export default async function Page() {
           className="surface space-y-4 p-6"
         >
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.recognition.new.recipientLabel", undefined, "Recipient")}
             </span>
-            <select name="to_user_id" required className="input-base focus-ring w-full" defaultValue="">
+            <select name="to_user_id" required className="ps-input focus-ring w-full" defaultValue="">
               <option value="" disabled>
                 {t("console.workforce.recognition.new.pickTeammate", undefined, "— Pick A Teammate —")}
               </option>
@@ -89,7 +89,7 @@ export default async function Page() {
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.recognition.new.messageLabel", undefined, "Message")}
             </span>
             <textarea
@@ -102,7 +102,7 @@ export default async function Page() {
                 undefined,
                 "Specifically, what did they do that mattered?",
               )}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input

@@ -86,7 +86,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
-          className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
+          className="ps-btn ps-btn--ghost ps-btn--sm inline-flex items-center gap-1.5"
           aria-label={t("footerUtility.changeLanguage")}
           disabled={isPending}
         >
@@ -99,9 +99,9 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
         <DropdownMenu.Content
           align="end"
           sideOffset={6}
-          className="surface z-50 min-w-[11rem] rounded-lg border border-[var(--border-color)] p-1 text-sm"
+          className="surface z-50 min-w-[11rem] rounded-lg border border-[var(--p-border)] p-1 text-sm"
         >
-          <DropdownMenu.Label className="px-2 pt-0.5 pb-1 text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+          <DropdownMenu.Label className="px-2 pt-0.5 pb-1 text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
             {t("marketing.header.language")}
           </DropdownMenu.Label>
           <DropdownMenu.RadioGroup value={active} onValueChange={(v) => pick(v as Locale)}>
@@ -109,7 +109,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
               <DropdownMenu.RadioItem
                 key={loc}
                 value={loc}
-                className="relative flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 outline-none hover:bg-[var(--bg-secondary)] focus-visible:bg-[var(--bg-secondary)] data-[state=checked]:font-medium"
+                className="relative flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 outline-none hover:bg-[var(--p-surface)] focus-visible:bg-[var(--p-surface)] data-[state=checked]:font-medium"
                 data-locale={loc}
               >
                 <span className="inline-flex h-4 w-4 items-center justify-center">
@@ -118,7 +118,7 @@ export function LocaleSwitcher({ current }: { current?: Locale } = {}) {
                   </DropdownMenu.ItemIndicator>
                 </span>
                 <span>{LOCALE_LABELS[loc]}</span>
-                <span className="ms-auto text-xs tracking-wider text-[var(--text-muted)] uppercase">{loc}</span>
+                <span className="ms-auto text-xs tracking-wider text-[var(--p-text-2)] uppercase">{loc}</span>
               </DropdownMenu.RadioItem>
             ))}
           </DropdownMenu.RadioGroup>

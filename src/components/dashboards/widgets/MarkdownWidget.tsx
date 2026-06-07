@@ -12,7 +12,7 @@ export function MarkdownWidget({ widget }: { widget: MarkdownWidgetConfig }): Re
   return (
     <div className="surface flex h-full flex-col overflow-auto p-4">
       {widget.title && (
-        <h3 className="mb-2 text-sm font-semibold tracking-tight text-[var(--foreground)]">{widget.title}</h3>
+        <h3 className="mb-2 text-sm font-semibold tracking-tight text-[var(--p-text-1)]">{widget.title}</h3>
       )}
       <Markdown source={widget.content} className="flex-1" />
     </div>

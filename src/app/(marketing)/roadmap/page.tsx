@@ -121,8 +121,8 @@ const STATUS_LABEL_KEY: Record<RoadmapQuarter["status"], string> = {
 
 const STATUS_COLOR: Record<RoadmapQuarter["status"], string> = {
   in_flight: "var(--success)",
-  next: "var(--org-primary)",
-  exploring: "var(--text-muted)",
+  next: "var(--p-accent)",
+  exploring: "var(--p-text-2)",
 };
 
 export default async function RoadmapPage() {
@@ -140,12 +140,10 @@ export default async function RoadmapPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.roadmap.hero.eyebrow")}</div>
         <h1 className="hed-3xl mt-4">{t("marketing.pages.roadmap.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.roadmap.hero.subtitle")}
-        </p>
-        <p className="mt-3 max-w-3xl text-sm text-[var(--text-muted)]">
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.roadmap.hero.subtitle")}</p>
+        <p className="mt-3 max-w-3xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.roadmap.hero.influencePrefix")}{" "}
-          <Link href="/contact" className="text-[var(--org-primary)] underline underline-offset-2">
+          <Link href="/contact" className="text-[var(--p-accent)] underline underline-offset-2">
             {t("marketing.pages.roadmap.hero.influenceLink")}
           </Link>{" "}
           {t("marketing.pages.roadmap.hero.influenceSuffix")}
@@ -162,7 +160,7 @@ export default async function RoadmapPage() {
             />
             <h2 className="hed-lg">{t(q.labelKey)}</h2>
             <span
-              className="rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase"
+              className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase"
               style={{ color: STATUS_COLOR[q.status] }}
             >
               {t(STATUS_LABEL_KEY[q.status])}
@@ -174,13 +172,13 @@ export default async function RoadmapPage() {
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">{t(item.titleKey)}</div>
                   {item.tagKey ? (
-                    <span className="rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-muted)]">
+                    <span className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] font-medium text-[var(--p-text-2)]">
                       <Clock size={9} className="me-1 inline-block" aria-hidden="true" />
                       {t(item.tagKey)}
                     </span>
                   ) : null}
                 </div>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">{t(item.bodyKey)}</p>
+                <p className="mt-2 text-sm text-[var(--p-text-2)]">{t(item.bodyKey)}</p>
               </div>
             ))}
           </div>

@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <div className="text-sm font-medium">{e.name}</div>
                 <StatusBadge status={e.status ?? "draft"} />
               </div>
-              <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+              <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                 {fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}
               </div>
             </li>

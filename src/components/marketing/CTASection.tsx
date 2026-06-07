@@ -21,15 +21,15 @@ export function CTASection({
       <div className="surface relative overflow-hidden p-10 text-center">
         <div
           className="absolute inset-x-0 top-0 h-1"
-          style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+          style={{ background: "linear-gradient(90deg, var(--p-accent), var(--p-accent-text))" }}
         />
         <h2 className="hed-xl">{title}</h2>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">{subtitle}</p>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--p-text-2)]">{subtitle}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link href={primaryHref} className="btn btn-primary">
+          <Link href={primaryHref} className="ps-btn">
             {primaryLabel}
           </Link>
-          <Link href={secondaryHref} className="btn btn-secondary">
+          <Link href={secondaryHref} className="ps-btn ps-btn--ghost">
             {secondaryLabel}
           </Link>
         </div>

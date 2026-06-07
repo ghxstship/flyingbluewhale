@@ -20,8 +20,8 @@ import { updateSitePlanSheet } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const DISCIPLINES = [
   "site",
@@ -108,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.sitePlans.edit.field.title", undefined, "Title")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <input name="title" required defaultValue={sp.title} maxLength={200} className={INPUT} />
             </label>
@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
                   {t("console.sitePlans.edit.field.sheetCode", undefined, "Sheet Code")}
-                  <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  <span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input name="code" required defaultValue={sp.code} maxLength={40} className={INPUT} />
               </label>
@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
                   {t("console.sitePlans.edit.field.sheetType", undefined, "Sheet Type")}
-                  <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  <span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <select name="sheet_type" required defaultValue={sp.sheet_type} className={INPUT}>
                   {SITEPLAN_SHEET_TYPES.map((sheetType) => (
@@ -148,7 +148,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
                   {t("console.sitePlans.edit.field.xpmsClass", undefined, "XPMS Class")}
-                  <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  <span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <select name="primary_class" required defaultValue={String(sp.primary_class ?? 8)} className={INPUT}>
                   {XPMS_CLASSES.map((c) => (

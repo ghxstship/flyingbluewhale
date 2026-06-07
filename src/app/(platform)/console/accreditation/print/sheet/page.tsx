@@ -79,14 +79,14 @@ export default async function PrintSheetPage() {
       <div className="page-content">
         <div className="grid grid-cols-2 gap-4 print:gap-2">
           {cards.length === 0 ? (
-            <div className="surface col-span-2 p-6 text-sm text-[var(--text-muted)]">
+            <div className="surface col-span-2 p-6 text-sm text-[var(--p-text-2)]">
               {t("console.accreditation.print.sheet.empty", undefined, "No approved badges queued.")}
             </div>
           ) : (
             cards.map((c) => (
               <div
                 key={c.id}
-                className="relative overflow-hidden rounded-lg border-2 border-[var(--border-color)] bg-white p-4 text-black print:break-inside-avoid"
+                className="relative overflow-hidden rounded-lg border-2 border-[var(--p-border)] bg-white p-4 text-black print:break-inside-avoid"
                 style={{ aspectRatio: "85.6 / 54" }}
               >
                 <div className="flex h-full flex-col">

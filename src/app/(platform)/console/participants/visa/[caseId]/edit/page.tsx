@@ -57,10 +57,10 @@ export default async function Page({ params }: { params: Promise<{ caseId: strin
             maxLength={80}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.participants.visa.edit.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="pending">{t("console.participants.visa.edit.statusPending", undefined, "pending")}</option>
               <option value="submitted">
                 {t("console.participants.visa.edit.statusSubmitted", undefined, "submitted")}

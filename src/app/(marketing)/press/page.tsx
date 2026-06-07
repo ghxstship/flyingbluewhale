@@ -55,7 +55,7 @@ export default async function PressPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.press.hero.eyebrow")}</div>
         <h1 className="hed-3xl mt-4">{t("marketing.pages.press.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.press.hero.body")}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.press.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
@@ -64,7 +64,7 @@ export default async function PressPage() {
           {FACTS.map((f, i) => (
             <div
               key={f.label}
-              className={`grid grid-cols-1 gap-2 p-5 sm:grid-cols-[160px_1fr] ${i < FACTS.length - 1 ? "border-b border-[var(--border-color)]" : ""}`}
+              className={`grid grid-cols-1 gap-2 p-5 sm:grid-cols-[160px_1fr] ${i < FACTS.length - 1 ? "border-b border-[var(--p-border)]" : ""}`}
             >
               <div className="eyebrow">{f.label}</div>
               <div className="text-sm">{f.value}</div>
@@ -77,11 +77,11 @@ export default async function PressPage() {
         <div className="surface relative overflow-hidden p-8 md:p-10">
           <span
             className="absolute inset-x-0 top-0 h-1"
-            style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+            style={{ background: "linear-gradient(90deg, var(--p-accent), var(--p-accent-text))" }}
           />
           <div className="eyebrow eyebrow-brand">{t("marketing.pages.press.kit.eyebrow")}</div>
           <h2 className="hed-lg mt-3">{t("marketing.pages.press.kit.title")}</h2>
-          <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">{t("marketing.pages.press.kit.body")}</p>
+          <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.press.kit.body")}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href="/contact" variant="secondary">
               <Download size={14} className="me-1.5" aria-hidden="true" />
@@ -95,12 +95,12 @@ export default async function PressPage() {
         <div className="surface p-8">
           <div className="eyebrow">{t("marketing.pages.press.contact.eyebrow")}</div>
           <div className="mt-3 flex items-center gap-2 text-sm">
-            <Mail size={14} aria-hidden="true" className="text-[var(--text-muted)]" />
-            <Link href="mailto:press@atlvs.pro" className="font-medium text-[var(--org-primary)]">
+            <Mail size={14} aria-hidden="true" className="text-[var(--p-text-2)]" />
+            <Link href="mailto:press@atlvs.pro" className="font-medium text-[var(--p-accent)]">
               press@atlvs.pro
             </Link>
           </div>
-          <p className="mt-3 text-xs text-[var(--text-muted)]">{t("marketing.pages.press.contact.body")}</p>
+          <p className="mt-3 text-xs text-[var(--p-text-2)]">{t("marketing.pages.press.contact.body")}</p>
         </div>
       </section>
 

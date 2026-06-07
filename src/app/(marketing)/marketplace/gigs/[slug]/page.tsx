@@ -83,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-gigs-detail.roles.title")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {r.role_taxonomy.length === 0 ? (
-                <span className="text-sm text-[var(--text-secondary)]">—</span>
+                <span className="text-sm text-[var(--p-text-2)]">—</span>
               ) : (
                 r.role_taxonomy.map((t) => (
                   <Badge key={t} variant="muted">
@@ -97,19 +97,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-gigs-detail.requirements.title")}</h2>
             <dl className="space-y-1 text-sm">
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace-gigs-detail.requirements.unions")}
                 </span>{" "}
                 {r.union_required.join(", ") || "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace-gigs-detail.requirements.certs")}
                 </span>{" "}
                 {r.certs_required.join(", ") || "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace-gigs-detail.requirements.travel")}
                 </span>{" "}
                 {r.travel_paid
@@ -117,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   : t("marketing.pages.marketplace-gigs-detail.requirements.travelNotPaid")}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace-gigs-detail.requirements.lodging")}
                 </span>{" "}
                 {r.lodging_provided
@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <Button href="/signup" variant="ghost">
             {t("marketing.pages.marketplace-gigs-detail.cta.needAccount")}
           </Button>
-          <span className="text-xs text-[var(--text-secondary)]">
+          <span className="text-xs text-[var(--p-text-2)]">
             {r.applicant_count} {t("marketing.pages.marketplace-gigs-detail.cta.applicants")}
           </span>
         </div>

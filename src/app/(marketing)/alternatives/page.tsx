@@ -41,9 +41,7 @@ export default async function AlternativesIndex() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.alternatives.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.alternatives.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.alternatives.hero.body")}
-        </p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.alternatives.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
@@ -53,8 +51,8 @@ export default async function AlternativesIndex() {
               <div className="text-sm font-semibold">
                 {c.competitor} {t("marketing.pages.alternatives.card.alternativesSuffix")}
               </div>
-              <p className="mt-2 text-xs text-[var(--text-secondary)]">{c.blurb}</p>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">{c.blurb}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("marketing.pages.alternatives.card.readLongForm")} <ArrowRight size={12} />
               </div>
             </Link>

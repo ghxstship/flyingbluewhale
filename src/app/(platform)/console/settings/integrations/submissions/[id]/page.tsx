@@ -88,18 +88,16 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content max-w-3xl space-y-5">
         <div className="surface p-5">
-          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.settings.integrations.submissions.detail.description", undefined, "Description")}
           </h3>
           <p className="mt-2 text-sm">{r.short_description}</p>
-          {r.long_description ? (
-            <p className="mt-3 text-sm text-[var(--text-secondary)]">{r.long_description}</p>
-          ) : null}
+          {r.long_description ? <p className="mt-3 text-sm text-[var(--p-text-2)]">{r.long_description}</p> : null}
         </div>
 
         {r.capabilities.length > 0 ? (
           <div className="surface p-5">
-            <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+            <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.integrations.submissions.detail.capabilities", undefined, "Capabilities")}
             </h3>
             <ul className="mt-2 list-disc space-y-1 ps-5 text-sm">
@@ -111,18 +109,18 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         ) : null}
 
         <div className="surface p-5">
-          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.settings.integrations.submissions.detail.partnerContact", undefined, "Partner contact")}
           </h3>
           <div className="mt-2 grid grid-cols-2 gap-3 text-sm">
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.settings.integrations.submissions.detail.name", undefined, "Name")}
               </div>
               <div>{r.partner_contact_name ?? "—"}</div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.settings.integrations.submissions.detail.email", undefined, "Email")}
               </div>
               <a className="font-mono underline" href={`mailto:${r.partner_contact_email}`}>
@@ -130,7 +128,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </a>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.settings.integrations.submissions.detail.homepage", undefined, "Homepage")}
               </div>
               <div className="font-mono text-xs">
@@ -144,7 +142,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.settings.integrations.submissions.detail.docs", undefined, "Docs")}
               </div>
               <div className="font-mono text-xs">
@@ -161,8 +159,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </div>
 
         {r.certification_tier === "rejected" && r.rejection_reason ? (
-          <div className="surface border-s-4 border-s-[var(--color-error)] p-5">
-            <h3 className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+          <div className="surface border-s-4 border-s-[var(--p-danger)] p-5">
+            <h3 className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
               {t("console.settings.integrations.submissions.detail.rejectionReason", undefined, "Rejection reason")}
             </h3>
             <p className="mt-2 text-sm">{r.rejection_reason}</p>
@@ -170,10 +168,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         ) : null}
 
         <div className="surface p-5">
-          <h3 className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.settings.integrations.submissions.detail.certificationQueue", undefined, "Certification queue")}
           </h3>
-          <p className="mt-2 text-xs text-[var(--text-secondary)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.integrations.submissions.detail.queueIntro",
               undefined,
@@ -194,13 +192,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <input type="hidden" name="id" value={r.id} />
             <div className="grid grid-cols-2 gap-3">
               <label className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-[var(--text-secondary)]">
+                <span className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.settings.integrations.submissions.detail.nextTier", undefined, "Next Tier")}
                 </span>
                 <select
                   name="next_tier"
                   defaultValue={r.certification_tier}
-                  className="w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 >
                   {(["submitted", "reviewing", "verified", "certified", "rejected"] as Tier[]).map((tier) => (
                     <option key={tier} value={tier}>
@@ -210,7 +208,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </select>
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className="text-xs font-medium text-[var(--text-secondary)]">
+                <span className="text-xs font-medium text-[var(--p-text-2)]">
                   {t(
                     "console.settings.integrations.submissions.detail.publishLabel",
                     undefined,
@@ -220,7 +218,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <select
                   name="publish"
                   defaultValue={r.published_at ? "keep" : "no"}
-                  className="w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
+                  className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 >
                   <option value="no">
                     {t(
@@ -250,7 +248,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </label>
             </div>
             <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--text-secondary)]">
+              <span className="text-xs font-medium text-[var(--p-text-2)]">
                 {t(
                   "console.settings.integrations.submissions.detail.rejectionReasonLabel",
                   undefined,
@@ -262,7 +260,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 rows={3}
                 maxLength={1000}
                 defaultValue={r.rejection_reason ?? ""}
-                className="w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm"
+                className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
               />
             </label>
             <div className="flex justify-end">

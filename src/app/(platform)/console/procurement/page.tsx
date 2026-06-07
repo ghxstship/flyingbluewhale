@@ -120,7 +120,7 @@ export default async function ProcurementHub() {
           ].map((tile) => (
             <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{tile.label}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.sub}</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">{tile.sub}</div>
             </Link>
           ))}
         </div>

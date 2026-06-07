@@ -121,7 +121,7 @@ export default async function Page() {
         ) : (
           days.map(([day, dayRuns]) => (
             <section key={day} className="surface">
-              <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-3">
+              <header className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-3">
                 <h3 className="text-sm font-semibold">{fmtDay(new Date(day))}</h3>
                 <Badge variant="muted">
                   {dayRuns.length === 1
@@ -133,7 +133,7 @@ export default async function Page() {
                       )}
                 </Badge>
               </header>
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th>{t("console.transport.workforce.col.depart", undefined, "Depart")}</th>

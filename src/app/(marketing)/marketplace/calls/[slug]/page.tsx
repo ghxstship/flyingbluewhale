@@ -88,25 +88,25 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h2 className="hed-md mb-3">{t("marketing.pages.marketplace.calls.detail.booking.title")}</h2>
             <dl className="space-y-1 text-sm">
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace.calls.detail.booking.performance")}
                 </span>{" "}
                 {c.performance_date ?? t("marketing.pages.marketplace.calls.detail.booking.tbd")}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace.calls.detail.booking.fee")}
                 </span>{" "}
                 {formatFeeRange(c.fee_min_cents, c.fee_max_cents, c.currency)}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace.calls.detail.booking.deadline")}
                 </span>{" "}
                 {c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("marketing.pages.marketplace.calls.detail.booking.submissions")}
                 </span>{" "}
                 {c.submission_count}

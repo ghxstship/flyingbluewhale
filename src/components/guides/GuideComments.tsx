@@ -63,7 +63,7 @@ export function GuideComments({
     <section aria-labelledby="comments-heading" className="mt-8">
       <h2 id="comments-heading" className="flex items-center gap-2 text-sm font-semibold">
         <MessageCircle size={14} aria-hidden="true" />
-        Comments {comments.length > 0 && <span className="text-[var(--text-muted)]">({comments.length})</span>}
+        Comments {comments.length > 0 && <span className="text-[var(--p-text-2)]">({comments.length})</span>}
       </h2>
 
       <form onSubmit={submit} className="mt-3 space-y-2">
@@ -73,7 +73,7 @@ export function GuideComments({
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name · optional"
           aria-label="Your Name"
-          className="input-base text-sm"
+          className="ps-input text-sm"
         />
         <textarea
           value={body}
@@ -82,7 +82,7 @@ export function GuideComments({
           aria-label="Comment Body"
           rows={3}
           required
-          className="input-base w-full resize-none text-sm"
+          className="ps-input w-full resize-none text-sm"
         />
         <div className="flex justify-end">
           <Button type="submit" loading={submitting} disabled={!body.trim()}>
@@ -93,7 +93,7 @@ export function GuideComments({
 
       <ul className="mt-4 space-y-3">
         {comments.length === 0 ? (
-          <li className="rounded border border-dashed border-[var(--border-color)] py-6 text-center text-xs text-[var(--text-muted)]">
+          <li className="rounded border border-dashed border-[var(--p-border)] py-6 text-center text-xs text-[var(--p-text-2)]">
             No comments yet.
           </li>
         ) : (
@@ -101,7 +101,7 @@ export function GuideComments({
             <li key={c.id} className="surface p-3">
               <div className="flex items-baseline justify-between text-xs">
                 <span className="font-medium">{c.author_name ?? "Anonymous"}</span>
-                <time className="text-[var(--text-muted)]" dateTime={c.created_at}>
+                <time className="text-[var(--p-text-2)]" dateTime={c.created_at}>
                   {formatRelative(c.created_at)}
                 </time>
               </div>

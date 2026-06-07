@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.tasks.edit.fields.description", undefined, "Description")}
             </span>
             <textarea
@@ -53,14 +53,14 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
               defaultValue={row.description ?? ""}
               rows={6}
               maxLength={8000}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.tasks.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
               <option value="todo">todo</option>
               <option value="in_progress">in_progress</option>
               <option value="blocked">blocked</option>

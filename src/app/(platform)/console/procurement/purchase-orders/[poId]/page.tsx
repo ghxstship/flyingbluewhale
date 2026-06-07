@@ -67,7 +67,7 @@ export default async function POPage({ params }: { params: Promise<{ poId: strin
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1 font-mono text-sm">{children}</div>
     </div>
   );

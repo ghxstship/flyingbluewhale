@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ locationId: s
             />
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.locations.edit.fields.notes", undefined, "Notes")}
             </span>
             <textarea
@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: Promise<{ locationId: s
               defaultValue={row.notes ?? ""}
               maxLength={4000}
               rows={4}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
         </FormShell>

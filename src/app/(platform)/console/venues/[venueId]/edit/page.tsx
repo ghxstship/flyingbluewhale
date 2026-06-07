@@ -45,10 +45,10 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.venues.edit.fields.kind", undefined, "Kind")}
             </span>
-            <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
+            <select name="kind" defaultValue={row.kind ?? ""} required className="ps-input focus-ring w-full">
               <option value="competition">competition</option>
               <option value="training">training</option>
               <option value="live_site">live_site</option>
@@ -71,14 +71,14 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             defaultValue={row.capacity != null ? String(row.capacity) : ""}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.venues.edit.fields.handoverState", undefined, "Handover state")}
             </span>
             <select
               name="handover_state"
               defaultValue={row.handover_state ?? ""}
               required
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             >
               <option value="not_started">not_started</option>
               <option value="inspection">inspection</option>

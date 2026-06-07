@@ -20,16 +20,16 @@ export default async function Page() {
         >
           <Input label={t("console.ai.automations.new.name", undefined, "Name")} name="name" required maxLength={120} />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ai.automations.new.description", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ai.automations.new.trigger", undefined, "Trigger")}
             </label>
-            <select name="trigger_kind" defaultValue="manual" className="input-base mt-1.5 w-full">
+            <select name="trigger_kind" defaultValue="manual" className="ps-input mt-1.5 w-full">
               <option value="manual">{t("console.ai.automations.new.triggerManual", undefined, "Manual")}</option>
               <option value="schedule">
                 {t("console.ai.automations.new.triggerSchedule", undefined, "Schedule — Cron")}

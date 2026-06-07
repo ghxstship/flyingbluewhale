@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {venues.map((v) => (
             <li key={v.id} className="surface p-4">
               <div className="text-sm font-semibold">{v.name}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">
                 {v.address ?? "—"}
                 {v.city ? ` · ${v.city}` : ""}
               </div>

@@ -33,24 +33,24 @@ export default async function ComparePage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-accent)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
           {t("marketing.pages.compare.hero.eyebrow")}
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
           {t("marketing.pages.compare.hero.title")}
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.compare.hero.body")}</p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.compare.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="grid gap-4 md:grid-cols-3">
           {COMPARE_LIST.map((c) => (
             <Link key={c.slug} href={`/compare/${c.slug}`} className="surface hover-lift p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {t("marketing.pages.compare.card.eyebrow")} {c.competitor}
               </div>
               <div className="mt-3 text-2xl font-semibold tracking-tight">{t("marketing.pages.compare.card.cta")}</div>
-              <div className="mt-3 text-sm text-[var(--text-secondary)]">{c.blurb}</div>
+              <div className="mt-3 text-sm text-[var(--p-text-2)]">{c.blurb}</div>
             </Link>
           ))}
         </div>

@@ -22,7 +22,7 @@ export default async function MobileOnboardingPage() {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -45,11 +45,11 @@ export default async function MobileOnboardingPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.onboarding.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.onboarding.title", undefined, "Onboarding")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.onboarding.subtitle",
           undefined,
@@ -86,12 +86,12 @@ export default async function MobileOnboardingPage() {
                 <Link href={`/m/onboarding/${a.id}`} className="surface block p-4">
                   <div className="flex items-center justify-between">
                     <Badge variant={tone}>{a.assignment_phase}</Badge>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">{fmt.date(a.assigned_at)}</span>
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(a.assigned_at)}</span>
                   </div>
                   <h2 className="mt-2 text-sm font-semibold">
                     {flow?.name ?? t("m.onboarding.fallbackFlowName", undefined, "Onboarding")}
                   </h2>
-                  {flow?.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{flow.description}</p>}
+                  {flow?.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{flow.description}</p>}
                 </Link>
               </li>
             );

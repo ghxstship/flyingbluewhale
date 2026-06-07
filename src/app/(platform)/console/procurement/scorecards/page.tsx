@@ -142,14 +142,14 @@ export default async function Page() {
               "Author vendors via Procurement → Vendors. Scorecards rank them by PO volume + compliance.",
             )}
             action={
-              <Link href="/console/procurement/vendors" className="btn btn-secondary btn-sm">
+              <Link href="/console/procurement/vendors" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.procurement.scorecards.empty.cta", undefined, "Open vendors")}
               </Link>
             }
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.procurement.scorecards.col.vendor", undefined, "Vendor")}</th>
@@ -174,7 +174,7 @@ export default async function Page() {
                       <td>
                         <Link
                           href={`/console/procurement/vendors/${v.id}`}
-                          className="font-medium hover:text-[var(--org-primary)]"
+                          className="font-medium hover:text-[var(--p-accent)]"
                         >
                           {v.name}
                         </Link>

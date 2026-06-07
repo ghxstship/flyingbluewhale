@@ -48,10 +48,10 @@ export default async function Page({ params }: { params: Promise<{ changeId: str
             maxLength={80}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.changes.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="pending">{t("console.accreditation.changes.status.pending", undefined, "pending")}</option>
               <option value="approved">
                 {t("console.accreditation.changes.status.approved", undefined, "approved")}
@@ -63,10 +63,10 @@ export default async function Page({ params }: { params: Promise<{ changeId: str
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.changes.edit.noteLabel", undefined, "Note")}
             </span>
-            <textarea name="note" defaultValue={row.note ?? ""} rows={5} className="input-base focus-ring w-full" />
+            <textarea name="note" defaultValue={row.note ?? ""} rows={5} className="ps-input focus-ring w-full" />
           </label>
         </FormShell>
       </div>

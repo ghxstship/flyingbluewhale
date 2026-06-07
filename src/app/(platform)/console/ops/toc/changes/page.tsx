@@ -128,7 +128,7 @@ export default async function Page() {
             "ITIL change management — author records for non-trivial changes during live ops (rigging swap, generator hot-swap, software patch on the timing box). Each record carries risk, impact, planned window, and a backout plan.",
           )}
           emptyAction={
-            <Link href="/console/ops/toc/changes/new" className="btn btn-primary btn-sm">
+            <Link href="/console/ops/toc/changes/new" className="ps-btn ps-btn--sm">
               {t("console.ops.toc.changes.newChange", undefined, "+ New Change")}
             </Link>
           }
@@ -185,7 +185,7 @@ export default async function Page() {
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.ops.toc.changes.footer",
             undefined,

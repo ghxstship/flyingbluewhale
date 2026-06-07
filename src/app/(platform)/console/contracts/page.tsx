@@ -138,20 +138,20 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
         <div className="flex items-center justify-end gap-1 text-xs">
           <a
             href="?scope=all"
-            className={`rounded border border-[var(--border-color)] px-2 py-1 ${scope === "all" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded border border-[var(--p-border)] px-2 py-1 ${scope === "all" ? "bg-[var(--p-surface)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             aria-current={scope === "all" ? "true" : undefined}
           >
             {t("console.contracts.scope.all", undefined, "All")}
           </a>
           <a
             href="?scope=construction"
-            className={`rounded border border-[var(--border-color)] px-2 py-1 ${scope === "construction" ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded border border-[var(--p-border)] px-2 py-1 ${scope === "construction" ? "bg-[var(--p-surface)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"}`}
             aria-current={scope === "construction" ? "true" : undefined}
           >
             {t("console.contracts.scope.constructionOnly", undefined, "Construction Only")}
           </a>
         </div>
-        <div className="text-[10px] text-[var(--text-muted)]">
+        <div className="text-[10px] text-[var(--p-text-2)]">
           {t(
             "console.contracts.descriptionLine1",
             undefined,

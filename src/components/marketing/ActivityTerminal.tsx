@@ -57,18 +57,18 @@ export function ActivityTerminal() {
 
   return (
     <div className="surface-terminal overflow-hidden">
-      <div className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2">
+      <div className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-2">
         <div className="flex items-center gap-2">
           <span className="term-prompt">$</span>
           <span className="term-dim">tail -f atlvs.production.log</span>
         </div>
         <div className="flex items-center gap-2 text-[10px] tracking-wide uppercase">
           <span className="term-ok inline-flex items-center gap-1">
-            <span className="status-dot status-dot-success status-dot-pulse" aria-hidden /> live
+            <span className="ps-dot ps-dot ps-dot--ok ps-dot" aria-hidden /> live
           </span>
         </div>
       </div>
-      <ul className="divide-y divide-[color-mix(in_oklab,var(--border-color)_25%,transparent)]">
+      <ul className="divide-y divide-[color-mix(in_oklab,var(--p-border)_25%,transparent)]">
         {rows.map((r, i) => {
           const toneClass =
             r.tone === "ok"

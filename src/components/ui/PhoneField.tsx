@@ -144,9 +144,9 @@ export function PhoneField(props: PhoneFieldProps) {
   return (
     <div className={className}>
       {label ? (
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {label}
-          {required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
+          {required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
         </label>
       ) : null}
       <div className="mt-1.5 flex gap-2">
@@ -155,7 +155,7 @@ export function PhoneField(props: PhoneFieldProps) {
           value={country}
           disabled={disabled}
           onChange={(e) => fire({ country: e.target.value })}
-          className="input-base w-32 shrink-0"
+          className="ps-input w-32 shrink-0"
         >
           {COUNTRIES.map((c) => (
             <option key={c.iso} value={c.iso}>
@@ -184,7 +184,7 @@ export function PhoneField(props: PhoneFieldProps) {
             value={type ?? "mobile"}
             disabled={disabled}
             onChange={(e) => fire({ type: e.target.value as PhoneType })}
-            className="input-base w-28 shrink-0"
+            className="ps-input w-28 shrink-0"
           >
             {TYPE_OPTIONS.map((t) => (
               <option key={t.value} value={t.value}>

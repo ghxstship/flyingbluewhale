@@ -103,15 +103,15 @@ export function PublicFormRenderer({
           window.location.assign(redirect);
         }, 50);
       }
-      return <div className="surface p-6 text-center text-sm text-[var(--text-secondary)]">Redirecting…</div>;
+      return <div className="surface p-6 text-center text-sm text-[var(--p-text-2)]">Redirecting…</div>;
     }
     const title = schema.submit?.thankYouTitle ?? "Thanks — we received it.";
     const body = schema.submit?.thankYouBody ?? "Your response was recorded. You can close this tab.";
     return (
       <div className="surface p-8 text-center">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">Submitted</div>
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Submitted</div>
         <h2 className="mt-2 text-2xl font-semibold">{title}</h2>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">{body}</p>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">{body}</p>
       </div>
     );
   }
@@ -146,12 +146,10 @@ export function PublicFormRenderer({
             if (sectionFields.length === 0) return null;
             return (
               <fieldset key={section.id} className="border-ink space-y-4 border-t-3 pt-4">
-                <legend className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+                <legend className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
                   {section.heading}
                 </legend>
-                {section.description ? (
-                  <p className="text-xs text-[var(--text-secondary)]">{section.description}</p>
-                ) : null}
+                {section.description ? <p className="text-xs text-[var(--p-text-2)]">{section.description}</p> : null}
                 {sectionFields.map((f) => (
                   <FieldRenderer key={f.key} field={f} value={values[f.key]} onChange={(v) => setValue(f.key, v)} />
                 ))}
@@ -199,10 +197,10 @@ function FieldRenderer({
 }) {
   const name = `f_${field.key}`;
   const labelEl = (
-    <label className="text-xs font-medium text-[var(--text-secondary)]">
+    <label className="text-xs font-medium text-[var(--p-text-2)]">
       {field.label}
-      {field.required && <span className="ms-0.5 text-[var(--color-error)]">*</span>}
-      {field.help ? <span className="ms-2 text-[10px] font-normal text-[var(--text-muted)]">{field.help}</span> : null}
+      {field.required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
+      {field.help ? <span className="ms-2 text-[10px] font-normal text-[var(--p-text-2)]">{field.help}</span> : null}
     </label>
   );
 
@@ -219,7 +217,7 @@ function FieldRenderer({
           rows={4}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
-          className="input-base mt-1.5 w-full"
+          className="ps-input mt-1.5 w-full"
         />
       </div>
     );
@@ -234,7 +232,7 @@ function FieldRenderer({
           required={field.required}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
-          className="input-base mt-1.5 w-full"
+          className="ps-input mt-1.5 w-full"
         >
           <option value="" disabled>
             {field.placeholder || "Select…"}
@@ -263,7 +261,7 @@ function FieldRenderer({
                 checked={value === opt}
                 required={field.required}
                 onChange={(e) => onChange(e.target.value)}
-                className="accent-[var(--org-primary)]"
+                className="accent-[var(--p-accent)]"
               />
               {opt}
             </label>
@@ -281,12 +279,12 @@ function FieldRenderer({
           name={name}
           checked={Boolean(value)}
           onChange={(e) => onChange(e.target.checked)}
-          className="mt-0.5 accent-[var(--org-primary)]"
+          className="mt-0.5 accent-[var(--p-accent)]"
         />
         <div>
           <div className="font-medium">{field.label}</div>
-          {field.placeholder && <div className="text-[11px] text-[var(--text-muted)]">{field.placeholder}</div>}
-          {field.help && <div className="text-[11px] text-[var(--text-muted)]">{field.help}</div>}
+          {field.placeholder && <div className="text-[11px] text-[var(--p-text-2)]">{field.placeholder}</div>}
+          {field.help && <div className="text-[11px] text-[var(--p-text-2)]">{field.help}</div>}
         </div>
       </label>
     );
@@ -303,7 +301,7 @@ function FieldRenderer({
           accept="image/*,application/pdf"
           className="mt-1.5 block w-full text-sm"
         />
-        <p className="mt-1 text-[11px] text-[var(--text-muted)]">Up to 10 MB. Images or PDF.</p>
+        <p className="mt-1 text-[11px] text-[var(--p-text-2)]">Up to 10 MB. Images or PDF.</p>
       </div>
     );
   }

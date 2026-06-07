@@ -31,7 +31,7 @@ export function PresenceAvatars({
       <div className="flex -space-x-1.5">
         {shown.map((p) => (
           <Hint key={`${p.userId}-${p.joinedAt}`} label={p.displayName} side="bottom">
-            <span className="rounded-full ring-2 ring-[var(--background)]">
+            <span className="rounded-full ring-2 ring-[var(--p-bg)]">
               <Avatar src={p.avatarUrl} name={p.displayName} size="sm" />
             </span>
           </Hint>
@@ -44,7 +44,7 @@ export function PresenceAvatars({
               .join(", ")}
             side="bottom"
           >
-            <span className="rounded-full ring-2 ring-[var(--background)]">
+            <span className="rounded-full ring-2 ring-[var(--p-bg)]">
               <Avatar name={`+${overflow}`} size="sm" />
             </span>
           </Hint>
@@ -52,10 +52,10 @@ export function PresenceAvatars({
       </div>
       {isOnline && (
         <span
-          className="inline-flex items-center gap-1 text-[11px] font-medium tracking-wide text-[var(--text-muted)] uppercase"
+          className="inline-flex items-center gap-1 text-[11px] font-medium tracking-wide text-[var(--p-text-2)] uppercase"
           aria-label="Live presence"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-success)]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--p-success)]" />
           Live
         </span>
       )}

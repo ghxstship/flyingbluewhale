@@ -148,7 +148,7 @@ export function SaveViewDialog({
 
             {allowedScopes.length > 1 && (
               <fieldset className="space-y-1.5">
-                <legend className="text-xs font-semibold tracking-wide text-[var(--text-secondary)]">Visibility</legend>
+                <legend className="text-xs font-semibold tracking-wide text-[var(--p-text-2)]">Visibility</legend>
                 <div className="flex flex-col gap-1.5">
                   {allowedScopes.includes("private") && (
                     <ScopeRadio
@@ -179,17 +179,14 @@ export function SaveViewDialog({
             )}
 
             <div className="space-y-1.5">
-              <label
-                htmlFor="save-view-type"
-                className="text-xs font-semibold tracking-wide text-[var(--text-secondary)]"
-              >
+              <label htmlFor="save-view-type" className="text-xs font-semibold tracking-wide text-[var(--p-text-2)]">
                 View Type
               </label>
               <select
                 id="save-view-type"
                 value={type}
                 onChange={(e) => setType(e.target.value as ViewType)}
-                className="w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]"
+                className="w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
               >
                 {VIEW_TYPES.map((t) => (
                   <option key={t} value={t}>
@@ -197,7 +194,7 @@ export function SaveViewDialog({
                   </option>
                 ))}
               </select>
-              <p className="text-[11px] text-[var(--text-muted)]">
+              <p className="text-[11px] text-[var(--p-text-2)]">
                 Only Grid renders today. Other types reserve the row for an upcoming alt renderer.
               </p>
             </div>
@@ -229,17 +226,17 @@ function ScopeRadio({
   hint: string;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-2 rounded border border-[var(--border-color)] px-2 py-1.5 text-sm hover:bg-[var(--surface-inset)]">
+    <label className="flex cursor-pointer items-start gap-2 rounded border border-[var(--p-border)] px-2 py-1.5 text-sm hover:bg-[var(--p-surface-2)]">
       <input
         type="radio"
         name="view-scope"
         checked={checked}
         onChange={onChange}
-        className="mt-0.5 accent-[var(--org-primary)]"
+        className="mt-0.5 accent-[var(--p-accent)]"
       />
       <span className="flex flex-col">
-        <span className="text-[var(--text-primary)]">{label}</span>
-        <span className="text-[11px] text-[var(--text-muted)]">{hint}</span>
+        <span className="text-[var(--p-text-1)]">{label}</span>
+        <span className="text-[11px] text-[var(--p-text-2)]">{hint}</span>
       </span>
     </label>
   );

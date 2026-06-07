@@ -24,7 +24,7 @@ export default async function MobileGuardPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.guard.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -48,11 +48,11 @@ export default async function MobileGuardPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.guard.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.guard.title", undefined, "Guard")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.guard.noToursAssigned", undefined, "No tours assigned to you.")
           : t(
@@ -74,7 +74,7 @@ export default async function MobileGuardPage() {
                 "Patrol routes appear here when a supervisor assigns you. See all tours in Safety → Guard tours.",
               )}
               action={
-                <Link href="/console/safety/guard-tours" className="btn btn-secondary btn-sm">
+                <Link href="/console/safety/guard-tours" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("m.guard.empty.action", undefined, "Open guard tours")}
                 </Link>
               }
@@ -86,7 +86,7 @@ export default async function MobileGuardPage() {
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold">{r.name}</div>
-                  <div className="mt-1 text-xs text-[var(--text-muted)]">
+                  <div className="mt-1 text-xs text-[var(--p-text-2)]">
                     {r.venue_id
                       ? t("m.guard.venue.assigned", undefined, "Assigned venue")
                       : t("m.guard.venue.any", undefined, "Any venue")}

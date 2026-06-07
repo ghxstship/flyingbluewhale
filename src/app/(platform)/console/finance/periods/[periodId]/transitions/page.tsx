@@ -37,7 +37,7 @@ export default async function AccountingPeriodTransitionsPage({ params }: { para
       />
       <div className="page-content">
         <div className="surface overflow-hidden">
-          <table className="data-table">
+          <table className="ps-table">
             <thead>
               <tr>
                 <th>{t("console.finance.periods.transitions.col.when", undefined, "When")}</th>

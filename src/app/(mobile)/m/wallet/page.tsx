@@ -23,7 +23,7 @@ export default async function WalletPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.wallet.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -54,11 +54,11 @@ export default async function WalletPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.wallet.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.wallet.title", undefined, "My Credential")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.wallet.subtitle", undefined, "Show this screen at the gate. Keep it active until your shift ends.")}
       </p>
 
@@ -92,11 +92,11 @@ export default async function WalletPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <div className="text-xs font-semibold tracking-[0.2em] text-[var(--brand-color,var(--org-primary))] uppercase">
+                  <div className="text-xs font-semibold tracking-[0.2em] text-[var(--brand-color,var(--p-accent))] uppercase">
                     {c.category?.code ?? t("m.wallet.defaultCategoryCode", undefined, "ACC")}
                   </div>
                   <div className="mt-1 text-xl leading-snug font-semibold">{c.person_name}</div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {c.delegation
                       ? c.delegation.code
                         ? `${c.delegation.code} · ${c.delegation.name}`
@@ -108,7 +108,7 @@ export default async function WalletPage() {
               </div>
               {c.card_barcode && (
                 <div className="surface-inset mt-4 rounded-md p-4 text-center">
-                  <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">
+                  <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">
                     {t("m.wallet.cardBarcode", undefined, "Card Barcode")}
                   </div>
                   <div className="mt-1.5 font-mono text-base tracking-wider">{c.card_barcode}</div>
@@ -116,11 +116,11 @@ export default async function WalletPage() {
               )}
               <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
                 <div>
-                  <div className="text-[var(--text-muted)]">{t("m.wallet.validFrom", undefined, "Valid From")}</div>
+                  <div className="text-[var(--p-text-2)]">{t("m.wallet.validFrom", undefined, "Valid From")}</div>
                   <div className="mt-0.5 font-mono">{c.valid_from?.slice(0, 10) ?? "—"}</div>
                 </div>
                 <div>
-                  <div className="text-[var(--text-muted)]">{t("m.wallet.validTo", undefined, "Valid To")}</div>
+                  <div className="text-[var(--p-text-2)]">{t("m.wallet.validTo", undefined, "Valid To")}</div>
                   <div className="mt-0.5 font-mono">{c.valid_to?.slice(0, 10) ?? "—"}</div>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export default async function WalletPage() {
 
       {others.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.wallet.otherCards", undefined, "Other Cards")}
           </h2>
           <ul className="mt-3 space-y-2">
@@ -139,7 +139,7 @@ export default async function WalletPage() {
               <li key={c.id} className="surface flex items-center justify-between p-3">
                 <div className="text-sm">
                   <div className="font-medium">{c.person_name}</div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">{c.category?.code ?? "—"}</div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{c.category?.code ?? "—"}</div>
                 </div>
                 <Badge
                   variant={
@@ -158,8 +158,8 @@ export default async function WalletPage() {
         </section>
       )}
 
-      <div className="mt-8 border-t border-[var(--border-color)] pt-4">
-        <Link href="/me/profile" className="text-xs text-[var(--org-primary)]">
+      <div className="mt-8 border-t border-[var(--p-border)] pt-4">
+        <Link href="/me/profile" className="text-xs text-[var(--p-accent)]">
           {t("m.wallet.openProfile", undefined, "Open profile →")}
         </Link>
       </div>

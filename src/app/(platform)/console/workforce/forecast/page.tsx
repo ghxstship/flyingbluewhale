@@ -119,7 +119,7 @@ export default async function Page() {
             value={fmt.number(new Set(rows.map((r) => r.horizon)).size)}
           />
         </div>
-        <div className="text-[10px] text-[var(--text-muted)]">
+        <div className="text-[10px] text-[var(--p-text-2)]">
           {t(
             "console.workforce.forecast.description",
             undefined,
@@ -177,7 +177,7 @@ export default async function Page() {
                 r.gap_count > 0 ? (
                   <Badge variant="error">{fmt.number(r.gap_count)}</Badge>
                 ) : (
-                  <span className="text-[var(--text-muted)]">{fmt.number(r.gap_count)}</span>
+                  <span className="text-[var(--p-text-2)]">{fmt.number(r.gap_count)}</span>
                 ),
               accessor: (r) => r.gap_count,
               className: "font-mono text-xs text-right",

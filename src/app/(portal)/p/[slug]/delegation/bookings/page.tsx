@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t("p.delegation.bookings.section.bookings", undefined, "Bookings")}
           </h3>
           {bookings.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.delegation.bookings.empty",
                 undefined,
@@ -126,12 +126,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {bookings.map((b) => (
                 <li key={b.id} className="flex items-center justify-between py-2 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{b.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmt(b.starts_at)} → {fmt(b.ends_at)}
                       {b.location?.name ? ` · ${b.location.name}` : ""}
                     </div>

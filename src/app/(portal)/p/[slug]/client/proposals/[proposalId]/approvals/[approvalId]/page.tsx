@@ -26,13 +26,13 @@ export default async function Page({
 
   return (
     <div className="space-y-4 p-6">
-      <Link href={base} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+      <Link href={base} className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
         {t("p.client.proposals.approvals.detail.backLink", undefined, "← All approvals")}
       </Link>
 
       <header className="surface p-6">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+          <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
             {toTitle(approval.kind)}
           </span>
           <Badge variant={APPROVAL_STATE_VARIANT[approval.state]}>{APPROVAL_STATE_LABEL[approval.state]}</Badge>

@@ -48,7 +48,7 @@ export default async function DomainsPage() {
           <h3 className="text-sm font-semibold">
             {t("console.settings.domains.addDomain", undefined, "Add a Domain")}
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.domains.addDomainHelp",
               undefined,
@@ -61,11 +61,11 @@ export default async function DomainsPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
             {t("console.settings.domains.sectionDomains", undefined, "Domains")}
           </h3>
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.settings.domains.colHostname", undefined, "Hostname")}</th>
@@ -78,7 +78,7 @@ export default async function DomainsPage() {
               <tbody>
                 {domains.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-6 text-center text-[var(--text-muted)]">
+                    <td colSpan={5} className="py-6 text-center text-[var(--p-text-2)]">
                       {t("console.settings.domains.empty", undefined, "No custom domains yet.")}
                     </td>
                   </tr>
@@ -86,7 +86,7 @@ export default async function DomainsPage() {
                   domains.map((d) => (
                     <tr key={d.id}>
                       <td className="font-mono text-xs">{d.hostname}</td>
-                      <td className="text-xs text-[var(--text-secondary)]">{toTitle(d.purpose)}</td>
+                      <td className="text-xs text-[var(--p-text-2)]">{toTitle(d.purpose)}</td>
                       <td>
                         <Badge variant={d.verified_at ? "success" : "muted"}>
                           {d.verified_at
@@ -94,21 +94,21 @@ export default async function DomainsPage() {
                             : t("console.settings.domains.statusPending", undefined, "Pending")}
                         </Badge>
                       </td>
-                      <td className="font-mono text-[10px] text-[var(--text-muted)]">
+                      <td className="font-mono text-[10px] text-[var(--p-text-2)]">
                         TXT _atlvs-verify.{d.hostname} = {d.verification_token}
                       </td>
                       <td className="space-x-2 whitespace-nowrap">
                         {!d.verified_at && (
                           <form action={verifyDomainAction} className="inline">
                             <input type="hidden" name="id" value={d.id} />
-                            <button type="submit" className="text-xs text-[var(--org-primary)] hover:underline">
+                            <button type="submit" className="text-xs text-[var(--p-accent)] hover:underline">
                               {t("console.settings.domains.verify", undefined, "Verify")}
                             </button>
                           </form>
                         )}
                         <form action={deleteDomainAction} className="inline">
                           <input type="hidden" name="id" value={d.id} />
-                          <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                          <button type="submit" className="text-xs text-[var(--p-danger)] hover:underline">
                             {t("console.settings.domains.remove", undefined, "Remove")}
                           </button>
                         </form>

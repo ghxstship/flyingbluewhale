@@ -8,7 +8,7 @@ import { signMsa } from "./actions";
 const EXHIBIT_B_ROWS = 3;
 const EXHIBIT_C_ROWS = 4;
 
-const inputCls = "input-base focus-ring w-full";
+const inputCls = "ps-input focus-ring w-full";
 
 export function SignForm({ token, showChapter624 }: { token: string; showChapter624: boolean }) {
   const [confirmed, setConfirmed] = useState(false);
@@ -20,10 +20,10 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
   return (
     <FormShell action={action} submitLabel="Sign &amp; Submit" className="surface space-y-6 p-6">
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           Exhibit B — Other Clients
         </h3>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           List at least two (2) clients you&rsquo;ve served with substantially similar services in the past 24 months.
           Leave rows blank if you have fewer to disclose.
         </p>
@@ -39,10 +39,10 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
       </div>
 
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           Exhibit C — Capital Investment
         </h3>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           Itemize what you bring to the table — business entity, insurance, equipment, tools, certifications, etc.
         </p>
         <div className="space-y-2">
@@ -68,11 +68,11 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
       </div>
 
       {showChapter624 && (
-        <div className="space-y-3 rounded border border-[var(--border-default)] bg-[var(--surface-inset)] p-4">
-          <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+        <div className="space-y-3 rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-4">
+          <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             NSCB License — Chapter 624
           </h3>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             Required for trade scopes that fall within NRS Chapter 624 (carpentry, electrical, rigging, etc.). Skip if
             not applicable.
           </p>
@@ -103,7 +103,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
           placeholder="Your full legal name"
           required
           disabled={!confirmed}
-          className="input-base font-subdisplay text-xl tracking-wide"
+          className="ps-input font-subdisplay text-xl tracking-wide"
         />
       </FormField>
     </FormShell>

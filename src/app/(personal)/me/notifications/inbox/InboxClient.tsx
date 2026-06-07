@@ -238,7 +238,7 @@ export function InboxClient({
       <header className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <h1 className="text-2xl font-semibold tracking-tight">{t("me.inbox.title", undefined, "Inbox")}</h1>
-          <p className="mt-2 text-sm text-[var(--text-muted)]">
+          <p className="mt-2 text-sm text-[var(--p-text-2)]">
             {t(
               "me.inbox.subtitle",
               undefined,
@@ -249,7 +249,7 @@ export function InboxClient({
         <div className="flex items-center gap-2">
           <Link
             href="/me/notifications"
-            className="text-xs font-medium text-[var(--text-muted)] underline-offset-2 hover:text-[var(--foreground)] hover:underline"
+            className="text-xs font-medium text-[var(--p-text-2)] underline-offset-2 hover:text-[var(--p-text-1)] hover:underline"
           >
             {t("me.inbox.preferences", undefined, "Preferences")}
           </Link>
@@ -276,7 +276,7 @@ export function InboxClient({
 
       <nav
         aria-label={t("me.inbox.filters.ariaLabel", undefined, "Inbox filters")}
-        className="mb-4 flex items-center gap-1 border-b border-[var(--border-color)]"
+        className="mb-4 flex items-center gap-1 border-b border-[var(--p-border)]"
       >
         {TAB_ORDER.map((tabKey) => {
           const active = tabKey === tab;
@@ -287,8 +287,8 @@ export function InboxClient({
               aria-current={active ? "page" : undefined}
               className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors ${
                 active
-                  ? "border-[var(--org-primary)] text-[var(--foreground)]"
-                  : "border-transparent text-[var(--text-muted)] hover:text-[var(--foreground)]"
+                  ? "border-[var(--p-accent)] text-[var(--p-text-1)]"
+                  : "border-transparent text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
               }`}
             >
               {TAB_ICONS[tabKey]}
@@ -310,28 +310,26 @@ export function InboxClient({
       {notifications.length === 0 ? (
         <EmptyState title={EMPTY_COPY[tab].title} description={EMPTY_COPY[tab].description} />
       ) : (
-        <ul className="surface divide-y divide-[var(--border-color)]" aria-busy={pending || undefined}>
+        <ul className="surface divide-y divide-[var(--p-border)]" aria-busy={pending || undefined}>
           {notifications.map((n) => {
             const unread = !n.read_at;
             return (
               <li
                 key={n.id}
                 className={`flex items-start gap-3 px-4 py-3 transition-colors ${
-                  unread ? "bg-[var(--surface-raised)]" : ""
+                  unread ? "bg-[var(--p-surface)]" : ""
                 }`}
               >
                 <span
                   aria-hidden="true"
-                  className={`mt-2 h-2 w-2 shrink-0 rounded-full ${
-                    unread ? "bg-[var(--org-primary)]" : "bg-transparent"
-                  }`}
+                  className={`mt-2 h-2 w-2 shrink-0 rounded-full ${unread ? "bg-[var(--p-accent)]" : "bg-transparent"}`}
                 />
                 <div className="min-w-0 flex-1">
                   {n.href ? (
                     <Link
                       href={n.href}
                       onClick={(e) => handleRowClick(n, e)}
-                      className="block focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:outline-none"
+                      className="block focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:outline-none"
                     >
                       <NotificationBody notification={n} />
                     </Link>
@@ -386,12 +384,12 @@ export function InboxClient({
                               <button
                                 key={p.key}
                                 type="button"
-                                className="flex w-full items-center justify-between rounded px-3 py-1.5 text-start hover:bg-[var(--surface-inset)]"
+                                className="flex w-full items-center justify-between rounded px-3 py-1.5 text-start hover:bg-[var(--p-surface-2)]"
                                 onClick={() => handleSnooze(n.id, p.hours)}
                                 disabled={pending}
                               >
                                 <span>{labels.label}</span>
-                                <span className="font-mono text-[10px] text-[var(--text-muted)]">{labels.hint}</span>
+                                <span className="font-mono text-[10px] text-[var(--p-text-2)]">{labels.hint}</span>
                               </button>
                             );
                           })}
@@ -435,7 +433,7 @@ function NotificationBody({ notification }: { notification: InboxNotification })
       <div className="flex items-center gap-2">
         <h3
           className={`truncate text-sm ${
-            notification.read_at ? "font-medium text-[var(--text-secondary)]" : "font-semibold text-[var(--foreground)]"
+            notification.read_at ? "font-medium text-[var(--p-text-2)]" : "font-semibold text-[var(--p-text-1)]"
           }`}
         >
           {notification.title}
@@ -444,8 +442,8 @@ function NotificationBody({ notification }: { notification: InboxNotification })
           {notification.kind}
         </Badge>
       </div>
-      {notification.body && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-muted)]">{notification.body}</p>}
-      <p className="mt-1 text-xs text-[var(--text-muted)]">{timeAgo(notification.created_at)}</p>
+      {notification.body && <p className="mt-1 line-clamp-2 text-sm text-[var(--p-text-2)]">{notification.body}</p>}
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">{timeAgo(notification.created_at)}</p>
     </>
   );
 }

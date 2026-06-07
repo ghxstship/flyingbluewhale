@@ -172,7 +172,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
       <Popover.Trigger asChild>
         <button
           type="button"
-          className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-1 focus-visible:outline-none"
+          className="relative inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-1 focus-visible:outline-none"
           aria-label={
             unread > 0
               ? t("notifications.bellAriaUnread", { count: unread }, `Notifications — ${unread} unread`)
@@ -182,7 +182,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
           <Bell size={16} aria-hidden="true" />
           {unread > 0 ? (
             <span
-              className="absolute -end-0.5 -top-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--color-error)] px-1 text-[10px] font-semibold text-white"
+              className="absolute -end-0.5 -top-0.5 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-[color:var(--p-danger)] px-1 text-[10px] font-semibold text-white"
               aria-hidden="true"
             >
               {unread > 99 ? "99+" : unread}
@@ -194,17 +194,17 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
         <Popover.Content
           align="end"
           sideOffset={8}
-          className="surface z-50 w-[360px] rounded-lg border border-[var(--border-color)] text-sm"
+          className="surface z-50 w-[360px] rounded-lg border border-[var(--p-border)] text-sm"
         >
-          <div className="flex items-center justify-between border-b border-[var(--border-color)] px-3 py-2">
-            <span className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="flex items-center justify-between border-b border-[var(--p-border)] px-3 py-2">
+            <span className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("notifications.title", undefined, "Notifications")}
             </span>
             <button
               type="button"
               onClick={markAllRead}
               disabled={unread === 0}
-              className="inline-flex items-center gap-1 text-xs hover:text-[var(--foreground)] disabled:opacity-40"
+              className="inline-flex items-center gap-1 text-xs hover:text-[var(--p-text-1)] disabled:opacity-40"
               aria-label={t("notifications.markAllReadAria", undefined, "Mark all as read")}
             >
               <Check size={12} aria-hidden="true" />
@@ -213,7 +213,7 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
           </div>
           <div className="max-h-[360px] overflow-y-auto p-1">
             {items.length === 0 ? (
-              <p className="px-3 py-6 text-center text-xs text-[var(--text-muted)]">
+              <p className="px-3 py-6 text-center text-xs text-[var(--p-text-2)]">
                 {t("notifications.allCaughtUp", undefined, "You're all caught up.")}
               </p>
             ) : (
@@ -221,27 +221,25 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
                 const isUnread = !n.read_at;
                 const Row = (
                   <div
-                    className="group flex items-start gap-2.5 rounded-md px-2.5 py-2 hover:bg-[var(--bg-secondary)]"
+                    className="group flex items-start gap-2.5 rounded-md px-2.5 py-2 hover:bg-[var(--p-surface)]"
                     onClick={() => (isUnread ? void markOne(n.id) : null)}
                   >
                     <span
                       aria-hidden="true"
                       className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${
-                        isUnread ? "bg-[var(--org-primary)]" : "bg-transparent"
+                        isUnread ? "bg-[var(--p-accent)]" : "bg-transparent"
                       }`}
                     />
                     <div className="min-w-0 flex-1">
                       <p
                         className={`truncate text-[13px] ${
-                          isUnread ? "font-semibold text-[var(--foreground)]" : "text-[var(--text-muted)]"
+                          isUnread ? "font-semibold text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"
                         }`}
                       >
                         {n.title}
                       </p>
-                      {n.body ? <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-muted)]">{n.body}</p> : null}
-                      <p className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
-                        {fmt.dateTime(n.created_at)}
-                      </p>
+                      {n.body ? <p className="mt-0.5 line-clamp-2 text-xs text-[var(--p-text-2)]">{n.body}</p> : null}
+                      <p className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">{fmt.dateTime(n.created_at)}</p>
                     </div>
                   </div>
                 );
@@ -262,11 +260,11 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
               })
             )}
           </div>
-          <div className="border-t border-[var(--border-color)] px-3 py-2 text-center">
+          <div className="border-t border-[var(--p-border)] px-3 py-2 text-center">
             <Link
               href="/me/notifications/inbox"
               onClick={() => setOpen(false)}
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--foreground)]"
+              className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             >
               {t("notifications.viewAllInInbox", undefined, "View all in inbox →")}
             </Link>

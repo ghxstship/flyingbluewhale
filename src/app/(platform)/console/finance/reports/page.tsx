@@ -79,15 +79,15 @@ export default async function ReportsPage() {
         <ReportsCharts monthly={series} aging={aging} categories={expenseCategories} />
 
         <section className="overflow-x-auto">
-          <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2.5">
+          <header className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-2.5">
             <h3 className="text-sm font-semibold">
               {t("console.finance.reports.arAging.title", undefined, "AR aging")}
             </h3>
-            <span className="text-xs text-[var(--text-muted)]">
+            <span className="text-xs text-[var(--p-text-2)]">
               {t("console.finance.reports.arAging.subtitle", undefined, "Outstanding invoices by days overdue")}
             </span>
           </header>
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.finance.reports.arAging.col.bucket", undefined, "Bucket")}</th>

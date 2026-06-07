@@ -89,7 +89,7 @@ export default async function Page() {
             <form action={generateOrgWipSnapshots}>
               <button
                 type="submit"
-                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+                className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
               >
                 {t("console.finance.wip.generateSnapshots", undefined, "Generate snapshots")}
               </button>
@@ -98,7 +98,7 @@ export default async function Page() {
               href="/api/v1/wip/snapshot-pdf"
               target="_blank"
               rel="noopener"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.finance.wip.downloadLatestPdf", undefined, "Download Latest WIP PDF")}
             </a>
@@ -186,7 +186,7 @@ export default async function Page() {
                 const v = Number(r.over_under_billed);
                 if (v === 0) return "—";
                 return (
-                  <span className={v > 0 ? "text-[var(--color-warning)]" : "text-[var(--color-info)]"}>
+                  <span className={v > 0 ? "text-[var(--p-warning)]" : "text-[var(--p-info)]"}>
                     {v > 0
                       ? t("console.finance.wip.overPrefix", undefined, "Over ")
                       : t("console.finance.wip.underPrefix", undefined, "Under ")}

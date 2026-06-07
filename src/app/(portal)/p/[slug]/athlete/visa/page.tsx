@@ -111,7 +111,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.athlete.visa.section.title", undefined, "Your Visa Cases")}</h3>
           {cases.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.athlete.visa.empty",
                 undefined,
@@ -119,22 +119,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {cases.map((c) => (
                 <li key={c.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{c.person_name}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {c.nationality ?? "—"} · {t("p.athlete.visa.passportLabel", undefined, "passport")}{" "}
                       {maskPassport(c.passport_no)}
                       {c.delegation?.name ? ` · ${c.delegation.name}` : ""}
                     </div>
                     {c.letter_path && (
-                      <div className="mt-1 font-mono text-[10px] text-[var(--org-primary)]">
+                      <div className="mt-1 font-mono text-[10px] text-[var(--p-accent)]">
                         {t("p.athlete.visa.letterOnFile", undefined, "letter on file")}
                       </div>
                     )}
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {t("p.athlete.visa.updated", { date: fmtDate(c.updated_at) }, `updated ${fmtDate(c.updated_at)}`)}
                     </div>
                   </div>
@@ -145,13 +145,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "p.athlete.visa.footer.prefix",
             undefined,
             "Passport numbers are masked on screen but retained for letter generation. Email",
           )}{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:visas@atlvs.pro">
+          <a className="text-[var(--p-accent)]" href="mailto:visas@atlvs.pro">
             visas@atlvs.pro
           </a>{" "}
           {t("p.athlete.visa.footer.suffix", undefined, "if your case isn't progressing.")}

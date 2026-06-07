@@ -118,12 +118,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {tiles.map((tile) => (
             <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{tile.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{tile.desc}</p>
+              <p className="mt-1 text-xs text-[var(--p-text-2)]">{tile.desc}</p>
             </Link>
           ))}
         </div>
         {!me && (
-          <div className="surface p-4 text-xs text-[var(--text-muted)]">
+          <div className="surface p-4 text-xs text-[var(--p-text-2)]">
             <Badge variant="warning">{t("p.volunteer.notOnboarded.badge", undefined, "Not yet onboarded")}</Badge>{" "}
             {t(
               "p.volunteer.notOnboarded.message",

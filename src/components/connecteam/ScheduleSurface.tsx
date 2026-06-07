@@ -54,7 +54,7 @@ export async function ScheduleSurface({
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -100,14 +100,14 @@ export async function ScheduleSurface({
 
   return (
     <div className={containerClass}>
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {wfm
           ? t("m.shift.greeting", { name: wfm.full_name }, `Hello, ${wfm.full_name}.`)
           : t("m.shift.welcome", undefined, "Welcome.")}{" "}
         {t("m.shift.useBefore", undefined, "Use")}{" "}
-        <Link href={clockInHref} className="text-[var(--org-primary)]">
+        <Link href={clockInHref} className="text-[var(--p-accent)]">
           {t("m.shift.useLink", undefined, "check-in")}
         </Link>{" "}
         {t("m.shift.useAfter", undefined, "to clock in / out and take breaks.")}
@@ -124,7 +124,7 @@ export async function ScheduleSurface({
       )}
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.shift.today", undefined, "Today")}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -140,7 +140,7 @@ export async function ScheduleSurface({
                     <div className="text-sm font-semibold">
                       {s.venue?.name ?? t("m.shift.unassignedVenue", undefined, "Unassigned venue")}
                     </div>
-                    <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                    <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
                       {s.role ? ` · ${s.role}` : wfm?.role ? ` · ${wfm.role}` : ""}
                     </div>
@@ -165,7 +165,7 @@ export async function ScheduleSurface({
 
       {upcoming.length > 0 && (
         <section className="mt-6">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.shift.upcomingThisWeek", undefined, "Upcoming this week")}
           </h2>
           <ul className="mt-3 space-y-2">
@@ -175,7 +175,7 @@ export async function ScheduleSurface({
                   <div className="font-medium">
                     {s.venue?.name ?? t("m.shift.unassignedVenue", undefined, "Unassigned venue")}
                   </div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
                   </div>
                 </div>
@@ -187,10 +187,10 @@ export async function ScheduleSurface({
       )}
 
       <div className="mt-8 grid grid-cols-2 gap-2">
-        <Link href={clockInHref} className="btn btn-primary">
+        <Link href={clockInHref} className="ps-btn">
           {t("m.shift.checkIn", undefined, "Check in")}
         </Link>
-        <Link href={swapHref} className="btn btn-secondary">
+        <Link href={swapHref} className="ps-btn ps-btn--ghost">
           {t("m.shift.swapShift", undefined, "Swap shift")}
         </Link>
       </div>

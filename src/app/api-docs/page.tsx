@@ -95,19 +95,19 @@ export default function ApiDocsPage() {
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-12">
       <header className="mb-12">
-        <p className="text-xs tracking-[0.2em] text-[var(--text-secondary)] uppercase">REST API · v1</p>
+        <p className="text-xs tracking-[0.2em] text-[var(--p-text-2)] uppercase">REST API · v1</p>
         <h1 className="mt-2 text-4xl font-semibold">ATLVS API Reference</h1>
-        <p className="mt-4 max-w-3xl text-base text-[var(--text-secondary)]">{doc.info.description}</p>
+        <p className="mt-4 max-w-3xl text-base text-[var(--p-text-2)]">{doc.info.description}</p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
           <a
             href="/api/v1/openapi.json"
-            className="rounded-md border border-[var(--border)] px-3 py-2 hover:bg-[var(--surface-inset)]"
+            className="rounded-md border border-[var(--p-border)] px-3 py-2 hover:bg-[var(--p-surface-2)]"
           >
             Download OpenAPI 3.1 (JSON)
           </a>
           <a
             href="/me/api-keys"
-            className="rounded-md border border-[var(--border)] px-3 py-2 hover:bg-[var(--surface-inset)]"
+            className="rounded-md border border-[var(--p-border)] px-3 py-2 hover:bg-[var(--p-surface-2)]"
           >
             Manage API keys
           </a>
@@ -115,22 +115,22 @@ export default function ApiDocsPage() {
       </header>
 
       <section className="mb-12 grid gap-6 md:grid-cols-2">
-        <div className="rounded-lg border border-[var(--border)] p-5">
-          <h2 className="text-sm tracking-wider text-[var(--text-secondary)] uppercase">Authentication</h2>
+        <div className="rounded-lg border border-[var(--p-border)] p-5">
+          <h2 className="text-sm tracking-wider text-[var(--p-text-2)] uppercase">Authentication</h2>
           <p className="mt-2 text-sm">
             Pass a personal access token in the <code>Authorization</code> header:
           </p>
-          <pre className="mt-3 overflow-x-auto rounded bg-[var(--surface-inset)] p-3 text-xs">
+          <pre className="mt-3 overflow-x-auto rounded bg-[var(--p-surface-2)] p-3 text-xs">
             {`Authorization: Bearer pat_xxxxxxxxxxxx`}
           </pre>
-          <p className="mt-3 text-sm text-[var(--text-secondary)]">
+          <p className="mt-3 text-sm text-[var(--p-text-2)]">
             Or use the session cookie set by signing in at <code>/login</code>.
           </p>
         </div>
-        <div className="rounded-lg border border-[var(--border)] p-5">
-          <h2 className="text-sm tracking-wider text-[var(--text-secondary)] uppercase">Rate limits</h2>
+        <div className="rounded-lg border border-[var(--p-border)] p-5">
+          <h2 className="text-sm tracking-wider text-[var(--p-text-2)] uppercase">Rate limits</h2>
           <p className="mt-2 text-sm">Limits scale with your org plan. Every response includes:</p>
-          <ul className="mt-2 list-disc ps-5 text-sm text-[var(--text-secondary)]">
+          <ul className="mt-2 list-disc ps-5 text-sm text-[var(--p-text-2)]">
             <li>
               <code>RateLimit-Limit</code>
             </li>
@@ -147,8 +147,8 @@ export default function ApiDocsPage() {
         </div>
       </section>
 
-      <nav className="mb-12 rounded-lg border border-[var(--border)] p-5">
-        <h2 className="mb-3 text-sm tracking-wider text-[var(--text-secondary)] uppercase">Resources</h2>
+      <nav className="mb-12 rounded-lg border border-[var(--p-border)] p-5">
+        <h2 className="mb-3 text-sm tracking-wider text-[var(--p-text-2)] uppercase">Resources</h2>
         <ul className="grid grid-cols-2 gap-2 text-sm md:grid-cols-3">
           {sortedTags.map((tag) => (
             <li key={tag}>
@@ -162,32 +162,32 @@ export default function ApiDocsPage() {
 
       {sortedTags.map((tag) => (
         <section key={tag} id={tag.toLowerCase()} className="mb-16">
-          <h2 className="mb-6 border-b border-[var(--border)] pb-2 text-2xl font-semibold">{tag}</h2>
+          <h2 className="mb-6 border-b border-[var(--p-border)] pb-2 text-2xl font-semibold">{tag}</h2>
           {byTag.get(tag)!.map(({ path, method, op }) => (
-            <article key={`${method}-${path}`} className="mb-6 rounded-lg border border-[var(--border)] p-5">
+            <article key={`${method}-${path}`} className="mb-6 rounded-lg border border-[var(--p-border)] p-5">
               <header className="mb-3 flex flex-wrap items-baseline gap-3">
                 <span
                   className="rounded px-2 py-0.5 font-mono text-xs font-bold text-white uppercase"
-                  style={{ backgroundColor: METHOD_COLORS[method] ?? "var(--text-secondary)" }}
+                  style={{ backgroundColor: METHOD_COLORS[method] ?? "var(--p-text-2)" }}
                 >
                   {method}
                 </span>
                 <code className="text-sm font-semibold">{path}</code>
                 {op["x-min-tier"] && (
-                  <span className="rounded border border-[var(--border)] px-2 py-0.5 text-xs text-[var(--text-secondary)] uppercase">
+                  <span className="rounded border border-[var(--p-border)] px-2 py-0.5 text-xs text-[var(--p-text-2)] uppercase">
                     {op["x-min-tier"]}+
                   </span>
                 )}
               </header>
               <h3 className="mb-1 text-base font-medium">{op.summary}</h3>
-              {op.description && <p className="mb-3 text-sm text-[var(--text-secondary)]">{op.description}</p>}
+              {op.description && <p className="mb-3 text-sm text-[var(--p-text-2)]">{op.description}</p>}
 
               {op.parameters && op.parameters.length > 0 && (
                 <div className="mb-3">
-                  <h4 className="mb-1 text-xs font-semibold text-[var(--text-secondary)] uppercase">Parameters</h4>
+                  <h4 className="mb-1 text-xs font-semibold text-[var(--p-text-2)] uppercase">Parameters</h4>
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-start text-xs text-[var(--text-secondary)] uppercase">
+                      <tr className="text-start text-xs text-[var(--p-text-2)] uppercase">
                         <th className="pb-1">Name</th>
                         <th className="pb-1">In</th>
                         <th className="pb-1">Type</th>
@@ -196,7 +196,7 @@ export default function ApiDocsPage() {
                     </thead>
                     <tbody>
                       {op.parameters.map((p) => (
-                        <tr key={`${p.in}-${p.name}`} className="border-t border-[var(--border)]">
+                        <tr key={`${p.in}-${p.name}`} className="border-t border-[var(--p-border)]">
                           <td className="py-1 font-mono">{p.name}</td>
                           <td className="py-1">{p.in}</td>
                           <td className="py-1 font-mono text-xs">{renderSchemaSummary(p.schema)}</td>
@@ -210,20 +210,20 @@ export default function ApiDocsPage() {
 
               {op.requestBody?.content?.["application/json"]?.schema && (
                 <div className="mb-3">
-                  <h4 className="mb-1 text-xs font-semibold text-[var(--text-secondary)] uppercase">Request body</h4>
-                  <pre className="overflow-x-auto rounded bg-[var(--surface-inset)] p-3 text-xs">
+                  <h4 className="mb-1 text-xs font-semibold text-[var(--p-text-2)] uppercase">Request body</h4>
+                  <pre className="overflow-x-auto rounded bg-[var(--p-surface-2)] p-3 text-xs">
                     {renderSchemaSummary(op.requestBody.content["application/json"].schema)}
                   </pre>
                 </div>
               )}
 
               <div>
-                <h4 className="mb-1 text-xs font-semibold text-[var(--text-secondary)] uppercase">Responses</h4>
+                <h4 className="mb-1 text-xs font-semibold text-[var(--p-text-2)] uppercase">Responses</h4>
                 <ul className="text-sm">
                   {Object.entries(op.responses).map(([status, r]) => (
-                    <li key={status} className="border-t border-[var(--border)] py-1">
+                    <li key={status} className="border-t border-[var(--p-border)] py-1">
                       <span className="font-mono">{status}</span>
-                      <span className="ms-3 text-[var(--text-secondary)]">{r.description}</span>
+                      <span className="ms-3 text-[var(--p-text-2)]">{r.description}</span>
                     </li>
                   ))}
                 </ul>
@@ -233,7 +233,7 @@ export default function ApiDocsPage() {
         </section>
       ))}
 
-      <footer className="mt-16 border-t border-[var(--border)] pt-6 text-xs text-[var(--text-secondary)]">
+      <footer className="mt-16 border-t border-[var(--p-border)] pt-6 text-xs text-[var(--p-text-2)]">
         <p>
           OpenAPI 3.1 · {Object.keys(doc.paths).length} paths · Generated at request time from registered Zod schemas.
         </p>

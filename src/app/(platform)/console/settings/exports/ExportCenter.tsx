@@ -140,10 +140,10 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
         </h2>
         <div className="flex flex-wrap items-end gap-3">
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+            <span className="font-medium tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.exports.format", undefined, "Format")}
             </span>
-            <select value={kind} onChange={(e) => setKind(e.target.value)} className="input-base w-40">
+            <select value={kind} onChange={(e) => setKind(e.target.value)} className="ps-input w-40">
               {KINDS.map((k) => (
                 <option key={k.value} value={k.value}>
                   {t(k.labelKey, undefined, k.defaultLabel)}
@@ -152,10 +152,10 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
             </select>
           </label>
           <label className="flex flex-col gap-1 text-xs">
-            <span className="font-medium tracking-wider text-[var(--text-muted)] uppercase">
+            <span className="font-medium tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.exports.table", undefined, "Table")}
             </span>
-            <select value={table} onChange={(e) => setTable(e.target.value)} className="input-base w-52">
+            <select value={table} onChange={(e) => setTable(e.target.value)} className="ps-input w-52">
               {TABLES.map((tbl) => (
                 <option key={tbl.value} value={tbl.value}>
                   {t(tbl.labelKey, undefined, tbl.defaultLabel)}
@@ -169,7 +169,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
               : t("console.settings.exports.runExport", undefined, "Run export")}
           </Button>
           {(kind === "csv" || kind === "json") && (
-            <label className="ms-2 flex items-center gap-1 text-xs text-[var(--text-muted)]">
+            <label className="ms-2 flex items-center gap-1 text-xs text-[var(--p-text-2)]">
               <input type="checkbox" checked={asyncMode} onChange={(e) => setAsyncMode(e.target.checked)} />
               {t("console.settings.exports.queueInBackground", undefined, "Queue in background")}
             </label>
@@ -183,7 +183,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
             {t("console.settings.exports.recentRuns", undefined, "Recent Runs")}
           </h2>
           {anyBusy && (
-            <span className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)]">
+            <span className="inline-flex items-center gap-1 text-xs text-[var(--p-text-2)]">
               <Spinner size="sm" />
               {t("console.settings.exports.autoRefreshing", undefined, "Auto-refreshing while runs are in flight")}
             </span>
@@ -200,7 +200,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
             )}
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.settings.exports.col.when", undefined, "When")}</th>
@@ -232,10 +232,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                         {r.status}
                       </StatusChip>
                       {r.status === "failed" && r.last_error && (
-                        <div
-                          className="mt-1 max-w-xs truncate text-[10px] text-[var(--color-error)]"
-                          title={r.last_error}
-                        >
+                        <div className="mt-1 max-w-xs truncate text-[10px] text-[var(--p-danger)]" title={r.last_error}>
                           {r.last_error}
                         </div>
                       )}
@@ -246,7 +243,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                           type="button"
                           onClick={() => redownload(r)}
                           aria-label={t("console.settings.exports.downloadAgain", undefined, "Download Again")}
-                          className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-[10px] hover:bg-[var(--surface-inset)]"
+                          className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-[10px] hover:bg-[var(--p-surface-2)]"
                         >
                           <Download size={10} /> {t("console.settings.exports.download", undefined, "Download")}
                         </button>

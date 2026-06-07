@@ -51,10 +51,10 @@ export default async function Page({ params }: { params: Promise<{ runId: string
             maxLength={80}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.dispatch.edit.fleetLabel", undefined, "Fleet")}
             </span>
-            <select name="fleet" defaultValue={row.fleet ?? ""} required className="input-base focus-ring w-full">
+            <select name="fleet" defaultValue={row.fleet ?? ""} required className="ps-input focus-ring w-full">
               <option value="t1">t1</option>
               <option value="t2">t2</option>
               <option value="t3">t3</option>

@@ -20,13 +20,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   return (
     <div className="space-y-4 p-6">
       <header className="surface p-5">
-        <div className="eyebrow text-xs text-[var(--text-muted)]">
+        <div className="eyebrow text-xs text-[var(--p-text-2)]">
           {t("p.client.approvals.eyebrow", undefined, "Approvals")}
         </div>
         <h1 className="text-lg font-semibold">
           {t("p.client.approvals.title", undefined, "Signatures, sign-offs, and decisions")}
         </h1>
-        <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
+        <p className="mt-1 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t(
             "p.client.approvals.description",
             undefined,
@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {approvals.length === 0 ? (
-        <div className="surface p-12 text-center text-[var(--text-muted)]">
+        <div className="surface p-12 text-center text-[var(--p-text-2)]">
           {t("p.client.approvals.empty", undefined, "No approvals on file.")}
         </div>
       ) : (
@@ -47,15 +47,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+                      <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
                         {toTitle(a.kind)}
                       </span>
                       <Badge variant={APPROVAL_STATE_VARIANT[a.state]}>{APPROVAL_STATE_LABEL[a.state]}</Badge>
                     </div>
                     <h2 className="mt-1 text-base font-semibold">{a.title}</h2>
-                    {a.body && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-muted)]">{a.body}</p>}
+                    {a.body && <p className="mt-1 line-clamp-2 text-sm text-[var(--p-text-2)]">{a.body}</p>}
                   </div>
-                  <div className="shrink-0 text-right text-xs text-[var(--text-muted)]">
+                  <div className="shrink-0 text-right text-xs text-[var(--p-text-2)]">
                     {a.signed_at
                       ? t(
                           "p.client.approvals.signedBy",

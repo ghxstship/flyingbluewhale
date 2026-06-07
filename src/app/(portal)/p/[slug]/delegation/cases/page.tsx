@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <h3 className="text-sm font-semibold">
             {t("p.delegation.cases.openCases.heading", undefined, "Open Cases")}
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.delegation.cases.openCases.description",
               undefined,
@@ -114,17 +114,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             )}
           </p>
           {cases.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("p.delegation.cases.empty", undefined, "No high-priority cases.")}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {cases.map((c) => (
                 <li key={c.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{c.category}</div>
-                    {c.description && <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{c.description}</p>}
-                    <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                    {c.description && <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{c.description}</p>}
+                    <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
                       {c.resolved_at
                         ? t(
                             "p.delegation.cases.timestamps.openedResolved",

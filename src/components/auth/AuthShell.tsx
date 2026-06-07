@@ -49,7 +49,7 @@ export function AuthShell({
     <div className="grid min-h-[calc(100vh-72px)] lg:grid-cols-2">
       <aside
         aria-label={`About ${productName}`}
-        className="hidden flex-col justify-between bg-[var(--surface-inset)] p-12 lg:flex"
+        className="hidden flex-col justify-between bg-[var(--p-surface-2)] p-12 lg:flex"
       >
         <Link
           href="/"
@@ -72,26 +72,26 @@ export function AuthShell({
         </Link>
         <div>
           <h2 className="text-3xl font-semibold tracking-tight">{tagline}</h2>
-          <p className="mt-3 max-w-md text-sm text-[var(--text-secondary)]">{description}</p>
+          <p className="mt-3 max-w-md text-sm text-[var(--p-text-2)]">{description}</p>
           <ul className="mt-8 space-y-3">
             {highlights.map(({ icon: Icon, label }) => (
-              <li key={label} className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
-                {Icon ? <Icon size={14} className="text-[var(--org-primary)]" /> : null}
+              <li key={label} className="flex items-center gap-2 text-xs text-[var(--p-text-2)]">
+                {Icon ? <Icon size={14} className="text-[var(--p-accent)]" /> : null}
                 {label}
               </li>
             ))}
           </ul>
         </div>
-        <div className="text-xs text-[var(--text-muted)]">{copyright}</div>
+        <div className="text-xs text-[var(--p-text-2)]">{copyright}</div>
       </aside>
 
       {/* Form pane */}
       <main className="flex items-center justify-center px-6 py-12 sm:py-16">
         <div className="w-full max-w-sm">
           <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-          {subtitle && <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p>}
+          {subtitle && <p className="mt-2 text-sm text-[var(--p-text-2)]">{subtitle}</p>}
           <div className="mt-8">{children}</div>
-          {footer && <div className="mt-6 text-center text-xs text-[var(--text-muted)]">{footer}</div>}
+          {footer && <div className="mt-6 text-center text-xs text-[var(--p-text-2)]">{footer}</div>}
         </div>
       </main>
     </div>

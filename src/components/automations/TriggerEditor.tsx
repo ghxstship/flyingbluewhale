@@ -38,12 +38,12 @@ export function TriggerEditor({ kind, config, webhookUrl, onKindChange, onConfig
     <div className="surface flex flex-col gap-3 p-4">
       <div className="flex items-center gap-2">
         <Badge variant="info">Trigger</Badge>
-        <span className="text-sm font-semibold text-[var(--text-primary)]">{KIND_LABELS[kind]}</span>
+        <span className="text-sm font-semibold text-[var(--p-text-1)]">{KIND_LABELS[kind]}</span>
       </div>
-      <p className="text-[11px] text-[var(--text-muted)]">{KIND_DESCRIPTIONS[kind]}</p>
+      <p className="text-[11px] text-[var(--p-text-2)]">{KIND_DESCRIPTIONS[kind]}</p>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={kindId} className="text-xs font-medium text-[var(--text-secondary)]">
+        <label htmlFor={kindId} className="text-xs font-medium text-[var(--p-text-2)]">
           Kind
         </label>
         <Select value={kind} onValueChange={(v) => onKindChange(v as TriggerKind)}>
@@ -61,7 +61,7 @@ export function TriggerEditor({ kind, config, webhookUrl, onKindChange, onConfig
       </div>
 
       {kind === "manual" && (
-        <p className="text-[11px] text-[var(--text-muted)]">
+        <p className="text-[11px] text-[var(--p-text-2)]">
           No additional configuration. Use the &quot;Run now&quot; button under Controls to trigger a run.
         </p>
       )}
@@ -84,10 +84,10 @@ function ScheduleConfig({
 }) {
   const rrule = typeof config.rrule === "string" ? config.rrule : "";
   return (
-    <div className="grid gap-2 rounded-md border border-dashed border-[var(--border-color)] bg-[var(--surface-inset)] p-3">
+    <div className="grid gap-2 rounded-md border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-3">
       <div className="flex items-center gap-2">
         <Badge variant="warning">Coming soon</Badge>
-        <span className="text-[11px] text-[var(--text-muted)]">Schedule trigger lands in Phase 4.3.</span>
+        <span className="text-[11px] text-[var(--p-text-2)]">Schedule trigger lands in Phase 4.3.</span>
       </div>
       <Input
         label="RRULE / cron"
@@ -111,14 +111,14 @@ function WebhookConfig({
 }) {
   const secret = typeof config.secret === "string" ? config.secret : "";
   return (
-    <div className="grid gap-2 rounded-md border border-dashed border-[var(--border-color)] bg-[var(--surface-inset)] p-3">
+    <div className="grid gap-2 rounded-md border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-3">
       <div className="flex items-center gap-2">
         <Badge variant="warning">Coming soon</Badge>
-        <span className="text-[11px] text-[var(--text-muted)]">Inbound endpoint lands in Phase 4.3.</span>
+        <span className="text-[11px] text-[var(--p-text-2)]">Inbound endpoint lands in Phase 4.3.</span>
       </div>
       <div className="flex flex-col gap-1.5">
-        <span className="text-xs font-medium text-[var(--text-secondary)]">Inbound URL</span>
-        <code className="rounded bg-[var(--bg-secondary)] px-2 py-1.5 font-mono text-xs text-[var(--text-secondary)] select-all">
+        <span className="text-xs font-medium text-[var(--p-text-2)]">Inbound URL</span>
+        <code className="rounded bg-[var(--p-surface)] px-2 py-1.5 font-mono text-xs text-[var(--p-text-2)] select-all">
           {url ?? "/api/v1/automations/<id>/webhook"}
         </code>
       </div>
@@ -145,13 +145,13 @@ function EventConfig({
   const table = typeof config.table === "string" ? config.table : "";
   const eventType = typeof config.eventType === "string" ? config.eventType : "";
   return (
-    <div className="grid gap-2 rounded-md border border-dashed border-[var(--border-color)] bg-[var(--surface-inset)] p-3">
+    <div className="grid gap-2 rounded-md border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-3">
       <div className="flex items-center gap-2">
         <Badge variant="warning">Coming soon</Badge>
-        <span className="text-[11px] text-[var(--text-muted)]">Event subscription lands in Phase 4.5.</span>
+        <span className="text-[11px] text-[var(--p-text-2)]">Event subscription lands in Phase 4.5.</span>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={tableId} className="text-xs font-medium text-[var(--text-secondary)]">
+        <label htmlFor={tableId} className="text-xs font-medium text-[var(--p-text-2)]">
           Target Table
         </label>
         <Select value={table} onValueChange={(v) => onChange({ ...config, table: v })}>
@@ -168,7 +168,7 @@ function EventConfig({
         </Select>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor={eventTypeId} className="text-xs font-medium text-[var(--text-secondary)]">
+        <label htmlFor={eventTypeId} className="text-xs font-medium text-[var(--p-text-2)]">
           Event Type
         </label>
         <Select value={eventType} onValueChange={(v) => onChange({ ...config, eventType: v })}>

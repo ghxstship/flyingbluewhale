@@ -16,9 +16,9 @@ export function CallControls({ callId, status, publicSlug }: { callId: string; s
           <h2 className="text-sm font-semibold tracking-wide uppercase">
             {t("console.marketplace.calls.controls.visibility", undefined, "Visibility")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t("console.marketplace.calls.controls.publicUrl", undefined, "Public URL")}{" "}
-            <a className="font-mono text-[var(--org-primary)]" href={`/marketplace/calls/${publicSlug}`}>
+            <a className="font-mono text-[var(--p-accent)]" href={`/marketplace/calls/${publicSlug}`}>
               /marketplace/calls/{publicSlug}
             </a>
           </p>

@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
         }
       />
       <div className="page-content space-y-5">
-        {automation.description && <p className="text-sm text-[var(--text-secondary)]">{automation.description}</p>}
+        {automation.description && <p className="text-sm text-[var(--p-text-2)]">{automation.description}</p>}
 
         <div className="metric-grid-3">
           <MetricCard
@@ -198,7 +198,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
           <h3 className="text-sm font-semibold">
             {t("console.ai.automations.detail.controlsHeading", undefined, "Controls")}
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.ai.automations.detail.controlsHelp",
               undefined,
@@ -219,7 +219,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
             <h3 className="text-sm font-semibold">
               {t("console.ai.automations.detail.builderHeading", undefined, "Builder")}
             </h3>
-            <span className="text-[11px] text-[var(--text-muted)]">
+            <span className="text-[11px] text-[var(--p-text-2)]">
               {t("console.ai.automations.detail.builderAutosave", undefined, "Auto-saves on change")}
             </span>
           </div>
@@ -251,7 +251,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
             </h3>
             <div className="mt-2 flex items-center gap-2 text-sm">
               <Badge variant={RUN_TONE[automation.last_run_status] ?? "muted"}>{automation.last_run_status}</Badge>
-              <span className="font-mono text-xs text-[var(--text-muted)]">{fmt(automation.last_run_at)}</span>
+              <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt(automation.last_run_at)}</span>
             </div>
           </section>
         )}

@@ -8,7 +8,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 export default async function Page() {
   if (!hasSupabase) return null;
@@ -78,7 +78,7 @@ export default async function Page() {
         </form>
 
         <section className="surface p-3">
-          <h3 className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+          <h3 className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
             {t("m.dailyLog.recent", undefined, "Recent")}
           </h3>
           <ul className="mt-2 space-y-1.5">
@@ -98,7 +98,7 @@ export default async function Page() {
                   <span>
                     {fmtDate(r.log_date)} · {r.project?.name ?? "—"}
                   </span>
-                  <span className="text-xs text-[var(--text-muted)]">{r.status}</span>
+                  <span className="text-xs text-[var(--p-text-2)]">{r.status}</span>
                 </Link>
               </li>
             ))}

@@ -12,7 +12,7 @@ export function FAQSection({ title = "Frequently asked questions", faqs }: { tit
         {faqs.map((f) => (
           <details key={f.q} className="surface p-5">
             <summary className="cursor-pointer text-sm font-semibold">{f.q}</summary>
-            <div className="mt-3 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{f.a}</div>
+            <div className="mt-3 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{f.a}</div>
           </details>
         ))}
       </div>

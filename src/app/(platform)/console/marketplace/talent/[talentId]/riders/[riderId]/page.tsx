@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
               {t("console.marketplace.talent.riders.detail.attachedFileHeading", undefined, "Attached File")}
             </h2>
-            <a href={r.file_url} target="_blank" rel="noopener" className="font-mono text-sm text-[var(--org-primary)]">
+            <a href={r.file_url} target="_blank" rel="noopener" className="font-mono text-sm text-[var(--p-accent)]">
               {r.file_url} ↗
             </a>
           </section>

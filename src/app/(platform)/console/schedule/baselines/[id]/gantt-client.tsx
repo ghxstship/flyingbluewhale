@@ -148,7 +148,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
   return (
     <div className="space-y-3">
       <div className="surface flex flex-wrap items-center gap-3 p-2 text-xs">
-        <span className="font-mono text-[var(--text-muted)] uppercase">
+        <span className="font-mono text-[var(--p-text-2)] uppercase">
           {t("console.schedule.baselines.gantt.lookahead", undefined, "Lookahead")}
         </span>
         {(["all", "3w", "6w"] as const).map((opt) => (
@@ -156,8 +156,8 @@ export default function GanttClient({ activities, dependencies }: Props) {
             key={opt}
             type="button"
             onClick={() => setLookahead(opt)}
-            className={`rounded border border-[var(--border-color)] px-2 py-1 ${
-              lookahead === opt ? "bg-[var(--surface-raised)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
+            className={`rounded border border-[var(--p-border)] px-2 py-1 ${
+              lookahead === opt ? "bg-[var(--p-surface)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"
             }`}
           >
             {opt === "all"
@@ -171,7 +171,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
           <input type="checkbox" checked={showFloat} onChange={(e) => setShowFloat(e.target.checked)} />
           {t("console.schedule.baselines.gantt.showFloat", undefined, "Show float")}
         </label>
-        <span className="ms-auto font-mono text-[var(--text-muted)]">
+        <span className="ms-auto font-mono text-[var(--p-text-2)]">
           {t(
             "console.schedule.baselines.gantt.activityCount",
             { shown: filteredActivities.length, total: activities.length },
@@ -276,7 +276,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
         </svg>
       </div>
 
-      <div className="text-[10px] text-[var(--text-muted)]">
+      <div className="text-[10px] text-[var(--p-text-2)]">
         {t(
           "console.schedule.baselines.gantt.legend",
           undefined,

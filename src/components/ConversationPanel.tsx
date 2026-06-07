@@ -34,21 +34,21 @@ export async function ConversationPanel({
       <h3 className="text-sm font-semibold">Conversation</h3>
       <div className="mt-3 space-y-3">
         {messages.length === 0 && (
-          <p className="text-xs text-[var(--text-muted)]">No messages yet. Start the thread below.</p>
+          <p className="text-xs text-[var(--p-text-2)]">No messages yet. Start the thread below.</p>
         )}
         {messages.map((m) => (
           <div key={m.id} className="surface-inset p-3 text-sm">
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs font-semibold text-[var(--foreground)]">
+              <span className="text-xs font-semibold text-[var(--p-text-1)]">
                 {m.author_name ?? m.author_email ?? "Someone"}
               </span>
-              <span className="font-mono text-[10px] text-[var(--text-muted)]">{fmt(m.created_at)}</span>
+              <span className="font-mono text-[10px] text-[var(--p-text-2)]">{fmt(m.created_at)}</span>
             </div>
             <p className="mt-1 text-sm whitespace-pre-wrap">{m.body}</p>
           </div>
         ))}
       </div>
-      <div className="mt-4 border-t border-[var(--border-color)] pt-3">
+      <div className="mt-4 border-t border-[var(--p-border)] pt-3">
         <ConversationComposer recordType={recordType} recordId={recordId} />
       </div>
     </section>

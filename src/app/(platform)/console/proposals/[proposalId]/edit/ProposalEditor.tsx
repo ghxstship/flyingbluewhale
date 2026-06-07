@@ -177,10 +177,10 @@ export function ProposalEditor({
         />
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.proposals.edit.fields.currency", undefined, "Currency")}
             </label>
-            <select name="currency" defaultValue={defaults.currency} className="input-base mt-1.5 w-full">
+            <select name="currency" defaultValue={defaults.currency} className="ps-input mt-1.5 w-full">
               <option>USD</option>
               <option>EUR</option>
               <option>GBP</option>
@@ -211,21 +211,21 @@ export function ProposalEditor({
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-xs text-[var(--text-muted)]">
+        <div className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.proposals.edit.summary",
             { count: summary.count, types: summary.types.length },
             `${summary.count} blocks · ${summary.types.length} distinct types`,
           )}
         </div>
-        <div className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5">
+        <div className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5">
           <button
             type="button"
             onClick={() => {
               setBlocks(JSON.parse(json));
               setMode("outline");
             }}
-            className={`rounded-full px-3 py-1 text-xs ${mode === "outline" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 text-xs ${mode === "outline" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
           >
             {t("console.proposals.edit.mode.outline", undefined, "Outline")}
           </button>
@@ -235,7 +235,7 @@ export function ProposalEditor({
               setJson(JSON.stringify(blocks, null, 2));
               setMode("json");
             }}
-            className={`rounded-full px-3 py-1 text-xs ${mode === "json" ? "bg-[var(--background)]" : "text-[var(--text-muted)]"}`}
+            className={`rounded-full px-3 py-1 text-xs ${mode === "json" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
           >
             {t("console.proposals.edit.mode.json", undefined, "JSON")}
           </button>
@@ -258,7 +258,7 @@ export function ProposalEditor({
                 <div className="surface p-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                      <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
                         {i + 1} · {BLOCK_LABELS[item.block.type]}
                       </div>
                       <div className="mt-0.5 truncate text-sm">{describeBlock(item.block, t)}</div>
@@ -268,7 +268,7 @@ export function ProposalEditor({
                         <button
                           type="button"
                           onClick={() => toggleExpanded(item.block._dragId)}
-                          className="btn btn-ghost btn-sm"
+                          className="ps-btn ps-btn--ghost ps-btn--sm"
                           aria-label={
                             isOpen
                               ? t("console.proposals.edit.lineage.collapse", undefined, "Collapse lineage")
@@ -284,7 +284,7 @@ export function ProposalEditor({
                       <button
                         type="button"
                         onClick={() => removeBlock(item.block._dragId)}
-                        className="btn btn-ghost btn-sm text-[var(--color-error)]"
+                        className="ps-btn ps-btn--ghost ps-btn--sm text-[var(--p-danger)]"
                         aria-label={t("common.remove", undefined, "Remove")}
                       >
                         <Trash2 size={14} />
@@ -300,7 +300,7 @@ export function ProposalEditor({
           />
 
           <div className="surface-inset p-3">
-            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.proposals.edit.addBlock", undefined, "Add block")}
             </div>
             <div className="mt-2 flex flex-wrap gap-1">
@@ -309,7 +309,7 @@ export function ProposalEditor({
                   key={blockType}
                   type="button"
                   onClick={() => addBlock(blockType)}
-                  className="inline-flex items-center gap-1 rounded-full border border-[var(--border-color)] px-2.5 py-1 text-xs hover:bg-[var(--bg-secondary)]"
+                  className="inline-flex items-center gap-1 rounded-full border border-[var(--p-border)] px-2.5 py-1 text-xs hover:bg-[var(--p-surface)]"
                 >
                   <Plus size={10} /> {BLOCK_LABELS[blockType]}
                 </button>
@@ -319,7 +319,7 @@ export function ProposalEditor({
         </div>
       ) : (
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.proposals.edit.blocksJson", undefined, "Blocks JSON")}
           </label>
           <textarea
@@ -327,7 +327,7 @@ export function ProposalEditor({
             onChange={(e) => setJson(e.target.value)}
             rows={24}
             spellCheck={false}
-            className="input-base mt-1.5 w-full font-mono text-xs"
+            className="ps-input mt-1.5 w-full font-mono text-xs"
           />
         </div>
       )}

@@ -40,14 +40,14 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.guardTours.new.descriptionLabel", undefined, "Description")}
             </label>
             <textarea
               name="description"
               rows={3}
               maxLength={2000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               placeholder={t(
                 "console.safety.guardTours.new.descriptionPlaceholder",
                 undefined,
@@ -56,10 +56,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.guardTours.new.venueLabel", undefined, "Venue · Optional")}
             </label>
-            <select name="venue_id" defaultValue="" className="input-base mt-1.5 w-full">
+            <select name="venue_id" defaultValue="" className="ps-input mt-1.5 w-full">
               <option value="">
                 {t("console.safety.guardTours.new.venueNone", undefined, "— None / multi-venue —")}
               </option>
@@ -82,7 +82,7 @@ export default async function Page() {
               "60 = hourly · leave blank for ad-hoc",
             )}
           />
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.safety.guardTours.new.waypointsHint",
               undefined,

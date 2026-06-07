@@ -140,7 +140,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--p-text-2)]">
             {templates.length === 1
               ? t(
                   "console.settings.emailTemplates.countOne",
@@ -172,7 +172,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
             }
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.settings.emailTemplates.colSlug", undefined, "Slug")}</th>
@@ -188,14 +188,14 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
                 <tr key={tpl.id}>
                   <td className="font-mono text-xs">{tpl.slug}</td>
                   <td>{tpl.name}</td>
-                  <td className="text-[var(--text-muted)]">{tpl.subject}</td>
+                  <td className="text-[var(--p-text-2)]">{tpl.subject}</td>
                   <td>{tpl.is_active ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</td>
                   <td className="font-mono text-xs">{new Date(tpl.updated_at).toLocaleDateString()}</td>
                   <td>
                     <button
                       type="button"
                       onClick={() => setMode({ edit: tpl.id })}
-                      className="text-xs text-[var(--org-primary)] hover:underline"
+                      className="text-xs text-[var(--p-accent)] hover:underline"
                     >
                       {t("common.edit", undefined, "Edit")}
                     </button>
@@ -220,7 +220,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         <button
           type="button"
           onClick={() => setMode("list")}
-          className="text-xs text-[var(--text-muted)] hover:underline"
+          className="text-xs text-[var(--p-text-2)] hover:underline"
         >
           {t("common.cancel", undefined, "Cancel")}
         </button>
@@ -266,18 +266,18 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         </label>
       )}
 
-      <div className="mt-4 grid gap-3 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-3 text-xs">
-        <div className="font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+      <div className="mt-4 grid gap-3 rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3 text-xs">
+        <div className="font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("console.settings.emailTemplates.preview", undefined, "Preview")}
         </div>
         <div>
-          <div className="text-[10px] text-[var(--text-muted)]">
+          <div className="text-[10px] text-[var(--p-text-2)]">
             {t("console.settings.emailTemplates.colSubject", undefined, "Subject")}
           </div>
-          <div className="mt-0.5 text-[var(--text-primary)]">{renderPreview(form.subject ?? "")}</div>
+          <div className="mt-0.5 text-[var(--p-text-1)]">{renderPreview(form.subject ?? "")}</div>
         </div>
         <div>
-          <div className="text-[10px] text-[var(--text-muted)]">
+          <div className="text-[10px] text-[var(--p-text-2)]">
             {t("console.settings.emailTemplates.body", undefined, "Body")}
           </div>
           <div
@@ -303,8 +303,8 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
 function MergeTagCatalog() {
   const t = useT();
   return (
-    <details className="rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] text-xs">
-      <summary className="cursor-pointer px-3 py-2 font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+    <details className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] text-xs">
+      <summary className="cursor-pointer px-3 py-2 font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
         {t(
           "console.settings.emailTemplates.availableMergeTags",
           { count: MERGE_TAGS.length },
@@ -312,14 +312,14 @@ function MergeTagCatalog() {
         )}
       </summary>
       <div className="max-h-56 overflow-y-auto px-3 py-2">
-        <ul className="divide-y divide-[var(--border-color)]">
+        <ul className="divide-y divide-[var(--p-border)]">
           {MERGE_TAGS.map((m) => (
             <li key={m.tag} className="flex items-center justify-between gap-3 py-1.5">
-              <code className="font-mono text-[11px] text-[var(--org-primary)]">{`{{${m.tag}}}`}</code>
-              <span className="flex-1 text-[var(--text-muted)]">
+              <code className="font-mono text-[11px] text-[var(--p-accent)]">{`{{${m.tag}}}`}</code>
+              <span className="flex-1 text-[var(--p-text-2)]">
                 {t(`console.settings.emailTemplates.mergeTag.${m.tag}.description`, undefined, m.description)}
               </span>
-              <span className="text-[var(--text-muted)]">{m.sample}</span>
+              <span className="text-[var(--p-text-2)]">{m.sample}</span>
             </li>
           ))}
         </ul>
@@ -386,7 +386,7 @@ function MergeTagField({
 
   return (
     <div className="relative">
-      <label className="block text-xs font-medium text-[var(--text-muted)]">{label}</label>
+      <label className="block text-xs font-medium text-[var(--p-text-2)]">{label}</label>
       <FieldTag
         ref={ref as never}
         value={value}
@@ -395,10 +395,10 @@ function MergeTagField({
           onChangeRaw(e.target.value, (e.target as HTMLInputElement).selectionStart ?? e.target.value.length)
         }
         onBlur={() => setTimeout(() => setOpen(false), 120)}
-        className={`input-base mt-1 w-full ${singleLine ? "" : "font-mono text-xs"}`}
+        className={`ps-input mt-1 w-full ${singleLine ? "" : "font-mono text-xs"}`}
       />
       {open && candidates.length > 0 && (
-        <div className="absolute start-0 end-0 z-20 mt-1 overflow-hidden rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)]">
+        <div className="absolute start-0 end-0 z-20 mt-1 overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]">
           {candidates.map((m) => (
             <button
               key={m.tag}
@@ -407,10 +407,10 @@ function MergeTagField({
                 e.preventDefault();
                 pick(m.tag);
               }}
-              className="flex w-full items-center justify-between gap-3 px-3 py-1.5 text-start text-xs hover:bg-[var(--surface-inset)]"
+              className="flex w-full items-center justify-between gap-3 px-3 py-1.5 text-start text-xs hover:bg-[var(--p-surface-2)]"
             >
-              <code className="font-mono text-[var(--org-primary)]">{`{{${m.tag}}}`}</code>
-              <span className="truncate text-[var(--text-muted)]">
+              <code className="font-mono text-[var(--p-accent)]">{`{{${m.tag}}}`}</code>
+              <span className="truncate text-[var(--p-text-2)]">
                 {t(`console.settings.emailTemplates.mergeTag.${m.tag}.description`, undefined, m.description)}
               </span>
             </button>

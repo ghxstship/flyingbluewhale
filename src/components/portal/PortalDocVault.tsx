@@ -62,7 +62,7 @@ export async function PortalDocVault({
   }
 
   return (
-    <table className="data-table w-full text-sm">
+    <table className="ps-table w-full text-sm">
       <thead>
         <tr>
           <th>Title</th>

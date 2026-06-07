@@ -48,7 +48,7 @@ export async function LearningSurface({
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -76,9 +76,9 @@ export async function LearningSurface({
 
   return (
     <div className={containerClass}>
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.learning.coursesAssigned", { count: rows.length }, `${rows.length} courses assigned`)}
       </p>
 
@@ -101,7 +101,7 @@ export async function LearningSurface({
                 <Link href={detailHref(a.course_id)} className="surface block p-4">
                   <div className="flex items-center justify-between gap-3">
                     <Badge variant={tone}>{a.assignment_state}</Badge>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">
                       {a.due_at
                         ? t("m.learning.dueDate", { date: fmt.date(a.due_at) }, `due ${fmt.date(a.due_at)}`)
                         : ""}
@@ -110,11 +110,9 @@ export async function LearningSurface({
                   <h2 className="mt-2 text-sm font-semibold">
                     {course?.title ?? t("m.learning.courseFallback", undefined, "Course")}
                   </h2>
-                  {course?.summary ? (
-                    <p className="mt-1 text-xs text-[var(--text-secondary)]">{course.summary}</p>
-                  ) : null}
+                  {course?.summary ? <p className="mt-1 text-xs text-[var(--p-text-2)]">{course.summary}</p> : null}
                   {course?.duration_minutes ? (
-                    <p className="mt-1 text-xs text-[var(--text-muted)]">
+                    <p className="mt-1 text-xs text-[var(--p-text-2)]">
                       {t(
                         "m.learning.durationMin",
                         { minutes: course.duration_minutes },

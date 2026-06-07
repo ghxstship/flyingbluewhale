@@ -87,7 +87,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.projects.advancing.columns.title", undefined, "Title")}</th>

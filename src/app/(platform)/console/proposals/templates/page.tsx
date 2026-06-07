@@ -65,13 +65,13 @@ export default async function ProposalTemplatesPage() {
               "The canonical 17-section template ships with every org. Reach out if it isn't showing — your migration may not have applied.",
             )}
             action={
-              <Link className="text-sm text-[var(--org-primary)]" href="/console/proposals/new">
+              <Link className="text-sm text-[var(--p-accent)]" href="/console/proposals/new">
                 {t("console.proposals.templates.empty.draftFromScratch", undefined, "Draft from scratch →")}
               </Link>
             }
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.proposals.templates.col.name", undefined, "Name")}</th>
@@ -89,13 +89,13 @@ export default async function ProposalTemplatesPage() {
                     <Link href={`/console/proposals/templates/${r.id}`} className="hover:underline">
                       {r.name}
                     </Link>
-                    {r.description && <div className="text-xs text-[var(--text-muted)]">{r.description}</div>}
+                    {r.description && <div className="text-xs text-[var(--p-text-2)]">{r.description}</div>}
                   </td>
                   <td className="font-mono text-xs">{r.scope}</td>
                   <td className="font-mono text-xs">{r.blockCount}</td>
                   <td className="text-xs">
                     {r.is_system ? (
-                      <span className="rounded-full bg-[var(--bg-secondary)] px-2 py-0.5 text-[10px] tracking-wide uppercase">
+                      <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 text-[10px] tracking-wide uppercase">
                         {t("console.proposals.templates.source.system", undefined, "System")}
                       </span>
                     ) : (
@@ -104,7 +104,10 @@ export default async function ProposalTemplatesPage() {
                   </td>
                   <td className="font-mono text-xs">{fmtDate(r.updated_at)}</td>
                   <td className="text-right">
-                    <Link href={`/console/proposals/new?templateId=${r.id}`} className="btn btn-secondary btn-sm">
+                    <Link
+                      href={`/console/proposals/new?templateId=${r.id}`}
+                      className="ps-btn ps-btn--ghost ps-btn--sm"
+                    >
                       {t("console.proposals.templates.useTemplate", undefined, "Use Template")}
                     </Link>
                   </td>

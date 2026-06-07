@@ -119,7 +119,7 @@ export default async function Page() {
             />
           ) : (
             <div className="surface mt-3 overflow-x-auto">
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th>{t("console.safety.medical.plan.col.venue", undefined, "Venue")}</th>
@@ -136,10 +136,7 @@ export default async function Page() {
                     return (
                       <tr key={v.id}>
                         <td>
-                          <Link
-                            href={`/console/venues/${v.id}`}
-                            className="font-medium hover:text-[var(--org-primary)]"
-                          >
+                          <Link href={`/console/venues/${v.id}`} className="font-medium hover:text-[var(--p-accent)]">
                             {v.name}
                           </Link>
                         </td>
@@ -152,7 +149,7 @@ export default async function Page() {
                           {med?.tier ? (
                             <Badge variant="info">{med.tier}</Badge>
                           ) : (
-                            <span className="text-[var(--text-muted)]">—</span>
+                            <span className="text-[var(--p-text-2)]">—</span>
                           )}
                         </td>
                         <td className="font-mono text-xs">{med?.cot_count ?? "—"}</td>
@@ -181,7 +178,7 @@ export default async function Page() {
                     "Author safety playbooks tagged with 'medical' to surface them here.",
                   )}
                   action={
-                    <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
+                    <Link href="/console/safety/playbooks/new" className="ps-btn ps-btn--ghost ps-btn--sm">
                       {t("console.safety.medical.plan.newPlan", undefined, "+ New Plan")}
                     </Link>
                   }
@@ -193,11 +190,11 @@ export default async function Page() {
                   <div>
                     <Link
                       href={`/console/safety/playbooks/${p.slug}`}
-                      className="text-sm font-medium hover:text-[var(--org-primary)]"
+                      className="text-sm font-medium hover:text-[var(--p-accent)]"
                     >
                       {p.title}
                     </Link>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">v{p.version}</div>
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">v{p.version}</div>
                   </div>
                   <Badge variant={p.status === "published" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
                 </li>
@@ -206,7 +203,7 @@ export default async function Page() {
           </ul>
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.safety.medical.plan.footnote",
             undefined,

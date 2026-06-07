@@ -49,10 +49,10 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
             required
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.privacy.dsar.edit.kindLabel", undefined, "Kind")}
             </span>
-            <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
+            <select name="kind" defaultValue={row.kind ?? ""} required className="ps-input focus-ring w-full">
               <option value="access">access</option>
               <option value="deletion">deletion</option>
               <option value="correction">correction</option>
@@ -61,10 +61,10 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.privacy.dsar.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="received">received</option>
               <option value="verifying">verifying</option>
               <option value="in_progress">in_progress</option>
@@ -79,10 +79,10 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
             defaultValue={dateOnly(row.due_by)}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.privacy.dsar.edit.notesLabel", undefined, "Notes")}
             </span>
-            <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="input-base focus-ring w-full" />
+            <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="ps-input focus-ring w-full" />
           </label>
         </FormShell>
       </div>

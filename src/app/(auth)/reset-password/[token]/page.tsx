@@ -32,14 +32,14 @@ export default async function Page({ params }: { params: Promise<{ token: string
       subtitle={t("auth.resetPassword.expiredSubtitle", undefined, "We couldn't open your password-reset session.")}
     >
       <Alert kind="error">{error.message}</Alert>
-      <p className="mt-4 text-sm text-[var(--text-secondary)]">
+      <p className="mt-4 text-sm text-[var(--p-text-2)]">
         {t(
           "auth.resetPassword.expiredBody",
           undefined,
           "Reset links expire after 24 hours. Request a fresh one to continue.",
         )}
       </p>
-      <a href="/forgot-password" className="btn btn-primary mt-4 w-full">
+      <a href="/forgot-password" className="ps-btn mt-4 w-full">
         {t("auth.resetPassword.requestNew", undefined, "Request a new reset link")}
       </a>
     </AuthShell>

@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">
             {t("console.marketplace.calls.detail.description", undefined, "Description")}
           </h2>
-          <div className="text-sm whitespace-pre-wrap text-[var(--text-primary)]">{c.description ?? "—"}</div>
+          <div className="text-sm whitespace-pre-wrap text-[var(--p-text-1)]">{c.description ?? "—"}</div>
         </section>
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -85,11 +85,11 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               {t("console.marketplace.calls.detail.eligibility", undefined, "Eligibility")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.detail.performance", undefined, "Performance")}
               </dt>
               <dd>{c.performance_date ?? "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.detail.slotLength", undefined, "Slot length")}
               </dt>
               <dd>
@@ -101,11 +101,11 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
                     )
                   : "—"}
               </dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.detail.feeBand", undefined, "Fee band")}
               </dt>
               <dd>{formatFeeRange(c.fee_min_cents, c.fee_max_cents, c.currency)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.detail.deadline", undefined, "Deadline")}
               </dt>
               <dd>{c.deadline_at ? new Date(c.deadline_at).toLocaleString() : "—"}</dd>
@@ -117,12 +117,12 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             </h2>
             <div className="space-y-2">
               <div>
-                <p className="mb-1 text-xs text-[var(--text-secondary)]">
+                <p className="mb-1 text-xs text-[var(--p-text-2)]">
                   {t("console.marketplace.calls.detail.genres", undefined, "Genres")}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {c.genre_tags.length === 0 ? (
-                    <span className="text-sm text-[var(--text-secondary)]">—</span>
+                    <span className="text-sm text-[var(--p-text-2)]">—</span>
                   ) : (
                     c.genre_tags.map((g) => (
                       <Badge key={g} variant="muted">
@@ -133,12 +133,12 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
                 </div>
               </div>
               <div>
-                <p className="mb-1 text-xs text-[var(--text-secondary)]">
+                <p className="mb-1 text-xs text-[var(--p-text-2)]">
                   {t("console.marketplace.calls.detail.trades", undefined, "Trades")}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {c.trade_categories.length === 0 ? (
-                    <span className="text-sm text-[var(--text-secondary)]">—</span>
+                    <span className="text-sm text-[var(--p-text-2)]">—</span>
                   ) : (
                     c.trade_categories.map((tag) => (
                       <Badge key={tag} variant="muted">

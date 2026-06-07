@@ -36,14 +36,14 @@ export function PerDiemCalculator() {
     <div className="surface p-6">
       <div className="space-y-4">
         {legs.map((l, idx) => (
-          <div key={l.id} className="rounded-lg border border-[var(--border-color)] bg-[var(--surface-inset)] p-4">
+          <div key={l.id} className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4">
             <div className="mb-3 flex items-center justify-between">
               <div className="eyebrow">Leg {idx + 1}</div>
               {legs.length > 1 ? (
                 <button
                   type="button"
                   onClick={() => remove(l.id)}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)]"
+                  className="inline-flex h-7 w-7 items-center justify-center rounded text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
                   aria-label="Remove leg"
                 >
                   <X size={14} aria-hidden="true" />
@@ -58,7 +58,7 @@ export function PerDiemCalculator() {
                   value={l.city}
                   onChange={(e) => update(l.id, { city: e.target.value })}
                   placeholder="e.g. Las Vegas"
-                  className="mt-1 w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 />
               </div>
               <div>
@@ -68,7 +68,7 @@ export function PerDiemCalculator() {
                   min={0}
                   value={l.days}
                   onChange={(e) => update(l.id, { days: Number(e.target.value) })}
-                  className="mt-1 w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 />
               </div>
               <div>
@@ -78,7 +78,7 @@ export function PerDiemCalculator() {
                   min={0}
                   value={l.headcount}
                   onChange={(e) => update(l.id, { headcount: Number(e.target.value) })}
-                  className="mt-1 w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 />
               </div>
               <div className="sm:col-span-2">
@@ -88,7 +88,7 @@ export function PerDiemCalculator() {
                   min={0}
                   value={l.rate}
                   onChange={(e) => update(l.id, { rate: Number(e.target.value) })}
-                  className="mt-1 w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm"
+                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
                 />
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {GSA_TIER_PRESETS.map((preset) => (
@@ -96,7 +96,7 @@ export function PerDiemCalculator() {
                       key={preset.label}
                       type="button"
                       onClick={() => update(l.id, { rate: preset.rate })}
-                      className="rounded-full border border-[var(--border-color)] bg-[var(--background)] px-2 py-0.5 text-[11px] font-medium text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--foreground)]"
+                      className="rounded-full border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-0.5 text-[11px] font-medium text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
                       title={preset.hint}
                     >
                       {preset.label} ${preset.rate}
@@ -106,23 +106,27 @@ export function PerDiemCalculator() {
               </div>
               <div className="sm:col-span-2">
                 <label className="eyebrow">Leg total</label>
-                <div className="mt-1 rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 font-mono text-sm">
+                <div className="mt-1 rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 font-mono text-sm">
                   ${(Math.max(0, l.days) * Math.max(0, l.rate) * Math.max(0, l.headcount)).toLocaleString()}
                 </div>
               </div>
             </div>
           </div>
         ))}
-        <button type="button" onClick={add} className="btn btn-secondary btn-sm inline-flex items-center gap-1.5">
+        <button
+          type="button"
+          onClick={add}
+          className="ps-btn ps-btn--ghost ps-btn--sm inline-flex items-center gap-1.5"
+        >
           <Plus size={14} aria-hidden="true" /> Add leg
         </button>
       </div>
 
-      <div className="mt-6 border-t border-[var(--border-color)] pt-4">
+      <div className="mt-6 border-t border-[var(--p-border)] pt-4">
         <div className="flex items-center justify-between">
           <div>
             <div className="eyebrow">Total</div>
-            <div className="mt-1 text-[10px] text-[var(--text-muted)]">
+            <div className="mt-1 text-[10px] text-[var(--p-text-2)]">
               {totalDays} crew-days across {legs.length} leg{legs.length === 1 ? "" : "s"}
             </div>
           </div>

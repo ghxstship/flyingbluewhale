@@ -40,18 +40,18 @@ export function DiffViewer({
   }, [before, after]);
 
   if (!delta) {
-    return <p className="text-xs text-[var(--text-muted)]">{emptyLabel}</p>;
+    return <p className="text-xs text-[var(--p-text-2)]">{emptyLabel}</p>;
   }
 
   const rows = flatten(delta as Record<string, unknown>);
   if (rows.length === 0) {
-    return <p className="text-xs text-[var(--text-muted)]">{emptyLabel}</p>;
+    return <p className="text-xs text-[var(--p-text-2)]">{emptyLabel}</p>;
   }
 
   return (
-    <div className={`overflow-hidden rounded-md border border-[var(--border-color)] ${className}`}>
+    <div className={`overflow-hidden rounded-md border border-[var(--p-border)] ${className}`}>
       <table className="w-full text-xs">
-        <thead className="bg-[var(--surface-inset)] text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+        <thead className="bg-[var(--p-surface-2)] text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
           <tr>
             <th className="px-3 py-1.5 text-start">Field</th>
             <th className="px-3 py-1.5 text-start">Before</th>
@@ -60,21 +60,21 @@ export function DiffViewer({
         </thead>
         <tbody>
           {rows.map((r, i) => (
-            <tr key={i} className="border-t border-[var(--border-color)]">
-              <td className="px-3 py-1.5 align-top font-mono text-[10px] text-[var(--text-secondary)]">{r.path}</td>
+            <tr key={i} className="border-t border-[var(--p-border)]">
+              <td className="px-3 py-1.5 align-top font-mono text-[10px] text-[var(--p-text-2)]">{r.path}</td>
               <td className="px-3 py-1.5 align-top">
                 {r.kind !== "added" ? (
                   <code
                     className={`rounded px-1 py-0.5 break-all ${
                       r.kind === "removed"
-                        ? "bg-[color:var(--color-error)]/10 text-[color:var(--color-error)]"
-                        : "bg-[color:var(--color-warning)]/10 text-[var(--text-secondary)]"
+                        ? "bg-[color:var(--p-danger)]/10 text-[color:var(--p-danger)]"
+                        : "bg-[color:var(--p-warning)]/10 text-[var(--p-text-2)]"
                     }`}
                   >
                     {fmt(r.before)}
                   </code>
                 ) : (
-                  <span className="text-[var(--text-muted)]">—</span>
+                  <span className="text-[var(--p-text-2)]">—</span>
                 )}
               </td>
               <td className="px-3 py-1.5 align-top">
@@ -82,14 +82,14 @@ export function DiffViewer({
                   <code
                     className={`rounded px-1 py-0.5 break-all ${
                       r.kind === "added"
-                        ? "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]"
-                        : "bg-[color:var(--color-warning)]/10 text-[var(--text-primary)]"
+                        ? "bg-[color-mix(in_srgb,var(--p-success)_10%,transparent)] text-[var(--p-success)]"
+                        : "bg-[color:var(--p-warning)]/10 text-[var(--p-text-1)]"
                     }`}
                   >
                     {fmt(r.after)}
                   </code>
                 ) : (
-                  <span className="text-[var(--text-muted)]">—</span>
+                  <span className="text-[var(--p-text-2)]">—</span>
                 )}
               </td>
             </tr>

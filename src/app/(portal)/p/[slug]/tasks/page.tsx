@@ -136,7 +136,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">{t("p.shared.tasks.title", undefined, "My Tasks")}</h1>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.shared.tasks.subtitle",
               undefined,
@@ -171,7 +171,7 @@ export default async function PortalTasks({ params }: { params: Promise<{ slug: 
                           )}
                         </div>
                         <div className="mt-1 truncate text-sm font-semibold">{it.title}</div>
-                        <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                        <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                           {it.state}
                           {it.due
                             ? ` · ${t("p.shared.tasks.duePrefix", { date: fmt.date(it.due) }, `due ${fmt.date(it.due)}`)}`

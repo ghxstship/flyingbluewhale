@@ -52,10 +52,10 @@ export default async function Page({ params }: { params: Promise<{ shipmentId: s
             maxLength={80}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.logistics.freight.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="draft">draft</option>
               <option value="sent">sent</option>
               <option value="acknowledged">acknowledged</option>

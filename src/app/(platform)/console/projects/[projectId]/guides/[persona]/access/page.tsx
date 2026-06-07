@@ -64,21 +64,24 @@ export default async function GuideAccessPage({ params }: { params: Promise<{ pr
             <Badge variant="success">
               {t("console.projects.guides.access.publicBadge", undefined, "Public — no code required")}
             </Badge>
-            <p className="text-sm text-[var(--text-secondary)]">
+            <p className="text-sm text-[var(--p-text-2)]">
               {t(
                 "console.projects.guides.access.publicExplainer",
                 undefined,
                 "This persona is publicly accessible. Anyone with the link sees this guide once it is published. There is nothing to manage here.",
               )}
             </p>
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t("console.projects.guides.access.publicUrlLabel", undefined, "Public URL:")}{" "}
               <code className="font-mono">
                 /p/{project.slug ?? "<slug>"}/guide?as={persona}
               </code>
             </p>
             <div className="pt-2">
-              <Link href={`/console/projects/${projectId}/guides/${persona}`} className="btn btn-secondary btn-sm">
+              <Link
+                href={`/console/projects/${projectId}/guides/${persona}`}
+                className="ps-btn ps-btn--ghost ps-btn--sm"
+              >
                 {t("console.projects.guides.access.editGuideContent", undefined, "Edit guide content")}
               </Link>
             </div>

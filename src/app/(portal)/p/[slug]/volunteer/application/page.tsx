@@ -100,26 +100,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {t("p.volunteer.application.profile.title", undefined, "Your Profile")}
             </h3>
             <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-muted)]">
-                {t("p.volunteer.application.profile.name", undefined, "Name")}
-              </dt>
+              <dt className="text-[var(--p-text-2)]">{t("p.volunteer.application.profile.name", undefined, "Name")}</dt>
               <dd>{member.full_name}</dd>
-              <dt className="text-[var(--text-muted)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("p.volunteer.application.profile.email", undefined, "Email")}
               </dt>
               <dd className="font-mono text-xs">{member.email ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("p.volunteer.application.profile.phone", undefined, "Phone")}
               </dt>
               <dd className="font-mono text-xs">{member.phone ?? "—"}</dd>
-              <dt className="text-[var(--text-muted)]">
-                {t("p.volunteer.application.profile.role", undefined, "Role")}
-              </dt>
+              <dt className="text-[var(--p-text-2)]">{t("p.volunteer.application.profile.role", undefined, "Role")}</dt>
               <dd>{member.role ?? t("p.volunteer.application.tbd", undefined, "TBD")}</dd>
             </dl>
-            <p className="mt-4 text-xs text-[var(--text-muted)]">
+            <p className="mt-4 text-xs text-[var(--p-text-2)]">
               {t("p.volunteer.application.profile.updatePrompt", undefined, "Need to update your details? Email")}{" "}
-              <a className="text-[var(--org-primary)]" href="mailto:volunteers@atlvs.pro">
+              <a className="text-[var(--p-accent)]" href="mailto:volunteers@atlvs.pro">
                 volunteers@atlvs.pro
               </a>
               .
@@ -130,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h3 className="text-sm font-semibold">
               {t("p.volunteer.application.submit.title", undefined, "Submit Your Application")}
             </h3>
-            <p className="mt-1 text-xs text-[var(--text-secondary)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.volunteer.application.submit.description",
                 undefined,
@@ -140,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <div className="mt-4 flex flex-wrap gap-2">
               <Link
                 href={`mailto:volunteers@atlvs.pro?subject=Volunteer%20application%20—%20${slug}`}
-                className="btn btn-primary btn-sm"
+                className="ps-btn ps-btn--sm"
               >
                 {t("p.volunteer.application.submit.emailCta", undefined, "Email volunteer team")}
               </Link>

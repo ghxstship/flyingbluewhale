@@ -51,7 +51,7 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
     | undefined;
 
   return (
-    <div className="proposal-doc bg-[var(--background)] text-[var(--foreground)]" data-theme="light">
+    <div className="proposal-doc bg-[var(--p-bg)] text-[var(--p-text-1)]" data-theme="light">
       <ProposalTopBar proposal={proposal as unknown as Proposal} blocks={blocks} />
       <main>
         <ProposalBlockRenderer blocks={blocks} theme={theme} currency={proposal.currency ?? "USD"} />
@@ -71,11 +71,11 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
           client-facing PDFs. Waypoint mark + spaced "A T L V S" wordmark
           on the left, GHXSTSHIP skull + parent attribution on the right,
           doc number + version inline. */}
-      <footer className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 border-t border-[var(--border-color)] px-8 py-10 text-xs text-[var(--text-muted)]">
+      <footer className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-4 border-t border-[var(--p-border)] px-8 py-10 text-xs text-[var(--p-text-2)]">
         <div className="flex items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/atlvs-mark.svg" alt="" width={18} height={18} aria-hidden="true" />
-          <span className="font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase">A T L V S</span>
+          <span className="font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">A T L V S</span>
           <span>· Technologies</span>
         </div>
         <div className="font-mono">

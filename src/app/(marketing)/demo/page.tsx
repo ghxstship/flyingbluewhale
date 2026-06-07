@@ -57,13 +57,13 @@ export default async function DemoIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
           {t("marketing.pages.demo.hero.eyebrow")}
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
           {t("marketing.pages.demo.hero.title")}
         </h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.demo.hero.subtitle")}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.demo.hero.subtitle")}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -74,18 +74,16 @@ export default async function DemoIndex() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.demo.personas.title")}</h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-          {t("marketing.pages.demo.personas.subtitle")}
-        </p>
+        <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.demo.personas.subtitle")}</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {DEMO_PERSONAS.map((p) => (
             <Link key={p.slug} href={`/demo/${p.slug}`} className="surface hover-lift p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">
+              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">
                 {p.buyer}
               </div>
               <h3 className="mt-2 text-xl font-semibold">{p.hero}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{p.subhero}</p>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{p.subhero}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("marketing.pages.demo.personas.cta")} <ArrowRight size={12} />
               </div>
             </Link>

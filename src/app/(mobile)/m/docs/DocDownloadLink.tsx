@@ -26,7 +26,7 @@ export function DocDownloadLink({ docId }: { docId: string }) {
     });
   };
   return (
-    <button type="button" className="btn btn-secondary btn-sm" disabled={pending} onClick={click}>
+    <button type="button" className="ps-btn ps-btn--ghost ps-btn--sm" disabled={pending} onClick={click}>
       {pending
         ? t("m.docs.download.opening", undefined, "Opening…")
         : t("m.docs.download.label", undefined, "Download")}

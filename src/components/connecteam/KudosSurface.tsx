@@ -44,7 +44,7 @@ export async function KudosSurface({
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -105,7 +105,7 @@ export async function KudosSurface({
 
   return (
     <div className={containerClass}>
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
 
       {(
@@ -118,7 +118,7 @@ export async function KudosSurface({
         }>
       ).length > 0 && (
         <section className="mt-5">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.kudos.myBadges", undefined, "My Badges")}
           </h2>
           <ul className="mt-2 flex flex-wrap gap-2">
@@ -151,7 +151,7 @@ export async function KudosSurface({
             <select
               name="to_user_id"
               required
-              className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
             >
               {members
                 .filter((m) => m.id !== session.userId)
@@ -169,7 +169,7 @@ export async function KudosSurface({
               required
               rows={3}
               maxLength={500}
-              className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
             />
           </label>
           <label className="block text-xs font-semibold">
@@ -178,10 +178,10 @@ export async function KudosSurface({
               type="text"
               name="value_tag"
               maxLength={40}
-              className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+              className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
             />
           </label>
-          <button type="submit" className="btn btn-primary w-full">
+          <button type="submit" className="ps-btn w-full">
             {t("common.send", undefined, "Send")}
           </button>
         </form>
@@ -204,10 +204,10 @@ export async function KudosSurface({
                   <span className="font-semibold">
                     {memberMap.get(p.from_user_id) ?? t("m.kudos.someone", undefined, "Someone")}
                   </span>{" "}
-                  <span className="text-[var(--text-muted)]">→</span>{" "}
+                  <span className="text-[var(--p-text-2)]">→</span>{" "}
                   <span className="font-semibold">{memberMap.get(p.to_user_id) ?? "Someone"}</span>
                 </span>
-                <span className="font-mono text-xs text-[var(--text-muted)]">{fmt.time(p.created_at)}</span>
+                <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.time(p.created_at)}</span>
               </div>
               <p className="mt-2 text-sm">{p.message}</p>
               <div className="mt-2 flex items-center gap-2">
@@ -232,8 +232,8 @@ export async function KudosSurface({
                         aria-pressed={mine}
                         className={`rounded-full border px-2 py-0.5 text-xs transition-colors ${
                           mine
-                            ? "border-[var(--org-primary)] bg-[var(--surface-inset)]"
-                            : "border-[var(--border-color)] hover:bg-[var(--surface-inset)]"
+                            ? "border-[var(--p-accent)] bg-[var(--p-surface-2)]"
+                            : "border-[var(--p-border)] hover:bg-[var(--p-surface-2)]"
                         }`}
                       >
                         <span aria-hidden>{emoji}</span>

@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
           title={t("console.production.fabrication.detail.title", undefined, "Fabrication")}
         />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.production.fabrication.detail.notFound", undefined, "Not found.")}
           </div>
         </div>
@@ -89,17 +89,17 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
                 <input type="hidden" name="status" value={b.to} />
                 <button
                   type="submit"
-                  className={`rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium transition-colors ${
+                  className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
                     b.to === "blocked"
-                      ? "text-[var(--color-warning)] hover:bg-[color:var(--color-warning)]/10"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                      ? "text-[var(--p-warning)] hover:bg-[color:var(--p-warning)]/10"
+                      : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                   }`}
                 >
                   {t(b.labelKey, undefined, b.labelFallback)}
                 </button>
               </form>
             ))}
-            <a href={`/console/production/fabrication/${row.id}/edit`} className="btn btn-secondary btn-sm">
+            <a href={`/console/production/fabrication/${row.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("common.edit", undefined, "Edit")}
             </a>
           </div>
@@ -122,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             />
           </div>
           {row.description && (
-            <div className="mt-4 border-t border-[var(--border-color)] pt-3 text-xs text-[var(--text-secondary)]">
+            <div className="mt-4 border-t border-[var(--p-border)] pt-3 text-xs text-[var(--p-text-2)]">
               {row.description}
             </div>
           )}
@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             </Badge>
             <form action={deleteFab}>
               <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
+              <button type="submit" className="text-[color:var(--p-danger)] hover:underline">
                 {t("console.production.fabrication.detail.deleteOrder", undefined, "Delete Order")}
               </button>
             </form>
@@ -165,7 +165,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
         </h2>
         <Badge variant="default">{toTitle(fab.production_phase)}</Badge>
       </div>
-      <p className="text-xs text-[var(--text-secondary)]">
+      <p className="text-xs text-[var(--p-text-2)]">
         {t(
           "console.production.fabrication.detail.phase.description",
           undefined,
@@ -178,7 +178,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
         allowedNext={allowedNext}
       />
       {transitions.length > 0 && (
-        <div className="border-t border-[var(--border-color)] pt-3">
+        <div className="border-t border-[var(--p-border)] pt-3">
           <div className="mb-2 text-xs font-semibold tracking-wide uppercase">
             {t("console.production.fabrication.detail.phase.recentTransitions", undefined, "Recent Transitions")}
           </div>
@@ -202,7 +202,7 @@ async function ProductionPhaseSection({ orderId, orgId }: { orderId: string; org
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{value}</div>
     </div>
   );

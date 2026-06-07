@@ -159,19 +159,19 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
             {t("console.production.dispatch.detail.scheduleHeading", undefined, "Schedule")}
           </h3>
           <dl className="mt-3 grid grid-cols-2 gap-y-2 text-sm">
-            <dt className="text-[var(--text-muted)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.production.dispatch.detail.departScheduled", undefined, "Depart — Scheduled")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_depart)}</dd>
-            <dt className="text-[var(--text-muted)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.production.dispatch.detail.departActual", undefined, "Depart — Actual")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_depart)}</dd>
-            <dt className="text-[var(--text-muted)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.production.dispatch.detail.arriveScheduled", undefined, "Arrive — Scheduled")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.scheduled_arrive)}</dd>
-            <dt className="text-[var(--text-muted)]">
+            <dt className="text-[var(--p-text-2)]">
               {t("console.production.dispatch.detail.arriveActual", undefined, "Arrive — Actual")}
             </dt>
             <dd className="font-mono text-xs">{fmt(run.actual_arrive)}</dd>
@@ -183,11 +183,11 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
             {t("console.production.dispatch.detail.manifestHeading", undefined, "Manifest")}
           </h3>
           {passengers === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.production.dispatch.detail.noPassengers", undefined, "No passengers on this run.")}
             </p>
           ) : (
-            <pre className="mt-3 max-h-72 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
+            <pre className="mt-3 max-h-72 overflow-auto rounded bg-[var(--p-surface)] p-3 font-mono text-xs">
               {JSON.stringify(run.manifest, null, 2)}
             </pre>
           )}

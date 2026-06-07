@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.media.pressconf.schedule.heading", undefined, "Schedule")}</h3>
           {conferences.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.media.pressconf.schedule.empty",
                 undefined,
@@ -126,16 +126,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {conferences.map((c) => (
                 <li key={c.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{c.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmt(c.starts_at)} → {fmt(c.ends_at)}
                       {c.location?.name ? ` · ${c.location.name}` : ""}
                     </div>
-                    {c.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{c.description}</p>}
+                    {c.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{c.description}</p>}
                   </div>
                   <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
                 </li>
@@ -144,9 +144,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t("p.media.pressconf.rsvp.prefix", undefined, "To RSVP, email")}{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:press@atlvs.pro">
+          <a className="text-[var(--p-accent)]" href="mailto:press@atlvs.pro">
             press@atlvs.pro
           </a>{" "}
           {t("p.media.pressconf.rsvp.suffix", undefined, "with your accreditation number and the conference name.")}

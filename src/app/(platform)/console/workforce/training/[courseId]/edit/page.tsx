@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
             maxLength={160}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.training.edit.fields.body", undefined, "Body — Markdown")}
             </span>
             <textarea
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               defaultValue={row.body_markdown ?? ""}
               rows={12}
               required
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
         </FormShell>

@@ -34,7 +34,7 @@ export type KpiWidget = WidgetBase & {
   value: number | string;
   /** Trailing sparkline points (renderer normalizes the scale). */
   sparkline?: number[];
-  /** Optional accent flag — picks up `--org-primary` (matches MetricCard.accent). */
+  /** Optional accent flag — picks up `--p-accent` (matches MetricCard.accent). */
   accent?: boolean;
   /** Delta indicator — value already pre-formatted. */
   delta?: { value: string; positive?: boolean };

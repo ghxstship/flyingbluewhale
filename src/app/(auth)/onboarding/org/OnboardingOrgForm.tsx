@@ -45,7 +45,7 @@ export function OnboardingOrgForm({ initialName = "", email }: { initialName?: s
             ? t("auth.onboarding.submitting", undefined, "Creating workspace")
             : t("auth.onboarding.submit", undefined, "Create workspace")}
         </Button>
-        <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
+        <p className="text-[11px] leading-relaxed text-[var(--p-text-2)]">
           {t("auth.onboarding.ownerNotePrefix", undefined, "You'll become the owner. You can invite teammates from")}{" "}
           <code>/console/people/invites</code> {t("auth.onboarding.ownerNoteSuffix", undefined, "once you're in.")}
         </p>

@@ -54,7 +54,7 @@ export default async function ClientHome({ params }: { params: Promise<{ slug: s
             ].map((tile) => (
               <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
                 <div className="text-sm font-semibold">{tile.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.desc}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{tile.desc}</div>
               </Link>
             ))}
           </div>

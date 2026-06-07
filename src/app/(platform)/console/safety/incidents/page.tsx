@@ -132,7 +132,7 @@ export default async function Page() {
                 <div className="text-sm font-medium">
                   {t("console.safety.incidents.opsLog.title", undefined, "Operations log")}
                 </div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(
                     "console.safety.incidents.opsLog.subtitle",
                     { count: totalThirtyDay },
@@ -146,7 +146,7 @@ export default async function Page() {
                 <div className="text-sm font-medium">
                   {t("console.safety.incidents.cyberIr.title", undefined, "Cyber IR")}
                 </div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(
                     "console.safety.incidents.cyberIr.subtitle",
                     { count: cyberCount ?? 0 },
@@ -160,7 +160,7 @@ export default async function Page() {
                 <div className="text-sm font-medium">
                   {t("console.safety.incidents.medical.title", undefined, "Medical encounters")}
                 </div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(
                     "console.safety.incidents.medical.subtitle",
                     { count: medCount ?? 0 },

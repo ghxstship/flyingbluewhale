@@ -59,7 +59,7 @@ export function PhaseBlock({
         </span>
         <div className="flex-1">
           {block.tag && (
-            <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
               {block.tag}
             </div>
           )}
@@ -75,13 +75,11 @@ export function PhaseBlock({
 
       {open && (
         <div className="surface animate-fade-in mt-2 p-6">
-          {block.narrative && <p className="text-sm text-[var(--text-secondary)]">{block.narrative}</p>}
+          {block.narrative && <p className="text-sm text-[var(--p-text-2)]">{block.narrative}</p>}
 
           {block.core && block.core.length > 0 && (
             <div className="mt-5">
-              <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
-                Included
-              </div>
+              <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">Included</div>
               <ul className="mt-2 space-y-2">
                 {block.core.map((c, i) => (
                   <li
@@ -91,7 +89,7 @@ export function PhaseBlock({
                   >
                     <div>
                       <div className="text-sm font-medium">{c.name}</div>
-                      {c.desc && <div className="text-xs text-[var(--text-muted)]">{c.desc}</div>}
+                      {c.desc && <div className="text-xs text-[var(--p-text-2)]">{c.desc}</div>}
                     </div>
                     {c.price != null && (
                       <div className="font-display text-base tabular-nums">{fmtMoney(c.price, currency)}</div>
@@ -104,10 +102,10 @@ export function PhaseBlock({
 
           {block.addons && block.addons.length > 0 && (
             <div className="mt-6">
-              <div className="text-[10px] font-semibold tracking-widest text-[var(--text-muted)] uppercase">
+              <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
                 Add-ons{" "}
                 {addonTotalCents > 0 && (
-                  <span className="ms-2 font-mono text-[var(--foreground)] normal-case">
+                  <span className="ms-2 font-mono text-[var(--p-text-1)] normal-case">
                     +{fmtMoney({ cents: addonTotalCents }, currency)} selected
                   </span>
                 )}
@@ -125,7 +123,7 @@ export function PhaseBlock({
                         description={a.desc}
                         leading={
                           <span
-                            className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded border ${isOn ? "text-white" : "border-[var(--border-color)]"}`}
+                            className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded border ${isOn ? "text-white" : "border-[var(--p-border)]"}`}
                             style={isOn ? { background: accent, borderColor: accent } : {}}
                             aria-hidden="true"
                           >
@@ -146,12 +144,12 @@ export function PhaseBlock({
           )}
 
           {block.gate && (
-            <div className="mt-6 rounded-lg border border-dashed border-[var(--border-color)] p-4">
+            <div className="mt-6 rounded-lg border border-dashed border-[var(--p-border)] p-4">
               <div className="flex items-center gap-2">
                 <span className="inline-block h-3 w-3 rotate-45" style={{ background: accent }} />
                 <div className="text-[10px] font-semibold tracking-widest uppercase">{block.gate.title}</div>
               </div>
-              <ul className="mt-2 space-y-1 text-xs text-[var(--text-secondary)]">
+              <ul className="mt-2 space-y-1 text-xs text-[var(--p-text-2)]">
                 {block.gate.items.map((i, idx) => (
                   <li key={idx} className="flex items-start gap-1.5">
                     <Square size={12} strokeWidth={2} className="mt-0.5 flex-shrink-0" aria-hidden="true" />
@@ -160,16 +158,16 @@ export function PhaseBlock({
                 ))}
               </ul>
               {block.gate.unlocks && (
-                <div className="mt-2 text-[11px] text-[var(--text-muted)]">→ unlocks {block.gate.unlocks}</div>
+                <div className="mt-2 text-[11px] text-[var(--p-text-2)]">→ unlocks {block.gate.unlocks}</div>
               )}
             </div>
           )}
 
           {block.contractRefs && block.contractRefs.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1">
-              <span className="text-[10px] text-[var(--text-muted)]">Contractual framework:</span>
+              <span className="text-[10px] text-[var(--p-text-2)]">Contractual framework:</span>
               {block.contractRefs.map((r) => (
-                <span key={r} className="rounded-full bg-[var(--bg-secondary)] px-2 py-0.5 font-mono text-[10px]">
+                <span key={r} className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 font-mono text-[10px]">
                   {r}
                 </span>
               ))}

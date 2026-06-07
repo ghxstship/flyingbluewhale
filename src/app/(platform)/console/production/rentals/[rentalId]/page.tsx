@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
           title={t("console.production.rentals.detail.title", undefined, "Rental")}
         />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.production.rentals.detail.notFound", undefined, "Not found.")}
           </div>
         </div>
@@ -64,13 +64,13 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
                 <input type="hidden" name="id" value={row.id} />
                 <button
                   type="submit"
-                  className="rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                  className="rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                 >
                   {t("console.production.rentals.detail.endRentalNow", undefined, "End rental now")}
                 </button>
               </form>
             )}
-            <a href={`/console/production/rentals/${row.id}/edit`} className="btn btn-secondary btn-sm">
+            <a href={`/console/production/rentals/${row.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("common.edit", undefined, "Edit")}
             </a>
           </div>
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             />
           </div>
           {row.notes && (
-            <div className="mt-4 border-t border-[var(--border-color)] pt-3 text-xs text-[var(--text-secondary)]">
+            <div className="mt-4 border-t border-[var(--p-border)] pt-3 text-xs text-[var(--p-text-2)]">
               {row.notes}
             </div>
           )}
@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
             <Badge variant="muted">{t("console.production.rentals.detail.lifecycle", undefined, "Lifecycle")}</Badge>
             <form action={deleteRental}>
               <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
+              <button type="submit" className="text-[color:var(--p-danger)] hover:underline">
                 {t("console.production.rentals.detail.deleteRental", undefined, "Delete rental")}
               </button>
             </form>
@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{value}</div>
     </div>
   );

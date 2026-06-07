@@ -113,13 +113,13 @@ export default async function LiveDispatchPage() {
         <LiveDispatchMap points={points} />
 
         <section className="overflow-x-auto">
-          <header className="border-b border-[var(--border-color)] px-4 py-2.5">
+          <header className="border-b border-[var(--p-border)] px-4 py-2.5">
             <h3 className="text-sm font-semibold">
               {t("console.production.dispatch.live.activeRuns", undefined, "Active Runs")}
             </h3>
           </header>
           {points.length === 0 ? (
-            <p className="px-4 py-6 text-center text-xs text-[var(--text-muted)]">
+            <p className="px-4 py-6 text-center text-xs text-[var(--p-text-2)]">
               {t(
                 "console.production.dispatch.live.emptyState",
                 undefined,
@@ -127,7 +127,7 @@ export default async function LiveDispatchPage() {
               )}
             </p>
           ) : (
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.production.dispatch.live.col.vehicle", undefined, "Vehicle")}</th>

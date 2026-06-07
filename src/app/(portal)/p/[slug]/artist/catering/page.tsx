@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <div className="font-medium">
                 {r.title ?? t("p.artist.catering.defaultTitle", undefined, "Hospitality rider")}
               </div>
-              <pre className="mt-2 overflow-x-auto text-xs text-[var(--text-muted)]">
+              <pre className="mt-2 overflow-x-auto text-xs text-[var(--p-text-2)]">
                 {JSON.stringify(r.data, null, 2)}
               </pre>
             </li>

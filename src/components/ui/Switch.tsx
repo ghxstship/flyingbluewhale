@@ -10,10 +10,10 @@ export const Switch = React.forwardRef<
   return (
     <SwitchPrimitive.Root
       ref={ref}
-      className={`inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:opacity-50 data-[state=checked]:border-[var(--org-primary)] data-[state=checked]:bg-[var(--org-primary)] ${className}`}
+      className={`inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--p-bg)] disabled:opacity-50 data-[state=checked]:border-[var(--p-accent)] data-[state=checked]:bg-[var(--p-accent)] ${className}`}
       {...props}
     >
-      <SwitchPrimitive.Thumb className="pointer-events-none block h-4 w-4 translate-x-0.5 rounded-full bg-[var(--background)] shadow transition-transform data-[state=checked]:translate-x-[1.125rem]" />
+      <SwitchPrimitive.Thumb className="pointer-events-none block h-4 w-4 translate-x-0.5 rounded-full bg-[var(--p-bg)] shadow transition-transform data-[state=checked]:translate-x-[1.125rem]" />
     </SwitchPrimitive.Root>
   );
 });
@@ -30,11 +30,11 @@ export function LabeledSwitch({
   return (
     <div className="flex items-start justify-between gap-4">
       <div>
-        <label htmlFor={inputId} className="text-sm font-medium text-[var(--text-primary)]">
+        <label htmlFor={inputId} className="text-sm font-medium text-[var(--p-text-1)]">
           {label}
         </label>
         {description && (
-          <div id={descId} className="text-xs text-[var(--text-muted)]">
+          <div id={descId} className="text-xs text-[var(--p-text-2)]">
             {description}
           </div>
         )}

@@ -132,15 +132,15 @@ export function WebhookEditor({
       </label>
 
       <div>
-        <label className="text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">
+        <label className="text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">
           {t("console.settings.webhooks.editor.eventsLabel", undefined, "Events")}
         </label>
         <div className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           {EVENT_OPTIONS.map((ev) => (
             <label
               key={ev}
-              className={`flex cursor-pointer items-center gap-2 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs ${
-                events.has(ev) ? "bg-[var(--surface-inset)]" : ""
+              className={`flex cursor-pointer items-center gap-2 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs ${
+                events.has(ev) ? "bg-[var(--p-surface-2)]" : ""
               }`}
             >
               <input type="checkbox" checked={events.has(ev)} onChange={() => toggle(ev)} />
@@ -150,7 +150,7 @@ export function WebhookEditor({
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-4">
+      <div className="flex items-center justify-between border-t border-[var(--p-border)] pt-4">
         <Button variant="danger" onClick={() => setConfirmOpen(true)} disabled={isDeleting}>
           {isDeleting
             ? t("console.settings.webhooks.editor.deleting", undefined, "Deleting…")

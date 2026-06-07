@@ -23,7 +23,7 @@ export default async function MobileCocPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -57,11 +57,11 @@ export default async function MobileCocPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.coc.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.coc.title", undefined, "Chain of Custody")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.coc.description",
           undefined,
@@ -79,7 +79,7 @@ export default async function MobileCocPage() {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.coc.recent.heading", undefined, "My recent custody events")}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -101,7 +101,7 @@ export default async function MobileCocPage() {
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium">{r.action.replace(/[._]/g, " ")}</div>
                   {r.target_table && (
-                    <div className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       {r.target_table}
                       {r.target_id ? ` · ${r.target_id.slice(0, 8)}` : ""}
                     </div>
@@ -109,15 +109,15 @@ export default async function MobileCocPage() {
                 </div>
                 <div className="flex flex-none items-center gap-2">
                   <Badge variant="muted">{t("m.coc.badge.audit", undefined, "Audit")}</Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{relativeTime(r.at)}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{relativeTime(r.at)}</span>
                 </div>
               </li>
             ))
           )}
         </ul>
-        <p className="mt-4 text-xs text-[var(--text-muted)]">
+        <p className="mt-4 text-xs text-[var(--p-text-2)]">
           {t("m.coc.desktopPrompt", undefined, "Need the desktop view?")}{" "}
-          <Link href="/console/compliance/coc" className="text-[var(--org-primary)]">
+          <Link href="/console/compliance/coc" className="text-[var(--p-accent)]">
             {t("m.coc.desktopLink", undefined, "Open Chain of Custody")}
           </Link>
           .

@@ -46,7 +46,7 @@ export default function ServicesHub() {
 
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             Services Catalog
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -56,7 +56,7 @@ export default function ServicesHub() {
             <br />
             Real producers behind every line.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
             Each service is a real, scoped, priceable line of work — not a marketing buzzword. Browse by discipline
             below, or jump straight to the industry vertical you&apos;re in. Every service detail page tells you what it
             is, when in the project you need it, what you receive, and where it operates.
@@ -69,31 +69,31 @@ export default function ServicesHub() {
               const items = servicesByClass(c.code);
               return (
                 <div key={c.code} className="surface overflow-hidden">
-                  <div className="flex flex-wrap items-end justify-between gap-4 bg-[var(--bg-secondary)] p-6">
+                  <div className="flex flex-wrap items-end justify-between gap-4 bg-[var(--p-surface)] p-6">
                     <div>
-                      <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--text-muted)]">
+                      <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--p-text-2)]">
                         Class {c.code}
                       </div>
                       <h2 className="mt-1 text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
                         {c.shortName}
                       </h2>
-                      <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">{c.definition}</p>
+                      <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">{c.definition}</p>
                     </div>
-                    <Link href={paths.classDetail(c.slug)} className="btn btn-secondary btn-sm">
+                    <Link href={paths.classDetail(c.slug)} className="ps-btn ps-btn--ghost ps-btn--sm">
                       {items.length} services <ArrowRight className="h-3 w-3" />
                     </Link>
                   </div>
-                  <ul className="grid gap-px bg-[var(--border-color)] sm:grid-cols-2 lg:grid-cols-3">
+                  <ul className="grid gap-px bg-[var(--p-border)] sm:grid-cols-2 lg:grid-cols-3">
                     {items.map((s) => (
                       <li key={s.number}>
                         <Link
                           href={paths.serviceDetail(c.slug, s.slug)}
-                          className="nav-item flex h-full items-start gap-3 bg-[var(--background)] p-4"
+                          className="nav-item flex h-full items-start gap-3 bg-[var(--p-bg)] p-4"
                         >
-                          <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)]">
+                          <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)]">
                             {String(s.number).padStart(3, "0")}
                           </span>
-                          <span className="text-sm text-[var(--text-primary)]">{s.name}</span>
+                          <span className="text-sm text-[var(--p-text-1)]">{s.name}</span>
                         </Link>
                       </li>
                     ))}
@@ -111,7 +111,7 @@ export default function ServicesHub() {
                 <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
                   Don&apos;t know what to call it?
                 </h2>
-                <p className="mt-3 max-w-xl text-[var(--text-secondary)]">
+                <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
                   Brief us in plain English. We&apos;ll resolve it against the catalog, reply with a scope, a
                   recommended engagement model, and the producer who&apos;ll own it.
                 </p>

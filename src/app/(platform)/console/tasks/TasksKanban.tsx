@@ -39,8 +39,8 @@ export function TasksKanban({ rows }: { rows: Task[] }): React.ReactElement {
       renderCard={(r) => (
         <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">
-            <span className="line-clamp-2 text-sm font-medium text-[var(--foreground)]">{r.title}</span>
-            <span className="font-mono text-[10px] text-[var(--text-muted)]">P{r.priority}</span>
+            <span className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.title}</span>
+            <span className="font-mono text-[10px] text-[var(--p-text-2)]">P{r.priority}</span>
           </div>
           <div className="flex items-center justify-between gap-2">
             <DueDateBadge dueAt={r.due_at} status={r.status} size="sm" />

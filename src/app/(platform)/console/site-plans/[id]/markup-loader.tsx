@@ -11,7 +11,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 function LoadingPlaceholder() {
   const t = useT();
   return (
-    <div className="surface p-6 text-sm text-[var(--text-muted)]">
+    <div className="surface p-6 text-sm text-[var(--p-text-2)]">
       {t("console.sitePlans.markup.loading", undefined, "Loading sheet…")}
     </div>
   );

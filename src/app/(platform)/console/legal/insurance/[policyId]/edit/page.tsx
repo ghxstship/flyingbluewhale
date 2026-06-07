@@ -50,13 +50,13 @@ export default async function Page({ params }: { params: Promise<{ policyId: str
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.insurance.edit.kindLabel", undefined, "Kind")}
             </label>
             <select
               name="kind"
               defaultValue={(r.kind as string | undefined) ?? "general_liability"}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               required
             >
               <option value="general_liability">

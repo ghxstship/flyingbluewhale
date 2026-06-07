@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
             defaultValue={row.estimated_value_cents != null ? String(row.estimated_value_cents) : ""}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.leads.edit.fields.notes", undefined, "Notes")}
             </span>
             <textarea
@@ -72,10 +72,10 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
               defaultValue={row.notes ?? ""}
               maxLength={4000}
               rows={5}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t("console.leads.edit.stageHint", undefined, "Stage transitions are managed from the lead detail.")}
           </p>
         </FormShell>

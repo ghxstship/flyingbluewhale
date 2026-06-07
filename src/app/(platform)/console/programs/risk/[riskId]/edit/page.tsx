@@ -50,21 +50,21 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.risk.edit.fields.description", undefined, "Description")}
             </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
               rows={5}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.risk.edit.fields.kind", undefined, "Kind")}
             </span>
-            <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
+            <select name="kind" defaultValue={row.kind ?? ""} required className="ps-input focus-ring w-full">
               <option value="risk">risk</option>
               <option value="assumption">assumption</option>
               <option value="issue">issue</option>
@@ -72,14 +72,14 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.risk.edit.fields.likelihood", undefined, "Likelihood")}
             </span>
             <select
               name="likelihood"
               defaultValue={row.likelihood ?? ""}
               required
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             >
               <option value="rare">rare</option>
               <option value="unlikely">unlikely</option>
@@ -89,10 +89,10 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.risk.edit.fields.impact", undefined, "Impact")}
             </span>
-            <select name="impact" defaultValue={row.impact ?? ""} required className="input-base focus-ring w-full">
+            <select name="impact" defaultValue={row.impact ?? ""} required className="ps-input focus-ring w-full">
               <option value="insignificant">insignificant</option>
               <option value="minor">minor</option>
               <option value="moderate">moderate</option>
@@ -101,10 +101,10 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.risk.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="open">open</option>
               <option value="mitigating">mitigating</option>
               <option value="accepted">accepted</option>
@@ -118,14 +118,14 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
             defaultValue={dateOnly(row.due_on)}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.risk.edit.fields.treatment", undefined, "Treatment")}
             </span>
             <textarea
               name="treatment"
               defaultValue={row.treatment ?? ""}
               rows={5}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
         </FormShell>

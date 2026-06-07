@@ -27,11 +27,11 @@ const KIND_STYLES: Record<
   BannerKind,
   { bg: string; fg: string; Icon: React.ComponentType<{ size?: number; "aria-hidden"?: boolean }> }
 > = {
-  offline: { bg: "bg-[var(--color-warning)]", fg: "text-[var(--p-text-1)]", Icon: WifiOff },
-  online: { bg: "bg-[var(--color-success)]", fg: "text-[var(--p-text-1)]", Icon: Wifi },
-  warning: { bg: "bg-[var(--color-warning)]", fg: "text-[var(--p-text-1)]", Icon: AlertTriangle },
-  info: { bg: "bg-[var(--color-info)]", fg: "text-[var(--p-text-1)]", Icon: Info },
-  success: { bg: "bg-[var(--color-success)]", fg: "text-[var(--p-text-1)]", Icon: CheckCircle2 },
+  offline: { bg: "bg-[var(--p-warning)]", fg: "text-[var(--p-text-1)]", Icon: WifiOff },
+  online: { bg: "bg-[var(--p-success)]", fg: "text-[var(--p-text-1)]", Icon: Wifi },
+  warning: { bg: "bg-[var(--p-warning)]", fg: "text-[var(--p-text-1)]", Icon: AlertTriangle },
+  info: { bg: "bg-[var(--p-info)]", fg: "text-[var(--p-text-1)]", Icon: Info },
+  success: { bg: "bg-[var(--p-success)]", fg: "text-[var(--p-text-1)]", Icon: CheckCircle2 },
 };
 
 export function GlobalBanner({

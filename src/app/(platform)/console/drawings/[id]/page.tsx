@@ -56,7 +56,7 @@ const STATE_TONE: Record<SheetSetState, "muted" | "info" | "warning" | "success"
   archived: "muted",
 };
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   if (!hasSupabase) return null;
@@ -149,14 +149,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-6">
         {sheetSet.description && (
-          <div className="surface p-4 text-sm text-[var(--text-secondary)]">{sheetSet.description}</div>
+          <div className="surface p-4 text-sm text-[var(--p-text-2)]">{sheetSet.description}</div>
         )}
 
         {/* ── Versions panel ─────────────────────────────────────────────── */}
         <section className="surface space-y-3 p-4">
           <header className="flex items-center justify-between">
             <h2 className="text-sm font-semibold">{t("console.drawings.detail.versions", undefined, "Versions")}</h2>
-            <span className="text-xs text-[var(--text-muted)]">
+            <span className="text-xs text-[var(--p-text-2)]">
               {t("console.drawings.detail.versionsCount", { count: versionRows.length }, `${versionRows.length} total`)}{" "}
               ·{" "}
               {activeVersion
@@ -169,7 +169,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           </header>
           {versionRows.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.drawings.detail.noVersionsEmpty",
                 undefined,
@@ -183,7 +183,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span className="font-mono">
                     {v.version_label}
                     {sheetSet.current_version_id === v.id && (
-                      <span className="ms-2 text-[10px] text-[var(--color-success)] uppercase">
+                      <span className="ms-2 text-[10px] text-[var(--p-success)] uppercase">
                         {t("console.drawings.detail.active", undefined, "active")}
                       </span>
                     )}
@@ -191,7 +191,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <span className="flex items-center gap-2">
                     <Badge variant={STATE_TONE[v.set_state]}>{toTitle(v.set_state)}</Badge>
                     {v.published_at && (
-                      <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                      <span className="font-mono text-[10px] text-[var(--p-text-2)]">
                         {fmt.dateParts(v.published_at, { month: "short", day: "numeric", year: "numeric" })}
                       </span>
                     )}
@@ -252,7 +252,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 `Sheets in ${activeVersion ? activeVersion.version_label : "(no active version)"}`,
               )}
             </h2>
-            <span className="text-xs text-[var(--text-muted)]">
+            <span className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.drawings.detail.sheetsCount",
                 { count: memberRows.length, total: planChoices.length },
@@ -348,7 +348,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 {t("console.drawings.detail.addSheet", undefined, "+ Add Sheet")}
               </Button>
             </form>
-            <p className="text-[10px] text-[var(--text-muted)]">
+            <p className="text-[10px] text-[var(--p-text-2)]">
               {t(
                 "console.drawings.detail.revisionImmutableNote",
                 undefined,

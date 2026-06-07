@@ -41,9 +41,9 @@ export function StatusForm({
 
   const tone =
     variant === "danger"
-      ? "text-[var(--color-error)] hover:bg-[var(--color-error)]/5"
+      ? "text-[var(--p-danger)] hover:bg-[var(--p-danger)]/5"
       : variant === "primary"
-        ? "bg-[var(--org-primary)] text-[var(--org-on-primary)] hover:opacity-90"
+        ? "bg-[var(--p-accent)] text-[var(--p-accent-contrast)] hover:opacity-90"
         : "";
 
   return (

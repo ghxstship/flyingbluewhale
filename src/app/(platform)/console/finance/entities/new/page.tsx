@@ -10,8 +10,8 @@ import { createOrgEntity } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 export default async function Page() {
   if (!hasSupabase) return null;
@@ -47,14 +47,14 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.finance.entities.new.fields.legalName", undefined, "Legal Name")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <input name="legal_name" required placeholder="ATLVS Productions LLC" className={INPUT} />
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.finance.entities.new.fields.shortCode", undefined, "Short Code")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <input
                 name="short_code"
@@ -69,7 +69,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.finance.entities.new.fields.baseCurrency", undefined, "Base Currency")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <input
                 name="base_currency"

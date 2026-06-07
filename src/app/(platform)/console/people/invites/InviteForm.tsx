@@ -43,7 +43,7 @@ export function InviteForm({ projects }: { projects: ProjectOption[] }) {
       />
       <label className="block text-xs font-medium">
         <span className="mb-1 block">{t("console.people.invites.platformRole", undefined, "Platform role")}</span>
-        <select name="role" defaultValue="member" className="input-base focus-ring w-full" required>
+        <select name="role" defaultValue="member" className="ps-input focus-ring w-full" required>
           {ROLES.map((r) => (
             <option key={r.value} value={r.value}>
               {r.label}
@@ -60,7 +60,7 @@ export function InviteForm({ projects }: { projects: ProjectOption[] }) {
           name="projectId"
           value={projectId}
           onChange={(e) => setProjectId(e.target.value)}
-          className="input-base focus-ring w-full"
+          className="ps-input focus-ring w-full"
         >
           <option value="">{t("console.people.invites.orgWide", undefined, "— Org-wide invite —")}</option>
           {projects.map((p) => (
@@ -74,7 +74,7 @@ export function InviteForm({ projects }: { projects: ProjectOption[] }) {
       {isProjectScoped && (
         <label className="block text-xs font-medium">
           <span className="mb-1 block">{t("console.people.invites.projectRole", undefined, "Project role")}</span>
-          <select name="projectRole" defaultValue="contributor" className="input-base focus-ring w-full" required>
+          <select name="projectRole" defaultValue="contributor" className="ps-input focus-ring w-full" required>
             {PROJECT_ROLES.map((r: ProjectRole) => (
               <option key={r} value={r}>
                 {r}
@@ -84,7 +84,7 @@ export function InviteForm({ projects }: { projects: ProjectOption[] }) {
         </label>
       )}
 
-      <p className="text-xs text-[var(--text-muted)]">
+      <p className="text-xs text-[var(--p-text-2)]">
         {isProjectScoped
           ? t(
               "console.people.invites.helpScoped",

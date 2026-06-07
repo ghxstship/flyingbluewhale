@@ -68,8 +68,8 @@ export function IncidentsKanban({ rows }: { rows: IncidentKanbanRow[] }): React.
           <div className="flex items-start justify-between gap-2">
             <StatusChip tone={SEVERITY_TONE[r.severity] ?? "neutral"}>{r.severity}</StatusChip>
           </div>
-          <div className="line-clamp-2 text-sm font-medium text-[var(--foreground)]">{r.summary}</div>
-          {r.location && <div className="text-[10px] text-[var(--text-muted)]">{r.location}</div>}
+          <div className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.summary}</div>
+          {r.location && <div className="text-[10px] text-[var(--p-text-2)]">{r.location}</div>}
         </div>
       )}
     />

@@ -49,7 +49,7 @@ export default function AboutPage() {
       />
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             About
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -57,7 +57,7 @@ export default function AboutPage() {
             <br />
             behind the studio.
           </h1>
-          <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-6 max-w-3xl text-lg text-[var(--p-text-2)]">
             GHXSTSHIP is an experiential production company building festivals, theme park attractions, immersive
             experiences, theatrical productions, brand activations, and premium hospitality at scale. We span{" "}
             {CATALOG_STATS.serviceCount} services across {CATALOG_STATS.classCount} disciplines and{" "}
@@ -70,16 +70,13 @@ export default function AboutPage() {
           <div className="grid gap-5 sm:grid-cols-2">
             {PRINCIPLES.map((p) => (
               <div key={p.eyebrow} className="surface hover-lift p-8">
-                <div
-                  className="text-xs font-semibold tracking-[0.25em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
-                >
+                <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
                   {p.eyebrow}
                 </div>
                 <h2 className="mt-3 text-2xl uppercase sm:text-3xl" style={{ fontFamily: "var(--font-display)" }}>
                   {p.title}
                 </h2>
-                <p className="mt-3 text-[var(--text-secondary)]">{p.body}</p>
+                <p className="mt-3 text-[var(--p-text-2)]">{p.body}</p>
               </div>
             ))}
           </div>
@@ -91,7 +88,7 @@ export default function AboutPage() {
               <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
                 The lineage.
               </h2>
-              <div className="mt-6 space-y-4 text-sm text-[var(--text-secondary)]">
+              <div className="mt-6 space-y-4 text-sm text-[var(--p-text-2)]">
                 <p>
                   GHXSTSHIP Industries is the parent. ATLVS Technologies — operating ATLVS, GVTEWAY, and COMPVSS — is
                   the software arm we built so we&apos;d stop running production on spreadsheets.
@@ -111,7 +108,7 @@ export default function AboutPage() {
               <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
                 The roster.
               </h2>
-              <div className="mt-6 space-y-4 text-sm text-[var(--text-secondary)]">
+              <div className="mt-6 space-y-4 text-sm text-[var(--p-text-2)]">
                 <p>
                   Producers, project managers, account managers, A1s, L1s, V1s, riggers, engineers (PE-stamped where it
                   matters), hospitality leads, federation liaisons, fixers, conservators, art handlers, stage managers,
@@ -132,7 +129,7 @@ export default function AboutPage() {
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
               Brief us.
             </h2>
-            <p className="mt-3 max-w-xl text-[var(--text-secondary)]">
+            <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
               A paragraph in plain English is fine. A six-hundred-line RFP is fine. A drunk voice memo at 2am that
               becomes a festival is the most fun. We answer all three.
             </p>

@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           { label: t("p.athlete.requests.breadcrumb.requests", undefined, "Requests") },
         ]}
         action={
-          <Link href={`/m/requests/new`} className="btn btn-primary btn-sm">
+          <Link href={`/m/requests/new`} className="ps-btn ps-btn--sm">
             {t("p.athlete.requests.actions.new", undefined, "+ New Request")}
           </Link>
         }
@@ -127,7 +127,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.athlete.requests.list.heading", undefined, "Your Requests")}</h3>
           {rows.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.athlete.requests.empty",
                 undefined,
@@ -135,13 +135,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {rows.map((r) => (
                 <li key={r.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{r.category}</div>
-                    {r.description && <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{r.description}</p>}
-                    <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                    {r.description && <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{r.description}</p>}
+                    <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
                       {t("p.athlete.requests.row.opened", { date: fmt(r.opened_at) }, `opened ${fmt(r.opened_at)}`)}
                       {r.resolved_at
                         ? t(
@@ -165,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "p.athlete.requests.footnote",
             undefined,

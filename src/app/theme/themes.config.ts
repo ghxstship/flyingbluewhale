@@ -1,22 +1,18 @@
 /**
- * CHROMA BEACON theme registry.
+ * ATLVS Technologies — theme registry.
  *
- * Per the v3 GHXSTSHIP design handoff (design_handoff/README.md
- * "Two kits — same logo, two skins"), the canonical brand carries
- * exactly two theme slugs:
+ * One canonical skin: the ATLVS SaaS kit (design_handoff_atlvs_kit). The
+ * pre-kit cosmic GHXSTSHIP skin and the earlier CHROMA exploration set
+ * (bermuda-triangle, glass, brutal, bento, kinetic, copilot, cyber, soft,
+ * earthy) were retired in this refactor — the kit's neutral light/dark
+ * surfaces + per-product accent (atlvs/compvss/gvteway) now drive every
+ * shell across the platform.
  *
- *   - `ghxstship`     — cosmic pop-art, marketing only
- *   - `atlvs-product` — neutral SaaS, light/dark + per-product accent
- *
- * The legacy CHROMA exploration set (bermuda-triangle, glass, brutal,
- * bento, kinetic, copilot, cyber, soft, earthy) was purged in the v3
- * sweep — those skins are not part of the production brand canon.
- *
- * Slugs are immutable — used verbatim in data-theme, localStorage,
- * URLs, and the user_preferences_theme_check Postgres CHECK constraint.
+ * Slug is immutable — used verbatim in `data-theme`, localStorage, URLs,
+ * and the `user_preferences_theme_check` Postgres CHECK constraint.
  */
 
-export type ThemeSlug = "ghxstship" | "atlvs-product";
+export type ThemeSlug = "atlvs-product";
 
 export type ThemeFamily = "light" | "dark";
 
@@ -30,20 +26,12 @@ export interface ThemeRegistryEntry {
 }
 
 export const THEMES: Record<ThemeSlug, ThemeRegistryEntry> = {
-  ghxstship: {
-    slug: "ghxstship",
-    label: "Deep Space Voyage",
-    family: "dark",
-    essence:
-      "Retro-futurist nautical pop art. Cosmic ink ground, brass doubloon accent, nebula + plasma signals, halftone dots, hard-offset shadows. Marketing surfaces only.",
-    swatchColor: "#e9a23b",
-  },
   "atlvs-product": {
     slug: "atlvs-product",
-    label: "ATLVS Product",
+    label: "ATLVS",
     family: "light",
     essence:
-      "Neutral SaaS skin for the ATLVS · COMPVSS · GVTEWAY apps. Clean light/dark canvas, soft shadows, per-product accent (pink/amber/cyan). Asana/ClickUp ergonomic register — distinct from the cosmic marketing brand.",
+      "Neutral SaaS skin for ATLVS · COMPVSS · GVTEWAY. Clean light/dark canvas, soft elevation, per-product accent (pink/amber/cyan). Title Case, Space Grotesk, Asana/Linear-adjacent ergonomic register.",
     swatchColor: "#ff2e88",
   },
 };
@@ -55,10 +43,10 @@ export function isValidThemeSlug(s: unknown): s is ThemeSlug {
 }
 
 /** Color scheme for `color-scheme` CSS property — used by native form controls + scrollbars.
- *  Defensive against unknown slugs (e.g., a stale cookie from a purged theme like the
- *  pre-v3 bermuda-triangle/cyber/glass set). Falls back to the dark default. */
+ *  Defensive against unknown slugs (e.g., a stale cookie from a purged theme).
+ *  Falls back to the kit's light default. */
 export function colorSchemeFor(slug: ThemeSlug): "light" | "dark" {
   const entry = THEMES[slug];
-  if (!entry) return "dark"; // unknown / stale slug — safe default (ghxstship is dark)
+  if (!entry) return "light";
   return entry.family;
 }

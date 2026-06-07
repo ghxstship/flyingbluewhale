@@ -126,7 +126,7 @@ export default async function Page() {
                 <li key={e.id} className="flex items-center justify-between text-sm">
                   <div>
                     <span className="font-medium">{toTitle(e.kind)}</span>{" "}
-                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">
                       {t("console.safety.medical.sincePrefix", undefined, "since")} {fmt(e.started_at)}
                     </span>
                   </div>
@@ -145,7 +145,7 @@ export default async function Page() {
                 <div className="text-sm font-medium">
                   {t(`console.safety.medical.tiles.${tile.href}.label`, undefined, tile.label)}
                 </div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(`console.safety.medical.tiles.${tile.href}.description`, undefined, tile.description)}
                 </div>
               </Link>

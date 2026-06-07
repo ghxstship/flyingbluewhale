@@ -68,14 +68,14 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             defaultValue={talent.tagline ?? ""}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.talent.edit.bio", undefined, "Bio")}
             </label>
             <textarea
               name="bio"
               rows={6}
               maxLength={8000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               defaultValue={talent.bio ?? ""}
             />
           </div>

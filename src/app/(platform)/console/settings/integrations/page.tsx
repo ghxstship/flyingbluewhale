@@ -67,24 +67,24 @@ export default async function IntegrationsPage() {
                     </Badge>
                   )}
                 </div>
-                <p className="mt-2 text-xs text-[var(--text-muted)]">{c.desc}</p>
+                <p className="mt-2 text-xs text-[var(--p-text-2)]">{c.desc}</p>
                 <div className="mt-4 flex gap-2">
                   {isInstalled && dbStatus ? (
                     <form action={uninstallConnector}>
                       <input type="hidden" name="connector" value={c.id} />
-                      <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                      <button type="submit" className="text-xs text-[var(--p-danger)] hover:underline">
                         {t("console.settings.integrations.disconnect", undefined, "Disconnect")}
                       </button>
                     </form>
                   ) : !envProof[c.id] ? (
                     <form action={installConnector}>
                       <input type="hidden" name="connector" value={c.id} />
-                      <button type="submit" className="text-xs font-medium text-[var(--org-primary)] hover:underline">
+                      <button type="submit" className="text-xs font-medium text-[var(--p-accent)] hover:underline">
                         {t("console.settings.integrations.connect", undefined, "Connect")}
                       </button>
                     </form>
                   ) : (
-                    <span className="text-xs text-[var(--text-muted)]">
+                    <span className="text-xs text-[var(--p-text-2)]">
                       {t("console.settings.integrations.viaEnv", undefined, "via env")}
                     </span>
                   )}

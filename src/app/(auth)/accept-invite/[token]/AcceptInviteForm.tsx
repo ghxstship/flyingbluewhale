@@ -23,12 +23,12 @@ export function AcceptInviteForm({ token }: { token: string }) {
       title={t("auth.acceptInvite.title", undefined, "Join your team")}
       subtitle={t("auth.acceptInvite.subtitle", undefined, "Accept your invitation to ATLVS Technologies")}
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
+        <Link href="/login" className="text-[var(--p-accent)] underline underline-offset-4">
           {t("auth.acceptInvite.signInInstead", undefined, "Sign in instead")}
         </Link>
       }
     >
-      <p className="text-sm text-[var(--text-secondary)]">
+      <p className="text-sm text-[var(--p-text-2)]">
         {t(
           "auth.acceptInvite.body",
           undefined,

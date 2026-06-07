@@ -58,7 +58,7 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
           {t("marketing.pages.demo-persona.hero.eyebrowPrefix")} {p.buyer}
         </div>
         <h1 className="hed-2xl mt-4">{p.hero}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{p.subhero}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{p.subhero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={`${CANONICAL_CTAS.primary.href}?from=demo-${p.slug}`}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={`${CANONICAL_CTAS.secondary.href}?from=demo-${p.slug}`} variant="secondary">
@@ -72,7 +72,7 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
         <ul className="mt-6 space-y-3 text-sm">
           {p.outcomes.map((o) => (
             <li key={o} className="flex items-start gap-2">
-              <span className="status-dot status-dot-success mt-2" />
+              <span className="ps-dot ps-dot ps-dot--ok mt-2" />
               <span>{o}</span>
             </li>
           ))}
@@ -92,7 +92,7 @@ export default async function DemoSplinter({ params }: { params: Promise<{ perso
                 className="surface hover-lift group flex items-center justify-between p-4 text-sm"
               >
                 <span className="font-medium">{m.name}</span>
-                <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+                <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
               </Link>
             ))}
         </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
+import { Wordmark } from "@/components/brand/Wordmark";
 import { requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -50,7 +51,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
       ],
     },
   ];
-  const brandName = tenant.branding.productName ?? tenant.orgName ?? "A T L V S";
+  const brandName = tenant.branding.productName ?? tenant.orgName ?? "ATLVS";
   const brandAria = tenant.branding.productName ?? tenant.orgName ?? "ATLVS Technologies";
   const isDefaultBrand = !tenant.branding.productName && !tenant.orgName;
   return (
@@ -58,15 +59,15 @@ export default async function PersonalLayout({ children }: { children: React.Rea
       {/*
        * Theme lock — per v2 GHXSTSHIP handoff: /me is a per-user SaaS
        * surface, so it paints with the neutral atlvs-product skin (not
-       * cosmic ghxstship). No data-platform here — /me is product-agnostic
+       * legacy cosmic skin). No data-platform here — /me is product-agnostic
        * so the theme's default accent (atlvs pink) is correct.
        */}
-      <div data-theme="atlvs-product" className="page-shell">
+      <div data-ui="saas" data-theme="atlvs-product" data-product="atlvs" className="page-shell">
         <div className="mx-auto max-w-5xl px-6 pt-5">
           <div className="flex items-center justify-between">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sm font-semibold tracking-tight text-[var(--foreground)]"
+              className="inline-flex items-end gap-2 text-sm font-semibold tracking-tight text-[var(--p-text-1)]"
               aria-label={brandAria}
             >
               {tenant.branding.logoUrl ? (
@@ -74,29 +75,29 @@ export default async function PersonalLayout({ children }: { children: React.Rea
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={tenant.branding.logoUrl} alt="" className="h-5 w-auto" />
               ) : isDefaultBrand ? (
-                // Default ATLVS — pair the Waypoint mark with the spaced
-                // wordmark per ui_kits/atlvs/logo-kit.html "Primary Lockup".
-                // Only renders when neither tenant.productName nor orgName
-                // overrides; org-named tenants keep the text-only treatment.
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src="/brand/atlvs-mark.svg" alt="" width={18} height={18} aria-hidden="true" />
+                <img src="/brand/atlvs-mark.svg" alt="" width={20} height={20} aria-hidden="true" />
               ) : null}
-              <span className={isDefaultBrand ? "tracking-[0.14em] uppercase" : ""}>{brandName}</span>
+              {isDefaultBrand ? (
+                <Wordmark word={brandName} style={{ fontSize: 14, fontWeight: 500 }} />
+              ) : (
+                <span>{brandName}</span>
+              )}
             </Link>
             <ThemeToggle />
           </div>
           {/* ADR-0010 three-area nav: section labels render as quiet
               eyebrows over each tab group; tabs themselves keep the
               same `.nav-item` chrome the flat list used. */}
-          <nav className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-[var(--border-color)] pb-2">
+          <nav className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-[var(--p-border)] pb-2">
             {tabGroups.map((group, i) => (
               <div key={group.label} className="flex flex-wrap items-center gap-1">
                 {i > 0 ? (
-                  <span aria-hidden="true" className="text-[var(--text-muted)]">
+                  <span aria-hidden="true" className="text-[var(--p-text-2)]">
                     ·
                   </span>
                 ) : null}
-                <span className="me-0.5 text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                <span className="me-0.5 text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
                   {group.label}
                 </span>
                 {group.tabs.map((tab) => (

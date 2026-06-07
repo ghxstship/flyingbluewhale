@@ -69,18 +69,18 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
       <article className="mx-auto max-w-3xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.guides.detail.eyebrow")}</div>
         <h1 className="hed-xl mt-4">{g.title}</h1>
-        <div className="mt-3 font-mono text-xs text-[var(--text-muted)]">{g.readingTime}</div>
-        <p className="mt-6 text-lg text-[var(--text-secondary)]">{g.hero}</p>
+        <div className="mt-3 font-mono text-xs text-[var(--p-text-2)]">{g.readingTime}</div>
+        <p className="mt-6 text-lg text-[var(--p-text-2)]">{g.hero}</p>
 
         <div className="surface mt-8 p-6">
           <div className="eyebrow">{t("marketing.pages.guides.detail.tldrLabel")}</div>
           <div className="mt-2 text-sm">{g.tldr}</div>
         </div>
 
-        <div className="mt-12 space-y-10 text-[15px] leading-7 text-[var(--text-secondary)]">
+        <div className="mt-12 space-y-10 text-[15px] leading-7 text-[var(--p-text-2)]">
           {g.sections.map((s, i) => (
             <section key={i}>
-              <h2 className="hed-lg mt-10 text-[var(--text-primary)]">{s.heading}</h2>
+              <h2 className="hed-lg mt-10 text-[var(--p-text-1)]">{s.heading}</h2>
               {s.body.map((p, j) =>
                 p === "" ? (
                   <div key={j} className="h-2" />
@@ -101,11 +101,11 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
           ))}
         </div>
 
-        <div className="mt-12 flex flex-wrap gap-1.5 border-t border-[var(--border)] pt-6">
+        <div className="mt-12 flex flex-wrap gap-1.5 border-t border-[var(--p-border)] pt-6">
           {g.keywords.map((k) => (
             <span
               key={k}
-              className="rounded-full bg-[var(--surface-inset)] px-2.5 py-1 text-[11px] text-[var(--text-muted)]"
+              className="rounded-full bg-[var(--p-surface-2)] px-2.5 py-1 text-[11px] text-[var(--p-text-2)]"
             >
               {k}
             </span>
@@ -121,7 +121,7 @@ export default async function GuideDetail({ params }: { params: Promise<{ slug: 
           {MARKETING_GUIDE_LIST.filter((x) => x.slug !== g.slug).map((x) => (
             <Link key={x.slug} href={`/guides/${x.slug}`} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{x.title}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{x.blurb}</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">{x.blurb}</div>
             </Link>
           ))}
         </div>

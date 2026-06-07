@@ -41,7 +41,7 @@ export default async function AccountingPeriodDetailPage({ params }: { params: P
             <Badge variant="default" className="text-base">
               {period.state}
             </Badge>
-            <span className="text-sm text-[var(--text-secondary)]">
+            <span className="text-sm text-[var(--p-text-2)]">
               {t(
                 "console.finance.periods.detail.allowedNext",
                 { next: allowedNext.length === 0 ? "—" : allowedNext.join(", ") },
@@ -51,7 +51,7 @@ export default async function AccountingPeriodDetailPage({ params }: { params: P
           </div>
           <AccountingPeriodStateControls periodId={period.id} currentState={period.state} allowedNext={allowedNext} />
           {period.state === "CLOSED" || period.state === "AUDITED" ? (
-            <p className="text-xs text-[var(--text-secondary)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               <strong>{t("console.finance.periods.detail.frozenLabel", undefined, "Period frozen.")}</strong>{" "}
               {t(
                 "console.finance.periods.detail.frozenBody",
@@ -76,18 +76,18 @@ export default async function AccountingPeriodDetailPage({ params }: { params: P
             </Link>
           </div>
           {transitions.length === 0 ? (
-            <p className="text-sm text-[var(--text-secondary)]">
+            <p className="text-sm text-[var(--p-text-2)]">
               {t("console.finance.periods.detail.noTransitions", undefined, "No transitions logged yet.")}
             </p>
           ) : (
             <ul className="space-y-2 text-sm">
               {transitions.slice(0, 8).map((row) => (
-                <li key={row.id} className="border-b border-[var(--border-color)] pb-2 last:border-0">
+                <li key={row.id} className="border-b border-[var(--p-border)] pb-2 last:border-0">
                   <span className="font-mono text-xs">
                     {row.from_state ?? t("console.finance.periods.detail.initialState", undefined, "(initial)")} →{" "}
                     <strong>{row.to_state}</strong>
                   </span>{" "}
-                  · <span className="text-[var(--text-secondary)]">{timeAgo(row.transitioned_at)}</span>
+                  · <span className="text-[var(--p-text-2)]">{timeAgo(row.transitioned_at)}</span>
                   {row.reason ? <span className="ms-2">{row.reason}</span> : null}
                 </li>
               ))}

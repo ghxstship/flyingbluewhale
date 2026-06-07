@@ -50,14 +50,14 @@ export default async function Page({ params }: { params: Promise<{ ceremonyId: s
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.ceremonies.edit.fields.description", undefined, "Description")}
             </span>
             <textarea
               name="description"
               defaultValue={row.description ?? ""}
               rows={5}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input
@@ -75,10 +75,10 @@ export default async function Page({ params }: { params: Promise<{ ceremonyId: s
             required
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.ceremonies.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="draft">{t("console.programs.ceremonies.edit.status.draft", undefined, "draft")}</option>
               <option value="scheduled">
                 {t("console.programs.ceremonies.edit.status.scheduled", undefined, "scheduled")}

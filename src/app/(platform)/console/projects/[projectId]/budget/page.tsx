@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               "Create a budget from the Finance module.",
             )}
             action={
-              <Link className="text-sm text-[var(--org-primary)]" href="/console/finance/budgets/new">
+              <Link className="text-sm text-[var(--p-accent)]" href="/console/finance/budgets/new">
                 {t("console.projects.budget.empty.action", undefined, "New budget →")}
               </Link>
             }
@@ -77,16 +77,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   <div>
                     <div className="text-sm font-medium">{b.name}</div>
                     {b.category && (
-                      <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                        {b.category}
-                      </div>
+                      <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{b.category}</div>
                     )}
                   </div>
                   <div className="text-right text-xs">
                     <div className="font-mono">
                       {money(b.spent_cents)} / {money(b.amount_cents)}
                     </div>
-                    <div className="text-[var(--text-muted)]">{pct}%</div>
+                    <div className="text-[var(--p-text-2)]">{pct}%</div>
                   </div>
                 </div>
                 <div className="mt-2">

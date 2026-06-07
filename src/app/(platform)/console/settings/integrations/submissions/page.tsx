@@ -115,8 +115,8 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         {!serviceRoleAvailable ? (
-          <div className="surface border-s-4 border-s-amber-500 p-4 text-xs text-[var(--text-secondary)]">
-            <strong className="text-[var(--text-primary)]">
+          <div className="surface border-s-4 border-s-amber-500 p-4 text-xs text-[var(--p-text-2)]">
+            <strong className="text-[var(--p-text-1)]">
               {t("console.settings.integrations.submissions.limitedView", undefined, "Limited view:")}
             </strong>{" "}
             <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code>{" "}
@@ -189,7 +189,7 @@ export default async function Page() {
                     {t("console.settings.integrations.submissions.liveBadge", undefined, "Live")}
                   </Badge>
                 ) : (
-                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                  <span className="text-xs text-[var(--p-text-2)]">—</span>
                 ),
             },
             {
@@ -204,7 +204,7 @@ export default async function Page() {
             },
           ]}
         />
-        <p className="text-xs text-[var(--text-secondary)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t("console.settings.integrations.submissions.publicDirectoryLabel", undefined, "Public partner directory:")}{" "}
           <Link href="/integrations/partners" className="underline">
             /integrations/partners

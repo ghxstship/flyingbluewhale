@@ -98,7 +98,7 @@ export default async function RecognitionAdminPage() {
             {t("console.workforce.recognition.leaderboardTitle", undefined, "90-Day Leaderboard")}
           </h2>
           {top.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.workforce.recognition.leaderboardEmpty", undefined, "No kudos in the last 90 days.")}
             </p>
           ) : (
@@ -106,7 +106,7 @@ export default async function RecognitionAdminPage() {
               {top.map(([uid, count], idx) => (
                 <li key={uid} className="flex items-center justify-between text-sm">
                   <span>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">#{idx + 1}</span>{" "}
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">#{idx + 1}</span>{" "}
                     {userMap.get(uid) ?? t("console.workforce.recognition.unknownUser", undefined, "Unknown")}
                   </span>
                   <span className="font-mono text-xs">{count}</span>
@@ -127,11 +127,11 @@ export default async function RecognitionAdminPage() {
                   <span className="font-semibold">
                     {userMap.get(p.from_user_id) ?? t("console.workforce.recognition.someone", undefined, "Someone")}
                   </span>
-                  <span className="text-[var(--text-muted)]"> → </span>
+                  <span className="text-[var(--p-text-2)]"> → </span>
                   <span className="font-semibold">
                     {userMap.get(p.to_user_id) ?? t("console.workforce.recognition.someone", undefined, "Someone")}
                   </span>
-                  <span className="ms-2 font-mono text-[var(--text-muted)]">{fmt.time(p.created_at)}</span>
+                  <span className="ms-2 font-mono text-[var(--p-text-2)]">{fmt.time(p.created_at)}</span>
                 </div>
                 <p className="mt-1 text-xs">{p.message}</p>
                 {p.value_tag && (

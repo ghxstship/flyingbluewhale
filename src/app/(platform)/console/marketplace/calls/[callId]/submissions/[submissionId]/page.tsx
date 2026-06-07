@@ -68,18 +68,18 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           </h2>
           <dl className="space-y-1 text-sm">
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.userLabel", undefined, "User:")}
               </span>{" "}
               <span className="font-mono">{s.submitter_user_id.slice(0, 8)}</span>
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.talentProfileLabel", undefined, "Talent profile:")}
               </span>{" "}
               {s.talent_profile_id ? (
                 <a
-                  className="font-mono text-[var(--org-primary)]"
+                  className="font-mono text-[var(--p-accent)]"
                   href={`/console/marketplace/talent/${s.talent_profile_id}`}
                 >
                   ↗
@@ -89,14 +89,14 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               )}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.proposedFeeLabel", undefined, "Proposed fee:")}
               </span>{" "}
               {s.fee_proposed_cents ? formatMoney(s.fee_proposed_cents) : "—"}
             </div>
             {s.score != null && (
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {t("console.marketplace.calls.submissions.detail.scoreLabel", undefined, "Score:")}
                 </span>{" "}
                 <span className="font-mono">{s.score}</span>
@@ -124,10 +124,10 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           >
             <input type="hidden" name="submission_id" value={s.id} />
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.statusLabel", undefined, "Status")}
               </label>
-              <select name="status" className="input-base mt-1.5 w-full" defaultValue={s.status}>
+              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={s.status}>
                 {SUBMISSION_STATUSES.map((st) => (
                   <option key={st} value={st}>
                     {st}
@@ -144,14 +144,14 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               defaultValue={s.score ?? ""}
             />
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.internalNotes", undefined, "Internal Notes")}
               </label>
               <textarea
                 name="internal_notes"
                 rows={4}
                 maxLength={4000}
-                className="input-base mt-1.5 w-full"
+                className="ps-input mt-1.5 w-full"
                 defaultValue={s.internal_notes ?? ""}
               />
             </div>

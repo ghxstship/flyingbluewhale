@@ -25,7 +25,7 @@ export default async function Page() {
             maxLength={300}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.polls.new.optionsLabel", undefined, "Options — One per Line, Max 8")}
             </label>
             <textarea
@@ -33,14 +33,14 @@ export default async function Page() {
               rows={6}
               required
               placeholder={t("console.comms.polls.new.optionsPlaceholder", undefined, "Yes\nNo\nUnsure")}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.polls.new.audienceLabel", undefined, "Audience")}
             </label>
-            <select name="audience" className="input-base mt-1.5 w-full" defaultValue="all">
+            <select name="audience" className="ps-input mt-1.5 w-full" defaultValue="all">
               <option value="all">{t("console.comms.polls.new.audienceAll", undefined, "All")}</option>
               <option value="crew">{t("console.comms.polls.new.audienceCrew", undefined, "Crew")}</option>
               <option value="contractors">

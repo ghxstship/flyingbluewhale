@@ -121,7 +121,7 @@ export default async function Page() {
             {t("console.assistant.corpusSnapshot", undefined, "Corpus snapshot")}
           </h2>
           {corpusRows.length === 0 ? (
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.assistant.emptyCorpus",
                 undefined,

@@ -107,7 +107,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
             <div className="flex flex-wrap items-center gap-1.5">
               <Link
                 href="/console/knowledge"
-                className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-xs"
+                className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-xs"
               >
                 {t("console.knowledge.filterAll", undefined, "All")}
               </Link>
@@ -115,8 +115,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                 <Link
                   key={tag}
                   href={`/console/knowledge?tag=${encodeURIComponent(tag)}`}
-                  className={`hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-xs ${
-                    sp.tag === tag ? "bg-[var(--surface-inset)] font-semibold" : ""
+                  className={`hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-xs ${
+                    sp.tag === tag ? "bg-[var(--p-surface-2)] font-semibold" : ""
                   }`}
                 >
                   {tag}
@@ -152,12 +152,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
             {rows.map((a) => (
               <li key={a.id} className="surface hover-lift p-4">
                 <Link href={`/console/knowledge/${a.slug}`} className="block">
-                  <div className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+                  <div className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
                     /{a.slug} · v{a.version}
                   </div>
                   <h3 className="mt-1 text-base font-semibold">{a.title}</h3>
-                  <p className="mt-2 line-clamp-3 text-xs text-[var(--text-secondary)]">{preview(a.body_markdown)}</p>
-                  <div className="mt-3 flex items-center justify-between text-[10px] text-[var(--text-muted)]">
+                  <p className="mt-2 line-clamp-3 text-xs text-[var(--p-text-2)]">{preview(a.body_markdown)}</p>
+                  <div className="mt-3 flex items-center justify-between text-[10px] text-[var(--p-text-2)]">
                     <div className="flex flex-wrap gap-1">
                       {(a.tags ?? []).slice(0, 4).map((tag) => (
                         <Badge key={tag} variant="muted">

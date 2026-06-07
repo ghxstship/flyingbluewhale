@@ -129,7 +129,7 @@ export default async function HelpPage() {
         <div className="mt-6 max-w-3xl">
           <div className="eyebrow eyebrow-brand">{t("marketing.pages.help.hero.eyebrow")}</div>
           <h1 className="hed-2xl mt-4">{t("marketing.pages.help.hero.title")}</h1>
-          <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-[var(--p-text-2)] sm:text-lg">
             {t("marketing.pages.help.hero.subtitle")}
           </p>
         </div>
@@ -141,13 +141,13 @@ export default async function HelpPage() {
           {CHANNELS.map(({ icon: Icon, title, body, cta, href }) => (
             <Link key={title} href={href} className="surface hover-lift block p-6">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--p-accent)]/10 text-[var(--p-accent)]">
                   <Icon size={18} />
                 </div>
                 <h3 className="text-lg font-semibold">{title}</h3>
               </div>
-              <p className="mt-3 text-sm text-[var(--text-secondary)]">{body}</p>
-              <div className="mt-4 text-xs font-semibold text-[var(--org-primary)]">{cta} →</div>
+              <p className="mt-3 text-sm text-[var(--p-text-2)]">{body}</p>
+              <div className="mt-4 text-xs font-semibold text-[var(--p-accent)]">{cta} →</div>
             </Link>
           ))}
         </div>
@@ -159,10 +159,10 @@ export default async function HelpPage() {
           {TROUBLESHOOTING.map(({ icon: Icon, title, body }) => (
             <div key={title} className="surface p-6">
               <div className="flex items-center gap-3">
-                <Icon size={18} className="text-[var(--org-primary)]" />
+                <Icon size={18} className="text-[var(--p-accent)]" />
                 <h3 className="text-base font-semibold">{title}</h3>
               </div>
-              <p className="mt-3 text-sm text-[var(--text-secondary)]">{body}</p>
+              <p className="mt-3 text-sm text-[var(--p-text-2)]">{body}</p>
             </div>
           ))}
         </div>

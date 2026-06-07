@@ -37,7 +37,7 @@ export default async function MobilePunchPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -62,11 +62,11 @@ export default async function MobilePunchPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.punch.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.punch.title", undefined, "Punch List")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.punch.noOpenItems", undefined, "No open items assigned to you.")
           : overdueCount
@@ -90,7 +90,7 @@ export default async function MobilePunchPage() {
                 "Open items assigned to you appear here. Visit Tasks on desktop to assign new ones.",
               )}
               action={
-                <Link href="/console/tasks" className="btn btn-secondary btn-sm">
+                <Link href="/console/tasks" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("m.punch.empty.action", undefined, "Open Tasks")}
                 </Link>
               }
@@ -105,7 +105,7 @@ export default async function MobilePunchPage() {
                   <div className="min-w-0 flex-1">
                     <div className="text-sm leading-snug font-semibold">{r.title}</div>
                     {r.description && (
-                      <p className="mt-1 line-clamp-2 text-xs text-[var(--text-secondary)]">{r.description}</p>
+                      <p className="mt-1 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.description}</p>
                     )}
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>

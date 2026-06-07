@@ -127,7 +127,7 @@ export default async function Page() {
                     "Author crisis-tagged playbooks (evac, weather hold, IT outage) — they appear here.",
                   )}
                   action={
-                    <Link href="/console/safety/playbooks/new" className="btn btn-secondary btn-sm">
+                    <Link href="/console/safety/playbooks/new" className="ps-btn ps-btn--ghost ps-btn--sm">
                       {t("console.safety.bcdr.newRunbook", undefined, "+ New Runbook")}
                     </Link>
                   }
@@ -139,11 +139,11 @@ export default async function Page() {
                   <div>
                     <Link
                       href={`/console/safety/playbooks/${p.slug}`}
-                      className="text-sm font-medium hover:text-[var(--org-primary)]"
+                      className="text-sm font-medium hover:text-[var(--p-accent)]"
                     >
                       {p.title}
                     </Link>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">v{p.version}</div>
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">v{p.version}</div>
                   </div>
                   <Badge variant={p.status === "published" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
                 </li>
@@ -168,7 +168,7 @@ export default async function Page() {
                     "TTX, drills, full-scale exercises live in Programs → Readiness.",
                   )}
                   action={
-                    <Link href="/console/programs/readiness" className="btn btn-secondary btn-sm">
+                    <Link href="/console/programs/readiness" className="ps-btn ps-btn--ghost ps-btn--sm">
                       {t("console.safety.bcdr.openReadiness", undefined, "Open Readiness")}
                     </Link>
                   }
@@ -179,7 +179,7 @@ export default async function Page() {
                 <li key={e.id} className="surface flex items-center justify-between p-3">
                   <div>
                     <div className="text-sm font-medium">{e.name}</div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(e.scheduled_at)}</div>
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">{fmtDate(e.scheduled_at)}</div>
                   </div>
                   <Badge variant={KIND_TONE[e.kind] ?? "muted"}>{toTitle(e.kind)}</Badge>
                 </li>

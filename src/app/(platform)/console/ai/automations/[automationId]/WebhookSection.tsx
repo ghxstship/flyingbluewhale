@@ -36,7 +36,7 @@ export function WebhookSection({
       <h3 className="text-sm font-semibold">
         {t("console.ai.automations.webhook.title", undefined, "Inbound Webhook")}
       </h3>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "console.ai.automations.webhook.descriptionPrefix",
           undefined,
@@ -46,14 +46,14 @@ export function WebhookSection({
       </p>
 
       <div className="mt-3 space-y-2">
-        <label className="block text-xs font-medium text-[var(--text-secondary)]">
+        <label className="block text-xs font-medium text-[var(--p-text-2)]">
           {t("console.ai.automations.webhook.urlLabel", undefined, "Webhook URL")}
         </label>
-        <code className="block rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs break-all">{webhookUrl}</code>
+        <code className="block rounded bg-[var(--p-surface)] p-3 font-mono text-xs break-all">{webhookUrl}</code>
       </div>
 
       <div className="mt-3 flex items-center gap-3">
-        <span className="text-xs text-[var(--text-muted)]">
+        <span className="text-xs text-[var(--p-text-2)]">
           {hasSecret
             ? t("console.ai.automations.webhook.secretConfigured", undefined, "Secret configured")
             : t(

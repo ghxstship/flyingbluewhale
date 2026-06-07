@@ -63,7 +63,7 @@ export default async function GlossaryIndex() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.glossary.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.glossary.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.glossary.hero.body")}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.glossary.hero.body")}</p>
       </section>
 
       {GLOSSARY_CATEGORIES.filter((cat) => byCategory.has(cat.slug)).map((cat) => (
@@ -73,7 +73,7 @@ export default async function GlossaryIndex() {
             {(byCategory.get(cat.slug) ?? []).map((t) => (
               <Link key={t.slug} href={`/glossary/${t.slug}`} className="surface hover-lift p-4">
                 <div className="text-sm font-semibold">{t.term}</div>
-                <p className="mt-1 text-xs text-[var(--text-secondary)]">{t.short}</p>
+                <p className="mt-1 text-xs text-[var(--p-text-2)]">{t.short}</p>
               </Link>
             ))}
           </div>

@@ -34,9 +34,9 @@ export function MapMarker({ tone, count, title, active }: MapMarkerProps): React
         title={title}
         style={{
           background: color,
-          color: "var(--background)",
-          border: "2px solid var(--background)",
-          boxShadow: "var(--shadow-1, 0 1px 2px rgba(0,0,0,0.2))",
+          color: "var(--p-bg)",
+          border: "2px solid var(--p-bg)",
+          boxShadow: "var(--p-elev-1, 0 1px 2px rgba(0,0,0,0.2))",
           width: 32,
           height: 32,
           borderRadius: "50%",
@@ -62,8 +62,8 @@ export function MapMarker({ tone, count, title, active }: MapMarkerProps): React
       title={title}
       style={{
         background: color,
-        border: "2px solid var(--background)",
-        boxShadow: "var(--shadow-1, 0 1px 2px rgba(0,0,0,0.2))",
+        border: "2px solid var(--p-bg)",
+        boxShadow: "var(--p-elev-1, 0 1px 2px rgba(0,0,0,0.2))",
         width: 14,
         height: 14,
         borderRadius: "50%",

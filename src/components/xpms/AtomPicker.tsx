@@ -45,15 +45,15 @@ export function AtomPicker({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {label}
-          {!required && <span className="ms-1 text-[var(--text-muted)]">(optional)</span>}
+          {!required && <span className="ms-1 text-[var(--p-text-2)]">(optional)</span>}
         </label>
-        <Link href={catalogHref} className="text-xs text-[var(--org-primary)] hover:underline">
+        <Link href={catalogHref} className="text-xs text-[var(--p-accent)] hover:underline">
           + New atom
         </Link>
       </div>
-      <select name={name} defaultValue={defaultValue ?? ""} required={required} className="input-base mt-1.5 w-full">
+      <select name={name} defaultValue={defaultValue ?? ""} required={required} className="ps-input mt-1.5 w-full">
         {!required && <option value="">— Unpinned —</option>}
         {sorted.map((a) => (
           <option key={a.id} value={a.id}>
@@ -62,7 +62,7 @@ export function AtomPicker({
           </option>
         ))}
       </select>
-      {hint && <p className="mt-1 text-xs text-[var(--text-muted)]">{hint}</p>}
+      {hint && <p className="mt-1 text-xs text-[var(--p-text-2)]">{hint}</p>}
     </div>
   );
 }

@@ -8,8 +8,8 @@ import { X } from "lucide-react";
  * brand-soft · muted (mirrors tokens.json#semantic + brand neutrals).
  *
  * Kit-extension aliases (house additions, kept for call-site readability):
- *   - `cyan`   → aliased to `info`  (paints with --color-info / brand soft)
- *   - `purple` → aliased to `brand` (paints with --org-primary)
+ *   - `cyan`   → aliased to `info`  (paints with --p-info / brand soft)
+ *   - `purple` → aliased to `brand` (paints with --p-accent)
  * Both share the same paint tokens as the underlying kit variant — they
  * exist for vocabulary fit, not new colors. No call site should pass a
  * raw hex/Tailwind palette for either; if you need a new color, add it
@@ -46,18 +46,18 @@ const VARIANT: Record<BadgeVariant, string> = {
 // Off-token bg-emerald-500 / bg-amber-500 produced #10b981 / #f59e0b for
 // the dot while the pill variant painted the kit-canonical #2fbf71 /
 // #e9a23b via `badge-success` / `badge-warning`. Both shapes now bind
-// to --color-success / --color-warning so they paint identically.
+// to --p-success / --p-warning so they paint identically.
 const DOT_BG: Record<BadgeVariant, string> = {
-  default: "bg-[var(--text-muted)]",
-  success: "bg-[var(--color-success)]",
-  warning: "bg-[var(--color-warning)]",
-  error: "bg-[var(--color-error)]",
-  info: "bg-[var(--color-info)]",
-  brand: "bg-[var(--org-primary)]",
-  "brand-soft": "bg-[var(--org-primary)]",
-  muted: "bg-[var(--text-muted)]",
-  cyan: "bg-[var(--color-info)]",
-  purple: "bg-[var(--org-primary)]",
+  default: "bg-[var(--p-text-2)]",
+  success: "bg-[var(--p-success)]",
+  warning: "bg-[var(--p-warning)]",
+  error: "bg-[var(--p-danger)]",
+  info: "bg-[var(--p-info)]",
+  brand: "bg-[var(--p-accent)]",
+  "brand-soft": "bg-[var(--p-accent)]",
+  muted: "bg-[var(--p-text-2)]",
+  cyan: "bg-[var(--p-info)]",
+  purple: "bg-[var(--p-accent)]",
 };
 
 interface BadgeProps {
@@ -84,7 +84,7 @@ export function Badge({
     return (
       <span
         aria-label={ariaLabel ?? (typeof children === "string" ? children : undefined)}
-        className={`inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] ${className}`}
+        className={`inline-flex items-center gap-1.5 text-xs text-[var(--p-text-2)] ${className}`}
       >
         <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT_BG[variant]}`} aria-hidden="true" />
         {children}

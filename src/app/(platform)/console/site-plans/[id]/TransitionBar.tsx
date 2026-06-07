@@ -16,7 +16,7 @@ export function TransitionBar({ sheetId, transitions, labels }: Props) {
   if (transitions.length === 0) {
     return (
       <section className="surface-inset flex items-center justify-between p-3 text-xs">
-        <span className="text-[var(--text-muted)]">
+        <span className="text-[var(--p-text-2)]">
           {t("console.sitePlans.transitionBar.terminal", undefined, "Terminal state — no transitions available.")}
         </span>
       </section>
@@ -24,7 +24,7 @@ export function TransitionBar({ sheetId, transitions, labels }: Props) {
   }
   return (
     <section className="surface-inset flex flex-wrap items-center gap-2 p-3">
-      <span className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+      <span className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
         {t("console.sitePlans.transitionBar.lifecycle", undefined, "Lifecycle")}
       </span>
       {transitions.map((tr) => (
@@ -46,12 +46,12 @@ function TransitionButton({
   const [state, action, pending] = useActionState<State, FormData>(transitionSheet, null);
   const tone =
     transition === "issue"
-      ? "border-[var(--color-success)] text-[var(--color-success)]"
+      ? "border-[var(--p-success)] text-[var(--p-success)]"
       : transition === "approve"
-        ? "border-[var(--color-info)] text-[var(--color-info)]"
+        ? "border-[var(--p-info)] text-[var(--p-info)]"
         : transition === "reject" || transition === "supersede"
-          ? "border-[var(--color-error)] text-[var(--color-error)]"
-          : "border-[var(--border-color)]";
+          ? "border-[var(--p-danger)] text-[var(--p-danger)]"
+          : "border-[var(--p-border)]";
   return (
     <form action={action} className="contents">
       <input type="hidden" name="sheet_id" value={sheetId} />
@@ -64,7 +64,7 @@ function TransitionButton({
         {pending ? "…" : label}
       </button>
       {state?.error && (
-        <span className="text-[11px] text-[var(--color-error)]" role="alert">
+        <span className="text-[11px] text-[var(--p-danger)]" role="alert">
           {state.error}
         </span>
       )}

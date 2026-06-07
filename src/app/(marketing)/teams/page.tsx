@@ -43,7 +43,7 @@ export default async function TeamsHub() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.teams.hero.eyebrow")}</div>
         <h1 className="hed-3xl mt-4">{t("marketing.pages.teams.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.teams.hero.body")}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.teams.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
@@ -52,8 +52,8 @@ export default async function TeamsHub() {
             <Link key={team.slug} href={`/teams/${team.slug}`} className="surface hover-lift p-6">
               <div className="eyebrow eyebrow-brand">{team.hero.eyebrow}</div>
               <h3 className="hed-lg mt-3">{team.role}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{team.blurb}</p>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{team.blurb}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("marketing.pages.teams.cards.cta")} <ArrowRight size={12} />
               </div>
             </Link>

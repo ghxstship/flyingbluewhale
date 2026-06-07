@@ -47,19 +47,19 @@ export default async function ProposalPortalLayout({
           )}
         />
         <div className="px-6 pt-2">
-          <nav className="flex flex-wrap gap-1 border-b border-[var(--border-color)]">
+          <nav className="flex flex-wrap gap-1 border-b border-[var(--p-border)]">
             {SUBNAV.map((item) => (
               <Link
                 key={item.href}
                 href={`${base}${item.href}`}
-                className="nav-item rounded-t px-3 py-2 text-sm hover:bg-[var(--surface-inset)]"
+                className="nav-item rounded-t px-3 py-2 text-sm hover:bg-[var(--p-surface-2)]"
               >
                 {item.label}
               </Link>
             ))}
             <Link
               href={`/p/${slug}/client/proposals`}
-              className="nav-item ms-auto rounded-t px-3 py-2 text-xs text-[var(--text-muted)] hover:bg-[var(--surface-inset)]"
+              className="nav-item ms-auto rounded-t px-3 py-2 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)]"
             >
               {t("p.client.proposals.layout.allProposals", undefined, "← All proposals")}
             </Link>

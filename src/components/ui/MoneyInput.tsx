@@ -53,10 +53,10 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
   return (
     <label htmlFor={id} className="flex flex-col gap-1.5">
       {label && (
-        <span className="text-xs font-medium text-[var(--text-secondary)]">
+        <span className="text-xs font-medium text-[var(--p-text-2)]">
           {label}
           {required && (
-            <span aria-hidden="true" className="text-[var(--color-danger)]">
+            <span aria-hidden="true" className="text-[var(--p-danger)]">
               {" "}
               *
             </span>
@@ -66,7 +66,7 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
       <div className="relative">
         <span
           aria-hidden="true"
-          className="absolute inset-y-0 start-0 flex items-center ps-3 text-sm text-[var(--text-muted)]"
+          className="absolute inset-y-0 start-0 flex items-center ps-3 text-sm text-[var(--p-text-2)]"
         >
           $
         </span>
@@ -80,11 +80,11 @@ export function MoneyInput({ name, defaultCents, label, hint, required, ...rest 
           onChange={(e) => onInput(e.target.value)}
           onBlur={onBlur}
           required={required}
-          className="input-base focus-ring w-full ps-7 font-mono text-sm"
+          className="ps-input focus-ring w-full ps-7 font-mono text-sm"
           placeholder="0.00"
         />
       </div>
-      {hint && <span className="text-[10px] text-[var(--text-muted)]">{hint}</span>}
+      {hint && <span className="text-[10px] text-[var(--p-text-2)]">{hint}</span>}
       {/* Hidden field carries the canonical cents integer to server actions. */}
       <input type="hidden" name={name} value={cents} />
     </label>

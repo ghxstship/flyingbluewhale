@@ -20,7 +20,7 @@ export default async function MyTicketsPage() {
     return (
       <div>
         <h1 className="text-2xl font-semibold">{t("me.tickets.title", undefined, "My Tickets")}</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.tickets.configureSupabase", undefined, "Configure Supabase.")}
         </p>
       </div>
@@ -61,7 +61,7 @@ export default async function MyTicketsPage() {
   return (
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">{t("me.tickets.title", undefined, "My Tickets")}</h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t("me.tickets.subtitle", { email: session.email }, `Tickets issued to ${session.email}`)}
       </p>
       <div className="mt-6">

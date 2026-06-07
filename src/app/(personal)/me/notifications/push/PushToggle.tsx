@@ -229,7 +229,7 @@ export function PushToggle({
             <h2 className="text-base font-semibold">
               {t("me.notifications.push.thisBrowser.title", undefined, "This Browser")}
             </h2>
-            <p className="mt-1 text-sm text-[var(--text-muted)]">
+            <p className="mt-1 text-sm text-[var(--p-text-2)]">
               {t("me.notifications.push.thisBrowser.permissionLabel", undefined, "Permission:")}{" "}
               <Badge variant={permission === "granted" ? "success" : permission === "denied" ? "error" : "muted"}>
                 {permission}
@@ -276,19 +276,19 @@ export function PushToggle({
             )}
           />
         ) : (
-          <ul className="surface divide-y divide-[var(--border-color)]">
+          <ul className="surface divide-y divide-[var(--p-border)]">
             {devices.map((d) => (
               <li key={d.id} className="flex items-start justify-between gap-3 px-4 py-3">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium">{shortUserAgent(d.user_agent, t)}</p>
-                  <p className="mt-1 text-xs text-[var(--text-muted)]">
+                  <p className="mt-1 text-xs text-[var(--p-text-2)]">
                     {t(
                       "me.notifications.push.devices.timestamps",
                       { lastSeen: timeAgo(d.last_seen_at), added: timeAgo(d.created_at) },
                       `Last seen ${timeAgo(d.last_seen_at)} · added ${timeAgo(d.created_at)}`,
                     )}
                   </p>
-                  <p className="mt-1 truncate font-mono text-[10px] text-[var(--text-muted)]">{d.endpoint}</p>
+                  <p className="mt-1 truncate font-mono text-[10px] text-[var(--p-text-2)]">{d.endpoint}</p>
                 </div>
                 <Button
                   variant="ghost"

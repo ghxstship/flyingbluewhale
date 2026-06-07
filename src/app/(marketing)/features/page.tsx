@@ -79,12 +79,12 @@ export default async function FeaturesPage() {
               <Link
                 key={key}
                 href={`/features/${key}`}
-                className="surface hover-lift rounded-lg p-5 focus-visible:ring-2 focus-visible:ring-[var(--accent-solid,var(--org-primary))] focus-visible:ring-offset-2"
+                className="surface hover-lift rounded-lg p-5 focus-visible:ring-2 focus-visible:ring-[var(--p-accent,var(--p-accent))] focus-visible:ring-offset-2"
               >
                 <div className="text-sm font-semibold">
                   {t(`marketing.pages.features.categories.items.${i18nKey}.title`)}
                 </div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(`marketing.pages.features.categories.items.${i18nKey}.desc`)}
                 </div>
               </Link>

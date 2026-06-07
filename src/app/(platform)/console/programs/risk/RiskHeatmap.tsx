@@ -60,7 +60,7 @@ export function RiskHeatmap({
           {likelihood.map((l) => (
             <div
               key={l}
-              className="px-1.5 py-1 text-center text-[10px] font-medium tracking-[0.16em] text-[var(--text-muted)] uppercase"
+              className="px-1.5 py-1 text-center text-[10px] font-medium tracking-[0.16em] text-[var(--p-text-2)] uppercase"
             >
               {pretty(l)}
             </div>
@@ -69,7 +69,7 @@ export function RiskHeatmap({
           {/* Body — impact rows reversed (severe at top) */}
           {[...impact].reverse().map((impactRow) => (
             <React.Fragment key={impactRow}>
-              <div className="flex items-center justify-end pe-2 text-[10px] font-medium tracking-[0.16em] text-[var(--text-muted)] uppercase">
+              <div className="flex items-center justify-end pe-2 text-[10px] font-medium tracking-[0.16em] text-[var(--p-text-2)] uppercase">
                 {pretty(impactRow)}
               </div>
               {likelihood.map((likeCol) => {
@@ -104,32 +104,32 @@ export function RiskHeatmap({
           ))}
         </div>
 
-        <div className="mt-3 flex items-center justify-end gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
+        <div className="mt-3 flex items-center justify-end gap-3 text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
           <Legend
-            tone="bg-[var(--color-success)]"
+            tone="bg-[var(--p-success)]"
             label={t("console.programs.risk.heatmap.legend.low", undefined, "Low")}
           />
           <Legend
-            tone="bg-[var(--color-warning)]"
+            tone="bg-[var(--p-warning)]"
             label={t("console.programs.risk.heatmap.legend.moderate", undefined, "Moderate")}
           />
           <Legend
-            tone="bg-[color-mix(in_srgb,var(--color-warning)_70%,var(--color-error))]"
+            tone="bg-[color-mix(in_srgb,var(--p-warning)_70%,var(--p-danger))]"
             label={t("console.programs.risk.heatmap.legend.high", undefined, "High")}
           />
           <Legend
-            tone="bg-[var(--color-error)]"
+            tone="bg-[var(--p-danger)]"
             label={t("console.programs.risk.heatmap.legend.severe", undefined, "Severe")}
           />
         </div>
 
         {open && (
           <div
-            className="mt-4 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-3"
+            className="mt-4 rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3"
             aria-live="polite"
           >
             <div className="mb-2 flex items-center justify-between">
-              <h4 className="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+              <h4 className="text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
                 {pretty(open.likelihood)} × {pretty(open.impact)} —{" "}
                 {open.risks.length === 1
                   ? t(
@@ -146,7 +146,7 @@ export function RiskHeatmap({
               <button
                 type="button"
                 onClick={() => setOpen(null)}
-                className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
               >
                 {t("common.close", undefined, "Close")}
               </button>
@@ -156,11 +156,11 @@ export function RiskHeatmap({
                 <li key={r.id} className="flex items-center justify-between text-xs">
                   <Link
                     href={`/console/programs/risk/${r.id}`}
-                    className="truncate text-[var(--text-primary)] hover:underline"
+                    className="truncate text-[var(--p-text-1)] hover:underline"
                   >
                     {r.title}
                   </Link>
-                  <span className="ms-2 shrink-0 font-mono text-[var(--text-muted)]">
+                  <span className="ms-2 shrink-0 font-mono text-[var(--p-text-2)]">
                     {r.status} · {t("console.programs.risk.heatmap.score", { score: r.score }, `score ${r.score}`)}
                   </span>
                 </li>
@@ -192,9 +192,9 @@ function pretty(s: string) {
  */
 function riskTone(likelihoodIdx: number, impactIdx: number): string {
   const sum = likelihoodIdx + impactIdx; // 0..8
-  if (sum <= 2) return "bg-[color-mix(in_srgb,var(--color-success)_85%,transparent)] hover:bg-[var(--color-success)]";
-  if (sum <= 4) return "bg-[color-mix(in_srgb,var(--color-warning)_85%,transparent)] hover:bg-[var(--color-warning)]";
+  if (sum <= 2) return "bg-[color-mix(in_srgb,var(--p-success)_85%,transparent)] hover:bg-[var(--p-success)]";
+  if (sum <= 4) return "bg-[color-mix(in_srgb,var(--p-warning)_85%,transparent)] hover:bg-[var(--p-warning)]";
   if (sum <= 6)
-    return "bg-[color-mix(in_srgb,color-mix(in_srgb,var(--color-warning)_70%,var(--color-error))_85%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-warning)_70%,var(--color-error))]";
-  return "bg-[color-mix(in_srgb,var(--color-error)_90%,transparent)] hover:bg-[var(--color-error)]";
+    return "bg-[color-mix(in_srgb,color-mix(in_srgb,var(--p-warning)_70%,var(--p-danger))_85%,transparent)] hover:bg-[color-mix(in_srgb,var(--p-warning)_70%,var(--p-danger))]";
+  return "bg-[color-mix(in_srgb,var(--p-danger)_90%,transparent)] hover:bg-[var(--p-danger)]";
 }

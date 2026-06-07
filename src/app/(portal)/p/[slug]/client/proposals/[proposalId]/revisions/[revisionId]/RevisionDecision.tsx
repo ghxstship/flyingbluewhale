@@ -50,7 +50,7 @@ export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; 
       <input type="hidden" name="proposalId" value={proposalId} />
       <input type="hidden" name="roundId" value={roundId} />
       <input type="hidden" name="decision" value={decision} />
-      <div className="eyebrow text-xs text-[var(--text-muted)]">
+      <div className="eyebrow text-xs text-[var(--p-text-2)]">
         {t("p.client.proposals.revisions.decision.eyebrow", undefined, "Your decision")}
       </div>
       <h3 className="text-base font-semibold">
@@ -82,7 +82,7 @@ export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; 
           undefined,
           "Notes for the team — what's working, what isn't…",
         )}
-        className="input-base w-full"
+        className="ps-input w-full"
       />
 
       {state?.error && <Alert kind="error">{state.error}</Alert>}

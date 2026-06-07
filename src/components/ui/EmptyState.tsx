@@ -31,8 +31,8 @@ export function EmptyState({
   if (size === "compact") {
     return (
       <div className="flex flex-col items-center justify-center gap-1 p-5 text-center">
-        <h3 className="text-sm font-medium text-[var(--foreground)]">{title}</h3>
-        {description && <p className="max-w-sm text-xs text-[var(--text-muted)]">{description}</p>}
+        <h3 className="text-sm font-medium text-[var(--p-text-1)]">{title}</h3>
+        {description && <p className="max-w-sm text-xs text-[var(--p-text-2)]">{description}</p>}
         {(action || secondaryAction) && (
           <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
             {action}
@@ -49,12 +49,12 @@ export function EmptyState({
           {illustration}
         </div>
       ) : (
-        <div aria-hidden="true" className="text-[var(--text-muted)]">
+        <div aria-hidden="true" className="text-[var(--p-text-2)]">
           {icon ?? <Inbox size={32} />}
         </div>
       )}
-      <h3 className="text-sm font-semibold text-[var(--foreground)]">{title}</h3>
-      {description && <p className="max-w-sm text-sm text-[var(--text-muted)]">{description}</p>}
+      <h3 className="text-sm font-semibold text-[var(--p-text-1)]">{title}</h3>
+      {description && <p className="max-w-sm text-sm text-[var(--p-text-2)]">{description}</p>}
       {(action || secondaryAction) && (
         <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
           {action}

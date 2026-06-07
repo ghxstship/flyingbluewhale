@@ -56,10 +56,10 @@ export default async function Page() {
         </h2>
         <FormShell action={createSavedSearchAction} submitLabel={t("common.save", undefined, "Save")}>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("me.savedSearches.fields.kind", undefined, "Kind")}
             </label>
-            <select name="kind" required className="input-base mt-1.5 w-full">
+            <select name="kind" required className="ps-input mt-1.5 w-full">
               <option value="gig">{t("me.savedSearches.kinds.gig", undefined, "Gig")}</option>
               <option value="rfq">{t("me.savedSearches.kinds.rfq", undefined, "RFQ")}</option>
               <option value="talent_call">{t("me.savedSearches.kinds.talentCall", undefined, "Talent Call")}</option>
@@ -75,14 +75,14 @@ export default async function Page() {
             placeholder={t("me.savedSearches.fields.namePlaceholder", undefined, "A1 / Lighting Programmer · FL")}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("me.savedSearches.fields.query", undefined, "Query — JSON")}
             </label>
             <textarea
               name="query"
               rows={4}
               maxLength={4000}
-              className="input-base mt-1.5 w-full font-mono text-xs"
+              className="ps-input mt-1.5 w-full font-mono text-xs"
               placeholder='{"role":"A1","region":"FL"}'
             />
           </div>
@@ -129,7 +129,7 @@ export default async function Page() {
                   }}
                 >
                   <input type="hidden" name="search_id" value={r.id} />
-                  <button type="submit" className="btn btn-ghost text-xs">
+                  <button type="submit" className="ps-btn ps-btn--ghost text-xs">
                     {t("common.remove", undefined, "Remove")}
                   </button>
                 </form>

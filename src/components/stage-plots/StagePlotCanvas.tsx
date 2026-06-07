@@ -247,30 +247,30 @@ export function StagePlotCanvas({
   return (
     <div className="flex flex-col gap-4">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3 rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] px-3 py-2">
+      <div className="flex flex-wrap items-center gap-3 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2">
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           aria-label="Plot Name"
-          className="input-base w-48"
+          className="ps-input w-48"
         />
-        <label className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
+        <label className="flex items-center gap-1 text-xs text-[var(--p-text-2)]">
           Width
           <input
             type="number"
             value={widthFt}
             onChange={(e) => setWidthFt(Math.max(8, Math.min(200, Number(e.target.value))))}
-            className="input-base w-16"
+            className="ps-input w-16"
           />
           ft
         </label>
-        <label className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
+        <label className="flex items-center gap-1 text-xs text-[var(--p-text-2)]">
           Depth
           <input
             type="number"
             value={depthFt}
             onChange={(e) => setDepthFt(Math.max(8, Math.min(200, Number(e.target.value))))}
-            className="input-base w-16"
+            className="ps-input w-16"
           />
           ft
         </label>
@@ -280,7 +280,7 @@ export function StagePlotCanvas({
             onClick={undo}
             disabled={historyLength === 0}
             aria-label="Undo last change"
-            className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs disabled:opacity-50"
+            className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-xs disabled:opacity-50"
           >
             <Undo2 size={12} /> Undo
           </button>
@@ -289,7 +289,7 @@ export function StagePlotCanvas({
             onClick={deleteSelected}
             disabled={!selectedId}
             aria-label="Delete selected element"
-            className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-2 py-1 text-xs disabled:opacity-50"
+            className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-xs disabled:opacity-50"
           >
             <Trash2 size={12} /> Delete
           </button>
@@ -301,8 +301,8 @@ export function StagePlotCanvas({
 
       <div className="flex gap-4">
         {/* Palette */}
-        <div className="w-36 shrink-0 space-y-1 rounded-md border border-[var(--border-color)] bg-[var(--bg-secondary)] p-2">
-          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">Palette</div>
+        <div className="w-36 shrink-0 space-y-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-2">
+          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">Palette</div>
           {PALETTE.map((p) => (
             <button
               key={p.kind}
@@ -311,21 +311,21 @@ export function StagePlotCanvas({
               aria-pressed={selectedTool === p.kind}
               className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-xs transition-colors ${
                 selectedTool === p.kind
-                  ? "bg-[var(--surface-inset)] text-[var(--text-primary)] ring-1 ring-[var(--org-primary)]"
-                  : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)]"
+                  ? "bg-[var(--p-surface-2)] text-[var(--p-text-1)] ring-1 ring-[var(--p-accent)]"
+                  : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)]"
               }`}
             >
               <p.Icon size={12} />
               <span>{p.label}</span>
             </button>
           ))}
-          <p className="mt-2 text-[10px] leading-relaxed text-[var(--text-muted)]">
+          <p className="mt-2 text-[10px] leading-relaxed text-[var(--p-text-2)]">
             Pick a tool, then click the stage to place. Drag to move. Delete to remove. ⌘Z undo.
           </p>
         </div>
 
         {/* Canvas */}
-        <div className="flex-1 overflow-auto rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-4">
+        <div className="flex-1 overflow-auto rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4">
           <svg
             ref={svgRef}
             width={canvasW}
@@ -385,7 +385,7 @@ export function StagePlotCanvas({
               );
             })}
           </svg>
-          <div className="mt-2 text-[11px] text-[var(--text-muted)]">
+          <div className="mt-2 text-[11px] text-[var(--p-text-2)]">
             {widthFt}′ × {depthFt}′ stage · {elements.length} {elements.length === 1 ? "element" : "elements"}
           </div>
         </div>

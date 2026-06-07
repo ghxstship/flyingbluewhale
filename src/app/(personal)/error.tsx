@@ -14,7 +14,7 @@ export default function PersonalError({ error, reset }: { error: Error & { diges
       <h1 className="text-3xl font-semibold tracking-tight">
         {t("me.error.title", undefined, "Something Went Wrong")}
       </h1>
-      <p className="mt-3 text-sm text-[var(--text-secondary)]">
+      <p className="mt-3 text-sm text-[var(--p-text-2)]">
         {error.message || t("me.error.fallbackMessage", undefined, "We hit an error loading your account view.")}
         {error.digest ? (
           <span className="mt-2 block font-mono text-xs">

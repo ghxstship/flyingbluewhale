@@ -264,9 +264,9 @@ export function StepBuilder({
         </DndContext>
 
         {steps.length === 0 && (
-          <div className="surface-inset flex flex-col items-center gap-2 rounded-md border border-dashed border-[var(--border-color)] p-6 text-center">
-            <p className="text-sm text-[var(--text-secondary)]">No steps yet.</p>
-            <p className="text-xs text-[var(--text-muted)]">Add an action to get started.</p>
+          <div className="surface-inset flex flex-col items-center gap-2 rounded-md border border-dashed border-[var(--p-border)] p-6 text-center">
+            <p className="text-sm text-[var(--p-text-2)]">No steps yet.</p>
+            <p className="text-xs text-[var(--p-text-2)]">Add an action to get started.</p>
           </div>
         )}
 
@@ -282,17 +282,17 @@ function SaveIndicator({ label, status, error }: { label: string; status: SaveSt
   if (status === "idle") return null;
   if (status === "saving") {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[11px] text-[var(--text-muted)]">
+      <span className="inline-flex items-center gap-1.5 text-[11px] text-[var(--p-text-2)]">
         <Spinner size="xs" />
         Saving {label.toLowerCase()}…
       </span>
     );
   }
   if (status === "saved") {
-    return <span className="text-[11px] text-[var(--color-success,var(--text-muted))]">{label} saved</span>;
+    return <span className="text-[11px] text-[var(--p-success,var(--p-text-2))]">{label} saved</span>;
   }
   return (
-    <span className="text-[11px] text-[var(--color-error)]">
+    <span className="text-[11px] text-[var(--p-danger)]">
       {label} save failed: {error ?? "unknown error"}
     </span>
   );

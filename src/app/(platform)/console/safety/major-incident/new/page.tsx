@@ -30,10 +30,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.majorIncident.new.statusLabel", undefined, "Status")}
             </label>
-            <select name="status" defaultValue="activated" className="input-base mt-1.5 w-full">
+            <select name="status" defaultValue="activated" className="ps-input mt-1.5 w-full">
               <option value="activated">
                 {t("console.safety.majorIncident.new.statusActivated", undefined, "Activated")}
               </option>

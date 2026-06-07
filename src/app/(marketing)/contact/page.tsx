@@ -85,13 +85,13 @@ export default async function ContactPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-accent)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
           {t("marketing.pages.contact.hero.eyebrow")}
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
           {t("marketing.pages.contact.hero.title")}
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.contact.hero.bodyPrefix")}{" "}
           <a className="underline" href="/signup">
             {t("marketing.pages.contact.hero.signupLabel")}
@@ -104,13 +104,13 @@ export default async function ContactPage() {
         <div className="grid gap-4 md:grid-cols-2">
           {ROUTES.map(({ icon: Icon, title, body, cta, href }) => (
             <a key={title} href={href} className="surface hover-lift flex items-start gap-4 p-6">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--p-accent)]/10 text-[var(--p-accent)]">
                 <Icon size={18} />
               </div>
               <div>
                 <div className="text-sm font-semibold">{title}</div>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">{body}</p>
-                <div className="mt-2 font-mono text-xs text-[var(--org-accent)]">{cta}</div>
+                <p className="mt-1 text-sm text-[var(--p-text-2)]">{body}</p>
+                <div className="mt-2 font-mono text-xs text-[var(--p-accent-text)]">{cta}</div>
               </div>
             </a>
           ))}
@@ -123,23 +123,23 @@ export default async function ContactPage() {
         </h2>
         <form className="surface mt-8 space-y-4 p-6" method="post" action="mailto:sales@atlvs.pro">
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("marketing.pages.contact.form.fields.name")}
-              <input name="name" required className="input-base mt-1.5 w-full" />
+              <input name="name" required className="ps-input mt-1.5 w-full" />
             </label>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("marketing.pages.contact.form.fields.email")}
-              <input name="email" type="email" required className="input-base mt-1.5 w-full" />
+              <input name="email" type="email" required className="ps-input mt-1.5 w-full" />
             </label>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("marketing.pages.contact.form.fields.company")}
-              <input name="company" className="input-base mt-1.5 w-full" />
+              <input name="company" className="ps-input mt-1.5 w-full" />
             </label>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("marketing.pages.contact.form.fields.scale")}
-              <select name="scale" className="input-base mt-1.5 w-full">
+              <select name="scale" className="ps-input mt-1.5 w-full">
                 <option>1–5</option>
                 <option>6–20</option>
                 <option>21–50</option>
@@ -147,9 +147,9 @@ export default async function ContactPage() {
               </select>
             </label>
           </div>
-          <label className="block text-xs font-medium text-[var(--text-secondary)]">
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">
             {t("marketing.pages.contact.form.fields.vertical")}
-            <select name="vertical" className="input-base mt-1.5 w-full">
+            <select name="vertical" className="ps-input mt-1.5 w-full">
               <option>{t("marketing.pages.contact.form.verticals.liveEvents")}</option>
               <option>{t("marketing.pages.contact.form.verticals.touring")}</option>
               <option>{t("marketing.pages.contact.form.verticals.corporate")}</option>
@@ -157,11 +157,11 @@ export default async function ContactPage() {
               <option>{t("marketing.pages.contact.form.verticals.other")}</option>
             </select>
           </label>
-          <label className="block text-xs font-medium text-[var(--text-secondary)]">
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">
             {t("marketing.pages.contact.form.fields.message")}
-            <textarea name="message" rows={4} className="input-base mt-1.5 w-full" />
+            <textarea name="message" rows={4} className="ps-input mt-1.5 w-full" />
           </label>
-          <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
+          <label className="flex items-center gap-2 text-xs text-[var(--p-text-2)]">
             <input type="checkbox" name="demo" /> {t("marketing.pages.contact.form.fields.demoOptIn")}
           </label>
           <div className="flex items-center justify-end gap-2">

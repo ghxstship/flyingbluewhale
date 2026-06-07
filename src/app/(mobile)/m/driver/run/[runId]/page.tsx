@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: Promise<{ runId: string
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.driver.run.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -83,18 +83,18 @@ export default async function Page({ params }: { params: Promise<{ runId: string
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <Link href="/m/driver" className="text-xs text-[var(--text-muted)]">
+      <Link href="/m/driver" className="text-xs text-[var(--p-text-2)]">
         {t("m.driver.run.backToToday", undefined, "← Today's runs")}
       </Link>
       <div className="mt-3 flex items-start justify-between gap-3">
         <div>
-          <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+          <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
             {t("m.driver.run.eyebrow", undefined, "Run")}
           </div>
           <h1 className="mt-1 text-xl leading-tight font-semibold">
             {run.origin?.name ?? "—"} → {run.destination?.name ?? "—"}
           </h1>
-          <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-[10px] text-[var(--text-muted)]">
+          <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-[10px] text-[var(--p-text-2)]">
             <span>{run.fleet}</span>
             {run.vehicle_ref && <span>· {run.vehicle_ref}</span>}
           </div>
@@ -104,12 +104,12 @@ export default async function Page({ params }: { params: Promise<{ runId: string
 
       <section className="mt-5 grid grid-cols-2 gap-2">
         <div className="surface p-3">
-          <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.driver.run.depart", undefined, "Depart")}
           </div>
           <div className="mt-1 font-mono text-base tabular-nums">{fmtTime(run.scheduled_depart)}</div>
           {run.actual_depart && (
-            <div className="mt-0.5 font-mono text-[10px] text-[var(--color-success)]">
+            <div className="mt-0.5 font-mono text-[10px] text-[var(--p-success)]">
               {t(
                 "m.driver.run.actualPrefix",
                 { time: fmtTime(run.actual_depart) },
@@ -119,12 +119,12 @@ export default async function Page({ params }: { params: Promise<{ runId: string
           )}
         </div>
         <div className="surface p-3">
-          <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.driver.run.arrive", undefined, "Arrive")}
           </div>
           <div className="mt-1 font-mono text-base tabular-nums">{fmtTime(run.scheduled_arrive)}</div>
           {run.actual_arrive && (
-            <div className="mt-0.5 font-mono text-[10px] text-[var(--color-success)]">
+            <div className="mt-0.5 font-mono text-[10px] text-[var(--p-success)]">
               {t(
                 "m.driver.run.actualPrefix",
                 { time: fmtTime(run.actual_arrive) },
@@ -136,11 +136,11 @@ export default async function Page({ params }: { params: Promise<{ runId: string
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.driver.run.manifestHeading", { count: manifest.length }, `Manifest · ${manifest.length}`)}
         </h2>
         {manifest.length === 0 ? (
-          <p className="mt-2 text-xs text-[var(--text-muted)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t("m.driver.run.noPassengers", undefined, "No passengers listed.")}
           </p>
         ) : (
@@ -152,16 +152,16 @@ export default async function Page({ params }: { params: Promise<{ runId: string
                     <div className="text-sm font-semibold">
                       {m.name ?? t("m.driver.run.passengerFallback", { index: i + 1 }, `Passenger ${i + 1}`)}
                     </div>
-                    {m.role && <div className="text-xs text-[var(--text-muted)]">{m.role}</div>}
+                    {m.role && <div className="text-xs text-[var(--p-text-2)]">{m.role}</div>}
                   </div>
                   {m.phone && (
-                    <a href={`tel:${m.phone}`} className="font-mono text-xs text-[var(--org-primary)]">
+                    <a href={`tel:${m.phone}`} className="font-mono text-xs text-[var(--p-accent)]">
                       {m.phone}
                     </a>
                   )}
                 </div>
                 {(m.pickup || m.dropoff) && (
-                  <div className="mt-2 font-mono text-[10px] text-[var(--text-muted)]">
+                  <div className="mt-2 font-mono text-[10px] text-[var(--p-text-2)]">
                     {m.pickup && (
                       <span>{t("m.driver.run.pickupPrefix", { location: m.pickup }, `pickup ${m.pickup}`)}</span>
                     )}
@@ -171,7 +171,7 @@ export default async function Page({ params }: { params: Promise<{ runId: string
                     )}
                   </div>
                 )}
-                {m.notes && <p className="mt-1 text-xs text-[var(--text-secondary)]">{m.notes}</p>}
+                {m.notes && <p className="mt-1 text-xs text-[var(--p-text-2)]">{m.notes}</p>}
               </li>
             ))}
           </ul>

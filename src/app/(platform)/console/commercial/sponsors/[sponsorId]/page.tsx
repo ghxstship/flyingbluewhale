@@ -104,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
       />
       <div className="page-content space-y-4">
         <section className="surface p-6">
-          <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+          <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
             {t("console.commercial.sponsors.detail.sectionEntitlement", undefined, "Entitlement")}
           </h2>
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -121,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
           </dl>
           {notes && (
             <div className="mt-4">
-              <div className="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+              <div className="text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
                 {t("console.commercial.sponsors.detail.notesLabel", undefined, "Notes")}
               </div>
               <p className="mt-2 text-sm whitespace-pre-wrap">{notes}</p>
@@ -136,7 +136,7 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-xs font-medium text-[var(--text-secondary)]">{label}</dt>
+      <dt className="text-xs font-medium text-[var(--p-text-2)]">{label}</dt>
       <dd className="mt-1 text-sm">{children}</dd>
     </div>
   );

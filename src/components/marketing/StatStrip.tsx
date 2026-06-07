@@ -4,10 +4,10 @@ export function StatStrip({ stats }: { stats: { value: string; label: string }[]
       <div className="surface grid grid-cols-2 gap-4 p-6 md:grid-cols-4">
         {stats.map((s) => (
           <div key={s.label} className="text-center">
-            <div className="hed-xl" style={{ color: "var(--org-primary)" }}>
+            <div className="hed-xl" style={{ color: "var(--p-accent)" }}>
               {s.value}
             </div>
-            <div className="mt-1 text-xs font-medium tracking-wider text-[var(--text-muted)] uppercase">{s.label}</div>
+            <div className="mt-1 text-xs font-medium tracking-wider text-[var(--p-text-2)] uppercase">{s.label}</div>
           </div>
         ))}
       </div>

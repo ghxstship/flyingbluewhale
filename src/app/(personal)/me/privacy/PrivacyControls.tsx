@@ -122,7 +122,7 @@ export function PrivacyControls() {
                 undefined,
                 "This soft-deletes your profile and revokes every membership immediately. Your data is permanently purged in 30 days. To proceed, type",
               )}{" "}
-              <code className="rounded bg-[var(--surface-inset)] px-1 py-0.5 font-mono text-xs">delete my account</code>{" "}
+              <code className="rounded bg-[var(--p-surface-2)] px-1 py-0.5 font-mono text-xs">delete my account</code>{" "}
               {t("me.privacy.dialog.descriptionSuffix", undefined, "below.")}
             </DialogDescription>
           </DialogHeader>
@@ -132,7 +132,7 @@ export function PrivacyControls() {
             onChange={(e) => setConfirmText(e.target.value)}
             placeholder={t("me.privacy.dialog.placeholder", undefined, "delete my account")}
             aria-label={t("me.privacy.dialog.ariaLabel", undefined, "Type the Confirmation Phrase")}
-            className="input-base mt-4 w-full"
+            className="ps-input mt-4 w-full"
             autoComplete="off"
           />
           <DialogFooter>
@@ -169,17 +169,17 @@ function Card({
 }) {
   return (
     <div
-      className={`surface flex flex-wrap items-start justify-between gap-4 p-5 ${accent === "danger" ? "border border-[var(--color-error)]/30" : ""}`}
+      className={`surface flex flex-wrap items-start justify-between gap-4 p-5 ${accent === "danger" ? "border border-[var(--p-danger)]/30" : ""}`}
     >
       <div className="flex items-start gap-3">
         <div
-          className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-full ${accent === "danger" ? "bg-[var(--color-error)]/10 text-[var(--color-error)]" : "bg-[var(--surface-inset)] text-[var(--org-primary)]"}`}
+          className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-full ${accent === "danger" ? "bg-[var(--p-danger)]/10 text-[var(--p-danger)]" : "bg-[var(--p-surface-2)] text-[var(--p-accent)]"}`}
         >
           {icon}
         </div>
         <div className="max-w-md">
           <div className="text-sm font-semibold">{title}</div>
-          <div className="mt-1 text-xs text-[var(--text-secondary)]">{body}</div>
+          <div className="mt-1 text-xs text-[var(--p-text-2)]">{body}</div>
         </div>
       </div>
       <div>{action}</div>

@@ -76,7 +76,7 @@ export default async function WebhooksPage() {
               <span className="font-mono">*</span>
             </Badge>
           </div>
-          <p className="mt-3 text-xs text-[var(--text-muted)]">
+          <p className="mt-3 text-xs text-[var(--p-text-2)]">
             {t("console.settings.webhooks.wildcardHintBefore", undefined, "Use ")}
             <span className="font-mono">*</span>
             {t("console.settings.webhooks.wildcardHintAfter", undefined, " to subscribe to every event.")}
@@ -94,7 +94,7 @@ export default async function WebhooksPage() {
           />
         ) : (
           <div className="surface">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.settings.webhooks.col.url", undefined, "URL")}</th>
@@ -113,21 +113,18 @@ export default async function WebhooksPage() {
                         {r.url}
                       </div>
                       {r.description && (
-                        <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">{r.description}</div>
+                        <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">{r.description}</div>
                       )}
                     </td>
                     <td>
                       <div className="flex flex-wrap gap-1">
                         {r.events.slice(0, 3).map((e) => (
-                          <span
-                            key={e}
-                            className="rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[10px]"
-                          >
+                          <span key={e} className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px]">
                             {e}
                           </span>
                         ))}
                         {r.events.length > 3 && (
-                          <span className="font-mono text-[10px] text-[var(--text-muted)]">+{r.events.length - 3}</span>
+                          <span className="font-mono text-[10px] text-[var(--p-text-2)]">+{r.events.length - 3}</span>
                         )}
                       </div>
                     </td>
@@ -141,7 +138,7 @@ export default async function WebhooksPage() {
                     <td className="font-mono text-xs">{fmtDate(r.last_delivery_at)}</td>
                     <td className="font-mono text-xs">{r.failure_count}</td>
                     <td>
-                      <Link href={`/console/settings/webhooks/${r.id}`} className="text-xs text-[var(--org-primary)]">
+                      <Link href={`/console/settings/webhooks/${r.id}`} className="text-xs text-[var(--p-accent)]">
                         {t("console.settings.webhooks.editAction", undefined, "Edit →")}
                       </Link>
                     </td>

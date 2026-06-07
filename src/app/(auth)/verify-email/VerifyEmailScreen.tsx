@@ -40,7 +40,7 @@ export function VerifyEmailScreen({ email }: { email?: string }) {
           : t("auth.verifyEmail.subtitleGeneric", undefined, "We sent a verification link to your email.")
       }
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
+        <Link href="/login" className="text-[var(--p-accent)] underline underline-offset-4">
           {t("auth.verifyEmail.backToLogin", undefined, "Back to sign in")}
         </Link>
       }
@@ -53,7 +53,7 @@ export function VerifyEmailScreen({ email }: { email?: string }) {
             "Click the link in the email to activate your account. The link expires in 24 hours.",
           )}
         </Alert>
-        <p className="text-sm text-[var(--text-secondary)]">
+        <p className="text-sm text-[var(--p-text-2)]">
           {t(
             "auth.verifyEmail.didntGetIt",
             undefined,

@@ -97,7 +97,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t("p.volunteer.training.requiredModules.heading", undefined, "Required Modules")}
           </h3>
           {required.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.volunteer.training.requiredModules.empty",
                 undefined,
@@ -105,12 +105,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {required.map((a) => {
                 const tags = tagsOf(a.tags).filter((tag) => REQUIRED_TAGS.includes(tag));
                 return (
                   <li key={a.id} className="flex items-center justify-between py-2 text-sm">
-                    <Link href={`/console/knowledge/${a.slug}`} className="font-medium hover:text-[var(--org-primary)]">
+                    <Link href={`/console/knowledge/${a.slug}`} className="font-medium hover:text-[var(--p-accent)]">
                       {a.title}
                     </Link>
                     <div className="flex items-center gap-1">
@@ -127,7 +127,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "p.volunteer.training.footer.note",
             undefined,

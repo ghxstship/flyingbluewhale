@@ -104,8 +104,8 @@ export default function GhxstshipHome() {
         {/* HERO */}
         <section className="mx-auto max-w-6xl px-6 pt-20 pb-12">
           <div className="text-xs font-semibold tracking-[0.25em] uppercase">
-            <span style={{ color: "var(--org-primary)" }}>GHXSTSHIP Industries</span>
-            <span className="ms-3 text-[var(--text-muted)]">Est. Miami · New York · Chicago · Los Angeles</span>
+            <span style={{ color: "var(--p-accent)" }}>GHXSTSHIP Industries</span>
+            <span className="ms-3 text-[var(--p-text-2)]">Est. Miami · New York · Chicago · Los Angeles</span>
           </div>
           <h1
             className="mt-6 text-5xl leading-[0.95] font-semibold tracking-tight uppercase sm:text-7xl lg:text-[8rem]"
@@ -113,13 +113,13 @@ export default function GhxstshipHome() {
           >
             Experiential
             <br />
-            <span style={{ color: "var(--org-primary)" }}>production,</span>
+            <span style={{ color: "var(--p-accent)" }}>production,</span>
             <br />
             built once,
             <br />
             run anywhere.
           </h1>
-          <p className="mt-8 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-8 max-w-2xl text-lg text-[var(--p-text-2)]">
             We design, engineer, fabricate, and operate festivals, immersive experiences, theme park attractions,
             theatrical productions, brand activations, and premium hospitality. The same operating system that runs
             inside our studio publishes the catalog you&apos;re reading — so the work you brief us on Monday becomes a
@@ -132,7 +132,7 @@ export default function GhxstshipHome() {
             <Button href={paths.servicesRoot()} size="lg" variant="secondary">
               Services Catalog
             </Button>
-            <Link href={paths.pricing()} className="btn btn-ghost btn-lg">
+            <Link href={paths.pricing()} className="ps-btn ps-btn--ghost ps-btn--lg">
               Pricing →
             </Link>
           </div>
@@ -142,15 +142,15 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised grid grid-cols-2 gap-px overflow-hidden md:grid-cols-4">
             {PROOF_STATS.map((stat) => (
-              <div key={stat.label} className="bg-[var(--background)] p-6">
+              <div key={stat.label} className="bg-[var(--p-bg)] p-6">
                 <div
                   className="text-5xl font-semibold tracking-tight"
-                  style={{ fontFamily: "var(--font-display)", color: "var(--org-primary)" }}
+                  style={{ fontFamily: "var(--font-display)", color: "var(--p-accent)" }}
                 >
                   {stat.value}
                 </div>
                 <div className="mt-2 text-xs font-semibold tracking-[0.18em] uppercase">{stat.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{stat.sub}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{stat.sub}</div>
               </div>
             ))}
           </div>
@@ -160,7 +160,7 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid items-end gap-6 md:grid-cols-2">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
                 What We Do
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -169,7 +169,7 @@ export default function GhxstshipHome() {
                 the right team.
               </h2>
             </div>
-            <p className="text-[var(--text-secondary)]">
+            <p className="text-[var(--p-text-2)]">
               Production touches a lot of disciplines. Search by what you build, when in the lifecycle, how deep the
               detail goes, what kind of experience it is, what industry it serves, or where it happens. Every path lands
               on a real producer with a real portfolio.
@@ -226,7 +226,7 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
                 Capabilities
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -237,7 +237,7 @@ export default function GhxstshipHome() {
             </div>
             <Link
               href={paths.servicesRoot()}
-              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--org-primary)]"
+              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--p-accent)]"
             >
               Full services catalog →
             </Link>
@@ -251,13 +251,13 @@ export default function GhxstshipHome() {
                 className="surface hover-lift group flex items-start justify-between gap-4 p-6"
               >
                 <div>
-                  <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--text-muted)]">CLASS {c.code}</div>
+                  <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--p-text-2)]">CLASS {c.code}</div>
                   <div className="mt-2 text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                     {c.shortName}
                   </div>
-                  <div className="mt-2 line-clamp-2 text-sm text-[var(--text-secondary)]">{c.definition}</div>
+                  <div className="mt-2 line-clamp-2 text-sm text-[var(--p-text-2)]">{c.definition}</div>
                 </div>
-                <ArrowRight className="cta-nudge mt-1 h-5 w-5 shrink-0 text-[var(--text-muted)] transition-colors group-hover:text-[var(--org-primary)]" />
+                <ArrowRight className="cta-nudge mt-1 h-5 w-5 shrink-0 text-[var(--p-text-2)] transition-colors group-hover:text-[var(--p-accent)]" />
               </Link>
             ))}
           </div>
@@ -267,7 +267,7 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+              <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
                 Industries
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -278,7 +278,7 @@ export default function GhxstshipHome() {
             </div>
             <Link
               href={paths.solutionsRoot()}
-              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--org-primary)]"
+              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--p-accent)]"
             >
               All 19 industries →
             </Link>
@@ -293,8 +293,8 @@ export default function GhxstshipHome() {
                   <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                     {s.name}
                   </div>
-                  <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{s.definition}</p>
-                  <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase transition-colors group-hover:text-[var(--org-primary)]">
+                  <p className="mt-3 line-clamp-3 text-sm text-[var(--p-text-2)]">{s.definition}</p>
+                  <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase transition-colors group-hover:text-[var(--p-accent)]">
                     Read more →
                   </div>
                 </Link>
@@ -308,14 +308,11 @@ export default function GhxstshipHome() {
           <div className="surface-raised relative overflow-hidden p-10">
             <div
               className="absolute inset-x-0 top-0 h-1"
-              style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+              style={{ background: "linear-gradient(90deg, var(--p-accent), var(--p-accent-text))" }}
             />
             <div className="grid gap-8 md:grid-cols-2 md:items-end">
               <div>
-                <div
-                  className="text-xs font-semibold tracking-[0.2em] uppercase"
-                  style={{ color: "var(--org-primary)" }}
-                >
+                <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
                   How We Work Together
                 </div>
                 <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -324,10 +321,10 @@ export default function GhxstshipHome() {
                   Or on retainer.
                 </h2>
               </div>
-              <p className="text-[var(--text-secondary)]">
-                <strong className="text-[var(--text-primary)]">Per Project</strong> — five tiers from a single-night
-                activation to a multi-year mega-event. <strong className="text-[var(--text-primary)]">Retainer</strong>{" "}
-                — four team-composition bundles from a coordinator pair to a 24/7 senior team. Add-ons stack on either
+              <p className="text-[var(--p-text-2)]">
+                <strong className="text-[var(--p-text-1)]">Per Project</strong> — five tiers from a single-night
+                activation to a multi-year mega-event. <strong className="text-[var(--p-text-1)]">Retainer</strong> —
+                four team-composition bundles from a coordinator pair to a 24/7 senior team. Add-ons stack on either
                 path.
               </p>
             </div>
@@ -344,23 +341,21 @@ export default function GhxstshipHome() {
 
         {/* MARKETS STRIP */}
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-            Anchor Markets
-          </div>
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">Anchor Markets</div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {ANCHOR_MARKETS.map((m) => (
               <Link key={m.slug} href={paths.marketDetail(m.slug)} className="surface hover-lift block p-6">
                 <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {m.name}
                 </div>
-                <div className="mt-3 line-clamp-3 text-xs text-[var(--text-secondary)]">{m.blurb}</div>
+                <div className="mt-3 line-clamp-3 text-xs text-[var(--p-text-2)]">{m.blurb}</div>
               </Link>
             ))}
           </div>
           <div className="mt-6">
             <Link
               href={paths.marketsRoot()}
-              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--org-primary)]"
+              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--p-accent)]"
             >
               All twelve markets, including satellites →
             </Link>
@@ -369,7 +364,7 @@ export default function GhxstshipHome() {
 
         {/* FAQ */}
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
             FAQ
           </div>
           <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -382,7 +377,7 @@ export default function GhxstshipHome() {
                   <span className="text-base font-semibold">{faq.q}</span>
                   <span className="mt-1 inline-block text-2xl leading-none transition-transform">+</span>
                 </summary>
-                <p className="mt-3 text-sm text-[var(--text-secondary)]">{faq.a}</p>
+                <p className="mt-3 text-sm text-[var(--p-text-2)]">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -410,17 +405,17 @@ function AxisCard({
       <div className="flex items-center gap-3">
         <span
           className="inline-flex h-8 w-8 items-center justify-center"
-          style={{ background: "var(--org-accent)", color: "var(--accent-contrast)" }}
+          style={{ background: "var(--p-accent-text)", color: "var(--p-accent-contrast)" }}
         >
           {icon}
         </span>
-        <span className="ms-auto font-mono text-xs text-[var(--text-muted)]">{count}</span>
+        <span className="ms-auto font-mono text-xs text-[var(--p-text-2)]">{count}</span>
       </div>
       <div className="mt-4 text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
         {title}
       </div>
-      <p className="mt-2 text-sm text-[var(--text-secondary)]">{blurb}</p>
-      <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase transition-colors group-hover:text-[var(--org-primary)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">{blurb}</p>
+      <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase transition-colors group-hover:text-[var(--p-accent)]">
         Open →
       </div>
     </Link>

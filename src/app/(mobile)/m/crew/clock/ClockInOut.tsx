@@ -84,7 +84,7 @@ export function ClockInOut({ initial }: { initial: OpenShift }) {
     <div className="surface p-6 text-center">
       {state === "clocked_in" ? (
         <>
-          <div className="text-xs font-semibold tracking-wider text-[var(--color-success)] uppercase">
+          <div className="text-xs font-semibold tracking-wider text-[var(--p-success)] uppercase">
             {t("m.clock.status.clockedIn", undefined, "Clocked In")}
           </div>
           <div className="mt-3 font-mono text-4xl tabular-nums">
@@ -103,10 +103,10 @@ export function ClockInOut({ initial }: { initial: OpenShift }) {
         </>
       ) : (
         <>
-          <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.clock.status.readyToStart", undefined, "Ready to Start")}
           </div>
-          <div className="mt-3 font-mono text-4xl text-[var(--text-muted)] tabular-nums">00:00:00</div>
+          <div className="mt-3 font-mono text-4xl text-[var(--p-text-2)] tabular-nums">00:00:00</div>
           <Button size="lg" className="mt-6 w-full" disabled={pending} onClick={clockIn}>
             {t("m.clock.action.clockIn", undefined, "Clock in")}
           </Button>

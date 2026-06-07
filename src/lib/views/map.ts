@@ -110,20 +110,20 @@ export function clusterMarkers<T extends { id: string; lat: number; lng: number 
 export function markerColor(tone: string | undefined): string {
   switch (tone) {
     case "info":
-      return "var(--color-info)";
+      return "var(--p-info)";
     case "warn":
     case "warning":
-      return "var(--color-warning)";
+      return "var(--p-warning)";
     case "error":
     case "danger":
-      return "var(--color-error)";
+      return "var(--p-danger)";
     case "success":
-      return "var(--color-success)";
+      return "var(--p-success)";
     case "accent":
-      return "var(--accent)";
+      return "var(--p-accent)";
     case "neutral":
-      return "var(--text-muted)";
+      return "var(--p-text-2)";
     default:
-      return "var(--org-primary, var(--color-info))";
+      return "var(--p-accent, var(--p-info))";
   }
 }

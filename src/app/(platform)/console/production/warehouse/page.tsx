@@ -144,7 +144,7 @@ export default async function Page() {
                 .map(([status, count]) => (
                   <li key={status} className="flex items-center justify-between text-sm">
                     <Badge variant="muted">{status}</Badge>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">{count}</span>
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">{count}</span>
                   </li>
                 ))}
             </ul>
@@ -157,7 +157,7 @@ export default async function Page() {
             {hubTiles.map((tile) => (
               <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
                 <div className="text-sm font-medium">{tile.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{tile.description}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{tile.description}</div>
               </Link>
             ))}
           </div>

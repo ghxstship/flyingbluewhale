@@ -32,7 +32,7 @@ export default async function CheckInPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.clock.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -69,11 +69,11 @@ export default async function CheckInPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.clock.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.clock.title", undefined, "Check-in")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.clock.subtitle",
           undefined,
@@ -108,14 +108,14 @@ export default async function CheckInPage() {
                   <div className="text-sm font-semibold">
                     {s.venue?.name ?? t("m.clock.unassignedVenue", undefined, "Unassigned venue")}
                   </div>
-                  <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                  <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                     {fmt.time(s.starts_at)}
                     {" – "}
                     {fmt.time(s.ends_at)}
                     {s.role ? ` · ${s.role}` : ""}
                   </div>
                   {(s.checked_in_at || s.checked_out_at) && (
-                    <div className="mt-2 font-mono text-xs text-[var(--text-secondary)]">
+                    <div className="mt-2 font-mono text-xs text-[var(--p-text-2)]">
                       {s.checked_in_at && (
                         <>
                           {t("m.clock.inLabel", undefined, "In")}{" "}

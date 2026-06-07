@@ -65,13 +65,13 @@ export default async function Page() {
       />
       <div className="page-content space-y-4">
         {days.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.marketing.calendar.empty", undefined, "No milestones in the next two weeks.")}
           </div>
         ) : (
           days.map((d) => (
             <section key={d} className="surface p-4">
-              <h2 className="mb-2 font-mono text-sm text-[var(--text-secondary)]">{new Date(d).toDateString()}</h2>
+              <h2 className="mb-2 font-mono text-sm text-[var(--p-text-2)]">{new Date(d).toDateString()}</h2>
               <ul className="divide-y divide-[var(--border-subtle)]">
                 {byDay[d].map((r) => (
                   <li key={r.id} className="flex items-center justify-between py-2 text-sm">
@@ -79,7 +79,7 @@ export default async function Page() {
                       <Badge variant={STATUS_TONE[r.kind] ?? "muted"}>{toTitle(r.kind)}</Badge>
                       <span>{r.label ?? "—"}</span>
                     </div>
-                    <span className="font-mono text-xs text-[var(--text-secondary)]">
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">
                       {new Date(r.occurs_at).toLocaleTimeString()}
                     </span>
                   </li>

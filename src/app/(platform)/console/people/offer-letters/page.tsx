@@ -62,7 +62,7 @@ export default async function OfferLettersPage() {
               render: (r) => (
                 <div>
                   <div className="text-sm font-medium">{r.recipient_name}</div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">{r.recipient_email}</div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{r.recipient_email}</div>
                 </div>
               ),
               accessor: (r) => r.recipient_name ?? null,
@@ -73,7 +73,7 @@ export default async function OfferLettersPage() {
               render: (r) => (
                 <div>
                   <div className="text-sm">{r.role_title}</div>
-                  <div className="text-xs text-[var(--text-muted)]">{r.role_department ?? ""}</div>
+                  <div className="text-xs text-[var(--p-text-2)]">{r.role_department ?? ""}</div>
                 </div>
               ),
               filterable: true,
@@ -99,7 +99,7 @@ export default async function OfferLettersPage() {
                 r.effective_compensation_cents > 0 ? (
                   <span className="font-mono text-xs">{formatDollars(r.effective_compensation_cents)}</span>
                 ) : (
-                  <span className="text-xs text-[var(--text-muted)]">
+                  <span className="text-xs text-[var(--p-text-2)]">
                     {t("console.people.offerLetters.tbd", undefined, "TBD")}
                   </span>
                 ),
@@ -126,7 +126,7 @@ export default async function OfferLettersPage() {
               render: (r) => (
                 <Link
                   href={`/console/people/offer-letters/${r.id}`}
-                  className="text-xs text-[var(--text-muted)] hover:text-[var(--org-primary)]"
+                  className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-accent)]"
                 >
                   {t("console.people.offerLetters.open", undefined, "Open →")}
                 </Link>

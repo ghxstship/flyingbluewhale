@@ -55,10 +55,10 @@ export function CarbonCharts({
                 <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />
-            <XAxis dataKey="month" tick={{ fontSize: 10, fill: "var(--text-muted)" }} />
-            <YAxis tick={{ fontSize: 10, fill: "var(--text-muted)" }} tickFormatter={fmtAxis} />
-            <Tooltip content={<DarkTooltip suffix=" kg CO₂e" />} cursor={{ fill: "var(--surface-inset)" }} />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />
+            <XAxis dataKey="month" tick={{ fontSize: 10, fill: "var(--p-text-2)" }} />
+            <YAxis tick={{ fontSize: 10, fill: "var(--p-text-2)" }} tickFormatter={fmtAxis} />
+            <Tooltip content={<DarkTooltip suffix=" kg CO₂e" />} cursor={{ fill: "var(--p-surface-2)" }} />
             <Legend wrapperStyle={{ fontSize: 10 }} />
             <Area
               dataKey="actual"
@@ -72,7 +72,7 @@ export function CarbonCharts({
               dataKey="target"
               name={t("console.sustainability.carbon.charts.monthly.target", undefined, "Target — 5% Reduction")}
               type="monotone"
-              stroke="var(--text-muted)"
+              stroke="var(--p-text-2)"
               strokeDasharray="4 4"
               strokeWidth={1.5}
               dot={false}
@@ -100,11 +100,11 @@ export function CarbonCharts({
               outerRadius={90}
               innerRadius={50}
               paddingAngle={2}
-              stroke="var(--background)"
+              stroke="var(--p-bg)"
               strokeWidth={2}
             >
               {byScope.map((s, i) => (
-                <Cell key={i} fill={SCOPE_COLORS[s.scope] ?? "var(--org-primary)"} />
+                <Cell key={i} fill={SCOPE_COLORS[s.scope] ?? "var(--p-accent)"} />
               ))}
             </Pie>
             <Tooltip content={<DarkTooltip suffix=" kg" />} />
@@ -136,12 +136,12 @@ function DarkTooltip({
   const fmt = useFormatters();
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px]">
+    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[10px]">
       {label && <div className="mb-1 font-medium">{label}</div>}
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-1.5">
           <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
-          <span className="text-[var(--text-secondary)]">{p.name}:</span>
+          <span className="text-[var(--p-text-2)]">{p.name}:</span>
           <span className="font-mono">{fmt.number(Number(p.value ?? 0)) + suffix}</span>
         </div>
       ))}

@@ -104,8 +104,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           <Markdown source={article.body_markdown} />
         </article>
 
-        <footer className="surface p-5 text-xs text-[var(--text-muted)]">
-          <div className="font-medium text-[var(--text-secondary)]">
+        <footer className="surface p-5 text-xs text-[var(--p-text-2)]">
+          <div className="font-medium text-[var(--p-text-2)]">
             {t("p.vendor.training.ack.heading", undefined, "Acknowledged your training?")}
           </div>
           <p className="mt-1">
@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           <div className="mt-3">
             <Link
               href={`/p/${slug}/vendor/training`}
-              className="text-[var(--org-primary)] underline-offset-2 hover:underline"
+              className="text-[var(--p-accent)] underline-offset-2 hover:underline"
             >
               {t("p.vendor.training.ack.allModules", undefined, "All training modules →")}
             </Link>

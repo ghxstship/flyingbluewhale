@@ -20,7 +20,7 @@ export function HelpButton({ knowledgeUrl = "/console/knowledge" }: { knowledgeU
         <button
           type="button"
           aria-label="Help"
-          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--text-muted)] hover:bg-[var(--surface-raised)] hover:text-[var(--text-primary)]"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
         >
           <HelpCircle size={16} aria-hidden="true" />
         </button>
@@ -29,18 +29,18 @@ export function HelpButton({ knowledgeUrl = "/console/knowledge" }: { knowledgeU
         <Popover.Content
           align="end"
           sideOffset={6}
-          className="z-40 w-64 rounded-lg border border-[var(--border-color)] bg-[var(--background)] p-1 shadow-lg"
+          className="z-40 w-64 rounded-lg border border-[var(--p-border)] bg-[var(--p-bg)] p-1 shadow-lg"
         >
           <Link
             href={knowledgeUrl}
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--surface-raised)]"
+            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"
           >
-            <BookOpen size={14} aria-hidden="true" className="text-[var(--text-muted)]" />
+            <BookOpen size={14} aria-hidden="true" className="text-[var(--p-text-2)]" />
             <span>Knowledge base</span>
           </Link>
           <Link
             href="/changelog"
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--surface-raised)]"
+            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"
           >
             <span aria-hidden="true" className="w-3.5" />
             <span>What's new</span>
@@ -49,9 +49,9 @@ export function HelpButton({ knowledgeUrl = "/console/knowledge" }: { knowledgeU
             href="https://atlvs.pro/docs"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--surface-raised)]"
+            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"
           >
-            <ExternalLink size={14} aria-hidden="true" className="text-[var(--text-muted)]" />
+            <ExternalLink size={14} aria-hidden="true" className="text-[var(--p-text-2)]" />
             <span>Docs</span>
           </a>
         </Popover.Content>

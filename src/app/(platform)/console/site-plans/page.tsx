@@ -140,7 +140,7 @@ export default async function Page() {
               header: t("console.sitePlans.columns.atomId", undefined, "Atom ID"),
               render: (r) =>
                 r.atom_id ?? (
-                  <span className="text-[var(--text-muted)]">
+                  <span className="text-[var(--p-text-2)]">
                     {t("console.sitePlans.pending", undefined, "— pending —")}
                   </span>
                 ),

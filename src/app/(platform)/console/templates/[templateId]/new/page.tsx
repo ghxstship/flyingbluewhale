@@ -37,11 +37,11 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
   return (
     <main className="mx-auto w-full max-w-2xl px-6 py-8">
       <header className="border-ink mb-6 border-b-3 pb-4">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
           {t("console.templates.new.eyebrow", undefined, "New Project from Template")}
         </div>
         <h1 className="mt-2 text-2xl font-semibold tracking-tight uppercase">{tpl.name}</h1>
-        {tpl.tagline ? <p className="mt-1 text-xs text-[var(--text-secondary)] italic">{tpl.tagline}</p> : null}
+        {tpl.tagline ? <p className="mt-1 text-xs text-[var(--p-text-2)] italic">{tpl.tagline}</p> : null}
       </header>
 
       <Card>
@@ -71,7 +71,7 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
 
             {tpl.blueprint.project.modules.length ? (
               <div>
-                <label className="text-xs font-medium text-[var(--text-secondary)]">
+                <label className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.templates.new.modulesLabel", undefined, "Modules to enable")}
                 </label>
                 <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -86,10 +86,10 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
 
             {tpl.blueprint.deliverables?.length ? (
               <div>
-                <label className="text-xs font-medium text-[var(--text-secondary)]">
+                <label className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.templates.new.willBeCreatedLabel", undefined, "Will be created")}
                 </label>
-                <ul className="mt-1.5 list-disc ps-5 text-sm text-[var(--text-secondary)]">
+                <ul className="mt-1.5 list-disc ps-5 text-sm text-[var(--p-text-2)]">
                   {tpl.blueprint.deliverables.map((d, i) => (
                     <li key={i}>
                       <span className="font-mono text-[10px] tracking-wider uppercase">{d.kind}</span>

@@ -59,9 +59,7 @@ export default async function Page() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.marketplace.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.marketplace.hero.title")}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.marketplace.hero.body")}
-        </p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.marketplace.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 pb-12">
@@ -69,7 +67,7 @@ export default async function Page() {
           {SECTIONS.map((s) => (
             <Link key={s.href} href={s.href} className="surface hover-lift flex flex-col gap-2 p-5">
               <h2 className="hed-lg">{s.title}</h2>
-              <p className="text-sm text-[var(--text-secondary)]">{s.blurb}</p>
+              <p className="text-sm text-[var(--p-text-2)]">{s.blurb}</p>
             </Link>
           ))}
         </div>
@@ -78,7 +76,7 @@ export default async function Page() {
       <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="surface p-6">
           <h2 className="hed-lg mb-2">{t("marketing.pages.marketplace.operators.title")}</h2>
-          <p className="mb-3 text-sm text-[var(--text-secondary)]">{t("marketing.pages.marketplace.operators.body")}</p>
+          <p className="mb-3 text-sm text-[var(--p-text-2)]">{t("marketing.pages.marketplace.operators.body")}</p>
           <Button href="/signup" size="sm">
             {t("marketing.pages.marketplace.operators.cta")}
           </Button>

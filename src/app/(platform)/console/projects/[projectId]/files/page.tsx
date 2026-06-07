@@ -78,11 +78,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     <div className="text-sm font-medium">
                       {f.title ?? t("console.projects.files.untitled", undefined, "Untitled")}
                     </div>
-                    <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                    <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                       {f.type}
                     </div>
                   </div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(f.updated_at)}</div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{fmtDate(f.updated_at)}</div>
                 </Link>
               </li>
             ))}

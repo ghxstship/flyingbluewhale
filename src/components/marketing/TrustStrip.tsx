@@ -36,21 +36,21 @@ export function TrustStrip() {
         <div className="flex items-center gap-3">
           <div className="flex" aria-hidden="true">
             {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={14} className="fill-[var(--org-primary)] text-[var(--org-primary)]" />
+              <Star key={i} size={14} className="fill-[var(--p-accent)] text-[var(--p-accent)]" />
             ))}
           </div>
           <div className="text-xs">
             <div className="font-semibold">4.9 average</div>
-            <div className="text-[var(--text-muted)]">from named operators on the platform</div>
+            <div className="text-[var(--p-text-2)]">from named operators on the platform</div>
           </div>
         </div>
         <div className="text-xs">
           <div className="font-semibold">15,000+ guests scanned</div>
-          <div className="text-[var(--text-muted)]">on a single gate, sub-100ms</div>
+          <div className="text-[var(--p-text-2)]">on a single gate, sub-100ms</div>
         </div>
         <div className="text-xs">
           <div className="font-semibold">47 modules · 1 schema</div>
-          <div className="text-[var(--text-muted)]">three apps, every show</div>
+          <div className="text-[var(--p-text-2)]">three apps, every show</div>
         </div>
       </div>
 
@@ -66,8 +66,8 @@ export function TrustStrip() {
               aria-hidden
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full font-mono text-[11px] font-semibold"
               style={{
-                background: "color-mix(in srgb, var(--org-primary) 12%, transparent)",
-                color: "var(--org-primary)",
+                background: "color-mix(in srgb, var(--p-accent) 12%, transparent)",
+                color: "var(--p-accent)",
               }}
             >
               {op.name
@@ -77,7 +77,7 @@ export function TrustStrip() {
             </span>
             <div className="min-w-0">
               <div className="truncate text-xs font-semibold">{op.name}</div>
-              <div className="truncate font-mono text-[10px] tracking-wide text-[var(--text-muted)] uppercase">
+              <div className="truncate font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
                 {op.role} · {op.shows}
               </div>
             </div>

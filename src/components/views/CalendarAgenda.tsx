@@ -28,21 +28,21 @@ export function CalendarAgenda({ cursor, eventsByKey, today, windowDays = 30 }: 
   }, [cursor, eventsByKey, windowDays]);
 
   if (days.length === 0) {
-    return <div className="surface p-6 text-sm text-[var(--text-muted)]">No events in the next {windowDays} days.</div>;
+    return <div className="surface p-6 text-sm text-[var(--p-text-2)]">No events in the next {windowDays} days.</div>;
   }
 
   return (
-    <ol className="surface divide-y divide-[var(--border-color)]">
+    <ol className="surface divide-y divide-[var(--p-border)]">
       {days.map((day) => {
         const key = isoDateUTC(day);
         const events = eventsByKey.get(key) ?? [];
         return (
           <li key={key} className="px-4 py-3">
             <div className="mb-2 flex items-baseline justify-between">
-              <h3 className="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+              <h3 className="text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
                 {labelForDay(day, today)}
               </h3>
-              <span className="font-mono text-[10px] text-[var(--text-muted)]">
+              <span className="font-mono text-[10px] text-[var(--p-text-2)]">
                 {events.length} {events.length === 1 ? "event" : "events"}
               </span>
             </div>

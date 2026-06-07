@@ -13,13 +13,13 @@ import type { ReportsCharts as ReportsChartsType } from "./ReportsCharts";
  * expense rows under RLS), so we put the dynamic import here, in a
  * "use client" wrapper, and the server just imports this wrapper.
  *
- * Why dynamic at all? recharts is ~100 KB gzipped. The dynamic + skeleton
+ * Why dynamic at all? recharts is ~100 KB gzipped. The dynamic + ps-skel
  * keeps it out of the parent route's initial JS payload — it loads only
  * when this widget enters the React tree.
  */
 const ReportsCharts = nextDynamic(() => import("./ReportsCharts").then((m) => m.ReportsCharts), {
   ssr: false,
-  loading: () => <div className="surface skeleton h-64" aria-busy="true" />,
+  loading: () => <div className="surface ps-skel h-64" aria-busy="true" />,
 });
 
 export function ReportsChartsClient(props: ComponentProps<typeof ReportsChartsType>) {

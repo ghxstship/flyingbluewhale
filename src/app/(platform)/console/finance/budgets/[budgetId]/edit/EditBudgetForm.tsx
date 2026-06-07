@@ -12,7 +12,7 @@ import {
   XPMS_XYZ,
 } from "@/lib/finance/xpms-budget";
 
-const SELECT_CLASS = "w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm";
+const SELECT_CLASS = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm";
 
 function Select({
   label,
@@ -29,7 +29,7 @@ function Select({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs font-medium text-[var(--text-secondary)]">{label}</span>
+      <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">{label}</span>
       <select name={name} defaultValue={defaultValue ?? ""} required={required} className={SELECT_CLASS}>
         <option value="">—</option>
         {options.map((opt) => (
@@ -73,7 +73,7 @@ export function EditBudgetForm({
 
       {/* Identity */}
       <fieldset className="space-y-3">
-        <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Identity</legend>
+        <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Identity</legend>
         <Input
           label={t("console.finance.budgets.edit.name", undefined, "Name")}
           name="name"
@@ -105,7 +105,7 @@ export function EditBudgetForm({
 
       {/* XPMS taxonomy */}
       <fieldset className="space-y-3">
-        <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           XPMS Classification
         </legend>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -138,7 +138,7 @@ export function EditBudgetForm({
 
       {/* Lifecycle / axes */}
       <fieldset className="space-y-3">
-        <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           Lifecycle &amp; Axes
         </legend>
         <div className="grid gap-3 sm:grid-cols-3">
@@ -178,7 +178,7 @@ export function EditBudgetForm({
 
       {/* Money */}
       <fieldset className="space-y-3">
-        <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Money</legend>
+        <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Money</legend>
         <div className="grid gap-3 sm:grid-cols-2">
           <Input
             label={t("console.finance.budgets.edit.quantity", undefined, "Quantity")}
@@ -217,7 +217,7 @@ export function EditBudgetForm({
 
       {/* Notes */}
       <fieldset className="space-y-3">
-        <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Notes</legend>
+        <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Notes</legend>
         <Input
           label={t("console.finance.budgets.edit.status", undefined, "Status")}
           name="budget_status"

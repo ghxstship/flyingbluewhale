@@ -68,7 +68,7 @@ export default async function CatalogPage() {
               "Add equipment via the Production module or bulk-import through Settings → Imports. Every non-retired item appears here as a SKU.",
             )}
             action={
-              <Link className="text-sm text-[var(--org-primary)]" href="/console/production/equipment">
+              <Link className="text-sm text-[var(--p-accent)]" href="/console/production/equipment">
                 {t("console.procurement.catalog.empty.cta", undefined, "Go to Equipment →")}
               </Link>
             }
@@ -76,9 +76,9 @@ export default async function CatalogPage() {
         ) : (
           Array.from(grouped.entries()).map(([cat, items]) => (
             <section key={cat} className="surface">
-              <div className="border-b border-[var(--border-color)] px-5 py-3">
-                <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">{cat}</div>
-                <div className="mt-0.5 text-xs text-[var(--text-muted)]">
+              <div className="border-b border-[var(--p-border)] px-5 py-3">
+                <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{cat}</div>
+                <div className="mt-0.5 text-xs text-[var(--p-text-2)]">
                   {t(
                     "console.procurement.catalog.itemCount",
                     { count: items.length, label: items.length === 1 ? "item" : "items" },
@@ -86,7 +86,7 @@ export default async function CatalogPage() {
                   )}
                 </div>
               </div>
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th>{t("console.procurement.catalog.column.name", undefined, "Name")}</th>

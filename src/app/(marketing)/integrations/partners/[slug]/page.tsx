@@ -84,19 +84,17 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           </Badge>
         </div>
         <h1 className="hed-3xl mt-4">{p.name}</h1>
-        <p className="mt-2 text-xs text-[var(--text-muted)]">by {p.partner_org_name}</p>
-        <p className="mt-5 text-lg text-[var(--text-secondary)]">{p.short_description}</p>
+        <p className="mt-2 text-xs text-[var(--p-text-2)]">by {p.partner_org_name}</p>
+        <p className="mt-5 text-lg text-[var(--p-text-2)]">{p.short_description}</p>
         {p.long_description ? <p className="mt-3 text-sm">{p.long_description}</p> : null}
 
         {p.capabilities.length > 0 ? (
           <div className="surface mt-6 p-5">
-            <div className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
-              Capabilities
-            </div>
+            <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Capabilities</div>
             <ul className="mt-3 space-y-1.5 text-sm">
               {p.capabilities.map((c) => (
                 <li key={c} className="flex items-start gap-2">
-                  <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--org-primary)]" />
+                  <span className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--p-accent)]" />
                   {c}
                 </li>
               ))}

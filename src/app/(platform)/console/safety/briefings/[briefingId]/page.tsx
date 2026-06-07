@@ -147,7 +147,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
               <h3 className="text-sm font-semibold">
                 {t("console.safety.briefings.detail.statusHeading", undefined, "Status")}
               </h3>
-              <p className="mt-1 text-xs text-[var(--text-muted)]">
+              <p className="mt-1 text-xs text-[var(--p-text-2)]">
                 {row.status === "scheduled"
                   ? t(
                       "console.safety.briefings.detail.statusScheduled",
@@ -181,25 +181,25 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
 
         <dl className="surface grid grid-cols-1 gap-4 p-5 sm:grid-cols-2">
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+            <dt className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.safety.briefings.detail.project", undefined, "Project")}
             </dt>
             <dd className="text-sm">{row.project?.name ?? "—"}</dd>
           </div>
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+            <dt className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.safety.briefings.detail.briefer", undefined, "Briefer")}
             </dt>
             <dd className="text-sm">{brieferName}</dd>
           </div>
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+            <dt className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.safety.briefings.detail.scheduled", undefined, "Scheduled")}
             </dt>
             <dd className="font-mono text-xs">{fmt(row.scheduled_for)}</dd>
           </div>
           <div className="flex flex-col gap-1">
-            <dt className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+            <dt className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.safety.briefings.detail.conducted", undefined, "Conducted")}
             </dt>
             <dd className="font-mono text-xs">{fmt(row.conducted_at)}</dd>
@@ -209,7 +209,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
         {row.notes && (
           <section className="surface p-5">
             <h3 className="text-sm font-semibold">{t("console.safety.briefings.detail.notes", undefined, "Notes")}</h3>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{row.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{row.notes}</p>
           </section>
         )}
 
@@ -218,7 +218,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
             <h3 className="text-sm font-semibold">
               {t("console.safety.briefings.detail.attendance", undefined, "Attendance")}
             </h3>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {t(
                 "console.safety.briefings.detail.acknowledgedCount",
                 { acknowledged: acknowledgedCount, total: attendees.length },
@@ -227,7 +227,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
             </span>
           </div>
           {attendees.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.safety.briefings.detail.noAttendees",
                 undefined,
@@ -246,7 +246,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                   <li key={a.id} className="flex items-center justify-between gap-3 py-2">
                     <div>
                       <div className="font-medium">{who}</div>
-                      {a.notes && <div className="text-xs text-[var(--text-muted)]">{a.notes}</div>}
+                      {a.notes && <div className="text-xs text-[var(--p-text-2)]">{a.notes}</div>}
                     </div>
                     <div className="flex items-center gap-2">
                       {a.acknowledged_at ? (
@@ -285,7 +285,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
             className="surface-inset mt-4 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-2"
           >
             <input type="hidden" name="briefingId" value={briefingId} />
-            <select name="user_id" defaultValue="" className="input-base">
+            <select name="user_id" defaultValue="" className="ps-input">
               <option value="">
                 {t("console.safety.briefings.detail.orgMemberOption", undefined, "— Org member —")}
               </option>
@@ -295,7 +295,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                 </option>
               ))}
             </select>
-            <select name="crew_member_id" defaultValue="" className="input-base">
+            <select name="crew_member_id" defaultValue="" className="ps-input">
               <option value="">
                 {t("console.safety.briefings.detail.crewMemberOption", undefined, "— Crew member —")}
               </option>
@@ -309,9 +309,9 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
               name="notes"
               placeholder={t("console.safety.briefings.detail.notePlaceholder", undefined, "Note · Optional")}
               maxLength={500}
-              className="input-base sm:col-span-2"
+              className="ps-input sm:col-span-2"
             />
-            <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)] sm:col-span-1">
+            <label className="flex items-center gap-2 text-xs text-[var(--p-text-2)] sm:col-span-1">
               <input type="checkbox" name="acknowledged" value="true" />
               {t("console.safety.briefings.detail.markAcknowledged", undefined, "Mark already acknowledged")}
             </label>
@@ -321,7 +321,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
               </Button>
             </div>
           </form>
-          <p className="mt-2 text-[10px] text-[var(--text-muted)]">
+          <p className="mt-2 text-[10px] text-[var(--p-text-2)]">
             {t(
               "console.safety.briefings.detail.pickOneHint",
               undefined,

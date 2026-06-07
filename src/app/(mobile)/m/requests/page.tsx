@@ -21,7 +21,7 @@ export default async function MobileRequests() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -44,16 +44,16 @@ export default async function MobileRequests() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.requests.eyebrow", undefined, "Field")}
       </div>
       <div className="mt-1 flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{t("m.requests.title", undefined, "Service Requests")}</h1>
-        <Link href="/m/requests/new" className="btn btn-primary btn-sm">
+        <Link href="/m/requests/new" className="ps-btn ps-btn--sm">
           {t("m.requests.openCta", undefined, "+ Open")}
         </Link>
       </div>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.requests.subtitle", undefined, "Active requests across the org.")}
       </p>
 
@@ -72,13 +72,11 @@ export default async function MobileRequests() {
               <Link href={`/m/requests/${r.id}`} className="surface flex flex-col gap-1 p-4">
                 <div className="flex items-center gap-2">
                   <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
-                  <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.category}</span>
-                  <span className="ms-auto font-mono text-[10px] text-[var(--text-muted)]">
-                    {fmt.time(r.opened_at)}
-                  </span>
+                  <span className="font-mono text-[10px] text-[var(--p-text-2)]">{r.category}</span>
+                  <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">{fmt.time(r.opened_at)}</span>
                 </div>
                 <div className="text-sm font-medium">{r.summary}</div>
-                <div className="font-mono text-[10px] text-[var(--text-muted)]">{toTitle(r.status)}</div>
+                <div className="font-mono text-[10px] text-[var(--p-text-2)]">{toTitle(r.status)}</div>
               </Link>
             </li>
           ))

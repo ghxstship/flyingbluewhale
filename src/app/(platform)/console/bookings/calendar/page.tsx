@@ -65,7 +65,7 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         {items.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.bookings.calendar.empty", undefined, "No upcoming holds or milestones.")}
           </div>
         ) : (
@@ -86,9 +86,7 @@ export default async function Page() {
                   )}
                   <span className="text-sm">{it.row.label ?? "—"}</span>
                 </div>
-                <span className="font-mono text-xs text-[var(--text-secondary)]">
-                  {new Date(it.date).toLocaleString()}
-                </span>
+                <span className="font-mono text-xs text-[var(--p-text-2)]">{new Date(it.date).toLocaleString()}</span>
               </li>
             ))}
           </ul>

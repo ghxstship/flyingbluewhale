@@ -104,26 +104,26 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
               {t("console.marketplace.talent.detail.booking", undefined, "Booking")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.talent.detail.feeBand", undefined, "Fee band")}
               </dt>
               <dd>{formatFeeRange(talent.fee_min_cents, talent.fee_max_cents, talent.currency)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.talent.detail.travelRadius", undefined, "Travel radius")}
               </dt>
               <dd>{talent.travel_radius_km ? `${talent.travel_radius_km} km` : "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.talent.detail.deposit", undefined, "Deposit")}
               </dt>
               <dd>{talent.deposit_pct}%</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.talent.detail.agent", undefined, "Agent")}
               </dt>
               <dd>
                 {talent.agent_name ?? "—"}
                 {talent.agent_email ? ` <${talent.agent_email}>` : ""}
               </dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.talent.detail.reel", undefined, "Reel")}
               </dt>
               <dd>
@@ -132,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
                     href={talent.video_reel_url}
                     target="_blank"
                     rel="noopener"
-                    className="font-mono text-xs text-[var(--org-primary)]"
+                    className="font-mono text-xs text-[var(--p-accent)]"
                   >
                     {t("console.marketplace.talent.detail.watch", undefined, "Watch ↗")}
                   </a>
@@ -140,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
                   "—"
                 )}
               </dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.talent.detail.rating", undefined, "Rating")}
               </dt>
               <dd>

@@ -65,8 +65,8 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
                   ? t("console.operations.maintenance.job.status.overdue", undefined, "Overdue")
                   : t("console.operations.maintenance.job.status.open", undefined, "Open")}
             </Badge>
-            <span className="font-mono text-xs text-[var(--text-muted)]">{job.kind}</span>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">{job.kind}</span>
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {t(
                 "console.operations.maintenance.job.targetLabel",
                 { target: job.target_kind },
@@ -76,14 +76,14 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
           </div>
           <dl className="mt-4 grid grid-cols-2 gap-3 text-xs">
             <div>
-              <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+              <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                 {t("console.operations.maintenance.job.fields.due", undefined, "Due")}
               </dt>
               <dd className="font-mono">{fmt.dateTime(job.due_at)}</dd>
             </div>
             {job.completed_at && (
               <div>
-                <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+                <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                   {t("console.operations.maintenance.job.fields.completed", undefined, "Completed")}
                 </dt>
                 <dd className="font-mono">{fmt.dateTime(job.completed_at)}</dd>
@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
             )}
             {job.schedule?.cadence_days && (
               <div>
-                <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+                <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                   {t("console.operations.maintenance.job.fields.cadence", undefined, "Cadence")}
                 </dt>
                 <dd className="font-mono">
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
             )}
             {job.target_id && (
               <div>
-                <dt className="tracking-wide text-[var(--text-muted)] uppercase">
+                <dt className="tracking-wide text-[var(--p-text-2)] uppercase">
                   {t("console.operations.maintenance.job.fields.targetId", undefined, "Target id")}
                 </dt>
                 <dd className="font-mono break-all">{job.target_id}</dd>
@@ -114,7 +114,7 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
           </dl>
           {job.notes && (
             <div className="mt-4 text-sm">
-              <div className="text-xs tracking-wide text-[var(--text-muted)] uppercase">
+              <div className="text-xs tracking-wide text-[var(--p-text-2)] uppercase">
                 {t("console.operations.maintenance.job.fields.notes", undefined, "Notes")}
               </div>
               <p className="mt-1 whitespace-pre-wrap">{job.notes}</p>
@@ -128,10 +128,10 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
               {t("console.operations.maintenance.job.complete.heading", undefined, "Complete")}
             </h3>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.operations.maintenance.job.complete.outcomeLabel", undefined, "Outcome")}
               </label>
-              <select name="outcome" defaultValue="pass" className="input-base mt-1.5 w-full" required>
+              <select name="outcome" defaultValue="pass" className="ps-input mt-1.5 w-full" required>
                 <option value="pass">
                   {t("console.operations.maintenance.job.complete.outcome.pass", undefined, "Pass")}
                 </option>
@@ -148,10 +148,10 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.operations.maintenance.job.complete.notesLabel", undefined, "Notes")}
               </label>
-              <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+              <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
             </div>
             <div className="flex justify-end">
               <Button type="submit">

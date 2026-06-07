@@ -29,13 +29,13 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <Link href="/m/tasks" className="text-xs text-[var(--text-muted)]">
+      <Link href="/m/tasks" className="text-xs text-[var(--p-text-2)]">
         {t("m.tasks.detail.back", undefined, "← Tasks")}
       </Link>
       <h1 className="mt-2 text-2xl leading-snug font-semibold">{task.title}</h1>
       <div className="mt-3 flex items-center gap-2">
         <StatusBadge status={task.status} />
-        <span className="text-xs text-[var(--text-muted)]">
+        <span className="text-xs text-[var(--p-text-2)]">
           {t("m.tasks.detail.dueLabel", { date: formatDate(task.due_at) }, `Due ${formatDate(task.due_at)}`)}
         </span>
       </div>
@@ -45,14 +45,14 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
         </div>
       )}
       <div className="mt-6">
-        <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.tasks.detail.updateStatus", undefined, "Update Status")}
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
           {TRANSITIONS.filter((tx) => tx.value !== task.status).map((tx) => (
             <form key={tx.value} action={setTaskStatus.bind(null, taskId)}>
               <input type="hidden" name="status" value={tx.value} />
-              <button type="submit" className="btn btn-secondary w-full">
+              <button type="submit" className="ps-btn ps-btn--ghost w-full">
                 {t(tx.labelKey, undefined, tx.labelFallback)}
               </button>
             </form>

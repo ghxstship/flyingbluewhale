@@ -33,7 +33,7 @@ export async function DirectorySurface({
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -63,13 +63,13 @@ export async function DirectorySurface({
 
   return (
     <div className={containerClass}>
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.directory.peopleCount", { count: members.length }, `${members.length} people in your org`)}
       </p>
 
-      <ul className="mt-5 divide-y divide-[var(--border-color)]">
+      <ul className="mt-5 divide-y divide-[var(--p-border)]">
         {members.length === 0 ? (
           <li className="py-4">
             <EmptyState
@@ -83,9 +83,9 @@ export async function DirectorySurface({
             <li key={user.id} className="flex items-start justify-between gap-3 py-3">
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-semibold">{user.name ?? user.email}</div>
-                <div className="truncate font-mono text-[11px] text-[var(--text-muted)]">{user.email}</div>
+                <div className="truncate font-mono text-[11px] text-[var(--p-text-2)]">{user.email}</div>
               </div>
-              <span className="font-mono text-[10px] text-[var(--text-muted)] uppercase">{role}</span>
+              <span className="font-mono text-[10px] text-[var(--p-text-2)] uppercase">{role}</span>
             </li>
           ))
         )}

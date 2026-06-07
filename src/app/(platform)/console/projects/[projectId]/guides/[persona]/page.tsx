@@ -76,7 +76,10 @@ export default async function GuideEditorPage({ params }: { params: Promise<{ pr
         )}
         action={
           !isPublicPersona(persona) ? (
-            <Link href={`/console/projects/${projectId}/guides/${persona}/access`} className="btn btn-secondary btn-sm">
+            <Link
+              href={`/console/projects/${projectId}/guides/${persona}/access`}
+              className="ps-btn ps-btn--ghost ps-btn--sm"
+            >
               {t("console.projects.guides.persona.manageAccessCodes", undefined, "Manage access codes")}
             </Link>
           ) : undefined

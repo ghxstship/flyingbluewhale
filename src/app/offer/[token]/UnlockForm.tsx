@@ -14,11 +14,11 @@ export function UnlockForm({ token, expired = false }: { token: string; expired?
   return (
     <div className="mx-auto max-w-md space-y-6 py-12">
       <div className="space-y-2 text-center">
-        <div className="font-mono text-xs tracking-widest text-[var(--text-muted)] uppercase">
+        <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">
           GHXSTSHIP × Five Senses Group
         </div>
         <h1 className="text-2xl font-semibold">{t("offer.unlock.title", undefined, "Engagement Letter")}</h1>
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-[var(--p-text-2)]">
           {expired
             ? t(
                 "offer.unlock.expiredBody",
@@ -46,10 +46,10 @@ export function UnlockForm({ token, expired = false }: { token: string; expired?
             inputMode="text"
             maxLength={6}
             placeholder="ABC123"
-            className="input-base focus-ring text-center font-mono text-2xl tracking-[0.4em] uppercase"
+            className="ps-input focus-ring text-center font-mono text-2xl tracking-[0.4em] uppercase"
           />
         </FormField>
-        <p className="text-center text-xs text-[var(--text-muted)]">
+        <p className="text-center text-xs text-[var(--p-text-2)]">
           {t("offer.unlock.troublePrefix", undefined, "Trouble? Contact")}{" "}
           <a className="underline" href="mailto:julian.clarkson@ghxstship.pro">
             julian.clarkson@ghxstship.pro

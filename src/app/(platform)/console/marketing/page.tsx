@@ -85,7 +85,7 @@ export default async function Page() {
             <div className="text-sm font-semibold tracking-wide uppercase">
               {t("console.marketing.cards.onsales.title", undefined, "On-sales")}
             </div>
-            <p className="mt-2 text-xs text-[var(--text-secondary)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.marketing.cards.onsales.description", undefined, "Upcoming on-sale dates across all shows.")}
             </p>
           </Link>
@@ -93,7 +93,7 @@ export default async function Page() {
             <div className="text-sm font-semibold tracking-wide uppercase">
               {t("console.marketing.cards.calendar.title", undefined, "Calendar")}
             </div>
-            <p className="mt-2 text-xs text-[var(--text-secondary)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.marketing.cards.calendar.description",
                 undefined,
@@ -120,7 +120,7 @@ export default async function Page() {
                     <Badge variant={STATUS_TONE[r.kind] ?? "muted"}>{toTitle(r.kind)}</Badge>
                     <span>{r.label ?? "—"}</span>
                   </div>
-                  <span className="font-mono text-xs text-[var(--text-secondary)]">
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {new Date(r.occurs_at).toLocaleString()}
                   </span>
                 </li>

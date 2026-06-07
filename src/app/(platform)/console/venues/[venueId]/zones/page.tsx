@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               header: t("console.venues.zones.column.allowedCategories", undefined, "Allowed Categories"),
               render: (r) => {
                 const cats = categoriesFor(r.allowed_categories);
-                if (cats.length === 0) return <span className="text-[var(--text-muted)]">—</span>;
+                if (cats.length === 0) return <span className="text-[var(--p-text-2)]">—</span>;
                 return (
                   <div className="flex flex-wrap gap-1">
                     {cats.slice(0, 6).map((c) => (
@@ -115,7 +115,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                         {c}
                       </Badge>
                     ))}
-                    {cats.length > 6 && <span className="text-xs text-[var(--text-muted)]">+{cats.length - 6}</span>}
+                    {cats.length > 6 && <span className="text-xs text-[var(--p-text-2)]">+{cats.length - 6}</span>}
                   </div>
                 );
               },
@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           Zones drive the accreditation policy matrix. Edit the allowed categories list to grant access — the policy
           matrix renders the result.
         </p>

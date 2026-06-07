@@ -54,10 +54,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         >
           <input type="hidden" name="id" value={item.id} />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.catalog.edit.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" required className="input-base mt-1.5 w-full" defaultValue={item.kind}>
+            <select name="kind" required className="ps-input mt-1.5 w-full" defaultValue={item.kind}>
               <option value="credential">
                 {t("console.settings.catalog.edit.kind.credential", undefined, "Credential")}
               </option>
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             defaultValue={item.name}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.catalog.edit.descriptionLabel", undefined, "Description")}
             </label>
             <textarea
@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               rows={3}
               maxLength={1000}
               defaultValue={item.description ?? ""}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
             />
           </div>
           <Input

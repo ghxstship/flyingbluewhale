@@ -28,10 +28,10 @@ export function NewInvoiceForm({
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.invoices.new.client", undefined, "Client")}
           </label>
-          <select name="client_id" className="input-base mt-1.5 w-full">
+          <select name="client_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.finance.invoices.new.noClient", undefined, "— No client —")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -41,10 +41,10 @@ export function NewInvoiceForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.invoices.new.project", undefined, "Project")}
           </label>
-          <select name="project_id" className="input-base mt-1.5 w-full">
+          <select name="project_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.finance.invoices.new.noProject", undefined, "— No project —")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -64,10 +64,10 @@ export function NewInvoiceForm({
           required
         />
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.invoices.new.currency", undefined, "Currency")}
           </label>
-          <select name="currency" defaultValue="USD" className="input-base mt-1.5 w-full">
+          <select name="currency" defaultValue="USD" className="ps-input mt-1.5 w-full">
             <option>USD</option>
             <option>EUR</option>
             <option>GBP</option>
@@ -78,10 +78,10 @@ export function NewInvoiceForm({
       </div>
       <Input label={t("console.finance.invoices.new.issued", undefined, "Issued")} name="issued_at" type="date" />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.finance.invoices.new.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={3} className="input-base mt-1.5 w-full" />
+        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

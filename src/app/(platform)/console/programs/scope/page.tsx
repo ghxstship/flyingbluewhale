@@ -105,7 +105,7 @@ export default async function Page() {
               "Program scope is derived from delegation_entries. Author entries via Console → Participants → Entries.",
             )}
             action={
-              <Link href="/console/participants/entries/new" className="btn btn-primary btn-sm">
+              <Link href="/console/participants/entries/new" className="ps-btn ps-btn--sm">
                 {t("console.programs.scope.newEntry", undefined, "+ New Entry")}
               </Link>
             }
@@ -132,8 +132,8 @@ export default async function Page() {
                       .sort((a, b) => b[1] - a[1])
                       .map(([event, count]) => (
                         <li key={event} className="flex items-center justify-between">
-                          <span className="text-[var(--text-secondary)]">{event}</span>
-                          <span className="font-mono text-xs text-[var(--text-muted)]">
+                          <span className="text-[var(--p-text-2)]">{event}</span>
+                          <span className="font-mono text-xs text-[var(--p-text-2)]">
                             {count}{" "}
                             {count === 1
                               ? t("console.programs.scope.participantSingular", undefined, "participant")

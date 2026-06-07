@@ -70,13 +70,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-2xl space-y-4">
         <article className="surface p-6 text-sm whitespace-pre-wrap">{a.body}</article>
         <div className="flex flex-wrap gap-2">
-          <Link href={`/console/comms/announcements/${a.id}/edit`} className="btn btn-secondary btn-sm">
+          <Link href={`/console/comms/announcements/${a.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
             {t("common.edit", undefined, "Edit")}
           </Link>
           {a.publish_state === "draft" && (
             <form action={publishAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
-              <button type="submit" className="btn btn-primary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--sm">
                 {t("console.comms.announcements.detail.publish", undefined, "Publish")}
               </button>
             </form>
@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           {a.publish_state !== "archived" && (
             <form action={archiveAnnouncement}>
               <input type="hidden" name="id" value={a.id} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.comms.announcements.detail.archive", undefined, "Archive")}
               </button>
             </form>

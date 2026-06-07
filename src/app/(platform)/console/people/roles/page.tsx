@@ -62,7 +62,7 @@ export default async function RolesPage() {
       />
       <div className="page-content max-w-5xl space-y-6">
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
             {t(
               "console.people.roles.platformHeading",
               undefined,
@@ -70,7 +70,7 @@ export default async function RolesPage() {
             )}
           </h3>
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.people.roles.col.role", undefined, "Role")}</th>
@@ -85,7 +85,7 @@ export default async function RolesPage() {
                       <Badge variant="brand">{r.role}</Badge>
                     </td>
                     <td className="font-mono text-xs">{r.tier}</td>
-                    <td className="text-[var(--text-secondary)]">{r.description}</td>
+                    <td className="text-[var(--p-text-2)]">{r.description}</td>
                   </tr>
                 ))}
               </tbody>
@@ -94,7 +94,7 @@ export default async function RolesPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
             {t(
               "console.people.roles.projectHeading",
               undefined,
@@ -102,7 +102,7 @@ export default async function RolesPage() {
             )}
           </h3>
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.people.roles.col.role", undefined, "Role")}</th>
@@ -115,13 +115,13 @@ export default async function RolesPage() {
                     <td>
                       <Badge variant="info">{r.role}</Badge>
                     </td>
-                    <td className="text-[var(--text-secondary)]">{r.description}</td>
+                    <td className="text-[var(--p-text-2)]">{r.description}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="mt-2 text-xs text-[var(--text-muted)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t("console.people.roles.bypassNote.prefix", undefined, "Platform ")}
             <code>owner</code>
             {t("console.people.roles.bypassNote.comma1", undefined, ", ")}
@@ -141,7 +141,7 @@ export default async function RolesPage() {
             </h3>
             <CustomRoleForm />
           </div>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.people.roles.custom.intro",
               undefined,
@@ -152,7 +152,7 @@ export default async function RolesPage() {
             <code>safety-officer</code>
             {t("console.people.roles.custom.intro.suffix", undefined, ").")}
           </p>
-          <table className="data-table mt-4 w-full text-sm">
+          <table className="ps-table mt-4 w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.people.roles.col.slug", undefined, "Slug")}</th>
@@ -165,7 +165,7 @@ export default async function RolesPage() {
             <tbody>
               {(customRoles ?? []).length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-6 text-center text-[var(--text-muted)]">
+                  <td colSpan={5} className="py-6 text-center text-[var(--p-text-2)]">
                     {t("console.people.roles.empty", undefined, "No custom roles yet.")}
                   </td>
                 </tr>
@@ -174,13 +174,13 @@ export default async function RolesPage() {
                   <tr key={r.id}>
                     <td className="font-mono text-xs">{r.slug}</td>
                     <td>{r.label}</td>
-                    <td className="text-xs text-[var(--text-secondary)]">{r.description ?? "—"}</td>
-                    <td className="text-xs text-[var(--text-secondary)]">{(r.permissions ?? []).join(", ") || "—"}</td>
+                    <td className="text-xs text-[var(--p-text-2)]">{r.description ?? "—"}</td>
+                    <td className="text-xs text-[var(--p-text-2)]">{(r.permissions ?? []).join(", ") || "—"}</td>
                     <td>
                       {!r.is_system && (
                         <form action={deleteCustomRole}>
                           <input type="hidden" name="id" value={r.id} />
-                          <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                          <button type="submit" className="text-xs text-[var(--p-danger)] hover:underline">
                             {t("common.delete", undefined, "Delete")}
                           </button>
                         </form>

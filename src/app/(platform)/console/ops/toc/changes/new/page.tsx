@@ -32,14 +32,14 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ops.toc.changes.new.descriptionLabel", undefined, "Description")}
             </label>
             <textarea
               name="description"
               rows={3}
               maxLength={4000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               placeholder={t(
                 "console.ops.toc.changes.new.descriptionPlaceholder",
                 undefined,
@@ -48,10 +48,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ops.toc.changes.new.typeLabel", undefined, "Type")}
             </label>
-            <select name="type" defaultValue="normal" className="input-base mt-1.5 w-full">
+            <select name="type" defaultValue="normal" className="ps-input mt-1.5 w-full">
               <option value="standard">
                 {t("console.ops.toc.changes.new.typeStandard", undefined, "Standard — Pre-approved")}
               </option>
@@ -64,20 +64,20 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.ops.toc.changes.new.riskLabel", undefined, "Risk")}
               </label>
-              <select name="risk" defaultValue="medium" className="input-base mt-1.5 w-full">
+              <select name="risk" defaultValue="medium" className="ps-input mt-1.5 w-full">
                 <option value="low">{t("console.ops.toc.changes.new.levelLow", undefined, "Low")}</option>
                 <option value="medium">{t("console.ops.toc.changes.new.levelMedium", undefined, "Medium")}</option>
                 <option value="high">{t("console.ops.toc.changes.new.levelHigh", undefined, "High")}</option>
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.ops.toc.changes.new.impactLabel", undefined, "Impact")}
               </label>
-              <select name="impact" defaultValue="medium" className="input-base mt-1.5 w-full">
+              <select name="impact" defaultValue="medium" className="ps-input mt-1.5 w-full">
                 <option value="low">{t("console.ops.toc.changes.new.levelLow", undefined, "Low")}</option>
                 <option value="medium">{t("console.ops.toc.changes.new.levelMedium", undefined, "Medium")}</option>
                 <option value="high">{t("console.ops.toc.changes.new.levelHigh", undefined, "High")}</option>
@@ -95,14 +95,14 @@ export default async function Page() {
             type="datetime-local"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ops.toc.changes.new.backoutPlanLabel", undefined, "Backout plan")}
             </label>
             <textarea
               name="backout_plan"
               rows={3}
               maxLength={4000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               placeholder={t(
                 "console.ops.toc.changes.new.backoutPlanPlaceholder",
                 undefined,

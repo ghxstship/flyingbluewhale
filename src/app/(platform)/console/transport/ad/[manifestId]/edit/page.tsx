@@ -43,20 +43,20 @@ export default async function Page({ params }: { params: Promise<{ manifestId: s
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.ad.edit.kindLabel", undefined, "Kind")}
             </span>
-            <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
+            <select name="kind" defaultValue={row.kind ?? ""} required className="ps-input focus-ring w-full">
               <option value="arrival">arrival</option>
               <option value="departure">departure</option>
               <option value="transit">transit</option>
             </select>
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.ad.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="scheduled">scheduled</option>
               <option value="boarded">boarded</option>
               <option value="in_transit">in_transit</option>
@@ -95,10 +95,10 @@ export default async function Page({ params }: { params: Promise<{ manifestId: s
             defaultValue={dateTimeLocal(row.actual_at)}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.ad.edit.notesLabel", undefined, "Notes")}
             </span>
-            <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="input-base focus-ring w-full" />
+            <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="ps-input focus-ring w-full" />
           </label>
         </FormShell>
       </div>

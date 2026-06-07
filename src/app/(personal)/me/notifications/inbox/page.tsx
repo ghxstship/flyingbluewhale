@@ -30,7 +30,7 @@ export default async function InboxPage({ searchParams }: { searchParams: Search
       <div>
         <header className="mb-6">
           <h1 className="text-2xl font-semibold tracking-tight">{t("me.inbox.title", undefined, "Inbox")}</h1>
-          <p className="mt-2 text-sm text-[var(--text-muted)]">
+          <p className="mt-2 text-sm text-[var(--p-text-2)]">
             {t(
               "me.inbox.subtitle",
               undefined,
@@ -46,7 +46,7 @@ export default async function InboxPage({ searchParams }: { searchParams: Search
             "Supabase is not configured in this environment.",
           )}
         />
-        <p className="mt-4 text-xs text-[var(--text-muted)]">
+        <p className="mt-4 text-xs text-[var(--p-text-2)]">
           <Link href="/me/notifications" className="underline">
             {t("me.inbox.managePreferences", undefined, "Manage notification preferences")}
           </Link>

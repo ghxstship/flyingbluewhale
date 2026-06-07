@@ -101,8 +101,8 @@ export function TimelineView({
           role="img"
           aria-label={t("console.projects.schedule.timeline.ariaLabel", undefined, "Project Timeline")}
         >
-          <rect x={0} y={0} width={width} height={HEADER_HEIGHT} fill="var(--surface-inset)" />
-          <line x1={LABEL_COL} y1={HEADER_HEIGHT} x2={width} y2={HEADER_HEIGHT} stroke="var(--border-color)" />
+          <rect x={0} y={0} width={width} height={HEADER_HEIGHT} fill="var(--p-surface-2)" />
+          <line x1={LABEL_COL} y1={HEADER_HEIGHT} x2={width} y2={HEADER_HEIGHT} stroke="var(--p-border)" />
 
           {monthTicks.map((tick, i) => (
             <g key={i}>
@@ -111,11 +111,11 @@ export function TimelineView({
                 y1={HEADER_HEIGHT}
                 x2={tick.x}
                 y2={height}
-                stroke="var(--border-color)"
+                stroke="var(--p-border)"
                 strokeDasharray="2 4"
                 opacity={0.6}
               />
-              <text x={tick.x + 4} y={HEADER_HEIGHT - 8} fontSize={10} fill="var(--text-muted)">
+              <text x={tick.x + 4} y={HEADER_HEIGHT - 8} fontSize={10} fill="var(--p-text-2)">
                 {tick.label}
               </text>
             </g>
@@ -128,10 +128,10 @@ export function TimelineView({
                 y1={HEADER_HEIGHT - 4}
                 x2={xFor(now.getTime())}
                 y2={height}
-                stroke="var(--org-primary)"
+                stroke="var(--p-accent)"
                 strokeWidth={1}
               />
-              <text x={xFor(now.getTime()) + 4} y={HEADER_HEIGHT - 12} fontSize={9} fill="var(--org-primary)">
+              <text x={xFor(now.getTime()) + 4} y={HEADER_HEIGHT - 12} fontSize={9} fill="var(--p-accent)">
                 {t("console.projects.schedule.timeline.today", undefined, "Today")}
               </text>
             </g>
@@ -142,12 +142,12 @@ export function TimelineView({
             if (line.kind === "header") {
               return (
                 <g key={`h-${idx}`}>
-                  <rect x={0} y={y} width={width} height={ROW_HEIGHT} fill="var(--surface-inset)" />
+                  <rect x={0} y={y} width={width} height={ROW_HEIGHT} fill="var(--p-surface-2)" />
                   <text
                     x={12}
                     y={y + ROW_HEIGHT / 2 + 4}
                     fontSize={10}
-                    fill="var(--text-muted)"
+                    fill="var(--p-text-2)"
                     style={{ letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600 }}
                   >
                     {line.lane === "Tasks"
@@ -169,7 +169,7 @@ export function TimelineView({
                   x={12}
                   y={y + ROW_HEIGHT / 2 + 4}
                   fontSize={10}
-                  fill="var(--text-secondary)"
+                  fill="var(--p-text-2)"
                   style={{ pointerEvents: "none" }}
                 >
                   {trim(r.label, 32)}
@@ -190,16 +190,16 @@ export function TimelineView({
 
 function barTone(lane: "Tasks" | "Events", status: string): string {
   if (lane === "Events") {
-    if (status === "live") return "var(--color-success)";
-    if (status === "completed") return "var(--text-muted)";
-    if (status === "cancelled") return "var(--color-error)";
-    return "var(--org-primary)";
+    if (status === "live") return "var(--p-success)";
+    if (status === "completed") return "var(--p-text-2)";
+    if (status === "cancelled") return "var(--p-danger)";
+    return "var(--p-accent)";
   }
-  if (status === "done") return "var(--color-success)";
-  if (status === "blocked") return "var(--color-error)";
-  if (status === "in_progress") return "var(--org-primary)";
-  if (status === "review") return "var(--color-warning)";
-  return "var(--text-muted)";
+  if (status === "done") return "var(--p-success)";
+  if (status === "blocked") return "var(--p-danger)";
+  if (status === "in_progress") return "var(--p-accent)";
+  if (status === "review") return "var(--p-warning)";
+  return "var(--p-text-2)";
 }
 
 function fmtRange(start: string, end: string): string {

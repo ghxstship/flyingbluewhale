@@ -58,16 +58,16 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
           <h2 className="hed-md mb-3">Profile</h2>
           <dl className="space-y-1 text-sm">
             <div>
-              <span className="text-[var(--text-secondary)]">Roster size:</span> {a.artist_count}
+              <span className="text-[var(--p-text-2)]">Roster size:</span> {a.artist_count}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">Default commission:</span>{" "}
+              <span className="text-[var(--p-text-2)]">Default commission:</span>{" "}
               {(a.default_commission_bps / 100).toFixed(2)}%
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">Web:</span>{" "}
+              <span className="text-[var(--p-text-2)]">Web:</span>{" "}
               {a.website_url ? (
-                <a href={a.website_url} target="_blank" rel="noopener" className="font-mono text-[var(--org-primary)]">
+                <a href={a.website_url} target="_blank" rel="noopener" className="font-mono text-[var(--p-accent)]">
                   {a.website_url} ↗
                 </a>
               ) : (

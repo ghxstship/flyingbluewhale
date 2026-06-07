@@ -278,12 +278,12 @@ export function TimelineView({
   return (
     <div className={["surface flex flex-col", className ?? ""].join(" ")} data-zoom={zoom}>
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-2 border-b border-[var(--border-color)] px-3 py-2">
-        <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">Timeline</div>
+      <div className="flex items-center justify-between gap-2 border-b border-[var(--p-border)] px-3 py-2">
+        <div className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Timeline</div>
         <div
           role="tablist"
           aria-label="Timeline zoom"
-          className="inline-flex overflow-hidden rounded-md border border-[var(--border-color)]"
+          className="inline-flex overflow-hidden rounded-md border border-[var(--p-border)]"
         >
           {ZOOMS.map((z) => (
             <button
@@ -294,8 +294,8 @@ export function TimelineView({
               onClick={() => setZoom(z)}
               className={`px-2 py-1 text-xs capitalize ${
                 zoom === z
-                  ? "bg-[var(--surface-inset)] text-[var(--text-primary)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  ? "bg-[var(--p-surface-2)] text-[var(--p-text-1)]"
+                  : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
               }`}
             >
               {z}
@@ -314,11 +314,11 @@ export function TimelineView({
           <div className="relative" style={{ width: LANE_RAIL_WIDTH + canvasWidth, minWidth: "100%" }}>
             {/* Sticky top-axis rail */}
             <div
-              className="sticky top-0 z-20 flex border-b border-[var(--border-color)] bg-[var(--surface-raised)]"
+              className="sticky top-0 z-20 flex border-b border-[var(--p-border)] bg-[var(--p-surface)]"
               style={{ height: HEADER_HEIGHT }}
             >
               <div
-                className="sticky start-0 z-30 flex shrink-0 items-center border-e border-[var(--border-color)] bg-[var(--surface-raised)] px-3 text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase"
+                className="sticky start-0 z-30 flex shrink-0 items-center border-e border-[var(--p-border)] bg-[var(--p-surface)] px-3 text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase"
                 style={{ width: LANE_RAIL_WIDTH }}
               >
                 Lane
@@ -327,7 +327,7 @@ export function TimelineView({
                 {markers.map((m, i) => (
                   <div
                     key={`${m.date.toISOString()}-${i}`}
-                    className="absolute top-0 flex h-full items-center border-s border-[var(--border-color)] ps-1 font-mono text-[10px] text-[var(--text-muted)]"
+                    className="absolute top-0 flex h-full items-center border-s border-[var(--p-border)] ps-1 font-mono text-[10px] text-[var(--p-text-2)]"
                     style={{ left: m.offset }}
                   >
                     {m.label}
@@ -340,7 +340,7 @@ export function TimelineView({
                     style={{
                       left: todayPx,
                       width: 2,
-                      background: "var(--color-error)",
+                      background: "var(--p-danger)",
                     }}
                   />
                 )}
@@ -351,14 +351,10 @@ export function TimelineView({
             {lanes.map((lane) => {
               const laneItems = itemsByLane.get(lane.id) ?? [];
               return (
-                <div
-                  key={lane.id}
-                  className="flex border-b border-[var(--border-color)]"
-                  style={{ height: LANE_HEIGHT }}
-                >
+                <div key={lane.id} className="flex border-b border-[var(--p-border)]" style={{ height: LANE_HEIGHT }}>
                   {/* Sticky lane label */}
                   <div
-                    className="sticky start-0 z-10 flex shrink-0 items-center gap-2 border-e border-[var(--border-color)] bg-[var(--surface)] px-3 text-xs font-medium text-[var(--text-primary)]"
+                    className="sticky start-0 z-10 flex shrink-0 items-center gap-2 border-e border-[var(--p-border)] bg-[var(--p-surface)] px-3 text-xs font-medium text-[var(--p-text-1)]"
                     style={{ width: LANE_RAIL_WIDTH }}
                   >
                     {lane.icon && (
@@ -383,7 +379,7 @@ export function TimelineView({
                         style={{
                           left: todayPx,
                           width: 2,
-                          background: "var(--color-error)",
+                          background: "var(--p-danger)",
                           opacity: 0.5,
                         }}
                       />

@@ -33,7 +33,7 @@ const SERVICES: ServiceRow[] = [
 const STATE_COLOR: Record<ServiceRow["state"], string> = {
   operational: "var(--success)",
   degraded: "var(--warning)",
-  outage: "var(--color-error)",
+  outage: "var(--p-danger)",
 };
 
 const STATE_LABEL_KEY: Record<ServiceRow["state"], string> = {
@@ -57,8 +57,8 @@ export default async function StatusPage() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.status.hero.eyebrow")}</div>
         <h1 className="hed-3xl mt-4">{t("marketing.pages.status.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.status.hero.body")}</p>
-        <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-1.5">
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.status.hero.body")}</p>
+        <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-1.5">
           <span
             className="inline-block h-2 w-2 rounded-full"
             style={{ background: "var(--success)" }}
@@ -73,11 +73,11 @@ export default async function StatusPage() {
           {SERVICES.map((s, i) => (
             <div
               key={s.name}
-              className={`flex items-center justify-between p-5 ${i < SERVICES.length - 1 ? "border-b border-[var(--border-color)]" : ""}`}
+              className={`flex items-center justify-between p-5 ${i < SERVICES.length - 1 ? "border-b border-[var(--p-border)]" : ""}`}
             >
               <div>
                 <div className="text-sm font-semibold">{s.name}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{t(s.descriptionKey)}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{t(s.descriptionKey)}</div>
               </div>
               <div className="flex items-center gap-2">
                 <span
@@ -98,7 +98,7 @@ export default async function StatusPage() {
         <div className="surface p-8 md:p-10">
           <div className="eyebrow eyebrow-brand">{t("marketing.pages.status.comingSoon.eyebrow")}</div>
           <h2 className="hed-lg mt-3">{t("marketing.pages.status.comingSoon.title")}</h2>
-          <p className="mt-3 text-sm text-[var(--text-secondary)]">
+          <p className="mt-3 text-sm text-[var(--p-text-2)]">
             {t("marketing.pages.status.comingSoon.body")}
             <span className="font-mono"> status.{SITE.domain}</span>.
           </p>

@@ -21,10 +21,10 @@ export function NewPoForm({
       <Input label={t("console.procurement.purchaseOrders.new.titleLabel", undefined, "Title")} name="title" required />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.procurement.purchaseOrders.new.vendorLabel", undefined, "Vendor")}
           </label>
-          <select name="vendor_id" className="input-base mt-1.5 w-full">
+          <select name="vendor_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.procurement.purchaseOrders.new.noVendor", undefined, "— No vendor —")}</option>
             {vendors.map((v) => (
               <option key={v.id} value={v.id}>
@@ -34,10 +34,10 @@ export function NewPoForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.procurement.purchaseOrders.new.projectLabel", undefined, "Project")}
           </label>
-          <select name="project_id" className="input-base mt-1.5 w-full">
+          <select name="project_id" className="ps-input mt-1.5 w-full">
             <option value="">
               {t("console.procurement.purchaseOrders.new.noProject", undefined, "— No project —")}
             </option>

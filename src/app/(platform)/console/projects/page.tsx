@@ -21,7 +21,7 @@ export default async function ProjectsPage() {
       <>
         <ModuleHeader title={t("console.projects.title", undefined, "Projects")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-secondary)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.projects.configureSupabase", undefined, "Configure Supabase to load projects.")}
           </div>
         </div>

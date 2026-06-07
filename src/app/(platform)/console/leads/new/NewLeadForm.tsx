@@ -28,10 +28,10 @@ export function NewLeadForm() {
           placeholder={t("console.leads.new.sourcePlaceholder", undefined, "Referral, web, event…")}
         />
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.leads.new.stage", undefined, "Stage")}
           </label>
-          <select name="stage" defaultValue="new" className="input-base mt-1.5 w-full">
+          <select name="stage" defaultValue="new" className="ps-input mt-1.5 w-full">
             {STAGES.map((s) => (
               <option key={s} value={s}>
                 {toTitle(s)}
@@ -48,10 +48,10 @@ export function NewLeadForm() {
         step="0.01"
       />
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.leads.new.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={3} className="input-base mt-1.5 w-full" />
+        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

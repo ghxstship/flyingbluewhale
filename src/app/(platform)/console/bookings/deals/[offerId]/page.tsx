@@ -111,23 +111,21 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               {t("console.bookings.deals.detail.dealTerms", undefined, "Deal Terms")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
-                {t("console.bookings.deals.detail.type", undefined, "Type")}
-              </dt>
+              <dt className="text-[var(--p-text-2)]">{t("console.bookings.deals.detail.type", undefined, "Type")}</dt>
               <dd>{toTitle(d.deal_type)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.guarantee", undefined, "Guarantee")}
               </dt>
               <dd className="font-mono">{d.guarantee_cents != null ? formatMoney(d.guarantee_cents) : "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.doorPct", undefined, "Door %")}
               </dt>
               <dd>{d.door_pct != null ? `${d.door_pct}%` : "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.walkoutThreshold", undefined, "Walkout threshold")}
               </dt>
               <dd className="font-mono">{d.walkout_threshold_cents ? formatMoney(d.walkout_threshold_cents) : "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.agentCommission", undefined, "Agent commission")}
               </dt>
               <dd>{(d.agent_commission_bps / 100).toFixed(2)}%</dd>
@@ -138,19 +136,19 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               {t("console.bookings.deals.detail.breakEven", undefined, "Break-even")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.totalSeats", undefined, "Total seats")}
               </dt>
               <dd className="font-mono">{totalSeats}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.avgTicket", undefined, "Avg ticket")}
               </dt>
               <dd className="font-mono">{avgTicketCents != null ? formatMoney(avgTicketCents) : "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.estimatedExpenses", undefined, "Estimated expenses")}
               </dt>
               <dd className="font-mono">{formatMoney(expenseTotal)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.bookings.deals.detail.breakEvenAtAvg", undefined, "Break-even @ avg")}
               </dt>
               <dd className="font-mono">
@@ -167,11 +165,11 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
             {t("console.bookings.deals.detail.ticketScaling", undefined, "Ticket Scaling")}
           </h2>
           {scaling.length === 0 ? (
-            <p className="text-sm text-[var(--text-secondary)]">
+            <p className="text-sm text-[var(--p-text-2)]">
               {t("console.bookings.deals.detail.noScalingDefined", undefined, "No scaling defined.")}
             </p>
           ) : (
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.bookings.deals.detail.tierHeader", undefined, "Tier")}</th>
@@ -233,7 +231,7 @@ async function CoProSection({ offerId }: { offerId: string }) {
         </Badge>
       </div>
       {rows.length === 0 ? (
-        <p className="text-sm text-[var(--text-secondary)]">
+        <p className="text-sm text-[var(--p-text-2)]">
           {t(
             "console.bookings.deals.detail.noPartnersAttached",
             undefined,
@@ -247,9 +245,7 @@ async function CoProSection({ offerId }: { offerId: string }) {
               <div>
                 <span className="font-semibold">{r.partner_name}</span>
                 <span className="ms-2 font-mono text-xs">{r.split_pct}%</span>
-                {r.contact_email && (
-                  <span className="ms-2 text-xs text-[var(--text-secondary)]">{r.contact_email}</span>
-                )}
+                {r.contact_email && <span className="ms-2 text-xs text-[var(--p-text-2)]">{r.contact_email}</span>}
                 {r.settled_at && (
                   <Badge variant="success" className="ms-2">
                     {t("console.bookings.deals.detail.settledBadge", undefined, "settled")}
@@ -264,7 +260,7 @@ async function CoProSection({ offerId }: { offerId: string }) {
               >
                 <input type="hidden" name="partnership_id" value={r.id} />
                 <input type="hidden" name="offer_id" value={offerId} />
-                <button type="submit" className="btn btn-ghost text-xs">
+                <button type="submit" className="ps-btn ps-btn--ghost text-xs">
                   {t("common.remove", undefined, "Remove")}
                 </button>
               </form>
@@ -302,14 +298,14 @@ async function CoProSection({ offerId }: { offerId: string }) {
           type="email"
         />
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.bookings.deals.detail.bonusTerms", undefined, "Bonus Terms")}
           </label>
           <textarea
             name="bonus_terms"
             rows={3}
             maxLength={2000}
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
             placeholder={t(
               "console.bookings.deals.detail.bonusTermsPlaceholder",
               undefined,

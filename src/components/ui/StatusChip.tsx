@@ -23,11 +23,11 @@ export type StatusTone =
 
 const TONE_CLASS: Record<StatusTone, string> = {
   neutral: "bg-[color-mix(in_srgb,var(--p-text-3)_10%,transparent)] text-[var(--p-text-3)]",
-  info: "bg-[color-mix(in_srgb,var(--color-info)_10%,transparent)] text-[var(--color-info)]",
-  success: "bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)] text-[var(--color-success)]",
-  warning: "bg-[color-mix(in_srgb,var(--color-warning)_10%,transparent)] text-[var(--color-warning)]",
-  danger: "bg-[color-mix(in_srgb,var(--color-error)_10%,transparent)] text-[var(--color-error)]",
-  muted: "bg-[var(--surface-inset)] text-[var(--text-muted)]",
+  info: "bg-[color-mix(in_srgb,var(--p-info)_10%,transparent)] text-[var(--p-info)]",
+  success: "bg-[color-mix(in_srgb,var(--p-success)_10%,transparent)] text-[var(--p-success)]",
+  warning: "bg-[color-mix(in_srgb,var(--p-warning)_10%,transparent)] text-[var(--p-warning)]",
+  danger: "bg-[color-mix(in_srgb,var(--p-danger)_10%,transparent)] text-[var(--p-danger)]",
+  muted: "bg-[var(--p-surface-2)] text-[var(--p-text-2)]",
 };
 
 export function StatusChip({

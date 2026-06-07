@@ -35,7 +35,7 @@ export default async function PersonalSettings() {
         <h2 className="text-sm font-semibold">
           {t("me.settings.workspace.title", undefined, "Workspace Preferences")}
         </h2>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "me.settings.workspace.blurb",
             undefined,
@@ -48,10 +48,10 @@ export default async function PersonalSettings() {
             submitLabel={t("me.settings.workspace.submit", undefined, "Save Preferences")}
           >
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("me.settings.workspace.density.label", undefined, "Density")}
               </label>
-              <select name="density" defaultValue={prefs.density ?? "comfortable"} className="input-base mt-1.5 w-full">
+              <select name="density" defaultValue={prefs.density ?? "comfortable"} className="ps-input mt-1.5 w-full">
                 <option value="compact">{t("me.settings.workspace.density.compact", undefined, "Compact")}</option>
                 <option value="comfortable">
                   {t("me.settings.workspace.density.comfortable", undefined, "Comfortable")}

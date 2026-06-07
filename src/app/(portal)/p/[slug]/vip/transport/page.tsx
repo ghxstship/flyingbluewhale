@@ -115,18 +115,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.vip.transport.section.schedule", undefined, "Schedule")}</h3>
           {runs.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("p.vip.transport.empty", undefined, "No T1 runs scheduled. Concierge will publish on confirmation.")}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {runs.map((r) => (
                 <li key={r.id} className="flex items-center justify-between py-2 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">
                       {r.origin?.name ?? "—"} → {r.destination?.name ?? "—"}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmt(r.scheduled_depart)}
                       {r.vehicle_ref ? ` · ${r.vehicle_ref}` : ""}
                     </div>

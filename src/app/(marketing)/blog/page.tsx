@@ -36,7 +36,7 @@ export default async function BlogIndex() {
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-10">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.blog.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.blog.hero.title")}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.blog.hero.subtitle")}</p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.blog.hero.subtitle")}</p>
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-8">
@@ -44,16 +44,16 @@ export default async function BlogIndex() {
           {POST_LIST.map((p) => (
             <li key={p.slug}>
               <Link href={`/blog/${p.slug}`} className="surface hover-lift block p-6">
-                <div className="font-mono text-xs text-[var(--text-muted)]">
+                <div className="font-mono text-xs text-[var(--p-text-2)]">
                   {p.date} · {p.readingTime}
                 </div>
                 <div className="hed-lg mt-3 tracking-tight">{p.title}</div>
-                <div className="mt-2 text-sm text-[var(--text-secondary)]">{p.blurb}</div>
+                <div className="mt-2 text-sm text-[var(--p-text-2)]">{p.blurb}</div>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {p.keywords.slice(0, 4).map((k) => (
                     <span
                       key={k}
-                      className="rounded-full bg-[var(--surface-inset)] px-2 py-0.5 text-[10px] text-[var(--text-muted)]"
+                      className="rounded-full bg-[var(--p-surface-2)] px-2 py-0.5 text-[10px] text-[var(--p-text-2)]"
                     >
                       {k}
                     </span>

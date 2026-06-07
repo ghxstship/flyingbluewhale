@@ -86,18 +86,18 @@ export default async function Page({
             <Button href={`/console/workforce/call-sheets?date=${dateStr}`} variant="ghost" size="sm">
               Back
             </Button>
-            <span className="text-xs text-[var(--text-muted)]">⌘P to print or save as PDF</span>
+            <span className="text-xs text-[var(--p-text-2)]">⌘P to print or save as PDF</span>
           </div>
         }
       />
       <div className="page-content max-w-2xl">
         <div className="surface space-y-6 p-6 print:border-0 print:p-0 print:shadow-none">
-          <header className="border-b border-[var(--border-color)] pb-4">
-            <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--text-muted)] uppercase">
+          <header className="border-b border-[var(--p-border)] pb-4">
+            <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-text-2)] uppercase">
               Call sheet · {dateStr}
             </div>
             <div className="mt-1 text-2xl font-bold">{member.full_name}</div>
-            <div className="mt-1 font-mono text-xs text-[var(--text-secondary)]">
+            <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
               {member.role ?? "—"}
               {member.phone && <span className="ms-3">{member.phone}</span>}
               {member.email && <span className="ms-3">{member.email}</span>}
@@ -106,11 +106,11 @@ export default async function Page({
 
           <section className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <div className="text-[10px] tracking-wide text-[var(--text-muted)] uppercase">Call</div>
+              <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">Call</div>
               <div className="mt-1 font-mono text-2xl font-semibold">{callTime ? fmt.time(callTime) : "—"}</div>
             </div>
             <div>
-              <div className="text-[10px] tracking-wide text-[var(--text-muted)] uppercase">Wrap</div>
+              <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">Wrap</div>
               <div className="mt-1 font-mono text-2xl font-semibold">{wrapTime ? fmt.time(wrapTime) : "—"}</div>
             </div>
           </section>
@@ -118,7 +118,7 @@ export default async function Page({
           <section>
             <h3 className="text-sm font-semibold">Shifts</h3>
             {shifts.length === 0 ? (
-              <p className="mt-2 text-xs text-[var(--text-muted)]">No shifts scheduled on this date.</p>
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">No shifts scheduled on this date.</p>
             ) : (
               <ol className="mt-2 space-y-3">
                 {shifts.map((s) => (
@@ -133,16 +133,16 @@ export default async function Page({
                     </div>
                     <div className="mt-1 text-sm">
                       {s.venue?.name ?? "Unassigned venue"}
-                      {s.role && <span className="ms-2 font-mono text-xs text-[var(--text-muted)]">· {s.role}</span>}
+                      {s.role && <span className="ms-2 font-mono text-xs text-[var(--p-text-2)]">· {s.role}</span>}
                     </div>
                     {s.venue?.locations?.address && (
-                      <div className="mt-0.5 text-xs text-[var(--text-secondary)]">
+                      <div className="mt-0.5 text-xs text-[var(--p-text-2)]">
                         {s.venue.locations.address}
                         {s.venue.locations.city && `, ${s.venue.locations.city}`}
                       </div>
                     )}
                     {s.break_minutes > 0 && (
-                      <div className="mt-1 text-[10px] text-[var(--text-muted)]">{s.break_minutes}m break</div>
+                      <div className="mt-1 text-[10px] text-[var(--p-text-2)]">{s.break_minutes}m break</div>
                     )}
                   </li>
                 ))}
@@ -150,9 +150,9 @@ export default async function Page({
             )}
           </section>
 
-          <footer className="border-t border-[var(--border-color)] pt-3 text-[10px] text-[var(--text-muted)]">
+          <footer className="border-t border-[var(--p-border)] pt-3 text-[10px] text-[var(--p-text-2)]">
             Generated {fmt.dateTime(new Date())} · Check{" "}
-            <Link href="/m/clock" className="text-[var(--org-primary)] underline">
+            <Link href="/m/clock" className="text-[var(--p-accent)] underline">
               /m/clock
             </Link>{" "}
             on arrival to clock in.

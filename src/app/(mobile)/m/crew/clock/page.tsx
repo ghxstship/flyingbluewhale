@@ -14,11 +14,11 @@ export default async function ClockPage() {
   const { t } = await getRequestT();
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.clock.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.clock.title", undefined, "Clock")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.clock.subtitle", undefined, "Geo-verified time tracking")}
       </p>
       <div className="mt-6">

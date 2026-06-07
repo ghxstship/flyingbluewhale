@@ -30,9 +30,7 @@ export function SchemaForm({ fields, value, onChange, showTemplateHints }: Schem
 
   return (
     <div className="grid gap-3">
-      {fields.length === 0 && (
-        <p className="text-xs text-[var(--text-muted)]">This action has no configurable fields.</p>
-      )}
+      {fields.length === 0 && <p className="text-xs text-[var(--p-text-2)]">This action has no configurable fields.</p>}
       {fields.map((f) => (
         <FieldRow
           key={f.name}
@@ -59,15 +57,15 @@ function FieldRow({
 }) {
   const id = useId();
   const labelEl = (
-    <label htmlFor={id} className="flex items-center gap-1.5 text-xs font-medium text-[var(--text-secondary)]">
+    <label htmlFor={id} className="flex items-center gap-1.5 text-xs font-medium text-[var(--p-text-2)]">
       <span>{field.label}</span>
       {field.required && (
-        <span aria-hidden="true" className="text-[var(--color-error)]">
+        <span aria-hidden="true" className="text-[var(--p-danger)]">
           *
         </span>
       )}
       {showHints && (field.type === "text" || field.type === "textarea") && (
-        <span className="ms-auto rounded border border-[var(--border-color)] bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+        <span className="ms-auto rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
           {"{{trigger.field}}"}
         </span>
       )}
@@ -79,15 +77,15 @@ function FieldRow({
       <div className="flex items-start gap-2">
         <Checkbox id={id} checked={!!value} onCheckedChange={(v: boolean | "indeterminate") => onChange(v === true)} />
         <div className="flex flex-col gap-0.5">
-          <label htmlFor={id} className="text-xs font-medium text-[var(--text-secondary)]">
+          <label htmlFor={id} className="text-xs font-medium text-[var(--p-text-2)]">
             {field.label}
             {field.required && (
-              <span aria-hidden="true" className="ms-0.5 text-[var(--color-error)]">
+              <span aria-hidden="true" className="ms-0.5 text-[var(--p-danger)]">
                 *
               </span>
             )}
           </label>
-          {field.description && <span className="text-[11px] text-[var(--text-muted)]">{field.description}</span>}
+          {field.description && <span className="text-[11px] text-[var(--p-text-2)]">{field.description}</span>}
         </div>
       </div>
     );
@@ -110,7 +108,7 @@ function FieldRow({
             ))}
           </SelectContent>
         </Select>
-        {field.description && <span className="text-[11px] text-[var(--text-muted)]">{field.description}</span>}
+        {field.description && <span className="text-[11px] text-[var(--p-text-2)]">{field.description}</span>}
       </div>
     );
   }
@@ -128,9 +126,9 @@ function FieldRow({
           placeholder={field.placeholder}
           value={v}
           onChange={(e) => onChange(e.target.value)}
-          className="input-base focus-ring min-h-[88px] w-full resize-y font-mono text-xs"
+          className="ps-input focus-ring min-h-[88px] w-full resize-y font-mono text-xs"
         />
-        {field.description && <span className="text-[11px] text-[var(--text-muted)]">{field.description}</span>}
+        {field.description && <span className="text-[11px] text-[var(--p-text-2)]">{field.description}</span>}
       </div>
     );
   }

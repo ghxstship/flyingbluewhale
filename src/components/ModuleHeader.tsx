@@ -51,12 +51,12 @@ export function ModuleHeader({
               eyebrow per the Title Case rule's letter-spaced-label
               exception. */}
           {eyebrow && (
-            <div className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--org-primary)] uppercase">
+            <div className="font-mono text-[11px] font-semibold tracking-[0.14em] text-[var(--p-accent)] uppercase">
               {eyebrow}
             </div>
           )}
-          <h1 className="mt-1 text-2xl font-bold tracking-[-0.01em] text-[var(--foreground)]">{title}</h1>
-          {subtitle ? <p className="mt-1 text-sm text-[var(--text-muted)]">{subtitle}</p> : null}
+          <h1 className="mt-1 text-2xl font-bold tracking-[-0.01em] text-[var(--p-text-1)]">{title}</h1>
+          {subtitle ? <p className="mt-1 text-sm text-[var(--p-text-2)]">{subtitle}</p> : null}
         </div>
         {action && <div className="flex items-center gap-2">{action}</div>}
       </div>

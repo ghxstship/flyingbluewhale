@@ -55,13 +55,13 @@ export default async function TemplatePreviewPage({ params }: { params: Promise<
           { label: tpl.name },
         ]}
         action={
-          <Link href={`/console/proposals/new?templateId=${tpl.id}`} className="btn btn-primary btn-sm">
+          <Link href={`/console/proposals/new?templateId=${tpl.id}`} className="ps-btn ps-btn--sm">
             {t("console.proposals.templates.preview.useTemplate", undefined, "Use Template")}
           </Link>
         }
       />
       <div className="page-content max-w-3xl space-y-3">
-        <div className="text-xs text-[var(--text-muted)]">
+        <div className="text-xs text-[var(--p-text-2)]">
           {valid.length === 1
             ? t(
                 "console.proposals.templates.preview.validBlockOne",
@@ -79,10 +79,10 @@ export default async function TemplatePreviewPage({ params }: { params: Promise<
         </div>
         {valid.map((block: ProposalBlock, i: number) => (
           <div key={i} className="surface p-3">
-            <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {i + 1} · {BLOCK_LABELS[block.type]}
               {"anchorId" in block && block.anchorId ? (
-                <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">#{block.anchorId}</span>
+                <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">#{block.anchorId}</span>
               ) : null}
             </div>
             <div className="mt-1 text-sm">{describeBlock(block)}</div>

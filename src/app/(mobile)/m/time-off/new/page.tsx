@@ -12,7 +12,7 @@ export default async function NewTimeOffPage() {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -36,7 +36,7 @@ export default async function NewTimeOffPage() {
           <select
             name="policy_id"
             required
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
           >
             {list.map((p) => (
               <option key={p.id} value={p.id}>
@@ -51,7 +51,7 @@ export default async function NewTimeOffPage() {
             type="date"
             name="starts_on"
             required
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
           />
         </label>
         <label className="block text-xs font-semibold">
@@ -60,7 +60,7 @@ export default async function NewTimeOffPage() {
             type="date"
             name="ends_on"
             required
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
           />
         </label>
         <label className="block text-xs font-semibold">
@@ -71,7 +71,7 @@ export default async function NewTimeOffPage() {
             min="1"
             step="0.5"
             required
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
           />
         </label>
         <label className="block text-xs font-semibold">
@@ -80,10 +80,10 @@ export default async function NewTimeOffPage() {
             name="reason"
             rows={3}
             maxLength={1000}
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
           />
         </label>
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="ps-btn w-full">
           {t("common.submit", undefined, "Submit")}
         </button>
       </form>

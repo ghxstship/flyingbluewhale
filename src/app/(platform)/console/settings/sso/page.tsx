@@ -101,11 +101,11 @@ export default async function Page() {
               header: t("console.settings.sso.col.emailDomains", undefined, "Email domains"),
               render: (r) =>
                 r.email_domains.length === 0 ? (
-                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                  <span className="text-xs text-[var(--p-text-2)]">—</span>
                 ) : (
                   <span className="flex flex-wrap gap-1">
                     {r.email_domains.map((d) => (
-                      <code key={d} className="font-mono text-xs text-[var(--text-secondary)]">
+                      <code key={d} className="font-mono text-xs text-[var(--p-text-2)]">
                         @{d}
                       </code>
                     ))}
@@ -120,7 +120,7 @@ export default async function Page() {
                 r.supabase_id ? (
                   <code className="font-mono text-xs">{r.supabase_id}</code>
                 ) : (
-                  <span className="text-xs text-[var(--text-muted)]">
+                  <span className="text-xs text-[var(--p-text-2)]">
                     {t("console.settings.sso.unlinked", undefined, "unlinked")}
                   </span>
                 ),
@@ -164,7 +164,7 @@ export default async function Page() {
           <h2 className="text-sm font-semibold">
             {t("console.settings.sso.addUpdate.title", undefined, "Add / Update Provider")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.sso.addUpdate.description",
               undefined,
@@ -184,9 +184,9 @@ export default async function Page() {
                 undefined,
                 'Display name (e.g. "Okta — Production")',
               )}
-              className="input-base sm:col-span-3"
+              className="ps-input sm:col-span-3"
             />
-            <select name="provider_type" required defaultValue="saml" className="input-base sm:col-span-1">
+            <select name="provider_type" required defaultValue="saml" className="ps-input sm:col-span-1">
               <option value="saml">{t("console.settings.sso.form.saml", undefined, "SAML")}</option>
               <option value="oidc">{t("console.settings.sso.form.oidc", undefined, "OIDC")}</option>
             </select>
@@ -198,7 +198,7 @@ export default async function Page() {
                 undefined,
                 "acme.com, contractors.acme.com",
               )}
-              className="input-base sm:col-span-2"
+              className="ps-input sm:col-span-2"
             />
             <input
               name="supabase_id"
@@ -208,7 +208,7 @@ export default async function Page() {
                 undefined,
                 "Supabase Auth SSO Provider ID · Optional",
               )}
-              className="input-base sm:col-span-3"
+              className="ps-input sm:col-span-3"
             />
             <input
               name="logout_url"
@@ -219,7 +219,7 @@ export default async function Page() {
                 undefined,
                 "Single-logout URL · Optional",
               )}
-              className="input-base sm:col-span-3"
+              className="ps-input sm:col-span-3"
             />
             <label className="flex items-center gap-2 text-xs sm:col-span-3">
               <input type="checkbox" name="enabled" value="true" defaultChecked />
@@ -235,7 +235,7 @@ export default async function Page() {
               </Button>
             </div>
           </form>
-          <p className="mt-2 text-[10px] text-[var(--text-muted)]">
+          <p className="mt-2 text-[10px] text-[var(--p-text-2)]">
             {t(
               "console.settings.sso.form.emailDomainsHint",
               undefined,

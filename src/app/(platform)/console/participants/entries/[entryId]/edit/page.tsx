@@ -53,13 +53,13 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
             defaultValue={(r.event as string | undefined) ?? ""}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.participants.entries.edit.status", undefined, "Status")}
             </label>
             <select
               name="status"
               defaultValue={(r.status as string | undefined) ?? "nominated"}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
             >
               <option value="nominated">
                 {t("console.participants.entries.edit.statusNominated", undefined, "Nominated")}

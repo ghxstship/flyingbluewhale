@@ -41,26 +41,26 @@ export default async function Page({ params }: { params: Promise<{ alertId: stri
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.crisis.edit.bodyLabel", undefined, "Body")}
             </label>
             <textarea
               name="body"
               rows={5}
               maxLength={5000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               defaultValue={(r.body as string | undefined) ?? ""}
               required
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.crisis.edit.severityLabel", undefined, "Severity")}
             </label>
             <select
               name="severity"
               defaultValue={(r.severity as string | undefined) ?? "info"}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
             >
               <option value="info">{t("console.safety.crisis.edit.severityInfo", undefined, "Info")}</option>
               <option value="advisory">

@@ -22,13 +22,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
     <div className="space-y-4 p-6">
       <header className="surface flex items-end justify-between gap-4 p-5">
         <div>
-          <div className="eyebrow text-xs text-[var(--text-muted)]">
+          <div className="eyebrow text-xs text-[var(--p-text-2)]">
             {t("p.client.changeOrders.eyebrow", undefined, "Change orders")}
           </div>
           <h1 className="text-lg font-semibold">
             {t("p.client.changeOrders.title", undefined, "Scope Changes After May 12 Lock")}
           </h1>
-          <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
+          <p className="mt-1 max-w-2xl text-sm text-[var(--p-text-2)]">
             {t(
               "p.client.changeOrders.description",
               undefined,
@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {cos.length === 0 ? (
-        <div className="surface p-12 text-center text-[var(--text-muted)]">
+        <div className="surface p-12 text-center text-[var(--p-text-2)]">
           {t("p.client.changeOrders.empty", undefined, "No change orders yet.")}
         </div>
       ) : (
@@ -51,15 +51,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs text-[var(--text-muted)]">#{co.number}</span>
+                      <span className="font-mono text-xs text-[var(--p-text-2)]">#{co.number}</span>
                       <Badge variant={CO_STATE_VARIANT[co.state]}>{CO_STATE_LABEL[co.state]}</Badge>
                     </div>
                     <h2 className="mt-1 text-base font-semibold">{co.title}</h2>
-                    {co.body && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-muted)]">{co.body}</p>}
+                    {co.body && <p className="mt-1 line-clamp-2 text-sm text-[var(--p-text-2)]">{co.body}</p>}
                   </div>
                   <div className="text-right">
                     <div className="font-mono text-sm font-semibold">{formatMoney(co.delta_cents ?? 0)}</div>
-                    <div className="mt-1 text-xs text-[var(--text-muted)]">
+                    <div className="mt-1 text-xs text-[var(--p-text-2)]">
                       {co.decided_at
                         ? t(
                             "p.client.changeOrders.decidedAgo",

@@ -71,17 +71,17 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
               {t("console.marketplace.offers.detail.termsHeading", undefined, "Terms")}
             </h2>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.offers.detail.feeLabel", undefined, "Fee")}
               </dt>
               <dd className="font-mono">{formatMoney(o.fee_cents)}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.offers.detail.depositLabel", undefined, "Deposit")}
               </dt>
               <dd className="font-mono">
                 {o.deposit_pct}% · {formatMoney(depositCents)}
               </dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.offers.detail.balanceLabel", undefined, "Balance")}
               </dt>
               <dd className="font-mono">
@@ -91,11 +91,11 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
                   `${formatMoney(balanceCents)} on ${toTitle(o.balance_terms)}`,
                 )}
               </dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.offers.detail.slotLabel", undefined, "Slot")}
               </dt>
               <dd>{o.slot_start ? `${new Date(o.slot_start).toLocaleString()}` : "—"}</dd>
-              <dt className="text-[var(--text-secondary)]">
+              <dt className="text-[var(--p-text-2)]">
                 {t("console.marketplace.offers.detail.projectLabel", undefined, "Project")}
               </dt>
               <dd>{o.project_id ?? "—"}</dd>

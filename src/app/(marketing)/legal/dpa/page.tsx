@@ -2,8 +2,8 @@ export default function DpaPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="hed-xl">Data Processing Addendum</h1>
-      <p className="mt-4 text-xs text-[var(--text-muted)]">Last updated: 2026-04-16</p>
-      <div className="mt-8 space-y-4 text-sm text-[var(--text-secondary)]">
+      <p className="mt-4 text-xs text-[var(--p-text-2)]">Last updated: 2026-04-16</p>
+      <div className="mt-8 space-y-4 text-sm text-[var(--p-text-2)]">
         <p>
           Our DPA incorporates the EU SCCs and UK IDTA. It auto-applies when you subscribe. Request a counter-signed
           copy from Settings → Compliance.

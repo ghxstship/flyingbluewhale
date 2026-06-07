@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {t("marketing.pages.marketplace.rfqs.detail.header.eyebrow", { org: r.org_name })}
         </div>
         <h1 className="hed-2xl mt-4">{r.title}</h1>
-        <div className="mt-5 flex flex-wrap gap-2 text-sm text-[var(--text-secondary)]">
+        <div className="mt-5 flex flex-wrap gap-2 text-sm text-[var(--p-text-2)]">
           {r.region && <Badge variant="muted">{r.region}</Badge>}
           {r.budget_band && <Badge variant="muted">{r.budget_band}</Badge>}
           {r.due_at && (
@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h2 className="hed-md mb-3">{t("marketing.pages.marketplace.rfqs.detail.trades.title")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {r.trade_categories.length === 0 ? (
-                <span className="text-sm text-[var(--text-secondary)]">—</span>
+                <span className="text-sm text-[var(--p-text-2)]">—</span>
               ) : (
                 r.trade_categories.map((tag) => (
                   <Badge key={tag} variant="muted">

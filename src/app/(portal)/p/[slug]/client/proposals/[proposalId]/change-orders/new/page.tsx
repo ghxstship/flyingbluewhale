@@ -17,13 +17,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   return (
     <div className="mx-auto max-w-2xl space-y-4 p-6">
       <header className="surface p-5">
-        <div className="eyebrow text-xs text-[var(--text-muted)]">
+        <div className="eyebrow text-xs text-[var(--p-text-2)]">
           {t("p.client.proposals.changeOrders.new.eyebrow", undefined, "New change order")}
         </div>
         <h1 className="text-lg font-semibold">
           {t("p.client.proposals.changeOrders.new.title", undefined, "Request a Scope Change")}
         </h1>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">
+        <p className="mt-1 text-sm text-[var(--p-text-2)]">
           {t(
             "p.client.proposals.changeOrders.new.description",
             undefined,
@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
               "e.g. Add 2 planter boxes to ring",
             )}
             required
-            className="input-base w-full"
+            className="ps-input w-full"
           />
         </FormField>
         <FormField
@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
               undefined,
               "Describe the scope, location, quantity, and any reference to the original deliverable…",
             )}
-            className="input-base w-full"
+            className="ps-input w-full"
           />
         </FormField>
       </FormShell>

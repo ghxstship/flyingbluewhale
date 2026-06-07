@@ -50,20 +50,20 @@ export default async function MarketDetail({ params }: { params: Promise<{ city:
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-12">
-          <nav className="mb-6 text-xs text-[var(--text-muted)]">
-            <Link href={paths.marketsRoot()} className="hover:text-[var(--text-primary)]">
+          <nav className="mb-6 text-xs text-[var(--p-text-2)]">
+            <Link href={paths.marketsRoot()} className="hover:text-[var(--p-text-1)]">
               Markets
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-[var(--text-primary)]">{m.name}</span>
+            <span className="text-[var(--p-text-1)]">{m.name}</span>
           </nav>
-          <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             {m.type === "anchor" ? "Anchor Market" : "Satellite Market"}
             {m.servicedFrom && (
               <>
                 {" "}
                 · serviced from{" "}
-                <Link href={paths.marketDetail(m.servicedFrom)} className="underline hover:text-[var(--text-primary)]">
+                <Link href={paths.marketDetail(m.servicedFrom)} className="underline hover:text-[var(--p-text-1)]">
                   {MARKET_BY_SLUG[m.servicedFrom].name}
                 </Link>
               </>
@@ -72,11 +72,11 @@ export default async function MarketDetail({ params }: { params: Promise<{ city:
           <h1 className="mt-3 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
             {m.name}
           </h1>
-          <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{m.blurb}</p>
+          <p className="mt-6 max-w-3xl text-lg text-[var(--p-text-2)]">{m.blurb}</p>
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
             Venues & Anchors
           </div>
           <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -90,7 +90,7 @@ export default async function MarketDetail({ params }: { params: Promise<{ city:
 
         {relevantSolutions.length > 0 && (
           <section className="mx-auto max-w-6xl px-6">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               Industries where {m.name} is a stronghold
             </div>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -110,7 +110,7 @@ export default async function MarketDetail({ params }: { params: Promise<{ city:
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
               Run something in {m.name}.
             </h2>
-            <p className="mt-3 max-w-xl text-[var(--text-secondary)]">
+            <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
               We know the venues, the unions, the permit windows, and the fixers. Brief us with your dates and the local
               posture.
             </p>

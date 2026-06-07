@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         />
       ) : (
-        <table className="data-table w-full text-sm">
+        <table className="ps-table w-full text-sm">
           <thead>
             <tr>
               <th>{t("p.vendor.submissions.col.title", undefined, "Title")}</th>

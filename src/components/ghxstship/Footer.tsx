@@ -41,7 +41,7 @@ const COLUMNS: Array<{ heading: string; items: Array<{ label: string; href: stri
 
 export function GhxstshipFooter() {
   return (
-    <footer className="mt-24 border-t border-[var(--border-color)] bg-[var(--bg-secondary)]">
+    <footer className="mt-24 border-t border-[var(--p-border)] bg-[var(--p-surface)]">
       <div className="mx-auto max-w-6xl px-6 py-16">
         <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-1">
@@ -52,28 +52,28 @@ export function GhxstshipFooter() {
             >
               G H X S T S H I P
             </Link>
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               Experiential production company.
               <br />
               Festivals. Theme parks. Theatre.
               <br />
               Built once, run anywhere.
             </p>
-            <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
-              <a href={SITE.baseUrl} className="hover:text-[var(--text-primary)]">
+            <div className="mt-4 flex gap-3 text-xs text-[var(--p-text-2)]">
+              <a href={SITE.baseUrl} className="hover:text-[var(--p-text-1)]">
                 ATLVS Technologies →
               </a>
             </div>
           </div>
           {COLUMNS.map((col) => (
             <div key={col.heading}>
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {col.heading}
               </div>
               <ul className="mt-4 space-y-2 text-sm">
                 {col.items.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                    <Link href={item.href} className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
                       {item.label}
                     </Link>
                   </li>
@@ -82,7 +82,7 @@ export function GhxstshipFooter() {
             </div>
           ))}
         </div>
-        <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
+        <div className="mt-12 border-t border-[var(--p-border)] pt-6 text-xs text-[var(--p-text-2)]">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <span>© {new Date().getFullYear()} GHXSTSHIP Industries LLC</span>
             <span>Miami · New York · Chicago · Los Angeles</span>

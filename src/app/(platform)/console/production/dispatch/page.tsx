@@ -72,7 +72,7 @@ export default async function DispatchPage() {
                 >
                   <div>
                     <div className="text-sm font-semibold">{e.name}</div>
-                    <div className="mt-0.5 font-mono text-[11px] text-[var(--text-muted)]">
+                    <div className="mt-0.5 font-mono text-[11px] text-[var(--p-text-2)]">
                       {fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}
                     </div>
                   </div>

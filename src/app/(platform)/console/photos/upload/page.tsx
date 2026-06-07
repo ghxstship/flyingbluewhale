@@ -58,7 +58,7 @@ export default async function Page() {
       />
       <div className="page-content max-w-2xl">
         {projects.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t(
               "console.photos.upload.noProjects",
               undefined,

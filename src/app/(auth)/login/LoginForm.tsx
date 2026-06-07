@@ -28,7 +28,7 @@ export function LoginForm() {
       footer={
         <>
           {t("auth.login.noAccount", undefined, "Don't have an account?")}{" "}
-          <Link href="/signup" className="text-[var(--org-accent)] underline underline-offset-4">
+          <Link href="/signup" className="text-[var(--p-accent-text)] underline underline-offset-4">
             {t("auth.login.createOne", undefined, "Create one")}
           </Link>
         </>
@@ -60,10 +60,10 @@ export function LoginForm() {
         </Button>
       </form>
       <div className="mt-4 flex items-center justify-between text-xs">
-        <Link href="/forgot-password" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+        <Link href="/forgot-password" className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
           {t("auth.login.forgotPassword", undefined, "Forgot password?")}
         </Link>
-        <Link href="/magic-link" className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+        <Link href="/magic-link" className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
           {t("auth.login.emailMeALink", undefined, "Email me a link")}
         </Link>
       </div>

@@ -79,14 +79,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     <article className="mx-auto max-w-3xl px-6 py-16">
       <div className="eyebrow eyebrow-brand">{t("marketing.pages.customers.detail.eyebrow")}</div>
       <h1 className="hed-xl mt-4">{cs.customer_name}</h1>
-      {meta && <p className="mt-2 font-mono text-xs text-[var(--text-muted)]">{meta}</p>}
+      {meta && <p className="mt-2 font-mono text-xs text-[var(--p-text-2)]">{meta}</p>}
 
       {metrics.length > 0 && (
         <section className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {metrics.map((m, i) => (
             <div key={i} className="surface p-4">
               <div className="hed-lg">{m.value ?? "—"}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{m.label ?? ""}</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">{m.label ?? ""}</div>
             </div>
           ))}
         </section>
@@ -94,28 +94,28 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       {cs.challenge && (
         <section className="mt-10">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("marketing.pages.customers.detail.sections.challenge")}
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">{cs.challenge}</p>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-1)]">{cs.challenge}</p>
         </section>
       )}
 
       {cs.solution && (
         <section className="mt-8">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("marketing.pages.customers.detail.sections.solution")}
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">{cs.solution}</p>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-1)]">{cs.solution}</p>
         </section>
       )}
 
       {cs.outcomes && (
         <section className="mt-8">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("marketing.pages.customers.detail.sections.outcomes")}
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-[var(--text-primary)]">{cs.outcomes}</p>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-1)]">{cs.outcomes}</p>
         </section>
       )}
 
@@ -123,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <blockquote className="surface mt-10 p-6">
           <p className="text-base leading-snug">"{cs.quote_text}"</p>
           {(cs.quote_author || cs.quote_role) && (
-            <footer className="mt-3 text-xs text-[var(--text-muted)]">
+            <footer className="mt-3 text-xs text-[var(--p-text-2)]">
               — {cs.quote_author ?? ""}
               {cs.quote_author && cs.quote_role ? ", " : ""}
               {cs.quote_role ?? ""}
@@ -133,7 +133,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       )}
 
       <div className="mt-12 flex items-center gap-3">
-        <Link href="/customers" className="text-xs text-[var(--org-primary)]">
+        <Link href="/customers" className="text-xs text-[var(--p-accent)]">
           {t("marketing.pages.customers.detail.backLink")}
         </Link>
       </div>

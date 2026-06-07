@@ -52,14 +52,14 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.edit.fields.state", undefined, "State")}
             </span>
             <select
               name="project_state"
               defaultValue={row.project_state}
               required
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             >
               <option value="draft">{t("console.projects.edit.state.draft", undefined, "Draft")}</option>
               <option value="active">{t("console.projects.edit.state.active", undefined, "Active")}</option>
@@ -84,10 +84,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--text-secondary)]">
+              <span className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.projects.edit.fields.client", undefined, "Client")}
               </span>
-              <select name="client_id" defaultValue={row.client_id ?? ""} className="input-base focus-ring w-full">
+              <select name="client_id" defaultValue={row.client_id ?? ""} className="ps-input focus-ring w-full">
                 <option value="">{t("console.projects.edit.none", undefined, "— None —")}</option>
                 {clients.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -97,13 +97,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--text-secondary)]">
+              <span className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.projects.edit.fields.primaryVenue", undefined, "Primary Venue")}
               </span>
               <select
                 name="primary_venue_id"
                 defaultValue={row.primary_venue_id ?? ""}
-                className="input-base focus-ring w-full"
+                className="ps-input focus-ring w-full"
               >
                 <option value="">{t("console.projects.edit.none", undefined, "— None —")}</option>
                 {venues.map((v) => (
@@ -122,13 +122,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           />
           <div className="grid grid-cols-3 gap-3">
             <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--text-secondary)]">
+              <span className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.projects.edit.fields.scope", undefined, "Scope")}
               </span>
               <select
                 name="geographic_scope"
                 defaultValue={row.geographic_scope ?? ""}
-                className="input-base focus-ring w-full"
+                className="ps-input focus-ring w-full"
               >
                 <option value="">—</option>
                 <option value="local">{t("console.projects.edit.scope.local", undefined, "Local")}</option>
@@ -140,13 +140,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--text-secondary)]">
+              <span className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.projects.edit.fields.tourStructure", undefined, "Tour Structure")}
               </span>
               <select
                 name="tour_structure"
                 defaultValue={row.tour_structure ?? ""}
-                className="input-base focus-ring w-full"
+                className="ps-input focus-ring w-full"
               >
                 <option value="">—</option>
                 <option value="single_stop">
@@ -161,13 +161,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               </select>
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-xs font-medium text-[var(--text-secondary)]">
+              <span className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.projects.edit.fields.productionStyle", undefined, "Production Style")}
               </span>
               <select
                 name="production_style"
                 defaultValue={row.production_style ?? ""}
-                className="input-base focus-ring w-full"
+                className="ps-input focus-ring w-full"
               >
                 <option value="">—</option>
                 <option value="editorial">
@@ -192,7 +192,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </label>
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.edit.fields.description", undefined, "Description")}
             </span>
             <textarea
@@ -200,10 +200,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               defaultValue={row.description ?? ""}
               rows={6}
               maxLength={8000}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.projects.edit.slugNote",
               undefined,

@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <Badge variant="info">{t("marketing.pages.marketplace-crew-handle.badges.available")}</Badge>
           )}
         </div>
-        {c.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{c.tagline}</p>}
+        {c.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{c.tagline}</p>}
       </section>
 
       <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.sections.roles")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {c.roles.length === 0 ? (
-                <span className="text-sm text-[var(--text-secondary)]">—</span>
+                <span className="text-sm text-[var(--p-text-2)]">—</span>
               ) : (
                 c.roles.map((r) => (
                   <Badge key={r} variant="muted">
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.sections.unions")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {c.unions.length === 0 ? (
-                <span className="text-sm text-[var(--text-secondary)]">—</span>
+                <span className="text-sm text-[var(--p-text-2)]">—</span>
               ) : (
                 c.unions.map((u) => (
                   <Badge key={u} variant="muted">
@@ -104,7 +104,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.sections.certs")}</h2>
             <div className="flex flex-wrap gap-1.5">
               {c.certifications.length === 0 ? (
-                <span className="text-sm text-[var(--text-secondary)]">—</span>
+                <span className="text-sm text-[var(--p-text-2)]">—</span>
               ) : (
                 c.certifications.map((cert) => (
                   <Badge key={cert} variant="muted">
@@ -120,23 +120,23 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
           <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-crew-handle.booking.title")}</h2>
           <dl className="space-y-1 text-sm">
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-crew-handle.booking.dayRate")}
               </span>{" "}
               {formatFeeRange(c.day_rate_min_cents, c.day_rate_max_cents, "USD")}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-crew-handle.booking.travelRadius")}
               </span>{" "}
               {c.travel_radius_km ? `${c.travel_radius_km} km` : "—"}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-crew-handle.booking.reel")}
               </span>{" "}
               {c.reel_url ? (
-                <a href={c.reel_url} target="_blank" rel="noopener" className="font-mono text-[var(--org-primary)]">
+                <a href={c.reel_url} target="_blank" rel="noopener" className="font-mono text-[var(--p-accent)]">
                   {t("marketing.pages.marketplace-crew-handle.booking.watch")}
                 </a>
               ) : (
@@ -144,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
               )}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-crew-handle.booking.rating")}
               </span>{" "}
               {c.rating_avg == null

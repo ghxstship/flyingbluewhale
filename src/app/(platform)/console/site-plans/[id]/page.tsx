@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {sp.atom_id ? (
               <span className="font-mono">{sp.atom_id}</span>
             ) : (
-              <span className="text-[var(--text-muted)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("console.sitePlans.detail.noAtomId", undefined, "— no atom id —")}
               </span>
             )}
@@ -226,7 +226,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <li key={it.key} className="flex items-center gap-2 text-xs">
                     <span
                       aria-hidden="true"
-                      className={`inline-block h-2.5 w-2.5 rounded-full ${ok ? "bg-[var(--color-success)]" : "bg-[var(--color-warning)]"}`}
+                      className={`inline-block h-2.5 w-2.5 rounded-full ${ok ? "bg-[var(--p-success)]" : "bg-[var(--p-warning)]"}`}
                     />
                     <span>{it.label}</span>
                   </li>
@@ -234,12 +234,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               })}
             </ul>
           ) : (
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t("console.sitePlans.detail.acceptanceUnavailable", undefined, "Acceptance snapshot unavailable.")}
             </p>
           )}
           {violations.length > 0 && (
-            <div className="mt-3 rounded-md border border-[var(--color-warning)] bg-[var(--color-warning-subtle,transparent)] p-3 text-xs">
+            <div className="mt-3 rounded-md border border-[var(--p-warning)] bg-[var(--color-warning-subtle,transparent)] p-3 text-xs">
               <div className="font-semibold tracking-wide uppercase">
                 {t("console.sitePlans.detail.placementViolations", undefined, "Placement Law Violations (§9)")}
               </div>
@@ -267,7 +267,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </Empty>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.sitePlans.detail.code", undefined, "Code")}</th>
@@ -283,7 +283,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <td className="font-mono text-xs">{r.code}</td>
                     <td>{r.label}</td>
                     <td className="font-mono text-xs">{r.class_tag != null ? XPMS_CLASS_LABEL[r.class_tag] : "—"}</td>
-                    <td className="text-xs text-[var(--text-muted)]">{r.notes ?? "—"}</td>
+                    <td className="text-xs text-[var(--p-text-2)]">{r.notes ?? "—"}</td>
                     <td className="text-end">
                       <DeleteFormBtn action={deleteRegion} id={r.id} sheetId={sp.id} />
                     </td>
@@ -338,7 +338,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </Empty>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.sitePlans.detail.type", undefined, "Type")}</th>
@@ -419,7 +419,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </Empty>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.sitePlans.detail.code", undefined, "Code")}</th>
@@ -436,7 +436,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     <tr key={s.id}>
                       <td className="font-mono text-xs">{s.station_code}</td>
                       <td className="font-mono text-xs">
-                        {band ? `${band.band_type}/${band.edge}` : <span className="text-[var(--text-muted)]">—</span>}
+                        {band ? `${band.band_type}/${band.edge}` : <span className="text-[var(--p-text-2)]">—</span>}
                       </td>
                       <td>{s.function ?? "—"}</td>
                       <td className="font-mono text-xs">{s.head_count}</td>
@@ -510,7 +510,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </Empty>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.sitePlans.detail.tag", undefined, "Tag")}</th>
@@ -605,7 +605,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </Empty>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.sitePlans.detail.drop", undefined, "Drop")}</th>
@@ -669,7 +669,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             count={adjRows.length}
           />
           {missingEdges.length > 0 && (
-            <div className="mb-3 rounded-md border border-[var(--color-warning)] p-2 text-xs">
+            <div className="mb-3 rounded-md border border-[var(--p-warning)] p-2 text-xs">
               {t("console.sitePlans.detail.missingEdgesPrefix", undefined, "Missing edges:")}{" "}
               <span className="font-mono">{missingEdges.join(", ")}</span>{" "}
               {t(
@@ -688,7 +688,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </Empty>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.sitePlans.detail.edge", undefined, "Edge")}</th>
@@ -709,7 +709,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                           ? t("console.sitePlans.detail.linkedSheet", undefined, "(linked sheet)")
                           : "—")}
                     </td>
-                    <td className="text-xs text-[var(--text-muted)]">{a.notes ?? "—"}</td>
+                    <td className="text-xs text-[var(--p-text-2)]">{a.notes ?? "—"}</td>
                     <td className="text-end">
                       <DeleteFormBtn action={deleteAdjacency} id={a.id} sheetId={sp.id} />
                     </td>
@@ -762,7 +762,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </Empty>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.sitePlans.detail.rev", undefined, "Rev")}</th>
@@ -800,7 +800,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 return (
                   <li key={pin.id} className="surface-inset p-2 text-xs">
                     <span className="font-mono text-[10px]">{pin.pin_type}</span> · {pin.label ?? "—"} ·
-                    <span className="text-[var(--text-muted)]">
+                    <span className="text-[var(--p-text-2)]">
                       {" "}
                       ({Number(pin.x_pct).toFixed(0)}%, {Number(pin.y_pct).toFixed(0)}%)
                     </span>
@@ -825,19 +825,19 @@ function SectionHeader({ title, count }: { title: string; count: number }) {
   return (
     <div className="flex items-center justify-between">
       <h3 className="text-sm font-semibold">{title}</h3>
-      <span className="text-xs text-[var(--text-muted)]">{count}</span>
+      <span className="text-xs text-[var(--p-text-2)]">{count}</span>
     </div>
   );
 }
 
 function Empty({ children }: { children: React.ReactNode }) {
-  return <p className="mt-2 text-xs text-[var(--text-muted)]">{children}</p>;
+  return <p className="mt-2 text-xs text-[var(--p-text-2)]">{children}</p>;
 }
 
 function SummaryItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-[10px] tracking-wide text-[var(--text-muted)] uppercase">{label}</dt>
+      <dt className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{label}</dt>
       <dd className="mt-0.5">{value}</dd>
     </div>
   );
@@ -864,7 +864,7 @@ function DeleteFormBtn({
       <input type="hidden" name="sheet_id" value={sheetId} />
       <button
         type="submit"
-        className="text-[11px] font-medium text-[var(--text-muted)] hover:text-[var(--color-error)]"
+        className="text-[11px] font-medium text-[var(--p-text-2)] hover:text-[var(--p-danger)]"
         aria-label="Delete"
       >
         ×

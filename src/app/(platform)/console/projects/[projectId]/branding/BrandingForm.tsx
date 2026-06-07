@@ -45,7 +45,7 @@ export function BrandingForm({
           hint={t(
             "console.projects.branding.accentColor.hint",
             undefined,
-            "Hex like #DC2626 — overrides --org-primary in portals.",
+            "Hex like #DC2626 — overrides --p-accent in portals.",
           )}
           placeholder="#DC2626"
         />
@@ -104,7 +104,7 @@ export function BrandingForm({
       </FormShell>
 
       <div className="space-y-3">
-        <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
           {t("console.projects.branding.livePreview", undefined, "Live preview")}
         </div>
         <div className="surface overflow-hidden" style={previewStyle} data-platform="gvteway">
@@ -128,14 +128,11 @@ export function BrandingForm({
               >
                 {t("console.projects.branding.preview.primaryAction", undefined, "Primary action")}
               </button>
-              <button
-                type="button"
-                className="rounded border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium"
-              >
+              <button type="button" className="rounded border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium">
                 {t("console.projects.branding.preview.secondary", undefined, "Secondary")}
               </button>
             </div>
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.projects.branding.preview.sanitizedNote",
                 undefined,

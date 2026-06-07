@@ -150,14 +150,14 @@ export default async function Page() {
                 "Customs + bonded warehouse routing flows through ad_manifests. Capture flight refs and carriers as runs land.",
               )}
               action={
-                <Link href="/console/transport/ad" className="btn btn-secondary btn-sm">
+                <Link href="/console/transport/ad" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.logistics.freight.manifests.openAd", undefined, "Open A&D")}
                 </Link>
               }
             />
           ) : (
             <div className="surface mt-3 overflow-x-auto">
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th>{t("console.logistics.freight.manifests.col.kind", undefined, "Kind")}</th>
@@ -213,7 +213,7 @@ export default async function Page() {
                 <li key={o.id} className="surface flex items-center justify-between p-3">
                   <div>
                     <div className="text-sm font-medium">{o.catalog}</div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">
                       {formatMoney(o.total_cents, o.currency)}
                     </div>
                   </div>
@@ -224,13 +224,13 @@ export default async function Page() {
           )}
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.logistics.freight.integrationsHint",
             undefined,
             "Customs holds, bonded-warehouse routing, and TMS feeds (Flexport, project44) install via",
           )}{" "}
-          <Link href="/console/settings/integrations" className="text-[var(--org-primary)]">
+          <Link href="/console/settings/integrations" className="text-[var(--p-accent)]">
             {t("console.logistics.freight.integrationsLink", undefined, "Settings → Integrations")}
           </Link>
           .

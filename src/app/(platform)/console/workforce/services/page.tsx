@@ -173,7 +173,7 @@ export default async function Page() {
             {HUB_TILES.map((tile) => (
               <Link key={tile.href} href={tile.href} className="surface hover-lift p-4">
                 <div className="text-sm font-medium">{t(tile.labelKey, undefined, tile.labelFallback)}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">
                   {t(tile.descriptionKey, undefined, tile.descriptionFallback)}
                 </div>
               </Link>

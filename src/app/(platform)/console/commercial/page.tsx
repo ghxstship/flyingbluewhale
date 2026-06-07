@@ -65,8 +65,8 @@ export default async function Page() {
           {SECTIONS.map((s) => (
             <Link key={s.href} href={s.href} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{s.title}</div>
-              <p className="mt-2 text-xs text-[var(--text-secondary)]">{s.body}</p>
-              <div className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">{s.body}</p>
+              <div className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("common.open", undefined, "Open")} <ArrowRight size={12} />
               </div>
             </Link>

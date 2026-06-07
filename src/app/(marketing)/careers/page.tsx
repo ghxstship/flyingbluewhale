@@ -84,7 +84,7 @@ export default async function CareersPage() {
         <div className="mt-6 max-w-3xl">
           <div className="eyebrow eyebrow-brand">{t("marketing.pages.careers.hero.eyebrow")}</div>
           <h1 className="hed-2xl mt-4">{t("marketing.pages.careers.hero.title")}</h1>
-          <p className="mt-5 text-base leading-relaxed text-[var(--text-secondary)] sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-[var(--p-text-2)] sm:text-lg">
             {t("marketing.pages.careers.hero.body")}
           </p>
         </div>
@@ -96,12 +96,12 @@ export default async function CareersPage() {
           {values.map(({ icon: Icon, title, body }) => (
             <div key={title} className="surface p-6">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--p-accent)]/10 text-[var(--p-accent)]">
                   <Icon size={18} />
                 </div>
                 <h3 className="text-lg font-semibold">{title}</h3>
               </div>
-              <p className="mt-3 text-sm text-[var(--text-secondary)]">{body}</p>
+              <p className="mt-3 text-sm text-[var(--p-text-2)]">{body}</p>
             </div>
           ))}
         </div>
@@ -110,17 +110,17 @@ export default async function CareersPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-end justify-between">
           <h2 className="hed-xl">{t("marketing.pages.careers.roles.heading")}</h2>
-          <span className="text-xs text-[var(--text-muted)]">{t("marketing.pages.careers.roles.updatedNote")}</span>
+          <span className="text-xs text-[var(--p-text-2)]">{t("marketing.pages.careers.roles.updatedNote")}</span>
         </div>
 
         {ROLES.length === 0 ? (
           <div className="surface mt-8 p-10 text-center">
             <div className="eyebrow">{t("marketing.pages.careers.roles.empty.eyebrow")}</div>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
+            <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.careers.roles.empty.body")}
             </p>
             <div className="mt-5">
-              <Link href="/contact" className="btn btn-primary">
+              <Link href="/contact" className="ps-btn">
                 {t("marketing.pages.careers.roles.empty.cta")}
               </Link>
             </div>
@@ -135,9 +135,9 @@ export default async function CareersPage() {
                       {r.team} · {r.location} · {r.type}
                     </div>
                     <h3 className="hed-lg mt-3">{r.title}</h3>
-                    <p className="mt-2 text-sm text-[var(--text-secondary)]">{r.body}</p>
+                    <p className="mt-2 text-sm text-[var(--p-text-2)]">{r.body}</p>
                   </div>
-                  <Link href="/contact" className="btn btn-secondary btn-sm shrink-0">
+                  <Link href="/contact" className="ps-btn ps-btn--ghost ps-btn--sm shrink-0">
                     {t("marketing.pages.careers.roles.applyCta")}
                   </Link>
                 </div>

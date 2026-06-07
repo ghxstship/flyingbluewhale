@@ -7,7 +7,7 @@ import * as React from "react";
  *
  * recharts ships every chart type we use except heatmaps, so we render
  * a small SVG grid here. Sequential scale ramps a single tone token
- * (default `--color-info`) by alpha; diverging scale uses success →
+ * (default `--p-info`) by alpha; diverging scale uses success →
  * neutral → error so signed values read at a glance (e.g. variance vs.
  * budget). The cell tint uses CSS `color-mix` so themes / brand
  * overlays influence the color without us hardcoding hex.
@@ -82,7 +82,7 @@ export function HeatmapGrid({
             y={xLabelHeight - 8}
             textAnchor="middle"
             fontSize={10}
-            fill="var(--text-muted)"
+            fill="var(--p-text-2)"
           >
             {label}
           </text>
@@ -95,7 +95,7 @@ export function HeatmapGrid({
             y={xLabelHeight + i * cellSize + cellSize / 2 + 3}
             textAnchor="end"
             fontSize={10}
-            fill="var(--text-muted)"
+            fill="var(--p-text-2)"
           >
             {label}
           </text>
@@ -116,7 +116,7 @@ export function HeatmapGrid({
               width={cellSize - 1}
               height={cellSize - 1}
               fill={fill}
-              stroke="var(--border-color)"
+              stroke="var(--p-border)"
               strokeWidth={0.5}
               style={onCellClick ? { cursor: "pointer" } : undefined}
               onMouseEnter={() => setHover(cell)}
@@ -132,9 +132,9 @@ export function HeatmapGrid({
         <div
           role="status"
           aria-live="polite"
-          className="pointer-events-none absolute end-2 top-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2 py-1 text-[10px] text-[var(--text-secondary)]"
+          className="pointer-events-none absolute end-2 top-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2 py-1 text-[10px] text-[var(--p-text-2)]"
         >
-          <span className="font-medium text-[var(--text-primary)]">
+          <span className="font-medium text-[var(--p-text-1)]">
             {hover.x} · {hover.y}
           </span>
           <span className="ms-2 font-mono">{formatNum(hover.value)}</span>
@@ -155,20 +155,20 @@ function cellFill(
   ctx: { min: number; max: number; absMax: number; colorScale: "sequential" | "diverging" },
 ): string {
   if (ctx.colorScale === "diverging") {
-    if (ctx.absMax === 0) return "color-mix(in srgb, var(--text-muted) 8%, transparent)";
+    if (ctx.absMax === 0) return "color-mix(in srgb, var(--p-text-2) 8%, transparent)";
     const t = Math.max(-1, Math.min(1, value / ctx.absMax));
     if (t >= 0) {
       const pct = Math.round(t * 80) + 8; // 8% → 88%
-      return `color-mix(in srgb, var(--color-success) ${pct}%, transparent)`;
+      return `color-mix(in srgb, var(--p-success) ${pct}%, transparent)`;
     }
     const pct = Math.round(-t * 80) + 8;
-    return `color-mix(in srgb, var(--color-error) ${pct}%, transparent)`;
+    return `color-mix(in srgb, var(--p-danger) ${pct}%, transparent)`;
   }
   // sequential
   const range = ctx.max - ctx.min;
   const t = range === 0 ? 0.5 : (value - ctx.min) / range;
   const pct = Math.round(t * 80) + 8;
-  return `color-mix(in srgb, var(--color-info) ${pct}%, transparent)`;
+  return `color-mix(in srgb, var(--p-info) ${pct}%, transparent)`;
 }
 
 function formatNum(v: number): string {

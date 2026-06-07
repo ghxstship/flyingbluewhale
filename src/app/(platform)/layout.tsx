@@ -58,7 +58,13 @@ export default async function PlatformLayout({ children }: { children: React.Rea
        * marketing site while /console stays canonical regardless.
        * data-platform="atlvs" narrows the accent to nebula pink.
        */}
-      <div data-theme="atlvs-product" data-platform="atlvs" className="console-shell">
+      <div
+        data-ui="saas"
+        data-theme="atlvs-product"
+        data-product="atlvs"
+        data-platform="atlvs"
+        className="console-shell"
+      >
         <PlatformSidebar groups={platformNav} workspaceName={tenant.orgName} />
         <div className="console-main">
           {/*

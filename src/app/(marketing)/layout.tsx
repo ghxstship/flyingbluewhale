@@ -1,5 +1,6 @@
 import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
+import { Wordmark } from "@/components/brand/Wordmark";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
 import { StickyCTABar } from "@/components/marketing/StickyCTABar";
 import { getRequestT } from "@/lib/i18n/request";
@@ -106,33 +107,35 @@ export default async function MarketingLayout({ children }: { children: React.Re
   // cosmic GHXSTSHIP brand voice lives only at /ghxstship (the parent
   // company surface, locked in (ghxstship)/ghxstship/layout.tsx).
   return (
-    <div data-theme="atlvs-product" data-platform="atlvs" className="page-shell">
+    <div data-ui="saas" data-theme="atlvs-product" data-product="atlvs" data-platform="atlvs" className="page-shell">
       <MarketingHeader />
       <WebVitalsReporter />
       <main>{children}</main>
       <StickyCTABar />
-      <footer className="mt-24 border-t border-[var(--border-color)] bg-[var(--surface-inset)]">
+      <footer className="mt-24 border-t border-[var(--p-border)] bg-[var(--p-surface-2)]">
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-10 md:grid-cols-3 lg:grid-cols-7">
             <div className="md:col-span-1">
-              {/* Canonical ATLVS primary lockup — Waypoint mark + spaced
-                  wordmark per ui_kits/atlvs/logo-kit.html "Primary Lockup". */}
+              {/* Canonical ATLVS Technologies primary lockup — Waypoint mark
+                  + Jost crossbar-less wordmark with TECHNOLOGIES subtitle, per
+                  design_handoff_atlvs_kit/wordmarks.html. The mark + wordmark
+                  bottom-align via baseline. */}
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 whitespace-nowrap"
+                className="inline-flex items-end gap-2 whitespace-nowrap"
                 aria-label={t("marketing.layout.footer.brand.homeAriaLabel")}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/brand/atlvs-mark.svg" alt="" width={20} height={20} aria-hidden="true" />
-                <span className="text-base font-semibold tracking-[0.18em] uppercase">A T L V S</span>
+                <img src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
+                <Wordmark word="ATLVS" subtitle="TECHNOLOGIES" style={{ fontSize: 16, fontWeight: 500 }} />
               </Link>
-              <p className="mt-3 text-xs text-[var(--text-muted)]">{t("marketing.layout.footer.brand.tagline")}</p>
-              <div className="mt-4 flex gap-3 text-xs text-[var(--text-muted)]">
+              <p className="mt-3 text-xs text-[var(--p-text-2)]">{t("marketing.layout.footer.brand.tagline")}</p>
+              <div className="mt-4 flex gap-3 text-xs text-[var(--p-text-2)]">
                 <a
                   href="https://twitter.com/atlvs.pro"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-[var(--text-primary)]"
+                  className="hover:text-[var(--p-text-1)]"
                 >
                   {t("marketing.layout.footer.social.twitter")}
                 </a>
@@ -140,7 +143,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
                   href="https://github.com/ghxstship"
                   target="_blank"
                   rel="noreferrer"
-                  className="hover:text-[var(--text-primary)]"
+                  className="hover:text-[var(--p-text-1)]"
                 >
                   {t("marketing.layout.footer.social.github")}
                 </a>
@@ -152,7 +155,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
                 <ul className="mt-4 space-y-2 text-sm">
                   {col.items.map((item) => (
                     <li key={item.href}>
-                      <Link href={item.href} className="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                      <Link href={item.href} className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
                         {t(item.labelKey)}
                       </Link>
                     </li>
@@ -161,7 +164,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
               </div>
             ))}
           </div>
-          <div className="mt-12 border-t border-[var(--border-color)] pt-6 text-xs text-[var(--text-muted)]">
+          <div className="mt-12 border-t border-[var(--p-border)] pt-6 text-xs text-[var(--p-text-2)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span>{t("marketing.layout.footer.copyright", { year: new Date().getFullYear() })}</span>
               <span>{t("marketing.layout.footer.tagline")}</span>
@@ -169,9 +172,8 @@ export default async function MarketingLayout({ children }: { children: React.Re
             <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] leading-relaxed">
               {t("marketing.layout.footer.trademarkPrefix")}{" "}
               {/* GHXSTSHIP parent endorsement lockup — small ink-tile skull
-                  paired with the spaced wordmark per v4 logo-kit
-                  "Endorsement" section. The skull is the parent-company
-                  mark, NEVER the ATLVS product icon. */}
+                  paired with the Jost crossbar-less wordmark. The skull is
+                  the parent-company mark, NEVER the ATLVS product icon. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/brand/logo-ghostship-skull.svg"
@@ -181,7 +183,7 @@ export default async function MarketingLayout({ children }: { children: React.Re
                 aria-hidden="true"
                 className="inline-block align-middle"
               />
-              <span className="font-medium tracking-[0.18em] text-[var(--text-secondary)]">G H X S T S H I P</span>{" "}
+              <Wordmark word="GHXSTSHIP" className="text-[var(--p-text-2)]" style={{ fontSize: 12, fontWeight: 500 }} />{" "}
               {t("marketing.layout.footer.trademarkSuffix")}
             </div>
           </div>

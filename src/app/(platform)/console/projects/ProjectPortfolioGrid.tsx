@@ -54,17 +54,17 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
       empty={enriched.length === 0}
       height={undefined as unknown as number}
       actions={
-        <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
+        <div className="flex items-center gap-3 text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
           <Legend
-            tone="bg-[var(--color-success)]"
+            tone="bg-[var(--p-success)]"
             label={t("console.projects.portfolio.legend.onTrack", { count: counts.green }, `On track ${counts.green}`)}
           />
           <Legend
-            tone="bg-[var(--color-warning)]"
+            tone="bg-[var(--p-warning)]"
             label={t("console.projects.portfolio.legend.watch", { count: counts.amber }, `Watch ${counts.amber}`)}
           />
           <Legend
-            tone="bg-[var(--color-error)]"
+            tone="bg-[var(--p-danger)]"
             label={t("console.projects.portfolio.legend.atRisk", { count: counts.red }, `At risk ${counts.red}`)}
           />
         </div>
@@ -75,21 +75,19 @@ export function ProjectPortfolioGrid({ entries }: { entries: PortfolioEntry[] })
           <Link
             key={p.id}
             href={`/console/projects/${p.id}`}
-            className={`hover-lift block rounded-md border border-[var(--border-color)] p-3 ${tone(p.health).bg}`}
+            className={`hover-lift block rounded-md border border-[var(--p-border)] p-3 ${tone(p.health).bg}`}
             style={{ minHeight: 70 + 60 * p.relSize }}
           >
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <div className="truncate text-sm font-semibold text-[var(--text-primary)]">{p.name}</div>
-                <div className="mt-0.5 text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
-                  {p.status}
-                </div>
+                <div className="truncate text-sm font-semibold text-[var(--p-text-1)]">{p.name}</div>
+                <div className="mt-0.5 text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">{p.status}</div>
               </div>
               <span className={`mt-0.5 inline-block h-2 w-2 shrink-0 rounded-full ${tone(p.health).dot}`} aria-hidden />
             </div>
-            <div className="mt-3 flex items-baseline justify-between text-[11px] text-[var(--text-secondary)]">
+            <div className="mt-3 flex items-baseline justify-between text-[11px] text-[var(--p-text-2)]">
               <span className="font-mono">{fmtBudget(p.budgetCents, locale, currency)}</span>
-              <span className="text-[var(--text-muted)]">{scheduleLabel(p, t)}</span>
+              <span className="text-[var(--p-text-2)]">{scheduleLabel(p, t)}</span>
             </div>
           </Link>
         ))}
@@ -118,17 +116,17 @@ function computeHealth(p: PortfolioEntry): Health {
 function tone(h: Health): { bg: string; dot: string } {
   if (h === "red")
     return {
-      bg: "bg-[color:var(--color-error)]/8 hover:bg-[color:var(--color-error)]/12",
-      dot: "bg-[var(--color-error)]",
+      bg: "bg-[color:var(--p-danger)]/8 hover:bg-[color:var(--p-danger)]/12",
+      dot: "bg-[var(--p-danger)]",
     };
   if (h === "amber")
     return {
-      bg: "bg-[color-mix(in_srgb,var(--color-warning)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-warning)_12%,transparent)]",
-      dot: "bg-[var(--color-warning)]",
+      bg: "bg-[color-mix(in_srgb,var(--p-warning)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--p-warning)_12%,transparent)]",
+      dot: "bg-[var(--p-warning)]",
     };
   return {
-    bg: "bg-[color-mix(in_srgb,var(--color-success)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-success)_12%,transparent)]",
-    dot: "bg-[var(--color-success)]",
+    bg: "bg-[color-mix(in_srgb,var(--p-success)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--p-success)_12%,transparent)]",
+    dot: "bg-[var(--p-success)]",
   };
 }
 

@@ -62,10 +62,10 @@ export default async function Page({ params }: { params: Promise<{ volunteerId: 
             maxLength={120}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.volunteers.edit.kind", undefined, "Kind")}
             </span>
-            <select name="kind" defaultValue={row.kind ?? ""} required className="input-base focus-ring w-full">
+            <select name="kind" defaultValue={row.kind ?? ""} required className="ps-input focus-ring w-full">
               <option value="paid_staff">paid_staff</option>
               <option value="volunteer">volunteer</option>
               <option value="contractor">contractor</option>

@@ -43,9 +43,7 @@ export default async function TemplatesIndex() {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{t("marketing.pages.templates.hero.eyebrow")}</div>
         <h1 className="hed-2xl mt-4">{t("marketing.pages.templates.hero.title")}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.templates.hero.body")}
-        </p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.templates.hero.body")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
@@ -54,8 +52,8 @@ export default async function TemplatesIndex() {
             <Link key={tpl.slug} href={`/templates/${tpl.slug}`} className="surface hover-lift p-5">
               <div className="eyebrow eyebrow-brand">{tpl.category}</div>
               <h3 className="mt-2 text-base font-semibold">{tpl.title}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{tpl.short}</p>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{tpl.short}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("marketing.pages.templates.card.cta")} <ArrowRight size={12} />
               </div>
             </Link>

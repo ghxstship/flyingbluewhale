@@ -120,12 +120,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </div>
 
         <div className="surface p-5">
-          <div className="mb-3 text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <div className="mb-3 text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.finance.entities.detail.hierarchy", undefined, "Hierarchy")}
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.finance.entities.detail.parentEntity", undefined, "Parent entity")}
               </div>
               <div className="text-sm font-medium">
@@ -137,7 +137,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.finance.entities.detail.effectiveWindow", undefined, "Effective window")}
               </div>
               <div className="font-mono text-sm">
@@ -148,13 +148,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.finance.entities.detail.taxId", undefined, "Tax ID")}
               </div>
               <div className="font-mono text-sm">{e.tax_id ?? "—"}</div>
             </div>
             <div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--p-text-2)]">
                 {t("console.finance.entities.detail.baseCurrency", undefined, "Base currency")}
               </div>
               <div className="font-mono text-sm">{e.base_currency}</div>

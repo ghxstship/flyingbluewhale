@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
             defaultValue={dateOnly(row.due_at)}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.finance.invoices.edit.fields.notes", undefined, "Notes")}
             </span>
             <textarea
@@ -85,10 +85,10 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
               defaultValue={row.notes ?? ""}
               rows={5}
               maxLength={4000}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.finance.invoices.edit.statusHint",
               undefined,

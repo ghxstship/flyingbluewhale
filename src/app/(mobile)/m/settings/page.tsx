@@ -45,7 +45,7 @@ export default async function MobileSettings() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.settings.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.settings.title", undefined, "Settings")}</h1>
@@ -54,7 +54,7 @@ export default async function MobileSettings() {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-sm font-semibold">{t("m.settings.language.title", undefined, "Language")}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">
                 {t("m.settings.language.description", undefined, "Affects every label, date, and number in the app.")}
               </div>
             </div>
@@ -64,7 +64,7 @@ export default async function MobileSettings() {
 
         <div className="surface p-4">
           <div className="text-sm font-semibold">{t("m.settings.push.title", undefined, "Push Notifications")}</div>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "m.settings.push.description",
               undefined,
@@ -75,7 +75,7 @@ export default async function MobileSettings() {
             {vapidPublicKey ? (
               <PushToggle vapidPublicKey={vapidPublicKey} initialDevices={devices} />
             ) : (
-              <p className="text-xs text-[var(--text-muted)]">
+              <p className="text-xs text-[var(--p-text-2)]">
                 {t(
                   "m.settings.push.missingVapid",
                   undefined,
@@ -85,7 +85,7 @@ export default async function MobileSettings() {
             )}
             <Link
               href="/m/settings/notifications"
-              className="mt-3 inline-block text-xs text-[var(--text-secondary)] underline"
+              className="mt-3 inline-block text-xs text-[var(--p-text-2)] underline"
             >
               {t("m.settings.push.managePreferences", undefined, "Manage per-kind notification preferences →")}
             </Link>
@@ -95,7 +95,7 @@ export default async function MobileSettings() {
         <div className="surface p-4">
           <div className="text-sm font-semibold">{t("m.settings.offline.title", undefined, "Offline Mode")}</div>
           <div className="mt-1 flex items-center justify-between text-xs">
-            <span className="text-[var(--text-muted)]">
+            <span className="text-[var(--p-text-2)]">
               {t("m.settings.offline.serviceWorker", undefined, "Service worker cache")}
             </span>
             <Badge variant="success">{t("m.settings.offline.ready", undefined, "Ready")}</Badge>
@@ -103,23 +103,23 @@ export default async function MobileSettings() {
         </div>
         <div className="surface p-4">
           <div className="text-sm font-semibold">{t("m.settings.camera.title", undefined, "Camera")}</div>
-          <div className="mt-1 text-xs text-[var(--text-muted)]">
+          <div className="mt-1 text-xs text-[var(--p-text-2)]">
             {t("m.settings.camera.description", undefined, "Required for scan + incident reports.")}
           </div>
         </div>
         <div className="surface p-4">
           <div className="text-sm font-semibold">{t("m.settings.location.title", undefined, "Location")}</div>
-          <div className="mt-1 text-xs text-[var(--text-muted)]">
+          <div className="mt-1 text-xs text-[var(--p-text-2)]">
             {t("m.settings.location.description", undefined, "Used for geo-verified clock in/out.")}
           </div>
         </div>
         <form action="/auth/signout" method="post">
-          <button type="submit" className="btn btn-ghost w-full">
+          <button type="submit" className="ps-btn ps-btn--ghost w-full">
             {t("m.settings.signOut", undefined, "Sign Out")}
           </button>
         </form>
-        <div className="text-center text-[10px] text-[var(--text-muted)]">
-          <Link href="/" className="font-medium text-[var(--text-muted)]">
+        <div className="text-center text-[10px] text-[var(--p-text-2)]">
+          <Link href="/" className="font-medium text-[var(--p-text-2)]">
             COMPVSS · v0.1
           </Link>
         </div>

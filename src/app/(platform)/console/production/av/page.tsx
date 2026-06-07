@@ -79,8 +79,8 @@ export default async function Page() {
             <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1.5 md:grid-cols-3">
               {catEntries.map(([cat, count]) => (
                 <li key={cat} className="flex items-center justify-between text-sm">
-                  <span className="text-[var(--text-secondary)]">{cat}</span>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{count}</span>
+                  <span className="text-[var(--p-text-2)]">{cat}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{count}</span>
                 </li>
               ))}
             </ul>
@@ -138,7 +138,7 @@ export default async function Page() {
             },
           ]}
         />
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.production.av.footnotePrefix",
             undefined,

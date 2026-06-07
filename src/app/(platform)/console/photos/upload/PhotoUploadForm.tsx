@@ -41,9 +41,9 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
       {/* Project picker — Combobox is client-only and uses controlled value, so we mirror
           into a hidden input that the FormData picks up. */}
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.photos.upload.projectLabel", undefined, "Project")}{" "}
-          <span className="text-[var(--color-error)]">*</span>
+          <span className="text-[var(--p-danger)]">*</span>
         </label>
         <div className="mt-1.5">
           <Combobox
@@ -82,9 +82,9 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
       />
 
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.photos.upload.photosLabel", undefined, "Photos")}{" "}
-          <span className="text-[var(--color-error)]">*</span>
+          <span className="text-[var(--p-danger)]">*</span>
         </label>
         <div className="mt-1.5">
           <input
@@ -93,10 +93,10 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
             multiple
             accept={ACCEPT}
             onChange={onPick}
-            className="block w-full cursor-pointer text-sm file:me-4 file:cursor-pointer file:border-0 file:bg-[var(--foreground)] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-[var(--background)] hover:file:opacity-90"
+            className="block w-full cursor-pointer text-sm file:me-4 file:cursor-pointer file:border-0 file:bg-[var(--p-text-1)] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-[var(--p-bg)] hover:file:opacity-90"
           />
         </div>
-        <div className="mt-1 text-[11px] text-[var(--text-muted)]">
+        <div className="mt-1 text-[11px] text-[var(--p-text-2)]">
           {t(
             "console.photos.upload.limits",
             { max: MAX_FILES },
@@ -104,7 +104,7 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
           )}
         </div>
         {files.length > 0 && (
-          <div className="mt-2 text-[11px] text-[var(--text-secondary)]">
+          <div className="mt-2 text-[11px] text-[var(--p-text-2)]">
             {files.length === 1
               ? t(
                   "console.photos.upload.selectedOne",
@@ -117,7 +117,7 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
                   `${files.length} files selected · ${fmtBytes(totalBytes)} total`,
                 )}
             {tooBig && (
-              <span className="ms-2 font-semibold text-[var(--color-error)]">
+              <span className="ms-2 font-semibold text-[var(--p-danger)]">
                 {t("console.photos.upload.tooBig", undefined, "One or more files exceed 25 MB and will be rejected.")}
               </span>
             )}

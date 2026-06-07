@@ -60,7 +60,7 @@ export default async function CompvssPage() {
           <br />
           {t("marketing.pages.solutions.compvss.hero.titleLine2")}
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.solutions.compvss.hero.body")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -119,16 +119,16 @@ export default async function CompvssPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface grid gap-10 p-10 md:grid-cols-2 md:items-start">
           <div>
-            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--org-accent)] uppercase">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-accent-text)] uppercase">
               <Wifi size={14} /> {t("marketing.pages.solutions.compvss.offlineFirst.eyebrow")}
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-tight">
               {t("marketing.pages.solutions.compvss.offlineFirst.heading")}
             </h2>
-            <p className="mt-4 text-sm text-[var(--text-secondary)]">
+            <p className="mt-4 text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.solutions.compvss.offlineFirst.body1")}
             </p>
-            <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            <p className="mt-3 text-sm text-[var(--p-text-2)]">
               {t("marketing.pages.solutions.compvss.offlineFirst.body2")}
             </p>
           </div>
@@ -144,7 +144,7 @@ export default async function CompvssPage() {
               t("marketing.pages.solutions.compvss.offlineFirst.bullets.contrast"),
             ].map((x) => (
               <li key={x} className="flex items-start gap-2">
-                <CheckCircle2 size={16} className="mt-0.5 text-[var(--org-primary)]" />
+                <CheckCircle2 size={16} className="mt-0.5 text-[var(--p-accent)]" />
                 <span>{x}</span>
               </li>
             ))}

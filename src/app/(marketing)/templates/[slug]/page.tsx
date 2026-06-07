@@ -57,7 +57,7 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
           {tr("marketing.pages.templates.detail.hero.eyebrow")} · {t.category}
         </div>
         <h1 className="hed-2xl mt-4">{t.title}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t.long}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t.long}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={`${CANONICAL_CTAS.primary.href}?template=${t.slug}`}>
             {tr("marketing.pages.templates.detail.hero.ctaPrimary")}
@@ -86,16 +86,16 @@ export default async function TemplateDetail({ params }: { params: Promise<{ slu
             {t.bestFor.map((p) => (
               <span
                 key={p}
-                className="rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-1.5 text-xs font-medium"
+                className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-1.5 text-xs font-medium"
               >
                 {p}
               </span>
             ))}
           </div>
           {moduleInfo ? (
-            <div className="mt-6 border-t border-[var(--border-color)] pt-4 text-sm">
-              <span className="text-[var(--text-muted)]">{tr("marketing.pages.templates.detail.livesIn.label")} </span>
-              <Link href={`/features/${moduleInfo.slug}`} className="font-medium text-[var(--org-primary)]">
+            <div className="mt-6 border-t border-[var(--p-border)] pt-4 text-sm">
+              <span className="text-[var(--p-text-2)]">{tr("marketing.pages.templates.detail.livesIn.label")} </span>
+              <Link href={`/features/${moduleInfo.slug}`} className="font-medium text-[var(--p-accent)]">
                 {moduleInfo.name} →
               </Link>
             </div>

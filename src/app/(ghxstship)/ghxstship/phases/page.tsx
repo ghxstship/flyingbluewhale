@@ -24,13 +24,13 @@ export default function PhasesHub() {
       />
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             Production Phases
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
             Discovery to Wrap.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
             Every production touches some or all of eight phases. Use the phase pages to understand what we do and when
             — what gets decided in Discovery, what ships in Build, what closes in Wrap. Engage end to end or scope us
             into a single phase where you need the lift.
@@ -46,17 +46,17 @@ export default function PhasesHub() {
                 className="surface hover-lift group flex h-full flex-col p-6"
               >
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-[10px] tracking-[0.18em] text-[var(--text-muted)]">
+                  <span className="font-mono text-[10px] tracking-[0.18em] text-[var(--p-text-2)]">
                     Phase {p.number}
                   </span>
                 </div>
                 <span className="mt-2 text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {p.name}
                 </span>
-                <p className="mt-3 line-clamp-3 text-sm text-[var(--text-secondary)]">{p.buyerIntent}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-[var(--p-text-2)]">{p.buyerIntent}</p>
                 <div className="mt-4 flex items-center gap-2 text-[10px] font-semibold tracking-[0.2em] uppercase">
-                  <span className="text-[var(--text-muted)]">{p.activeServices.length} services</span>
-                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--text-muted)] group-hover:text-[var(--org-primary)]" />
+                  <span className="text-[var(--p-text-2)]">{p.activeServices.length} services</span>
+                  <ArrowRight className="ms-auto h-3 w-3 text-[var(--p-text-2)] group-hover:text-[var(--p-accent)]" />
                 </div>
               </Link>
             ))}

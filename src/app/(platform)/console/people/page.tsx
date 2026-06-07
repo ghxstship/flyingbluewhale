@@ -116,7 +116,7 @@ export default async function PeoplePage() {
                   <Avatar name={r.users?.name ?? r.users?.email ?? "?"} />
                   <div>
                     <div className="text-sm font-medium">{r.users?.name ?? "—"}</div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">{r.users?.email}</div>
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">{r.users?.email}</div>
                   </div>
                 </div>
               ),
@@ -140,16 +140,14 @@ export default async function PeoplePage() {
           ]}
         />
         <section className="mt-8">
-          <h2 className="mb-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          <h2 className="mb-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             {t("console.people.relatedSections", undefined, "Related Sections")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {PEOPLE_RELATED.map((item) => (
               <Link key={item.href} href={item.href} className="surface hover-lift p-4">
                 <div className="text-sm font-semibold">{t(item.labelKey, undefined, item.labelDefault)}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">
-                  {t(item.subKey, undefined, item.subDefault)}
-                </div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{t(item.subKey, undefined, item.subDefault)}</div>
               </Link>
             ))}
           </div>

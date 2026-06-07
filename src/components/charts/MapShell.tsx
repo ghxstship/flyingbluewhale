@@ -11,7 +11,7 @@ export type MapMarker = {
   lat: number;
   /** Optional inline label for the marker (e.g. truck name). */
   label?: string;
-  /** CSS-var-friendly color string, e.g. "var(--org-primary)" or "#22c55e". */
+  /** CSS-var-friendly color string, e.g. "var(--p-accent)" or "#22c55e". */
   color?: string;
   /** Optional click handler. */
   onClick?: (marker: MapMarker) => void;
@@ -95,8 +95,8 @@ export function MapShell({
       el.setAttribute("aria-label", m.label ?? "Map marker");
       el.style.cssText = `
         width: 14px; height: 14px; border-radius: 50%;
-        border: 2px solid var(--background); box-shadow: var(--shadow-1);
-        background: ${m.color ?? "var(--org-primary)"};
+        border: 2px solid var(--p-bg); box-shadow: var(--p-elev-1);
+        background: ${m.color ?? "var(--p-accent)"};
         cursor: pointer;
       `;
       if (m.onClick) el.addEventListener("click", () => m.onClick!(m));

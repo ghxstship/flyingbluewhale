@@ -26,8 +26,8 @@ import { SaveViewDialog, type SaveViewSubmit } from "./SaveViewDialog";
  */
 
 const TRIGGER_BASE =
-  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--org-primary)]";
-const TRIGGER_ACTIVE = "bg-[var(--surface-inset)] text-[var(--text-primary)]";
+  "inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]";
+const TRIGGER_ACTIVE = "bg-[var(--p-surface-2)] text-[var(--p-text-1)]";
 
 export type SavedViewSelectorProps = {
   /** All saved views visible to the caller for the current table. The
@@ -93,7 +93,7 @@ export function SavedViewSelector({
               {modified && (
                 <span
                   aria-hidden="true"
-                  className="ms-1 inline-block h-1.5 w-1.5 rounded-full bg-[var(--org-primary)]"
+                  className="ms-1 inline-block h-1.5 w-1.5 rounded-full bg-[var(--p-accent)]"
                   title="Unsaved changes"
                 />
               )}
@@ -107,7 +107,7 @@ export function SavedViewSelector({
                 {!activeId && <Check size={12} aria-hidden="true" />}
                 <span className={!activeId ? "" : "ms-[18px]"}>Default View</span>
               </span>
-              <span className="text-[10px] text-[var(--text-muted)]">Auto-Saved</span>
+              <span className="text-[10px] text-[var(--p-text-2)]">Auto-Saved</span>
             </span>
           </DropdownMenuItem>
 
@@ -117,7 +117,7 @@ export function SavedViewSelector({
             return (
               <React.Fragment key={scope}>
                 <DropdownMenuSeparator />
-                <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--text-muted)]">
+                <div className="px-2 py-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)]">
                   {headingForScope(scope)}
                 </div>
                 {rows.map((view) => (
@@ -203,13 +203,13 @@ function SavedViewRow({
   onSetDefault?: () => Promise<void> | void;
 }) {
   return (
-    <div className="group relative flex items-center justify-between gap-1 px-2 py-1 hover:bg-[var(--surface-inset)]">
+    <div className="group relative flex items-center justify-between gap-1 px-2 py-1 hover:bg-[var(--p-surface-2)]">
       <button type="button" onClick={onLoad} className="flex flex-1 items-center gap-1.5 truncate text-start text-sm">
         {active ? <Check size={12} aria-hidden="true" /> : <span className="inline-block w-3" />}
         <span className="truncate">{view.name}</span>
-        {view.isDefault && <Star size={10} aria-hidden="true" className="text-[var(--org-primary)]" />}
+        {view.isDefault && <Star size={10} aria-hidden="true" className="text-[var(--p-accent)]" />}
         {view.isLocked && (
-          <span className="text-[10px] text-[var(--text-muted)]" aria-label="Locked view">
+          <span className="text-[10px] text-[var(--p-text-2)]" aria-label="Locked view">
             (locked)
           </span>
         )}
@@ -221,7 +221,7 @@ function SavedViewRow({
               type="button"
               aria-label={`Set "${view.name}" as default`}
               onClick={() => void onSetDefault()}
-              className="rounded p-1 text-[var(--text-muted)] hover:bg-[var(--background)] hover:text-[var(--text-primary)]"
+              className="rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-bg)] hover:text-[var(--p-text-1)]"
             >
               <Star size={11} aria-hidden="true" />
             </button>
@@ -232,7 +232,7 @@ function SavedViewRow({
             type="button"
             aria-label={`Edit "${view.name}"`}
             onClick={onEdit}
-            className="rounded p-1 text-[var(--text-muted)] hover:bg-[var(--background)] hover:text-[var(--text-primary)]"
+            className="rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-bg)] hover:text-[var(--p-text-1)]"
           >
             <Edit3 size={11} aria-hidden="true" />
           </button>
@@ -243,7 +243,7 @@ function SavedViewRow({
               type="button"
               aria-label={`Delete "${view.name}"`}
               onClick={() => void onDelete()}
-              className="rounded p-1 text-[var(--text-muted)] hover:bg-[var(--background)] hover:text-[var(--danger,red)]"
+              className="rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-bg)] hover:text-[var(--danger,red)]"
             >
               <Trash2 size={11} aria-hidden="true" />
             </button>

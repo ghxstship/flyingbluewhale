@@ -15,7 +15,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -63,7 +63,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
     <div className="px-4 pt-6 pb-24">
       <h1 className="text-xl font-semibold">{(course as { title: string }).title}</h1>
       {(course as { summary: string | null }).summary && (
-        <p className="mt-1 text-xs text-[var(--text-secondary)]">{(course as { summary: string }).summary}</p>
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">{(course as { summary: string }).summary}</p>
       )}
 
       <section className="mt-6 space-y-3">
@@ -73,10 +73,10 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
               <Badge variant="muted">
                 {t("m.learning.course.lessonLabel", { ordinal: l.ordinal }, `Lesson ${l.ordinal}`)}
               </Badge>
-              <span className="font-mono text-xs text-[var(--text-muted)]">{l.lesson_kind}</span>
+              <span className="font-mono text-xs text-[var(--p-text-2)]">{l.lesson_kind}</span>
             </div>
             <h2 className="mt-2 text-sm font-semibold">{l.title}</h2>
-            {l.body && <p className="mt-2 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{l.body}</p>}
+            {l.body && <p className="mt-2 text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{l.body}</p>}
           </article>
         ))}
       </section>
@@ -118,7 +118,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
                   </div>
                 </fieldset>
               ))}
-              <button type="submit" className="btn btn-primary w-full">
+              <button type="submit" className="ps-btn w-full">
                 {t("common.submit", undefined, "Submit")}
               </button>
             </form>

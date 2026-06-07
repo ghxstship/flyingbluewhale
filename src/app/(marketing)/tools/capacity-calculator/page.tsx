@@ -47,7 +47,7 @@ export default function CapacityCalculatorPage() {
       <section className="mx-auto max-w-3xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">Free Tool</div>
         <h1 className="hed-xl mt-4">Venue Capacity Calculator.</h1>
-        <p className="mt-5 text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 text-lg text-[var(--p-text-2)]">
           Estimate maximum legal occupancy from square footage and use type. IBC-aligned defaults for assembly,
           concentrated, standing, and dining configurations. Confirm with the AHJ before publishing.
         </p>
@@ -59,13 +59,13 @@ export default function CapacityCalculatorPage() {
 
       <section className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="hed-lg">How Occupant Load Works.</h2>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">
           Occupant load is the maximum number of people permitted in a space, set by the International Building Code
           (IBC) and adopted (with modifications) by most US jurisdictions. The IBC sets per-occupant area factors by use
           type — 7 sq ft per person standing, 15 sq ft for unconcentrated assembly with tables, 5 sq ft for waiting
           areas. Multiply usable floor area by the appropriate factor (and divide) to land on a load.
         </p>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">
           Real-world capacity is the lower of the IBC load and what the venue's egress capacity supports — exit width,
           fixed seating layout, sprinkler coverage, and AHJ judgement all play in. Use this calculator as a starting
           estimate; confirm with the local Authority Having Jurisdiction before publishing capacity.

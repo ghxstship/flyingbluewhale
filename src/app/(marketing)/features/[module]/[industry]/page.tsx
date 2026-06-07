@@ -125,7 +125,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
         <h1 className="hed-2xl mt-4">
           {mod.name} for {ind.name}.
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {mod.blurb} {ind.hero.body}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -144,7 +144,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {useCases.map((uc) => (
             <div key={uc} className="surface p-6">
-              <p className="text-sm text-[var(--text-secondary)]">{uc}</p>
+              <p className="text-sm text-[var(--p-text-2)]">{uc}</p>
             </div>
           ))}
         </div>
@@ -156,12 +156,12 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
             <div>
               <div className="eyebrow eyebrow-brand">Industry Outcomes</div>
               <h2 className="hed-lg mt-3">What Changes For {ind.name} Operators.</h2>
-              <p className="mt-3 text-sm text-[var(--text-secondary)]">{ind.description}</p>
+              <p className="mt-3 text-sm text-[var(--p-text-2)]">{ind.description}</p>
             </div>
             <ul className="space-y-3 text-sm">
               {ind.outcomes.slice(0, 6).map((o) => (
                 <li key={o} className="flex items-start gap-2">
-                  <span className="status-dot status-dot-success mt-2" />
+                  <span className="ps-dot ps-dot ps-dot--ok mt-2" />
                   <span>{o}</span>
                 </li>
               ))}
@@ -172,14 +172,14 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="hed-lg">The {mod.name} Feature Set.</h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
           The same primitives that ship in our {mod.name} module — applied to {ind.name.toLowerCase()} workflows.
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {mod.highlights.map((h) => (
             <div key={h.title} className="surface p-5">
               <div className="text-sm font-semibold">{h.title}</div>
-              <p className="mt-2 text-xs text-[var(--text-secondary)]">{h.body}</p>
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">{h.body}</p>
             </div>
           ))}
         </div>
@@ -194,9 +194,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="hed-lg">Other Modules For {ind.name}.</h2>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          One database. Every module reads from the same record.
-        </p>
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">One database. Every module reads from the same record.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {siblingModules.map((sib) => (
             <Link
@@ -205,7 +203,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
               className="surface hover-lift group flex items-center justify-between p-4 text-sm"
             >
               <span className="font-medium">{sib.name}</span>
-              <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+              <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
             </Link>
           ))}
         </div>
@@ -221,7 +219,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
               className="surface hover-lift group flex items-center justify-between p-4 text-sm"
             >
               <span className="font-medium">{sib.name}</span>
-              <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+              <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
             </Link>
           ))}
         </div>

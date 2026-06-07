@@ -19,7 +19,7 @@ export function WidgetPalette({
 }): React.ReactElement {
   return (
     <aside className="surface flex w-56 shrink-0 flex-col gap-2 p-3">
-      <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">Widgets</div>
+      <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Widgets</div>
       {PALETTE.map((item) => (
         <PaletteItem
           key={item.type}
@@ -30,7 +30,7 @@ export function WidgetPalette({
           onClick={() => onAdd(item.type)}
         />
       ))}
-      <p className="mt-2 text-[10px] leading-relaxed text-[var(--text-muted)]">
+      <p className="mt-2 text-[10px] leading-relaxed text-[var(--p-text-2)]">
         Drag a widget onto the canvas, or click to drop into the next open slot.
       </p>
     </aside>
@@ -92,18 +92,18 @@ function PaletteItem({
       type="button"
       onClick={onClick}
       aria-label={`Add ${label} widget`}
-      className={`hover-lift flex items-start gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] p-2 text-start transition-shadow ${
+      className={`hover-lift flex items-start gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-2 text-start transition-shadow ${
         isDragging ? "opacity-60" : ""
       }`}
       {...attributes}
       {...listeners}
     >
-      <span className="mt-0.5 text-[var(--org-primary)]" aria-hidden>
+      <span className="mt-0.5 text-[var(--p-accent)]" aria-hidden>
         {glyph}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-xs font-semibold tracking-tight text-[var(--foreground)]">{label}</span>
-        <span className="block text-[10px] leading-snug text-[var(--text-muted)]">{description}</span>
+        <span className="block text-xs font-semibold tracking-tight text-[var(--p-text-1)]">{label}</span>
+        <span className="block text-[10px] leading-snug text-[var(--p-text-2)]">{description}</span>
       </span>
     </button>
   );

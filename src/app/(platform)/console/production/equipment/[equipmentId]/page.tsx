@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
           title={t("console.production.equipment.title", undefined, "Equipment")}
         />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.production.equipment.detail.notFound", undefined, "Not found.")}
           </div>
         </div>
@@ -109,20 +109,20 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                 <input type="hidden" name="status" value={to} />
                 <button
                   type="submit"
-                  className={`rounded-md border border-[var(--border-color)] px-2.5 py-1 text-xs font-medium transition-colors ${
+                  className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
                     to === "retired"
-                      ? "text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/10"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                      ? "text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/10"
+                      : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                   }`}
                 >
                   {t("console.production.equipment.detail.markStatus", { status: toTitle(to) }, `Mark ${toTitle(to)}`)}
                 </button>
               </form>
             ))}
-            <a href={`/console/production/equipment/${row.id}/qr`} className="btn btn-ghost btn-sm">
+            <a href={`/console/production/equipment/${row.id}/qr`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("console.production.equipment.detail.qr", undefined, "QR")}
             </a>
-            <a href={`/console/production/equipment/${row.id}/edit`} className="btn btn-secondary btn-sm">
+            <a href={`/console/production/equipment/${row.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("common.edit", undefined, "Edit")}
             </a>
           </div>
@@ -161,7 +161,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             />
           </div>
           {row.notes && (
-            <div className="mt-4 border-t border-[var(--border-color)] pt-3 text-xs text-[var(--text-secondary)]">
+            <div className="mt-4 border-t border-[var(--p-border)] pt-3 text-xs text-[var(--p-text-2)]">
               {row.notes}
             </div>
           )}
@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <h2 className="text-sm font-semibold">
               {t("console.production.equipment.detail.ledger.title", undefined, "Movement Ledger")}
             </h2>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {movements.length === 1
                 ? t(
                     "console.production.equipment.detail.ledger.countOne",
@@ -187,7 +187,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             </span>
           </div>
           {movements.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.production.equipment.detail.ledger.empty",
                 undefined,
@@ -217,13 +217,13 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                         </Badge>
                       )}
                       <StatusBadge status={m.to_state} />
-                      <span className="text-[var(--text-muted)]">
+                      <span className="text-[var(--p-text-2)]">
                         {t("console.production.equipment.detail.ledger.by", { who }, `by ${who}`)}
                       </span>
                       {m.project?.name && <Badge variant="muted">{m.project.name}</Badge>}
-                      {m.reason && <span className="text-[var(--text-secondary)]">— {m.reason}</span>}
+                      {m.reason && <span className="text-[var(--p-text-2)]">— {m.reason}</span>}
                     </span>
-                    <span className="font-mono text-[var(--text-muted)]">{new Date(m.moved_at).toLocaleString()}</span>
+                    <span className="font-mono text-[var(--p-text-2)]">{new Date(m.moved_at).toLocaleString()}</span>
                   </li>
                 );
               })}
@@ -236,7 +236,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             <Badge variant="muted">{t("console.production.equipment.detail.lifecycle", undefined, "Lifecycle")}</Badge>
             <form action={deleteEquipment}>
               <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--color-error)] hover:underline">
+              <button type="submit" className="text-[color:var(--p-danger)] hover:underline">
                 {t("console.production.equipment.detail.retireRemove", undefined, "Retire & remove")}
               </button>
             </form>
@@ -250,7 +250,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
 function Field({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
     <div>
-      <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">{label}</div>
       <div className={`mt-1 text-sm ${mono ? "font-mono text-xs" : ""}`}>{value}</div>
     </div>
   );

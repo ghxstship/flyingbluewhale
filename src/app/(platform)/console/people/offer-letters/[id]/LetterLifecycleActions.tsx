@@ -52,8 +52,8 @@ export function LetterLifecycleActions({
               {t("console.people.offerLetters.lifecycle.markSent", undefined, "Mark Sent — Activate Public Link")}
             </Button>
             {sendDisabled && (
-              <div className="rounded border border-[var(--color-warning)]/40 bg-[var(--color-warning)]/10 p-3 text-xs leading-relaxed">
-                <div className="mb-1 font-medium tracking-wider text-[var(--text-secondary)] uppercase">
+              <div className="rounded border border-[var(--p-warning)]/40 bg-[var(--p-warning)]/10 p-3 text-xs leading-relaxed">
+                <div className="mb-1 font-medium tracking-wider text-[var(--p-text-2)] uppercase">
                   {t("console.people.offerLetters.lifecycle.msaRequired", undefined, "MSA Required Before Send")}
                 </div>
                 <p>
@@ -62,7 +62,7 @@ export function LetterLifecycleActions({
                     undefined,
                     "No Master Services Agreement on file for this contractor. Issue an MSA first; the recipient’s engagement letter references it.",
                   )}{" "}
-                  <Link className="text-[var(--org-primary)] hover:underline" href={msaIssueHref}>
+                  <Link className="text-[var(--p-accent)] hover:underline" href={msaIssueHref}>
                     {t("console.people.offerLetters.lifecycle.issueMsa", undefined, "Issue MSA →")}
                   </Link>
                 </p>
@@ -82,11 +82,11 @@ export function LetterLifecycleActions({
         )}
       </div>
       {error && (
-        <p className="text-xs text-[var(--color-error)]" role="alert">
+        <p className="text-xs text-[var(--p-danger)]" role="alert">
           {error}
         </p>
       )}
-      <p className="text-xs text-[var(--text-muted)]">
+      <p className="text-xs text-[var(--p-text-2)]">
         {t(
           "console.people.offerLetters.lifecycle.lockedNote",
           undefined,

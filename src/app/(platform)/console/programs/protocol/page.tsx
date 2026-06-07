@@ -128,7 +128,7 @@ export default async function Page() {
                 "Author categories with codes like VIP, VVIP, DIGNITARY, T3 in Console → Accreditation → Categories.",
               )}
               action={
-                <Link href="/console/accreditation/categories" className="btn btn-secondary btn-sm">
+                <Link href="/console/accreditation/categories" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.programs.protocol.empty.vipCategories.action", undefined, "Open categories")}
                 </Link>
               }
@@ -140,7 +140,7 @@ export default async function Page() {
                   <span style={c.color ? { color: c.color } : undefined} className="font-medium">
                     {c.code}
                   </span>
-                  <span className="text-xs text-[var(--text-muted)]">{c.name}</span>
+                  <span className="text-xs text-[var(--p-text-2)]">{c.name}</span>
                 </li>
               ))}
             </ul>
@@ -161,7 +161,7 @@ export default async function Page() {
                 "Author dispatch runs with fleet = 't3' under Transport → Dispatch.",
               )}
               action={
-                <Link href="/console/transport/dispatch/new" className="btn btn-secondary btn-sm">
+                <Link href="/console/transport/dispatch/new" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.programs.protocol.empty.t3Runs.action", undefined, "+ Schedule run")}
                 </Link>
               }
@@ -174,7 +174,7 @@ export default async function Page() {
                     <div className="text-sm font-medium">
                       {r.origin?.name ?? "—"} → {r.destination?.name ?? "—"}
                     </div>
-                    <div className="font-mono text-xs text-[var(--text-muted)]">{fmt(r.scheduled_depart)}</div>
+                    <div className="font-mono text-xs text-[var(--p-text-2)]">{fmt(r.scheduled_depart)}</div>
                   </div>
                   <Badge variant="muted">{toTitle(r.status)}</Badge>
                 </li>

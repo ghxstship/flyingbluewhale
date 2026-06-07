@@ -129,12 +129,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-5">
         <section className="grid gap-4 md:grid-cols-3">
           <div className="surface p-4">
-            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.operations.dailyLog.detail.weather", undefined, "Weather")}
             </div>
             <p className="mt-2 text-sm">{log.weather_summary ?? "—"}</p>
             {(log.weather_temp_high_f != null || log.weather_temp_low_f != null) && (
-              <p className="mt-1 text-xs text-[var(--text-muted)]">
+              <p className="mt-1 text-xs text-[var(--p-text-2)]">
                 {t(
                   "console.operations.dailyLog.detail.tempRange",
                   { high: log.weather_temp_high_f ?? "—", low: log.weather_temp_low_f ?? "—" },
@@ -144,11 +144,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             )}
           </div>
           <div className="surface p-4">
-            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.operations.dailyLog.detail.manpower", undefined, "Manpower")}
             </div>
             <p className="mt-2 text-2xl font-semibold">{totalHeadcount}</p>
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {t(
                 "console.operations.dailyLog.detail.manpowerSummary",
                 { hours: totalHours.toFixed(1), trades: (manpower ?? []).length },
@@ -157,7 +157,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </p>
           </div>
           <div className="surface p-4">
-            <div className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.operations.dailyLog.detail.activity", undefined, "Activity")}
             </div>
             <p className="mt-2 text-sm">
@@ -188,11 +188,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.operations.dailyLog.detail.manpower", undefined, "Manpower")}
           </h3>
           {(manpower ?? []).length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.operations.dailyLog.detail.noManpower", undefined, "No manpower entries.")}
             </p>
           ) : (
-            <table className="data-table mt-3">
+            <table className="ps-table mt-3">
               <thead>
                 <tr>
                   <th>{t("console.operations.dailyLog.detail.trade", undefined, "Trade")}</th>
@@ -220,7 +220,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <h3 className="text-sm font-semibold">
               {t("console.operations.dailyLog.detail.photos", undefined, "Photos")}
             </h3>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {photos.length === 1
                 ? t(
                     "console.operations.dailyLog.detail.photoCountOne",
@@ -235,7 +235,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           </div>
           {photos.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.operations.dailyLog.detail.noPhotos",
                 undefined,
@@ -257,14 +257,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       loading="lazy"
                     />
                   ) : (
-                    <div className="aspect-video w-full bg-[var(--surface)] text-center text-xs leading-[14rem] text-[var(--text-muted)]">
+                    <div className="aspect-video w-full bg-[var(--p-surface)] text-center text-xs leading-[14rem] text-[var(--p-text-2)]">
                       {t("console.operations.dailyLog.detail.previewUnavailable", undefined, "Preview unavailable")}
                     </div>
                   )}
                   <div className="flex items-start justify-between gap-2 p-2 text-xs">
                     <div>
                       {p.caption && <div className="font-medium">{p.caption}</div>}
-                      <div className="font-mono text-[10px] text-[var(--text-muted)]">{fmt.dateTime(p.taken_at)}</div>
+                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">{fmt.dateTime(p.taken_at)}</div>
                     </div>
                     {photosEditable && (
                       <form action={deleteDailyLogPhoto}>
@@ -292,7 +292,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif"
                 required
-                className="input-base sm:col-span-2"
+                className="ps-input sm:col-span-2"
               />
               <input
                 name="caption"
@@ -302,7 +302,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   "Caption · Optional",
                 )}
                 maxLength={280}
-                className="input-base sm:col-span-1"
+                className="ps-input sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
                 {t("common.upload", undefined, "Upload")}
@@ -310,7 +310,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </form>
           )}
           {!photosEditable && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.operations.dailyLog.detail.photosLocked",
                 undefined,

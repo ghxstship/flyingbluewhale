@@ -38,10 +38,10 @@ export function SavedViewWidget({
   if (!view) {
     return (
       <div className="surface flex h-full flex-col p-4">
-        <div className="mb-2 text-sm font-semibold tracking-tight text-[var(--foreground)]">
+        <div className="mb-2 text-sm font-semibold tracking-tight text-[var(--p-text-1)]">
           {widget.title ?? "Saved View"}
         </div>
-        <div className="flex flex-1 items-center justify-center text-xs text-[var(--text-muted)]">
+        <div className="flex flex-1 items-center justify-center text-xs text-[var(--p-text-2)]">
           The referenced saved view is unavailable.
         </div>
       </div>
@@ -56,30 +56,30 @@ export function SavedViewWidget({
     <div className="surface flex h-full flex-col overflow-hidden p-3">
       <div className="mb-2 flex items-center justify-between gap-2">
         <div className="min-w-0">
-          <div className="truncate text-sm font-semibold tracking-tight text-[var(--foreground)]">
+          <div className="truncate text-sm font-semibold tracking-tight text-[var(--p-text-1)]">
             {widget.title ?? view.name}
           </div>
           {widget.title && view.name !== widget.title && (
-            <div className="truncate text-[10px] tracking-wider text-[var(--text-muted)] uppercase">{view.name}</div>
+            <div className="truncate text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{view.name}</div>
           )}
         </div>
         {href && (
           <Link
             href={href}
-            className="shrink-0 text-[10px] font-medium tracking-wider text-[var(--org-primary)] uppercase hover:underline"
+            className="shrink-0 text-[10px] font-medium tracking-wider text-[var(--p-accent)] uppercase hover:underline"
           >
             Open
           </Link>
         )}
       </div>
       <div className="-mx-3 flex-1 overflow-auto px-3">
-        <table className="data-table w-full text-xs">
+        <table className="ps-table w-full text-xs">
           <thead>
             <tr>
               {columns.map((col) => (
                 <th
                   key={col}
-                  className="border-b border-[var(--border-color)] px-2 py-1.5 text-start text-[10px] font-medium tracking-wider text-[var(--text-muted)] uppercase"
+                  className="border-b border-[var(--p-border)] px-2 py-1.5 text-start text-[10px] font-medium tracking-wider text-[var(--p-text-2)] uppercase"
                 >
                   {col}
                 </th>
@@ -89,15 +89,15 @@ export function SavedViewWidget({
           <tbody>
             {visibleRows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length || 1} className="px-2 py-3 text-center text-[var(--text-muted)]">
+                <td colSpan={columns.length || 1} className="px-2 py-3 text-center text-[var(--p-text-2)]">
                   No rows.
                 </td>
               </tr>
             ) : (
               visibleRows.map((row, i) => (
-                <tr key={i} className="border-b border-[var(--border-color)] last:border-b-0">
+                <tr key={i} className="border-b border-[var(--p-border)] last:border-b-0">
                   {columns.map((col) => (
-                    <td key={col} className="px-2 py-1.5 text-[var(--text-secondary)]">
+                    <td key={col} className="px-2 py-1.5 text-[var(--p-text-2)]">
                       {formatCell(row[col])}
                     </td>
                   ))}
@@ -108,7 +108,7 @@ export function SavedViewWidget({
         </table>
       </div>
       {rows.length > visibleRows.length && (
-        <div className="mt-2 text-[10px] text-[var(--text-muted)]">
+        <div className="mt-2 text-[10px] text-[var(--p-text-2)]">
           Showing {visibleRows.length} of {rows.length} rows.
         </div>
       )}

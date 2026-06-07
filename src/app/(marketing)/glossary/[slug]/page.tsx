@@ -62,9 +62,9 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
         <div className="eyebrow eyebrow-brand">Glossary · {t.category.replace(/-/g, " ")}</div>
         <h1 className="hed-2xl mt-4">{t.term}</h1>
         {t.aka && t.aka.length > 0 ? (
-          <p className="mt-3 text-sm text-[var(--text-muted)]">Also: {t.aka.join(", ")}</p>
+          <p className="mt-3 text-sm text-[var(--p-text-2)]">Also: {t.aka.join(", ")}</p>
         ) : null}
-        <p className="mt-6 text-lg leading-relaxed text-[var(--text-secondary)]">{t.long}</p>
+        <p className="mt-6 text-lg leading-relaxed text-[var(--p-text-2)]">{t.long}</p>
       </article>
 
       {t.modules && t.modules.length > 0 ? (
@@ -79,7 +79,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
                   <Link
                     key={m.slug}
                     href={`/features/${m.slug}`}
-                    className="rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--bg-secondary)]"
+                    className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
                   >
                     {m.name} →
                   </Link>
@@ -103,7 +103,7 @@ export default async function GlossaryDetail({ params }: { params: Promise<{ slu
                   className="surface hover-lift flex items-center justify-between p-3 text-sm"
                 >
                   <span>{r.term}</span>
-                  <ArrowRight size={12} className="cta-nudge text-[var(--text-muted)]" />
+                  <ArrowRight size={12} className="cta-nudge text-[var(--p-text-2)]" />
                 </Link>
               ))}
           </div>

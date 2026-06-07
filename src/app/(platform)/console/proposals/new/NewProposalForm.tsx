@@ -27,7 +27,7 @@ export function NewProposalForm({
         <>
           <input type="hidden" name="template_id" value={template.id} />
           <div className="surface-inset rounded-md p-3 text-xs">
-            <div className="font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+            <div className="font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
               {t("console.proposals.new.templateLabel", undefined, "Template")}
             </div>
             <div className="mt-1">
@@ -42,10 +42,10 @@ export function NewProposalForm({
       <Input label={t("console.proposals.new.title", undefined, "Title")} name="title" required maxLength={200} />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.proposals.new.client", undefined, "Client")}
           </label>
-          <select name="client_id" defaultValue={defaultClientId ?? ""} className="input-base mt-1.5 w-full">
+          <select name="client_id" defaultValue={defaultClientId ?? ""} className="ps-input mt-1.5 w-full">
             <option value="">{t("console.proposals.new.noClient", undefined, "— No client —")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -55,10 +55,10 @@ export function NewProposalForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.proposals.new.project", undefined, "Project")}
           </label>
-          <select name="project_id" className="input-base mt-1.5 w-full">
+          <select name="project_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.proposals.new.noProject", undefined, "— No project —")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -79,10 +79,10 @@ export function NewProposalForm({
         <Input label={t("console.proposals.new.expires", undefined, "Expires")} name="expires_at" type="date" />
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.proposals.new.notes", undefined, "Notes / scope")}
         </label>
-        <textarea name="notes" rows={5} className="input-base mt-1.5 w-full" />
+        <textarea name="notes" rows={5} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

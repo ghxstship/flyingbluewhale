@@ -26,7 +26,7 @@ export default async function Page() {
               placeholder="evacuation-stadium-a"
               required
             />
-            <p className="mt-1 text-[10px] text-[var(--text-muted)]">
+            <p className="mt-1 text-[10px] text-[var(--p-text-2)]">
               {t(
                 "console.safety.playbooks.new.slugHint",
                 undefined,
@@ -42,14 +42,14 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.playbooks.new.summaryLabel", undefined, "Summary")}
             </label>
             <textarea
               name="summary"
               rows={3}
               maxLength={2000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               placeholder={t(
                 "console.safety.playbooks.new.summaryPlaceholder",
                 undefined,
@@ -58,10 +58,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.playbooks.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="general" className="input-base mt-1.5 w-full">
+            <select name="kind" defaultValue="general" className="ps-input mt-1.5 w-full">
               <option value="crisis">{t("console.safety.playbooks.new.kind.crisis", undefined, "Crisis")}</option>
               <option value="safety">{t("console.safety.playbooks.new.kind.safety", undefined, "Safety")}</option>
               <option value="onboarding">
@@ -71,7 +71,7 @@ export default async function Page() {
               <option value="general">{t("console.safety.playbooks.new.kind.general", undefined, "General")}</option>
             </select>
           </div>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.safety.playbooks.new.footnote",
               undefined,

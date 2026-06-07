@@ -83,11 +83,11 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           submitLabel={t("console.projects.advancing.assignments.new.submit", undefined, "Create Assignment")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.advancing.assignments.new.catalogItem", undefined, "Catalog Item")}
             </label>
             {catalogItems.length === 0 ? (
-              <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+              <p className="mt-1.5 text-xs text-[var(--p-text-2)]">
                 {t(
                   "console.projects.advancing.assignments.new.noCatalogPrefix",
                   undefined,
@@ -99,7 +99,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 {t("console.projects.advancing.assignments.new.noCatalogSuffix", undefined, "first.")}
               </p>
             ) : (
-              <select name="catalog_item_id" required className="input-base mt-1.5 w-full">
+              <select name="catalog_item_id" required className="ps-input mt-1.5 w-full">
                 <option value="">
                   {t(
                     "console.projects.advancing.assignments.new.pickCatalogItem",
@@ -114,7 +114,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 ))}
               </select>
             )}
-            <p className="mt-1 text-[10px] text-[var(--text-muted)]">
+            <p className="mt-1 text-[10px] text-[var(--p-text-2)]">
               {t(
                 "console.projects.advancing.assignments.new.catalogHint",
                 undefined,
@@ -134,10 +134,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.advancing.assignments.new.assignee", undefined, "Assignee")}
             </label>
-            <select name="party_user_id" required className="input-base mt-1.5 w-full">
+            <select name="party_user_id" required className="ps-input mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}
@@ -165,10 +165,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.advancing.assignments.new.notes", undefined, "Notes · Optional")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

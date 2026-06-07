@@ -170,7 +170,7 @@ export default async function Page() {
           <h2 className="text-sm font-semibold">
             {t("console.settings.slaPolicies.upsert.heading", undefined, "Create / Update Policy")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.slaPolicies.upsert.help",
               undefined,
@@ -181,7 +181,7 @@ export default async function Page() {
             action={upsertSlaPolicy}
             className="surface-inset mt-3 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-6"
           >
-            <select name="severity" required defaultValue="P2" className="input-base sm:col-span-1">
+            <select name="severity" required defaultValue="P2" className="ps-input sm:col-span-1">
               <option value="P1">{t("console.settings.slaPolicies.sev.p1", undefined, "P1 — Critical")}</option>
               <option value="P2">{t("console.settings.slaPolicies.sev.p2", undefined, "P2 — High")}</option>
               <option value="P3">{t("console.settings.slaPolicies.sev.p3", undefined, "P3 — Standard")}</option>
@@ -194,7 +194,7 @@ export default async function Page() {
               min="1"
               max="100000"
               placeholder={t("console.settings.slaPolicies.placeholder.response", undefined, "Response — Min")}
-              className="input-base sm:col-span-2"
+              className="ps-input sm:col-span-2"
             />
             <input
               name="resolution_minutes"
@@ -203,7 +203,7 @@ export default async function Page() {
               min="1"
               max="1000000"
               placeholder={t("console.settings.slaPolicies.placeholder.resolution", undefined, "Resolution — Min")}
-              className="input-base sm:col-span-2"
+              className="ps-input sm:col-span-2"
             />
             <label className="flex items-center gap-2 text-xs sm:col-span-1">
               <input type="checkbox" name="business_hours_only" value="true" />
@@ -222,7 +222,7 @@ export default async function Page() {
             <h2 className="text-sm font-semibold">
               {t("console.settings.slaPolicies.defaults.heading", undefined, "Suggested Defaults")}
             </h2>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.settings.slaPolicies.defaults.help",
                 undefined,

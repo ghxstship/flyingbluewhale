@@ -15,8 +15,8 @@ export const metadata: Metadata = buildMetadata({
   ogImageTitle: "Build It. Ship It. We'll List It.",
 });
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const CATEGORIES = [
   "payments",
@@ -48,7 +48,7 @@ export default function Page() {
       <section className="mx-auto max-w-2xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">Partner Program</div>
         <h1 className="hed-2xl mt-4">Submit A Partner Integration</h1>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">
           Once submitted, your proposal lands in the ATLVS partner-AM queue. We typically respond within 5 business
           days. Verified Partner review passes our technical checklist; Certified additionally passes end-to-end QA on a
           live tenant.
@@ -59,13 +59,13 @@ export default function Page() {
             <div className="grid grid-cols-2 gap-3">
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  Integration Name<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  Integration Name<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input name="name" required maxLength={120} placeholder="Acme Field Reports" className={INPUT} />
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  Slug<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  Slug<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input
                   name="slug"
@@ -80,13 +80,13 @@ export default function Page() {
             <div className="grid grid-cols-2 gap-3">
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  Partner Org<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  Partner Org<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input name="partner_org_name" required maxLength={120} placeholder="Acme Inc" className={INPUT} />
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  Category<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  Category<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <select name="category" required defaultValue="field" className={INPUT}>
                   {CATEGORIES.map((c) => (
@@ -100,7 +100,7 @@ export default function Page() {
             <div className="grid grid-cols-2 gap-3">
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  Contact Email<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  Contact Email<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input
                   type="email"
@@ -118,7 +118,7 @@ export default function Page() {
             </div>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                Short Description (one sentence)<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                Short Description (one sentence)<span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <input
                 name="short_description"

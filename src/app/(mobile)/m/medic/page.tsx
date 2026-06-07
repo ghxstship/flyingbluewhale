@@ -33,7 +33,7 @@ export default async function MobileMedicPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -68,17 +68,17 @@ export default async function MobileMedicPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.medic.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.medic.title", undefined, "Medic")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.medic.empty24h", undefined, "No encounters logged in the last 24h.")
           : `${t("m.medic.countIn24h", { count: rows.length }, `${rows.length} in last 24h`)}${open ? ` · ${t("m.medic.openCount", { count: open }, `${open} open`)}` : ""}`}
       </p>
 
-      <Link href="/m/medic/new" className="btn btn-primary mt-5 w-full">
+      <Link href="/m/medic/new" className="ps-btn mt-5 w-full">
         {t("m.medic.newEncounter", undefined, "+ New Encounter")}
       </Link>
 
@@ -103,18 +103,14 @@ export default async function MobileMedicPage() {
                   <div className="text-sm font-semibold">
                     {r.patient_ref ?? t("m.medic.anonPatient", undefined, "Anon patient")}
                   </div>
-                  {r.chief_complaint && (
-                    <p className="mt-1 text-xs text-[var(--text-secondary)]">{r.chief_complaint}</p>
-                  )}
+                  {r.chief_complaint && <p className="mt-1 text-xs text-[var(--p-text-2)]">{r.chief_complaint}</p>}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {r.triage && <Badge variant={TRIAGE_TONE[r.triage.toLowerCase()] ?? "muted"}>{r.triage}</Badge>}
                     {r.disposition && <Badge variant="success">{toTitle(r.disposition)}</Badge>}
                     {r.venue?.name && <Badge variant="muted">{r.venue.name}</Badge>}
                   </div>
                 </div>
-                <span className="flex-none font-mono text-xs text-[var(--text-muted)]">
-                  {relativeTime(r.created_at)}
-                </span>
+                <span className="flex-none font-mono text-xs text-[var(--p-text-2)]">{relativeTime(r.created_at)}</span>
               </div>
             </li>
           ))

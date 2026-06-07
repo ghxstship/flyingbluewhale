@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             />
           </div>
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.stagePlots.edit.notesLabel", undefined, "Notes")}
             </span>
             <textarea
@@ -75,10 +75,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               defaultValue={row.notes ?? ""}
               rows={4}
               maxLength={2000}
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.projects.stagePlots.edit.canvasHint",
               undefined,

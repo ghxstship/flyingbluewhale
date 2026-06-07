@@ -38,9 +38,7 @@ export function NavModeToggle({ initial }: { initial: "domain" | "xpms" }) {
 
   return (
     <fieldset className="space-y-2">
-      <legend className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-        Console sidebar
-      </legend>
+      <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Console sidebar</legend>
       <div className="grid grid-cols-2 gap-1.5">
         <button
           type="button"
@@ -50,7 +48,7 @@ export function NavModeToggle({ initial }: { initial: "domain" | "xpms" }) {
           disabled={pending}
         >
           <span className="font-medium">Domain</span>
-          <span className="text-[11px] text-[var(--text-muted)]">
+          <span className="text-[11px] text-[var(--p-text-2)]">
             Plain-English groups (Projects, Sales, Finance…). Default.
           </span>
         </button>
@@ -62,7 +60,7 @@ export function NavModeToggle({ initial }: { initial: "domain" | "xpms" }) {
           disabled={pending}
         >
           <span className="font-medium">XPMS spine</span>
-          <span className="text-[11px] text-[var(--text-muted)]">
+          <span className="text-[11px] text-[var(--p-text-2)]">
             Numeric class taxonomy (0 EXECUTIVE … 9 TECHNOLOGY).
           </span>
         </button>

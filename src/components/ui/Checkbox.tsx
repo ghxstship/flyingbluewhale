@@ -11,7 +11,7 @@ export const Checkbox = React.forwardRef<
   return (
     <CheckboxPrimitive.Root
       ref={ref}
-      className={`inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--border-color)] bg-[var(--surface)] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] disabled:opacity-50 data-[state=checked]:border-[var(--org-primary)] data-[state=checked]:bg-[var(--org-primary)] data-[state=checked]:text-[var(--org-on-primary,white)] data-[state=indeterminate]:border-[var(--org-primary)] data-[state=indeterminate]:bg-[var(--org-primary)] data-[state=indeterminate]:text-[var(--org-on-primary,white)] ${className}`}
+      className={`inline-flex h-4 w-4 shrink-0 items-center justify-center rounded border border-[var(--p-border)] bg-[var(--p-surface)] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--p-bg)] disabled:opacity-50 data-[state=checked]:border-[var(--p-accent)] data-[state=checked]:bg-[var(--p-accent)] data-[state=checked]:text-[var(--p-accent-contrast,white)] data-[state=indeterminate]:border-[var(--p-accent)] data-[state=indeterminate]:bg-[var(--p-accent)] data-[state=indeterminate]:text-[var(--p-accent-contrast,white)] ${className}`}
       {...props}
     >
       <CheckboxPrimitive.Indicator className="flex items-center justify-center">
@@ -42,11 +42,11 @@ export function LabeledCheckbox({
     <div className="flex items-start gap-2">
       <Checkbox id={inputId} aria-describedby={descId} {...props} />
       <div>
-        <label htmlFor={inputId} className="text-sm font-medium text-[var(--text-primary)]">
+        <label htmlFor={inputId} className="text-sm font-medium text-[var(--p-text-1)]">
           {label}
         </label>
         {description && (
-          <div id={descId} className="text-xs text-[var(--text-muted)]">
+          <div id={descId} className="text-xs text-[var(--p-text-2)]">
             {description}
           </div>
         )}

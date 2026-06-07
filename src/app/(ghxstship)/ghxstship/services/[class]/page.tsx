@@ -56,22 +56,22 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
 
       <div className="space-y-16 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-12">
-          <nav className="mb-6 text-xs text-[var(--text-muted)]">
-            <Link href={paths.servicesRoot()} className="hover:text-[var(--text-primary)]">
+          <nav className="mb-6 text-xs text-[var(--p-text-2)]">
+            <Link href={paths.servicesRoot()} className="hover:text-[var(--p-text-1)]">
               Services
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-[var(--text-primary)]">{c.shortName}</span>
+            <span className="text-[var(--p-text-1)]">{c.shortName}</span>
           </nav>
-          <div className="font-mono text-xs tracking-[0.18em] text-[var(--text-muted)]">Class {c.code}</div>
+          <div className="font-mono text-xs tracking-[0.18em] text-[var(--p-text-2)]">Class {c.code}</div>
           <h1 className="mt-3 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
             {c.shortName}
           </h1>
-          <p className="mt-6 max-w-3xl text-lg text-[var(--text-secondary)]">{c.definition}</p>
+          <p className="mt-6 max-w-3xl text-lg text-[var(--p-text-2)]">{c.definition}</p>
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             Services in this discipline
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -82,12 +82,12 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
                 className="surface hover-lift group flex h-full flex-col gap-2 p-6"
               >
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)]">
+                  <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)]">
                     {String(s.number).padStart(3, "0")}
                   </span>
                   <span className="text-lg font-semibold">{s.name}</span>
                 </div>
-                <p className="line-clamp-2 text-sm text-[var(--text-secondary)]">{s.whatItIs}</p>
+                <p className="line-clamp-2 text-sm text-[var(--p-text-2)]">{s.whatItIs}</p>
               </Link>
             ))}
           </div>
@@ -95,7 +95,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
 
         {crossServices.length > 0 && (
           <section className="mx-auto max-w-6xl px-6">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
               Related services that touch {c.shortName}
             </div>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -108,12 +108,12 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
                       href={paths.serviceDetail(primary.slug, s.slug)}
                       className="surface hover-lift flex h-full items-start gap-3 p-4"
                     >
-                      <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)]">
+                      <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)]">
                         {String(s.number).padStart(3, "0")}
                       </span>
                       <div>
                         <div className="text-sm">{s.name}</div>
-                        <div className="text-[10px] text-[var(--text-muted)] uppercase">
+                        <div className="text-[10px] text-[var(--p-text-2)] uppercase">
                           Primary discipline: {primary.shortName}
                         </div>
                       </div>
@@ -130,7 +130,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
               Brief us with what you have.
             </h2>
-            <p className="mt-3 max-w-xl text-[var(--text-secondary)]">
+            <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
               Email a paragraph. Walk us through a deck. Drop a venue address and a calendar window. We&apos;ll come
               back inside one business day with the scope, the producer, and the price band.
             </p>

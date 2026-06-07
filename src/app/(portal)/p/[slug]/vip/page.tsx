@@ -81,13 +81,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {tiles.map((tile) => (
             <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{tile.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{tile.desc}</p>
+              <p className="mt-1 text-xs text-[var(--p-text-2)]">{tile.desc}</p>
             </Link>
           ))}
         </div>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t("p.vip.concierge.label", undefined, "Concierge:")}{" "}
-          <a className="text-[var(--org-primary)]" href="mailto:vip@atlvs.pro">
+          <a className="text-[var(--p-accent)]" href="mailto:vip@atlvs.pro">
             vip@atlvs.pro
           </a>{" "}
           {t("p.vip.concierge.window", undefined, "— 24/7 during event window.")}

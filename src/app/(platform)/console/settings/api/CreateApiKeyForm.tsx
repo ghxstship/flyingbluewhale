@@ -52,7 +52,7 @@ export function CreateApiKeyForm() {
         </DialogHeader>
         {secret ? (
           <div className="space-y-3">
-            <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-3">
+            <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3">
               <code className="font-mono text-xs break-all">{secret}</code>
             </div>
             <div className="flex justify-end gap-2">
@@ -82,25 +82,25 @@ export function CreateApiKeyForm() {
                 "Comma-separated; leave blank for full access. Capability strings — projects:read, projects:write, tasks:write, deliverables:read, invoices:read, etc.",
               )}
             />
-            <details className="rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-2 text-xs">
-              <summary className="cursor-pointer text-[var(--text-muted)]">
+            <details className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-2 text-xs">
+              <summary className="cursor-pointer text-[var(--p-text-2)]">
                 {t("console.settings.api.commonScopeSets", undefined, "Common scope sets")}
               </summary>
               <ul className="mt-2 space-y-1 font-mono">
                 <li>
-                  <code className="text-[var(--text-secondary)]">projects:read, tasks:read</code>{" "}
+                  <code className="text-[var(--p-text-2)]">projects:read, tasks:read</code>{" "}
                   {t("console.settings.api.scopeReadOnly", undefined, "— read-only reporter")}
                 </li>
                 <li>
-                  <code className="text-[var(--text-secondary)]">tasks:write, time:write</code>{" "}
+                  <code className="text-[var(--p-text-2)]">tasks:write, time:write</code>{" "}
                   {t("console.settings.api.scopeFieldClockIn", undefined, "— field clock-in")}
                 </li>
                 <li>
-                  <code className="text-[var(--text-secondary)]">deliverables:read, deliverables:write</code>{" "}
+                  <code className="text-[var(--p-text-2)]">deliverables:read, deliverables:write</code>{" "}
                   {t("console.settings.api.scopeAdvancing", undefined, "— advancing pipeline")}
                 </li>
                 <li>
-                  <code className="text-[var(--text-secondary)]">
+                  <code className="text-[var(--p-text-2)]">
                     {t("console.settings.api.scopeBlank", undefined, "(blank)")}
                   </code>{" "}
                   {t("console.settings.api.scopeFullAccess", undefined, "— full access of the issuing user")}
@@ -108,7 +108,7 @@ export function CreateApiKeyForm() {
               </ul>
             </details>
             {state && "error" in state && state.error && (
-              <p className="text-xs text-[var(--color-error)]">{state.error}</p>
+              <p className="text-xs text-[var(--p-danger)]">{state.error}</p>
             )}
             <div className="flex justify-end gap-2">
               <Button type="button" variant="ghost" onClick={() => setOpen(false)}>

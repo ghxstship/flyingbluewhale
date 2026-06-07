@@ -61,7 +61,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
         {lead.notes && (
           <div className="surface p-5">
             <h3 className="text-sm font-semibold">{t("console.leads.detail.notesHeading", undefined, "Notes")}</h3>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{lead.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{lead.notes}</p>
           </div>
         )}
       </div>
@@ -72,7 +72,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{children}</div>
     </div>
   );

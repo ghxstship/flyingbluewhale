@@ -176,9 +176,9 @@ export function TrackerView({
               <>
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">{row.wbs_path}</div>
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">{row.wbs_path}</div>
                     <div className="mt-0.5 truncate text-sm font-medium">{row.name}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">{row.identifier}</div>
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">{row.identifier}</div>
                   </div>
                   <Badge variant={row.state === "tpc" ? "brand" : "muted"}>{row.state.toUpperCase()}</Badge>
                 </div>
@@ -207,10 +207,10 @@ export function TrackerView({
         </div>
       ) : (
         <div className="surface overflow-hidden">
-          <div className="data-table">
+          <div className="ps-table">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                <tr className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                   <th className="px-4 py-3 text-start">WBS / Atom</th>
                   <th className="px-3 py-3 text-right">Budget</th>
                   <th className="px-3 py-3 text-right">Actual</th>
@@ -228,7 +228,7 @@ export function TrackerView({
                   const variance = row.variance_cost_cents_rollup ?? 0;
                   const nameEl = atomHrefBuilder ? (
                     <Link
-                      className="text-sm font-medium hover:text-[var(--org-primary)]"
+                      className="text-sm font-medium hover:text-[var(--p-accent)]"
                       href={atomHrefBuilder(row.atom_id)}
                       style={{ paddingLeft: `${indent * 16}px` }}
                     >
@@ -240,17 +240,17 @@ export function TrackerView({
                     </span>
                   );
                   return (
-                    <tr key={row.atom_id} className="border-t border-[var(--border)]">
+                    <tr key={row.atom_id} className="border-t border-[var(--p-border)]">
                       <td className="px-4 py-3">
                         <div className="flex items-start gap-2" style={{ paddingLeft: `${indent * 16}px` }}>
-                          <span className="font-mono text-[10px] text-[var(--text-muted)]">{row.wbs_path}</span>
+                          <span className="font-mono text-[10px] text-[var(--p-text-2)]">{row.wbs_path}</span>
                         </div>
                         <div className="mt-0.5 flex items-center gap-2">
                           {nameEl}
                           <Badge variant={row.state === "tpc" ? "brand" : "muted"}>{row.state.toUpperCase()}</Badge>
                         </div>
                         <div
-                          className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]"
+                          className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]"
                           style={{ paddingLeft: `${indent * 16}px` }}
                         >
                           {row.identifier}
@@ -266,17 +266,17 @@ export function TrackerView({
                       <td
                         className={`px-3 py-3 text-right font-mono text-xs ${
                           variance > 0
-                            ? "text-[var(--color-error)]"
+                            ? "text-[var(--p-danger)]"
                             : variance < 0
-                              ? "text-[var(--color-success)]"
-                              : "text-[var(--text-muted)]"
+                              ? "text-[var(--p-success)]"
+                              : "text-[var(--p-text-2)]"
                         }`}
                       >
                         {variance === 0 ? "—" : money(variance)}
                       </td>
                       <td className="px-3 py-3 text-xs">
                         {(row.task_count_rollup ?? 0) === 0 ? (
-                          <span className="text-[var(--text-muted)]">—</span>
+                          <span className="text-[var(--p-text-2)]">—</span>
                         ) : (
                           <span className="font-mono">
                             {row.tasks_done_rollup ?? 0}/{row.task_count_rollup ?? 0}
@@ -285,21 +285,19 @@ export function TrackerView({
                       </td>
                       <td className="px-3 py-3 text-xs">
                         {(row.deliverable_count_rollup ?? 0) === 0 ? (
-                          <span className="text-[var(--text-muted)]">—</span>
+                          <span className="text-[var(--p-text-2)]">—</span>
                         ) : (
                           <span className="font-mono">
                             {row.deliverables_approved_rollup ?? 0}/{row.deliverable_count_rollup ?? 0}
                             {(row.deliverables_open_rollup ?? 0) > 0 && (
-                              <span className="ms-1 text-[var(--text-muted)]">
-                                · {row.deliverables_open_rollup} open
-                              </span>
+                              <span className="ms-1 text-[var(--p-text-2)]">· {row.deliverables_open_rollup} open</span>
                             )}
                           </span>
                         )}
                       </td>
                       <td className="min-w-[140px] px-4 py-3">
                         {row.pct_complete_rollup == null ? (
-                          <span className="text-xs text-[var(--text-muted)]">—</span>
+                          <span className="text-xs text-[var(--p-text-2)]">—</span>
                         ) : (
                           <ProgressBar value={rowPct} showLabel aria-label={`Progress ${rowPct}%`} />
                         )}

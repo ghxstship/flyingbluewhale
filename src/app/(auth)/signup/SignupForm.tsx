@@ -28,7 +28,7 @@ export function SignupForm() {
       footer={
         <>
           {t("auth.signup.haveAccount", undefined, "Already have an account?")}{" "}
-          <Link href="/login" className="text-[var(--org-accent)] underline underline-offset-4">
+          <Link href="/login" className="text-[var(--p-accent-text)] underline underline-offset-4">
             {t("auth.signup.signIn", undefined, "Sign in")}
           </Link>
         </>
@@ -72,7 +72,7 @@ export function SignupForm() {
           error={state?.fieldErrors?.orgName}
         />
         {state?.error && !state?.fieldErrors && <Alert kind="error">{state.error}</Alert>}
-        <p className="text-[11px] leading-relaxed text-[var(--text-muted)]">
+        <p className="text-[11px] leading-relaxed text-[var(--p-text-2)]">
           {t("auth.signup.tosPrefix", undefined, "By creating an account you agree to our")}{" "}
           <Link href="/legal/terms" className="underline">
             {t("nav.legal.terms", undefined, "Terms")}

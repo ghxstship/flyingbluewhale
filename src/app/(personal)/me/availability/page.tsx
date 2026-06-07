@@ -57,7 +57,7 @@ export default async function Page() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs font-medium">{t("me.availability.kind", undefined, "Kind")}</label>
-              <select name="kind" className="input-base mt-1.5 w-full" defaultValue="hold">
+              <select name="kind" className="ps-input mt-1.5 w-full" defaultValue="hold">
                 <option value="hold">{t("me.availability.kind.hold", undefined, "Hold — Auto-release on TTL")}</option>
                 <option value="confirm">{t("me.availability.kind.confirm", undefined, "Confirm — Locked")}</option>
                 <option value="block">{t("me.availability.kind.block", undefined, "Block — Unavailable")}</option>
@@ -110,7 +110,7 @@ export default async function Page() {
                   }}
                 >
                   <input type="hidden" name="slot_id" value={s.id} />
-                  <button type="submit" className="btn btn-ghost text-xs">
+                  <button type="submit" className="ps-btn ps-btn--ghost text-xs">
                     {t("common.remove", undefined, "Remove")}
                   </button>
                 </form>

@@ -166,12 +166,12 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
                 aria-selected={isActive}
                 className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs transition-colors ${
                   isActive
-                    ? "border-[var(--org-primary)] bg-[var(--org-primary)] text-[var(--org-on-primary,var(--background))]"
-                    : "border-[var(--border-color)] hover:bg-[var(--surface-inset)]"
+                    ? "border-[var(--p-accent)] bg-[var(--p-accent)] text-[var(--p-accent-contrast,var(--p-bg))]"
+                    : "border-[var(--p-border)] hover:bg-[var(--p-surface-2)]"
                 }`}
               >
                 {f.label}
-                <span className={isActive ? "opacity-80" : "text-[var(--text-muted)]"}>{count}</span>
+                <span className={isActive ? "opacity-80" : "text-[var(--p-text-2)]"}>{count}</span>
               </Link>
             );
           })}
@@ -227,14 +227,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
         />
 
         <section>
-          <h2 className="mb-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          <h2 className="mb-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             {t("console.workforce.relatedSections", undefined, "Related Sections")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {RELATED_I18N.map((item) => (
               <Link key={item.href} href={item.href} className="surface hover-lift p-4">
                 <div className="text-sm font-semibold">{item.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{item.sub}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{item.sub}</div>
               </Link>
             ))}
           </div>

@@ -90,7 +90,7 @@ function actionsForShell(shell: Shell, t: TFn): ActionSpec[] {
   }
 }
 
-// data-platform drives --org-primary in globals.css. Apex (marketing/auth/
+// data-platform drives --p-accent in globals.css. Apex (marketing/auth/
 // personal) inherits the default; subdomain shells lock to their accent.
 function platformAttrFor(shell: Shell): string | undefined {
   if (shell === "platform") return "atlvs";
@@ -108,7 +108,7 @@ export default async function NotFound() {
   return (
     <div
       data-platform={platformAttr}
-      className="flex min-h-screen items-center justify-center bg-[var(--background)] px-6 py-24"
+      className="flex min-h-screen items-center justify-center bg-[var(--p-bg)] px-6 py-24"
     >
       <div className="mx-auto max-w-md text-center">
         {/* Waypoint brand anchor — the root 404 is what Next.js falls
@@ -117,16 +117,16 @@ export default async function NotFound() {
             of reading as a generic browser error. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/brand/atlvs-mark.svg" alt="" width={36} height={36} aria-hidden="true" className="mx-auto mb-6" />
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">404</div>
-        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">404</div>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[var(--p-text-1)]">
           {t("notFound.title", undefined, "Not Found")}
         </h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("notFound.body", undefined, "The page you're looking for doesn't exist, or the link has expired.")}
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           {actions.map((a) => (
-            <Link key={a.href} href={a.href} className={`btn btn-${a.variant}`}>
+            <Link key={a.href} href={a.href} className={`ps-btn btn-${a.variant}`}>
               {a.label}
             </Link>
           ))}

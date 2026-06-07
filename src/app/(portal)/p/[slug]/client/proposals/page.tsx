@@ -45,10 +45,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             key: "title",
             header: t("p.client.proposals.col.title", undefined, "Title"),
             render: (r) => (
-              <Link
-                href={`/p/${slug}/client/proposals/${r.id}`}
-                className="font-medium hover:text-[var(--org-primary)]"
-              >
+              <Link href={`/p/${slug}/client/proposals/${r.id}`} className="font-medium hover:text-[var(--p-accent)]">
                 {r.title}
               </Link>
             ),
@@ -82,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             render: (r) => (
               <Link
                 href={`/p/${slug}/client/proposals/${r.id}`}
-                className="text-xs text-[var(--text-muted)] hover:text-[var(--org-primary)]"
+                className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-accent)]"
               >
                 {t("p.client.proposals.open", undefined, "Open →")}
               </Link>

@@ -111,7 +111,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.forms.edit.fields.description", undefined, "Description")}
             </label>
             <textarea
@@ -119,12 +119,12 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
               defaultValue={form.description ?? ""}
               rows={3}
               maxLength={2000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
             />
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.forms.edit.fields.status", undefined, "Status")}
             </label>
             <div className="mt-1.5 grid grid-cols-3 gap-1.5">
@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
                     name="status"
                     value={s}
                     defaultChecked={form.status === s}
-                    className="accent-[var(--org-primary)]"
+                    className="accent-[var(--p-accent)]"
                   />
                   {toTitle(s)}
                 </label>
@@ -144,9 +144,9 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.forms.edit.fields.schemaJson", undefined, "Schema — JSON")}{" "}
-              <span className="text-[var(--color-error)]">*</span>
+              <span className="text-[var(--p-danger)]">*</span>
             </label>
             <textarea
               name="schema_json"
@@ -154,9 +154,9 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
               rows={20}
               required
               spellCheck={false}
-              className="input-base mt-1.5 w-full font-mono text-xs"
+              className="ps-input mt-1.5 w-full font-mono text-xs"
             />
-            <p className="mt-1 text-[11px] text-[var(--text-muted)]">
+            <p className="mt-1 text-[11px] text-[var(--p-text-2)]">
               {t("console.forms.edit.fields.schemaShapeLabel", undefined, "Shape:")}{" "}
               <code>{`{ "fields": [{ "key", "label", "type", "required"?, "placeholder"?, "options"? }] }`}</code>.{" "}
               {t(

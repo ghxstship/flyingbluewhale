@@ -126,14 +126,14 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
               <div className="mt-2 space-y-1 text-sm">
                 <div>{accountName}</div>
                 {deal.account?.account_kind && (
-                  <div className="font-mono text-[10px] text-[var(--text-muted)]">{deal.account.account_kind}</div>
+                  <div className="font-mono text-[10px] text-[var(--p-text-2)]">{deal.account.account_kind}</div>
                 )}
                 {deal.party?.primary_email && (
-                  <div className="font-mono text-xs text-[var(--text-secondary)]">{deal.party.primary_email}</div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{deal.party.primary_email}</div>
                 )}
               </div>
             ) : (
-              <p className="mt-2 text-xs text-[var(--text-muted)]">
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">
                 {t("console.pipeline.deal.account.notLinked", undefined, "Not linked to an account.")}
               </p>
             )}
@@ -145,20 +145,20 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
             </h3>
             <dl className="mt-2 space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-[var(--text-muted)]">
+                <dt className="text-[var(--p-text-2)]">
                   {t("console.pipeline.deal.lifecycle.created", undefined, "Created")}
                 </dt>
                 <dd className="font-mono text-xs">{timeAgo(deal.created_at)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-[var(--text-muted)]">
+                <dt className="text-[var(--p-text-2)]">
                   {t("console.pipeline.deal.lifecycle.updated", undefined, "Updated")}
                 </dt>
                 <dd className="font-mono text-xs">{timeAgo(deal.updated_at)}</dd>
               </div>
               {deal.closed_at && (
                 <div className="flex justify-between">
-                  <dt className="text-[var(--text-muted)]">
+                  <dt className="text-[var(--p-text-2)]">
                     {t("console.pipeline.deal.lifecycle.closed", undefined, "Closed")}
                   </dt>
                   <dd className="font-mono text-xs">
@@ -174,7 +174,7 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("console.pipeline.deal.activity.title", undefined, "Activity")}</h3>
           {activities.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.pipeline.deal.activity.empty",
                 undefined,
@@ -182,17 +182,17 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {activities.map((a) => (
                 <li key={a.id} className="py-3 text-sm">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Badge variant="muted">{a.activity_kind}</Badge>
-                      {a.outcome && <span className="font-mono text-[10px] text-[var(--text-muted)]">{a.outcome}</span>}
+                      {a.outcome && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{a.outcome}</span>}
                     </div>
-                    <span className="font-mono text-[10px] text-[var(--text-muted)]">{timeAgo(a.occurred_at)}</span>
+                    <span className="font-mono text-[10px] text-[var(--p-text-2)]">{timeAgo(a.occurred_at)}</span>
                   </div>
-                  {a.notes && <p className="mt-1 whitespace-pre-wrap text-[var(--text-secondary)]">{a.notes}</p>}
+                  {a.notes && <p className="mt-1 whitespace-pre-wrap text-[var(--p-text-2)]">{a.notes}</p>}
                 </li>
               ))}
             </ul>
@@ -206,7 +206,7 @@ export default async function DealDetail({ params }: { params: Promise<{ dealId:
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{label}</div>
       <div className="mt-1 text-sm">{children}</div>
     </div>
   );

@@ -64,7 +64,7 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
       <PortalRail group={portalNav(slug, "promoter")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">{t("p.promoter.approvals.title", undefined, "Approvals")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {pending.length === 1
             ? t(
                 "p.promoter.approvals.subtitle.one",
@@ -100,7 +100,7 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
                       {propMap.get(a.proposal_id) ?? t("p.promoter.approvals.proposalFallback", undefined, "Proposal")}{" "}
                       — {a.title ?? a.kind}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {a.kind} · {fmt.date(a.created_at)}
                       {a.due_at
                         ? ` · ${t("p.promoter.approvals.due", { date: fmt.date(a.due_at) }, `due ${fmt.date(a.due_at)}`)}`

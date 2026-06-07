@@ -40,8 +40,8 @@ export function ImportBudgetForm() {
   return (
     <form action={action} className="space-y-4">
       <div className="surface p-4">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Paste</h2>
-        <p className="mt-2 text-xs text-[var(--text-muted)]">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Paste</h2>
+        <p className="mt-2 text-xs text-[var(--p-text-2)]">
           Copy the Budget sheet header row plus data rows from the XPMS template and paste below. PROJECT accepts either
           a project name or a UUID. ESTIMATE and VARIANCE are skipped (the database recomputes them). FLAG accepts
           true/false, yes/no, or 1/0.
@@ -50,7 +50,7 @@ export function ImportBudgetForm() {
           name="csv"
           required
           rows={14}
-          className="mt-3 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-2 font-mono text-xs"
+          className="mt-3 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-2 font-mono text-xs"
           placeholder={`${TEMPLATE_HEADER}\n…\n`}
         />
       </div>

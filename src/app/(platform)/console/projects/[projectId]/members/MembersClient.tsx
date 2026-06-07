@@ -53,13 +53,13 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
     <form action={formAction} className="surface space-y-4 p-4">
       <div className="grid gap-3 sm:grid-cols-[2fr_1fr_auto]">
         <label className="space-y-1 text-xs">
-          <div className="tracking-wide text-[var(--text-muted)] uppercase">
+          <div className="tracking-wide text-[var(--p-text-2)] uppercase">
             {t("console.projects.members.orgMemberLabel", undefined, "Org Member")}
           </div>
           <select
             name="userId"
             required
-            className="w-full rounded-md border border-[var(--border)] bg-[var(--surface)] p-2 text-sm"
+            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-2 text-sm"
           >
             <option value="">
               {t("console.projects.members.selectMemberPlaceholder", undefined, "Select a member…")}
@@ -72,14 +72,14 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
           </select>
         </label>
         <label className="space-y-1 text-xs">
-          <div className="tracking-wide text-[var(--text-muted)] uppercase">
+          <div className="tracking-wide text-[var(--p-text-2)] uppercase">
             {t("console.projects.members.projectRoleLabel", undefined, "Project Role")}
           </div>
           <select
             name="role"
             defaultValue="contributor"
             required
-            className="w-full rounded-md border border-[var(--border)] bg-[var(--surface)] p-2 text-sm"
+            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-2 text-sm"
           >
             {PROJECT_ROLES.map((r) => (
               <option key={r} value={r}>
@@ -150,7 +150,7 @@ export function MemberRow({
     <tr>
       <td>
         <div className="font-medium">{member.name ?? member.email}</div>
-        {member.name && <div className="text-xs text-[var(--text-muted)]">{member.email}</div>}
+        {member.name && <div className="text-xs text-[var(--p-text-2)]">{member.email}</div>}
       </td>
       <td>
         <select
@@ -158,7 +158,7 @@ export function MemberRow({
           defaultValue={member.role}
           disabled={updating}
           onChange={(e) => onChangeRole(e.currentTarget.value)}
-          className="rounded-md border border-[var(--border)] bg-[var(--surface)] p-1 text-xs"
+          className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-1 text-xs"
         >
           {PROJECT_ROLES.map((r) => (
             <option key={r} value={r}>

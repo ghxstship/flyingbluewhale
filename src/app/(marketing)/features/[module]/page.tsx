@@ -92,11 +92,9 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-primary)] uppercase">
-          {config.eyebrow}
-        </div>
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">{config.eyebrow}</div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">{config.heroTitle}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{config.heroBody}</p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{config.heroBody}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -108,19 +106,17 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       {config.withoutUs && config.withUs ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <h2 className="text-3xl font-semibold tracking-tight">Before And After.</h2>
-          <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
+          <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
             What changes when this module lands in your stack.
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <div className="surface p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
-                Without
-              </div>
+              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">Without</div>
               <ul className="mt-4 space-y-3 text-sm">
                 {config.withoutUs.map((line) => (
                   <li key={line} className="flex items-start gap-2">
-                    <span className="status-dot status-dot-error mt-2" />
-                    <span className="text-[var(--text-secondary)]">{line}</span>
+                    <span className="ps-dot ps-dot ps-dot--danger mt-2" />
+                    <span className="text-[var(--p-text-2)]">{line}</span>
                   </li>
                 ))}
               </ul>
@@ -128,14 +124,14 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
             <div className="surface p-6">
               <div
                 className="text-[11px] font-semibold tracking-[0.2em] uppercase"
-                style={{ color: "var(--org-primary)" }}
+                style={{ color: "var(--p-accent)" }}
               >
                 With ATLVS
               </div>
               <ul className="mt-4 space-y-3 text-sm">
                 {config.withUs.map((line) => (
                   <li key={line} className="flex items-start gap-2">
-                    <span className="status-dot status-dot-success mt-2" />
+                    <span className="ps-dot ps-dot ps-dot--ok mt-2" />
                     <span>{line}</span>
                   </li>
                 ))}
@@ -151,7 +147,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
           {config.highlights.map((h) => (
             <div key={h.title} className="surface p-6">
               <div className="text-sm font-semibold">{h.title}</div>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{h.body}</p>
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{h.body}</p>
             </div>
           ))}
         </div>
@@ -160,13 +156,13 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       {config.personas ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <div className="surface p-8 md:p-10">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--org-primary)] uppercase">Built For</div>
+            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">Built For</div>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight">Who Runs This Day-To-Day.</h2>
             <div className="mt-6 flex flex-wrap gap-2">
               {config.personas.map((p) => (
                 <span
                   key={p}
-                  className="rounded-full border border-[var(--border-color)] bg-[var(--surface-inset)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)]"
+                  className="rounded-full border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-1.5 text-xs font-medium text-[var(--p-text-2)]"
                 >
                   {p}
                 </span>
@@ -182,7 +178,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
             <blockquote className="text-xl leading-relaxed font-medium tracking-tight text-balance sm:text-2xl">
               &ldquo;{config.quote.text}&rdquo;
             </blockquote>
-            <figcaption className="mt-4 text-xs tracking-wide text-[var(--text-muted)] uppercase">
+            <figcaption className="mt-4 text-xs tracking-wide text-[var(--p-text-2)] uppercase">
               — {config.quote.attribution}
             </figcaption>
           </figure>
@@ -198,20 +194,18 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-2xl font-semibold tracking-tight">The Rest Of ATLVS.</h2>
-        <p className="mt-3 text-sm text-[var(--text-secondary)]">
-          One database. Every module reads from the same record.
-        </p>
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">One database. Every module reads from the same record.</p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {siblings.map((s) => (
             <Link
               key={s.slug}
               href={`/features/${s.slug}`}
               className={`surface hover-lift group flex items-center justify-between p-4 text-sm ${
-                s.isRelated ? "ring-1 ring-[var(--org-primary)]/40" : ""
+                s.isRelated ? "ring-1 ring-[var(--p-accent)]/40" : ""
               }`}
             >
               <span className="font-medium">{s.name}</span>
-              <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+              <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
             </Link>
           ))}
         </div>

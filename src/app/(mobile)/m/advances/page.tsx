@@ -38,7 +38,7 @@ export default async function MobileAdvancesPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -70,11 +70,11 @@ export default async function MobileAdvancesPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.advances.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.advances.title", undefined, "My Assignments")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.advances.summary",
           { open: openCount, total: rows.length },
@@ -100,7 +100,7 @@ export default async function MobileAdvancesPage() {
             const items = byKind.get(kind) ?? [];
             return (
               <section key={kind}>
-                <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+                <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
                   {CATALOG_KIND_LABEL[kind]} <span>· {items.length}</span>
                 </h2>
                 <ul className="mt-2 space-y-2">
@@ -111,7 +111,7 @@ export default async function MobileAdvancesPage() {
                           <div className="truncate text-sm font-semibold">
                             {d.title ?? t("m.advances.untitled", undefined, "Untitled")}
                           </div>
-                          <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                          <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
                             {projectMap.get(d.project_id) ?? t("m.advances.projectFallback", undefined, "Project")}
                             {d.deadline
                               ? t(
@@ -135,7 +135,7 @@ export default async function MobileAdvancesPage() {
         </div>
       )}
 
-      <p className="mt-6 text-xs text-[var(--text-muted)]">
+      <p className="mt-6 text-xs text-[var(--p-text-2)]">
         {t("m.advances.singleShow.prompt", undefined, "Working a single show?")}{" "}
         <Link className="underline" href="/m/shift">
           {t("m.advances.singleShow.link", undefined, "Open your shift")}

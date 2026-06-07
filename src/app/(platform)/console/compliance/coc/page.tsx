@@ -125,7 +125,7 @@ export default async function Page() {
               {tableEntries.map(([table, count]) => (
                 <li key={table} className="flex items-center justify-between text-sm">
                   <span className="font-mono text-xs">{table}</span>
-                  <span className="text-xs text-[var(--text-muted)]">{fmt.number(count)}</span>
+                  <span className="text-xs text-[var(--p-text-2)]">{fmt.number(count)}</span>
                 </li>
               ))}
             </ul>
@@ -155,14 +155,14 @@ export default async function Page() {
                       <span className="font-medium">
                         {r.actor?.name ?? r.actor?.email ?? t("console.compliance.coc.system", undefined, "system")}
                       </span>{" "}
-                      <span className="text-[var(--text-muted)]">{r.action.replace(/[._]/g, " ")}</span>{" "}
+                      <span className="text-[var(--p-text-2)]">{r.action.replace(/[._]/g, " ")}</span>{" "}
                       <Badge variant="muted">{r.target_table ?? "—"}</Badge>
                     </div>
                     {r.target_id && (
-                      <div className="font-mono text-[10px] text-[var(--text-muted)]">{r.target_id.slice(0, 8)}</div>
+                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">{r.target_id.slice(0, 8)}</div>
                     )}
                   </div>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{relativeTime(r.at)}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{relativeTime(r.at)}</span>
                 </li>
               ))}
             </ul>

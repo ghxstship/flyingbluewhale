@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
 
         {!me && (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t(
               "p.volunteer.schedule.notOnboarded",
               undefined,
@@ -144,18 +144,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t("p.volunteer.schedule.upcomingShifts", undefined, "Upcoming Shifts")}
           </h3>
           {upcoming.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("p.volunteer.schedule.noUpcoming", undefined, "No upcoming shifts.")}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {upcoming.map((s) => (
                 <li key={s.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">
                       {s.role ?? t("p.volunteer.schedule.volunteerShift", undefined, "Volunteer shift")}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} → {fmtTime(s.ends_at)}
                       {s.venue?.name ? ` · ${s.venue.name}` : ""}
                       {s.meal_credit ? ` · ${t("p.volunteer.schedule.mealCredit", undefined, "meal credit")}` : ""}
@@ -173,12 +173,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <h3 className="text-sm font-semibold">
               {t("p.volunteer.schedule.recentShifts", undefined, "Recent Shifts")}
             </h3>
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {past.slice(-10).map((s) => (
                 <li key={s.id} className="flex items-center justify-between py-2 text-xs">
                   <div className="min-w-0">
                     <span className="font-medium">{s.role ?? t("p.volunteer.schedule.shift", undefined, "Shift")}</span>
-                    <span className="ms-2 font-mono text-[10px] text-[var(--text-muted)]">
+                    <span className="ms-2 font-mono text-[10px] text-[var(--p-text-2)]">
                       {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)}
                     </span>
                   </div>

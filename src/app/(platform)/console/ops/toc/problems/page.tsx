@@ -119,7 +119,7 @@ export default async function Page() {
             "ITIL problem management — record root-cause investigations triggered by incidents. Link incidents and the change(s) that resolve them.",
           )}
           emptyAction={
-            <Link href="/console/ops/toc/problems/new" className="btn btn-primary btn-sm">
+            <Link href="/console/ops/toc/problems/new" className="ps-btn ps-btn--sm">
               {t("console.ops.toc.problems.newProblem", undefined, "+ New Problem")}
             </Link>
           }
@@ -170,7 +170,7 @@ export default async function Page() {
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.ops.toc.problems.footnote",
             undefined,

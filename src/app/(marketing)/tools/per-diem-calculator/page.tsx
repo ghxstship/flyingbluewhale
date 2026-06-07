@@ -47,7 +47,7 @@ export default function PerDiemCalculatorPage() {
       <section className="mx-auto max-w-3xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">Free Tool</div>
         <h1 className="hed-xl mt-4">Per-Diem Calculator.</h1>
-        <p className="mt-5 text-lg text-[var(--text-secondary)]">
+        <p className="mt-5 text-lg text-[var(--p-text-2)]">
           Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates;
           overridable per-city.
         </p>
@@ -59,13 +59,13 @@ export default function PerDiemCalculatorPage() {
 
       <section className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="hed-lg">How Per-Diem Works.</h2>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">
           Per-diem is the daily allowance paid to a traveler — typically crew, talent, or contractors — for meals and
           incidentals while away from their home base. The US General Services Administration (GSA) publishes
           city-by-city per-diem rates for federal travel; most production budgets use these as a defensible baseline.
           International rates come from the State Department's DSSR tables.
         </p>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">
           Per-diem typically settles on a per-show or weekly cadence in cash or paystub. Tour managers track per-diem
           against the city × day rate matrix to avoid drift between projected and actual.
         </p>

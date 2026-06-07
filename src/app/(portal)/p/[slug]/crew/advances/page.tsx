@@ -39,7 +39,7 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("p.crew.advances.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -60,11 +60,11 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("p.crew.advances.eyebrow", undefined, "Portal")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("p.crew.advances.title", undefined, "My Assignments")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "p.crew.advances.subtitle",
           undefined,
@@ -90,8 +90,8 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
             const items = byKind.get(kind) ?? [];
             return (
               <section key={kind}>
-                <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  {CATALOG_KIND_LABEL_SINGULAR[kind]} <span className="text-[var(--text-muted)]">· {items.length}</span>
+                <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+                  {CATALOG_KIND_LABEL_SINGULAR[kind]} <span className="text-[var(--p-text-2)]">· {items.length}</span>
                 </h2>
                 <ul className="mt-2 space-y-2">
                   {items.map((d) => (
@@ -101,7 +101,7 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
                           <div className="truncate text-sm font-semibold">
                             {d.title ?? t("p.crew.advances.item.untitled", undefined, "Untitled")}
                           </div>
-                          <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                          <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
                             v{d.version}
                             {d.deadline
                               ? ` · ${t("p.crew.advances.item.due", { date: fmt.date(d.deadline) }, `due ${fmt.date(d.deadline)}`)}`
@@ -125,7 +125,7 @@ export default async function CrewAdvancesPage({ params }: { params: Promise<{ s
         </div>
       )}
 
-      <p className="mt-6 text-xs text-[var(--text-muted)]">
+      <p className="mt-6 text-xs text-[var(--p-text-2)]">
         {t("p.crew.advances.footer.lead", undefined, "Issue with anything here? Reach your production coordinator via")}{" "}
         <Link className="underline" href={`/p/${slug}/crew`}>
           {t("p.crew.advances.footer.callSheet", undefined, "your call-sheet")}

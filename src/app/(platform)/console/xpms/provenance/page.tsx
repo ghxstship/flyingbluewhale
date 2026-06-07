@@ -95,7 +95,7 @@ export default async function ProvenancePage() {
               header: t("console.xpms.provenance.columns.created", undefined, "Created"),
               render: (e) => fmt.dateTime(e.created_at),
               accessor: (e) => e.created_at,
-              className: "text-xs text-[var(--text-muted)]",
+              className: "text-xs text-[var(--p-text-2)]",
               sortable: true,
             },
           ]}

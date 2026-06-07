@@ -1,8 +1,14 @@
 /**
- * CHROMA BEACON — pre-hydration theme bootstrap.
+ * ATLVS Technologies — pre-hydration theme bootstrap.
+ *
  * This string MUST be injected into <head> as a blocking inline <script>
- * before any React code runs, to set [data-theme] + [data-mode] on <html>
- * before first paint. Zero FOUC is a hard requirement.
+ * before any React code runs, to set [data-theme] + [data-mode] +
+ * [data-ui="saas"] on <html> before first paint. Zero FOUC is a hard
+ * requirement.
+ *
+ * One canonical theme: atlvs-product. The kit's `data-ui="saas"` selector
+ * is set in parallel so kit-canon authoring works alongside the codebase's
+ * `data-theme` convention.
  */
 
 export const THEME_COOKIE_NAME = "chroma_theme";
@@ -14,45 +20,32 @@ export const MODE_COOKIE_NAME = "atlvs_mode";
  * release. */
 export const LEGACY_MODE_COOKIE_NAME = "fbw_mode";
 export const MODE_STORAGE_KEY = "chroma.mode";
+export const ACCENT_COOKIE_NAME = "atlvs_accent";
+export const ACCENT_STORAGE_KEY = "atlvs.accent";
 
 export const themeScript = `
 (function() {
   try {
-    // Canonical two-skin set — MUST mirror THEME_SLUGS in
-    // src/app/theme/themes.config.ts. The v3 GHXSTSHIP brand sweep purged
-    // the pre-v3 CHROMA exploration slugs (bermuda-triangle, glass, brutal,
-    // bento, kinetic, copilot, cyber, soft, earthy); validating against the
-    // SSOT here keeps the client bootstrap in lock-step with the SSR
-    // isValidThemeSlug() check in layout.tsx so there's no FOUC swap.
-    var valid = ['ghxstship','atlvs-product'];
+    var valid = ['atlvs-product'];
     var validModes = ['light','dark','system'];
-    // Themes whose family is intrinsically dark (mirrors
-    // colorSchemeFor() in src/app/theme/themes.config.ts). The script
-    // and the SSR helper MUST agree — if SSR puts color-scheme=dark
-    // and the client bootstrap then overwrites it with light, the
-    // page flashes light scrollbars + form controls before the React
-    // tree hydrates. Hard-code the list rather than ship a JSON blob.
-    // ghxstship.family = dark; atlvs-product.family = light.
-    var darkThemes = ['ghxstship'];
+    var validAccents = ['soft','default','vivid'];
 
-    // Theme slug (palette). Default = ghxstship (Deep Space Voyage) —
-    // the GHXSTSHIP canon since the rebrand. Falls back to legacy
-    // bermuda-triangle only via cookie/localStorage override.
+    // Theme slug (palette) — single canonical kit skin. Stale cookie values
+    // (from purged ghxstship / pre-v3 CHROMA slugs) fall through to the default.
     var c = document.cookie.match(/(?:^|;\\s*)${THEME_COOKIE_NAME}=([^;]+)/);
     var fromCookie = c ? decodeURIComponent(c[1]) : null;
     var stored = null;
-    // localStorage throws in private browsing; ignore and fall back to system preference.
     try { stored = localStorage.getItem('${THEME_STORAGE_KEY}'); } catch (_) { /* private mode */ }
-    var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     var picked = (fromCookie && valid.indexOf(fromCookie) > -1) ? fromCookie
                : (stored && valid.indexOf(stored) > -1) ? stored
-               : 'ghxstship';
+               : 'atlvs-product';
     document.documentElement.setAttribute('data-theme', picked);
+    // Kit canon selector — paint .ps-* primitives without having to scope
+    // every selector to [data-theme="atlvs-product"].
+    document.documentElement.setAttribute('data-ui', 'saas');
 
-    // Color mode (light / dark / system → resolved). Read the canonical
-    // cookie first; fall back to the pre-brand-sweep name so existing
-    // installs don't lose their preference on the deploy that ships the
-    // rename. ThemeProvider rewrites under the canonical name on next mount.
+    // Color mode (light / dark / system → resolved).
+    var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     var mc = document.cookie.match(/(?:^|;\\s*)${MODE_COOKIE_NAME}=([^;]+)/)
           || document.cookie.match(/(?:^|;\\s*)${LEGACY_MODE_COOKIE_NAME}=([^;]+)/);
     var modeFromCookie = mc ? decodeURIComponent(mc[1]) : null;
@@ -65,16 +58,25 @@ export const themeScript = `
       ? (systemPrefersDark ? 'dark' : 'light')
       : rawMode;
     document.documentElement.setAttribute('data-mode', resolvedMode);
-    // colorScheme follows the theme's intrinsic family — dark themes
-    // (cyber, glass) get dark scrollbars + form controls regardless of
-    // the user's mode preference. This matches the SSR layout.tsx
-    // behavior (colorSchemeFor()) so there's no flash on hydration.
-    var themeColorScheme = darkThemes.indexOf(picked) > -1 ? 'dark' : 'light';
-    document.documentElement.style.colorScheme = themeColorScheme;
+
+    // Accent intensity — kit axis (soft / default / vivid). Cookie + storage only.
+    var ac = document.cookie.match(/(?:^|;\\s*)${ACCENT_COOKIE_NAME}=([^;]+)/);
+    var accentFromCookie = ac ? decodeURIComponent(ac[1]) : null;
+    var accentStored = null;
+    try { accentStored = localStorage.getItem('${ACCENT_STORAGE_KEY}'); } catch (_) { /* private mode */ }
+    var accent = (accentFromCookie && validAccents.indexOf(accentFromCookie) > -1) ? accentFromCookie
+               : (accentStored && validAccents.indexOf(accentStored) > -1) ? accentStored
+               : 'default';
+    if (accent !== 'default') document.documentElement.setAttribute('data-accent', accent);
+
+    // colorScheme — atlvs-product is light-family; dark mode overrides
+    // come from [data-mode="dark"] selectors in the theme CSS.
+    document.documentElement.style.colorScheme = resolvedMode === 'dark' ? 'dark' : 'light';
   } catch (e) {
-    document.documentElement.setAttribute('data-theme', 'ghxstship');
-    document.documentElement.setAttribute('data-mode', 'dark');
-    document.documentElement.style.colorScheme = 'dark';
+    document.documentElement.setAttribute('data-theme', 'atlvs-product');
+    document.documentElement.setAttribute('data-ui', 'saas');
+    document.documentElement.setAttribute('data-mode', 'light');
+    document.documentElement.style.colorScheme = 'light';
   }
 })();
 `.trim();

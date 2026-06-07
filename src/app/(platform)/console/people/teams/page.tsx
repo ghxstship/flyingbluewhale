@@ -70,7 +70,7 @@ export default async function TeamsPage() {
             <h3 className="text-sm font-semibold">
               {t("console.people.teams.create.title", undefined, "Create Team")}
             </h3>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t("console.people.teams.create.hintPrefix", undefined, "Slug becomes the @-mention handle (e.g. ")}
               <code>@team-prod</code>
               {t("console.people.teams.create.hintSuffix", undefined, "). Lowercase letters, digits, hyphens.")}
@@ -112,7 +112,7 @@ export default async function TeamsPage() {
                     <Avatar name={r.name} />
                     <div>
                       <div className="text-sm font-medium">{r.name}</div>
-                      <div className="font-mono text-xs text-[var(--text-muted)]">@team-{r.slug}</div>
+                      <div className="font-mono text-xs text-[var(--p-text-2)]">@team-{r.slug}</div>
                     </div>
                   </div>
                 ),
@@ -122,7 +122,7 @@ export default async function TeamsPage() {
               {
                 key: "description",
                 header: t("console.people.teams.table.columnDescription", undefined, "Description"),
-                render: (r) => <span className="text-xs text-[var(--text-muted)]">{r.description ?? "—"}</span>,
+                render: (r) => <span className="text-xs text-[var(--p-text-2)]">{r.description ?? "—"}</span>,
                 accessor: (r) => r.description ?? "",
               },
               {
@@ -144,7 +144,7 @@ export default async function TeamsPage() {
           />
         )}
 
-        <section className="surface p-4 text-xs text-[var(--text-muted)]">
+        <section className="surface p-4 text-xs text-[var(--p-text-2)]">
           {t(
             "console.people.teams.footer.prefix",
             undefined,

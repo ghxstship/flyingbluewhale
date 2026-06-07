@@ -186,7 +186,7 @@ export default async function Page() {
                 const v = r.total_variance;
                 if (v === 0) return "—";
                 return (
-                  <span className={v > 0 ? "text-[var(--color-error)]" : "text-[var(--color-success)]"}>
+                  <span className={v > 0 ? "text-[var(--p-danger)]" : "text-[var(--p-success)]"}>
                     {v > 0 ? "+" : "−"}
                     {fmtMoney(Math.abs(v))}
                   </span>

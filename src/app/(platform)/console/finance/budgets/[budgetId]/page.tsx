@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           title={t("console.finance.budgets.detail.title", undefined, "Budget")}
         />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.finance.budgets.detail.notFound", undefined, "Not found.")}
           </div>
         </div>
@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               <input type="hidden" name="id" value={budget.id} />
               <button
                 type="submit"
-                className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] hover:bg-[var(--surface-inset)] hover:text-[var(--text-primary)]"
+                className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
               >
                 {t("console.finance.budgets.detail.reconcileToActuals", undefined, "Reconcile to actuals")}
               </button>
@@ -142,13 +142,13 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           if (items.length === 0) return null;
           return (
             <section className="surface p-4">
-              <div className="text-[10px] font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+              <div className="text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
                 XPMS Classification
               </div>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {items.map(([k, v]) => (
                   <Badge key={k} variant="muted">
-                    <span className="text-[var(--text-muted)]">{k}:</span> <span className="font-medium">{v}</span>
+                    <span className="text-[var(--p-text-2)]">{k}:</span> <span className="font-medium">{v}</span>
                   </Badge>
                 ))}
               </div>
@@ -159,17 +159,17 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.budget", undefined, "Budget")}
               </div>
               <div className="mt-1 text-lg font-semibold">{money(budget.amount_cents)}</div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.computedActual", undefined, "Computed actual")}
               </div>
               <div className="mt-1 text-lg font-semibold">{money(recomputed)}</div>
-              <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
+              <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">
                 {t(
                   "console.finance.budgets.detail.storedLabel",
                   { amount: money(budget.spent_cents) },
@@ -178,34 +178,34 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               </div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.remaining", undefined, "Remaining")}
               </div>
               <div
                 className={`mt-1 text-lg font-semibold ${
-                  remaining >= 0 ? "text-[var(--text-primary)]" : "text-[var(--color-error)]"
+                  remaining >= 0 ? "text-[var(--p-text-1)]" : "text-[var(--p-danger)]"
                 }`}
               >
                 {money(remaining)}
               </div>
             </div>
             <div>
-              <div className="text-[10px] tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              <div className="text-[10px] tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.finance.budgets.detail.varianceVsStored", undefined, "Variance vs stored")}
               </div>
               <div
                 className={`mt-1 text-lg font-semibold ${
                   variance === 0
-                    ? "text-[var(--text-muted)]"
+                    ? "text-[var(--p-text-2)]"
                     : variance > 0
-                      ? "text-[var(--color-warning)]"
-                      : "text-[var(--color-success)]"
+                      ? "text-[var(--p-warning)]"
+                      : "text-[var(--p-success)]"
                 }`}
               >
                 {variance === 0 ? "—" : `${variance > 0 ? "+" : ""}${money(variance)}`}
               </div>
               {variance !== 0 && (
-                <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
+                <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">
                   {t("console.finance.budgets.detail.reconcileToClear", undefined, "Reconcile to clear")}
                 </div>
               )}
@@ -218,11 +218,11 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
 
         <div className="grid gap-4 lg:grid-cols-2">
           <section className="surface">
-            <header className="border-b border-[var(--border-color)] px-4 py-2.5">
+            <header className="border-b border-[var(--p-border)] px-4 py-2.5">
               <h3 className="text-sm font-semibold">
                 {t("console.finance.budgets.detail.expensesHeader", undefined, "Expenses")}
               </h3>
-              <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+              <p className="mt-0.5 text-xs text-[var(--p-text-2)]">
                 {(expenses ?? []).length === 1
                   ? t(
                       "console.finance.budgets.detail.expensesCountOne",
@@ -236,7 +236,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
                     )}
               </p>
             </header>
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.finance.budgets.detail.col.when", undefined, "When")}</th>
@@ -247,7 +247,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               <tbody>
                 {(expenses ?? []).length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="py-6 text-center text-[var(--text-muted)]">
+                    <td colSpan={3} className="py-6 text-center text-[var(--p-text-2)]">
                       {t("console.finance.budgets.detail.noExpenses", undefined, "No matching expenses.")}
                     </td>
                   </tr>
@@ -265,11 +265,11 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           </section>
 
           <section className="surface">
-            <header className="border-b border-[var(--border-color)] px-4 py-2.5">
+            <header className="border-b border-[var(--p-border)] px-4 py-2.5">
               <h3 className="text-sm font-semibold">
                 {t("console.finance.budgets.detail.paidInvoicesHeader", undefined, "Paid Invoices")}
               </h3>
-              <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+              <p className="mt-0.5 text-xs text-[var(--p-text-2)]">
                 {t(
                   "console.finance.budgets.detail.invoicesCount",
                   { count: (invoices ?? []).length },
@@ -277,7 +277,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
                 )}
               </p>
             </header>
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.finance.budgets.detail.col.paid", undefined, "Paid")}</th>
@@ -288,7 +288,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               <tbody>
                 {(invoices ?? []).length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="py-6 text-center text-[var(--text-muted)]">
+                    <td colSpan={3} className="py-6 text-center text-[var(--p-text-2)]">
                       {t(
                         "console.finance.budgets.detail.noPaidInvoices",
                         undefined,
@@ -310,7 +310,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
           </section>
         </div>
 
-        <section className="surface p-4 text-xs text-[var(--text-muted)]">
+        <section className="surface p-4 text-xs text-[var(--p-text-2)]">
           <Badge variant="muted">{t("console.finance.budgets.detail.createdBadge", undefined, "Created")}</Badge>{" "}
           <span className="font-mono">{fmtDate(budget.created_at)}</span>
         </section>

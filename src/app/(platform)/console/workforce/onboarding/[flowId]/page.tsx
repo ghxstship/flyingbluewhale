@@ -122,18 +122,18 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
           </h2>
           <ol className="mt-3 space-y-2">
             {stepList.map((s) => (
-              <li key={s.id} className="rounded-md border border-[var(--border-color)] p-3">
+              <li key={s.id} className="rounded-md border border-[var(--p-border)] p-3">
                 <div className="flex items-center justify-between">
                   <Badge variant="muted">{s.step_kind}</Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">#{s.ordinal}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">#{s.ordinal}</span>
                 </div>
                 <div className="mt-1 text-sm font-semibold">{s.title}</div>
-                {s.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{s.description}</p>}
+                {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
               </li>
             ))}
           </ol>
           {f.publish_state === "draft" && (
-            <form action={addStep} className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4">
+            <form action={addStep} className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4">
               <input type="hidden" name="flowId" value={f.id} />
               <input
                 type="text"
@@ -141,7 +141,7 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                 placeholder={t("console.workforce.onboarding.flow.stepTitlePlaceholder", undefined, "Step title")}
                 required
                 maxLength={200}
-                className="input-base w-full"
+                className="ps-input w-full"
               />
               <textarea
                 name="description"
@@ -152,9 +152,9 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                   "What the new hire needs to do",
                 )}
                 maxLength={2000}
-                className="input-base w-full"
+                className="ps-input w-full"
               />
-              <select name="step_kind" className="input-base w-full" defaultValue="read">
+              <select name="step_kind" className="ps-input w-full" defaultValue="read">
                 <option value="read">{t("console.workforce.onboarding.flow.kind.read", undefined, "Read")}</option>
                 <option value="sign">{t("console.workforce.onboarding.flow.kind.sign", undefined, "Sign")}</option>
                 <option value="upload">
@@ -166,7 +166,7 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                 </option>
                 <option value="form">{t("console.workforce.onboarding.flow.kind.form", undefined, "Form")}</option>
               </select>
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.workforce.onboarding.flow.addStep", undefined, "+ Add Step")}
               </button>
             </form>
@@ -190,14 +190,14 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
               return (
                 <li
                   key={a.id}
-                  className="flex items-center justify-between rounded-md border border-[var(--border-color)] p-3"
+                  className="flex items-center justify-between rounded-md border border-[var(--p-border)] p-3"
                 >
                   <div>
                     <div className="text-sm font-semibold">
                       {memberMap.get(a.assignee_id) ??
                         t("console.workforce.onboarding.flow.unknownAssignee", undefined, "Unknown")}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {t(
                         "console.workforce.onboarding.flow.assignedOn",
                         { date: new Date(a.assigned_at).toLocaleDateString() },
@@ -211,9 +211,9 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
             })}
           </ul>
           {f.publish_state === "published" && (
-            <form action={assignFlow} className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4">
+            <form action={assignFlow} className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4">
               <input type="hidden" name="flowId" value={f.id} />
-              <select name="assignee_id" required className="input-base w-full">
+              <select name="assignee_id" required className="ps-input w-full">
                 {memberList
                   .filter((m) => !assigned.has(m.id))
                   .map((m) => (
@@ -222,7 +222,7 @@ export default async function Page({ params }: { params: Promise<{ flowId: strin
                     </option>
                   ))}
               </select>
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.workforce.onboarding.flow.assign", undefined, "+ Assign")}
               </button>
             </form>

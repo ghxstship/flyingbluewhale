@@ -13,13 +13,12 @@ const BCP47 = /^[a-z]{2,3}(-[A-Z][a-z]{3})?(-[A-Z]{2}|-[0-9]{3})?$/;
 
 const Schema = z.object({
   // Mirrors src/app/theme/themes.config.ts#ThemeSlug + "system" sentinel.
-  // The v3 GHXSTSHIP brand sweep purged the pre-v3 CHROMA exploration set
-  // (bermuda-triangle, glass, brutal, bento, kinetic, copilot, cyber,
-  // soft, earthy) — the canon ships exactly two skins: ghxstship
-  // (cosmic marketing) + atlvs-product (neutral SaaS). The underlying
-  // user_preferences_theme_check Postgres CHECK will be widened to match
-  // by a separate migration; until that ships the DB will still ACCEPT
-  // the dead slugs but no app code can write them.
+  // Kit-only refactor: the canonical platform ships exactly one skin —
+  // `atlvs-product` (the design_handoff_atlvs_kit). The pre-kit cosmic
+  // `ghxstship` skin and the pre-v3 CHROMA exploration set were retired.
+  // The "ghxstship" literal stays in the enum so stored rows from the
+  // pre-kit deploy don't fail validation on the next save; new writes
+  // should target "atlvs-product" or "system".
   //
   // light/dark is the orthogonal `data-mode` attribute, not stored here.
   theme: z.enum(["ghxstship", "atlvs-product", "system"]),

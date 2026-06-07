@@ -10,7 +10,7 @@ import { addChecklistItem, completeChecklistItem, skipChecklistItem } from "./ac
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 const STATUS_TONE: Record<string, "muted" | "success"> = {
   pending: "muted",
@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
             {t("console.procurement.purchaseOrders.checklist.requiredSteps", undefined, "Required Steps")}
           </h3>
           {all.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.purchaseOrders.checklist.empty",
                 undefined,
@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
                       <form action={completeChecklistItem.bind(null, poId, it.id)}>
                         <button
                           type="submit"
-                          className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
+                          className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-[11px]"
                         >
                           {t("console.procurement.purchaseOrders.checklist.markComplete", undefined, "Mark complete")}
                         </button>
@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
                       <form action={skipChecklistItem.bind(null, poId, it.id)}>
                         <button
                           type="submit"
-                          className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
+                          className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-[11px]"
                         >
                           {t("console.procurement.purchaseOrders.checklist.skip", undefined, "Skip")}
                         </button>

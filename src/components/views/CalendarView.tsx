@@ -187,7 +187,7 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
               type="button"
               onClick={() => shift(-1)}
               aria-label="Previous"
-              className="rounded p-1 hover:bg-[var(--surface-inset)]"
+              className="rounded p-1 hover:bg-[var(--p-surface-2)]"
             >
               <ChevronLeft size={14} />
             </button>
@@ -195,11 +195,11 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
               type="button"
               onClick={() => shift(1)}
               aria-label="Next"
-              className="rounded p-1 hover:bg-[var(--surface-inset)]"
+              className="rounded p-1 hover:bg-[var(--p-surface-2)]"
             >
               <ChevronRight size={14} />
             </button>
-            <h2 className="text-sm font-semibold tracking-tight text-[var(--text-primary)]">{headerLabel}</h2>
+            <h2 className="text-sm font-semibold tracking-tight text-[var(--p-text-1)]">{headerLabel}</h2>
           </div>
 
           <div className="flex items-center gap-2">
@@ -213,12 +213,12 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
                 }
               }}
               aria-label="Jump to date"
-              className="rounded border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1 text-xs"
+              className="rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs"
             />
             <div
               role="tablist"
               aria-label="Calendar mode"
-              className="inline-flex overflow-hidden rounded-md border border-[var(--border-color)]"
+              className="inline-flex overflow-hidden rounded-md border border-[var(--p-border)]"
             >
               {MODES.map((m) => (
                 <button
@@ -228,7 +228,7 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
                   aria-selected={mode === m}
                   onClick={() => setMode(m)}
                   className={`px-2 py-1 text-xs capitalize ${
-                    mode === m ? "bg-[var(--surface-inset)] text-[var(--text-primary)]" : "text-[var(--text-muted)]"
+                    mode === m ? "bg-[var(--p-surface-2)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"
                   }`}
                 >
                   {m}

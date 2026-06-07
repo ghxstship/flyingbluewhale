@@ -45,37 +45,37 @@ export function CalendarWeekGrid({
         }}
       >
         {/* Header row */}
-        <div className="border-e border-b border-[var(--border-color)] bg-[var(--surface-inset)]/40" />
+        <div className="border-e border-b border-[var(--p-border)] bg-[var(--p-surface-2)]/40" />
         {days.map((day) => {
           const isToday = isSameDayUTC(day, today);
           return (
             <div
               key={isoDateUTC(day)}
               role="columnheader"
-              className="flex flex-col items-center justify-center gap-0.5 border-e border-b border-[var(--border-color)] py-2"
+              className="flex flex-col items-center justify-center gap-0.5 border-e border-b border-[var(--p-border)] py-2"
             >
-              <span className="text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
+              <span className="text-[10px] tracking-[0.16em] text-[var(--p-text-2)] uppercase">
                 {WEEKDAY_SHORT[day.getUTCDay()]}
               </span>
               <span
                 className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold ${
-                  isToday ? "today-marker" : "text-[var(--text-primary)]"
+                  isToday ? "today-marker" : "text-[var(--p-text-1)]"
                 }`}
-                style={isToday ? { background: "var(--org-primary)", color: "white" } : undefined}
+                style={isToday ? { background: "var(--p-accent)", color: "white" } : undefined}
               >
                 {day.getUTCDate()}
               </span>
-              <span className="text-[10px] text-[var(--text-muted)]">{MONTH_SHORT[day.getUTCMonth()]}</span>
+              <span className="text-[10px] text-[var(--p-text-2)]">{MONTH_SHORT[day.getUTCMonth()]}</span>
             </div>
           );
         })}
 
         {/* Body — hour rail + day columns */}
-        <div className="relative border-e border-[var(--border-color)]">
+        <div className="relative border-e border-[var(--p-border)]">
           {HOURS.map((h) => (
             <div
               key={h}
-              className="flex items-start justify-end pe-1 font-mono text-[9px] text-[var(--text-muted)]"
+              className="flex items-start justify-end pe-1 font-mono text-[9px] text-[var(--p-text-2)]"
               style={{ height: `${HOUR_HEIGHT_PX}px` }}
             >
               {h.toString().padStart(2, "0")}:00
@@ -119,13 +119,13 @@ function DayColumn({
       ref={setNodeRef}
       role="gridcell"
       data-drop-over={isOver || undefined}
-      className="relative border-e border-[var(--border-color)] data-[drop-over]:bg-[var(--surface-inset)]"
+      className="relative border-e border-[var(--p-border)] data-[drop-over]:bg-[var(--p-surface-2)]"
       style={{ height: `${HOUR_HEIGHT_PX * 24}px` }}
       onDoubleClick={onCreate ? () => onCreate(dayKey) : undefined}
     >
       {/* Hour gridlines */}
       {HOURS.map((h) => (
-        <div key={h} className="border-b border-[var(--border-color)]/50" style={{ height: `${HOUR_HEIGHT_PX}px` }} />
+        <div key={h} className="border-b border-[var(--p-border)]/50" style={{ height: `${HOUR_HEIGHT_PX}px` }} />
       ))}
       {/* Time-positioned events */}
       {events.map((event) => {
@@ -141,7 +141,7 @@ function DayColumn({
         return (
           <div
             key={event.id}
-            className="absolute start-1 end-1 z-10 rounded border border-[var(--border-color)] bg-[var(--surface-raised)] p-1"
+            className="absolute start-1 end-1 z-10 rounded border border-[var(--p-border)] bg-[var(--p-surface)] p-1"
             style={{
               top: `${block.top}px`,
               height: `${block.height}px`,

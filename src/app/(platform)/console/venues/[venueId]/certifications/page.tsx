@@ -181,14 +181,14 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                 r.file_path ? (
                   <code className="font-mono text-[10px]">{r.file_path.slice(0, 40)}…</code>
                 ) : (
-                  <span className="text-[var(--text-muted)]">—</span>
+                  <span className="text-[var(--p-text-2)]">—</span>
                 ),
               accessor: (r) => r.file_path ?? null,
             },
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.venues.certifications.footnote",
             undefined,

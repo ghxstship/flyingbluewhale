@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       ) : (
         <>
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-xs text-[var(--text-muted)]">
+            <p className="text-xs text-[var(--p-text-2)]">
               {events.length === 1
                 ? t("p.crew.call-sheet.upcomingOne", { count: events.length }, `${events.length} upcoming call`)
                 : t("p.crew.call-sheet.upcomingMany", { count: events.length }, `${events.length} upcoming calls`)}
@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {events.map((e) => (
               <li key={e.id} className="surface p-4">
                 <div className="text-sm font-semibold">{e.name}</div>
-                <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">{fmtDateTime(e.starts_at)}</div>
+                <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">{fmtDateTime(e.starts_at)}</div>
                 {e.location && (
                   <div className="mt-1 text-xs">
                     {e.location.name}

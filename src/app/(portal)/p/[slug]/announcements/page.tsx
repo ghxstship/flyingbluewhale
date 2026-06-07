@@ -62,7 +62,7 @@ export default async function PortalAnnouncementsPage({ params }: { params: Prom
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">{t("p.shared.announcements.title", undefined, "Updates")}</h1>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.shared.announcements.subtitle",
               {
@@ -96,12 +96,12 @@ export default async function PortalAnnouncementsPage({ params }: { params: Prom
                       )}
                       <Badge variant="muted">{toTitle(a.audience)}</Badge>
                     </div>
-                    <span className="font-mono text-xs text-[var(--text-muted)]">
+                    <span className="font-mono text-xs text-[var(--p-text-2)]">
                       {a.published_at ? fmt.date(a.published_at) : ""}
                     </span>
                   </div>
                   <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
-                  <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{a.body}</p>
+                  <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{a.body}</p>
                 </li>
               ))
             )}

@@ -41,25 +41,25 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.incidents.edit.descriptionLabel", undefined, "Description")}
             </label>
             <textarea
               name="description"
               rows={4}
               maxLength={5000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               defaultValue={(r.description as string | undefined) ?? ""}
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.incidents.edit.severityLabel", undefined, "Severity")}
             </label>
             <select
               name="severity"
               defaultValue={(r.severity as string | undefined) ?? "minor"}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               required
             >
               <option value="near_miss">
@@ -73,13 +73,13 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.incidents.edit.statusLabel", undefined, "Status")}
             </label>
             <select
               name="status"
               defaultValue={(r.status as string | undefined) ?? "open"}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               required
             >
               <option value="open">{t("console.operations.incidents.edit.status.open", undefined, "Open")}</option>

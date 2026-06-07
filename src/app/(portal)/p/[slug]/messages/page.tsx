@@ -69,7 +69,7 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
       <div className="flex-1">
         <div className="page-content">
           <h1 className="text-2xl font-semibold">{t("p.shared.messages.title", undefined, "Messages")}</h1>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.shared.messages.subtitle",
               { projectName: project?.name ?? t("p.shared.messages.thisProject", undefined, "this project") },
@@ -106,20 +106,20 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
                         </Badge>
                       </div>
                       {meta?.last_message_at && (
-                        <span className="font-mono text-xs text-[var(--text-muted)]">
+                        <span className="font-mono text-xs text-[var(--p-text-2)]">
                           {fmt.time(meta.last_message_at)}
                         </span>
                       )}
                     </div>
                     <div className="mt-3 flex justify-end">
                       {r.chat_room_id ? (
-                        <Link href={`/m/inbox/${r.chat_room_id}`} className="btn btn-primary btn-sm">
+                        <Link href={`/m/inbox/${r.chat_room_id}`} className="ps-btn ps-btn--sm">
                           {t("p.shared.messages.openThread", undefined, "Open Thread")}
                         </Link>
                       ) : (
                         <form action={`/p/${slug}/messages/start`} method="post">
                           <input type="hidden" name="assignment_id" value={r.id} />
-                          <button type="submit" className="btn btn-primary btn-sm">
+                          <button type="submit" className="ps-btn ps-btn--sm">
                             {t("p.shared.messages.startThread", undefined, "Start Thread")}
                           </button>
                         </form>

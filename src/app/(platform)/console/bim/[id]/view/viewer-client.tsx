@@ -193,16 +193,16 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
   return (
     <div className="space-y-2">
       <div className="surface flex items-center gap-3 p-2 text-xs">
-        <span className="font-mono text-[var(--text-muted)] uppercase">
+        <span className="font-mono text-[var(--p-text-2)] uppercase">
           {t("console.bim.view.statusLabel", undefined, "Status")}
         </span>
         <span>{status}</span>
         {elementCount != null && (
-          <span className="ms-auto font-mono text-[var(--text-muted)]">
+          <span className="ms-auto font-mono text-[var(--p-text-2)]">
             {t("console.bim.view.meshesCount", { count: elementCount }, `${elementCount} meshes`)}
           </span>
         )}
-        <span className="font-mono text-[10px] text-[var(--text-muted)]">
+        <span className="font-mono text-[10px] text-[var(--p-text-2)]">
           {t("console.bim.view.modelLabel", { id: modelId.slice(0, 8) }, `model ${modelId.slice(0, 8)}…`)}
         </span>
       </div>
@@ -212,7 +212,7 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
         style={{ height: "75vh", touchAction: "none" }}
         aria-label={t("console.bim.view.canvasAriaLabel", undefined, "3D BIM viewer canvas")}
       />
-      <p className="text-[10px] text-[var(--text-muted)]">
+      <p className="text-[10px] text-[var(--p-text-2)]">
         {t(
           "console.bim.view.hint",
           undefined,

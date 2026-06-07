@@ -61,7 +61,7 @@ export default async function DocsLanding() {
         {SECTIONS.map((s) => (
           <Link key={s.titleKey} href={s.href} className="surface hover-lift p-5">
             <div className="text-sm font-semibold">{t(s.titleKey)}</div>
-            <div className="mt-1 text-xs text-[var(--text-muted)]">{t(s.descKey)}</div>
+            <div className="mt-1 text-xs text-[var(--p-text-2)]">{t(s.descKey)}</div>
           </Link>
         ))}
       </div>

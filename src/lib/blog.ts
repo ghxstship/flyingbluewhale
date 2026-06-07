@@ -169,7 +169,7 @@ export const POSTS: Record<string, BlogPost> = {
           "CMS editor with draft → preview → publish flow",
           "Version history — roll back any publish from ATLVS",
           "Server-rendered PDF export for the handful of stakeholders who still print it",
-          "Branded per project — logo, accent color, hero imagery overlay --org-primary",
+          "Branded per project — logo, accent color, hero imagery overlay --p-accent",
         ],
       },
 

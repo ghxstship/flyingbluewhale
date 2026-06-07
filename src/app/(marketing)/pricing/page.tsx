@@ -513,10 +513,10 @@ const buildFaqs = (t: FaqT) => [
 ];
 
 function Cell({ value }: { value: boolean | string }) {
-  if (value === true) return <Check size={16} className="text-[var(--org-primary)]" />;
-  if (value === false) return <X size={14} className="text-[var(--text-muted)] opacity-50" />;
-  if (value === "—") return <Minus size={14} className="text-[var(--text-muted)]" />;
-  return <span className="text-xs text-[var(--text-secondary)]">{value}</span>;
+  if (value === true) return <Check size={16} className="text-[var(--p-accent)]" />;
+  if (value === false) return <X size={14} className="text-[var(--p-text-2)] opacity-50" />;
+  if (value === "—") return <Minus size={14} className="text-[var(--p-text-2)]" />;
+  return <span className="text-xs text-[var(--p-text-2)]">{value}</span>;
 }
 
 export default async function PricingPage() {
@@ -539,7 +539,7 @@ export default async function PricingPage() {
         <h1 className="kinetic-display mx-auto mt-3 max-w-3xl text-5xl sm:text-6xl">
           {t("marketing.pages.pricing.hero.title")}
         </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        <p className="mx-auto mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.pricing.hero.subtitle")}
         </p>
       </section>
@@ -549,7 +549,7 @@ export default async function PricingPage() {
           {tiers.map((tier) => (
             <div
               key={tier.tier}
-              className={`surface flex flex-col p-6 ${tier.highlight ? "ring-2 ring-[var(--org-primary)]" : ""}`}
+              className={`surface flex flex-col p-6 ${tier.highlight ? "ring-2 ring-[var(--p-accent)]" : ""}`}
             >
               <div className="flex items-center justify-between">
                 <div className="text-sm font-semibold">{tier.tier}</div>
@@ -557,13 +557,13 @@ export default async function PricingPage() {
               </div>
               <div className="mt-4">
                 <span className="text-3xl font-semibold tracking-tight">{tier.price}</span>
-                {tier.per && <span className="text-sm text-[var(--text-muted)]"> / {tier.per}</span>}
+                {tier.per && <span className="text-sm text-[var(--p-text-2)]"> / {tier.per}</span>}
               </div>
-              <p className="mt-2 text-xs text-[var(--text-secondary)]">{tier.description}</p>
-              <ul className="mt-5 flex-1 space-y-2 text-sm text-[var(--text-secondary)]">
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">{tier.description}</p>
+              <ul className="mt-5 flex-1 space-y-2 text-sm text-[var(--p-text-2)]">
                 {tier.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <Check size={14} className="mt-0.5 text-[var(--org-primary)]" />
+                    <Check size={14} className="mt-0.5 text-[var(--p-accent)]" />
                     <span>{f}</span>
                   </li>
                 ))}
@@ -582,9 +582,9 @@ export default async function PricingPage() {
         <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           {t("marketing.pages.pricing.comparison.title")}
         </h2>
-        <p className="mt-3 max-w-xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-3 max-w-xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.pricing.comparison.intro")}{" "}
-          <a className="text-[var(--org-accent)] underline underline-offset-2" href="/contact">
+          <a className="text-[var(--p-accent-text)] underline underline-offset-2" href="/contact">
             {t("marketing.pages.pricing.comparison.talkToStudio")}
           </a>
           .
@@ -592,7 +592,7 @@ export default async function PricingPage() {
         <div className="mt-8 overflow-x-auto">
           <table className="w-full min-w-[720px] text-start">
             <thead>
-              <tr className="border-b border-[var(--border)] text-xs tracking-wider text-[var(--text-muted)] uppercase">
+              <tr className="border-b border-[var(--p-border)] text-xs tracking-wider text-[var(--p-text-2)] uppercase">
                 <th className="py-3 pe-4 font-semibold">{t("marketing.pages.pricing.comparison.headers.module")}</th>
                 <th className="py-3 pe-4 text-center font-semibold">
                   {t("marketing.pages.pricing.comparison.headers.free")}
@@ -611,16 +611,16 @@ export default async function PricingPage() {
             <tbody>
               {comparison.map((cat) => (
                 <>
-                  <tr key={cat.category} className="bg-[var(--surface-inset)]">
+                  <tr key={cat.category} className="bg-[var(--p-surface-2)]">
                     <td
                       colSpan={5}
-                      className="py-2 ps-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase"
+                      className="py-2 ps-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase"
                     >
                       {cat.category}
                     </td>
                   </tr>
                   {cat.rows.map((r) => (
-                    <tr key={cat.category + r.feature} className="border-b border-[var(--border)]">
+                    <tr key={cat.category + r.feature} className="border-b border-[var(--p-border)]">
                       <td className="py-3 pe-4 text-sm">{r.feature}</td>
                       <td className="py-3 pe-4 text-center">
                         <Cell value={r.free} />

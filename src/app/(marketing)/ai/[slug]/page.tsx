@@ -70,7 +70,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
           {t("marketing.pages.ai-slug.hero.eyebrowPrefix")} · {u.title.replace(/^AI For /, "")}
         </div>
         <h1 className="hed-2xl mt-4">{u.title}.</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{u.hero}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{u.hero}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -86,8 +86,8 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
             <ul className="mt-4 space-y-2 text-sm">
               {u.reads.map((r) => (
                 <li key={r} className="flex items-start gap-2">
-                  <span className="status-dot status-dot-info mt-2" />
-                  <span className="text-[var(--text-secondary)]">{r}</span>
+                  <span className="ps-dot ps-dot--info mt-2" />
+                  <span className="text-[var(--p-text-2)]">{r}</span>
                 </li>
               ))}
             </ul>
@@ -97,7 +97,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
             <ul className="mt-4 space-y-2 text-sm">
               {u.outputs.map((o) => (
                 <li key={o} className="flex items-start gap-2">
-                  <span className="status-dot status-dot-success mt-2" />
+                  <span className="ps-dot ps-dot ps-dot--ok mt-2" />
                   <span>{o}</span>
                 </li>
               ))}
@@ -111,7 +111,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
         <ul className="mt-6 space-y-3 text-sm">
           {u.surfaces.map((s) => (
             <li key={s} className="flex items-start gap-2">
-              <span className="status-dot status-dot-info mt-2" />
+              <span className="ps-dot ps-dot--info mt-2" />
               <span>{s}</span>
             </li>
           ))}
@@ -131,7 +131,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
                 className="surface hover-lift group flex items-center justify-between p-4 text-sm"
               >
                 <span className="font-medium">{m.name}</span>
-                <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+                <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
               </Link>
             ))}
         </div>
@@ -151,7 +151,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
               className="surface hover-lift group flex items-center justify-between p-4 text-sm"
             >
               <span className="font-medium">{s.title}</span>
-              <ArrowRight size={14} className="cta-nudge text-[var(--text-muted)]" />
+              <ArrowRight size={14} className="cta-nudge text-[var(--p-text-2)]" />
             </Link>
           ))}
         </div>

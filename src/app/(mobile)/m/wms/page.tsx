@@ -36,7 +36,7 @@ export default async function MobileWmsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -68,11 +68,11 @@ export default async function MobileWmsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.wms.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.wms.title", undefined, "Warehouse")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.wms.subtitle", undefined, "Pick, put-away, and check-in/out via scan.")}
       </p>
 
@@ -91,7 +91,7 @@ export default async function MobileWmsPage() {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.wms.inMaintenance", undefined, "In Maintenance")}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -104,7 +104,7 @@ export default async function MobileWmsPage() {
               <li key={r.id} className="surface flex items-center justify-between p-3">
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium">{r.name}</div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {r.asset_tag ?? t("m.wms.noTag", undefined, "no tag")}
                     {r.category ? ` · ${r.category}` : ""}
                   </div>
@@ -117,7 +117,7 @@ export default async function MobileWmsPage() {
       </section>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.wms.returnsDue", undefined, "Returns Due")}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -130,7 +130,7 @@ export default async function MobileWmsPage() {
               <li key={r.id} className="surface flex items-center justify-between p-3">
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium">{r.equipment?.name ?? "—"}</div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">{r.equipment?.asset_tag ?? ""}</div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{r.equipment?.asset_tag ?? ""}</div>
                 </div>
                 <Badge variant="muted">{t("m.wms.due", { date: fmtDay(r.ends_at) }, `Due ${fmtDay(r.ends_at)}`)}</Badge>
               </li>

@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
       />
       <div className="page-content space-y-5">
         {cues.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t("console.venues.ros.emptyPrefix", undefined, "No cues scheduled at this venue yet. Authoring lives in")}{" "}
             <code>/console/production/ros</code>.
           </div>
@@ -115,10 +115,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           <div className="space-y-6">
             {days.map((day) => (
               <section key={day}>
-                <h3 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
-                  {fmtDay(day)}
-                </h3>
-                <ul className="mt-3 divide-y divide-[var(--border-color)]">
+                <h3 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{fmtDay(day)}</h3>
+                <ul className="mt-3 divide-y divide-[var(--p-border)]">
                   {(byDay.get(day) ?? []).map((c) => (
                     <li key={c.id} className="flex items-start gap-3 py-2">
                       <div className="w-14 shrink-0 font-mono text-xs tabular-nums">{fmtTime(c.scheduled_at)}</div>
@@ -126,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <div className="text-sm font-medium">{c.label}</div>
-                            <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                            <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                               {c.lane}
                               {c.duration_seconds ? ` · ${fmtDuration(c.duration_seconds)}` : ""}
                               {c.event?.name ? ` · ${c.event.name}` : ""}
@@ -134,7 +132,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                           </div>
                           <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
                         </div>
-                        {c.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{c.description}</p>}
+                        {c.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{c.description}</p>}
                       </div>
                     </li>
                   ))}
@@ -144,7 +142,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           </div>
         )}
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.venues.ros.footnote",
             undefined,

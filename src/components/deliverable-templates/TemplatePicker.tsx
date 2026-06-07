@@ -63,7 +63,7 @@ export function TemplatePicker({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1 rounded border border-[var(--border-color)] px-3 py-1.5 text-xs hover:bg-[var(--surface-inset)]"
+        className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs hover:bg-[var(--p-surface-2)]"
       >
         <FilePlus2 size={12} />
         <span>{triggerLabel}</span>
@@ -77,8 +77,8 @@ export function TemplatePicker({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-3 flex items-center gap-2 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] px-2 py-1.5">
-            <Search size={12} className="text-[var(--text-muted)]" aria-hidden />
+          <div className="mt-3 flex items-center gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] px-2 py-1.5">
+            <Search size={12} className="text-[var(--p-text-2)]" aria-hidden />
             <input
               type="search"
               value={query}
@@ -91,7 +91,7 @@ export function TemplatePicker({
           </div>
 
           <div className="mt-3 max-h-[50vh] space-y-1 overflow-y-auto pe-1">
-            {loading && <div className="py-8 text-center text-xs text-[var(--text-muted)]">Loading templates…</div>}
+            {loading && <div className="py-8 text-center text-xs text-[var(--p-text-2)]">Loading templates…</div>}
             {!loading &&
               filtered.map((t) => (
                 <button
@@ -101,24 +101,24 @@ export function TemplatePicker({
                     onPick(t);
                     setOpen(false);
                   }}
-                  className="block w-full rounded border border-transparent px-3 py-2 text-start text-xs hover:border-[var(--border-color)] hover:bg-[var(--surface-inset)]"
+                  className="block w-full rounded border border-transparent px-3 py-2 text-start text-xs hover:border-[var(--p-border)] hover:bg-[var(--p-surface-2)]"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-medium text-[var(--text-primary)]">{t.name}</span>
-                    <span className="rounded bg-[var(--surface-inset)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                    <span className="font-medium text-[var(--p-text-1)]">{t.name}</span>
+                    <span className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       {t.type}
                     </span>
                   </div>
-                  {t.description && <div className="mt-1 text-[var(--text-muted)]">{t.description}</div>}
+                  {t.description && <div className="mt-1 text-[var(--p-text-2)]">{t.description}</div>}
                   {t.is_global && (
-                    <div className="mt-1 text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+                    <div className="mt-1 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
                       Platform template
                     </div>
                   )}
                 </button>
               ))}
             {!loading && filtered.length === 0 && (
-              <div className="py-8 text-center text-xs text-[var(--text-muted)]">
+              <div className="py-8 text-center text-xs text-[var(--p-text-2)]">
                 {templates.length === 0
                   ? "No templates yet. Create one from /console/settings/templates."
                   : `No templates match “${query}”.`}

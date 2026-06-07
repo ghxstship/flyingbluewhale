@@ -138,7 +138,7 @@ export default async function Page() {
               render: (r) => (
                 <div>
                   <Badge variant="info">{BUCKET_HINT[r.bucket]?.label ?? r.bucket}</Badge>
-                  <div className="mt-1 text-[10px] text-[var(--text-muted)]">
+                  <div className="mt-1 text-[10px] text-[var(--p-text-2)]">
                     {BUCKET_HINT[r.bucket]?.description ?? ""}
                   </div>
                 </div>
@@ -153,7 +153,7 @@ export default async function Page() {
               render: (r) => (
                 <span className="font-mono text-sm">
                   {r.limit_count.toLocaleString()}{" "}
-                  <span className="text-[var(--text-muted)]">
+                  <span className="text-[var(--p-text-2)]">
                     {t("console.settings.rateLimits.unit.req", undefined, "req")}
                   </span>
                 </span>
@@ -182,7 +182,7 @@ export default async function Page() {
               render: (r) => {
                 const perSecond = r.limit_count / (r.window_ms / 1000);
                 return (
-                  <span className="font-mono text-xs text-[var(--text-muted)]">
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {perSecond >= 1 ? `${perSecond.toFixed(1)}/sec` : `${(perSecond * 60).toFixed(1)}/min`}
                   </span>
                 );
@@ -209,7 +209,7 @@ export default async function Page() {
           <h2 className="text-sm font-semibold">
             {t("console.settings.rateLimits.upsert.heading", undefined, "Add / Update Override")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.rateLimits.upsert.hint",
               undefined,
@@ -220,7 +220,7 @@ export default async function Page() {
             action={upsertRateLimitOverride}
             className="surface-inset mt-3 grid grid-cols-1 gap-2 rounded-md p-3 sm:grid-cols-6"
           >
-            <select name="bucket" required defaultValue="ai" className="input-base sm:col-span-2">
+            <select name="bucket" required defaultValue="ai" className="ps-input sm:col-span-2">
               {BUCKETS.map((b) => (
                 <option key={b} value={b}>
                   {BUCKET_HINT[b].label}
@@ -234,7 +234,7 @@ export default async function Page() {
               min="1"
               max="1000000"
               placeholder={t("console.settings.rateLimits.upsert.requestsPlaceholder", undefined, "Requests")}
-              className="input-base sm:col-span-2"
+              className="ps-input sm:col-span-2"
             />
             <input
               name="window_seconds"
@@ -244,7 +244,7 @@ export default async function Page() {
               max="3600"
               placeholder={t("console.settings.rateLimits.upsert.windowPlaceholder", undefined, "Window — Sec")}
               defaultValue="60"
-              className="input-base sm:col-span-1"
+              className="ps-input sm:col-span-1"
             />
             <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
               {t("common.save", undefined, "Save")}
@@ -257,7 +257,7 @@ export default async function Page() {
             <h2 className="text-sm font-semibold">
               {t("console.settings.rateLimits.unconfigured.heading", undefined, "Unconfigured Buckets")}
             </h2>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.settings.rateLimits.unconfigured.hint",
                 undefined,
@@ -268,7 +268,7 @@ export default async function Page() {
               {unconfigured.map((b) => (
                 <li key={b} className="surface-inset rounded-md p-3 text-xs">
                   <div className="text-sm font-semibold">{BUCKET_HINT[b].label}</div>
-                  <div className="text-[var(--text-muted)]">{BUCKET_HINT[b].description}</div>
+                  <div className="text-[var(--p-text-2)]">{BUCKET_HINT[b].description}</div>
                 </li>
               ))}
             </ul>

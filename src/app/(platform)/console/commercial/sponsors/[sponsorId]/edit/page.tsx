@@ -67,10 +67,10 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
             defaultValue={row.delivered != null ? String(row.delivered) : ""}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.commercial.sponsors.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="planned">planned</option>
               <option value="in_progress">in_progress</option>
               <option value="delivered">delivered</option>

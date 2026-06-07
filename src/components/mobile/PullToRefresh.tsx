@@ -68,7 +68,7 @@ export function PullToRefresh({
       >
         <RefreshCw
           size={18}
-          className={`text-[var(--org-primary)] ${refreshing ? "motion-safe:animate-spin" : ""}`}
+          className={`text-[var(--p-accent)] ${refreshing ? "motion-safe:animate-spin" : ""}`}
           style={{ transform: `rotate(${ratio * 360}deg)` }}
         />
       </div>

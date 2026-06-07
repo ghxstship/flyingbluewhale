@@ -54,7 +54,7 @@ export default async function VendorHome({ params }: { params: Promise<{ slug: s
             ].map((item) => (
               <Link key={item.href} href={item.href} className="surface hover-lift p-5">
                 <div className="text-sm font-semibold">{item.label}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{item.desc}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{item.desc}</div>
               </Link>
             ))}
           </div>

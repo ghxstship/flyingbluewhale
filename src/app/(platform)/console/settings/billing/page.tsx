@@ -121,7 +121,7 @@ export default async function BillingPage() {
         <section className="surface p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <div className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              <div className="text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("console.settings.billing.plan", undefined, "Plan")}
               </div>
               <div className="mt-1 text-base font-semibold">{toTitle(current)}</div>
@@ -131,14 +131,14 @@ export default async function BillingPage() {
         </section>
 
         <section>
-          <h2 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          <h2 className="mb-2 text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
             {t("console.settings.billing.plansHeading", undefined, "Plans")}
           </h2>
           <div className="grid gap-3 md:grid-cols-4">
             {TIERS.map((tier) => (
               <div
                 key={tier.tier}
-                className={`surface p-5 ${tier.tier === current ? "ring-2 ring-[var(--org-primary)]" : ""}`}
+                className={`surface p-5 ${tier.tier === current ? "ring-2 ring-[var(--p-accent)]" : ""}`}
               >
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold">{toTitle(tier.tier)}</div>
@@ -149,7 +149,7 @@ export default async function BillingPage() {
                 <div className="mt-2 text-lg font-semibold tracking-tight">
                   {t(tier.priceKey, undefined, tier.priceFallback)}
                 </div>
-                <ul className="mt-3 space-y-1 text-xs text-[var(--text-secondary)]">
+                <ul className="mt-3 space-y-1 text-xs text-[var(--p-text-2)]">
                   {tier.featureKeys.map((f) => (
                     <li key={f.key}>· {t(f.key, undefined, f.fallback)}</li>
                   ))}
@@ -161,15 +161,15 @@ export default async function BillingPage() {
 
         <section>
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+            <h2 className="text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
               {t("console.settings.billing.recentInvoices", undefined, "Recent invoices")}
             </h2>
-            <Link href="/console/finance/invoices" className="text-xs text-[var(--org-primary)] hover:underline">
+            <Link href="/console/finance/invoices" className="text-xs text-[var(--p-accent)] hover:underline">
               {t("console.settings.billing.viewAll", undefined, "View all →")}
             </Link>
           </div>
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.settings.billing.table.number", undefined, "Number")}</th>
@@ -182,7 +182,7 @@ export default async function BillingPage() {
               <tbody>
                 {invoices.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-6 text-center text-[var(--text-muted)]">
+                    <td colSpan={5} className="py-6 text-center text-[var(--p-text-2)]">
                       {t("console.settings.billing.noInvoices", undefined, "No invoices yet.")}
                     </td>
                   </tr>

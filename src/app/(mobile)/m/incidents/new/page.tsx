@@ -19,11 +19,11 @@ export default async function IncidentNew() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("m.incident.new.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.incident.new.title", undefined, "Incident Report")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.incident.new.subtitle", undefined, "Log a safety issue — admin and EHS lead are notified immediately.")}
       </p>
       <div className="mt-6">

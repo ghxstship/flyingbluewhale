@@ -87,12 +87,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         ) : (
           order.map((q) => (
             <section key={q} className="surface p-5">
-              <div className="text-[10px] tracking-[0.2em] text-[var(--text-muted)] uppercase">{q}</div>
-              <ul className="mt-3 divide-y divide-[var(--border-color)]">
+              <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">{q}</div>
+              <ul className="mt-3 divide-y divide-[var(--p-border)]">
                 {(byQuarter.get(q) ?? []).map((i) => (
                   <li key={`${i.kind}-${i.id}`} className="flex items-center justify-between py-2 text-sm">
                     <span>
-                      <span className="me-2 inline-block rounded bg-[var(--surface-inset)] px-1.5 py-0.5 text-[9px] tracking-wider text-[var(--text-muted)] uppercase">
+                      <span className="me-2 inline-block rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 text-[9px] tracking-wider text-[var(--p-text-2)] uppercase">
                         {i.kind === "task"
                           ? t("console.projects.roadmap.kindTask", undefined, "task")
                           : t("console.projects.roadmap.kindMilestone", undefined, "milestone")}
@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     </span>
                     <span className="flex items-center gap-2">
                       <StatusBadge status={i.status} />
-                      <span className="font-mono text-xs text-[var(--text-muted)]">{fmtDate(i.date)}</span>
+                      <span className="font-mono text-xs text-[var(--p-text-2)]">{fmtDate(i.date)}</span>
                     </span>
                   </li>
                 ))}

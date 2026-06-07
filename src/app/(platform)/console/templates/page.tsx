@@ -34,13 +34,13 @@ export default async function TemplatesGalleryPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-8">
       <header className="border-ink mb-8 border-b-3 pb-6">
-        <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
           {t("console.templates.eyebrow", undefined, "Templates")}
         </div>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">
           {t("console.templates.title", undefined, "PROJECT TEMPLATES")}
         </h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t(
             "console.templates.description",
             undefined,
@@ -79,9 +79,7 @@ export default async function TemplatesGalleryPage() {
                 />
                 <CardBody>
                   <Badge variant="muted">{CATEGORY_LABEL[tpl.category] ?? tpl.category}</Badge>
-                  {tpl.description ? (
-                    <p className="mt-3 text-sm text-[var(--text-secondary)]">{tpl.description}</p>
-                  ) : null}
+                  {tpl.description ? <p className="mt-3 text-sm text-[var(--p-text-2)]">{tpl.description}</p> : null}
                   {tpl.blueprint.project.modules.length ? (
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {tpl.blueprint.project.modules.slice(0, 6).map((m: string) => (

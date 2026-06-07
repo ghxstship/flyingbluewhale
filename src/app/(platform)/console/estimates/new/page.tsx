@@ -9,8 +9,8 @@ import { createEstimate } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 export default async function Page() {
   if (!hasSupabase) return null;
@@ -47,7 +47,7 @@ export default async function Page() {
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               {t("console.estimates.new.name", undefined, "Name")}
-              <span className="ms-0.5 text-[var(--color-error)]">*</span>
+              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
             </span>
             <input
               name="name"
@@ -60,7 +60,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.estimates.new.project", undefined, "Project")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <select name="project_id" required className={INPUT}>
                 <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>
@@ -93,7 +93,7 @@ export default async function Page() {
                 placeholder={t("console.estimates.new.defaultMarkupPctPlaceholder", undefined, "0.0700 for 7%")}
                 className={INPUT}
               />
-              <span className="text-[10px] text-[var(--text-muted)]">
+              <span className="text-[10px] text-[var(--p-text-2)]">
                 {t("console.estimates.new.defaultMarkupHint", undefined, "Stored as a fraction (0.07 = 7%).")}
               </span>
             </label>

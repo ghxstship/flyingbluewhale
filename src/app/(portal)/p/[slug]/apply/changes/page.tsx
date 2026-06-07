@@ -112,7 +112,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <h3 className="text-sm font-semibold">
             {t("p.apply.changes.howItWorks.title", undefined, "How This Works")}
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.apply.changes.howItWorks.body",
               undefined,
@@ -126,23 +126,23 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t("p.apply.changes.yourRequests.title", undefined, "Your Requests")}
           </h3>
           {changes.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("p.apply.changes.yourRequests.empty", undefined, "No card-change requests on file yet.")}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {changes.map((c) => (
                 <li key={c.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{KIND_LABEL[c.kind] ?? c.kind}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {c.accreditation?.person_name ?? "—"} ·{" "}
                       {t("p.apply.changes.filed", { date: fmtDate(c.created_at) }, `filed ${fmtDate(c.created_at)}`)}
                       {c.decided_at
                         ? ` · ${t("p.apply.changes.decided", { date: fmtDate(c.decided_at) }, `decided ${fmtDate(c.decided_at)}`)}`
                         : ""}
                     </div>
-                    {c.note && <p className="mt-1 text-xs text-[var(--text-secondary)]">{c.note}</p>}
+                    {c.note && <p className="mt-1 text-xs text-[var(--p-text-2)]">{c.note}</p>}
                   </div>
                   <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
                 </li>

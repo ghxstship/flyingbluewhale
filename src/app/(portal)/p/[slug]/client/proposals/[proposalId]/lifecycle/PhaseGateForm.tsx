@@ -54,7 +54,7 @@ export function PhaseGateForm({
         {gateItems.map((g) => (
           <li
             key={g.id}
-            className="flex items-start gap-3 rounded border border-[var(--border-color)] bg-[var(--surface)] p-3"
+            className="flex items-start gap-3 rounded border border-[var(--p-border)] bg-[var(--p-surface)] p-3"
           >
             <Checkbox
               checked={g.is_done}
@@ -64,13 +64,13 @@ export function PhaseGateForm({
               id={`gate-${g.id}`}
             />
             <label htmlFor={`gate-${g.id}`} className="flex-1 text-sm leading-snug">
-              <span className={g.is_done ? "text-[var(--text-muted)] line-through" : ""}>{g.label}</span>
+              <span className={g.is_done ? "text-[var(--p-text-2)] line-through" : ""}>{g.label}</span>
             </label>
           </li>
         ))}
       </ul>
       {canApprove && (
-        <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-3">
+        <div className="flex items-center justify-between border-t border-[var(--p-border)] pt-3">
           {!allDone && (
             <Alert kind="info">
               {t(

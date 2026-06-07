@@ -53,9 +53,7 @@ export function ProgressBar({
           style={indeterminate ? undefined : { transform: `translateX(-${100 - (clamped ?? 0)}%)` }}
         />
       </ProgressPrimitive.Root>
-      {showLabel && !indeterminate && (
-        <span className="font-mono text-[10px] text-[var(--text-muted)]">{clamped}%</span>
-      )}
+      {showLabel && !indeterminate && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{clamped}%</span>}
     </div>
   );
 }

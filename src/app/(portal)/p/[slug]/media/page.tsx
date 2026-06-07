@@ -94,14 +94,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {tiles.map((tile) => (
             <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{tile.label}</div>
-              <p className="mt-1 text-xs text-[var(--text-secondary)]">{tile.desc}</p>
+              <p className="mt-1 text-xs text-[var(--p-text-2)]">{tile.desc}</p>
             </Link>
           ))}
         </div>
 
         <section>
           <h2 className="text-sm font-semibold">{t("p.media.docVault.title", undefined, "Document Vault")}</h2>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "p.media.docVault.description",
               undefined,

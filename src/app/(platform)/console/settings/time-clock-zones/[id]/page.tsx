@@ -64,14 +64,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           z.lifecycle_state === "active" ? (
             <form action={archiveZone}>
               <input type="hidden" name="id" value={z.id} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("common.archive", undefined, "Archive")}
               </button>
             </form>
           ) : (
             <form action={reactivateZone}>
               <input type="hidden" name="id" value={z.id} />
-              <button type="submit" className="btn btn-primary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--sm">
                 {t("common.reactivate", undefined, "Reactivate")}
               </button>
             </form>
@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               punch_lng: number | null;
             }>
           ).length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.settings.timeClockZones.detail.noPunches", undefined, "No punches recorded yet.")}
             </p>
           ) : (

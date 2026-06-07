@@ -9,7 +9,7 @@ import * as React from "react";
  * `useFormFieldIds` if the child accepts an `id` prop.
  *
  *   <FormField label="Domain" hint="example.com" required>
- *     <input name="domain" className="input-base" />
+ *     <input name="domain" className="ps-input" />
  *   </FormField>
  */
 export function FormField({
@@ -30,10 +30,10 @@ export function FormField({
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {label}
           {required && (
-            <span aria-hidden className="ms-0.5 text-[var(--color-error)]">
+            <span aria-hidden className="ms-0.5 text-[var(--p-danger)]">
               *
             </span>
           )}
@@ -41,11 +41,11 @@ export function FormField({
       )}
       {children}
       {error && (
-        <span role="alert" className="text-xs text-[var(--color-error)]">
+        <span role="alert" className="text-xs text-[var(--p-danger)]">
           {error}
         </span>
       )}
-      {!error && hint && <span className="text-xs text-[var(--text-muted)]">{hint}</span>}
+      {!error && hint && <span className="text-xs text-[var(--p-text-2)]">{hint}</span>}
     </div>
   );
 }

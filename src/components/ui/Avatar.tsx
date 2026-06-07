@@ -16,10 +16,10 @@ const SIZE: Record<AvatarSize, string> = {
 export type AvatarPresence = "online" | "away" | "busy" | "offline";
 
 const PRESENCE: Record<AvatarPresence, string> = {
-  online: "bg-[var(--color-success)]",
-  away: "bg-[var(--color-warning)]",
-  busy: "bg-[var(--color-error)]",
-  offline: "bg-[var(--text-muted)]",
+  online: "bg-[var(--p-success)]",
+  away: "bg-[var(--p-warning)]",
+  busy: "bg-[var(--p-danger)]",
+  offline: "bg-[var(--p-text-2)]",
 };
 
 /** Deterministic color hash for initials-only avatars. */
@@ -80,7 +80,7 @@ export function Avatar({
       {presence && (
         <span
           aria-label={`presence: ${presence}`}
-          className={`absolute end-0 bottom-0 rounded-full ring-2 ring-[var(--background)] ${presenceSize} ${PRESENCE[presence]}`}
+          className={`absolute end-0 bottom-0 rounded-full ring-2 ring-[var(--p-bg)] ${presenceSize} ${PRESENCE[presence]}`}
         />
       )}
     </AvatarPrimitive.Root>
@@ -107,12 +107,12 @@ export function AvatarGroup({
   return (
     <div className={`flex -space-x-2 ${className}`}>
       {shown.map((c, i) => (
-        <span key={i} className="ring-2 ring-[var(--background)]">
+        <span key={i} className="ring-2 ring-[var(--p-bg)]">
           {c}
         </span>
       ))}
       {overflow > 0 && (
-        <span className="ring-2 ring-[var(--background)]">
+        <span className="ring-2 ring-[var(--p-bg)]">
           <Avatar name={`+${overflow}`} size={size} />
         </span>
       )}

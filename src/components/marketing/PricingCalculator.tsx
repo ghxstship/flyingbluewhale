@@ -51,7 +51,7 @@ export function PricingCalculator() {
     <div className="surface relative overflow-hidden p-8 md:p-10">
       <span
         className="absolute inset-x-0 top-0 h-1"
-        style={{ background: "linear-gradient(90deg, var(--org-primary), var(--org-accent))" }}
+        style={{ background: "linear-gradient(90deg, var(--p-accent), var(--p-accent-text))" }}
         aria-hidden
       />
       <div className="grid gap-10 md:grid-cols-2 md:items-start">
@@ -60,7 +60,7 @@ export function PricingCalculator() {
             <Calculator size={12} aria-hidden /> What it actually costs
           </div>
           <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Run the math.</h2>
-          <p className="mt-3 text-sm text-[var(--text-secondary)]">
+          <p className="mt-3 text-sm text-[var(--p-text-2)]">
             Plug in shows per year, crew at peak, and what you spend monthly on the fragmented stack. We&apos;ll show
             you annual spend and per-show cost on both sides. Math is conservative — no integration tax, no per-seat
             overruns counted.
@@ -96,13 +96,13 @@ export function PricingCalculator() {
               suffix="/ mo"
             />
           </div>
-          <p className="mt-5 font-mono text-[11px] tracking-wide text-[var(--text-muted)] uppercase">
+          <p className="mt-5 font-mono text-[11px] tracking-wide text-[var(--p-text-2)] uppercase">
             Default $1,400/mo = Asana + Eventbrite + DocuSign + QuickBooks + Dropbox + Slack + PO tool.
           </p>
         </div>
 
         <div className="surface-terminal p-6">
-          <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+          <div className="flex items-center justify-between border-b border-[var(--p-border)] pb-3">
             <span className="term-prompt">$</span>
             <span className="term-dim flex-1">
               atlvs estimate --shows {shows} --crew {crew}
@@ -116,21 +116,21 @@ export function PricingCalculator() {
             <Row label="Annual savings" value={formatUsd(numbers.savings)} tone="ok" emphasize />
           </dl>
 
-          <div className="mt-5 grid grid-cols-2 gap-3 border-t border-[var(--border-color)] pt-4">
+          <div className="mt-5 grid grid-cols-2 gap-3 border-t border-[var(--p-border)] pt-4">
             <Tile label="Current per show" value={formatUsd(numbers.stackPerShow)} />
             <Tile label="ATLVS per show" value={formatUsd(numbers.atlvsPerShow)} tone="accent" />
           </div>
 
-          <div className="mt-5 flex items-center justify-between border-t border-[var(--border-color)] pt-4">
-            <div className="font-mono text-[10px] tracking-wide text-[var(--text-muted)] uppercase">Stack ÷ ATLVS</div>
-            <div className="font-mono text-2xl font-semibold text-[var(--org-primary)]">
+          <div className="mt-5 flex items-center justify-between border-t border-[var(--p-border)] pt-4">
+            <div className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">Stack ÷ ATLVS</div>
+            <div className="font-mono text-2xl font-semibold text-[var(--p-accent)]">
               {numbers.multiple > 0 ? `${numbers.multiple.toFixed(1)}×` : "—"}
             </div>
           </div>
 
           <a
             href="/signup"
-            className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-semibold text-[var(--org-accent)] underline underline-offset-4"
+            className="mt-6 inline-flex items-center gap-2 font-mono text-xs font-semibold text-[var(--p-accent-text)] underline underline-offset-4"
           >
             Sign up free <ArrowRight size={12} className="cta-nudge" aria-hidden />
           </a>
@@ -166,7 +166,7 @@ function Field({
         <div className="font-mono text-sm tabular-nums">
           {prefix}
           {value.toLocaleString()}
-          {suffix && <span className="ms-1 text-[var(--text-muted)]">{suffix}</span>}
+          {suffix && <span className="ms-1 text-[var(--p-text-2)]">{suffix}</span>}
         </div>
       </div>
       <input
@@ -177,7 +177,7 @@ function Field({
         max={max}
         step={step}
         aria-label={label}
-        className="mt-2 w-full accent-[var(--org-primary)]"
+        className="mt-2 w-full accent-[var(--p-accent)]"
       />
     </div>
   );
@@ -208,9 +208,9 @@ function Row({
 function Tile({ label, value, tone }: { label: string; value: string; tone?: "accent" }) {
   return (
     <div>
-      <div className="font-mono text-[10px] tracking-wide text-[var(--text-muted)] uppercase">{label}</div>
+      <div className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{label}</div>
       <div
-        className={`mt-1 font-mono tabular-nums ${tone === "accent" ? "text-[var(--org-accent)]" : ""} text-lg font-semibold`}
+        className={`mt-1 font-mono tabular-nums ${tone === "accent" ? "text-[var(--p-accent-text)]" : ""} text-lg font-semibold`}
       >
         {value}
       </div>

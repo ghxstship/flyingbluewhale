@@ -23,16 +23,16 @@ const STATUS_TONE: Record<StepStatus, "muted" | "info" | "success" | "warning" |
   failed: "error",
 };
 
-// `animate-pulse` on `running` is a status indicator (not a skeleton). It
+// `animate-pulse` on `running` is a status indicator (not a ps-skel). It
 // signals that an automation step is currently executing — the only
 // intentional pulse usage in the platform; everywhere else, animate-pulse
-// means "loading skeleton" and should use the .skeleton utility.
+// means "loading ps-skel" and should use the .ps-skel utility.
 const STATUS_DOT: Record<StepStatus, string> = {
-  pending: "bg-[var(--text-muted)]",
-  running: "bg-[var(--org-primary)] motion-safe:animate-pulse",
-  success: "bg-[var(--color-success)]",
-  skipped: "bg-[var(--color-warning)]",
-  failed: "bg-[var(--color-error)]",
+  pending: "bg-[var(--p-text-2)]",
+  running: "bg-[var(--p-accent)] motion-safe:animate-pulse",
+  success: "bg-[var(--p-success)]",
+  skipped: "bg-[var(--p-warning)]",
+  failed: "bg-[var(--p-danger)]",
 };
 
 export type RunTimelineStep = {
@@ -83,19 +83,19 @@ function CollapsibleJson({ label, value, defaultOpen }: { label: string; value: 
     (typeof value === "string" && value.length === 0);
 
   if (isEmpty) {
-    return <div className="text-[10px] tracking-wide text-[var(--text-muted)] uppercase">{label}: empty</div>;
+    return <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{label}: empty</div>;
   }
   return (
     <div>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="text-[10px] tracking-wide text-[var(--text-muted)] uppercase hover:text-[var(--foreground)]"
+        className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase hover:text-[var(--p-text-1)]"
       >
         {open ? "▾" : "▸"} {label}
       </button>
       {open && (
-        <pre className="mt-1 max-h-72 overflow-auto rounded bg-[var(--bg-secondary)] p-2 font-mono text-xs">
+        <pre className="mt-1 max-h-72 overflow-auto rounded bg-[var(--p-surface)] p-2 font-mono text-xs">
           {jsonString(value)}
         </pre>
       )}
@@ -105,29 +105,29 @@ function CollapsibleJson({ label, value, defaultOpen }: { label: string; value: 
 
 export function RunTimeline({ steps }: RunTimelineProps) {
   if (steps.length === 0) {
-    return <p className="text-xs text-[var(--text-muted)]">No steps recorded.</p>;
+    return <p className="text-xs text-[var(--p-text-2)]">No steps recorded.</p>;
   }
   return (
     <ol className="relative space-y-3 ps-6">
       {/* Vertical rail — sits behind the status dots. */}
-      <div className="absolute start-[7px] top-1 bottom-1 w-px bg-[var(--border-color)]" aria-hidden="true" />
+      <div className="absolute start-[7px] top-1 bottom-1 w-px bg-[var(--p-border)]" aria-hidden="true" />
       {steps.map((s) => (
         <li key={s.stepIndex} className="relative">
           <span
-            className={`absolute -start-[1px] top-2 inline-block h-3 w-3 rounded-full ring-2 ring-[var(--bg-primary)] ${STATUS_DOT[s.status]}`}
+            className={`absolute -start-[1px] top-2 inline-block h-3 w-3 rounded-full ring-2 ring-[var(--p-bg)] ${STATUS_DOT[s.status]}`}
             aria-hidden="true"
           />
-          <div className="surface rounded border border-[var(--border-color)] p-3">
+          <div className="surface rounded border border-[var(--p-border)] p-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-xs text-[var(--text-muted)]">#{s.stepIndex}</span>
+              <span className="font-mono text-xs text-[var(--p-text-2)]">#{s.stepIndex}</span>
               <span className="text-sm font-semibold">{s.actionType || "(unknown)"}</span>
               <Badge variant={STATUS_TONE[s.status]}>{s.status}</Badge>
-              <span className="ms-auto font-mono text-[10px] text-[var(--text-muted)]">
+              <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">
                 {fmtTime(s.startedAt)} · {fmtLatency(s.latencyMs)}
               </span>
             </div>
             {s.error && (
-              <div className="mt-2 rounded border border-[var(--color-error)] bg-[var(--bg-secondary)] p-2 font-mono text-xs text-[var(--color-error)]">
+              <div className="mt-2 rounded border border-[var(--p-danger)] bg-[var(--p-surface)] p-2 font-mono text-xs text-[var(--p-danger)]">
                 {s.error}
               </div>
             )}

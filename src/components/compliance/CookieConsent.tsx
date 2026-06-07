@@ -107,7 +107,7 @@ export function CookieConsent() {
           <button
             type="button"
             onClick={() => setShowDetails((v) => !v)}
-            className="text-xs text-[var(--text-muted)] underline-offset-4 hover:underline"
+            className="text-xs text-[var(--p-text-2)] underline-offset-4 hover:underline"
           >
             {showDetails ? "Hide Details" : "Customize"}
           </button>
@@ -135,7 +135,7 @@ function Row({ label, required, description }: { label: string; required?: boole
           {label}
           {required && " · always on"}
         </div>
-        <div className="text-[var(--text-muted)]">{description}</div>
+        <div className="text-[var(--p-text-2)]">{description}</div>
       </div>
     </div>
   );
@@ -156,7 +156,7 @@ function ToggleRow({
     <div className="flex items-start justify-between gap-3">
       <div>
         <div className="font-medium">{label}</div>
-        <div className="text-[var(--text-muted)]">{description}</div>
+        <div className="text-[var(--p-text-2)]">{description}</div>
       </div>
       <label className="inline-flex cursor-pointer items-center gap-2">
         <input

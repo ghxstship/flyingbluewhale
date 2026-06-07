@@ -49,19 +49,19 @@ export default async function NotificationsPrefs() {
       <h1 className="text-2xl font-semibold tracking-tight">
         {t("me.notifications.title", undefined, "Notifications")}
       </h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t("me.notifications.subtitle", undefined, "Choose how you get updates for each workspace event.")}
       </p>
       <div className="surface mt-4 flex items-center justify-between gap-3 p-3">
         <div className="flex items-center gap-2">
-          <Inbox size={16} className="text-[var(--text-muted)]" aria-hidden="true" />
-          <p className="text-sm text-[var(--text-secondary)]">
+          <Inbox size={16} className="text-[var(--p-text-2)]" aria-hidden="true" />
+          <p className="text-sm text-[var(--p-text-2)]">
             {t("me.notifications.inboxPrompt", undefined, "Looking for your inbox?")}{" "}
-            <Link href="/me/notifications/inbox" className="font-medium text-[var(--foreground)] underline">
+            <Link href="/me/notifications/inbox" className="font-medium text-[var(--p-text-1)] underline">
               {t("me.notifications.openInbox", undefined, "Open Inbox")}
             </Link>
             {" · "}
-            <Link href="/me/notifications/push" className="font-medium text-[var(--foreground)] underline">
+            <Link href="/me/notifications/push" className="font-medium text-[var(--p-text-1)] underline">
               {t("me.notifications.pushDevices", undefined, "Push Devices")}
             </Link>
           </p>
@@ -73,7 +73,7 @@ export default async function NotificationsPrefs() {
           submitLabel={t("me.notifications.savePreferences", undefined, "Save Preferences")}
         >
           <div className="surface -m-2 overflow-x-auto">
-            <table className="data-table">
+            <table className="ps-table">
               <thead>
                 <tr>
                   <th>{t("me.notifications.columns.event", undefined, "Event")}</th>

@@ -35,10 +35,10 @@ export function NewEventForm({
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.events.new.projectLabel", undefined, "Project")}
           </label>
-          <select name="project_id" className="input-base mt-1.5 w-full">
+          <select name="project_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.events.new.noProject", undefined, "— No project —")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -48,10 +48,10 @@ export function NewEventForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.events.new.locationLabel", undefined, "Location")}
           </label>
-          <select name="location_id" className="input-base mt-1.5 w-full">
+          <select name="location_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.events.new.noLocation", undefined, "— No location —")}</option>
             {locations.map((l) => (
               <option key={l.id} value={l.id}>
@@ -62,10 +62,10 @@ export function NewEventForm({
         </div>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--text-secondary)]">
+        <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.events.new.descriptionLabel", undefined, "Description")}
         </label>
-        <textarea name="description" rows={3} className="input-base mt-1.5 w-full" />
+        <textarea name="description" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

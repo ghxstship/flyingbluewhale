@@ -29,7 +29,7 @@ export default async function MobileGatePage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.gate.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -56,11 +56,11 @@ export default async function MobileGatePage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--org-primary))] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--brand-color,var(--p-accent))] uppercase">
         {t("m.gate.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.gate.title", undefined, "Gate")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.gate.noScansYet", undefined, "No scans yet today.")
           : t(
@@ -70,13 +70,13 @@ export default async function MobileGatePage() {
             )}
       </p>
 
-      <Link href="/m/gate/scan" className="btn btn-primary mt-5 flex w-full items-center justify-center gap-2">
+      <Link href="/m/gate/scan" className="ps-btn mt-5 flex w-full items-center justify-center gap-2">
         <QrCode size={18} />
         {t("m.gate.openScanner", undefined, "Open scanner")}
       </Link>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.gate.recentScans", undefined, "Recent Scans")}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -91,11 +91,11 @@ export default async function MobileGatePage() {
                   <div className="text-sm font-medium">
                     {r.venue?.name ?? r.gate_code ?? t("m.gate.gateFallback", undefined, "Gate")}
                   </div>
-                  {r.reason && <div className="mt-0.5 truncate text-xs text-[var(--text-muted)]">{r.reason}</div>}
+                  {r.reason && <div className="mt-0.5 truncate text-xs text-[var(--p-text-2)]">{r.reason}</div>}
                 </div>
                 <div className="flex flex-none items-center gap-2">
                   <Badge variant={RESULT_TONE[r.result] ?? "muted"}>{r.result}</Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{fmtTime(r.scanned_at)}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{fmtTime(r.scanned_at)}</span>
                 </div>
               </li>
             ))

@@ -50,7 +50,7 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
                     <Badge variant="muted">{t("console.projects.guides.statusNone", undefined, "None")}</Badge>
                   )}
                 </div>
-                <div className="mt-2 text-xs text-[var(--text-muted)]">
+                <div className="mt-2 text-xs text-[var(--p-text-2)]">
                   {t(
                     "console.projects.guides.tierLine",
                     { tier: tierInfo.tier, classification: tierInfo.classification },
@@ -62,8 +62,8 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
             );
           })}
         </div>
-        <div className="surface-inset p-5 text-sm text-[var(--text-muted)]">
-          <div className="text-sm font-semibold text-[var(--foreground)]">
+        <div className="surface-inset p-5 text-sm text-[var(--p-text-2)]">
+          <div className="text-sm font-semibold text-[var(--p-text-1)]">
             {t("console.projects.guides.customHeading", undefined, "Custom Guide")}
           </div>
           <p className="mt-2">

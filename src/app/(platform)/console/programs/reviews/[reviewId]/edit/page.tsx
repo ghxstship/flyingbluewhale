@@ -60,10 +60,10 @@ export default async function Page({ params }: { params: Promise<{ reviewId: str
             required
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.reviews.edit.fields.notes", undefined, "Notes")}
             </span>
-            <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="input-base focus-ring w-full" />
+            <textarea name="notes" defaultValue={row.notes ?? ""} rows={5} className="ps-input focus-ring w-full" />
           </label>
         </FormShell>
       </div>

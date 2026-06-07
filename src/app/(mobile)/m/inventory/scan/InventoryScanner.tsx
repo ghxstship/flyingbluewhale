@@ -148,7 +148,7 @@ export function InventoryScanner() {
           autoCorrect="off"
           spellCheck={false}
           placeholder={t("m.inventory.scan.placeholder", undefined, "Scan or type")}
-          className="input-base w-full font-mono text-lg tracking-wider"
+          className="ps-input w-full font-mono text-lg tracking-wider"
         />
         <div className="flex gap-2">
           <Button type="submit" size="lg" className="flex-1" disabled={pending || !tag}>

@@ -62,25 +62,25 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <Link href="/m/requests" className="text-xs text-[var(--text-muted)]">
+      <Link href="/m/requests" className="text-xs text-[var(--p-text-2)]">
         {t("m.requests.detail.back", undefined, "← Requests")}
       </Link>
       <h1 className="mt-2 text-xl leading-snug font-semibold">{r.summary}</h1>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
         <Badge variant={STATUS[r.status]}>{toTitle(r.status)}</Badge>
-        <span className="font-mono text-[10px] text-[var(--text-muted)]">{r.category}</span>
+        <span className="font-mono text-[10px] text-[var(--p-text-2)]">{r.category}</span>
       </div>
       {r.description && <div className="surface mt-4 p-4 text-sm whitespace-pre-wrap">{r.description}</div>}
       <div className="surface mt-4 grid grid-cols-2 gap-3 p-4 text-xs">
         <div>
-          <div className="tracking-wide text-[var(--text-muted)] uppercase">
+          <div className="tracking-wide text-[var(--p-text-2)] uppercase">
             {t("m.requests.detail.opened", undefined, "Opened")}
           </div>
           <div className="font-mono">{fmt.dateTime(r.opened_at)}</div>
         </div>
         <div>
-          <div className="tracking-wide text-[var(--text-muted)] uppercase">
+          <div className="tracking-wide text-[var(--p-text-2)] uppercase">
             {t("m.requests.detail.responseSla", undefined, "Response SLA")}
           </div>
           <div className="font-mono">
@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
       </div>
       {NEXT_STATES[r.status].length > 0 && (
         <div className="mt-5 space-y-2">
-          <div className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.requests.detail.update", undefined, "Update")}
           </div>
           <div className="grid grid-cols-2 gap-2">

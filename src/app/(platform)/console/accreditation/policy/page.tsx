@@ -95,10 +95,10 @@ export default async function Page() {
             )}
             action={
               <div className="flex items-center gap-2">
-                <Link href="/console/accreditation/categories/new" className="btn btn-primary btn-sm">
+                <Link href="/console/accreditation/categories/new" className="ps-btn ps-btn--sm">
                   {t("console.accreditation.policy.newCategory", undefined, "+ New Category")}
                 </Link>
-                <Link href="/console/venues" className="btn btn-secondary btn-sm">
+                <Link href="/console/venues" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.accreditation.policy.openVenues", undefined, "Open Venues")}
                 </Link>
               </div>
@@ -106,7 +106,7 @@ export default async function Page() {
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th className="text-start">
@@ -132,7 +132,7 @@ export default async function Page() {
                     <tr key={z.id}>
                       <td>
                         <div className="text-sm font-medium">{z.name}</div>
-                        <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                        <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                           {z.code} · {z.venue?.name ?? "—"}
                         </div>
                       </td>
@@ -147,7 +147,7 @@ export default async function Page() {
                             </Badge>
                           ) : (
                             <span
-                              className="text-[var(--text-muted)]"
+                              className="text-[var(--p-text-2)]"
                               aria-label={t("console.accreditation.policy.notAllowed", undefined, "Not allowed")}
                             >
                               ·
@@ -163,7 +163,7 @@ export default async function Page() {
           </div>
         )}
 
-        <p className="mt-4 text-xs text-[var(--text-muted)]">
+        <p className="mt-4 text-xs text-[var(--p-text-2)]">
           {t(
             "console.accreditation.policy.footnote",
             undefined,

@@ -43,7 +43,7 @@ export default async function ProfilePage() {
     return (
       <div>
         <h1 className="text-2xl font-semibold">{t("me.profile.title", undefined, "Profile")}</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t("me.profile.configureSupabase", undefined, "Configure Supabase.")}
         </p>
       </div>
@@ -66,7 +66,7 @@ export default async function ProfilePage() {
   return (
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">{t("me.profile.title", undefined, "Profile")}</h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {t(
           "me.profile.intro",
           undefined,
@@ -85,7 +85,7 @@ export default async function ProfilePage() {
             <div className="text-sm font-semibold">
               {profile?.display_name ?? user?.name ?? t("me.profile.unnamed", undefined, "Unnamed")}
             </div>
-            <div className="font-mono text-xs text-[var(--text-muted)]">{user?.email}</div>
+            <div className="font-mono text-xs text-[var(--p-text-2)]">{user?.email}</div>
             <div className="mt-1 flex flex-wrap items-center gap-1">
               {profile?.is_public ? (
                 <Badge variant="success">{t("me.profile.badges.public", undefined, "Public")}</Badge>
@@ -109,12 +109,12 @@ export default async function ProfilePage() {
               <div className="mt-1 text-xs">
                 <Link
                   href={`/marketplace/talent/${profile.public_handle}`}
-                  className="font-mono text-[var(--org-primary)] hover:underline"
+                  className="font-mono text-[var(--p-accent)] hover:underline"
                 >
                   @{profile.public_handle}
                 </Link>
                 {profile.rating_count > 0 && (
-                  <span className="ms-2 font-mono text-[var(--text-muted)]">
+                  <span className="ms-2 font-mono text-[var(--p-text-2)]">
                     {profile.rating_avg?.toFixed(1) ?? "—"} ★ ({profile.rating_count})
                   </span>
                 )}
@@ -126,7 +126,7 @@ export default async function ProfilePage() {
 
       <div className="surface mt-6 p-6">
         <h2 className="text-sm font-semibold">{t("me.profile.workspace.title", undefined, "Workspace Identity")}</h2>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("me.profile.workspace.subtitle", undefined, "Shown to teammates in every workspace you belong to.")}
         </p>
         <div className="mt-4 max-w-md">
@@ -156,9 +156,9 @@ export default async function ProfilePage() {
       <div className="surface mt-6 p-6">
         <div className="flex items-baseline justify-between">
           <h2 className="text-sm font-semibold">{t("me.profile.public.title", undefined, "Public Profile")}</h2>
-          <span className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">user_profiles</span>
+          <span className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">user_profiles</span>
         </div>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t(
             "me.profile.public.intro.before",
             undefined,
@@ -219,11 +219,11 @@ export default async function ProfilePage() {
                 name="bio"
                 rows={5}
                 maxLength={2000}
-                className="input-base mt-1 w-full resize-y"
+                className="ps-input mt-1 w-full resize-y"
                 defaultValue={profile?.bio ?? ""}
                 placeholder={t("me.profile.public.bio.placeholder", undefined, "A few paragraphs about your practice.")}
               />
-              <span className="text-[10px] text-[var(--text-muted)]">
+              <span className="text-[10px] text-[var(--p-text-2)]">
                 {t("me.profile.public.bio.hint", undefined, "Markdown not parsed — plain text only.")}
               </span>
             </label>
@@ -259,11 +259,11 @@ export default async function ProfilePage() {
                 name="links"
                 rows={4}
                 maxLength={2000}
-                className="input-base mt-1 w-full resize-y font-mono text-xs"
+                className="ps-input mt-1 w-full resize-y font-mono text-xs"
                 defaultValue={linksToText(profile?.links)}
                 placeholder={"Website|https://lunarose.studio\nInstagram|https://instagram.com/lunarose"}
               />
-              <span className="text-[10px] text-[var(--text-muted)]">
+              <span className="text-[10px] text-[var(--p-text-2)]">
                 {t("me.profile.public.links.hint.before", undefined, "One per line as ")}
                 <code>Label|URL</code>
                 {t("me.profile.public.links.hint.after", undefined, ". Label optional (defaults to the host).")}

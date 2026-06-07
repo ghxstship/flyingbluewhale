@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.media.info.section.documents", undefined, "Documents")}</h3>
           {items.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.media.info.empty",
                 undefined,
@@ -99,13 +99,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {items.map((a) => (
                 <li key={a.id} className="flex items-center justify-between py-2 text-sm">
-                  <Link href={`/console/knowledge/${a.slug}`} className="font-medium hover:text-[var(--org-primary)]">
+                  <Link href={`/console/knowledge/${a.slug}`} className="font-medium hover:text-[var(--p-accent)]">
                     {a.title}
                   </Link>
-                  <div className="flex items-center gap-1 font-mono text-[10px] text-[var(--text-muted)]">
+                  <div className="flex items-center gap-1 font-mono text-[10px] text-[var(--p-text-2)]">
                     {tagsOf(a.tags)
                       .slice(0, 3)
                       .map((tag) => (

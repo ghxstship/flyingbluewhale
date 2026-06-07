@@ -107,7 +107,7 @@ export const BRAND = {
    * The legacy `color` strings carry the GHXSTSHIP signal name (nebula /
    * brass / plasma) so call sites that build `data-platform` attributes or
    * Tailwind class names stay readable. The actual paint flows through
-   * the per-platform `--org-primary` overlays in src/app/theme/index.css. */
+   * the per-platform `--p-accent` overlays in src/app/theme/index.css. */
   products: {
     console: {
       name: "ATLVS",

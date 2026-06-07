@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
         {(flow as { name: string } | null)?.name ?? t("m.onboarding.title", undefined, "Onboarding")}
       </h1>
       {(flow as { description: string | null } | null)?.description && (
-        <p className="mt-1 text-xs text-[var(--text-secondary)]">{(flow as { description: string }).description}</p>
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">{(flow as { description: string }).description}</p>
       )}
       <div className="mt-2">
         <Badge
@@ -81,21 +81,21 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
             <li key={s.id} className={`surface p-4 ${done ? "opacity-60" : ""}`}>
               <div className="flex items-center justify-between">
                 <Badge variant="muted">{s.step_kind}</Badge>
-                <span className="font-mono text-xs text-[var(--text-muted)]">#{s.ordinal}</span>
+                <span className="font-mono text-xs text-[var(--p-text-2)]">#{s.ordinal}</span>
               </div>
               <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
-              {s.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{s.description}</p>}
+              {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
               {!done && a.assignment_phase !== "completed" && (
                 <form action={completeStep} className="mt-3 flex justify-end">
                   <input type="hidden" name="assignmentId" value={a.id} />
                   <input type="hidden" name="stepId" value={s.id} />
-                  <button type="submit" className="btn btn-primary btn-sm">
+                  <button type="submit" className="ps-btn ps-btn--sm">
                     {t("m.onboarding.markDone", undefined, "Mark Done")}
                   </button>
                 </form>
               )}
               {done && (
-                <p className="mt-2 text-xs text-[var(--color-success)]">
+                <p className="mt-2 text-xs text-[var(--p-success)]">
                   {t("m.onboarding.completed", undefined, "✓ Completed")}
                 </p>
               )}
@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
       {requiredDone && a.assignment_phase !== "completed" && (
         <form action={finalizeAssignment} className="mt-6">
           <input type="hidden" name="assignmentId" value={a.id} />
-          <button type="submit" className="btn btn-primary w-full">
+          <button type="submit" className="ps-btn w-full">
             {t("m.onboarding.finish", undefined, "Finish Onboarding")}
           </button>
         </form>

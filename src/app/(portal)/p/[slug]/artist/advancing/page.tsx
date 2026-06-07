@@ -53,12 +53,12 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
           <AdvancingForm slug={slug} />
 
           <section className="surface">
-            <div className="border-b border-[var(--border-color)] px-5 py-3">
+            <div className="border-b border-[var(--p-border)] px-5 py-3">
               <h2 className="text-sm font-semibold">
                 {t("p.artist.advancing.deliverables.title", undefined, "Talent Deliverables")}
               </h2>
             </div>
-            <div className="divide-y divide-[var(--border-color)]">
+            <div className="divide-y divide-[var(--p-border)]">
               {TALENT_TYPES.map((tt) => {
                 const rows = byType[tt.type] ?? [];
                 return (
@@ -66,7 +66,7 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="text-sm font-medium">{tt.label}</div>
-                        <div className="text-xs text-[var(--text-muted)]">
+                        <div className="text-xs text-[var(--p-text-2)]">
                           {rows.length === 1
                             ? t(
                                 "p.artist.advancing.deliverables.submissionCount.one",
@@ -87,7 +87,7 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                           <li key={d.id} className="surface-inset flex items-center justify-between p-3">
                             <div>
                               <div className="text-sm">{d.title ?? labelForType(d.type)}</div>
-                              <div className="text-xs text-[var(--text-muted)]">
+                              <div className="text-xs text-[var(--p-text-2)]">
                                 {t(
                                   "p.artist.advancing.deliverables.versionSubmitted",
                                   { version: d.version, time: timeAgo(d.submitted_at ?? d.created_at) },
@@ -107,7 +107,7 @@ export default async function ArtistAdvancingPage({ params }: { params: Promise<
                               {d.file_path && (
                                 <Link
                                   href={`/api/v1/deliverables/${d.id}/download`}
-                                  className="font-mono text-xs text-[var(--org-primary)]"
+                                  className="font-mono text-xs text-[var(--p-accent)]"
                                 >
                                   {t("common.download", undefined, "Download")}
                                 </Link>

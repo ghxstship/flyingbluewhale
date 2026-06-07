@@ -10,9 +10,7 @@ export const AccordionItem = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(function AccordionItem({ className = "", ...props }, ref) {
-  return (
-    <AccordionPrimitive.Item ref={ref} className={`border-b border-[var(--border-color)] ${className}`} {...props} />
-  );
+  return <AccordionPrimitive.Item ref={ref} className={`border-b border-[var(--p-border)] ${className}`} {...props} />;
 });
 
 export const AccordionTrigger = React.forwardRef<
@@ -23,13 +21,13 @@ export const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         ref={ref}
-        className={`group flex flex-1 items-center justify-between gap-2 py-3 text-sm font-medium text-[var(--text-primary)] transition-colors outline-none hover:text-[var(--text-primary)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] [&[data-state=open]>svg]:rotate-180 ${className}`}
+        className={`group flex flex-1 items-center justify-between gap-2 py-3 text-sm font-medium text-[var(--p-text-1)] transition-colors outline-none hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--p-bg)] [&[data-state=open]>svg]:rotate-180 ${className}`}
         {...props}
       >
         {children}
         <ChevronDown
           size={14}
-          className="shrink-0 text-[var(--text-muted)] transition-transform duration-[var(--motion-normal)] ease-[var(--ease-hover)]"
+          className="shrink-0 text-[var(--p-text-2)] transition-transform duration-[var(--motion-normal)] ease-[var(--ease-hover)]"
           aria-hidden="true"
         />
       </AccordionPrimitive.Trigger>
@@ -44,7 +42,7 @@ export const AccordionContent = React.forwardRef<
   return (
     <AccordionPrimitive.Content
       ref={ref}
-      className={`data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm text-[var(--text-secondary)] ${className}`}
+      className={`data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm text-[var(--p-text-2)] ${className}`}
       {...props}
     >
       <div className="pb-3">{children}</div>

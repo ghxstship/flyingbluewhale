@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       <section className="surface p-6">
         <div className="mb-4 flex items-end justify-between gap-4">
           <div>
-            <div className="eyebrow text-xs text-[var(--text-muted)]">
+            <div className="eyebrow text-xs text-[var(--p-text-2)]">
               {t("p.client.proposals.detail.lifecycle.eyebrow", undefined, "Lifecycle")}
             </div>
             <h2 className="text-lg font-semibold">
@@ -103,11 +103,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
         />
         <ol className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-4">
           {phases.map((p) => (
-            <li key={p.id} className="rounded border border-[var(--border-color)] bg-[var(--surface)] p-3">
+            <li key={p.id} className="rounded border border-[var(--p-border)] bg-[var(--p-surface)] p-3">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs text-[var(--text-muted)]">
-                  {String(p.phase_num).padStart(2, "0")}
-                </span>
+                <span className="font-mono text-xs text-[var(--p-text-2)]">{String(p.phase_num).padStart(2, "0")}</span>
                 <Badge
                   variant={
                     PHASE_STATUS_TONE[p.status] === "muted"
@@ -123,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 </Badge>
               </div>
               <div className="mt-1 text-sm leading-tight font-medium">{p.phase_name}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">
                 {t(
                   "p.client.proposals.detail.lifecycle.gatesCount",
                   { done: p.gateItems.filter((g) => g.is_done).length, total: p.gateItems.length },
@@ -143,15 +141,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
             <h3 className="text-sm font-semibold">
               {t("p.client.proposals.detail.approvals.title", undefined, "Approvals")}
             </h3>
-            <Link
-              href={`${base}/approvals`}
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            >
+            <Link href={`${base}/approvals`} className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
               {t("p.client.proposals.detail.approvals.allLink", undefined, "All →")}
             </Link>
           </header>
           {approvals.length === 0 ? (
-            <p className="text-sm text-[var(--text-muted)]">
+            <p className="text-sm text-[var(--p-text-2)]">
               {t("p.client.proposals.detail.approvals.empty", undefined, "No approvals pending.")}
             </p>
           ) : (
@@ -160,14 +155,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <li key={a.id}>
                   <Link
                     href={`${base}/approvals/${a.id}`}
-                    className="hover-lift block rounded border border-[var(--border-color)] p-3"
+                    className="hover-lift block rounded border border-[var(--p-border)] p-3"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="line-clamp-1 text-sm font-medium">{a.title}</span>
                       <Badge variant={APPROVAL_STATE_VARIANT[a.state]}>{APPROVAL_STATE_LABEL[a.state]}</Badge>
                     </div>
                     {a.due_at && (
-                      <div className="mt-1 text-xs text-[var(--text-muted)]">
+                      <div className="mt-1 text-xs text-[var(--p-text-2)]">
                         {t(
                           "p.client.proposals.detail.approvals.due",
                           { when: timeAgo(a.due_at) },
@@ -190,13 +185,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
             </h3>
             <Link
               href={`${base}/change-orders`}
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             >
               {t("p.client.proposals.detail.changeOrders.allLink", undefined, "All →")}
             </Link>
           </header>
           {changeOrders.length === 0 ? (
-            <p className="text-sm text-[var(--text-muted)]">
+            <p className="text-sm text-[var(--p-text-2)]">
               {t("p.client.proposals.detail.changeOrders.empty", undefined, "No change orders.")}
             </p>
           ) : (
@@ -205,7 +200,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <li key={co.id}>
                   <Link
                     href={`${base}/change-orders/${co.id}`}
-                    className="hover-lift block rounded border border-[var(--border-color)] p-3"
+                    className="hover-lift block rounded border border-[var(--p-border)] p-3"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="line-clamp-1 text-sm font-medium">
@@ -213,7 +208,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                       </span>
                       <Badge variant={CO_STATE_VARIANT[co.state]}>{CO_STATE_LABEL[co.state]}</Badge>
                     </div>
-                    <div className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                    <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t(
                         "p.client.proposals.detail.changeOrders.delta",
                         { amount: formatMoney(co.delta_cents ?? 0) },
@@ -233,15 +228,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
             <h3 className="text-sm font-semibold">
               {t("p.client.proposals.detail.revisions.title", undefined, "Revisions")}
             </h3>
-            <Link
-              href={`${base}/revisions`}
-              className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            >
+            <Link href={`${base}/revisions`} className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
               {t("p.client.proposals.detail.revisions.allLink", undefined, "All →")}
             </Link>
           </header>
           {rounds.length === 0 ? (
-            <p className="text-sm text-[var(--text-muted)]">
+            <p className="text-sm text-[var(--p-text-2)]">
               {t("p.client.proposals.detail.revisions.empty", undefined, "No revision rounds.")}
             </p>
           ) : (
@@ -250,7 +242,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <li key={r.id}>
                   <Link
                     href={`${base}/revisions/${r.id}`}
-                    className="hover-lift block rounded border border-[var(--border-color)] p-3"
+                    className="hover-lift block rounded border border-[var(--p-border)] p-3"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="line-clamp-1 text-sm font-medium">
@@ -276,12 +268,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           <h3 className="text-sm font-semibold">
             {t("p.client.proposals.detail.activity.title", undefined, "Recent Activity")}
           </h3>
-          <Link href={`${base}/activity`} className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+          <Link href={`${base}/activity`} className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
             {t("p.client.proposals.detail.activity.allLink", undefined, "All →")}
           </Link>
         </header>
         {activity.length === 0 ? (
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--p-text-2)]">
             {t("p.client.proposals.detail.activity.empty", undefined, "No activity yet.")}
           </p>
         ) : (
@@ -289,21 +281,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
             {activity.map((e) => (
               <li
                 key={e.id}
-                className="flex items-start gap-3 rounded border border-[var(--border-color)] bg-[var(--surface)] p-3"
+                className="flex items-start gap-3 rounded border border-[var(--p-border)] bg-[var(--p-surface)] p-3"
               >
                 <span
-                  className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[var(--org-primary)]"
+                  className="mt-1.5 inline-block h-2 w-2 shrink-0 rounded-full bg-[var(--p-accent)]"
                   aria-hidden="true"
                 />
                 <div className="min-w-0 flex-1">
                   <div className="text-sm">{e.summary}</div>
-                  <div className="mt-0.5 text-xs text-[var(--text-muted)]">
+                  <div className="mt-0.5 text-xs text-[var(--p-text-2)]">
                     {e.actor_label ?? "—"} · {timeAgo(e.occurred_at)}
                   </div>
                 </div>
-                <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
-                  {e.kind}
-                </span>
+                <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">{e.kind}</span>
               </li>
             ))}
           </ul>

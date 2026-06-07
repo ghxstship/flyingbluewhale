@@ -63,10 +63,10 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.agency.tours.new.fields.talent", undefined, "Talent")}
             </label>
-            <select name="talent_profile_id" required className="input-base mt-1.5 w-full">
+            <select name="talent_profile_id" required className="ps-input mt-1.5 w-full">
               <option value="">
                 {t("console.agency.tours.new.fields.talentPlaceholder", undefined, "Select an act…")}
               </option>
@@ -79,10 +79,10 @@ export default async function Page() {
           </div>
           {agencies.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.agency.tours.new.fields.agencyOptional", undefined, "Agency · Optional")}
               </label>
-              <select name="agency_id" className="input-base mt-1.5 w-full">
+              <select name="agency_id" className="ps-input mt-1.5 w-full">
                 <option value="">—</option>
                 {agencies.map((a) => (
                   <option key={a.id} value={a.id}>
@@ -101,10 +101,10 @@ export default async function Page() {
             <Input label={t("console.agency.tours.new.fields.ends", undefined, "Ends")} name="ends_on" type="date" />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.agency.tours.new.fields.description", undefined, "Description")}
             </label>
-            <textarea name="description" rows={4} maxLength={4000} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={4} maxLength={4000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

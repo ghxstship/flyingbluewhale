@@ -72,9 +72,7 @@ export function CheckInControls({
   };
 
   if (attendance === "checked_out") {
-    return (
-      <div className="text-xs text-[var(--text-muted)]">{t("m.clock.shiftClosed", undefined, "Shift closed.")}</div>
-    );
+    return <div className="text-xs text-[var(--p-text-2)]">{t("m.clock.shiftClosed", undefined, "Shift closed.")}</div>;
   }
 
   return (
@@ -82,7 +80,7 @@ export function CheckInControls({
       {attendance === "scheduled" && (
         <button
           type="button"
-          className="btn btn-primary col-span-2"
+          className="ps-btn col-span-2"
           disabled={pending}
           onClick={() => submit("check_in", t("m.clock.toast.checkedIn", undefined, "Checked in"))}
         >
@@ -93,7 +91,7 @@ export function CheckInControls({
         <>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="ps-btn ps-btn--ghost"
             disabled={pending}
             onClick={() => submit("break_start", t("m.clock.toast.breakStarted", undefined, "Break started"))}
           >
@@ -101,7 +99,7 @@ export function CheckInControls({
           </button>
           <button
             type="button"
-            className="btn btn-danger"
+            className="ps-btn ps-btn--danger"
             disabled={pending}
             onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
           >
@@ -113,7 +111,7 @@ export function CheckInControls({
         <>
           <button
             type="button"
-            className="btn btn-primary"
+            className="ps-btn"
             disabled={pending}
             onClick={() => submit("break_end", t("m.clock.toast.backFromBreak", undefined, "Back from break"))}
           >
@@ -121,7 +119,7 @@ export function CheckInControls({
           </button>
           <button
             type="button"
-            className="btn btn-danger"
+            className="ps-btn ps-btn--danger"
             disabled={pending}
             onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
           >

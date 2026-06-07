@@ -46,17 +46,17 @@ export function StepCard({ id, index, type, label, description, schema, config, 
           {...attributes}
           {...listeners}
           aria-label={`Drag step ${index + 1} to reorder`}
-          className="mt-0.5 inline-flex h-7 w-7 shrink-0 cursor-grab items-center justify-center rounded-md border border-[var(--border-color)] text-[var(--text-muted)] hover:bg-[var(--surface-inset)] active:cursor-grabbing"
+          className="mt-0.5 inline-flex h-7 w-7 shrink-0 cursor-grab items-center justify-center rounded-md border border-[var(--p-border)] text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] active:cursor-grabbing"
         >
           <GripVertical size={14} aria-hidden="true" />
         </button>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <Badge variant="muted">{`Step ${index + 1}`}</Badge>
-            <span className="text-sm font-semibold text-[var(--text-primary)]">{label}</span>
-            <span className="font-mono text-[10px] text-[var(--text-muted)]">{type}</span>
+            <span className="text-sm font-semibold text-[var(--p-text-1)]">{label}</span>
+            <span className="font-mono text-[10px] text-[var(--p-text-2)]">{type}</span>
           </div>
-          {description && <p className="mt-1 text-[11px] text-[var(--text-muted)]">{description}</p>}
+          {description && <p className="mt-1 text-[11px] text-[var(--p-text-2)]">{description}</p>}
         </div>
         <Button
           variant="ghost"
@@ -75,13 +75,13 @@ export function StepCard({ id, index, type, label, description, schema, config, 
       </div>
 
       {fields.length > 0 ? (
-        <div className="border-t border-[var(--border-color)] pt-3">
+        <div className="border-t border-[var(--p-border)] pt-3">
           <SchemaForm fields={fields} value={config} onChange={onChange} showTemplateHints />
         </div>
       ) : schema ? (
-        <p className="text-[11px] text-[var(--text-muted)]">This action has no configurable fields.</p>
+        <p className="text-[11px] text-[var(--p-text-2)]">This action has no configurable fields.</p>
       ) : (
-        <div className="rounded-md border border-dashed border-[var(--border-color)] bg-[var(--surface-inset)] p-3 text-[11px] text-[var(--text-muted)]">
+        <div className="rounded-md border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-3 text-[11px] text-[var(--p-text-2)]">
           Unknown action type <span className="font-mono">{type}</span>. The runner will fail until it is registered.
         </div>
       )}

@@ -52,7 +52,7 @@ export const SheetContent = React.forwardRef<
       <SheetOverlay />
       <DialogPrimitive.Content
         ref={ref}
-        className={`fixed z-50 overflow-y-auto border-[var(--border-color)] bg-[var(--surface-raised)] p-6 outline-none ${sideClasses[side]} ${className}`}
+        className={`fixed z-50 overflow-y-auto border-[var(--p-border)] bg-[var(--p-surface)] p-6 outline-none ${sideClasses[side]} ${className}`}
         {...props}
       >
         {children}
@@ -81,7 +81,7 @@ export function SheetTitle({ children, className = "" }: { children: React.React
 
 export function SheetDescription({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <DialogPrimitive.Description className={`mt-1 text-sm text-[var(--text-secondary)] ${className}`}>
+    <DialogPrimitive.Description className={`mt-1 text-sm text-[var(--p-text-2)] ${className}`}>
       {children}
     </DialogPrimitive.Description>
   );
@@ -89,7 +89,7 @@ export function SheetDescription({ children, className = "" }: { children: React
 
 export function SheetFooter({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`mt-6 flex items-center justify-end gap-2 border-t border-[var(--border-color)] pt-4 ${className}`}>
+    <div className={`mt-6 flex items-center justify-end gap-2 border-t border-[var(--p-border)] pt-4 ${className}`}>
       {children}
     </div>
   );

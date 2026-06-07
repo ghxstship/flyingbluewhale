@@ -97,14 +97,14 @@ export default async function AboutPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-accent)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
           {t("marketing.pages.about.hero.eyebrow")}
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
           {t("marketing.pages.about.hero.title")}
         </h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.about.hero.lead")}</p>
-        <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">{t("marketing.pages.about.hero.subLead")}</p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.about.hero.lead")}</p>
+        <p className="mt-4 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.about.hero.subLead")}</p>
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
@@ -115,12 +115,12 @@ export default async function AboutPage() {
           {PRINCIPLES.map(({ icon: Icon, titleKey, bodyKey }) => (
             <div key={titleKey} className="surface p-6">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--org-primary)]/10 text-[var(--org-primary)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--p-accent)]/10 text-[var(--p-accent)]">
                   <Icon size={18} />
                 </div>
                 <div className="text-sm font-semibold">{t(titleKey)}</div>
               </div>
-              <p className="mt-3 text-sm text-[var(--text-secondary)]">{t(bodyKey)}</p>
+              <p className="mt-3 text-sm text-[var(--p-text-2)]">{t(bodyKey)}</p>
             </div>
           ))}
         </div>
@@ -133,10 +133,10 @@ export default async function AboutPage() {
         <ul className="mt-8 space-y-6">
           {MILESTONES.map((m) => (
             <li key={m.date} className="surface grid gap-2 p-6 md:grid-cols-[140px_1fr] md:items-start md:gap-6">
-              <div className="font-mono text-xs text-[var(--text-muted)]">{m.date}</div>
+              <div className="font-mono text-xs text-[var(--p-text-2)]">{m.date}</div>
               <div>
                 <div className="text-sm font-semibold">{t(m.titleKey)}</div>
-                <p className="mt-1 text-sm text-[var(--text-secondary)]">{t(m.bodyKey)}</p>
+                <p className="mt-1 text-sm text-[var(--p-text-2)]">{t(m.bodyKey)}</p>
               </div>
             </li>
           ))}
@@ -146,18 +146,16 @@ export default async function AboutPage() {
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-10">
           <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.about.studio.heading")}</h2>
-          <p className="mt-4 max-w-2xl text-sm text-[var(--text-secondary)]">
-            {t("marketing.pages.about.studio.body")}
-          </p>
+          <p className="mt-4 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.about.studio.body")}</p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm">
             <Link className="underline underline-offset-4" href="/careers">
               {t("marketing.pages.about.studio.joinLink")}
             </Link>
-            <span className="text-[var(--text-muted)]">·</span>
+            <span className="text-[var(--p-text-2)]">·</span>
             <Link className="underline underline-offset-4" href="/contact">
               {t("marketing.pages.about.studio.talkLink")}
             </Link>
-            <span className="text-[var(--text-muted)]">·</span>
+            <span className="text-[var(--p-text-2)]">·</span>
             <a
               className="underline underline-offset-4"
               href="https://github.com/ghxstship"

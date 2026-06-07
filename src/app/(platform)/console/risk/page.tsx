@@ -91,7 +91,7 @@ export default async function Page() {
           <form action={runRiskBatch}>
             <button
               type="submit"
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.risk.runBatch", undefined, "Run risk batch")}
             </button>
@@ -111,7 +111,7 @@ export default async function Page() {
             value={fmt.number(projectCount)}
           />
         </div>
-        <div className="text-[10px] text-[var(--text-muted)]">
+        <div className="text-[10px] text-[var(--p-text-2)]">
           {t(
             "console.risk.description",
             undefined,
@@ -159,7 +159,7 @@ export default async function Page() {
                 if (r.trend_7d == null) return "—";
                 const v = Number(r.trend_7d);
                 return (
-                  <span className={v > 0 ? "text-[var(--color-warning)]" : "text-[var(--color-success)]"}>
+                  <span className={v > 0 ? "text-[var(--p-warning)]" : "text-[var(--p-success)]"}>
                     {v > 0 ? "+" : ""}
                     {v.toFixed(1)}
                   </span>
@@ -175,7 +175,7 @@ export default async function Page() {
                 if (r.trend_30d == null) return "—";
                 const v = Number(r.trend_30d);
                 return (
-                  <span className={v > 0 ? "text-[var(--color-warning)]" : "text-[var(--color-success)]"}>
+                  <span className={v > 0 ? "text-[var(--p-warning)]" : "text-[var(--p-success)]"}>
                     {v > 0 ? "+" : ""}
                     {v.toFixed(1)}
                   </span>

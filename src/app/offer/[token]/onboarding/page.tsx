@@ -56,18 +56,18 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
     <div className="space-y-6">
       <header className="flex items-baseline justify-between border-b border-(--border-default) pb-4">
         <div>
-          <div className="text-xs tracking-widest text-(--text-muted) uppercase">Onboarding</div>
+          <div className="text-xs tracking-widest text-(--p-text-2) uppercase">Onboarding</div>
           <h1 className="text-2xl font-semibold">Welcome, {letter.recipient_name.split(" ")[0]}</h1>
-          <p className="mt-1 text-sm text-(--text-secondary)">
+          <p className="mt-1 text-sm text-(--p-text-2)">
             {letter.project_name} · {letter.role_title}
           </p>
         </div>
         <div className="text-right">
-          <div className="text-xs text-(--text-muted) uppercase">Progress</div>
+          <div className="text-xs text-(--p-text-2) uppercase">Progress</div>
           <div className="font-mono text-3xl">
             {done}/{total}
           </div>
-          <div className="text-xs text-(--text-muted)">{pct}%</div>
+          <div className="text-xs text-(--p-text-2)">{pct}%</div>
         </div>
       </header>
 
@@ -76,7 +76,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
           <p className="text-sm font-medium">
             {cpOpen} critical-path step{cpOpen === 1 ? "" : "s"} open
           </p>
-          <p className="text-xs text-(--text-secondary)">
+          <p className="text-xs text-(--p-text-2)">
             Critical-path steps gate your credentials and first-call. Items marked ★ below.
           </p>
         </div>
@@ -86,13 +86,13 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
         {steps.map((s) => (
           <li key={s.id} className="surface flex flex-col gap-1 p-4">
             <div className="flex items-center gap-2">
-              {s.critical_path ? <span className="font-bold text-[var(--color-error)]">★</span> : null}
+              {s.critical_path ? <span className="font-bold text-[var(--p-danger)]">★</span> : null}
               <span className="font-medium">{s.title}</span>
               <Badge variant={STATE_VARIANT[s.step_state]}>{STATE_LABEL[s.step_state]}</Badge>
-              {s.category ? <span className="text-xs text-(--text-muted) uppercase">{s.category}</span> : null}
+              {s.category ? <span className="text-xs text-(--p-text-2) uppercase">{s.category}</span> : null}
             </div>
-            {s.description ? <p className="text-sm text-(--text-secondary)">{s.description}</p> : null}
-            <div className="mt-1 flex gap-3 text-xs text-(--text-muted)">
+            {s.description ? <p className="text-sm text-(--p-text-2)">{s.description}</p> : null}
+            <div className="mt-1 flex gap-3 text-xs text-(--p-text-2)">
               {s.due_at ? <span>Due {formatDate(s.due_at, "medium")}</span> : null}
               {s.completed_at ? <span>· Completed {formatDate(s.completed_at, "medium")}</span> : null}
             </div>
@@ -100,7 +100,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
         ))}
       </ol>
 
-      <div className="text-xs text-(--text-muted)">
+      <div className="text-xs text-(--p-text-2)">
         <Link href={`/offer/${token}`} className="underline">
           ← Back to engagement letter
         </Link>

@@ -51,13 +51,13 @@ export default function ContactPage() {
       />
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
-          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--org-primary)" }}>
+          <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
             Contact
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
             Brief us.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
             Tell us the brief, the date band, the venue or geography, and your scope. We&apos;ll come back inside one
             business day with the engagement model, the producer assignment, and a price band — or a request for the
             information we&apos;d need to scope it cleanly.
@@ -71,10 +71,10 @@ export default function ContactPage() {
                 <div className="text-xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                   {r.label}
                 </div>
-                <p className="mt-3 text-sm text-[var(--text-secondary)]">{r.body}</p>
+                <p className="mt-3 text-sm text-[var(--p-text-2)]">{r.body}</p>
                 <div
                   className="mt-4 inline-flex items-center gap-2 font-mono text-sm tracking-wide"
-                  style={{ color: "var(--org-primary)" }}
+                  style={{ color: "var(--p-accent)" }}
                 >
                   {r.line}
                   <ArrowRight className="cta-nudge h-3.5 w-3.5" />
@@ -89,65 +89,65 @@ export default function ContactPage() {
             <h2 className="text-2xl uppercase sm:text-3xl" style={{ fontFamily: "var(--font-display)" }}>
               What to put in the email.
             </h2>
-            <ul className="mt-6 grid gap-3 text-sm text-[var(--text-secondary)] sm:grid-cols-2">
+            <ul className="mt-6 grid gap-3 text-sm text-[var(--p-text-2)] sm:grid-cols-2">
               <li className="flex items-start gap-3">
                 <span
                   className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0"
-                  style={{ background: "var(--org-accent)" }}
+                  style={{ background: "var(--p-accent-text)" }}
                 />
                 <span>
-                  <strong className="text-[var(--text-primary)]">Brief.</strong> One paragraph is enough. We&apos;ll ask
-                  the right follow-ups.
+                  <strong className="text-[var(--p-text-1)]">Brief.</strong> One paragraph is enough. We&apos;ll ask the
+                  right follow-ups.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <span
                   className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0"
-                  style={{ background: "var(--org-accent)" }}
+                  style={{ background: "var(--p-accent-text)" }}
                 />
                 <span>
-                  <strong className="text-[var(--text-primary)]">Dates or window.</strong> Hard date or rolling window —
+                  <strong className="text-[var(--p-text-1)]">Dates or window.</strong> Hard date or rolling window —
                   both are fine.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <span
                   className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0"
-                  style={{ background: "var(--org-accent)" }}
+                  style={{ background: "var(--p-accent-text)" }}
                 />
                 <span>
-                  <strong className="text-[var(--text-primary)]">Venue or geography.</strong> Specific address if
-                  locked, market name if not.
+                  <strong className="text-[var(--p-text-1)]">Venue or geography.</strong> Specific address if locked,
+                  market name if not.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <span
                   className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0"
-                  style={{ background: "var(--org-accent)" }}
+                  style={{ background: "var(--p-accent-text)" }}
                 />
                 <span>
-                  <strong className="text-[var(--text-primary)]">Audience size.</strong> Total guest count or daily
+                  <strong className="text-[var(--p-text-1)]">Audience size.</strong> Total guest count or daily
                   attendance.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <span
                   className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0"
-                  style={{ background: "var(--org-accent)" }}
+                  style={{ background: "var(--p-accent-text)" }}
                 />
                 <span>
-                  <strong className="text-[var(--text-primary)]">Budget envelope.</strong> Even a band — it sharpens the
+                  <strong className="text-[var(--p-text-1)]">Budget envelope.</strong> Even a band — it sharpens the
                   engagement model fast.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <span
                   className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0"
-                  style={{ background: "var(--org-accent)" }}
+                  style={{ background: "var(--p-accent-text)" }}
                 />
                 <span>
-                  <strong className="text-[var(--text-primary)]">Constraints.</strong> Federation, union, host-city,
-                  clean zone, brand-rights, NDA — flag them up front.
+                  <strong className="text-[var(--p-text-1)]">Constraints.</strong> Federation, union, host-city, clean
+                  zone, brand-rights, NDA — flag them up front.
                 </span>
               </li>
             </ul>
@@ -155,7 +155,7 @@ export default function ContactPage() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
             Or start by browsing
           </div>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -168,7 +168,7 @@ export default function ContactPage() {
           <div className="mt-6">
             <Link
               href={paths.solutionsRoot()}
-              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--org-primary)]"
+              className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--p-accent)]"
             >
               All 19 industries →
             </Link>

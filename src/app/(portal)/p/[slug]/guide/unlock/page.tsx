@@ -74,10 +74,10 @@ export default async function UnlockPage({
       />
       <div className="page-content max-w-md">
         <div className="surface space-y-4 p-6">
-          <div className="text-xs text-[var(--text-muted)]">
+          <div className="text-xs text-[var(--p-text-2)]">
             {t("p.shared.guide.unlock.tierLine", { tier, personaLabel }, `Tier ${tier} · ${personaLabel}`)}
           </div>
-          <p className="text-sm text-[var(--text-secondary)]">
+          <p className="text-sm text-[var(--p-text-2)]">
             {t(
               "p.shared.guide.unlock.body",
               undefined,
@@ -85,7 +85,7 @@ export default async function UnlockPage({
             )}
           </p>
           <UnlockForm slug={slug} persona={persona} from={from} />
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "p.shared.guide.unlock.needCodePrefix",
               undefined,

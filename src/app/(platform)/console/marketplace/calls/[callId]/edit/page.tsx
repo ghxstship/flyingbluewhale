@@ -63,10 +63,10 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             defaultValue={c.title}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.calls.edit.fields.kind", undefined, "Kind")}
             </label>
-            <select name="kind" className="input-base mt-1.5 w-full" defaultValue={c.kind}>
+            <select name="kind" className="ps-input mt-1.5 w-full" defaultValue={c.kind}>
               <option value="talent_call">
                 {t("console.marketplace.calls.edit.kind.talentCall", undefined, "Talent Call")}
               </option>
@@ -78,14 +78,14 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.calls.edit.fields.description", undefined, "Description")}
             </label>
             <textarea
               name="description"
               rows={6}
               maxLength={8000}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               defaultValue={c.description ?? ""}
             />
           </div>

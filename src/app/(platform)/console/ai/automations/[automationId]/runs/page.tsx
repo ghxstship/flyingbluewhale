@@ -184,8 +184,8 @@ export default async function Page({
                 href={href}
                 className={
                   active
-                    ? "rounded border border-[var(--org-primary)] bg-[var(--org-primary-soft)] px-3 py-1 text-xs font-semibold text-[var(--org-primary)]"
-                    : "rounded border border-[var(--border-color)] px-3 py-1 text-xs text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]"
+                    ? "rounded border border-[var(--p-accent)] bg-[var(--org-primary-soft)] px-3 py-1 text-xs font-semibold text-[var(--p-accent)]"
+                    : "rounded border border-[var(--p-border)] px-3 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface)]"
                 }
               >
                 {STATUS_FILTER_LABELS[f.key] ?? f.label}
@@ -205,7 +205,7 @@ export default async function Page({
           />
         ) : (
           <div className="surface overflow-hidden">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th className="px-3 py-2 text-start text-xs tracking-wide uppercase">
@@ -232,7 +232,7 @@ export default async function Page({
                 {runs.map((r) => {
                   const dur = durationMs(r.started_at, r.finished_at);
                   return (
-                    <tr key={r.id} className="border-t border-[var(--border-color)]">
+                    <tr key={r.id} className="border-t border-[var(--p-border)]">
                       <td className="px-3 py-2 font-mono text-xs">
                         <Link href={`/console/ai/automations/${automationId}/runs/${r.id}`} className="hover:underline">
                           {fmt(r.started_at)}
@@ -243,7 +243,7 @@ export default async function Page({
                         <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                         {r.status === "failed" && r.error_summary && (
                           <span
-                            className="ms-2 truncate font-mono text-[10px] text-[var(--color-error)]"
+                            className="ms-2 truncate font-mono text-[10px] text-[var(--p-danger)]"
                             title={r.error_summary}
                           >
                             {r.error_summary.slice(0, 60)}
@@ -262,7 +262,7 @@ export default async function Page({
           </div>
         )}
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {inFlight
             ? t(
                 "console.ai.automations.runs.autoRefreshing",

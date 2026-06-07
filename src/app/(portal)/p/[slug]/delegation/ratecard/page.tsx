@@ -115,7 +115,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("p.delegation.ratecard.orders.heading", undefined, "Orders")}</h3>
           {orders.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.delegation.ratecard.orders.empty",
                 undefined,
@@ -123,19 +123,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {orders.map((o) => (
                 <li key={o.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">{o.catalog}</div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {t(
                         "p.delegation.ratecard.orders.placedAt",
                         { code: o.delegation?.code ?? "—", date: fmt(o.created_at) },
                         `${o.delegation?.code ?? "—"} · placed ${fmt(o.created_at)}`,
                       )}
                     </div>
-                    {o.notes && <p className="mt-1 text-xs text-[var(--text-secondary)]">{o.notes}</p>}
+                    {o.notes && <p className="mt-1 text-xs text-[var(--p-text-2)]">{o.notes}</p>}
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className="font-mono text-xs">{money(o.total_cents, o.currency)}</span>

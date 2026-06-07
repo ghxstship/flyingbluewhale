@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ entryId: stri
               type="checkbox"
               name="billable"
               defaultChecked={!!row.billable}
-              className="rounded border-[var(--border-color)]"
+              className="rounded border-[var(--p-border)]"
             />
             <span>{t("console.finance.time.edit.fields.billable", undefined, "Billable")}</span>
           </label>

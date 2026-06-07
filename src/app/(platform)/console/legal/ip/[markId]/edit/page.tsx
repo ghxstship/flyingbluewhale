@@ -57,10 +57,10 @@ export default async function Page({ params }: { params: Promise<{ markId: strin
             maxLength={120}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.ip.edit.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status} className="ps-input focus-ring w-full">
               <option value="pending">{t("console.legal.ip.edit.statusPending", undefined, "pending")}</option>
               <option value="registered">{t("console.legal.ip.edit.statusRegistered", undefined, "registered")}</option>
               <option value="abandoned">{t("console.legal.ip.edit.statusAbandoned", undefined, "abandoned")}</option>

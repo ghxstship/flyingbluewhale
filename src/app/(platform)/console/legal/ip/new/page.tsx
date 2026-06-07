@@ -48,10 +48,10 @@ export default async function Page() {
             type="date"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.ip.new.fields.status", undefined, "Status")}
             </label>
-            <select name="status" defaultValue="active" className="input-base mt-1.5 w-full">
+            <select name="status" defaultValue="active" className="ps-input mt-1.5 w-full">
               <option value="pending">{t("console.legal.ip.new.status.pending", undefined, "Pending")}</option>
               <option value="active">{t("console.legal.ip.new.status.active", undefined, "Active")}</option>
               <option value="opposed">{t("console.legal.ip.new.status.opposed", undefined, "Opposed")}</option>

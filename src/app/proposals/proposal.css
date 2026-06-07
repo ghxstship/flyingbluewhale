@@ -3,10 +3,10 @@
 
 @media print {
   :root {
-    --background: #ffffff;
-    --foreground: #0a0a0a;
-    --bg-secondary: #f7f7f7;
-    --text-muted: #555;
+    --p-bg: #ffffff;
+    --p-text-1: #0a0a0a;
+    --p-surface: #f7f7f7;
+    --p-text-2: #555;
   }
 
   .print-hide,

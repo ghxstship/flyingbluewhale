@@ -293,8 +293,8 @@ export function MapView({
         width: "100%",
         borderRadius: 12,
         overflow: "hidden",
-        border: "var(--border-strong, 1px solid var(--border))",
-        background: "var(--surface)",
+        border: "var(--border-strong, 1px solid var(--p-border))",
+        background: "var(--p-surface)",
       }}
     >
       {markers.length === 0 ? (
@@ -321,15 +321,15 @@ export function MapView({
                 position: "absolute",
                 top: 12,
                 left: 12,
-                background: "var(--surface)",
-                color: "var(--foreground)",
-                border: "1px solid var(--border)",
+                background: "var(--p-surface)",
+                color: "var(--p-text-1)",
+                border: "1px solid var(--p-border)",
                 borderRadius: 8,
                 padding: "8px 10px",
                 fontSize: 11,
                 lineHeight: 1.6,
                 fontFamily: "var(--font-mono, ui-monospace)",
-                boxShadow: "var(--shadow-1, 0 1px 2px rgba(0,0,0,0.2))",
+                boxShadow: "var(--p-elev-1, 0 1px 2px rgba(0,0,0,0.2))",
                 pointerEvents: "none",
                 zIndex: 2,
                 display: "flex",
@@ -348,7 +348,7 @@ export function MapView({
                       height: 8,
                       borderRadius: 999,
                       background: markerColor(t),
-                      border: "1px solid var(--background)",
+                      border: "1px solid var(--p-bg)",
                     }}
                   />
                   <span style={{ flex: 1 }}>{TONE_LABELS[t]}</span>
@@ -371,7 +371,7 @@ function MarkerPopup({ marker }: { marker: MapMarker }): React.ReactElement {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <strong style={{ fontSize: 13, lineHeight: 1.3 }}>{marker.title}</strong>
-      {marker.popup ? <div style={{ fontSize: 12, color: "var(--text-muted)" }}>{marker.popup}</div> : null}
+      {marker.popup ? <div style={{ fontSize: 12, color: "var(--p-text-2)" }}>{marker.popup}</div> : null}
       {marker.href ? (
         <a
           href={marker.href}
@@ -379,7 +379,7 @@ function MarkerPopup({ marker }: { marker: MapMarker }): React.ReactElement {
           rel="noopener noreferrer"
           style={{
             fontSize: 12,
-            color: "var(--accent, var(--color-info))",
+            color: "var(--p-accent, var(--p-info))",
             textDecoration: "underline",
           }}
         >

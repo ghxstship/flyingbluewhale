@@ -34,13 +34,13 @@ export default async function Page({ params }: { params: Promise<{ encounterId: 
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.medical.encounters.edit.triageLabel", undefined, "Triage")}
             </label>
             <select
               name="triage"
               defaultValue={(r.triage as string | undefined) ?? "green"}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
             >
               <option value="green">
                 {t("console.safety.medical.encounters.edit.triageGreen", undefined, "Green — Minor")}
@@ -63,14 +63,14 @@ export default async function Page({ params }: { params: Promise<{ encounterId: 
             defaultValue={(r.patient_ref as string | undefined) ?? ""}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.medical.encounters.edit.chiefComplaintLabel", undefined, "Chief Complaint")}
             </label>
             <textarea
               name="chief_complaint"
               rows={3}
               maxLength={500}
-              className="input-base mt-1.5 w-full"
+              className="ps-input mt-1.5 w-full"
               defaultValue={(r.chief_complaint as string | undefined) ?? ""}
             />
           </div>

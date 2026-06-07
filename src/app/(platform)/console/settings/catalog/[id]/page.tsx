@@ -78,13 +78,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/settings/catalog/${item.id}/edit`} className="btn btn-secondary btn-sm">
+            <Link href={`/console/settings/catalog/${item.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("common.edit", undefined, "Edit")}
             </Link>
             <form action={toggleActive}>
               <input type="hidden" name="id" value={item.id} />
               <input type="hidden" name="next" value={item.active ? "false" : "true"} />
-              <button type="submit" className="btn btn-secondary btn-sm">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {item.active
                   ? t("console.settings.catalog.detail.deactivate", undefined, "Deactivate")
                   : t("console.settings.catalog.detail.reactivate", undefined, "Reactivate")}
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {item.description && <section className="surface p-4 text-sm whitespace-pre-wrap">{item.description}</section>}
         <section className="surface grid grid-cols-2 gap-3 p-4 text-xs">
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.catalog.detail.unitCost", undefined, "Unit Cost")}
             </div>
             <div className="mt-1 font-mono">
@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
           </div>
           <div>
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.settings.catalog.detail.inventory", undefined, "Inventory")}
             </div>
             <div className="mt-1 font-mono">{item.inventory_qty ?? "—"}</div>

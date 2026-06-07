@@ -16,7 +16,7 @@ export default async function MobilePollsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -50,7 +50,7 @@ export default async function MobilePollsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.common.mobileEyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.polls.title", undefined, "Polls")}</h1>
@@ -79,8 +79,8 @@ export default async function MobilePollsPage() {
                         key={o.id}
                         className={
                           o.id === voted
-                            ? "rounded-md border border-[var(--org-primary)] bg-[var(--org-primary)]/10 px-3 py-2 text-xs"
-                            : "rounded-md border border-[var(--border-color)] px-3 py-2 text-xs opacity-70"
+                            ? "rounded-md border border-[var(--p-accent)] bg-[var(--p-accent)]/10 px-3 py-2 text-xs"
+                            : "rounded-md border border-[var(--p-border)] px-3 py-2 text-xs opacity-70"
                         }
                       >
                         {o.label}
@@ -93,13 +93,13 @@ export default async function MobilePollsPage() {
                     {opts.map((o) => (
                       <label
                         key={o.id}
-                        className="flex items-center gap-2 rounded-md border border-[var(--border-color)] px-3 py-2 text-xs"
+                        className="flex items-center gap-2 rounded-md border border-[var(--p-border)] px-3 py-2 text-xs"
                       >
                         <input type="radio" name="option_id" value={o.id} required />
                         {o.label}
                       </label>
                     ))}
-                    <button type="submit" className="btn btn-primary btn-sm mt-2 w-full">
+                    <button type="submit" className="ps-btn ps-btn--sm mt-2 w-full">
                       {t("m.polls.voteButton", undefined, "Vote")}
                     </button>
                   </form>

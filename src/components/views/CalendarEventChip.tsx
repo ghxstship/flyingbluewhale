@@ -16,16 +16,16 @@ type Props = {
 export function eventToneClass(tone: CalendarEvent["tone"]): string {
   switch (tone) {
     case "success":
-      return "bg-[color-mix(in_srgb,var(--color-success)_15%,transparent)] text-[var(--color-success)] hover:bg-[color-mix(in_srgb,var(--color-success)_25%,transparent)]";
+      return "bg-[color-mix(in_srgb,var(--p-success)_15%,transparent)] text-[var(--p-success)] hover:bg-[color-mix(in_srgb,var(--p-success)_25%,transparent)]";
     case "warn":
-      return "bg-[color-mix(in_srgb,var(--color-warning)_15%,transparent)] text-[var(--color-warning)] hover:bg-[color-mix(in_srgb,var(--color-warning)_25%,transparent)]";
+      return "bg-[color-mix(in_srgb,var(--p-warning)_15%,transparent)] text-[var(--p-warning)] hover:bg-[color-mix(in_srgb,var(--p-warning)_25%,transparent)]";
     case "error":
-      return "bg-[color:var(--color-error)]/10 text-[color:var(--color-error)] hover:bg-[color:var(--color-error)]/20";
+      return "bg-[color:var(--p-danger)]/10 text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/20";
     case "info":
-      return "bg-[var(--org-primary)]/15 text-[var(--org-primary)] hover:bg-[var(--org-primary)]/25";
+      return "bg-[var(--p-accent)]/15 text-[var(--p-accent)] hover:bg-[var(--p-accent)]/25";
     case "neutral":
     default:
-      return "bg-[var(--surface-inset)] text-[var(--text-primary)] hover:bg-[var(--surface-raised)]";
+      return "bg-[var(--p-surface-2)] text-[var(--p-text-1)] hover:bg-[var(--p-surface)]";
   }
 }
 
@@ -53,7 +53,7 @@ export function CalendarEventChip({ event, renderEvent }: Props) {
           {...attributes}
           {...listeners}
           aria-label={`Drag to reschedule ${event.title}`}
-          className="shrink-0 cursor-grab text-[var(--text-muted)] hover:text-[var(--text-primary)] active:cursor-grabbing"
+          className="shrink-0 cursor-grab text-[var(--p-text-2)] hover:text-[var(--p-text-1)] active:cursor-grabbing"
         >
           <GripVertical size={10} />
         </button>
@@ -72,7 +72,7 @@ export function CalendarEventChip({ event, renderEvent }: Props) {
         {...attributes}
         {...listeners}
         aria-label={`Drag to reschedule ${event.title}`}
-        className="shrink-0 cursor-grab text-[var(--text-muted)] opacity-0 transition-opacity group-hover/chip:opacity-100 hover:text-[var(--text-primary)] active:cursor-grabbing"
+        className="shrink-0 cursor-grab text-[var(--p-text-2)] opacity-0 transition-opacity group-hover/chip:opacity-100 hover:text-[var(--p-text-1)] active:cursor-grabbing"
         tabIndex={-1}
       >
         <GripVertical size={10} />

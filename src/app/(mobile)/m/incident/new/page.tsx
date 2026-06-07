@@ -14,11 +14,11 @@ export default async function QuickFilePage() {
   const { t } = await getRequestT();
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("m.incident.new.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.incident.new.title", undefined, "Quick File")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.incident.new.description",
           undefined,
@@ -45,10 +45,10 @@ export default async function QuickFilePage() {
               undefined,
               "e.g. Cable trip hazard near stage left exit — flagged with cone.",
             )}
-            className="mt-1 w-full rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-3 text-base"
+            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-3 text-base"
           />
         </label>
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="ps-btn w-full">
           {t("m.incident.new.fileNow", undefined, "File Now")}
         </button>
       </form>

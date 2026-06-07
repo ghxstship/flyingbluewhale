@@ -26,10 +26,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.readiness.new.kind", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="tabletop" className="input-base mt-1.5 w-full">
+            <select name="kind" defaultValue="tabletop" className="ps-input mt-1.5 w-full">
               <option value="tabletop">
                 {t("console.programs.readiness.new.kindTabletop", undefined, "Tabletop")}
               </option>

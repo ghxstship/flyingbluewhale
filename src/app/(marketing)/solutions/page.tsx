@@ -128,13 +128,11 @@ export default async function SolutionsIndex() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--org-accent)] uppercase">
+        <div className="text-xs font-semibold tracking-[0.25em] text-[var(--p-accent-text)] uppercase">
           {t("marketing.pages.solutions.hero.eyebrow")}
         </div>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight">{t("marketing.pages.solutions.hero.title")}</h1>
-        <p className="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-          {t("marketing.pages.solutions.hero.body")}
-        </p>
+        <p className="mt-4 max-w-2xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.solutions.hero.body")}</p>
       </section>
 
       {/* Apps */}
@@ -148,24 +146,29 @@ export default async function SolutionsIndex() {
               data-platform={a.slug}
               className="surface hover-lift relative overflow-hidden p-7"
             >
-              <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--org-primary)" }} />
+              <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--p-accent)" }} />
               <div className="flex items-center justify-between">
+                {/* App brand mark — canonical spaced wordmark in the app accent
+                    color (A T L V S / C O M P V S S / G V T E W A Y). aria-label
+                    keeps screen readers reading the solid name; whitespace-nowrap
+                    keeps the mark on one line. */}
                 <div
-                  className="text-[11px] font-semibold tracking-[0.2em] uppercase"
-                  style={{ color: "var(--org-accent)" }}
+                  className="text-[11px] font-semibold whitespace-nowrap uppercase"
+                  style={{ color: "var(--p-accent-text)" }}
+                  aria-label={a.name}
                 >
-                  {a.name}
+                  {a.name.split("").join(" ")}
                 </div>
-                <span className="font-mono text-[10px] text-[var(--text-muted)]">{a.tier}</span>
+                <span className="font-mono text-[10px] text-[var(--p-text-2)]">{a.tier}</span>
               </div>
               <h3 className="mt-3 text-lg font-semibold tracking-tight">{a.title}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{a.body}</p>
-              <ul className="mt-4 space-y-1.5 text-xs text-[var(--text-secondary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{a.body}</p>
+              <ul className="mt-4 space-y-1.5 text-xs text-[var(--p-text-2)]">
                 {a.bullets.map((b) => (
                   <li key={b} className="flex items-start gap-2">
                     <span
                       className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full"
-                      style={{ background: "var(--org-primary)" }}
+                      style={{ background: "var(--p-accent)" }}
                     />
                     {b}
                   </li>
@@ -182,14 +185,14 @@ export default async function SolutionsIndex() {
       {/* Industries */}
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="text-3xl font-semibold tracking-tight">{t("marketing.pages.solutions.industries.heading")}</h2>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
           {t("marketing.pages.solutions.industries.body")}
         </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-4">
           {INDUSTRIES.map((i) => (
             <Link key={i.slug} href={`/solutions/${i.slug}`} className="surface hover-lift p-5">
               <div className="text-sm font-semibold">{i.name}</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">{i.blurb}</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">{i.blurb}</div>
             </Link>
           ))}
         </div>

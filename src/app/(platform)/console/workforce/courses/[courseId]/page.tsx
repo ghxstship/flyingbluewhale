@@ -140,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
           <h2 className="text-sm font-semibold">
             {t("console.workforce.courses.detail.completionBadge.title", undefined, "Completion Badge")}
           </h2>
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.workforce.courses.detail.completionBadge.hint",
               undefined,
@@ -149,7 +149,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
           </p>
           <form action={setCompletionBadge} className="mt-3 flex items-end gap-2">
             <input type="hidden" name="courseId" value={c.id} />
-            <select name="badge_id" defaultValue={c.completion_badge_id ?? ""} className="input-base flex-1">
+            <select name="badge_id" defaultValue={c.completion_badge_id ?? ""} className="ps-input flex-1">
               <option value="">
                 {t("console.workforce.courses.detail.completionBadge.none", undefined, "— None —")}
               </option>
@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
           </h2>
           <ol className="mt-3 space-y-2">
             {lessonList.map((l) => (
-              <li key={l.id} className="rounded-md border border-[var(--border-color)] p-3">
+              <li key={l.id} className="rounded-md border border-[var(--p-border)] p-3">
                 <div className="flex items-center justify-between">
                   <Badge variant="muted">
                     {t(
@@ -181,13 +181,13 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                       `Lesson ${l.ordinal}`,
                     )}
                   </Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{l.lesson_kind}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{l.lesson_kind}</span>
                 </div>
                 <div className="mt-1 text-sm font-semibold">{l.title}</div>
               </li>
             ))}
           </ol>
-          <form action={addLesson} className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4">
+          <form action={addLesson} className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4">
             <input type="hidden" name="courseId" value={c.id} />
             <input
               type="text"
@@ -195,14 +195,14 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               placeholder={t("console.workforce.courses.detail.lessons.titlePlaceholder", undefined, "Lesson title")}
               required
               maxLength={200}
-              className="input-base w-full"
+              className="ps-input w-full"
             />
             <textarea
               name="body"
               rows={3}
               placeholder={t("console.workforce.courses.detail.lessons.bodyPlaceholder", undefined, "Lesson body")}
               maxLength={4000}
-              className="input-base w-full"
+              className="ps-input w-full"
             />
             <Button type="submit" variant="secondary" size="sm">
               {t("console.workforce.courses.detail.lessons.addLesson", undefined, "+ Add Lesson")}
@@ -218,16 +218,13 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
             {questionList.map((q) => {
               const choices = Array.isArray(q.choices) ? (q.choices as string[]) : [];
               return (
-                <li key={q.id} className="rounded-md border border-[var(--border-color)] p-3">
+                <li key={q.id} className="rounded-md border border-[var(--p-border)] p-3">
                   <div className="text-sm font-semibold">
                     {q.ordinal}. {q.prompt}
                   </div>
                   <ul className="mt-1.5 space-y-0.5 text-xs">
                     {choices.map((ch, idx) => (
-                      <li
-                        key={idx}
-                        className={idx === q.correct_index ? "font-semibold text-[var(--color-success)]" : ""}
-                      >
+                      <li key={idx} className={idx === q.correct_index ? "font-semibold text-[var(--p-success)]" : ""}>
                         {idx === q.correct_index ? "✓ " : "○ "}
                         {ch}
                       </li>
@@ -237,7 +234,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               );
             })}
           </ol>
-          <form action={addQuizQuestion} className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4">
+          <form action={addQuizQuestion} className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4">
             <input type="hidden" name="courseId" value={c.id} />
             <input
               type="text"
@@ -245,7 +242,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               placeholder={t("console.workforce.courses.detail.quiz.promptPlaceholder", undefined, "Question prompt")}
               required
               maxLength={400}
-              className="input-base w-full"
+              className="ps-input w-full"
             />
             <input
               type="text"
@@ -256,7 +253,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                 "Choices — One per Line · First 4",
               )}
               required
-              className="input-base w-full"
+              className="ps-input w-full"
             />
             <input
               type="number"
@@ -269,7 +266,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                 "Correct index (0-based)",
               )}
               required
-              className="input-base w-full"
+              className="ps-input w-full"
             />
             <Button type="submit" variant="secondary" size="sm">
               {t("console.workforce.courses.detail.quiz.addQuestion", undefined, "+ Add Question")}
@@ -286,12 +283,12 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               const tone =
                 a.assignment_state === "completed" ? "success" : a.assignment_state === "overdue" ? "error" : "info";
               return (
-                <li key={a.id} className="rounded-md border border-[var(--border-color)] p-3">
+                <li key={a.id} className="rounded-md border border-[var(--p-border)] p-3">
                   <div className="text-sm">
                     {memberMap.get(a.assignee_id) ??
                       t("console.workforce.courses.detail.assignees.unknown", undefined, "Unknown")}
                   </div>
-                  <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                  <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                     {new Date(a.assigned_at).toLocaleDateString()}
                   </div>
                   <Badge variant={tone} className="mt-1">
@@ -301,9 +298,9 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
               );
             })}
           </ul>
-          <form action={assignCourse} className="mt-4 space-y-2 border-t border-[var(--border-color)] pt-4">
+          <form action={assignCourse} className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4">
             <input type="hidden" name="courseId" value={c.id} />
-            <select name="assignee_id" required className="input-base w-full">
+            <select name="assignee_id" required className="ps-input w-full">
               {memberList
                 .filter((m) => !assignedIds.has(m.id))
                 .map((m) => (
@@ -312,7 +309,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                   </option>
                 ))}
             </select>
-            <input type="date" name="due_at" className="input-base w-full" />
+            <input type="date" name="due_at" className="ps-input w-full" />
             <Button type="submit" variant="secondary" size="sm">
               {t("console.workforce.courses.detail.assignees.assign", undefined, "+ Assign")}
             </Button>

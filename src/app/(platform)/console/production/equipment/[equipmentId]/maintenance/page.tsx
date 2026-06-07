@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             },
           ]}
         />
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t("console.production.equipment.maintenance.scheduleHintPrefix", undefined, "Schedule jobs from the")}{" "}
           <Link href="/console/operations/maintenance" className="underline">
             {t("console.production.equipment.maintenance.maintenanceModuleLink", undefined, "Maintenance module")}

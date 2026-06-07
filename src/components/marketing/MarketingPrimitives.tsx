@@ -19,7 +19,7 @@ import * as React from "react";
  * Focus ring (M2-07): all interactive children inherit globals.css'
  * `a:focus-visible, button:focus-visible` rule, so no per-primitive
  * focus styling is required. Primitives DO apply `focus-visible:ring-2
- * ring-offset-2 ring-[var(--accent)]` on their own clickable surfaces.
+ * ring-offset-2 ring-[var(--p-accent)]` on their own clickable surfaces.
  */
 
 // ---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ export function MarketingHero({
     <section className={`mx-auto max-w-6xl px-6 py-16 md:py-24 ${className}`}>
       {eyebrow && <div className="eyebrow eyebrow-brand">{eyebrow}</div>}
       <h1 className={`${eyebrow ? "mt-4" : ""} hed-3xl max-w-4xl`}>{title}</h1>
-      {subtitle && <p className="mt-5 max-w-2xl text-lg text-pretty text-[var(--text-secondary)]">{subtitle}</p>}
+      {subtitle && <p className="mt-5 max-w-2xl text-lg text-pretty text-[var(--p-text-2)]">{subtitle}</p>}
       {actions && <div className="mt-8 flex flex-wrap items-center gap-3">{actions}</div>}
     </section>
   );
@@ -84,9 +84,7 @@ export function MarketingSection({
             </h2>
           )}
           {subtitle && (
-            <p className={`mt-3 max-w-2xl text-[var(--text-secondary)] ${align === "center" ? "mx-auto" : ""}`}>
-              {subtitle}
-            </p>
+            <p className={`mt-3 max-w-2xl text-[var(--p-text-2)] ${align === "center" ? "mx-auto" : ""}`}>{subtitle}</p>
           )}
         </header>
       )}

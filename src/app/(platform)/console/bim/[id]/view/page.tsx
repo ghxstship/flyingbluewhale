@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="flex items-center gap-2">
             <a
               href={`/api/v1/bim/${m.id}/download`}
-              className="rounded-md border border-[var(--border-color)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--surface-raised)]"
+              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
             >
               {t("console.bim.view.download", { format: m.source_type.toUpperCase() }, "Download {format}")}
             </a>

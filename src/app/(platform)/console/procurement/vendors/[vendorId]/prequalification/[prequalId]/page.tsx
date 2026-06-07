@@ -211,7 +211,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                 "Reviewer Notes",
               )}
             </h2>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{prequal.notes}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{prequal.notes}</p>
           </section>
         )}
 
@@ -220,12 +220,12 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             <h2 className="text-sm font-semibold tracking-wide uppercase">
               {t("console.procurement.vendors.prequalification.detail.responsesHeading", undefined, "Responses")}
             </h2>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {answers.length}/{questions.length}
             </span>
           </div>
           {questions.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.vendors.prequalification.detail.noQuestions",
                 undefined,
@@ -245,7 +245,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <div className="flex flex-wrap items-baseline gap-2">
-                        <span className="font-mono text-xs text-[var(--text-muted)]">
+                        <span className="font-mono text-xs text-[var(--p-text-2)]">
                           {t(
                             "console.procurement.vendors.prequalification.detail.questionNumber",
                             { n: q.position },
@@ -275,7 +275,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                     </div>
                     <p className="mt-2 text-sm font-semibold">{q.prompt}</p>
                     {missing ? (
-                      <p className="mt-2 text-xs text-[var(--text-muted)] italic">
+                      <p className="mt-2 text-xs text-[var(--p-text-2)] italic">
                         {q.required
                           ? t(
                               "console.procurement.vendors.prequalification.detail.requiredMissing",
@@ -290,9 +290,9 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                       </p>
                     ) : (
                       <>
-                        <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">
+                        <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">
                           {a.answer ?? (
-                            <span className="text-[var(--text-muted)] italic">
+                            <span className="text-[var(--p-text-2)] italic">
                               {t("console.procurement.vendors.prequalification.detail.noText", undefined, "(no text)")}
                             </span>
                           )}
@@ -304,12 +304,12 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
                                 href={signedAttachment}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="font-mono text-[var(--org-primary)] hover:underline"
+                                className="font-mono text-[var(--p-accent)] hover:underline"
                               >
                                 ↗ {a.attachment_path.split("/").pop()}
                               </a>
                             ) : (
-                              <span className="font-mono text-[var(--text-muted)]">
+                              <span className="font-mono text-[var(--p-text-2)]">
                                 {t(
                                   "console.procurement.vendors.prequalification.detail.attachmentPrefix",
                                   { path: a.attachment_path },

@@ -74,13 +74,13 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">{t("p.producer.pnl.title", undefined, "P&L")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("p.producer.pnl.subtitle", { projectName: project.name }, `Headline roll-up for ${project.name}.`)}
         </p>
 
         <section className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.producer.pnl.metrics.budget", undefined, "Budget")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">
@@ -88,7 +88,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
             </div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.producer.pnl.metrics.spent", undefined, "Spent")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">
@@ -96,18 +96,18 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
             </div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.producer.pnl.metrics.revenuePaid", undefined, "Revenue — Paid")}
             </div>
             <div className="mt-1 font-mono text-2xl font-semibold">{fmtMoney(invoiceTotal)}</div>
           </div>
           <div className="surface p-4">
-            <div className="text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+            <div className="text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
               {t("p.producer.pnl.metrics.margin", undefined, "Margin")}
             </div>
             <div
               className={`mt-1 font-mono text-2xl font-semibold ${
-                margin >= 0 ? "text-[var(--color-success)]" : "text-[var(--color-error)]"
+                margin >= 0 ? "text-[var(--p-success)]" : "text-[var(--p-danger)]"
               }`}
             >
               {fmtMoney(margin)}
@@ -115,7 +115,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
           </div>
         </section>
 
-        <p className="mt-5 text-xs text-[var(--text-muted)]">
+        <p className="mt-5 text-xs text-[var(--p-text-2)]">
           {t(
             "p.producer.pnl.lastUpdated",
             { date: fmt.date(new Date().toISOString()) },

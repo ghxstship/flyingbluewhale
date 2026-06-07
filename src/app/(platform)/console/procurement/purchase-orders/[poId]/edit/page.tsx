@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
             required
             maxLength={3}
           />
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.procurement.purchaseOrders.edit.statusHint",
               undefined,

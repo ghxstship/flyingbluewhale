@@ -25,10 +25,10 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.courses.new.fields.summary", undefined, "Summary")}
             </label>
-            <textarea name="summary" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+            <textarea name="summary" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.workforce.courses.new.fields.duration", undefined, "Duration — Minutes")}

@@ -68,18 +68,18 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
                 <Badge variant="warning">{t("console.annotations.detail.required", undefined, "Required")}</Badge>
               )
             ) : (
-              <span className="text-[var(--text-subtle)]">—</span>
+              <span className="text-[var(--p-text-3)]">—</span>
             )}
           </Field>
         </div>
 
         <div className="surface p-5">
           <h3 className="text-sm font-semibold">{t("console.annotations.detail.body", undefined, "Body")}</h3>
-          <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{root.body}</p>
+          <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{root.body}</p>
           {root.tags.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-1.5">
               {root.tags.map((tag) => (
-                <span key={tag} className="rounded-md bg-(--surface-inset) px-2 py-0.5 font-mono text-xs">
+                <span key={tag} className="rounded-md bg-(--p-surface-2) px-2 py-0.5 font-mono text-xs">
                   #{tag}
                 </span>
               ))}
@@ -92,9 +92,9 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
             <h3 className="text-sm font-semibold">
               {t("console.annotations.detail.resolutionNote", undefined, "Resolution note")}
             </h3>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{root.resolution_note}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{root.resolution_note}</p>
             {root.resolved_at ? (
-              <p className="mt-2 text-xs text-[var(--text-subtle)]">
+              <p className="mt-2 text-xs text-[var(--p-text-3)]">
                 {t(
                   "console.annotations.detail.resolvedAgo",
                   { ago: timeAgo(root.resolved_at) },
@@ -108,7 +108,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
         {Object.keys(root.metadata).length > 0 ? (
           <div className="surface p-5">
             <h3 className="text-sm font-semibold">{t("console.annotations.detail.metadata", undefined, "Metadata")}</h3>
-            <pre className="mt-2 overflow-x-auto rounded-md bg-(--surface-inset) p-3 font-mono text-xs">
+            <pre className="mt-2 overflow-x-auto rounded-md bg-(--p-surface-2) p-3 font-mono text-xs">
               {JSON.stringify(root.metadata, null, 2)}
             </pre>
           </div>
@@ -122,11 +122,11 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
             {replies.map((r) => (
               <li key={r.id} className="border-s-2 border-(--ink) ps-3 text-sm">
                 <p className="whitespace-pre-wrap">{r.body}</p>
-                <p className="mt-1 font-mono text-xs text-[var(--text-subtle)]">{timeAgo(r.created_at)}</p>
+                <p className="mt-1 font-mono text-xs text-[var(--p-text-3)]">{timeAgo(r.created_at)}</p>
               </li>
             ))}
             {replies.length === 0 ? (
-              <li className="text-sm text-[var(--text-subtle)]">
+              <li className="text-sm text-[var(--p-text-3)]">
                 {t("console.annotations.detail.noReplies", undefined, "No replies yet.")}
               </li>
             ) : null}
@@ -136,7 +136,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
           </div>
         </div>
 
-        <Link href="/console/annotations" className="inline-block text-xs text-[var(--text-subtle)] underline">
+        <Link href="/console/annotations" className="inline-block text-xs text-[var(--p-text-3)] underline">
           {t("console.annotations.detail.backToAll", undefined, "← Back to all annotations")}
         </Link>
       </div>
@@ -147,7 +147,7 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="surface p-3">
-      <div className="text-[11px] font-semibold tracking-wider text-[var(--text-subtle)] uppercase">{label}</div>
+      <div className="text-[11px] font-semibold tracking-wider text-[var(--p-text-3)] uppercase">{label}</div>
       <div className="mt-1 font-mono text-sm">{children}</div>
     </div>
   );

@@ -91,25 +91,25 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="grid gap-3 md:grid-cols-4">
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.pass}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.inspections.detail.totals.pass", undefined, "Pass")}
             </div>
           </div>
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.fail}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.inspections.detail.totals.fail", undefined, "Fail")}
             </div>
           </div>
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.na}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.inspections.detail.totals.na", undefined, "N/A")}
             </div>
           </div>
           <div className="surface p-3 text-center">
             <div className="text-2xl font-semibold">{totals.pending}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.inspections.detail.totals.pending", undefined, "Pending")}
             </div>
           </div>
@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <section className="surface p-4">
           <h3 className="text-sm font-semibold">{t("console.inspections.detail.checklist", undefined, "Checklist")}</h3>
           {allItems.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.inspections.detail.emptyChecklist",
                 undefined,
@@ -140,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       {(["pass", "fail", "na"] as const).map((r) => (
                         <form key={r} action={setInspectionItemResult.bind(null, id, it.id, r)}>
                           <button
-                            className="hover-lift rounded border border-[var(--border-color)] px-2 py-1 text-[11px]"
+                            className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-[11px]"
                             type="submit"
                           >
                             {r.toUpperCase()}

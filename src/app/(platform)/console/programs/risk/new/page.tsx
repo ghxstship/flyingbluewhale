@@ -25,10 +25,10 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.risk.new.fields.description", undefined, "Description")}
             </label>
-            <textarea name="description" rows={4} className="input-base mt-1.5 w-full" maxLength={4000} />
+            <textarea name="description" rows={4} className="ps-input mt-1.5 w-full" maxLength={4000} />
           </div>
           <Input
             label={t("console.programs.risk.new.fields.category", undefined, "Category")}

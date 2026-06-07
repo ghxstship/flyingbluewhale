@@ -54,7 +54,7 @@ export default async function IndustryPage({ params }: Props) {
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
         <div className="eyebrow eyebrow-brand">{info.hero.eyebrow}</div>
         <h1 className="hed-2xl mt-4">{info.hero.title}</h1>
-        <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{info.hero.body}</p>
+        <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{info.hero.body}</p>
         <div className="mt-8 flex gap-3">
           <Button href="/signup">Start Free</Button>
           <Button href="/contact" variant="secondary">
@@ -70,7 +70,7 @@ export default async function IndustryPage({ params }: Props) {
         <ul className="mt-6 grid gap-3 md:grid-cols-2">
           {info.outcomes.map((o) => (
             <li key={o} className="surface flex items-start gap-3 p-4">
-              <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[var(--org-primary)]" />
+              <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-[var(--p-accent)]" />
               <span className="text-sm">{o}</span>
             </li>
           ))}
@@ -83,7 +83,7 @@ export default async function IndustryPage({ params }: Props) {
           {info.modules.map((m) => (
             <div key={m.name} className="surface p-5">
               <div className="text-sm font-semibold">{m.name}</div>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{m.body}</p>
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{m.body}</p>
             </div>
           ))}
         </div>
@@ -100,7 +100,7 @@ export default async function IndustryPage({ params }: Props) {
             return (
               <Link key={r} href={`/solutions/${r}`} className="surface hover-lift p-4">
                 <div className="text-sm font-semibold">{rel.name}</div>
-                <div className="mt-1 text-xs text-[var(--text-muted)]">{rel.tagline}</div>
+                <div className="mt-1 text-xs text-[var(--p-text-2)]">{rel.tagline}</div>
               </Link>
             );
           })}

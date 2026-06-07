@@ -93,7 +93,7 @@ export default async function BudgetSummaryPage() {
           eyebrow="Finance"
           title={t("console.finance.budgets.summary.title", undefined, "Budget Summary")}
         />
-        <div className="page-content text-sm text-[var(--text-muted)]">
+        <div className="page-content text-sm text-[var(--p-text-2)]">
           {t("common.configureSupabase", undefined, "Configure Supabase.")}
         </div>
       </>
@@ -195,9 +195,9 @@ function RollupTable({
   const totals = total(rollups);
   return (
     <section>
-      <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">{title}</h2>
+      <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">{title}</h2>
       <div className="surface mt-2 overflow-hidden">
-        <table className="data-table w-full text-sm">
+        <table className="ps-table w-full text-sm">
           <thead>
             <tr>
               <th className="px-3 py-2 text-left">Segment</th>
@@ -211,7 +211,7 @@ function RollupTable({
           </thead>
           <tbody>
             {rollups.map((r) => (
-              <tr key={r.label} className="border-t border-[var(--border-color)]">
+              <tr key={r.label} className="border-t border-[var(--p-border)]">
                 <td className="px-3 py-2">{r.label}</td>
                 <td className="px-3 py-2 text-right font-mono">{fmt(r.estimate)}</td>
                 <td className="px-3 py-2 text-right font-mono">{fmt(r.budget)}</td>
@@ -227,7 +227,7 @@ function RollupTable({
                 )}
               </tr>
             ))}
-            <tr className="border-t border-[var(--border-color)] bg-[var(--surface-inset)] font-semibold">
+            <tr className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] font-semibold">
               <td className="px-3 py-2">{totalLabel}</td>
               <td className="px-3 py-2 text-right font-mono">{fmt(totals.estimate)}</td>
               <td className="px-3 py-2 text-right font-mono">{fmt(totals.budget)}</td>
@@ -256,11 +256,11 @@ function DrawSchedule({
   const totalDraw = Math.round(totalBudget * totalPct);
   return (
     <section>
-      <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+      <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
         Project Billing / Draw Schedule (% of total contract)
       </h2>
       <div className="surface mt-2 overflow-hidden">
-        <table className="data-table w-full text-sm">
+        <table className="ps-table w-full text-sm">
           <thead>
             <tr>
               <th className="px-3 py-2 text-left">Draw</th>
@@ -271,14 +271,14 @@ function DrawSchedule({
           </thead>
           <tbody>
             {schedule.map((s) => (
-              <tr key={s.label} className="border-t border-[var(--border-color)]">
+              <tr key={s.label} className="border-t border-[var(--p-border)]">
                 <td className="px-3 py-2">{s.label}</td>
                 <td className="px-3 py-2">{s.trigger}</td>
                 <td className="px-3 py-2 text-right font-mono">{(s.pct * 100).toFixed(0)}%</td>
                 <td className="px-3 py-2 text-right font-mono">{fmt(Math.round(totalBudget * s.pct))}</td>
               </tr>
             ))}
-            <tr className="border-t border-[var(--border-color)] bg-[var(--surface-inset)] font-semibold">
+            <tr className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] font-semibold">
               <td className="px-3 py-2" colSpan={2}>
                 TOTAL CONTRACT
               </td>

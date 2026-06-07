@@ -49,10 +49,10 @@ export default async function Page() {
           submitLabel={t("console.services.requests.new.submit", undefined, "Open Request")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.services.requests.new.categoryLabel", undefined, "Category")}
             </label>
-            <select name="category" defaultValue="AV" className="input-base mt-1.5 w-full" required>
+            <select name="category" defaultValue="AV" className="ps-input mt-1.5 w-full" required>
               <option value="AV">{t("console.services.requests.new.categoryAV", undefined, "AV")}</option>
               <option value="cleaning">
                 {t("console.services.requests.new.categoryCleaning", undefined, "Cleaning")}
@@ -69,10 +69,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.services.requests.new.severityLabel", undefined, "Severity")}
             </label>
-            <select name="severity" defaultValue="P3" className="input-base mt-1.5 w-full" required>
+            <select name="severity" defaultValue="P3" className="ps-input mt-1.5 w-full" required>
               <option value="P1">
                 {t(
                   "console.services.requests.new.severityP1",
@@ -99,17 +99,17 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.services.requests.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={4} maxLength={4000} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={4} maxLength={4000} className="ps-input mt-1.5 w-full" />
           </div>
           {projects.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.services.requests.new.projectLabel", undefined, "Project · Optional")}
               </label>
-              <select name="project_id" defaultValue="" className="input-base mt-1.5 w-full">
+              <select name="project_id" defaultValue="" className="ps-input mt-1.5 w-full">
                 <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -121,10 +121,10 @@ export default async function Page() {
           )}
           {venues.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.services.requests.new.venueLabel", undefined, "Venue · Optional")}
               </label>
-              <select name="venue_id" defaultValue="" className="input-base mt-1.5 w-full">
+              <select name="venue_id" defaultValue="" className="ps-input mt-1.5 w-full">
                 <option value="">{t("console.services.requests.new.noneOption", undefined, "— none —")}</option>
                 {venues.map((v) => (
                   <option key={v.id} value={v.id}>

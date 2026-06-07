@@ -44,10 +44,10 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
       />
       <div className="page-content space-y-6">
         <section className="surface space-y-3 p-6">
-          <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+          <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("console.people.msas.detail.signerLink", undefined, "Signer Link")}
           </h3>
-          <p className="text-xs text-[var(--text-muted)]">
+          <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "console.people.msas.detail.signerLinkHint",
               undefined,
@@ -56,15 +56,15 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
           </p>
           <div className="space-y-2">
             <div>
-              <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">
+              <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">
                 {t("console.people.msas.detail.publicLink", undefined, "Public Link")}
               </div>
-              <a className="font-mono text-sm text-[var(--org-primary)] hover:underline" href={url}>
+              <a className="font-mono text-sm text-[var(--p-accent)] hover:underline" href={url}>
                 {url}
               </a>
             </div>
             <div>
-              <div className="text-xs tracking-wider text-[var(--text-muted)] uppercase">
+              <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">
                 {t("console.people.msas.detail.accessCode", undefined, "Access Code")}
               </div>
               <div className="font-mono text-2xl tracking-[0.4em]">{resolved.access_code}</div>
@@ -94,11 +94,11 @@ export default async function MsaDetailPage({ params }: { params: Promise<{ id: 
 
         {resolved.msa_state === "signed" && (
           <section className="surface space-y-2 p-6">
-            <h3 className="text-sm font-semibold tracking-wider text-[var(--text-secondary)] uppercase">
+            <h3 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
               {t("console.people.msas.detail.signature", undefined, "Signature")}
             </h3>
             <div className="font-subdisplay text-2xl">{resolved.signed_signature}</div>
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {resolved.signed_at ? new Date(resolved.signed_at).toLocaleString() : ""} ·{" "}
               {t(
                 "console.people.msas.detail.ipLabel",

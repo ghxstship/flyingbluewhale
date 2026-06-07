@@ -152,7 +152,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.meetings.metrics.total", undefined, "Total")} value={fmt.number(rows.length)} />
         </div>
-        <div className="text-[10px] text-[var(--text-muted)]">
+        <div className="text-[10px] text-[var(--p-text-2)]">
           {t(
             "console.meetings.description",
             undefined,
@@ -226,7 +226,7 @@ export default async function Page() {
                 r.open_action_count > 0 ? (
                   <Badge variant="warning">{fmt.number(r.open_action_count)}</Badge>
                 ) : (
-                  <span className="text-[var(--text-muted)]">{fmt.number(r.open_action_count)}</span>
+                  <span className="text-[var(--p-text-2)]">{fmt.number(r.open_action_count)}</span>
                 ),
               accessor: (r) => r.open_action_count,
               className: "font-mono text-xs text-right",

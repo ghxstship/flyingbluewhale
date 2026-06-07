@@ -88,7 +88,7 @@ export default async function AssetLinkerPage() {
           <h3 className="text-sm font-semibold">
             {t("console.people.credentials.assetLinker.bindNewCode", undefined, "Bind a New Code")}
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.people.credentials.assetLinker.bindNewCodeDescription",
               undefined,
@@ -101,11 +101,11 @@ export default async function AssetLinkerPage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
             {t("console.people.credentials.assetLinker.activeCodes", undefined, "Active codes")}
           </h3>
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.people.credentials.assetLinker.col.holder", undefined, "Holder")}</th>
@@ -120,7 +120,7 @@ export default async function AssetLinkerPage() {
               <tbody>
                 {(links ?? []).length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-6 text-center text-[var(--text-muted)]">
+                    <td colSpan={7} className="py-6 text-center text-[var(--p-text-2)]">
                       {t("console.people.credentials.assetLinker.noCodesBound", undefined, "No codes bound yet.")}
                     </td>
                   </tr>
@@ -143,7 +143,7 @@ export default async function AssetLinkerPage() {
                         {l.active && (
                           <form action={revokeLinkAction}>
                             <input type="hidden" name="id" value={l.id} />
-                            <button type="submit" className="text-xs text-[var(--color-error)] hover:underline">
+                            <button type="submit" className="text-xs text-[var(--p-danger)] hover:underline">
                               {t("console.people.credentials.assetLinker.void", undefined, "Void")}
                             </button>
                           </form>

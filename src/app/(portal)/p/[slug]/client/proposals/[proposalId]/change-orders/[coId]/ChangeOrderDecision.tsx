@@ -19,7 +19,7 @@ export function ChangeOrderDecision({ slug, proposalId, coId }: { slug: string; 
       <input type="hidden" name="proposalId" value={proposalId} />
       <input type="hidden" name="coId" value={coId} />
       <input type="hidden" name="decision" value={decision} />
-      <div className="eyebrow text-xs text-[var(--text-muted)]">
+      <div className="eyebrow text-xs text-[var(--p-text-2)]">
         {t("p.client.changeOrders.decision.eyebrow", undefined, "Your decision")}
       </div>
       <h3 className="text-base font-semibold">
@@ -59,7 +59,7 @@ export function ChangeOrderDecision({ slug, proposalId, coId }: { slug: string; 
         name="note"
         rows={3}
         placeholder={t("p.client.changeOrders.decision.notePlaceholder", undefined, "Optional note for the team…")}
-        className="input-base w-full"
+        className="ps-input w-full"
       />
 
       {state?.error && <Alert kind="error">{state.error}</Alert>}

@@ -99,13 +99,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-5">
         <section className="grid gap-3 md:grid-cols-3">
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.procurement.poChangeOrders.detail.amount", undefined, "Amount")}
             </div>
             <div className="text-lg font-semibold">{formatMoney(co.amount_cents)}</div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.procurement.poChangeOrders.detail.scheduleImpact", undefined, "Schedule impact")}
             </div>
             <div className="text-lg font-semibold">
@@ -117,7 +117,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
           </div>
           <div className="surface p-3">
-            <div className="text-xs text-[var(--text-muted)]">
+            <div className="text-xs text-[var(--p-text-2)]">
               {t("console.procurement.poChangeOrders.detail.proposed", undefined, "Proposed")}
             </div>
             <div className="text-lg font-semibold">{new Date(co.proposed_at).toLocaleDateString()}</div>
@@ -137,7 +137,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <h3 className="text-sm font-semibold">
               {t("console.procurement.poChangeOrders.detail.lineItems", undefined, "Line Items")}
             </h3>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.poChangeOrders.detail.linesSummary",
                 { count: lines.length, sum: formatMoney(linesTotal) },
@@ -156,7 +156,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </div>
           )}
           {lines.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.poChangeOrders.detail.noBreakdown",
                 undefined,
@@ -164,7 +164,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </p>
           ) : (
-            <table className="data-table mt-3 w-full">
+            <table className="ps-table mt-3 w-full">
               <thead>
                 <tr>
                   <th className="w-12 text-start">#</th>
@@ -186,7 +186,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <tbody>
                 {lines.map((l) => (
                   <tr key={l.id}>
-                    <td className="font-mono text-xs text-[var(--text-muted)]">{l.position}</td>
+                    <td className="font-mono text-xs text-[var(--p-text-2)]">{l.position}</td>
                     <td className="text-sm">{l.description}</td>
                     <td className="text-right font-mono">{Number(l.quantity).toFixed(2)}</td>
                     <td className="text-right font-mono">{formatMoney(l.unit_price_cents)}</td>
@@ -220,7 +220,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 required
                 placeholder={t("console.procurement.poChangeOrders.detail.col.description", undefined, "Description")}
                 maxLength={500}
-                className="input-base sm:col-span-3"
+                className="ps-input sm:col-span-3"
               />
               <input
                 name="quantity"
@@ -230,7 +230,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 required
                 placeholder={t("console.procurement.poChangeOrders.detail.col.qty", undefined, "Qty")}
                 defaultValue="1"
-                className="input-base sm:col-span-1"
+                className="ps-input sm:col-span-1"
               />
               <input
                 name="unit_price_dollars"
@@ -239,7 +239,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 min="0"
                 required
                 placeholder={t("console.procurement.poChangeOrders.detail.unitDollarsPlaceholder", undefined, "Unit $")}
-                className="input-base sm:col-span-1"
+                className="ps-input sm:col-span-1"
               />
               <Button type="submit" size="sm" variant="secondary" className="sm:col-span-1">
                 {t("console.procurement.poChangeOrders.detail.addLine", undefined, "Add Line")}
@@ -247,7 +247,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </form>
           )}
           {!editable && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.poChangeOrders.detail.linesLocked",
                 undefined,

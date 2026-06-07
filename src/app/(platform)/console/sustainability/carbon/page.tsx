@@ -138,7 +138,7 @@ export default async function Page() {
             {
               key: "source",
               header: t("console.sustainability.carbon.col.source", undefined, "Source"),
-              render: (r) => <span className="text-xs text-[var(--text-secondary)]">{r.source ?? "—"}</span>,
+              render: (r) => <span className="text-xs text-[var(--p-text-2)]">{r.source ?? "—"}</span>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.source ?? null,
@@ -146,7 +146,7 @@ export default async function Page() {
             {
               key: "method",
               header: t("console.sustainability.carbon.col.method", undefined, "Method"),
-              render: (r) => <span className="text-xs text-[var(--text-muted)]">{r.method ?? "—"}</span>,
+              render: (r) => <span className="text-xs text-[var(--p-text-2)]">{r.method ?? "—"}</span>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.method ?? null,

@@ -139,7 +139,7 @@ export default async function Page({
             )}
             action={
               <Link
-                className="text-sm font-medium text-[var(--org-primary)]"
+                className="text-sm font-medium text-[var(--p-accent)]"
                 href={`/console/events/new?project_id=${projectId}`}
               >
                 {t("console.projects.schedule.scheduleFirstEvent", undefined, "Schedule First Event →")}
@@ -274,7 +274,7 @@ async function ListView({
     <div className="space-y-6">
       {events.length > 0 && (
         <section>
-          <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+          <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
             {t("console.projects.schedule.list.eventsHeading", undefined, "Events")} · {events.length}
           </h2>
           <ul className="space-y-2">
@@ -285,12 +285,12 @@ async function ListView({
                     <div className="min-w-0">
                       <div className="text-sm font-semibold">{e.name}</div>
                       {e.description && (
-                        <div className="mt-1 truncate text-xs text-[var(--text-muted)]">{e.description}</div>
+                        <div className="mt-1 truncate text-xs text-[var(--p-text-2)]">{e.description}</div>
                       )}
                     </div>
                     <StatusBadge status={e.status ?? "draft"} />
                   </div>
-                  <div className="mt-2 font-mono text-xs text-[var(--text-muted)]">
+                  <div className="mt-2 font-mono text-xs text-[var(--p-text-2)]">
                     {fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}
                   </div>
                 </Link>
@@ -301,7 +301,7 @@ async function ListView({
       )}
       {tasks.length > 0 && (
         <section>
-          <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+          <h2 className="mb-3 text-xs font-semibold tracking-[0.16em] text-[var(--p-text-2)] uppercase">
             {t("console.projects.schedule.list.tasksHeading", undefined, "Tasks")} · {tasks.length}
           </h2>
           <ul className="space-y-2">
@@ -310,7 +310,7 @@ async function ListView({
                 <Link href={`/console/tasks/${task.id}`} className="surface hover-lift block p-3">
                   <div className="flex items-center justify-between gap-3">
                     <div className="truncate text-sm">{task.title}</div>
-                    <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
+                    <div className="flex items-center gap-3 text-xs text-[var(--p-text-2)]">
                       <span className="font-mono">
                         {task.due_at
                           ? fmtDateTime(task.due_at)

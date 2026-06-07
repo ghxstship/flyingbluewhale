@@ -25,10 +25,10 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.procurement.rfqs.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={4} maxLength={4000} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={4} maxLength={4000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.procurement.rfqs.new.dueLabel", undefined, "Due")}

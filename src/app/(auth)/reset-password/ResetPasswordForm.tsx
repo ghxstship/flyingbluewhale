@@ -24,7 +24,7 @@ export function ResetPasswordForm() {
       title={t("auth.resetPassword.title", undefined, "Set a new password")}
       subtitle={t("auth.resetPassword.subtitle", undefined, "Choose a password you haven't used before.")}
       footer={
-        <Link href="/login" className="text-[var(--org-primary)] underline underline-offset-4">
+        <Link href="/login" className="text-[var(--p-accent)] underline underline-offset-4">
           {t("auth.forgotPassword.backToLogin", undefined, "Back to sign in")}
         </Link>
       }

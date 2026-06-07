@@ -55,13 +55,13 @@ export default async function ImportPage() {
       <header className="border-ink mb-8 border-b-3 pb-6">
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+            <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
               {t("console.import.eyebrow", undefined, "Import")}
             </div>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight">
               {t("console.import.title", undefined, "IMPORT CENTER")}
             </h1>
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+            <p className="mt-2 text-sm text-[var(--p-text-2)]">
               {t(
                 "console.import.description",
                 undefined,
@@ -105,26 +105,24 @@ export default async function ImportPage() {
                   <CardBody>
                     <div className="grid grid-cols-3 gap-4 text-xs">
                       <div>
-                        <div className="text-[var(--text-muted)]">
+                        <div className="text-[var(--p-text-2)]">
                           {t("console.import.stats.total", undefined, "Total")}
                         </div>
                         <div className="text-lg font-semibold tabular-nums">{j.rowsTotal}</div>
                       </div>
                       <div>
-                        <div className="text-[var(--text-muted)]">
+                        <div className="text-[var(--p-text-2)]">
                           {t("console.import.stats.succeeded", undefined, "Succeeded")}
                         </div>
-                        <div className="text-lg font-semibold text-[var(--color-success)] tabular-nums">
+                        <div className="text-lg font-semibold text-[var(--p-success)] tabular-nums">
                           {j.rowsSucceeded}
                         </div>
                       </div>
                       <div>
-                        <div className="text-[var(--text-muted)]">
+                        <div className="text-[var(--p-text-2)]">
                           {t("console.import.stats.failed", undefined, "Failed")}
                         </div>
-                        <div className="text-lg font-semibold text-[var(--color-error)] tabular-nums">
-                          {j.rowsFailed}
-                        </div>
+                        <div className="text-lg font-semibold text-[var(--p-danger)] tabular-nums">{j.rowsFailed}</div>
                       </div>
                     </div>
                     {(j.state === "parsing" || j.state === "inserting") && (
@@ -132,10 +130,10 @@ export default async function ImportPage() {
                         <ProgressBar value={pct} />
                       </div>
                     )}
-                    {j.summary ? <p className="mt-3 text-sm text-[var(--text-secondary)]">{j.summary}</p> : null}
+                    {j.summary ? <p className="mt-3 text-sm text-[var(--p-text-2)]">{j.summary}</p> : null}
                     {j.errors.length > 0 ? (
                       <details className="mt-3 text-xs">
-                        <summary className="cursor-pointer text-[var(--text-muted)]">
+                        <summary className="cursor-pointer text-[var(--p-text-2)]">
                           {j.errors.length === 1
                             ? t(
                                 "console.import.errors.summaryOne",

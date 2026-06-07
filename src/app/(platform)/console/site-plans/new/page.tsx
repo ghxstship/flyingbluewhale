@@ -10,9 +10,9 @@ import { createSitePlanSheet } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 const MONO = `${INPUT} font-mono uppercase tracking-wide`;
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const XPMS_CLASSES = [
   { value: 0, label: "0 EXECUTIVE" },
@@ -73,13 +73,13 @@ export default async function Page() {
             <div className="grid grid-cols-5 gap-3">
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  ORG<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  ORG<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input name="org_code" required maxLength={4} className={MONO} placeholder="SC" />
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  EVT<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  EVT<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input name="evt_code" required maxLength={5} className={MONO} placeholder="EDCLV" />
               </label>
@@ -95,13 +95,13 @@ export default async function Page() {
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  VEN<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  VEN<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input name="ven_code" required maxLength={5} className={MONO} placeholder="LVMS" />
               </label>
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
-                  ZON<span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  ZON<span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <input name="zon_code" required maxLength={8} className={MONO} placeholder="KITPRP" />
               </label>
@@ -126,7 +126,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.sitePlans.new.label.title", undefined, "Title")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <input
                 name="title"
@@ -143,7 +143,7 @@ export default async function Page() {
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.sitePlans.new.label.sheetCode", undefined, "Sheet Code")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <input name="code" required maxLength={40} className={INPUT} placeholder="K-101" />
             </label>
@@ -151,7 +151,7 @@ export default async function Page() {
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
                   {t("console.sitePlans.new.label.sheetType", undefined, "Sheet Type")}
-                  <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  <span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <select name="sheet_type" required defaultValue="floor_plan" className={INPUT}>
                   {SITEPLAN_SHEET_TYPES.map((sheetType) => (
@@ -164,7 +164,7 @@ export default async function Page() {
               <label className="flex flex-col gap-1.5">
                 <span className={LBL}>
                   {t("console.sitePlans.new.label.xpmsClass", undefined, "XPMS Class")}
-                  <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                  <span className="ms-0.5 text-[var(--p-danger)]">*</span>
                 </span>
                 <select name="primary_class" required defaultValue="8" className={INPUT}>
                   {XPMS_CLASSES.map((c) => (

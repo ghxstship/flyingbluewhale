@@ -131,7 +131,7 @@ export default async function Page() {
                 "Sourcing pulls from open requisitions. Author one to start the funnel.",
               )}
               action={
-                <Link href="/console/procurement/requisitions/new" className="btn btn-secondary btn-sm">
+                <Link href="/console/procurement/requisitions/new" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.procurement.sourcing.newRequisition", undefined, "+ New Requisition")}
                 </Link>
               }
@@ -146,7 +146,7 @@ export default async function Page() {
                   >
                     <div>
                       <div className="text-sm font-medium">{r.title}</div>
-                      <div className="font-mono text-xs text-[var(--text-muted)]">
+                      <div className="font-mono text-xs text-[var(--p-text-2)]">
                         {formatMoney(r.estimated_cents ?? 0)}
                       </div>
                     </div>
@@ -179,7 +179,7 @@ export default async function Page() {
                       <div className="text-sm font-medium">
                         <span className="font-mono text-xs">{p.number}</span> · {p.title}
                       </div>
-                      <div className="text-xs text-[var(--text-muted)]">
+                      <div className="text-xs text-[var(--p-text-2)]">
                         {p.vendor?.name ?? t("console.procurement.sourcing.noVendor", undefined, "No vendor")} ·{" "}
                         {formatMoney(p.amount_cents)}
                       </div>

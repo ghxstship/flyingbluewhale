@@ -17,7 +17,7 @@ export const TabsList = React.forwardRef<
   return (
     <TabsPrimitive.List
       ref={ref}
-      className={`flex items-center gap-1 border-b border-[var(--border-color)] ${scroll} ${className}`}
+      className={`flex items-center gap-1 border-b border-[var(--p-border)] ${scroll} ${className}`}
       {...props}
     />
   );
@@ -30,7 +30,7 @@ export const TabsTrigger = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-sm text-[var(--text-muted)] transition-colors outline-none hover:text-[var(--text-primary)] focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] data-[state=active]:border-[var(--org-primary)] data-[state=active]:text-[var(--text-primary)] ${className}`}
+      className={`relative -mb-px inline-flex items-center gap-1.5 border-b-2 border-transparent px-3 py-2 text-sm text-[var(--p-text-2)] transition-colors outline-none hover:text-[var(--p-text-1)] focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--p-bg)] data-[state=active]:border-[var(--p-accent)] data-[state=active]:text-[var(--p-text-1)] ${className}`}
       {...props}
     />
   );
@@ -43,7 +43,7 @@ export const TabsContent = React.forwardRef<
   return (
     <TabsPrimitive.Content
       ref={ref}
-      className={`outline-none focus-visible:ring-2 focus-visible:ring-[var(--org-primary)] ${className}`}
+      className={`outline-none focus-visible:ring-2 focus-visible:ring-[var(--p-accent)] ${className}`}
       {...props}
     />
   );
@@ -60,7 +60,7 @@ export const SegmentedControl = React.forwardRef<
   return (
     <TabsPrimitive.List
       ref={ref}
-      className={`inline-flex items-center gap-0.5 rounded-md border border-[var(--border-color)] bg-[var(--surface-inset)] p-0.5 ${className}`}
+      className={`inline-flex items-center gap-0.5 rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] p-0.5 ${className}`}
       {...props}
     />
   );
@@ -73,7 +73,7 @@ export const SegmentedControlItem = React.forwardRef<
   return (
     <TabsPrimitive.Trigger
       ref={ref}
-      className={`focus-ring data-[state=active]:elevation-1 rounded px-3 py-1 text-xs font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] data-[state=active]:bg-[var(--surface-raised)] data-[state=active]:text-[var(--text-primary)] ${className}`}
+      className={`focus-ring data-[state=active]:elevation-1 rounded px-3 py-1 text-xs font-medium text-[var(--p-text-2)] transition-colors hover:text-[var(--p-text-1)] data-[state=active]:bg-[var(--p-surface)] data-[state=active]:text-[var(--p-text-1)] ${className}`}
       {...props}
     />
   );

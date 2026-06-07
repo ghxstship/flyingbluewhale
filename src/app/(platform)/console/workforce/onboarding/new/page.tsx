@@ -26,10 +26,10 @@ export default async function Page() {
             placeholder={t("console.workforce.onboarding.new.namePlaceholder", undefined, "Day-1 Crew Onboarding")}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.onboarding.new.description", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={2000} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.workforce.onboarding.new.targetRole", undefined, "Target role")}

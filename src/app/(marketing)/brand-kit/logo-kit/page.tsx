@@ -13,7 +13,7 @@
  *
  * This page paints in the ATLVS Technologies SaaS register (neutral
  * canvas, Inter type) — it documents the ATLVS product mark, not the
- * GHXSTSHIP cosmic brand. The data-theme override pins the SaaS skin
+ * legacy cosmic brand. The data-theme override pins the SaaS skin
  * regardless of the visitor's cookie pref on the rest of the (marketing)
  * shell.
  */

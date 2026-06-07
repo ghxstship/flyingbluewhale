@@ -21,10 +21,10 @@ export default async function Page() {
           submitLabel={t("console.settings.integrations.ticketing.new.submitLabel", undefined, "Connect")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.integrations.ticketing.new.providerLabel", undefined, "Provider")}
             </label>
-            <select name="provider" className="input-base mt-1.5 w-full" required>
+            <select name="provider" className="ps-input mt-1.5 w-full" required>
               {TICKETING_PROVIDERS.map((p) => (
                 <option key={p} value={p}>
                   {p}

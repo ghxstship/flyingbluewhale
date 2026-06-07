@@ -103,7 +103,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ y
           />
         </div>
         {fatalities > 0 && (
-          <div className="surface p-4 ring-2 ring-[var(--color-error)]">
+          <div className="surface p-4 ring-2 ring-[var(--p-danger)]">
             <strong>
               {fatalities}{" "}
               {fatalities === 1

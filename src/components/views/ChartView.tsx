@@ -62,17 +62,17 @@ export type ChartViewProps<T extends Record<string, unknown> = Record<string, un
 };
 
 /**
- * Tone → CSS var. `accent` rebinds to `--org-primary` so the active
+ * Tone → CSS var. `accent` rebinds to `--p-accent` so the active
  * brand overlay (ATLVS / GVTEWAY / COMPVSS) drives accent color
  * automatically — no hardcoded hex anywhere in chart output.
  */
 const TONE_VAR: Record<Tone, string> = {
-  accent: "var(--org-primary)",
-  info: "var(--color-info)",
-  success: "var(--color-success)",
-  warn: "var(--color-warning)",
-  error: "var(--color-error)",
-  neutral: "var(--text-muted)",
+  accent: "var(--p-accent)",
+  info: "var(--p-info)",
+  success: "var(--p-success)",
+  warn: "var(--p-warning)",
+  error: "var(--p-danger)",
+  neutral: "var(--p-text-2)",
 };
 
 function toneFor(series: ChartSeries, index: number): string {
@@ -164,7 +164,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
 
   const commonAxes = (
     <>
-      {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />}
+      {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />}
       {showTooltip && <ChartTooltip xAxis={config.x} yAxis={config.y} series={config.series} />}
       {showLegend && <Legend wrapperStyle={{ fontSize: 10 }} />}
     </>
@@ -173,13 +173,13 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
   const xAxisEl = (
     <XAxis
       dataKey={config.x.field}
-      tick={{ fontSize: 10, fill: "var(--text-muted)" }}
+      tick={{ fontSize: 10, fill: "var(--p-text-2)" }}
       tickFormatter={(v) => formatValue(v, config.x.format ?? "auto", config.x.currency)}
     />
   );
   const yAxisEl = (
     <YAxis
-      tick={{ fontSize: 10, fill: "var(--text-muted)" }}
+      tick={{ fontSize: 10, fill: "var(--p-text-2)" }}
       tickFormatter={(v) =>
         formatValue(v, (config.y?.format ?? config.series[0]?.field) ? "auto" : "auto", config.y?.currency)
       }
@@ -196,15 +196,15 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
           layout={horizontal ? "vertical" : "horizontal"}
           onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}
         >
-          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />}
+          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />}
           {horizontal ? (
             <>
               <XAxis
                 type="number"
-                tick={{ fontSize: 10, fill: "var(--text-muted)" }}
+                tick={{ fontSize: 10, fill: "var(--p-text-2)" }}
                 tickFormatter={(v) => formatValue(v, config.y?.format ?? "auto", config.y?.currency)}
               />
-              <YAxis type="category" dataKey={config.x.field} tick={{ fontSize: 10, fill: "var(--text-muted)" }} />
+              <YAxis type="category" dataKey={config.x.field} tick={{ fontSize: 10, fill: "var(--p-text-2)" }} />
             </>
           ) : (
             <>
@@ -299,7 +299,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
             outerRadius="80%"
             innerRadius={isDonut ? "55%" : 0}
             paddingAngle={isDonut ? 2 : 0}
-            stroke="var(--background)"
+            stroke="var(--p-bg)"
             strokeWidth={2}
             onClick={onClick ? (slice) => onClick(slice as unknown as Record<string, unknown>) : undefined}
           >
@@ -319,18 +319,18 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
       const zField = config.series[0]?.zField;
       return (
         <ScatterChart onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}>
-          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" />}
+          {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />}
           <XAxis
             dataKey={config.x.field}
             type="number"
-            tick={{ fontSize: 10, fill: "var(--text-muted)" }}
+            tick={{ fontSize: 10, fill: "var(--p-text-2)" }}
             tickFormatter={(v) => formatValue(v, config.x.format ?? "auto", config.x.currency)}
             name={config.x.label ?? config.x.field}
           />
           <YAxis
             dataKey={config.series[0]?.field}
             type="number"
-            tick={{ fontSize: 10, fill: "var(--text-muted)" }}
+            tick={{ fontSize: 10, fill: "var(--p-text-2)" }}
             tickFormatter={(v) => formatValue(v, config.y?.format ?? "auto", config.y?.currency)}
             name={config.y?.label ?? config.series[0]?.field}
           />
@@ -460,7 +460,7 @@ function ChartTooltip({
 }): React.ReactElement {
   return (
     <Tooltip
-      cursor={{ fill: "var(--surface-inset)" }}
+      cursor={{ fill: "var(--p-surface-2)" }}
       content={<TooltipContent xAxis={xAxis} yAxis={yAxis} series={series} />}
     />
   );
@@ -485,9 +485,9 @@ function TooltipContent({
 }: TooltipContentProps): React.ReactElement | null {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-[var(--border-color)] bg-[var(--surface-raised)] px-2.5 py-1.5 text-[10px] shadow-sm">
+    <div className="rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1.5 text-[10px] shadow-sm">
       {label !== undefined && label !== null && (
-        <div className="mb-1 font-medium text-[var(--text-primary)]">
+        <div className="mb-1 font-medium text-[var(--p-text-1)]">
           {formatValue(label, xAxis.format ?? "auto", xAxis.currency)}
         </div>
       )}
@@ -498,8 +498,8 @@ function TooltipContent({
         return (
           <div key={i} className="flex items-center gap-1.5">
             <span className="inline-block h-2 w-2 rounded-full" style={{ background: p.color }} aria-hidden />
-            <span className="text-[var(--text-secondary)]">{p.name}:</span>
-            <span className="font-mono text-[var(--text-primary)]">
+            <span className="text-[var(--p-text-2)]">{p.name}:</span>
+            <span className="font-mono text-[var(--p-text-1)]">
               {typeof p.value === "number" ? formatValue(p.value, fmt, currency) : "—"}
             </span>
           </div>

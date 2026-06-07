@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             )}
           />
         ) : (
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.projects.crew.columnName", undefined, "Name")}</th>
@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     </Link>
                   </td>
                   <td>{c.role ?? "—"}</td>
-                  <td className="text-[var(--text-muted)]">{c.email ?? "—"}</td>
+                  <td className="text-[var(--p-text-2)]">{c.email ?? "—"}</td>
                   <td className="font-mono text-xs">{money(c.day_rate_cents)}</td>
                 </tr>
               ))}

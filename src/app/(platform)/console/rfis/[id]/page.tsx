@@ -13,7 +13,7 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] px-3 py-2 text-sm";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <h3 className="text-sm font-semibold">{t("console.rfis.detail.questionHeading", undefined, "Question")}</h3>
           <p className="mt-2 text-sm whitespace-pre-wrap">{rfi.question}</p>
           {rfi.category && (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.rfis.detail.categoryLabel", undefined, "Category:")} {toTitle(rfi.category)}
             </p>
           )}
@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           {rfi.official_answer ? (
             <div className="mt-2">
               <p className="text-sm whitespace-pre-wrap">{rfi.official_answer}</p>
-              <p className="mt-2 text-xs text-[var(--text-muted)]">
+              <p className="mt-2 text-xs text-[var(--p-text-2)]">
                 {t("console.rfis.detail.answeredBy", undefined, "Answered by")}{" "}
                 {(rfi.answerer as unknown as { name: string | null; email: string | null } | null)?.name ?? "—"}
                 {rfi.answered_at ? ` · ${fmt.dateTime(rfi.answered_at)}` : ""}

@@ -1,7 +1,11 @@
 /*
- * CHROMA BEACON — primitive tokens
- * Raw palette, spacing, type scale. Never consumed directly by components.
- * Semantic tokens (src/app/theme/themes/*.css) map these into roles.
+ * ATLVS theme — primitives
+ *
+ * Raw, kit-agnostic tokens that live one tier below `themes/atlvs-product.css`.
+ * Type scale, spacing scale, motion timing/easing, hover personality, z-index
+ * tiers, theme-swap transition. The kit theme imports next and OVERRIDES
+ * anything semantic (surface/text/accent/radius/shadow); primitives only owns
+ * what the kit doesn't define.
  */
 
 :root {
@@ -34,13 +38,10 @@
   --space-24: 6rem;
 
   /* ─── Motion ──────────────────────────────────────────────────────
-     Single source of truth for motion. Audit T1 fix: previously the
-     `--motion-*` durations and easing curves were redeclared inside
-     globals.css `@layer components { :root { ... } }`, which meant two
-     namespaces (`--transition-duration-*` in @theme + `--motion-*` in
-     @layer) covered the same ground. Hoisted here so primitives owns
-     all motion tokens; globals.css now only carries the
-     `prefers-reduced-motion` override and the consumer classes. */
+     Single source of truth for motion. The kit theme also defines
+     `--motion-*` / `--ease-*` inside the [data-ui="saas"] scope; that
+     scoped declaration WINS on cascade for kit-attributed subtrees,
+     while these :root defaults paint pre-kit SSR cold-start. */
   --motion-fast: 120ms;
   --motion-normal: 200ms;
   --motion-slow: 360ms;
@@ -50,18 +51,7 @@
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Hover / press personality — themes override these to express their
-     own motion vocabulary. Defaults are the conservative baseline (Material/
-     Bento ergonomics): a 2px lift, no scale change, gentle 0.97 press.
-     - `--motion-hover` is the timing for hover/press transitions; themes
-       can drop or stretch it without touching keyframe-based animations.
-     - `--ease-hover` is the curve for hover/press only — kinetic + soft
-       swap to spring; brutal/bermuda flatten to linear for snap.
-     - `--hover-lift-y` is the translateY amount on hover. Set to `0` for
-       brutal-family themes that move the shadow instead of the element.
-     - `--hover-scale` adds a subtle grow on hover (>1) for soft/kinetic.
-     - `--press-scale` is the active-state shrink. Brutal themes shrink
-       harder so the click registers without any lift to undo. */
+  /* Hover / press personality. */
   --motion-hover: var(--motion-normal);
   --ease-hover: var(--ease-out);
   --hover-lift-y: -2px;
@@ -69,21 +59,14 @@
   --press-scale: 0.97;
 
   /* Tailwind v4 default-transition overrides — all `transition-*`
-     utilities (transition-colors, transition-transform, transition-opacity,
-     etc.) read these as their fallback duration + curve. Bound to
-     --motion-hover / --ease-hover (the per-theme hover personality
-     tokens) so Tailwind utilities pick up the active theme's vocabulary
-     for free: brutal snaps at 120ms linear, soft eases at 360ms spring.
-     Tailwind's per-utility overrides (`duration-100`, `ease-linear`)
-     still win via `--tw-duration` / `--tw-ease` CSS variables. */
+     utilities (transition-colors, transition-transform, etc.) read these
+     as their fallback duration + curve. Per-utility overrides
+     (`duration-100`, `ease-linear`) still win via Tailwind's own vars. */
   --default-transition-duration: var(--motion-hover);
   --default-transition-timing-function: var(--ease-hover);
 
   /* Global theme-swap transition — fires on every element when the user
-     toggles theme/mode. Reads --motion-normal so reduced-motion zeroes
-     it (combined with the explicit !important override below). Curve is
-     fixed to --ease-standard because per-theme spring would overshoot
-     into the previous theme's color tokens during the swap. */
+     toggles mode/accent. Reduced-motion zeroes it via the media query below. */
   --theme-transition:
     background-color var(--motion-normal) var(--ease-standard), color var(--motion-normal) var(--ease-standard),
     border-color var(--motion-normal) var(--ease-standard), box-shadow var(--motion-normal) var(--ease-standard),
@@ -98,117 +81,17 @@
   --z-modal: 50;
   --z-toast: 60;
   --z-palette: 70;
-
-  /* ─── Legacy aliases — tie old components to the active theme
-         (the token names the rest of the codebase already consumes).
-         These remain the consumer contract; themes/*.css rewires them. */
-  --background: var(--bg);
-  --foreground: var(--text);
-  --bg-secondary: var(--surface);
-  --bg-tertiary: var(--surface-2);
-  --text-primary: var(--text);
-  --text-color: var(--text);
-  --text-secondary: var(--text-muted);
-  --border-color: var(--border);
-  /* `--surface-inset` means "subtle recessed bg" — one tiny step off the
-   * page background. Previously aliased to `--surface-2`, which is each
-   * theme's prominent *accent* surface (brutal `#ffde3a`, bento black,
-   * etc.). That made the footer, embedded previews, and inset panels pick
-   * up the theme accent color — producing, e.g., a neon-yellow footer on
-   * brutal. A proper inset tracks the page bg with a small color-mix
-   * shift that stays subtle in every theme. Themes can still override
-   * this with an explicit `--surface-inset: …` if they want a custom feel. */
-  --surface-inset: color-mix(in oklab, var(--bg) 92%, var(--text) 8%);
-  --surface-raised: var(--surface);
-  --org-primary: var(--accent);
-  --org-accent: var(--accent);
-  --org-on-primary: var(--accent-contrast);
-
-  /* ─── Status pairings — locked to the GHXSTSHIP kit (tokens.json#semantic).
-   * Kit names this swatch `danger` (matches `--flare`); `--color-error`
-   * is a back-compat alias so existing consumers keep painting. */
-  --color-error: #f23a2f;
-  --color-danger: #f23a2f;
-  --color-warning: #e9a23b;
-  --color-success: #2fbf71;
-  --color-info: #21d4d4;
-
-  /* ─── Specialty token fallbacks (audit m1) ─────────────────────────
-     Themes are free to override these; neutral fallbacks make sure a
-     consumer referencing the token never resolves to `initial`. */
-  --glass-blur: blur(12px) saturate(1.2); /* default frosted-glass effect */
-  --shadow-press: inset 0 1px 2px rgba(0, 0, 0, 0.08); /* subtle press feedback */
-  --accent-solid: var(--accent); /* non-gradient accent fallback */
-  --accent-soft: color-mix(in srgb, var(--accent) 35%, transparent);
-  --accent-alt: var(--accent);
-  --type-variation-display: normal;
-  /* Overlay backdrop tokens — themes can override for tinted scrims. Audit
-     T5 fix: globals.css `.overlay-backdrop` previously hardcoded
-     `rgba(0,0,0,0.4)` / `rgba(0,0,0,0.6)` for light/dark, bypassing every
-     theme's identity. */
-  --overlay-backdrop: rgba(0, 0, 0, 0.4);
-  --overlay-backdrop-strong: rgba(0, 0, 0, 0.6);
-
-  /* ─── Elevation tier scale ─────────────────────────────────────────
-     Audit DS-S1 fix: `.elevation-{0..4}` previously collapsed to two
-     distinct shadow values (`--shadow-elev` and `--shadow-elev-hover`),
-     making five named tiers a degenerate scale. The HVRBOR canon needs
-     a real progression so small chips don't get the same 8px brutal
-     drop as full cards (which produces the visible black-blob overflow
-     on rounded-full pills).
-
-     Fallback chain: themes that don't override these inherit the legacy
-     `--shadow-elev` / `--shadow-elev-hover` so cyber's neon glow, soft's
-     spring shadow, and earthy's muted lift still render. Bermuda Triangle
-     declares explicit tier values for the brutal progression (2/4/8/12). */
-  --shadow-1: var(--shadow-press, var(--shadow-elev));
-  --shadow-2: var(--shadow-elev-soft, var(--shadow-elev));
-  --shadow-3: var(--shadow-elev);
-  --shadow-4: var(--shadow-elev-hover);
   /* Skip-link tier — sits above every other z-index so the keyboard
-     accessibility affordance is never obscured by modals, palettes, or
-     toasts. Audit T3 fix: replaces the 9999 magic number. */
+     accessibility affordance is never obscured by modals or palettes. */
   --z-skip-link: 80;
-  /* Focus ring tokens — audit T4 fix. `--ring-width` lets the focus ring
-     scale with the active theme's structural language (Bermuda Triangle's
-     thick-border canon wants a thicker ring than the legacy 1px); themes
-     can override --ring-color to break from the org-primary default
-     (e.g., dark themes that need a brighter accent for visibility). */
-  --ring-width: 1px;
-  --ring-color: var(--org-primary);
-
-  /* Border weight tiers — audit DS-B1. `--border-width` is the STRUCTURAL
-     weight (cards, inputs, surfaces — 3px in Bermuda Triangle). Chrome
-     rules (top bar bottom, sidebar dividers, table row dividers) need a
-     lighter weight so they read as separators, not as structural enclosure.
-     Hairline is the smallest legible rule for inset cells. */
-  --border-width-chrome: 1px;
-  --border-width-hairline: 1px;
-  /* Subdisplay font — declared as alias to --font-display so themes that
-     don't define their own subdisplay still resolve cleanly. Bermuda
-     Triangle overrides this to Bebas Neue. */
-  --font-subdisplay: var(--font-display);
-
-  /* ─── Layout ────────────────────────────────────────────────────── */
-  --sidebar-width: 16rem;
 }
 
-/* `--bg-hero` falls back to the theme's own `--bg` per scope. This MUST be
- * declared on `[data-theme]` (not `:root`) so the value re-resolves at
- * every element that carries a data-theme attribute — not just <html>.
- * Each surviving theme (ghxstship, atlvs-product) can declare its own
- * `--bg-hero` and win via cascade order (their CSS files are imported
- * after primitives). */
-[data-theme] {
-  --bg-hero: var(--bg);
-}
-
-/* Theme-swap transition — applied globally, guarded by reduced-motion.
-   Scoped into @layer base so class-level transition declarations
-   (e.g., `.hover-lift` in @layer components, Tailwind `transition-*`
-   utilities in @layer utilities) override per-component motion timing.
-   Without the layer, the unlayered `*` rule outranked everything and
-   pinned every element to the theme-swap timing. */
+/*
+ * Theme-swap transition — applied globally, guarded by reduced-motion.
+ * Scoped into @layer base so class-level transition declarations
+ * (`.hover-lift` in @layer components, Tailwind `transition-*` utilities
+ * in @layer utilities) override per-component motion timing.
+ */
 @layer base {
   *,
   *::before,

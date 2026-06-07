@@ -83,9 +83,9 @@ export default async function CrewPage() {
             },
           ]}
         />
-        <div className="mt-4 text-xs text-[var(--text-muted)]">
+        <div className="mt-4 text-xs text-[var(--p-text-2)]">
           {t("console.people.crew.manageCertsPrompt", undefined, "Need to manage certifications?")}{" "}
-          <Link href="/console/people/credentials" className="text-[var(--org-primary)]">
+          <Link href="/console/people/credentials" className="text-[var(--p-accent)]">
             {t("console.people.crew.openCredentials", undefined, "Open credentials →")}
           </Link>
         </div>

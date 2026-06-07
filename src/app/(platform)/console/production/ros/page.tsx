@@ -59,7 +59,7 @@ export default async function RunOfShowPage() {
       <div className="page-content max-w-5xl space-y-5">
         <section className="surface p-5">
           <h3 className="text-sm font-semibold">{t("console.production.ros.addCue", undefined, "Add a Cue")}</h3>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.production.ros.addCueHint",
               undefined,
@@ -72,13 +72,13 @@ export default async function RunOfShowPage() {
         </section>
 
         {grouped.size === 0 ? (
-          <section className="surface p-8 text-center text-sm text-[var(--text-muted)]">
+          <section className="surface p-8 text-center text-sm text-[var(--p-text-2)]">
             {t("console.production.ros.empty", undefined, "No cues yet — author one above.")}
           </section>
         ) : (
           Array.from(grouped.entries()).map(([day, cues]) => (
             <section key={day} className="surface">
-              <header className="flex items-center justify-between border-b border-[var(--border-color)] px-4 py-2.5">
+              <header className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-2.5">
                 <h3 className="text-sm font-semibold">
                   {fmt.dateParts(day, {
                     weekday: "short",
@@ -93,7 +93,7 @@ export default async function RunOfShowPage() {
                     : t("console.production.ros.countOther", { count: cues.length }, `${cues.length} cues`)}
                 </Badge>
               </header>
-              <table className="data-table w-full text-sm">
+              <table className="ps-table w-full text-sm">
                 <thead>
                   <tr>
                     <th>{t("console.production.ros.col.time", undefined, "Time")}</th>

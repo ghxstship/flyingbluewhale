@@ -40,10 +40,10 @@ export default async function Page() {
             placeholder="🛡️"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.badges.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={400} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={3} maxLength={400} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

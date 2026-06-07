@@ -186,7 +186,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             <h2 className="text-sm font-semibold">
               {t("console.procurement.woBroadcasts.detail.scope", undefined, "Scope")}
             </h2>
-            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--text-secondary)]">{broadcast.description}</p>
+            <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{broadcast.description}</p>
           </section>
         )}
 
@@ -196,7 +196,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
               <h2 className="text-sm font-semibold">
                 {t("console.procurement.woBroadcasts.detail.awarded", undefined, "Awarded")}
               </h2>
-              <span className="font-mono text-xs text-[var(--text-muted)]">
+              <span className="font-mono text-xs text-[var(--p-text-2)]">
                 {broadcast.awarded_at && timeAgo(broadcast.awarded_at)}
               </span>
             </div>
@@ -211,7 +211,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             <h2 className="text-sm font-semibold tracking-wide uppercase">
               {t("console.procurement.woBroadcasts.detail.invitees", undefined, "Invitees")}
             </h2>
-            <span className="font-mono text-xs text-[var(--text-muted)]">
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.woBroadcasts.detail.invitedRespondedCount",
                 { invited: invites.length, responded },
@@ -220,7 +220,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             </span>
           </div>
           {invites.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.woBroadcasts.detail.noVendorsInvited",
                 undefined,
@@ -228,7 +228,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
               )}
             </p>
           ) : (
-            <table className="data-table mt-3 w-full">
+            <table className="ps-table mt-3 w-full">
               <thead>
                 <tr>
                   <th className="text-start">
@@ -252,13 +252,13 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                     <td>
                       <div className="text-sm">{i.vendor?.name ?? i.vendor_id.slice(0, 8)}</div>
                       {i.vendor?.email && (
-                        <div className="font-mono text-[10px] text-[var(--text-muted)]">{i.vendor.email}</div>
+                        <div className="font-mono text-[10px] text-[var(--p-text-2)]">{i.vendor.email}</div>
                       )}
                     </td>
                     <td>
                       <Badge variant={INVITE_TONE[i.status] ?? "muted"}>{toTitle(i.status)}</Badge>
                     </td>
-                    <td className="font-mono text-xs text-[var(--text-muted)]">
+                    <td className="font-mono text-xs text-[var(--p-text-2)]">
                       {i.responded_at ? timeAgo(i.responded_at) : "—"}
                     </td>
                     <td className="text-xs">{i.notes ?? "—"}</td>
@@ -293,7 +293,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
           {editable && candidateVendors.length > 0 && (
             <form action={inviteVendor} className="surface-inset mt-4 flex flex-wrap gap-2 rounded-md p-3">
               <input type="hidden" name="broadcastId" value={broadcastId} />
-              <select name="vendor_id" required defaultValue="" className="input-base min-w-[14rem] flex-1">
+              <select name="vendor_id" required defaultValue="" className="ps-input min-w-[14rem] flex-1">
                 <option value="" disabled>
                   {t("console.procurement.woBroadcasts.detail.addVendorPlaceholder", undefined, "— Add vendor —")}
                 </option>
@@ -309,7 +309,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             </form>
           )}
           {editable && candidateVendors.length === 0 && invites.length > 0 && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.woBroadcasts.detail.allVendorsInvited",
                 undefined,
@@ -318,7 +318,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
             </p>
           )}
           {!editable && (
-            <p className="mt-3 text-xs text-[var(--text-muted)]">
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.woBroadcasts.detail.inviteeListLocked",
                 undefined,

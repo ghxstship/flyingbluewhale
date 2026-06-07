@@ -26,17 +26,17 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.postings.new.fields.description", undefined, "Description")}
             </label>
-            <textarea name="description" rows={6} maxLength={8000} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={6} maxLength={8000} className="ps-input mt-1.5 w-full" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.new.fields.postingType", undefined, "Posting Type")}
               </label>
-              <select name="posting_type" className="input-base mt-1.5 w-full" defaultValue="single">
+              <select name="posting_type" className="ps-input mt-1.5 w-full" defaultValue="single">
                 <option value="single">
                   {t("console.marketplace.postings.new.postingType.single", undefined, "Single")}
                 </option>
@@ -49,10 +49,10 @@ export default async function Page() {
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--text-secondary)]">
+              <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.new.fields.employment", undefined, "Employment")}
               </label>
-              <select name="employment_type" className="input-base mt-1.5 w-full" defaultValue="1099">
+              <select name="employment_type" className="ps-input mt-1.5 w-full" defaultValue="1099">
                 <option value="1099">
                   {t("console.marketplace.postings.new.employment.contractor1099", undefined, "1099 Contractor")}
                 </option>

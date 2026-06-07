@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <h3 className="text-sm font-semibold">
             {t("p.athlete.safeguarding.channelTitle", undefined, "Confidential Reporting Channel")}
           </h3>
-          <p className="mt-2 text-xs text-[var(--text-secondary)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t(
               "p.athlete.safeguarding.channelDescription",
               undefined,
@@ -102,11 +102,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
               href={`mailto:safeguarding@atlvs.pro?subject=Safeguarding%20report%20—%20${slug}`}
-              className="btn btn-primary btn-sm"
+              className="ps-btn ps-btn--sm"
             >
               {t("p.athlete.safeguarding.emailLead", undefined, "Email safeguarding lead")}
             </Link>
-            <Link href={`/m/incidents/new?kind=safeguarding`} className="btn btn-secondary btn-sm">
+            <Link href={`/m/incidents/new?kind=safeguarding`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("p.athlete.safeguarding.fileViaMobile", undefined, "File via mobile")}
             </Link>
           </div>
@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t("p.athlete.safeguarding.yourReports", undefined, "Your Reports")}
           </h3>
           {reports.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "p.athlete.safeguarding.emptyState",
                 undefined,
@@ -137,15 +137,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               )}
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[var(--border-color)]">
+            <ul className="mt-3 divide-y divide-[var(--p-border)]">
               {reports.map((r) => (
                 <li key={r.id} className="flex items-start justify-between gap-3 py-3 text-sm">
                   <div className="min-w-0">
                     <div className="font-medium">
                       {r.subject_ref ?? t("p.athlete.safeguarding.confidential", undefined, "Confidential")}
                     </div>
-                    <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-secondary)]">{r.narrative}</p>
-                    <div className="mt-1 font-mono text-[10px] text-[var(--text-muted)]">
+                    <p className="mt-0.5 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.narrative}</p>
+                    <div className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
                       {t(
                         "p.athlete.safeguarding.filedUpdated",
                         { filed: fmt(r.created_at), updated: fmt(r.updated_at) },
@@ -160,7 +160,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         </section>
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "p.athlete.safeguarding.emergencyNote",
             undefined,

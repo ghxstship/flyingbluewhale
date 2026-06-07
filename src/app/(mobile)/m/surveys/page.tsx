@@ -20,7 +20,7 @@ export default async function MobileSurveysPage() {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -45,7 +45,7 @@ export default async function MobileSurveysPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.common.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.surveys.title", undefined, "Surveys")}</h1>
@@ -79,9 +79,9 @@ export default async function MobileSurveysPage() {
                     )}
                   </div>
                   <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
-                  {s.description && <p className="mt-1 text-xs text-[var(--text-secondary)]">{s.description}</p>}
+                  {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
                   {s.closes_at && (
-                    <p className="mt-1 font-mono text-xs text-[var(--text-muted)]">
+                    <p className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.surveys.closesAt", { date: fmt.date(s.closes_at) }, `closes ${fmt.date(s.closes_at)}`)}
                     </p>
                   )}

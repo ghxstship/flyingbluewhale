@@ -115,10 +115,10 @@ export default async function Page() {
                 <span
                   className={`font-mono text-xs ${
                     r.inherent_score >= 20
-                      ? "text-[var(--color-error)]"
+                      ? "text-[var(--p-danger)]"
                       : r.inherent_score >= 12
-                        ? "text-[var(--color-warning)]"
-                        : "text-[var(--text-secondary)]"
+                        ? "text-[var(--p-warning)]"
+                        : "text-[var(--p-text-2)]"
                   }`}
                 >
                   {r.inherent_score}

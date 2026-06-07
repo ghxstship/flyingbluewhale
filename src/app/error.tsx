@@ -16,13 +16,13 @@ export default function RootError({ error, reset }: { error: Error & { digest?: 
           stays on-brand instead of reading as a generic crash page. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/brand/atlvs-mark.svg" alt="" width={32} height={32} aria-hidden="true" className="mx-auto mb-6" />
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("rootError.eyebrow", undefined, "Error")}
       </div>
       <h1 className="mt-3 text-3xl font-semibold tracking-tight">
         {t("rootError.title", undefined, "Something went wrong")}
       </h1>
-      <p className="mt-2 text-sm text-[var(--text-muted)]">
+      <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {error.message || t("rootError.fallback", undefined, "An unexpected error occurred.")}
         {error.digest && (
           <span className="ms-2 font-mono text-xs">
@@ -31,10 +31,10 @@ export default function RootError({ error, reset }: { error: Error & { digest?: 
         )}
       </p>
       <div className="mt-6 flex justify-center gap-2">
-        <button type="button" onClick={reset} className="btn btn-primary">
+        <button type="button" onClick={reset} className="ps-btn">
           {t("common.retry", undefined, "Try again")}
         </button>
-        <Link href="/" className="btn btn-secondary">
+        <Link href="/" className="ps-btn ps-btn--ghost">
           {t("nav.home", undefined, "Home")}
         </Link>
       </div>

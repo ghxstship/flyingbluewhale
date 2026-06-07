@@ -21,13 +21,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
     <div className="space-y-4 p-6">
       <header className="surface flex items-end justify-between gap-4 p-5">
         <div>
-          <div className="eyebrow text-xs text-[var(--text-muted)]">
+          <div className="eyebrow text-xs text-[var(--p-text-2)]">
             {t("p.client.proposals.revisions.eyebrow", undefined, "Revisions & proofing")}
           </div>
           <h1 className="text-lg font-semibold">
             {t("p.client.proposals.revisions.title", undefined, "Decide on Creative Deliverables")}
           </h1>
-          <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
+          <p className="mt-1 max-w-2xl text-sm text-[var(--p-text-2)]">
             {t(
               "p.client.proposals.revisions.subtitle",
               undefined,
@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       </header>
 
       {rounds.length === 0 ? (
-        <div className="surface p-12 text-center text-[var(--text-muted)]">
+        <div className="surface p-12 text-center text-[var(--p-text-2)]">
           {t("p.client.proposals.revisions.empty", undefined, "No revision rounds yet.")}
         </div>
       ) : (
@@ -50,18 +50,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs text-[var(--text-muted)]">
+                      <span className="font-mono text-xs text-[var(--p-text-2)]">
                         {t("p.client.proposals.revisions.roundLabel", { num: r.round_num }, `Round ${r.round_num}`)}
                       </span>
                       <Badge variant={REV_STATE_VARIANT[r.state]}>{REV_STATE_LABEL[r.state]}</Badge>
-                      <span className="font-mono text-[10px] tracking-wider text-[var(--text-muted)] uppercase">
+                      <span className="font-mono text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
                         {r.target_kind}
                       </span>
                     </div>
                     <h2 className="mt-1 text-base font-semibold">{r.title}</h2>
-                    {r.summary && <p className="mt-1 line-clamp-2 text-sm text-[var(--text-muted)]">{r.summary}</p>}
+                    {r.summary && <p className="mt-1 line-clamp-2 text-sm text-[var(--p-text-2)]">{r.summary}</p>}
                   </div>
-                  <div className="shrink-0 text-right text-xs text-[var(--text-muted)]">
+                  <div className="shrink-0 text-right text-xs text-[var(--p-text-2)]">
                     {r.decided_at
                       ? t(
                           "p.client.proposals.revisions.decidedAt",

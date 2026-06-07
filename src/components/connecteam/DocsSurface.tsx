@@ -49,7 +49,7 @@ export async function DocsSurface({
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -72,9 +72,9 @@ export async function DocsSurface({
 
   return (
     <div className={containerClass}>
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">{eyebrow}</div>
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t(
           "m.docs.subtitle",
           undefined,
@@ -83,7 +83,7 @@ export async function DocsSurface({
       </p>
 
       <div className="mt-4 flex justify-end">
-        <Link href={uploadHref} className="btn btn-primary btn-sm">
+        <Link href={uploadHref} className="ps-btn ps-btn--sm">
           {t("m.docs.uploadCta", undefined, "+ Upload")}
         </Link>
       </div>
@@ -108,13 +108,11 @@ export async function DocsSurface({
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <Badge variant={KIND_TONE[d.doc_kind] ?? "muted"}>{d.doc_kind}</Badge>
-                    {d.mime_type && (
-                      <span className="font-mono text-[10px] text-[var(--text-muted)]">{d.mime_type}</span>
-                    )}
+                    {d.mime_type && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{d.mime_type}</span>}
                   </div>
                   <div className="mt-1 truncate text-sm font-semibold">{d.label}</div>
                 </div>
-                <span className="shrink-0 font-mono text-xs text-[var(--text-muted)]">{fmt.date(d.uploaded_at)}</span>
+                <span className="shrink-0 font-mono text-xs text-[var(--p-text-2)]">{fmt.date(d.uploaded_at)}</span>
               </div>
               <div className="mt-2 flex justify-end">
                 <DocDownloadLink docId={d.id} />

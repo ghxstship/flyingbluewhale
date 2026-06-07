@@ -71,7 +71,7 @@ export default async function MsasPage() {
               render: (r) => (
                 <div>
                   <div className="text-sm font-medium">{r.crew_member_name}</div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">{r.crew_member_email ?? "—"}</div>
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">{r.crew_member_email ?? "—"}</div>
                 </div>
               ),
               accessor: (r) => r.crew_member_name ?? null,
@@ -105,7 +105,7 @@ export default async function MsasPage() {
                 r.signed_at ? (
                   <span className="font-mono text-xs">{new Date(r.signed_at).toLocaleDateString()}</span>
                 ) : (
-                  <span className="text-xs text-[var(--text-muted)]">—</span>
+                  <span className="text-xs text-[var(--p-text-2)]">—</span>
                 ),
               accessor: (r) => r.signed_at ?? null,
             },
@@ -121,7 +121,7 @@ export default async function MsasPage() {
               render: (r) => (
                 <Link
                   href={`/console/people/msas/${r.id}`}
-                  className="text-xs text-[var(--text-muted)] hover:text-[var(--org-primary)]"
+                  className="text-xs text-[var(--p-text-2)] hover:text-[var(--p-accent)]"
                 >
                   {t("common.openArrow", undefined, "Open →")}
                 </Link>

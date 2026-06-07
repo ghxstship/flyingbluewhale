@@ -58,7 +58,7 @@ export default async function CompliancePage() {
           <h3 className="text-sm font-semibold">
             {t("console.settings.compliance.workspaceSettings", undefined, "Workspace Settings")}
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "console.settings.compliance.overrideDescription",
               undefined,
@@ -71,11 +71,11 @@ export default async function CompliancePage() {
         </section>
 
         <section>
-          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          <h3 className="mb-2 text-xs tracking-[0.18em] text-[var(--p-text-2)] uppercase">
             {t("console.settings.compliance.platformControls", undefined, "Platform controls")}
           </h3>
           <div className="overflow-x-auto">
-            <table className="data-table w-full text-sm">
+            <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
                   <th>{t("console.settings.compliance.columns.control", undefined, "Control")}</th>
@@ -90,7 +90,7 @@ export default async function CompliancePage() {
                     <td>
                       <Badge variant="success">{toTitle(c.status)}</Badge>
                     </td>
-                    <td className="text-[var(--text-secondary)]">
+                    <td className="text-[var(--p-text-2)]">
                       {t(`console.settings.compliance.controls.${c.key}.note`, undefined, c.note)}
                     </td>
                   </tr>

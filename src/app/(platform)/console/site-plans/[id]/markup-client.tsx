@@ -346,7 +346,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           <select
             value={tool}
             onChange={(e) => setTool(e.target.value as MarkupKind)}
-            className="rounded border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1 text-xs"
+            className="rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs"
           >
             {[
               "rectangle",
@@ -389,7 +389,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="rounded border border-[var(--border-color)] bg-[var(--bg-primary)] px-2 py-1 text-xs"
+              className="rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs"
             />
           </label>
         )}
@@ -398,7 +398,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             type="button"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
-            className="rounded border border-[var(--border-color)] px-2 py-1 disabled:opacity-50"
+            className="rounded border border-[var(--p-border)] px-2 py-1 disabled:opacity-50"
             aria-label={t("console.sitePlans.markup.previousPage", undefined, "Previous page")}
           >
             ‹
@@ -410,7 +410,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             type="button"
             onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
             disabled={page >= pageCount}
-            className="rounded border border-[var(--border-color)] px-2 py-1 disabled:opacity-50"
+            className="rounded border border-[var(--p-border)] px-2 py-1 disabled:opacity-50"
             aria-label={t("console.sitePlans.markup.nextPage", undefined, "Next page")}
           >
             ›
@@ -418,7 +418,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           <button
             type="button"
             onClick={() => setScale((s) => Math.max(0.5, s - 0.25))}
-            className="rounded border border-[var(--border-color)] px-2 py-1"
+            className="rounded border border-[var(--p-border)] px-2 py-1"
             aria-label={t("console.sitePlans.markup.zoomOut", undefined, "Zoom out")}
           >
             −
@@ -427,7 +427,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           <button
             type="button"
             onClick={() => setScale((s) => Math.min(4, s + 0.25))}
-            className="rounded border border-[var(--border-color)] px-2 py-1"
+            className="rounded border border-[var(--p-border)] px-2 py-1"
             aria-label={t("console.sitePlans.markup.zoomIn", undefined, "Zoom in")}
           >
             +
@@ -435,11 +435,11 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
         </span>
       </div>
       {error && (
-        <div className="surface p-3 text-xs text-[var(--color-error)]">
+        <div className="surface p-3 text-xs text-[var(--p-danger)]">
           {t("console.sitePlans.markup.renderError", { error }, "PDF render error: {error}")}
         </div>
       )}
-      <div className="text-[10px] text-[var(--text-muted)]">
+      <div className="text-[10px] text-[var(--p-text-2)]">
         {t(
           "console.sitePlans.markup.summary",
           {

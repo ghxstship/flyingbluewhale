@@ -159,7 +159,7 @@ export default async function GuidePage({
           subtitle={t("p.guide.subtitle", undefined, "Your Know-Before-You-Go")}
         />
         <div className="page-content">
-          <div className="surface p-6 text-sm text-[var(--text-muted)]">
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
             {t(
               "p.guide.unpublished",
               undefined,
@@ -189,7 +189,7 @@ export default async function GuidePage({
         action={
           <Link
             href={`/api/v1/guides/${guide.id}/pdf`}
-            className="btn btn-ghost btn-sm inline-flex items-center gap-1.5"
+            className="ps-btn ps-btn--ghost ps-btn--sm inline-flex items-center gap-1.5"
             aria-label={t("p.guide.downloadPdf.aria", undefined, "Download this guide as a PDF")}
           >
             <FileDown size={14} aria-hidden="true" />
@@ -283,7 +283,7 @@ async function PreviewSwitcher({
   if (visible.length < 2) return null;
   return (
     <div className="surface mb-4 flex flex-wrap items-center gap-2 px-4 py-2.5 text-xs">
-      <span className="font-medium text-[var(--text-secondary)]">
+      <span className="font-medium text-[var(--p-text-2)]">
         {previewing
           ? t("p.guide.preview.previewingAs", undefined, "Previewing as")
           : t("p.guide.preview.previewAs", undefined, "Preview as")}
@@ -297,8 +297,8 @@ async function PreviewSwitcher({
             aria-current={isActive ? "page" : undefined}
             className={
               isActive
-                ? "rounded-full bg-[var(--org-primary)] px-2.5 py-1 font-medium text-[var(--background)]"
-                : "rounded-full bg-[var(--surface-inset)] px-2.5 py-1 text-[var(--text-secondary)] hover:bg-[var(--surface-raised)]"
+                ? "rounded-full bg-[var(--p-accent)] px-2.5 py-1 font-medium text-[var(--p-bg)]"
+                : "rounded-full bg-[var(--p-surface-2)] px-2.5 py-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface)]"
             }
           >
             {personaLabel[p.value] ?? p.label}
@@ -306,7 +306,7 @@ async function PreviewSwitcher({
         );
       })}
       {previewing && (
-        <Link href={`/p/${slug}/guide`} className="ms-auto text-[var(--text-muted)] underline-offset-2 hover:underline">
+        <Link href={`/p/${slug}/guide`} className="ms-auto text-[var(--p-text-2)] underline-offset-2 hover:underline">
           {t("p.guide.preview.exit", undefined, "Exit preview")}
         </Link>
       )}

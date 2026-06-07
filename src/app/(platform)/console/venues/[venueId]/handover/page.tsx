@@ -150,7 +150,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               <span className="font-mono text-xs">{pct}%</span>
             </div>
             <ProgressBar value={pct} className="mt-3" />
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.venues.handover.progress.help",
                 undefined,

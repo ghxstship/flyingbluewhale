@@ -156,7 +156,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                   href={`/console/pipeline?pipeline=${p.slug}`}
                   className={
                     "rounded px-2 py-1 text-xs " +
-                    (p.id === active.id ? "bg-[var(--org-primary)] text-white" : "surface hover-lift")
+                    (p.id === active.id ? "bg-[var(--p-accent)] text-white" : "surface hover-lift")
                   }
                 >
                   {p.name}
@@ -199,10 +199,10 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
               const laneValue = lane.reduce((sum, o) => sum + (o.estimated_value_minor ?? 0), 0);
               return (
                 <section key={stage.id} className="surface p-4">
-                  <header className="flex items-center justify-between border-b border-[var(--border-color)] pb-2">
+                  <header className="flex items-center justify-between border-b border-[var(--p-border)] pb-2">
                     <div className="flex items-center gap-2">
                       <Badge variant={stageTone(stage)}>{stage.name}</Badge>
-                      <span className="font-mono text-[11px] text-[var(--text-muted)]">
+                      <span className="font-mono text-[11px] text-[var(--p-text-2)]">
                         {t(
                           lane.length === 1 ? "console.pipeline.lane.deals.one" : "console.pipeline.lane.deals.other",
                           { count: lane.length },
@@ -213,11 +213,11 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                     <span className="font-mono text-xs">{formatMoney(laneValue)}</span>
                   </header>
                   {lane.length === 0 ? (
-                    <p className="py-4 text-center text-xs text-[var(--text-muted)]">
+                    <p className="py-4 text-center text-xs text-[var(--p-text-2)]">
                       {t("console.pipeline.lane.empty", undefined, "No deals in this stage.")}
                     </p>
                   ) : (
-                    <ul className="mt-2 divide-y divide-[var(--border-color)]">
+                    <ul className="mt-2 divide-y divide-[var(--p-border)]">
                       {lane.map((o) => (
                         <li key={o.id}>
                           <Link
@@ -226,7 +226,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                           >
                             <div className="min-w-0 flex-1">
                               <div className="truncate text-sm font-medium">{o.title}</div>
-                              <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10px] text-[var(--text-muted)]">
+                              <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[10px] text-[var(--p-text-2)]">
                                 {o.account?.party?.display_name && <span>{o.account.party.display_name}</span>}
                                 {o.expected_close && (
                                   <span>
@@ -252,7 +252,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                                 {formatMoney(o.estimated_value_minor, o.estimated_value_currency ?? undefined)}
                               </div>
                               {o.probability != null && (
-                                <div className="font-mono text-[10px] text-[var(--text-muted)]">{o.probability}%</div>
+                                <div className="font-mono text-[10px] text-[var(--p-text-2)]">{o.probability}%</div>
                               )}
                             </div>
                           </Link>

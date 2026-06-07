@@ -33,10 +33,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--text-secondary)]">
+            <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.categories.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={500} className="input-base mt-1.5 w-full" />
+            <textarea name="description" rows={3} maxLength={500} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.accreditation.categories.new.colorLabel", undefined, "Color — Hex or Token")}

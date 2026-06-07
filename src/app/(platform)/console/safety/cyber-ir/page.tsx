@@ -166,7 +166,7 @@ export default async function Page() {
           ]}
         />
 
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.safety.cyberIr.lifecycleNote",
             undefined,

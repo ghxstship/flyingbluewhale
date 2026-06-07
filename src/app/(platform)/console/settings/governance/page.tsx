@@ -56,7 +56,7 @@ export default async function GovernancePage() {
             </h3>
             <CommitteeForm />
           </div>
-          <table className="data-table mt-3 w-full text-sm">
+          <table className="ps-table mt-3 w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.settings.governance.columns.name", undefined, "Name")}</th>
@@ -67,7 +67,7 @@ export default async function GovernancePage() {
             <tbody>
               {(committees ?? []).length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="py-6 text-center text-[var(--text-muted)]">
+                  <td colSpan={3} className="py-6 text-center text-[var(--p-text-2)]">
                     {t("console.settings.governance.emptyCommittees", undefined, "No committees yet.")}
                   </td>
                 </tr>
@@ -75,8 +75,8 @@ export default async function GovernancePage() {
                 (committees ?? []).map((c) => (
                   <tr key={c.id}>
                     <td>{c.name}</td>
-                    <td className="text-xs text-[var(--text-secondary)]">{c.cadence ? toTitle(c.cadence) : "—"}</td>
-                    <td className="text-xs text-[var(--text-muted)]">{c.charter ?? "—"}</td>
+                    <td className="text-xs text-[var(--p-text-2)]">{c.cadence ? toTitle(c.cadence) : "—"}</td>
+                    <td className="text-xs text-[var(--p-text-2)]">{c.charter ?? "—"}</td>
                   </tr>
                 ))
               )}
@@ -91,7 +91,7 @@ export default async function GovernancePage() {
             </h3>
             <PolicyForm />
           </div>
-          <table className="data-table mt-3 w-full text-sm">
+          <table className="ps-table mt-3 w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.settings.governance.columns.name", undefined, "Name")}</th>
@@ -103,7 +103,7 @@ export default async function GovernancePage() {
             <tbody>
               {(policies ?? []).length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-6 text-center text-[var(--text-muted)]">
+                  <td colSpan={4} className="py-6 text-center text-[var(--p-text-2)]">
                     {t("console.settings.governance.emptyPolicies", undefined, "No policies yet.")}
                   </td>
                 </tr>
@@ -111,7 +111,7 @@ export default async function GovernancePage() {
                 (policies ?? []).map((p) => (
                   <tr key={p.id}>
                     <td>{p.name}</td>
-                    <td className="text-xs text-[var(--text-secondary)]">{p.category ? toTitle(p.category) : "—"}</td>
+                    <td className="text-xs text-[var(--p-text-2)]">{p.category ? toTitle(p.category) : "—"}</td>
                     <td>
                       <Badge variant={p.status === "active" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
                     </td>

@@ -7,7 +7,7 @@ export interface SelectableCardProps extends Omit<
   "children" | "onChange" | "title" | "role"
 > {
   selected: boolean;
-  /** Visual tint when selected. Defaults to `brand` (--org-primary). */
+  /** Visual tint when selected. Defaults to `brand` (--p-accent). */
   tone?: SelectableCardTone;
   /** ARIA semantic — `radio` for "one of N", `checkbox` for "any of N".
    *  Defaults to `radio`. The wrapping element should set `role="radiogroup"`
@@ -24,9 +24,9 @@ export interface SelectableCardProps extends Omit<
 }
 
 const TONE_SELECTED: Record<SelectableCardTone, string> = {
-  brand: "border-[var(--org-primary)] bg-[color-mix(in_srgb,var(--org-primary)_8%,transparent)]",
-  success: "border-[color:var(--color-success)] bg-[color-mix(in_srgb,var(--color-success)_10%,transparent)]",
-  error: "border-[color:var(--color-error)] bg-[color-mix(in_srgb,var(--color-error)_10%,transparent)]",
+  brand: "border-[var(--p-accent)] bg-[color-mix(in_srgb,var(--p-accent)_8%,transparent)]",
+  success: "border-[color:var(--p-success)] bg-[color-mix(in_srgb,var(--p-success)_10%,transparent)]",
+  error: "border-[color:var(--p-danger)] bg-[color-mix(in_srgb,var(--p-danger)_10%,transparent)]",
 };
 
 /**
@@ -50,7 +50,7 @@ export function SelectableCard({
 }: SelectableCardProps) {
   const base =
     "flex w-full items-start justify-between gap-3 rounded-md border-2 p-4 text-start transition-colors press-scale";
-  const stateCls = selected ? TONE_SELECTED[tone] : "border-[var(--border-color)] hover:border-[var(--text-muted)]";
+  const stateCls = selected ? TONE_SELECTED[tone] : "border-[var(--p-border)] hover:border-[var(--p-text-2)]";
 
   return (
     <button
@@ -65,7 +65,7 @@ export function SelectableCard({
         {leading && <span className="shrink-0">{leading}</span>}
         <span className="flex flex-col gap-0.5">
           <span className="text-sm font-semibold">{title}</span>
-          {description && <span className="text-xs text-[var(--text-muted)]">{description}</span>}
+          {description && <span className="text-xs text-[var(--p-text-2)]">{description}</span>}
         </span>
       </span>
       {trailing && <span className="shrink-0">{trailing}</span>}

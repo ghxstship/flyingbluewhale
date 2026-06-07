@@ -21,7 +21,7 @@ export function ProductionPhaseControls({
 
   if (allowedNext.length === 0) {
     return (
-      <p className="text-xs text-[var(--text-secondary)]">
+      <p className="text-xs text-[var(--p-text-2)]">
         {t("console.production.fabrication.phaseControls.terminal", undefined, "Terminal phase.")}
       </p>
     );
@@ -48,7 +48,7 @@ export function ProductionPhaseControls({
           </Button>
         </form>
       ))}
-      <span className="ms-2 self-center text-xs text-[var(--text-secondary)]">
+      <span className="ms-2 self-center text-xs text-[var(--p-text-2)]">
         {t("console.production.fabrication.phaseControls.from", undefined, "From")}{" "}
         <strong>{toTitle(currentPhase)}</strong>
       </span>

@@ -39,7 +39,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
 
   return (
     <section className="surface">
-      <div className="flex flex-wrap items-end gap-2 border-b border-[var(--border-color)] px-4 py-3">
+      <div className="flex flex-wrap items-end gap-2 border-b border-[var(--p-border)] px-4 py-3">
         <div className="min-w-[180px] flex-1">
           <Input
             label={t("console.settings.audit.actorLabel", undefined, "Actor — UUID Prefix")}
@@ -51,13 +51,13 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
           />
         </div>
         <div className="min-w-[160px]">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.settings.audit.actionLabel", undefined, "Action")}
           </label>
           <select
             value={actionFilter}
             onChange={(e) => setActionFilter(e.target.value)}
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
           >
             <option value="">{t("console.settings.audit.allActions", undefined, "All actions")}</option>
             {actions.map((a) => (
@@ -68,13 +68,13 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
           </select>
         </div>
         <div className="min-w-[160px]">
-          <label className="text-xs font-medium text-[var(--text-secondary)]">
+          <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.settings.audit.targetTableLabel", undefined, "Target Table")}
           </label>
           <select
             value={tableFilter}
             onChange={(e) => setTableFilter(e.target.value)}
-            className="input-base mt-1.5 w-full"
+            className="ps-input mt-1.5 w-full"
           >
             <option value="">{t("console.settings.audit.allTables", undefined, "All tables")}</option>
             {tables.map((tbl) => (
@@ -84,7 +84,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
             ))}
           </select>
         </div>
-        <span className="text-xs text-[var(--text-muted)]">
+        <span className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.settings.audit.eventsCount",
             { filtered: filtered.length, total: rows.length },
@@ -94,7 +94,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="data-table w-full text-sm">
+        <table className="ps-table w-full text-sm">
           <thead>
             <tr>
               <th className="w-8" />
@@ -107,7 +107,7 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} className="py-6 text-center text-[var(--text-muted)]">
+                <td colSpan={5} className="py-6 text-center text-[var(--p-text-2)]">
                   {t("console.settings.audit.empty", undefined, "No matching events.")}
                 </td>
               </tr>
@@ -118,10 +118,10 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
                 return (
                   <React.Fragment key={r.id}>
                     <tr
-                      className={`cursor-pointer ${isOpen ? "bg-[var(--surface-inset)]" : ""}`}
+                      className={`cursor-pointer ${isOpen ? "bg-[var(--p-surface-2)]" : ""}`}
                       onClick={() => setOpen(isOpen ? null : r.id)}
                     >
-                      <td className="text-center text-[var(--text-muted)]">{diffable ? (isOpen ? "▾" : "▸") : ""}</td>
+                      <td className="text-center text-[var(--p-text-2)]">{diffable ? (isOpen ? "▾" : "▸") : ""}</td>
                       <td className="font-mono text-xs">{timeAgo(r.at)}</td>
                       <td>
                         <Badge variant="muted">
@@ -140,14 +140,14 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
                     </tr>
                     {isOpen && (
                       <tr>
-                        <td colSpan={5} className="bg-[var(--surface-inset)]/40 px-4 py-3">
+                        <td colSpan={5} className="bg-[var(--p-surface-2)]/40 px-4 py-3">
                           {diffable ? (
                             <DiffViewer
                               before={(r.metadata as { before?: unknown }).before}
                               after={(r.metadata as { after?: unknown }).after}
                             />
                           ) : (
-                            <pre className="overflow-x-auto rounded bg-[var(--surface-raised)] p-2 font-mono text-[10px] text-[var(--text-secondary)]">
+                            <pre className="overflow-x-auto rounded bg-[var(--p-surface)] p-2 font-mono text-[10px] text-[var(--p-text-2)]">
                               {JSON.stringify(r.metadata ?? {}, null, 2)}
                             </pre>
                           )}

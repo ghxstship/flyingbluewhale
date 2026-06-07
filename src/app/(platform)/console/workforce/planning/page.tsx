@@ -117,7 +117,7 @@ export default async function Page() {
               "Author workforce_deployments rows per venue+zone+window to drive headcount planning.",
             )}
             action={
-              <Link href="/console/workforce/deployment" className="btn btn-secondary btn-sm">
+              <Link href="/console/workforce/deployment" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("console.workforce.planning.openDeployment", undefined, "Open deployment")}
               </Link>
             }
@@ -152,7 +152,7 @@ export default async function Page() {
                               {d.venue?.name ?? "—"}
                               {d.zone?.name ? ` · ${d.zone.name}` : ""}
                             </span>
-                            <span className="font-mono text-xs text-[var(--text-muted)]">
+                            <span className="font-mono text-xs text-[var(--p-text-2)]">
                               {d.actual_fte}/{d.planned_fte}
                               {dr != null ? ` (${dr}%)` : ""}
                             </span>
@@ -160,7 +160,7 @@ export default async function Page() {
                         );
                       })}
                       {agg.rows.length > 6 && (
-                        <li className="text-xs text-[var(--text-muted)]">
+                        <li className="text-xs text-[var(--p-text-2)]">
                           +
                           {t(
                             "console.workforce.planning.moreCount",

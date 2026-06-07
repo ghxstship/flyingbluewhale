@@ -195,7 +195,7 @@ export default async function DatamapPage() {
       />
       <div className="page-content max-w-5xl space-y-4">
         <div className="overflow-x-auto">
-          <table className="data-table w-full text-sm">
+          <table className="ps-table w-full text-sm">
             <thead>
               <tr>
                 <th>{t("console.legal.privacy.datamap.col.domain", undefined, "Domain")}</th>
@@ -228,7 +228,7 @@ export default async function DatamapPage() {
                       {t(`console.legal.privacy.datamap.category.${r.category}`, undefined, r.category)}
                     </Badge>
                   </td>
-                  <td className="text-xs text-[var(--text-secondary)]">{r.processors.join(", ")}</td>
+                  <td className="text-xs text-[var(--p-text-2)]">{r.processors.join(", ")}</td>
                   <td className="text-xs">
                     {t(`console.legal.privacy.datamap.retention.${r.table}`, undefined, r.retention)}
                   </td>
@@ -240,7 +240,7 @@ export default async function DatamapPage() {
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-[var(--text-muted)]">
+        <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.legal.privacy.datamap.footnote",
             undefined,

@@ -44,16 +44,16 @@ export function DetailShell<T>({
       />
       <div className="page-content max-w-5xl space-y-5">
         {fields && fields.length > 0 && (
-          <dl className="surface grid gap-0 divide-y divide-[var(--border-color)] md:grid-cols-2 md:divide-y-0">
+          <dl className="surface grid gap-0 divide-y divide-[var(--p-border)] md:grid-cols-2 md:divide-y-0">
             {fields.map((f, i) => (
               <div
                 key={`${f.label}-${i}`}
-                className="px-5 py-3 md:border-b md:border-[var(--border-color)] md:[&:nth-last-child(-n+2)]:border-b-0"
+                className="px-5 py-3 md:border-b md:border-[var(--p-border)] md:[&:nth-last-child(-n+2)]:border-b-0"
               >
-                <dt className="text-[10px] font-semibold tracking-[0.2em] text-[var(--text-muted)] uppercase">
+                <dt className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                   {f.label}
                 </dt>
-                <dd className="mt-1 text-sm text-[var(--foreground)]">{f.value}</dd>
+                <dd className="mt-1 text-sm text-[var(--p-text-1)]">{f.value}</dd>
               </div>
             ))}
           </dl>

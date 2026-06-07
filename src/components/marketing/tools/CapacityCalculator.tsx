@@ -52,7 +52,7 @@ export function CapacityCalculator() {
             min={0}
             value={sqft}
             onChange={(e) => setSqft(Number(e.target.value))}
-            className="mt-1 w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
           />
         </div>
         <div>
@@ -60,7 +60,7 @@ export function CapacityCalculator() {
           <select
             value={useType}
             onChange={(e) => setUseType(e.target.value)}
-            className="mt-1 w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
           >
             {USE_TYPES.map((u) => (
               <option key={u.slug} value={u.slug}>
@@ -68,7 +68,7 @@ export function CapacityCalculator() {
               </option>
             ))}
           </select>
-          <p className="mt-2 text-[11px] text-[var(--text-muted)]">{selectedUse.hint}</p>
+          <p className="mt-2 text-[11px] text-[var(--p-text-2)]">{selectedUse.hint}</p>
         </div>
         <div>
           <label className="eyebrow">Usable floor area %</label>
@@ -78,20 +78,20 @@ export function CapacityCalculator() {
             max={100}
             value={usableFactor}
             onChange={(e) => setUsableFactor(Number(e.target.value))}
-            className="mt-1 w-full rounded border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm"
+            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
           />
-          <p className="mt-2 text-[11px] text-[var(--text-muted)]">
+          <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
             % of total sqft actually occupiable after stage, bars, lounges, fixed obstructions. 80% is a common default;
             adjust per venue plot.
           </p>
         </div>
       </div>
 
-      <div className="mt-6 border-t border-[var(--border-color)] pt-4">
+      <div className="mt-6 border-t border-[var(--p-border)] pt-4">
         <div className="flex items-center justify-between">
           <div>
             <div className="eyebrow">Estimated capacity</div>
-            <div className="mt-1 text-[11px] text-[var(--text-muted)]">
+            <div className="mt-1 text-[11px] text-[var(--p-text-2)]">
               Usable area: {Math.round(usableSqft).toLocaleString()} sf at {selectedUse.sqftPerPerson} sf/person
             </div>
           </div>
@@ -99,7 +99,7 @@ export function CapacityCalculator() {
         </div>
       </div>
 
-      <div className="mt-4 rounded border border-[var(--border-color)] bg-[var(--surface-inset)] p-3 text-[11px] leading-relaxed text-[var(--text-muted)]">
+      <div className="mt-4 rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3 text-[11px] leading-relaxed text-[var(--p-text-2)]">
         Estimate only. Verified capacity depends on egress capacity, sprinkler coverage, fixed seating, and AHJ
         judgement. Confirm before publishing.
       </div>

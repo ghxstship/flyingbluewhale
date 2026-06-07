@@ -12,7 +12,7 @@ export default function AuthError({ error, reset }: { error: Error & { digest?: 
   return (
     <div className="mx-auto max-w-md px-6 py-12 text-center">
       <h1 className="text-2xl font-semibold tracking-tight">{t("auth.error.title", undefined, "Sign-in error")}</h1>
-      <p className="mt-3 text-sm text-[var(--text-secondary)]">
+      <p className="mt-3 text-sm text-[var(--p-text-2)]">
         {error.message ||
           t(
             "auth.error.fallback",

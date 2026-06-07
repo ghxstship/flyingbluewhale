@@ -37,7 +37,7 @@ export default async function MyIncidentsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -58,11 +58,11 @@ export default async function MyIncidentsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.incident.eyebrow", undefined, "Field")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.incident.title", undefined, "My Incidents")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.incident.subtitle", { count: openCount }, "Reports you filed. {count} open. See the org-wide queue at")}{" "}
         <a className="underline" href="/m/incidents">
           /m/incidents
@@ -71,10 +71,10 @@ export default async function MyIncidentsPage() {
       </p>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <Link href="/m/incident/new" className="btn btn-primary btn-sm">
+        <Link href="/m/incident/new" className="ps-btn ps-btn--sm">
           {t("m.incident.quickFile", undefined, "Quick-file — One Field")}
         </Link>
-        <Link href="/m/incidents/new" className="btn btn-secondary btn-sm">
+        <Link href="/m/incidents/new" className="ps-btn ps-btn--ghost ps-btn--sm">
           {t("m.incident.fullReport", undefined, "Full report")}
         </Link>
       </div>
@@ -98,10 +98,10 @@ export default async function MyIncidentsPage() {
               <Link href={`/m/incidents`} className="surface block p-4">
                 <div className="flex items-center justify-between gap-3">
                   <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">{fmt.date(r.occurred_at)}</span>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(r.occurred_at)}</span>
                 </div>
                 <h2 className="mt-2 line-clamp-2 text-sm font-semibold">{r.summary}</h2>
-                <div className="mt-1 flex items-center gap-2 text-xs text-[var(--text-secondary)]">
+                <div className="mt-1 flex items-center gap-2 text-xs text-[var(--p-text-2)]">
                   <Badge variant={r.status === "closed" ? "muted" : "info"}>{toTitle(r.status)}</Badge>
                   {r.location && <span className="font-mono">{r.location}</span>}
                 </div>

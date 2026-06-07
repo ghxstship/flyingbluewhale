@@ -34,7 +34,7 @@ export default async function MobileDriverPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -66,16 +66,16 @@ export default async function MobileDriverPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--org-primary)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
         {t("m.driver.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.driver.title", undefined, "Driver")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.driver.subtitle", undefined, "Today's runs assigned to you. Tap a run to view manifest + waypoints.")}
       </p>
 
       <section className="mt-6">
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.driver.upcoming", undefined, "Upcoming")} · {upcoming.length}
         </h2>
         <ul className="mt-3 space-y-2">
@@ -99,7 +99,7 @@ export default async function MobileDriverPage() {
                     <span className="font-mono text-base font-semibold tabular-nums">
                       {fmtTime(r.scheduled_depart)}
                     </span>
-                    <span className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]">
+                    <span className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       {t("m.driver.depart", undefined, "depart")}
                     </span>
                   </div>
@@ -110,7 +110,7 @@ export default async function MobileDriverPage() {
                       </div>
                       <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
                     </div>
-                    <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       <span>{r.fleet}</span>
                       {r.vehicle_ref && <span>· {r.vehicle_ref}</span>}
                       {r.scheduled_arrive && (
@@ -129,7 +129,7 @@ export default async function MobileDriverPage() {
 
       {completed.length > 0 && (
         <section className="mt-6">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.driver.completed", undefined, "Completed")} · {completed.length}
           </h2>
           <ul className="mt-3 space-y-2">
@@ -139,7 +139,7 @@ export default async function MobileDriverPage() {
                   <div className="font-medium">
                     {r.origin?.name ?? "—"} → {r.destination?.name ?? "—"}
                   </div>
-                  <div className="font-mono text-xs text-[var(--text-muted)]">
+                  <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {r.actual_arrive
                       ? t(
                           "m.driver.arrivedAt",

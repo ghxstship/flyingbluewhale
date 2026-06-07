@@ -9,7 +9,7 @@ export function Sparkline({
   data,
   width = 120,
   height = 32,
-  color = "var(--org-primary)",
+  color = "var(--p-accent)",
   fillOpacity = 0.12,
   className = "",
 }: {

@@ -84,10 +84,10 @@ export default async function RoleHomePage({ params }: { params: Promise<{ role:
         {links.map((l) => (
           <Link key={l.href} href={l.href} className="surface hover-lift p-4">
             <div className="text-sm font-medium">{l.label}</div>
-            {l.desc ? <div className="mt-0.5 text-xs text-[var(--text-muted)]">{l.desc}</div> : null}
+            {l.desc ? <div className="mt-0.5 text-xs text-[var(--p-text-2)]">{l.desc}</div> : null}
           </Link>
         ))}
-        <Link href="/m/settings/role" className="mt-2 text-center text-xs text-[var(--text-muted)] underline">
+        <Link href="/m/settings/role" className="mt-2 text-center text-xs text-[var(--p-text-2)] underline">
           Switch role →
         </Link>
       </div>

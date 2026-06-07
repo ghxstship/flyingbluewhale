@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <Badge variant="success">{tr("marketing.pages.marketplace.talent.detail.verifiedBadge")}</Badge>
           )}
         </div>
-        {t.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{t.tagline}</p>}
+        {t.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{t.tagline}</p>}
         <div className="mt-5 flex flex-wrap gap-1.5">
           {t.genre_tags.map((g) => (
             <Badge key={g} variant="muted">
@@ -81,19 +81,19 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <h2 className="hed-md mb-3">{tr("marketing.pages.marketplace.talent.detail.booking.heading")}</h2>
             <dl className="space-y-1 text-sm">
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.booking.feeBandLabel")}
                 </span>{" "}
                 {formatFeeRange(t.fee_min_cents, t.fee_max_cents, t.currency)}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.booking.travelRadiusLabel")}
                 </span>{" "}
                 {t.travel_radius_km ? `${t.travel_radius_km} km` : "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.booking.ratingLabel")}
                 </span>{" "}
                 {t.rating_avg == null
@@ -106,19 +106,19 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <h2 className="hed-md mb-3">{tr("marketing.pages.marketplace.talent.detail.reach.heading")}</h2>
             <dl className="space-y-1 text-sm">
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.reach.monthlyListenersLabel")}
                 </span>{" "}
                 {t.monthly_listeners?.toLocaleString() ?? "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.reach.followersLabel")}
                 </span>{" "}
                 {t.follower_count?.toLocaleString() ?? "—"}
               </div>
               <div>
-                <span className="text-[var(--text-secondary)]">
+                <span className="text-[var(--p-text-2)]">
                   {tr("marketing.pages.marketplace.talent.detail.reach.reelLabel")}
                 </span>{" "}
                 {t.video_reel_url ? (
@@ -126,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                     href={t.video_reel_url}
                     target="_blank"
                     rel="noopener"
-                    className="font-mono text-[var(--org-primary)]"
+                    className="font-mono text-[var(--p-accent)]"
                   >
                     {tr("marketing.pages.marketplace.talent.detail.reach.watchCta")}
                   </a>

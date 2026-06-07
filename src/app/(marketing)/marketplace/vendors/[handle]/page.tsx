@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
             <Badge variant="success">{t("marketing.pages.marketplace-vendors-detail.badges.verified")}</Badge>
           )}
         </div>
-        {v.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">{v.tagline}</p>}
+        {v.tagline && <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{v.tagline}</p>}
         <div className="mt-5 flex flex-wrap gap-1.5">
           {v.trade_categories.map((t) => (
             <Badge key={t} variant="muted">
@@ -75,23 +75,23 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
           <h2 className="hed-md mb-3">{t("marketing.pages.marketplace-vendors-detail.coverage.title")}</h2>
           <dl className="space-y-1 text-sm">
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-vendors-detail.coverage.regions")}
               </span>{" "}
               {v.regions.join(", ") || "—"}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-vendors-detail.coverage.founded")}
               </span>{" "}
               {v.year_founded ?? "—"}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-vendors-detail.coverage.web")}
               </span>{" "}
               {v.website_url ? (
-                <a href={v.website_url} target="_blank" rel="noopener" className="font-mono text-[var(--org-primary)]">
+                <a href={v.website_url} target="_blank" rel="noopener" className="font-mono text-[var(--p-accent)]">
                   {v.website_url} ↗
                 </a>
               ) : (
@@ -99,7 +99,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
               )}
             </div>
             <div>
-              <span className="text-[var(--text-secondary)]">
+              <span className="text-[var(--p-text-2)]">
                 {t("marketing.pages.marketplace-vendors-detail.coverage.rating")}
               </span>{" "}
               {v.rating_avg == null

@@ -15,15 +15,15 @@ export default function Page() {
       <ModuleHeader eyebrow="Production" title="Production" subtitle="Inventory, build, show systems." />
       <div className="page-content space-y-6">
         <section>
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Inventory</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Inventory</h2>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <Link className="surface hover-lift p-4" href="/console/production/equipment">
               <div className="text-sm font-medium">Equipment</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">Owned assets + maintenance</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">Owned assets + maintenance</div>
             </Link>
             <Link className="surface hover-lift p-4" href="/console/production/equipment/utilization">
               <div className="text-sm font-medium">Equipment Utilization</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">30/90-day rollup + idle revenue</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">30/90-day rollup + idle revenue</div>
             </Link>
             <Link className="surface hover-lift p-4" href="/console/production/av">
               <div className="text-sm font-medium">AV Inventory</div>
@@ -35,7 +35,7 @@ export default function Page() {
         </section>
 
         <section>
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Build</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Build</h2>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Link className="surface hover-lift p-4" href="/console/production/fabrication">
               <div className="text-sm font-medium">Fabrication</div>
@@ -62,11 +62,11 @@ export default function Page() {
         </section>
 
         <section>
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">Show</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Show</h2>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Link className="surface hover-lift p-4" href="/console/production/ros">
               <div className="text-sm font-medium">Run of Show</div>
-              <div className="mt-1 text-xs text-[var(--text-muted)]">Cue-by-cue timeline</div>
+              <div className="mt-1 text-xs text-[var(--p-text-2)]">Cue-by-cue timeline</div>
             </Link>
             <Link className="surface hover-lift p-4" href="/console/production/dispatch/live">
               <div className="text-sm font-medium">Live Dispatch</div>

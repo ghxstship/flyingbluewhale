@@ -64,7 +64,7 @@ export default async function PhasesPage() {
                     {t("console.xpms.phases.total", undefined, "Total")} <strong>{total}</strong>
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-1 text-xs text-[var(--text-muted)]">
+                <div className="grid grid-cols-2 gap-1 text-xs text-[var(--p-text-2)]">
                   {XPMS_CLASSES.filter((c) => stat.byClass[c.code]).map((c) => (
                     <span key={c.code} style={{ color: c.accent }}>
                       {c.name} <span className="font-mono">{stat.byClass[c.code]}</span>

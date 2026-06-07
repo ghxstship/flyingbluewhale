@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: Promise<{ reportId: str
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.safeguarding.edit.narrative", undefined, "Narrative")}
             </span>
             <textarea
@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ reportId: str
               defaultValue={row.narrative ?? ""}
               rows={8}
               required
-              className="input-base focus-ring w-full"
+              className="ps-input focus-ring w-full"
             />
           </label>
           <Input
@@ -59,10 +59,10 @@ export default async function Page({ params }: { params: Promise<{ reportId: str
             maxLength={200}
           />
           <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-[var(--text-secondary)]">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.safeguarding.edit.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="input-base focus-ring w-full">
+            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
               <option value="new">new</option>
               <option value="triage">triage</option>
               <option value="investigating">investigating</option>

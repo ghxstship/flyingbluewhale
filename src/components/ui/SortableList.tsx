@@ -70,7 +70,7 @@ function SortableRow({ id, children }: { id: string; children: ReactNode }) {
         type="button"
         {...attributes}
         {...listeners}
-        className="flex w-8 shrink-0 cursor-grab items-center justify-center rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:bg-[var(--bg-secondary)] active:cursor-grabbing"
+        className="flex w-8 shrink-0 cursor-grab items-center justify-center rounded-lg border border-[var(--p-border)] text-[var(--p-text-2)] hover:bg-[var(--p-surface)] active:cursor-grabbing"
         aria-label={t("ui.sortable.dragToReorder", undefined, "Drag to reorder")}
       >
         <GripVertical size={14} />

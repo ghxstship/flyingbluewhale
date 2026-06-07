@@ -60,7 +60,7 @@ export default async function ProducerApprovals({ params }: { params: Promise<{ 
       <PortalRail group={portalNav(slug, "producer")} />
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-semibold">{t("p.producer.approvals.title", undefined, "Approvals")}</h1>
-        <p className="mt-1 text-xs text-[var(--text-muted)]">
+        <p className="mt-1 text-xs text-[var(--p-text-2)]">
           {propIds.length === 1
             ? t(
                 "p.producer.approvals.summary.one",
@@ -96,7 +96,7 @@ export default async function ProducerApprovals({ params }: { params: Promise<{ 
                       {propMap.get(a.proposal_id) ?? t("p.producer.approvals.proposalFallback", undefined, "Proposal")}{" "}
                       — {a.title ?? a.kind}
                     </div>
-                    <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                    <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                       {a.kind} · {fmt.date(a.created_at)}
                       {a.signed_at
                         ? ` · ${t("p.producer.approvals.signedAt", { date: fmt.date(a.signed_at) }, `signed ${fmt.date(a.signed_at)}`)}`

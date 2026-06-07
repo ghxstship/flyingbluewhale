@@ -57,15 +57,13 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
             <li key={s.id} className="surface flex items-start gap-3 p-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  {s.critical_path ? <span className="font-bold text-[var(--color-error)]">★</span> : null}
+                  {s.critical_path ? <span className="font-bold text-[var(--p-danger)]">★</span> : null}
                   <span className="font-medium">{s.title}</span>
                   <Badge variant={STATE_VARIANT[s.step_state]}>{STATE_LABEL[s.step_state]}</Badge>
-                  {s.category ? (
-                    <span className="text-xs text-[var(--text-subtle)] uppercase">{s.category}</span>
-                  ) : null}
+                  {s.category ? <span className="text-xs text-[var(--p-text-3)] uppercase">{s.category}</span> : null}
                 </div>
-                {s.description ? <p className="mt-1 text-sm text-[var(--text-subtle)]">{s.description}</p> : null}
-                <div className="mt-2 flex gap-3 text-xs text-[var(--text-subtle)]">
+                {s.description ? <p className="mt-1 text-sm text-[var(--p-text-3)]">{s.description}</p> : null}
+                <div className="mt-2 flex gap-3 text-xs text-[var(--p-text-3)]">
                   {s.due_at ? (
                     <span>
                       {t(
@@ -89,7 +87,7 @@ export default async function LetterOnboardingPage({ params }: { params: Promise
             </li>
           ))}
         </ul>
-        <div className="surface p-4 text-xs text-[var(--text-subtle)]">
+        <div className="surface p-4 text-xs text-[var(--p-text-3)]">
           <Link href="/console/people/offer-letters" className="underline">
             {t("console.people.offerLetters.onboarding.backLink", undefined, "← Back to offer letters")}
           </Link>

@@ -59,7 +59,7 @@ export function RoleChooser({ current, roles }: { current: MobileRole; roles: Mo
           className="surface hover-lift flex flex-col items-start gap-1 px-3 py-2 text-left text-sm disabled:opacity-60"
         >
           <span className="font-medium">{ROLE_TITLE[r]}</span>
-          <span className="text-[11px] text-[var(--text-muted)]">{ROLE_DESC[r]}</span>
+          <span className="text-[11px] text-[var(--p-text-2)]">{ROLE_DESC[r]}</span>
         </button>
       ))}
     </div>

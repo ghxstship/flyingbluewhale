@@ -97,30 +97,30 @@ export function ActivityItem({ item }: { item: ActivityItemType }) {
       {/* Timeline rail dot */}
       <span
         aria-hidden="true"
-        className="absolute start-2 top-2 h-2 w-2 -translate-x-1/2 rounded-full bg-[var(--org-primary)] ring-2 ring-[var(--background)]"
+        className="absolute start-2 top-2 h-2 w-2 -translate-x-1/2 rounded-full bg-[var(--p-accent)] ring-2 ring-[var(--p-bg)]"
       />
       <Avatar name={actorName} src={item.actorAvatarUrl ?? null} size="sm" />
       <div className="min-w-0 flex-1">
         <p className="text-sm leading-snug">
-          <span className="font-medium text-[var(--foreground)]">{actorName}</span>{" "}
-          <span className="text-[var(--text-secondary)]">{verb}</span>
+          <span className="font-medium text-[var(--p-text-1)]">{actorName}</span>{" "}
+          <span className="text-[var(--p-text-2)]">{verb}</span>
           {hasDiff && (
             <>
               {" "}
-              <span className="text-[var(--text-muted)]">
+              <span className="text-[var(--p-text-2)]">
                 ({fields.length} {fields.length === 1 ? "field" : "fields"})
               </span>
             </>
           )}
         </p>
-        <p className="mt-0.5 font-mono text-[10px] text-[var(--text-muted)]" title={formatAbsolute(item.occurredAt)}>
+        <p className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]" title={formatAbsolute(item.occurredAt)}>
           {formatRelative(item.occurredAt)}
         </p>
         {hasDiff && (
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="mt-1 inline-flex items-center gap-1 text-[11px] text-[var(--text-muted)] hover:text-[var(--foreground)]"
+            className="mt-1 inline-flex items-center gap-1 text-[11px] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             aria-expanded={open}
           >
             {open ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
@@ -133,11 +133,11 @@ export function ActivityItem({ item }: { item: ActivityItemType }) {
               const entry = item.diff![field];
               return (
                 <div key={field} className="surface-inset px-2 py-1">
-                  <dt className="font-mono text-[10px] tracking-wide text-[var(--text-muted)] uppercase">{field}</dt>
+                  <dt className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{field}</dt>
                   <dd className="mt-0.5 flex flex-wrap items-center gap-1 font-mono text-[11px]">
-                    <span className="text-[var(--text-muted)] line-through">{renderValue(entry.before)}</span>
+                    <span className="text-[var(--p-text-2)] line-through">{renderValue(entry.before)}</span>
                     <span aria-hidden="true">→</span>
-                    <span className="text-[var(--foreground)]">{renderValue(entry.after)}</span>
+                    <span className="text-[var(--p-text-1)]">{renderValue(entry.after)}</span>
                   </dd>
                 </div>
               );

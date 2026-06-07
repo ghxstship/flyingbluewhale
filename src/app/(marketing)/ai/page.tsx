@@ -81,7 +81,7 @@ export default async function AiHub() {
           <br />
           {t("marketing.pages.ai.hero.titleLine2")}
         </h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--text-secondary)]">{t("marketing.pages.ai.hero.subtitle")}</p>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.ai.hero.subtitle")}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -92,22 +92,22 @@ export default async function AiHub() {
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <h2 className="hed-xl">{t("marketing.pages.ai.drafts.title")}</h2>
-        <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">{t("marketing.pages.ai.drafts.subtitle")}</p>
+        <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">{t("marketing.pages.ai.drafts.subtitle")}</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
           {AI_USES.map((u) => (
             <Link key={u.slug} href={`/ai/${u.slug}`} className="surface hover-lift p-5">
               <span
                 className="inline-flex h-9 w-9 items-center justify-center rounded-lg"
                 style={{
-                  background: "color-mix(in oklab, var(--org-primary) 12%, transparent)",
-                  color: "var(--org-primary)",
+                  background: "color-mix(in oklab, var(--p-accent) 12%, transparent)",
+                  color: "var(--p-accent)",
                 }}
               >
                 <Sparkles size={16} aria-hidden="true" />
               </span>
               <h3 className="mt-3 text-base font-semibold">{u.title}</h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">{u.short}</p>
-              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--org-primary)]">
+              <p className="mt-2 text-sm text-[var(--p-text-2)]">{u.short}</p>
+              <div className="mt-4 inline-flex items-center gap-1 text-xs font-medium text-[var(--p-accent)]">
                 {t("marketing.pages.ai.drafts.cardCta")} <ArrowRight size={12} />
               </div>
             </Link>
@@ -121,7 +121,7 @@ export default async function AiHub() {
             <div>
               <div className="eyebrow eyebrow-brand">{t("marketing.pages.ai.rules.eyebrow")}</div>
               <h2 className="hed-lg mt-3">{t("marketing.pages.ai.rules.title")}</h2>
-              <p className="mt-3 text-sm text-[var(--text-secondary)]">{t("marketing.pages.ai.rules.subtitle")}</p>
+              <p className="mt-3 text-sm text-[var(--p-text-2)]">{t("marketing.pages.ai.rules.subtitle")}</p>
             </div>
             <ul className="space-y-3 text-sm">
               {[
@@ -133,7 +133,7 @@ export default async function AiHub() {
                 t("marketing.pages.ai.rules.items.5"),
               ].map((line) => (
                 <li key={line} className="flex items-start gap-2">
-                  <span className="status-dot status-dot-success mt-2" />
+                  <span className="ps-dot ps-dot ps-dot--ok mt-2" />
                   <span>{line}</span>
                 </li>
               ))}

@@ -100,7 +100,7 @@ function renderInline(src: string, keyPrefix: string): React.ReactNode[] {
       out.push(<strong key={k}>{tok.slice(2, -2)}</strong>);
     } else if (tok.startsWith("`")) {
       out.push(
-        <code key={k} className="rounded bg-[var(--surface-inset)] px-1 py-0.5 font-mono text-[0.85em]">
+        <code key={k} className="rounded bg-[var(--p-surface-2)] px-1 py-0.5 font-mono text-[0.85em]">
           {tok.slice(1, -1)}
         </code>,
       );
@@ -115,7 +115,7 @@ function renderInline(src: string, keyPrefix: string): React.ReactNode[] {
             href={safe}
             target={safe.startsWith("http") ? "_blank" : undefined}
             rel={safe.startsWith("http") ? "noopener noreferrer" : undefined}
-            className="text-[var(--org-primary)] underline-offset-2 hover:underline"
+            className="text-[var(--p-accent)] underline-offset-2 hover:underline"
           >
             {link[1]}
           </a>,
@@ -140,7 +140,7 @@ export function Markdown({ source, className = "" }: { source: string; className
     const k = `b-${i}`;
     switch (b.kind) {
       case "hr":
-        return <hr key={k} className="my-6 border-[var(--border-color)]" />;
+        return <hr key={k} className="my-6 border-[var(--p-border)]" />;
       case "heading": {
         const inner = renderInline(b.text, k);
         const sizeMap: Record<number, string> = {
@@ -148,8 +148,8 @@ export function Markdown({ source, className = "" }: { source: string; className
           2: "mt-6 mb-2 text-xl font-semibold",
           3: "mt-5 mb-2 text-base font-semibold",
           4: "mt-4 mb-2 text-sm font-semibold",
-          5: "mt-3 mb-1 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]",
-          6: "mt-2 mb-1 text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)]",
+          5: "mt-3 mb-1 text-xs font-semibold uppercase tracking-wider text-[var(--p-text-2)]",
+          6: "mt-2 mb-1 text-[11px] font-semibold uppercase tracking-wider text-[var(--p-text-2)]",
         };
         const cls = sizeMap[b.level];
         if (b.level === 1)
@@ -190,13 +190,13 @@ export function Markdown({ source, className = "" }: { source: string; className
       }
       case "paragraph":
         return (
-          <p key={k} className="my-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+          <p key={k} className="my-3 text-sm leading-relaxed text-[var(--p-text-2)]">
             {renderInline(b.text, k)}
           </p>
         );
       case "ul":
         return (
-          <ul key={k} className="my-3 ms-5 list-disc space-y-1 text-sm text-[var(--text-secondary)]">
+          <ul key={k} className="my-3 ms-5 list-disc space-y-1 text-sm text-[var(--p-text-2)]">
             {b.items.map((it, j) => (
               <li key={`${k}-${j}`}>{renderInline(it, `${k}-${j}`)}</li>
             ))}
@@ -204,7 +204,7 @@ export function Markdown({ source, className = "" }: { source: string; className
         );
       case "ol":
         return (
-          <ol key={k} className="my-3 ms-5 list-decimal space-y-1 text-sm text-[var(--text-secondary)]">
+          <ol key={k} className="my-3 ms-5 list-decimal space-y-1 text-sm text-[var(--p-text-2)]">
             {b.items.map((it, j) => (
               <li key={`${k}-${j}`}>{renderInline(it, `${k}-${j}`)}</li>
             ))}
@@ -214,7 +214,7 @@ export function Markdown({ source, className = "" }: { source: string; className
         return (
           <pre
             key={k}
-            className="my-4 overflow-x-auto rounded bg-[var(--surface-inset)] p-3 font-mono text-xs"
+            className="my-4 overflow-x-auto rounded bg-[var(--p-surface-2)] p-3 font-mono text-xs"
             data-lang={b.lang ?? undefined}
           >
             <code>{b.body}</code>

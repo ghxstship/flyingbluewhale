@@ -121,7 +121,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
         action={<Badge variant={STATUS_TONE[rfq.status] ?? "muted"}>{toTitle(rfq.status)}</Badge>}
       />
       <div className="page-content space-y-5">
-        {rfq.description && <p className="text-sm text-[var(--text-secondary)]">{rfq.description}</p>}
+        {rfq.description && <p className="text-sm text-[var(--p-text-2)]">{rfq.description}</p>}
 
         <div className="metric-grid-3">
           <MetricCard
@@ -144,7 +144,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             {t("console.procurement.rfqs.detail.bidSummary", undefined, "Bid Summary")}
           </h3>
           {responses.length === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t(
                 "console.procurement.rfqs.detail.emptyResponses",
                 undefined,
@@ -154,8 +154,8 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
           ) : (
             <div className="mt-3 space-y-3">
               {lowestBid && (
-                <div className="rounded bg-[var(--bg-secondary)] p-3 text-xs">
-                  <div className="text-[var(--text-muted)]">
+                <div className="rounded bg-[var(--p-surface)] p-3 text-xs">
+                  <div className="text-[var(--p-text-2)]">
                     {t("console.procurement.rfqs.detail.lowestBid", undefined, "Lowest bid")}
                   </div>
                   <div className="mt-1 font-mono text-sm">
@@ -163,12 +163,12 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                   </div>
                 </div>
               )}
-              <ul className="divide-y divide-[var(--border-color)]">
+              <ul className="divide-y divide-[var(--p-border)]">
                 {responses.map((r) => (
                   <li key={r.id} className="flex items-center justify-between py-2 text-sm">
                     <div className="min-w-0">
                       <div className="font-medium">{r.vendor?.name ?? "—"}</div>
-                      <div className="font-mono text-[10px] text-[var(--text-muted)]">
+                      <div className="font-mono text-[10px] text-[var(--p-text-2)]">
                         {r.submitted_at
                           ? fmt(r.submitted_at)
                           : t("console.procurement.rfqs.detail.pending", undefined, "Pending")}
@@ -190,14 +190,11 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
             <h3 className="text-sm font-semibold">
               {t("console.procurement.rfqs.detail.linkedRequisitions", undefined, "Linked Requisitions")}
             </h3>
-            <Link
-              href={`/console/procurement/requisitions?rfqId=${rfq.id}`}
-              className="text-xs text-[var(--org-primary)]"
-            >
+            <Link href={`/console/procurement/requisitions?rfqId=${rfq.id}`} className="text-xs text-[var(--p-accent)]">
               {t("console.procurement.rfqs.detail.viewLink", undefined, "View →")}
             </Link>
           </div>
-          <p className="mt-2 text-xs text-[var(--text-muted)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t(
               "console.procurement.rfqs.detail.linkedHint",
               undefined,

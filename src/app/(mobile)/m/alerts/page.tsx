@@ -32,7 +32,7 @@ export default async function AlertsPage() {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -66,11 +66,11 @@ export default async function AlertsPage() {
 
   return (
     <div className="px-4 pt-6 pb-24">
-      <div className="text-xs font-semibold tracking-wider text-[var(--color-error)] uppercase">
+      <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("m.alerts.eyebrow", undefined, "Mobile")}
       </div>
       <h1 className="mt-1 text-2xl font-semibold">{t("m.alerts.title", undefined, "Alerts")}</h1>
-      <p className="mt-1 text-xs text-[var(--text-muted)]">
+      <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.alerts.noneActive", undefined, "No active alerts.")
           : t(
@@ -101,21 +101,21 @@ export default async function AlertsPage() {
               <li key={a.id} className={`surface p-4 ${ack ? "opacity-60" : ""}`}>
                 <div className="flex items-start justify-between gap-3">
                   <Badge variant={tone}>{toTitle(a.severity)}</Badge>
-                  <span className="font-mono text-xs text-[var(--text-muted)]">
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {a.sent_at ? fmt.time(a.sent_at) : t("m.alerts.scheduled", undefined, "scheduled")}
                   </span>
                 </div>
                 <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
-                <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--text-secondary)]">{a.body}</p>
+                <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{a.body}</p>
                 <div className="mt-3 flex items-center justify-end gap-2">
                   {ack ? (
-                    <span className="text-xs text-[var(--text-muted)]">
+                    <span className="text-xs text-[var(--p-text-2)]">
                       {t("m.alerts.acknowledgedAt", { time: fmt.time(ack) }, `Acknowledged ${fmt.time(ack)}`)}
                     </span>
                   ) : (
                     <form action={acknowledgeAlert}>
                       <input type="hidden" name="alertId" value={a.id} />
-                      <button type="submit" className="btn btn-primary btn-sm">
+                      <button type="submit" className="ps-btn ps-btn--sm">
                         {t("m.alerts.acknowledge", undefined, "Acknowledge")}
                       </button>
                     </form>

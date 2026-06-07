@@ -19,7 +19,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
-      <div className="px-4 pt-6 pb-24 text-sm text-[var(--text-muted)]">
+      <div className="px-4 pt-6 pb-24 text-sm text-[var(--p-text-2)]">
         {t("m.common.configureSupabase", undefined, "Configure Supabase.")}
       </div>
     );
@@ -57,11 +57,11 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
         filter={`room_id=eq.${roomId}`}
         event="INSERT"
       />
-      <div className="border-b border-[var(--border-color)] px-4 pt-4 pb-3">
+      <div className="border-b border-[var(--p-border)] px-4 pt-4 pb-3">
         <h1 className="truncate text-base font-semibold">
           {room.name ?? t("m.inbox.room.directMessage", undefined, "Direct message")}
         </h1>
-        <p className="text-xs text-[var(--text-muted)]">{room.room_kind}</p>
+        <p className="text-xs text-[var(--p-text-2)]">{room.room_kind}</p>
       </div>
       <ul className="flex-1 space-y-2 overflow-y-auto px-4 py-3">
         {((msgs ?? []) as Msg[]).map((m) => {
@@ -71,7 +71,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
               <div
                 className={
                   mine
-                    ? "max-w-[80%] rounded-lg bg-[var(--org-primary)] px-3 py-2 text-xs text-[var(--org-on-primary)]"
+                    ? "max-w-[80%] rounded-lg bg-[var(--p-accent)] px-3 py-2 text-xs text-[var(--p-accent-contrast)]"
                     : "surface max-w-[80%] px-3 py-2 text-xs"
                 }
               >
@@ -82,7 +82,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
           );
         })}
       </ul>
-      <form action={postMessage} className="flex items-center gap-2 border-t border-[var(--border-color)] p-3">
+      <form action={postMessage} className="flex items-center gap-2 border-t border-[var(--p-border)] p-3">
         <input type="hidden" name="roomId" value={roomId} />
         <input
           type="text"
@@ -90,9 +90,9 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
           placeholder={t("m.inbox.room.messagePlaceholder", undefined, "Message")}
           required
           maxLength={4000}
-          className="flex-1 rounded-md border border-[var(--border-color)] bg-[var(--surface)] px-3 py-2 text-sm"
+          className="flex-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
         />
-        <button type="submit" className="btn btn-primary btn-sm">
+        <button type="submit" className="ps-btn ps-btn--sm">
           {t("common.send", undefined, "Send")}
         </button>
       </form>

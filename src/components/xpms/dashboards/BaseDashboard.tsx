@@ -21,7 +21,7 @@ export function BaseDashboard({ classCode, title, subtitle, branding, sections, 
     <div className="mx-auto w-full max-w-5xl">
       {/* Cover band — accent strip + title block */}
       <header
-        className="relative overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)]"
+        className="relative overflow-hidden rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)]"
         style={{ borderTop: `4px solid ${accent}` }}
         data-class-code={classCode}
         data-class-name={xpmsClass.name}
@@ -40,15 +40,15 @@ export function BaseDashboard({ classCode, title, subtitle, branding, sections, 
               src={branding.logoUrl}
               alt=""
               aria-hidden="true"
-              className="h-10 w-10 shrink-0 rounded border border-[var(--border-color)] object-contain"
+              className="h-10 w-10 shrink-0 rounded border border-[var(--p-border)] object-contain"
             />
           ) : null}
           <div className="min-w-0 flex-1">
             <div className="font-mono text-[10px] font-semibold tracking-[0.18em]" style={{ color: accent }}>
               {String(classCode).padStart(1, "0")} · {xpmsClass.name}
             </div>
-            <h1 className="mt-1 truncate text-2xl font-semibold text-[var(--text-primary)]">{title}</h1>
-            {subtitle ? <p className="mt-1 truncate text-sm text-[var(--text-secondary)]">{subtitle}</p> : null}
+            <h1 className="mt-1 truncate text-2xl font-semibold text-[var(--p-text-1)]">{title}</h1>
+            {subtitle ? <p className="mt-1 truncate text-sm text-[var(--p-text-2)]">{subtitle}</p> : null}
           </div>
         </div>
       </header>
@@ -61,11 +61,11 @@ export function BaseDashboard({ classCode, title, subtitle, branding, sections, 
           <section
             key={s.key}
             data-section-key={s.key}
-            className="rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4"
+            className="rounded-lg border border-[var(--p-border)] bg-[var(--p-surface)] p-4"
           >
             <header className="mb-3">
-              <h2 className="text-sm font-semibold tracking-wide text-[var(--text-primary)]">{s.title}</h2>
-              {s.description ? <p className="mt-0.5 text-xs text-[var(--text-secondary)]">{s.description}</p> : null}
+              <h2 className="text-sm font-semibold tracking-wide text-[var(--p-text-1)]">{s.title}</h2>
+              {s.description ? <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{s.description}</p> : null}
             </header>
             <div className="text-sm">{s.body}</div>
           </section>

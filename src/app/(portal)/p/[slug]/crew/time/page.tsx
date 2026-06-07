@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         />
       ) : (
-        <table className="data-table w-full text-sm">
+        <table className="ps-table w-full text-sm">
           <thead>
             <tr>
               <th>{t("p.crew.time.col.started", undefined, "Started")}</th>
@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   {r.duration_minutes != null ? Math.round((r.duration_minutes / 60) * 10) / 10 : "—"}
                 </td>
                 <td>{r.billable ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</td>
-                <td className="text-[var(--text-muted)]">{r.description ?? "—"}</td>
+                <td className="text-[var(--p-text-2)]">{r.description ?? "—"}</td>
               </tr>
             ))}
           </tbody>

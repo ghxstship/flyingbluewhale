@@ -151,7 +151,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
           <div className="text-sm font-semibold">
             {t("me.security.twoFactor.enroll.title", undefined, "Scan this QR code")}
           </div>
-          <p className="mt-1 text-xs text-[var(--text-muted)]">
+          <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
               "me.security.twoFactor.enroll.subtitle",
               undefined,
@@ -177,14 +177,14 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
               />
             </div>
           ) : (
-            <div className="surface-inset flex h-[252px] w-[252px] items-center justify-center text-xs text-[var(--text-muted)]">
+            <div className="surface-inset flex h-[252px] w-[252px] items-center justify-center text-xs text-[var(--p-text-2)]">
               {t("me.security.twoFactor.enroll.qrUnavailable", undefined, "QR unavailable — paste the secret below")}
             </div>
           )}
 
           <div className="flex-1 space-y-3">
             <div>
-              <div className="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              <div className="text-xs font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">
                 {t("me.security.twoFactor.enroll.pasteSecret", undefined, "Or paste this secret")}
               </div>
               <div className="mt-2 flex items-center gap-2">
@@ -208,7 +208,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
           </div>
         </div>
 
-        <form onSubmit={submitVerification} className="space-y-3 border-t border-[var(--border-color)] pt-5">
+        <form onSubmit={submitVerification} className="space-y-3 border-t border-[var(--p-border)] pt-5">
           <Input
             label={t("me.security.twoFactor.enroll.codeLabel", undefined, "Enter the 6-digit code")}
             name="code"
@@ -251,11 +251,11 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
             icon={<ShieldCheck size={32} />}
           />
         ) : (
-          <ul className="divide-y divide-[var(--border-color)]">
+          <ul className="divide-y divide-[var(--p-border)]">
             {factors.map((f) => (
               <li key={f.id} className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3">
-                  <ShieldCheck size={16} className="text-[var(--color-success)]" aria-hidden="true" />
+                  <ShieldCheck size={16} className="text-[var(--p-success)]" aria-hidden="true" />
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">
@@ -268,7 +268,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                           : t("me.security.twoFactor.factor.statusPending", undefined, "Pending")}
                       </Badge>
                     </div>
-                    <div className="mt-0.5 text-[10px] text-[var(--text-muted)]">
+                    <div className="mt-0.5 text-[10px] text-[var(--p-text-2)]">
                       {t(
                         "me.security.twoFactor.factor.addedAt",
                         { when: formatRelative(f.createdAt) },
@@ -281,7 +281,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                   type="button"
                   onClick={() => removeFactor(f.id)}
                   aria-label={t("me.security.twoFactor.factor.remove", undefined, "Remove authenticator")}
-                  className="rounded p-1 text-[var(--text-muted)] hover:text-[var(--color-error)]"
+                  className="rounded p-1 text-[var(--p-text-2)] hover:text-[var(--p-danger)]"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -289,7 +289,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
             ))}
           </ul>
         )}
-        <div className="flex items-center justify-end gap-2 border-t border-[var(--border-color)] p-3">
+        <div className="flex items-center justify-end gap-2 border-t border-[var(--p-border)] p-3">
           <Button onClick={startEnroll} loading={pending} size="sm">
             <ShieldCheck size={12} className="me-1" aria-hidden="true" />
             {factors.length === 0
@@ -304,12 +304,12 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <KeyRound size={14} className="text-[var(--text-muted)]" aria-hidden="true" />
+                <KeyRound size={14} className="text-[var(--p-text-2)]" aria-hidden="true" />
                 <span className="text-sm font-semibold">
                   {t("me.security.twoFactor.recovery.title", undefined, "Recovery Codes")}
                 </span>
               </div>
-              <p className="mt-1 text-xs text-[var(--text-muted)]">
+              <p className="mt-1 text-xs text-[var(--p-text-2)]">
                 {t(
                   "me.security.twoFactor.recovery.description",
                   undefined,
@@ -365,12 +365,12 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
   return (
     <div className="surface space-y-5 p-6">
       <div className="flex items-center gap-2">
-        <KeyRound size={16} className="text-[var(--org-primary)]" aria-hidden="true" />
+        <KeyRound size={16} className="text-[var(--p-accent)]" aria-hidden="true" />
         <h2 className="text-sm font-semibold tracking-[0.18em] uppercase">
           {t("me.security.twoFactor.recovery.panelTitle", undefined, "Save Your Recovery Codes")}
         </h2>
       </div>
-      <p className="text-xs text-[var(--text-muted)]">
+      <p className="text-xs text-[var(--p-text-2)]">
         {t(
           "me.security.twoFactor.recovery.panelBlurb",
           undefined,
@@ -389,7 +389,7 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
         ))}
       </ul>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-color)] pt-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--p-border)] pt-4">
         <div className="flex items-center gap-2">
           <Button type="button" variant="secondary" size="sm" onClick={copy}>
             <Copy size={12} className="me-1" aria-hidden="true" /> {t("common.copy", undefined, "Copy")}
@@ -403,7 +403,7 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
             type="checkbox"
             checked={confirmed}
             onChange={(e) => setConfirmed(e.target.checked)}
-            className="h-4 w-4 accent-[var(--org-primary)]"
+            className="h-4 w-4 accent-[var(--p-accent)]"
           />
           {t("me.security.twoFactor.recovery.savedConfirm", undefined, "I've saved these codes")}
         </label>

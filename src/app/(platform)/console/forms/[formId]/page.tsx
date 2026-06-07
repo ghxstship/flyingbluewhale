@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
         }
       />
       <div className="page-content space-y-5">
-        {form.description && <p className="text-sm text-[var(--text-secondary)]">{form.description}</p>}
+        {form.description && <p className="text-sm text-[var(--p-text-2)]">{form.description}</p>}
 
         <div className="metric-grid-3">
           <MetricCard
@@ -129,15 +129,15 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
               href={`/forms/${form.slug}`}
               target="_blank"
               rel="noopener"
-              className="text-xs text-[var(--org-primary)]"
+              className="text-xs text-[var(--p-accent)]"
             >
               {t("console.forms.detail.openLink", undefined, "Open ↗")}
             </Link>
           </div>
-          <code className="mt-2 block rounded bg-[var(--bg-secondary)] p-2 font-mono text-xs break-all">
+          <code className="mt-2 block rounded bg-[var(--p-surface)] p-2 font-mono text-xs break-all">
             /forms/{form.slug}
           </code>
-          <p className="mt-2 text-xs text-[var(--text-muted)]">
+          <p className="mt-2 text-xs text-[var(--p-text-2)]">
             {t(
               "console.forms.detail.shareUrlHint",
               undefined,
@@ -149,11 +149,11 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
         <section className="surface p-4">
           <h3 className="text-sm font-semibold">{t("console.forms.detail.schemaHeading", undefined, "Schema")}</h3>
           {fields === 0 ? (
-            <p className="mt-2 text-xs text-[var(--text-muted)]">
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
               {t("console.forms.detail.noFields", undefined, "No fields defined yet. Open the editor to add fields.")}
             </p>
           ) : (
-            <pre className="mt-3 max-h-96 overflow-auto rounded bg-[var(--bg-secondary)] p-3 font-mono text-xs">
+            <pre className="mt-3 max-h-96 overflow-auto rounded bg-[var(--p-surface)] p-3 font-mono text-xs">
               {JSON.stringify(form.schema, null, 2)}
             </pre>
           )}

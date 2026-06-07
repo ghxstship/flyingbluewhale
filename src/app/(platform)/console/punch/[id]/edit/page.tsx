@@ -10,8 +10,8 @@ import { updatePunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--border-color)] bg-[var(--background)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--text-secondary)]";
+const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const STATUSES = ["open", "in_progress", "ready_for_review", "complete", "void"] as const;
 const PRIORITIES = ["low", "normal", "high", "urgent"] as const;
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <label className="flex flex-col gap-1.5">
             <span className={LBL}>
               {t("console.punch.fields.title", undefined, "Title")}
-              <span className="ms-0.5 text-[var(--color-error)]">*</span>
+              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
             </span>
             <input name="title" required defaultValue={item.title} maxLength={200} className={INPUT} />
           </label>
@@ -110,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
                 {t("console.punch.fields.project", undefined, "Project")}
-                <span className="ms-0.5 text-[var(--color-error)]">*</span>
+                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
               </span>
               <select name="project_id" required defaultValue={item.project_id} className={INPUT}>
                 {(projects ?? []).map((p) => (
@@ -196,11 +196,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               name="show_ready_gate"
               value="1"
               defaultChecked={item.show_ready_gate}
-              className="mt-0.5 accent-[var(--org-primary)]"
+              className="mt-0.5 accent-[var(--p-accent)]"
             />
             <div>
               <div className="font-medium">{t("console.punch.fields.showReadyGate", undefined, "Show-ready gate")}</div>
-              <div className="text-[11px] text-[var(--text-muted)]">
+              <div className="text-[11px] text-[var(--p-text-2)]">
                 {t(
                   "console.punch.fields.showReadyGateHint",
                   undefined,

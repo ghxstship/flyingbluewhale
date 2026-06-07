@@ -56,7 +56,7 @@ export function CustomRoleForm() {
               "Comma-separated, e.g. invoices:read, expenses:read",
             )}
           />
-          {state?.error && <p className="text-xs text-[var(--color-error)]">{state.error}</p>}
+          {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
               {t("console.people.roles.createRole", undefined, "Create Role")}

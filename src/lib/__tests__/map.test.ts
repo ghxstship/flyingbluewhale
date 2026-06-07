@@ -114,16 +114,16 @@ describe("clusterMarkers", () => {
 
 describe("markerColor", () => {
   it("maps known tones to CSS variable references", () => {
-    expect(markerColor("info")).toBe("var(--color-info)");
-    expect(markerColor("warn")).toBe("var(--color-warning)");
-    expect(markerColor("error")).toBe("var(--color-error)");
-    expect(markerColor("success")).toBe("var(--color-success)");
-    expect(markerColor("accent")).toBe("var(--accent)");
-    expect(markerColor("neutral")).toBe("var(--text-muted)");
+    expect(markerColor("info")).toBe("var(--p-info)");
+    expect(markerColor("warn")).toBe("var(--p-warning)");
+    expect(markerColor("error")).toBe("var(--p-danger)");
+    expect(markerColor("success")).toBe("var(--p-success)");
+    expect(markerColor("accent")).toBe("var(--p-accent)");
+    expect(markerColor("neutral")).toBe("var(--p-text-2)");
   });
 
   it("falls back to the org primary for unknown / undefined tones", () => {
-    expect(markerColor(undefined)).toContain("--org-primary");
-    expect(markerColor("zoinks")).toContain("--org-primary");
+    expect(markerColor(undefined)).toContain("--p-accent");
+    expect(markerColor("zoinks")).toContain("--p-accent");
   });
 });

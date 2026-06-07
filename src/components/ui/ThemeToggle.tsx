@@ -34,7 +34,7 @@ export function ThemeToggle() {
 
   return (
     <div
-      className="inline-flex rounded-full border border-[var(--border-color)] bg-[var(--bg-secondary)] p-0.5"
+      className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5"
       role="radiogroup"
       aria-label={t("theme.toggle.colorTheme", undefined, "Color mode")}
     >
@@ -50,8 +50,8 @@ export function ThemeToggle() {
               onClick={() => setMode(key)}
               className={`inline-flex h-7 w-7 items-center justify-center rounded-full transition-colors ${
                 isActive
-                  ? "bg-[var(--background)] text-[var(--foreground)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
+                  ? "bg-[var(--p-bg)] text-[var(--p-text-1)]"
+                  : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
               }`}
             >
               <Icon size={13} aria-hidden="true" />

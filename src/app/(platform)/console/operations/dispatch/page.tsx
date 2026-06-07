@@ -182,28 +182,28 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
         <nav className="flex items-center gap-3 text-sm">
           <Link
             href={`/console/operations/dispatch?date=${prevDate}`}
-            className="text-[var(--org-primary)] hover:underline"
+            className="text-[var(--p-accent)] hover:underline"
           >
             ← {prevDate}
           </Link>
-          <span className="font-mono text-xs text-[var(--text-muted)]">{dateStr}</span>
+          <span className="font-mono text-xs text-[var(--p-text-2)]">{dateStr}</span>
           <Link
             href={`/console/operations/dispatch?date=${nextDate}`}
-            className="text-[var(--org-primary)] hover:underline"
+            className="text-[var(--p-accent)] hover:underline"
           >
             {nextDate} →
           </Link>
           <span className="ms-auto flex items-center gap-3 text-xs">
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-sm bg-[var(--color-info)]" />
+              <span className="h-2 w-2 rounded-sm bg-[var(--p-info)]" />
               {t("console.operations.dispatch.legend.shift", undefined, "Shift")}
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-sm bg-[var(--color-warning)]" />
+              <span className="h-2 w-2 rounded-sm bg-[var(--p-warning)]" />
               {t("console.operations.dispatch.legend.task", undefined, "Task")}
             </span>
             <span className="flex items-center gap-1">
-              <span className="h-2 w-2 rounded-sm bg-[var(--color-success)]" />
+              <span className="h-2 w-2 rounded-sm bg-[var(--p-success)]" />
               {t("console.operations.dispatch.legend.dispatch", undefined, "Dispatch")}
             </span>
           </span>
@@ -211,10 +211,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
 
         <div className="surface overflow-x-auto">
           {/* Time header */}
-          <div className="sticky top-0 flex border-b border-[var(--border-color)] bg-[var(--surface)]">
+          <div className="sticky top-0 flex border-b border-[var(--p-border)] bg-[var(--p-surface)]">
             <div
               style={{ width: 180 }}
-              className="shrink-0 border-e border-[var(--border-color)] px-3 py-2 text-[10px] font-semibold tracking-wide text-[var(--text-muted)] uppercase"
+              className="shrink-0 border-e border-[var(--p-border)] px-3 py-2 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase"
             >
               {t("console.operations.dispatch.laneColumn", undefined, "Lane")}
             </div>
@@ -223,7 +223,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                 <div
                   key={h}
                   style={{ width: colWidth }}
-                  className="border-e border-[var(--border-color)] px-2 py-2 font-mono text-[10px] text-[var(--text-muted)]"
+                  className="border-e border-[var(--p-border)] px-2 py-2 font-mono text-[10px] text-[var(--p-text-2)]"
                 >
                   {h.toString().padStart(2, "0")}:00
                 </div>
@@ -235,10 +235,10 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
           {lanes.map((lane) => {
             const items = byLane.get(lane.id) ?? [];
             return (
-              <div key={lane.id} className="flex border-b border-[var(--border-color)]">
+              <div key={lane.id} className="flex border-b border-[var(--p-border)]">
                 <div
                   style={{ width: 180, height: laneHeight }}
-                  className="flex shrink-0 items-center border-e border-[var(--border-color)] px-3 text-xs"
+                  className="flex shrink-0 items-center border-e border-[var(--p-border)] px-3 text-xs"
                 >
                   <Badge variant={lane.kind === "venue" ? "muted" : "info"} className="me-2">
                     {lane.kind === "venue"
@@ -252,7 +252,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                   {HOURS.map((_, idx) => (
                     <div
                       key={idx}
-                      className="absolute top-0 bottom-0 border-e border-[var(--border-color)] opacity-30"
+                      className="absolute top-0 bottom-0 border-e border-[var(--p-border)] opacity-30"
                       style={{ left: idx * colWidth, width: colWidth }}
                     />
                   ))}
@@ -266,17 +266,17 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                       <Link
                         key={`${b.laneId}-${i}`}
                         href={b.href}
-                        className="absolute top-1.5 bottom-1.5 overflow-hidden rounded border border-[var(--border-color)] bg-[var(--surface-raised)] px-2 py-1 text-[11px]"
+                        className="absolute top-1.5 bottom-1.5 overflow-hidden rounded border border-[var(--p-border)] bg-[var(--p-surface)] px-2 py-1 text-[11px]"
                         style={{ left: startCol * colWidth, width: widthHrs * colWidth }}
                         title={b.label}
                       >
                         <span
                           className={`me-1 inline-block h-1.5 w-1.5 rounded-sm ${
                             b.source === "shift"
-                              ? "bg-[var(--color-info)]"
+                              ? "bg-[var(--p-info)]"
                               : b.source === "task"
-                                ? "bg-[var(--color-warning)]"
-                                : "bg-[var(--color-success)]"
+                                ? "bg-[var(--p-warning)]"
+                                : "bg-[var(--p-success)]"
                           }`}
                         />
                         <span className="font-medium">{b.label}</span>

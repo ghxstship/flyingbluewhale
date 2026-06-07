@@ -170,7 +170,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
     return { error: error.message, values: echo(fd) };
   }
 
-  // Instantiate preset skeleton (regions/bands/stations) when one was selected.
+  // Instantiate preset ps-skel (regions/bands/stations) when one was selected.
   if (parsed.data.preset_code) {
     const preset = getPreset(parsed.data.preset_code);
     if (preset) {

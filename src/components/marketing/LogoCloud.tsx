@@ -39,7 +39,7 @@ export function LogoCloud({
                 className="h-6 w-auto object-contain opacity-70 grayscale transition-[opacity,filter] hover:opacity-100 hover:grayscale-0 motion-reduce:transition-none"
               />
             ) : (
-              <span className="text-center font-mono text-xs font-semibold tracking-[0.2em] text-[var(--text-muted)]">
+              <span className="text-center font-mono text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)]">
                 {l.name}
               </span>
             )}

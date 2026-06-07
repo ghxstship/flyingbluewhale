@@ -5,6 +5,8 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_LINE_TYPES, XPMS_PHASES, XPMS_XYZ } from "@/lib/finance/xpms-budget";
 
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
 /**
  * XPMS Universal Budget Template — Summary rollups (server-rendered).
  *
@@ -90,7 +92,7 @@ export default async function BudgetSummaryPage() {
     return (
       <>
         <ModuleHeader
-          eyebrow="Finance"
+          eyebrow={t("console.finance.budgets.summary.eyebrow", undefined, "Finance")}
           title={t("console.finance.budgets.summary.title", undefined, "Budget Summary")}
         />
         <div className="page-content text-sm text-[var(--p-text-2)]">
@@ -125,15 +127,31 @@ export default async function BudgetSummaryPage() {
   // draws the project finance page already does it.
   const totalBudget = rows.reduce((acc, r) => acc + (r.amount_cents ?? 0), 0);
   const drawSchedule = [
-    { label: "Mobilization deposit", trigger: "Phase 1 · Discovery / contract", pct: 0.5 },
-    { label: "Progress draw", trigger: "Phase 5 · Build start", pct: 0.3 },
-    { label: "Final balance", trigger: "Phase 8 · Close / final acceptance", pct: 0.2 },
+    {
+      label: t("console.finance.budgets.summary.draw.mobilizationLabel", undefined, "Mobilization deposit"),
+      trigger: t(
+        "console.finance.budgets.summary.draw.mobilizationTrigger",
+        undefined,
+        "Phase 1 · Discovery / contract",
+      ),
+      pct: 0.5,
+    },
+    {
+      label: t("console.finance.budgets.summary.draw.progressLabel", undefined, "Progress draw"),
+      trigger: t("console.finance.budgets.summary.draw.progressTrigger", undefined, "Phase 5 · Build start"),
+      pct: 0.3,
+    },
+    {
+      label: t("console.finance.budgets.summary.draw.finalLabel", undefined, "Final balance"),
+      trigger: t("console.finance.budgets.summary.draw.finalTrigger", undefined, "Phase 8 · Close / final acceptance"),
+      pct: 0.2,
+    },
   ];
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Finance"
+        eyebrow={t("console.finance.budgets.summary.eyebrow", undefined, "Finance")}
         title={t("console.finance.budgets.summary.title", undefined, "Budget Summary")}
         subtitle={t(
           "console.finance.budgets.summary.subtitle",
@@ -143,35 +161,40 @@ export default async function BudgetSummaryPage() {
       />
       <div className="page-content space-y-8">
         <RollupTable
-          title="By Department — XPMS Class"
+          t={t}
+          title={t("console.finance.budgets.summary.byDepartment", undefined, "By Department — XPMS Class")}
           rollups={byDept}
-          totalLabel="TOTAL"
+          totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
         />
         <RollupTable
-          title="By Phase — 8-Gate Lifecycle · Scope Only"
+          t={t}
+          title={t("console.finance.budgets.summary.byPhase", undefined, "By Phase — 8-Gate Lifecycle · Scope Only")}
           rollups={byPhase}
-          totalLabel="TOTAL"
+          totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
         />
-        <DrawSchedule totalBudget={totalBudget} schedule={drawSchedule} fmt={(c) => fmt.money(c / 100)} />
+        <DrawSchedule t={t} totalBudget={totalBudget} schedule={drawSchedule} fmt={(c) => fmt.money(c / 100)} />
         <RollupTable
-          title="By Line Type"
+          t={t}
+          title={t("console.finance.budgets.summary.byLineType", undefined, "By Line Type")}
           rollups={byLineType}
-          totalLabel="GRAND TOTAL"
+          totalLabel={t("console.finance.budgets.summary.grandTotal", undefined, "GRAND TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
           showPercent
         />
         <RollupTable
-          title="By Discipline — Scope Only"
+          t={t}
+          title={t("console.finance.budgets.summary.byDiscipline", undefined, "By Discipline — Scope Only")}
           rollups={byDiscipline}
-          totalLabel="TOTAL"
+          totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
         />
         <RollupTable
-          title="By XYZ — Cost Behaviour · All-in"
+          t={t}
+          title={t("console.finance.budgets.summary.byXyz", undefined, "By XYZ — Cost Behaviour · All-in")}
           rollups={byXyz}
-          totalLabel="TOTAL"
+          totalLabel={t("console.finance.budgets.summary.total", undefined, "TOTAL")}
           fmt={(c) => fmt.money(c / 100)}
         />
       </div>
@@ -180,12 +203,14 @@ export default async function BudgetSummaryPage() {
 }
 
 function RollupTable({
+  t,
   title,
   rollups,
   totalLabel,
   fmt,
   showPercent = false,
 }: {
+  t: Translator;
   title: string;
   rollups: Rollup[];
   totalLabel: string;
@@ -200,13 +225,29 @@ function RollupTable({
         <table className="ps-table w-full text-sm">
           <thead>
             <tr>
-              <th className="px-3 py-2 text-left">Segment</th>
-              <th className="px-3 py-2 text-right">Estimate</th>
-              <th className="px-3 py-2 text-right">Budget</th>
-              <th className="px-3 py-2 text-right">Forecast</th>
-              <th className="px-3 py-2 text-right">Actual</th>
-              <th className="px-3 py-2 text-right">Variance</th>
-              {showPercent && <th className="px-3 py-2 text-right">% of Total</th>}
+              <th className="px-3 py-2 text-left">
+                {t("console.finance.budgets.summary.col.segment", undefined, "Segment")}
+              </th>
+              <th className="px-3 py-2 text-right">
+                {t("console.finance.budgets.summary.col.estimate", undefined, "Estimate")}
+              </th>
+              <th className="px-3 py-2 text-right">
+                {t("console.finance.budgets.summary.col.budget", undefined, "Budget")}
+              </th>
+              <th className="px-3 py-2 text-right">
+                {t("console.finance.budgets.summary.col.forecast", undefined, "Forecast")}
+              </th>
+              <th className="px-3 py-2 text-right">
+                {t("console.finance.budgets.summary.col.actual", undefined, "Actual")}
+              </th>
+              <th className="px-3 py-2 text-right">
+                {t("console.finance.budgets.summary.col.variance", undefined, "Variance")}
+              </th>
+              {showPercent && (
+                <th className="px-3 py-2 text-right">
+                  {t("console.finance.budgets.summary.col.pctOfTotal", undefined, "% of Total")}
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -244,10 +285,12 @@ function RollupTable({
 }
 
 function DrawSchedule({
+  t,
   totalBudget,
   schedule,
   fmt,
 }: {
+  t: Translator;
   totalBudget: number;
   schedule: Array<{ label: string; trigger: string; pct: number }>;
   fmt: (cents: number) => string;
@@ -257,16 +300,28 @@ function DrawSchedule({
   return (
     <section>
       <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-        Project Billing / Draw Schedule (% of total contract)
+        {t(
+          "console.finance.budgets.summary.draw.title",
+          undefined,
+          "Project Billing / Draw Schedule · % of total contract",
+        )}
       </h2>
       <div className="surface mt-2 overflow-hidden">
         <table className="ps-table w-full text-sm">
           <thead>
             <tr>
-              <th className="px-3 py-2 text-left">Draw</th>
-              <th className="px-3 py-2 text-left">Trigger</th>
-              <th className="px-3 py-2 text-right">%</th>
-              <th className="px-3 py-2 text-right">Amount</th>
+              <th className="px-3 py-2 text-left">
+                {t("console.finance.budgets.summary.draw.colDraw", undefined, "Draw")}
+              </th>
+              <th className="px-3 py-2 text-left">
+                {t("console.finance.budgets.summary.draw.colTrigger", undefined, "Trigger")}
+              </th>
+              <th className="px-3 py-2 text-right">
+                {t("console.finance.budgets.summary.draw.colPct", undefined, "%")}
+              </th>
+              <th className="px-3 py-2 text-right">
+                {t("console.finance.budgets.summary.draw.colAmount", undefined, "Amount")}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -280,7 +335,7 @@ function DrawSchedule({
             ))}
             <tr className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] font-semibold">
               <td className="px-3 py-2" colSpan={2}>
-                TOTAL CONTRACT
+                {t("console.finance.budgets.summary.totalContract", undefined, "TOTAL CONTRACT")}
               </td>
               <td className="px-3 py-2 text-right font-mono">{(totalPct * 100).toFixed(0)}%</td>
               <td className="px-3 py-2 text-right font-mono">{fmt(totalDraw)}</td>

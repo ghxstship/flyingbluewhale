@@ -31,12 +31,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   const dateStr = sp.date ?? tomorrow.toISOString().slice(0, 10);
   const focusDate = new Date(`${dateStr}T00:00:00.000Z`);
 
+  const { t } = await getRequestT();
+
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="Call Sheets" />
+        <ModuleHeader title={t("console.workforce.callSheets.title", undefined, "Call Sheets")} />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>
         </div>
       </>
     );
@@ -79,9 +81,21 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce"
-        title="Call Sheets"
-        subtitle={`${members.length} member${members.length === 1 ? "" : "s"} on shift · ${dateStr}`}
+        eyebrow={t("console.workforce.callSheets.eyebrow", undefined, "Workforce")}
+        title={t("console.workforce.callSheets.title", undefined, "Call Sheets")}
+        subtitle={
+          members.length === 1
+            ? t(
+                "console.workforce.callSheets.subtitleOne",
+                { count: members.length, date: dateStr },
+                `${members.length} member on shift · ${dateStr}`,
+              )
+            : t(
+                "console.workforce.callSheets.subtitleMany",
+                { count: members.length, date: dateStr },
+                `${members.length} members on shift · ${dateStr}`,
+              )
+        }
       />
       <div className="page-content space-y-4">
         <nav className="flex items-center gap-3 text-sm">
@@ -101,8 +115,16 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
         </nav>
         {members.length === 0 ? (
           <EmptyState
-            title={`No shifts scheduled for ${dateStr}`}
-            description="Author a roster + shifts to materialise per-person call sheets."
+            title={t(
+              "console.workforce.callSheets.emptyTitle",
+              { date: dateStr },
+              `No shifts scheduled for ${dateStr}`,
+            )}
+            description={t(
+              "console.workforce.callSheets.emptyDescription",
+              undefined,
+              "Author a roster + shifts to materialise per-person call sheets.",
+            )}
           />
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -120,17 +142,23 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                   <div className="text-sm font-semibold">{m.full_name}</div>
                   <div className="font-mono text-xs text-[var(--p-text-2)]">{m.role ?? "—"}</div>
                   <div className="mt-3 flex items-baseline justify-between text-xs">
-                    <span className="text-[var(--p-text-2)]">Call</span>
+                    <span className="text-[var(--p-text-2)]">
+                      {t("console.workforce.callSheets.call", undefined, "Call")}
+                    </span>
                     <span className="font-mono text-base font-semibold">{callTime ? fmt.time(callTime) : "—"}</span>
                   </div>
                   {first && last && first !== last && (
                     <div className="mt-1 flex items-baseline justify-between text-[10px]">
-                      <span className="text-[var(--p-text-2)]">Wrap</span>
+                      <span className="text-[var(--p-text-2)]">
+                        {t("console.workforce.callSheets.wrap", undefined, "Wrap")}
+                      </span>
                       <span className="font-mono">{fmt.time(last.ends_at)}</span>
                     </div>
                   )}
                   <div className="mt-2 font-mono text-[10px] text-[var(--p-text-2)]">
-                    {ms.length} shift{ms.length === 1 ? "" : "s"}
+                    {ms.length === 1
+                      ? t("console.workforce.callSheets.shiftOne", { count: ms.length }, `${ms.length} shift`)
+                      : t("console.workforce.callSheets.shiftMany", { count: ms.length }, `${ms.length} shifts`)}
                   </div>
                 </Link>
               );

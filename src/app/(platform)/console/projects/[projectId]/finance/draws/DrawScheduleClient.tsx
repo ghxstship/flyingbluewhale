@@ -5,6 +5,7 @@ import { useFormState } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { createDraw, deleteDraw, seedDefaultDraws, toggleDrawn, type State } from "./actions";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type DrawRow = {
   id: string;
@@ -41,6 +42,7 @@ export function DrawScheduleClient({
   totalBudgetFormatted: string;
   phaseOptions: string[];
 }) {
+  const t = useT();
   const seed = seedDefaultDraws.bind(null, projectId) as () => Promise<State>;
   const create = createDraw.bind(null, projectId) as (state: State, fd: FormData) => Promise<State>;
   const toggle = toggleDrawn.bind(null, projectId) as (drawId: string) => Promise<void>;
@@ -60,18 +62,24 @@ export function DrawScheduleClient({
       {/* Totals strip */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div className="surface p-4">
-          <div className="text-xs text-[var(--p-text-2)]">Project budget</div>
+          <div className="text-xs text-[var(--p-text-2)]">
+            {t("console.draws.projectBudget", undefined, "Project budget")}
+          </div>
           <div className="mt-1 font-mono text-lg font-semibold">{totalBudgetFormatted}</div>
         </div>
         <div className="surface p-4">
-          <div className="text-xs text-[var(--p-text-2)]">Total scheduled</div>
+          <div className="text-xs text-[var(--p-text-2)]">
+            {t("console.draws.totalScheduled", undefined, "Total scheduled")}
+          </div>
           <div className="mt-1 font-mono text-lg font-semibold">
             {formatMoneyCents(totalDrawCents)}{" "}
-            <span className="text-xs text-[var(--p-text-2)]">({formatPct(totalPct)})</span>
+            <span className="text-xs text-[var(--p-text-2)]">{formatPct(totalPct)}</span>
           </div>
         </div>
         <div className="surface p-4">
-          <div className="text-xs text-[var(--p-text-2)]">Drawn to date</div>
+          <div className="text-xs text-[var(--p-text-2)]">
+            {t("console.draws.drawnToDate", undefined, "Drawn to date")}
+          </div>
           <div className="mt-1 font-mono text-lg font-semibold">{formatMoneyCents(drawnCents)}</div>
         </div>
       </div>
@@ -79,7 +87,9 @@ export function DrawScheduleClient({
       {/* Existing draws */}
       <section>
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Draws</h2>
+          <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            {t("console.draws.draws", undefined, "Draws")}
+          </h2>
           {rows.length === 0 && (
             <Button
               onClick={() =>
@@ -89,7 +99,7 @@ export function DrawScheduleClient({
               }
               disabled={pending}
             >
-              Seed 50 / 30 / 20 default
+              {t("console.draws.seedDefault", undefined, "Seed 50 / 30 / 20 default")}
             </Button>
           )}
         </div>
@@ -97,19 +107,23 @@ export function DrawScheduleClient({
           <table className="ps-table w-full text-sm">
             <thead>
               <tr>
-                <th className="px-3 py-2 text-left">Draw</th>
-                <th className="px-3 py-2 text-left">Trigger</th>
-                <th className="px-3 py-2 text-right">%</th>
-                <th className="px-3 py-2 text-right">Amount</th>
-                <th className="px-3 py-2 text-center">State</th>
-                <th className="px-3 py-2 text-right">Actions</th>
+                <th className="px-3 py-2 text-left">{t("console.draws.colDraw", undefined, "Draw")}</th>
+                <th className="px-3 py-2 text-left">{t("console.draws.colTrigger", undefined, "Trigger")}</th>
+                <th className="px-3 py-2 text-right">{t("console.draws.colPct", undefined, "%")}</th>
+                <th className="px-3 py-2 text-right">{t("console.draws.colAmount", undefined, "Amount")}</th>
+                <th className="px-3 py-2 text-center">{t("console.draws.colState", undefined, "State")}</th>
+                <th className="px-3 py-2 text-right">{t("console.draws.colActions", undefined, "Actions")}</th>
               </tr>
             </thead>
             <tbody>
               {rows.length === 0 ? (
                 <tr>
                   <td className="px-3 py-3 text-sm text-[var(--p-text-2)]" colSpan={6}>
-                    No draws scheduled yet. Seed the 50 / 30 / 20 default or add a custom draw below.
+                    {t(
+                      "console.draws.empty",
+                      undefined,
+                      "No draws scheduled yet. Seed the 50 / 30 / 20 default or add a custom draw below.",
+                    )}
                   </td>
                 </tr>
               ) : (
@@ -125,7 +139,11 @@ export function DrawScheduleClient({
                       {formatMoneyCents(Math.round(totalBudgetCents * (r.percentage ?? 0)))}
                     </td>
                     <td className="px-3 py-2 text-center">
-                      {r.drawn ? <Badge variant="success">Drawn</Badge> : <Badge variant="muted">Pending</Badge>}
+                      {r.drawn ? (
+                        <Badge variant="success">{t("console.draws.drawn", undefined, "Drawn")}</Badge>
+                      ) : (
+                        <Badge variant="muted">{t("console.draws.pending", undefined, "Pending")}</Badge>
+                      )}
                     </td>
                     <td className="px-3 py-2 text-right">
                       <button
@@ -134,7 +152,9 @@ export function DrawScheduleClient({
                         onClick={() => startTransition(async () => void (await toggle(r.id)))}
                         disabled={pending}
                       >
-                        {r.drawn ? "Mark pending" : "Mark drawn"}
+                        {r.drawn
+                          ? t("console.draws.markPending", undefined, "Mark pending")
+                          : t("console.draws.markDrawn", undefined, "Mark drawn")}
                       </button>
                       <span className="mx-2 text-[var(--p-text-2)]">·</span>
                       <button
@@ -143,7 +163,7 @@ export function DrawScheduleClient({
                         onClick={() => startTransition(async () => void (await drop(r.id)))}
                         disabled={pending}
                       >
-                        Delete
+                        {t("console.draws.delete", undefined, "Delete")}
                       </button>
                     </td>
                   </tr>
@@ -156,24 +176,32 @@ export function DrawScheduleClient({
 
       {/* Add custom draw */}
       <section>
-        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Add a draw</h2>
+        <h2 className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          {t("console.draws.addHeading", undefined, "Add a draw")}
+        </h2>
         <form action={createAction} className="surface mt-2 space-y-3 p-4">
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Draw name</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">
+                {t("console.draws.drawName", undefined, "Draw name")}
+              </span>
               <input name="draw_name" required maxLength={120} className={INPUT_CLASS} />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Trigger label</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">
+                {t("console.draws.triggerLabel", undefined, "Trigger label")}
+              </span>
               <input
                 name="trigger_label"
                 maxLength={200}
                 className={INPUT_CLASS}
-                placeholder="e.g. Phase 3 · Advance / contracts"
+                placeholder={t("console.draws.triggerPlaceholder", undefined, "e.g. Phase 3 · Advance / contracts")}
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Trigger phase</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">
+                {t("console.draws.triggerPhase", undefined, "Trigger phase")}
+              </span>
               <select name="trigger_phase" className={INPUT_CLASS} defaultValue="">
                 <option value="">—</option>
                 {phaseOptions.map((p) => (
@@ -184,26 +212,30 @@ export function DrawScheduleClient({
               </select>
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Percentage</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">
+                {t("console.draws.percentage", undefined, "Percentage")}
+              </span>
               <input
                 name="percentage"
                 required
                 type="number"
                 inputMode="decimal"
                 step="0.01"
-                placeholder="50 or 0.5"
+                placeholder={t("console.draws.pctPlaceholder", undefined, "50 or 0.5")}
                 className={INPUT_CLASS}
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">Sort order</span>
+              <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">
+                {t("console.draws.sortOrder", undefined, "Sort order")}
+              </span>
               <input name="sort_order" type="number" defaultValue={rows.length + 1} className={INPUT_CLASS} />
             </label>
           </div>
           {createState?.error && <p className="text-xs text-red-500">{createState.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" disabled={pending}>
-              Add draw
+              {t("console.draws.addDraw", undefined, "Add draw")}
             </Button>
           </div>
         </form>

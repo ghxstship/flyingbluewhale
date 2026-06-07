@@ -7621,6 +7621,41 @@
           "spent": "Spent",
           "budget": "Budget",
           "utilization": "Utilization"
+        },
+        "summary": {
+          "eyebrow": "Finance",
+          "title": "Budget Summary",
+          "subtitle": "Live XPMS rollups. Phase curve = Scope only — Fee & Contingency roll up separately.",
+          "byDepartment": "By Department — XPMS Class",
+          "byPhase": "By Phase — 8-Gate Lifecycle · Scope Only",
+          "byLineType": "By Line Type",
+          "byDiscipline": "By Discipline — Scope Only",
+          "byXyz": "By XYZ — Cost Behaviour · All-in",
+          "total": "TOTAL",
+          "grandTotal": "GRAND TOTAL",
+          "totalContract": "TOTAL CONTRACT",
+          "col": {
+            "segment": "Segment",
+            "estimate": "Estimate",
+            "budget": "Budget",
+            "forecast": "Forecast",
+            "actual": "Actual",
+            "variance": "Variance",
+            "pctOfTotal": "% of Total"
+          },
+          "draw": {
+            "title": "Project Billing / Draw Schedule · % of total contract",
+            "colDraw": "Draw",
+            "colTrigger": "Trigger",
+            "colPct": "%",
+            "colAmount": "Amount",
+            "mobilizationLabel": "Mobilization deposit",
+            "mobilizationTrigger": "Phase 1 · Discovery / contract",
+            "progressLabel": "Progress draw",
+            "progressTrigger": "Phase 5 · Build start",
+            "finalLabel": "Final balance",
+            "finalTrigger": "Phase 8 · Close / final acceptance"
+          }
         }
       },
       "eyebrow": "Finance",
@@ -15450,7 +15485,20 @@
         },
         "eyebrow": "Workforce",
         "title": "Badges",
-        "configureSupabase": "Configure Supabase."
+        "configureSupabase": "Configure Supabase.",
+        "detail": {
+          "eyebrow": "Badge",
+          "awardedOne": "{count} awarded",
+          "awardedMany": "{count} awarded",
+          "deleteConfirm": "Hard-delete this badge? All award history will also be removed.",
+          "awardThis": "Award This Badge",
+          "notePlaceholder": "Why this person earned it · optional",
+          "award": "Award",
+          "recentAwards": "Recent Awards",
+          "noAwardsTitle": "No awards yet",
+          "noAwardsDescription": "Award this badge from the form above.",
+          "unknown": "Unknown"
+        }
       },
       "contractors": {
         "edit": {
@@ -16019,6 +16067,18 @@
           "role": "Role",
           "email": "Email"
         }
+      },
+      "callSheets": {
+        "eyebrow": "Workforce",
+        "title": "Call Sheets",
+        "subtitleOne": "{count} member on shift · {date}",
+        "subtitleMany": "{count} members on shift · {date}",
+        "emptyTitle": "No shifts scheduled for {date}",
+        "emptyDescription": "Author a roster + shifts to materialise per-person call sheets.",
+        "call": "Call",
+        "wrap": "Wrap",
+        "shiftOne": "{count} shift",
+        "shiftMany": "{count} shifts"
       }
     },
     "xpms": {
@@ -16195,6 +16255,34 @@
           "analyticsDesc": "Cross-cutting BI rollup"
         }
       }
+    },
+    "draws": {
+      "projectBudget": "Project budget",
+      "totalScheduled": "Total scheduled",
+      "drawnToDate": "Drawn to date",
+      "draws": "Draws",
+      "seedDefault": "Seed 50 / 30 / 20 default",
+      "colDraw": "Draw",
+      "colTrigger": "Trigger",
+      "colPct": "%",
+      "colAmount": "Amount",
+      "colState": "State",
+      "colActions": "Actions",
+      "empty": "No draws scheduled yet. Seed the 50 / 30 / 20 default or add a custom draw below.",
+      "drawn": "Drawn",
+      "pending": "Pending",
+      "markPending": "Mark pending",
+      "markDrawn": "Mark drawn",
+      "delete": "Delete",
+      "addHeading": "Add a draw",
+      "drawName": "Draw name",
+      "triggerLabel": "Trigger label",
+      "triggerPlaceholder": "e.g. Phase 3 · Advance / contracts",
+      "triggerPhase": "Trigger phase",
+      "percentage": "Percentage",
+      "pctPlaceholder": "50 or 0.5",
+      "sortOrder": "Sort order",
+      "addDraw": "Add draw"
     }
   },
   "p": {

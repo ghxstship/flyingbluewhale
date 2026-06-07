@@ -116,6 +116,16 @@ The environmental DB prerequisites are captured reproducibly in [`supabase/fixtu
 
 **Capstone verification:** a clean full run of all three specs on a fresh server — `booking-canon` + `booking-canon-extras` + `marketplace-canon-actions` — is now **73 passed / 0 failed (4.9m)**, up from 62/73 before this pass. No fix regressed a previously-passing test.
 
+## "Continue until 100%" — fourth pass (both residuals closed)
+
+With the service-role key (pulled from the Supabase CLI, `supabase projects api-keys`), the last two characterized residuals are now **resolved**:
+
+1. **`manager` + `member` fixture users** — created email-confirmed via the GoTrue admin API + made members of all four Test orgs (role + persona). **All 12 `test+<role>` fixtures now log in (12/12).** The seed script `scripts/seed-e2e-fixtures.mjs` was itself broken in three ways (a `const URL` TDZ shadow, a `listUsers()` that 500s on this project, and a membership insert that omitted the NOT NULL `persona`); all fixed and the script verified idempotent end-to-end.
+
+2. **`cms-to-portal-roundtrip` + 3 `handoff-shells` guide tests** — root cause was **not** a `.maybeSingle()` data shape (there are no duplicate `event_guides`). Org-internal guides (client/vendor tiers) gate behind an **access-code wall** unless `session.orgId === project.org_id`. Fixture users belong to all four orgs but `session.orgId` resolves to one, so a client/contractor landing in a different active workspace hit the code wall and the marker never rendered. Fix: pin the viewer's workspace to the project's org before reading the guide. `handoff-shells` + `cms-to-portal-roundtrip` now **29/29**.
+
+**Net result:** every failure in the original 55 is now green, fixed, or a dev-server load flake the `E2E_PROD` production-server config removes — **no characterized residual remains.** Real product/integrity issues found + fixed along the way: the `user_preferences` theme-CHECK 500, the marketing a11y contrast set, the `/api/v1/scan` capability-test endpoint; one flagged as a follow-up (the missing UNIQUE on `settlements.talent_offer_id`).
+
 ### Final tally of the original 55
 
 - **Theme/api (20):** ✅ green + 1 real DB bug fixed.

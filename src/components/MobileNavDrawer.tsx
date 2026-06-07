@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/Sheet";
 import { NAV_ICONS } from "@/components/nav-icons";
 import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Mobile-only platform nav. The desktop PlatformSidebar is hidden at
@@ -25,6 +26,7 @@ import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
  * pink / COMPVSS amber / GVTEWAY cyan) shows through automatically.
  */
 export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
+  const t = useT();
   const [open, setOpen] = React.useState(false);
   const pathname = usePathname();
 
@@ -43,7 +45,7 @@ export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
       <SheetTrigger asChild>
         <button
           type="button"
-          aria-label="Open navigation"
+          aria-label={t("shell.nav.openNavigation", undefined, "Open navigation")}
           className="-ms-1 inline-flex h-9 w-9 items-center justify-center rounded-md text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] md:hidden"
         >
           <Menu size={18} aria-hidden="true" />
@@ -80,7 +82,7 @@ export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            aria-label="Close navigation"
+            aria-label={t("shell.nav.closeNavigation", undefined, "Close navigation")}
             className="rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
           >
             <X size={16} aria-hidden="true" />

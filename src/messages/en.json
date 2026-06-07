@@ -4068,6 +4068,25 @@
     "mobile": {
       "brand": "COMPVSS",
       "aboutSuffix": "· v{version}"
+    },
+    "nav": {
+      "openNavigation": "Open navigation",
+      "closeNavigation": "Close navigation"
+    },
+    "sidebar": {
+      "primary": "Primary",
+      "collapseHint": "Collapse sidebar · ⌘B",
+      "collapse": "Collapse sidebar",
+      "searchNavPlaceholder": "Search nav…",
+      "searchNavAria": "Search navigation",
+      "openSearch": "Open sidebar search",
+      "search": "Search",
+      "pinned": "Pinned",
+      "expandHint": "Expand sidebar · ⌘B",
+      "expand": "Expand sidebar",
+      "resize": "Resize sidebar",
+      "shortcutToggle": "Collapse / expand sidebar",
+      "shortcutSearch": "Focus sidebar search"
     }
   },
   "a11y": {
@@ -18325,6 +18344,89 @@
     "chips": {
       "remove": "Remove {header} filter {value}",
       "clearAll": "Clear all"
+    }
+  },
+  "commandPalette": {
+    "shortcut": "Open command palette",
+    "title": "Command Palette",
+    "description": "Search for pages and run commands.",
+    "menuLabel": "Command Menu",
+    "placeholder": "Search or run a command…",
+    "searchLabel": "Search",
+    "noResults": "No results for \"{query}\"",
+    "footerHint": "↑↓ navigate · ↵ select · ⌘↵ open in new tab · esc close",
+    "actionCount": "{count} actions",
+    "groups": {
+      "recent": "Recent",
+      "navigate": "Navigate",
+      "create": "Create",
+      "switch": "Switch",
+      "settings": "Settings",
+      "results": "Results"
+    },
+    "hint": {
+      "settings": "Settings · {group}",
+      "tab": "Tab",
+      "tool": "Tool"
+    },
+    "actions": {
+      "newProject": "New Project",
+      "newClient": "New Client",
+      "newInvoice": "New Invoice",
+      "newPo": "New PO",
+      "newProposal": "New Proposal",
+      "addEquipment": "Add Equipment",
+      "reportIncident": "Report Incident",
+      "logMedical": "Log Medical Event",
+      "openRequest": "Open Request",
+      "editProfile": "Edit Profile",
+      "switchOrg": "Switch Organization",
+      "preferences": "Preferences",
+      "lightMode": "Switch to Light Mode",
+      "darkMode": "Switch to Dark Mode",
+      "signOut": "Sign Out"
+    }
+  },
+  "savedViews": {
+    "toast": {
+      "nameRequired": "Name is required",
+      "updated": "View Updated",
+      "saved": "View Saved",
+      "saveFailed": "Could not save view"
+    },
+    "editTitle": "Edit Saved View",
+    "newTitle": "Save Current View",
+    "editDescription": "Rename, re-scope, or relock this saved view. Existing config snapshot is preserved.",
+    "newDescription": "Capture the current sort, filters, columns, and density as a named view you can return to.",
+    "nameLabel": "Name",
+    "namePlaceholder": "e.g. Open RFIs · Critical",
+    "descriptionLabel": "Description",
+    "descriptionHint": "Optional — explain when this view is useful.",
+    "descriptionPlaceholder": "Add context for teammates",
+    "visibility": "Visibility",
+    "scope": {
+      "private": "Private",
+      "privateHint": "Only you. Stored in your views list.",
+      "org": "Shared with the org",
+      "orgHint": "Visible to every org member under Shared.",
+      "public": "Public",
+      "publicHint": "Accessible via a share link."
+    },
+    "viewType": "View Type",
+    "viewTypeNote": "Only Grid renders today. Other types reserve the row for an upcoming alt renderer.",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "saveView": "Save View",
+    "types": {
+      "grid": "Grid",
+      "kanban": "Kanban",
+      "calendar": "Calendar",
+      "timeline": "Timeline",
+      "chart": "Chart",
+      "map": "Map",
+      "gantt": "Gantt",
+      "card": "Card",
+      "form": "Form"
     }
   }
 }

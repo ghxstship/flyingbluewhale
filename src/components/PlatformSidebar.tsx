@@ -30,6 +30,7 @@ export function PlatformSidebar({
    *  doesn't flash "Workspace" before the switcher hydrates. */
   workspaceName?: string;
 }) {
+  const t = useT();
   const pathname = usePathname();
   const { prefs, setPrefs } = useUserPreferences();
 
@@ -55,11 +56,15 @@ export function PlatformSidebar({
   // Register shortcuts for the cheatsheet
   React.useEffect(() => {
     const unregister = [
-      registerShortcut("mod+b", "Collapse / expand sidebar", "Navigation"),
-      registerShortcut("/", "Focus sidebar search", "Navigation"),
+      registerShortcut(
+        "mod+b",
+        t("shell.sidebar.shortcutToggle", undefined, "Collapse / expand sidebar"),
+        "Navigation",
+      ),
+      registerShortcut("/", t("shell.sidebar.shortcutSearch", undefined, "Focus sidebar search"), "Navigation"),
     ];
     return () => unregister.forEach((fn) => fn());
-  }, []);
+  }, [t]);
 
   // Shortcuts
   useHotkeys([
@@ -157,7 +162,7 @@ export function PlatformSidebar({
 
   return (
     <aside
-      aria-label="Primary"
+      aria-label={t("shell.sidebar.primary", undefined, "Primary")}
       // hidden md:flex: the desktop sidebar is suppressed below 768px
       // because its width swallows the entire phone viewport. The
       // MobileNavDrawer (top bar hamburger) replaces it for `< md`. See
@@ -178,7 +183,7 @@ export function PlatformSidebar({
             <WorkspaceSwitcher collapsed={collapsed} initialName={workspaceName} />
           </div>
           {!collapsed && (
-            <Hint label="Collapse sidebar · ⌘B" side="right">
+            <Hint label={t("shell.sidebar.collapseHint", undefined, "Collapse sidebar · ⌘B")} side="right">
               <button
                 type="button"
                 onClick={() => {
@@ -186,7 +191,7 @@ export function PlatformSidebar({
                   void setPrefs({ sidebar_collapsed: true });
                 }}
                 className="shrink-0 rounded p-1 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
-                aria-label="Collapse sidebar"
+                aria-label={t("shell.sidebar.collapse", undefined, "Collapse sidebar")}
               >
                 <PanelLeftClose size={14} />
               </button>
@@ -212,8 +217,8 @@ export function PlatformSidebar({
                       setShowSearch(false);
                     }
                   }}
-                  placeholder="Search nav…"
-                  aria-label="Search navigation"
+                  placeholder={t("shell.sidebar.searchNavPlaceholder", undefined, "Search nav…")}
+                  aria-label={t("shell.sidebar.searchNavAria", undefined, "Search navigation")}
                   className="w-full bg-transparent text-xs outline-none"
                 />
               </div>
@@ -225,11 +230,11 @@ export function PlatformSidebar({
                   setTimeout(() => searchRef.current?.focus(), 50);
                 }}
                 className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface)]"
-                aria-label="Open sidebar search"
+                aria-label={t("shell.sidebar.openSearch", undefined, "Open sidebar search")}
               >
                 <span className="flex items-center gap-2">
                   <Search size={12} aria-hidden="true" />
-                  <span>Search</span>
+                  <span>{t("shell.sidebar.search", undefined, "Search")}</span>
                 </span>
                 <kbd className="font-mono text-[10px]">/</kbd>
               </button>
@@ -241,7 +246,7 @@ export function PlatformSidebar({
         <nav className="flex-1 overflow-y-auto p-2">
           {pinnedItems.length > 0 && !query && (
             <SidebarGroup
-              label="Pinned"
+              label={t("shell.sidebar.pinned", undefined, "Pinned")}
               items={pinnedItems}
               pathname={pathname}
               collapsed={collapsed}
@@ -292,7 +297,7 @@ export function PlatformSidebar({
             toggle, since the rail header is reserved for the workspace
             tile per Linear/Notion convention. */}
         {collapsed ? (
-          <Hint label="Expand sidebar · ⌘B" side="right">
+          <Hint label={t("shell.sidebar.expandHint", undefined, "Expand sidebar · ⌘B")} side="right">
             <button
               type="button"
               onClick={() => {
@@ -300,7 +305,7 @@ export function PlatformSidebar({
                 void setPrefs({ sidebar_collapsed: false });
               }}
               className="flex w-full items-center justify-center border-t border-[var(--p-border)] py-3 text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
-              aria-label="Expand sidebar"
+              aria-label={t("shell.sidebar.expand", undefined, "Expand sidebar")}
             >
               <PanelLeftOpen size={14} />
             </button>
@@ -350,7 +355,7 @@ export function PlatformSidebar({
         <div
           role="separator"
           aria-orientation="vertical"
-          aria-label="Resize sidebar"
+          aria-label={t("shell.sidebar.resize", undefined, "Resize sidebar")}
           className="absolute inset-y-0 end-0 w-1 cursor-col-resize hover:bg-[var(--p-accent)]/30 active:bg-[var(--p-accent)]"
           onPointerDown={onResizeStart}
           onPointerMove={onResizeMove}

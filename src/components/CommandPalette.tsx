@@ -26,8 +26,10 @@ import {
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
 import { platformNav, portalNav, mobileTabs, mobileSurfaces, settingsNav } from "@/lib/nav";
+import { navItemKey } from "@/lib/i18n/nav-label";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Action = {
   id: string;
@@ -46,6 +48,7 @@ type Action = {
 type Scope = "platform" | "portal" | "mobile";
 
 export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Scope; portalSlug?: string }) {
+  const t = useT();
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
   const router = useRouter();
@@ -54,9 +57,9 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
 
   // Register shortcut in the cheatsheet registry
   React.useEffect(() => {
-    const off = registerShortcut("mod+k", "Open command palette", "Global");
+    const off = registerShortcut("mod+k", t("commandPalette.shortcut", undefined, "Open command palette"), "Global");
     return off;
-  }, []);
+  }, [t]);
 
   // Cmd/Ctrl+K toggles + ESC close
   React.useEffect(() => {
@@ -115,7 +118,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         for (const item of group.items) {
           list.push({
             id: `nav-${item.href}`,
-            label: item.label,
+            label: t(navItemKey(item), undefined, item.label),
             hint: group.label,
             group: "Navigate",
             icon: iconForRoute(item.href),
@@ -132,8 +135,8 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         for (const item of group.items) {
           list.push({
             id: `settings-${item.href}`,
-            label: item.label,
-            hint: `Settings · ${group.label}`,
+            label: t(navItemKey(item), undefined, item.label),
+            hint: t("commandPalette.hint.settings", { group: group.label }, `Settings · ${group.label}`),
             group: "Navigate",
             icon: iconForRoute(item.href),
             perform: () => goto(item.href),
@@ -143,16 +146,16 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         }
       }
       [
-        { label: "New Project", href: "/console/projects/new", icon: Briefcase },
-        { label: "New Client", href: "/console/clients/new", icon: Users },
-        { label: "New Invoice", href: "/console/finance/invoices/new", icon: Receipt },
-        { label: "New PO", href: "/console/procurement/purchase-orders/new", icon: FileText },
-        { label: "New Proposal", href: "/console/proposals/new", icon: FileText },
-        { label: "Add Equipment", href: "/console/equipment/new", icon: Package },
+        { key: "newProject", label: "New Project", href: "/console/projects/new", icon: Briefcase },
+        { key: "newClient", label: "New Client", href: "/console/clients/new", icon: Users },
+        { key: "newInvoice", label: "New Invoice", href: "/console/finance/invoices/new", icon: Receipt },
+        { key: "newPo", label: "New PO", href: "/console/procurement/purchase-orders/new", icon: FileText },
+        { key: "newProposal", label: "New Proposal", href: "/console/proposals/new", icon: FileText },
+        { key: "addEquipment", label: "Add Equipment", href: "/console/equipment/new", icon: Package },
       ].forEach((c) =>
         list.push({
           id: `create-${c.href}`,
-          label: c.label,
+          label: t(`commandPalette.actions.${c.key}`, undefined, c.label),
           group: "Create",
           icon: c.icon,
           perform: () => goto(c.href),
@@ -168,7 +171,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         for (const item of items) {
           list.push({
             id: `portal-${persona}-${item.href}`,
-            label: item.label,
+            label: t(navItemKey(item), undefined, item.label),
             hint: persona,
             group: "Navigate",
             icon: BookOpen,
@@ -182,8 +185,8 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       for (const tab of mobileTabs) {
         list.push({
           id: `m-tab-${tab.href}`,
-          label: tab.label,
-          hint: "Tab",
+          label: t(navItemKey(tab), undefined, tab.label),
+          hint: t("commandPalette.hint.tab", undefined, "Tab"),
           group: "Navigate",
           icon: BookOpen,
           perform: () => goto(tab.href),
@@ -195,8 +198,8 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       for (const surface of mobileSurfaces) {
         list.push({
           id: `m-surface-${surface.href}`,
-          label: surface.label,
-          hint: "Tool",
+          label: t(navItemKey(surface), undefined, surface.label),
+          hint: t("commandPalette.hint.tool", undefined, "Tool"),
           group: "Navigate",
           icon: BookOpen,
           perform: () => goto(surface.href),
@@ -204,21 +207,21 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       }
       list.push({
         id: "m-create-incident",
-        label: "Report Incident",
+        label: t("commandPalette.actions.reportIncident", undefined, "Report Incident"),
         group: "Create",
         icon: Ticket,
         perform: () => goto("/m/incidents/new"),
       });
       list.push({
         id: "m-create-medic",
-        label: "Log Medical Event",
+        label: t("commandPalette.actions.logMedical", undefined, "Log Medical Event"),
         group: "Create",
         icon: Ticket,
         perform: () => goto("/m/medic/new"),
       });
       list.push({
         id: "m-create-request",
-        label: "Open Request",
+        label: t("commandPalette.actions.openRequest", undefined, "Open Request"),
         group: "Create",
         icon: Ticket,
         perform: () => goto("/m/requests/new"),
@@ -229,28 +232,28 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
     list.push(
       {
         id: "settings-profile",
-        label: "Edit Profile",
+        label: t("commandPalette.actions.editProfile", undefined, "Edit Profile"),
         group: "Settings",
         icon: Users,
         perform: () => goto("/me/profile"),
       },
       {
         id: "settings-orgs",
-        label: "Switch Organization",
+        label: t("commandPalette.actions.switchOrg", undefined, "Switch Organization"),
         group: "Switch",
         icon: Building2,
         perform: () => goto("/me/organizations"),
       },
       {
         id: "settings-prefs",
-        label: "Preferences",
+        label: t("commandPalette.actions.preferences", undefined, "Preferences"),
         group: "Settings",
         icon: Settings,
         perform: () => goto("/me/settings"),
       },
       {
         id: "settings-mode-light",
-        label: "Switch to Light Mode",
+        label: t("commandPalette.actions.lightMode", undefined, "Switch to Light Mode"),
         group: "Settings",
         icon: Sun,
         perform: () => {
@@ -270,7 +273,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       },
       {
         id: "settings-mode-dark",
-        label: "Switch to Dark Mode",
+        label: t("commandPalette.actions.darkMode", undefined, "Switch to Dark Mode"),
         group: "Settings",
         icon: Moon,
         perform: () => {
@@ -285,7 +288,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
       },
       {
         id: "logout",
-        label: "Sign Out",
+        label: t("commandPalette.actions.signOut", undefined, "Sign Out"),
         group: "Settings",
         icon: LogOut,
         perform: () => goto("/auth/signout"),
@@ -293,7 +296,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
     );
 
     return list;
-  }, [scope, portalSlug, goto, gotoNewTab]);
+  }, [scope, portalSlug, goto, gotoNewTab, t]);
 
   // Build recents list by dereferencing recorded ids
   const recentActions = React.useMemo(() => {
@@ -349,11 +352,13 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         {/* Radix requires a Title (and looks for a Description) descendant for
             an accessible name; the palette has no visible heading, so render
             both visually hidden. */}
-        <DialogTitle className="sr-only">Command Palette</DialogTitle>
-        <DialogDescription className="sr-only">Search for pages and run commands.</DialogDescription>
+        <DialogTitle className="sr-only">{t("commandPalette.title", undefined, "Command Palette")}</DialogTitle>
+        <DialogDescription className="sr-only">
+          {t("commandPalette.description", undefined, "Search for pages and run commands.")}
+        </DialogDescription>
         <Command
           ref={cmdkRef}
-          label="Command Menu"
+          label={t("commandPalette.menuLabel", undefined, "Command Menu")}
           className="flex flex-col"
           shouldFilter={false /* we filter with match-sorter */}
         >
@@ -362,7 +367,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
             <Command.Input
               value={search}
               onValueChange={setSearch}
-              placeholder="Search or run a command…"
+              placeholder={t("commandPalette.placeholder", undefined, "Search or run a command…")}
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--p-text-2)]"
               autoFocus
             />
@@ -372,12 +377,12 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
           </div>
           <Command.List className="max-h-96 overflow-y-auto p-2">
             <Command.Empty className="py-12 text-center text-sm text-[var(--p-text-2)]">
-              No results for &quot;{search}&quot;
+              {t("commandPalette.noResults", { query: search }, `No results for "${search}"`)}
             </Command.Empty>
             {Object.entries(grouped).map(([group, items]) => (
               <Command.Group
                 key={group}
-                heading={group}
+                heading={t(`commandPalette.groups.${group.toLowerCase()}`, undefined, group)}
                 className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase"
               >
                 {items.map((a) => {
@@ -411,8 +416,10 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
             ))}
           </Command.List>
           <div className="flex items-center justify-between border-t border-[var(--p-border)] px-4 py-2 text-[10px] text-[var(--p-text-2)]">
-            <span>↑↓ navigate · ↵ select · ⌘↵ open in new tab · esc close</span>
-            <span>{actions.length} actions</span>
+            <span>
+              {t("commandPalette.footerHint", undefined, "↑↓ navigate · ↵ select · ⌘↵ open in new tab · esc close")}
+            </span>
+            <span>{t("commandPalette.actionCount", { count: actions.length }, `${actions.length} actions`)}</span>
           </div>
         </Command>
       </DialogContent>
@@ -434,6 +441,7 @@ function iconForRoute(href: string): React.ComponentType<{ size?: number }> {
 }
 
 export function CommandPaletteTrigger() {
+  const t = useT();
   return (
     <button
       type="button"
@@ -441,10 +449,10 @@ export function CommandPaletteTrigger() {
         window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
       }}
       className="hidden items-center gap-2 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-2.5 py-1 text-xs text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] sm:inline-flex"
-      aria-label="Open command palette"
+      aria-label={t("commandPalette.shortcut", undefined, "Open command palette")}
     >
       <Search size={12} />
-      <span>Search</span>
+      <span>{t("commandPalette.searchLabel", undefined, "Search")}</span>
       <kbd className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px]">⌘K</kbd>
     </button>
   );

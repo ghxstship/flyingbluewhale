@@ -14,6 +14,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import type { SavedView, ViewConfigRow, ViewScope, ViewType } from "@/lib/views/types";
 import { VIEW_TYPES } from "@/lib/views/types";
+import { useT } from "@/lib/i18n/LocaleProvider";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 /**
  * SaveViewDialog — modal for naming + scoping a new (or editing an
@@ -68,6 +71,7 @@ export function SaveViewDialog({
   defaultType = "grid",
   onSubmit,
 }: SaveViewDialogProps) {
+  const t = useT();
   const [name, setName] = React.useState<string>(editing?.name ?? "");
   const [description, setDescription] = React.useState<string>(editing?.description ?? "");
   const [scope, setScope] = React.useState<ViewScope>(editing?.scope ?? allowedScopes[0] ?? "private");
@@ -89,7 +93,7 @@ export function SaveViewDialog({
       e.preventDefault();
       const trimmed = name.trim();
       if (!trimmed) {
-        toast.error("Name is required");
+        toast.error(t("savedViews.toast.nameRequired", undefined, "Name is required"));
         return;
       }
       setSubmitting(true);
@@ -102,15 +106,21 @@ export function SaveViewDialog({
           config: currentConfig,
           upsertById: editing?.id,
         });
-        toast.success(editing ? "View Updated" : "View Saved");
+        toast.success(
+          editing
+            ? t("savedViews.toast.updated", undefined, "View Updated")
+            : t("savedViews.toast.saved", undefined, "View Saved"),
+        );
         onOpenChange(false);
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : "Could not save view");
+        toast.error(
+          err instanceof Error ? err.message : t("savedViews.toast.saveFailed", undefined, "Could not save view"),
+        );
       } finally {
         setSubmitting(false);
       }
     },
-    [name, description, scope, type, currentConfig, editing, onOpenChange, onSubmit],
+    [name, description, scope, type, currentConfig, editing, onOpenChange, onSubmit, t],
   );
 
   return (
@@ -118,60 +128,74 @@ export function SaveViewDialog({
       <DialogContent size="md">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{editing ? "Edit Saved View" : "Save Current View"}</DialogTitle>
+            <DialogTitle>
+              {editing
+                ? t("savedViews.editTitle", undefined, "Edit Saved View")
+                : t("savedViews.newTitle", undefined, "Save Current View")}
+            </DialogTitle>
             <DialogDescription>
               {editing
-                ? "Rename, re-scope, or relock this saved view. Existing config snapshot is preserved."
-                : "Capture the current sort, filters, columns, and density as a named view you can return to."}
+                ? t(
+                    "savedViews.editDescription",
+                    undefined,
+                    "Rename, re-scope, or relock this saved view. Existing config snapshot is preserved.",
+                  )
+                : t(
+                    "savedViews.newDescription",
+                    undefined,
+                    "Capture the current sort, filters, columns, and density as a named view you can return to.",
+                  )}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             <Input
-              label="Name"
+              label={t("savedViews.nameLabel", undefined, "Name")}
               required
               autoFocus
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Open RFIs · Critical"
+              placeholder={t("savedViews.namePlaceholder", undefined, "e.g. Open RFIs · Critical")}
               maxLength={120}
             />
 
             <Input
-              label="Description"
-              hint="Optional — explain when this view is useful."
+              label={t("savedViews.descriptionLabel", undefined, "Description")}
+              hint={t("savedViews.descriptionHint", undefined, "Optional — explain when this view is useful.")}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Add context for teammates"
+              placeholder={t("savedViews.descriptionPlaceholder", undefined, "Add context for teammates")}
               maxLength={500}
             />
 
             {allowedScopes.length > 1 && (
               <fieldset className="space-y-1.5">
-                <legend className="text-xs font-semibold tracking-wide text-[var(--p-text-2)]">Visibility</legend>
+                <legend className="text-xs font-semibold tracking-wide text-[var(--p-text-2)]">
+                  {t("savedViews.visibility", undefined, "Visibility")}
+                </legend>
                 <div className="flex flex-col gap-1.5">
                   {allowedScopes.includes("private") && (
                     <ScopeRadio
                       checked={scope === "private"}
                       onChange={() => setScope("private")}
-                      label="Private"
-                      hint="Only you. Stored in your views list."
+                      label={t("savedViews.scope.private", undefined, "Private")}
+                      hint={t("savedViews.scope.privateHint", undefined, "Only you. Stored in your views list.")}
                     />
                   )}
                   {allowedScopes.includes("org") && (
                     <ScopeRadio
                       checked={scope === "org"}
                       onChange={() => setScope("org")}
-                      label="Shared with the org"
-                      hint="Visible to every org member under Shared."
+                      label={t("savedViews.scope.org", undefined, "Shared with the org")}
+                      hint={t("savedViews.scope.orgHint", undefined, "Visible to every org member under Shared.")}
                     />
                   )}
                   {allowedScopes.includes("public") && (
                     <ScopeRadio
                       checked={scope === "public"}
                       onChange={() => setScope("public")}
-                      label="Public"
-                      hint="Accessible via a share link."
+                      label={t("savedViews.scope.public", undefined, "Public")}
+                      hint={t("savedViews.scope.publicHint", undefined, "Accessible via a share link.")}
                     />
                   )}
                 </div>
@@ -180,7 +204,7 @@ export function SaveViewDialog({
 
             <div className="space-y-1.5">
               <label htmlFor="save-view-type" className="text-xs font-semibold tracking-wide text-[var(--p-text-2)]">
-                View Type
+                {t("savedViews.viewType", undefined, "View Type")}
               </label>
               <select
                 id="save-view-type"
@@ -188,24 +212,30 @@ export function SaveViewDialog({
                 onChange={(e) => setType(e.target.value as ViewType)}
                 className="w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)]"
               >
-                {VIEW_TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {labelForType(t)}
+                {VIEW_TYPES.map((vt) => (
+                  <option key={vt} value={vt}>
+                    {labelForType(vt, t)}
                   </option>
                 ))}
               </select>
               <p className="text-[11px] text-[var(--p-text-2)]">
-                Only Grid renders today. Other types reserve the row for an upcoming alt renderer.
+                {t(
+                  "savedViews.viewTypeNote",
+                  undefined,
+                  "Only Grid renders today. Other types reserve the row for an upcoming alt renderer.",
+                )}
               </p>
             </div>
           </div>
 
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => onOpenChange(false)} disabled={submitting}>
-              Cancel
+              {t("savedViews.cancel", undefined, "Cancel")}
             </Button>
             <Button type="submit" loading={submitting}>
-              {editing ? "Save Changes" : "Save View"}
+              {editing
+                ? t("savedViews.saveChanges", undefined, "Save Changes")
+                : t("savedViews.saveView", undefined, "Save View")}
             </Button>
           </DialogFooter>
         </form>
@@ -242,25 +272,17 @@ function ScopeRadio({
   );
 }
 
-function labelForType(t: ViewType): string {
-  switch (t) {
-    case "grid":
-      return "Grid";
-    case "kanban":
-      return "Kanban";
-    case "calendar":
-      return "Calendar";
-    case "timeline":
-      return "Timeline";
-    case "chart":
-      return "Chart";
-    case "map":
-      return "Map";
-    case "gantt":
-      return "Gantt";
-    case "card":
-      return "Card";
-    case "form":
-      return "Form";
-  }
+function labelForType(viewType: ViewType, t: Translator): string {
+  const fallbacks: Record<ViewType, string> = {
+    grid: "Grid",
+    kanban: "Kanban",
+    calendar: "Calendar",
+    timeline: "Timeline",
+    chart: "Chart",
+    map: "Map",
+    gantt: "Gantt",
+    card: "Card",
+    form: "Form",
+  };
+  return t(`savedViews.types.${viewType}`, undefined, fallbacks[viewType]);
 }

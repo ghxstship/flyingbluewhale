@@ -5,6 +5,7 @@ import { FormShell, type FormState } from "@/components/FormShell";
 import { FormField, TextInput, TextArea } from "@/components/forms/FormField";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { OfferLetterStatus } from "@/lib/offer-letters/types";
 import { acceptOffer, declineOffer } from "./actions";
 
@@ -17,33 +18,60 @@ export function ResponseForms({
   status: OfferLetterStatus;
   recipientName: string;
 }) {
+  const t = useT();
   const [mode, setMode] = useState<"choose" | "accept" | "decline" | "done">(
     status === "accepted" || status === "declined" ? "done" : "choose",
   );
 
   if (status === "accepted") {
     return (
-      <Alert kind="success">You signed this letter. A copy was sent to your team and is on file with GHXSTSHIP.</Alert>
+      <Alert kind="success">
+        {t(
+          "legal.offer.acceptedNotice",
+          undefined,
+          "You signed this letter. A copy was sent to your team and is on file with GHXSTSHIP.",
+        )}
+      </Alert>
     );
   }
   if (status === "declined") {
-    return <Alert kind="info">You declined this offer. Reach out if anything changes.</Alert>;
+    return (
+      <Alert kind="info">
+        {t("legal.offer.declinedNotice", undefined, "You declined this offer. Reach out if anything changes.")}
+      </Alert>
+    );
   }
   if (status === "withdrawn" || status === "expired") {
-    return <Alert kind="warning">This letter is no longer active. Contact production to request an update.</Alert>;
+    return (
+      <Alert kind="warning">
+        {t(
+          "legal.offer.inactiveNotice",
+          undefined,
+          "This letter is no longer active. Contact production to request an update.",
+        )}
+      </Alert>
+    );
   }
 
   if (mode === "choose") {
     return (
       <section className="surface space-y-3 p-6">
-        <h3 className="text-sm font-semibold tracking-wider uppercase">Your Response</h3>
+        <h3 className="text-sm font-semibold tracking-wider uppercase">
+          {t("legal.offer.yourResponseHeading", undefined, "Your Response")}
+        </h3>
         <p className="text-sm text-[var(--p-text-2)]">
-          Review the letter above. When you&apos;re ready, accept with a typed signature or decline with a brief reason.
+          {t(
+            "legal.offer.yourResponseBody",
+            undefined,
+            "Review the letter above. When you're ready, accept with a typed signature or decline with a brief reason.",
+          )}
         </p>
         <div className="flex flex-wrap gap-2">
-          <Button onClick={() => setMode("accept")}>Accept and Sign</Button>
+          <Button onClick={() => setMode("accept")}>
+            {t("legal.offer.acceptAndSign", undefined, "Accept and Sign")}
+          </Button>
           <Button variant="secondary" onClick={() => setMode("decline")}>
-            Decline
+            {t("legal.offer.decline", undefined, "Decline")}
           </Button>
         </div>
       </section>
@@ -58,6 +86,7 @@ export function ResponseForms({
 }
 
 function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultName: string; onCancel: () => void }) {
+  const t = useT();
   const action = async (prev: FormState, fd: FormData) => {
     return (await acceptOffer(token, prev as never, fd)) as FormState;
   };
@@ -65,18 +94,31 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
     <section className="surface space-y-4 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold tracking-wider uppercase">Accept and Sign</h3>
+          <h3 className="text-sm font-semibold tracking-wider uppercase">
+            {t("legal.offer.acceptAndSign", undefined, "Accept and Sign")}
+          </h3>
           <p className="text-sm text-[var(--p-text-2)]">
-            Type your full legal name to accept this engagement. Your typed signature, IP address, and timestamp are
-            recorded as evidence of agreement.
+            {t(
+              "legal.offer.acceptBody",
+              undefined,
+              "Type your full legal name to accept this engagement. Your typed signature, IP address, and timestamp are recorded as evidence of agreement.",
+            )}
           </p>
         </div>
         <Button variant="ghost" onClick={onCancel}>
-          Cancel
+          {t("legal.offer.cancel", undefined, "Cancel")}
         </Button>
       </div>
-      <FormShell action={action} submitLabel="Sign and Accept" className="space-y-4">
-        <FormField name="signature" label="Typed Signature · Full Legal Name" required>
+      <FormShell
+        action={action}
+        submitLabel={t("legal.offer.signAndAccept", undefined, "Sign and Accept")}
+        className="space-y-4"
+      >
+        <FormField
+          name="signature"
+          label={t("legal.offer.typedSignatureLabel", undefined, "Typed Signature · Full Legal Name")}
+          required
+        >
           <TextInput
             name="signature"
             defaultValue={defaultName}
@@ -89,6 +131,7 @@ function AcceptForm({ token, defaultName, onCancel }: { token: string; defaultNa
 }
 
 function DeclineForm({ token, onCancel }: { token: string; onCancel: () => void }) {
+  const t = useT();
   const action = async (prev: FormState, fd: FormData) => {
     return (await declineOffer(token, prev as never, fd)) as FormState;
   };
@@ -96,18 +139,36 @@ function DeclineForm({ token, onCancel }: { token: string; onCancel: () => void 
     <section className="surface space-y-4 p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold tracking-wider uppercase">Decline This Offer</h3>
+          <h3 className="text-sm font-semibold tracking-wider uppercase">
+            {t("legal.offer.declineHeading", undefined, "Decline This Offer")}
+          </h3>
           <p className="text-sm text-[var(--p-text-2)]">
-            Share a brief reason so production can follow up if anything changes.
+            {t(
+              "legal.offer.declineBody",
+              undefined,
+              "Share a brief reason so production can follow up if anything changes.",
+            )}
           </p>
         </div>
         <Button variant="ghost" onClick={onCancel}>
-          Cancel
+          {t("legal.offer.cancel", undefined, "Cancel")}
         </Button>
       </div>
-      <FormShell action={action} submitLabel="Decline Letter" className="space-y-4">
-        <FormField name="reason" label="Reason" required>
-          <TextArea name="reason" rows={3} placeholder="e.g. Calendar conflict — already booked May 14–18." />
+      <FormShell
+        action={action}
+        submitLabel={t("legal.offer.declineLetter", undefined, "Decline Letter")}
+        className="space-y-4"
+      >
+        <FormField name="reason" label={t("legal.offer.reasonLabel", undefined, "Reason")} required>
+          <TextArea
+            name="reason"
+            rows={3}
+            placeholder={t(
+              "legal.offer.reasonPlaceholder",
+              undefined,
+              "e.g. Calendar conflict — already booked May 14–18.",
+            )}
+          />
         </FormField>
       </FormShell>
     </section>

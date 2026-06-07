@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { ProposalPdf } from "@/lib/pdf/proposal";
+import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -57,12 +58,14 @@ export async function GET(req: Request, ctx: { params: Promise<{ proposalId: str
   if (!org) return apiError("internal", "Missing organization row");
 
   const brand = resolvePdfBrand({ org, client: client ?? null });
+  const { t } = await getRequestT();
 
   try {
     const { signedUrl } = await compileAndStore({
       doc: (
         <ProposalPdf
           brand={brand}
+          t={t}
           proposal={{
             doc_number: p.doc_number ?? null,
             title: p.title,

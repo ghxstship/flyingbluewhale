@@ -4,6 +4,11 @@ import { formatCompensation, formatPerDiem } from "@/lib/offer-letters/format";
 import { formatDate, formatDateTime } from "@/lib/i18n/format";
 import type { CrewMemberActiveMsa } from "@/lib/msa/types";
 
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity translator — used when no `t` is supplied so the English fallbacks render verbatim. */
+const identityT: Translator = (_key, _vars, fallback) => fallback ?? "";
+
 /**
  * Engagement Letter — friendly deal-memo style.
  *
@@ -21,12 +26,15 @@ export function LetterDocument({
   letter,
   activeMsa = null,
   msaSignerUrl = null,
+  t = identityT,
 }: {
   letter: OfferLetterResolved;
   /** The contractor's signed MSA, if any. Drives footer reference + onboarding gating. */
   activeMsa?: CrewMemberActiveMsa | null;
   /** The signer URL for the contractor's pending/active MSA (admin-resolved). */
   msaSignerUrl?: string | null;
+  /** Request translator. Optional — falls back to English literals when omitted (e.g. legacy callers). */
+  t?: Translator;
 }) {
   const issuedOn = formatDate(letter.created_at, "long");
   const venueLine = [letter.venue_name, letter.venue_city, letter.venue_region].filter(Boolean).join(" · ");
@@ -39,33 +47,48 @@ export function LetterDocument({
           <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">
             {EMPLOYER_LABEL[letter.employer]}
           </div>
-          <h1 className="mt-2 text-2xl leading-tight font-semibold">Engagement Letter</h1>
+          <h1 className="mt-2 text-2xl leading-tight font-semibold">
+            {t("legal.letterDocument.title", undefined, "Engagement Letter")}
+          </h1>
           <div className="mt-1 text-sm text-[var(--p-text-2)]">{letter.project_name}</div>
         </div>
         <div className="text-end text-xs text-[var(--p-text-2)]">
-          <div>Issued {issuedOn}</div>
+          <div>{t("legal.letterDocument.issued", { date: issuedOn }, `Issued ${issuedOn}`)}</div>
           <div className="font-mono">REF · OL-{letter.id.slice(0, 8).toUpperCase()}</div>
         </div>
       </header>
 
       <section className="space-y-2">
-        <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Recipient</div>
+        <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">
+          {t("legal.letterDocument.recipient", undefined, "Recipient")}
+        </div>
         <div className="text-base font-medium">{letter.recipient_name}</div>
       </section>
 
       <section className="space-y-3">
         <p className="text-sm leading-relaxed">
-          Greetings <strong>{letter.recipient_name.split(" ")[0]}</strong>,
+          {t("legal.letterDocument.greeting", undefined, "Greetings")}{" "}
+          <strong>{letter.recipient_name.split(" ")[0]}</strong>,
         </p>
         <p className="text-sm leading-relaxed">
-          You&rsquo;re on the manifest. On behalf of {EMPLOYER_LABEL[letter.employer]}, we&rsquo;re pleased to bring you
-          on as <strong>{letter.role_title}</strong> for <strong>{letter.project_name}</strong>. Full engagement details
-          are outlined below — please give it a read, then counter-sign at the bottom to make it official.
+          {t(
+            "legal.letterDocument.introLead",
+            { employer: EMPLOYER_LABEL[letter.employer] },
+            `You're on the manifest. On behalf of ${EMPLOYER_LABEL[letter.employer]}, we're pleased to bring you on as`,
+          )}{" "}
+          <strong>{letter.role_title}</strong> {t("legal.letterDocument.introFor", undefined, "for")}{" "}
+          <strong>{letter.project_name}</strong>.{" "}
+          {t(
+            "legal.letterDocument.introTail",
+            undefined,
+            "Full engagement details are outlined below — please give it a read, then counter-sign at the bottom to make it official.",
+          )}
         </p>
         {letter.signing_authority_name && letter.signing_authority_email && (
           <p className="text-xs text-[var(--p-text-2)]">
-            Questions before signing? Reach{" "}
-            <strong className="text-[var(--p-text-2)]">{letter.signing_authority_name}</strong> at{" "}
+            {t("legal.letterDocument.questionsBeforeSigning", undefined, "Questions before signing? Reach")}{" "}
+            <strong className="text-[var(--p-text-2)]">{letter.signing_authority_name}</strong>{" "}
+            {t("legal.letterDocument.at", undefined, "at")}{" "}
             <a className="text-[var(--p-accent)] hover:underline" href={`mailto:${letter.signing_authority_email}`}>
               {letter.signing_authority_email}
             </a>
@@ -75,64 +98,95 @@ export function LetterDocument({
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">1. Engagement Summary</h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          {t("legal.letterDocument.engagementSummaryHeading", undefined, "1. Engagement Summary")}
+        </h2>
         <DefinitionList
           rows={[
-            ["Role", letter.role_title],
-            ["Department", letter.role_department || "—"],
-            ["Classification", CLASSIFICATION_LABEL[letter.classification]],
+            [t("legal.letterDocument.role", undefined, "Role"), letter.role_title],
+            [t("legal.letterDocument.department", undefined, "Department"), letter.role_department || "—"],
             [
-              "Reports To",
+              t("legal.letterDocument.classification", undefined, "Classification"),
+              CLASSIFICATION_LABEL[letter.classification],
+            ],
+            [
+              t("legal.letterDocument.reportsTo", undefined, "Reports To"),
               letter.reports_to_name
                 ? `${letter.reports_to_name}${letter.reports_to_role ? ` · ${letter.reports_to_role}` : ""}`
                 : "—",
             ],
-            ["Work Location", venueLine || "—"],
+            [t("legal.letterDocument.workLocation", undefined, "Work Location"), venueLine || "—"],
           ]}
         />
 
         <div className="mt-4 space-y-2">
-          <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">Engagement Window</div>
+          <div className="text-xs tracking-wider text-[var(--p-text-2)] uppercase">
+            {t("legal.letterDocument.engagementWindow", undefined, "Engagement Window")}
+          </div>
           <div className="overflow-hidden rounded border border-[var(--border-default)]">
             <table className="w-full text-xs">
               <tbody>
-                <EngagementRow label="Travel In" date={letter.travel_in_date} />
                 <EngagementRow
-                  label="On Site Start"
+                  label={t("legal.letterDocument.travelIn", undefined, "Travel In")}
+                  date={letter.travel_in_date}
+                />
+                <EngagementRow
+                  label={t("legal.letterDocument.onSiteStart", undefined, "On Site Start")}
                   date={letter.effective_onsite_start ?? letter.onsite_start_date}
                   bold
                 />
-                <EngagementRow label="On Site End" date={letter.effective_onsite_end ?? letter.onsite_end_date} bold />
-                <EngagementRow label="Travel Out" date={letter.travel_out_date} />
+                <EngagementRow
+                  label={t("legal.letterDocument.onSiteEnd", undefined, "On Site End")}
+                  date={letter.effective_onsite_end ?? letter.onsite_end_date}
+                  bold
+                />
+                <EngagementRow
+                  label={t("legal.letterDocument.travelOut", undefined, "Travel Out")}
+                  date={letter.travel_out_date}
+                />
               </tbody>
             </table>
           </div>
           {letter.engagement_days > 0 && (
             <div className="text-xs text-[var(--p-text-2)]">
-              <strong className="text-[var(--p-text-1)]">{letter.engagement_days}</strong> projected service day
-              {letter.engagement_days === 1 ? "" : "s"} on site.
+              <strong className="text-[var(--p-text-1)]">{letter.engagement_days}</strong>{" "}
+              {letter.engagement_days === 1
+                ? t("legal.letterDocument.serviceDayOne", undefined, "projected service day on site.")
+                : t("legal.letterDocument.serviceDayOther", undefined, "projected service days on site.")}
             </div>
           )}
         </div>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">2. Compensation</h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          {t("legal.letterDocument.compensationHeading", undefined, "2. Compensation")}
+        </h2>
         <DefinitionList
           rows={[
-            ["Basis", BASIS_LABEL[letter.compensation_basis]],
-            ["Compensation", formatCompensation(letter)],
-            ["Travel + Lodging Reimbursement", formatPerDiem(letter.effective_per_diem_cents)],
-            ["Payment Schedule", letter.effective_payment_schedule],
+            [t("legal.letterDocument.basis", undefined, "Basis"), BASIS_LABEL[letter.compensation_basis]],
+            [t("legal.letterDocument.compensation", undefined, "Compensation"), formatCompensation(letter)],
+            [
+              t("legal.letterDocument.travelLodgingReimbursement", undefined, "Travel + Lodging Reimbursement"),
+              formatPerDiem(letter.effective_per_diem_cents),
+            ],
+            [
+              t("legal.letterDocument.paymentSchedule", undefined, "Payment Schedule"),
+              letter.effective_payment_schedule,
+            ],
           ]}
         />
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">3. Inclusions</h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          {t("legal.letterDocument.inclusionsHeading", undefined, "3. Inclusions")}
+        </h2>
         <ul className="space-y-1 text-sm">
           {(letter.effective_inclusions ?? []).length === 0 && (
-            <li className="text-[var(--p-text-2)]">No additional inclusions specified.</li>
+            <li className="text-[var(--p-text-2)]">
+              {t("legal.letterDocument.noInclusions", undefined, "No additional inclusions specified.")}
+            </li>
           )}
           {(letter.effective_inclusions ?? []).map((item, i) => (
             <li key={i} className="flex gap-2">
@@ -143,19 +197,19 @@ export function LetterDocument({
           {letter.effective_travel_provided && (
             <li className="flex gap-2">
               <span className="text-[var(--p-text-2)]">·</span>
-              <span>Travel provided / arranged</span>
+              <span>{t("legal.letterDocument.travelProvided", undefined, "Travel provided / arranged")}</span>
             </li>
           )}
           {letter.effective_lodging_provided && (
             <li className="flex gap-2">
               <span className="text-[var(--p-text-2)]">·</span>
-              <span>Lodging provided</span>
+              <span>{t("legal.letterDocument.lodgingProvided", undefined, "Lodging provided")}</span>
             </li>
           )}
           {letter.effective_meals_provided && (
             <li className="flex gap-2">
               <span className="text-[var(--p-text-2)]">·</span>
-              <span>Crew meals on call days</span>
+              <span>{t("legal.letterDocument.mealsProvided", undefined, "Crew meals on call days")}</span>
             </li>
           )}
         </ul>
@@ -166,26 +220,41 @@ export function LetterDocument({
 
       {letter.effective_expectations && (
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">4. Scope of Work</h2>
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            {t("legal.letterDocument.scopeHeading", undefined, "4. Scope of Work")}
+          </h2>
           <p className="text-sm leading-relaxed whitespace-pre-line">{letter.effective_expectations}</p>
         </section>
       )}
 
       {(letter.schedule_items?.length ?? 0) > 0 && (
         <section className="break-inside-avoid space-y-3">
-          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">5. Working Schedule</h2>
+          <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+            {t("legal.letterDocument.scheduleHeading", undefined, "5. Working Schedule")}
+          </h2>
           <p className="text-xs text-[var(--p-text-2)]">
-            Project production schedule milestones. Dates and activities are subject to revision based on production
-            circumstances; we&rsquo;ll let you know about material changes through standard production channels.
+            {t(
+              "legal.letterDocument.scheduleHint",
+              undefined,
+              "Project production schedule milestones. Dates and activities are subject to revision based on production circumstances; we'll let you know about material changes through standard production channels.",
+            )}
           </p>
           <div className="overflow-hidden rounded border border-[var(--border-default)]">
             <table className="w-full text-xs">
               <thead className="bg-[var(--p-surface-2)] text-[var(--p-text-2)]">
                 <tr>
-                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">Date</th>
-                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">Call</th>
-                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">Wrap</th>
-                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">Milestones</th>
+                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">
+                    {t("legal.letterDocument.colDate", undefined, "Date")}
+                  </th>
+                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">
+                    {t("legal.letterDocument.colCall", undefined, "Call")}
+                  </th>
+                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">
+                    {t("legal.letterDocument.colWrap", undefined, "Wrap")}
+                  </th>
+                  <th className="px-3 py-2 text-start font-medium tracking-wider uppercase">
+                    {t("legal.letterDocument.colMilestones", undefined, "Milestones")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -214,10 +283,14 @@ export function LetterDocument({
 
       <section className="break-inside-avoid space-y-3">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          6. Onboarding Checklist
+          {t("legal.letterDocument.onboardingHeading", undefined, "6. Onboarding Checklist")}
         </h2>
         <p className="text-xs text-[var(--p-text-2)]">
-          A short list to get you ready. Try to close these out within 48 hours of acceptance so credentials can ship.
+          {t(
+            "legal.letterDocument.onboardingHint",
+            undefined,
+            "A short list to get you ready. Try to close these out within 48 hours of acceptance so credentials can ship.",
+          )}
         </p>
         <ol className="space-y-2 text-sm">
           {!msaOnFile && msaSignerUrl && (
@@ -230,18 +303,22 @@ export function LetterDocument({
               </span>
               <span className="flex-1">
                 <span className="block">
-                  <strong>Sign your Master Services Agreement</strong>
+                  <strong>{t("legal.letterDocument.signMsa", undefined, "Sign your Master Services Agreement")}</strong>
                   <a
                     href={msaSignerUrl}
                     className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Open MSA ↗
+                    {t("legal.letterDocument.openMsaLink", undefined, "Open MSA ↗")}
                   </a>
                 </span>
                 <span className="mt-0.5 block text-xs text-[var(--p-text-2)]">
-                  One-time. Signs apply to every engagement we book you on — you won&rsquo;t see this step again.
+                  {t(
+                    "legal.letterDocument.msaOneTimeNote",
+                    undefined,
+                    "One-time. Signs apply to every engagement we book you on — you won't see this step again.",
+                  )}
                 </span>
               </span>
             </li>
@@ -279,7 +356,7 @@ export function LetterDocument({
                             target="_blank"
                             rel="noreferrer"
                           >
-                            Open ↗
+                            {t("legal.letterDocument.openLink", undefined, "Open ↗")}
                           </a>
                         )}
                   </span>
@@ -297,14 +374,14 @@ export function LetterDocument({
               </span>
               <span className="flex-1">
                 <span className="block">
-                  Review the Salvage City Production Guide
+                  {t("legal.letterDocument.reviewGuide", undefined, "Review the Salvage City Production Guide")}
                   <a
                     href={letter.guide_url}
                     className="ms-2 text-[10px] tracking-wider text-[var(--p-accent)] uppercase hover:underline"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Open ↗
+                    {t("legal.letterDocument.openLink", undefined, "Open ↗")}
                   </a>
                 </span>
               </span>
@@ -316,32 +393,52 @@ export function LetterDocument({
       <section className="border-t border-[var(--border-default)] pt-6">
         {letter.status === "accepted" && letter.accepted_signature ? (
           <div className="space-y-2">
-            <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Accepted</div>
+            <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">
+              {t("legal.letterDocument.accepted", undefined, "Accepted")}
+            </div>
             <div className="font-subdisplay text-2xl tracking-wide">{letter.accepted_signature}</div>
             <div className="text-xs text-[var(--p-text-2)]">
-              Counter-signed {letter.accepted_at ? formatDateTime(letter.accepted_at) : ""}
+              {t(
+                "legal.letterDocument.counterSigned",
+                { when: letter.accepted_at ? formatDateTime(letter.accepted_at) : "" },
+                `Counter-signed ${letter.accepted_at ? formatDateTime(letter.accepted_at) : ""}`,
+              )}
             </div>
           </div>
         ) : (
           <div className="space-y-2 text-sm text-[var(--p-text-2)]">
-            <div className="text-xs tracking-widest uppercase">Awaiting Counter-Signature</div>
+            <div className="text-xs tracking-widest uppercase">
+              {t("legal.letterDocument.awaitingCounterSignature", undefined, "Awaiting Counter-Signature")}
+            </div>
             <div>
-              Type your full legal name below to formalize acceptance. Your typed signature, IP address, and timestamp
-              will be captured as the audit trail.
+              {t(
+                "legal.letterDocument.awaitingBody",
+                undefined,
+                "Type your full legal name below to formalize acceptance. Your typed signature, IP address, and timestamp will be captured as the audit trail.",
+              )}
             </div>
           </div>
         )}
         <div className="mt-6 grid grid-cols-2 gap-6 text-xs text-[var(--p-text-2)]">
           <div>
-            <div className="font-medium text-[var(--p-text-2)]">For {EMPLOYER_LABEL[letter.employer]}</div>
+            <div className="font-medium text-[var(--p-text-2)]">
+              {t(
+                "legal.letterDocument.forEmployer",
+                { employer: EMPLOYER_LABEL[letter.employer] },
+                `For ${EMPLOYER_LABEL[letter.employer]}`,
+              )}
+            </div>
             <div className="font-subdisplay text-lg tracking-wide">
               {letter.signing_authority_name ?? "Julian Clarkson"}
             </div>
-            <div>{letter.signing_authority_title ?? "Producer & Operations Director"}</div>
+            <div>
+              {letter.signing_authority_title ??
+                t("legal.letterDocument.signerTitle", undefined, "Producer & Operations Director")}
+            </div>
             <div>{letter.signing_authority_email ?? ""}</div>
           </div>
           <div className="text-end">
-            <div>Reference</div>
+            <div>{t("legal.letterDocument.reference", undefined, "Reference")}</div>
             <div className="font-mono">OL-{letter.id.slice(0, 8).toUpperCase()}</div>
           </div>
         </div>
@@ -350,8 +447,11 @@ export function LetterDocument({
       <footer className="space-y-3 border-t border-[var(--border-default)] pt-6 text-xs text-[var(--p-text-2)]">
         {msaOnFile && activeMsa ? (
           <p>
-            This engagement is subject to your <strong>Independent Contractor Master Services Agreement</strong> signed{" "}
-            {formatDate(activeMsa.signed_at, "long")} (v{activeMsa.version}).{" "}
+            {t(
+              "legal.letterDocument.footerMsaOnFile",
+              { date: formatDate(activeMsa.signed_at, "long"), version: activeMsa.version },
+              `This engagement is subject to your Independent Contractor Master Services Agreement signed ${formatDate(activeMsa.signed_at, "long")} · v${activeMsa.version}.`,
+            )}{" "}
             {msaSignerUrl && (
               <a
                 className="text-[var(--p-accent)] hover:underline"
@@ -359,27 +459,41 @@ export function LetterDocument({
                 target="_blank"
                 rel="noreferrer"
               >
-                View MSA ↗
+                {t("legal.letterDocument.viewMsaLink", undefined, "View MSA ↗")}
               </a>
             )}
           </p>
         ) : msaSignerUrl ? (
           <p>
-            This engagement is subject to our <strong>Independent Contractor Master Services Agreement</strong> —{" "}
+            {t(
+              "legal.letterDocument.footerMsaPendingPrefix",
+              undefined,
+              "This engagement is subject to our Independent Contractor Master Services Agreement —",
+            )}{" "}
             <a className="text-[var(--p-accent)] hover:underline" href={msaSignerUrl} target="_blank" rel="noreferrer">
-              read &amp; sign your copy ↗
+              {t("legal.letterDocument.readAndSignLink", undefined, "read & sign your copy ↗")}
             </a>{" "}
-            (one-time, applies to every future engagement).
+            {t(
+              "legal.letterDocument.footerMsaPendingSuffix",
+              undefined,
+              "one-time, applies to every future engagement.",
+            )}
           </p>
         ) : (
           <p>
-            This engagement is subject to our <strong>Independent Contractor Master Services Agreement</strong> — your
-            personal copy will arrive in a separate email and is required before your first service day.
+            {t(
+              "legal.letterDocument.footerMsaSeparateEmail",
+              undefined,
+              "This engagement is subject to our Independent Contractor Master Services Agreement — your personal copy will arrive in a separate email and is required before your first service day.",
+            )}
           </p>
         )}
         <p>
-          Governing law: <strong>State of Nevada</strong>. Venue: Clark County, NV. Confidential and proprietary to{" "}
-          {EMPLOYER_LABEL[letter.employer]}.
+          {t(
+            "legal.letterDocument.governingLaw",
+            { employer: EMPLOYER_LABEL[letter.employer] },
+            `Governing law: State of Nevada. Venue: Clark County, NV. Confidential and proprietary to ${EMPLOYER_LABEL[letter.employer]}.`,
+          )}
         </p>
         {/* GHXSTSHIP parent endorsement — v4 logo-kit canon for formal
             documents. Mark on the left, parent skull endorsement on the

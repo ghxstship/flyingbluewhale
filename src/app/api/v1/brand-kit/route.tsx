@@ -5,6 +5,7 @@ import { createClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { BrandKitPdf } from "@/lib/pdf/brand-kit";
+import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -47,7 +48,8 @@ export async function GET(req: Request) {
   // error-boundary rule doesn't think we're catching JSX render errors
   // (these errors are caught by the @react-pdf renderer's own pipeline,
   // not by React Suspense). The try wraps the async compile + upload.
-  const doc = <BrandKitPdf brand={brand} />;
+  const { t } = await getRequestT();
+  const doc = <BrandKitPdf brand={brand} t={t} />;
   try {
     const { signedUrl } = await compileAndStore({
       doc,

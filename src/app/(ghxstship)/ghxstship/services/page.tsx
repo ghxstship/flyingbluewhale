@@ -4,25 +4,37 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CLASSES, SERVICES, servicesByClass, paths, CATALOG_STATS } from "@/lib/ghxstship";
 import { GhxstshipJsonLd, breadcrumbSchema, serviceSchema } from "@/components/ghxstship/JsonLd";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = {
-  title: "Services Catalog — Production, Build, Hospitality, Technology | GHXSTSHIP",
-  description:
-    "The full GHXSTSHIP services catalog — 114 production services across 10 disciplines: Executive, Creative, Talent, Marketing, Build, Production, Operations, Experience, Hospitality, Technology.",
-  keywords: [
-    "production services catalog",
-    "event production services",
-    "festival production services",
-    "scenic fabrication services",
-    "live event technical services",
-    "production hospitality services",
-  ],
-  alternates: { canonical: "https://ghxstship.pro/ghxstship/services" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return {
+    title: t(
+      "ghxstship.services.meta.title",
+      undefined,
+      "Services Catalog — Production, Build, Hospitality, Technology | GHXSTSHIP",
+    ),
+    description: t(
+      "ghxstship.services.meta.description",
+      undefined,
+      "The full GHXSTSHIP services catalog — 114 production services across 10 disciplines: Executive, Creative, Talent, Marketing, Build, Production, Operations, Experience, Hospitality, Technology.",
+    ),
+    keywords: [
+      "production services catalog",
+      "event production services",
+      "festival production services",
+      "scenic fabrication services",
+      "live event technical services",
+      "production hospitality services",
+    ],
+    alternates: { canonical: "https://ghxstship.pro/ghxstship/services" },
+  };
+}
 
-export default function ServicesHub() {
+export default async function ServicesHub() {
+  const { t } = await getRequestT();
   return (
     <>
       <GhxstshipJsonLd
@@ -47,19 +59,21 @@ export default function ServicesHub() {
       <div className="space-y-20 pb-24">
         <section className="mx-auto max-w-6xl px-6 pt-16">
           <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
-            Services Catalog
+            {t("ghxstship.services.hero.eyebrow", undefined, "Services Catalog")}
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
-            {CATALOG_STATS.serviceCount} services.
+            {t("ghxstship.services.hero.heading.line1", { count: CATALOG_STATS.serviceCount }, "{count} services.")}
             <br />
-            {CATALOG_STATS.classCount} disciplines.
+            {t("ghxstship.services.hero.heading.line2", { count: CATALOG_STATS.classCount }, "{count} disciplines.")}
             <br />
-            Real producers behind every line.
+            {t("ghxstship.services.hero.heading.line3", undefined, "Real producers behind every line.")}
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
-            Each service is a real, scoped, priceable line of work — not a marketing buzzword. Browse by discipline
-            below, or jump straight to the industry vertical you&apos;re in. Every service detail page tells you what it
-            is, when in the project you need it, what you receive, and where it operates.
+            {t(
+              "ghxstship.services.hero.body",
+              undefined,
+              "Each service is a real, scoped, priceable line of work — not a marketing buzzword. Browse by discipline below, or jump straight to the industry vertical you’re in. Every service detail page tells you what it is, when in the project you need it, what you receive, and where it operates.",
+            )}
           </p>
         </section>
 
@@ -72,7 +86,7 @@ export default function ServicesHub() {
                   <div className="flex flex-wrap items-end justify-between gap-4 bg-[var(--p-surface)] p-6">
                     <div>
                       <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--p-text-2)]">
-                        Class {c.code}
+                        {t("ghxstship.services.classLabel", { code: c.code }, "Class {code}")}
                       </div>
                       <h2 className="mt-1 text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
                         {c.shortName}
@@ -80,7 +94,8 @@ export default function ServicesHub() {
                       <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">{c.definition}</p>
                     </div>
                     <Link href={paths.classDetail(c.slug)} className="ps-btn ps-btn--ghost ps-btn--sm">
-                      {items.length} services <ArrowRight className="h-3 w-3" />
+                      {t("ghxstship.services.servicesCount", { count: items.length }, "{count} services")}{" "}
+                      <ArrowRight className="h-3 w-3" />
                     </Link>
                   </div>
                   <ul className="grid gap-px bg-[var(--p-border)] sm:grid-cols-2 lg:grid-cols-3">
@@ -109,19 +124,22 @@ export default function ServicesHub() {
             <div className="grid gap-8 md:grid-cols-2 md:items-end">
               <div>
                 <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
-                  Don&apos;t know what to call it?
+                  {t("ghxstship.services.cta.heading", undefined, "Don’t know what to call it?")}
                 </h2>
                 <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
-                  Brief us in plain English. We&apos;ll resolve it against the catalog, reply with a scope, a
-                  recommended engagement model, and the producer who&apos;ll own it.
+                  {t(
+                    "ghxstship.services.cta.body",
+                    undefined,
+                    "Brief us in plain English. We’ll resolve it against the catalog, reply with a scope, a recommended engagement model, and the producer who’ll own it.",
+                  )}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <Button href={paths.contact()} size="lg">
-                  Start a Project
+                  {t("ghxstship.common.startProject", undefined, "Start a Project")}
                 </Button>
                 <Button href={paths.solutionsRoot()} size="lg" variant="secondary">
-                  Browse by industry
+                  {t("ghxstship.services.cta.browseByIndustry", undefined, "Browse by industry")}
                 </Button>
               </div>
             </div>

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { CallSheetPdf } from "@/lib/pdf/call-sheet";
+import { getRequestT } from "@/lib/i18n/request";
 import { fetchWeather } from "@/lib/external/weather";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
@@ -98,12 +99,14 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   }
 
   const brand = resolvePdfBrand({ org, client: null });
+  const { t } = await getRequestT();
 
   try {
     const { signedUrl } = await compileAndStore({
       doc: (
         <CallSheetPdf
           brand={brand}
+          t={t}
           project={{ name: project.name }}
           forDate={forDate}
           weather={weather}

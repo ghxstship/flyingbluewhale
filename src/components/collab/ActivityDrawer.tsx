@@ -7,8 +7,11 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/Sheet";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { ActivityItem as ActivityItemType } from "@/lib/db/activity";
 import { ActivityItem } from "./ActivityItem";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 export type ActivityDrawerProps = {
   targetTable: string;
@@ -33,11 +36,11 @@ function startOfDay(d: Date): number {
   return x.getTime();
 }
 
-function dayLabel(iso: string): string {
+function dayLabel(iso: string, t: Translator): string {
   const item = startOfDay(new Date(iso));
   const today = startOfDay(new Date());
-  if (item === today) return "Today";
-  if (item === today - DAY_MS) return "Yesterday";
+  if (item === today) return t("components.activityDrawer.today", undefined, "Today");
+  if (item === today - DAY_MS) return t("components.activityDrawer.yesterday", undefined, "Yesterday");
   return new Date(iso).toLocaleDateString(undefined, {
     weekday: "short",
     month: "short",
@@ -50,11 +53,11 @@ function dayLabel(iso: string): string {
  * Group activity items by calendar day. Preserves the input order
  * (newest first) so the most recent day surfaces at the top.
  */
-function groupByDay(items: ActivityItemType[]): Array<{ label: string; items: ActivityItemType[] }> {
+function groupByDay(items: ActivityItemType[], t: Translator): Array<{ label: string; items: ActivityItemType[] }> {
   const groups: Array<{ label: string; items: ActivityItemType[] }> = [];
   let current: { label: string; items: ActivityItemType[] } | null = null;
   for (const item of items) {
-    const label = dayLabel(item.occurredAt);
+    const label = dayLabel(item.occurredAt, t);
     if (!current || current.label !== label) {
       current = { label, items: [] };
       groups.push(current);
@@ -65,17 +68,22 @@ function groupByDay(items: ActivityItemType[]): Array<{ label: string; items: Ac
 }
 
 function TimelineBody({ items }: { items: ActivityItemType[] }) {
+  const t = useT();
   if (items.length === 0) {
     return (
       <EmptyState
         size="compact"
         icon={<ActivityIcon size={20} />}
-        title="No activity yet"
-        description="Edits, transitions, and comments will surface here."
+        title={t("components.activityDrawer.noActivity", undefined, "No activity yet")}
+        description={t(
+          "components.activityDrawer.noActivityDesc",
+          undefined,
+          "Edits, transitions, and comments will surface here.",
+        )}
       />
     );
   }
-  const groups = groupByDay(items);
+  const groups = groupByDay(items, t);
   return (
     <div className="space-y-5">
       {groups.map((group) => (
@@ -102,14 +110,10 @@ function TimelineBody({ items }: { items: ActivityItemType[] }) {
  * (typically next to a `<CommentThread>`). Pass `mode="sheet"` to expose
  * a side-panel trigger instead.
  */
-export function ActivityDrawer({
-  initial,
-  mode = "inline",
-  title = "Activity",
-  hasMore,
-  loadMore,
-}: ActivityDrawerProps) {
+export function ActivityDrawer({ initial, mode = "inline", title, hasMore, loadMore }: ActivityDrawerProps) {
+  const t = useT();
   const router = useRouter();
+  const resolvedTitle = title ?? t("components.activityDrawer.activity", undefined, "Activity");
   const [items, setItems] = React.useState<ActivityItemType[]>(initial);
   const [isPending, startTransition] = React.useTransition();
 
@@ -133,10 +137,16 @@ export function ActivityDrawer({
   const header = (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-2">
-        <h3 className="text-sm font-semibold tracking-tight">{title}</h3>
+        <h3 className="text-sm font-semibold tracking-tight">{resolvedTitle}</h3>
         <Badge variant="muted">{items.length}</Badge>
       </div>
-      <Button type="button" variant="ghost" size="sm" onClick={handleRefresh} aria-label="Refresh activity">
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={handleRefresh}
+        aria-label={t("components.activityDrawer.refresh", undefined, "Refresh activity")}
+      >
         <RefreshCw size={14} aria-hidden="true" />
       </Button>
     </div>
@@ -148,7 +158,7 @@ export function ActivityDrawer({
       {hasMore && loadMore && (
         <div className="mt-4 flex justify-center">
           <Button type="button" variant="secondary" size="sm" onClick={handleLoadMore} loading={isPending}>
-            Load More
+            {t("components.activityDrawer.loadMore", undefined, "Load More")}
           </Button>
         </div>
       )}
@@ -161,7 +171,7 @@ export function ActivityDrawer({
         <SheetTrigger asChild>
           <Button type="button" variant="secondary" size="sm">
             <ActivityIcon size={14} className="me-1.5" aria-hidden="true" />
-            {title}
+            {resolvedTitle}
             <Badge variant="muted" className="ms-2">
               {items.length}
             </Badge>
@@ -169,7 +179,7 @@ export function ActivityDrawer({
         </SheetTrigger>
         <SheetContent side="right" className="sm:max-w-md">
           <SheetHeader>
-            <SheetTitle>{title}</SheetTitle>
+            <SheetTitle>{resolvedTitle}</SheetTitle>
           </SheetHeader>
           {body}
         </SheetContent>
@@ -178,7 +188,7 @@ export function ActivityDrawer({
   }
 
   return (
-    <section className="surface p-4" aria-label={title}>
+    <section className="surface p-4" aria-label={resolvedTitle}>
       {header}
       <div className="mt-4">{body}</div>
     </section>

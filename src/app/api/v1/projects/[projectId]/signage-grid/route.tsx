@@ -7,6 +7,7 @@ import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { SignageGridPdf } from "@/lib/pdf/reports";
 import { SignageGridSchema } from "@/lib/pdf/schemas/deliverables";
+import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -65,9 +66,10 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   if (!org) return apiError("internal", "Missing organization row");
 
   const brand = resolvePdfBrand({ org, client: null });
+  const { t } = await getRequestT();
   try {
     const { signedUrl } = await compileAndStore({
-      doc: <SignageGridPdf brand={brand} project={{ name: project.name }} entries={entries} />,
+      doc: <SignageGridPdf brand={brand} t={t} project={{ name: project.name }} entries={entries} />,
       bucket: "advancing",
       path: `signage/${session.orgId}/${project.id}.pdf`,
       signedUrlTtlSeconds: 60,

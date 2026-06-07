@@ -5,7 +5,7 @@ import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
 type DsarRow = {
@@ -62,12 +62,18 @@ export async function PortalPrivacyPanel({
     | "hospitality";
   slug: string;
 }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Portal" title="Privacy" />
+        <ModuleHeader
+          eyebrow={t("components.portalPrivacyPanel.eyebrow", undefined, "Portal")}
+          title={t("components.portalPrivacyPanel.privacy", undefined, "Privacy")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("components.portalPrivacyPanel.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -102,46 +108,70 @@ export async function PortalPrivacyPanel({
   return (
     <>
       <ModuleHeader
-        eyebrow="Portal · Privacy"
-        title="Your Data"
-        subtitle="Submit a data subject access request, manage consent, or download what we hold about you."
+        eyebrow={t("components.portalPrivacyPanel.headerEyebrow", undefined, "Portal · Privacy")}
+        title={t("components.portalPrivacyPanel.title", undefined, "Your Data")}
+        subtitle={t(
+          "components.portalPrivacyPanel.subtitle",
+          undefined,
+          "Submit a data subject access request, manage consent, or download what we hold about you.",
+        )}
         breadcrumbs={[
-          { label: "Portal", href: `/p/${slug}` },
+          { label: t("components.portalPrivacyPanel.eyebrow", undefined, "Portal"), href: `/p/${slug}` },
           { label: persona, href: `/p/${slug}/${persona}` },
-          { label: "Privacy" },
+          { label: t("components.portalPrivacyPanel.privacy", undefined, "Privacy") },
         ]}
       />
       <div className="page-content space-y-6">
         <div className="metric-grid-3">
-          <MetricCard label="Open Requests" value={fmtter.number(open)} />
-          <MetricCard label="Total Requests" value={fmtter.number(dsars.length)} />
-          <MetricCard label="Active Consents" value={fmtter.number(grantedConsents)} />
+          <MetricCard
+            label={t("components.portalPrivacyPanel.openRequests", undefined, "Open Requests")}
+            value={fmtter.number(open)}
+          />
+          <MetricCard
+            label={t("components.portalPrivacyPanel.totalRequests", undefined, "Total Requests")}
+            value={fmtter.number(dsars.length)}
+          />
+          <MetricCard
+            label={t("components.portalPrivacyPanel.activeConsents", undefined, "Active Consents")}
+            value={fmtter.number(grantedConsents)}
+          />
         </div>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Submit a Request</h3>
+          <h3 className="text-sm font-semibold">
+            {t("components.portalPrivacyPanel.submitRequest", undefined, "Submit a Request")}
+          </h3>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
-            Under your jurisdiction's privacy law (GDPR, CCPA, LGPD, etc.) you may request access, portability,
-            correction, or erasure of personal data we process about you.
+            {t(
+              "components.portalPrivacyPanel.submitRequestBody",
+              undefined,
+              "Under your jurisdiction's privacy law (GDPR, CCPA, LGPD, etc.) you may request access, portability, correction, or erasure of personal data we process about you.",
+            )}
           </p>
           <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <Link href="/api/v1/me/export" className="ps-btn ps-btn--sm w-full justify-center">
-              Download my data (JSON)
+              {t("components.portalPrivacyPanel.downloadData", undefined, "Download my data · JSON")}
             </Link>
             <Link
               href={`mailto:privacy@atlvs.pro?subject=DSAR%20—%20${persona}%20${slug}`}
               className="ps-btn ps-btn--ghost ps-btn--sm w-full justify-center"
             >
-              Email a DSAR
+              {t("components.portalPrivacyPanel.emailDsar", undefined, "Email a DSAR")}
             </Link>
           </div>
         </section>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Your Requests</h3>
+          <h3 className="text-sm font-semibold">
+            {t("components.portalPrivacyPanel.yourRequests", undefined, "Your Requests")}
+          </h3>
           {dsars.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--p-text-2)]">
-              No requests on record. New ones land here once submitted.
+              {t(
+                "components.portalPrivacyPanel.noRequests",
+                undefined,
+                "No requests on record. New ones land here once submitted.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--p-border)]">
@@ -150,9 +180,13 @@ export async function PortalPrivacyPanel({
                   <div>
                     <div className="font-medium">{toTitle(d.kind)}</div>
                     <div className="font-mono text-[10px] text-[var(--p-text-2)]">
-                      filed {fmt(d.created_at)}
-                      {d.due_by ? ` · due ${fmt(d.due_by)}` : ""}
-                      {d.fulfilled_at ? ` · fulfilled ${fmt(d.fulfilled_at)}` : ""}
+                      {t("components.portalPrivacyPanel.filed", { date: fmt(d.created_at) }, "filed {date}")}
+                      {d.due_by
+                        ? ` · ${t("components.portalPrivacyPanel.due", { date: fmt(d.due_by) }, "due {date}")}`
+                        : ""}
+                      {d.fulfilled_at
+                        ? ` · ${t("components.portalPrivacyPanel.fulfilled", { date: fmt(d.fulfilled_at) }, "fulfilled {date}")}`
+                        : ""}
                     </div>
                   </div>
                   <Badge variant={DSAR_TONE[d.status] ?? "muted"}>{toTitle(d.status)}</Badge>
@@ -163,10 +197,16 @@ export async function PortalPrivacyPanel({
         </section>
 
         <section className="surface p-5">
-          <h3 className="text-sm font-semibold">Consent Ledger</h3>
+          <h3 className="text-sm font-semibold">
+            {t("components.portalPrivacyPanel.consentLedger", undefined, "Consent Ledger")}
+          </h3>
           {consents.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--p-text-2)]">
-              No consent records yet. When you grant or revoke consent for a specific purpose, it lands here.
+              {t(
+                "components.portalPrivacyPanel.noConsents",
+                undefined,
+                "No consent records yet. When you grant or revoke consent for a specific purpose, it lands here.",
+              )}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--p-border)]">
@@ -175,13 +215,19 @@ export async function PortalPrivacyPanel({
                   <div>
                     <div className="font-medium">{c.purpose}</div>
                     <div className="font-mono text-[10px] text-[var(--p-text-2)]">
-                      {c.granted_at ? `granted ${fmt(c.granted_at)}` : "—"}
+                      {c.granted_at
+                        ? t("components.portalPrivacyPanel.granted", { date: fmt(c.granted_at) }, "granted {date}")
+                        : "—"}
                       {c.version ? ` · v${c.version}` : ""}
-                      {c.revoked_at ? ` · revoked ${fmt(c.revoked_at)}` : ""}
+                      {c.revoked_at
+                        ? ` · ${t("components.portalPrivacyPanel.revoked", { date: fmt(c.revoked_at) }, "revoked {date}")}`
+                        : ""}
                     </div>
                   </div>
                   <Badge variant={c.granted && !c.revoked_at ? "success" : "muted"}>
-                    {c.granted && !c.revoked_at ? "granted" : "revoked"}
+                    {c.granted && !c.revoked_at
+                      ? t("components.portalPrivacyPanel.statusGranted", undefined, "granted")
+                      : t("components.portalPrivacyPanel.statusRevoked", undefined, "revoked")}
                   </Badge>
                 </li>
               ))}
@@ -190,9 +236,17 @@ export async function PortalPrivacyPanel({
         </section>
 
         <p className="text-xs text-[var(--p-text-2)]">
-          Data we process about you depends on your role. As a <strong>{persona}</strong> you may have records in:
-          accreditations, credentials, advancing rider, contracts, payments, scans, and signed disclosures. Requesting
-          erasure may impact your active engagement — we'll confirm before processing.
+          {t(
+            "components.portalPrivacyPanel.roleNoteBefore",
+            undefined,
+            "Data we process about you depends on your role. As a",
+          )}{" "}
+          <strong>{persona}</strong>{" "}
+          {t(
+            "components.portalPrivacyPanel.roleNoteAfter",
+            undefined,
+            "you may have records in: accreditations, credentials, advancing rider, contracts, payments, scans, and signed disclosures. Requesting erasure may impact your active engagement — we'll confirm before processing.",
+          )}
         </p>
       </div>
     </>

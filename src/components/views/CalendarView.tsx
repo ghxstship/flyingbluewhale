@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { useAnnounce } from "@/components/ui/LiveRegion";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   eventsByDay as bucketEventsByDay,
   isoDateUTC,
@@ -69,6 +70,17 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const announce = useAnnounce();
+  const t = useT();
+
+  const modeLabel = (m: CalendarMode): string => {
+    const fallbacks: Record<CalendarMode, string> = {
+      month: "Month",
+      week: "Week",
+      day: "Day",
+      agenda: "Agenda",
+    };
+    return t(`components.calendarView.mode.${m}`, undefined, fallbacks[m]);
+  };
 
   const today = React.useMemo(() => startOfDayUTC(new Date()), []);
 
@@ -123,12 +135,12 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
       const newStartISO = reanchorStartISO(original, newDayISO);
       try {
         await onReschedule(eventId, newStartISO);
-        announce(`Rescheduled to ${newDayISO}`);
+        announce(t("components.calendarView.rescheduledTo", { date: newDayISO }, "Rescheduled to {date}"));
       } catch {
-        announce("Reschedule failed", "assertive");
+        announce(t("components.calendarView.rescheduleFailed", undefined, "Reschedule failed"), "assertive");
       }
     },
-    [onReschedule, announce],
+    [onReschedule, announce, t],
   );
 
   function shift(direction: -1 | 1) {
@@ -171,8 +183,8 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
         timeZone: "UTC",
       }).format(cursor);
     }
-    return "Upcoming";
-  }, [mode, cursor, weekStart]);
+    return t("components.calendarView.upcoming", undefined, "Upcoming");
+  }, [mode, cursor, weekStart, t]);
 
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
@@ -181,12 +193,12 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Button type="button" variant="ghost" size="sm" onClick={jumpToday}>
-              Today
+              {t("components.calendarView.today", undefined, "Today")}
             </Button>
             <button
               type="button"
               onClick={() => shift(-1)}
-              aria-label="Previous"
+              aria-label={t("components.calendarView.previous", undefined, "Previous")}
               className="rounded p-1 hover:bg-[var(--p-surface-2)]"
             >
               <ChevronLeft size={14} />
@@ -194,7 +206,7 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
             <button
               type="button"
               onClick={() => shift(1)}
-              aria-label="Next"
+              aria-label={t("components.calendarView.next", undefined, "Next")}
               className="rounded p-1 hover:bg-[var(--p-surface-2)]"
             >
               <ChevronRight size={14} />
@@ -212,12 +224,12 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
                   setCursor(new Date(`${v}T00:00:00Z`));
                 }
               }}
-              aria-label="Jump to date"
+              aria-label={t("components.calendarView.jumpToDate", undefined, "Jump to date")}
               className="rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs"
             />
             <div
               role="tablist"
-              aria-label="Calendar mode"
+              aria-label={t("components.calendarView.calendarMode", undefined, "Calendar mode")}
               className="inline-flex overflow-hidden rounded-md border border-[var(--p-border)]"
             >
               {MODES.map((m) => (
@@ -227,11 +239,11 @@ export function CalendarView(props: CalendarViewProps): React.ReactElement {
                   role="tab"
                   aria-selected={mode === m}
                   onClick={() => setMode(m)}
-                  className={`px-2 py-1 text-xs capitalize ${
+                  className={`px-2 py-1 text-xs ${
                     mode === m ? "bg-[var(--p-surface-2)] text-[var(--p-text-1)]" : "text-[var(--p-text-2)]"
                   }`}
                 >
-                  {m}
+                  {modeLabel(m)}
                 </button>
               ))}
             </div>

@@ -32,7 +32,21 @@ import type {
  *
  * All views fit on a single page where possible (they reuse the shared
  * `PdfTable` + `SectionHeading` primitives so rhythm is consistent).
+ *
+ * i18n note: these views are composed via the registry (`renderDeliverable`)
+ * which only threads `data` today — the registry signature lives in
+ * `registry.tsx` / `document.tsx` (outside this file). Each view therefore
+ * accepts an OPTIONAL `t` prop that defaults to the identity fallback, so the
+ * English strings are centralized under `pdf.deliverablesViews.*` and become
+ * locale-aware as soon as the registry render signature is widened to pass a
+ * request-scoped translator through.
  */
+
+/** Request-scoped translator: `t(key, vars?, fallback?)`. */
+export type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity fallback used when no translator is threaded in (registry path today). */
+const identityT: Translator = (_k, _v, fb) => fb ?? "";
 
 export function TechnicalRiderView({ data }: { data: TechnicalRiderData }) {
   return (
@@ -54,17 +68,22 @@ export function TechnicalRiderView({ data }: { data: TechnicalRiderData }) {
 
 export const HospitalityRiderView = TechnicalRiderView as (p: { data: HospitalityRiderData }) => React.JSX.Element;
 
-export function InputListView({ data }: { data: InputListData }) {
+export function InputListView({ data, t = identityT }: { data: InputListData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Input List" />
+      <SectionHeading title={t("pdf.deliverablesViews.inputList.heading", undefined, "Input List")} />
       <PdfTable
         columns={[
-          { key: "channel", label: "Ch", width: 0.5, align: "center" },
-          { key: "name", label: "Source", width: 3 },
-          { key: "mic", label: "Mic/DI", width: 2 },
-          { key: "insert", label: "Insert", width: 1.5 },
-          { key: "note", label: "Note", width: 2 },
+          {
+            key: "channel",
+            label: t("pdf.deliverablesViews.inputList.colCh", undefined, "Ch"),
+            width: 0.5,
+            align: "center",
+          },
+          { key: "name", label: t("pdf.deliverablesViews.inputList.colSource", undefined, "Source"), width: 3 },
+          { key: "mic", label: t("pdf.deliverablesViews.inputList.colMic", undefined, "Mic/DI"), width: 2 },
+          { key: "insert", label: t("pdf.deliverablesViews.inputList.colInsert", undefined, "Insert"), width: 1.5 },
+          { key: "note", label: t("pdf.deliverablesViews.inputList.colNote", undefined, "Note"), width: 2 },
         ]}
         rows={data.entries.map((e) => ({
           channel: String(e.channel),
@@ -78,23 +97,34 @@ export function InputListView({ data }: { data: InputListData }) {
   );
 }
 
-export function StagePlotView({ data }: { data: StagePlotData }) {
+export function StagePlotView({ data, t = identityT }: { data: StagePlotData; t?: Translator }) {
   return (
     <>
       {data.svgUrl ? (
         <>
-          <SectionHeading title="Stage Plot" />
+          <SectionHeading title={t("pdf.deliverablesViews.stagePlot.heading", undefined, "Stage Plot")} />
           <Image src={data.svgUrl} style={{ width: "100%", maxHeight: 380, objectFit: "contain" }} />
         </>
       ) : (
         <>
-          <SectionHeading title="Stage Plot Elements" />
+          <SectionHeading
+            title={t("pdf.deliverablesViews.stagePlot.elementsHeading", undefined, "Stage Plot Elements")}
+          />
           <PdfTable
             columns={[
-              { key: "label", label: "Element", width: 3 },
-              { key: "kind", label: "Kind", width: 2 },
-              { key: "position", label: "Position", width: 2 },
-              { key: "rotation", label: "Rot", width: 1, align: "center" },
+              { key: "label", label: t("pdf.deliverablesViews.stagePlot.colElement", undefined, "Element"), width: 3 },
+              { key: "kind", label: t("pdf.deliverablesViews.stagePlot.colKind", undefined, "Kind"), width: 2 },
+              {
+                key: "position",
+                label: t("pdf.deliverablesViews.stagePlot.colPosition", undefined, "Position"),
+                width: 2,
+              },
+              {
+                key: "rotation",
+                label: t("pdf.deliverablesViews.stagePlot.colRot", undefined, "Rot"),
+                width: 1,
+                align: "center",
+              },
             ]}
             rows={data.elements.map((e) => ({
               label: e.label,
@@ -110,17 +140,17 @@ export function StagePlotView({ data }: { data: StagePlotData }) {
   );
 }
 
-export function CrewListView({ data }: { data: CrewListData }) {
+export function CrewListView({ data, t = identityT }: { data: CrewListData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Crew List" />
+      <SectionHeading title={t("pdf.deliverablesViews.crewList.heading", undefined, "Crew List")} />
       <PdfTable
         columns={[
-          { key: "name", label: "Name", width: 3 },
-          { key: "role", label: "Role", width: 2.5 },
-          { key: "dept", label: "Dept", width: 2 },
-          { key: "call", label: "Call", width: 1.5 },
-          { key: "contact", label: "Contact", width: 3 },
+          { key: "name", label: t("pdf.deliverablesViews.crewList.colName", undefined, "Name"), width: 3 },
+          { key: "role", label: t("pdf.deliverablesViews.crewList.colRole", undefined, "Role"), width: 2.5 },
+          { key: "dept", label: t("pdf.deliverablesViews.crewList.colDept", undefined, "Dept"), width: 2 },
+          { key: "call", label: t("pdf.deliverablesViews.crewList.colCall", undefined, "Call"), width: 1.5 },
+          { key: "contact", label: t("pdf.deliverablesViews.crewList.colContact", undefined, "Contact"), width: 3 },
         ]}
         rows={data.entries.map((e) => ({
           name: e.name,
@@ -134,16 +164,16 @@ export function CrewListView({ data }: { data: CrewListData }) {
   );
 }
 
-export function GuestListView({ data }: { data: GuestListData }) {
+export function GuestListView({ data, t = identityT }: { data: GuestListData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Guest List" />
+      <SectionHeading title={t("pdf.deliverablesViews.guestList.heading", undefined, "Guest List")} />
       <PdfTable
         columns={[
-          { key: "name", label: "Name", width: 4 },
+          { key: "name", label: t("pdf.deliverablesViews.guestList.colName", undefined, "Name"), width: 4 },
           { key: "plus_ones", label: "+", width: 0.6, align: "center" },
-          { key: "tier", label: "Tier", width: 2 },
-          { key: "note", label: "Note", width: 3 },
+          { key: "tier", label: t("pdf.deliverablesViews.guestList.colTier", undefined, "Tier"), width: 2 },
+          { key: "note", label: t("pdf.deliverablesViews.guestList.colNote", undefined, "Note"), width: 3 },
         ]}
         rows={data.entries.map((e) => ({
           name: e.name,
@@ -156,16 +186,25 @@ export function GuestListView({ data }: { data: GuestListData }) {
   );
 }
 
-export function EquipmentPullListView({ data }: { data: EquipmentPullListData }) {
+export function EquipmentPullListView({ data, t = identityT }: { data: EquipmentPullListData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Equipment Pull List" />
+      <SectionHeading title={t("pdf.deliverablesViews.equipmentPullList.heading", undefined, "Equipment Pull List")} />
       <PdfTable
         columns={[
-          { key: "qty", label: "Qty", width: 0.8, align: "center" },
-          { key: "item", label: "Item", width: 4 },
-          { key: "category", label: "Category", width: 2 },
-          { key: "note", label: "Note", width: 2.5 },
+          {
+            key: "qty",
+            label: t("pdf.deliverablesViews.equipmentPullList.colQty", undefined, "Qty"),
+            width: 0.8,
+            align: "center",
+          },
+          { key: "item", label: t("pdf.deliverablesViews.equipmentPullList.colItem", undefined, "Item"), width: 4 },
+          {
+            key: "category",
+            label: t("pdf.deliverablesViews.equipmentPullList.colCategory", undefined, "Category"),
+            width: 2,
+          },
+          { key: "note", label: t("pdf.deliverablesViews.equipmentPullList.colNote", undefined, "Note"), width: 2.5 },
         ]}
         rows={data.entries.map((e) => ({
           qty: String(e.qty),
@@ -178,18 +217,18 @@ export function EquipmentPullListView({ data }: { data: EquipmentPullListData })
   );
 }
 
-export function PowerPlanView({ data }: { data: PowerPlanData }) {
+export function PowerPlanView({ data, t = identityT }: { data: PowerPlanData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Power Services" />
+      <SectionHeading title={t("pdf.deliverablesViews.powerPlan.servicesHeading", undefined, "Power Services")} />
       <PdfTable
         columns={[
-          { key: "location", label: "Location", width: 3 },
-          { key: "amperage", label: "Amps", width: 1 },
-          { key: "voltage", label: "Volts", width: 1 },
-          { key: "phase", label: "Phase", width: 1 },
-          { key: "source", label: "Source", width: 2 },
-          { key: "note", label: "Note", width: 2 },
+          { key: "location", label: t("pdf.deliverablesViews.powerPlan.colLocation", undefined, "Location"), width: 3 },
+          { key: "amperage", label: t("pdf.deliverablesViews.powerPlan.colAmps", undefined, "Amps"), width: 1 },
+          { key: "voltage", label: t("pdf.deliverablesViews.powerPlan.colVolts", undefined, "Volts"), width: 1 },
+          { key: "phase", label: t("pdf.deliverablesViews.powerPlan.colPhase", undefined, "Phase"), width: 1 },
+          { key: "source", label: t("pdf.deliverablesViews.powerPlan.colSource", undefined, "Source"), width: 2 },
+          { key: "note", label: t("pdf.deliverablesViews.powerPlan.colNote", undefined, "Note"), width: 2 },
         ]}
         rows={data.services.map((s) => ({
           location: s.location,
@@ -202,13 +241,22 @@ export function PowerPlanView({ data }: { data: PowerPlanData }) {
       />
       {data.generators.length > 0 ? (
         <>
-          <SectionHeading title="Generators" />
+          <SectionHeading title={t("pdf.deliverablesViews.powerPlan.generatorsHeading", undefined, "Generators")} />
           <PdfTable
             columns={[
-              { key: "label", label: "Unit", width: 2 },
-              { key: "kw", label: "kW", width: 1, align: "right" },
-              { key: "fuel", label: "Fuel", width: 1.5 },
-              { key: "location", label: "Location", width: 3 },
+              { key: "label", label: t("pdf.deliverablesViews.powerPlan.colUnit", undefined, "Unit"), width: 2 },
+              {
+                key: "kw",
+                label: t("pdf.deliverablesViews.powerPlan.colKw", undefined, "kW"),
+                width: 1,
+                align: "right",
+              },
+              { key: "fuel", label: t("pdf.deliverablesViews.powerPlan.colFuel", undefined, "Fuel"), width: 1.5 },
+              {
+                key: "location",
+                label: t("pdf.deliverablesViews.powerPlan.colLocation", undefined, "Location"),
+                width: 3,
+              },
             ]}
             rows={data.generators.map((g) => ({
               label: g.label,
@@ -223,16 +271,26 @@ export function PowerPlanView({ data }: { data: PowerPlanData }) {
   );
 }
 
-export function RiggingPlanView({ data }: { data: RiggingPlanData }) {
+export function RiggingPlanView({ data, t = identityT }: { data: RiggingPlanData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Rigging Points" />
+      <SectionHeading title={t("pdf.deliverablesViews.riggingPlan.heading", undefined, "Rigging Points")} />
       <PdfTable
         columns={[
-          { key: "label", label: "Point", width: 2 },
-          { key: "capacity", label: "Cap (lbs)", width: 1.5, align: "right" },
-          { key: "height", label: "Height (ft)", width: 1.5, align: "right" },
-          { key: "note", label: "Note", width: 3 },
+          { key: "label", label: t("pdf.deliverablesViews.riggingPlan.colPoint", undefined, "Point"), width: 2 },
+          {
+            key: "capacity",
+            label: t("pdf.deliverablesViews.riggingPlan.colCapacity", undefined, "Cap · lbs"),
+            width: 1.5,
+            align: "right",
+          },
+          {
+            key: "height",
+            label: t("pdf.deliverablesViews.riggingPlan.colHeight", undefined, "Height · ft"),
+            width: 1.5,
+            align: "right",
+          },
+          { key: "note", label: t("pdf.deliverablesViews.riggingPlan.colNote", undefined, "Note"), width: 3 },
         ]}
         rows={data.points.map((p) => ({
           label: p.label,
@@ -246,16 +304,16 @@ export function RiggingPlanView({ data }: { data: RiggingPlanData }) {
   );
 }
 
-export function SitePlanView({ data }: { data: SitePlanData }) {
+export function SitePlanView({ data, t = identityT }: { data: SitePlanData; t?: Translator }) {
   return (
     <>
       {data.svgUrl ? (
         <>
-          <SectionHeading title="Site Plan" />
+          <SectionHeading title={t("pdf.deliverablesViews.sitePlan.heading", undefined, "Site Plan")} />
           <Image src={data.svgUrl} style={{ width: "100%", maxHeight: 380, objectFit: "contain" }} />
         </>
       ) : null}
-      <SectionHeading title="Zones" />
+      <SectionHeading title={t("pdf.deliverablesViews.sitePlan.zonesHeading", undefined, "Zones")} />
       {data.zones.map((z, i) => (
         <View key={i} style={{ marginBottom: 4 }}>
           <Text style={{ fontWeight: 700 }}>{z.name}</Text>
@@ -267,17 +325,21 @@ export function SitePlanView({ data }: { data: SitePlanData }) {
   );
 }
 
-export function BuildScheduleView({ data }: { data: BuildScheduleData }) {
+export function BuildScheduleView({ data, t = identityT }: { data: BuildScheduleData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Build Schedule" />
+      <SectionHeading title={t("pdf.deliverablesViews.buildSchedule.heading", undefined, "Build Schedule")} />
       <PdfTable
         columns={[
-          { key: "day", label: "Day", width: 1.5 },
-          { key: "time", label: "Time", width: 1.5 },
-          { key: "activity", label: "Activity", width: 3 },
-          { key: "crew", label: "Crew", width: 2 },
-          { key: "note", label: "Note", width: 2 },
+          { key: "day", label: t("pdf.deliverablesViews.buildSchedule.colDay", undefined, "Day"), width: 1.5 },
+          { key: "time", label: t("pdf.deliverablesViews.buildSchedule.colTime", undefined, "Time"), width: 1.5 },
+          {
+            key: "activity",
+            label: t("pdf.deliverablesViews.buildSchedule.colActivity", undefined, "Activity"),
+            width: 3,
+          },
+          { key: "crew", label: t("pdf.deliverablesViews.buildSchedule.colCrew", undefined, "Crew"), width: 2 },
+          { key: "note", label: t("pdf.deliverablesViews.buildSchedule.colNote", undefined, "Note"), width: 2 },
         ]}
         rows={data.entries.map((e) => ({
           day: e.day,
@@ -291,16 +353,25 @@ export function BuildScheduleView({ data }: { data: BuildScheduleData }) {
   );
 }
 
-export function VendorPackageView({ data }: { data: VendorPackageData }) {
+export function VendorPackageView({ data, t = identityT }: { data: VendorPackageData; t?: Translator }) {
   return (
     <>
-      {data.vendor_name ? <SectionHeading eyebrow="Vendor" title={data.vendor_name} /> : null}
-      <SectionHeading title="Deliverables" />
+      {data.vendor_name ? (
+        <SectionHeading
+          eyebrow={t("pdf.deliverablesViews.vendorPackage.vendorEyebrow", undefined, "Vendor")}
+          title={data.vendor_name}
+        />
+      ) : null}
+      <SectionHeading title={t("pdf.deliverablesViews.vendorPackage.deliverablesHeading", undefined, "Deliverables")} />
       <PdfTable
         columns={[
-          { key: "name", label: "Deliverable", width: 4 },
-          { key: "due", label: "Due", width: 2 },
-          { key: "status", label: "Status", width: 2 },
+          {
+            key: "name",
+            label: t("pdf.deliverablesViews.vendorPackage.colDeliverable", undefined, "Deliverable"),
+            width: 4,
+          },
+          { key: "due", label: t("pdf.deliverablesViews.vendorPackage.colDue", undefined, "Due"), width: 2 },
+          { key: "status", label: t("pdf.deliverablesViews.vendorPackage.colStatus", undefined, "Status"), width: 2 },
         ]}
         rows={data.deliverables.map((d) => ({
           name: d.name,
@@ -313,16 +384,26 @@ export function VendorPackageView({ data }: { data: VendorPackageData }) {
   );
 }
 
-export function SafetyComplianceView({ data }: { data: SafetyComplianceData }) {
+export function SafetyComplianceView({ data, t = identityT }: { data: SafetyComplianceData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Safety + compliance checklist" />
+      <SectionHeading
+        title={t("pdf.deliverablesViews.safetyCompliance.heading", undefined, "Safety + compliance checklist")}
+      />
       <PdfTable
         columns={[
-          { key: "topic", label: "Topic", width: 2 },
-          { key: "requirement", label: "Requirement", width: 4 },
-          { key: "owner", label: "Owner", width: 2 },
-          { key: "status", label: "Status", width: 1.5 },
+          { key: "topic", label: t("pdf.deliverablesViews.safetyCompliance.colTopic", undefined, "Topic"), width: 2 },
+          {
+            key: "requirement",
+            label: t("pdf.deliverablesViews.safetyCompliance.colRequirement", undefined, "Requirement"),
+            width: 4,
+          },
+          { key: "owner", label: t("pdf.deliverablesViews.safetyCompliance.colOwner", undefined, "Owner"), width: 2 },
+          {
+            key: "status",
+            label: t("pdf.deliverablesViews.safetyCompliance.colStatus", undefined, "Status"),
+            width: 1.5,
+          },
         ]}
         rows={data.items.map((it) => ({
           topic: it.topic,
@@ -335,20 +416,20 @@ export function SafetyComplianceView({ data }: { data: SafetyComplianceData }) {
   );
 }
 
-export function CommsPlanView({ data }: { data: CommsPlanData }) {
+export function CommsPlanView({ data, t = identityT }: { data: CommsPlanData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Radio Channels" />
+      <SectionHeading title={t("pdf.deliverablesViews.commsPlan.radioChannelsHeading", undefined, "Radio Channels")} />
       <PdfTable
         columns={[
-          { key: "channel", label: "Channel", width: 1 },
-          { key: "purpose", label: "Purpose", width: 4 },
+          { key: "channel", label: t("pdf.deliverablesViews.commsPlan.colChannel", undefined, "Channel"), width: 1 },
+          { key: "purpose", label: t("pdf.deliverablesViews.commsPlan.colPurpose", undefined, "Purpose"), width: 4 },
         ]}
         rows={data.channels.map((c) => ({ channel: c.channel, purpose: c.purpose }))}
       />
       {data.codeWords.length > 0 ? (
         <>
-          <SectionHeading title="Code Words" />
+          <SectionHeading title={t("pdf.deliverablesViews.commsPlan.codeWordsHeading", undefined, "Code Words")} />
           {data.codeWords.map((c, i) => (
             <Text key={i}>
               <Text style={{ fontWeight: 700 }}>{c.code}</Text> — {c.meaning}
@@ -360,18 +441,26 @@ export function CommsPlanView({ data }: { data: CommsPlanData }) {
   );
 }
 
-export function SignageGridView({ data }: { data: SignageGridData }) {
+export function SignageGridView({ data, t = identityT }: { data: SignageGridData; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Signage Grid" />
+      <SectionHeading title={t("pdf.deliverablesViews.signageGrid.heading", undefined, "Signage Grid")} />
       <PdfTable
         columns={[
-          { key: "location", label: "Location", width: 3 },
-          { key: "type", label: "Type", width: 2 },
-          { key: "size", label: "Size", width: 1.5 },
-          { key: "install", label: "Install", width: 1.5 },
-          { key: "strike", label: "Strike", width: 1.5 },
-          { key: "note", label: "Note", width: 2 },
+          {
+            key: "location",
+            label: t("pdf.deliverablesViews.signageGrid.colLocation", undefined, "Location"),
+            width: 3,
+          },
+          { key: "type", label: t("pdf.deliverablesViews.signageGrid.colType", undefined, "Type"), width: 2 },
+          { key: "size", label: t("pdf.deliverablesViews.signageGrid.colSize", undefined, "Size"), width: 1.5 },
+          {
+            key: "install",
+            label: t("pdf.deliverablesViews.signageGrid.colInstall", undefined, "Install"),
+            width: 1.5,
+          },
+          { key: "strike", label: t("pdf.deliverablesViews.signageGrid.colStrike", undefined, "Strike"), width: 1.5 },
+          { key: "note", label: t("pdf.deliverablesViews.signageGrid.colNote", undefined, "Note"), width: 2 },
         ]}
         rows={data.entries.map((e) => ({
           location: e.location,
@@ -400,10 +489,10 @@ export function CustomView({ data }: { data: CustomData }) {
 }
 
 /** Generic fallback for types we don't (yet) have a specialized renderer for. */
-export function GenericDeliverableView({ data }: { data: unknown }) {
+export function GenericDeliverableView({ data, t = identityT }: { data: unknown; t?: Translator }) {
   return (
     <>
-      <SectionHeading title="Deliverable Data" />
+      <SectionHeading title={t("pdf.deliverablesViews.generic.heading", undefined, "Deliverable Data")} />
       <Text style={{ fontFamily: "Courier", fontSize: 9 }}>{JSON.stringify(data, null, 2)}</Text>
     </>
   );

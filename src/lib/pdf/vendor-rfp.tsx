@@ -14,8 +14,16 @@ import type { PdfBrand } from "./branding";
  * just formats.
  */
 
+/** Request-scoped translator: `t(key, vars?, fallback?)`. */
+export type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity fallback used when no translator is threaded in (existing callers). */
+const identityT: Translator = (_k, _v, fb) => fb ?? "";
+
 export type VendorRfpInput = {
   brand: PdfBrand;
+  /** Optional request-scoped translator; defaults to English fallbacks. */
+  t?: Translator;
   vendor: { name: string; contact_email?: string | null };
   project: { name: string };
   scope: string;
@@ -26,6 +34,7 @@ export type VendorRfpInput = {
 
 export function VendorRfpPdf({
   brand,
+  t = identityT,
   vendor,
   project,
   scope,
@@ -37,19 +46,27 @@ export function VendorRfpPdf({
     <PdfDocument title={`RFP · ${vendor.name}`} author={brand.producerName} subject={`${project.name} RFP`}>
       <CoverPage
         brand={brand}
-        eyebrow="Request for Proposal"
+        eyebrow={t("pdf.vendorRfp.eyebrow", undefined, "Request for Proposal")}
         title={project.name}
-        subtitle={`For ${vendor.name}${deadline ? ` · responses due ${deadline}` : ""}`}
+        subtitle={
+          deadline
+            ? t(
+                "pdf.vendorRfp.subtitleWithDeadline",
+                { vendor: vendor.name, deadline },
+                `For ${vendor.name} · responses due ${deadline}`,
+              )
+            : t("pdf.vendorRfp.subtitle", { vendor: vendor.name }, `For ${vendor.name}`)
+        }
       />
       <BrandedPage brand={brand} pageLabel="RFP">
-        <SectionHeading title="Scope" />
+        <SectionHeading title={t("pdf.vendorRfp.scope", undefined, "Scope")} />
         <Text style={styles.p}>{scope}</Text>
-        <SectionHeading title="Deliverables Requested" />
+        <SectionHeading title={t("pdf.vendorRfp.deliverablesRequested", undefined, "Deliverables Requested")} />
         <PdfTable
           columns={[
-            { key: "title", label: "Deliverable", width: 3 },
-            { key: "description", label: "Description", width: 5 },
-            { key: "due", label: "Due", width: 2 },
+            { key: "title", label: t("pdf.vendorRfp.colDeliverable", undefined, "Deliverable"), width: 3 },
+            { key: "description", label: t("pdf.vendorRfp.colDescription", undefined, "Description"), width: 5 },
+            { key: "due", label: t("pdf.vendorRfp.colDue", undefined, "Due"), width: 2 },
           ]}
           rows={deliverables.map((d) => ({
             title: d.title,
@@ -57,7 +74,7 @@ export function VendorRfpPdf({
             due: d.due ?? "",
           }))}
         />
-        <SectionHeading title="How to Respond" />
+        <SectionHeading title={t("pdf.vendorRfp.howToRespond", undefined, "How to Respond")} />
         <Text style={styles.p}>{submitInstructions}</Text>
       </BrandedPage>
     </PdfDocument>

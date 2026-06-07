@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { MessageCircle, Send } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { formatRelative } from "@/lib/i18n/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Comment = {
   id: string;
@@ -23,6 +24,7 @@ export function GuideComments({
   orgId: string;
   initial?: Comment[];
 }) {
+  const t = useT();
   const [comments, setComments] = React.useState(initial);
   const [name, setName] = React.useState("");
   const [body, setBody] = React.useState("");
@@ -47,13 +49,18 @@ export function GuideComments({
         | { ok: true; data: { comment: Comment } }
         | { ok: false; error: { message: string } };
       if (!res.ok || !json.ok) {
-        throw new Error(("error" in json && json.error?.message) || "Couldn't post comment");
+        throw new Error(
+          ("error" in json && json.error?.message) ||
+            t("components.guideComments.postFailed", undefined, "Couldn't post comment"),
+        );
       }
       setComments((prev) => [json.data.comment, ...prev]);
       setBody("");
-      toast.success("Posted");
+      toast.success(t("components.guideComments.posted", undefined, "Posted"));
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Couldn't post");
+      toast.error(
+        err instanceof Error ? err.message : t("components.guideComments.postFailedShort", undefined, "Couldn't post"),
+      );
     } finally {
       setSubmitting(false);
     }
@@ -63,7 +70,8 @@ export function GuideComments({
     <section aria-labelledby="comments-heading" className="mt-8">
       <h2 id="comments-heading" className="flex items-center gap-2 text-sm font-semibold">
         <MessageCircle size={14} aria-hidden="true" />
-        Comments {comments.length > 0 && <span className="text-[var(--p-text-2)]">({comments.length})</span>}
+        {t("components.guideComments.heading", undefined, "Comments")}{" "}
+        {comments.length > 0 && <span className="text-[var(--p-text-2)]">·&nbsp;{comments.length}</span>}
       </h2>
 
       <form onSubmit={submit} className="mt-3 space-y-2">
@@ -71,22 +79,23 @@ export function GuideComments({
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Your name · optional"
-          aria-label="Your Name"
+          placeholder={t("components.guideComments.namePlaceholder", undefined, "Your name · optional")}
+          aria-label={t("components.guideComments.nameLabel", undefined, "Your Name")}
           className="ps-input text-sm"
         />
         <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          placeholder="Add a comment or question…"
-          aria-label="Comment Body"
+          placeholder={t("components.guideComments.bodyPlaceholder", undefined, "Add a comment or question…")}
+          aria-label={t("components.guideComments.bodyLabel", undefined, "Comment Body")}
           rows={3}
           required
           className="ps-input w-full resize-none text-sm"
         />
         <div className="flex justify-end">
           <Button type="submit" loading={submitting} disabled={!body.trim()}>
-            <Send size={12} className="me-1" aria-hidden="true" /> Post
+            <Send size={12} className="me-1" aria-hidden="true" />{" "}
+            {t("components.guideComments.post", undefined, "Post")}
           </Button>
         </div>
       </form>
@@ -94,13 +103,15 @@ export function GuideComments({
       <ul className="mt-4 space-y-3">
         {comments.length === 0 ? (
           <li className="rounded border border-dashed border-[var(--p-border)] py-6 text-center text-xs text-[var(--p-text-2)]">
-            No comments yet.
+            {t("components.guideComments.empty", undefined, "No comments yet.")}
           </li>
         ) : (
           comments.map((c) => (
             <li key={c.id} className="surface p-3">
               <div className="flex items-baseline justify-between text-xs">
-                <span className="font-medium">{c.author_name ?? "Anonymous"}</span>
+                <span className="font-medium">
+                  {c.author_name ?? t("components.guideComments.anonymous", undefined, "Anonymous")}
+                </span>
                 <time className="text-[var(--p-text-2)]" dateTime={c.created_at}>
                   {formatRelative(c.created_at)}
                 </time>

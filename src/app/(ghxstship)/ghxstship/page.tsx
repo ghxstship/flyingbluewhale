@@ -4,36 +4,67 @@ import { ArrowRight, Layers, Compass, Clock3, Building2, Hexagon, MapPin } from 
 import { Button } from "@/components/ui/Button";
 import { CATALOG_STATS, CLASSES, SOLUTIONS, ANCHOR_MARKETS, paths } from "@/lib/ghxstship";
 import { GhxstshipJsonLd, organizationSchema, serviceSchema, faqSchema } from "@/components/ghxstship/JsonLd";
+import { getRequestT } from "@/lib/i18n/request";
+
+type Translate = Awaited<ReturnType<typeof getRequestT>>["t"];
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = {
-  title: "GHXSTSHIP — Experiential Production Company | Festivals, Theme Parks, Live Events",
-  description:
-    "Experiential production at scale — festivals, immersive experiences, theme park attractions, brand activations, theatrical productions, and premium hospitality. Anchored in Miami, New York City, Chicago, and Los Angeles.",
-  keywords: [
-    "experiential production company",
-    "festival production company",
-    "theme park production",
-    "live event production",
-    "immersive experience design",
-    "brand activation agency",
-    "theatrical production company",
-    "premium hospitality production",
-    "Miami event production",
-    "New York event production",
-    "Los Angeles event production",
-    "Chicago event production",
-  ],
-  alternates: { canonical: "https://ghxstship.pro/ghxstship" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return {
+    title: t(
+      "ghxstship.home.meta.title",
+      undefined,
+      "GHXSTSHIP — Experiential Production Company | Festivals, Theme Parks, Live Events",
+    ),
+    description: t(
+      "ghxstship.home.meta.description",
+      undefined,
+      "Experiential production at scale — festivals, immersive experiences, theme park attractions, brand activations, theatrical productions, and premium hospitality. Anchored in Miami, New York City, Chicago, and Los Angeles.",
+    ),
+    keywords: [
+      "experiential production company",
+      "festival production company",
+      "theme park production",
+      "live event production",
+      "immersive experience design",
+      "brand activation agency",
+      "theatrical production company",
+      "premium hospitality production",
+      "Miami event production",
+      "New York event production",
+      "Los Angeles event production",
+      "Chicago event production",
+    ],
+    alternates: { canonical: "https://ghxstship.pro/ghxstship" },
+  };
+}
 
-const PROOF_STATS = [
-  { label: "Services", value: CATALOG_STATS.serviceCount, sub: "Disciplines under one roof" },
-  { label: "Industries", value: CATALOG_STATS.solutionCount, sub: "From festivals to fan zones" },
-  { label: "Markets", value: CATALOG_STATS.marketCount, sub: "Anchored + national reach" },
-  { label: "Phases", value: CATALOG_STATS.phaseCount, sub: "Discovery to wrap" },
-];
+function buildProofStats(t: Translate) {
+  return [
+    {
+      label: t("ghxstship.home.proof.services.label", undefined, "Services"),
+      value: CATALOG_STATS.serviceCount,
+      sub: t("ghxstship.home.proof.services.sub", undefined, "Disciplines under one roof"),
+    },
+    {
+      label: t("ghxstship.home.proof.industries.label", undefined, "Industries"),
+      value: CATALOG_STATS.solutionCount,
+      sub: t("ghxstship.home.proof.industries.sub", undefined, "From festivals to fan zones"),
+    },
+    {
+      label: t("ghxstship.home.proof.markets.label", undefined, "Markets"),
+      value: CATALOG_STATS.marketCount,
+      sub: t("ghxstship.home.proof.markets.sub", undefined, "Anchored + national reach"),
+    },
+    {
+      label: t("ghxstship.home.proof.phases.label", undefined, "Phases"),
+      value: CATALOG_STATS.phaseCount,
+      sub: t("ghxstship.home.proof.phases.sub", undefined, "Discovery to wrap"),
+    },
+  ];
+}
 
 const FEATURED_SOLUTIONS = [
   "concerts-festivals-tours",
@@ -44,30 +75,55 @@ const FEATURED_SOLUTIONS = [
   "premium-experiences-hospitality",
 ] as const;
 
-const FAQS = [
-  {
-    q: "What kind of productions does GHXSTSHIP take on?",
-    a: "Festivals and concert tours, theme park attractions, immersive experiences, brand activations and pop-ups, theatrical performances, art and cultural installations, premium sporting hospitality and fan zones, conferences and trade shows, luxury retail and dining, weddings and private estate events, cruise ship and maritime entertainment, and ultra-premium private events. Nineteen industry verticals in total.",
-  },
-  {
-    q: "Where does GHXSTSHIP operate?",
-    a: "Four anchor markets with full-time teams and dedicated fabrication capacity: Miami, New York City, Chicago, and Los Angeles. Eight satellite markets serviced from those anchors: Orlando, Nashville, Austin, Atlanta, Minneapolis, Denver, Las Vegas, and Seattle. National and international productions are handled from the closest anchor.",
-  },
-  {
-    q: "How is GHXSTSHIP different from a typical event agency?",
-    a: "GHXSTSHIP runs every engagement on the same internal data model — the Experiential Project Management System (XPMS) — that publishes our public service catalog. Every deliverable, vendor, compliance check, and budget line carries a stable identifier you can audit end to end. Same schema runs internally on our ATLVS software. Same schema is what you read on this site.",
-  },
-  {
-    q: "Do you handle production end to end, or only specific phases?",
-    a: "Both. We engage across all eight production phases — Discovery, Concept, Develop, Advance, Build, Show, Strike, and Wrap — or any subset. Per-project tiers are scoped to a single brief. Retainers run continuous engagements across multiple briefs.",
-  },
-  {
-    q: "Who owns the deliverables and IP at the end of an engagement?",
-    a: "You do. All concept artwork, design files, engineering drawings, and production documentation transfer to you on final invoice. Reusable touring scenic systems and trade show booth assets stay in our climate-controlled storage by default for redeployment, but ownership is yours.",
-  },
-];
+function buildFaqs(t: Translate) {
+  return [
+    {
+      q: t("ghxstship.home.faq.q1.q", undefined, "What kind of productions does GHXSTSHIP take on?"),
+      a: t(
+        "ghxstship.home.faq.q1.a",
+        undefined,
+        "Festivals and concert tours, theme park attractions, immersive experiences, brand activations and pop-ups, theatrical performances, art and cultural installations, premium sporting hospitality and fan zones, conferences and trade shows, luxury retail and dining, weddings and private estate events, cruise ship and maritime entertainment, and ultra-premium private events. Nineteen industry verticals in total.",
+      ),
+    },
+    {
+      q: t("ghxstship.home.faq.q2.q", undefined, "Where does GHXSTSHIP operate?"),
+      a: t(
+        "ghxstship.home.faq.q2.a",
+        undefined,
+        "Four anchor markets with full-time teams and dedicated fabrication capacity: Miami, New York City, Chicago, and Los Angeles. Eight satellite markets serviced from those anchors: Orlando, Nashville, Austin, Atlanta, Minneapolis, Denver, Las Vegas, and Seattle. National and international productions are handled from the closest anchor.",
+      ),
+    },
+    {
+      q: t("ghxstship.home.faq.q3.q", undefined, "How is GHXSTSHIP different from a typical event agency?"),
+      a: t(
+        "ghxstship.home.faq.q3.a",
+        undefined,
+        "GHXSTSHIP runs every engagement on the same internal data model — the Experiential Project Management System (XPMS) — that publishes our public service catalog. Every deliverable, vendor, compliance check, and budget line carries a stable identifier you can audit end to end. Same schema runs internally on our ATLVS software. Same schema is what you read on this site.",
+      ),
+    },
+    {
+      q: t("ghxstship.home.faq.q4.q", undefined, "Do you handle production end to end, or only specific phases?"),
+      a: t(
+        "ghxstship.home.faq.q4.a",
+        undefined,
+        "Both. We engage across all eight production phases — Discovery, Concept, Develop, Advance, Build, Show, Strike, and Wrap — or any subset. Per-project tiers are scoped to a single brief. Retainers run continuous engagements across multiple briefs.",
+      ),
+    },
+    {
+      q: t("ghxstship.home.faq.q5.q", undefined, "Who owns the deliverables and IP at the end of an engagement?"),
+      a: t(
+        "ghxstship.home.faq.q5.a",
+        undefined,
+        "You do. All concept artwork, design files, engineering drawings, and production documentation transfer to you on final invoice. Reusable touring scenic systems and trade show booth assets stay in our climate-controlled storage by default for redeployment, but ownership is yours.",
+      ),
+    },
+  ];
+}
 
-export default function GhxstshipHome() {
+export default async function GhxstshipHome() {
+  const { t } = await getRequestT();
+  const PROOF_STATS = buildProofStats(t);
+  const FAQS = buildFaqs(t);
   return (
     <>
       <GhxstshipJsonLd
@@ -105,35 +161,38 @@ export default function GhxstshipHome() {
         <section className="mx-auto max-w-6xl px-6 pt-20 pb-12">
           <div className="text-xs font-semibold tracking-[0.25em] uppercase">
             <span style={{ color: "var(--p-accent)" }}>GHXSTSHIP Industries</span>
-            <span className="ms-3 text-[var(--p-text-2)]">Est. Miami · New York · Chicago · Los Angeles</span>
+            <span className="ms-3 text-[var(--p-text-2)]">
+              {t("ghxstship.home.hero.established", undefined, "Est. Miami · New York · Chicago · Los Angeles")}
+            </span>
           </div>
           <h1
             className="mt-6 text-5xl leading-[0.95] font-semibold tracking-tight uppercase sm:text-7xl lg:text-[8rem]"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Experiential
+            {t("ghxstship.home.hero.line1", undefined, "Experiential")}
             <br />
-            <span style={{ color: "var(--p-accent)" }}>production,</span>
+            <span style={{ color: "var(--p-accent)" }}>{t("ghxstship.home.hero.line2", undefined, "production,")}</span>
             <br />
-            built once,
+            {t("ghxstship.home.hero.line3", undefined, "built once,")}
             <br />
-            run anywhere.
+            {t("ghxstship.home.hero.line4", undefined, "run anywhere.")}
           </h1>
           <p className="mt-8 max-w-2xl text-lg text-[var(--p-text-2)]">
-            We design, engineer, fabricate, and operate festivals, immersive experiences, theme park attractions,
-            theatrical productions, brand activations, and premium hospitality. The same operating system that runs
-            inside our studio publishes the catalog you&apos;re reading — so the work you brief us on Monday becomes a
-            scoped, priced, and assignable engagement by Wednesday.
+            {t(
+              "ghxstship.home.hero.body",
+              undefined,
+              "We design, engineer, fabricate, and operate festivals, immersive experiences, theme park attractions, theatrical productions, brand activations, and premium hospitality. The same operating system that runs inside our studio publishes the catalog you’re reading — so the work you brief us on Monday becomes a scoped, priced, and assignable engagement by Wednesday.",
+            )}
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Button href={paths.contact()} size="lg">
-              Start a Project
+              {t("ghxstship.home.hero.cta.startProject", undefined, "Start a Project")}
             </Button>
             <Button href={paths.servicesRoot()} size="lg" variant="secondary">
-              Services Catalog
+              {t("ghxstship.home.hero.cta.servicesCatalog", undefined, "Services Catalog")}
             </Button>
             <Link href={paths.pricing()} className="ps-btn ps-btn--ghost ps-btn--lg">
-              Pricing →
+              {t("ghxstship.home.hero.cta.pricing", undefined, "Pricing →")}
             </Link>
           </div>
         </section>
@@ -161,18 +220,20 @@ export default function GhxstshipHome() {
           <div className="grid items-end gap-6 md:grid-cols-2">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-                What We Do
+                {t("ghxstship.home.whatWeDo.eyebrow", undefined, "What We Do")}
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                Six ways to find
+                {t("ghxstship.home.whatWeDo.heading.line1", undefined, "Six ways to find")}
                 <br />
-                the right team.
+                {t("ghxstship.home.whatWeDo.heading.line2", undefined, "the right team.")}
               </h2>
             </div>
             <p className="text-[var(--p-text-2)]">
-              Production touches a lot of disciplines. Search by what you build, when in the lifecycle, how deep the
-              detail goes, what kind of experience it is, what industry it serves, or where it happens. Every path lands
-              on a real producer with a real portfolio.
+              {t(
+                "ghxstship.home.whatWeDo.body",
+                undefined,
+                "Production touches a lot of disciplines. Search by what you build, when in the lifecycle, how deep the detail goes, what kind of experience it is, what industry it serves, or where it happens. Every path lands on a real producer with a real portfolio.",
+              )}
             </p>
           </div>
 
@@ -180,44 +241,74 @@ export default function GhxstshipHome() {
             <AxisCard
               icon={<Layers className="h-5 w-5" />}
               count={CATALOG_STATS.classCount}
-              title="Disciplines"
-              blurb="Production, build, hospitality, technology, operations, executive — ten core disciplines covering everything we touch."
+              title={t("ghxstship.home.axis.disciplines.title", undefined, "Disciplines")}
+              blurb={t(
+                "ghxstship.home.axis.disciplines.blurb",
+                undefined,
+                "Production, build, hospitality, technology, operations, executive — ten core disciplines covering everything we touch.",
+              )}
               href={paths.servicesRoot()}
+              t={t}
             />
             <AxisCard
               icon={<Clock3 className="h-5 w-5" />}
               count={CATALOG_STATS.phaseCount}
-              title="Phases"
-              blurb="Discovery, concept, develop, advance, build, show, strike, wrap. Engage across all eight or any subset."
+              title={t("ghxstship.home.axis.phases.title", undefined, "Phases")}
+              blurb={t(
+                "ghxstship.home.axis.phases.blurb",
+                undefined,
+                "Discovery, concept, develop, advance, build, show, strike, wrap. Engage across all eight or any subset.",
+              )}
               href={paths.phasesRoot()}
+              t={t}
             />
             <AxisCard
               icon={<Building2 className="h-5 w-5" />}
               count={6}
-              title="Detail Depth"
-              blurb="From multi-year programs down to single rigging components. We work at the level your brief lives at."
+              title={t("ghxstship.home.axis.detailDepth.title", undefined, "Detail Depth")}
+              blurb={t(
+                "ghxstship.home.axis.detailDepth.blurb",
+                undefined,
+                "From multi-year programs down to single rigging components. We work at the level your brief lives at.",
+              )}
               href={paths.servicesRoot()}
+              t={t}
             />
             <AxisCard
               icon={<Hexagon className="h-5 w-5" />}
               count={CATALOG_STATS.tierCount}
-              title="Experience Modes"
-              blurb="Social, digital, virtual, physical, experiential, theatrical. Most engagements span two or three."
+              title={t("ghxstship.home.axis.experienceModes.title", undefined, "Experience Modes")}
+              blurb={t(
+                "ghxstship.home.axis.experienceModes.blurb",
+                undefined,
+                "Social, digital, virtual, physical, experiential, theatrical. Most engagements span two or three.",
+              )}
               href={paths.tiersRoot()}
+              t={t}
             />
             <AxisCard
               icon={<Compass className="h-5 w-5" />}
               count={CATALOG_STATS.solutionCount}
-              title="Industries"
-              blurb="Festivals to fan zones, theme parks to maritime, art galleries to F1 paddock clubs. Nineteen verticals."
+              title={t("ghxstship.home.axis.industries.title", undefined, "Industries")}
+              blurb={t(
+                "ghxstship.home.axis.industries.blurb",
+                undefined,
+                "Festivals to fan zones, theme parks to maritime, art galleries to F1 paddock clubs. Nineteen verticals.",
+              )}
               href={paths.solutionsRoot()}
+              t={t}
             />
             <AxisCard
               icon={<MapPin className="h-5 w-5" />}
               count={CATALOG_STATS.marketCount}
-              title="Markets"
-              blurb="Miami, New York, Chicago, Los Angeles. Plus eight satellites. National and international from any anchor."
+              title={t("ghxstship.home.axis.markets.title", undefined, "Markets")}
+              blurb={t(
+                "ghxstship.home.axis.markets.blurb",
+                undefined,
+                "Miami, New York, Chicago, Los Angeles. Plus eight satellites. National and international from any anchor.",
+              )}
               href={paths.marketsRoot()}
+              t={t}
             />
           </div>
         </section>
@@ -227,19 +318,19 @@ export default function GhxstshipHome() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-                Capabilities
+                {t("ghxstship.home.capabilities.eyebrow", undefined, "Capabilities")}
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                Ten disciplines.
+                {t("ghxstship.home.capabilities.heading.line1", undefined, "Ten disciplines.")}
                 <br />
-                One studio.
+                {t("ghxstship.home.capabilities.heading.line2", undefined, "One studio.")}
               </h2>
             </div>
             <Link
               href={paths.servicesRoot()}
               className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--p-accent)]"
             >
-              Full services catalog →
+              {t("ghxstship.home.capabilities.fullCatalog", undefined, "Full services catalog →")}
             </Link>
           </div>
 
@@ -251,7 +342,9 @@ export default function GhxstshipHome() {
                 className="surface hover-lift group flex items-start justify-between gap-4 p-6"
               >
                 <div>
-                  <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--p-text-2)]">CLASS {c.code}</div>
+                  <div className="font-mono text-[10px] tracking-[0.18em] text-[var(--p-text-2)]">
+                    {t("ghxstship.home.classLabel", { code: c.code }, "CLASS {code}")}
+                  </div>
                   <div className="mt-2 text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
                     {c.shortName}
                   </div>
@@ -268,19 +361,19 @@ export default function GhxstshipHome() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-                Industries
+                {t("ghxstship.home.industries.eyebrow", undefined, "Industries")}
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                Where the
+                {t("ghxstship.home.industries.heading.line1", undefined, "Where the")}
                 <br />
-                work lives.
+                {t("ghxstship.home.industries.heading.line2", undefined, "work lives.")}
               </h2>
             </div>
             <Link
               href={paths.solutionsRoot()}
               className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--p-accent)]"
             >
-              All 19 industries →
+              {t("ghxstship.home.industries.all", undefined, "All 19 industries →")}
             </Link>
           </div>
 
@@ -295,7 +388,7 @@ export default function GhxstshipHome() {
                   </div>
                   <p className="mt-3 line-clamp-3 text-sm text-[var(--p-text-2)]">{s.definition}</p>
                   <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase transition-colors group-hover:text-[var(--p-accent)]">
-                    Read more →
+                    {t("ghxstship.home.industries.readMore", undefined, "Read more →")}
                   </div>
                 </Link>
               );
@@ -313,27 +406,39 @@ export default function GhxstshipHome() {
             <div className="grid gap-8 md:grid-cols-2 md:items-end">
               <div>
                 <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-                  How We Work Together
+                  {t("ghxstship.home.pricingTease.eyebrow", undefined, "How We Work Together")}
                 </div>
                 <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                  Per project.
+                  {t("ghxstship.home.pricingTease.heading.line1", undefined, "Per project.")}
                   <br />
-                  Or on retainer.
+                  {t("ghxstship.home.pricingTease.heading.line2", undefined, "Or on retainer.")}
                 </h2>
               </div>
               <p className="text-[var(--p-text-2)]">
-                <strong className="text-[var(--p-text-1)]">Per Project</strong> — five tiers from a single-night
-                activation to a multi-year mega-event. <strong className="text-[var(--p-text-1)]">Retainer</strong> —
-                four team-composition bundles from a coordinator pair to a 24/7 senior team. Add-ons stack on either
-                path.
+                <strong className="text-[var(--p-text-1)]">
+                  {t("ghxstship.home.pricingTease.perProject.label", undefined, "Per Project")}
+                </strong>{" "}
+                {t(
+                  "ghxstship.home.pricingTease.perProject.body",
+                  undefined,
+                  "— five tiers from a single-night activation to a multi-year mega-event.",
+                )}{" "}
+                <strong className="text-[var(--p-text-1)]">
+                  {t("ghxstship.home.pricingTease.retainer.label", undefined, "Retainer")}
+                </strong>{" "}
+                {t(
+                  "ghxstship.home.pricingTease.retainer.body",
+                  undefined,
+                  "— four team-composition bundles from a coordinator pair to a 24/7 senior team. Add-ons stack on either path.",
+                )}
               </p>
             </div>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button href={paths.pricing()} size="lg">
-                See pricing
+                {t("ghxstship.home.pricingTease.cta.seePricing", undefined, "See pricing")}
               </Button>
               <Button href={paths.contact()} size="lg" variant="secondary">
-                Start a Project
+                {t("ghxstship.home.hero.cta.startProject", undefined, "Start a Project")}
               </Button>
             </div>
           </div>
@@ -341,7 +446,9 @@ export default function GhxstshipHome() {
 
         {/* MARKETS STRIP */}
         <section className="mx-auto max-w-6xl px-6">
-          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">Anchor Markets</div>
+          <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+            {t("ghxstship.home.markets.eyebrow", undefined, "Anchor Markets")}
+          </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {ANCHOR_MARKETS.map((m) => (
               <Link key={m.slug} href={paths.marketDetail(m.slug)} className="surface hover-lift block p-6">
@@ -357,7 +464,7 @@ export default function GhxstshipHome() {
               href={paths.marketsRoot()}
               className="text-sm font-semibold tracking-wide uppercase hover:text-[var(--p-accent)]"
             >
-              All twelve markets, including satellites →
+              {t("ghxstship.home.markets.all", undefined, "All twelve markets, including satellites →")}
             </Link>
           </div>
         </section>
@@ -365,10 +472,10 @@ export default function GhxstshipHome() {
         {/* FAQ */}
         <section className="mx-auto max-w-6xl px-6">
           <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-            FAQ
+            {t("ghxstship.home.faq.eyebrow", undefined, "FAQ")}
           </div>
           <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-            Common questions.
+            {t("ghxstship.home.faq.heading", undefined, "Common questions.")}
           </h2>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {FAQS.map((faq) => (
@@ -393,12 +500,14 @@ function AxisCard({
   title,
   blurb,
   href,
+  t,
 }: {
   icon: React.ReactNode;
   count: number;
   title: string;
   blurb: string;
   href: string;
+  t: Translate;
 }) {
   return (
     <Link href={href} className="surface hover-lift group block p-6">
@@ -416,7 +525,7 @@ function AxisCard({
       </div>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">{blurb}</p>
       <div className="mt-4 text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase transition-colors group-hover:text-[var(--p-accent)]">
-        Open →
+        {t("ghxstship.home.axis.open", undefined, "Open →")}
       </div>
     </Link>
   );

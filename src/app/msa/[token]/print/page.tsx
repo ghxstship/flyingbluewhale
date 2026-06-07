@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { getMsaByToken } from "@/lib/msa/queries";
 import { MSADocument } from "@/components/msa/MSADocument";
 import { PrintTrigger } from "@/app/offer/[token]/print/PrintTrigger";
@@ -20,6 +21,7 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
   if (!code) notFound();
   const msa = await getMsaByToken(token, code);
   if (!msa || !msa.id) notFound();
+  const { t } = await getRequestT();
 
   return (
     <main className="min-h-screen bg-white text-black" data-theme="light">
@@ -56,17 +58,20 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
       <div className="mx-auto max-w-[8in] py-8 print:py-0">
         <div className="no-print mb-6 flex items-center justify-between gap-3 rounded border border-black/20 bg-[var(--p-surface-2)] px-4 py-3 text-xs text-black">
           <div>
-            Click <strong>Print / Save as PDF</strong>, then choose <em>Save as PDF</em> in your browser&apos;s print
-            dialog.
+            {t("legal.msaPrint.instructionsBefore", undefined, "Click")}{" "}
+            <strong>{t("legal.msaPrint.printSaveAsPdf", undefined, "Print / Save as PDF")}</strong>
+            {t("legal.msaPrint.instructionsMiddle", undefined, ", then choose")}{" "}
+            <em>{t("legal.msaPrint.saveAsPdf", undefined, "Save as PDF")}</em>{" "}
+            {t("legal.msaPrint.instructionsAfter", undefined, "in your browser's print dialog.")}
           </div>
           <div className="flex items-center gap-3">
             <PrintTrigger />
             <a href={`/msa/${token}`} className="text-[var(--p-info)] hover:underline">
-              ← Back to MSA
+              {t("legal.msaPrint.backToMsa", undefined, "← Back to MSA")}
             </a>
           </div>
         </div>
-        <MSADocument msa={msa} orgName={msa.org_name} />
+        <MSADocument msa={msa} orgName={msa.org_name} t={t} />
       </div>
     </main>
   );

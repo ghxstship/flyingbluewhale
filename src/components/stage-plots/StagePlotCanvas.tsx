@@ -4,7 +4,7 @@ import * as React from "react";
 import { toast } from "sonner";
 import { Music, Mic, Speaker, Drum, Guitar, Radio, Lightbulb, Square, Trash2, Save, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { toTitle } from "@/lib/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * 2D stage plot editor. SVG-based drag-and-drop — every palette item
@@ -74,6 +74,13 @@ const SIZE_BY_KIND: Record<ElementKind, { w: number; h: number }> = Object.fromE
   PALETTE.map((p) => [p.kind, { w: p.w, h: p.h }]),
 ) as Record<ElementKind, { w: number; h: number }>;
 
+// English fallbacks for each palette item, keyed by kind. Translated at render
+// time via `t("components.stagePlotCanvas.palette.<kind>", …, PALETTE_LABELS[kind])`.
+const PALETTE_LABELS: Record<ElementKind, string> = Object.fromEntries(PALETTE.map((p) => [p.kind, p.label])) as Record<
+  ElementKind,
+  string
+>;
+
 const SCALE = 8; // pixels per foot
 const GRID_FT = 1;
 
@@ -89,6 +96,11 @@ export function StagePlotCanvas({
     elements: StageElement[];
   };
 }) {
+  const t = useT();
+  const labelForKind = React.useCallback(
+    (kind: ElementKind) => t(`components.stagePlotCanvas.palette.${kind}`, undefined, PALETTE_LABELS[kind]),
+    [t],
+  );
   const [name, setName] = React.useState(initial.name);
   const [widthFt, setWidthFt] = React.useState(initial.widthFt || 32);
   const [depthFt, setDepthFt] = React.useState(initial.depthFt || 24);
@@ -228,11 +240,11 @@ export function StagePlotCanvas({
       });
       const json = await res.json();
       if (json?.ok) {
-        toast.success("Stage plot saved");
+        toast.success(t("components.stagePlotCanvas.saved", undefined, "Stage plot saved"));
         historyRef.current = [];
         setHistoryLength(0);
       } else {
-        toast.error(json?.error?.message ?? "Save failed");
+        toast.error(json?.error?.message ?? t("components.stagePlotCanvas.saveFailed", undefined, "Save failed"));
       }
     } catch (err) {
       toast.error((err as Error).message);
@@ -251,50 +263,53 @@ export function StagePlotCanvas({
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          aria-label="Plot Name"
+          aria-label={t("components.stagePlotCanvas.plotNameLabel", undefined, "Plot Name")}
           className="ps-input w-48"
         />
         <label className="flex items-center gap-1 text-xs text-[var(--p-text-2)]">
-          Width
+          {t("components.stagePlotCanvas.width", undefined, "Width")}
           <input
             type="number"
             value={widthFt}
             onChange={(e) => setWidthFt(Math.max(8, Math.min(200, Number(e.target.value))))}
             className="ps-input w-16"
           />
-          ft
+          {t("components.stagePlotCanvas.feetAbbr", undefined, "ft")}
         </label>
         <label className="flex items-center gap-1 text-xs text-[var(--p-text-2)]">
-          Depth
+          {t("components.stagePlotCanvas.depth", undefined, "Depth")}
           <input
             type="number"
             value={depthFt}
             onChange={(e) => setDepthFt(Math.max(8, Math.min(200, Number(e.target.value))))}
             className="ps-input w-16"
           />
-          ft
+          {t("components.stagePlotCanvas.feetAbbr", undefined, "ft")}
         </label>
         <div className="ms-auto flex items-center gap-2">
           <button
             type="button"
             onClick={undo}
             disabled={historyLength === 0}
-            aria-label="Undo last change"
+            aria-label={t("components.stagePlotCanvas.undoLabel", undefined, "Undo last change")}
             className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-xs disabled:opacity-50"
           >
-            <Undo2 size={12} /> Undo
+            <Undo2 size={12} /> {t("components.stagePlotCanvas.undo", undefined, "Undo")}
           </button>
           <button
             type="button"
             onClick={deleteSelected}
             disabled={!selectedId}
-            aria-label="Delete selected element"
+            aria-label={t("components.stagePlotCanvas.deleteLabel", undefined, "Delete selected element")}
             className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-xs disabled:opacity-50"
           >
-            <Trash2 size={12} /> Delete
+            <Trash2 size={12} /> {t("components.stagePlotCanvas.delete", undefined, "Delete")}
           </button>
           <Button type="button" onClick={save} disabled={saving} size="sm">
-            <Save size={12} /> {saving ? "Saving…" : "Save"}
+            <Save size={12} />{" "}
+            {saving
+              ? t("components.stagePlotCanvas.saving", undefined, "Saving…")
+              : t("components.stagePlotCanvas.save", undefined, "Save")}
           </Button>
         </div>
       </div>
@@ -302,7 +317,9 @@ export function StagePlotCanvas({
       <div className="flex gap-4">
         {/* Palette */}
         <div className="w-36 shrink-0 space-y-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] p-2">
-          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">Palette</div>
+          <div className="text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+            {t("components.stagePlotCanvas.paletteHeading", undefined, "Palette")}
+          </div>
           {PALETTE.map((p) => (
             <button
               key={p.kind}
@@ -316,11 +333,15 @@ export function StagePlotCanvas({
               }`}
             >
               <p.Icon size={12} />
-              <span>{p.label}</span>
+              <span>{labelForKind(p.kind)}</span>
             </button>
           ))}
           <p className="mt-2 text-[10px] leading-relaxed text-[var(--p-text-2)]">
-            Pick a tool, then click the stage to place. Drag to move. Delete to remove. ⌘Z undo.
+            {t(
+              "components.stagePlotCanvas.paletteHelp",
+              undefined,
+              "Pick a tool, then click the stage to place. Drag to move. Delete to remove. ⌘Z undo.",
+            )}
           </p>
         </div>
 
@@ -331,7 +352,7 @@ export function StagePlotCanvas({
             width={canvasW}
             height={canvasH}
             role="img"
-            aria-label="Stage plot canvas"
+            aria-label={t("components.stagePlotCanvas.canvasLabel", undefined, "Stage plot canvas")}
             onClick={onCanvasClick}
             onPointerMove={onElementPointerMove}
             onPointerUp={onElementPointerUp}
@@ -353,7 +374,7 @@ export function StagePlotCanvas({
             {/* Downstage edge label */}
             <line x1={0} y1={canvasH} x2={canvasW} y2={canvasH} stroke="#1e293b" strokeWidth={2} />
             <text x={canvasW / 2} y={canvasH - 4} fill="#1e293b" fontSize="10" textAnchor="middle">
-              Downstage · audience
+              {t("components.stagePlotCanvas.downstage", undefined, "Downstage · audience")}
             </text>
             {/* Elements */}
             {elements.map((el) => {
@@ -379,14 +400,22 @@ export function StagePlotCanvas({
                     textAnchor="middle"
                     pointerEvents="none"
                   >
-                    {toTitle(el.kind)}
+                    {labelForKind(el.kind)}
                   </text>
                 </g>
               );
             })}
           </svg>
           <div className="mt-2 text-[11px] text-[var(--p-text-2)]">
-            {widthFt}′ × {depthFt}′ stage · {elements.length} {elements.length === 1 ? "element" : "elements"}
+            {t(
+              "components.stagePlotCanvas.dimensions",
+              { width: widthFt, depth: depthFt },
+              "{width}′ × {depth}′ stage",
+            )}{" "}
+            ·{" "}
+            {elements.length === 1
+              ? t("components.stagePlotCanvas.elementCountOne", { count: elements.length }, "{count} element")
+              : t("components.stagePlotCanvas.elementCountMany", { count: elements.length }, "{count} elements")}
           </div>
         </div>
       </div>

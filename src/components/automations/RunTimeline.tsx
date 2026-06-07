@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
+import { useT } from "@/lib/i18n/LocaleProvider";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 /**
  * RunTimeline — vertical step timeline rendered on a single-run page.
@@ -34,6 +37,17 @@ const STATUS_DOT: Record<StepStatus, string> = {
   skipped: "bg-[var(--p-warning)]",
   failed: "bg-[var(--p-danger)]",
 };
+
+function statusLabel(status: StepStatus, t: Translator): string {
+  const fallbacks: Record<StepStatus, string> = {
+    pending: "Pending",
+    running: "Running",
+    success: "Success",
+    failed: "Failed",
+    skipped: "Skipped",
+  };
+  return t(`components.runTimeline.status.${status}`, undefined, fallbacks[status]);
+}
 
 export type RunTimelineStep = {
   stepIndex: number;
@@ -75,6 +89,7 @@ function jsonString(v: unknown): string {
 }
 
 function CollapsibleJson({ label, value, defaultOpen }: { label: string; value: unknown; defaultOpen?: boolean }) {
+  const t = useT();
   const [open, setOpen] = useState(!!defaultOpen);
   // Don't bother showing a section for an empty payload — keeps the timeline tidy.
   const isEmpty =
@@ -83,7 +98,11 @@ function CollapsibleJson({ label, value, defaultOpen }: { label: string; value: 
     (typeof value === "string" && value.length === 0);
 
   if (isEmpty) {
-    return <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{label}: empty</div>;
+    return (
+      <div className="text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
+        {t("components.runTimeline.empty", { label }, "{label}: empty")}
+      </div>
+    );
   }
   return (
     <div>
@@ -104,8 +123,13 @@ function CollapsibleJson({ label, value, defaultOpen }: { label: string; value: 
 }
 
 export function RunTimeline({ steps }: RunTimelineProps) {
+  const t = useT();
   if (steps.length === 0) {
-    return <p className="text-xs text-[var(--p-text-2)]">No steps recorded.</p>;
+    return (
+      <p className="text-xs text-[var(--p-text-2)]">
+        {t("components.runTimeline.noSteps", undefined, "No steps recorded.")}
+      </p>
+    );
   }
   return (
     <ol className="relative space-y-3 ps-6">
@@ -120,8 +144,10 @@ export function RunTimeline({ steps }: RunTimelineProps) {
           <div className="surface rounded border border-[var(--p-border)] p-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-mono text-xs text-[var(--p-text-2)]">#{s.stepIndex}</span>
-              <span className="text-sm font-semibold">{s.actionType || "(unknown)"}</span>
-              <Badge variant={STATUS_TONE[s.status]}>{s.status}</Badge>
+              <span className="text-sm font-semibold">
+                {s.actionType || t("components.runTimeline.unknownAction", undefined, "Unknown")}
+              </span>
+              <Badge variant={STATUS_TONE[s.status]}>{statusLabel(s.status, t)}</Badge>
               <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">
                 {fmtTime(s.startedAt)} · {fmtLatency(s.latencyMs)}
               </span>
@@ -132,8 +158,12 @@ export function RunTimeline({ steps }: RunTimelineProps) {
               </div>
             )}
             <div className="mt-2 space-y-2">
-              <CollapsibleJson label="Input" value={s.input} />
-              <CollapsibleJson label="Output" value={s.output} defaultOpen={s.status === "success"} />
+              <CollapsibleJson label={t("components.runTimeline.input", undefined, "Input")} value={s.input} />
+              <CollapsibleJson
+                label={t("components.runTimeline.output", undefined, "Output")}
+                value={s.output}
+                defaultOpen={s.status === "success"}
+              />
             </div>
           </div>
         </li>

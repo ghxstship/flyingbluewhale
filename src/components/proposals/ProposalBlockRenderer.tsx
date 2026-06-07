@@ -1,7 +1,10 @@
 import Link from "next/link";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { getRequestT } from "@/lib/i18n/request";
 import { PhaseBlock } from "./PhaseBlock";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
   if (m == null) return "";
@@ -13,7 +16,7 @@ function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
   }).format(m.cents / 100);
 }
 
-export function ProposalBlockRenderer({
+export async function ProposalBlockRenderer({
   blocks,
   theme,
   currency = "USD",
@@ -22,10 +25,11 @@ export function ProposalBlockRenderer({
   theme: { primary: string; secondary: string };
   currency?: string;
 }) {
+  const { t } = await getRequestT();
   return (
     <>
       {blocks.map((b, i) => (
-        <BlockSwitch key={i} block={b} theme={theme} currency={currency} />
+        <BlockSwitch key={i} block={b} theme={theme} currency={currency} t={t} />
       ))}
     </>
   );
@@ -35,10 +39,12 @@ function BlockSwitch({
   block,
   theme,
   currency,
+  t,
 }: {
   block: ProposalBlock;
   theme: { primary: string; secondary: string };
   currency: string;
+  t: Translator;
 }) {
   switch (block.type) {
     case "hero":
@@ -58,21 +64,21 @@ function BlockSwitch({
     case "journey":
       return <JourneyBlock block={block} theme={theme} />;
     case "schedule_table":
-      return <ScheduleTable block={block} />;
+      return <ScheduleTable block={block} t={t} />;
     case "capabilities":
       return <CapabilitiesBlock block={block} />;
     case "investment_table":
-      return <InvestmentTable block={block} currency={currency} />;
+      return <InvestmentTable block={block} currency={currency} t={t} />;
     case "total_block":
       return <TotalBlock block={block} currency={currency} />;
     case "engagement_split":
-      return <EngagementSplit block={block} theme={theme} />;
+      return <EngagementSplit block={block} theme={theme} t={t} />;
     case "payment_method":
-      return <PaymentMethodCard block={block} />;
+      return <PaymentMethodCard block={block} t={t} />;
     case "equipment_manifest":
-      return <EquipmentManifest block={block} />;
+      return <EquipmentManifest block={block} t={t} />;
     case "change_orders":
-      return <ChangeOrders block={block} currency={currency} />;
+      return <ChangeOrders block={block} currency={currency} t={t} />;
     case "exclusions":
       return <Exclusions block={block} />;
     case "terms_grid":
@@ -266,16 +272,16 @@ function JourneyBlock({
   );
 }
 
-function ScheduleTable({ block }: { block: Extract<ProposalBlock, { type: "schedule_table" }> }) {
+function ScheduleTable({ block, t }: { block: Extract<ProposalBlock, { type: "schedule_table" }>; t: Translator }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface overflow-x-auto">
         <table className="ps-table">
           <thead>
             <tr>
-              <th>Phase</th>
-              <th>Milestone</th>
-              <th>Date</th>
+              <th>{t("components.proposalBlockRenderer.schedule.phase", undefined, "Phase")}</th>
+              <th>{t("components.proposalBlockRenderer.schedule.milestone", undefined, "Milestone")}</th>
+              <th>{t("components.proposalBlockRenderer.schedule.date", undefined, "Date")}</th>
             </tr>
           </thead>
           <tbody>
@@ -311,9 +317,11 @@ function CapabilitiesBlock({ block }: { block: Extract<ProposalBlock, { type: "c
 function InvestmentTable({
   block,
   currency,
+  t,
 }: {
   block: Extract<ProposalBlock, { type: "investment_table" }>;
   currency: string;
+  t: Translator;
 }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
@@ -346,7 +354,9 @@ function InvestmentTable({
           </tbody>
           <tfoot>
             <tr>
-              <td className="text-sm font-semibold tracking-wider uppercase">Total investment</td>
+              <td className="text-sm font-semibold tracking-wider uppercase">
+                {t("components.proposalBlockRenderer.totalInvestment", undefined, "Total investment")}
+              </td>
               <td className="font-display text-right text-2xl tabular-nums">{fmtMoney(block.total, currency)}</td>
             </tr>
           </tfoot>
@@ -377,36 +387,49 @@ function TotalBlock({ block, currency }: { block: Extract<ProposalBlock, { type:
 function EngagementSplit({
   block,
   theme,
+  t,
 }: {
   block: Extract<ProposalBlock, { type: "engagement_split" }>;
   theme: { primary: string; secondary: string };
+  t: Translator;
 }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="surface relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.primary }} />
-          <div className="text-[10px] font-semibold tracking-widest uppercase">Engagement deposit</div>
+          <div className="text-[10px] font-semibold tracking-widest uppercase">
+            {t("components.proposalBlockRenderer.engagementDeposit", undefined, "Engagement deposit")}
+          </div>
           <div className="font-display mt-3 text-4xl tabular-nums">{block.depositPercent}%</div>
-          <div className="mt-1 text-xs text-[var(--p-text-2)]">{block.depositLabel ?? "Due on contract signature"}</div>
+          <div className="mt-1 text-xs text-[var(--p-text-2)]">
+            {block.depositLabel ??
+              t("components.proposalBlockRenderer.dueOnSignature", undefined, "Due on contract signature")}
+          </div>
         </div>
         <div className="surface relative overflow-hidden p-6">
           <span className="absolute inset-x-0 top-0 h-1" style={{ background: theme.secondary }} />
-          <div className="text-[10px] font-semibold tracking-widest uppercase">Balance</div>
+          <div className="text-[10px] font-semibold tracking-widest uppercase">
+            {t("components.proposalBlockRenderer.balance", undefined, "Balance")}
+          </div>
           <div className="font-display mt-3 text-4xl tabular-nums">{block.balancePercent}%</div>
-          <div className="mt-1 text-xs text-[var(--p-text-2)]">{block.balanceLabel ?? "Due 30 days before event"}</div>
+          <div className="mt-1 text-xs text-[var(--p-text-2)]">
+            {block.balanceLabel ??
+              t("components.proposalBlockRenderer.dueBeforeEvent", undefined, "Due 30 days before event")}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function PaymentMethodCard({ block }: { block: Extract<ProposalBlock, { type: "payment_method" }> }) {
+function PaymentMethodCard({ block, t }: { block: Extract<ProposalBlock, { type: "payment_method" }>; t: Translator }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface p-5">
         <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
-          Payment method · {block.method.toUpperCase()}
+          {t("components.proposalBlockRenderer.paymentMethod", undefined, "Payment method")} ·{" "}
+          {block.method.toUpperCase()}
         </div>
         <dl className="mt-3 grid gap-2 text-xs sm:grid-cols-2">
           {Object.entries(block.details).map(([k, v]) => (
@@ -421,12 +444,18 @@ function PaymentMethodCard({ block }: { block: Extract<ProposalBlock, { type: "p
   );
 }
 
-function EquipmentManifest({ block }: { block: Extract<ProposalBlock, { type: "equipment_manifest" }> }) {
+function EquipmentManifest({
+  block,
+  t,
+}: {
+  block: Extract<ProposalBlock, { type: "equipment_manifest" }>;
+  t: Translator;
+}) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
       <div className="surface p-5">
         <div className="text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
-          Technical production package
+          {t("components.proposalBlockRenderer.technicalPackage", undefined, "Technical production package")}
         </div>
         <ul className="mt-3 grid gap-1 text-sm sm:grid-cols-2">
           {block.items.map((it, i) => (
@@ -456,9 +485,11 @@ function EquipmentManifest({ block }: { block: Extract<ProposalBlock, { type: "e
 function ChangeOrders({
   block,
   currency,
+  t,
 }: {
   block: Extract<ProposalBlock, { type: "change_orders" }>;
   currency: string;
+  t: Translator;
 }) {
   return (
     <section className="mx-auto max-w-4xl px-8 py-4">
@@ -468,7 +499,7 @@ function ChangeOrders({
             <div className="flex items-center justify-between">
               <div className="text-sm font-semibold">{it.name}</div>
               <span className="rounded-full bg-[var(--p-surface)] px-2 py-0.5 text-[10px] font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
-                Available
+                {t("components.proposalBlockRenderer.available", undefined, "Available")}
               </span>
             </div>
             <div className="mt-1 text-xs text-[var(--p-text-2)]">{it.description}</div>

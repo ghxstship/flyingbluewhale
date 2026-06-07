@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { submitFormAction, type SubmitState } from "./actions";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type PublicFormField = {
   key: string;
@@ -16,6 +17,7 @@ export type PublicFormField = {
 };
 
 export function PublicFormSubmit({ slug, fields }: { slug: string; fields: PublicFormField[] }) {
+  const t = useT();
   const errId = useId();
   const [state, action, pending] = useActionState<SubmitState, FormData>(
     async (prev, fd) => submitFormAction(slug, prev, fd),
@@ -25,9 +27,15 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
   if (state?.ok) {
     return (
       <div className="surface p-8 text-center">
-        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Submitted</div>
-        <h2 className="mt-2 text-2xl font-semibold">Thanks — we received it.</h2>
-        <p className="mt-2 text-sm text-[var(--p-text-2)]">Your response was recorded. You can close this tab.</p>
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
+          {t("publicFormSubmit.submitted", undefined, "Submitted")}
+        </div>
+        <h2 className="mt-2 text-2xl font-semibold">
+          {t("publicFormSubmit.thankYouTitle", undefined, "Thanks — we received it.")}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--p-text-2)]">
+          {t("publicFormSubmit.thankYouBody", undefined, "Your response was recorded. You can close this tab.")}
+        </p>
       </div>
     );
   }
@@ -37,7 +45,7 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
       {/* Honeypot — hidden from real users via CSS, bots will fill it. */}
       <div className="absolute -start-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
         <label>
-          Leave blank
+          {t("publicFormSubmit.leaveBlank", undefined, "Leave blank")}
           <input type="text" name="hp_url" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
@@ -71,7 +79,7 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
               </label>
               <select name={name} required={f.required} className="ps-input mt-1.5 w-full" defaultValue="">
                 <option value="" disabled>
-                  {f.placeholder || "Select…"}
+                  {f.placeholder || t("publicFormSubmit.selectPlaceholder", undefined, "Select…")}
                 </option>
                 {(f.options ?? []).map((opt) => (
                   <option key={opt} value={opt}>
@@ -123,7 +131,9 @@ export function PublicFormSubmit({ slug, fields }: { slug: string; fields: Publi
 
       <div className="flex justify-end pt-2">
         <Button type="submit" loading={pending}>
-          {pending ? "Submitting" : "Submit"}
+          {pending
+            ? t("publicFormSubmit.submitting", undefined, "Submitting")
+            : t("publicFormSubmit.submit", undefined, "Submit")}
         </Button>
       </div>
     </form>

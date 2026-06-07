@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { VendorRfpPdf } from "@/lib/pdf/vendor-rfp";
+import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -61,11 +62,13 @@ export async function POST(req: Request, ctx: { params: Promise<{ vendorId: stri
   if (!org) return apiError("internal", "Missing organization row");
 
   const brand = resolvePdfBrand({ org, client: null });
+  const { t } = await getRequestT();
   try {
     const { signedUrl } = await compileAndStore({
       doc: (
         <VendorRfpPdf
           brand={brand}
+          t={t}
           vendor={{ name: vendor.name, contact_email: vendor.contact_email ?? null }}
           project={{ name: project.name }}
           scope={b.scope}

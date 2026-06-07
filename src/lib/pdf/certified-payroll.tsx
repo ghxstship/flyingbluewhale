@@ -18,8 +18,16 @@ import type { PdfBrand } from "./branding";
  *      rate, gross, deductions, net. Statement of compliance on the back.
  */
 
+/** Request-scoped translator: `t(key, vars?, fallback?)`. */
+export type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity fallback used when no translator is threaded in (existing callers). */
+const identityT: Translator = (_k, _v, fb) => fb ?? "";
+
 export type WH347Input = {
   brand: PdfBrand;
+  /** Optional request-scoped translator; defaults to English fallbacks. */
+  t?: Translator;
   payroll: {
     week_ending: string;
     pay_period_start: string;
@@ -70,60 +78,88 @@ function fmtDate(d: string | null | undefined): string {
   }
 }
 
-export function WH347Pdf({ brand, payroll, project, contractor, certifiedBy, lines }: WH347Input) {
+export function WH347Pdf({ brand, t = identityT, payroll, project, contractor, certifiedBy, lines }: WH347Input) {
   const formLabel =
     payroll.agency_report_type === "wh_347"
-      ? "U.S. DOL Form WH-347 — Davis-Bacon Certified Payroll"
-      : `Certified Payroll — ${payroll.agency_report_type.toUpperCase().replace(/_/g, " ")}`;
+      ? t("pdf.certifiedPayroll.formWh347", undefined, "U.S. DOL Form WH-347 — Davis-Bacon Certified Payroll")
+      : t(
+          "pdf.certifiedPayroll.formGeneric",
+          { type: payroll.agency_report_type.toUpperCase().replace(/_/g, " ") },
+          `Certified Payroll — ${payroll.agency_report_type.toUpperCase().replace(/_/g, " ")}`,
+        );
 
-  const title = `Certified Payroll · WE ${fmtDate(payroll.week_ending)}`;
+  const certifiedPayrollWord = t("pdf.certifiedPayroll.title", undefined, "Certified Payroll");
+  const weekEndingShort = t("pdf.certifiedPayroll.weekEndingShort", undefined, "WE");
+  const title = `${certifiedPayrollWord} · ${weekEndingShort} ${fmtDate(payroll.week_ending)}`;
 
   return (
     <PdfDocument title={title} author={brand.producerName} subject={`${formLabel} — ${project.name}`}>
       <CoverPage
         brand={brand}
-        eyebrow="Statement of Compliance"
-        title="Certified Payroll"
-        subtitle={`${project.name} · Week ending ${fmtDate(payroll.week_ending)}`}
+        eyebrow={t("pdf.certifiedPayroll.statementOfCompliance", undefined, "Statement of Compliance")}
+        title={certifiedPayrollWord}
+        subtitle={`${project.name} · ${t("pdf.certifiedPayroll.weekEnding", undefined, "Week ending")} ${fmtDate(payroll.week_ending)}`}
       />
 
-      <BrandedPage brand={brand} pageLabel={`WH-347 · ${project.name} · WE ${fmtDate(payroll.week_ending)}`}>
-        <SectionHeading title="Project & Contractor" />
-        <KeyValue label="Project" value={project.name} />
-        {project.address ? <KeyValue label="Project address" value={project.address} /> : null}
-        <KeyValue label="Contractor" value={contractor.name} />
-        {contractor.address ? <KeyValue label="Contractor address" value={contractor.address} /> : null}
-        <KeyValue label="Form" value={formLabel} />
-        <KeyValue label="Week ending" value={fmtDate(payroll.week_ending)} />
+      <BrandedPage
+        brand={brand}
+        pageLabel={`WH-347 · ${project.name} · ${weekEndingShort} ${fmtDate(payroll.week_ending)}`}
+      >
+        <SectionHeading title={t("pdf.certifiedPayroll.projectContractor", undefined, "Project & Contractor")} />
+        <KeyValue label={t("pdf.certifiedPayroll.project", undefined, "Project")} value={project.name} />
+        {project.address ? (
+          <KeyValue
+            label={t("pdf.certifiedPayroll.projectAddress", undefined, "Project address")}
+            value={project.address}
+          />
+        ) : null}
+        <KeyValue label={t("pdf.certifiedPayroll.contractor", undefined, "Contractor")} value={contractor.name} />
+        {contractor.address ? (
+          <KeyValue
+            label={t("pdf.certifiedPayroll.contractorAddress", undefined, "Contractor address")}
+            value={contractor.address}
+          />
+        ) : null}
+        <KeyValue label={t("pdf.certifiedPayroll.form", undefined, "Form")} value={formLabel} />
         <KeyValue
-          label="Pay period"
+          label={t("pdf.certifiedPayroll.weekEnding", undefined, "Week ending")}
+          value={fmtDate(payroll.week_ending)}
+        />
+        <KeyValue
+          label={t("pdf.certifiedPayroll.payPeriod", undefined, "Pay period")}
           value={`${fmtDate(payroll.pay_period_start)} → ${fmtDate(payroll.pay_period_end)}`}
         />
-        {payroll.state_code ? <KeyValue label="State" value={payroll.state_code} /> : null}
+        {payroll.state_code ? (
+          <KeyValue label={t("pdf.certifiedPayroll.state", undefined, "State")} value={payroll.state_code} />
+        ) : null}
 
-        <SectionHeading title="Worker Detail" />
+        <SectionHeading title={t("pdf.certifiedPayroll.workerDetail", undefined, "Worker Detail")} />
         <View style={{ marginBottom: 6 }}>
           <Text style={{ fontSize: 8, color: "#666" }}>
-            Hours columns are Sun / Mon / Tue / Wed / Thu / Fri / Sat. Amounts in USD.
+            {t(
+              "pdf.certifiedPayroll.hoursColumnsNote",
+              undefined,
+              "Hours columns are Sun / Mon / Tue / Wed / Thu / Fri / Sat. Amounts in USD.",
+            )}
           </Text>
         </View>
         <PdfTable
           columns={[
-            { key: "name", label: "Worker", width: 2.5 },
-            { key: "ssn", label: "SSN", width: 0.6 },
-            { key: "class", label: "Class", width: 1.4 },
-            { key: "su", label: "S", width: 0.4 },
-            { key: "mo", label: "M", width: 0.4 },
-            { key: "tu", label: "T", width: 0.4 },
-            { key: "we", label: "W", width: 0.4 },
-            { key: "th", label: "T", width: 0.4 },
-            { key: "fr", label: "F", width: 0.4 },
-            { key: "sa", label: "S", width: 0.4 },
-            { key: "st", label: "ST", width: 0.5 },
-            { key: "ot", label: "OT", width: 0.5 },
-            { key: "rate", label: "Rate", width: 0.7 },
-            { key: "gross", label: "Gross", width: 1.0 },
-            { key: "net", label: "Net", width: 1.0 },
+            { key: "name", label: t("pdf.certifiedPayroll.colWorker", undefined, "Worker"), width: 2.5 },
+            { key: "ssn", label: t("pdf.certifiedPayroll.colSsn", undefined, "SSN"), width: 0.6 },
+            { key: "class", label: t("pdf.certifiedPayroll.colClass", undefined, "Class"), width: 1.4 },
+            { key: "su", label: t("pdf.certifiedPayroll.colSun", undefined, "S"), width: 0.4 },
+            { key: "mo", label: t("pdf.certifiedPayroll.colMon", undefined, "M"), width: 0.4 },
+            { key: "tu", label: t("pdf.certifiedPayroll.colTue", undefined, "T"), width: 0.4 },
+            { key: "we", label: t("pdf.certifiedPayroll.colWed", undefined, "W"), width: 0.4 },
+            { key: "th", label: t("pdf.certifiedPayroll.colThu", undefined, "T"), width: 0.4 },
+            { key: "fr", label: t("pdf.certifiedPayroll.colFri", undefined, "F"), width: 0.4 },
+            { key: "sa", label: t("pdf.certifiedPayroll.colSat", undefined, "S"), width: 0.4 },
+            { key: "st", label: t("pdf.certifiedPayroll.colSt", undefined, "ST"), width: 0.5 },
+            { key: "ot", label: t("pdf.certifiedPayroll.colOt", undefined, "OT"), width: 0.5 },
+            { key: "rate", label: t("pdf.certifiedPayroll.colRate", undefined, "Rate"), width: 0.7 },
+            { key: "gross", label: t("pdf.certifiedPayroll.colGross", undefined, "Gross"), width: 1.0 },
+            { key: "net", label: t("pdf.certifiedPayroll.colNet", undefined, "Net"), width: 1.0 },
           ]}
           rows={lines.map((l) => ({
             name: l.worker_name,
@@ -146,14 +182,14 @@ export function WH347Pdf({ brand, payroll, project, contractor, certifiedBy, lin
         <View style={{ marginTop: 14, paddingTop: 6, borderTopWidth: 1, borderTopColor: "#0A0A0A" }}>
           <PdfTable
             columns={[
-              { key: "label", label: "Totals", width: 8 },
-              { key: "hrs", label: "Hours", width: 1.0 },
-              { key: "gross", label: "Gross", width: 1.0 },
-              { key: "fringes", label: "Fringes", width: 1.0 },
+              { key: "label", label: t("pdf.certifiedPayroll.totals", undefined, "Totals"), width: 8 },
+              { key: "hrs", label: t("pdf.certifiedPayroll.colHours", undefined, "Hours"), width: 1.0 },
+              { key: "gross", label: t("pdf.certifiedPayroll.colGross", undefined, "Gross"), width: 1.0 },
+              { key: "fringes", label: t("pdf.certifiedPayroll.colFringes", undefined, "Fringes"), width: 1.0 },
             ]}
             rows={[
               {
-                label: "Totals",
+                label: t("pdf.certifiedPayroll.totals", undefined, "Totals"),
                 hrs: payroll.total_hours.toFixed(1),
                 gross: money(payroll.total_gross),
                 fringes: money(payroll.total_fringes),
@@ -163,50 +199,74 @@ export function WH347Pdf({ brand, payroll, project, contractor, certifiedBy, lin
         </View>
       </BrandedPage>
 
-      <BrandedPage brand={brand} pageLabel={`Statement of Compliance · ${project.name}`}>
-        <SectionHeading title="Statement of Compliance" />
+      <BrandedPage
+        brand={brand}
+        pageLabel={`${t("pdf.certifiedPayroll.statementOfCompliance", undefined, "Statement of Compliance")} · ${project.name}`}
+      >
+        <SectionHeading title={t("pdf.certifiedPayroll.statementOfCompliance", undefined, "Statement of Compliance")} />
         <Text style={styles.p}>
-          I, <Text style={{ fontWeight: 700 }}>{certifiedBy?.name ?? "[Certifier Name]"}</Text>
-          {certifiedBy?.title ? ` (${certifiedBy.title})` : ""}, do hereby state:
+          {t("pdf.certifiedPayroll.attestIntroLead", undefined, "I,")}{" "}
+          <Text style={{ fontWeight: 700 }}>
+            {certifiedBy?.name ?? t("pdf.certifiedPayroll.certifierNamePlaceholder", undefined, "[Certifier Name]")}
+          </Text>
+          {certifiedBy?.title ? ` — ${certifiedBy.title}` : ""}
+          {t("pdf.certifiedPayroll.attestIntroTrail", undefined, ", do hereby state:")}
         </Text>
         <Text style={styles.p}>
-          (1) That I pay or supervise the payment of the persons employed by {contractor.name} on the {project.name}{" "}
-          project; that during the payroll period commencing on the {fmtDate(payroll.pay_period_start)} day and ending
-          the {fmtDate(payroll.pay_period_end)} day, all persons employed on said project have been paid the full weekly
-          wages earned, that no rebates have been or will be made either directly or indirectly to or on behalf of said
-          contractor or subcontractor from the full weekly wages earned by any person and that no deductions have been
-          made either directly or indirectly from the full wages earned by any person, other than permissible deductions
-          as defined in Regulations, Part 3 (29 CFR Subtitle A).
+          {t(
+            "pdf.certifiedPayroll.clause1",
+            {
+              contractor: contractor.name,
+              project: project.name,
+              start: fmtDate(payroll.pay_period_start),
+              end: fmtDate(payroll.pay_period_end),
+            },
+            `(1) That I pay or supervise the payment of the persons employed by ${contractor.name} on the ${project.name} project; that during the payroll period commencing on the ${fmtDate(payroll.pay_period_start)} day and ending the ${fmtDate(payroll.pay_period_end)} day, all persons employed on said project have been paid the full weekly wages earned, that no rebates have been or will be made either directly or indirectly to or on behalf of said contractor or subcontractor from the full weekly wages earned by any person and that no deductions have been made either directly or indirectly from the full wages earned by any person, other than permissible deductions as defined in Regulations, Part 3 (29 CFR Subtitle A).`,
+          )}
         </Text>
         <Text style={styles.p}>
-          (2) That any payrolls otherwise under this contract required to be submitted for the above period are correct
-          and complete; that the wage rates for laborers or mechanics contained therein are not less than the applicable
-          wage rates contained in any wage determination incorporated into the contract; that the classifications set
-          forth therein for each laborer or mechanic conform with the work he performed.
+          {t(
+            "pdf.certifiedPayroll.clause2",
+            undefined,
+            "(2) That any payrolls otherwise under this contract required to be submitted for the above period are correct and complete; that the wage rates for laborers or mechanics contained therein are not less than the applicable wage rates contained in any wage determination incorporated into the contract; that the classifications set forth therein for each laborer or mechanic conform with the work he performed.",
+          )}
         </Text>
         <Text style={styles.p}>
-          (3) That any apprentices employed in the above period are duly registered in a bona fide apprenticeship
-          program registered with a State apprenticeship agency recognized by the Bureau of Apprenticeship and Training,
-          United States Department of Labor, or if no such recognized agency exists in a State, are registered with the
-          Bureau of Apprenticeship and Training, United States Department of Labor.
+          {t(
+            "pdf.certifiedPayroll.clause3",
+            undefined,
+            "(3) That any apprentices employed in the above period are duly registered in a bona fide apprenticeship program registered with a State apprenticeship agency recognized by the Bureau of Apprenticeship and Training, United States Department of Labor, or if no such recognized agency exists in a State, are registered with the Bureau of Apprenticeship and Training, United States Department of Labor.",
+          )}
         </Text>
         <Text style={styles.p}>
-          (4) That fringe benefits required by the wage determination have been paid as applicable —
           {payroll.total_fringes > 0
-            ? ` total fringe payments this period: ${money(payroll.total_fringes)}.`
-            : " no fringes due this period."}
+            ? t(
+                "pdf.certifiedPayroll.clause4WithFringes",
+                { amount: money(payroll.total_fringes) },
+                `(4) That fringe benefits required by the wage determination have been paid as applicable — total fringe payments this period: ${money(payroll.total_fringes)}.`,
+              )
+            : t(
+                "pdf.certifiedPayroll.clause4NoFringes",
+                undefined,
+                "(4) That fringe benefits required by the wage determination have been paid as applicable — no fringes due this period.",
+              )}
         </Text>
 
-        {payroll.certified_at ? <KeyValue label="Certified" value={fmtDate(payroll.certified_at)} /> : null}
+        {payroll.certified_at ? (
+          <KeyValue
+            label={t("pdf.certifiedPayroll.certified", undefined, "Certified")}
+            value={fmtDate(payroll.certified_at)}
+          />
+        ) : null}
         {certifiedBy?.name ? (
           <KeyValue
-            label="Signed by"
+            label={t("pdf.certifiedPayroll.signedBy", undefined, "Signed by")}
             value={`${certifiedBy.name}${certifiedBy.title ? `, ${certifiedBy.title}` : ""}`}
           />
         ) : null}
         {payroll.notes ? (
           <>
-            <SectionHeading title="Notes" />
+            <SectionHeading title={t("pdf.certifiedPayroll.notes", undefined, "Notes")} />
             <Text style={styles.p}>{payroll.notes}</Text>
           </>
         ) : null}

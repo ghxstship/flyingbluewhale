@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Upload, X, Camera, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Incident-report form — used by /console/operations/incidents/new and
@@ -27,6 +28,7 @@ export function IncidentForm({
   defaultProjectId?: string;
   returnHref?: string;
 }) {
+  const t = useT();
   const router = useRouter();
   const draftId = React.useMemo(() => crypto.randomUUID(), []);
   const [summary, setSummary] = React.useState("");
@@ -53,7 +55,10 @@ export function IncidentForm({
         });
         const json = await res.json();
         if (!json?.ok) {
-          toast.error(json?.error?.message ?? `Upload failed: ${file.name}`);
+          toast.error(
+            json?.error?.message ??
+              t("components.incidentForm.uploadFailed", { name: file.name }, "Upload failed: {name}"),
+          );
           continue;
         }
         const { path, uploadUrl } = json.data;
@@ -63,7 +68,7 @@ export function IncidentForm({
           headers: { "content-type": file.type },
         });
         if (!put.ok) {
-          toast.error(`Upload failed: ${file.name}`);
+          toast.error(t("components.incidentForm.uploadFailed", { name: file.name }, "Upload failed: {name}"));
           continue;
         }
         setPhotos((prev) => [...prev, { path, localPreview: URL.createObjectURL(file) }]);
@@ -80,7 +85,7 @@ export function IncidentForm({
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!summary.trim()) {
-      toast.error("Summary is required");
+      toast.error(t("components.incidentForm.summaryRequired", undefined, "Summary is required"));
       return;
     }
     setSubmitting(true);
@@ -100,11 +105,11 @@ export function IncidentForm({
       });
       const json = await res.json();
       if (json?.ok) {
-        toast.success("Incident reported");
+        toast.success(t("components.incidentForm.reported", undefined, "Incident reported"));
         router.push(returnHref);
         router.refresh();
       } else {
-        toast.error(json?.error?.message ?? "Submit failed");
+        toast.error(json?.error?.message ?? t("components.incidentForm.submitFailed", undefined, "Submit failed"));
       }
     } catch (err) {
       toast.error((err as Error).message);
@@ -117,34 +122,39 @@ export function IncidentForm({
     <form onSubmit={submit} className="space-y-5">
       <div>
         <label className="block text-xs font-medium text-[var(--p-text-2)]">
-          Summary <span className="text-[var(--p-danger)]">*</span>
+          {t("components.incidentForm.summaryLabel", undefined, "Summary")}{" "}
+          <span className="text-[var(--p-danger)]">*</span>
         </label>
         <input
           required
           maxLength={200}
           value={summary}
           onChange={(e) => setSummary(e.target.value)}
-          placeholder="e.g. Slip on wet floor backstage"
+          placeholder={t("components.incidentForm.summaryPlaceholder", undefined, "e.g. Slip on wet floor backstage")}
           className="ps-input mt-1 w-full"
         />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="block text-xs font-medium text-[var(--p-text-2)]">Severity</label>
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">
+            {t("components.incidentForm.severityLabel", undefined, "Severity")}
+          </label>
           <select
             value={severity}
             onChange={(e) => setSeverity(e.target.value as typeof severity)}
             className="ps-input mt-1 w-full"
           >
-            <option value="near_miss">Near-miss</option>
-            <option value="minor">Minor</option>
-            <option value="major">Major</option>
-            <option value="critical">Critical</option>
+            <option value="near_miss">{t("components.incidentForm.severity.nearMiss", undefined, "Near-miss")}</option>
+            <option value="minor">{t("components.incidentForm.severity.minor", undefined, "Minor")}</option>
+            <option value="major">{t("components.incidentForm.severity.major", undefined, "Major")}</option>
+            <option value="critical">{t("components.incidentForm.severity.critical", undefined, "Critical")}</option>
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-[var(--p-text-2)]">Occurred At</label>
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">
+            {t("components.incidentForm.occurredAtLabel", undefined, "Occurred At")}
+          </label>
           <input
             type="datetime-local"
             value={occurredAt}
@@ -156,9 +166,11 @@ export function IncidentForm({
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="block text-xs font-medium text-[var(--p-text-2)]">Project</label>
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">
+            {t("components.incidentForm.projectLabel", undefined, "Project")}
+          </label>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className="ps-input mt-1 w-full">
-            <option value="">— None —</option>
+            <option value="">{t("components.incidentForm.projectNone", undefined, "— None —")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -167,31 +179,41 @@ export function IncidentForm({
           </select>
         </div>
         <div>
-          <label className="block text-xs font-medium text-[var(--p-text-2)]">Location</label>
+          <label className="block text-xs font-medium text-[var(--p-text-2)]">
+            {t("components.incidentForm.locationLabel", undefined, "Location")}
+          </label>
           <input
             maxLength={200}
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="e.g. Stage-right monitor world"
+            placeholder={t("components.incidentForm.locationPlaceholder", undefined, "e.g. Stage-right monitor world")}
             className="ps-input mt-1 w-full"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-[var(--p-text-2)]">Description</label>
+        <label className="block text-xs font-medium text-[var(--p-text-2)]">
+          {t("components.incidentForm.descriptionLabel", undefined, "Description")}
+        </label>
         <textarea
           maxLength={8000}
           rows={4}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="What happened, what was the response, witnesses…"
+          placeholder={t(
+            "components.incidentForm.descriptionPlaceholder",
+            undefined,
+            "What happened, what was the response, witnesses…",
+          )}
           className="ps-input mt-1 w-full"
         />
       </div>
 
       <div>
-        <label className="block text-xs font-medium text-[var(--p-text-2)]">Photos</label>
+        <label className="block text-xs font-medium text-[var(--p-text-2)]">
+          {t("components.incidentForm.photosLabel", undefined, "Photos")}
+        </label>
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -205,7 +227,7 @@ export function IncidentForm({
           <div className="flex flex-wrap items-center gap-2">
             <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs hover:bg-[var(--p-surface-2)]">
               <Upload size={12} />
-              <span>Choose files</span>
+              <span>{t("components.incidentForm.chooseFiles", undefined, "Choose files")}</span>
               <input
                 type="file"
                 accept="image/*"
@@ -216,7 +238,7 @@ export function IncidentForm({
             </label>
             <label className="inline-flex cursor-pointer items-center gap-1 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs hover:bg-[var(--p-surface-2)]">
               <Camera size={12} />
-              <span>Camera</span>
+              <span>{t("components.incidentForm.camera", undefined, "Camera")}</span>
               <input
                 type="file"
                 accept="image/*"
@@ -225,7 +247,11 @@ export function IncidentForm({
                 onChange={(e) => e.target.files && handleFiles(e.target.files)}
               />
             </label>
-            {uploading && <span className="text-xs text-[var(--p-text-2)]">Uploading…</span>}
+            {uploading && (
+              <span className="text-xs text-[var(--p-text-2)]">
+                {t("components.incidentForm.uploading", undefined, "Uploading…")}
+              </span>
+            )}
           </div>
 
           {photos.length > 0 && (
@@ -235,13 +261,13 @@ export function IncidentForm({
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={p.localPreview}
-                    alt="Uploaded incident photo"
+                    alt={t("components.incidentForm.photoAlt", undefined, "Uploaded incident photo")}
                     className="aspect-video w-full object-cover"
                   />
                   <button
                     type="button"
                     onClick={() => removePhoto(idx)}
-                    aria-label="Remove photo"
+                    aria-label={t("components.incidentForm.removePhoto", undefined, "Remove photo")}
                     className="absolute end-1 top-1 rounded bg-black/50 p-0.5 text-white opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                   >
                     <X size={10} />
@@ -256,10 +282,16 @@ export function IncidentForm({
       <div className="flex items-center justify-between gap-2 border-t border-[var(--p-border)] pt-4">
         <div className="flex items-center gap-1 text-[11px] text-[var(--p-text-2)]">
           <AlertTriangle size={12} className="text-[var(--p-warning)]" />
-          In emergencies, call local services first — then log here.
+          {t(
+            "components.incidentForm.emergencyNotice",
+            undefined,
+            "In emergencies, call local services first — then log here.",
+          )}
         </div>
         <Button type="submit" variant="danger" disabled={submitting || uploading}>
-          {submitting ? "Submitting…" : "Submit report"}
+          {submitting
+            ? t("components.incidentForm.submitting", undefined, "Submitting…")
+            : t("components.incidentForm.submit", undefined, "Submit report")}
         </Button>
       </div>
     </form>

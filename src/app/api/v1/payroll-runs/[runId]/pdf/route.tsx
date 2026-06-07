@@ -7,6 +7,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { WH347Pdf } from "@/lib/pdf/certified-payroll";
+import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -96,6 +97,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ runId: string }
   const linesArr = (lines ?? []) as LineRow[];
 
   const brand = resolvePdfBrand({ org, client: null });
+  const { t } = await getRequestT();
   const proj = project as { name: string; address: string | null };
 
   // Resolve worker_name when only user_id present.
@@ -129,6 +131,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ runId: string }
       doc: (
         <WH347Pdf
           brand={brand}
+          t={t}
           payroll={{
             week_ending: r.week_ending,
             pay_period_start: r.pay_period_start,

@@ -25,8 +25,16 @@ type ProposalBlock = {
   items?: Array<{ title?: string; description?: string; amount_cents?: number; note?: string; date?: string }>;
 };
 
+/** Request-scoped translator: `t(key, vars?, fallback?)`. */
+export type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity fallback used when no translator is threaded in (existing callers). */
+const identityT: Translator = (_k, _v, fb) => fb ?? "";
+
 export type ProposalPdfInput = {
   brand: PdfBrand;
+  /** Optional request-scoped translator; defaults to English fallbacks. */
+  t?: Translator;
   proposal: {
     doc_number: string | null;
     title: string;
@@ -59,17 +67,20 @@ function money(cents: number, currency: string): string {
   }
 }
 
-export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdfInput) {
-  const statusLabel = proposal.signed_at ? "SIGNED" : (proposal.status ?? "draft").toUpperCase();
+export function ProposalPdf({ brand, t = identityT, proposal, blocks, signatures }: ProposalPdfInput) {
+  const statusLabel = proposal.signed_at
+    ? t("pdf.proposal.statusSigned", undefined, "SIGNED")
+    : (proposal.status ?? "draft").toUpperCase();
+  const proposalWord = t("pdf.proposal.eyebrow", undefined, "Proposal");
   return (
     <PdfDocument
-      title={`Proposal ${proposal.doc_number ?? ""} · ${proposal.title}`}
+      title={`${proposalWord} ${proposal.doc_number ?? ""} · ${proposal.title}`}
       author={brand.producerName}
       subject={proposal.title}
     >
       <CoverPage
         brand={brand}
-        eyebrow={`Proposal · ${statusLabel}`}
+        eyebrow={`${proposalWord} · ${statusLabel}`}
         title={proposal.title}
         subtitle={
           [
@@ -80,32 +91,46 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
             .filter(Boolean)
             .join(" · ") || undefined
         }
-        classification={proposal.signed_at ? "EXECUTED" : undefined}
+        classification={
+          proposal.signed_at ? t("pdf.proposal.classificationExecuted", undefined, "EXECUTED") : undefined
+        }
       />
 
-      <BrandedPage brand={brand} pageLabel={`Proposal ${proposal.doc_number ?? ""}`}>
-        <SectionHeading title="Summary" />
-        <KeyValue label="Proposal #" value={proposal.doc_number ?? "—"} />
-        <KeyValue label="Status" value={statusLabel} />
-        <KeyValue label="Total" value={money(proposal.amount_cents, proposal.currency)} />
-        {proposal.deposit_percent != null ? <KeyValue label="Deposit" value={`${proposal.deposit_percent}%`} /> : null}
-        {proposal.sent_at ? <KeyValue label="Sent" value={proposal.sent_at} /> : null}
-        {proposal.expires_at ? <KeyValue label="Expires" value={proposal.expires_at} /> : null}
+      <BrandedPage brand={brand} pageLabel={`${proposalWord} ${proposal.doc_number ?? ""}`}>
+        <SectionHeading title={t("pdf.proposal.summary", undefined, "Summary")} />
+        <KeyValue
+          label={t("pdf.proposal.proposalNumber", undefined, "Proposal #")}
+          value={proposal.doc_number ?? "—"}
+        />
+        <KeyValue label={t("pdf.proposal.status", undefined, "Status")} value={statusLabel} />
+        <KeyValue
+          label={t("pdf.proposal.total", undefined, "Total")}
+          value={money(proposal.amount_cents, proposal.currency)}
+        />
+        {proposal.deposit_percent != null ? (
+          <KeyValue label={t("pdf.proposal.deposit", undefined, "Deposit")} value={`${proposal.deposit_percent}%`} />
+        ) : null}
+        {proposal.sent_at ? (
+          <KeyValue label={t("pdf.proposal.sent", undefined, "Sent")} value={proposal.sent_at} />
+        ) : null}
+        {proposal.expires_at ? (
+          <KeyValue label={t("pdf.proposal.expires", undefined, "Expires")} value={proposal.expires_at} />
+        ) : null}
 
         {blocks.map((b, i) => (
-          <ProposalBlockView key={i} block={b} currency={proposal.currency} />
+          <ProposalBlockView key={i} block={b} currency={proposal.currency} t={t} />
         ))}
 
         {proposal.notes ? (
           <>
-            <SectionHeading title="Notes" />
+            <SectionHeading title={t("pdf.proposal.notes", undefined, "Notes")} />
             <Text style={styles.p}>{proposal.notes}</Text>
           </>
         ) : null}
 
         {signatures.length > 0 ? (
           <>
-            <SectionHeading title="Signatures" />
+            <SectionHeading title={t("pdf.proposal.signatures", undefined, "Signatures")} />
             {signatures.map((s, i) => (
               <View
                 key={i}
@@ -114,7 +139,11 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
                 <Text style={{ fontWeight: 700 }}>{s.signer_name ?? "—"}</Text>
                 <Text>{[s.signer_role, s.signer_email].filter(Boolean).join(" · ")}</Text>
                 <Text style={{ fontSize: 9, color: "#666" }}>
-                  Signed {s.signed_at ?? "—"} from {s.signer_ip ?? "—"}
+                  {t(
+                    "pdf.proposal.signedFromLine",
+                    { date: s.signed_at ?? "—", ip: s.signer_ip ?? "—" },
+                    `Signed ${s.signed_at ?? "—"} from ${s.signer_ip ?? "—"}`,
+                  )}
                 </Text>
                 {s.signature_hash ? (
                   <Text style={{ fontSize: 8, fontFamily: "Courier", color: "#999" }}>{s.signature_hash}</Text>
@@ -124,8 +153,14 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
           </>
         ) : (
           <>
-            <SectionHeading title="Signature" />
-            <Text style={{ color: "#777" }}>Pending — sign the proposal at the shared link to execute.</Text>
+            <SectionHeading title={t("pdf.proposal.signature", undefined, "Signature")} />
+            <Text style={{ color: "#777" }}>
+              {t(
+                "pdf.proposal.signaturePending",
+                undefined,
+                "Pending — sign the proposal at the shared link to execute.",
+              )}
+            </Text>
           </>
         )}
       </BrandedPage>
@@ -133,17 +168,17 @@ export function ProposalPdf({ brand, proposal, blocks, signatures }: ProposalPdf
   );
 }
 
-function ProposalBlockView({ block, currency }: { block: ProposalBlock; currency: string }) {
-  const title = block.title ?? block.kind ?? "Section";
+function ProposalBlockView({ block, currency, t }: { block: ProposalBlock; currency: string; t: Translator }) {
+  const title = block.title ?? block.kind ?? t("pdf.proposal.sectionFallback", undefined, "Section");
   if (block.kind === "pricing" && block.items) {
     return (
       <>
         <SectionHeading title={title} />
         <PdfTable
           columns={[
-            { key: "title", label: "Item", width: 5 },
-            { key: "description", label: "Description", width: 4 },
-            { key: "amount", label: "Amount", width: 2, align: "right" },
+            { key: "title", label: t("pdf.proposal.colItem", undefined, "Item"), width: 5 },
+            { key: "description", label: t("pdf.proposal.colDescription", undefined, "Description"), width: 4 },
+            { key: "amount", label: t("pdf.proposal.colAmount", undefined, "Amount"), width: 2, align: "right" },
           ]}
           rows={block.items.map((it) => ({
             title: it.title ?? "",
@@ -160,9 +195,9 @@ function ProposalBlockView({ block, currency }: { block: ProposalBlock; currency
         <SectionHeading title={title} />
         <PdfTable
           columns={[
-            { key: "title", label: "Milestone", width: 4 },
-            { key: "date", label: "Date", width: 2 },
-            { key: "description", label: "Description", width: 4 },
+            { key: "title", label: t("pdf.proposal.colMilestone", undefined, "Milestone"), width: 4 },
+            { key: "date", label: t("pdf.proposal.colDate", undefined, "Date"), width: 2 },
+            { key: "description", label: t("pdf.proposal.colDescription", undefined, "Description"), width: 4 },
           ]}
           rows={block.items.map((it) => ({
             title: it.title ?? "",

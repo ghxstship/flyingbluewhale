@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/sortable";
 import type { ZodTypeAny } from "zod";
 import { Spinner } from "@/components/ui/Spinner";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { actionRegistry } from "@/lib/automations/registry";
 import { AddStepMenu, type RegisteredAction } from "./AddStepMenu";
 import { StepCard } from "./StepCard";
@@ -76,6 +77,7 @@ export function StepBuilder({
   saveTriggerAction,
   webhookUrl,
 }: StepBuilderProps) {
+  const t = useT();
   const [steps, setSteps] = useState<AutomationStep[]>(() =>
     initialSteps.map((s) => ({
       id: s.id || genId(),
@@ -230,12 +232,12 @@ export function StepBuilder({
         onKindChange={setTriggerKind}
         onConfigChange={setTriggerConfig}
       />
-      <SaveIndicator label="Trigger" status={trigStatus} error={trigError} />
+      <SaveIndicator kind="trigger" status={trigStatus} error={trigError} />
 
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold">Steps</h3>
-          <SaveIndicator label="Steps" status={stepStatus} error={stepError} />
+          <h3 className="text-sm font-semibold">{t("components.stepBuilder.steps", undefined, "Steps")}</h3>
+          <SaveIndicator kind="steps" status={stepStatus} error={stepError} />
         </div>
 
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
@@ -265,8 +267,12 @@ export function StepBuilder({
 
         {steps.length === 0 && (
           <div className="surface-inset flex flex-col items-center gap-2 rounded-md border border-dashed border-[var(--p-border)] p-6 text-center">
-            <p className="text-sm text-[var(--p-text-2)]">No steps yet.</p>
-            <p className="text-xs text-[var(--p-text-2)]">Add an action to get started.</p>
+            <p className="text-sm text-[var(--p-text-2)]">
+              {t("components.stepBuilder.noSteps", undefined, "No steps yet.")}
+            </p>
+            <p className="text-xs text-[var(--p-text-2)]">
+              {t("components.stepBuilder.noStepsHint", undefined, "Add an action to get started.")}
+            </p>
           </div>
         )}
 
@@ -278,22 +284,32 @@ export function StepBuilder({
   );
 }
 
-function SaveIndicator({ label, status, error }: { label: string; status: SaveStatus; error?: string }) {
+function SaveIndicator({ kind, status, error }: { kind: "trigger" | "steps"; status: SaveStatus; error?: string }) {
+  const t = useT();
   if (status === "idle") return null;
   if (status === "saving") {
+    const savingText =
+      kind === "trigger"
+        ? t("components.stepBuilder.savingTrigger", undefined, "Saving trigger…")
+        : t("components.stepBuilder.savingSteps", undefined, "Saving steps…");
     return (
       <span className="inline-flex items-center gap-1.5 text-[11px] text-[var(--p-text-2)]">
         <Spinner size="xs" />
-        Saving {label.toLowerCase()}…
+        {savingText}
       </span>
     );
   }
   if (status === "saved") {
-    return <span className="text-[11px] text-[var(--p-success,var(--p-text-2))]">{label} saved</span>;
+    const savedText =
+      kind === "trigger"
+        ? t("components.stepBuilder.triggerSaved", undefined, "Trigger saved")
+        : t("components.stepBuilder.stepsSaved", undefined, "Steps saved");
+    return <span className="text-[11px] text-[var(--p-success,var(--p-text-2))]">{savedText}</span>;
   }
-  return (
-    <span className="text-[11px] text-[var(--p-danger)]">
-      {label} save failed: {error ?? "unknown error"}
-    </span>
-  );
+  const unknownErr = t("components.stepBuilder.unknownError", undefined, "unknown error");
+  const failedText =
+    kind === "trigger"
+      ? t("components.stepBuilder.triggerFailed", { error: error ?? unknownErr }, "Trigger save failed: {error}")
+      : t("components.stepBuilder.stepsFailed", { error: error ?? unknownErr }, "Steps save failed: {error}");
+  return <span className="text-[11px] text-[var(--p-danger)]">{failedText}</span>;
 }

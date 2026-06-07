@@ -13,8 +13,16 @@ import type { PdfBrand } from "./branding";
  * variant (#13) filters events + crew to a single department.
  */
 
+/** Request-scoped translator: `t(key, vars?, fallback?)`. */
+export type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity fallback used when no translator is threaded in (existing callers). */
+const identityT: Translator = (_k, _v, fb) => fb ?? "";
+
 export type CallSheetInput = {
   brand: PdfBrand;
+  /** Optional request-scoped translator; defaults to English fallbacks. */
+  t?: Translator;
   project: { name: string };
   forDate: string; // ISO date yyyy-mm-dd
   weather?: { tempF: number; conditions: string } | null;
@@ -46,6 +54,7 @@ function fmtTime(iso: string): string {
 
 export function CallSheetPdf({
   brand,
+  t = identityT,
   project,
   forDate,
   weather,
@@ -54,33 +63,46 @@ export function CallSheetPdf({
   crew,
   variant = "full",
 }: CallSheetInput) {
-  const title = variant === "labor" ? `Labor call · ${project.name}` : `Call sheet · ${project.name}`;
+  const eyebrow =
+    variant === "labor"
+      ? t("pdf.callSheet.eyebrowLabor", undefined, "Labor call")
+      : t("pdf.callSheet.eyebrow", undefined, "Call sheet");
+  const title = `${eyebrow} · ${project.name}`;
   return (
     <PdfDocument title={title} author={brand.producerName} subject={title}>
       <CoverPage
         brand={brand}
-        eyebrow={variant === "labor" ? "Labor call" : "Call sheet"}
+        eyebrow={eyebrow}
         title={project.name}
         subtitle={[forDate, weather ? `${weather.tempF}°F ${weather.conditions}` : null].filter(Boolean).join(" · ")}
       />
       <BrandedPage brand={brand} pageLabel={`${project.name} · ${forDate}`}>
         {venue ? (
           <>
-            <SectionHeading title="Venue" />
-            <KeyValue label="Name" value={venue.name} />
+            <SectionHeading title={t("pdf.callSheet.venue", undefined, "Venue")} />
+            <KeyValue label={t("pdf.callSheet.venueName", undefined, "Name")} value={venue.name} />
             {venue.address ? (
-              <KeyValue label="Address" value={[venue.address, venue.city, venue.region].filter(Boolean).join(", ")} />
+              <KeyValue
+                label={t("pdf.callSheet.venueAddress", undefined, "Address")}
+                value={[venue.address, venue.city, venue.region].filter(Boolean).join(", ")}
+              />
             ) : null}
           </>
         ) : null}
 
-        <SectionHeading title={variant === "labor" ? "Labor schedule" : "Schedule"} />
+        <SectionHeading
+          title={
+            variant === "labor"
+              ? t("pdf.callSheet.laborSchedule", undefined, "Labor schedule")
+              : t("pdf.callSheet.schedule", undefined, "Schedule")
+          }
+        />
         <PdfTable
           columns={[
-            { key: "start", label: "Start", width: 1.2 },
-            { key: "end", label: "End", width: 1.2 },
-            { key: "activity", label: "Activity", width: 4 },
-            { key: "location", label: "Location", width: 2 },
+            { key: "start", label: t("pdf.callSheet.colStart", undefined, "Start"), width: 1.2 },
+            { key: "end", label: t("pdf.callSheet.colEnd", undefined, "End"), width: 1.2 },
+            { key: "activity", label: t("pdf.callSheet.colActivity", undefined, "Activity"), width: 4 },
+            { key: "location", label: t("pdf.callSheet.colLocation", undefined, "Location"), width: 2 },
           ]}
           rows={events.map((e) => ({
             start: fmtTime(e.starts_at),
@@ -90,12 +112,18 @@ export function CallSheetPdf({
           }))}
         />
 
-        <SectionHeading title={variant === "labor" ? "Labor roster" : "Crew"} />
+        <SectionHeading
+          title={
+            variant === "labor"
+              ? t("pdf.callSheet.laborRoster", undefined, "Labor roster")
+              : t("pdf.callSheet.crew", undefined, "Crew")
+          }
+        />
         <PdfTable
           columns={[
-            { key: "name", label: "Name", width: 3 },
-            { key: "role", label: "Role", width: 2.5 },
-            { key: "contact", label: "Contact", width: 3.5 },
+            { key: "name", label: t("pdf.callSheet.colName", undefined, "Name"), width: 3 },
+            { key: "role", label: t("pdf.callSheet.colRole", undefined, "Role"), width: 2.5 },
+            { key: "contact", label: t("pdf.callSheet.colContact", undefined, "Contact"), width: 3.5 },
           ]}
           rows={crew.map((c) => ({
             name: c.name,
@@ -106,7 +134,7 @@ export function CallSheetPdf({
 
         {weather ? (
           <>
-            <SectionHeading title="Weather" />
+            <SectionHeading title={t("pdf.callSheet.weather", undefined, "Weather")} />
             <Text style={styles.p}>
               {weather.tempF}°F, {weather.conditions}.
             </Text>

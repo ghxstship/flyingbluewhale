@@ -2,8 +2,11 @@ import type { ReactNode } from "react";
 import { Check } from "lucide-react";
 import type { GuideConfig, GuideSection } from "@/lib/guides/types";
 import { Alert } from "@/components/ui/Alert";
+import { getRequestT } from "@/lib/i18n/request";
 
-export function GuideView({
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+export async function GuideView({
   title,
   subtitle,
   classification,
@@ -28,6 +31,7 @@ export function GuideView({
   /** Optional comments slot rendered after sections (typically <GuideComments />). */
   comments?: ReactNode;
 }) {
+  const { t } = await getRequestT();
   const sections = config.sections ?? [];
   const lastUpdated = updatedAt ? formatLastUpdated(updatedAt) : null;
 
@@ -47,9 +51,13 @@ export function GuideView({
         )}
         {(typeof tier === "number" || lastUpdated) && (
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-[var(--p-text-2)]">
-            {typeof tier === "number" && <span>Access tier {tier}</span>}
+            {typeof tier === "number" && (
+              <span>{t("components.guideView.accessTier", { tier }, "Access tier {tier}")}</span>
+            )}
             {typeof tier === "number" && lastUpdated && <span aria-hidden>·</span>}
-            {lastUpdated && <span>Last updated {lastUpdated}</span>}
+            {lastUpdated && (
+              <span>{t("components.guideView.lastUpdated", { date: lastUpdated }, "Last updated {date}")}</span>
+            )}
           </div>
         )}
       </header>
@@ -67,7 +75,7 @@ export function GuideView({
       </nav>
 
       {sections.map((s, i) => (
-        <SectionWrapper key={i} index={i} section={s} />
+        <SectionWrapper key={i} index={i} section={s} t={t} />
       ))}
 
       {comments && <div className="border-t border-[var(--p-border)] pt-6">{comments}</div>}
@@ -75,7 +83,7 @@ export function GuideView({
   );
 }
 
-function SectionWrapper({ index, section }: { index: number; section: GuideSection }) {
+function SectionWrapper({ index, section, t }: { index: number; section: GuideSection; t: Translator }) {
   return (
     <section id={`section-${index}`} className="space-y-4">
       <div className="flex items-baseline gap-4">
@@ -87,13 +95,13 @@ function SectionWrapper({ index, section }: { index: number; section: GuideSecti
         </div>
       </div>
       <div className="ps-16">
-        <SectionBody section={section} />
+        <SectionBody section={section} t={t} />
       </div>
     </section>
   );
 }
 
-function SectionBody({ section }: { section: GuideSection }) {
+function SectionBody({ section, t }: { section: GuideSection; t: Translator }) {
   switch (section.type) {
     case "overview":
       return (
@@ -135,10 +143,10 @@ function SectionBody({ section }: { section: GuideSection }) {
         <table className="ps-table">
           <thead>
             <tr>
-              <th>Artist</th>
-              <th>Stage</th>
-              <th>Start</th>
-              <th>End</th>
+              <th>{t("components.guideView.setTimes.artist", undefined, "Artist")}</th>
+              <th>{t("components.guideView.setTimes.stage", undefined, "Stage")}</th>
+              <th>{t("components.guideView.setTimes.start", undefined, "Start")}</th>
+              <th>{t("components.guideView.setTimes.end", undefined, "End")}</th>
             </tr>
           </thead>
           <tbody>
@@ -160,7 +168,7 @@ function SectionBody({ section }: { section: GuideSection }) {
           <table className="ps-table">
             <thead>
               <tr>
-                <th>Area</th>
+                <th>{t("components.guideView.credentials.area", undefined, "Area")}</th>
                 {section.columns.map((c) => (
                   <th key={c} className="font-mono text-xs">
                     {c}
@@ -184,10 +192,13 @@ function SectionBody({ section }: { section: GuideSection }) {
                             size={14}
                             strokeWidth={3}
                             className="inline-block text-[var(--p-success)]"
-                            aria-label="Allowed"
+                            aria-label={t("components.guideView.allowed", undefined, "Allowed")}
                           />
                         ) : (
-                          <span className="text-[var(--p-text-2)]" aria-label="Not allowed">
+                          <span
+                            className="text-[var(--p-text-2)]"
+                            aria-label={t("components.guideView.notAllowed", undefined, "Not allowed")}
+                          >
                             —
                           </span>
                         )}
@@ -267,9 +278,9 @@ function SectionBody({ section }: { section: GuideSection }) {
         <table className="ps-table">
           <thead>
             <tr>
-              <th>Item</th>
-              <th>Required</th>
-              <th>Note</th>
+              <th>{t("components.guideView.ppe.item", undefined, "Item")}</th>
+              <th>{t("components.guideView.ppe.required", undefined, "Required")}</th>
+              <th>{t("components.guideView.ppe.note", undefined, "Note")}</th>
             </tr>
           </thead>
           <tbody>
@@ -278,9 +289,17 @@ function SectionBody({ section }: { section: GuideSection }) {
                 <td>{e.item}</td>
                 <td>
                   {e.required ? (
-                    <Check size={14} strokeWidth={3} className="inline-block" aria-label="Required" />
+                    <Check
+                      size={14}
+                      strokeWidth={3}
+                      className="inline-block"
+                      aria-label={t("components.guideView.ppe.requiredLabel", undefined, "Required")}
+                    />
                   ) : (
-                    <span className="text-[var(--p-text-2)]" aria-label="Not required">
+                    <span
+                      className="text-[var(--p-text-2)]"
+                      aria-label={t("components.guideView.ppe.notRequiredLabel", undefined, "Not required")}
+                    >
                       —
                     </span>
                   )}
@@ -298,8 +317,8 @@ function SectionBody({ section }: { section: GuideSection }) {
           <table className="ps-table">
             <thead>
               <tr>
-                <th>Channel</th>
-                <th>Purpose</th>
+                <th>{t("components.guideView.radio.channel", undefined, "Channel")}</th>
+                <th>{t("components.guideView.radio.purpose", undefined, "Purpose")}</th>
               </tr>
             </thead>
             <tbody>
@@ -315,8 +334,8 @@ function SectionBody({ section }: { section: GuideSection }) {
             <table className="ps-table">
               <thead>
                 <tr>
-                  <th>Code</th>
-                  <th>Meaning</th>
+                  <th>{t("components.guideView.radio.code", undefined, "Code")}</th>
+                  <th>{t("components.guideView.radio.meaning", undefined, "Meaning")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -351,9 +370,9 @@ function SectionBody({ section }: { section: GuideSection }) {
           <table className="ps-table">
             <thead>
               <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Via</th>
+                <th>{t("components.guideView.evacuation.from", undefined, "From")}</th>
+                <th>{t("components.guideView.evacuation.to", undefined, "To")}</th>
+                <th>{t("components.guideView.evacuation.via", undefined, "Via")}</th>
               </tr>
             </thead>
             <tbody>
@@ -361,13 +380,19 @@ function SectionBody({ section }: { section: GuideSection }) {
                 <tr key={i}>
                   <td>{r.from}</td>
                   <td>{r.to}</td>
-                  <td className="font-mono text-xs text-[var(--p-text-2)]">{r.via ?? "direct"}</td>
+                  <td className="font-mono text-xs text-[var(--p-text-2)]">
+                    {r.via ?? t("components.guideView.evacuation.direct", undefined, "direct")}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
           {section.assemblyPoint && (
-            <Alert kind="error" title="Assembly Point" className="text-sm">
+            <Alert
+              kind="error"
+              title={t("components.guideView.evacuation.assemblyPoint", undefined, "Assembly Point")}
+              className="text-sm"
+            >
               {section.assemblyPoint}
             </Alert>
           )}

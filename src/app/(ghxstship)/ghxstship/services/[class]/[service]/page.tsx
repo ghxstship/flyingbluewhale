@@ -15,6 +15,9 @@ import {
 } from "@/lib/ghxstship";
 import type { ClassSlug, PhaseNumber } from "@/lib/ghxstship/types";
 import { GhxstshipJsonLd, breadcrumbSchema, serviceSchema } from "@/components/ghxstship/JsonLd";
+import { getRequestT } from "@/lib/i18n/request";
+
+type Translate = Awaited<ReturnType<typeof getRequestT>>["t"];
 
 export const dynamic = "force-static";
 
@@ -33,8 +36,9 @@ export async function generateMetadata({
   const { class: classSlug, service } = await params;
   const s = SERVICE_BY_SLUG[service];
   if (!s) return {};
+  const { t } = await getRequestT();
   return {
-    title: `${s.name} | GHXSTSHIP`,
+    title: t("ghxstship.service.meta.title", { name: s.name }, "{name} | GHXSTSHIP"),
     description: s.whatItIs,
     alternates: { canonical: `https://ghxstship.pro/ghxstship/services/${classSlug}/${service}` },
   };
@@ -45,6 +49,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
   const c = CLASS_BY_SLUG[classSlug as ClassSlug];
   const s = SERVICE_BY_SLUG[serviceSlug];
   if (!c || !s || s.primaryClass !== c.code) notFound();
+  const { t } = await getRequestT();
 
   const primaryPhase = PHASE_BY_NUMBER[s.primaryPhase];
   const tierObjects = s.tiers.map((t) => TIER_BY_NUMBER[t]).filter(Boolean);
@@ -81,7 +86,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
         <section className="mx-auto max-w-6xl px-6 pt-12">
           <nav className="mb-6 text-xs text-[var(--p-text-2)]">
             <Link href={paths.servicesRoot()} className="hover:text-[var(--p-text-1)]">
-              Services
+              {t("ghxstship.service.crumb", undefined, "Services")}
             </Link>
             <span className="mx-2">/</span>
             <Link href={paths.classDetail(c.slug)} className="hover:text-[var(--p-text-1)]">
@@ -91,7 +96,11 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
             <span className="text-[var(--p-text-1)]">{String(s.number).padStart(3, "0")}</span>
           </nav>
           <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--p-text-2)]">
-            Service {String(s.number).padStart(3, "0")} · {c.shortName}
+            {t(
+              "ghxstship.service.label",
+              { number: String(s.number).padStart(3, "0"), name: c.shortName },
+              "Service {number} · {name}",
+            )}
             {crossClasses.length > 0 && ` × ${crossClasses.map((cc) => cc.shortName).join(" × ")}`}
           </div>
           <h1 className="mt-3 text-4xl uppercase sm:text-6xl" style={{ fontFamily: "var(--font-display)" }}>
@@ -103,25 +112,25 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
           <div className="grid gap-5 md:grid-cols-2">
             <div className="surface p-6">
               <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
-                What it is
+                {t("ghxstship.service.whatItIs", undefined, "What it is")}
               </div>
               <p className="mt-3 text-[var(--p-text-2)]">{s.whatItIs}</p>
             </div>
             <div className="surface p-6">
               <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
-                When you need it
+                {t("ghxstship.service.whenYouNeed", undefined, "When you need it")}
               </div>
               <p className="mt-3 text-[var(--p-text-2)]">{s.whenYouNeed}</p>
             </div>
             <div className="surface p-6">
               <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
-                What you receive
+                {t("ghxstship.service.whatYouReceive", undefined, "What you receive")}
               </div>
               <p className="mt-3 text-[var(--p-text-2)]">{s.whatYouReceive}</p>
             </div>
             <div className="surface p-6">
               <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
-                Where it operates
+                {t("ghxstship.service.whereItOperates", undefined, "Where it operates")}
               </div>
               <p className="mt-3 text-[var(--p-text-2)]">{s.whereItOperates}</p>
             </div>
@@ -130,14 +139,14 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid gap-5 md:grid-cols-3">
-            <FactCard label="Primary phase">
+            <FactCard label={t("ghxstship.service.primaryPhase", undefined, "Primary phase")}>
               <Link href={paths.phaseDetail(primaryPhase.slug)} className="hover:text-[var(--p-accent)]">
                 {primaryPhase.name}
               </Link>
               <p className="mt-2 text-xs text-[var(--p-text-2)]">{primaryPhase.buyerIntent}</p>
               {Array.isArray(s.secondaryPhases) && s.secondaryPhases.length > 0 && (
                 <div className="mt-3 text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
-                  Also active in:{" "}
+                  {t("ghxstship.service.alsoActiveIn", undefined, "Also active in:")}{" "}
                   {s.secondaryPhases
                     .map((p) => PHASE_BY_NUMBER[p as PhaseNumber]?.name)
                     .filter(Boolean)
@@ -146,18 +155,18 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
               )}
               {s.secondaryPhases === "all" && (
                 <div className="mt-3 text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">
-                  Active across the full project lifecycle
+                  {t("ghxstship.service.activeFullLifecycle", undefined, "Active across the full project lifecycle")}
                 </div>
               )}
             </FactCard>
-            <FactCard label="Detail depth">
+            <FactCard label={t("ghxstship.service.detailDepth", undefined, "Detail depth")}>
               <ul className="space-y-1 text-sm">
                 {s.apsLevels.map((lvl) => (
-                  <li key={lvl}>{depthLabel(lvl)}</li>
+                  <li key={lvl}>{depthLabel(lvl, t)}</li>
                 ))}
               </ul>
             </FactCard>
-            <FactCard label="Experience modes">
+            <FactCard label={t("ghxstship.service.experienceModes", undefined, "Experience modes")}>
               <ul className="space-y-1 text-sm">
                 {tierObjects.map((t) => (
                   <li key={t.number}>
@@ -174,7 +183,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
         {anchoredIn.length > 0 && (
           <section className="mx-auto max-w-6xl px-6">
             <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-              Industries where this service anchors
+              {t("ghxstship.service.industriesAnchor", undefined, "Industries where this service anchors")}
             </div>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {anchoredIn.map((sol) => (
@@ -193,7 +202,7 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
         {siblings.length > 0 && (
           <section className="mx-auto max-w-6xl px-6">
             <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-              Related services in {c.shortName}
+              {t("ghxstship.service.relatedServices", { name: c.shortName }, "Related services in {name}")}
             </div>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {siblings.map((sib) => (
@@ -216,18 +225,21 @@ export default async function ServiceDetail({ params }: { params: Promise<{ clas
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-10">
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
-              Add this to your engagement.
+              {t("ghxstship.service.cta.heading", undefined, "Add this to your engagement.")}
             </h2>
             <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
-              Most engagements bundle eight to forty services from the catalog. Tell us the brief; we&apos;ll come back
-              with the scope, the engagement model, and the producer.
+              {t(
+                "ghxstship.service.cta.body",
+                undefined,
+                "Most engagements bundle eight to forty services from the catalog. Tell us the brief; we’ll come back with the scope, the engagement model, and the producer.",
+              )}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Button href={paths.contact()} size="lg">
-                Start a Project
+                {t("ghxstship.common.startProject", undefined, "Start a Project")}
               </Button>
               <Button href={paths.pricing()} size="lg" variant="secondary">
-                See pricing
+                {t("ghxstship.common.seePricing", undefined, "See pricing")}
               </Button>
             </div>
           </div>
@@ -246,14 +258,14 @@ function FactCard({ label, children }: { label: string; children: React.ReactNod
   );
 }
 
-function depthLabel(level: string): string {
+function depthLabel(level: string, t: Translate): string {
   const map: Record<string, string> = {
-    L1: "Project (multi-event container)",
-    L2: "Event (single occasion)",
-    L3: "Zone (area within an event)",
-    L4: "Activation (experience unit)",
-    L5: "Component (build element)",
-    L6: "Item (atomic unit)",
+    L1: t("ghxstship.service.depth.L1", undefined, "Project — multi-event container"),
+    L2: t("ghxstship.service.depth.L2", undefined, "Event — single occasion"),
+    L3: t("ghxstship.service.depth.L3", undefined, "Zone — area within an event"),
+    L4: t("ghxstship.service.depth.L4", undefined, "Activation — experience unit"),
+    L5: t("ghxstship.service.depth.L5", undefined, "Component — build element"),
+    L6: t("ghxstship.service.depth.L6", undefined, "Item — atomic unit"),
   };
   return map[level] ?? level;
 }

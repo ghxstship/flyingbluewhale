@@ -3,6 +3,7 @@
 import * as React from "react";
 import { FilePlus2, Search } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Deliverable template picker — lazy-loads templates from
@@ -24,12 +25,14 @@ type Template = {
 export function TemplatePicker({
   typeFilter,
   onPick,
-  triggerLabel = "Start from template",
+  triggerLabel,
 }: {
   typeFilter?: string;
   onPick: (t: Template) => void;
   triggerLabel?: string;
 }) {
+  const t = useT();
+  const resolvedTriggerLabel = triggerLabel ?? t("components.templatePicker.trigger", undefined, "Start from template");
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [templates, setTemplates] = React.useState<Template[]>([]);
@@ -66,14 +69,18 @@ export function TemplatePicker({
         className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-3 py-1.5 text-xs hover:bg-[var(--p-surface-2)]"
       >
         <FilePlus2 size={12} />
-        <span>{triggerLabel}</span>
+        <span>{resolvedTriggerLabel}</span>
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent size="md">
           <DialogHeader>
-            <DialogTitle>Pick a template</DialogTitle>
+            <DialogTitle>{t("components.templatePicker.title", undefined, "Pick a template")}</DialogTitle>
             <DialogDescription>
-              Pre-fill the deliverable with a saved template. Org-scoped templates appear alongside platform globals.
+              {t(
+                "components.templatePicker.description",
+                undefined,
+                "Pre-fill the deliverable with a saved template. Org-scoped templates appear alongside platform globals.",
+              )}
             </DialogDescription>
           </DialogHeader>
 
@@ -84,35 +91,39 @@ export function TemplatePicker({
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               autoFocus
-              placeholder="Filter templates…"
-              aria-label="Filter Templates"
+              placeholder={t("components.templatePicker.filterPlaceholder", undefined, "Filter templates…")}
+              aria-label={t("components.templatePicker.filterLabel", undefined, "Filter Templates")}
               className="w-full bg-transparent text-xs outline-none"
             />
           </div>
 
           <div className="mt-3 max-h-[50vh] space-y-1 overflow-y-auto pe-1">
-            {loading && <div className="py-8 text-center text-xs text-[var(--p-text-2)]">Loading templates…</div>}
+            {loading && (
+              <div className="py-8 text-center text-xs text-[var(--p-text-2)]">
+                {t("components.templatePicker.loading", undefined, "Loading templates…")}
+              </div>
+            )}
             {!loading &&
-              filtered.map((t) => (
+              filtered.map((tpl) => (
                 <button
-                  key={t.id}
+                  key={tpl.id}
                   type="button"
                   onClick={() => {
-                    onPick(t);
+                    onPick(tpl);
                     setOpen(false);
                   }}
                   className="block w-full rounded border border-transparent px-3 py-2 text-start text-xs hover:border-[var(--p-border)] hover:bg-[var(--p-surface-2)]"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-medium text-[var(--p-text-1)]">{t.name}</span>
+                    <span className="font-medium text-[var(--p-text-1)]">{tpl.name}</span>
                     <span className="rounded bg-[var(--p-surface-2)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
-                      {t.type}
+                      {tpl.type}
                     </span>
                   </div>
-                  {t.description && <div className="mt-1 text-[var(--p-text-2)]">{t.description}</div>}
-                  {t.is_global && (
+                  {tpl.description && <div className="mt-1 text-[var(--p-text-2)]">{tpl.description}</div>}
+                  {tpl.is_global && (
                     <div className="mt-1 text-[10px] tracking-wider text-[var(--p-text-2)] uppercase">
-                      Platform template
+                      {t("components.templatePicker.platformTemplate", undefined, "Platform template")}
                     </div>
                   )}
                 </button>
@@ -120,8 +131,12 @@ export function TemplatePicker({
             {!loading && filtered.length === 0 && (
               <div className="py-8 text-center text-xs text-[var(--p-text-2)]">
                 {templates.length === 0
-                  ? "No templates yet. Create one from /console/settings/templates."
-                  : `No templates match “${query}”.`}
+                  ? t(
+                      "components.templatePicker.emptyNone",
+                      undefined,
+                      "No templates yet. Create one from /console/settings/templates.",
+                    )
+                  : t("components.templatePicker.emptyNoMatch", { query }, "No templates match “{query}”.")}
               </div>
             )}
           </div>

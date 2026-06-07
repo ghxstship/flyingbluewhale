@@ -28,8 +28,11 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { createRoot, type Root } from "react-dom/client";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { MapMarker as MapMarkerChip } from "./MapMarker";
 import { bounds, clusterMarkers, markerColor } from "@/lib/views/map";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 /** Tone keywords supported by the legend + marker chips. */
 export type MapMarkerTone = "info" | "warn" | "error" | "success" | "neutral" | "accent";
@@ -70,14 +73,16 @@ export type MapViewProps = {
 
 const DEFAULT_STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 
-const TONE_LABELS: Record<MapMarkerTone, string> = {
-  info: "Info",
-  warn: "Warning",
-  error: "Error",
-  success: "Success",
-  neutral: "Neutral",
-  accent: "Accent",
-};
+function toneLabels(t: Translator): Record<MapMarkerTone, string> {
+  return {
+    info: t("components.mapView.tone.info", undefined, "Info"),
+    warn: t("components.mapView.tone.warn", undefined, "Warning"),
+    error: t("components.mapView.tone.error", undefined, "Error"),
+    success: t("components.mapView.tone.success", undefined, "Success"),
+    neutral: t("components.mapView.tone.neutral", undefined, "Neutral"),
+    accent: t("components.mapView.tone.accent", undefined, "Accent"),
+  };
+}
 
 type MountedMarker = {
   marker: maplibregl.Marker;
@@ -96,11 +101,13 @@ export function MapView({
   height = 480,
   className,
 }: MapViewProps): React.ReactElement {
+  const t = useT();
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const mapRef = React.useRef<maplibregl.Map | null>(null);
   const markerRefs = React.useRef<MountedMarker[]>([]);
   const popupRef = React.useRef<maplibregl.Popup | null>(null);
   const [zoom, setZoom] = React.useState<number>(initialZoom ?? 2);
+  const TONE_LABELS = toneLabels(t);
 
   // Stable refs to props that the render-markers effect reads, so we
   // don't have to retear all markers when a callback identity changes.
@@ -214,7 +221,12 @@ export function MapView({
       } else {
         // Aggregate tone across the cluster: take the first marker's tone.
         // Good enough for legend / glance; popup shows the breakdown.
-        root.render(<MapMarkerChip count={u.count} title={`${u.count} locations`} />);
+        root.render(
+          <MapMarkerChip
+            count={u.count}
+            title={t("components.mapView.clusterLocations", { count: u.count }, "{count} locations")}
+          />,
+        );
       }
       const marker = new maplibregl.Marker({ element: el }).setLngLat([u.lng, u.lat]).addTo(map);
 
@@ -253,7 +265,7 @@ export function MapView({
 
       markerRefs.current.push({ marker, root, el });
     }
-  }, [renderUnits, clusterAtZoom]);
+  }, [renderUnits, clusterAtZoom, t]);
 
   // When the marker collection itself changes shape (count / bounds),
   // refit so newly-added pins stay on screen.
@@ -308,8 +320,12 @@ export function MapView({
         >
           <EmptyState
             size="compact"
-            title="No locations on map"
-            description="Add an address or lat/lng to a record to see it here."
+            title={t("components.mapView.noLocations", undefined, "No Locations on Map")}
+            description={t(
+              "components.mapView.noLocationsDesc",
+              undefined,
+              "Add an address or lat/lng to a record to see it here.",
+            )}
           />
         </div>
       ) : (
@@ -336,7 +352,7 @@ export function MapView({
                 flexDirection: "column",
                 gap: 2,
               }}
-              aria-label="Map legend"
+              aria-label={t("components.mapView.legend", undefined, "Map legend")}
             >
               {(Object.keys(toneCounts) as MapMarkerTone[]).map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -368,6 +384,7 @@ type RenderUnit =
   | { kind: "cluster"; id: string; lat: number; lng: number; count: number; ids: string[] };
 
 function MarkerPopup({ marker }: { marker: MapMarker }): React.ReactElement {
+  const t = useT();
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
       <strong style={{ fontSize: 13, lineHeight: 1.3 }}>{marker.title}</strong>
@@ -383,7 +400,7 @@ function MarkerPopup({ marker }: { marker: MapMarker }): React.ReactElement {
             textDecoration: "underline",
           }}
         >
-          View details
+          {t("components.mapView.viewDetails", undefined, "View Details")}
         </a>
       ) : null}
     </div>

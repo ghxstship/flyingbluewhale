@@ -5,6 +5,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
 import { Badge } from "@/components/ui";
 import { money } from "@/components/detail/DetailShell";
+import { useT } from "@/lib/i18n/LocaleProvider";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 export type AtomMeta = {
   id: string;
@@ -60,6 +63,33 @@ const DELIVERABLE_STATE_TONE: Record<string, "muted" | "info" | "warning" | "suc
   rejected: "error",
 };
 
+const TASK_STATUS_FALLBACK: Record<string, string> = {
+  todo: "To Do",
+  in_progress: "In Progress",
+  blocked: "Blocked",
+  review: "Review",
+  done: "Done",
+};
+
+const DELIVERABLE_STATE_FALLBACK: Record<string, string> = {
+  briefed: "Briefed",
+  draft: "Draft",
+  submitted: "Submitted",
+  in_review: "In Review",
+  revision_requested: "Revision Requested",
+  approved: "Approved",
+  delivered: "Delivered",
+  rejected: "Rejected",
+};
+
+function taskStatusLabel(status: string, t: Translator): string {
+  return t(`components.atomDrillIn.taskStatus.${status}`, undefined, TASK_STATUS_FALLBACK[status] ?? status);
+}
+
+function deliverableStateLabel(state: string, t: Translator): string {
+  return t(`components.atomDrillIn.deliverableState.${state}`, undefined, DELIVERABLE_STATE_FALLBACK[state] ?? state);
+}
+
 /**
  * AtomDrillIn — modal panel rendered when ?atom=<id> is set on a
  * tracker route. Five tabs (Tasks / Submittals / Expenses / POs /
@@ -84,6 +114,7 @@ export function AtomDrillIn({
   poLines: AtomPO[];
   variances: AtomVariance[];
 }) {
+  const tr = useT();
   const router = useRouter();
   const pathname = usePathname();
   const close = () => router.replace(pathname);
@@ -105,33 +136,39 @@ export function AtomDrillIn({
         <Tabs defaultValue="tasks" className="mt-2">
           <TabsList scrollable>
             <TabsTrigger value="tasks">
-              Tasks <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{tasks.length}</span>
+              {tr("components.atomDrillIn.tabTasks", undefined, "Tasks")}{" "}
+              <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{tasks.length}</span>
             </TabsTrigger>
             <TabsTrigger value="submittals">
-              Submittals{" "}
+              {tr("components.atomDrillIn.tabSubmittals", undefined, "Submittals")}{" "}
               <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{deliverables.length}</span>
             </TabsTrigger>
             <TabsTrigger value="expenses">
-              Expenses <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{expenses.length}</span>
+              {tr("components.atomDrillIn.tabExpenses", undefined, "Expenses")}{" "}
+              <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{expenses.length}</span>
             </TabsTrigger>
             <TabsTrigger value="pos">
-              POs <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{poLines.length}</span>
+              {tr("components.atomDrillIn.tabPos", undefined, "POs")}{" "}
+              <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{poLines.length}</span>
             </TabsTrigger>
             <TabsTrigger value="variance">
-              Variance <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{variances.length}</span>
+              {tr("components.atomDrillIn.tabVariance", undefined, "Variance")}{" "}
+              <span className="ms-1 font-mono text-[10px] text-[var(--p-text-2)]">{variances.length}</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="tasks" className="mt-3 space-y-1.5">
             {tasks.length === 0 ? (
-              <p className="text-xs text-[var(--p-text-2)]">No tasks pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">
+                {tr("components.atomDrillIn.noTasks", undefined, "No tasks pinned to this atom.")}
+              </p>
             ) : (
-              tasks.map((t) => (
-                <div key={t.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
-                  <span className="truncate">{t.title}</span>
+              tasks.map((task) => (
+                <div key={task.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
+                  <span className="truncate">{task.title}</span>
                   <div className="flex items-center gap-2">
-                    {t.due_at && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{t.due_at}</span>}
-                    <Badge variant={TASK_STATUS_TONE[t.status] ?? "muted"}>{t.status}</Badge>
+                    {task.due_at && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{task.due_at}</span>}
+                    <Badge variant={TASK_STATUS_TONE[task.status] ?? "muted"}>{taskStatusLabel(task.status, tr)}</Badge>
                   </div>
                 </div>
               ))
@@ -140,7 +177,9 @@ export function AtomDrillIn({
 
           <TabsContent value="submittals" className="mt-3 space-y-1.5">
             {deliverables.length === 0 ? (
-              <p className="text-xs text-[var(--p-text-2)]">No submittals pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">
+                {tr("components.atomDrillIn.noSubmittals", undefined, "No submittals pinned to this atom.")}
+              </p>
             ) : (
               deliverables.map((d) => {
                 const stateKey = d.fulfillment_state ?? d.status;
@@ -154,7 +193,9 @@ export function AtomDrillIn({
                       {d.deadline && (
                         <span className="font-mono text-[10px] text-[var(--p-text-2)]">{d.deadline.slice(0, 10)}</span>
                       )}
-                      <Badge variant={DELIVERABLE_STATE_TONE[stateKey] ?? "muted"}>{stateKey}</Badge>
+                      <Badge variant={DELIVERABLE_STATE_TONE[stateKey] ?? "muted"}>
+                        {deliverableStateLabel(stateKey, tr)}
+                      </Badge>
                     </div>
                   </div>
                 );
@@ -164,7 +205,9 @@ export function AtomDrillIn({
 
           <TabsContent value="expenses" className="mt-3 space-y-1.5">
             {expenses.length === 0 ? (
-              <p className="text-xs text-[var(--p-text-2)]">No expenses pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">
+                {tr("components.atomDrillIn.noExpenses", undefined, "No expenses pinned to this atom.")}
+              </p>
             ) : (
               expenses.map((e) => (
                 <div key={e.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
@@ -180,7 +223,9 @@ export function AtomDrillIn({
 
           <TabsContent value="pos" className="mt-3 space-y-1.5">
             {poLines.length === 0 ? (
-              <p className="text-xs text-[var(--p-text-2)]">No PO line items pinned to this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">
+                {tr("components.atomDrillIn.noPos", undefined, "No PO line items pinned to this atom.")}
+              </p>
             ) : (
               poLines.map((p) => (
                 <div key={p.id} className="surface flex items-center justify-between gap-2 p-2.5 text-sm">
@@ -198,7 +243,9 @@ export function AtomDrillIn({
 
           <TabsContent value="variance" className="mt-3 space-y-1.5">
             {variances.length === 0 ? (
-              <p className="text-xs text-[var(--p-text-2)]">No variance entries for this atom.</p>
+              <p className="text-xs text-[var(--p-text-2)]">
+                {tr("components.atomDrillIn.noVariance", undefined, "No variance entries for this atom.")}
+              </p>
             ) : (
               variances.map((v) => (
                 <div key={v.id} className="surface p-2.5 text-sm">

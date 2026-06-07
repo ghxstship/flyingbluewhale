@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { CLASSES, CLASS_BY_SLUG, servicesByClass, servicesByClassOrCross, paths } from "@/lib/ghxstship";
 import type { ClassSlug } from "@/lib/ghxstship/types";
 import { GhxstshipJsonLd, breadcrumbSchema, serviceSchema } from "@/components/ghxstship/JsonLd";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-static";
 
@@ -17,8 +18,13 @@ export async function generateMetadata({ params }: { params: Promise<{ class: st
   const c = CLASS_BY_SLUG[classSlug as ClassSlug];
   if (!c) return {};
   const items = servicesByClass(c.code);
+  const { t } = await getRequestT();
   return {
-    title: `${c.shortName} Services — ${items.length} Disciplines | GHXSTSHIP`,
+    title: t(
+      "ghxstship.serviceClass.meta.title",
+      { name: c.shortName, count: items.length },
+      "{name} Services — {count} Disciplines | GHXSTSHIP",
+    ),
     description: c.definition,
     alternates: { canonical: `https://ghxstship.pro/ghxstship/services/${c.slug}` },
   };
@@ -28,6 +34,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
   const { class: classSlug } = await params;
   const c = CLASS_BY_SLUG[classSlug as ClassSlug];
   if (!c) notFound();
+  const { t } = await getRequestT();
 
   const primaryServices = servicesByClass(c.code);
   const crossServices = servicesByClassOrCross(c.code).filter((s) => s.primaryClass !== c.code);
@@ -58,12 +65,14 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
         <section className="mx-auto max-w-6xl px-6 pt-12">
           <nav className="mb-6 text-xs text-[var(--p-text-2)]">
             <Link href={paths.servicesRoot()} className="hover:text-[var(--p-text-1)]">
-              Services
+              {t("ghxstship.serviceClass.crumb", undefined, "Services")}
             </Link>
             <span className="mx-2">/</span>
             <span className="text-[var(--p-text-1)]">{c.shortName}</span>
           </nav>
-          <div className="font-mono text-xs tracking-[0.18em] text-[var(--p-text-2)]">Class {c.code}</div>
+          <div className="font-mono text-xs tracking-[0.18em] text-[var(--p-text-2)]">
+            {t("ghxstship.serviceClass.classLabel", { code: c.code }, "Class {code}")}
+          </div>
           <h1 className="mt-3 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
             {c.shortName}
           </h1>
@@ -72,7 +81,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
 
         <section className="mx-auto max-w-6xl px-6">
           <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-            Services in this discipline
+            {t("ghxstship.serviceClass.servicesInDiscipline", undefined, "Services in this discipline")}
           </div>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {primaryServices.map((s) => (
@@ -96,7 +105,7 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
         {crossServices.length > 0 && (
           <section className="mx-auto max-w-6xl px-6">
             <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-              Related services that touch {c.shortName}
+              {t("ghxstship.serviceClass.relatedServices", { name: c.shortName }, "Related services that touch {name}")}
             </div>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {crossServices.map((s) => {
@@ -114,7 +123,11 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
                       <div>
                         <div className="text-sm">{s.name}</div>
                         <div className="text-[10px] text-[var(--p-text-2)] uppercase">
-                          Primary discipline: {primary.shortName}
+                          {t(
+                            "ghxstship.serviceClass.primaryDiscipline",
+                            { name: primary.shortName },
+                            "Primary discipline: {name}",
+                          )}
                         </div>
                       </div>
                     </Link>
@@ -128,18 +141,21 @@ export default async function ClassDetail({ params }: { params: Promise<{ class:
         <section className="mx-auto max-w-6xl px-6">
           <div className="surface-raised p-10">
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
-              Brief us with what you have.
+              {t("ghxstship.serviceClass.cta.heading", undefined, "Brief us with what you have.")}
             </h2>
             <p className="mt-3 max-w-xl text-[var(--p-text-2)]">
-              Email a paragraph. Walk us through a deck. Drop a venue address and a calendar window. We&apos;ll come
-              back inside one business day with the scope, the producer, and the price band.
+              {t(
+                "ghxstship.serviceClass.cta.body",
+                undefined,
+                "Email a paragraph. Walk us through a deck. Drop a venue address and a calendar window. We’ll come back inside one business day with the scope, the producer, and the price band.",
+              )}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Button href={paths.contact()} size="lg">
-                Start a Project
+                {t("ghxstship.common.startProject", undefined, "Start a Project")}
               </Button>
               <Button href={paths.pricing()} size="lg" variant="secondary">
-                See pricing
+                {t("ghxstship.common.seePricing", undefined, "See pricing")}
               </Button>
             </div>
           </div>

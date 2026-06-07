@@ -3,11 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import { getOfferLetterByToken } from "@/lib/offer-letters/queries";
 import { listOnboardingSteps, type OnboardingStep } from "@/lib/db/onboarding";
 import { formatDate } from "@/lib/i18n/format";
 
 export const dynamic = "force-dynamic";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 const STATE_VARIANT: Record<OnboardingStep["step_state"], "muted" | "warning" | "success" | "error"> = {
   pending: "muted",
@@ -16,27 +19,39 @@ const STATE_VARIANT: Record<OnboardingStep["step_state"], "muted" | "warning" | 
   waived: "muted",
   blocked: "error",
 };
-const STATE_LABEL: Record<OnboardingStep["step_state"], string> = {
-  pending: "Not started",
-  in_progress: "In progress",
-  done: "Done",
-  waived: "Waived",
-  blocked: "Blocked",
-};
+function stateLabel(t: Translator, state: OnboardingStep["step_state"]): string {
+  switch (state) {
+    case "pending":
+      return t("legal.offerOnboarding.stateNotStarted", undefined, "Not started");
+    case "in_progress":
+      return t("legal.offerOnboarding.stateInProgress", undefined, "In progress");
+    case "done":
+      return t("legal.offerOnboarding.stateDone", undefined, "Done");
+    case "waived":
+      return t("legal.offerOnboarding.stateWaived", undefined, "Waived");
+    case "blocked":
+      return t("legal.offerOnboarding.stateBlocked", undefined, "Blocked");
+  }
+}
 
 export default async function OnboardingPortalPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   if (!hasSupabase) notFound();
+  const { t } = await getRequestT();
   const c = await cookies();
   const code = c.get(`offer_${token}`)?.value;
   if (!code) {
     return (
       <div className="space-y-4">
-        <h1 className="text-xl font-semibold">Onboarding</h1>
+        <h1 className="text-xl font-semibold">{t("legal.offerOnboarding.title", undefined, "Onboarding")}</h1>
         <p>
-          Open your engagement letter first to unlock onboarding —{" "}
+          {t(
+            "legal.offerOnboarding.lockedPrefix",
+            undefined,
+            "Open your engagement letter first to unlock onboarding —",
+          )}{" "}
           <Link href={`/offer/${token}`} className="underline">
-            return to letter
+            {t("legal.offerOnboarding.returnToLetter", undefined, "return to letter")}
           </Link>
           .
         </p>
@@ -56,14 +71,24 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
     <div className="space-y-6">
       <header className="flex items-baseline justify-between border-b border-(--border-default) pb-4">
         <div>
-          <div className="text-xs tracking-widest text-(--p-text-2) uppercase">Onboarding</div>
-          <h1 className="text-2xl font-semibold">Welcome, {letter.recipient_name.split(" ")[0]}</h1>
+          <div className="text-xs tracking-widest text-(--p-text-2) uppercase">
+            {t("legal.offerOnboarding.eyebrow", undefined, "Onboarding")}
+          </div>
+          <h1 className="text-2xl font-semibold">
+            {t(
+              "legal.offerOnboarding.welcome",
+              { name: letter.recipient_name.split(" ")[0] },
+              `Welcome, ${letter.recipient_name.split(" ")[0]}`,
+            )}
+          </h1>
           <p className="mt-1 text-sm text-(--p-text-2)">
             {letter.project_name} · {letter.role_title}
           </p>
         </div>
         <div className="text-right">
-          <div className="text-xs text-(--p-text-2) uppercase">Progress</div>
+          <div className="text-xs text-(--p-text-2) uppercase">
+            {t("legal.offerOnboarding.progress", undefined, "Progress")}
+          </div>
           <div className="font-mono text-3xl">
             {done}/{total}
           </div>
@@ -74,10 +99,16 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
       {cpOpen > 0 ? (
         <div className="border-s-warning bg-warning-soft border-s-4 p-4">
           <p className="text-sm font-medium">
-            {cpOpen} critical-path step{cpOpen === 1 ? "" : "s"} open
+            {cpOpen === 1
+              ? t("legal.offerOnboarding.criticalOpenOne", { count: cpOpen }, `${cpOpen} critical-path step open`)
+              : t("legal.offerOnboarding.criticalOpenOther", { count: cpOpen }, `${cpOpen} critical-path steps open`)}
           </p>
           <p className="text-xs text-(--p-text-2)">
-            Critical-path steps gate your credentials and first-call. Items marked ★ below.
+            {t(
+              "legal.offerOnboarding.criticalBody",
+              undefined,
+              "Critical-path steps gate your credentials and first-call. Items marked ★ below.",
+            )}
           </p>
         </div>
       ) : null}
@@ -88,13 +119,29 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
             <div className="flex items-center gap-2">
               {s.critical_path ? <span className="font-bold text-[var(--p-danger)]">★</span> : null}
               <span className="font-medium">{s.title}</span>
-              <Badge variant={STATE_VARIANT[s.step_state]}>{STATE_LABEL[s.step_state]}</Badge>
+              <Badge variant={STATE_VARIANT[s.step_state]}>{stateLabel(t, s.step_state)}</Badge>
               {s.category ? <span className="text-xs text-(--p-text-2) uppercase">{s.category}</span> : null}
             </div>
             {s.description ? <p className="text-sm text-(--p-text-2)">{s.description}</p> : null}
             <div className="mt-1 flex gap-3 text-xs text-(--p-text-2)">
-              {s.due_at ? <span>Due {formatDate(s.due_at, "medium")}</span> : null}
-              {s.completed_at ? <span>· Completed {formatDate(s.completed_at, "medium")}</span> : null}
+              {s.due_at ? (
+                <span>
+                  {t(
+                    "legal.offerOnboarding.due",
+                    { date: formatDate(s.due_at, "medium") },
+                    `Due ${formatDate(s.due_at, "medium")}`,
+                  )}
+                </span>
+              ) : null}
+              {s.completed_at ? (
+                <span>
+                  {t(
+                    "legal.offerOnboarding.completed",
+                    { date: formatDate(s.completed_at, "medium") },
+                    `· Completed ${formatDate(s.completed_at, "medium")}`,
+                  )}
+                </span>
+              ) : null}
             </div>
           </li>
         ))}
@@ -102,7 +149,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
 
       <div className="text-xs text-(--p-text-2)">
         <Link href={`/offer/${token}`} className="underline">
-          ← Back to engagement letter
+          {t("legal.offerOnboarding.backToLetter", undefined, "← Back to engagement letter")}
         </Link>
       </div>
     </div>

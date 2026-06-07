@@ -4,47 +4,80 @@ import { Check, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { PROJECT_TIERS, RETAINER_TIERS, ADD_ONS, paths } from "@/lib/ghxstship";
 import { GhxstshipJsonLd, breadcrumbSchema, faqSchema } from "@/components/ghxstship/JsonLd";
+import { getRequestT } from "@/lib/i18n/request";
+
+type Translate = Awaited<ReturnType<typeof getRequestT>>["t"];
 
 export const dynamic = "force-static";
 
-export const metadata: Metadata = {
-  title: "Pricing — Per Project & Retainer | GHXSTSHIP",
-  description:
-    "Per-project tiers from $25K through federation-grade. Monthly retainers from $3K (Coordinator pair) through $13K (full senior team with 24/7 support). Stackable add-ons for engineering, federation liaison, AR/VR, sustainability, and more.",
-  keywords: [
-    "production company pricing",
-    "event production retainer",
-    "festival production cost",
-    "experiential production rates",
-    "event agency retainer pricing",
-  ],
-  alternates: { canonical: "https://ghxstship.pro/ghxstship/pricing" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return {
+    title: t("ghxstship.pricing.meta.title", undefined, "Pricing — Per Project & Retainer | GHXSTSHIP"),
+    description: t(
+      "ghxstship.pricing.meta.description",
+      undefined,
+      "Per-project tiers from $25K through federation-grade. Monthly retainers from $3K — Coordinator pair — through $13K — full senior team with 24/7 support. Stackable add-ons for engineering, federation liaison, AR/VR, sustainability, and more.",
+    ),
+    keywords: [
+      "production company pricing",
+      "event production retainer",
+      "festival production cost",
+      "experiential production rates",
+      "event agency retainer pricing",
+    ],
+    alternates: { canonical: "https://ghxstship.pro/ghxstship/pricing" },
+  };
+}
 
-const FAQS = [
-  {
-    q: "What's actually included in the price on the card?",
-    a: "The fee on the card is GHXSTSHIP's professional services fee — what we charge to scope, plan, manage, and deliver the engagement. Production costs (gear rental, labor, travel, fabrication, F&B, freight) pass through at cost plus an agreed administration rate, typically 12 to 18 percent.",
-  },
-  {
-    q: "Can I move from a per-project engagement onto a retainer later?",
-    a: "Yes. Many clients start with a single per-project engagement and convert to a retainer once a second or third event lands on the calendar. We credit any unused project balance against the first month of the retainer.",
-  },
-  {
-    q: "How does payment work on per-project tiers?",
-    a: "Sixty percent of the GHXSTSHIP fee on signature, forty percent at load-in. Production pass-throughs are invoiced as they accrue, with full receipts. Retainers bill monthly in advance.",
-  },
-  {
-    q: "What's the difference between Studio and Bureau?",
-    a: "Studio gives you a senior producer leading the engagement and an on-site representative every show day. Bureau adds a 24/7 off-site lead — the person who picks up the phone at 3am when weather pivots, a vendor disappears, or a federation issues a clean-zone update mid-build.",
-  },
-  {
-    q: "Are add-ons priced separately from the tier?",
-    a: "Yes. Add-ons are line-itemed at SOW or change-order. Most engagements end up pulling two to three. Stamped engineering and federation liaison are the most-requested across all tiers.",
-  },
-];
+function buildFaqs(t: Translate) {
+  return [
+    {
+      q: t("ghxstship.pricing.faq.q1.q", undefined, "What’s actually included in the price on the card?"),
+      a: t(
+        "ghxstship.pricing.faq.q1.a",
+        undefined,
+        "The fee on the card is GHXSTSHIP’s professional services fee — what we charge to scope, plan, manage, and deliver the engagement. Production costs — gear rental, labor, travel, fabrication, F&B, freight — pass through at cost plus an agreed administration rate, typically 12 to 18 percent.",
+      ),
+    },
+    {
+      q: t("ghxstship.pricing.faq.q2.q", undefined, "Can I move from a per-project engagement onto a retainer later?"),
+      a: t(
+        "ghxstship.pricing.faq.q2.a",
+        undefined,
+        "Yes. Many clients start with a single per-project engagement and convert to a retainer once a second or third event lands on the calendar. We credit any unused project balance against the first month of the retainer.",
+      ),
+    },
+    {
+      q: t("ghxstship.pricing.faq.q3.q", undefined, "How does payment work on per-project tiers?"),
+      a: t(
+        "ghxstship.pricing.faq.q3.a",
+        undefined,
+        "Sixty percent of the GHXSTSHIP fee on signature, forty percent at load-in. Production pass-throughs are invoiced as they accrue, with full receipts. Retainers bill monthly in advance.",
+      ),
+    },
+    {
+      q: t("ghxstship.pricing.faq.q4.q", undefined, "What’s the difference between Studio and Bureau?"),
+      a: t(
+        "ghxstship.pricing.faq.q4.a",
+        undefined,
+        "Studio gives you a senior producer leading the engagement and an on-site representative every show day. Bureau adds a 24/7 off-site lead — the person who picks up the phone at 3am when weather pivots, a vendor disappears, or a federation issues a clean-zone update mid-build.",
+      ),
+    },
+    {
+      q: t("ghxstship.pricing.faq.q5.q", undefined, "Are add-ons priced separately from the tier?"),
+      a: t(
+        "ghxstship.pricing.faq.q5.a",
+        undefined,
+        "Yes. Add-ons are line-itemed at SOW or change-order. Most engagements end up pulling two to three. Stamped engineering and federation liaison are the most-requested across all tiers.",
+      ),
+    },
+  ];
+}
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const { t } = await getRequestT();
+  const FAQS = buildFaqs(t);
   return (
     <>
       <GhxstshipJsonLd
@@ -61,29 +94,40 @@ export default function PricingPage() {
         {/* HERO */}
         <section className="mx-auto max-w-6xl px-6 pt-16">
           <div className="text-xs font-semibold tracking-[0.25em] uppercase" style={{ color: "var(--p-accent)" }}>
-            Pricing
+            {t("ghxstship.pricing.hero.eyebrow", undefined, "Pricing")}
           </div>
           <h1 className="mt-4 text-5xl uppercase sm:text-7xl" style={{ fontFamily: "var(--font-display)" }}>
-            Two ways
+            {t("ghxstship.pricing.hero.heading.line1", undefined, "Two ways")}
             <br />
-            to work with us.
+            {t("ghxstship.pricing.hero.heading.line2", undefined, "to work with us.")}
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
-            <strong className="text-[var(--p-text-1)]">Per Project</strong> for a single brief. Five tiers scaled to
-            scope, from a one-night activation to a multi-year mega-event.{" "}
-            <strong className="text-[var(--p-text-1)]">Retainer</strong> for ongoing programs. Four bundles built around
-            team composition, from a coordinator pair to a senior team with 24/7 support. Add-ons stack on either path.
-            Production costs pass through at cost.
+            <strong className="text-[var(--p-text-1)]">
+              {t("ghxstship.pricing.perProject.label", undefined, "Per Project")}
+            </strong>{" "}
+            {t(
+              "ghxstship.pricing.hero.body.perProject",
+              undefined,
+              "for a single brief. Five tiers scaled to scope, from a one-night activation to a multi-year mega-event.",
+            )}{" "}
+            <strong className="text-[var(--p-text-1)]">
+              {t("ghxstship.pricing.retainer.label", undefined, "Retainer")}
+            </strong>{" "}
+            {t(
+              "ghxstship.pricing.hero.body.retainer",
+              undefined,
+              "for ongoing programs. Four bundles built around team composition, from a coordinator pair to a senior team with 24/7 support. Add-ons stack on either path. Production costs pass through at cost.",
+            )}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link href="#per-project" className="ps-btn ps-btn--ghost ps-btn--sm">
-              Per-Project
+              {t("ghxstship.pricing.nav.perProject", undefined, "Per-Project")}
             </Link>
             <Link href="#retainer" className="ps-btn ps-btn--ghost ps-btn--sm">
-              Retainer
+              {t("ghxstship.pricing.nav.retainer", undefined, "Retainer")}
             </Link>
             <Link href="#stack" className="ps-btn ps-btn--ghost ps-btn--sm">
-              Add-Ons
+              {t("ghxstship.pricing.nav.addOns", undefined, "Add-Ons")}
             </Link>
           </div>
         </section>
@@ -93,17 +137,20 @@ export default function PricingPage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-                Per Project
+                {t("ghxstship.pricing.perProject.label", undefined, "Per Project")}
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                Five tiers.
+                {t("ghxstship.pricing.perProject.heading.line1", undefined, "Five tiers.")}
                 <br />
-                One brief.
+                {t("ghxstship.pricing.perProject.heading.line2", undefined, "One brief.")}
               </h2>
             </div>
             <p className="max-w-xl text-sm text-[var(--p-text-2)]">
-              Tiers scale to scope. The Pop is a single zone. The Federation is a multi-year mega-event with full senior
-              team. Pick by the work in front of you, not the aspiration.
+              {t(
+                "ghxstship.pricing.perProject.body",
+                undefined,
+                "Tiers scale to scope. The Pop is a single zone. The Federation is a multi-year mega-event with full senior team. Pick by the work in front of you, not the aspiration.",
+              )}
             </p>
           </div>
 
@@ -115,7 +162,7 @@ export default function PricingPage() {
               >
                 {tier.highlight && (
                   <div className="mb-3 inline-flex w-fit items-center gap-1 bg-[var(--p-accent)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-accent-contrast)] uppercase">
-                    Most engagements
+                    {t("ghxstship.pricing.perProject.mostEngagements", undefined, "Most engagements")}
                   </div>
                 )}
                 <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
@@ -126,10 +173,15 @@ export default function PricingPage() {
                   <span className="text-4xl font-semibold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
                     {tier.startingFee}
                   </span>
-                  <span className="text-xs text-[var(--p-text-2)]">starting fee</span>
+                  <span className="text-xs text-[var(--p-text-2)]">
+                    {t("ghxstship.pricing.perProject.startingFee", undefined, "starting fee")}
+                  </span>
                 </div>
                 <div className="mt-4 space-y-2 border-t border-[var(--p-border)] pt-4 text-xs">
-                  <Detail label="Scope band" value={tier.scopeBand} />
+                  <Detail
+                    label={t("ghxstship.pricing.perProject.scopeBand", undefined, "Scope band")}
+                    value={tier.scopeBand}
+                  />
                 </div>
                 <ul className="mt-6 space-y-2 text-sm">
                   {tier.includes.map((line) => (
@@ -140,7 +192,9 @@ export default function PricingPage() {
                   ))}
                 </ul>
                 <div className="mt-6 border-t border-[var(--p-border)] pt-4 text-xs">
-                  <div className="font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">Best for</div>
+                  <div className="font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">
+                    {t("ghxstship.pricing.perProject.bestFor", undefined, "Best for")}
+                  </div>
                   <ul className="mt-2 space-y-1 text-[var(--p-text-2)]">
                     {tier.bestFor.map((b) => (
                       <li key={b}>· {b}</li>
@@ -165,18 +219,20 @@ export default function PricingPage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-                Retainer
+                {t("ghxstship.pricing.retainer.label", undefined, "Retainer")}
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                Bundled by
+                {t("ghxstship.pricing.retainer.heading.line1", undefined, "Bundled by")}
                 <br />
-                team composition.
+                {t("ghxstship.pricing.retainer.heading.line2", undefined, "team composition.")}
               </h2>
             </div>
             <p className="max-w-xl text-sm text-[var(--p-text-2)]">
-              Each tier adds a senior role and a layer of always-on support. Ramp up between tiers as your program
-              grows. Drop down between tiers in your slow season. Billed monthly in advance, cancellable on 60-day
-              notice.
+              {t(
+                "ghxstship.pricing.retainer.body",
+                undefined,
+                "Each tier adds a senior role and a layer of always-on support. Ramp up between tiers as your program grows. Drop down between tiers in your slow season. Billed monthly in advance, cancellable on 60-day notice.",
+              )}
             </p>
           </div>
 
@@ -188,7 +244,7 @@ export default function PricingPage() {
               >
                 {tier.highlight && (
                   <div className="mb-3 inline-flex w-fit items-center gap-1 bg-[var(--p-accent)] px-2 py-0.5 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-accent-contrast)] uppercase">
-                    Most retained
+                    {t("ghxstship.pricing.retainer.mostRetained", undefined, "Most retained")}
                   </div>
                 )}
                 <div className="text-2xl uppercase" style={{ fontFamily: "var(--font-display)" }}>
@@ -202,7 +258,7 @@ export default function PricingPage() {
                 </div>
                 <div className="mt-4 border-t border-[var(--p-border)] pt-4">
                   <div className="flex items-center gap-1 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-                    <Users className="h-3 w-3" /> Your team
+                    <Users className="h-3 w-3" /> {t("ghxstship.pricing.retainer.yourTeam", undefined, "Your team")}
                   </div>
                   <ul className="mt-2 space-y-1 text-xs">
                     {tier.team.map((role) => (
@@ -217,7 +273,7 @@ export default function PricingPage() {
                   </ul>
                 </div>
                 <div className="mt-4 border-t border-[var(--p-border)] pt-4 text-xs">
-                  <Detail label="Cadence" value={tier.cadence} />
+                  <Detail label={t("ghxstship.pricing.retainer.cadence", undefined, "Cadence")} value={tier.cadence} />
                 </div>
                 <ul className="mt-5 space-y-2 text-sm">
                   {tier.includes.map((line) => (
@@ -250,15 +306,18 @@ export default function PricingPage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-                Add-Ons
+                {t("ghxstship.pricing.addOns.eyebrow", undefined, "Add-Ons")}
               </div>
               <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                Stack on either path.
+                {t("ghxstship.pricing.addOns.heading", undefined, "Stack on either path.")}
               </h2>
             </div>
             <p className="max-w-xl text-sm text-[var(--p-text-2)]">
-              Sold a la carte at scope-of-work or change-order. Stamped engineering and federation liaison are the
-              most-requested across all tiers.
+              {t(
+                "ghxstship.pricing.addOns.body",
+                undefined,
+                "Sold a la carte at scope-of-work or change-order. Stamped engineering and federation liaison are the most-requested across all tiers.",
+              )}
             </p>
           </div>
 
@@ -285,43 +344,52 @@ export default function PricingPage() {
               style={{ background: "linear-gradient(90deg, var(--p-accent), var(--p-accent-text))" }}
             />
             <h2 className="text-3xl uppercase sm:text-4xl" style={{ fontFamily: "var(--font-display)" }}>
-              How billing works.
+              {t("ghxstship.pricing.billing.heading", undefined, "How billing works.")}
             </h2>
             <div className="mt-8 grid gap-8 md:grid-cols-3">
               <div>
                 <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
-                  01 Professional Fee
+                  {t("ghxstship.pricing.billing.fee.label", undefined, "01 Professional Fee")}
                 </div>
                 <p className="mt-2 text-sm text-[var(--p-text-2)]">
-                  The fee on the card is what GHXSTSHIP charges to scope, plan, and operate the engagement. Locked at
-                  scope-of-work, with a clear change-order framework if scope grows.
+                  {t(
+                    "ghxstship.pricing.billing.fee.body",
+                    undefined,
+                    "The fee on the card is what GHXSTSHIP charges to scope, plan, and operate the engagement. Locked at scope-of-work, with a clear change-order framework if scope grows.",
+                  )}
                 </p>
               </div>
               <div>
                 <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
-                  02 Production Pass-Through
+                  {t("ghxstship.pricing.billing.passThrough.label", undefined, "02 Production Pass-Through")}
                 </div>
                 <p className="mt-2 text-sm text-[var(--p-text-2)]">
-                  Gear, labor, travel, fabrication, food and beverage, freight — all production costs pass through at
-                  cost plus an agreed admin rate, typically 12 to 18 percent. Full receipts on every line.
+                  {t(
+                    "ghxstship.pricing.billing.passThrough.body",
+                    undefined,
+                    "Gear, labor, travel, fabrication, food and beverage, freight — all production costs pass through at cost plus an agreed admin rate, typically 12 to 18 percent. Full receipts on every line.",
+                  )}
                 </p>
               </div>
               <div>
                 <div className="text-xs font-semibold tracking-[0.18em] uppercase" style={{ color: "var(--p-accent)" }}>
-                  03 Schedule
+                  {t("ghxstship.pricing.billing.schedule.label", undefined, "03 Schedule")}
                 </div>
                 <p className="mt-2 text-sm text-[var(--p-text-2)]">
-                  Per-project: 60% of the professional fee on signature, 40% at load-in. Retainers: monthly in advance.
-                  Production pass-throughs invoiced as they accrue.
+                  {t(
+                    "ghxstship.pricing.billing.schedule.body",
+                    undefined,
+                    "Per-project: 60% of the professional fee on signature, 40% at load-in. Retainers: monthly in advance. Production pass-throughs invoiced as they accrue.",
+                  )}
                 </p>
               </div>
             </div>
             <div className="mt-10 flex flex-wrap items-center gap-3">
               <Button href={paths.contact()} size="lg">
-                Start a Project
+                {t("ghxstship.common.startProject", undefined, "Start a Project")}
               </Button>
               <Button href={paths.servicesRoot()} size="lg" variant="secondary">
-                Services Catalog
+                {t("ghxstship.common.servicesCatalog", undefined, "Services Catalog")}
               </Button>
             </div>
           </div>
@@ -330,10 +398,10 @@ export default function PricingPage() {
         {/* FAQ */}
         <section className="mx-auto max-w-6xl px-6">
           <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: "var(--p-accent)" }}>
-            Pricing FAQ
+            {t("ghxstship.pricing.faq.eyebrow", undefined, "Pricing FAQ")}
           </div>
           <h2 className="mt-3 text-4xl uppercase sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-            Common questions.
+            {t("ghxstship.pricing.faq.heading", undefined, "Common questions.")}
           </h2>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {FAQS.map((faq) => (

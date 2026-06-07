@@ -5,6 +5,7 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, type 
 
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useAnnounce } from "@/components/ui/LiveRegion";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   addDaysUTC,
   barGeometry,
@@ -88,6 +89,17 @@ export function TimelineView({
   React.useEffect(() => setLocalItems(items), [items]);
 
   const announce = useAnnounce();
+  const t = useT();
+
+  const zoomLabel = (z: TimelineZoom): string => {
+    const fallbacks: Record<TimelineZoom, string> = {
+      day: "Day",
+      week: "Week",
+      month: "Month",
+      quarter: "Quarter",
+    };
+    return t(`components.timelineView.zoom.${z}`, undefined, fallbacks[z]);
+  };
 
   const { start: anchor, end: rangeEnd } = React.useMemo(() => dateRange(localItems), [localItems]);
   const ppd = pxPerDay?.[zoom] ?? DEFAULT_PX_PER_DAY![zoom];
@@ -156,16 +168,31 @@ export function TimelineView({
 
       try {
         await onMove(id, newStart, newEnd);
-        announce(`Moved ${item.title} by ${dayDelta} day${Math.abs(dayDelta) === 1 ? "" : "s"}`);
+        announce(
+          Math.abs(dayDelta) === 1
+            ? t(
+                "components.timelineView.movedOne",
+                { title: item.title, count: dayDelta },
+                "Moved {title} by {count} day",
+              )
+            : t(
+                "components.timelineView.movedMany",
+                { title: item.title, count: dayDelta },
+                "Moved {title} by {count} days",
+              ),
+        );
       } catch (err) {
         setLocalItems(prev);
-        announce(`Move failed for ${item.title}`, "assertive");
+        announce(
+          t("components.timelineView.moveFailed", { title: item.title }, "Move failed for {title}"),
+          "assertive",
+        );
         if (process.env.NODE_ENV !== "production") {
           console.error("[TimelineView] onMove rejected:", err);
         }
       }
     },
-    [onMove, localItems, ppd, announce],
+    [onMove, localItems, ppd, announce, t],
   );
 
   // Resize: pointer-driven on the bar's edge handles. We listen on the
@@ -240,9 +267,12 @@ export function TimelineView({
                   : x,
               ),
             );
-            announce(`Resize failed for ${found.title}`, "assertive");
+            announce(
+              t("components.timelineView.resizeFailed", { title: found.title }, "Resize failed for {title}"),
+              "assertive",
+            );
           });
-          announce(`Resized ${found.title}`);
+          announce(t("components.timelineView.resized", { title: found.title }, "Resized {title}"));
           return curr;
         });
       };
@@ -250,14 +280,21 @@ export function TimelineView({
       window.addEventListener("pointermove", onMoveWindow);
       window.addEventListener("pointerup", onUpWindow);
     },
-    [localItems, ppd, onResize, announce],
+    [localItems, ppd, onResize, announce, t],
   );
 
   const isEmpty = lanes.length === 0;
   if (isEmpty) {
     return (
       <div className={className}>
-        <EmptyState title="No lanes" description="Provide at least one lane to render the timeline." />
+        <EmptyState
+          title={t("components.timelineView.noLanes", undefined, "No Lanes")}
+          description={t(
+            "components.timelineView.noLanesDesc",
+            undefined,
+            "Provide at least one lane to render the timeline.",
+          )}
+        />
       </div>
     );
   }
@@ -279,10 +316,12 @@ export function TimelineView({
     <div className={["surface flex flex-col", className ?? ""].join(" ")} data-zoom={zoom}>
       {/* Toolbar */}
       <div className="flex items-center justify-between gap-2 border-b border-[var(--p-border)] px-3 py-2">
-        <div className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">Timeline</div>
+        <div className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+          {t("components.timelineView.timeline", undefined, "Timeline")}
+        </div>
         <div
           role="tablist"
-          aria-label="Timeline zoom"
+          aria-label={t("components.timelineView.timelineZoom", undefined, "Timeline zoom")}
           className="inline-flex overflow-hidden rounded-md border border-[var(--p-border)]"
         >
           {ZOOMS.map((z) => (
@@ -292,13 +331,13 @@ export function TimelineView({
               role="tab"
               aria-selected={zoom === z}
               onClick={() => setZoom(z)}
-              className={`px-2 py-1 text-xs capitalize ${
+              className={`px-2 py-1 text-xs ${
                 zoom === z
                   ? "bg-[var(--p-surface-2)] text-[var(--p-text-1)]"
                   : "text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
               }`}
             >
-              {z}
+              {zoomLabel(z)}
             </button>
           ))}
         </div>
@@ -321,7 +360,7 @@ export function TimelineView({
                 className="sticky start-0 z-30 flex shrink-0 items-center border-e border-[var(--p-border)] bg-[var(--p-surface)] px-3 text-[10px] font-semibold tracking-wider text-[var(--p-text-2)] uppercase"
                 style={{ width: LANE_RAIL_WIDTH }}
               >
-                Lane
+                {t("components.timelineView.lane", undefined, "Lane")}
               </div>
               <div className="relative" style={{ width: canvasWidth }}>
                 {markers.map((m, i) => (
@@ -415,8 +454,12 @@ export function TimelineView({
               <div className="px-3 py-6">
                 <EmptyState
                   size="compact"
-                  title="No items in range"
-                  description="Add a record with a start and end date to populate the timeline."
+                  title={t("components.timelineView.noItems", undefined, "No Items in Range")}
+                  description={t(
+                    "components.timelineView.noItemsDesc",
+                    undefined,
+                    "Add a record with a start and end date to populate the timeline.",
+                  )}
                 />
               </div>
             )}

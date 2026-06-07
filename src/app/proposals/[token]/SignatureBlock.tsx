@@ -7,6 +7,7 @@ import { Alert } from "@/components/ui/Alert";
 import { Input } from "@/components/ui/Input";
 import { signProposalAction, type SignState } from "./actions";
 import { formatDate } from "@/lib/i18n/format";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Party = { role: string; name?: string; email?: string };
 
@@ -28,6 +29,7 @@ export function SignatureBlock({
   signedAt: string | null;
 }) {
   void proposalId;
+  const t = useT();
   const [mode, setMode] = useState<"typed" | "canvas">("typed");
   const [typed, setTyped] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -37,7 +39,8 @@ export function SignatureBlock({
   const [state, formAction, pending] = useActionState<SignState, FormData>(async (prev, fd) => {
     const res = await signProposalAction(prev, fd);
     if (res?.error) toast.error(res.error);
-    else if (res?.ok) toast.success(`Signed · ${res.ok.hash}`);
+    else if (res?.ok)
+      toast.success(t("legal.proposalSignature.signedToast", { hash: res.ok.hash }, `Signed · ${res.ok.hash}`));
     return res;
   }, null);
 
@@ -97,9 +100,23 @@ export function SignatureBlock({
     return (
       <section className="print-hide-sibling mx-auto my-12 max-w-4xl px-8">
         <div className="surface p-8 text-center">
-          <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-success)] uppercase">Signed</div>
-          <div className="font-display mt-3 text-4xl tracking-tight">Thank you, {signerName ?? "signer"}</div>
-          <div className="mt-2 font-mono text-xs text-[var(--p-text-2)]">Signed {formatDate(signedAt, "long")}</div>
+          <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-success)] uppercase">
+            {t("legal.proposalSignature.signedEyebrow", undefined, "Signed")}
+          </div>
+          <div className="font-display mt-3 text-4xl tracking-tight">
+            {t(
+              "legal.proposalSignature.thankYou",
+              { name: signerName ?? t("legal.proposalSignature.signerFallback", undefined, "signer") },
+              `Thank you, ${signerName ?? "signer"}`,
+            )}
+          </div>
+          <div className="mt-2 font-mono text-xs text-[var(--p-text-2)]">
+            {t(
+              "legal.proposalSignature.signedOn",
+              { date: formatDate(signedAt, "long") },
+              `Signed ${formatDate(signedAt, "long")}`,
+            )}
+          </div>
         </div>
       </section>
     );
@@ -108,8 +125,12 @@ export function SignatureBlock({
   return (
     <section id="authorize" className="mx-auto my-12 max-w-4xl px-8">
       <div className="surface p-8">
-        <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">Authorize</div>
-        <h2 className="font-display mt-3 text-4xl tracking-tight">Accept this proposal</h2>
+        <div className="text-[10px] font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
+          {t("legal.proposalSignature.authorizeEyebrow", undefined, "Authorize")}
+        </div>
+        <h2 className="font-display mt-3 text-4xl tracking-tight">
+          {t("legal.proposalSignature.acceptHeading", undefined, "Accept this proposal")}
+        </h2>
         {instructions && <p className="mt-2 text-sm text-[var(--p-text-2)]">{instructions}</p>}
 
         {parties.length > 1 && (
@@ -128,10 +149,14 @@ export function SignatureBlock({
           <input type="hidden" name="token" value={token} />
           <input type="hidden" name="kind" value={mode} />
           <div className="grid gap-4 sm:grid-cols-2">
-            <Input label="Your Name" name="name" required />
-            <Input label="Email" name="email" type="email" />
+            <Input label={t("legal.proposalSignature.yourNameLabel", undefined, "Your Name")} name="name" required />
+            <Input label={t("legal.proposalSignature.emailLabel", undefined, "Email")} name="email" type="email" />
           </div>
-          <Input label="Title / role" name="role" placeholder="Founder, Producer, COO…" />
+          <Input
+            label={t("legal.proposalSignature.titleRoleLabel", undefined, "Title / role")}
+            name="role"
+            placeholder={t("legal.proposalSignature.titleRolePlaceholder", undefined, "Founder, Producer, COO…")}
+          />
 
           <div className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5">
             <button
@@ -139,14 +164,14 @@ export function SignatureBlock({
               onClick={() => setMode("typed")}
               className={`rounded-full px-3 py-1 text-xs ${mode === "typed" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
             >
-              Type
+              {t("legal.proposalSignature.type", undefined, "Type")}
             </button>
             <button
               type="button"
               onClick={() => setMode("canvas")}
               className={`rounded-full px-3 py-1 text-xs ${mode === "canvas" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
             >
-              Draw
+              {t("legal.proposalSignature.draw", undefined, "Draw")}
             </button>
           </div>
 
@@ -155,7 +180,7 @@ export function SignatureBlock({
               <input
                 value={typed}
                 onChange={(e) => setTyped(e.target.value)}
-                placeholder="Type your signature"
+                placeholder={t("legal.proposalSignature.typeSignaturePlaceholder", undefined, "Type your signature")}
                 className="ps-input font-subdisplay w-full text-3xl tracking-wide"
               />
               <input type="hidden" name="data" value={typed} />
@@ -174,7 +199,7 @@ export function SignatureBlock({
               </div>
               <CanvasSync canvasRef={canvasRef} hasInk={hasInk} />
               <button type="button" onClick={clear} className="text-xs text-[var(--p-text-2)] hover:underline">
-                Clear
+                {t("legal.proposalSignature.clear", undefined, "Clear")}
               </button>
             </>
           )}
@@ -183,7 +208,9 @@ export function SignatureBlock({
 
           <div className="flex items-center justify-end gap-2">
             <Button type="submit" disabled={pending || (mode === "typed" ? !typed.trim() : !hasInk)}>
-              {pending ? "Signing…" : "Sign & accept"}
+              {pending
+                ? t("legal.proposalSignature.signing", undefined, "Signing…")
+                : t("legal.proposalSignature.signAndAccept", undefined, "Sign & accept")}
             </Button>
           </div>
         </form>

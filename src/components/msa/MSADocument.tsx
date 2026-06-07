@@ -2,6 +2,11 @@ import type { ReactNode } from "react";
 import type { IndependentContractorMsaResolved } from "@/lib/msa/types";
 import { formatDate, formatDateTime } from "@/lib/i18n/format";
 
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity translator — used when no `t` is supplied so the English fallbacks render verbatim. */
+const identityT: Translator = (_key, _vars, fallback) => fallback ?? "";
+
 /**
  * Independent Contractor Master Services Agreement — branded, print-friendly.
  *
@@ -13,7 +18,16 @@ import { formatDate, formatDateTime } from "@/lib/i18n/format";
  * signed). The static structural sections (Recitals, Relationship, Exhibits)
  * live in this component as they are the same across every MSA.
  */
-export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaResolved; orgName: string }) {
+export function MSADocument({
+  msa,
+  orgName,
+  t = identityT,
+}: {
+  msa: IndependentContractorMsaResolved;
+  orgName: string;
+  /** Request translator. Optional — falls back to English literals when omitted (e.g. legacy callers). */
+  t?: Translator;
+}) {
   const issuedOn = formatDate(msa.created_at, "long");
   const tcBody = msa.body_snapshot ?? "";
   const governingLaw = msa.governing_law_snapshot ?? "State of Nevada";
@@ -24,18 +38,22 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
         <div>
           <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">{orgName}</div>
           <h1 className="mt-2 text-2xl leading-tight font-semibold">
-            Independent Contractor Master Services Agreement
+            {t("legal.msaDocument.title", undefined, "Independent Contractor Master Services Agreement")}
           </h1>
-          <div className="mt-1 text-sm text-[var(--p-text-2)]">Version {msa.version}</div>
+          <div className="mt-1 text-sm text-[var(--p-text-2)]">
+            {t("legal.msaDocument.version", { version: msa.version }, `Version ${msa.version}`)}
+          </div>
         </div>
         <div className="text-end text-xs text-[var(--p-text-2)]">
-          <div>Issued {issuedOn}</div>
+          <div>{t("legal.msaDocument.issued", { date: issuedOn }, `Issued ${issuedOn}`)}</div>
           <div className="font-mono">REF · MSA-{msa.id.slice(0, 8).toUpperCase()}</div>
         </div>
       </header>
 
       <section className="space-y-2">
-        <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Contractor</div>
+        <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">
+          {t("legal.msaDocument.contractor", undefined, "Contractor")}
+        </div>
         <div className="text-base font-medium">{msa.crew_member_name}</div>
         {msa.crew_member_phone && (
           <div className="font-mono text-xs text-[var(--p-text-2)]">{msa.crew_member_phone}</div>
@@ -43,7 +61,9 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Recitals</h2>
+        <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+          {t("legal.msaDocument.recitalsHeading", undefined, "Recitals")}
+        </h2>
         <p className="text-sm leading-relaxed">
           This Master Services Agreement (this &ldquo;Agreement&rdquo;) is entered into between{" "}
           <strong>{orgName}</strong> (&ldquo;Company&rdquo;) and the contractor identified above
@@ -62,7 +82,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
 
       <section className="break-inside-avoid space-y-3">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          1. Relationship of the Parties
+          {t("legal.msaDocument.relationshipHeading", undefined, "1. Relationship of the Parties")}
         </h2>
         <div className="space-y-3 text-sm leading-relaxed">
           <p>
@@ -119,7 +139,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       {tcBody && (
         <section className="break-inside-avoid space-y-3">
           <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-            2. Terms &amp; Conditions
+            {t("legal.msaDocument.termsHeading", undefined, "2. Terms & Conditions")}
           </h2>
           <div className="space-y-3 text-sm leading-relaxed">
             {tcBody.split(/\n\n+/).map((para, i) => (
@@ -131,7 +151,7 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          3. Governing Law &amp; Confidentiality
+          {t("legal.msaDocument.governingLawHeading", undefined, "3. Governing Law & Confidentiality")}
         </h2>
         <p className="text-sm leading-relaxed">
           This Agreement is governed by the laws of the <strong>{governingLaw}</strong>, without regard to its
@@ -146,51 +166,58 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
 
       <section className="break-inside-avoid space-y-3 border-t border-[var(--border-default)] pt-6">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          Exhibit B — Other Clients
+          {t("legal.msaDocument.exhibitBHeading", undefined, "Exhibit B — Other Clients")}
         </h2>
         <p className="text-xs text-[var(--p-text-2)]">
-          Contractor represents that Contractor has performed substantially similar services for the following clients
-          within the twenty-four (24) months preceding the effective date of this Agreement.
+          {t(
+            "legal.msaDocument.exhibitBHint",
+            undefined,
+            "Contractor represents that Contractor has performed substantially similar services for the following clients within the twenty-four (24) months preceding the effective date of this Agreement.",
+          )}
         </p>
         <ExhibitTable
           rows={msa.exhibit_b_other_clients}
           fallbackRows={3}
           columns={[
-            { key: "client", label: "Client" },
-            { key: "project", label: "Project" },
-            { key: "dates", label: "Dates" },
+            { key: "client", label: t("legal.msaDocument.colClient", undefined, "Client") },
+            { key: "project", label: t("legal.msaDocument.colProject", undefined, "Project") },
+            { key: "dates", label: t("legal.msaDocument.colDates", undefined, "Dates") },
           ]}
         />
       </section>
 
       <section className="break-inside-avoid space-y-3">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          Exhibit C — Capital Investment Itemization
+          {t("legal.msaDocument.exhibitCHeading", undefined, "Exhibit C — Capital Investment Itemization")}
         </h2>
         <p className="text-xs text-[var(--p-text-2)]">
-          Contractor&rsquo;s capital investment in Contractor&rsquo;s business relevant to the services may include,
-          without limitation, business entity formation, insurance carried, software/equipment/tools owned,
-          pre-engagement preparation and certifications, and trade-specific NSCB licensure where applicable.
+          {t(
+            "legal.msaDocument.exhibitCHint",
+            undefined,
+            "Contractor's capital investment in Contractor's business relevant to the services may include, without limitation, business entity formation, insurance carried, software/equipment/tools owned, pre-engagement preparation and certifications, and trade-specific NSCB licensure where applicable.",
+          )}
         </p>
         <ExhibitTable
           rows={msa.exhibit_c_capital_items}
           fallbackRows={4}
           columns={[
-            { key: "label", label: "Item / Category" },
-            { key: "description", label: "Description / Value" },
+            { key: "label", label: t("legal.msaDocument.colItemCategory", undefined, "Item / Category") },
+            { key: "description", label: t("legal.msaDocument.colDescriptionValue", undefined, "Description / Value") },
           ]}
         />
         {(msa.nscb_license_number || msa.nscb_classification) && (
           <div className="mt-2 rounded border border-[var(--border-default)] bg-[var(--p-surface-2)] p-3 text-xs leading-relaxed">
             <div className="mb-1 font-medium tracking-wider text-[var(--p-text-2)] uppercase">
-              NSCB License (Chapter 624)
+              {t("legal.msaDocument.nscbLicenseHeading", undefined, "NSCB License · Chapter 624")}
             </div>
             <div>
-              License #: <strong>{msa.nscb_license_number ?? "—"}</strong> · Classification:{" "}
+              {t("legal.msaDocument.licenseNumberLabel", undefined, "License #:")}{" "}
+              <strong>{msa.nscb_license_number ?? "—"}</strong> ·{" "}
+              {t("legal.msaDocument.classificationLabel", undefined, "Classification:")}{" "}
               <strong>{msa.nscb_classification ?? "—"}</strong>
               {msa.nscb_monetary_limit_cents != null && (
                 <>
-                  {" · Monetary Limit: "}
+                  {` · ${t("legal.msaDocument.monetaryLimitLabel", undefined, "Monetary Limit:")} `}
                   <strong>
                     ${(msa.nscb_monetary_limit_cents / 100).toLocaleString("en-US", { maximumFractionDigits: 0 })}
                   </strong>
@@ -204,29 +231,42 @@ export function MSADocument({ msa, orgName }: { msa: IndependentContractorMsaRes
       <section className="border-t border-[var(--border-default)] pt-6">
         {msa.msa_state === "signed" && msa.signed_signature ? (
           <div className="space-y-2">
-            <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">Signed</div>
+            <div className="text-xs tracking-widest text-[var(--p-text-2)] uppercase">
+              {t("legal.msaDocument.signed", undefined, "Signed")}
+            </div>
             <div className="font-subdisplay text-2xl tracking-wide">{msa.signed_signature}</div>
             <div className="text-xs text-[var(--p-text-2)]">
-              Counter-signed {msa.signed_at ? formatDateTime(msa.signed_at) : ""}
+              {t(
+                "legal.msaDocument.counterSigned",
+                { when: msa.signed_at ? formatDateTime(msa.signed_at) : "" },
+                `Counter-signed ${msa.signed_at ? formatDateTime(msa.signed_at) : ""}`,
+              )}
             </div>
           </div>
         ) : (
           <div className="space-y-2 text-sm text-[var(--p-text-2)]">
-            <div className="text-xs tracking-widest uppercase">Awaiting Counter-Signature</div>
+            <div className="text-xs tracking-widest uppercase">
+              {t("legal.msaDocument.awaitingCounterSignature", undefined, "Awaiting Counter-Signature")}
+            </div>
             <div>
-              Type your full legal name to formalize acceptance of this Master Services Agreement. Your typed signature,
-              IP address, and timestamp will be captured as the audit trail.
+              {t(
+                "legal.msaDocument.awaitingBody",
+                undefined,
+                "Type your full legal name to formalize acceptance of this Master Services Agreement. Your typed signature, IP address, and timestamp will be captured as the audit trail.",
+              )}
             </div>
           </div>
         )}
         <div className="mt-6 grid grid-cols-2 gap-6 text-xs text-[var(--p-text-2)]">
           <div>
-            <div className="font-medium text-[var(--p-text-2)]">For {orgName}</div>
+            <div className="font-medium text-[var(--p-text-2)]">
+              {t("legal.msaDocument.forOrg", { org: orgName }, `For ${orgName}`)}
+            </div>
             <div className="font-subdisplay text-lg tracking-wide">Julian Clarkson</div>
-            <div>Producer &amp; Operations Director</div>
+            <div>{t("legal.msaDocument.signerTitle", undefined, "Producer & Operations Director")}</div>
           </div>
           <div className="text-end">
-            <div>Reference</div>
+            <div>{t("legal.msaDocument.reference", undefined, "Reference")}</div>
             <div className="font-mono">MSA-{msa.id.slice(0, 8).toUpperCase()}</div>
           </div>
         </div>

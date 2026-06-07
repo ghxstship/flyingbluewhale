@@ -2,9 +2,11 @@
 
 import { FormShell, type FormState } from "@/components/FormShell";
 import { FormField, TextInput } from "@/components/forms/FormField";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { unlockMsa } from "./actions";
 
 export function UnlockForm({ token, expired = false }: { token: string; expired?: boolean }) {
+  const t = useT();
   const action = async (prev: FormState, fd: FormData) => {
     return (await unlockMsa(token, prev as never, fd)) as FormState;
   };
@@ -15,16 +17,28 @@ export function UnlockForm({ token, expired = false }: { token: string; expired?
         <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">
           GHXSTSHIP Industries LLC
         </div>
-        <h1 className="text-2xl font-semibold">Master Services Agreement</h1>
+        <h1 className="text-2xl font-semibold">{t("legal.msaUnlock.title", undefined, "Master Services Agreement")}</h1>
         <p className="text-sm text-[var(--p-text-2)]">
           {expired
-            ? "Your session expired or the access code changed. Re-enter the 6-character access code that was sent with this link."
-            : "Enter the 6-character access code that was sent with this link to view your MSA."}
+            ? t(
+                "legal.msaUnlock.expiredHint",
+                undefined,
+                "Your session expired or the access code changed. Re-enter the 6-character access code that was sent with this link.",
+              )
+            : t(
+                "legal.msaUnlock.hint",
+                undefined,
+                "Enter the 6-character access code that was sent with this link to view your MSA.",
+              )}
         </p>
       </div>
 
-      <FormShell action={action} submitLabel="Open MSA" className="surface space-y-4 p-6">
-        <FormField name="access_code" label="Access Code" required>
+      <FormShell
+        action={action}
+        submitLabel={t("legal.msaUnlock.openMsa", undefined, "Open MSA")}
+        className="surface space-y-4 p-6"
+      >
+        <FormField name="access_code" label={t("legal.msaUnlock.accessCodeLabel", undefined, "Access Code")} required>
           <TextInput
             name="access_code"
             autoComplete="off"
@@ -36,7 +50,7 @@ export function UnlockForm({ token, expired = false }: { token: string; expired?
           />
         </FormField>
         <p className="text-center text-xs text-[var(--p-text-2)]">
-          Trouble? Contact{" "}
+          {t("legal.msaUnlock.troubleContact", undefined, "Trouble? Contact")}{" "}
           <a className="underline" href="mailto:julian.clarkson@ghxstship.pro">
             julian.clarkson@ghxstship.pro
           </a>

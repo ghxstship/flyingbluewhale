@@ -19,10 +19,17 @@ import type { PdfBrand } from "./branding";
  *   #25 Rental checkout / pull sheet (rentals + equipment)
  */
 
+/** Request-scoped translator: `t(key, vars?, fallback?)`. */
+export type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity fallback used when no translator is threaded in (existing callers). */
+const identityT: Translator = (_k, _v, fb) => fb ?? "";
+
 // ── #17 expense report ────────────────────────────────────────────
 
 export function ExpenseReportPdf({
   brand,
+  t = identityT,
   project,
   rangeFrom,
   rangeTo,
@@ -33,6 +40,7 @@ export function ExpenseReportPdf({
   currency,
 }: {
   brand: PdfBrand;
+  t?: Translator;
   project: { name: string };
   rangeFrom: string;
   rangeTo: string;
@@ -49,22 +57,28 @@ export function ExpenseReportPdf({
       return `${currency} ${(c / 100).toFixed(2)}`;
     }
   };
+  const expenseReportTitle = t("pdf.reports.expense.title", undefined, "Expense report");
+  const totalWord = t("pdf.reports.expense.total", undefined, "Total");
   return (
-    <PdfDocument title={`Expense report · ${project.name}`} author={brand.producerName} subject="Expense report">
+    <PdfDocument
+      title={`${expenseReportTitle} · ${project.name}`}
+      author={brand.producerName}
+      subject={expenseReportTitle}
+    >
       <CoverPage
         brand={brand}
-        eyebrow="Expense Report"
+        eyebrow={t("pdf.reports.expense.eyebrow", undefined, "Expense Report")}
         title={project.name}
-        subtitle={`${rangeFrom} → ${rangeTo} · Total ${money(totalCents)}`}
+        subtitle={`${rangeFrom} → ${rangeTo} · ${totalWord} ${money(totalCents)}`}
       />
-      <BrandedPage brand={brand} pageLabel="Expense report">
-        <SectionHeading title="Expenses" />
+      <BrandedPage brand={brand} pageLabel={expenseReportTitle}>
+        <SectionHeading title={t("pdf.reports.expense.expenses", undefined, "Expenses")} />
         <PdfTable
           columns={[
-            { key: "date", label: "Date", width: 1.5 },
-            { key: "description", label: "Description", width: 4 },
-            { key: "category", label: "Category", width: 2 },
-            { key: "amount", label: "Amount", width: 2, align: "right" },
+            { key: "date", label: t("pdf.reports.expense.colDate", undefined, "Date"), width: 1.5 },
+            { key: "description", label: t("pdf.reports.expense.colDescription", undefined, "Description"), width: 4 },
+            { key: "category", label: t("pdf.reports.expense.colCategory", undefined, "Category"), width: 2 },
+            { key: "amount", label: t("pdf.reports.expense.colAmount", undefined, "Amount"), width: 2, align: "right" },
           ]}
           rows={expenses.map((e) => ({
             date: e.date ?? "",
@@ -73,14 +87,14 @@ export function ExpenseReportPdf({
             amount: money(e.amount_cents),
           }))}
         />
-        <SectionHeading title="Time Entries" />
+        <SectionHeading title={t("pdf.reports.expense.timeEntries", undefined, "Time Entries")} />
         <PdfTable
           columns={[
-            { key: "date", label: "Date", width: 1.5 },
-            { key: "user", label: "Member", width: 3 },
-            { key: "hours", label: "Hours", width: 1, align: "right" },
-            { key: "rate", label: "Rate", width: 2, align: "right" },
-            { key: "amount", label: "Amount", width: 2, align: "right" },
+            { key: "date", label: t("pdf.reports.expense.colDate", undefined, "Date"), width: 1.5 },
+            { key: "user", label: t("pdf.reports.expense.colMember", undefined, "Member"), width: 3 },
+            { key: "hours", label: t("pdf.reports.expense.colHours", undefined, "Hours"), width: 1, align: "right" },
+            { key: "rate", label: t("pdf.reports.expense.colRate", undefined, "Rate"), width: 2, align: "right" },
+            { key: "amount", label: t("pdf.reports.expense.colAmount", undefined, "Amount"), width: 2, align: "right" },
           ]}
           rows={time.map((t) => ({
             date: t.date ?? "",
@@ -90,14 +104,19 @@ export function ExpenseReportPdf({
             amount: t.rate_cents != null ? money(Math.round(t.hours * t.rate_cents)) : "",
           }))}
         />
-        <SectionHeading title="Mileage" />
+        <SectionHeading title={t("pdf.reports.expense.mileage", undefined, "Mileage")} />
         <PdfTable
           columns={[
-            { key: "date", label: "Date", width: 1.5 },
-            { key: "user", label: "Member", width: 3 },
-            { key: "miles", label: "Miles", width: 1, align: "right" },
-            { key: "rate", label: "Rate/mi", width: 2, align: "right" },
-            { key: "amount", label: "Amount", width: 2, align: "right" },
+            { key: "date", label: t("pdf.reports.expense.colDate", undefined, "Date"), width: 1.5 },
+            { key: "user", label: t("pdf.reports.expense.colMember", undefined, "Member"), width: 3 },
+            { key: "miles", label: t("pdf.reports.expense.colMiles", undefined, "Miles"), width: 1, align: "right" },
+            {
+              key: "rate",
+              label: t("pdf.reports.expense.colRatePerMile", undefined, "Rate/mi"),
+              width: 2,
+              align: "right",
+            },
+            { key: "amount", label: t("pdf.reports.expense.colAmount", undefined, "Amount"), width: 2, align: "right" },
           ]}
           rows={mileage.map((m) => ({
             date: m.date ?? "",
@@ -107,7 +126,9 @@ export function ExpenseReportPdf({
             amount: m.rate_per_mile_cents != null ? money(Math.round(m.miles * m.rate_per_mile_cents)) : "",
           }))}
         />
-        <Text style={{ ...styles.p, marginTop: 20, fontWeight: 700, fontSize: 14 }}>Total — {money(totalCents)}</Text>
+        <Text style={{ ...styles.p, marginTop: 20, fontWeight: 700, fontSize: 14 }}>
+          {totalWord} — {money(totalCents)}
+        </Text>
       </BrandedPage>
     </PdfDocument>
   );
@@ -117,10 +138,12 @@ export function ExpenseReportPdf({
 
 export function TaskReportPdf({
   brand,
+  t = identityT,
   project,
   tasks,
 }: {
   brand: PdfBrand;
+  t?: Translator;
   project: { name: string };
   tasks: Array<{
     title: string;
@@ -130,17 +153,27 @@ export function TaskReportPdf({
     due_at: string | null;
   }>;
 }) {
+  const tasksWord = t("pdf.reports.task.tasksWord", undefined, "Tasks");
   return (
-    <PdfDocument title={`Tasks · ${project.name}`} author={brand.producerName} subject="Task report">
-      <CoverPage brand={brand} eyebrow="Task report" title={project.name} subtitle={`${tasks.length} tasks`} />
-      <BrandedPage brand={brand} pageLabel="Tasks">
+    <PdfDocument
+      title={`${tasksWord} · ${project.name}`}
+      author={brand.producerName}
+      subject={t("pdf.reports.task.title", undefined, "Task report")}
+    >
+      <CoverPage
+        brand={brand}
+        eyebrow={t("pdf.reports.task.eyebrow", undefined, "Task report")}
+        title={project.name}
+        subtitle={t("pdf.reports.task.countSubtitle", { count: tasks.length }, `${tasks.length} tasks`)}
+      />
+      <BrandedPage brand={brand} pageLabel={tasksWord}>
         <PdfTable
           columns={[
-            { key: "title", label: "Task", width: 4 },
-            { key: "status", label: "Status", width: 1.5 },
-            { key: "priority", label: "Priority", width: 1.2 },
-            { key: "assignee", label: "Assignee", width: 2 },
-            { key: "due", label: "Due", width: 1.5 },
+            { key: "title", label: t("pdf.reports.task.colTask", undefined, "Task"), width: 4 },
+            { key: "status", label: t("pdf.reports.task.colStatus", undefined, "Status"), width: 1.5 },
+            { key: "priority", label: t("pdf.reports.task.colPriority", undefined, "Priority"), width: 1.2 },
+            { key: "assignee", label: t("pdf.reports.task.colAssignee", undefined, "Assignee"), width: 2 },
+            { key: "due", label: t("pdf.reports.task.colDue", undefined, "Due"), width: 1.5 },
           ]}
           rows={tasks.map((t) => ({
             title: t.title,
@@ -159,18 +192,25 @@ export function TaskReportPdf({
 
 export function RentalPullSheetPdf({
   brand,
+  t = identityT,
   rental,
   lineItems,
 }: {
   brand: PdfBrand;
+  t?: Translator;
   rental: { number: string; vendor_name: string | null; starts_on: string | null; ends_on: string | null };
   lineItems: Array<{ qty: number; item: string; serial?: string | null; note?: string | null }>;
 }) {
+  const pullSheetWord = t("pdf.reports.pullSheet.title", undefined, "Pull sheet");
   return (
-    <PdfDocument title={`Pull sheet ${rental.number}`} author={brand.producerName} subject="Rental pull sheet">
+    <PdfDocument
+      title={`${pullSheetWord} ${rental.number}`}
+      author={brand.producerName}
+      subject={t("pdf.reports.pullSheet.subject", undefined, "Rental pull sheet")}
+    >
       <CoverPage
         brand={brand}
-        eyebrow="Rental · pull sheet"
+        eyebrow={t("pdf.reports.pullSheet.eyebrow", undefined, "Rental · pull sheet")}
         title={`#${rental.number}`}
         subtitle={[
           rental.vendor_name,
@@ -179,13 +219,16 @@ export function RentalPullSheetPdf({
           .filter(Boolean)
           .join(" · ")}
       />
-      <BrandedPage brand={brand} pageLabel={`Rental ${rental.number}`}>
+      <BrandedPage
+        brand={brand}
+        pageLabel={t("pdf.reports.pullSheet.pageLabel", { number: rental.number }, `Rental ${rental.number}`)}
+      >
         <PdfTable
           columns={[
-            { key: "qty", label: "Qty", width: 0.7, align: "center" },
-            { key: "item", label: "Item", width: 5 },
-            { key: "serial", label: "Serial", width: 2 },
-            { key: "note", label: "Note", width: 2.5 },
+            { key: "qty", label: t("pdf.reports.pullSheet.colQty", undefined, "Qty"), width: 0.7, align: "center" },
+            { key: "item", label: t("pdf.reports.pullSheet.colItem", undefined, "Item"), width: 5 },
+            { key: "serial", label: t("pdf.reports.pullSheet.colSerial", undefined, "Serial"), width: 2 },
+            { key: "note", label: t("pdf.reports.pullSheet.colNote", undefined, "Note"), width: 2.5 },
           ]}
           rows={lineItems.map((li) => ({
             qty: String(li.qty),
@@ -203,10 +246,12 @@ export function RentalPullSheetPdf({
 
 export function SignageGridPdf({
   brand,
+  t = identityT,
   project,
   entries,
 }: {
   brand: PdfBrand;
+  t?: Translator;
   project: { name: string };
   entries: Array<{
     location: string;
@@ -217,23 +262,29 @@ export function SignageGridPdf({
     note?: string | null;
   }>;
 }) {
+  const signageWord = t("pdf.reports.signage.signageWord", undefined, "Signage");
+  const signageGridLabel = t("pdf.reports.signage.gridLabel", undefined, "Signage grid");
   return (
-    <PdfDocument title={`Signage · ${project.name}`} author={brand.producerName} subject="Signage grid">
+    <PdfDocument title={`${signageWord} · ${project.name}`} author={brand.producerName} subject={signageGridLabel}>
       <CoverPage
         brand={brand}
-        eyebrow="Signage grid"
+        eyebrow={signageGridLabel}
         title={project.name}
-        subtitle={`${entries.length} signage locations`}
+        subtitle={t(
+          "pdf.reports.signage.countSubtitle",
+          { count: entries.length },
+          `${entries.length} signage locations`,
+        )}
       />
-      <BrandedPage brand={brand} pageLabel="Signage grid">
+      <BrandedPage brand={brand} pageLabel={signageGridLabel}>
         <PdfTable
           columns={[
-            { key: "location", label: "Location", width: 3 },
-            { key: "type", label: "Type", width: 2 },
-            { key: "size", label: "Size", width: 1.5 },
-            { key: "install", label: "Install", width: 1.5 },
-            { key: "strike", label: "Strike", width: 1.5 },
-            { key: "note", label: "Note", width: 2 },
+            { key: "location", label: t("pdf.reports.signage.colLocation", undefined, "Location"), width: 3 },
+            { key: "type", label: t("pdf.reports.signage.colType", undefined, "Type"), width: 2 },
+            { key: "size", label: t("pdf.reports.signage.colSize", undefined, "Size"), width: 1.5 },
+            { key: "install", label: t("pdf.reports.signage.colInstall", undefined, "Install"), width: 1.5 },
+            { key: "strike", label: t("pdf.reports.signage.colStrike", undefined, "Strike"), width: 1.5 },
+            { key: "note", label: t("pdf.reports.signage.colNote", undefined, "Note"), width: 2 },
           ]}
           rows={entries.map((e) => ({
             location: e.location,

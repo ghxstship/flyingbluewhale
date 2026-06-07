@@ -4,6 +4,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Badge } from "@/components/ui";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
+import { getRequestT } from "@/lib/i18n/request";
 
 export type TrackerRow = {
   atom_id: string;
@@ -98,7 +99,7 @@ export function trackerTotals(atoms: TrackerRow[]) {
  * console tracker, the producer portal tracker, and (in a compact
  * form) the mobile tracker.
  */
-export function TrackerView({
+export async function TrackerView({
   atoms,
   atomHrefBuilder,
   emptyAction,
@@ -112,11 +113,16 @@ export function TrackerView({
   /** Card layout for small screens — no table, just summary cards. */
   compact?: boolean;
 }) {
+  const { t: tr } = await getRequestT();
   if (atoms.length === 0) {
     return (
       <EmptyState
-        title="No Atoms Yet"
-        description="Pin work to canonical XPMS atoms to see budget, schedule, and submittal progress roll up the WBS tree."
+        title={tr("components.trackerView.noAtoms", undefined, "No Atoms Yet")}
+        description={tr(
+          "components.trackerView.noAtomsDesc",
+          undefined,
+          "Pin work to canonical XPMS atoms to see budget, schedule, and submittal progress roll up the WBS tree.",
+        )}
         action={emptyAction}
       />
     );
@@ -127,41 +133,71 @@ export function TrackerView({
     <div className="space-y-4">
       <div className="metric-grid">
         <MetricCard
-          label="Budget"
+          label={tr("components.trackerView.budget", undefined, "Budget")}
           value={money(t.totalBudget)}
           delta={
             t.totalActual > 0
-              ? { value: `${money(t.totalActual)} actual`, positive: t.totalActual <= t.totalBudget }
+              ? {
+                  value: tr("components.trackerView.actualDelta", { amount: money(t.totalActual) }, "{amount} actual"),
+                  positive: t.totalActual <= t.totalBudget,
+                }
               : undefined
           }
         />
         <MetricCard
-          label="Committed"
+          label={tr("components.trackerView.committed", undefined, "Committed")}
           value={money(t.totalCommitted)}
           delta={
             t.totalCommitted > 0
-              ? { value: `${money(t.totalBudget - t.totalActual - t.totalCommitted)} remaining`, positive: true }
+              ? {
+                  value: tr(
+                    "components.trackerView.remainingDelta",
+                    { amount: money(t.totalBudget - t.totalActual - t.totalCommitted) },
+                    "{amount} remaining",
+                  ),
+                  positive: true,
+                }
               : undefined
           }
         />
         <MetricCard
-          label="Variance"
+          label={tr("components.trackerView.variance", undefined, "Variance")}
           value={money(t.totalVariance)}
           delta={
             t.totalVariance !== 0
-              ? { value: t.totalVariance > 0 ? "over baseline" : "under baseline", positive: t.totalVariance <= 0 }
+              ? {
+                  value:
+                    t.totalVariance > 0
+                      ? tr("components.trackerView.overBaseline", undefined, "over baseline")
+                      : tr("components.trackerView.underBaseline", undefined, "under baseline"),
+                  positive: t.totalVariance <= 0,
+                }
               : undefined
           }
           accent={t.totalVariance > 0}
         />
         <MetricCard
-          label="Progress"
+          label={tr("components.trackerView.progress", undefined, "Progress")}
           value={`${t.projectPct}%`}
           delta={
             t.totalTasks > 0
-              ? { value: `${t.totalTasksDone}/${t.totalTasks} tasks done`, positive: t.projectPct >= 50 }
+              ? {
+                  value: tr(
+                    "components.trackerView.tasksDoneDelta",
+                    { done: t.totalTasksDone, total: t.totalTasks },
+                    "{done}/{total} tasks done",
+                  ),
+                  positive: t.projectPct >= 50,
+                }
               : t.totalDeliv > 0
-                ? { value: `${t.totalDelivApproved}/${t.totalDeliv} submittals approved`, positive: true }
+                ? {
+                    value: tr(
+                      "components.trackerView.submittalsApprovedDelta",
+                      { done: t.totalDelivApproved, total: t.totalDeliv },
+                      "{done}/{total} submittals approved",
+                    ),
+                    positive: true,
+                  }
                 : undefined
           }
         />
@@ -186,7 +222,11 @@ export function TrackerView({
                   <span className="font-mono">{money(row.budget_cents_rollup ?? 0)}</span>
                   {row.pct_complete_rollup != null && (
                     <span className="flex-1">
-                      <ProgressBar value={rowPct} showLabel aria-label={`Progress ${rowPct}%`} />
+                      <ProgressBar
+                        value={rowPct}
+                        showLabel
+                        aria-label={tr("components.trackerView.progressAria", { pct: rowPct }, "Progress {pct}%")}
+                      />
                     </span>
                   )}
                 </div>
@@ -211,14 +251,24 @@ export function TrackerView({
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-                  <th className="px-4 py-3 text-start">WBS / Atom</th>
-                  <th className="px-3 py-3 text-right">Budget</th>
-                  <th className="px-3 py-3 text-right">Actual</th>
-                  <th className="px-3 py-3 text-right">Committed</th>
-                  <th className="px-3 py-3 text-right">Variance</th>
-                  <th className="px-3 py-3 text-start">Tasks</th>
-                  <th className="px-3 py-3 text-start">Submittals</th>
-                  <th className="px-4 py-3 text-start">Progress</th>
+                  <th className="px-4 py-3 text-start">
+                    {tr("components.trackerView.colWbsAtom", undefined, "WBS / Atom")}
+                  </th>
+                  <th className="px-3 py-3 text-right">{tr("components.trackerView.budget", undefined, "Budget")}</th>
+                  <th className="px-3 py-3 text-right">{tr("components.trackerView.actual", undefined, "Actual")}</th>
+                  <th className="px-3 py-3 text-right">
+                    {tr("components.trackerView.committed", undefined, "Committed")}
+                  </th>
+                  <th className="px-3 py-3 text-right">
+                    {tr("components.trackerView.variance", undefined, "Variance")}
+                  </th>
+                  <th className="px-3 py-3 text-start">{tr("components.trackerView.tasks", undefined, "Tasks")}</th>
+                  <th className="px-3 py-3 text-start">
+                    {tr("components.trackerView.submittals", undefined, "Submittals")}
+                  </th>
+                  <th className="px-4 py-3 text-start">
+                    {tr("components.trackerView.progress", undefined, "Progress")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -290,7 +340,14 @@ export function TrackerView({
                           <span className="font-mono">
                             {row.deliverables_approved_rollup ?? 0}/{row.deliverable_count_rollup ?? 0}
                             {(row.deliverables_open_rollup ?? 0) > 0 && (
-                              <span className="ms-1 text-[var(--p-text-2)]">· {row.deliverables_open_rollup} open</span>
+                              <span className="ms-1 text-[var(--p-text-2)]">
+                                ·{" "}
+                                {tr(
+                                  "components.trackerView.openCount",
+                                  { count: row.deliverables_open_rollup ?? 0 },
+                                  "{count} open",
+                                )}
+                              </span>
                             )}
                           </span>
                         )}
@@ -299,7 +356,11 @@ export function TrackerView({
                         {row.pct_complete_rollup == null ? (
                           <span className="text-xs text-[var(--p-text-2)]">—</span>
                         ) : (
-                          <ProgressBar value={rowPct} showLabel aria-label={`Progress ${rowPct}%`} />
+                          <ProgressBar
+                            value={rowPct}
+                            showLabel
+                            aria-label={tr("components.trackerView.progressAria", { pct: rowPct }, "Progress {pct}%")}
+                          />
                         )}
                       </td>
                     </tr>

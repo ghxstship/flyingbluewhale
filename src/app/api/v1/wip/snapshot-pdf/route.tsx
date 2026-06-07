@@ -7,6 +7,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { WipReportPdf } from "@/lib/pdf/wip-report";
+import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -90,12 +91,14 @@ export async function GET(req: Request) {
   }
 
   const brand = resolvePdfBrand({ org, client: null });
+  const { t } = await getRequestT();
 
   try {
     const { signedUrl } = await compileAndStore({
       doc: (
         <WipReportPdf
           brand={brand}
+          t={t}
           snapshot_date={snapshotDate}
           org_name={(org as { name: string }).name}
           rows={data.map((r) => ({

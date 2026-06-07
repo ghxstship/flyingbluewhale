@@ -7,6 +7,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { AiaPayAppPdf } from "@/lib/pdf/aia-pay-app";
+import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
@@ -143,6 +144,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ payAppId: strin
 
   // brand resolver expects client row; PO-side contracts use vendor, so pass null.
   const brand = resolvePdfBrand({ org, client: null });
+  const { t } = await getRequestT();
 
   // Build the G703 line array outside the JSX prop to keep the prop tree
   // shallow + the TS parser happy.
@@ -170,6 +172,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ payAppId: strin
       doc: (
         <AiaPayAppPdf
           brand={brand}
+          t={t}
           payApp={{
             application_number: pa.application_number,
             aia_form_version: pa.aia_form_version,

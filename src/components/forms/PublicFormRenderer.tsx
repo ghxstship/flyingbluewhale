@@ -7,6 +7,9 @@ import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { type FormSchema, type PublicFormField, isFieldVisible, isSectionVisible } from "@/lib/forms/types";
 import type { SubmitState } from "@/app/forms/[slug]/actions";
+import { useT } from "@/lib/i18n/LocaleProvider";
+
+type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 /**
  * Forms v2 public renderer — Phase 6.2 of the SmartSuite parity roadmap.
@@ -41,6 +44,7 @@ export function PublicFormRenderer({
   turnstileSiteKey,
   embed,
 }: PublicFormRendererProps) {
+  const t = useT();
   const errId = useId();
   const captchaContainerId = useId();
   const [state, action, pending] = useActionState<SubmitState, FormData>(
@@ -103,13 +107,23 @@ export function PublicFormRenderer({
           window.location.assign(redirect);
         }, 50);
       }
-      return <div className="surface p-6 text-center text-sm text-[var(--p-text-2)]">Redirecting…</div>;
+      return (
+        <div className="surface p-6 text-center text-sm text-[var(--p-text-2)]">
+          {t("components.publicFormRenderer.redirecting", undefined, "Redirecting…")}
+        </div>
+      );
     }
-    const title = schema.submit?.thankYouTitle ?? "Thanks — we received it.";
-    const body = schema.submit?.thankYouBody ?? "Your response was recorded. You can close this tab.";
+    const title =
+      schema.submit?.thankYouTitle ??
+      t("components.publicFormRenderer.thankYouTitle", undefined, "Thanks — we received it.");
+    const body =
+      schema.submit?.thankYouBody ??
+      t("components.publicFormRenderer.thankYouBody", undefined, "Your response was recorded. You can close this tab.");
     return (
       <div className="surface p-8 text-center">
-        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Submitted</div>
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
+          {t("components.publicFormRenderer.submitted", undefined, "Submitted")}
+        </div>
         <h2 className="mt-2 text-2xl font-semibold">{title}</h2>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">{body}</p>
       </div>
@@ -127,7 +141,7 @@ export function PublicFormRenderer({
       {/* Honeypot — hidden from real users via CSS, bots will fill it. */}
       <div className="absolute -start-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
         <label>
-          Leave blank
+          {t("components.publicFormRenderer.leaveBlank", undefined, "Leave blank")}
           <input type="text" name="hp_url" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
@@ -151,7 +165,13 @@ export function PublicFormRenderer({
                 </legend>
                 {section.description ? <p className="text-xs text-[var(--p-text-2)]">{section.description}</p> : null}
                 {sectionFields.map((f) => (
-                  <FieldRenderer key={f.key} field={f} value={values[f.key]} onChange={(v) => setValue(f.key, v)} />
+                  <FieldRenderer
+                    key={f.key}
+                    field={f}
+                    value={values[f.key]}
+                    onChange={(v) => setValue(f.key, v)}
+                    t={t}
+                  />
                 ))}
               </fieldset>
             );
@@ -162,7 +182,7 @@ export function PublicFormRenderer({
       {(sections.get(null) ?? [])
         .filter((f) => isFieldVisible(f, values))
         .map((f) => (
-          <FieldRenderer key={f.key} field={f} value={values[f.key]} onChange={(v) => setValue(f.key, v)} />
+          <FieldRenderer key={f.key} field={f} value={values[f.key]} onChange={(v) => setValue(f.key, v)} t={t} />
         ))}
 
       {schema.antiSpam?.captcha && turnstileSiteKey ? (
@@ -179,7 +199,9 @@ export function PublicFormRenderer({
 
       <div className="flex justify-end pt-2">
         <Button type="submit" loading={pending}>
-          {pending ? "Submitting" : (schema.submit?.submitLabel ?? "Submit")}
+          {pending
+            ? t("components.publicFormRenderer.submitting", undefined, "Submitting")
+            : (schema.submit?.submitLabel ?? t("components.publicFormRenderer.submit", undefined, "Submit"))}
         </Button>
       </div>
     </form>
@@ -190,10 +212,12 @@ function FieldRenderer({
   field,
   value,
   onChange,
+  t,
 }: {
   field: PublicFormField;
   value: unknown;
   onChange: (v: unknown) => void;
+  t: Translator;
 }) {
   const name = `f_${field.key}`;
   const labelEl = (
@@ -235,7 +259,7 @@ function FieldRenderer({
           className="ps-input mt-1.5 w-full"
         >
           <option value="" disabled>
-            {field.placeholder || "Select…"}
+            {field.placeholder || t("components.publicFormRenderer.selectPlaceholder", undefined, "Select…")}
           </option>
           {(field.options ?? []).map((opt) => (
             <option key={opt} value={opt}>
@@ -301,7 +325,9 @@ function FieldRenderer({
           accept="image/*,application/pdf"
           className="mt-1.5 block w-full text-sm"
         />
-        <p className="mt-1 text-[11px] text-[var(--p-text-2)]">Up to 10 MB. Images or PDF.</p>
+        <p className="mt-1 text-[11px] text-[var(--p-text-2)]">
+          {t("components.publicFormRenderer.fileHelp", undefined, "Up to 10 MB. Images or PDF.")}
+        </p>
       </div>
     );
   }

@@ -19,8 +19,16 @@ import type { PdfBrand } from "./branding";
  * consistent with the rest of the platform.
  */
 
+/** Request-scoped translator: `t(key, vars?, fallback?)`. */
+export type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
+
+/** Identity fallback used when no translator is threaded in (existing callers). */
+const identityT: Translator = (_k, _v, fb) => fb ?? "";
+
 export type InvoicePdfInput = {
   brand: PdfBrand;
+  /** Optional request-scoped translator; defaults to English fallbacks. */
+  t?: Translator;
   invoice: {
     number: string;
     title: string | null;
@@ -50,7 +58,13 @@ function money(cents: number, currency: string): string {
   }
 }
 
-export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _paymentIntentUrl }: InvoicePdfInput) {
+export function InvoicePdf({
+  brand,
+  t = identityT,
+  invoice,
+  lineItems,
+  paymentIntentUrl: _paymentIntentUrl,
+}: InvoicePdfInput) {
   const total = invoice.amount_cents;
   const subtotal = lineItems.reduce(
     (sum, li) => sum + Math.round(Number(li.quantity) * Number(li.unit_price_cents)),
@@ -60,39 +74,45 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
   // single line rather than misreporting `total`.
   const adjustments = total - subtotal;
 
-  const status = invoice.paid_at ? "PAID" : (invoice.status?.toUpperCase() ?? "ISSUED");
-  const statusEyebrow = `Invoice · ${status}`;
+  const status = invoice.paid_at
+    ? t("pdf.invoice.statusPaid", undefined, "PAID")
+    : (invoice.status?.toUpperCase() ?? t("pdf.invoice.statusIssued", undefined, "ISSUED"));
+  const statusEyebrow = `${t("pdf.invoice.eyebrow", undefined, "Invoice")} · ${status}`;
+  const invoiceTitleFallback = t("pdf.invoice.titleFallback", { number: invoice.number }, `Invoice ${invoice.number}`);
 
   return (
     <PdfDocument
-      title={`Invoice ${invoice.number}`}
+      title={invoiceTitleFallback}
       author={brand.producerName}
-      subject={invoice.title ?? `Invoice ${invoice.number}`}
+      subject={invoice.title ?? invoiceTitleFallback}
     >
       <CoverPage
         brand={brand}
         eyebrow={statusEyebrow}
-        title={invoice.title ?? `Invoice ${invoice.number}`}
+        title={invoice.title ?? invoiceTitleFallback}
         subtitle={money(total, invoice.currency)}
-        classification={invoice.paid_at ? undefined : "DUE"}
+        classification={invoice.paid_at ? undefined : t("pdf.invoice.classificationDue", undefined, "DUE")}
         classificationTier={invoice.paid_at ? 0 : 3}
       />
 
-      <BrandedPage brand={brand} pageLabel={`Invoice ${invoice.number}`}>
-        <SectionHeading eyebrow="Bill To" title={brand.clientName ?? "Client"} />
-        <KeyValue label="Invoice #" value={invoice.number} />
-        <KeyValue label="Issued" value={invoice.issued_at ?? "—"} />
-        <KeyValue label="Due" value={invoice.due_at ?? "—"} />
-        <KeyValue label="Currency" value={invoice.currency} />
+      <BrandedPage brand={brand} pageLabel={invoiceTitleFallback}>
+        <SectionHeading
+          eyebrow={t("pdf.invoice.billTo", undefined, "Bill To")}
+          title={brand.clientName ?? t("pdf.invoice.client", undefined, "Client")}
+        />
+        <KeyValue label={t("pdf.invoice.invoiceNumber", undefined, "Invoice #")} value={invoice.number} />
+        <KeyValue label={t("pdf.invoice.issued", undefined, "Issued")} value={invoice.issued_at ?? "—"} />
+        <KeyValue label={t("pdf.invoice.due", undefined, "Due")} value={invoice.due_at ?? "—"} />
+        <KeyValue label={t("pdf.invoice.currency", undefined, "Currency")} value={invoice.currency} />
 
-        <SectionHeading title="Line Items" />
+        <SectionHeading title={t("pdf.invoice.lineItems", undefined, "Line Items")} />
         <PdfTable
           accentColor={brand.producerAccent}
           columns={[
-            { key: "description", label: "Description", width: 6 },
-            { key: "quantity", label: "Qty", width: 1, align: "right" },
-            { key: "unit", label: "Unit", width: 2, align: "right" },
-            { key: "amount", label: "Amount", width: 2, align: "right" },
+            { key: "description", label: t("pdf.invoice.colDescription", undefined, "Description"), width: 6 },
+            { key: "quantity", label: t("pdf.invoice.colQty", undefined, "Qty"), width: 1, align: "right" },
+            { key: "unit", label: t("pdf.invoice.colUnit", undefined, "Unit"), width: 2, align: "right" },
+            { key: "amount", label: t("pdf.invoice.colAmount", undefined, "Amount"), width: 2, align: "right" },
           ]}
           rows={lineItems.map((li) => ({
             description: li.description,
@@ -103,8 +123,16 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
         />
 
         <View style={{ marginTop: 12, alignItems: "flex-end" }}>
-          <KeyValue label="Subtotal" value={money(subtotal, invoice.currency)} />
-          {adjustments !== 0 ? <KeyValue label="Taxes / fees" value={money(adjustments, invoice.currency)} /> : null}
+          <KeyValue
+            label={t("pdf.invoice.subtotal", undefined, "Subtotal")}
+            value={money(subtotal, invoice.currency)}
+          />
+          {adjustments !== 0 ? (
+            <KeyValue
+              label={t("pdf.invoice.taxesFees", undefined, "Taxes / fees")}
+              value={money(adjustments, invoice.currency)}
+            />
+          ) : null}
           <View style={{ marginTop: 8, borderTopWidth: 1, borderTopColor: brand.producerAccent, paddingTop: 4 }}>
             <Text style={{ fontSize: 14, fontWeight: 700 }}>{money(total, invoice.currency)}</Text>
           </View>
@@ -112,7 +140,7 @@ export function InvoicePdf({ brand, invoice, lineItems, paymentIntentUrl: _payme
 
         {invoice.notes ? (
           <>
-            <SectionHeading title="Notes" />
+            <SectionHeading title={t("pdf.invoice.notes", undefined, "Notes")} />
             <Text style={styles.p}>{invoice.notes}</Text>
           </>
         ) : null}

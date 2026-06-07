@@ -18627,6 +18627,1723 @@
       "placeholder": "Select date",
       "prevMonth": "Previous month",
       "nextMonth": "Next month"
+    },
+    "triggerEditor": {
+      "kind": {
+        "manual": "Manual",
+        "schedule": "Schedule",
+        "webhook": "Webhook",
+        "event": "Record Event"
+      },
+      "desc": {
+        "manual": "Triggered by a user clicking Run now on this page.",
+        "schedule": "Runs on a recurring cron / RRULE schedule. Backend lands in Phase 4.3.",
+        "webhook": "Runs when an inbound HTTP POST hits the URL below. Backend lands in Phase 4.3.",
+        "event": "Runs when a record event matches — created or updated. Backend lands in Phase 4.5."
+      },
+      "kindLabel": "Kind",
+      "kindAria": "Trigger kind",
+      "manualNote": "No additional configuration. Use the Run now button under Controls to trigger a run.",
+      "comingSoon": "Coming Soon",
+      "scheduleSoon": "Schedule trigger lands in Phase 4.3.",
+      "rruleLabel": "RRULE / cron",
+      "rruleHint": "iCal RRULE syntax. Saved now; runner enables it in P4.3.",
+      "webhookSoon": "Inbound endpoint lands in Phase 4.3.",
+      "inboundUrl": "Inbound URL",
+      "secretLabel": "Shared Secret — HMAC",
+      "secretPlaceholder": "Optional — falls back to per-automation secret",
+      "secretHint": "If set, the runner verifies x-lyt-signature before dispatch.",
+      "eventSoon": "Event subscription lands in Phase 4.5.",
+      "targetTable": "Target Table",
+      "targetTableAria": "Target table",
+      "selectPlaceholder": "Select…",
+      "eventType": "Event Type",
+      "eventTypeAria": "Event type",
+      "recordCreated": "Record created",
+      "recordUpdated": "Record updated",
+      "recordDeleted": "Record deleted"
+    },
+    "stepBuilder": {
+      "steps": "Steps",
+      "noSteps": "No steps yet.",
+      "noStepsHint": "Add an action to get started.",
+      "savingTrigger": "Saving trigger…",
+      "savingSteps": "Saving steps…",
+      "triggerSaved": "Trigger saved",
+      "stepsSaved": "Steps saved",
+      "unknownError": "unknown error",
+      "triggerFailed": "Trigger save failed: {error}",
+      "stepsFailed": "Steps save failed: {error}"
+    },
+    "addStepMenu": {
+      "addStep": "Add Step",
+      "actions": "ACTIONS",
+      "noActions": "No actions registered."
+    },
+    "runTimeline": {
+      "status": {
+        "pending": "Pending",
+        "running": "Running",
+        "success": "Success",
+        "failed": "Failed",
+        "skipped": "Skipped"
+      },
+      "empty": "{label}: empty",
+      "noSteps": "No steps recorded.",
+      "unknownAction": "Unknown",
+      "input": "Input",
+      "output": "Output"
+    },
+    "calendarView": {
+      "mode": {
+        "month": "Month",
+        "week": "Week",
+        "day": "Day",
+        "agenda": "Agenda"
+      },
+      "rescheduledTo": "Rescheduled to {date}",
+      "rescheduleFailed": "Reschedule failed",
+      "upcoming": "Upcoming",
+      "today": "Today",
+      "previous": "Previous",
+      "next": "Next",
+      "jumpToDate": "Jump to date",
+      "calendarMode": "Calendar mode"
+    },
+    "timelineView": {
+      "zoom": {
+        "day": "Day",
+        "week": "Week",
+        "month": "Month",
+        "quarter": "Quarter"
+      },
+      "movedOne": "Moved {title} by {count} day",
+      "movedMany": "Moved {title} by {count} days",
+      "moveFailed": "Move failed for {title}",
+      "resizeFailed": "Resize failed for {title}",
+      "resized": "Resized {title}",
+      "noLanes": "No Lanes",
+      "noLanesDesc": "Provide at least one lane to render the timeline.",
+      "timeline": "Timeline",
+      "timelineZoom": "Timeline zoom",
+      "lane": "Lane",
+      "noItems": "No Items in Range",
+      "noItemsDesc": "Add a record with a start and end date to populate the timeline."
+    },
+    "mapView": {
+      "tone": {
+        "info": "Info",
+        "warn": "Warning",
+        "error": "Error",
+        "success": "Success",
+        "neutral": "Neutral",
+        "accent": "Accent"
+      },
+      "clusterLocations": "{count} locations",
+      "noLocations": "No Locations on Map",
+      "noLocationsDesc": "Add an address or lat/lng to a record to see it here.",
+      "legend": "Map legend",
+      "viewDetails": "View Details"
+    },
+    "trackerView": {
+      "noAtoms": "No Atoms Yet",
+      "noAtomsDesc": "Pin work to canonical XPMS atoms to see budget, schedule, and submittal progress roll up the WBS tree.",
+      "budget": "Budget",
+      "committed": "Committed",
+      "variance": "Variance",
+      "progress": "Progress",
+      "actual": "Actual",
+      "tasks": "Tasks",
+      "submittals": "Submittals",
+      "colWbsAtom": "WBS / Atom",
+      "actualDelta": "{amount} actual",
+      "remainingDelta": "{amount} remaining",
+      "overBaseline": "over baseline",
+      "underBaseline": "under baseline",
+      "tasksDoneDelta": "{done}/{total} tasks done",
+      "submittalsApprovedDelta": "{done}/{total} submittals approved",
+      "progressAria": "Progress {pct}%",
+      "openCount": "{count} open"
+    },
+    "atomDrillIn": {
+      "taskStatus": {
+        "todo": "To Do",
+        "in_progress": "In Progress",
+        "blocked": "Blocked",
+        "review": "Review",
+        "done": "Done"
+      },
+      "deliverableState": {
+        "briefed": "Briefed",
+        "draft": "Draft",
+        "submitted": "Submitted",
+        "in_review": "In Review",
+        "revision_requested": "Revision Requested",
+        "approved": "Approved",
+        "delivered": "Delivered",
+        "rejected": "Rejected"
+      },
+      "tabTasks": "Tasks",
+      "tabSubmittals": "Submittals",
+      "tabExpenses": "Expenses",
+      "tabPos": "POs",
+      "tabVariance": "Variance",
+      "noTasks": "No tasks pinned to this atom.",
+      "noSubmittals": "No submittals pinned to this atom.",
+      "noExpenses": "No expenses pinned to this atom.",
+      "noPos": "No PO line items pinned to this atom.",
+      "noVariance": "No variance entries for this atom."
+    },
+    "activityDrawer": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "noActivity": "No activity yet",
+      "noActivityDesc": "Edits, transitions, and comments will surface here.",
+      "activity": "Activity",
+      "refresh": "Refresh activity",
+      "loadMore": "Load More"
+    },
+    "incidentForm": {
+      "uploadFailed": "Upload failed: {name}",
+      "summaryRequired": "Summary is required",
+      "reported": "Incident reported",
+      "submitFailed": "Submit failed",
+      "summaryLabel": "Summary",
+      "summaryPlaceholder": "e.g. Slip on wet floor backstage",
+      "severityLabel": "Severity",
+      "severity": {
+        "nearMiss": "Near-miss",
+        "minor": "Minor",
+        "major": "Major",
+        "critical": "Critical"
+      },
+      "occurredAtLabel": "Occurred At",
+      "projectLabel": "Project",
+      "projectNone": "— None —",
+      "locationLabel": "Location",
+      "locationPlaceholder": "e.g. Stage-right monitor world",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "What happened, what was the response, witnesses…",
+      "photosLabel": "Photos",
+      "chooseFiles": "Choose files",
+      "camera": "Camera",
+      "uploading": "Uploading…",
+      "photoAlt": "Uploaded incident photo",
+      "removePhoto": "Remove photo",
+      "emergencyNotice": "In emergencies, call local services first — then log here.",
+      "submitting": "Submitting…",
+      "submit": "Submit report"
+    },
+    "guideComments": {
+      "postFailed": "Couldn't post comment",
+      "postFailedShort": "Couldn't post",
+      "posted": "Posted",
+      "heading": "Comments",
+      "namePlaceholder": "Your name · optional",
+      "nameLabel": "Your Name",
+      "bodyPlaceholder": "Add a comment or question…",
+      "bodyLabel": "Comment Body",
+      "post": "Post",
+      "empty": "No comments yet.",
+      "anonymous": "Anonymous"
+    },
+    "guideView": {
+      "accessTier": "Access tier {tier}",
+      "lastUpdated": "Last updated {date}",
+      "allowed": "Allowed",
+      "notAllowed": "Not allowed",
+      "setTimes": {
+        "artist": "Artist",
+        "stage": "Stage",
+        "start": "Start",
+        "end": "End"
+      },
+      "credentials": {
+        "area": "Area"
+      },
+      "ppe": {
+        "item": "Item",
+        "required": "Required",
+        "note": "Note",
+        "requiredLabel": "Required",
+        "notRequiredLabel": "Not required"
+      },
+      "radio": {
+        "channel": "Channel",
+        "purpose": "Purpose",
+        "code": "Code",
+        "meaning": "Meaning"
+      },
+      "evacuation": {
+        "from": "From",
+        "to": "To",
+        "via": "Via",
+        "direct": "direct",
+        "assemblyPoint": "Assembly Point"
+      }
+    },
+    "templatePicker": {
+      "trigger": "Start from template",
+      "title": "Pick a template",
+      "description": "Pre-fill the deliverable with a saved template. Org-scoped templates appear alongside platform globals.",
+      "filterPlaceholder": "Filter templates…",
+      "filterLabel": "Filter Templates",
+      "loading": "Loading templates…",
+      "platformTemplate": "Platform template",
+      "emptyNone": "No templates yet. Create one from /console/settings/templates.",
+      "emptyNoMatch": "No templates match “{query}”."
+    },
+    "portalPrivacyPanel": {
+      "eyebrow": "Portal",
+      "privacy": "Privacy",
+      "configureSupabase": "Configure Supabase.",
+      "headerEyebrow": "Portal · Privacy",
+      "title": "Your Data",
+      "subtitle": "Submit a data subject access request, manage consent, or download what we hold about you.",
+      "openRequests": "Open Requests",
+      "totalRequests": "Total Requests",
+      "activeConsents": "Active Consents",
+      "submitRequest": "Submit a Request",
+      "submitRequestBody": "Under your jurisdiction's privacy law (GDPR, CCPA, LGPD, etc.) you may request access, portability, correction, or erasure of personal data we process about you.",
+      "downloadData": "Download my data · JSON",
+      "emailDsar": "Email a DSAR",
+      "yourRequests": "Your Requests",
+      "noRequests": "No requests on record. New ones land here once submitted.",
+      "filed": "filed {date}",
+      "due": "due {date}",
+      "fulfilled": "fulfilled {date}",
+      "consentLedger": "Consent Ledger",
+      "noConsents": "No consent records yet. When you grant or revoke consent for a specific purpose, it lands here.",
+      "granted": "granted {date}",
+      "revoked": "revoked {date}",
+      "statusGranted": "granted",
+      "statusRevoked": "revoked",
+      "roleNoteBefore": "Data we process about you depends on your role. As a",
+      "roleNoteAfter": "you may have records in: accreditations, credentials, advancing rider, contracts, payments, scans, and signed disclosures. Requesting erasure may impact your active engagement — we'll confirm before processing."
+    },
+    "proposalBlockRenderer": {
+      "schedule": {
+        "phase": "Phase",
+        "milestone": "Milestone",
+        "date": "Date"
+      },
+      "totalInvestment": "Total investment",
+      "engagementDeposit": "Engagement deposit",
+      "dueOnSignature": "Due on contract signature",
+      "balance": "Balance",
+      "dueBeforeEvent": "Due 30 days before event",
+      "paymentMethod": "Payment method",
+      "technicalPackage": "Technical production package",
+      "available": "Available"
+    },
+    "stagePlotCanvas": {
+      "palette": {
+        "mic": "Mic",
+        "monitor": "Monitor",
+        "amp": "Amp",
+        "drum_kit": "Drum Kit",
+        "guitar": "Guitar",
+        "keys": "Keys",
+        "speaker": "Speaker",
+        "di_box": "DI",
+        "light_truss": "Light Truss",
+        "riser": "Riser"
+      },
+      "saved": "Stage plot saved",
+      "saveFailed": "Save failed",
+      "plotNameLabel": "Plot Name",
+      "width": "Width",
+      "depth": "Depth",
+      "feetAbbr": "ft",
+      "undoLabel": "Undo last change",
+      "undo": "Undo",
+      "deleteLabel": "Delete selected element",
+      "delete": "Delete",
+      "saving": "Saving…",
+      "save": "Save",
+      "paletteHeading": "Palette",
+      "paletteHelp": "Pick a tool, then click the stage to place. Drag to move. Delete to remove. ⌘Z undo.",
+      "canvasLabel": "Stage plot canvas",
+      "downstage": "Downstage · audience",
+      "dimensions": "{width}′ × {depth}′ stage",
+      "elementCountOne": "{count} element",
+      "elementCountMany": "{count} elements"
+    },
+    "publicFormRenderer": {
+      "redirecting": "Redirecting…",
+      "thankYouTitle": "Thanks — we received it.",
+      "thankYouBody": "Your response was recorded. You can close this tab.",
+      "submitted": "Submitted",
+      "leaveBlank": "Leave blank",
+      "submitting": "Submitting",
+      "submit": "Submit",
+      "selectPlaceholder": "Select…",
+      "fileHelp": "Up to 10 MB. Images or PDF."
     }
+  },
+  "pdf": {
+    "invoice": {
+      "eyebrow": "Invoice",
+      "statusPaid": "PAID",
+      "statusIssued": "ISSUED",
+      "titleFallback": "Invoice {number}",
+      "classificationDue": "DUE",
+      "billTo": "Bill To",
+      "client": "Client",
+      "invoiceNumber": "Invoice #",
+      "issued": "Issued",
+      "due": "Due",
+      "currency": "Currency",
+      "lineItems": "Line Items",
+      "colDescription": "Description",
+      "colQty": "Qty",
+      "colUnit": "Unit",
+      "colAmount": "Amount",
+      "subtotal": "Subtotal",
+      "taxesFees": "Taxes / fees",
+      "notes": "Notes"
+    },
+    "proposal": {
+      "eyebrow": "Proposal",
+      "statusSigned": "SIGNED",
+      "classificationExecuted": "EXECUTED",
+      "summary": "Summary",
+      "proposalNumber": "Proposal #",
+      "status": "Status",
+      "total": "Total",
+      "deposit": "Deposit",
+      "sent": "Sent",
+      "expires": "Expires",
+      "notes": "Notes",
+      "signatures": "Signatures",
+      "signature": "Signature",
+      "signedFromLine": "Signed {date} from {ip}",
+      "signaturePending": "Pending — sign the proposal at the shared link to execute.",
+      "sectionFallback": "Section",
+      "colItem": "Item",
+      "colDescription": "Description",
+      "colAmount": "Amount",
+      "colMilestone": "Milestone",
+      "colDate": "Date"
+    },
+    "reports": {
+      "expense": {
+        "title": "Expense report",
+        "eyebrow": "Expense Report",
+        "total": "Total",
+        "expenses": "Expenses",
+        "timeEntries": "Time Entries",
+        "mileage": "Mileage",
+        "colDate": "Date",
+        "colDescription": "Description",
+        "colCategory": "Category",
+        "colAmount": "Amount",
+        "colMember": "Member",
+        "colHours": "Hours",
+        "colRate": "Rate",
+        "colMiles": "Miles",
+        "colRatePerMile": "Rate/mi"
+      },
+      "task": {
+        "title": "Task report",
+        "eyebrow": "Task report",
+        "tasksWord": "Tasks",
+        "countSubtitle": "{count} tasks",
+        "colTask": "Task",
+        "colStatus": "Status",
+        "colPriority": "Priority",
+        "colAssignee": "Assignee",
+        "colDue": "Due"
+      },
+      "pullSheet": {
+        "title": "Pull sheet",
+        "subject": "Rental pull sheet",
+        "eyebrow": "Rental · pull sheet",
+        "pageLabel": "Rental {number}",
+        "colQty": "Qty",
+        "colItem": "Item",
+        "colSerial": "Serial",
+        "colNote": "Note"
+      },
+      "signage": {
+        "signageWord": "Signage",
+        "gridLabel": "Signage grid",
+        "countSubtitle": "{count} signage locations",
+        "colLocation": "Location",
+        "colType": "Type",
+        "colSize": "Size",
+        "colInstall": "Install",
+        "colStrike": "Strike",
+        "colNote": "Note"
+      }
+    },
+    "callSheet": {
+      "eyebrow": "Call sheet",
+      "eyebrowLabor": "Labor call",
+      "venue": "Venue",
+      "venueName": "Name",
+      "venueAddress": "Address",
+      "schedule": "Schedule",
+      "laborSchedule": "Labor schedule",
+      "crew": "Crew",
+      "laborRoster": "Labor roster",
+      "weather": "Weather",
+      "colStart": "Start",
+      "colEnd": "End",
+      "colActivity": "Activity",
+      "colLocation": "Location",
+      "colName": "Name",
+      "colRole": "Role",
+      "colContact": "Contact"
+    },
+    "certifiedPayroll": {
+      "title": "Certified Payroll",
+      "formWh347": "U.S. DOL Form WH-347 — Davis-Bacon Certified Payroll",
+      "formGeneric": "Certified Payroll — {type}",
+      "weekEndingShort": "WE",
+      "weekEnding": "Week ending",
+      "statementOfCompliance": "Statement of Compliance",
+      "projectContractor": "Project & Contractor",
+      "project": "Project",
+      "projectAddress": "Project address",
+      "contractor": "Contractor",
+      "contractorAddress": "Contractor address",
+      "form": "Form",
+      "payPeriod": "Pay period",
+      "state": "State",
+      "workerDetail": "Worker Detail",
+      "hoursColumnsNote": "Hours columns are Sun / Mon / Tue / Wed / Thu / Fri / Sat. Amounts in USD.",
+      "colWorker": "Worker",
+      "colSsn": "SSN",
+      "colClass": "Class",
+      "colSun": "S",
+      "colMon": "M",
+      "colTue": "T",
+      "colWed": "W",
+      "colThu": "T",
+      "colFri": "F",
+      "colSat": "S",
+      "colSt": "ST",
+      "colOt": "OT",
+      "colRate": "Rate",
+      "colGross": "Gross",
+      "colNet": "Net",
+      "colHours": "Hours",
+      "colFringes": "Fringes",
+      "totals": "Totals",
+      "attestIntroLead": "I,",
+      "certifierNamePlaceholder": "[Certifier Name]",
+      "attestIntroTrail": ", do hereby state:",
+      "clause1": "(1) That I pay or supervise the payment of the persons employed by {contractor} on the {project} project; that during the payroll period commencing on the {start} day and ending the {end} day, all persons employed on said project have been paid the full weekly wages earned, that no rebates have been or will be made either directly or indirectly to or on behalf of said contractor or subcontractor from the full weekly wages earned by any person and that no deductions have been made either directly or indirectly from the full wages earned by any person, other than permissible deductions as defined in Regulations, Part 3 (29 CFR Subtitle A).",
+      "clause2": "(2) That any payrolls otherwise under this contract required to be submitted for the above period are correct and complete; that the wage rates for laborers or mechanics contained therein are not less than the applicable wage rates contained in any wage determination incorporated into the contract; that the classifications set forth therein for each laborer or mechanic conform with the work he performed.",
+      "clause3": "(3) That any apprentices employed in the above period are duly registered in a bona fide apprenticeship program registered with a State apprenticeship agency recognized by the Bureau of Apprenticeship and Training, United States Department of Labor, or if no such recognized agency exists in a State, are registered with the Bureau of Apprenticeship and Training, United States Department of Labor.",
+      "clause4WithFringes": "(4) That fringe benefits required by the wage determination have been paid as applicable — total fringe payments this period: {amount}.",
+      "clause4NoFringes": "(4) That fringe benefits required by the wage determination have been paid as applicable — no fringes due this period.",
+      "certified": "Certified",
+      "signedBy": "Signed by",
+      "notes": "Notes"
+    },
+    "aiaPayApp": {
+      "title": "Pay Application #{number}",
+      "eyebrow": "Application & Certificate for Payment",
+      "appAbbrev": "App #{number}",
+      "projectContract": "Project & Contract",
+      "project": "Project",
+      "projectAddress": "Project address",
+      "contractorVendor": "Contractor / Vendor",
+      "vendorAddress": "Vendor address",
+      "contractPo": "Contract / PO",
+      "formVersion": "Form version",
+      "applicationPeriod": "Application period",
+      "periodThrough": "{start} through {end}",
+      "status": "Status",
+      "applicationSummary": "Application Summary",
+      "colLine": "Line",
+      "colDescription": "Description",
+      "colAmount": "Amount",
+      "lineOriginalContractSum": "Original Contract Sum",
+      "lineNetChangeByChangeOrders": "Net change by Change Orders",
+      "lineContractSumToDate": "Contract Sum to Date — Line 1 ± 2",
+      "lineTotalCompletedStored": "Total Completed & Stored to Date",
+      "lineRetainage": "Retainage — {pct}",
+      "lineTotalEarnedLessRetainage": "Total Earned Less Retainage — Line 4 − 5",
+      "lineLessPreviousCertificates": "Less Previous Certificates for Payment",
+      "lineCurrentPaymentDue": "Current Payment Due — Line 6 − 7",
+      "lineBalanceToFinish": "Balance to Finish, Including Retainage",
+      "contractorCertification": "Contractor's Certification",
+      "contractorCertificationBody": "The undersigned Contractor certifies that to the best of the Contractor's knowledge, information, and belief the Work covered by this Application for Payment has been completed in accordance with the Contract Documents, that all amounts have been paid by the Contractor for Work for which previous Certificates for Payment were issued and payments received from the Owner, and that current payment shown herein is now due.",
+      "submitted": "Submitted",
+      "architectCertificate": "Architect's Certificate",
+      "architectCertificateBody": "In accordance with the Contract Documents, based on on-site observations and the data comprising this Application, the Architect certifies to the Owner that to the best of the Architect's knowledge, information, and belief the Work has progressed as indicated, the quality of the Work is in accordance with the Contract Documents, and the Contractor is entitled to payment of the AMOUNT CERTIFIED.",
+      "amountCertified": "Amount Certified",
+      "architect": "Architect",
+      "certified": "Certified",
+      "notes": "Notes",
+      "scheduleOfValues": "Schedule of Values — Continuation Sheet",
+      "columnsNote": "Columns A–I per AIA G703. Amounts in USD.",
+      "colScheduled": "Scheduled",
+      "colPrior": "Prior",
+      "colThisPeriod": "This Period",
+      "colStored": "Stored",
+      "colTotalAndPct": "Total & %",
+      "colBalance": "Balance",
+      "colRetainage": "Retainage",
+      "colTotal": "Total",
+      "totals": "Totals"
+    },
+    "wipReport": {
+      "titleShort": "WIP Report",
+      "subjectPrefix": "Work-In-Progress",
+      "eyebrow": "Work-In-Progress Report",
+      "asOf": "As of {date}",
+      "coverSubtitle": "{count} active projects · {bonded} bonded · {over} over-billed · {under} under-billed",
+      "over": "Over",
+      "under": "Under",
+      "portfolioSummary": "Portfolio Summary",
+      "snapshotDate": "Snapshot date",
+      "activeProjects": "Active projects",
+      "aggregateRevisedContract": "Aggregate revised contract",
+      "aggregateCostsToDate": "Aggregate costs-to-date",
+      "aggregateEarned": "Aggregate earned",
+      "aggregateBilled": "Aggregate billed",
+      "netOverUnderBilled": "Net over/under-billed",
+      "aggregateEac": "Aggregate EAC",
+      "projects": "Projects",
+      "tableNote": "All amounts in USD. % Comp is by cost. Over/Under = Earned − Billed (positive = over-billed).",
+      "colProject": "Project",
+      "colRevised": "Revised",
+      "colCostToDate": "Cost-to-Date",
+      "colEarned": "Earned",
+      "colBilled": "Billed",
+      "colOverUnder": "O/U",
+      "colEac": "EAC",
+      "totals": "Totals",
+      "projectsCount": "{count} projects",
+      "methodology": "Methodology",
+      "methodologyBody": "Percent-complete = costs_to_date / estimated_at_completion. Earned revenue = revised_contract × % comp. Over/under-billed = earned − billed (positive = over-billed, negative = under-billed). Estimated cost-to-complete = EAC − costs_to_date."
+    },
+    "vendorRfp": {
+      "eyebrow": "Request for Proposal",
+      "subtitle": "For {vendor}",
+      "subtitleWithDeadline": "For {vendor} · responses due {deadline}",
+      "scope": "Scope",
+      "deliverablesRequested": "Deliverables Requested",
+      "colDeliverable": "Deliverable",
+      "colDescription": "Description",
+      "colDue": "Due",
+      "howToRespond": "How to Respond"
+    },
+    "brandKit": {
+      "title": "Brand kit",
+      "eyebrow": "Brand Kit",
+      "coverSubtitle": "Design tokens, logo, and style rules.",
+      "color": "Color",
+      "accent": "Accent",
+      "legalFooter": "Legal Footer",
+      "typography": "Typography",
+      "displaySample": "Display 24pt",
+      "titleSample": "Title 14pt",
+      "bodySample": "Body 11pt, 1.45 line-height. Use Helvetica for interoperability in field prints.",
+      "usageRules": "Usage Rules",
+      "usageRule1": "• Use the accent color for running header bars + primary CTAs.",
+      "usageRule2": "• Tier 4+ documents carry a crimson classification banner — override the accent only for the banner.",
+      "usageRule3": "• Legal footer appears on every page of every producer-generated document."
+    },
+    "deliverablesViews": {
+      "inputList": {
+        "heading": "Input List",
+        "colCh": "Ch",
+        "colSource": "Source",
+        "colMic": "Mic/DI",
+        "colInsert": "Insert",
+        "colNote": "Note"
+      },
+      "stagePlot": {
+        "heading": "Stage Plot",
+        "elementsHeading": "Stage Plot Elements",
+        "colElement": "Element",
+        "colKind": "Kind",
+        "colPosition": "Position",
+        "colRot": "Rot"
+      },
+      "crewList": {
+        "heading": "Crew List",
+        "colName": "Name",
+        "colRole": "Role",
+        "colDept": "Dept",
+        "colCall": "Call",
+        "colContact": "Contact"
+      },
+      "guestList": {
+        "heading": "Guest List",
+        "colName": "Name",
+        "colTier": "Tier",
+        "colNote": "Note"
+      },
+      "equipmentPullList": {
+        "heading": "Equipment Pull List",
+        "colQty": "Qty",
+        "colItem": "Item",
+        "colCategory": "Category",
+        "colNote": "Note"
+      },
+      "powerPlan": {
+        "servicesHeading": "Power Services",
+        "generatorsHeading": "Generators",
+        "colLocation": "Location",
+        "colAmps": "Amps",
+        "colVolts": "Volts",
+        "colPhase": "Phase",
+        "colSource": "Source",
+        "colNote": "Note",
+        "colUnit": "Unit",
+        "colKw": "kW",
+        "colFuel": "Fuel"
+      },
+      "riggingPlan": {
+        "heading": "Rigging Points",
+        "colPoint": "Point",
+        "colCapacity": "Cap · lbs",
+        "colHeight": "Height · ft",
+        "colNote": "Note"
+      },
+      "sitePlan": {
+        "heading": "Site Plan",
+        "zonesHeading": "Zones"
+      },
+      "buildSchedule": {
+        "heading": "Build Schedule",
+        "colDay": "Day",
+        "colTime": "Time",
+        "colActivity": "Activity",
+        "colCrew": "Crew",
+        "colNote": "Note"
+      },
+      "vendorPackage": {
+        "vendorEyebrow": "Vendor",
+        "deliverablesHeading": "Deliverables",
+        "colDeliverable": "Deliverable",
+        "colDue": "Due",
+        "colStatus": "Status"
+      },
+      "safetyCompliance": {
+        "heading": "Safety + compliance checklist",
+        "colTopic": "Topic",
+        "colRequirement": "Requirement",
+        "colOwner": "Owner",
+        "colStatus": "Status"
+      },
+      "commsPlan": {
+        "radioChannelsHeading": "Radio Channels",
+        "codeWordsHeading": "Code Words",
+        "colChannel": "Channel",
+        "colPurpose": "Purpose"
+      },
+      "signageGrid": {
+        "heading": "Signage Grid",
+        "colLocation": "Location",
+        "colType": "Type",
+        "colSize": "Size",
+        "colInstall": "Install",
+        "colStrike": "Strike",
+        "colNote": "Note"
+      },
+      "generic": {
+        "heading": "Deliverable Data"
+      }
+    }
+  },
+  "ghxstship": {
+    "common": {
+      "startProject": "Start a Project",
+      "seePricing": "See pricing",
+      "servicesCatalog": "Services Catalog",
+      "browseIndustries": "Browse Industries",
+      "all19Industries": "All 19 industries →"
+    },
+    "header": {
+      "pricing": "Pricing",
+      "contact": "Contact",
+      "startProject": "Start a Project",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "services": {
+        "label": "Services",
+        "fullCatalog": {
+          "label": "Full Catalog",
+          "description": "All 114 services"
+        },
+        "production": {
+          "label": "Production",
+          "description": "Audio, lighting, video, staging"
+        },
+        "build": {
+          "label": "Build",
+          "description": "Scenic, fabrication, install"
+        },
+        "hospitality": {
+          "label": "Hospitality",
+          "description": "F&B, VIP, premium service"
+        },
+        "operations": {
+          "label": "Operations",
+          "description": "Crew, logistics, security"
+        },
+        "experience": {
+          "label": "Experience",
+          "description": "Guest experience, retail"
+        },
+        "technology": {
+          "label": "Technology",
+          "description": "Networks, RFID, AR / VR"
+        },
+        "executive": {
+          "label": "Executive",
+          "description": "Permits, insurance, compliance"
+        },
+        "creative": {
+          "label": "Creative",
+          "description": "Design, art direction, IP"
+        },
+        "marketing": {
+          "label": "Marketing",
+          "description": "Ambassadors, donor programs"
+        },
+        "talent": {
+          "label": "Talent",
+          "description": "Performers, programming"
+        }
+      },
+      "industries": {
+        "label": "Industries",
+        "all": {
+          "label": "All Industries",
+          "description": "All 19 verticals"
+        },
+        "concertsFestivalsTours": "Concerts, Festivals & Tours",
+        "immersiveExperiences": "Immersive Experiences",
+        "brandActivationsPopups": "Brand Activations & Pop-ups",
+        "themeParksAttractions": "Theme Parks & Attractions",
+        "cruiseLinesMaritime": "Cruise Lines & Maritime",
+        "premiumSportingFanZones": "Premium Sporting & Fan Zones",
+        "premiumHospitality": "Premium Hospitality",
+        "theatricalPerformances": "Theatrical Performances"
+      },
+      "studio": {
+        "label": "Studio",
+        "phases": {
+          "label": "Phases",
+          "description": "Discovery to Wrap"
+        },
+        "experienceModes": {
+          "label": "Experience Modes",
+          "description": "How audiences engage"
+        },
+        "markets": {
+          "label": "Markets",
+          "description": "12 cities, 4 anchors"
+        },
+        "about": "About",
+        "contact": "Contact"
+      }
+    },
+    "footer": {
+      "services": "Services",
+      "topIndustries": "Top Industries",
+      "anchorMarkets": "Anchor Markets",
+      "allMarkets": "All Markets",
+      "studio": "Studio",
+      "about": "About",
+      "pricing": "Pricing",
+      "phases": "Phases",
+      "experienceModes": "Experience Modes",
+      "contact": "Contact",
+      "tagline": {
+        "line1": "Experiential production company.",
+        "line2": "Festivals. Theme parks. Theatre.",
+        "line3": "Built once, run anywhere."
+      },
+      "operatingBrands": "ATLVS, GVTEWAY, and COMPVSS are operating brands of ATLVS Technologies, a GHXSTSHIP Industries company."
+    },
+    "notFound": {
+      "title": "Not Found.",
+      "body": "The page doesn’t exist or has moved. Try one of these.",
+      "services": "Services",
+      "contact": "Contact"
+    },
+    "home": {
+      "meta": {
+        "title": "GHXSTSHIP — Experiential Production Company | Festivals, Theme Parks, Live Events",
+        "description": "Experiential production at scale — festivals, immersive experiences, theme park attractions, brand activations, theatrical productions, and premium hospitality. Anchored in Miami, New York City, Chicago, and Los Angeles."
+      },
+      "proof": {
+        "services": {
+          "label": "Services",
+          "sub": "Disciplines under one roof"
+        },
+        "industries": {
+          "label": "Industries",
+          "sub": "From festivals to fan zones"
+        },
+        "markets": {
+          "label": "Markets",
+          "sub": "Anchored + national reach"
+        },
+        "phases": {
+          "label": "Phases",
+          "sub": "Discovery to wrap"
+        }
+      },
+      "hero": {
+        "line1": "Experiential",
+        "line2": "production,",
+        "line3": "built once,",
+        "line4": "run anywhere.",
+        "established": "Est. Miami · New York · Chicago · Los Angeles",
+        "body": "We design, engineer, fabricate, and operate festivals, immersive experiences, theme park attractions, theatrical productions, brand activations, and premium hospitality. The same operating system that runs inside our studio publishes the catalog you’re reading — so the work you brief us on Monday becomes a scoped, priced, and assignable engagement by Wednesday.",
+        "cta": {
+          "startProject": "Start a Project",
+          "servicesCatalog": "Services Catalog",
+          "pricing": "Pricing →"
+        }
+      },
+      "whatWeDo": {
+        "eyebrow": "What We Do",
+        "heading": {
+          "line1": "Six ways to find",
+          "line2": "the right team."
+        },
+        "body": "Production touches a lot of disciplines. Search by what you build, when in the lifecycle, how deep the detail goes, what kind of experience it is, what industry it serves, or where it happens. Every path lands on a real producer with a real portfolio."
+      },
+      "axis": {
+        "open": "Open →",
+        "disciplines": {
+          "title": "Disciplines",
+          "blurb": "Production, build, hospitality, technology, operations, executive — ten core disciplines covering everything we touch."
+        },
+        "phases": {
+          "title": "Phases",
+          "blurb": "Discovery, concept, develop, advance, build, show, strike, wrap. Engage across all eight or any subset."
+        },
+        "detailDepth": {
+          "title": "Detail Depth",
+          "blurb": "From multi-year programs down to single rigging components. We work at the level your brief lives at."
+        },
+        "experienceModes": {
+          "title": "Experience Modes",
+          "blurb": "Social, digital, virtual, physical, experiential, theatrical. Most engagements span two or three."
+        },
+        "industries": {
+          "title": "Industries",
+          "blurb": "Festivals to fan zones, theme parks to maritime, art galleries to F1 paddock clubs. Nineteen verticals."
+        },
+        "markets": {
+          "title": "Markets",
+          "blurb": "Miami, New York, Chicago, Los Angeles. Plus eight satellites. National and international from any anchor."
+        }
+      },
+      "classLabel": "CLASS {code}",
+      "capabilities": {
+        "eyebrow": "Capabilities",
+        "heading": {
+          "line1": "Ten disciplines.",
+          "line2": "One studio."
+        },
+        "fullCatalog": "Full services catalog →"
+      },
+      "industries": {
+        "eyebrow": "Industries",
+        "heading": {
+          "line1": "Where the",
+          "line2": "work lives."
+        },
+        "all": "All 19 industries →",
+        "readMore": "Read more →"
+      },
+      "pricingTease": {
+        "eyebrow": "How We Work Together",
+        "heading": {
+          "line1": "Per project.",
+          "line2": "Or on retainer."
+        },
+        "perProject": {
+          "label": "Per Project",
+          "body": "— five tiers from a single-night activation to a multi-year mega-event."
+        },
+        "retainer": {
+          "label": "Retainer",
+          "body": "— four team-composition bundles from a coordinator pair to a 24/7 senior team. Add-ons stack on either path."
+        },
+        "cta": {
+          "seePricing": "See pricing"
+        }
+      },
+      "markets": {
+        "eyebrow": "Anchor Markets",
+        "all": "All twelve markets, including satellites →"
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "heading": "Common questions.",
+        "q1": {
+          "q": "What kind of productions does GHXSTSHIP take on?",
+          "a": "Festivals and concert tours, theme park attractions, immersive experiences, brand activations and pop-ups, theatrical performances, art and cultural installations, premium sporting hospitality and fan zones, conferences and trade shows, luxury retail and dining, weddings and private estate events, cruise ship and maritime entertainment, and ultra-premium private events. Nineteen industry verticals in total."
+        },
+        "q2": {
+          "q": "Where does GHXSTSHIP operate?",
+          "a": "Four anchor markets with full-time teams and dedicated fabrication capacity: Miami, New York City, Chicago, and Los Angeles. Eight satellite markets serviced from those anchors: Orlando, Nashville, Austin, Atlanta, Minneapolis, Denver, Las Vegas, and Seattle. National and international productions are handled from the closest anchor."
+        },
+        "q3": {
+          "q": "How is GHXSTSHIP different from a typical event agency?",
+          "a": "GHXSTSHIP runs every engagement on the same internal data model — the Experiential Project Management System (XPMS) — that publishes our public service catalog. Every deliverable, vendor, compliance check, and budget line carries a stable identifier you can audit end to end. Same schema runs internally on our ATLVS software. Same schema is what you read on this site."
+        },
+        "q4": {
+          "q": "Do you handle production end to end, or only specific phases?",
+          "a": "Both. We engage across all eight production phases — Discovery, Concept, Develop, Advance, Build, Show, Strike, and Wrap — or any subset. Per-project tiers are scoped to a single brief. Retainers run continuous engagements across multiple briefs."
+        },
+        "q5": {
+          "q": "Who owns the deliverables and IP at the end of an engagement?",
+          "a": "You do. All concept artwork, design files, engineering drawings, and production documentation transfer to you on final invoice. Reusable touring scenic systems and trade show booth assets stay in our climate-controlled storage by default for redeployment, but ownership is yours."
+        }
+      }
+    },
+    "about": {
+      "meta": {
+        "title": "About GHXSTSHIP — Experiential Production Company",
+        "description": "GHXSTSHIP is the experiential production company behind festivals, theme park attractions, theatrical productions, brand activations, and premium hospitality. Anchored in Miami, New York, Chicago, Los Angeles. Built ATLVS to run our own work — and now yours."
+      },
+      "hero": {
+        "eyebrow": "About",
+        "heading": {
+          "line1": "The studio",
+          "line2": "behind the studio."
+        },
+        "body": "GHXSTSHIP is an experiential production company building festivals, theme park attractions, immersive experiences, theatrical productions, brand activations, and premium hospitality at scale. We span {serviceCount} services across {classCount} disciplines and {solutionCount} industries. We’re anchored in Miami, New York City, Chicago, and Los Angeles, and we deliver nationally and internationally."
+      },
+      "principles": {
+        "p1": {
+          "title": "One operating system, internal and external.",
+          "body": "Every engagement runs on the same data model that publishes our public services catalog. Vendors, deliverables, compliance checks, budgets, schedules — all carry stable identifiers you can audit end to end. Same schema runs internally on our ATLVS software. Same schema is what you read on this site."
+        },
+        "p2": {
+          "title": "Receipts, not promises.",
+          "body": "Stamped engineering, signed certificates of insurance, executed master service agreements, fire-marshal sign-offs, sustainability reports — every deliverable lands in your folder structure with a stable name and a clear chain of custody."
+        },
+        "p3": {
+          "title": "Operator language, no apologies.",
+          "body": "We speak in load-in, advance, run-of-show, RFI, paddock, dry-dock, clean zone, front-of-house, and union jurisdictions. If you already know what those words mean, you’ll feel at home. If you don’t, we’ll translate."
+        },
+        "p4": {
+          "title": "Anchored, not headquartered.",
+          "body": "We have full-time teams and dedicated fabrication in Miami, New York, Chicago, and Los Angeles. We deploy from those anchors into eight satellite cities and across national and international tiers. The team that briefs you is the team that builds it."
+        }
+      },
+      "lineage": {
+        "heading": "The lineage.",
+        "p1": "GHXSTSHIP Industries is the parent. ATLVS Technologies — operating ATLVS, GVTEWAY, and COMPVSS — is the software arm we built so we’d stop running production on spreadsheets.",
+        "p2": "ATLVS is the producer’s console. GVTEWAY is the stakeholder portal. COMPVSS is the offline-first field app. The same data model powers all three. The same data model publishes this catalog.",
+        "p3": "When we tell a client we’re running their engagement on the same system that publishes the catalog they read before they hired us, we mean it literally. Same vendor records. Same compliance framework. Same deliverable definitions."
+      },
+      "roster": {
+        "heading": "The roster.",
+        "p1": "Producers, project managers, account managers, A1s, L1s, V1s, riggers, engineers — PE-stamped where it matters — hospitality leads, federation liaisons, fixers, conservators, art handlers, stage managers, broadcast directors, brand ambassadors. Inside our four anchor markets, full-time on payroll. Across satellite markets and the international tier, deep bench under master agreement.",
+        "p2": "Every named role is a row in the catalog. Every catalog row is a real human with an availability calendar, a credentialing posture, and a published rate."
+      },
+      "briefUs": {
+        "heading": "Brief us.",
+        "body": "A paragraph in plain English is fine. A six-hundred-line RFP is fine. A drunk voice memo at 2am that becomes a festival is the most fun. We answer all three."
+      }
+    },
+    "contact": {
+      "meta": {
+        "title": "Contact GHXSTSHIP — Start a Project",
+        "description": "Brief GHXSTSHIP. A paragraph in plain English, an RFP, or a voice memo. We resolve every brief against the same services catalog and reply with scope, model, and producer assignment within one business day."
+      },
+      "routes": {
+        "studio": {
+          "label": "Start a Project",
+          "body": "New engagement, RFP, or scoping conversation. We reply with engagement model, producer assignment, and price band."
+        },
+        "federation": {
+          "label": "Federation & Mega-Event",
+          "body": "Olympic, FIFA, F1, Super Bowl, World Cup, NCAA, OCOG-tier, federation accreditation, host-city liaison."
+        },
+        "press": {
+          "label": "Press & Partnerships",
+          "body": "Media, sponsorship inbound, brand collaborations, podcast asks, speaking engagements."
+        },
+        "roster": {
+          "label": "Roster & Crew",
+          "body": "Producers, technicians, riggers, hospitality, fixers — apply with your portfolio and city. We onboard quarterly."
+        }
+      },
+      "hero": {
+        "eyebrow": "Contact",
+        "heading": "Brief us.",
+        "body": "Tell us the brief, the date band, the venue or geography, and your scope. We’ll come back inside one business day with the engagement model, the producer assignment, and a price band — or a request for the information we’d need to scope it cleanly."
+      },
+      "checklist": {
+        "heading": "What to put in the email.",
+        "brief": {
+          "label": "Brief.",
+          "body": "One paragraph is enough. We’ll ask the right follow-ups."
+        },
+        "dates": {
+          "label": "Dates or window.",
+          "body": "Hard date or rolling window — both are fine."
+        },
+        "venue": {
+          "label": "Venue or geography.",
+          "body": "Specific address if locked, market name if not."
+        },
+        "audience": {
+          "label": "Audience size.",
+          "body": "Total guest count or daily attendance."
+        },
+        "budget": {
+          "label": "Budget envelope.",
+          "body": "Even a band — it sharpens the engagement model fast."
+        },
+        "constraints": {
+          "label": "Constraints.",
+          "body": "Federation, union, host-city, clean zone, brand-rights, NDA — flag them up front."
+        }
+      },
+      "browse": {
+        "eyebrow": "Or start by browsing"
+      }
+    },
+    "pricing": {
+      "meta": {
+        "title": "Pricing — Per Project & Retainer | GHXSTSHIP",
+        "description": "Per-project tiers from $25K through federation-grade. Monthly retainers from $3K — Coordinator pair — through $13K — full senior team with 24/7 support. Stackable add-ons for engineering, federation liaison, AR/VR, sustainability, and more."
+      },
+      "hero": {
+        "eyebrow": "Pricing",
+        "heading": {
+          "line1": "Two ways",
+          "line2": "to work with us."
+        },
+        "body": {
+          "perProject": "for a single brief. Five tiers scaled to scope, from a one-night activation to a multi-year mega-event.",
+          "retainer": "for ongoing programs. Four bundles built around team composition, from a coordinator pair to a senior team with 24/7 support. Add-ons stack on either path. Production costs pass through at cost."
+        }
+      },
+      "nav": {
+        "perProject": "Per-Project",
+        "retainer": "Retainer",
+        "addOns": "Add-Ons"
+      },
+      "perProject": {
+        "label": "Per Project",
+        "heading": {
+          "line1": "Five tiers.",
+          "line2": "One brief."
+        },
+        "body": "Tiers scale to scope. The Pop is a single zone. The Federation is a multi-year mega-event with full senior team. Pick by the work in front of you, not the aspiration.",
+        "mostEngagements": "Most engagements",
+        "startingFee": "starting fee",
+        "scopeBand": "Scope band",
+        "bestFor": "Best for"
+      },
+      "retainer": {
+        "label": "Retainer",
+        "heading": {
+          "line1": "Bundled by",
+          "line2": "team composition."
+        },
+        "body": "Each tier adds a senior role and a layer of always-on support. Ramp up between tiers as your program grows. Drop down between tiers in your slow season. Billed monthly in advance, cancellable on 60-day notice.",
+        "mostRetained": "Most retained",
+        "yourTeam": "Your team",
+        "cadence": "Cadence"
+      },
+      "addOns": {
+        "eyebrow": "Add-Ons",
+        "heading": "Stack on either path.",
+        "body": "Sold a la carte at scope-of-work or change-order. Stamped engineering and federation liaison are the most-requested across all tiers."
+      },
+      "billing": {
+        "heading": "How billing works.",
+        "fee": {
+          "label": "01 Professional Fee",
+          "body": "The fee on the card is what GHXSTSHIP charges to scope, plan, and operate the engagement. Locked at scope-of-work, with a clear change-order framework if scope grows."
+        },
+        "passThrough": {
+          "label": "02 Production Pass-Through",
+          "body": "Gear, labor, travel, fabrication, food and beverage, freight — all production costs pass through at cost plus an agreed admin rate, typically 12 to 18 percent. Full receipts on every line."
+        },
+        "schedule": {
+          "label": "03 Schedule",
+          "body": "Per-project: 60% of the professional fee on signature, 40% at load-in. Retainers: monthly in advance. Production pass-throughs invoiced as they accrue."
+        }
+      },
+      "faq": {
+        "eyebrow": "Pricing FAQ",
+        "heading": "Common questions.",
+        "q1": {
+          "q": "What’s actually included in the price on the card?",
+          "a": "The fee on the card is GHXSTSHIP’s professional services fee — what we charge to scope, plan, manage, and deliver the engagement. Production costs — gear rental, labor, travel, fabrication, F&B, freight — pass through at cost plus an agreed administration rate, typically 12 to 18 percent."
+        },
+        "q2": {
+          "q": "Can I move from a per-project engagement onto a retainer later?",
+          "a": "Yes. Many clients start with a single per-project engagement and convert to a retainer once a second or third event lands on the calendar. We credit any unused project balance against the first month of the retainer."
+        },
+        "q3": {
+          "q": "How does payment work on per-project tiers?",
+          "a": "Sixty percent of the GHXSTSHIP fee on signature, forty percent at load-in. Production pass-throughs are invoiced as they accrue, with full receipts. Retainers bill monthly in advance."
+        },
+        "q4": {
+          "q": "What’s the difference between Studio and Bureau?",
+          "a": "Studio gives you a senior producer leading the engagement and an on-site representative every show day. Bureau adds a 24/7 off-site lead — the person who picks up the phone at 3am when weather pivots, a vendor disappears, or a federation issues a clean-zone update mid-build."
+        },
+        "q5": {
+          "q": "Are add-ons priced separately from the tier?",
+          "a": "Yes. Add-ons are line-itemed at SOW or change-order. Most engagements end up pulling two to three. Stamped engineering and federation liaison are the most-requested across all tiers."
+        }
+      }
+    },
+    "markets": {
+      "meta": {
+        "title": "Markets — Miami, New York, Chicago, Los Angeles + 8 Satellites | GHXSTSHIP",
+        "description": "Anchor markets in Miami, New York City, Chicago, and Los Angeles with full local teams and dedicated fabrication. Eight satellite markets serviced from anchors: Orlando, Nashville, Austin, Atlanta, Minneapolis, Denver, Las Vegas, Seattle."
+      },
+      "hero": {
+        "eyebrow": "Markets",
+        "heading": {
+          "line1": "Four anchors.",
+          "line2": "Eight satellites."
+        },
+        "body": "Anchor markets get full local presence, dedicated team, and fabrication capacity. Satellites are serviced from anchors with deep venue and permit familiarity. National and international productions are handled from the closest anchor."
+      },
+      "anchor": {
+        "eyebrow": "Anchor Markets"
+      },
+      "satellite": {
+        "eyebrow": "Satellite Markets"
+      },
+      "servicedFrom": "Serviced from {city}"
+    },
+    "market": {
+      "meta": {
+        "title": "{name} Production Company — Festivals, Events, Activations | GHXSTSHIP",
+        "anchorCapacity": "Full local team and fabrication capacity.",
+        "satelliteCapacity": "Serviced from our nearest anchor market."
+      },
+      "crumb": "Markets",
+      "type": {
+        "anchor": "Anchor Market",
+        "satellite": "Satellite Market"
+      },
+      "servicedFrom": "serviced from",
+      "venuesAnchors": "Venues & Anchors",
+      "strongholds": "Industries where {name} is a stronghold",
+      "cta": {
+        "heading": "Run something in {name}.",
+        "body": "We know the venues, the unions, the permit windows, and the fixers. Brief us with your dates and the local posture."
+      }
+    },
+    "phase": {
+      "meta": {
+        "title": "{name} Phase — Production Services | GHXSTSHIP"
+      },
+      "crumb": "Phases",
+      "counter": "Phase {number} of 08",
+      "whatHappens": "What happens in this phase",
+      "servicesActive": "{count} services active in {name}",
+      "moveThrough": "Move through the lifecycle"
+    },
+    "services": {
+      "meta": {
+        "title": "Services Catalog — Production, Build, Hospitality, Technology | GHXSTSHIP",
+        "description": "The full GHXSTSHIP services catalog — 114 production services across 10 disciplines: Executive, Creative, Talent, Marketing, Build, Production, Operations, Experience, Hospitality, Technology."
+      },
+      "hero": {
+        "eyebrow": "Services Catalog",
+        "heading": {
+          "line1": "{count} services.",
+          "line2": "{count} disciplines.",
+          "line3": "Real producers behind every line."
+        },
+        "body": "Each service is a real, scoped, priceable line of work — not a marketing buzzword. Browse by discipline below, or jump straight to the industry vertical you’re in. Every service detail page tells you what it is, when in the project you need it, what you receive, and where it operates."
+      },
+      "classLabel": "Class {code}",
+      "servicesCount": "{count} services",
+      "cta": {
+        "heading": "Don’t know what to call it?",
+        "body": "Brief us in plain English. We’ll resolve it against the catalog, reply with a scope, a recommended engagement model, and the producer who’ll own it.",
+        "browseByIndustry": "Browse by industry"
+      }
+    },
+    "serviceClass": {
+      "meta": {
+        "title": "{name} Services — {count} Disciplines | GHXSTSHIP"
+      },
+      "crumb": "Services",
+      "classLabel": "Class {code}",
+      "servicesInDiscipline": "Services in this discipline",
+      "relatedServices": "Related services that touch {name}",
+      "primaryDiscipline": "Primary discipline: {name}",
+      "cta": {
+        "heading": "Brief us with what you have.",
+        "body": "Email a paragraph. Walk us through a deck. Drop a venue address and a calendar window. We’ll come back inside one business day with the scope, the producer, and the price band."
+      }
+    },
+    "service": {
+      "meta": {
+        "title": "{name} | GHXSTSHIP"
+      },
+      "crumb": "Services",
+      "label": "Service {number} · {name}",
+      "whatItIs": "What it is",
+      "whenYouNeed": "When you need it",
+      "whatYouReceive": "What you receive",
+      "whereItOperates": "Where it operates",
+      "primaryPhase": "Primary phase",
+      "alsoActiveIn": "Also active in:",
+      "activeFullLifecycle": "Active across the full project lifecycle",
+      "detailDepth": "Detail depth",
+      "experienceModes": "Experience modes",
+      "industriesAnchor": "Industries where this service anchors",
+      "relatedServices": "Related services in {name}",
+      "cta": {
+        "heading": "Add this to your engagement.",
+        "body": "Most engagements bundle eight to forty services from the catalog. Tell us the brief; we’ll come back with the scope, the engagement model, and the producer."
+      },
+      "depth": {
+        "L1": "Project — multi-event container",
+        "L2": "Event — single occasion",
+        "L3": "Zone — area within an event",
+        "L4": "Activation — experience unit",
+        "L5": "Component — build element",
+        "L6": "Item — atomic unit"
+      }
+    },
+    "solution": {
+      "meta": {
+        "title": "{name} — Production Company | GHXSTSHIP"
+      },
+      "crumb": "Industries",
+      "facts": {
+        "whenWorkHappens": "When the work happens",
+        "depthOfDetail": "Depth of detail",
+        "experienceModes": "Experience modes",
+        "whereItLands": "Where it tends to land"
+      },
+      "servicesAnchor": "{count} services anchor this industry across {disciplines} disciplines",
+      "allClassServices": "All {name} services →",
+      "cta": {
+        "heading": "Run a {name} engagement.",
+        "body": "We’ll resolve your brief against the {count} services anchored here and reply with the recommended engagement model and producer assignment."
+      }
+    }
+  },
+  "legal": {
+    "offer": {
+      "acceptedNotice": "You signed this letter. A copy was sent to your team and is on file with GHXSTSHIP.",
+      "declinedNotice": "You declined this offer. Reach out if anything changes.",
+      "inactiveNotice": "This letter is no longer active. Contact production to request an update.",
+      "yourResponseHeading": "Your Response",
+      "yourResponseBody": "Review the letter above. When you're ready, accept with a typed signature or decline with a brief reason.",
+      "acceptAndSign": "Accept and Sign",
+      "decline": "Decline",
+      "cancel": "Cancel",
+      "acceptBody": "Type your full legal name to accept this engagement. Your typed signature, IP address, and timestamp are recorded as evidence of agreement.",
+      "signAndAccept": "Sign and Accept",
+      "typedSignatureLabel": "Typed Signature · Full Legal Name",
+      "declineHeading": "Decline This Offer",
+      "declineBody": "Share a brief reason so production can follow up if anything changes.",
+      "declineLetter": "Decline Letter",
+      "reasonLabel": "Reason",
+      "reasonPlaceholder": "e.g. Calendar conflict — already booked May 14–18."
+    },
+    "offerCheckin": {
+      "title": "Check-in",
+      "lockedPrefix": "Open your engagement letter first to unlock check-in —",
+      "returnToLetter": "return to letter",
+      "dayOneEyebrow": "Day-1 Check-in",
+      "welcome": "Welcome to Salvage City, {name}.",
+      "checkedIn": "You're checked in.",
+      "checkedInBody": "Production sees this immediately. Head to the production trailer for credentials and the safety briefing.",
+      "nextLabel": "Next:",
+      "nextBody": "Pick up your credentials at the production trailer. Sign the safety briefing attestation and pick up your radio if your role requires one.",
+      "directorOnCall": "Project Director on call:",
+      "seeOnboarding": "See your onboarding tracker",
+      "engagementLetter": "Engagement letter"
+    },
+    "offerOnboarding": {
+      "title": "Onboarding",
+      "lockedPrefix": "Open your engagement letter first to unlock onboarding —",
+      "returnToLetter": "return to letter",
+      "stateNotStarted": "Not started",
+      "stateInProgress": "In progress",
+      "stateDone": "Done",
+      "stateWaived": "Waived",
+      "stateBlocked": "Blocked",
+      "eyebrow": "Onboarding",
+      "welcome": "Welcome, {name}",
+      "progress": "Progress",
+      "criticalOpenOne": "{count} critical-path step open",
+      "criticalOpenOther": "{count} critical-path steps open",
+      "criticalBody": "Critical-path steps gate your credentials and first-call. Items marked ★ below.",
+      "due": "Due {date}",
+      "completed": "· Completed {date}",
+      "backToLetter": "← Back to engagement letter"
+    },
+    "offerPrint": {
+      "instructionsBefore": "Click",
+      "printSaveAsPdf": "Print / Save as PDF",
+      "instructionsMiddle": ", then choose",
+      "saveAsPdf": "Save as PDF",
+      "instructionsAfter": "in your browser's print dialog.",
+      "backToLetter": "← Back to letter"
+    },
+    "msaSign": {
+      "submit": "Sign & Submit",
+      "exhibitBHeading": "Exhibit B — Other Clients",
+      "exhibitBHint": "List at least two (2) clients you've served with substantially similar services in the past 24 months. Leave rows blank if you have fewer to disclose.",
+      "exhibitBClientPlaceholder": "Client {n}",
+      "exhibitBProjectPlaceholder": "Project / Engagement",
+      "exhibitBDatesPlaceholder": "Dates · e.g. Q3 2025",
+      "exhibitCHeading": "Exhibit C — Capital Investment",
+      "exhibitCHint": "Itemize what you bring to the table — business entity, insurance, equipment, tools, certifications, etc.",
+      "exhibitCBusinessEntity": "Business entity",
+      "exhibitCInsurance": "Insurance",
+      "exhibitCToolsEquipment": "Tools / Equipment",
+      "exhibitCItemCategory": "Item / Category",
+      "exhibitCDescriptionPlaceholder": "Description / value",
+      "nscbHeading": "NSCB License — Chapter 624",
+      "nscbHint": "Required for trade scopes that fall within NRS Chapter 624 — carpentry, electrical, rigging, etc. Skip if not applicable.",
+      "nscbLicensePlaceholder": "License # · e.g. 0012345",
+      "nscbClassificationPlaceholder": "Classification · e.g. C-3",
+      "nscbMonetaryLimitPlaceholder": "Monetary limit · $ cents, e.g. 50000000",
+      "attestation": "I am authorized to sign this Agreement on behalf of myself or my business entity. The representations made in Exhibits B and C are true and correct to the best of my knowledge.",
+      "signatureLabel": "Signature · Type Your Full Legal Name",
+      "signaturePlaceholder": "Your full legal name"
+    },
+    "msaUnlock": {
+      "title": "Master Services Agreement",
+      "expiredHint": "Your session expired or the access code changed. Re-enter the 6-character access code that was sent with this link.",
+      "hint": "Enter the 6-character access code that was sent with this link to view your MSA.",
+      "openMsa": "Open MSA",
+      "accessCodeLabel": "Access Code",
+      "troubleContact": "Trouble? Contact"
+    },
+    "msaPrint": {
+      "instructionsBefore": "Click",
+      "printSaveAsPdf": "Print / Save as PDF",
+      "instructionsMiddle": ", then choose",
+      "saveAsPdf": "Save as PDF",
+      "instructionsAfter": "in your browser's print dialog.",
+      "backToMsa": "← Back to MSA"
+    },
+    "proposalSignature": {
+      "signedToast": "Signed · {hash}",
+      "signedEyebrow": "Signed",
+      "thankYou": "Thank you, {name}",
+      "signerFallback": "signer",
+      "signedOn": "Signed {date}",
+      "authorizeEyebrow": "Authorize",
+      "acceptHeading": "Accept this proposal",
+      "yourNameLabel": "Your Name",
+      "emailLabel": "Email",
+      "titleRoleLabel": "Title / role",
+      "titleRolePlaceholder": "Founder, Producer, COO…",
+      "type": "Type",
+      "draw": "Draw",
+      "typeSignaturePlaceholder": "Type your signature",
+      "clear": "Clear",
+      "signing": "Signing…",
+      "signAndAccept": "Sign & accept"
+    },
+    "msaDocument": {
+      "title": "Independent Contractor Master Services Agreement",
+      "version": "Version {version}",
+      "issued": "Issued {date}",
+      "contractor": "Contractor",
+      "recitalsHeading": "Recitals",
+      "relationshipHeading": "1. Relationship of the Parties",
+      "termsHeading": "2. Terms & Conditions",
+      "governingLawHeading": "3. Governing Law & Confidentiality",
+      "exhibitBHeading": "Exhibit B — Other Clients",
+      "exhibitBHint": "Contractor represents that Contractor has performed substantially similar services for the following clients within the twenty-four (24) months preceding the effective date of this Agreement.",
+      "colClient": "Client",
+      "colProject": "Project",
+      "colDates": "Dates",
+      "exhibitCHeading": "Exhibit C — Capital Investment Itemization",
+      "exhibitCHint": "Contractor's capital investment in Contractor's business relevant to the services may include, without limitation, business entity formation, insurance carried, software/equipment/tools owned, pre-engagement preparation and certifications, and trade-specific NSCB licensure where applicable.",
+      "colItemCategory": "Item / Category",
+      "colDescriptionValue": "Description / Value",
+      "nscbLicenseHeading": "NSCB License · Chapter 624",
+      "licenseNumberLabel": "License #:",
+      "classificationLabel": "Classification:",
+      "monetaryLimitLabel": "Monetary Limit:",
+      "signed": "Signed",
+      "counterSigned": "Counter-signed {when}",
+      "awaitingCounterSignature": "Awaiting Counter-Signature",
+      "awaitingBody": "Type your full legal name to formalize acceptance of this Master Services Agreement. Your typed signature, IP address, and timestamp will be captured as the audit trail.",
+      "forOrg": "For {org}",
+      "signerTitle": "Producer & Operations Director",
+      "reference": "Reference"
+    },
+    "letterDocument": {
+      "title": "Engagement Letter",
+      "issued": "Issued {date}",
+      "recipient": "Recipient",
+      "greeting": "Greetings",
+      "introLead": "You're on the manifest. On behalf of {employer}, we're pleased to bring you on as",
+      "introFor": "for",
+      "introTail": "Full engagement details are outlined below — please give it a read, then counter-sign at the bottom to make it official.",
+      "questionsBeforeSigning": "Questions before signing? Reach",
+      "at": "at",
+      "engagementSummaryHeading": "1. Engagement Summary",
+      "role": "Role",
+      "department": "Department",
+      "classification": "Classification",
+      "reportsTo": "Reports To",
+      "workLocation": "Work Location",
+      "engagementWindow": "Engagement Window",
+      "travelIn": "Travel In",
+      "onSiteStart": "On Site Start",
+      "onSiteEnd": "On Site End",
+      "travelOut": "Travel Out",
+      "serviceDayOne": "projected service day on site.",
+      "serviceDayOther": "projected service days on site.",
+      "compensationHeading": "2. Compensation",
+      "basis": "Basis",
+      "compensation": "Compensation",
+      "travelLodgingReimbursement": "Travel + Lodging Reimbursement",
+      "paymentSchedule": "Payment Schedule",
+      "inclusionsHeading": "3. Inclusions",
+      "noInclusions": "No additional inclusions specified.",
+      "travelProvided": "Travel provided / arranged",
+      "lodgingProvided": "Lodging provided",
+      "mealsProvided": "Crew meals on call days",
+      "scopeHeading": "4. Scope of Work",
+      "scheduleHeading": "5. Working Schedule",
+      "scheduleHint": "Project production schedule milestones. Dates and activities are subject to revision based on production circumstances; we'll let you know about material changes through standard production channels.",
+      "colDate": "Date",
+      "colCall": "Call",
+      "colWrap": "Wrap",
+      "colMilestones": "Milestones",
+      "onboardingHeading": "6. Onboarding Checklist",
+      "onboardingHint": "A short list to get you ready. Try to close these out within 48 hours of acceptance so credentials can ship.",
+      "signMsa": "Sign your Master Services Agreement",
+      "openMsaLink": "Open MSA ↗",
+      "msaOneTimeNote": "One-time. Signs apply to every engagement we book you on — you won't see this step again.",
+      "openLink": "Open ↗",
+      "reviewGuide": "Review the Salvage City Production Guide",
+      "accepted": "Accepted",
+      "counterSigned": "Counter-signed {when}",
+      "awaitingCounterSignature": "Awaiting Counter-Signature",
+      "awaitingBody": "Type your full legal name below to formalize acceptance. Your typed signature, IP address, and timestamp will be captured as the audit trail.",
+      "forEmployer": "For {employer}",
+      "signerTitle": "Producer & Operations Director",
+      "reference": "Reference",
+      "footerMsaOnFile": "This engagement is subject to your Independent Contractor Master Services Agreement signed {date} · v{version}.",
+      "viewMsaLink": "View MSA ↗",
+      "footerMsaPendingPrefix": "This engagement is subject to our Independent Contractor Master Services Agreement —",
+      "readAndSignLink": "read & sign your copy ↗",
+      "footerMsaPendingSuffix": "one-time, applies to every future engagement.",
+      "footerMsaSeparateEmail": "This engagement is subject to our Independent Contractor Master Services Agreement — your personal copy will arrive in a separate email and is required before your first service day.",
+      "governingLaw": "Governing law: State of Nevada. Venue: Clark County, NV. Confidential and proprietary to {employer}."
+    },
+    "heatProposal": {
+      "navOverview": "Overview",
+      "navBuilds": "Builds",
+      "navRetainer": "Retainer",
+      "navScope": "Scope",
+      "navLifecycle": "Lifecycle",
+      "navInvestment": "Investment",
+      "navAddons": "Add-Ons",
+      "navSign": "Sign",
+      "sectionNavLabel": "Section navigation",
+      "heroEyebrow": "Pop-Up Activation Program · {window}",
+      "heroHeadlineLine2": "East Plaza Activations",
+      "heroSub": "A retained activation studio for the East Plaza inside Kaseya Center — concept, engineering, fabrication, install, and strike across a tiered menu of pop-up moments calibrated to partner unlocks, homestand rhythm, and signature plaza takeovers.",
+      "metaClient": "Client",
+      "metaProducer": "Producer",
+      "metaVenue": "Venue",
+      "metaDocument": "Document",
+      "metaReference": "Reference",
+      "heroConfidential": "Confidential · Prepared for {contact} at Miami HEAT · {validity}",
+      "overviewEyebrow": "Project Overview",
+      "overviewTitle": "Tiered Builds. Retained Capacity.",
+      "overviewSub": "Three engagement vectors, designed to compound. Each activation pulls from a tiered build menu. A monthly retainer — pick one of three tiers — holds dedicated studio capacity behind the program. Add-Ons stack onto either, on demand.",
+      "perActivation": "Per Activation",
+      "buildMenu": "Build Menu",
+      "sizeSmall": "Small",
+      "sizeMedium": "Medium",
+      "sizeLarge": "Large",
+      "includes": "Includes",
+      "includesValue": "Production · Fab · Install · Strike",
+      "retainer": "Retainer",
+      "threeTiers": "Three Tiers",
+      "tierBase": "Base",
+      "tierElevated": "Elevated",
+      "tierPremium": "Premium",
+      "perMonth": "{amount} / mo",
+      "commitment": "Commitment",
+      "upgrades": "Upgrades",
+      "optionalUpgrades": "Optional Upgrades",
+      "addonMenu": "Add-On Menu",
+      "addonMenuValue": "{count} Items · 5 Categories",
+      "addsTo": "Adds To",
+      "addsToValue": "Retainer · Activation · Both",
+      "buildDiscount": "Build Discount",
+      "buildDiscountValue": "Up To 12% Off List",
+      "assetReuse": "Asset Reuse",
+      "assetReuseValue": "30–50% Credit On Re-Deployment",
+      "upsellSeeElevated": "Need More? See Elevated →",
+      "upsellSeePremium": "Need More? See Premium →",
+      "retainerTiersEyebrow": "Retainer Tiers",
+      "retainerTiersTitle": "Base. Elevated. Premium.",
+      "retainerTiersSub": "Three retainer tiers, scaled to your activation cadence. Each tier builds on the last — Elevated includes everything in Base, and Premium includes everything in Elevated plus exclusive lines reserved for the top tier.",
+      "monthly": "Monthly",
+      "perYear": "· {amount} / yr",
+      "fitFor": "Fit For",
+      "choose": "Choose {name}",
+      "premiumExclusivesEyebrow": "Premium Exclusives · Reserved For The Top Tier",
+      "premiumExclusivesTitle": "Lines You Won't Find Anywhere Else.",
+      "premiumExclusivesSub": "Four lines available only at the Premium tier — not à la carte, not on Elevated, not as a one-off buy. Reserved for partners running a season-defining program with us.",
+      "activationBuildsEyebrow": "Activation Builds",
+      "activationBuildsTitle": "Small. Medium. Large.",
+      "activationBuildsSub": "Three build tiers, calibrated for the moment. Each tier holds a tight range from base spec to top spec, with larger architectural and retail moves quoted separately from the Add-Ons menu.",
+      "buildRange": "Build Range",
+      "precedent": "Precedent · {name}",
+      "includedInBase": "Included In Base · {amount}",
+      "upgradesInTier": "Upgrades In This Tier · Up To {amount}",
+      "tierFootnotePrefix": "Larger architectural moves — chemetal cladding, container architecture, full POS retail, hospitality builds — are quoted separately from the",
+      "addonsMenuLink": "Add-Ons menu",
+      "tierFootnoteSuffix": "and layered onto whichever tier suits the moment.",
+      "scopeEyebrow": "Scope of Work",
+      "scopeTitle": "Drawn. Built. Printed. Installed.",
+      "scopeSub": "Eleven scope nodes covering every fabricated and printed element plus the production services that move it from shop to plaza and back. Tier defines breadth and finish — not which nodes are touched.",
+      "fabricationPrint": "Fabrication & Print",
+      "productionServices": "Production Services",
+      "appliesTo": "Applies To · {list}",
+      "sitesEyebrow": "Activation Sites",
+      "sitesTitle": "Where Every Element Lands.",
+      "sitesSub": "Three zones across the East Plaza. Each accommodates a different tier and dwell pattern; treatment scales with the moment.",
+      "site": "Site · {tag}",
+      "cadenceAriaLabel": "Cadence",
+      "cadenceSmall": "Small Cadence",
+      "cadenceMedium": "Medium Cadence",
+      "cadenceLarge": "Large Cadence",
+      "lifecycleEyebrow": "Production Lifecycle",
+      "lifecycleTitle": "From Brief To Strike.",
+      "lifecycleSub": "Eight phases, identical structure across every activation. The runway scales with build tier — Small condenses to five weeks, Medium runs nine, Large stretches to thirteen.",
+      "milestones": "Milestones",
+      "deliverables": "Deliverables",
+      "approvalGate": "Approval Gate",
+      "workbackEyebrow": "Workback Schedule · {runway}",
+      "workbackTitle": "Calibrated Against Activation Date.",
+      "workbackSub": "Every deadline counts back from the activation date for a {tier} build. Toggle the cadence above to see how Small, Medium, and Large compare.",
+      "colPhase": "Phase",
+      "colMilestone": "Milestone",
+      "colDeadline": "Deadline",
+      "investmentEyebrow": "Investment Summary",
+      "investmentTitle": "Build Plus Retainer.",
+      "investmentSub": "Total program investment scales with your activation cadence and retainer tier. Pick builds off the menu, choose a retainer to hold studio capacity behind the program, and layer in the upgrades that fit the moment. Every figure covers production, fabrication, install, and strike.",
+      "perActivationBuild": "Per-Activation Build",
+      "rangeBaseToTopSpec": "Range · Base To Top Spec",
+      "tierBuild": "{name} Build",
+      "retainerTierPickOne": "Retainer Tier · Pick One",
+      "monthlyAnnual": "Monthly · Annual",
+      "retainerNamePitch": "{name} Retainer · {pitch}",
+      "perMoSuffix": "/ mo",
+      "addonsUpgrades": "Add-Ons & Upgrades",
+      "addToAnyTier": "Add To Any Tier",
+      "menuItemsCount": "{count} menu items across 5 categories",
+      "addonsCategoriesBody": "Material & Finish · Functional Upgrades · Service Overlays · Logistics · Documentation. Add any number to any retainer or activation.",
+      "pricedByRequest": "Priced By Request",
+      "programInvestment": "Program Investment",
+      "retainerBuildAddons": "Retainer + Build + Add-Ons",
+      "investmentFootnote": "Every activation runs under its own signed sign-off, layered into this master agreement. Each build tier holds a tight range from base spec to top spec, and upgrades inside that range stay inside the tier. Larger architectural moves are quoted separately from the Add-Ons menu.",
+      "addonsEyebrow": "Add-Ons & Upgrades",
+      "addonsTitle": "Stack Anything. On Anything.",
+      "addonsSub": "The full menu of optional upgrades — material, functional, service, logistics, and documentation. Pick any item, add it to any retainer or any build. Priced by request.",
+      "itemsCount": "{count} items",
+      "appliesRetainerActivation": "Retainer + Activation",
+      "appliesRetainer": "Retainer",
+      "appliesActivation": "Activation",
+      "minTier": "Min Tier · {tier}",
+      "activationDeposit": "Activation Deposit",
+      "depositDue": "Due on written approval of each activation Statement of Work.",
+      "balance": "Balance",
+      "balanceDue": "Due five (5) business days prior to load-in. Retainer billed separately, monthly net-15.",
+      "paymentMethodAch": "Payment Method · ACH / Wire",
+      "payableTo": "Payable To",
+      "achWire": "ACH / Wire",
+      "achWireValue": "Banking detail issued with executed contract",
+      "currency": "Currency",
+      "optionalScopeEyebrow": "Optional Scope",
+      "changeOrdersTitle": "Available Change Orders.",
+      "changeOrdersSub": "Scope outside the base tier menu — issued individually or stacked into a single activation SOW.",
+      "available": "Available",
+      "scopeBoundariesEyebrow": "Scope Boundaries",
+      "exclusionsTitle": "Outside This Engagement.",
+      "termsEyebrow": "Terms & Conditions",
+      "termsTitle": "The Operating Agreement.",
+      "authorizationEyebrow": "Authorization",
+      "authorizationTitle": "Execute The Master Agreement.",
+      "authorizationSub": "Signing here authorizes the baseline retainer and entitles HEAT to call activations off the tier menu under individual SOWs. Per-activation signatures live in each SOW.",
+      "draw": "Draw",
+      "type": "Type",
+      "drawSignatureAria": "Draw your signature",
+      "typeFullNamePlaceholder": "Type your full legal name",
+      "typedSignatureAria": "Typed signature",
+      "printedName": "Printed name",
+      "titleField": "Title",
+      "executeAlert": "Add your signature and printed name to execute.",
+      "executed": "Executed",
+      "executeAgreement": "Execute Agreement",
+      "clear": "Clear",
+      "executionReceipt": "Execution Receipt",
+      "executedBy": "Executed by",
+      "emailProducer": "Email The Producer",
+      "printSavePdf": "Print / Save PDF",
+      "footerProducer": "Producer",
+      "footerProject": "Project",
+      "footerConfidential": "Confidential",
+      "footerConfidentialBody": "Prepared for {client}. Pricing and structural detail are confidential between the parties. © {year} {producer}."
+    }
+  },
+  "publicFormSubmit": {
+    "submitted": "Submitted",
+    "thankYouTitle": "Thanks — we received it.",
+    "thankYouBody": "Your response was recorded. You can close this tab.",
+    "leaveBlank": "Leave blank",
+    "selectPlaceholder": "Select…",
+    "submitting": "Submitting",
+    "submit": "Submit"
+  },
+  "apiDocs": {
+    "meta": {
+      "title": "API Reference",
+      "description": "REST + OpenAPI 3.1 documentation for the ATLVS public API. Auth via session cookie or Bearer PAT; rate limits scale with your plan tier."
+    },
+    "docDescription": "Public REST surface for ATLVS Technologies.",
+    "eyebrow": "REST API · v1",
+    "heading": "ATLVS API Reference",
+    "downloadOpenApi": "Download OpenAPI 3.1 · JSON",
+    "manageApiKeys": "Manage API keys",
+    "authentication": "Authentication",
+    "authBody": "Pass a personal access token in the",
+    "authBodyHeader": "header:",
+    "authCookieBefore": "Or use the session cookie set by signing in at",
+    "rateLimits": "Rate limits",
+    "rateLimitsBody": "Limits scale with your org plan. Every response includes:",
+    "retryAfterNote": "only on 429",
+    "resources": "Resources",
+    "parameters": "Parameters",
+    "paramName": "Name",
+    "paramIn": "In",
+    "paramType": "Type",
+    "paramRequired": "Required",
+    "yes": "yes",
+    "no": "no",
+    "requestBody": "Request body",
+    "responses": "Responses",
+    "footer": "OpenAPI 3.1 · {count} paths · Generated at request time from registered Zod schemas."
   }
 }

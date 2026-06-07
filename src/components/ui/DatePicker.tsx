@@ -4,7 +4,7 @@ import * as React from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { formatDate } from "@/lib/i18n/format";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * DatePicker — keyboard-first calendar, inline or in a popover.
@@ -23,7 +23,7 @@ export function DatePicker({
   defaultValue,
   min,
   max,
-  placeholder = "Select date",
+  placeholder,
   clearable,
   disabled,
   withTime,
@@ -50,6 +50,8 @@ export function DatePicker({
   const [open, setOpen] = React.useState(false);
   const [viewMonth, setViewMonth] = React.useState<Date>(() => selected ?? new Date());
   const fmt = useFormatters();
+  const t = useT();
+  const resolvedPlaceholder = placeholder ?? t("components.datePicker.placeholder", undefined, "Select date");
 
   function commit(d: Date | null) {
     if (!controlled) setInternal(d);
@@ -60,7 +62,7 @@ export function DatePicker({
     ? withTime
       ? `${fmt.date(selected)} ${fmt.time(selected)}`
       : fmt.date(selected)
-    : placeholder;
+    : resolvedPlaceholder;
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
@@ -68,7 +70,7 @@ export function DatePicker({
         <button
           type="button"
           disabled={disabled}
-          aria-label={ariaLabel ?? placeholder}
+          aria-label={ariaLabel ?? resolvedPlaceholder}
           className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
           <span className={selected ? "" : "text-[var(--p-text-2)]"}>{display}</span>
@@ -145,6 +147,7 @@ function Calendar_({
   min?: Date;
   max?: Date;
 }) {
+  const t = useT();
   const [focused, setFocused] = React.useState<Date>(() => value ?? month);
 
   const days = React.useMemo(() => buildMonth(month), [month]);
@@ -192,7 +195,7 @@ function Calendar_({
       <div className="flex items-center justify-between pb-2">
         <button
           type="button"
-          aria-label="Previous month"
+          aria-label={t("components.datePicker.prevMonth", undefined, "Previous month")}
           onClick={() => onMonthChange(addMonths(month, -1))}
           className="rounded p-1 hover:bg-[var(--p-surface-2)]"
         >
@@ -201,7 +204,7 @@ function Calendar_({
         <div className="text-sm font-medium">{monthLabel}</div>
         <button
           type="button"
-          aria-label="Next month"
+          aria-label={t("components.datePicker.nextMonth", undefined, "Next month")}
           onClick={() => onMonthChange(addMonths(month, 1))}
           className="rounded p-1 hover:bg-[var(--p-surface-2)]"
         >

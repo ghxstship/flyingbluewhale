@@ -18589,5 +18589,44 @@
     "revokeAria": "Revoke link {name}",
     "revoke": "Revoke",
     "done": "Done"
+  },
+  "components": {
+    "navModeToggle": {
+      "legend": "Console sidebar",
+      "domain": "Domain",
+      "domainHint": "Plain-English groups · Projects, Sales, Finance…. Default.",
+      "xpms": "XPMS spine",
+      "xpmsHint": "Numeric class taxonomy · 0 EXECUTIVE … 9 TECHNOLOGY."
+    },
+    "stickyCta": {
+      "region": "Quick access",
+      "open": "ATLVS is open.",
+      "tagline": "Free for small teams. No card.",
+      "dismiss": "Dismiss"
+    },
+    "signatureField": {
+      "label": "Signature",
+      "placeholder": "Type your full name",
+      "type": "Type",
+      "draw": "Draw",
+      "clear": "Clear",
+      "captured": "Captured",
+      "signAbove": "Sign above"
+    },
+    "addressField": {
+      "street": "Street and number",
+      "street2": "Apt, suite, floor",
+      "streetLabel": "Street",
+      "street2Label": "Apt / Suite · Optional",
+      "city": "City",
+      "region": "State / Region",
+      "postalCode": "Postal code",
+      "country": "Country"
+    },
+    "datePicker": {
+      "placeholder": "Select date",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month"
+    }
   }
 }

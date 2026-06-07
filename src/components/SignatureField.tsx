@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type Mode = "typed" | "canvas";
 
@@ -18,13 +19,15 @@ type Mode = "typed" | "canvas";
  */
 export function SignatureField({
   name,
-  label = "Signature",
+  label,
   required = false,
 }: {
   name: string;
   label?: string;
   required?: boolean;
 }) {
+  const t = useT();
+  const resolvedLabel = label ?? t("components.signatureField.label", undefined, "Signature");
   const [mode, setMode] = useState<Mode>("typed");
   const [typed, setTyped] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -92,7 +95,7 @@ export function SignatureField({
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <label className="text-xs font-medium text-[var(--p-text-2)]">
-          {label}
+          {resolvedLabel}
           {required && <span className="ms-1 text-[var(--p-danger)]">*</span>}
         </label>
         <div className="inline-flex rounded-full border border-[var(--p-border)] bg-[var(--p-surface)] p-0.5 text-xs">
@@ -101,14 +104,14 @@ export function SignatureField({
             onClick={() => setMode("typed")}
             className={`rounded-full px-3 py-1 ${mode === "typed" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
           >
-            Type
+            {t("components.signatureField.type", undefined, "Type")}
           </button>
           <button
             type="button"
             onClick={() => setMode("canvas")}
             className={`rounded-full px-3 py-1 ${mode === "canvas" ? "bg-[var(--p-bg)]" : "text-[var(--p-text-2)]"}`}
           >
-            Draw
+            {t("components.signatureField.draw", undefined, "Draw")}
           </button>
         </div>
       </div>
@@ -121,7 +124,7 @@ export function SignatureField({
             type="text"
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
-            placeholder="Type your full name"
+            placeholder={t("components.signatureField.placeholder", undefined, "Type your full name")}
             className="ps-input w-full"
             required={required}
           />

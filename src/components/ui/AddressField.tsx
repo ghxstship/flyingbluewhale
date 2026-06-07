@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Input } from "./Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * AddressField — Phase 7.2 of the SmartSuite parity roadmap.
@@ -118,6 +119,7 @@ export function AddressField(props: AddressFieldProps) {
     lockCountry,
   } = props;
 
+  const t = useT();
   const [state, setState] = React.useState<AddressValue>(value ?? defaultValue ?? EMPTY);
 
   // Sync controlled mode
@@ -146,12 +148,12 @@ export function AddressField(props: AddressFieldProps) {
       <div className="mt-1.5 grid gap-2 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <Input
-            label="Street"
+            label={t("components.addressField.streetLabel", undefined, "Street")}
             name={`${name}_street1`}
             value={state.street1}
             required={required}
             disabled={disabled}
-            placeholder="Street and number"
+            placeholder={t("components.addressField.street", undefined, "Street and number")}
             autoComplete="address-line1"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => update({ street1: e.target.value })}
           />
@@ -159,18 +161,18 @@ export function AddressField(props: AddressFieldProps) {
         {showStreet2 ? (
           <div className="sm:col-span-2">
             <Input
-              label="Apt / Suite · Optional"
+              label={t("components.addressField.street2Label", undefined, "Apt / Suite · Optional")}
               name={`${name}_street2`}
               value={state.street2 ?? ""}
               disabled={disabled}
-              placeholder="Apt, suite, floor"
+              placeholder={t("components.addressField.street2", undefined, "Apt, suite, floor")}
               autoComplete="address-line2"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => update({ street2: e.target.value })}
             />
           </div>
         ) : null}
         <Input
-          label="City"
+          label={t("components.addressField.city", undefined, "City")}
           name={`${name}_locality`}
           value={state.locality}
           required={required}
@@ -179,7 +181,7 @@ export function AddressField(props: AddressFieldProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => update({ locality: e.target.value })}
         />
         <Input
-          label="State / Region"
+          label={t("components.addressField.region", undefined, "State / Region")}
           name={`${name}_region`}
           value={state.region}
           required={required}
@@ -188,7 +190,7 @@ export function AddressField(props: AddressFieldProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => update({ region: e.target.value })}
         />
         <Input
-          label="Postal code"
+          label={t("components.addressField.postalCode", undefined, "Postal code")}
           name={`${name}_postal_code`}
           value={state.postal_code}
           required={required}
@@ -198,7 +200,7 @@ export function AddressField(props: AddressFieldProps) {
         />
         <div>
           <label className="text-xs font-medium text-[var(--p-text-2)]">
-            Country
+            {t("components.addressField.country", undefined, "Country")}
             {required && <span className="ms-0.5 text-[var(--p-danger)]">*</span>}
           </label>
           <select

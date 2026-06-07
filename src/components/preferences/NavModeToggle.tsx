@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Per-user toggle for the ATLVS console sidebar shape (ADR-0006).
@@ -19,6 +20,7 @@ import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
  * without a full page reload.
  */
 export function NavModeToggle({ initial }: { initial: "domain" | "xpms" }) {
+  const t = useT();
   const router = useRouter();
   const { setPrefs } = useUserPreferences();
   const [mode, setMode] = React.useState<"domain" | "xpms">(initial);
@@ -38,7 +40,9 @@ export function NavModeToggle({ initial }: { initial: "domain" | "xpms" }) {
 
   return (
     <fieldset className="space-y-2">
-      <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Console sidebar</legend>
+      <legend className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+        {t("components.navModeToggle.legend", undefined, "Console sidebar")}
+      </legend>
       <div className="grid grid-cols-2 gap-1.5">
         <button
           type="button"
@@ -47,9 +51,13 @@ export function NavModeToggle({ initial }: { initial: "domain" | "xpms" }) {
           className="surface hover-lift flex flex-col items-start gap-1 px-3 py-2 text-left text-sm disabled:opacity-60"
           disabled={pending}
         >
-          <span className="font-medium">Domain</span>
+          <span className="font-medium">{t("components.navModeToggle.domain", undefined, "Domain")}</span>
           <span className="text-[11px] text-[var(--p-text-2)]">
-            Plain-English groups (Projects, Sales, Finance…). Default.
+            {t(
+              "components.navModeToggle.domainHint",
+              undefined,
+              "Plain-English groups · Projects, Sales, Finance…. Default.",
+            )}
           </span>
         </button>
         <button
@@ -59,9 +67,9 @@ export function NavModeToggle({ initial }: { initial: "domain" | "xpms" }) {
           className="surface hover-lift flex flex-col items-start gap-1 px-3 py-2 text-left text-sm disabled:opacity-60"
           disabled={pending}
         >
-          <span className="font-medium">XPMS spine</span>
+          <span className="font-medium">{t("components.navModeToggle.xpms", undefined, "XPMS spine")}</span>
           <span className="text-[11px] text-[var(--p-text-2)]">
-            Numeric class taxonomy (0 EXECUTIVE … 9 TECHNOLOGY).
+            {t("components.navModeToggle.xpmsHint", undefined, "Numeric class taxonomy · 0 EXECUTIVE … 9 TECHNOLOGY.")}
           </span>
         </button>
       </div>

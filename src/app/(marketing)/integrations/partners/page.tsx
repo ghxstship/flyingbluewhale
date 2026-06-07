@@ -10,21 +10,32 @@ import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Partner Integrations — ATLVS Certified + Verified Partner Directory",
-  description:
-    "Third-party integrations built by ATLVS partners. Verified Partner integrations pass our technical review; Certified integrations also pass end-to-end QA.",
-  path: "/integrations/partners",
-  keywords: [
-    "ATLVS partners",
-    "ATLVS certified partners",
-    "construction PM integrations marketplace",
-    "Procore alternative integrations",
-  ],
-  ogImageEyebrow: "Partner Program",
-  ogImageTitle: "Built By Partners. Verified By Us.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t(
+      "marketing.integrations.partners.meta.title",
+      undefined,
+      "Partner Integrations — ATLVS Certified + Verified Partner Directory",
+    ),
+    description: t(
+      "marketing.integrations.partners.meta.description",
+      undefined,
+      "Third-party integrations built by ATLVS partners. Verified Partner integrations pass our technical review; Certified integrations also pass end-to-end QA.",
+    ),
+    path: "/integrations/partners",
+    keywords: [
+      "ATLVS partners",
+      "ATLVS certified partners",
+      "construction PM integrations marketplace",
+      "Procore alternative integrations",
+    ],
+    ogImageEyebrow: t("marketing.integrations.eyebrow", undefined, "Partner Program"),
+    ogImageTitle: t("marketing.integrations.partners.title", undefined, "Built By Partners. Verified By Us."),
+  });
+}
 
 type Row = {
   slug: string;
@@ -41,10 +52,14 @@ type Row = {
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Integrations", href: "/integrations" },
-    { label: "Partner Directory", href: "/integrations/partners" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.integrations.crumbsLabel", undefined, "Integrations"), href: "/integrations" },
+    {
+      label: t("marketing.integrations.partners.crumbsLabel", undefined, "Partner Directory"),
+      href: "/integrations/partners",
+    },
   ];
 
   let rows: Row[] = [];
@@ -69,20 +84,27 @@ export default async function Page() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-8">
-        <div className="eyebrow eyebrow-brand">Partner Program</div>
-        <h1 className="hed-3xl mt-4">Built By Partners. Verified By Us.</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.integrations.eyebrow", undefined, "Partner Program")}</div>
+        <h1 className="hed-3xl mt-4">
+          {t("marketing.integrations.partners.title", undefined, "Built By Partners. Verified By Us.")}
+        </h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">
-          Third-party integrations that hit the ATLVS REST + GraphQL surface. Verified Partner integrations pass our
-          technical review; Certified integrations also pass end-to-end QA on a live tenant. Build your own —{" "}
+          {t(
+            "marketing.integrations.partners.lead",
+            undefined,
+            "Third-party integrations that hit the ATLVS REST + GraphQL surface. Verified Partner integrations pass our technical review; Certified integrations also pass end-to-end QA on a live tenant. Build your own —",
+          )}{" "}
           <Link href="/integrations/submit" className="underline">
-            submit a proposal
+            {t("marketing.integrations.partners.submitLink", undefined, "submit a proposal")}
           </Link>
           .
         </p>
         <div className="mt-6 flex gap-3">
-          <Button href="/integrations/submit">Submit a partner integration</Button>
+          <Button href="/integrations/submit">
+            {t("marketing.integrations.partners.cta.submit", undefined, "Submit a partner integration")}
+          </Button>
           <Button href="/integrations" variant="ghost">
-            Back to live integrations
+            {t("marketing.integrations.partners.cta.back", undefined, "Back to live integrations")}
           </Button>
         </div>
       </section>
@@ -90,9 +112,13 @@ export default async function Page() {
       <section className="mx-auto max-w-6xl px-6 pb-12">
         {rows.length === 0 ? (
           <div className="surface p-8 text-center text-sm text-[var(--p-text-2)]">
-            No partner integrations are listed publicly yet.{" "}
+            {t(
+              "marketing.integrations.partners.emptyBefore",
+              undefined,
+              "No partner integrations are listed publicly yet.",
+            )}{" "}
             <Link href="/integrations/submit" className="underline">
-              Be the first.
+              {t("marketing.integrations.partners.emptyLink", undefined, "Be the first.")}
             </Link>
           </div>
         ) : (
@@ -102,14 +128,18 @@ export default async function Page() {
                 <div className="flex items-start justify-between">
                   <div className="text-sm font-semibold">{r.name}</div>
                   <Badge variant={r.certification_tier === "certified" ? "success" : "info"}>
-                    {r.certification_tier === "certified" ? "Certified" : "Verified"}
+                    {r.certification_tier === "certified"
+                      ? t("marketing.integrations.partners.tier.certified", undefined, "Certified")
+                      : t("marketing.integrations.partners.tier.verified", undefined, "Verified")}
                   </Badge>
                 </div>
                 <p className="mt-2 text-xs text-[var(--p-text-2)]">{r.short_description}</p>
                 <div className="mt-3 flex items-center justify-between text-[11px]">
-                  <span className="text-[var(--p-text-2)]">by {r.partner_org_name}</span>
+                  <span className="text-[var(--p-text-2)]">
+                    {t("marketing.integrations.partners.by", { name: r.partner_org_name }, "by {name}")}
+                  </span>
                   <span className="inline-flex items-center gap-1 font-medium text-[var(--p-accent)]">
-                    Details <ArrowRight size={11} />
+                    {t("marketing.integrations.partners.details", undefined, "Details")} <ArrowRight size={11} />
                   </span>
                 </div>
               </Link>
@@ -119,8 +149,12 @@ export default async function Page() {
       </section>
 
       <CTASection
-        title="Bring Your Stack Inside."
-        subtitle="Open API + open partner program. No revenue share, no gatekeeping."
+        title={t("marketing.integrations.partners.cta.bringTitle", undefined, "Bring Your Stack Inside.")}
+        subtitle={t(
+          "marketing.integrations.partners.cta.bringSubtitle",
+          undefined,
+          "Open API + open partner program. No revenue share, no gatekeeping.",
+        )}
       />
     </div>
   );

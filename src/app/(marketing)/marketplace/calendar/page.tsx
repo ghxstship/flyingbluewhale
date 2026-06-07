@@ -6,18 +6,27 @@ import { hasSupabase } from "@/lib/env";
 import { buildMetadata } from "@/lib/seo";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Event Calendar — On-sales + Announces",
-  description: "Upcoming on-sale dates, presale windows, and announcements.",
-  path: "/marketplace/calendar",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.marketplace.calendar.meta.title", undefined, "Event Calendar — On-sales + Announces"),
+    description: t(
+      "marketing.marketplace.calendar.meta.description",
+      undefined,
+      "Upcoming on-sale dates, presale windows, and announcements.",
+    ),
+    path: "/marketplace/calendar",
+  });
+}
 
 type Row = { id: string; kind: string; label: string | null; occurs_at: string; org_name: string; org_slug: string };
 
 export default async function Page() {
+  const { t } = await getRequestT();
   let rows: Row[] = [];
   if (hasSupabase) {
     const supabase = await createClient();
@@ -35,26 +44,42 @@ export default async function Page() {
     return acc;
   }, {});
   const days = Object.keys(byDay).sort();
+  const count = rows.length;
+  const summary =
+    count === 1
+      ? t("marketing.marketplace.calendar.summary.one", { count }, "{count} upcoming announcement + on-sale milestone")
+      : t(
+          "marketing.marketplace.calendar.summary.many",
+          { count },
+          "{count} upcoming announcements + on-sale milestones",
+        );
 
   return (
     <>
       <Breadcrumbs
-        items={[{ label: "Marketplace", href: "/marketplace" }, { label: "Calendar" }]}
+        items={[
+          {
+            label: t("marketing.marketplace.crumbsLabel", undefined, "Marketplace"),
+            href: "/marketplace",
+          },
+          { label: t("marketing.marketplace.calendar.crumbsLabel", undefined, "Calendar") },
+        ]}
         className="mx-auto max-w-6xl px-6 pt-6"
       />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Marketplace · Calendar</div>
-        <h1 className="hed-2xl mt-4">Event Calendar</h1>
-        <p className="mt-3 text-sm text-[var(--p-text-2)]">
-          {rows.length} upcoming announcement{rows.length === 1 ? "" : "s"} + on-sale milestone
-          {rows.length === 1 ? "" : "s"}
-        </p>
+        <div className="eyebrow eyebrow-brand">
+          {t("marketing.marketplace.calendar.eyebrow", undefined, "Marketplace · Calendar")}
+        </div>
+        <h1 className="hed-2xl mt-4">{t("marketing.marketplace.calendar.title", undefined, "Event Calendar")}</h1>
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">{summary}</p>
       </section>
 
       <section className="mx-auto max-w-6xl space-y-6 px-6 pb-16">
         {days.length === 0 ? (
-          <div className="surface p-6 text-sm text-[var(--p-text-2)]">No public milestones in the upcoming window.</div>
+          <div className="surface p-6 text-sm text-[var(--p-text-2)]">
+            {t("marketing.marketplace.calendar.empty", undefined, "No public milestones in the upcoming window.")}
+          </div>
         ) : (
           days.map((d) => (
             <div key={d} className="surface p-5">

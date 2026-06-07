@@ -4,29 +4,40 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, breadcrumbSchema, softwareApplicationSchema, SITE } from "@/lib/seo";
 import { PerDiemCalculator } from "@/components/marketing/tools/PerDiemCalculator";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Per-Diem Calculator — Crew & Talent Travel Allowance",
-  description:
-    "Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates with custom rate overrides.",
-  path: "/tools/per-diem-calculator",
-  keywords: [
-    "per diem calculator",
-    "GSA per diem rate",
-    "tour per diem",
-    "crew per diem rate",
-    "event per diem",
-    "production per diem total",
-  ],
-  ogImageEyebrow: "Free Tool",
-  ogImageTitle: "Per-Diem Calculator.",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.tools.perDiem.meta.title", undefined, "Per-Diem Calculator — Crew & Talent Travel Allowance"),
+    description: t(
+      "marketing.tools.perDiem.meta.description",
+      undefined,
+      "Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates with custom rate overrides.",
+    ),
+    path: "/tools/per-diem-calculator",
+    keywords: [
+      "per diem calculator",
+      "GSA per diem rate",
+      "tour per diem",
+      "crew per diem rate",
+      "event per diem",
+      "production per diem total",
+    ],
+    ogImageEyebrow: t("marketing.tools.eyebrow", undefined, "Free Tool"),
+    ogImageTitle: t("marketing.tools.perDiem.title", undefined, "Per-Diem Calculator."),
+  });
+}
 
-export default function PerDiemCalculatorPage() {
+export default async function PerDiemCalculatorPage() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Tools", href: "/tools" },
-    { label: "Per-Diem Calculator", href: "/tools/per-diem-calculator" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.tools.crumbsToolsLabel", undefined, "Tools"), href: "/tools" },
+    {
+      label: t("marketing.tools.perDiem.crumbsLabel", undefined, "Per-Diem Calculator"),
+      href: "/tools/per-diem-calculator",
+    },
   ];
 
   return (
@@ -35,8 +46,12 @@ export default function PerDiemCalculatorPage() {
         data={[
           breadcrumbSchema(crumbs),
           softwareApplicationSchema({
-            name: "ATLVS Per-Diem Calculator",
-            description: "Per-diem total calculator for production crew and talent.",
+            name: t("marketing.tools.perDiem.schemaName", undefined, "ATLVS Per-Diem Calculator"),
+            description: t(
+              "marketing.tools.perDiem.schemaDescription",
+              undefined,
+              "Per-diem total calculator for production crew and talent.",
+            ),
             url: `${SITE.baseUrl}/tools/per-diem-calculator`,
             price: "0",
           }),
@@ -45,11 +60,14 @@ export default function PerDiemCalculatorPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-3xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Free Tool</div>
-        <h1 className="hed-xl mt-4">Per-Diem Calculator.</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.tools.eyebrow", undefined, "Free Tool")}</div>
+        <h1 className="hed-xl mt-4">{t("marketing.tools.perDiem.title", undefined, "Per-Diem Calculator.")}</h1>
         <p className="mt-5 text-lg text-[var(--p-text-2)]">
-          Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates;
-          overridable per-city.
+          {t(
+            "marketing.tools.perDiem.lead",
+            undefined,
+            "Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates; overridable per-city.",
+          )}
         </p>
       </section>
 
@@ -58,22 +76,30 @@ export default function PerDiemCalculatorPage() {
       </section>
 
       <section className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="hed-lg">How Per-Diem Works.</h2>
+        <h2 className="hed-lg">{t("marketing.tools.perDiem.how.heading", undefined, "How Per-Diem Works.")}</h2>
         <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">
-          Per-diem is the daily allowance paid to a traveler — typically crew, talent, or contractors — for meals and
-          incidentals while away from their home base. The US General Services Administration (GSA) publishes
-          city-by-city per-diem rates for federal travel; most production budgets use these as a defensible baseline.
-          International rates come from the State Department's DSSR tables.
+          {t(
+            "marketing.tools.perDiem.how.body1",
+            undefined,
+            "Per-diem is the daily allowance paid to a traveler — typically crew, talent, or contractors — for meals and incidentals while away from their home base. The US General Services Administration (GSA) publishes city-by-city per-diem rates for federal travel; most production budgets use these as a defensible baseline. International rates come from the State Department's DSSR tables.",
+          )}
         </p>
         <p className="mt-3 text-sm leading-relaxed text-[var(--p-text-2)]">
-          Per-diem typically settles on a per-show or weekly cadence in cash or paystub. Tour managers track per-diem
-          against the city × day rate matrix to avoid drift between projected and actual.
+          {t(
+            "marketing.tools.perDiem.how.body2",
+            undefined,
+            "Per-diem typically settles on a per-show or weekly cadence in cash or paystub. Tour managers track per-diem against the city × day rate matrix to avoid drift between projected and actual.",
+          )}
         </p>
       </section>
 
       <CTASection
-        title="Skip The Math."
-        subtitle="Per-diem auto-calculates on every show in ATLVS, tied to your roster."
+        title={t("marketing.tools.perDiem.cta.title", undefined, "Skip The Math.")}
+        subtitle={t(
+          "marketing.tools.perDiem.cta.subtitle",
+          undefined,
+          "Per-diem auto-calculates on every show in ATLVS, tied to your roster.",
+        )}
       />
     </div>
   );

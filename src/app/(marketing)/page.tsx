@@ -339,7 +339,9 @@ export default async function Home() {
               <h1 className="mt-5 text-4xl leading-[1.05] font-bold tracking-tight sm:text-5xl md:text-6xl">
                 {t("marketing.pages.home.hero.titleLine1")}
                 <br />
-                <span className="text-[var(--p-accent)]">{t("marketing.pages.home.hero.titleLine2")}</span>
+                {t("marketing.pages.home.hero.titleLine2")}
+                <br />
+                <span className="text-[var(--p-accent)]">{t("marketing.pages.home.hero.titleLine3")}</span>
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--p-text-2)]">
                 {t("marketing.pages.home.hero.subtitleLead")} <strong className="text-[var(--p-text-1)]">ATLVS</strong>{" "}

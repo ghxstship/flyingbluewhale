@@ -1859,8 +1859,8 @@
         },
         "hero": {
           "eyebrow": "ATLVS Technologies",
-          "titleLine1": "プロダクションは",
-          "titleLine2": "1つのプラットフォームで動く。",
+          "titleLine1": "体験を",
+          "titleLine2": "プロダクションを",
           "subtitleLead": "3つのアプリ、1つのスキーマ。",
           "subtitleAtlvs": "がプロダクションを回す。",
           "subtitleCompvss": "が現場を回す。",
@@ -1868,7 +1868,8 @@
           "ctaPrimary": "無料で始める",
           "ctaSecondary": "ウォークスルーを予約",
           "disclaimer": "小規模チームには永久無料 · クレジットカード不要 · 組織単位の料金体系",
-          "ecosystemLabel": "ATLVS エコシステム"
+          "ecosystemLabel": "ATLVS エコシステム",
+          "titleLine3": "ひとつに。"
         },
         "trustBar": {
           "label": "以下のプロダクションチームに信頼されています"

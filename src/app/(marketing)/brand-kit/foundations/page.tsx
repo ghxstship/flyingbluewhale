@@ -6,10 +6,11 @@
  * elevation, motion, and iconography. Every value resolves from --p-* /
  * --brand-* — no raw hex.
  *
- * The page intentionally uses the kit's documentation primitives (.kf-*
- * page-local helpers) alongside the canonical kit primitives (.ps-*,
- * Wordmark, brand SVG marks) — so consumers see the kit documented by
- * the kit, not by a parallel system.
+ * i18n: prose chrome (headings, leads, notes, do/don't, captions, table
+ * labels) routes through the t() catalog. Token identifiers (--p-bg),
+ * brand proper nouns (ATLVS, GHXSTSHIP, Jost, Archivo, Space Grotesk,
+ * Phosphor, Waypoint), hex/spec values, and the typography specimen
+ * samples stay literal — they are not translatable content.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -34,50 +35,73 @@ import {
   WarningCircle,
 } from "@phosphor-icons/react/dist/ssr";
 import { Wordmark } from "@/components/brand/Wordmark";
+import { getRequestT } from "@/lib/i18n/request";
 import "./foundations.css";
 
-export const metadata: Metadata = {
-  title: "Foundations · ATLVS Technologies — Brand & UI Kit",
-  description:
-    "ATLVS Technologies brand foundations: Waypoint mark, color, typography (Industrial Wide / Archivo expanded), spacing, radii, elevation, motion, and iconography.",
-  alternates: { canonical: "/brand-kit/foundations" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return {
+    title: t(
+      "marketing.brandKit.foundations.meta.title",
+      undefined,
+      "Foundations · ATLVS Technologies — Brand & UI Kit",
+    ),
+    description: t(
+      "marketing.brandKit.foundations.meta.description",
+      undefined,
+      "ATLVS Technologies brand foundations: Waypoint mark, color, typography (Industrial Wide / Archivo expanded), spacing, radii, elevation, motion, and iconography.",
+    ),
+    alternates: { canonical: "/brand-kit/foundations" },
+  };
+}
 
-export default function FoundationsPage() {
+export default async function FoundationsPage() {
+  const { t } = await getRequestT();
   return (
     <div className="kf-wrap">
       {/* ===== SECTION NAV ===== */}
-      <aside className="kf-nav" aria-label="Foundations sections">
-        <div className="gp">Brand</div>
-        <a href="#logo">The Waypoint</a>
-        <a href="#appicons">App icons</a>
-        <a href="#clearspace">Clearspace &amp; usage</a>
-        <div className="gp">Foundations</div>
-        <a href="#color">Color</a>
-        <a href="#type">Typography</a>
-        <a href="#spacing">Spacing</a>
-        <a href="#radii">Radii</a>
-        <a href="#elevation">Elevation</a>
-        <a href="#motion">Motion</a>
-        <a href="#icons">Iconography</a>
+      <aside
+        className="kf-nav"
+        aria-label={t("marketing.brandKit.foundations.nav.aria", undefined, "Foundations sections")}
+      >
+        <div className="gp">{t("marketing.brandKit.foundations.nav.brand", undefined, "Brand")}</div>
+        <a href="#logo">{t("marketing.brandKit.foundations.nav.waypoint", undefined, "The Waypoint")}</a>
+        <a href="#appicons">{t("marketing.brandKit.foundations.nav.appIcons", undefined, "App icons")}</a>
+        <a href="#clearspace">{t("marketing.brandKit.foundations.nav.clearspace", undefined, "Clearspace & usage")}</a>
+        <div className="gp">{t("marketing.brandKit.foundations.nav.foundations", undefined, "Foundations")}</div>
+        <a href="#color">{t("marketing.brandKit.foundations.nav.color", undefined, "Color")}</a>
+        <a href="#type">{t("marketing.brandKit.foundations.nav.typography", undefined, "Typography")}</a>
+        <a href="#spacing">{t("marketing.brandKit.foundations.nav.spacing", undefined, "Spacing")}</a>
+        <a href="#radii">{t("marketing.brandKit.foundations.nav.radii", undefined, "Radii")}</a>
+        <a href="#elevation">{t("marketing.brandKit.foundations.nav.elevation", undefined, "Elevation")}</a>
+        <a href="#motion">{t("marketing.brandKit.foundations.nav.motion", undefined, "Motion")}</a>
+        <a href="#icons">{t("marketing.brandKit.foundations.nav.iconography", undefined, "Iconography")}</a>
       </aside>
 
       <main className="kf-main">
         {/* ===== LOGO ===== */}
         <section className="kf-sec" id="logo">
-          <p className="eb">Brand · Logo</p>
-          <h2>The Waypoint</h2>
+          <p className="eb">{t("marketing.brandKit.foundations.logo.eyebrow", undefined, "Brand · Logo")}</p>
+          <h2>{t("marketing.brandKit.foundations.logo.heading", undefined, "The Waypoint")}</h2>
           <p className="lead">
-            The ATLVS mark is a <b>waypoint</b> — an eight-point navigational star with a center void, the navigation
-            system rendered as one geometric glyph. Neutral SaaS register, recolored per product. It is distinct from
-            the cosmic GHXSTSHIP ghost-ship skull, which is the parent-company mark only.
+            {t("marketing.brandKit.foundations.logo.lead.before", undefined, "The ATLVS mark is a")}{" "}
+            <b>{t("marketing.brandKit.foundations.logo.lead.waypoint", undefined, "waypoint")}</b>{" "}
+            {t(
+              "marketing.brandKit.foundations.logo.lead.after",
+              undefined,
+              "— an eight-point navigational star with a center void, the navigation system rendered as one geometric glyph. Neutral SaaS register, recolored per product. It is distinct from the cosmic GHXSTSHIP ghost-ship skull, which is the parent-company mark only.",
+            )}
           </p>
 
           <div className="kf-grid kf-grid-2">
-            {/* Lockup on white tile (light affordance) */}
+            {/* Lockup on white tile (light affordance). The tile colors are
+                FIXED brand plates — the spec demonstrates the mark on a literal
+                white ground and a literal ink ground regardless of the active
+                theme, so these two hexes are intentional, not theme tokens. */}
             <div className="kf-lockup">
               <span
                 className="tile"
+                // eslint-disable-next-line no-restricted-syntax -- intentional fixed white brand plate
                 style={{ background: "#FFFFFF", border: "1px solid var(--p-border-2)" }}
                 aria-hidden="true"
               >
@@ -85,10 +109,11 @@ export default function FoundationsPage() {
               </span>
               <Wordmark word="ATLVS" subtitle="TECHNOLOGIES" style={{ fontSize: 30 }} />
             </div>
-            {/* Lockup on ink tile (dark affordance) */}
+            {/* Lockup on ink tile (dark affordance) — fixed ink brand plate. */}
             <div className="kf-lockup">
               <span
                 className="tile"
+                // eslint-disable-next-line no-restricted-syntax -- intentional fixed ink brand plate
                 style={{ background: "#181B23", border: "1px solid var(--p-border-2)" }}
                 aria-hidden="true"
               >
@@ -98,60 +123,87 @@ export default function FoundationsPage() {
             </div>
           </div>
           <p className="kf-note" style={{ marginTop: 14 }}>
-            The tile carries the product accent; the star stays white (or ink on light grounds). The wordmark is always
-            spaced caps and nowrap — never lowercase, never unspaced except in URLs and IDs.
+            {t(
+              "marketing.brandKit.foundations.logo.note",
+              undefined,
+              "The tile carries the product accent; the star stays white (or ink on light grounds). The wordmark is always spaced caps and nowrap — never lowercase, never unspaced except in URLs and IDs.",
+            )}
           </p>
 
           <table className="kf-spec" style={{ marginTop: 16 }}>
             <thead>
               <tr>
-                <th>Wordmark spec</th>
-                <th>Setting</th>
+                <th>{t("marketing.brandKit.foundations.logo.spec.colWordmark", undefined, "Wordmark spec")}</th>
+                <th>{t("marketing.brandKit.foundations.logo.spec.colSetting", undefined, "Setting")}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <b>Face</b>
+                  <b>{t("marketing.brandKit.foundations.logo.spec.faceLabel", undefined, "Face")}</b>
                 </td>
                 <td>
-                  <span style={{ fontFamily: "var(--p-wordmark)" }}>Jost</span> — geometric, logo lockup only. UI &amp;
-                  headings stay Space Grotesk / Archivo Expanded.
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <b>The A</b>
-                </td>
-                <td>
-                  A bare peak — <b>no crossbar</b>, the V flipped. A and V read as mirror forms.
+                  <span style={{ fontFamily: "var(--p-wordmark)" }}>Jost</span>{" "}
+                  {t(
+                    "marketing.brandKit.foundations.logo.spec.faceValue",
+                    undefined,
+                    "— geometric, logo lockup only. UI & headings stay Space Grotesk / Archivo Expanded.",
+                  )}
                 </td>
               </tr>
               <tr>
                 <td>
-                  <b>Setting</b>
+                  <b>{t("marketing.brandKit.foundations.logo.spec.aLabel", undefined, "The A")}</b>
                 </td>
                 <td>
-                  Spaced caps, nowrap. In the full lockup,{" "}
+                  {t("marketing.brandKit.foundations.logo.spec.aBefore", undefined, "A bare peak —")}{" "}
+                  <b>{t("marketing.brandKit.foundations.logo.spec.aBold", undefined, "no crossbar")}</b>
+                  {t(
+                    "marketing.brandKit.foundations.logo.spec.aAfter",
+                    undefined,
+                    ", the V flipped. A and V read as mirror forms.",
+                  )}
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <b>{t("marketing.brandKit.foundations.logo.spec.settingLabel", undefined, "Setting")}</b>
+                </td>
+                <td>
+                  {t(
+                    "marketing.brandKit.foundations.logo.spec.settingBefore",
+                    undefined,
+                    "Spaced caps, nowrap. In the full lockup,",
+                  )}{" "}
                   <span className="ps-mono" style={{ fontSize: 11 }}>
                     TECHNOLOGIES
                   </span>{" "}
-                  is letter-spaced to the exact ATLVS width.
+                  {t(
+                    "marketing.brandKit.foundations.logo.spec.settingAfter",
+                    undefined,
+                    "is letter-spaced to the exact ATLVS width.",
+                  )}
                 </td>
               </tr>
               <tr>
                 <td>
-                  <b>Subtitle</b>
+                  <b>{t("marketing.brandKit.foundations.logo.spec.subtitleLabel", undefined, "Subtitle")}</b>
                 </td>
                 <td>
-                  Only ATLVS carries <b>TECHNOLOGIES</b>. COMPVSS and GVTEWAY stand alone.
+                  {t("marketing.brandKit.foundations.logo.spec.subtitleBefore", undefined, "Only ATLVS carries")}{" "}
+                  <b>TECHNOLOGIES</b>
+                  {t(
+                    "marketing.brandKit.foundations.logo.spec.subtitleAfter",
+                    undefined,
+                    ". COMPVSS and GVTEWAY stand alone.",
+                  )}
                 </td>
               </tr>
             </tbody>
           </table>
 
           <div className="kf-sub" style={{ marginTop: 26 }}>
-            Product wordmarks
+            {t("marketing.brandKit.foundations.logo.productWordmarks", undefined, "Product wordmarks")}
             <span className="ln" />
           </div>
           <div className="kf-board">
@@ -187,18 +239,40 @@ export default function FoundationsPage() {
 
         {/* ===== APP ICONS ===== */}
         <section className="kf-sec" id="appicons">
-          <h2 style={{ fontSize: 20 }}>One mark, three accents</h2>
+          <h2 style={{ fontSize: 20 }}>
+            {t("marketing.brandKit.foundations.appIcons.heading", undefined, "One mark, three accents")}
+          </h2>
           <p className="lead">
-            Each product is the same waypoint on its own accent tile — instantly a family, instantly distinct.
+            {t(
+              "marketing.brandKit.foundations.appIcons.lead",
+              undefined,
+              "Each product is the same waypoint on its own accent tile — instantly a family, instantly distinct.",
+            )}
           </p>
           <div className="kf-board">
             <div className="bb">
               <div className="kf-row" style={{ gap: 34, justifyContent: "space-between" }}>
                 {[
-                  { tile: "var(--brand-atlvs)", title: "ATLVS · pink", role: "Producer / Internal" },
-                  { tile: "var(--brand-compvss)", title: "COMPVSS · amber", role: "Crew / Vendor / Talent" },
-                  { tile: "var(--brand-gvteway)", title: "GVTEWAY · cyan", role: "Guest / Client" },
-                  { tile: "var(--p-text-1)", title: "Ink", role: "Neutral / Suite" },
+                  {
+                    tile: "var(--brand-atlvs)",
+                    title: "ATLVS · pink",
+                    role: t("marketing.brandKit.foundations.appIcons.roleAtlvs", undefined, "Producer / Internal"),
+                  },
+                  {
+                    tile: "var(--brand-compvss)",
+                    title: "COMPVSS · amber",
+                    role: t("marketing.brandKit.foundations.appIcons.roleCompvss", undefined, "Crew / Vendor / Talent"),
+                  },
+                  {
+                    tile: "var(--brand-gvteway)",
+                    title: "GVTEWAY · cyan",
+                    role: t("marketing.brandKit.foundations.appIcons.roleGvteway", undefined, "Guest / Client"),
+                  },
+                  {
+                    tile: "var(--p-text-1)",
+                    title: t("marketing.brandKit.foundations.appIcons.inkTitle", undefined, "Ink"),
+                    role: t("marketing.brandKit.foundations.appIcons.roleInk", undefined, "Neutral / Suite"),
+                  },
                 ].map((c) => (
                   <div key={c.title} className="kf-iconcell">
                     <span className="tile" style={{ background: c.tile }} aria-hidden="true">
@@ -214,7 +288,11 @@ export default function FoundationsPage() {
               </div>
               <hr className="ps-divider" style={{ margin: "24px 0" }} />
               <div className="kf-sub">
-                Min-size — the mark holds at every scale
+                {t(
+                  "marketing.brandKit.foundations.appIcons.minSize",
+                  undefined,
+                  "Min-size — the mark holds at every scale",
+                )}
                 <span className="ln" />
               </div>
               <div className="kf-row" style={{ alignItems: "flex-end", gap: 24 }}>
@@ -243,7 +321,9 @@ export default function FoundationsPage() {
                   <span style={{ display: "grid", placeItems: "center", width: 32, height: 32 }} aria-hidden="true">
                     <Image src="/brand/atlvs-mark.svg" alt="" width={16} height={16} />
                   </span>
-                  <div className="cap">16 · bare</div>
+                  <div className="cap">
+                    {t("marketing.brandKit.foundations.appIcons.bare16", undefined, "16 · bare")}
+                  </div>
                 </div>
               </div>
             </div>
@@ -252,8 +332,16 @@ export default function FoundationsPage() {
 
         {/* ===== CLEARSPACE / USAGE ===== */}
         <section className="kf-sec" id="clearspace">
-          <h2 style={{ fontSize: 20 }}>Clearspace &amp; usage</h2>
-          <p className="lead">Keep margin equal to half the mark height on every side.</p>
+          <h2 style={{ fontSize: 20 }}>
+            {t("marketing.brandKit.foundations.clearspace.heading", undefined, "Clearspace & usage")}
+          </h2>
+          <p className="lead">
+            {t(
+              "marketing.brandKit.foundations.clearspace.lead",
+              undefined,
+              "Keep margin equal to half the mark height on every side.",
+            )}
+          </p>
           <div className="kf-clearbox">
             <div className="inner">
               <Image src="/brand/atlvs-mark.svg" alt="" width={50} height={50} />
@@ -263,61 +351,143 @@ export default function FoundationsPage() {
           <div className="kf-dd" style={{ marginTop: 22 }}>
             <div className="kf-do">
               <div className="h">
-                <CheckCircle size={18} weight="bold" /> Do
+                <CheckCircle size={18} weight="bold" />{" "}
+                {t("marketing.brandKit.foundations.clearspace.do", undefined, "Do")}
               </div>
               <ul>
-                <li>Recolor the tile to the product accent; keep the star white (or ink on light).</li>
-                <li>Maintain clearspace = ½ mark height.</li>
-                <li>Use the bare mark at ≤16px; the tiled icon at ≥32px.</li>
                 <li>
-                  Pair with the spaced <b>A&nbsp;T&nbsp;L&nbsp;V&nbsp;S</b> wordmark, nowrap.
+                  {t(
+                    "marketing.brandKit.foundations.clearspace.doItems.1",
+                    undefined,
+                    "Recolor the tile to the product accent; keep the star white (or ink on light).",
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "marketing.brandKit.foundations.clearspace.doItems.2",
+                    undefined,
+                    "Maintain clearspace = ½ mark height.",
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "marketing.brandKit.foundations.clearspace.doItems.3",
+                    undefined,
+                    "Use the bare mark at ≤16px; the tiled icon at ≥32px.",
+                  )}
+                </li>
+                <li>
+                  {t("marketing.brandKit.foundations.clearspace.doItems.4before", undefined, "Pair with the spaced")}{" "}
+                  <b>A&nbsp;T&nbsp;L&nbsp;V&nbsp;S</b>{" "}
+                  {t("marketing.brandKit.foundations.clearspace.doItems.4after", undefined, "wordmark, nowrap.")}
                 </li>
               </ul>
             </div>
             <div className="kf-dont">
               <div className="h">
-                <XCircle size={18} weight="bold" /> Don&apos;t
+                <XCircle size={18} weight="bold" />{" "}
+                {t("marketing.brandKit.foundations.clearspace.dont", undefined, "Don't")}
               </div>
               <ul>
-                <li>Recolor or gradient the star itself — only the tile carries color.</li>
-                <li>Rotate, stretch, or add the cosmic halftone or skull.</li>
-                <li>Set the wordmark unspaced or lowercase.</li>
-                <li>Place the bare mark on a busy photo without the solid tile.</li>
+                <li>
+                  {t(
+                    "marketing.brandKit.foundations.clearspace.dontItems.1",
+                    undefined,
+                    "Recolor or gradient the star itself — only the tile carries color.",
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "marketing.brandKit.foundations.clearspace.dontItems.2",
+                    undefined,
+                    "Rotate, stretch, or add the cosmic halftone or skull.",
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "marketing.brandKit.foundations.clearspace.dontItems.3",
+                    undefined,
+                    "Set the wordmark unspaced or lowercase.",
+                  )}
+                </li>
+                <li>
+                  {t(
+                    "marketing.brandKit.foundations.clearspace.dontItems.4",
+                    undefined,
+                    "Place the bare mark on a busy photo without the solid tile.",
+                  )}
+                </li>
               </ul>
             </div>
           </div>
           <div className="ps-banner ps-banner--info" style={{ marginTop: 18 }}>
             <Info size={18} weight="bold" />
             <div>
-              <b>Parent endorsement.</b> The GHXSTSHIP skull appears only in the endorsement lockup — &ldquo;an ATLVS
-              Technologies, a GHXSTSHIP Industries company.&rdquo; It is never the product app icon.
+              <b>
+                {t("marketing.brandKit.foundations.clearspace.endorsement.label", undefined, "Parent endorsement.")}
+              </b>{" "}
+              {t(
+                "marketing.brandKit.foundations.clearspace.endorsement.body",
+                undefined,
+                "The GHXSTSHIP skull appears only in the endorsement lockup — “an ATLVS Technologies, a GHXSTSHIP Industries company.” It is never the product app icon.",
+              )}
             </div>
           </div>
         </section>
 
         {/* ===== COLOR ===== */}
         <section className="kf-sec" id="color">
-          <p className="eb">Foundations · Color</p>
-          <h2>Color</h2>
+          <p className="eb">{t("marketing.brandKit.foundations.color.eyebrow", undefined, "Foundations · Color")}</p>
+          <h2>{t("marketing.brandKit.foundations.color.heading", undefined, "Color")}</h2>
           <p className="lead">
-            Neutral surfaces do the work; one accent per product carries identity. Every value resolves from the{" "}
-            <code className="kf-code">--p-*</code> namespace and re-tunes per mode for AA contrast.
+            {t(
+              "marketing.brandKit.foundations.color.lead.before",
+              undefined,
+              "Neutral surfaces do the work; one accent per product carries identity. Every value resolves from the",
+            )}{" "}
+            <code className="kf-code">--p-*</code>{" "}
+            {t(
+              "marketing.brandKit.foundations.color.lead.after",
+              undefined,
+              "namespace and re-tunes per mode for AA contrast.",
+            )}
           </p>
 
           <div className="kf-sub">
-            Surfaces &amp; text
+            {t("marketing.brandKit.foundations.color.surfacesText", undefined, "Surfaces & text")}
             <span className="ln" />
           </div>
           <div className="kf-grid kf-grid-4">
             {[
-              { name: "Canvas", token: "--p-bg" },
-              { name: "Surface", token: "--p-surface" },
-              { name: "Surface 2", token: "--p-surface-2" },
-              { name: "Border", token: "--p-border-2" },
-              { name: "Text 1", token: "--p-text-1" },
-              { name: "Text 2", token: "--p-text-2" },
-              { name: "Text 3", token: "--p-text-3" },
-              { name: "Accent (live)", token: "--p-accent" },
+              { name: t("marketing.brandKit.foundations.color.swatch.canvas", undefined, "Canvas"), token: "--p-bg" },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.surface", undefined, "Surface"),
+                token: "--p-surface",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.surface2", undefined, "Surface 2"),
+                token: "--p-surface-2",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.border", undefined, "Border"),
+                token: "--p-border-2",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.text1", undefined, "Text 1"),
+                token: "--p-text-1",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.text2", undefined, "Text 2"),
+                token: "--p-text-2",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.text3", undefined, "Text 3"),
+                token: "--p-text-3",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.accentLive", undefined, "Accent (live)"),
+                token: "--p-accent",
+              },
             ].map((s) => (
               <div key={s.token} className="kf-swatch">
                 <div className="chip" style={{ background: `var(${s.token})` }} />
@@ -330,14 +500,18 @@ export default function FoundationsPage() {
           </div>
 
           <div className="kf-sub">
-            Product identity — the accent each app owns
+            {t(
+              "marketing.brandKit.foundations.color.productIdentity",
+              undefined,
+              "Product identity — the accent each app owns",
+            )}
             <span className="ln" />
           </div>
           <div className="kf-col" style={{ gap: 10 }}>
             {[
               {
                 name: "ATLVS",
-                role: "Producer / Internal",
+                role: t("marketing.brandKit.foundations.appIcons.roleAtlvs", undefined, "Producer / Internal"),
                 hex: "#FF2E88",
                 accentBg: "var(--brand-atlvs)",
                 accentOn: "var(--brand-atlvs-on)",
@@ -347,7 +521,7 @@ export default function FoundationsPage() {
               },
               {
                 name: "COMPVSS",
-                role: "Crew / Vendor / Talent",
+                role: t("marketing.brandKit.foundations.appIcons.roleCompvss", undefined, "Crew / Vendor / Talent"),
                 hex: "#E9A23B",
                 accentBg: "var(--brand-compvss)",
                 accentOn: "var(--brand-compvss-on)",
@@ -357,7 +531,7 @@ export default function FoundationsPage() {
               },
               {
                 name: "GVTEWAY",
-                role: "Guest / Client",
+                role: t("marketing.brandKit.foundations.appIcons.roleGvteway", undefined, "Guest / Client"),
                 hex: "#12B5B5",
                 accentBg: "var(--brand-gvteway)",
                 accentOn: "var(--brand-gvteway-on)",
@@ -374,7 +548,7 @@ export default function FoundationsPage() {
                 </div>
                 <div className="seg" style={{ background: p.weakBg, color: "var(--p-text-1)" }}>
                   <div className="role" style={{ color: "var(--p-text-3)" }}>
-                    Accent-weak tint
+                    {t("marketing.brandKit.foundations.color.accentWeakTint", undefined, "Accent-weak tint")}
                   </div>
                   <div className="hx" style={{ color: p.inkText }}>
                     {p.accentText}
@@ -385,15 +559,24 @@ export default function FoundationsPage() {
           </div>
 
           <div className="kf-sub">
-            Semantic — shared across products
+            {t("marketing.brandKit.foundations.color.semantic", undefined, "Semantic — shared across products")}
             <span className="ln" />
           </div>
           <div className="kf-grid kf-grid-4">
             {[
-              { name: "Success", token: "--p-success" },
-              { name: "Warning", token: "--p-warning" },
-              { name: "Danger", token: "--p-danger" },
-              { name: "Info", token: "--p-info" },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.success", undefined, "Success"),
+                token: "--p-success",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.warning", undefined, "Warning"),
+                token: "--p-warning",
+              },
+              {
+                name: t("marketing.brandKit.foundations.color.swatch.danger", undefined, "Danger"),
+                token: "--p-danger",
+              },
+              { name: t("marketing.brandKit.foundations.color.swatch.info", undefined, "Info"), token: "--p-info" },
             ].map((s) => (
               <div key={s.token} className="kf-swatch">
                 <div className="chip" style={{ background: `var(${s.token})` }} />
@@ -408,14 +591,37 @@ export default function FoundationsPage() {
 
         {/* ===== TYPE ===== */}
         <section className="kf-sec" id="type">
-          <p className="eb">Foundations · Type</p>
-          <h2>Typography</h2>
+          <p className="eb">{t("marketing.brandKit.foundations.type.eyebrow", undefined, "Foundations · Type")}</p>
+          <h2>{t("marketing.brandKit.foundations.type.heading", undefined, "Typography")}</h2>
           <p className="lead">
-            <b>Industrial Wide.</b> Headings and metrics are set in <b>Archivo at its expanded width axis</b> — a
-            confident, structural grotesque that gives the product presence. Body and UI stay <b>Space Grotesk</b> so
-            tables and forms read clean; <b>Space Mono</b> is the eyebrow and coordinate vernacular (IDs, codes,
-            labels); <b>Inter</b> is the long-form body alternate. Title Case for headings and labels; sentence case for
-            body.
+            <b>{t("marketing.brandKit.foundations.type.lead.industrialWide", undefined, "Industrial Wide.")}</b>{" "}
+            {t("marketing.brandKit.foundations.type.lead.s1", undefined, "Headings and metrics are set in")}{" "}
+            <b>
+              {t(
+                "marketing.brandKit.foundations.type.lead.archivoExpanded",
+                undefined,
+                "Archivo at its expanded width axis",
+              )}
+            </b>{" "}
+            {t(
+              "marketing.brandKit.foundations.type.lead.s2",
+              undefined,
+              "— a confident, structural grotesque that gives the product presence. Body and UI stay",
+            )}{" "}
+            <b>Space Grotesk</b>{" "}
+            {t("marketing.brandKit.foundations.type.lead.s3", undefined, "so tables and forms read clean;")}{" "}
+            <b>Space Mono</b>{" "}
+            {t(
+              "marketing.brandKit.foundations.type.lead.s4",
+              undefined,
+              "is the eyebrow and coordinate vernacular (IDs, codes, labels);",
+            )}{" "}
+            <b>Inter</b>{" "}
+            {t(
+              "marketing.brandKit.foundations.type.lead.s5",
+              undefined,
+              "is the long-form body alternate. Title Case for headings and labels; sentence case for body.",
+            )}
           </p>
 
           <div className="kf-grid kf-grid-4" style={{ marginBottom: 22 }}>
@@ -435,7 +641,9 @@ export default function FoundationsPage() {
                 <div className="kf-tok" style={{ marginTop: 8 }}>
                   Archivo Expanded
                 </div>
-                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>Headings · stats · 700–900</div>
+                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
+                  {t("marketing.brandKit.foundations.type.face.archivo", undefined, "Headings · stats · 700–900")}
+                </div>
               </div>
             </div>
             <div className="kf-board">
@@ -444,7 +652,9 @@ export default function FoundationsPage() {
                 <div className="kf-tok" style={{ marginTop: 8 }}>
                   Space Grotesk
                 </div>
-                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>Body · UI · 400–700</div>
+                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
+                  {t("marketing.brandKit.foundations.type.face.grotesk", undefined, "Body · UI · 400–700")}
+                </div>
               </div>
             </div>
             <div className="kf-board">
@@ -462,7 +672,9 @@ export default function FoundationsPage() {
                 <div className="kf-tok" style={{ marginTop: 8 }}>
                   Space Mono
                 </div>
-                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>Eyebrows · IDs · codes</div>
+                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
+                  {t("marketing.brandKit.foundations.type.face.mono", undefined, "Eyebrows · IDs · codes")}
+                </div>
               </div>
             </div>
             <div className="kf-board">
@@ -471,7 +683,9 @@ export default function FoundationsPage() {
                 <div className="kf-tok" style={{ marginTop: 8 }}>
                   Inter
                 </div>
-                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>Long-form body alternate</div>
+                <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
+                  {t("marketing.brandKit.foundations.type.face.inter", undefined, "Long-form body alternate")}
+                </div>
               </div>
             </div>
           </div>
@@ -492,7 +706,11 @@ export default function FoundationsPage() {
                 },
                 {
                   lbl: "Body · 14",
-                  text: "The default reading size for tables, forms, and interface copy.",
+                  text: t(
+                    "marketing.brandKit.foundations.type.specimen.body",
+                    undefined,
+                    "The default reading size for tables, forms, and interface copy.",
+                  ),
                   size: 14,
                   wide: false,
                   weight: 400,
@@ -501,7 +719,11 @@ export default function FoundationsPage() {
                 },
                 {
                   lbl: "Small · 12",
-                  text: "Secondary metadata and helper text.",
+                  text: t(
+                    "marketing.brandKit.foundations.type.specimen.small",
+                    undefined,
+                    "Secondary metadata and helper text.",
+                  ),
                   size: 12,
                   wide: false,
                   weight: 400,
@@ -536,17 +758,22 @@ export default function FoundationsPage() {
           </div>
 
           <div className="kf-sub">
-            Header treatments
+            {t("marketing.brandKit.foundations.type.headerTreatments", undefined, "Header treatments")}
             <span className="ln" />
           </div>
           <p className="kf-note">
-            Three sanctioned ways to deploy the wide headline. Use the right one for the context — don&apos;t mix more
-            than one per view.
+            {t(
+              "marketing.brandKit.foundations.type.headerTreatmentsNote",
+              undefined,
+              "Three sanctioned ways to deploy the wide headline. Use the right one for the context — don't mix more than one per view.",
+            )}
           </p>
           <div className="kf-grid kf-grid-3">
             <div className="kf-board">
               <div className="bh">
-                <span className="t">A2 · Everyday</span>
+                <span className="t">
+                  {t("marketing.brandKit.foundations.type.a2.title", undefined, "A2 · Everyday")}
+                </span>
                 <span className="m">.ps-pagehead</span>
               </div>
               <div className="bb">
@@ -560,39 +787,61 @@ export default function FoundationsPage() {
                   </span>
                 </div>
                 <p className="kf-note" style={{ margin: "14px 0 0" }}>
-                  Accent bar + live mono kicker. The default for app chrome and page headers.
+                  {t(
+                    "marketing.brandKit.foundations.type.a2.note",
+                    undefined,
+                    "Accent bar + live mono kicker. The default for app chrome and page headers.",
+                  )}
                 </p>
               </div>
             </div>
             <div className="kf-board">
               <div className="bh">
-                <span className="t">A3 · Hero</span>
+                <span className="t">{t("marketing.brandKit.foundations.type.a3.title", undefined, "A3 · Hero")}</span>
                 <span className="m">.ps-hero .pop</span>
               </div>
               <div className="bb">
                 <div className="ps-hero" style={{ fontSize: 30 }}>
-                  Run the <span className="pop">show</span>.
+                  {t("marketing.brandKit.foundations.type.a3.sampleBefore", undefined, "Run the")}{" "}
+                  <span className="pop">
+                    {t("marketing.brandKit.foundations.type.a3.samplePop", undefined, "show")}
+                  </span>
+                  .
                 </div>
                 <p className="kf-note" style={{ margin: "14px 0 0" }}>
-                  One word takes the product accent — headlines self-brand. Covers, marketing, splash.
+                  {t(
+                    "marketing.brandKit.foundations.type.a3.note",
+                    undefined,
+                    "One word takes the product accent — headlines self-brand. Covers, marketing, splash.",
+                  )}
                 </p>
               </div>
             </div>
             <div className="kf-board">
               <div className="bh">
-                <span className="t">A4 · Metrics</span>
+                <span className="t">
+                  {t("marketing.brandKit.foundations.type.a4.title", undefined, "A4 · Metrics")}
+                </span>
                 <span className="m">.ps-stat .v</span>
               </div>
               <div className="bb">
                 <div className="ps-stat" style={{ boxShadow: "none", border: 0, padding: 0 }}>
-                  <div className="k">On-Time Rate</div>
+                  <div className="k">
+                    {t("marketing.brandKit.foundations.type.a4.statLabel", undefined, "On-Time Rate")}
+                  </div>
                   <div className="v" style={{ fontSize: 44 }}>
                     98%
                   </div>
-                  <div className="d">▲ 2% vs Q3</div>
+                  <div className="d">
+                    {t("marketing.brandKit.foundations.type.a4.statDelta", undefined, "▲ 2% vs Q3")}
+                  </div>
                 </div>
                 <p className="kf-note" style={{ margin: "10px 0 0" }}>
-                  Tabular figures at 900 / expanded. Dashboards and reports.
+                  {t(
+                    "marketing.brandKit.foundations.type.a4.note",
+                    undefined,
+                    "Tabular figures at 900 / expanded. Dashboards and reports.",
+                  )}
                 </p>
               </div>
             </div>
@@ -601,10 +850,14 @@ export default function FoundationsPage() {
 
         {/* ===== SPACING ===== */}
         <section className="kf-sec" id="spacing">
-          <p className="eb">Foundations · Space</p>
-          <h2>Spacing</h2>
+          <p className="eb">{t("marketing.brandKit.foundations.spacing.eyebrow", undefined, "Foundations · Space")}</p>
+          <h2>{t("marketing.brandKit.foundations.spacing.heading", undefined, "Spacing")}</h2>
           <p className="lead">
-            A 4px base grid. Density swaps the control and row rhythm — the same tokens tighten under{" "}
+            {t(
+              "marketing.brandKit.foundations.spacing.lead.before",
+              undefined,
+              "A 4px base grid. Density swaps the control and row rhythm — the same tokens tighten under",
+            )}{" "}
             <code className="kf-code">data-density=&quot;compact&quot;</code>.
           </p>
           <div className="kf-board">
@@ -629,10 +882,14 @@ export default function FoundationsPage() {
 
         {/* ===== RADII ===== */}
         <section className="kf-sec" id="radii">
-          <p className="eb">Foundations · Radius</p>
-          <h2>Radii</h2>
+          <p className="eb">{t("marketing.brandKit.foundations.radii.eyebrow", undefined, "Foundations · Radius")}</p>
+          <h2>{t("marketing.brandKit.foundations.radii.heading", undefined, "Radii")}</h2>
           <p className="lead">
-            Soft, productivity-tool friendly — never pop-art sharp. Pills for chips and toggles only.
+            {t(
+              "marketing.brandKit.foundations.radii.lead",
+              undefined,
+              "Soft, productivity-tool friendly — never pop-art sharp. Pills for chips and toggles only.",
+            )}
           </p>
           <div className="kf-board">
             <div className="bb">
@@ -655,23 +912,28 @@ export default function FoundationsPage() {
 
         {/* ===== ELEVATION ===== */}
         <section className="kf-sec" id="elevation">
-          <p className="eb">Foundations · Elevation</p>
-          <h2>Elevation</h2>
+          <p className="eb">
+            {t("marketing.brandKit.foundations.elevation.eyebrow", undefined, "Foundations · Elevation")}
+          </p>
+          <h2>{t("marketing.brandKit.foundations.elevation.heading", undefined, "Elevation")}</h2>
           <p className="lead">
-            A cool, tight three-step scale: resting → hover → popover &amp; modal. Shadows are subtle in light and lean
-            on borders in dark.
+            {t(
+              "marketing.brandKit.foundations.elevation.lead",
+              undefined,
+              "A cool, tight three-step scale: resting → hover → popover & modal. Shadows are subtle in light and lean on borders in dark.",
+            )}
           </p>
           <div className="kf-board">
             <div className="bb">
               <div className="kf-elev">
                 <div className="e" style={{ boxShadow: "var(--p-elev-1)" }}>
-                  elev-1 · rest
+                  {t("marketing.brandKit.foundations.elevation.rest", undefined, "elev-1 · rest")}
                 </div>
                 <div className="e" style={{ boxShadow: "var(--p-elev-2)" }}>
-                  elev-2 · hover
+                  {t("marketing.brandKit.foundations.elevation.hover", undefined, "elev-2 · hover")}
                 </div>
                 <div className="e" style={{ boxShadow: "var(--p-elev-3)" }}>
-                  elev-3 · overlay
+                  {t("marketing.brandKit.foundations.elevation.overlay", undefined, "elev-3 · overlay")}
                 </div>
               </div>
             </div>
@@ -680,19 +942,31 @@ export default function FoundationsPage() {
 
         {/* ===== MOTION ===== */}
         <section className="kf-sec" id="motion">
-          <p className="eb">Foundations · Motion</p>
-          <h2>Motion</h2>
+          <p className="eb">{t("marketing.brandKit.foundations.motion.eyebrow", undefined, "Foundations · Motion")}</p>
+          <h2>{t("marketing.brandKit.foundations.motion.heading", undefined, "Motion")}</h2>
           <p className="lead">
-            Quick and unfussy. One easing curve, short durations, and a hard rule: never transition a token-backed{" "}
-            <code className="kf-code">background</code> across a theme switch — recolor instantly and animate{" "}
-            <code className="kf-code">filter</code> or <code className="kf-code">opacity</code> instead.
+            {t(
+              "marketing.brandKit.foundations.motion.lead.s1",
+              undefined,
+              "Quick and unfussy. One easing curve, short durations, and a hard rule: never transition a token-backed",
+            )}{" "}
+            <code className="kf-code">background</code>{" "}
+            {t(
+              "marketing.brandKit.foundations.motion.lead.s2",
+              undefined,
+              "across a theme switch — recolor instantly and animate",
+            )}{" "}
+            <code className="kf-code">filter</code>{" "}
+            {t("marketing.brandKit.foundations.motion.lead.or", undefined, "or")}{" "}
+            <code className="kf-code">opacity</code>{" "}
+            {t("marketing.brandKit.foundations.motion.lead.instead", undefined, "instead.")}
           </p>
           <table className="kf-spec">
             <thead>
               <tr>
-                <th>Token</th>
-                <th>Value</th>
-                <th>Use</th>
+                <th>{t("marketing.brandKit.foundations.motion.col.token", undefined, "Token")}</th>
+                <th>{t("marketing.brandKit.foundations.motion.col.value", undefined, "Value")}</th>
+                <th>{t("marketing.brandKit.foundations.motion.col.use", undefined, "Use")}</th>
               </tr>
             </thead>
             <tbody>
@@ -701,24 +975,34 @@ export default function FoundationsPage() {
                   <code>--p-ease</code>
                 </td>
                 <td>140ms cubic-bezier(.2,.7,.2,1)</td>
-                <td>Hover, press, micro-interactions</td>
+                <td>
+                  {t("marketing.brandKit.foundations.motion.row.ease", undefined, "Hover, press, micro-interactions")}
+                </td>
               </tr>
               <tr>
-                <td>Hover lift</td>
+                <td>{t("marketing.brandKit.foundations.motion.row.hoverLift", undefined, "Hover lift")}</td>
                 <td>
                   <b>translateY(-2px)</b> + elev-2
                 </td>
-                <td>Cards, stat tiles</td>
+                <td>{t("marketing.brandKit.foundations.motion.row.hoverUse", undefined, "Cards, stat tiles")}</td>
               </tr>
               <tr>
-                <td>Skeleton shimmer</td>
-                <td>1.4s ease, infinite</td>
-                <td>Loading placeholders (respects reduced-motion)</td>
+                <td>{t("marketing.brandKit.foundations.motion.row.skeleton", undefined, "Skeleton shimmer")}</td>
+                <td>
+                  {t("marketing.brandKit.foundations.motion.row.skeletonValue", undefined, "1.4s ease, infinite")}
+                </td>
+                <td>
+                  {t(
+                    "marketing.brandKit.foundations.motion.row.skeletonUse",
+                    undefined,
+                    "Loading placeholders (respects reduced-motion)",
+                  )}
+                </td>
               </tr>
               <tr>
-                <td>Spinner</td>
-                <td>0.7s linear</td>
-                <td>In-flight actions</td>
+                <td>{t("marketing.brandKit.foundations.motion.row.spinner", undefined, "Spinner")}</td>
+                <td>{t("marketing.brandKit.foundations.motion.row.spinnerValue", undefined, "0.7s linear")}</td>
+                <td>{t("marketing.brandKit.foundations.motion.row.spinnerUse", undefined, "In-flight actions")}</td>
               </tr>
             </tbody>
           </table>
@@ -726,11 +1010,19 @@ export default function FoundationsPage() {
 
         {/* ===== ICONS ===== */}
         <section className="kf-sec" id="icons">
-          <p className="eb">Foundations · Icons</p>
-          <h2>Iconography</h2>
+          <p className="eb">{t("marketing.brandKit.foundations.icons.eyebrow", undefined, "Foundations · Icons")}</p>
+          <h2>{t("marketing.brandKit.foundations.icons.heading", undefined, "Iconography")}</h2>
           <p className="lead">
-            Phosphor Icons — <b>Bold</b> weight for UI, <b>Fill</b> for status seals and emphasis. Line up with text at
-            16–20px; standalone actions at 24px. Single-color, inheriting <code className="kf-code">currentColor</code>.
+            {t("marketing.brandKit.foundations.icons.lead.before", undefined, "Phosphor Icons —")}{" "}
+            <b>{t("marketing.brandKit.foundations.icons.lead.bold", undefined, "Bold")}</b>{" "}
+            {t("marketing.brandKit.foundations.icons.lead.mid", undefined, "weight for UI,")}{" "}
+            <b>{t("marketing.brandKit.foundations.icons.lead.fill", undefined, "Fill")}</b>{" "}
+            {t(
+              "marketing.brandKit.foundations.icons.lead.after",
+              undefined,
+              "for status seals and emphasis. Line up with text at 16–20px; standalone actions at 24px. Single-color, inheriting",
+            )}{" "}
+            <code className="kf-code">currentColor</code>.
           </p>
           <div className="kf-board">
             <div className="bb">
@@ -784,11 +1076,15 @@ export default function FoundationsPage() {
 
         {/* Footer */}
         <footer className="kf-foot">
-          <small>ATLVS Technologies · Foundations</small>
+          <small>
+            {t("marketing.brandKit.foundations.footer.tagline", undefined, "ATLVS Technologies · Foundations")}
+          </small>
           <div className="lk">
-            <Link href="/brand-kit">Overview</Link>
-            <Link href="/brand-kit/logo-kit">Logo Kit</Link>
-            <Link href="/">Home</Link>
+            <Link href="/brand-kit">{t("marketing.brandKit.foundations.footer.overview", undefined, "Overview")}</Link>
+            <Link href="/brand-kit/logo-kit">
+              {t("marketing.brandKit.foundations.footer.logoKit", undefined, "Logo Kit")}
+            </Link>
+            <Link href="/">{t("common.home", undefined, "Home")}</Link>
           </div>
         </footer>
       </main>

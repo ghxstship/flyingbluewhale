@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { buildMetadata, breadcrumbSchema, faqSchema, CANONICAL_CTAS, SITE } from "@/lib/seo";
 import { INTEGRATIONS, INTEGRATIONS_BY_SLUG } from "@/lib/marketing/integrations";
 import { MODULES } from "@/lib/marketing/modules";
+import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
   return INTEGRATIONS.map((i) => ({ slug: i.slug }));
@@ -18,9 +19,20 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const i = INTEGRATIONS_BY_SLUG[slug];
-  if (!i) return buildMetadata({ title: "Integrations", description: SITE.description, path: `/integrations/${slug}` });
+  const { t } = await getRequestT();
+  if (!i) {
+    return buildMetadata({
+      title: t("marketing.integrations.detail.fallbackTitle", undefined, "Integrations"),
+      description: SITE.description,
+      path: `/integrations/${slug}`,
+    });
+  }
   return buildMetadata({
-    title: `${i.name} Integration — ${i.short}`,
+    title: t(
+      "marketing.integrations.detail.meta.title",
+      { name: i.name, short: i.short },
+      "{name} Integration — {short}",
+    ),
     description: i.short,
     path: `/integrations/${i.slug}`,
     keywords: [
@@ -28,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       `${i.name.toLowerCase()} ATLVS`,
       `${i.name.toLowerCase()} event production`,
     ],
-    ogImageEyebrow: "Integration",
+    ogImageEyebrow: t("marketing.integrations.detail.eyebrowBase", undefined, "Integration"),
     ogImageTitle: i.name,
   });
 }
@@ -37,10 +49,11 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
   const { slug } = await params;
   const i = INTEGRATIONS_BY_SLUG[slug];
   if (!i) notFound();
+  const { t } = await getRequestT();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Integrations", href: "/integrations" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.integrations.crumbsLabel", undefined, "Integrations"), href: "/integrations" },
     { label: i.name, href: `/integrations/${i.slug}` },
   ];
 
@@ -52,7 +65,9 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">Integration · {i.category}</div>
+        <div className="eyebrow eyebrow-brand">
+          {t("marketing.integrations.detail.eyebrow", { category: i.category }, "Integration · {category}")}
+        </div>
         <h1 className="hed-2xl mt-4">{i.name}.</h1>
         <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{i.long}</p>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -64,7 +79,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-xl">What It Does.</h2>
+        <h2 className="hed-xl">{t("marketing.integrations.detail.whatItDoes", undefined, "What It Does.")}</h2>
         <ul className="mt-6 space-y-3 text-sm">
           {i.capabilities.map((c) => (
             <li key={c} className="flex items-start gap-2">
@@ -77,14 +92,18 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
 
       <section className="mx-auto max-w-6xl px-6 py-12">
         <div className="surface p-6">
-          <div className="eyebrow">Technical Anchor</div>
+          <div className="eyebrow">
+            {t("marketing.integrations.detail.technicalAnchor", undefined, "Technical Anchor")}
+          </div>
           <p className="mt-3 font-mono text-xs leading-relaxed text-[var(--p-text-2)]">{i.technicalAnchor}</p>
         </div>
       </section>
 
       {i.modules.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="hed-lg">Modules That Depend On It.</h2>
+          <h2 className="hed-lg">
+            {t("marketing.integrations.detail.modulesDepend", undefined, "Modules That Depend On It.")}
+          </h2>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {i.modules
               .map((m) => MODULES[m])
@@ -103,10 +122,15 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
         </section>
       ) : null}
 
-      {i.faqs.length > 0 ? <FAQSection title={`${i.name} · FAQ`} faqs={i.faqs} /> : null}
+      {i.faqs.length > 0 ? (
+        <FAQSection
+          title={t("marketing.integrations.detail.faqTitle", { name: i.name }, "{name} · FAQ")}
+          faqs={i.faqs}
+        />
+      ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Other Integrations.</h2>
+        <h2 className="hed-lg">{t("marketing.integrations.detail.other", undefined, "Other Integrations.")}</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {sibling.map((s) => (
             <Link
@@ -121,7 +145,14 @@ export default async function IntegrationPage({ params }: { params: Promise<{ sl
         </div>
       </section>
 
-      <CTASection title="ATLVS Is Open." subtitle="Free for small teams. All integrations included." />
+      <CTASection
+        title={t("marketing.integrations.detail.cta.title", undefined, "ATLVS Is Open.")}
+        subtitle={t(
+          "marketing.integrations.detail.cta.subtitle",
+          undefined,
+          "Free for small teams. All integrations included.",
+        )}
+      />
     </div>
   );
 }

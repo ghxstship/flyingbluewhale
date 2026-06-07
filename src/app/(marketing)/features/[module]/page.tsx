@@ -17,6 +17,7 @@ import {
 } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 import { MODULES } from "@/lib/marketing/modules";
+import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
   return Object.keys(MODULES).map((module) => ({ module }));
@@ -25,10 +26,15 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ module: string }> }): Promise<Metadata> {
   const { module } = await params;
   const config = MODULES[module];
+  const { t } = await getRequestT();
   if (!config) {
     return buildMetadata({
-      title: "Feature",
-      description: "ATLVS Technologies — the unified production management platform.",
+      title: t("marketing.features.detail.fallbackTitle", undefined, "Feature"),
+      description: t(
+        "marketing.features.detail.fallbackDescription",
+        undefined,
+        "ATLVS Technologies — the unified production management platform.",
+      ),
       path: `/features/${module}`,
     });
   }
@@ -48,10 +54,11 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
   if (!config) {
     notFound();
   }
+  const { t } = await getRequestT();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Features", href: "/features" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.features.crumbsLabel", undefined, "Features"), href: "/features" },
     { label: config.name, href: `/features/${config.slug}` },
   ];
 
@@ -105,13 +112,21 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
 
       {config.withoutUs && config.withUs ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="text-3xl font-semibold tracking-tight">Before And After.</h2>
+          <h2 className="text-3xl font-semibold tracking-tight">
+            {t("marketing.features.detail.beforeAfter.heading", undefined, "Before And After.")}
+          </h2>
           <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
-            What changes when this module lands in your stack.
+            {t(
+              "marketing.features.detail.beforeAfter.sub",
+              undefined,
+              "What changes when this module lands in your stack.",
+            )}
           </p>
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <div className="surface p-6">
-              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">Without</div>
+              <div className="text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
+                {t("marketing.features.detail.beforeAfter.without", undefined, "Without")}
+              </div>
               <ul className="mt-4 space-y-3 text-sm">
                 {config.withoutUs.map((line) => (
                   <li key={line} className="flex items-start gap-2">
@@ -126,7 +141,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
                 className="text-[11px] font-semibold tracking-[0.2em] uppercase"
                 style={{ color: "var(--p-accent)" }}
               >
-                With ATLVS
+                {t("marketing.features.detail.beforeAfter.with", undefined, "With ATLVS")}
               </div>
               <ul className="mt-4 space-y-3 text-sm">
                 {config.withUs.map((line) => (
@@ -142,7 +157,9 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">What This Module Does.</h2>
+        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t("marketing.features.detail.whatItDoes", undefined, "What This Module Does.")}
+        </h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {config.highlights.map((h) => (
             <div key={h.title} className="surface p-6">
@@ -156,8 +173,12 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       {config.personas ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <div className="surface p-8 md:p-10">
-            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">Built For</div>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight">Who Runs This Day-To-Day.</h2>
+            <div className="text-xs font-semibold tracking-[0.2em] text-[var(--p-accent)] uppercase">
+              {t("marketing.features.detail.builtFor", undefined, "Built For")}
+            </div>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight">
+              {t("marketing.features.detail.whoRuns", undefined, "Who Runs This Day-To-Day.")}
+            </h2>
             <div className="mt-6 flex flex-wrap gap-2">
               {config.personas.map((p) => (
                 <span
@@ -186,15 +207,30 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       ) : null}
 
       <CTASection
-        title={`Run ${config.name} On Your Next Show.`}
-        subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
+        title={t("marketing.features.detail.cta.runTitle", { name: config.name }, "Run {name} On Your Next Show.")}
+        subtitle={t(
+          "marketing.features.detail.cta.runSubtitle",
+          undefined,
+          "Free, forever, for small teams. Per-org pricing the rest of the way up.",
+        )}
       />
 
-      <FAQSection title={`${config.name} · FAQ`} faqs={config.faqs} />
+      <FAQSection
+        title={t("marketing.features.detail.faqTitle", { name: config.name }, "{name} · FAQ")}
+        faqs={config.faqs}
+      />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="text-2xl font-semibold tracking-tight">The Rest Of ATLVS.</h2>
-        <p className="mt-3 text-sm text-[var(--p-text-2)]">One database. Every module reads from the same record.</p>
+        <h2 className="text-2xl font-semibold tracking-tight">
+          {t("marketing.features.detail.restOfAtlvs", undefined, "The Rest Of ATLVS.")}
+        </h2>
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">
+          {t(
+            "marketing.features.detail.restOfAtlvsSub",
+            undefined,
+            "One database. Every module reads from the same record.",
+          )}
+        </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {siblings.map((s) => (
             <Link
@@ -212,8 +248,12 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       </section>
 
       <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
+        title={t("marketing.features.detail.cta.openTitle", undefined, "ATLVS Is Open.")}
+        subtitle={t(
+          "marketing.features.detail.cta.openSubtitle",
+          undefined,
+          "Free, forever, for small teams. Per-org pricing the rest of the way up.",
+        )}
       />
     </div>
   );

@@ -1775,8 +1775,8 @@
         },
         "hero": {
           "eyebrow": "ATLVS Technologies",
-          "titleLine1": "Production runs on",
-          "titleLine2": "one platform.",
+          "titleLine1": "EXPERIENCE",
+          "titleLine2": "PRODUCTION",
           "subtitleLead": "Three apps, one single source of truth.",
           "subtitleAtlvs": "runs the production.",
           "subtitleCompvss": "runs the field.",
@@ -1784,7 +1784,8 @@
           "ctaPrimary": "Start Free",
           "ctaSecondary": "Book a Walkthrough",
           "disclaimer": "Free forever for small teams · No credit card required · Per-org pricing",
-          "ecosystemLabel": "The ATLVS Ecosystem"
+          "ecosystemLabel": "The ATLVS Ecosystem",
+          "titleLine3": "UNIFIED."
         },
         "trustBar": {
           "label": "Trusted by production teams behind"
@@ -3251,6 +3252,579 @@
         "tagline": "Production runs on it.",
         "trademarkPrefix": "ATLVS, GVTEWAY, and COMPVSS are registered trademarks of ATLVS Technologies, a",
         "trademarkSuffix": "Industries company."
+      }
+    },
+    "legal": {
+      "privacy": {
+        "title": "Privacy Policy",
+        "lastUpdated": "Last updated: {date}",
+        "collect": {
+          "heading": "What We Collect",
+          "body": "Account info, workspace content you upload, and operational telemetry (pageviews, errors, API timing)."
+        },
+        "use": {
+          "heading": "How We Use It",
+          "body": "To run the Service, prevent abuse, and improve reliability. We do not sell customer data."
+        },
+        "subprocessors": {
+          "heading": "Subprocessors",
+          "body": "Supabase (hosting + database), Stripe (billing), Anthropic (AI), Vercel (edge + CDN)."
+        },
+        "retention": {
+          "heading": "Retention",
+          "body": "Default 90 days for audit logs; customer content retained until you delete it or your org is deleted."
+        }
+      },
+      "terms": {
+        "title": "Terms of Service",
+        "lastUpdated": "Last updated: {date}",
+        "acceptance": {
+          "heading": "1. Acceptance of Terms",
+          "body": "By accessing or using the ATLVS Technologies platform you agree to these Terms. If you do not agree, do not use the Service."
+        },
+        "accounts": {
+          "heading": "2. Accounts",
+          "body": "You are responsible for safeguarding the credentials used to access your account and for any activity under your account."
+        },
+        "billing": {
+          "heading": "3. Subscription & Billing",
+          "body": "Paid plans are billed via Stripe. Taxes, cancellation, and refund policies are documented in your in-app billing settings."
+        },
+        "data": {
+          "heading": "4. Data Ownership",
+          "body": "You own the content you upload. We process it solely to provide the Service. Export at any time from Settings → Compliance."
+        },
+        "termination": {
+          "heading": "5. Termination",
+          "body": "Either party may terminate at any time. Your data remains exportable for 30 days post-termination."
+        }
+      },
+      "dpa": {
+        "title": "Data Processing Addendum",
+        "lastUpdated": "Last updated: {date}",
+        "intro": "Our DPA incorporates the EU SCCs and UK IDTA. It auto-applies when you subscribe. Request a counter-signed copy from Settings → Compliance.",
+        "roles": "Roles: you are the Controller; we are the Processor.",
+        "subprocessors": "Subprocessors: Supabase, Stripe, Anthropic, Vercel.",
+        "breach": "Breach notification: within 48 hours of confirmation.",
+        "transfers": "Data transfers: SCCs + UK IDTA where applicable."
+      },
+      "sla": {
+        "title": "Service Level Agreement",
+        "applies": "Applies to Enterprise tier · effective {date}",
+        "uptime": {
+          "before": "We target",
+          "after": "monthly uptime. Scheduled maintenance windows are excluded."
+        },
+        "credits": "Service credits for missed SLA: 10% (99.0–99.9%), 25% (98.0–99.0%), 50% (below 98.0%).",
+        "report": {
+          "before": "Report incidents to"
+        }
+      }
+    },
+    "tools": {
+      "eyebrow": "Free Tool",
+      "crumbsToolsLabel": "Tools",
+      "capacity": {
+        "meta": {
+          "title": "Venue Capacity Calculator — Maximum Occupancy by Use",
+          "description": "Estimate maximum legal occupancy from square footage and use type. IBC-aligned defaults for assembly, concentrated, standing, and dining."
+        },
+        "title": "Venue Capacity Calculator.",
+        "crumbsLabel": "Capacity Calculator",
+        "schemaName": "ATLVS Capacity Calculator",
+        "schemaDescription": "Estimate maximum venue occupancy from square footage and use type.",
+        "lead": "Estimate maximum legal occupancy from square footage and use type. IBC-aligned defaults for assembly, concentrated, standing, and dining configurations. Confirm with the AHJ before publishing.",
+        "how": {
+          "heading": "How Occupant Load Works.",
+          "body1": "Occupant load is the maximum number of people permitted in a space, set by the International Building Code (IBC) and adopted (with modifications) by most US jurisdictions. The IBC sets per-occupant area factors by use type — 7 sq ft per person standing, 15 sq ft for unconcentrated assembly with tables, 5 sq ft for waiting areas. Multiply usable floor area by the appropriate factor (and divide) to land on a load.",
+          "body2": "Real-world capacity is the lower of the IBC load and what the venue's egress capacity supports — exit width, fixed seating layout, sprinkler coverage, and AHJ judgement all play in. Use this calculator as a starting estimate; confirm with the local Authority Having Jurisdiction before publishing capacity."
+        },
+        "cta": {
+          "title": "Capacity Lives In ATLVS.",
+          "subtitle": "Per-venue capacity, ticket allocations, and gate-scan limits — one record."
+        }
+      },
+      "perDiem": {
+        "meta": {
+          "title": "Per-Diem Calculator — Crew & Talent Travel Allowance",
+          "description": "Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates with custom rate overrides."
+        },
+        "title": "Per-Diem Calculator.",
+        "crumbsLabel": "Per-Diem Calculator",
+        "schemaName": "ATLVS Per-Diem Calculator",
+        "schemaDescription": "Per-diem total calculator for production crew and talent.",
+        "lead": "Compute total per-diem for crew or talent across multiple cities and days. GSA-aligned default rates; overridable per-city.",
+        "how": {
+          "heading": "How Per-Diem Works.",
+          "body1": "Per-diem is the daily allowance paid to a traveler — typically crew, talent, or contractors — for meals and incidentals while away from their home base. The US General Services Administration (GSA) publishes city-by-city per-diem rates for federal travel; most production budgets use these as a defensible baseline. International rates come from the State Department's DSSR tables.",
+          "body2": "Per-diem typically settles on a per-show or weekly cadence in cash or paystub. Tour managers track per-diem against the city × day rate matrix to avoid drift between projected and actual."
+        },
+        "cta": {
+          "title": "Skip The Math.",
+          "subtitle": "Per-diem auto-calculates on every show in ATLVS, tied to your roster."
+        }
+      }
+    },
+    "marketplace": {
+      "crumbsLabel": "Marketplace",
+      "calendar": {
+        "meta": {
+          "title": "Event Calendar — On-sales + Announces",
+          "description": "Upcoming on-sale dates, presale windows, and announcements."
+        },
+        "eyebrow": "Marketplace · Calendar",
+        "title": "Event Calendar",
+        "crumbsLabel": "Calendar",
+        "summary": {
+          "one": "{count} upcoming announcement + on-sale milestone",
+          "many": "{count} upcoming announcements + on-sale milestones"
+        },
+        "empty": "No public milestones in the upcoming window."
+      },
+      "agencies": {
+        "meta": {
+          "title": "Agency Directory — Booking Agencies",
+          "description": "Verified booking agencies on the ATLVS network."
+        },
+        "eyebrow": "Marketplace · Agencies",
+        "title": "Agency Directory",
+        "crumbsLabel": "Agencies",
+        "count": {
+          "one": "{count} agency",
+          "many": "{count} agencies"
+        },
+        "empty": "No published agencies yet.",
+        "artistCount": {
+          "one": "{count} artist",
+          "many": "{count} artists"
+        },
+        "commission": "{pct}% default commission",
+        "detail": {
+          "verified": "verified",
+          "about": "About",
+          "profile": "Profile",
+          "rosterSize": "Roster size:",
+          "defaultCommission": "Default commission:",
+          "web": "Web:",
+          "sendInquiry": "Send Inquiry",
+          "needAccount": "Need an account?"
+        }
+      }
+    },
+    "integrations": {
+      "eyebrow": "Partner Program",
+      "crumbsLabel": "Integrations",
+      "thanks": {
+        "meta": {
+          "title": "Submission Received — ATLVS Partner Program",
+          "description": "Your partner integration proposal is in the queue."
+        },
+        "crumbsLabel": "Submission Received",
+        "title": "Submission Received.",
+        "body": {
+          "before": "Your proposal is in the queue. The ATLVS partner-AM team typically responds within 5 business days. Watch the inbox you submitted with — we'll reach out from"
+        },
+        "cta": {
+          "back": "Back to live integrations",
+          "directory": "See the partner directory"
+        }
+      },
+      "partners": {
+        "meta": {
+          "title": "Partner Integrations — ATLVS Certified + Verified Partner Directory",
+          "description": "Third-party integrations built by ATLVS partners. Verified Partner integrations pass our technical review; Certified integrations also pass end-to-end QA."
+        },
+        "crumbsLabel": "Partner Directory",
+        "title": "Built By Partners. Verified By Us.",
+        "lead": "Third-party integrations that hit the ATLVS REST + GraphQL surface. Verified Partner integrations pass our technical review; Certified integrations also pass end-to-end QA on a live tenant. Build your own —",
+        "submitLink": "submit a proposal",
+        "cta": {
+          "submit": "Submit a partner integration",
+          "back": "Back to live integrations",
+          "bringTitle": "Bring Your Stack Inside.",
+          "bringSubtitle": "Open API + open partner program. No revenue share, no gatekeeping."
+        },
+        "emptyBefore": "No partner integrations are listed publicly yet.",
+        "emptyLink": "Be the first.",
+        "tier": {
+          "certified": "Certified",
+          "verified": "Verified"
+        },
+        "by": "by {name}",
+        "details": "Details"
+      },
+      "submit": {
+        "meta": {
+          "title": "Submit a Partner Integration — ATLVS Partner Program",
+          "description": "Build an integration against the ATLVS REST + GraphQL API and we'll list it in our partner directory. Verified Partner reviews pass our tech checklist; Certified passes end-to-end QA on a live tenant."
+        },
+        "title": "Build It. Ship It. We'll List It.",
+        "crumbsLabel": "Submit Partner Integration",
+        "h1": "Submit A Partner Integration",
+        "lead": "Once submitted, your proposal lands in the ATLVS partner-AM queue. We typically respond within 5 business days. Verified Partner review passes our technical checklist; Certified additionally passes end-to-end QA on a live tenant.",
+        "submitLabel": "Submit Proposal",
+        "fields": {
+          "name": "Integration Name",
+          "slug": "Slug",
+          "partnerOrg": "Partner Org",
+          "category": "Category",
+          "contactEmail": "Contact Email",
+          "contactName": "Contact Name",
+          "shortDescription": "Short Description (one sentence)",
+          "longDescription": "Long Description",
+          "capabilities": "Capabilities — One per Line",
+          "homepageUrl": "Homepage URL",
+          "docsUrl": "Integration Docs URL"
+        }
+      },
+      "detail": {
+        "fallbackTitle": "Integrations",
+        "meta": {
+          "title": "{name} Integration — {short}"
+        },
+        "eyebrow": "Integration · {category}",
+        "eyebrowBase": "Integration",
+        "whatItDoes": "What It Does.",
+        "technicalAnchor": "Technical Anchor",
+        "modulesDepend": "Modules That Depend On It.",
+        "faqTitle": "{name} · FAQ",
+        "other": "Other Integrations.",
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free for small teams. All integrations included."
+        }
+      },
+      "partnerDetail": {
+        "fallbackTitle": "Partner Integration",
+        "meta": {
+          "title": "{name} — ATLVS Partner Integration"
+        },
+        "ogCertified": "Certified Partner",
+        "ogVerified": "Verified Partner",
+        "eyebrow": "Partner Integration",
+        "capabilities": "Capabilities",
+        "partnerSite": "Partner site",
+        "docs": "Integration docs",
+        "backToDirectory": "Back to directory",
+        "cta": {
+          "title": "Want To Build One?",
+          "subtitle": "Open API surface. No revenue share, no gatekeeping. Apply through /integrations/submit."
+        }
+      }
+    },
+    "features": {
+      "crumbsLabel": "Features",
+      "detail": {
+        "fallbackTitle": "Feature",
+        "fallbackDescription": "ATLVS Technologies — the unified production management platform.",
+        "beforeAfter": {
+          "heading": "Before And After.",
+          "sub": "What changes when this module lands in your stack.",
+          "without": "Without",
+          "with": "With ATLVS"
+        },
+        "whatItDoes": "What This Module Does.",
+        "builtFor": "Built For",
+        "whoRuns": "Who Runs This Day-To-Day.",
+        "restOfAtlvs": "The Rest Of ATLVS.",
+        "restOfAtlvsSub": "One database. Every module reads from the same record.",
+        "faqTitle": "{name} · FAQ",
+        "cta": {
+          "runTitle": "Run {name} On Your Next Show.",
+          "runSubtitle": "Free, forever, for small teams. Per-org pricing the rest of the way up.",
+          "openTitle": "ATLVS Is Open.",
+          "openSubtitle": "Free, forever, for small teams. Per-org pricing the rest of the way up."
+        }
+      },
+      "industry": {
+        "fallbackTitle": "Feature × Industry",
+        "meta": {
+          "title": "{module} for {industry} — {sub}",
+          "description": "{blurb} Built for {industry} teams running {tagline}."
+        },
+        "ogTitle": "{module} for {industry}",
+        "useCase": "{title} — {body} On {industry} jobs, this shows up as {tagline}.",
+        "howItShowsUp": "How It Shows Up",
+        "teamsRunOn": "What {industry} Teams Run On {module}.",
+        "industryOutcomes": "Industry Outcomes",
+        "whatChanges": "What Changes For {industry} Operators.",
+        "featureSet": "The {module} Feature Set.",
+        "featureSetSub": "The same primitives that ship in our {module} module — applied to {industry} workflows.",
+        "cta": {
+          "runTitle": "Run {module} On {industry} Production.",
+          "runSubtitle": "Sign up free for small teams. Per-org pricing the rest of the way up."
+        },
+        "faqTitle": "{module} for {industry} · FAQ",
+        "otherModules": "Other Modules For {industry}.",
+        "oneDatabase": "One database. Every module reads from the same record.",
+        "otherIndustries": "{module} For Other Industries."
+      }
+    },
+    "solutions": {
+      "crumbsLabel": "Solutions",
+      "detail": {
+        "fallbackTitle": "Solution",
+        "fallbackDescription": "Industry solution",
+        "meta": {
+          "title": "{name} — {tagline} on ATLVS Technologies"
+        },
+        "cta": {
+          "bookDemo": "Book a Demo"
+        },
+        "outcomes": "Outcomes",
+        "modulesUsed": "Modules Used",
+        "faqTitle": "{name} · FAQ",
+        "related": "Related Industries"
+      }
+    },
+    "teams": {
+      "crumbsLabel": "Built For",
+      "detail": {
+        "fallbackTitle": "Teams",
+        "meta": {
+          "title": "{role} — {hero}"
+        },
+        "workflows": "What {role} Run Day-To-Day.",
+        "familiar": "Familiar?",
+        "painHeading": "The Pain You're Working Around.",
+        "modulesYouLive": "Modules You Live In.",
+        "industriesYouWork": "Industries You Work In.",
+        "faqTitle": "{role} · FAQ",
+        "cta": {
+          "runTitle": "Run {role}' Workflow On ATLVS.",
+          "runSubtitle": "Free for small teams. Per-org pricing the rest of the way up."
+        },
+        "otherRoles": "Other Roles."
+      }
+    },
+    "glossary": {
+      "crumbsLabel": "Glossary",
+      "detail": {
+        "fallbackTitle": "Glossary",
+        "meta": {
+          "title": "{term} — Definition"
+        },
+        "eyebrow": "Glossary · {category}",
+        "also": "Also: {list}",
+        "howAtlvsHandles": "How ATLVS Handles This",
+        "relatedTerms": "Related terms",
+        "cta": {
+          "title": "ATLVS Is Open.",
+          "subtitle": "Free forever for small teams. Per-org pricing the rest of the way up."
+        }
+      }
+    },
+    "brandKit": {
+      "foundations": {
+        "meta": {
+          "title": "Foundations · ATLVS Technologies — Brand & UI Kit",
+          "description": "ATLVS Technologies brand foundations: Waypoint mark, color, typography (Industrial Wide / Archivo expanded), spacing, radii, elevation, motion, and iconography."
+        },
+        "nav": {
+          "aria": "Foundations sections",
+          "brand": "Brand",
+          "waypoint": "The Waypoint",
+          "appIcons": "App icons",
+          "clearspace": "Clearspace & usage",
+          "foundations": "Foundations",
+          "color": "Color",
+          "typography": "Typography",
+          "spacing": "Spacing",
+          "radii": "Radii",
+          "elevation": "Elevation",
+          "motion": "Motion",
+          "iconography": "Iconography"
+        },
+        "logo": {
+          "eyebrow": "Brand · Logo",
+          "heading": "The Waypoint",
+          "lead": {
+            "before": "The ATLVS mark is a",
+            "waypoint": "waypoint",
+            "after": "— an eight-point navigational star with a center void, the navigation system rendered as one geometric glyph. Neutral SaaS register, recolored per product. It is distinct from the cosmic GHXSTSHIP ghost-ship skull, which is the parent-company mark only."
+          },
+          "note": "The tile carries the product accent; the star stays white (or ink on light grounds). The wordmark is always spaced caps and nowrap — never lowercase, never unspaced except in URLs and IDs.",
+          "spec": {
+            "colWordmark": "Wordmark spec",
+            "colSetting": "Setting",
+            "faceLabel": "Face",
+            "faceValue": "— geometric, logo lockup only. UI & headings stay Space Grotesk / Archivo Expanded.",
+            "aLabel": "The A",
+            "aBefore": "A bare peak —",
+            "aBold": "no crossbar",
+            "aAfter": ", the V flipped. A and V read as mirror forms.",
+            "settingLabel": "Setting",
+            "settingBefore": "Spaced caps, nowrap. In the full lockup,",
+            "settingAfter": "is letter-spaced to the exact ATLVS width.",
+            "subtitleLabel": "Subtitle",
+            "subtitleBefore": "Only ATLVS carries",
+            "subtitleAfter": ". COMPVSS and GVTEWAY stand alone."
+          },
+          "productWordmarks": "Product wordmarks"
+        },
+        "appIcons": {
+          "heading": "One mark, three accents",
+          "lead": "Each product is the same waypoint on its own accent tile — instantly a family, instantly distinct.",
+          "roleAtlvs": "Producer / Internal",
+          "roleCompvss": "Crew / Vendor / Talent",
+          "roleGvteway": "Guest / Client",
+          "inkTitle": "Ink",
+          "roleInk": "Neutral / Suite",
+          "minSize": "Min-size — the mark holds at every scale",
+          "bare16": "16 · bare"
+        },
+        "clearspace": {
+          "heading": "Clearspace & usage",
+          "lead": "Keep margin equal to half the mark height on every side.",
+          "do": "Do",
+          "dont": "Don't",
+          "doItems": {
+            "1": "Recolor the tile to the product accent; keep the star white (or ink on light).",
+            "2": "Maintain clearspace = ½ mark height.",
+            "3": "Use the bare mark at ≤16px; the tiled icon at ≥32px.",
+            "4before": "Pair with the spaced",
+            "4after": "wordmark, nowrap."
+          },
+          "dontItems": {
+            "1": "Recolor or gradient the star itself — only the tile carries color.",
+            "2": "Rotate, stretch, or add the cosmic halftone or skull.",
+            "3": "Set the wordmark unspaced or lowercase.",
+            "4": "Place the bare mark on a busy photo without the solid tile."
+          },
+          "endorsement": {
+            "label": "Parent endorsement.",
+            "body": "The GHXSTSHIP skull appears only in the endorsement lockup — “an ATLVS Technologies, a GHXSTSHIP Industries company.” It is never the product app icon."
+          }
+        },
+        "color": {
+          "eyebrow": "Foundations · Color",
+          "heading": "Color",
+          "lead": {
+            "before": "Neutral surfaces do the work; one accent per product carries identity. Every value resolves from the",
+            "after": "namespace and re-tunes per mode for AA contrast."
+          },
+          "surfacesText": "Surfaces & text",
+          "productIdentity": "Product identity — the accent each app owns",
+          "accentWeakTint": "Accent-weak tint",
+          "semantic": "Semantic — shared across products",
+          "swatch": {
+            "canvas": "Canvas",
+            "surface": "Surface",
+            "surface2": "Surface 2",
+            "border": "Border",
+            "text1": "Text 1",
+            "text2": "Text 2",
+            "text3": "Text 3",
+            "accentLive": "Accent (live)",
+            "success": "Success",
+            "warning": "Warning",
+            "danger": "Danger",
+            "info": "Info"
+          }
+        },
+        "type": {
+          "eyebrow": "Foundations · Type",
+          "heading": "Typography",
+          "lead": {
+            "industrialWide": "Industrial Wide.",
+            "s1": "Headings and metrics are set in",
+            "archivoExpanded": "Archivo at its expanded width axis",
+            "s2": "— a confident, structural grotesque that gives the product presence. Body and UI stay",
+            "s3": "so tables and forms read clean;",
+            "s4": "is the eyebrow and coordinate vernacular (IDs, codes, labels);",
+            "s5": "is the long-form body alternate. Title Case for headings and labels; sentence case for body."
+          },
+          "face": {
+            "archivo": "Headings · stats · 700–900",
+            "grotesk": "Body · UI · 400–700",
+            "mono": "Eyebrows · IDs · codes",
+            "inter": "Long-form body alternate"
+          },
+          "specimen": {
+            "body": "The default reading size for tables, forms, and interface copy.",
+            "small": "Secondary metadata and helper text."
+          },
+          "headerTreatments": "Header treatments",
+          "headerTreatmentsNote": "Three sanctioned ways to deploy the wide headline. Use the right one for the context — don't mix more than one per view.",
+          "a2": {
+            "title": "A2 · Everyday",
+            "note": "Accent bar + live mono kicker. The default for app chrome and page headers."
+          },
+          "a3": {
+            "title": "A3 · Hero",
+            "sampleBefore": "Run the",
+            "samplePop": "show",
+            "note": "One word takes the product accent — headlines self-brand. Covers, marketing, splash."
+          },
+          "a4": {
+            "title": "A4 · Metrics",
+            "statLabel": "On-Time Rate",
+            "statDelta": "▲ 2% vs Q3",
+            "note": "Tabular figures at 900 / expanded. Dashboards and reports."
+          }
+        },
+        "spacing": {
+          "eyebrow": "Foundations · Space",
+          "heading": "Spacing",
+          "lead": {
+            "before": "A 4px base grid. Density swaps the control and row rhythm — the same tokens tighten under"
+          }
+        },
+        "radii": {
+          "eyebrow": "Foundations · Radius",
+          "heading": "Radii",
+          "lead": "Soft, productivity-tool friendly — never pop-art sharp. Pills for chips and toggles only."
+        },
+        "elevation": {
+          "eyebrow": "Foundations · Elevation",
+          "heading": "Elevation",
+          "lead": "A cool, tight three-step scale: resting → hover → popover & modal. Shadows are subtle in light and lean on borders in dark.",
+          "rest": "elev-1 · rest",
+          "hover": "elev-2 · hover",
+          "overlay": "elev-3 · overlay"
+        },
+        "motion": {
+          "eyebrow": "Foundations · Motion",
+          "heading": "Motion",
+          "lead": {
+            "s1": "Quick and unfussy. One easing curve, short durations, and a hard rule: never transition a token-backed",
+            "s2": "across a theme switch — recolor instantly and animate",
+            "or": "or",
+            "instead": "instead."
+          },
+          "col": {
+            "token": "Token",
+            "value": "Value",
+            "use": "Use"
+          },
+          "row": {
+            "ease": "Hover, press, micro-interactions",
+            "hoverLift": "Hover lift",
+            "hoverUse": "Cards, stat tiles",
+            "skeleton": "Skeleton shimmer",
+            "skeletonValue": "1.4s ease, infinite",
+            "skeletonUse": "Loading placeholders (respects reduced-motion)",
+            "spinner": "Spinner",
+            "spinnerValue": "0.7s linear",
+            "spinnerUse": "In-flight actions"
+          }
+        },
+        "icons": {
+          "eyebrow": "Foundations · Icons",
+          "heading": "Iconography",
+          "lead": {
+            "before": "Phosphor Icons —",
+            "bold": "Bold",
+            "mid": "weight for UI,",
+            "fill": "Fill",
+            "after": "for status seals and emphasis. Line up with text at 16–20px; standalone actions at 24px. Single-color, inheriting"
+          }
+        },
+        "footer": {
+          "tagline": "ATLVS Technologies · Foundations",
+          "overview": "Overview",
+          "logoKit": "Logo Kit"
+        }
       }
     }
   },

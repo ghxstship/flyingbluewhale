@@ -1859,8 +1859,8 @@
         },
         "hero": {
           "eyebrow": "ATLVS Technologies",
-          "titleLine1": "La producción corre en",
-          "titleLine2": "una sola plataforma.",
+          "titleLine1": "EXPERIENCIA",
+          "titleLine2": "PRODUCCIÓN",
           "subtitleLead": "Tres apps, un solo schema.",
           "subtitleAtlvs": "lleva la producción.",
           "subtitleCompvss": "lleva el campo.",
@@ -1868,7 +1868,8 @@
           "ctaPrimary": "Empezar Gratis",
           "ctaSecondary": "Agendar una Demo",
           "disclaimer": "Gratis para siempre para equipos pequeños · Sin tarjeta de crédito · Precio por organización",
-          "ecosystemLabel": "El Ecosistema ATLVS"
+          "ecosystemLabel": "El Ecosistema ATLVS",
+          "titleLine3": "UNIFICADA."
         },
         "trustBar": {
           "label": "La confianza de los equipos de producción detrás de"

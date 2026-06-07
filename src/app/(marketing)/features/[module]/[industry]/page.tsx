@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/Button";
 import { buildMetadata, softwareApplicationSchema, breadcrumbSchema, faqSchema, CANONICAL_CTAS, SITE } from "@/lib/seo";
 import { MODULES, type ModuleConfig } from "@/lib/marketing/modules";
 import { INDUSTRIES, type IndustryConfig } from "@/lib/marketing/industries";
+import { getRequestT } from "@/lib/i18n/request";
 
 type Params = { module: string; industry: string };
 
@@ -42,16 +43,25 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { module, industry } = await params;
   const mod = MODULES[module];
   const ind = INDUSTRIES[industry];
+  const { t } = await getRequestT();
   if (!mod || !ind) {
     return buildMetadata({
-      title: "Feature × Industry",
+      title: t("marketing.features.industry.fallbackTitle", undefined, "Feature × Industry"),
       description: SITE.description,
       path: `/features/${module}/${industry}`,
     });
   }
   return buildMetadata({
-    title: `${mod.name} for ${ind.name} — ${mod.title}`,
-    description: `${mod.blurb} Built for ${ind.name.toLowerCase()} teams running ${ind.tagline.toLowerCase()}.`,
+    title: t(
+      "marketing.features.industry.meta.title",
+      { module: mod.name, industry: ind.name, sub: mod.title },
+      "{module} for {industry} — {sub}",
+    ),
+    description: t(
+      "marketing.features.industry.meta.description",
+      { blurb: mod.blurb, industry: ind.name.toLowerCase(), tagline: ind.tagline.toLowerCase() },
+      "{blurb} Built for {industry} teams running {tagline}.",
+    ),
     path: `/features/${mod.slug}/${industry}`,
     keywords: [
       ...(mod.keywords ?? []),
@@ -59,14 +69,26 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       `${mod.name.toLowerCase()} for ${ind.name.toLowerCase()}`,
     ],
     ogImageEyebrow: `${mod.name} · ${ind.name}`,
-    ogImageTitle: `${mod.name} for ${ind.name}`,
+    ogImageTitle: t(
+      "marketing.features.industry.ogTitle",
+      { module: mod.name, industry: ind.name },
+      "{module} for {industry}",
+    ),
   });
 }
 
-function buildUseCases(mod: ModuleConfig, ind: IndustryConfig): string[] {
+function buildUseCases(
+  mod: ModuleConfig,
+  ind: IndustryConfig,
+  t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
+): string[] {
   const top = mod.highlights.slice(0, 4);
-  return top.map(
-    (h) => `${h.title} — ${h.body} On ${ind.name.toLowerCase()} jobs, this shows up as ${ind.tagline.toLowerCase()}.`,
+  return top.map((h) =>
+    t(
+      "marketing.features.industry.useCase",
+      { title: h.title, body: h.body, industry: ind.name.toLowerCase(), tagline: ind.tagline.toLowerCase() },
+      "{title} — {body} On {industry} jobs, this shows up as {tagline}.",
+    ),
   );
 }
 
@@ -75,11 +97,12 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
   const mod = MODULES[module];
   const ind = INDUSTRIES[industry];
   if (!mod || !ind) notFound();
+  const { t } = await getRequestT();
 
   const path = `/features/${mod.slug}/${industry}`;
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Features", href: "/features" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.features.crumbsLabel", undefined, "Features"), href: "/features" },
     { label: mod.name, href: `/features/${mod.slug}` },
     { label: ind.name, href: path },
   ];
@@ -101,7 +124,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
     .filter(([slug]) => slug !== industry)
     .slice(0, 7);
 
-  const useCases = buildUseCases(mod, ind);
+  const useCases = buildUseCases(mod, ind, t);
 
   return (
     <div>
@@ -137,9 +160,15 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="eyebrow eyebrow-brand">How It Shows Up</div>
+        <div className="eyebrow eyebrow-brand">
+          {t("marketing.features.industry.howItShowsUp", undefined, "How It Shows Up")}
+        </div>
         <h2 className="hed-xl mt-4">
-          What {ind.name} Teams Run On {mod.name}.
+          {t(
+            "marketing.features.industry.teamsRunOn",
+            { industry: ind.name, module: mod.name },
+            "What {industry} Teams Run On {module}.",
+          )}
         </h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
           {useCases.map((uc) => (
@@ -154,8 +183,16 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
         <div className="surface p-8 md:p-10">
           <div className="grid gap-8 md:grid-cols-2 md:items-center">
             <div>
-              <div className="eyebrow eyebrow-brand">Industry Outcomes</div>
-              <h2 className="hed-lg mt-3">What Changes For {ind.name} Operators.</h2>
+              <div className="eyebrow eyebrow-brand">
+                {t("marketing.features.industry.industryOutcomes", undefined, "Industry Outcomes")}
+              </div>
+              <h2 className="hed-lg mt-3">
+                {t(
+                  "marketing.features.industry.whatChanges",
+                  { industry: ind.name },
+                  "What Changes For {industry} Operators.",
+                )}
+              </h2>
               <p className="mt-3 text-sm text-[var(--p-text-2)]">{ind.description}</p>
             </div>
             <ul className="space-y-3 text-sm">
@@ -171,9 +208,15 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">The {mod.name} Feature Set.</h2>
+        <h2 className="hed-lg">
+          {t("marketing.features.industry.featureSet", { module: mod.name }, "The {module} Feature Set.")}
+        </h2>
         <p className="mt-3 max-w-2xl text-sm text-[var(--p-text-2)]">
-          The same primitives that ship in our {mod.name} module — applied to {ind.name.toLowerCase()} workflows.
+          {t(
+            "marketing.features.industry.featureSetSub",
+            { module: mod.name, industry: ind.name.toLowerCase() },
+            "The same primitives that ship in our {module} module — applied to {industry} workflows.",
+          )}
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {mod.highlights.map((h) => (
@@ -186,15 +229,38 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <CTASection
-        title={`Run ${mod.name} On ${ind.name} Production.`}
-        subtitle="Sign up free for small teams. Per-org pricing the rest of the way up."
+        title={t(
+          "marketing.features.industry.cta.runTitle",
+          { module: mod.name, industry: ind.name },
+          "Run {module} On {industry} Production.",
+        )}
+        subtitle={t(
+          "marketing.features.industry.cta.runSubtitle",
+          undefined,
+          "Sign up free for small teams. Per-org pricing the rest of the way up.",
+        )}
       />
 
-      <FAQSection title={`${mod.name} for ${ind.name} · FAQ`} faqs={faqs} />
+      <FAQSection
+        title={t(
+          "marketing.features.industry.faqTitle",
+          { module: mod.name, industry: ind.name },
+          "{module} for {industry} · FAQ",
+        )}
+        faqs={faqs}
+      />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Other Modules For {ind.name}.</h2>
-        <p className="mt-3 text-sm text-[var(--p-text-2)]">One database. Every module reads from the same record.</p>
+        <h2 className="hed-lg">
+          {t("marketing.features.industry.otherModules", { industry: ind.name }, "Other Modules For {industry}.")}
+        </h2>
+        <p className="mt-3 text-sm text-[var(--p-text-2)]">
+          {t(
+            "marketing.features.industry.oneDatabase",
+            undefined,
+            "One database. Every module reads from the same record.",
+          )}
+        </p>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {siblingModules.map((sib) => (
             <Link
@@ -210,7 +276,9 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">{mod.name} For Other Industries.</h2>
+        <h2 className="hed-lg">
+          {t("marketing.features.industry.otherIndustries", { module: mod.name }, "{module} For Other Industries.")}
+        </h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {siblingIndustries.map(([slug, sib]) => (
             <Link
@@ -226,8 +294,12 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       </section>
 
       <CTASection
-        title="ATLVS Is Open."
-        subtitle="Free, forever, for small teams. Per-org pricing the rest of the way up."
+        title={t("marketing.features.detail.cta.openTitle", undefined, "ATLVS Is Open.")}
+        subtitle={t(
+          "marketing.features.detail.cta.openSubtitle",
+          undefined,
+          "Free, forever, for small teams. Per-org pricing the rest of the way up.",
+        )}
       />
     </div>
   );

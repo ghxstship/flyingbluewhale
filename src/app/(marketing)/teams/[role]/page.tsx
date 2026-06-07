@@ -11,52 +11,61 @@ import { buildMetadata, breadcrumbSchema, faqSchema, CANONICAL_CTAS, SITE } from
 import { TEAMS, TEAMS_BY_SLUG } from "@/lib/marketing/teams";
 import { MODULES } from "@/lib/marketing/modules";
 import { INDUSTRIES } from "@/lib/marketing/industries";
+import { getRequestT } from "@/lib/i18n/request";
 
 export function generateStaticParams() {
-  return TEAMS.map((t) => ({ role: t.slug }));
+  return TEAMS.map((cfg) => ({ role: cfg.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ role: string }> }): Promise<Metadata> {
   const { role } = await params;
-  const t = TEAMS_BY_SLUG[role];
-  if (!t) return buildMetadata({ title: "Teams", description: SITE.description, path: `/teams/${role}` });
+  const cfg = TEAMS_BY_SLUG[role];
+  const { t } = await getRequestT();
+  if (!cfg) {
+    return buildMetadata({
+      title: t("marketing.teams.detail.fallbackTitle", undefined, "Teams"),
+      description: SITE.description,
+      path: `/teams/${role}`,
+    });
+  }
   return buildMetadata({
-    title: `${t.role} — ${t.hero.title}`,
-    description: t.blurb,
-    path: `/teams/${t.slug}`,
+    title: t("marketing.teams.detail.meta.title", { role: cfg.role, hero: cfg.hero.title }, "{role} — {hero}"),
+    description: cfg.blurb,
+    path: `/teams/${cfg.slug}`,
     keywords: [
-      `${t.role.toLowerCase()} software`,
-      `software for ${t.role.toLowerCase()}`,
-      `${t.role.toLowerCase()} platform`,
-      `production software for ${t.role.toLowerCase()}`,
+      `${cfg.role.toLowerCase()} software`,
+      `software for ${cfg.role.toLowerCase()}`,
+      `${cfg.role.toLowerCase()} platform`,
+      `production software for ${cfg.role.toLowerCase()}`,
     ],
-    ogImageEyebrow: t.hero.eyebrow,
-    ogImageTitle: t.role,
+    ogImageEyebrow: cfg.hero.eyebrow,
+    ogImageTitle: cfg.role,
   });
 }
 
 export default async function TeamRolePage({ params }: { params: Promise<{ role: string }> }) {
   const { role } = await params;
-  const t = TEAMS_BY_SLUG[role];
-  if (!t) notFound();
+  const cfg = TEAMS_BY_SLUG[role];
+  if (!cfg) notFound();
+  const { t } = await getRequestT();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Built For", href: "/teams" },
-    { label: t.role, href: `/teams/${t.slug}` },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.teams.crumbsLabel", undefined, "Built For"), href: "/teams" },
+    { label: cfg.role, href: `/teams/${cfg.slug}` },
   ];
 
-  const sibling = TEAMS.filter((o) => o.slug !== t.slug);
+  const sibling = TEAMS.filter((o) => o.slug !== cfg.slug);
 
   return (
     <div>
-      <JsonLd data={[breadcrumbSchema(crumbs), faqSchema(t.faqs)]} />
+      <JsonLd data={[breadcrumbSchema(crumbs), faqSchema(cfg.faqs)]} />
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-brand">{t.hero.eyebrow}</div>
-        <h1 className="hed-2xl mt-4">{t.hero.title}</h1>
-        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{t.hero.body}</p>
+        <div className="eyebrow eyebrow-brand">{cfg.hero.eyebrow}</div>
+        <h1 className="hed-2xl mt-4">{cfg.hero.title}</h1>
+        <p className="mt-5 max-w-3xl text-lg text-[var(--p-text-2)]">{cfg.hero.body}</p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button href={CANONICAL_CTAS.primary.href}>{CANONICAL_CTAS.primary.label}</Button>
           <Button href={CANONICAL_CTAS.secondary.href} variant="secondary">
@@ -66,9 +75,11 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-xl">What {t.role} Run Day-To-Day.</h2>
+        <h2 className="hed-xl">
+          {t("marketing.teams.detail.workflows", { role: cfg.role }, "What {role} Run Day-To-Day.")}
+        </h2>
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {t.workflows.map((w) => (
+          {cfg.workflows.map((w) => (
             <div key={w.title} className="surface p-6">
               <div className="text-sm font-semibold">{w.title}</div>
               <p className="mt-2 text-sm text-[var(--p-text-2)]">{w.body}</p>
@@ -77,13 +88,15 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
         </div>
       </section>
 
-      {t.painPoints.length > 0 ? (
+      {cfg.painPoints.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
           <div className="surface p-8 md:p-10">
-            <div className="eyebrow eyebrow-brand">Familiar?</div>
-            <h2 className="hed-lg mt-3">The Pain You're Working Around.</h2>
+            <div className="eyebrow eyebrow-brand">{t("marketing.teams.detail.familiar", undefined, "Familiar?")}</div>
+            <h2 className="hed-lg mt-3">
+              {t("marketing.teams.detail.painHeading", undefined, "The Pain You're Working Around.")}
+            </h2>
             <ul className="mt-6 space-y-3 text-sm">
-              {t.painPoints.map((p) => (
+              {cfg.painPoints.map((p) => (
                 <li key={p} className="flex items-start gap-2">
                   <span className="ps-dot ps-dot ps-dot--danger mt-2" />
                   <span className="text-[var(--p-text-2)]">{p}</span>
@@ -95,9 +108,9 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
       ) : null}
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Modules You Live In.</h2>
+        <h2 className="hed-lg">{t("marketing.teams.detail.modulesYouLive", undefined, "Modules You Live In.")}</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-          {t.modules
+          {cfg.modules
             .map((m) => MODULES[m])
             .filter((m): m is NonNullable<typeof m> => Boolean(m))
             .map((m) => (
@@ -113,11 +126,13 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
         </div>
       </section>
 
-      {t.industries.length > 0 ? (
+      {cfg.industries.length > 0 ? (
         <section className="mx-auto max-w-6xl px-6 py-12">
-          <h2 className="hed-lg">Industries You Work In.</h2>
+          <h2 className="hed-lg">
+            {t("marketing.teams.detail.industriesYouWork", undefined, "Industries You Work In.")}
+          </h2>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {t.industries
+            {cfg.industries
               .map((s) => ({ slug: s, info: INDUSTRIES[s] }))
               .filter((x): x is { slug: string; info: NonNullable<(typeof INDUSTRIES)[string]> } => Boolean(x.info))
               .map((x) => (
@@ -134,15 +149,21 @@ export default async function TeamRolePage({ params }: { params: Promise<{ role:
         </section>
       ) : null}
 
-      {t.faqs.length > 0 ? <FAQSection title={`${t.role} · FAQ`} faqs={t.faqs} /> : null}
+      {cfg.faqs.length > 0 ? (
+        <FAQSection title={t("marketing.teams.detail.faqTitle", { role: cfg.role }, "{role} · FAQ")} faqs={cfg.faqs} />
+      ) : null}
 
       <CTASection
-        title={`Run ${t.role}' Workflow On ATLVS.`}
-        subtitle="Free for small teams. Per-org pricing the rest of the way up."
+        title={t("marketing.teams.detail.cta.runTitle", { role: cfg.role }, "Run {role}' Workflow On ATLVS.")}
+        subtitle={t(
+          "marketing.teams.detail.cta.runSubtitle",
+          undefined,
+          "Free for small teams. Per-org pricing the rest of the way up.",
+        )}
       />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Other Roles.</h2>
+        <h2 className="hed-lg">{t("marketing.teams.detail.otherRoles", undefined, "Other Roles.")}</h2>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {sibling.map((s) => (
             <Link

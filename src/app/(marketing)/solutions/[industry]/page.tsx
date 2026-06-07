@@ -14,20 +14,30 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { StatStrip } from "@/components/marketing/StatStrip";
 import { buildMetadata } from "@/lib/seo";
 import { INDUSTRIES } from "@/lib/marketing/industries";
+import { getRequestT } from "@/lib/i18n/request";
 
 type Props = { params: Promise<{ industry: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { industry } = await params;
   const info = INDUSTRIES[industry];
+  const { t } = await getRequestT();
   if (!info)
-    return buildMetadata({ title: "Solution", description: "Industry solution", path: `/solutions/${industry}` });
+    return buildMetadata({
+      title: t("marketing.solutions.detail.fallbackTitle", undefined, "Solution"),
+      description: t("marketing.solutions.detail.fallbackDescription", undefined, "Industry solution"),
+      path: `/solutions/${industry}`,
+    });
   return buildMetadata({
-    title: `${info.name} — ${info.tagline} on ATLVS Technologies`,
+    title: t(
+      "marketing.solutions.detail.meta.title",
+      { name: info.name, tagline: info.tagline },
+      "{name} — {tagline} on ATLVS Technologies",
+    ),
     description: info.description,
     path: `/solutions/${industry}`,
     keywords: [info.name.toLowerCase(), info.tagline.toLowerCase()],
-    ogImageEyebrow: "Solutions",
+    ogImageEyebrow: t("marketing.solutions.crumbsLabel", undefined, "Solutions"),
     ogImageTitle: info.hero.title,
   });
 }
@@ -40,10 +50,11 @@ export default async function IndustryPage({ params }: Props) {
   const { industry } = await params;
   const info = INDUSTRIES[industry];
   if (!info) notFound();
+  const { t } = await getRequestT();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Solutions", href: "/solutions" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.solutions.crumbsLabel", undefined, "Solutions"), href: "/solutions" },
     { label: info.name, href: `/solutions/${industry}` },
   ];
 
@@ -56,9 +67,9 @@ export default async function IndustryPage({ params }: Props) {
         <h1 className="hed-2xl mt-4">{info.hero.title}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">{info.hero.body}</p>
         <div className="mt-8 flex gap-3">
-          <Button href="/signup">Start Free</Button>
+          <Button href="/signup">{t("common.startFree", undefined, "Start Free")}</Button>
           <Button href="/contact" variant="secondary">
-            Book a Demo
+            {t("marketing.solutions.detail.cta.bookDemo", undefined, "Book a Demo")}
           </Button>
         </div>
       </section>
@@ -66,7 +77,7 @@ export default async function IndustryPage({ params }: Props) {
       <StatStrip stats={info.stats} />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-xl">Outcomes</h2>
+        <h2 className="hed-xl">{t("marketing.solutions.detail.outcomes", undefined, "Outcomes")}</h2>
         <ul className="mt-6 grid gap-3 md:grid-cols-2">
           {info.outcomes.map((o) => (
             <li key={o} className="surface flex items-start gap-3 p-4">
@@ -78,7 +89,7 @@ export default async function IndustryPage({ params }: Props) {
       </section>
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-xl">Modules Used</h2>
+        <h2 className="hed-xl">{t("marketing.solutions.detail.modulesUsed", undefined, "Modules Used")}</h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
           {info.modules.map((m) => (
             <div key={m.name} className="surface p-5">
@@ -89,10 +100,13 @@ export default async function IndustryPage({ params }: Props) {
         </div>
       </section>
 
-      <FAQSection title={`${info.name} · FAQ`} faqs={info.faqs} />
+      <FAQSection
+        title={t("marketing.solutions.detail.faqTitle", { name: info.name }, "{name} · FAQ")}
+        faqs={info.faqs}
+      />
 
       <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="hed-lg">Related Industries</h2>
+        <h2 className="hed-lg">{t("marketing.solutions.detail.related", undefined, "Related Industries")}</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {info.related.map((r) => {
             const rel = INDUSTRIES[r];

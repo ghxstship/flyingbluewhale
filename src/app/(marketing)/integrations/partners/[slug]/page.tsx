@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
@@ -10,6 +9,7 @@ import { buildMetadata, breadcrumbSchema } from "@/lib/seo";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 
 type Row = {
   slug: string;
@@ -46,13 +46,21 @@ async function getPartner(slug: string): Promise<Row | null> {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const p = await getPartner(slug);
+  const { t } = await getRequestT();
   if (!p)
-    return buildMetadata({ title: "Partner Integration", description: "", path: `/integrations/partners/${slug}` });
+    return buildMetadata({
+      title: t("marketing.integrations.partnerDetail.fallbackTitle", undefined, "Partner Integration"),
+      description: "",
+      path: `/integrations/partners/${slug}`,
+    });
   return buildMetadata({
-    title: `${p.name} — ATLVS Partner Integration`,
+    title: t("marketing.integrations.partnerDetail.meta.title", { name: p.name }, "{name} — ATLVS Partner Integration"),
     description: p.short_description,
     path: `/integrations/partners/${p.slug}`,
-    ogImageEyebrow: p.certification_tier === "certified" ? "Certified Partner" : "Verified Partner",
+    ogImageEyebrow:
+      p.certification_tier === "certified"
+        ? t("marketing.integrations.partnerDetail.ogCertified", undefined, "Certified Partner")
+        : t("marketing.integrations.partnerDetail.ogVerified", undefined, "Verified Partner"),
     ogImageTitle: p.name,
   });
 }
@@ -63,11 +71,15 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug } = await params;
   const p = await getPartner(slug);
   if (!p) notFound();
+  const { t } = await getRequestT();
 
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Integrations", href: "/integrations" },
-    { label: "Partner Directory", href: "/integrations/partners" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    { label: t("marketing.integrations.crumbsLabel", undefined, "Integrations"), href: "/integrations" },
+    {
+      label: t("marketing.integrations.partners.crumbsLabel", undefined, "Partner Directory"),
+      href: "/integrations/partners",
+    },
     { label: p.name, href: `/integrations/partners/${p.slug}` },
   ];
 
@@ -78,19 +90,27 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
       <section className="mx-auto max-w-4xl px-6 pt-8 pb-8">
         <div className="flex items-center justify-between">
-          <div className="eyebrow eyebrow-brand">Partner Integration</div>
+          <div className="eyebrow eyebrow-brand">
+            {t("marketing.integrations.partnerDetail.eyebrow", undefined, "Partner Integration")}
+          </div>
           <Badge variant={p.certification_tier === "certified" ? "success" : "info"}>
-            {p.certification_tier === "certified" ? "Certified" : "Verified"}
+            {p.certification_tier === "certified"
+              ? t("marketing.integrations.partners.tier.certified", undefined, "Certified")
+              : t("marketing.integrations.partners.tier.verified", undefined, "Verified")}
           </Badge>
         </div>
         <h1 className="hed-3xl mt-4">{p.name}</h1>
-        <p className="mt-2 text-xs text-[var(--p-text-2)]">by {p.partner_org_name}</p>
+        <p className="mt-2 text-xs text-[var(--p-text-2)]">
+          {t("marketing.integrations.partners.by", { name: p.partner_org_name }, "by {name}")}
+        </p>
         <p className="mt-5 text-lg text-[var(--p-text-2)]">{p.short_description}</p>
         {p.long_description ? <p className="mt-3 text-sm">{p.long_description}</p> : null}
 
         {p.capabilities.length > 0 ? (
           <div className="surface mt-6 p-5">
-            <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">Capabilities</div>
+            <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
+              {t("marketing.integrations.partnerDetail.capabilities", undefined, "Capabilities")}
+            </div>
             <ul className="mt-3 space-y-1.5 text-sm">
               {p.capabilities.map((c) => (
                 <li key={c} className="flex items-start gap-2">
@@ -105,23 +125,27 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <div className="mt-6 flex flex-wrap gap-3">
           {p.homepage_url ? (
             <Button href={p.homepage_url} variant="primary">
-              Partner site
+              {t("marketing.integrations.partnerDetail.partnerSite", undefined, "Partner site")}
             </Button>
           ) : null}
           {p.docs_url ? (
             <Button href={p.docs_url} variant="ghost">
-              Integration docs
+              {t("marketing.integrations.partnerDetail.docs", undefined, "Integration docs")}
             </Button>
           ) : null}
           <Button href="/integrations/partners" variant="ghost">
-            Back to directory
+            {t("marketing.integrations.partnerDetail.backToDirectory", undefined, "Back to directory")}
           </Button>
         </div>
       </section>
 
       <CTASection
-        title="Want To Build One?"
-        subtitle="Open API surface. No revenue share, no gatekeeping. Apply through /integrations/submit."
+        title={t("marketing.integrations.partnerDetail.cta.title", undefined, "Want To Build One?")}
+        subtitle={t(
+          "marketing.integrations.partnerDetail.cta.subtitle",
+          undefined,
+          "Open API surface. No revenue share, no gatekeeping. Apply through /integrations/submit.",
+        )}
       />
     </div>
   );

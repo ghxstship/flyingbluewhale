@@ -1859,8 +1859,8 @@
         },
         "hero": {
           "eyebrow": "ATLVS Technologies",
-          "titleLine1": "La production tourne sur",
-          "titleLine2": "une seule plateforme.",
+          "titleLine1": "EXPÉRIENCE",
+          "titleLine2": "PRODUCTION",
           "subtitleLead": "Trois apps, un seul schéma.",
           "subtitleAtlvs": "fait tourner la production.",
           "subtitleCompvss": "fait tourner le terrain.",
@@ -1868,7 +1868,8 @@
           "ctaPrimary": "Démarrer Gratuitement",
           "ctaSecondary": "Réserver Une Démo",
           "disclaimer": "Gratuit à vie pour les petites équipes · Sans carte bancaire · Tarif par organisation",
-          "ecosystemLabel": "L'Écosystème ATLVS"
+          "ecosystemLabel": "L'Écosystème ATLVS",
+          "titleLine3": "UNIFIÉE."
         },
         "trustBar": {
           "label": "Choisi par les équipes de production derrière"

@@ -2,34 +2,55 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { buildMetadata } from "@/lib/seo";
+import { getRequestT } from "@/lib/i18n/request";
 
-export const metadata: Metadata = buildMetadata({
-  title: "Submission Received — ATLVS Partner Program",
-  description: "Your partner integration proposal is in the queue.",
-  path: "/integrations/submit/thanks",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getRequestT();
+  return buildMetadata({
+    title: t("marketing.integrations.thanks.meta.title", undefined, "Submission Received — ATLVS Partner Program"),
+    description: t(
+      "marketing.integrations.thanks.meta.description",
+      undefined,
+      "Your partner integration proposal is in the queue.",
+    ),
+    path: "/integrations/submit/thanks",
+  });
+}
 
-export default function Page() {
+export default async function Page() {
+  const { t } = await getRequestT();
   const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "Integrations", href: "/integrations" },
-    { label: "Submission Received", href: "/integrations/submit/thanks" },
+    { label: t("common.home", undefined, "Home"), href: "/" },
+    {
+      label: t("marketing.integrations.crumbsLabel", undefined, "Integrations"),
+      href: "/integrations",
+    },
+    {
+      label: t("marketing.integrations.thanks.crumbsLabel", undefined, "Submission Received"),
+      href: "/integrations/submit/thanks",
+    },
   ];
 
   return (
     <div>
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
       <section className="mx-auto max-w-2xl px-6 pt-12 pb-20 text-center">
-        <div className="eyebrow eyebrow-brand">Partner Program</div>
-        <h1 className="hed-3xl mt-4">Submission Received.</h1>
+        <div className="eyebrow eyebrow-brand">{t("marketing.integrations.eyebrow", undefined, "Partner Program")}</div>
+        <h1 className="hed-3xl mt-4">{t("marketing.integrations.thanks.title", undefined, "Submission Received.")}</h1>
         <p className="mt-5 text-lg text-[var(--p-text-2)]">
-          Your proposal is in the queue. The ATLVS partner-AM team typically responds within 5 business days. Watch the
-          inbox you submitted with — we&apos;ll reach out from <span className="font-mono">partners@atlvs.pro</span>.
+          {t(
+            "marketing.integrations.thanks.body.before",
+            undefined,
+            "Your proposal is in the queue. The ATLVS partner-AM team typically responds within 5 business days. Watch the inbox you submitted with — we'll reach out from",
+          )}{" "}
+          <span className="font-mono">partners@atlvs.pro</span>.
         </p>
         <div className="mt-8 flex justify-center gap-3">
-          <Button href="/integrations">Back to live integrations</Button>
+          <Button href="/integrations">
+            {t("marketing.integrations.thanks.cta.back", undefined, "Back to live integrations")}
+          </Button>
           <Button href="/integrations/partners" variant="ghost">
-            See the partner directory
+            {t("marketing.integrations.thanks.cta.directory", undefined, "See the partner directory")}
           </Button>
         </div>
       </section>

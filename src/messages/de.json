@@ -1859,8 +1859,8 @@
         },
         "hero": {
           "eyebrow": "ATLVS Technologies",
-          "titleLine1": "Produktion läuft auf",
-          "titleLine2": "einer Plattform.",
+          "titleLine1": "ERLEBNIS",
+          "titleLine2": "PRODUKTION",
           "subtitleLead": "Drei Apps, ein Schema.",
           "subtitleAtlvs": "fährt die Produktion.",
           "subtitleCompvss": "fährt das Feld.",
@@ -1868,7 +1868,8 @@
           "ctaPrimary": "Kostenlos Starten",
           "ctaSecondary": "Walkthrough Buchen",
           "disclaimer": "Für immer kostenlos für kleine Teams · Keine Kreditkarte erforderlich · Pro-Org-Preise",
-          "ecosystemLabel": "Das ATLVS-Ökosystem"
+          "ecosystemLabel": "Das ATLVS-Ökosystem",
+          "titleLine3": "VEREINT."
         },
         "trustBar": {
           "label": "Vertraut von den Produktionsteams hinter"

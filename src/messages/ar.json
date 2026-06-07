@@ -85,21 +85,48 @@
       "mobilePrimaryAriaLabel": "التنقل الرئيسي للجوال",
       "product": {
         "label": "المنتج",
-        "features": { "label": "الميزات", "description": "كل وحدة، كل مرحلة" },
-        "solutions": { "label": "الحلول", "description": "ATLVS · COMPVSS · GVTEWAY" },
-        "atlvs": { "label": "ATLVS — الإنتاج", "description": "وحدة تحكم المنتج" },
-        "compvss": { "label": "COMPVSS — الطاقم", "description": "القوى العاملة وعمليات الميدان" },
-        "gvteway": { "label": "GVTEWAY — الضيوف", "description": "التذاكر وبوابة أصحاب المصلحة" }
+        "features": {
+          "label": "الميزات",
+          "description": "كل وحدة، كل مرحلة"
+        },
+        "solutions": {
+          "label": "الحلول",
+          "description": "ATLVS · COMPVSS · GVTEWAY"
+        },
+        "atlvs": {
+          "label": "ATLVS — الإنتاج",
+          "description": "وحدة تحكم المنتج"
+        },
+        "compvss": {
+          "label": "COMPVSS — الطاقم",
+          "description": "القوى العاملة وعمليات الميدان"
+        },
+        "gvteway": {
+          "label": "GVTEWAY — الضيوف",
+          "description": "التذاكر وبوابة أصحاب المصلحة"
+        }
       },
       "industries": {
         "label": "القطاعات"
       },
       "resources": {
         "label": "الموارد",
-        "blog": { "label": "المدونة", "description": "الإطلاقات والإصدارات وآراء القطاع" },
-        "guides": { "label": "الأدلة", "description": "محتوى موسّع للمنتجين" },
-        "docs": { "label": "الوثائق", "description": "مرجع المنصة + واجهة برمجة التطبيقات" },
-        "changelog": { "label": "سجل التغييرات", "description": "كل إصدار بتاريخه" }
+        "blog": {
+          "label": "المدونة",
+          "description": "الإطلاقات والإصدارات وآراء القطاع"
+        },
+        "guides": {
+          "label": "الأدلة",
+          "description": "محتوى موسّع للمنتجين"
+        },
+        "docs": {
+          "label": "الوثائق",
+          "description": "مرجع المنصة + واجهة برمجة التطبيقات"
+        },
+        "changelog": {
+          "label": "سجل التغييرات",
+          "description": "كل إصدار بتاريخه"
+        }
       }
     },
     "home": {
@@ -131,6 +158,15 @@
       "startFreeForLife": "مجاني مدى الحياة",
       "contactSales": "التواصل مع المبيعات",
       "pitchStory": "اقترح قصة"
+    },
+    "pages": {
+      "home": {
+        "hero": {
+          "titleLine1": "التجربة",
+          "titleLine2": "الإنتاج",
+          "titleLine3": "موحّدة."
+        }
+      }
     }
   },
   "auth": {

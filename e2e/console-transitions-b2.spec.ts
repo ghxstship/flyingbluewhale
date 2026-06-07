@@ -24,6 +24,17 @@ test.describe("console — state-machine transitions (batch 2)", () => {
     await expect(page.getByRole("button", { name: /mark ready|^close$/i }).first()).toBeVisible({ timeout: 15000 });
   });
 
+  test("Inspection · scheduled → start (then Pass/Fail exposed)", async ({ page }) => {
+    await createInModule(page, "/console/inspections/new", { name: `E2E Inspection ${stamp()}` });
+    // On the inspection detail (redirects to /console/inspections/[id]).
+    const start = page.getByRole("button", { name: /^start$/i }).first();
+    await expect(start).toBeVisible({ timeout: 15000 });
+    await start.click();
+    await expect(page.getByRole("alert").filter({ hasText: /error|failed|invalid/i })).toHaveCount(0);
+    // Once in progress, the Pass/Fail decision controls surface.
+    await expect(page.getByRole("button", { name: /^pass$|^fail$/i }).first()).toBeVisible({ timeout: 15000 });
+  });
+
   // Skipped: fabrication create redirects to the LIST (not a stable detail URL),
   // so the production_phase transition control isn't on the landing page. Driving
   // it needs the created order's detail URL, which the generic create helper

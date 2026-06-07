@@ -23,7 +23,13 @@ test.describe("console modules — create flows (batch 7)", () => {
   });
 
   test("BIM · model create", async ({ page }) => {
-    await createInModule(page, "/console/bim/new", { name: `E2E BIM Model ${stamp()}` });
+    // storage_path is required + unique-ish — the generic helper fills it with a
+    // constant, which collides on re-run; pass a unique path.
+    const s = stamp();
+    await createInModule(page, "/console/bim/new", {
+      name: `E2E BIM Model ${s}`,
+      storage_path: `e2e/bim-${s}.ifc`,
+    });
   });
 
   test("Finance · budget create", async ({ page }) => {
@@ -35,12 +41,16 @@ test.describe("console modules — create flows (batch 7)", () => {
   });
 
   test("Finance · payroll run create", async ({ page }) => {
-    // pay_period_start/end must differ + week_ending within range (generic helper
-    // would fill them all equal), so pass explicit distinct dates.
+    // pay_period_start/end must differ + be UNIQUE per run (payroll runs collide
+    // on a repeated period). Derive a unique 2-week past window from the clock.
+    const start = new Date(2001, 0, 1);
+    start.setDate(start.getDate() + (Date.now() % 8000));
+    const end = new Date(start);
+    end.setDate(end.getDate() + 14);
     await createInModule(page, "/console/finance/payroll/new", {
-      pay_period_start: "2026-05-01",
-      pay_period_end: "2026-05-15",
-      week_ending: "2026-05-15",
+      pay_period_start: start.toISOString().slice(0, 10),
+      pay_period_end: end.toISOString().slice(0, 10),
+      week_ending: end.toISOString().slice(0, 10),
     });
   });
 

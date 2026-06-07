@@ -4,7 +4,7 @@
 
 Every `page.tsx` in `src/app` is enumerated below with its URL route and validation status. This is the living pre-deployment gate — we keep filling it until every page is validated in writing.
 
-**Coverage layers:** (1) render — this checklist, **962/967 pages → HTTP 200** as the authed owner. (2) interactive/functional — the Playwright suite, **515 functional+interactive tests passing**, see [E2E_PLAYWRIGHT_COVERAGE.md](E2E_PLAYWRIGHT_COVERAGE.md) (incl. `console-core-flows` 7/7). (3) `/m` write paths — compvss smoke (92/92 + 28/28).
+**Coverage layers:** (1) render — this checklist, **967/967 pages validated to render** (962 → HTTP 200 directly in the authed sweep; the 5 token/credential-gated routes since confirmed 200 with real tokens — see Verdict; one was a real routing bug, fixed in `50dfe5ae`). (2) interactive/functional — the Playwright suite, **515 functional+interactive tests passing**, see [E2E_PLAYWRIGHT_COVERAGE.md](E2E_PLAYWRIGHT_COVERAGE.md) (incl. `console-core-flows` 7/7). (3) `/m` write paths — compvss smoke (92/92 + 28/28).
 
 ## Methodology / legend
 
@@ -28,21 +28,25 @@ Every `page.tsx` in `src/app` is enumerated below with its URL route and validat
 | Root / misc                 |      26 |     11 |      15 |       |
 | **Total**                   | **967** |        |         |       |
 
-**Sweep progress:** 967/967 routes swept · status breakdown {"200":962,"404":5}
+**Sweep progress:** 967/967 routes swept · status breakdown {"200":962,"404":5} · the 5 placeholder-404s since validated 200 with real tokens (see Verdict) → **967/967 render-validated**
 
 ## Verdict
 
-**962/967 pages return HTTP 200** as the authenticated org owner. The 5 non-200 below are all **expected** (dynamic routes needing a specific valid token/id that has no seeded instance) — none is a page defect. **No real render/RLS failure exists across the 967-page UI surface.**
+**All 967 pages validated to render HTTP 200 given valid inputs.** 962 returned 200 directly in the authenticated sweep; the remaining 5 were token/credential-gated dynamic routes that 404'd only on placeholder params. Each was then driven with a **real** token/id (and the print-access cookie where required) and confirmed to render — **and one turned out to be a genuine routing bug, now fixed.**
 
-### Non-200 triage (all expected)
+### Non-200 triage — now all resolved (2026-06-06)
 
-| Route                   | Tested                             | Status | Why (not a bug)                                            |
-| ----------------------- | ---------------------------------- | ------ | ---------------------------------------------------------- |
-| `/m/driver/run/[runId]` | `/m/driver/run/_`                  | 404    | needs a real dispatch run id; placeholder `_` → 404        |
-| `/forms/[slug]`         | `/forms/casa-wynwood-la-corriente` | 404    | public form-by-slug; project slug isn't a form slug → 404  |
-| `/msa/[token]/print`    | `/msa/_/print`                     | 404    | public MSA print needs a valid signing token → 404 on `_`  |
-| `/offer/[token]/print`  | `/offer/_/print`                   | 404    | public offer-letter print needs a valid token → 404 on `_` |
-| `/proposals/[token]`    | `/proposals/_`                     | 404    | public proposal share needs a valid token → 404 on `_`     |
+| Route                   | Real input used                                           | Result | Resolution                                                                                                                                                                                                                                |
+| ----------------------- | --------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/m/driver/run/[runId]` | seeded run `a3562de0…`, assigned driver, real session     | ✅ 200 | **Real bug fixed** — `src/proxy.ts` MOBILE_ROLE_ALIAS collapsed `/m/driver/run/[runId]` → non-existent `/m/run/…` (404 at the routing layer). Excluded role-OWNED surfaces (`run`, `new`); also fixes `/m/medic/new`. (commit `50dfe5ae`) |
+| `/forms/[slug]`         | published form `raci-test-form-2026-04-25`                | ✅ 200 | Page uses the **service client** (`isServiceClientAvailable()`); 404'd because dev `.env.local` lacked `SUPABASE_SERVICE_ROLE_KEY`. Added it (gitignored) + published a form.                                                             |
+| `/msa/[token]/print`    | MSA token `42a15070…` + `msa_<token>` cookie `5B5F4E`     | ✅ 200 | SECURITY DEFINER RPC gates on `token_expires_at > now()`; the seeded MSA's token had expired (clock advanced to 2026). Refreshed the expiry.                                                                                              |
+| `/offer/[token]/print`  | offer token `1931ee54…` + `offer_<token>` cookie `Q47TMC` | ✅ 200 | Same expiry gate + the RPC rejects `status='withdrawn'`; picked a non-withdrawn offer + refreshed expiry.                                                                                                                                 |
+| `/proposals/[token]`    | legacy share token `13d9dbe6…`                            | ✅ 200 | Needs the service client (added) + a valid share token; used the existing unexpired `proposal_share_links` legacy token (HMAC path needs `SHARE_LINK_SECRET`, absent — legacy fallback covers it).                                        |
+
+**Notes for reproducibility:** the dev `SUPABASE_SERVICE_ROLE_KEY` (pulled from the Supabase CLI) is required for the service-client public flows (`/forms`, `/proposals`) + webhooks — it belongs in `.env.local` (gitignored), per CLAUDE.md's env list. The token-expiry refreshes mirror the marketplace fixture drift captured in `supabase/fixtures/e2e_marketplace_booking_refresh.sql`. The two print pages are cookie-gated (`msa_<token>` / `offer_<token>` carry the access code) — correct security behavior; they render once the code cookie is present.
+
+**Bottom line:** the 967-page UI surface renders end-to-end with valid inputs, and full-page validation surfaced a real production routing defect (role-owned `/m` pages 404'ing) that is now fixed.
 
 ## Auth — 13 pages
 
@@ -1020,7 +1024,7 @@ Every `page.tsx` in `src/app` is enumerated below with its URL route and validat
 | Route                                   | Purpose          | Validation          |
 | --------------------------------------- | ---------------- | ------------------- |
 | `/api-docs`                             | Api Docs         | ✅ 200              |
-| `/forms/[slug]`                         | Detail (dynamic) | ❌ 404              |
+| `/forms/[slug]`                         | Detail (dynamic) | ✅ 200 · real input |
 | `/ghxstship`                            | Ghxstship        | ✅ 200              |
 | `/ghxstship/about`                      | About            | ✅ 200              |
 | `/ghxstship/contact`                    | Contact          | ✅ 200              |
@@ -1037,11 +1041,11 @@ Every `page.tsx` in `src/app` is enumerated below with its URL route and validat
 | `/ghxstship/tiers`                      | Tiers            | ✅ 200              |
 | `/ghxstship/tiers/[tier]`               | Detail (dynamic) | ✅ 200 · (param=\_) |
 | `/msa/[token]`                          | Detail (dynamic) | ✅ 200 · (param=\_) |
-| `/msa/[token]/print`                    | Print            | ❌ 404 · (param=\_) |
+| `/msa/[token]/print`                    | Print            | ✅ 200 · real token |
 | `/offer/[token]`                        | Detail (dynamic) | ✅ 200 · (param=\_) |
 | `/offer/[token]/checkin`                | Checkin          | ✅ 200 · (param=\_) |
 | `/offer/[token]/onboarding`             | Onboarding       | ✅ 200 · (param=\_) |
-| `/offer/[token]/print`                  | Print            | ❌ 404 · (param=\_) |
-| `/proposals/[token]`                    | Detail (dynamic) | ❌ 404 · (param=\_) |
+| `/offer/[token]/print`                  | Print            | ✅ 200 · real token |
+| `/proposals/[token]`                    | Detail (dynamic) | ✅ 200 · real token |
 | `/proposals/heat`                       | Heat             | ✅ 200              |
 | `/share/[token]`                        | Detail (dynamic) | ✅ 200 · (param=\_) |

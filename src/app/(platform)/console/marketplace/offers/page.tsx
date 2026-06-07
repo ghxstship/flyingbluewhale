@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { STATUS_TONE } from "@/lib/marketplace";
+import { STATUS_TONE, scoreOfferRisk } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -22,6 +22,8 @@ type OfferRow = {
   talent_profile_id: string;
   sent_at: string | null;
   accepted_at: string | null;
+  contracted_at: string | null;
+  version: number;
 };
 
 export default async function Page() {
@@ -45,13 +47,19 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("talent_offers")
-    .select("id, performance_date, fee_cents, currency, status, deposit_pct, talent_profile_id, sent_at, accepted_at")
+    .select(
+      "id, performance_date, fee_cents, currency, status, deposit_pct, talent_profile_id, sent_at, accepted_at, contracted_at, version",
+    )
     .eq("org_id", session.orgId)
     .order("performance_date", { ascending: false })
     .limit(500);
 
   const rows = (data ?? []) as OfferRow[];
   const live = rows.filter((r) => r.status === "sent" || r.status === "countered").length;
+  const atRisk = rows.filter((r) => {
+    const { level } = scoreOfferRisk(r);
+    return level === "high" || level === "medium";
+  }).length;
 
   return (
     <>
@@ -60,8 +68,8 @@ export default async function Page() {
         title={t("console.marketplace.offers.title", undefined, "Offers")}
         subtitle={t(
           "console.marketplace.offers.subtitle",
-          { total: rows.length, live },
-          `${rows.length} Total · ${live} Active`,
+          { total: rows.length, live, atRisk },
+          `${rows.length} Total · ${live} Active${atRisk > 0 ? ` · ${atRisk} At Risk` : ""}`,
         )}
         action={
           <Button href="/console/marketplace/offers/new" size="sm">
@@ -113,6 +121,22 @@ export default async function Page() {
               accessor: (r) => r.status,
               filterable: true,
               groupable: true,
+            },
+            {
+              key: "risk",
+              header: t("console.marketplace.offers.columns.risk", undefined, "Risk"),
+              render: (r) => {
+                const { level, flags } = scoreOfferRisk(r);
+                if (level === "low") return <Badge variant="muted">Low</Badge>;
+                const variant = level === "high" ? "error" : "warning";
+                return (
+                  <Badge variant={variant} title={flags.join(" · ")}>
+                    {level === "high" ? "High" : "Medium"}
+                  </Badge>
+                );
+              },
+              accessor: (r) => scoreOfferRisk(r).score,
+              filterable: true,
             },
           ]}
         />

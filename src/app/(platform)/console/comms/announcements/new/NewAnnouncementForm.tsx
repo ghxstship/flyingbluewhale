@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { AIDraftButton, type AIDraftResult } from "@/components/ui/AIDraftButton";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createAnnouncementAction, type State } from "./actions";
 
@@ -28,20 +29,38 @@ export function NewAnnouncementForm({
 }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(createAnnouncementAction, null);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+
+  function handleAIDraft(result: AIDraftResult) {
+    if (result.type !== "announcement") return;
+    if (titleRef.current) titleRef.current.value = result.title;
+    if (bodyRef.current) bodyRef.current.value = result.body;
+  }
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-[var(--p-text-2)] uppercase tracking-wide">
+          {t("console.comms.announcements.new.compose", undefined, "Compose")}
+        </span>
+        <AIDraftButton
+          draftType="announcement"
+          onDraft={handleAIDraft}
+        />
+      </div>
       <Input
         label={t("console.comms.announcements.new.title", undefined, "Title")}
         name="title"
         required
         maxLength={200}
+        ref={titleRef}
       />
       <label className="flex flex-col gap-1.5">
         <span className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.comms.announcements.new.body", undefined, "Body")}
         </span>
-        <textarea name="body" rows={6} required maxLength={8000} className="ps-input focus-ring w-full" />
+        <textarea ref={bodyRef} name="body" rows={6} required maxLength={8000} className="ps-input focus-ring w-full" />
       </label>
 
       <fieldset className="space-y-3 rounded-md border border-[var(--p-border)] p-3">

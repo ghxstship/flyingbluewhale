@@ -11,6 +11,7 @@ import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { ProposalConvertButton } from "./ProposalConvertButton";
 import { ProposalStatusControls } from "./ProposalStatusControls";
+import { ProposalViewsPanel } from "./ProposalViewsPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -89,6 +90,7 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{proposal.notes}</p>
           </div>
         )}
+        <ProposalViewsPanel proposalId={proposal.id} orgId={session.orgId} />
       </div>
     </>
   );

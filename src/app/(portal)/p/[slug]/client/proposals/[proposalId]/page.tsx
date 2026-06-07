@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProposalViewTracker } from "@/components/proposals/ProposalViewTracker";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
@@ -51,6 +52,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
   return (
     <div className="space-y-8 p-6">
+      <ProposalViewTracker proposalId={proposalId} persona="client" />
       {/* Top metrics */}
       <div className="metric-grid">
         <MetricCard

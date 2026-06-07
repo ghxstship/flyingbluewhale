@@ -184,3 +184,88 @@ export const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning
   sold_out: "success",
   press_embargo: "warning",
 };
+
+// ---------------------------------------------------------------------------
+// At-Risk Offer Detection (Instawork predictive no-show detection parity)
+// ---------------------------------------------------------------------------
+
+export type OfferRiskLevel = "low" | "medium" | "high";
+
+export type OfferRiskScore = {
+  level: OfferRiskLevel;
+  score: number;
+  flags: string[];
+};
+
+type ScoredOffer = {
+  status: string;
+  accepted_at?: string | null;
+  contracted_at?: string | null;
+  deposit_pct?: number | null;
+  fee_cents?: number | null;
+  version?: number | null;
+  performance_date?: string | null;
+  sent_at?: string | null;
+};
+
+/**
+ * Score a talent offer for no-show / cancellation risk.
+ * Returns a 0–100 score and a list of human-readable flag strings.
+ * Used by the marketplace offers list to surface a risk badge.
+ *
+ * Scoring is heuristic (no ML needed at this volume). Each factor adds
+ * a fixed delta; the sum is capped at 100. Levels: low < 25, medium < 55, high ≥ 55.
+ */
+export function scoreOfferRisk(offer: ScoredOffer): OfferRiskScore {
+  const flags: string[] = [];
+  let score = 0;
+
+  // Offer sent but not yet responded to in > 5 days
+  if (offer.status === "sent" && offer.sent_at) {
+    const sentMs = Date.now() - new Date(offer.sent_at).getTime();
+    const sentDays = sentMs / (1000 * 60 * 60 * 24);
+    if (sentDays > 5) {
+      score += 20;
+      flags.push(`Unresponded for ${Math.floor(sentDays)} days`);
+    }
+  }
+
+  // Accepted but no contract (contracted_at is null)
+  if (offer.status === "accepted" && !offer.contracted_at) {
+    score += 25;
+    flags.push("Accepted with no signed contract");
+  }
+
+  // Late acceptance: < 72h before performance date
+  if (offer.accepted_at && offer.performance_date) {
+    const hoursUntil =
+      (new Date(offer.performance_date).getTime() - new Date(offer.accepted_at).getTime()) / (1000 * 60 * 60);
+    if (hoursUntil < 72) {
+      score += 30;
+      flags.push(`Accepted ${Math.floor(hoursUntil)}h before performance`);
+    }
+  }
+
+  // Zero or missing deposit
+  if (offer.deposit_pct != null && offer.deposit_pct === 0) {
+    score += 20;
+    flags.push("No deposit charged");
+  }
+
+  // High fee with no contract (> $5k without signed agreement)
+  if ((offer.fee_cents ?? 0) > 500_000 && !offer.contracted_at) {
+    score += 15;
+    flags.push("High-value offer without signed contract");
+  }
+
+  // Countered version with reduced deposit (version > 1, deposit < 30%)
+  if ((offer.version ?? 1) > 1 && (offer.deposit_pct ?? 60) < 30) {
+    score += 10;
+    flags.push("Counter-offered with reduced deposit");
+  }
+
+  const capped = Math.min(score, 100);
+  const level: OfferRiskLevel = capped >= 55 ? "high" : capped >= 25 ? "medium" : "low";
+
+  return { level, score: capped, flags };
+}

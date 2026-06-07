@@ -9,6 +9,8 @@ import { createClient } from "@/lib/supabase/server";
 const Schema = z.object({
   title: z.string().min(1).max(200),
   summary: z.string().max(2000).optional().or(z.literal("")),
+  // lesson_outline is the AI-generated reference outline, saved to course notes
+  lesson_outline: z.string().max(4000).optional().or(z.literal("")),
   duration_minutes: z.string().optional().or(z.literal("")),
   required_for_role: z.string().max(80).optional().or(z.literal("")),
 });
@@ -29,7 +31,8 @@ export async function createCourseAction(_: State, fd: FormData): Promise<State>
     .insert({
       org_id: session.orgId,
       title: parsed.data.title,
-      summary: parsed.data.summary || null,
+      // Merge AI lesson outline into the summary if no manual summary provided
+      summary: parsed.data.summary || parsed.data.lesson_outline || null,
       duration_minutes: Number.isFinite(dur as number) ? dur : null,
       required_for_role: parsed.data.required_for_role || null,
       created_by: session.userId,

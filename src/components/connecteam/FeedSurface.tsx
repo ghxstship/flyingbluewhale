@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
+import { CrewReadinessWidget } from "./CrewReadinessWidget";
 import { markAnnouncementRead } from "./feed-action";
 
 /**
@@ -89,6 +90,7 @@ export async function FeedSurface({
         table="announcements"
         filter={`org_id=eq.${session.orgId}`}
       />
+      {variant === "mobile" && <CrewReadinessWidget orgId={session.orgId} />}
       <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
       <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
       <p className="mt-1 text-xs text-[var(--p-text-2)]">

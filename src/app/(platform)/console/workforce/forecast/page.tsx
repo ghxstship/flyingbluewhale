@@ -82,6 +82,27 @@ export default async function Page() {
 
   const totalGaps = rows.reduce((s, r) => s + r.gap_count, 0);
 
+  // Labor% panel — load the next 7 days of shift_sales_targets (with computed
+  // labor_pct from the v_daily_labor_vs_sales view). Uses LooseSupabase since
+  // shift_sales_targets isn't in the generated typed client yet.
+  const today = new Date().toISOString().slice(0, 10);
+  const sevenDaysOut = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const { data: salesRows } = await supabase
+    .from("v_daily_labor_vs_sales")
+    .select("shift_date, schedule_name, projected_revenue_cents, labor_cost_cents, labor_pct, currency")
+    .eq("org_id", session.orgId)
+    .gte("shift_date", today)
+    .lte("shift_date", sevenDaysOut)
+    .order("shift_date");
+  const laborRows = (salesRows ?? []) as {
+    shift_date: string;
+    schedule_name: string | null;
+    projected_revenue_cents: number;
+    labor_cost_cents: number;
+    labor_pct: number | null;
+    currency: string;
+  }[];
+
   return (
     <>
       <ModuleHeader
@@ -104,6 +125,63 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
+        {/* Labor% vs Projected Sales — Connecteam Mar 2026 parity */}
+        {laborRows.length > 0 && (
+          <section className="surface p-5">
+            <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+              {t("console.workforce.forecast.laborPct.title", undefined, "Labor % vs Projected Revenue — Next 7 Days")}
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="data-table w-full text-sm">
+                <thead>
+                  <tr>
+                    <th>{t("console.workforce.forecast.laborPct.date", undefined, "Date")}</th>
+                    <th>{t("console.workforce.forecast.laborPct.schedule", undefined, "Schedule")}</th>
+                    <th className="text-right">{t("console.workforce.forecast.laborPct.projected", undefined, "Projected Revenue")}</th>
+                    <th className="text-right">{t("console.workforce.forecast.laborPct.laborCost", undefined, "Labor Cost")}</th>
+                    <th className="text-right">{t("console.workforce.forecast.laborPct.laborPct", undefined, "Labor %")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {laborRows.map((r, i) => {
+                    const pct = r.labor_pct ?? null;
+                    const pctColor =
+                      pct === null
+                        ? ""
+                        : pct > 40
+                          ? "text-[var(--c-error)]"
+                          : pct > 30
+                            ? "text-[var(--c-warning)]"
+                            : "text-[var(--c-success)]";
+                    return (
+                      <tr key={i}>
+                        <td className="font-mono text-xs">{r.shift_date}</td>
+                        <td>{r.schedule_name ?? "—"}</td>
+                        <td className="text-right font-mono text-xs">
+                          {fmt.money(r.projected_revenue_cents, r.currency)}
+                        </td>
+                        <td className="text-right font-mono text-xs">
+                          {fmt.money(r.labor_cost_cents, r.currency)}
+                        </td>
+                        <td className={`text-right font-mono text-xs font-semibold ${pctColor}`}>
+                          {pct != null ? `${pct}%` : "—"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-2 text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.workforce.forecast.laborPct.hint",
+                undefined,
+                "Green < 30 % · Yellow 30–40 % · Red > 40 %. Set targets via Settings → Shift Sales Targets.",
+              )}
+            </p>
+          </section>
+        )}
+
         <div className="metric-grid-3">
           <MetricCard
             label={t("console.workforce.forecast.metrics.forecasts", undefined, "Forecasts")}

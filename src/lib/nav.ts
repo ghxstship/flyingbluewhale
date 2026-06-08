@@ -935,7 +935,10 @@ export const settingsNav: NavGroup[] = [
     // (operational sourcing concern, not admin). Time-Clock Zones stays
     // as it's purely org-level field configuration.
     label: "Field Config",
-    items: [{ label: "Time-Clock Zones", href: "/console/settings/time-clock-zones" }],
+    items: [
+      { label: "Time-Clock Zones", href: "/console/settings/time-clock-zones" },
+      { label: "Shift Sales Targets", href: "/console/settings/shift-sales-targets" },
+    ],
   },
   {
     label: "Billing & Data",
@@ -1403,6 +1406,7 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Onboarding", href: "/m/onboarding" },
   { label: "Advancing", href: "/m/advances" },
   { label: "Tracker", href: "/m/tracker" },
+  { label: "Ask AI", href: "/m/ask" },
 ];
 
 /**

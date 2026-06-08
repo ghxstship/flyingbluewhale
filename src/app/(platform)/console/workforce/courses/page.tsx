@@ -58,9 +58,14 @@ export default async function Page() {
             : t("console.workforce.courses.subtitleOther", { count: rows.length }, `${rows.length} courses`)
         }
         action={
-          <Button href="/console/workforce/courses/new" size="sm">
-            {t("console.workforce.courses.newCourse", undefined, "+ New Course")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href="/console/workforce/courses/generate" size="sm" variant="ghost">
+              {t("console.workforce.courses.generateWithAI", undefined, "Generate with AI")}
+            </Button>
+            <Button href="/console/workforce/courses/new" size="sm">
+              {t("console.workforce.courses.newCourse", undefined, "+ New Course")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content">

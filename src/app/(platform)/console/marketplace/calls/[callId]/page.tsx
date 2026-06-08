@@ -47,6 +47,35 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   if (!data) return notFound();
   const c = data as Call;
 
+  // Submission insights — aggregate metrics for the Lead Insights panel
+  const { data: subs } = await supabase
+    .from("open_call_submissions")
+    .select("submission_state, score, ai_match_score, submitted_at, reviewed_at")
+    .eq("open_call_id", callId)
+    .eq("org_id", session.orgId);
+
+  const subRows = subs ?? [];
+  const totalSubs = subRows.length;
+  const reviewedSubs = subRows.filter((s) => s.reviewed_at).length;
+  const avgScore =
+    subRows.filter((s) => s.score != null).length > 0
+      ? Math.round(
+          subRows.filter((s) => s.score != null).reduce((a, s) => a + (s.score ?? 0), 0) /
+            subRows.filter((s) => s.score != null).length,
+        )
+      : null;
+  const avgAiScore =
+    subRows.filter((s) => s.ai_match_score != null).length > 0
+      ? Number(
+          (
+            subRows.filter((s) => s.ai_match_score != null).reduce((a, s) => a + Number(s.ai_match_score ?? 0), 0) /
+            subRows.filter((s) => s.ai_match_score != null).length
+          ).toFixed(1),
+        )
+      : null;
+  const shortlistedCount = subRows.filter((s) => s.submission_state === "shortlisted").length;
+  const responseRate = totalSubs > 0 ? Math.round((reviewedSubs / totalSubs) * 100) : 0;
+
   return (
     <>
       <ModuleHeader
@@ -71,6 +100,50 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
       />
       <div className="page-content space-y-5">
         <CallControls callId={c.id} status={c.status} publicSlug={c.public_slug} />
+
+        {/* Lead Insights — inspired by GigSalad (Mar 2025): surface competition + review velocity */}
+        <section className="surface p-5">
+          <h2 className="mb-3 text-sm font-semibold tracking-wide uppercase">
+            {t("console.marketplace.calls.detail.insights.title", undefined, "Lead Insights")}
+          </h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="surface-inset rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold tabular-nums">{totalSubs}</div>
+              <div className="mt-0.5 text-xs text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.detail.insights.submissions", undefined, "Submissions")}
+              </div>
+            </div>
+            <div className="surface-inset rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold tabular-nums">{shortlistedCount}</div>
+              <div className="mt-0.5 text-xs text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.detail.insights.shortlisted", undefined, "Shortlisted")}
+              </div>
+            </div>
+            <div className="surface-inset rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold tabular-nums">{responseRate}%</div>
+              <div className="mt-0.5 text-xs text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.detail.insights.reviewRate", undefined, "Review rate")}
+              </div>
+            </div>
+            <div className="surface-inset rounded-lg p-3 text-center">
+              <div className="text-2xl font-bold tabular-nums">
+                {avgAiScore != null ? avgAiScore : avgScore != null ? avgScore : "—"}
+              </div>
+              <div className="mt-0.5 text-xs text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.detail.insights.avgScore", undefined, "Avg match score")}
+              </div>
+            </div>
+          </div>
+          {totalSubs === 0 && c.status === "published" && (
+            <p className="mt-3 text-xs text-[var(--p-text-2)]">
+              {t(
+                "console.marketplace.calls.detail.insights.empty",
+                undefined,
+                "No submissions yet. Share the public link to start receiving applicants.",
+              )}
+            </p>
+          )}
+        </section>
 
         <section className="surface p-5">
           <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">

@@ -12,6 +12,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 import { getRequestT } from "@/lib/i18n/request";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -54,7 +55,9 @@ export default async function CompvssPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-accent">COMPVSS</div>
+        <div className="eyebrow eyebrow-accent">
+          <Wordmark word="COMPVSS" style={{ color: "var(--p-accent-text)" }} />
+        </div>
         <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">
           {t("marketing.pages.solutions.compvss.hero.titleLine1")}
           <br />

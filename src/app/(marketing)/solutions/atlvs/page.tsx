@@ -23,6 +23,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata, productSchema } from "@/lib/seo";
 import { urlFor } from "@/lib/urls";
 import { getRequestT } from "@/lib/i18n/request";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -64,7 +65,9 @@ export default async function ATLVSPage() {
       <Breadcrumbs items={crumbs} className="mx-auto max-w-6xl px-6 pt-6" />
 
       <section className="mx-auto max-w-6xl px-6 pt-8 pb-12">
-        <div className="eyebrow eyebrow-accent">ATLVS</div>
+        <div className="eyebrow eyebrow-accent">
+          <Wordmark word="ATLVS" style={{ color: "var(--p-accent-text)" }} />
+        </div>
         <h1 className="kinetic-display mt-3 text-5xl sm:text-6xl">{t("marketing.pages.solutions.atlvs.hero.title")}</h1>
         <p className="mt-5 max-w-2xl text-lg text-[var(--p-text-2)]">
           {t("marketing.pages.solutions.atlvs.hero.subtitle")}

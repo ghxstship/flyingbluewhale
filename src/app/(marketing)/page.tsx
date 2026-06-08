@@ -10,6 +10,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -375,9 +376,7 @@ export default async function Home() {
                 {PRODUCTS.map((p) => (
                   <div key={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
                     <div className="flex items-baseline justify-between gap-3">
-                      <span className="text-lg font-semibold tracking-tight" style={{ color: p.textColor }}>
-                        {p.title}
-                      </span>
+                      <Wordmark word={p.title} style={{ color: p.textColor, fontSize: 17 }} />
                       <span className="text-[10px] font-medium tracking-[0.08em] text-[var(--p-text-3)] uppercase">
                         {p.audience.replace(/^For /i, "")}
                       </span>
@@ -434,8 +433,8 @@ export default async function Home() {
                 <p className="text-[10px] font-semibold tracking-[0.14em] uppercase" style={{ color: p.textColor }}>
                   {p.audience}
                 </p>
-                <h3 className="mt-2 text-3xl font-bold tracking-tight" style={{ color: p.textColor }}>
-                  {p.title}
+                <h3 className="mt-2">
+                  <Wordmark word={p.title} style={{ color: p.textColor, fontSize: 30 }} />
                 </h3>
                 <p className="mt-1 text-xs font-medium text-[var(--p-text-3)] uppercase">{p.tag}</p>
                 <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">{p.body}</p>

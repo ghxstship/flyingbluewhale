@@ -13947,8 +13947,11 @@ export type Database = {
           code: string
           created_at: string
           currency: string | null
+          default_phase: string | null
+          default_tier: string | null
           deleted_at: string | null
           description: string | null
+          discipline: string | null
           id: string
           inventory_qty: number | null
           kind: Database["public"]["Enums"]["catalog_kind"]
@@ -13958,14 +13961,20 @@ export type Database = {
           supplier_id: string | null
           unit_cost_cents: number | null
           updated_at: string
+          urid: string | null
+          xpms_department: string | null
+          xyz: string | null
         }
         Insert: {
           active?: boolean
           code: string
           created_at?: string
           currency?: string | null
+          default_phase?: string | null
+          default_tier?: string | null
           deleted_at?: string | null
           description?: string | null
+          discipline?: string | null
           id?: string
           inventory_qty?: number | null
           kind: Database["public"]["Enums"]["catalog_kind"]
@@ -13975,14 +13984,20 @@ export type Database = {
           supplier_id?: string | null
           unit_cost_cents?: number | null
           updated_at?: string
+          urid?: string | null
+          xpms_department?: string | null
+          xyz?: string | null
         }
         Update: {
           active?: boolean
           code?: string
           created_at?: string
           currency?: string | null
+          default_phase?: string | null
+          default_tier?: string | null
           deleted_at?: string | null
           description?: string | null
+          discipline?: string | null
           id?: string
           inventory_qty?: number | null
           kind?: Database["public"]["Enums"]["catalog_kind"]
@@ -13992,6 +14007,9 @@ export type Database = {
           supplier_id?: string | null
           unit_cost_cents?: number | null
           updated_at?: string
+          urid?: string | null
+          xpms_department?: string | null
+          xyz?: string | null
         }
         Relationships: [
           {
@@ -35118,6 +35136,7 @@ export type Database = {
         | "lodging"
         | "vehicle"
         | "ticket"
+        | "labor"
       change_order_state:
         | "draft"
         | "requested"
@@ -36192,6 +36211,7 @@ export const Constants = {
         "lodging",
         "vehicle",
         "ticket",
+        "labor",
       ],
       change_order_state: [
         "draft",

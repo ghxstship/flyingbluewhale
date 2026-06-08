@@ -4,6 +4,7 @@ import { matchRoute } from "@/lib/match-route";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 import { getRequestT } from "@/lib/i18n/request";
 import { navGroupKey, navItemKey } from "@/lib/i18n/nav-label";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 /**
  * Portal rail — extracted from `src/components/Shell.tsx` so the
@@ -52,7 +53,7 @@ export async function PortalRail({
           aria-hidden="true"
           className="rounded-md"
         />
-        <span className="text-base font-bold tracking-[-0.01em] text-[var(--p-accent)]">G V T E W A Y</span>
+        <Wordmark word="GVTEWAY" style={{ color: "var(--p-accent)", fontSize: 16, fontWeight: 500 }} />
       </div>
       {headerTitle ? <div className="nav-label">{headerTitle}</div> : null}
       {sections.map((section, idx) => {

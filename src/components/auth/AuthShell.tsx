@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Sparkles, ShieldCheck, Zap, Globe } from "lucide-react";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 export type AuthRailContent = {
   productName?: string;
@@ -68,7 +69,13 @@ export function AuthShell({
             // eslint-disable-next-line @next/next/no-img-element
             <img src="/brand/atlvs-mark.svg" alt="" width={22} height={22} aria-hidden="true" />
           )}
-          <span className={rail?.productName ? "" : "tracking-[0.14em] uppercase"}>{rail?.productName ?? "ATLVS"}</span>
+          {rail?.productName ? (
+            <span>{rail.productName}</span>
+          ) : (
+            // Default — the canonical ATLVS Jost wordmark completes the lockup
+            // (mark + wordmark). White-label tenants keep their plain productName.
+            <Wordmark word="ATLVS" style={{ fontSize: 16, fontWeight: 500 }} />
+          )}
         </Link>
         <div>
           <h2 className="text-3xl font-semibold tracking-tight">{tagline}</h2>

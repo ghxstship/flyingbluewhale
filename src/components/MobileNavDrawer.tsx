@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/Sheet";
 import { NAV_ICONS } from "@/components/nav-icons";
 import type { NavGroup, NavItem, NavSection } from "@/lib/nav";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 /**
  * Mobile-only platform nav. The desktop PlatformSidebar is hidden at
@@ -77,7 +78,7 @@ export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/atlvs-mark-white.svg" alt="" width={18} height={18} />
             </span>
-            <div className="text-base font-bold tracking-[-0.01em] text-[var(--p-text-1,var(--p-text-1))]">ATLVS</div>
+            <Wordmark word="ATLVS" className="text-[var(--p-text-1)]" style={{ fontSize: 16, fontWeight: 500 }} />
           </div>
           <button
             type="button"

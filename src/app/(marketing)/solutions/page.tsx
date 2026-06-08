@@ -9,6 +9,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { CTASection } from "@/components/marketing/CTASection";
 import { buildMetadata } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
+import { Wordmark } from "@/components/brand/Wordmark";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -148,17 +149,10 @@ export default async function SolutionsIndex() {
             >
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: "var(--p-accent)" }} />
               <div className="flex items-center justify-between">
-                {/* App brand mark — canonical spaced wordmark in the app accent
-                    color (A T L V S / C O M P V S S / G V T E W A Y). aria-label
-                    keeps screen readers reading the solid name; whitespace-nowrap
-                    keeps the mark on one line. */}
-                <div
-                  className="text-[11px] font-semibold whitespace-nowrap uppercase"
-                  style={{ color: "var(--p-accent-text)" }}
-                  aria-label={a.name}
-                >
-                  {a.name.split("").join(" ")}
-                </div>
+                {/* App brand mark — canonical Jost wordmark lockup in the app
+                    accent color. <Wordmark> carries its own aria-label (solid
+                    name) and renders the spaced crossbar-less treatment. */}
+                <Wordmark word={a.name} style={{ color: "var(--p-accent-text)", fontSize: 13 }} />
                 <span className="font-mono text-[10px] text-[var(--p-text-2)]">{a.tier}</span>
               </div>
               <h3 className="mt-3 text-lg font-semibold tracking-tight">{a.title}</h3>

@@ -2,8 +2,9 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 
 // ──────────────────────────────────────────────────────────────
-// Catalog kinds — the 10 things you can assign to a party.
-// Mirrors public.catalog_kind in the database (migration 0067).
+// Catalog kinds — the things you can assign to a party.
+// Mirrors public.catalog_kind in the database (0067; 'labor' added
+// with the XPMS master catalog, migration 20260608120000).
 // ──────────────────────────────────────────────────────────────
 
 export const CATALOG_KINDS = [
@@ -17,6 +18,7 @@ export const CATALOG_KINDS = [
   "travel",
   "lodging",
   "vehicle",
+  "labor",
 ] as const;
 export type CatalogKind = (typeof CATALOG_KINDS)[number];
 
@@ -31,6 +33,7 @@ export const CATALOG_KIND_LABEL: Record<CatalogKind, string> = {
   travel: "Travel",
   lodging: "Lodging",
   vehicle: "Vehicles",
+  labor: "Labor",
 };
 
 export const CATALOG_KIND_LABEL_SINGULAR: Record<CatalogKind, string> = {
@@ -44,6 +47,7 @@ export const CATALOG_KIND_LABEL_SINGULAR: Record<CatalogKind, string> = {
   travel: "Travel itinerary",
   lodging: "Lodging",
   vehicle: "Vehicle",
+  labor: "Labor booking",
 };
 
 // ──────────────────────────────────────────────────────────────

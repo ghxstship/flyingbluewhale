@@ -672,6 +672,8 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
           { label: "Resource Forecast", href: "/console/workforce/forecast", icon: "TrendingUp" },
+          // Connecteam/Deputy parity — projected vs actual hours + labor cost per date/role.
+          { label: "Labor Demand", href: "/console/workforce/labor", icon: "BarChart2" },
         ],
       },
     ],

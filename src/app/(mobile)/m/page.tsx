@@ -145,6 +145,11 @@ export default async function MobileHome() {
       label: t("m.home.tools.gigs.label", undefined, "Open Gigs"),
       sub: t("m.home.tools.gigs.sub", undefined, "Find next work"),
     },
+    {
+      href: "/m/ai",
+      label: t("m.home.tools.ai.label", undefined, "AI Assistant"),
+      sub: t("m.home.tools.ai.sub", undefined, "Ask anything"),
+    },
   ];
 
   const reports = [

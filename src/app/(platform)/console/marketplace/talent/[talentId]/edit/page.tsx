@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { updateTalentAction } from "./actions";
+import { SocialLinksEditor } from "./SocialLinksEditor";
 import { getRequestT } from "@/lib/i18n/request";
 
 type Talent = {
@@ -22,6 +23,7 @@ type Talent = {
   agent_email: string | null;
   agent_name: string | null;
   video_reel_url: string | null;
+  social_links: Record<string, unknown>;
 };
 
 const dollars = (cents: number | null) => (cents == null ? "" : (cents / 100).toFixed(0));
@@ -135,6 +137,12 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
               type="email"
               defaultValue={talent.agent_email ?? ""}
             />
+          </div>
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-[var(--p-text-2)]">
+              {t("console.marketplace.talent.edit.socialLinks", undefined, "Social Profiles")}
+            </p>
+            <SocialLinksEditor initialJson={JSON.stringify(talent.social_links ?? {})} />
           </div>
         </FormShell>
       </div>

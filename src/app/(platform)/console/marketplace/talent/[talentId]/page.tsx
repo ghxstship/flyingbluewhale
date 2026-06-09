@@ -13,6 +13,8 @@ import { TalentVisibility } from "./TalentVisibility";
 
 export const dynamic = "force-dynamic";
 
+type SocialEntry = { handle?: string; followers?: number; subscribers?: number; monthly_listeners?: number };
+
 type Talent = {
   id: string;
   act_name: string;
@@ -32,6 +34,7 @@ type Talent = {
   verified_at: string | null;
   rating_avg: number | null;
   rating_count: number;
+  social_links: Record<string, SocialEntry> | null;
 };
 
 export default async function Page({ params }: { params: Promise<{ talentId: string }> }) {
@@ -151,6 +154,33 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             </dl>
           </div>
         </section>
+
+        {talent.social_links && Object.keys(talent.social_links).length > 0 && (
+          <section className="surface p-5">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide">
+              {t("console.marketplace.talent.detail.socialLinks", undefined, "Social Profiles")}
+            </h2>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
+              {Object.entries(talent.social_links).map(([platform, entry]) => {
+                if (!entry?.handle) return null;
+                const count = entry.monthly_listeners ?? entry.subscribers ?? entry.followers;
+                return (
+                  <div key={platform}>
+                    <dt className="text-xs uppercase tracking-wide text-[var(--p-text-2)] capitalize">{platform}</dt>
+                    <dd className="font-mono text-xs mt-0.5">
+                      @{entry.handle}
+                      {count != null && (
+                        <span className="ml-1.5 text-[var(--p-text-2)]">
+                          · {count.toLocaleString()}
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </section>
+        )}
 
         <section className="surface p-5">
           <div className="mb-3 flex items-center justify-between">

@@ -17,6 +17,7 @@ import {
   ClipboardList,
   Siren,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import type { NavItem } from "@/lib/nav";
 import { Badge } from "@/components/ui/Badge";
@@ -49,6 +50,8 @@ const ICONS: Record<string, typeof Home> = {
   "/m/incidents": Siren,
   "/m/incident": Siren,
   "/m/wayfind": Map,
+  // AI Knowledge Agent (Connecteam AI Agent parity)
+  "/m/ai": Sparkles,
   // Schedule lives on /m/shift for the existing surface — but the
   // performer tab bar labels it "Schedule"; the same href works.
   "/m/schedule": Calendar,

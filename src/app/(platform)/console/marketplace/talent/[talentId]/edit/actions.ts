@@ -6,6 +6,15 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
+const SocialPlatformSchema = z
+  .object({
+    handle: z.string().max(120).optional(),
+    followers: z.number().int().nonnegative().optional(),
+    subscribers: z.number().int().nonnegative().optional(),
+    monthly_listeners: z.number().int().nonnegative().optional(),
+  })
+  .optional();
+
 const Schema = z.object({
   talent_id: z.string().uuid(),
   act_name: z.string().min(1).max(200),
@@ -23,6 +32,8 @@ const Schema = z.object({
   agent_email: z.string().email().optional().or(z.literal("")),
   agent_name: z.string().max(120).optional().or(z.literal("")),
   video_reel_url: z.string().url().optional().or(z.literal("")),
+  // social links — encoded as JSON in a single hidden field
+  social_links_json: z.string().optional().or(z.literal("")),
 });
 
 export type State = { error?: string; ok?: true } | null;
@@ -45,6 +56,15 @@ export async function updateTalentAction(_: State, fd: FormData): Promise<State>
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
+  let socialLinks: Record<string, unknown> = {};
+  if (parsed.data.social_links_json) {
+    try {
+      socialLinks = JSON.parse(parsed.data.social_links_json);
+    } catch {
+      // silently ignore malformed JSON
+    }
+  }
+
   const { error } = await supabase
     .from("talent_profiles")
     .update({
@@ -62,6 +82,7 @@ export async function updateTalentAction(_: State, fd: FormData): Promise<State>
       agent_email: parsed.data.agent_email || null,
       agent_name: parsed.data.agent_name || null,
       video_reel_url: parsed.data.video_reel_url || null,
+      social_links: socialLinks,
     })
     .eq("id", parsed.data.talent_id)
     .eq("org_id", session.orgId);

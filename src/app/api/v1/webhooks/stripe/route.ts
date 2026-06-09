@@ -16,8 +16,15 @@ export async function POST(req: Request) {
     const v = await verifyStripeWebhook(rawBody, sig, env.STRIPE_WEBHOOK_SECRET);
     if (!v) return apiError("unauthorized", "Invalid Stripe signature");
     event = v as StripeEvent;
+  } else if (process.env.NODE_ENV === "production") {
+    // Fail CLOSED in production: a missing STRIPE_WEBHOOK_SECRET must never
+    // turn this into an open mutation endpoint (forged payment_intent.succeeded
+    // would flip invoices to paid). 503 makes the misconfiguration loud —
+    // Stripe retries until the env var is fixed.
+    log.error("stripe.webhook.secret_missing_in_production", {});
+    return apiError("service_unavailable", "Webhook signature verification is not configured.");
   } else {
-    // Dev mode: allow unsigned posts so manual testing still works.
+    // Dev mode only: allow unsigned posts so manual testing still works.
     try {
       event = JSON.parse(rawBody) as StripeEvent;
     } catch {

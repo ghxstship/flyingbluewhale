@@ -21,9 +21,20 @@ export function rowsToCsv(rows: Array<Record<string, unknown>>, columns: CsvColu
   return [headerLine, ...lines].join("\r\n") + "\r\n";
 }
 
+/**
+ * Neutralize spreadsheet formula injection: a user-entered cell beginning
+ * with = + - @ (or tab/CR) executes as a formula when the export is opened
+ * in Excel/Sheets. Prefix with a single quote — the standard mitigation;
+ * spreadsheet apps render the value, not the apostrophe.
+ */
+export function neutralizeFormula(s: string): string {
+  return /^[=+\-@\t\r]/.test(s) ? `'${s}` : s;
+}
+
 function escapeCell(v: unknown): string {
   if (v === null || v === undefined) return "";
-  const s = v instanceof Date ? v.toISOString() : String(v);
+  const raw = v instanceof Date ? v.toISOString() : String(v);
+  const s = typeof v === "number" || typeof v === "boolean" || v instanceof Date ? raw : neutralizeFormula(raw);
   if (/[",\r\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
   return s;
 }

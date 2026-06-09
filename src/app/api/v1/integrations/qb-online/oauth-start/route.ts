@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { apiError } from "@/lib/api";
 import { withAuth } from "@/lib/auth";
+import { signOAuthState } from "@/lib/integrations/slack/sign";
 
 /**
  * GET /api/v1/integrations/qb-online/oauth-start
@@ -9,8 +10,12 @@ import { withAuth } from "@/lib/auth";
  * redirected to Intuit; on consent, Intuit posts to our callback with
  * code + realmId.
  *
- * State carries the org_id so the callback can verify the connection
- * lands in the correct tenant. Production should HMAC-sign the state.
+ * State is HMAC-signed (orgId + nonce + 10-min expiry, keyed off
+ * QB_CLIENT_SECRET — the same generic `signOAuthState` the Slack flow
+ * uses). A bare orgId state is guessable by any member or ex-member,
+ * which enables connection-binding CSRF: an attacker starts their own
+ * Intuit consent and replays our callback to bind THEIR realm to a
+ * victim org's books.
  */
 
 export const dynamic = "force-dynamic";
@@ -18,7 +23,10 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   return withAuth(async (session) => {
     const clientId = process.env.QB_CLIENT_ID;
-    if (!clientId) return apiError("internal", "QB_CLIENT_ID not configured");
+    const clientSecret = process.env.QB_CLIENT_SECRET;
+    if (!clientId || !clientSecret) {
+      return apiError("service_unavailable", "QB_CLIENT_ID/QB_CLIENT_SECRET not configured");
+    }
 
     const origin = new URL(req.url).origin;
     const redirectUri = `${origin}/api/v1/integrations/qb-online/callback`;
@@ -28,7 +36,7 @@ export async function GET(req: Request) {
       response_type: "code",
       scope: "com.intuit.quickbooks.accounting",
       redirect_uri: redirectUri,
-      state: session.orgId,
+      state: signOAuthState({ secret: clientSecret, orgId: session.orgId }),
     });
 
     const authUrl = `https://appcenter.intuit.com/connect/oauth2?${params.toString()}`;

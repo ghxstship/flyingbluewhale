@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { apiError, apiOk } from "@/lib/api";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { log } from "@/lib/log";
 
@@ -72,7 +72,13 @@ export const dynamic = "force-dynamic";
 async function verifyHmac(req: Request, body: string): Promise<boolean> {
   const key = process.env.DOCUSIGN_CONNECT_HMAC;
   if (!key) {
-    // No HMAC configured — accept and warn. Production should set this.
+    // Fail CLOSED in production: without the HMAC key, unsigned payloads
+    // could forge envelope-completed events and flip contracts to signed.
+    // Dev keeps the accept-and-warn convenience for manual testing.
+    if (process.env.NODE_ENV === "production") {
+      log.error("docusign_webhook.hmac_missing_in_production");
+      return false;
+    }
     log.warn("docusign_webhook.no_hmac");
     return true;
   }
@@ -109,6 +115,12 @@ export async function POST(req: Request) {
   const parsed = ConnectPayloadSchema.safeParse(json);
   if (!parsed.success) return apiError("bad_request", parsed.error.issues[0]?.message ?? "Invalid Connect payload");
 
+  if (!isServiceClientAvailable()) {
+    return apiError(
+      "service_unavailable",
+      "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+    );
+  }
   const supabase = createServiceClient() as unknown as LooseSupabase;
   const env = parsed.data.data;
   const summary = env.envelopeSummary ?? {};

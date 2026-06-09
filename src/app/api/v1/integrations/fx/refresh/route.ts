@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
-import { createServiceClient } from "@/lib/supabase/server";
+import { isAdmin, withAuth } from "@/lib/auth";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { pullDailyRates } from "@/lib/finance/fx";
 import { log } from "@/lib/log";
@@ -32,7 +32,9 @@ const BodySchema = z.object({
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
-  return withAuth(async () => {
+  return withAuth(async (session) => {
+    // Enforce the admin/owner gate the doc comment promises.
+    if (!isAdmin(session)) return apiError("forbidden", "Only owners and admins can trigger an FX pull");
     const body = await parseJson(req, BodySchema);
     if (body instanceof Response) return body;
 
@@ -42,6 +44,12 @@ export async function POST(req: Request) {
       return apiError("internal", "No FX rates returned. Frankfurter + exchangerate.host both failed.");
     }
 
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
     const supabase = createServiceClient() as unknown as LooseSupabase;
 
     // Idempotent upsert keyed on the unique index (from, to, effective_at, source).

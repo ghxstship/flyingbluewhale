@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
-import { createServiceClient } from "@/lib/supabase/server";
+import { isAdmin, withAuth } from "@/lib/auth";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { decodeSageTokens, fetchSageVendors, fetchSageJobCostCodes } from "@/lib/accounting/sage-300-cre";
 import { decodeFoundationTokens, fetchFoundationVendors, fetchFoundationCostCodes } from "@/lib/accounting/foundation";
@@ -42,8 +42,17 @@ export async function POST(req: Request, ctx: { params: Promise<{ system: string
   const dbSystem = SYSTEM_KEY_MAP[parsed.data];
 
   return withAuth(async (session) => {
+    // Accounting pulls upsert vendors/cost_codes via the service role —
+    // restrict to owner/admin, not every org member.
+    if (!isAdmin(session)) return apiError("forbidden", "Only owners and admins can run accounting syncs");
     const body = await parseJson(req, BodySchema);
     if (body instanceof Response) return body;
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
     const supabase = createServiceClient() as unknown as LooseSupabase;
 
     const { data: conn } = await supabase

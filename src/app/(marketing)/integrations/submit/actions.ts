@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const Schema = z.object({
@@ -52,6 +52,9 @@ export async function submitPartnerIntegration(_: State, fd: FormData): Promise<
 
   // Service-role client — public can submit, so we bypass RLS once we've
   // validated and we don't have an authed session yet.
+  if (!isServiceClientAvailable()) {
+    return { error: "Submissions are temporarily unavailable. Please try again later." };
+  }
   const supabase = createServiceClient() as unknown as LooseSupabase;
 
   // Slug-uniqueness pre-check to give a friendly error before we hit the

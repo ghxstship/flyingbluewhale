@@ -116,6 +116,19 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ aut
     const sigHeader = req.headers.get("x-signature") ?? req.headers.get("X-Signature");
     const ok = await verifyHmac(automation.webhook_secret, rawBody, sigHeader);
     if (!ok) return apiError("unauthorized", "Invalid X-Signature");
+  } else if (process.env.NODE_ENV === "production") {
+    // Fail CLOSED in production: an automation UUID is guessable/leakable
+    // (it appears in console URLs); without HMAC anyone holding it can
+    // fire org automations with an arbitrary payload. Dev keeps the
+    // unsigned convenience for local testing.
+    log.error("automation.webhook.unsigned_rejected", {
+      automationId: automation.id,
+      orgId: automation.org_id,
+    });
+    return apiError(
+      "forbidden",
+      "This webhook requires a signing secret. Set one on the automation's trigger settings.",
+    );
   } else {
     log.warn("automation.webhook.unsigned", {
       automationId: automation.id,

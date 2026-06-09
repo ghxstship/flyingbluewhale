@@ -31,6 +31,19 @@ export function apiCreated<T>(data: T) {
 }
 
 export function apiError(code: ApiErrorCode, message: string, details?: unknown) {
+  // 5xx hygiene: the dominant route pattern is `apiError("internal",
+  // error.message)`, which leaks raw Postgres/driver detail (constraint
+  // names, column names, occasionally RLS policy text) to API clients.
+  // In production, log the real message server-side and return a generic
+  // one. 4xx messages are user-correctable and pass through unchanged;
+  // dev keeps full detail for debugging.
+  if (code === "internal" && process.env.NODE_ENV === "production") {
+    console.error("[api:internal]", message, details ?? "");
+    return NextResponse.json(
+      { ok: false, error: { code, message: "Something went wrong on our side. The error has been logged." } },
+      { status: STATUS[code] },
+    );
+  }
   return NextResponse.json({ ok: false, error: { code, message, details } }, { status: STATUS[code] });
 }
 

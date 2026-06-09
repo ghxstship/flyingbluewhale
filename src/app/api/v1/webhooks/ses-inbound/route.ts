@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { createServiceClient } from "@/lib/supabase/server";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { log } from "@/lib/log";
 
@@ -68,6 +68,12 @@ export async function POST(req: Request) {
   const parsed = await parseJson(req, SesEventSchema);
   if (parsed instanceof NextResponse) return parsed;
 
+  if (!isServiceClientAvailable()) {
+    return apiError(
+      "service_unavailable",
+      "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+    );
+  }
   const supabase = createServiceClient() as unknown as LooseSupabase;
   const evt = parsed;
 

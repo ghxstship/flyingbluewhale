@@ -33,6 +33,17 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  // Per-principal rate limit — resolvers are paginated org-pinned reads,
+  // but an unthrottled POST loop still hammers PostgREST. Uses the shared
+  // write budget keyed by user (or IP pre-auth).
+  const { keyFromRequest, ratelimit, RATE_BUDGETS } = await import("@/lib/ratelimit");
+  const rl = await ratelimit({ key: keyFromRequest(req, "graphql"), ...RATE_BUDGETS.write });
+  if (!rl.ok) {
+    return Response.json(
+      { errors: [{ message: "Rate limited — slow down.", extensions: { code: "RATE_LIMITED" } }] },
+      { status: 429 },
+    );
+  }
   return yoga.handle(req, {} as never);
 }
 

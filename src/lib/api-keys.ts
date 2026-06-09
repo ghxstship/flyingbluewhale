@@ -29,7 +29,12 @@ import type { PlatformRole, Tier } from "./supabase/types";
  * is bounded by the issuing user's role.
  */
 
-const TOKEN_RE = /^sk_([A-Za-z0-9]{8})_[A-Za-z0-9_-]{20,}$/;
+// Prefix group accepts the full base64url alphabet (incl. `-` and `_`):
+// tokens minted before 2026-06 sliced the prefix from base64url output, so
+// ~22% of live tokens carry `-`/`_` in the prefix — a narrower class here
+// silently 401'd every one of them. The group is fixed-width (8), so an
+// embedded `_` can't be confused with the prefix/secret separator.
+const TOKEN_RE = /^sk_([A-Za-z0-9_-]{8})_[A-Za-z0-9_-]{20,}$/;
 
 export type ApiKeyRow = {
   id: string;
@@ -43,9 +48,12 @@ export type ApiKeyRow = {
 };
 
 export function mintToken(): { token: string; prefix: string; hashedSecret: string } {
-  const raw = randomBytes(32).toString("base64url"); // ~43 chars
-  const prefix = `sk_${raw.slice(0, 8)}`;
-  const token = `${prefix}_${raw.slice(8)}`;
+  // Prefix from hex (alphanumeric-only) so the visible handle never
+  // contains `-`/`_` — keeps `sk_<prefix>_<secret>` visually unambiguous.
+  // The secret keeps base64url density (~43 chars from 32 random bytes).
+  const prefix = `sk_${randomBytes(4).toString("hex")}`;
+  const secret = randomBytes(32).toString("base64url").slice(8);
+  const token = `${prefix}_${secret}`;
   const hashedSecret = sha256(token);
   return { token, prefix, hashedSecret };
 }

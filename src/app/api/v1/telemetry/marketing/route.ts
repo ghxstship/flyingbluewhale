@@ -57,7 +57,14 @@ export async function POST(req: NextRequest) {
     return apiError("rate_limited", "Too many beacon events; slow down");
   }
 
-  // Reject oversized payloads before Zod so we don't spend Zod cycles on abuse.
+  // Reject oversized payloads BEFORE buffering: the body.length check
+  // alone still read a multi-MB body into memory first. Content-Length is
+  // attacker-suppliable but lying about it gets the connection dropped by
+  // the platform; the post-read check below stays as the backstop.
+  const declared = Number(req.headers.get("content-length") ?? 0);
+  if (declared > MAX_PAYLOAD_BYTES) {
+    return apiError("bad_request", "Payload too large");
+  }
   const body = await req.text();
   if (body.length > MAX_PAYLOAD_BYTES) {
     return apiError("bad_request", "Payload too large");

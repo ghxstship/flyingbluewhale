@@ -1,6 +1,7 @@
 import { withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { apiError } from "@/lib/api";
+import { neutralizeFormula } from "@/lib/export/strategies/csv";
 
 /**
  * OSHA 300/300A/301 CSV export — combines core incident metadata with the
@@ -62,7 +63,10 @@ export async function GET(req: Request) {
         r.osha_classification ?? "",
         String(r.days_away ?? 0),
         String(r.days_restricted ?? 0),
-      ].map((v) => `"${String(v).replace(/"/g, '""')}"`);
+        // neutralizeFormula: summary/location/body_part are user-entered;
+        // a leading = + - @ would execute when the safety officer opens
+        // this in Excel.
+      ].map((v) => `"${neutralizeFormula(String(v)).replace(/"/g, '""')}"`);
       lines.push(cells.join(","));
     }
 

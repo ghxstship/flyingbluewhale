@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { randomBytes, createHash } from "node:crypto";
 import { isAdmin, requireSession } from "@/lib/auth";
+import { mintToken } from "@/lib/api-keys";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 
@@ -29,10 +29,10 @@ export async function createApiKeyAction(_: CreateState, fd: FormData): Promise<
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
-  const raw = randomBytes(32).toString("base64url"); // ~43 chars
-  const prefix = `sk_${raw.slice(0, 8)}`;
-  const fullSecret = `${prefix}_${raw.slice(8)}`;
-  const hashed = createHash("sha256").update(fullSecret).digest("hex");
+  // Single mint implementation — src/lib/api-keys.ts owns the token format.
+  // A second hand-rolled copy here once drifted from the verifier's charset
+  // and broke ~22% of minted keys; never duplicate it again.
+  const { token: fullSecret, prefix, hashedSecret: hashed } = mintToken();
   const scopes = (parsed.data.scopes ?? "")
     .split(",")
     .map((s) => s.trim())

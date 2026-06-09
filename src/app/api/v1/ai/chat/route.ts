@@ -64,11 +64,16 @@ export async function POST(req: Request) {
     if (!convo) return apiError("not_found", "Conversation not found");
   }
 
-  const { data: history } = await supabase
+  // Last 40 turns only — long conversations otherwise resend the entire
+  // history every request, growing token cost without bound. Fetch newest
+  // first with a cap, then restore chronological order for the model.
+  const { data: historyDesc } = await supabase
     .from("ai_messages")
     .select("role,content")
     .eq("conversation_id", conversationId)
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: false })
+    .limit(40);
+  const history = (historyDesc ?? []).reverse();
 
   await supabase.from("ai_messages").insert({
     conversation_id: conversationId,

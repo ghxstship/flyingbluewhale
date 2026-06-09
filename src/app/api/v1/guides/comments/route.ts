@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
 import { withIdempotency } from "@/lib/idempotency";
+import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 const Schema = z.object({
   guideId: z.string().uuid(),
@@ -15,6 +16,12 @@ const Schema = z.object({
 });
 
 async function postHandler(req: NextRequest) {
+  // Public write surface (anonymous guide visitors can comment) — IP
+  // rate-limit it like every other unauthenticated POST, or one script
+  // floods an org's guide threads with spoofed author names.
+  const rl = await ratelimit({ key: keyFromRequest(req, "guide-comments"), ...RATE_BUDGETS.write });
+  if (!rl.ok) return apiError("rate_limited", "Too many comments — slow down.");
+
   const parsed = await parseJson(req, Schema);
   if (parsed instanceof NextResponse) return parsed;
 
@@ -64,13 +71,32 @@ export const POST = withIdempotency(postHandler);
 
 export async function GET(req: NextRequest) {
   const guideId = req.nextUrl.searchParams.get("guideId");
+  const orgId = req.nextUrl.searchParams.get("orgId");
   if (!guideId) return apiError("bad_request", "guideId required");
+  // Require the matching (orgId, guideId) pair like the POST handler does.
+  // guideId alone let an anonymous caller enumerate UUIDs and harvest
+  // every published guide's comment threads platform-wide.
+  if (!orgId) return apiError("bad_request", "orgId required");
+
+  // Same IP budget as the POST — unauthenticated enumeration of 100-row
+  // pages is otherwise free.
+  const rl = await ratelimit({ key: keyFromRequest(req, "guide-comments-read"), ...RATE_BUDGETS.default });
+  if (!rl.ok) return apiError("rate_limited", "Too many requests — slow down.");
 
   const supabase = await createClient();
+  const { data: guide } = await supabase
+    .from("event_guides")
+    .select("id")
+    .eq("id", guideId)
+    .eq("org_id", orgId)
+    .maybeSingle();
+  if (!guide) return apiError("not_found", "Guide not found");
+
   const { data, error } = await supabase
     .from("guide_comments")
     .select("id, body, author_name, created_at, resolved_at, parent_id, section_key")
     .eq("guide_id", guideId)
+    .eq("org_id", orgId)
     .order("created_at", { ascending: false })
     .limit(100);
 

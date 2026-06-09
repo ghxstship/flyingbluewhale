@@ -155,6 +155,12 @@ export async function POST(req: NextRequest) {
 
     // Upload via service role to the `exports` bucket so the same path
     // is reachable later by the run row's signed-URL fetcher.
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
     const svc = createServiceClient();
     const { error: upErr } = await svc.storage.from("exports").upload(path, bytes, {
       contentType,

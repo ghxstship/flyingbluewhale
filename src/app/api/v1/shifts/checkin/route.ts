@@ -19,7 +19,10 @@ import { classifyPunch } from "@/lib/connecteam";
 const PostSchema = z.object({
   shiftId: z.string().uuid(),
   action: z.enum(["check_in", "check_out", "break_start", "break_end"]),
-  at: z.string().optional(),
+  // Strict ISO datetime — a free-form string surfaced as a Postgres cast
+  // 500. Past timestamps stay allowed (the offline punch queue replays
+  // punches captured hours earlier); the future clamp lives in POST.
+  at: z.string().datetime({ offset: true }).optional(),
   // Optional GPS punch. Browsers without geolocation permission (or
   // desktop test) send neither — we record geofence_state='unknown'.
   lat: z.number().min(-90).max(90).optional(),
@@ -39,6 +42,12 @@ const REQUIRED_FROM: Record<Action, readonly Attendance[]> = {
 export async function POST(req: NextRequest) {
   const input = await parseJson(req, PostSchema);
   if (input instanceof Response) return input;
+
+  // Future-date clamp: a punch can be late (offline replay) but never
+  // ahead of the server clock by more than 15 min of skew.
+  if (input.at && new Date(input.at).getTime() > Date.now() + 15 * 60_000) {
+    return apiError("bad_request", "Punch timestamp is in the future");
+  }
 
   return withAuth(async (session) => {
     const supabase = await createClient();

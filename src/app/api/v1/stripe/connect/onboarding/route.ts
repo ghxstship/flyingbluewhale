@@ -4,6 +4,8 @@ import { assertCapability, withAuth } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { httpFetch } from "@/lib/http";
 import { withIdempotency } from "@/lib/idempotency";
+import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import { urlFor } from "@/lib/urls";
 
 const Schema = z.object({
@@ -24,24 +26,52 @@ async function handler(req: Request) {
     if (denial) return denial;
     if (!env.STRIPE_SECRET_KEY) return apiError("service_unavailable", "STRIPE_SECRET_KEY is not configured");
 
-    const acctForm = new URLSearchParams();
-    acctForm.set("type", "express");
-    acctForm.set("capabilities[transfers][requested]", "true");
+    // Validate the vendor belongs to the caller's org and reuse its
+    // existing Connect account if onboarding was already started. Without
+    // this, every retry/double-click minted a brand-new orphan Express
+    // account, and nothing tied a completed onboarding back to the vendor.
+    const supabase = (await createClient()) as unknown as LooseSupabase;
+    const { data: vendorRow } = await supabase
+      .from("vendors")
+      .select("id, metadata")
+      .eq("id", input.vendorId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    const vendor = vendorRow as { id: string; metadata: Record<string, unknown> | null } | null;
+    if (!vendor) return apiError("not_found", "Vendor not found in your organization");
 
-    const acctRes = await httpFetch("https://api.stripe.com/v1/accounts", {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
-        "content-type": "application/x-www-form-urlencoded",
-      },
-      body: acctForm.toString(),
-      timeoutMs: 10000,
-    });
-    if (!acctRes.ok) return apiError("internal", `Stripe account: ${await acctRes.text()}`);
-    const acct = (await acctRes.json()) as { id: string };
+    let accountId = (vendor.metadata?.stripe_connect_account_id as string | undefined) ?? null;
+    if (!accountId) {
+      const acctForm = new URLSearchParams();
+      acctForm.set("type", "express");
+      acctForm.set("capabilities[transfers][requested]", "true");
+
+      const acctRes = await httpFetch("https://api.stripe.com/v1/accounts", {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body: acctForm.toString(),
+        timeoutMs: 10000,
+      });
+      if (!acctRes.ok) return apiError("internal", `Stripe account: ${await acctRes.text()}`);
+      const acct = (await acctRes.json()) as { id: string };
+      accountId = acct.id;
+
+      const { error: persistErr } = await supabase
+        .from("vendors")
+        .update({ metadata: { ...(vendor.metadata ?? {}), stripe_connect_account_id: accountId } })
+        .eq("id", vendor.id)
+        .eq("org_id", session.orgId);
+      if (persistErr) {
+        return apiError("internal", `Could not persist Connect account on vendor: ${persistErr.message}`);
+      }
+    }
 
     const linkForm = new URLSearchParams();
-    linkForm.set("account", acct.id);
+    linkForm.set("account", accountId);
     linkForm.set("refresh_url", urlFor("platform", `/procurement/vendors/${input.vendorId}?onboarding=refresh`));
     linkForm.set(
       "return_url",
@@ -61,7 +91,7 @@ async function handler(req: Request) {
     if (!linkRes.ok) return apiError("internal", `Stripe account_link: ${await linkRes.text()}`);
     const link = (await linkRes.json()) as { url: string };
 
-    return apiOk({ connectAccountId: acct.id, onboardingUrl: link.url });
+    return apiOk({ connectAccountId: accountId, onboardingUrl: link.url });
   });
 }
 

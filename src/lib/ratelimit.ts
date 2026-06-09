@@ -78,17 +78,32 @@ export async function ratelimit({
   key,
   max,
   windowMs,
+  failMode = "open",
 }: {
   key: string;
   max: number;
   windowMs: number;
+  /**
+   * What to do when Upstash errors mid-request. "open" (default) degrades
+   * to the per-instance in-memory window — acceptable for ordinary write
+   * budgets, but on serverless fan-out the effective global limit
+   * multiplies by instance count. "closed" refuses instead — used for the
+   * abuse-critical buckets (auth brute-force, crisis mass-notify) where a
+   * silently-multiplied budget is worse than a temporary 429.
+   */
+  failMode?: "open" | "closed";
 }): Promise<RateLimitResult> {
   if (HAS_UPSTASH) {
     try {
       return await upstashSlidingWindow(key, max, windowMs);
     } catch {
+      if (failMode === "closed") {
+        console.error("[ratelimit] upstash unavailable — failing CLOSED for", key.split(":")[0]);
+        return { ok: false, remaining: 0, resetAt: Date.now() + windowMs };
+      }
       // Network blip / Upstash outage — degrade to in-memory rather than 500.
       // The in-memory budget is still better than no enforcement at all.
+      console.warn("[ratelimit] upstash unavailable — in-memory fallback engaged for", key.split(":")[0]);
       return inMemorySlidingWindow(key, max, windowMs);
     }
   }
@@ -168,7 +183,9 @@ export function keyFromRequest(req: Request, prefix: string): string {
 // declare its own rate-limit. Read-only GETs are not rate-limited at the
 // edge (they hit caching layers + RLS already).
 export const RATE_BUDGETS = {
-  auth: { max: 10, windowMs: 60_000 }, // 10 / min — login/signup/forgot
+  // failMode "closed": login brute-force protection must not silently
+  // multiply by serverless instance count during an Upstash outage.
+  auth: { max: 10, windowMs: 60_000, failMode: "closed" }, // 10 / min — login/signup/forgot
   ai: { max: 30, windowMs: 60_000 }, // 30 / min — AI chat
   scan: { max: 120, windowMs: 60_000 }, // 120 / min — field scanning is fast
   webhook: { max: 300, windowMs: 60_000 }, // Stripe delivery rate
@@ -178,8 +195,9 @@ export const RATE_BUDGETS = {
   export: { max: 5, windowMs: 60_000 },
   // High-impact org-wide notifications (mass crisis alerts). 5/min is more
   // than enough for any legit use; the limit prevents a compromised account
-  // from spamming the entire workforce in seconds.
-  crisis: { max: 5, windowMs: 60_000 },
+  // from spamming the entire workforce in seconds. failMode "closed": a
+  // multiplied budget here means mass-notification abuse.
+  crisis: { max: 5, windowMs: 60_000, failMode: "closed" },
   // Catch-all for state-changing endpoints not in the buckets above.
   // Keyed per-user (or per-IP for unauth'd) so one tenant can't starve
   // another. 60/min is generous for genuine usage.

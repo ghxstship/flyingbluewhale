@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
-import { createServiceClient } from "@/lib/supabase/server";
+import { isAdmin, withAuth } from "@/lib/auth";
+import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { fetchVendors, fetchAccounts, refreshIfNeeded } from "@/lib/accounting/qb-online";
+import { openTokens, sealTokens } from "@/lib/integrations/token-vault";
 import { log } from "@/lib/log";
 
 /**
@@ -25,8 +26,17 @@ export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   return withAuth(async (session) => {
+    // Accounting pulls upsert vendors/cost_codes via the service role —
+    // restrict to owner/admin, not every org member.
+    if (!isAdmin(session)) return apiError("forbidden", "Only owners and admins can run accounting syncs");
     const body = await parseJson(req, BodySchema);
     if (body instanceof Response) return body;
+    if (!isServiceClientAvailable()) {
+      return apiError(
+        "service_unavailable",
+        "This endpoint requires SUPABASE_SERVICE_ROLE_KEY in the runtime environment.",
+      );
+    }
     const supabase = createServiceClient() as unknown as LooseSupabase;
 
     const { data: conn } = await supabase
@@ -49,19 +59,23 @@ export async function POST(req: Request) {
     if (c.system !== "qb_online") return apiError("bad_request", "Connection is not QuickBooks Online");
     if (!c.auth_ciphertext) return apiError("internal", "Connection has no auth payload");
 
-    let tokens: { access_token: string; refresh_token: string; realm_id: string; expires_at: number };
-    try {
-      tokens = JSON.parse(Buffer.from(c.auth_ciphertext, "base64").toString("utf8"));
-    } catch (e) {
-      log.error("qbo.token_decode_failed", { err: e instanceof Error ? e.message : String(e) });
+    type QboTokens = { access_token: string; refresh_token: string; realm_id: string; expires_at: number };
+    const tokens = openTokens<QboTokens>(c.auth_ciphertext);
+    if (!tokens) {
+      log.error("qbo.token_decode_failed", { connection_id: c.id });
       return apiError("internal", "Could not decode connection tokens");
     }
 
     const refreshed = await refreshIfNeeded(tokens);
     if ("error" in refreshed) return apiError("internal", refreshed.error);
     if (refreshed !== tokens) {
-      const newPayload = Buffer.from(JSON.stringify(refreshed)).toString("base64");
-      await supabase.from("accounting_connections").update({ auth_ciphertext: newPayload }).eq("id", c.id);
+      // Re-seal on refresh — this is also how legacy base64 rows migrate
+      // to the AES-GCM vault format without a data migration.
+      const sealed = sealTokens(refreshed);
+      await supabase
+        .from("accounting_connections")
+        .update({ auth_ciphertext: sealed.ciphertext, auth_key_ref: sealed.keyRef })
+        .eq("id", c.id);
     }
 
     // Audit row for this sync.

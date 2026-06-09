@@ -41,7 +41,8 @@ export async function updateHospitalityPackage(id: string, _: State, fd: FormDat
 export async function deleteHospitalityPackage(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("rate_card_items").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("rate_card_items").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete rate card item: ${error.message}`);
   revalidatePath("/console/commercial/hospitality");
   redirect("/console/commercial/hospitality");
 }

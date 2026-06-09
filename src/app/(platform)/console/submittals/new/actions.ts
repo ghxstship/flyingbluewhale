@@ -65,12 +65,13 @@ export async function createSubmittal(_: State, fd: FormData): Promise<State> {
   if (error) return { error: error.message };
 
   // Always seed round 1 so the revision register is ready for stamping.
-  await supabase.from("submittal_revisions").insert({
+  const { error: insertError } = await supabase.from("submittal_revisions").insert({
     org_id: session.orgId,
     submittal_id: sub.id,
     round: 1,
     submitted_by: session.userId,
   } as never);
+  if (insertError) return { error: insertError.message };
 
   revalidatePath("/console/submittals");
   redirect(`/console/submittals/${sub.id}`);

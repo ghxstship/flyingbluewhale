@@ -56,12 +56,13 @@ export async function inviteVendor(fd: FormData): Promise<void> {
     .maybeSingle();
   if (existing) return;
 
-  await supabase.from("work_order_broadcast_invites").insert({
+  const { error: inviteErr } = await supabase.from("work_order_broadcast_invites").insert({
     org_id: session.orgId,
     broadcast_id: parsed.data.broadcastId,
     vendor_id: parsed.data.vendor_id,
     status: "invited",
   });
+  if (inviteErr) throw new Error(`Could not invite vendor: ${inviteErr.message}`);
 
   revalidatePath(`/console/procurement/wo-broadcasts/${parsed.data.broadcastId}`);
 }
@@ -79,12 +80,13 @@ export async function removeInvite(fd: FormData): Promise<void> {
   if (!(await guardBroadcastEditable(parsed.data.broadcastId, session.orgId))) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error: removeErr } = await supabase
     .from("work_order_broadcast_invites")
     .delete()
     .eq("id", parsed.data.inviteId)
     .eq("broadcast_id", parsed.data.broadcastId)
     .eq("org_id", session.orgId);
+  if (removeErr) throw new Error(`Could not remove invite: ${removeErr.message}`);
 
   revalidatePath(`/console/procurement/wo-broadcasts/${parsed.data.broadcastId}`);
 }
@@ -114,7 +116,7 @@ export async function awardToInvite(fd: FormData): Promise<void> {
   // Conditional update on the parent so two simultaneous awards don't
   // both succeed — the .eq("status", "open") guard means only the
   // first wins; the second sees zero rows updated and returns.
-  const { data: updated } = await supabase
+  const { data: updated, error: awardErr } = await supabase
     .from("work_order_broadcasts")
     .update({
       status: "awarded",
@@ -126,16 +128,18 @@ export async function awardToInvite(fd: FormData): Promise<void> {
     .eq("org_id", session.orgId)
     .eq("status", "open")
     .select("id");
+  if (awardErr) throw new Error(`Could not award broadcast: ${awardErr.message}`);
   if (!updated || updated.length === 0) return; // already awarded / closed
 
   // Flip the winning invite to accepted; sibling invites stay
   // whatever they were (invited/viewed/declined) — preserving the
   // history of who responded how.
-  await supabase
+  const { error: acceptErr } = await supabase
     .from("work_order_broadcast_invites")
     .update({ status: "accepted", responded_at: new Date().toISOString() })
     .eq("id", inv.id)
     .eq("org_id", session.orgId);
+  if (acceptErr) throw new Error(`Could not accept invite: ${acceptErr.message}`);
 
   revalidatePath(`/console/procurement/wo-broadcasts/${parsed.data.broadcastId}`);
   revalidatePath("/console/procurement/wo-broadcasts");
@@ -153,11 +157,12 @@ export async function transitionBroadcast(fd: FormData): Promise<void> {
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error: transitionErr } = await supabase
     .from("work_order_broadcasts")
     .update({ status: parsed.data.status })
     .eq("id", parsed.data.broadcastId)
     .eq("org_id", session.orgId);
+  if (transitionErr) throw new Error(`Could not transition broadcast: ${transitionErr.message}`);
 
   revalidatePath(`/console/procurement/wo-broadcasts/${parsed.data.broadcastId}`);
   revalidatePath("/console/procurement/wo-broadcasts");

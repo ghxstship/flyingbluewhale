@@ -27,23 +27,25 @@ const LessonSchema = z.object({
 export async function addLesson(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = LessonSchema.parse(Object.fromEntries(fd));
-  if (!(await guardCourse(parsed.courseId, session.orgId))) return;
+  const parsed = LessonSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardCourse(parsed.data.courseId, session.orgId))) return;
   const supabase = await createClient();
 
   // Compute next ordinal — same pattern as `nextOrgCode` but per-course.
   const { count } = await supabase
     .from("course_lessons")
     .select("id", { count: "exact", head: true })
-    .eq("course_id", parsed.courseId);
-  await supabase.from("course_lessons").insert({
-    course_id: parsed.courseId,
+    .eq("course_id", parsed.data.courseId);
+  const { error } = await supabase.from("course_lessons").insert({
+    course_id: parsed.data.courseId,
     ordinal: (count ?? 0) + 1,
-    title: parsed.title,
-    body: parsed.body || null,
+    title: parsed.data.title,
+    body: parsed.data.body || null,
     lesson_kind: "text",
   });
-  revalidatePath(`/console/workforce/courses/${parsed.courseId}`);
+  if (error) throw new Error(`Could not create course lesson: ${error.message}`);
+  revalidatePath(`/console/workforce/courses/${parsed.data.courseId}`);
 }
 
 const QuizSchema = z.object({
@@ -56,46 +58,50 @@ const QuizSchema = z.object({
 export async function addQuizQuestion(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = QuizSchema.parse(Object.fromEntries(fd));
-  if (!(await guardCourse(parsed.courseId, session.orgId))) return;
+  const parsed = QuizSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardCourse(parsed.data.courseId, session.orgId))) return;
   const supabase = await createClient();
 
-  const choices = parsed.choices
+  const choices = parsed.data.choices
     .split(/\n|\|/)
     .map((s) => s.trim())
     .filter(Boolean)
     .slice(0, 4);
   if (choices.length < 2) return;
-  const correct = Math.max(0, Math.min(choices.length - 1, Number(parsed.correct_index)));
+  const correct = Math.max(0, Math.min(choices.length - 1, Number(parsed.data.correct_index)));
 
   const { count } = await supabase
     .from("course_quiz_questions")
     .select("id", { count: "exact", head: true })
-    .eq("course_id", parsed.courseId);
-  await supabase.from("course_quiz_questions").insert({
-    course_id: parsed.courseId,
+    .eq("course_id", parsed.data.courseId);
+  const { error } = await supabase.from("course_quiz_questions").insert({
+    course_id: parsed.data.courseId,
     ordinal: (count ?? 0) + 1,
-    prompt: parsed.prompt,
+    prompt: parsed.data.prompt,
     choices,
     correct_index: correct,
   });
-  revalidatePath(`/console/workforce/courses/${parsed.courseId}`);
+  if (error) throw new Error(`Could not create course quiz question: ${error.message}`);
+  revalidatePath(`/console/workforce/courses/${parsed.data.courseId}`);
 }
 
 const PublishSchema = z.object({ courseId: z.string().uuid() });
 export async function publishCourse(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = PublishSchema.parse(Object.fromEntries(fd));
-  if (!(await guardCourse(parsed.courseId, session.orgId))) return;
+  const parsed = PublishSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardCourse(parsed.data.courseId, session.orgId))) return;
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("courses")
     .update({ publish_state: "published" })
-    .eq("id", parsed.courseId)
+    .eq("id", parsed.data.courseId)
     .eq("org_id", session.orgId)
     .eq("publish_state", "draft");
-  revalidatePath(`/console/workforce/courses/${parsed.courseId}`);
+  if (error) throw new Error(`Could not update cours: ${error.message}`);
+  revalidatePath(`/console/workforce/courses/${parsed.data.courseId}`);
   revalidatePath("/console/workforce/courses");
 }
 
@@ -108,8 +114,9 @@ const AssignSchema = z.object({
 export async function assignCourse(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = AssignSchema.parse(Object.fromEntries(fd));
-  if (!(await guardCourse(parsed.courseId, session.orgId))) return;
+  const parsed = AssignSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardCourse(parsed.data.courseId, session.orgId))) return;
   const supabase = await createClient();
 
   // Assignee must be in this org. Without the check, manager+ could
@@ -118,19 +125,20 @@ export async function assignCourse(fd: FormData): Promise<void> {
     .from("memberships")
     .select("user_id")
     .eq("org_id", session.orgId)
-    .eq("user_id", parsed.assignee_id)
+    .eq("user_id", parsed.data.assignee_id)
     .is("deleted_at", null)
     .maybeSingle();
   if (!member) return;
 
-  await supabase.from("course_assignments").insert({
+  const { error } = await supabase.from("course_assignments").insert({
     org_id: session.orgId,
-    course_id: parsed.courseId,
-    assignee_id: parsed.assignee_id,
-    due_at: parsed.due_at || null,
+    course_id: parsed.data.courseId,
+    assignee_id: parsed.data.assignee_id,
+    due_at: parsed.data.due_at || null,
     assigned_by: session.userId,
   });
-  revalidatePath(`/console/workforce/courses/${parsed.courseId}`);
+  if (error) throw new Error(`Could not create course assignment: ${error.message}`);
+  revalidatePath(`/console/workforce/courses/${parsed.data.courseId}`);
 }
 
 const BadgeSchema = z.object({
@@ -141,30 +149,32 @@ const BadgeSchema = z.object({
 export async function setCompletionBadge(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = BadgeSchema.parse(Object.fromEntries(fd));
-  if (!(await guardCourse(parsed.courseId, session.orgId))) return;
+  const parsed = BadgeSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardCourse(parsed.data.courseId, session.orgId))) return;
   const supabase = await createClient();
 
   // Empty value = clear the auto-award. Otherwise the badge must be in
   // this org — the FK check would catch a cross-tenant id, but the
   // explicit guard surfaces the failure before the UPDATE fires.
   let badgeId: string | null = null;
-  if (parsed.badge_id) {
+  if (parsed.data.badge_id) {
     const { data: b } = await supabase
       .from("badges")
       .select("id")
-      .eq("id", parsed.badge_id)
+      .eq("id", parsed.data.badge_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
     if (!b) return;
-    badgeId = parsed.badge_id;
+    badgeId = parsed.data.badge_id;
   }
-  await supabase
+  const { error } = await supabase
     .from("courses")
     .update({ completion_badge_id: badgeId })
-    .eq("id", parsed.courseId)
+    .eq("id", parsed.data.courseId)
     .eq("org_id", session.orgId);
-  revalidatePath(`/console/workforce/courses/${parsed.courseId}`);
+  if (error) throw new Error(`Could not update cours: ${error.message}`);
+  revalidatePath(`/console/workforce/courses/${parsed.data.courseId}`);
 }
 
 export async function deleteCourse(courseId: string): Promise<void> {
@@ -172,11 +182,12 @@ export async function deleteCourse(courseId: string): Promise<void> {
   if (!isManagerPlus(session)) return;
   if (!(await guardCourse(courseId, session.orgId))) return;
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("courses")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", courseId)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update cours: ${error.message}`);
   revalidatePath("/console/workforce/courses");
   redirect("/console/workforce/courses");
 }

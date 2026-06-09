@@ -43,12 +43,13 @@ export async function deletePurchaseOrder(id: string): Promise<void> {
   // Hard-deleting cascaded onto FK references in po_line_items,
   // checklist, and change-orders, breaking financial reporting.
   // .is(deleted_at, null) makes the action idempotent.
-  await supabase
+  const { error } = await supabase
     .from("purchase_orders")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null);
+  if (error) throw new Error(`Could not archive purchase order: ${error.message}`);
   revalidatePath("/console/procurement/purchase-orders");
   redirect("/console/procurement/purchase-orders");
 }

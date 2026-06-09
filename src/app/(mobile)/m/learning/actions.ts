@@ -15,7 +15,8 @@ const Schema = z.object({
 export async function submitQuiz(fd: FormData): Promise<void> {
   const session = await requireSession();
   const entries = Object.fromEntries(fd);
-  const parsed = Schema.parse({ assignmentId: entries.assignmentId, courseId: entries.courseId });
+  const parsed = Schema.safeParse({ assignmentId: entries.assignmentId, courseId: entries.courseId });
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   // Verify assignment is the caller's. RLS gates writes too but this
@@ -23,7 +24,7 @@ export async function submitQuiz(fd: FormData): Promise<void> {
   const { data: assignment } = await supabase
     .from("course_assignments")
     .select("id, course_id, org_id")
-    .eq("id", parsed.assignmentId)
+    .eq("id", parsed.data.assignmentId)
     .eq("assignee_id", session.userId)
     .maybeSingle();
   if (!assignment) return;
@@ -33,14 +34,14 @@ export async function submitQuiz(fd: FormData): Promise<void> {
   const { data: course } = await supabase
     .from("courses")
     .select("id, title, completion_badge_id")
-    .eq("id", parsed.courseId)
+    .eq("id", parsed.data.courseId)
     .eq("org_id", (assignment as { org_id: string }).org_id)
     .maybeSingle();
 
   const { data: questions } = await supabase
     .from("course_quiz_questions")
     .select("id, correct_index")
-    .eq("course_id", parsed.courseId);
+    .eq("course_id", parsed.data.courseId);
 
   // Collect answers from the form. Keys are `q_<question_id>` and values
   // are choice indices.
@@ -51,18 +52,20 @@ export async function submitQuiz(fd: FormData): Promise<void> {
 
   const { score_pct, passed } = scoreQuiz((questions ?? []) as Array<{ id: string; correct_index: number }>, answers);
 
-  await supabase.from("course_completions").insert({
-    assignment_id: parsed.assignmentId,
+  const { error: completionError } = await supabase.from("course_completions").insert({
+    assignment_id: parsed.data.assignmentId,
     user_id: session.userId,
     score_pct,
     passed,
     answers,
   });
+  if (completionError) throw new Error(`Could not record quiz result: ${completionError.message}`);
 
-  await supabase
+  const { error: assignmentError } = await supabase
     .from("course_assignments")
     .update({ assignment_state: passed ? "completed" : "in_progress" })
-    .eq("id", parsed.assignmentId);
+    .eq("id", parsed.data.assignmentId);
+  if (assignmentError) throw new Error(`Could not update course progress: ${assignmentError.message}`);
 
   // Auto-award the completion badge on pass. The badge_awards insert
   // re-checks RLS via the caller's session — they're org-scoped, so the
@@ -71,7 +74,7 @@ export async function submitQuiz(fd: FormData): Promise<void> {
   const c = course as { id: string; title: string; completion_badge_id: string | null } | null;
   if (passed && c?.completion_badge_id) {
     const ca = assignment as { id: string; course_id: string; org_id: string };
-    const { data: award } = await supabase
+    const { data: award, error: awardError } = await supabase
       .from("badge_awards")
       .insert({
         org_id: ca.org_id,
@@ -81,6 +84,7 @@ export async function submitQuiz(fd: FormData): Promise<void> {
       })
       .select("id")
       .single();
+    if (awardError) throw new Error(`Could not award badge: ${awardError.message}`);
     if (award) {
       void writeInbox({
         userId: session.userId,
@@ -95,6 +99,6 @@ export async function submitQuiz(fd: FormData): Promise<void> {
     }
   }
 
-  revalidatePath(`/m/learning/${parsed.courseId}`);
+  revalidatePath(`/m/learning/${parsed.data.courseId}`);
   revalidatePath("/m/learning");
 }

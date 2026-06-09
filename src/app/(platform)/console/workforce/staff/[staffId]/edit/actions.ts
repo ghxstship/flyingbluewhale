@@ -41,7 +41,8 @@ export async function updateStaffMember(id: string, _: State, fd: FormData): Pro
 export async function deleteStaffMember(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("workforce_members").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("workforce_members").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete workforce member: ${error.message}`);
   revalidatePath("/console/workforce/staff");
   redirect("/console/workforce/staff");
 }

@@ -45,7 +45,12 @@ export async function updateCategory(categoryId: string, _: State, fd: FormData)
 export async function deleteCategory(categoryId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("accreditation_categories").delete().eq("id", categoryId).eq("org_id", session.orgId);
+  const { error } = await supabase
+    .from("accreditation_categories")
+    .delete()
+    .eq("id", categoryId)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete accreditation category: ${error.message}`);
   revalidatePath("/console/accreditation/categories");
   redirect("/console/accreditation/categories");
 }

@@ -15,7 +15,7 @@ export async function installConnector(formData: FormData) {
   const connector = String(formData.get("connector") ?? "");
   if (!CONNECTOR_RE.test(connector)) return;
   const supabase = await createClient();
-  await supabase.from("org_integrations").upsert(
+  const { error } = await supabase.from("org_integrations").upsert(
     {
       org_id: session.orgId,
       connector,
@@ -25,6 +25,7 @@ export async function installConnector(formData: FormData) {
     },
     { onConflict: "org_id,connector" },
   );
+  if (error) throw new Error(`Could not save org integration: ${error.message}`);
   revalidatePath("/console/settings/integrations");
 }
 
@@ -34,10 +35,11 @@ export async function uninstallConnector(formData: FormData) {
   const connector = String(formData.get("connector") ?? "");
   if (!CONNECTOR_RE.test(connector)) return;
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("org_integrations")
     .update({ status: "disabled", installed_at: null, updated_at: new Date().toISOString() })
     .eq("org_id", session.orgId)
     .eq("connector", connector);
+  if (error) throw new Error(`Could not update org integration: ${error.message}`);
   revalidatePath("/console/settings/integrations");
 }

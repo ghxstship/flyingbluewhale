@@ -66,7 +66,7 @@ export async function createSchedule(_: State, fd: FormData): Promise<State> {
   if (scheduleError) return { error: scheduleError.message };
 
   // Materialise the first job immediately so it shows up in the queue.
-  await supabase.from("maintenance_jobs").insert({
+  const { error: insertError } = await supabase.from("maintenance_jobs").insert({
     org_id: session.orgId,
     schedule_id: schedule.id,
     kind: parsed.data.kind,
@@ -74,6 +74,7 @@ export async function createSchedule(_: State, fd: FormData): Promise<State> {
     target_id: parsed.data.target_id || null,
     due_at: next,
   });
+  if (insertError) return { error: insertError.message };
 
   revalidatePath("/console/operations/maintenance");
   redirect("/console/operations/maintenance");

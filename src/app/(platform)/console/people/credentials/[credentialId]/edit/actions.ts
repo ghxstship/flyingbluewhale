@@ -41,7 +41,8 @@ export async function deleteCredential(credentialId: string): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
   const supabase = await createClient();
-  await supabase.from("credentials").delete().eq("id", credentialId).eq("org_id", session.orgId);
+  const { error } = await supabase.from("credentials").delete().eq("id", credentialId).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete credential: ${error.message}`);
   revalidatePath("/console/people/credentials");
   redirect("/console/people/credentials");
 }

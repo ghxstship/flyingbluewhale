@@ -231,6 +231,12 @@ export async function listOrgScopedPage<T extends TableName>(
   // `count: "exact"` gives us the total population under current filters,
   // not just the page. `range` is inclusive on both ends.
   let q = (await anyFrom(table as string)).select("*", { count: "exact" }).eq("org_id", orgId);
+  // Soft-delete filter — same contract as listOrgScoped. This helper
+  // shipped without it, so soft-deleted projects leaked through
+  // /api/v1/projects while the unpaginated list correctly hid them.
+  if (SOFT_DELETABLE_TABLES.has(table as string) && !opts.includeArchived) {
+    q = q.is("deleted_at", null);
+  }
   for (const f of opts.filters ?? []) {
     if (f.op === "eq") q = q.eq(f.column, f.value);
     else if (f.op === "in") q = q.in(f.column, f.value as unknown[]);

@@ -55,7 +55,8 @@ export async function updateExpense(id: string, _: State, fd: FormData): Promise
 export async function deleteExpense(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("expenses").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("expenses").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete expense: ${error.message}`);
   revalidatePath("/console/finance/expenses");
   redirect("/console/finance/expenses");
 }

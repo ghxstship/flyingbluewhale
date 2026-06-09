@@ -133,7 +133,12 @@ async function refreshCoAmount(coId: string, orgId: string): Promise<void> {
   );
   // Keep the rolled-up CO amount honest. Lines are SoT; amount_cents
   // on the parent is a denorm we maintain via this action.
-  await supabase.from("po_change_orders").update({ amount_cents: total }).eq("id", coId).eq("org_id", orgId);
+  const { error } = await supabase
+    .from("po_change_orders")
+    .update({ amount_cents: total })
+    .eq("id", coId)
+    .eq("org_id", orgId);
+  if (error) throw new Error(`Could not refresh change-order amount: ${error.message}`);
 }
 
 const AddLineSchema = z.object({
@@ -160,7 +165,7 @@ export async function addCoLine(fd: FormData): Promise<void> {
     .maybeSingle();
   const nextPos = ((maxPos?.position as number | undefined) ?? 0) + 1;
 
-  await supabase.from("po_change_order_lines").insert({
+  const { error: insertErr } = await supabase.from("po_change_order_lines").insert({
     org_id: session.orgId,
     po_change_order_id: parsed.data.coId,
     position: nextPos,
@@ -168,6 +173,7 @@ export async function addCoLine(fd: FormData): Promise<void> {
     quantity: parsed.data.quantity,
     unit_price_cents: Math.round(parsed.data.unit_price_dollars * 100),
   });
+  if (insertErr) throw new Error(`Could not add change-order line: ${insertErr.message}`);
 
   await refreshCoAmount(parsed.data.coId, session.orgId);
   revalidatePath(`/console/procurement/po-change-orders/${parsed.data.coId}`);
@@ -186,12 +192,13 @@ export async function deleteCoLine(fd: FormData): Promise<void> {
   if (!(await guardCoEditable(parsed.data.coId, session.orgId))) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error: deleteErr } = await supabase
     .from("po_change_order_lines")
     .delete()
     .eq("id", parsed.data.lineId)
     .eq("po_change_order_id", parsed.data.coId)
     .eq("org_id", session.orgId);
+  if (deleteErr) throw new Error(`Could not delete change-order line: ${deleteErr.message}`);
 
   await refreshCoAmount(parsed.data.coId, session.orgId);
   revalidatePath(`/console/procurement/po-change-orders/${parsed.data.coId}`);

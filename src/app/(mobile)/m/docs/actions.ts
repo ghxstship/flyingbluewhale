@@ -43,7 +43,7 @@ export async function uploadPersonalDoc(fd: FormData): Promise<void> {
   if (uploadErr) redirect("/m/docs/new?error=upload-failed");
 
   const supabase = await createClient();
-  await supabase.from("personal_documents").insert({
+  const { error } = await supabase.from("personal_documents").insert({
     org_id: session.orgId,
     user_id: session.userId,
     label: parsed.data!.label,
@@ -52,6 +52,7 @@ export async function uploadPersonalDoc(fd: FormData): Promise<void> {
     mime_type: f.type || null,
     size_bytes: f.size,
   });
+  if (error) throw new Error(`Could not save document record: ${error.message}`);
 
   revalidatePath("/m/docs");
   redirect("/m/docs");

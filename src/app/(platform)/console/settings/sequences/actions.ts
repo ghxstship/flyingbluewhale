@@ -37,7 +37,7 @@ export async function upsertSequence(fd: FormData): Promise<void> {
 
   const current_val = parsed.data.seed_val ?? (existing.data?.current_val as number | undefined) ?? 0;
 
-  await supabase.from("org_sequences").upsert(
+  const { error } = await supabase.from("org_sequences").upsert(
     {
       org_id: session.orgId,
       scope: parsed.data.scope,
@@ -47,6 +47,7 @@ export async function upsertSequence(fd: FormData): Promise<void> {
     },
     { onConflict: "org_id,scope" },
   );
+  if (error) throw new Error(`Could not save org sequence: ${error.message}`);
 
   revalidatePath("/console/settings/sequences");
 }
@@ -57,11 +58,12 @@ export async function resetSequence(scope: string): Promise<void> {
   if (!/^[a-z0-9_]+$/.test(scope) || scope.length > 64) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("org_sequences")
     .update({ current_val: 0, updated_at: new Date().toISOString() })
     .eq("org_id", session.orgId)
     .eq("scope", scope);
+  if (error) throw new Error(`Could not update org sequence: ${error.message}`);
 
   revalidatePath("/console/settings/sequences");
 }

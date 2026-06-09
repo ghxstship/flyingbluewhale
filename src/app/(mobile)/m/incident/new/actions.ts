@@ -19,13 +19,14 @@ export async function quickFileIncident(fd: FormData): Promise<void> {
   // Defaults: severity=minor, status=open — supervisor fills the rest
   // from /console/safety/incidents. Reporter_id is the caller, gating
   // visibility on /m/incident to "mine only".
-  await supabase.from("incidents").insert({
+  const { error } = await supabase.from("incidents").insert({
     org_id: session.orgId,
     reporter_id: session.userId,
     summary: parsed.data!.summary,
     severity: "minor",
     status: "open",
   });
+  if (error) throw new Error(`Could not file incident: ${error.message}`);
 
   revalidatePath("/m/incident");
   revalidatePath("/m/incidents");

@@ -88,7 +88,8 @@ export async function updateFormDefAction(_: State, fd: FormData): Promise<State
 export async function deleteFormDefAction(formId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("form_defs").delete().eq("id", formId).eq("org_id", session.orgId);
+  const { error } = await supabase.from("form_defs").delete().eq("id", formId).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete form def: ${error.message}`);
   revalidatePath("/console/forms");
   redirect("/console/forms");
 }

@@ -41,7 +41,8 @@ export async function updatePolicy(policyId: string, _: State, fd: FormData): Pr
 export async function deletePolicy(policyId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("insurance_policies").delete().eq("id", policyId).eq("org_id", session.orgId);
+  const { error } = await supabase.from("insurance_policies").delete().eq("id", policyId).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete insurance policy: ${error.message}`);
   revalidatePath("/console/legal/insurance");
   redirect("/console/legal/insurance");
 }

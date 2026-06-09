@@ -101,7 +101,8 @@ export async function updateBudget(id: string, _: State, fd: FormData): Promise<
 export async function deleteBudget(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("budgets").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("budgets").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete budget: ${error.message}`);
   revalidatePath("/console/finance/budgets");
   redirect("/console/finance/budgets");
 }

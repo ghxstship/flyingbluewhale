@@ -35,7 +35,7 @@ export async function upsertRateLimitOverride(fd: FormData): Promise<void> {
     .maybeSingle();
 
   if (existing) {
-    await supabase
+    const { error: updateError } = await supabase
       .from("rate_limit_overrides")
       .update({
         limit_count: parsed.data.limit_count,
@@ -44,13 +44,15 @@ export async function upsertRateLimitOverride(fd: FormData): Promise<void> {
       })
       .eq("id", (existing as { id: string }).id)
       .eq("org_id", session.orgId);
+    if (updateError) throw new Error(`Could not update rate limit override: ${updateError.message}`);
   } else {
-    await supabase.from("rate_limit_overrides").insert({
+    const { error } = await supabase.from("rate_limit_overrides").insert({
       org_id: session.orgId,
       bucket: parsed.data.bucket,
       limit_count: parsed.data.limit_count,
       window_ms,
     });
+    if (error) throw new Error(`Could not create rate limit override: ${error.message}`);
   }
 
   await emitAudit({
@@ -75,13 +77,14 @@ export async function deleteRateLimitOverride(id: string): Promise<void> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return;
 
   const supabase = await createClient();
-  const { data: deleted } = await supabase
+  const { error, data: deleted } = await supabase
     .from("rate_limit_overrides")
     .delete()
     .eq("id", id)
     .eq("org_id", session.orgId)
     .select("bucket")
     .maybeSingle();
+  if (error) throw new Error(`Could not delete rate limit override: ${error.message}`);
 
   if (deleted) {
     await emitAudit({

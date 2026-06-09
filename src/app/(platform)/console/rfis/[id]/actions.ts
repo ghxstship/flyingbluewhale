@@ -14,12 +14,13 @@ const AnswerSchema = z.object({ official_answer: z.string().min(1).max(10_000) }
 
 export async function answerRfi(id: string, fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = AnswerSchema.parse(Object.fromEntries(fd));
+  const parsed = AnswerSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("rfis")
     .update({
-      official_answer: parsed.official_answer,
+      official_answer: parsed.data.official_answer,
       answered_by: session.userId,
       answered_at: new Date().toISOString(),
       status: "answered",

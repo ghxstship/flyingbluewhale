@@ -170,12 +170,13 @@ export async function deleteDailyLogPhoto(fd: FormData): Promise<void> {
   if (rmErr) log.warn("daily_log_photo.storage_remove_failed", { err: rmErr.message });
   // Drop the row even if storage cleanup failed — orphaned bytes are
   // cheap, orphaned UI rows pointing at deleted bytes look broken.
-  await supabase
+  const { error: deleteError } = await supabase
     .from("daily_log_photos")
     .delete()
     .eq("id", parsed.data.photoId)
     .eq("daily_log_id", parsed.data.dailyLogId)
     .eq("org_id", session.orgId);
+  if (deleteError) throw new Error(`Could not delete daily log photo: ${deleteError.message}`);
 
   revalidatePath(`/console/operations/daily-log/${parsed.data.dailyLogId}`);
 }

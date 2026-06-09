@@ -14,14 +14,16 @@ const ToggleSchema = z.object({
 export async function toggleActive(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = ToggleSchema.parse(Object.fromEntries(fd));
+  const parsed = ToggleSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("master_catalog_items")
-    .update({ active: parsed.next === "true" })
-    .eq("id", parsed.id)
+    .update({ active: parsed.data.next === "true" })
+    .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
-  revalidatePath(`/console/settings/catalog/${parsed.id}`);
+  if (error) throw new Error(`Could not update master catalog item: ${error.message}`);
+  revalidatePath(`/console/settings/catalog/${parsed.data.id}`);
   revalidatePath("/console/settings/catalog");
 }
 
@@ -29,11 +31,12 @@ export async function deleteItem(id: string): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("master_catalog_items")
     .update({ deleted_at: new Date().toISOString(), active: false })
     .eq("id", id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update master catalog item: ${error.message}`);
   revalidatePath("/console/settings/catalog");
   redirect("/console/settings/catalog");
 }

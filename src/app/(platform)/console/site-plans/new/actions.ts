@@ -174,7 +174,8 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
   if (parsed.data.preset_code) {
     const preset = getPreset(parsed.data.preset_code);
     if (preset) {
-      await instantiatePreset(supabase, session.orgId, sheet.id, preset);
+      const presetResult = await instantiatePreset(supabase, session.orgId, sheet.id, preset);
+      if (presetResult?.error) return { error: presetResult.error, values: echo(fd) };
     }
   }
 
@@ -186,7 +187,7 @@ type PresetArg = NonNullable<ReturnType<typeof getPreset>>;
 
 async function instantiatePreset(supabase: LooseSupabase, orgId: string, sheetId: string, preset: PresetArg) {
   if (preset.regions.length > 0) {
-    await supabase.from("siteplan_zone_region").insert(
+    const { error: insertError2 } = await supabase.from("siteplan_zone_region").insert(
       preset.regions.map((r) => ({
         org_id: orgId,
         sheet_id: sheetId,
@@ -195,11 +196,12 @@ async function instantiatePreset(supabase: LooseSupabase, orgId: string, sheetId
         class_tag: r.class_tag ?? null,
       })),
     );
+    if (insertError2) return { error: insertError2.message };
   }
 
   const bandIds: string[] = [];
   if (preset.bands.length > 0) {
-    const { data: bandRows } = await supabase
+    const { error: insertError, data: bandRows } = await supabase
       .from("siteplan_band")
       .insert(
         preset.bands.map((b) => ({
@@ -212,13 +214,14 @@ async function instantiatePreset(supabase: LooseSupabase, orgId: string, sheetId
         })),
       )
       .select("id");
+    if (insertError) return { error: insertError.message };
     for (const row of (bandRows ?? []) as Array<{ id: string }>) {
       bandIds.push(row.id);
     }
   }
 
   if (preset.stations.length > 0) {
-    await supabase.from("siteplan_station").insert(
+    const { error } = await supabase.from("siteplan_station").insert(
       preset.stations.map((s) => ({
         org_id: orgId,
         sheet_id: sheetId,
@@ -228,5 +231,6 @@ async function instantiatePreset(supabase: LooseSupabase, orgId: string, sheetId
         head_count: s.head_count ?? 1,
       })),
     );
+    if (error) return { error: error.message };
   }
 }

@@ -83,7 +83,7 @@ export async function createInspection(_: State, fd: FormData): Promise<State> {
   if (error) return { error: error.message };
 
   if (templateItems.length > 0) {
-    await supabase.from("inspection_items").insert(
+    const { error: insertError } = await supabase.from("inspection_items").insert(
       templateItems.map((t) => ({
         org_id: session.orgId,
         inspection_id: insp.id,
@@ -91,6 +91,7 @@ export async function createInspection(_: State, fd: FormData): Promise<State> {
         prompt: t.prompt,
       })) as never,
     );
+    if (insertError) return { error: insertError.message };
   }
 
   revalidatePath("/console/inspections");

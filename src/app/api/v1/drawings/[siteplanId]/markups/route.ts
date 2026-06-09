@@ -63,7 +63,8 @@ export async function GET(_req: Request, ctx: { params: Promise<{ siteplanId: st
         .eq("site_plan_id", parsed.data.siteplanId)
         .eq("org_id", session.orgId)
         .is("deleted_at", null)
-        .order("created_at", { ascending: true }),
+        .order("created_at", { ascending: true })
+        .limit(5000),
       supabase
         .from("drawing_markup_layers")
         .select("id, name, color, is_visible, ordinal")

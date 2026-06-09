@@ -43,7 +43,8 @@ export async function updateMileage(id: string, _: State, fd: FormData): Promise
 export async function deleteMileage(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("mileage_logs").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("mileage_logs").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete mileage log: ${error.message}`);
   revalidatePath("/console/finance/mileage");
   redirect("/console/finance/mileage");
 }

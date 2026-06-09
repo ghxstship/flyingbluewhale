@@ -45,7 +45,8 @@ export async function updateLead(id: string, _: State, fd: FormData): Promise<St
 export async function deleteLead(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("leads").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("leads").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete lead: ${error.message}`);
   revalidatePath("/console/leads");
   redirect("/console/leads");
 }

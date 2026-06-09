@@ -34,7 +34,12 @@ async function refreshHeadlineTotal(responseId: string, orgId: string): Promise<
   // Keep the rolled-up total_cents on rfq_responses in sync with the
   // line-item ledger. This is the canonical denorm pattern in the
   // codebase — denorm only when a trigger or action keeps it honest.
-  await supabase.from("rfq_responses").update({ total_cents: total }).eq("id", responseId).eq("org_id", orgId);
+  const { error } = await supabase
+    .from("rfq_responses")
+    .update({ total_cents: total })
+    .eq("id", responseId)
+    .eq("org_id", orgId);
+  if (error) throw new Error(`Could not refresh response total: ${error.message}`);
 }
 
 const AddLineSchema = z.object({
@@ -63,7 +68,7 @@ export async function addResponseLine(fd: FormData): Promise<void> {
     .maybeSingle();
   const nextPos = ((maxPos?.position as number | undefined) ?? 0) + 1;
 
-  await supabase.from("rfq_response_lines").insert({
+  const { error: insertErr } = await supabase.from("rfq_response_lines").insert({
     rfq_response_id: responseId,
     org_id: session.orgId,
     position: nextPos,
@@ -71,6 +76,7 @@ export async function addResponseLine(fd: FormData): Promise<void> {
     quantity: parsed.data.quantity,
     unit_price_cents: Math.round(parsed.data.unit_price_dollars * 100),
   });
+  if (insertErr) throw new Error(`Could not add response line: ${insertErr.message}`);
 
   await refreshHeadlineTotal(responseId, session.orgId);
   revalidatePath(`/console/procurement/rfqs/${parsed.data.rfqId}/responses/${responseId}`);
@@ -92,12 +98,13 @@ export async function deleteResponseLine(fd: FormData): Promise<void> {
   if (!responseId) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error: deleteErr } = await supabase
     .from("rfq_response_lines")
     .delete()
     .eq("id", parsed.data.lineId)
     .eq("rfq_response_id", responseId)
     .eq("org_id", session.orgId);
+  if (deleteErr) throw new Error(`Could not delete response line: ${deleteErr.message}`);
 
   await refreshHeadlineTotal(responseId, session.orgId);
   revalidatePath(`/console/procurement/rfqs/${parsed.data.rfqId}/responses/${responseId}`);

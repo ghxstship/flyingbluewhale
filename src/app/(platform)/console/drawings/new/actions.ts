@@ -61,11 +61,12 @@ export async function createSheetSet(_: State, fd: FormData): Promise<State> {
       .single();
     if (vErr) return { error: vErr.message };
 
-    await supabase
+    const { error: updateError } = await supabase
       .from("sheet_sets")
       .update({ current_version_id: (version as { id: string }).id })
       .eq("id", setId)
       .eq("org_id", session.orgId);
+    if (updateError) return { error: updateError.message };
   }
 
   revalidatePath("/console/drawings");

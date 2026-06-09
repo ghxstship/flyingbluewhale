@@ -67,7 +67,12 @@ export async function endRentalNow(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase.from("rentals").update({ ends_at: new Date().toISOString() }).eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase
+    .from("rentals")
+    .update({ ends_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update rental: ${error.message}`);
   revalidatePath("/console/production/rentals");
   revalidatePath(`/console/production/rentals/${id}`);
 }
@@ -77,7 +82,8 @@ export async function deleteRental(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase.from("rentals").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("rentals").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete rental: ${error.message}`);
   revalidatePath("/console/production/rentals");
   redirect("/console/production/rentals");
 }

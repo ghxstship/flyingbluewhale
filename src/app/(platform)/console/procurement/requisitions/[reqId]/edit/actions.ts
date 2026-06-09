@@ -39,7 +39,8 @@ export async function updateRequisition(id: string, _: State, fd: FormData): Pro
 export async function deleteRequisition(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("requisitions").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("requisitions").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete requisition: ${error.message}`);
   revalidatePath("/console/procurement/requisitions");
   redirect("/console/procurement/requisitions");
 }

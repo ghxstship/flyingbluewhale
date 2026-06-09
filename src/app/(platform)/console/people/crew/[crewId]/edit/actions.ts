@@ -43,7 +43,8 @@ export async function updateCrewMember(id: string, _: State, fd: FormData): Prom
 export async function deleteCrewMember(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("crew_members").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("crew_members").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete crew member: ${error.message}`);
   revalidatePath("/console/people/crew");
   redirect("/console/people/crew");
 }

@@ -39,7 +39,8 @@ export async function updateVisaCase(id: string, _: State, fd: FormData): Promis
 export async function deleteVisaCase(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("visa_cases").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("visa_cases").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete visa cas: ${error.message}`);
   revalidatePath("/console/participants/visa");
   redirect("/console/participants/visa");
 }

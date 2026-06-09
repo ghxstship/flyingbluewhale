@@ -37,7 +37,8 @@ export async function updateSafeguardingReport(id: string, _: State, fd: FormDat
 export async function deleteSafeguardingReport(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("safeguarding_reports").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("safeguarding_reports").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete safeguarding report: ${error.message}`);
   revalidatePath("/console/safety/safeguarding");
   redirect("/console/safety/safeguarding");
 }

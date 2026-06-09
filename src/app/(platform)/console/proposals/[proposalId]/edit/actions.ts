@@ -79,13 +79,14 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   // Snapshot the previous version AFTER the conditional update lands.
   // If we'd snapshotted first and the update was rejected as stale,
   // we'd leave a duplicate version row pointing at the same blocks.
-  await supabase.from("proposal_versions").insert({
+  const { error: insertError } = await supabase.from("proposal_versions").insert({
     proposal_id: proposalId,
     version: currentVersion,
     blocks: current.blocks,
     theme: current.theme,
     changed_by: session.userId,
   });
+  if (insertError) return { error: insertError.message };
 
   revalidatePath(`/console/proposals/${proposalId}/edit`);
   revalidatePath(`/console/proposals/${proposalId}`);

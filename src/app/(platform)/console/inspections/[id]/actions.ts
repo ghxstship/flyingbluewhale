@@ -64,11 +64,12 @@ export async function setInspectionItemResult(
 ): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("inspection_items")
     .update({ result } as never)
     .eq("org_id", session.orgId)
     .eq("inspection_id", inspectionId)
     .eq("id", itemId);
+  if (error) throw new Error(`Could not update inspection item: ${error.message}`);
   revalidatePath(`/console/inspections/${inspectionId}`);
 }

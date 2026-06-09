@@ -48,7 +48,7 @@ export async function addAttendee(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!briefing) return;
 
-  await supabase.from("safety_briefing_attendees").insert({
+  const { error } = await supabase.from("safety_briefing_attendees").insert({
     briefing_id: parsed.data.briefingId,
     org_id: session.orgId,
     user_id,
@@ -56,6 +56,7 @@ export async function addAttendee(fd: FormData): Promise<void> {
     acknowledged_at: parsed.data.acknowledged ? new Date().toISOString() : null,
     notes: parsed.data.notes?.trim() || null,
   });
+  if (error) throw new Error(`Could not create safety briefing attendee: ${error.message}`);
 
   revalidatePath(`/console/safety/briefings/${parsed.data.briefingId}`);
 }
@@ -71,13 +72,14 @@ export async function acknowledgeAttendee(fd: FormData): Promise<void> {
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("safety_briefing_attendees")
     .update({ acknowledged_at: new Date().toISOString() })
     .eq("id", parsed.data.attendeeId)
     .eq("briefing_id", parsed.data.briefingId)
     .eq("org_id", session.orgId)
     .is("acknowledged_at", null);
+  if (error) throw new Error(`Could not update safety briefing attendee: ${error.message}`);
 
   revalidatePath(`/console/safety/briefings/${parsed.data.briefingId}`);
 }
@@ -93,12 +95,13 @@ export async function removeAttendee(fd: FormData): Promise<void> {
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("safety_briefing_attendees")
     .delete()
     .eq("id", parsed.data.attendeeId)
     .eq("briefing_id", parsed.data.briefingId)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete safety briefing attendee: ${error.message}`);
 
   revalidatePath(`/console/safety/briefings/${parsed.data.briefingId}`);
 }

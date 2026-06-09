@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { log } from "@/lib/log";
 
 // ──────────────────────────────────────────────────────────────
 // Catalog kinds — the things you can assign to a party.
@@ -178,13 +179,16 @@ export async function listMyAssignments(
 
 export async function getAssignment(orgId: string, id: string): Promise<AssignmentDetailRow | null> {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("assignments")
     .select(DETAIL_SELECT)
     .eq("id", id)
     .eq("org_id", orgId)
     .is("deleted_at", null)
     .maybeSingle();
+  // Surface query errors instead of silently rendering not-found — a
+  // transient PostgREST failure looked identical to a missing row.
+  if (error) throw error;
   return (data ?? null) as unknown as AssignmentDetailRow | null;
 }
 
@@ -202,6 +206,41 @@ export type ScanResult =
   | { result: "voided"; assignmentId: string }
   | { result: "expired"; assignmentId: string }
   | { result: "not_found" };
+
+/**
+ * Journal a scan attempt. The journal IS the audit trail — an accepted
+ * gate scan with no event row is unauditable, so insert failures are
+ * loud (logged with full context) even though we don't fail the scan
+ * itself: the field UX prefers a logged gap over re-banding a guest.
+ */
+async function logScanEvent(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  row: {
+    assignment_id: string;
+    org_id: string;
+    actor_user_id: string;
+    scan_code_id: string | null;
+    result: "accepted" | "duplicate" | "voided" | "not_found" | "expired" | "wrong_zone";
+    location: { lat: number; lng: number; accuracy?: number } | null;
+  },
+): Promise<void> {
+  const { error } = await supabase.from("assignment_events").insert({
+    assignment_id: row.assignment_id,
+    org_id: row.org_id,
+    event_kind: "scan",
+    actor_user_id: row.actor_user_id,
+    scan_code_id: row.scan_code_id,
+    result: row.result,
+    location: row.location,
+  });
+  if (error) {
+    log.error("assignments.scan_journal_failed", {
+      assignment_id: row.assignment_id,
+      result: row.result,
+      err: error.message,
+    });
+  }
+}
 
 export async function scanAssignment(input: {
   orgId: string;
@@ -231,10 +270,9 @@ export async function scanAssignment(input: {
       .maybeSingle();
     if (anyCode && !anyCode.active) {
       // Code was voided — log + return voided.
-      await supabase.from("assignment_events").insert({
+      await logScanEvent(supabase, {
         assignment_id: anyCode.assignment_id,
         org_id: input.orgId,
-        event_kind: "scan",
         actor_user_id: input.scannerUserId,
         scan_code_id: anyCode.id,
         result: "voided",
@@ -258,10 +296,9 @@ export async function scanAssignment(input: {
   const title = (a.title as string | null) ?? null;
 
   if (state === "voided") {
-    await supabase.from("assignment_events").insert({
+    await logScanEvent(supabase, {
       assignment_id: a.id,
       org_id: input.orgId,
-      event_kind: "scan",
       actor_user_id: input.scannerUserId,
       scan_code_id: scanCode.id,
       result: "voided",
@@ -271,10 +308,9 @@ export async function scanAssignment(input: {
   }
 
   if (state === "expired") {
-    await supabase.from("assignment_events").insert({
+    await logScanEvent(supabase, {
       assignment_id: a.id,
       org_id: input.orgId,
-      event_kind: "scan",
       actor_user_id: input.scannerUserId,
       scan_code_id: scanCode.id,
       result: "expired",
@@ -284,10 +320,9 @@ export async function scanAssignment(input: {
   }
 
   if (state === "redeemed") {
-    await supabase.from("assignment_events").insert({
+    await logScanEvent(supabase, {
       assignment_id: a.id,
       org_id: input.orgId,
-      event_kind: "scan",
       actor_user_id: input.scannerUserId,
       scan_code_id: scanCode.id,
       result: "duplicate",
@@ -315,10 +350,9 @@ export async function scanAssignment(input: {
       .eq("id", a.id)
       .eq("org_id", input.orgId)
       .maybeSingle();
-    await supabase.from("assignment_events").insert({
+    await logScanEvent(supabase, {
       assignment_id: a.id,
       org_id: input.orgId,
-      event_kind: "scan",
       actor_user_id: input.scannerUserId,
       scan_code_id: scanCode.id,
       result: "duplicate",
@@ -327,10 +361,9 @@ export async function scanAssignment(input: {
     return { result: "duplicate", assignmentId: a.id, redeemedAt: (latest?.fulfilled_at as string | null) ?? now };
   }
 
-  await supabase.from("assignment_events").insert({
+  await logScanEvent(supabase, {
     assignment_id: a.id,
     org_id: input.orgId,
-    event_kind: "scan",
     actor_user_id: input.scannerUserId,
     scan_code_id: scanCode.id,
     result: "accepted",

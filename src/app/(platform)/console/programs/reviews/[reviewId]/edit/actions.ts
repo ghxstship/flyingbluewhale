@@ -37,7 +37,8 @@ export async function updateProgramReview(id: string, _: State, fd: FormData): P
 export async function deleteProgramReview(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("program_reviews").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("program_reviews").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete program review: ${error.message}`);
   revalidatePath("/console/programs/reviews");
   redirect("/console/programs/reviews");
 }

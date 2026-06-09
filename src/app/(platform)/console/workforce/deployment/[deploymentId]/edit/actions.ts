@@ -43,7 +43,12 @@ export async function updateDeployment(deploymentId: string, _: State, fd: FormD
 export async function deleteDeployment(deploymentId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("workforce_deployments").delete().eq("id", deploymentId).eq("org_id", session.orgId);
+  const { error } = await supabase
+    .from("workforce_deployments")
+    .delete()
+    .eq("id", deploymentId)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete workforce deployment: ${error.message}`);
   revalidatePath("/console/workforce/deployment");
   redirect("/console/workforce/deployment");
 }

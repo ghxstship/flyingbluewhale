@@ -17,7 +17,8 @@ export async function GET() {
       .from("events")
       .select("id,name,starts_at,ends_at,description")
       .eq("org_id", session.orgId)
-      .order("starts_at", { ascending: true });
+      .order("starts_at", { ascending: true })
+      .limit(2000);
     if (error) return apiError("internal", error.message);
 
     const lines: string[] = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//atlvs//EN"];

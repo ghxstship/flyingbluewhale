@@ -118,11 +118,12 @@ export async function deleteEquipment(formData: FormData) {
   const supabase = await createClient();
   // Soft-delete via deleted_at — equipment is referenced by rentals so a
   // hard delete would break referential integrity.
-  await supabase
+  const { error } = await supabase
     .from("equipment")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update equipment: ${error.message}`);
   revalidatePath("/console/production/equipment");
   redirect("/console/production/equipment");
 }

@@ -52,13 +52,14 @@ export async function deleteInvoice(id: string): Promise<void> {
   // record + the .neq("status","paid") guard below refuses to
   // tombstone an already-paid invoice (use refund/void flows for
   // those — the audit trail must keep the paid record intact).
-  await supabase
+  const { error } = await supabase
     .from("invoices")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
     .neq("status", "paid")
     .is("deleted_at", null);
+  if (error) throw new Error(`Could not archive invoice: ${error.message}`);
   revalidatePath("/console/finance/invoices");
   redirect("/console/finance/invoices");
 }

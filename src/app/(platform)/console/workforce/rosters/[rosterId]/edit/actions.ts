@@ -37,7 +37,8 @@ export async function updateRoster(id: string, _: State, fd: FormData): Promise<
 export async function deleteRoster(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("rosters").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("rosters").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete roster: ${error.message}`);
   revalidatePath("/console/workforce/rosters");
   redirect("/console/workforce/rosters");
 }

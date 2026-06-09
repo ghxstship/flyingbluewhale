@@ -34,7 +34,7 @@ export async function addSettlementLine(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!settlement) return;
 
-  await supabase.from("settlement_lines").insert({
+  const { error } = await supabase.from("settlement_lines").insert({
     settlement_id: parsed.data.settlementId,
     org_id: session.orgId,
     kind: parsed.data.kind,
@@ -43,6 +43,7 @@ export async function addSettlementLine(fd: FormData): Promise<void> {
     amount_cents: Math.round(parsed.data.amount_dollars * 100),
     sort_order: parsed.data.sort_order,
   });
+  if (error) throw new Error(`Could not create settlement line: ${error.message}`);
 
   revalidatePath(`/console/bookings/settlements/${parsed.data.settlementId}`);
 }
@@ -59,12 +60,13 @@ export async function deleteSettlementLine(fd: FormData): Promise<void> {
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("settlement_lines")
     .delete()
     .eq("id", parsed.data.lineId)
     .eq("settlement_id", parsed.data.settlementId)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete settlement line: ${error.message}`);
 
   revalidatePath(`/console/bookings/settlements/${parsed.data.settlementId}`);
 }

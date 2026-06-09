@@ -69,12 +69,13 @@ export async function deleteProject(id: string): Promise<void> {
   // re-stamp deleted_at on an already-tombstoned project (which
   // would extend the purge clock and confuse the audit trail of
   // when it was first deleted).
-  await supabase
+  const { error } = await supabase
     .from("projects")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null);
+  if (error) throw new Error(`Could not delete project: ${error.message}`);
   revalidatePath("/console/projects");
   redirect("/console/projects");
 }

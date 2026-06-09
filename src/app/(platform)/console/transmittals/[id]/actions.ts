@@ -36,7 +36,7 @@ export async function sendTransmittal(fd: FormData): Promise<void> {
     .limit(1);
   if (!recipientCount || recipientCount.length === 0) return;
 
-  await supabase
+  const { error: updateError } = await supabase
     .from("transmittals")
     .update({
       transmittal_state: "sent",
@@ -45,14 +45,16 @@ export async function sendTransmittal(fd: FormData): Promise<void> {
     })
     .eq("id", t.id)
     .eq("org_id", session.orgId);
+  if (updateError) throw new Error(`Could not update transmittal: ${updateError.message}`);
 
   // Mark delivery for in-app user recipients immediately. Vendor + external
   // recipients get queued in the dispatch worker (not built yet — placeholder).
-  await supabase
+  const { error } = await supabase
     .from("transmittal_recipients")
     .update({ delivered_at: new Date().toISOString() })
     .eq("transmittal_id", t.id)
     .eq("recipient_kind", "user");
+  if (error) throw new Error(`Could not update transmittal recipient: ${error.message}`);
 
   revalidatePath(`/console/transmittals/${t.id}`);
 }
@@ -66,7 +68,7 @@ export async function closeTransmittal(fd: FormData): Promise<void> {
   const t = await loadTransmittal(supabase, parsed.data.transmittal_id, session.orgId);
   if (!t || t.transmittal_state === "closed" || t.transmittal_state === "voided") return;
 
-  await supabase
+  const { error } = await supabase
     .from("transmittals")
     .update({
       transmittal_state: "closed",
@@ -75,6 +77,7 @@ export async function closeTransmittal(fd: FormData): Promise<void> {
     })
     .eq("id", t.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update transmittal: ${error.message}`);
 
   revalidatePath(`/console/transmittals/${t.id}`);
 }
@@ -106,7 +109,7 @@ export async function addRecipient(fd: FormData): Promise<void> {
   const t = await loadTransmittal(supabase, parsed.data.transmittal_id, session.orgId);
   if (!t || t.transmittal_state !== "draft") return;
 
-  await supabase.from("transmittal_recipients").insert({
+  const { error } = await supabase.from("transmittal_recipients").insert({
     org_id: session.orgId,
     transmittal_id: t.id,
     recipient_kind: parsed.data.recipient_kind,
@@ -115,6 +118,7 @@ export async function addRecipient(fd: FormData): Promise<void> {
     external_email: parsed.data.recipient_kind === "external_email" ? parsed.data.external_email || null : null,
     cc: parsed.data.cc === "1",
   });
+  if (error) throw new Error(`Could not create transmittal recipient: ${error.message}`);
 
   revalidatePath(`/console/transmittals/${t.id}`);
 }
@@ -144,7 +148,7 @@ export async function addItem(fd: FormData): Promise<void> {
   const existingRows = (existing ?? []) as Array<{ ordinal: number }>;
   const nextOrdinal = existingRows[0] ? existingRows[0].ordinal + 1 : 1;
 
-  await supabase.from("transmittal_items").insert({
+  const { error } = await supabase.from("transmittal_items").insert({
     org_id: session.orgId,
     transmittal_id: t.id,
     item_type: parsed.data.item_type,
@@ -152,6 +156,7 @@ export async function addItem(fd: FormData): Promise<void> {
     description: parsed.data.description || null,
     ordinal: nextOrdinal,
   });
+  if (error) throw new Error(`Could not create transmittal item: ${error.message}`);
 
   revalidatePath(`/console/transmittals/${t.id}`);
 }

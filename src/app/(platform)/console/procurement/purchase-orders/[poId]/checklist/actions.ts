@@ -12,7 +12,8 @@ const AddSchema = z.object({
 
 export async function addChecklistItem(poId: string, fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = AddSchema.parse(Object.fromEntries(fd));
+  const parsed = AddSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   // Read the current max position so concurrent adders don't both
@@ -32,8 +33,8 @@ export async function addChecklistItem(poId: string, fd: FormData): Promise<void
     org_id: session.orgId,
     purchase_order_id: poId,
     position: nextPosition,
-    prompt: parsed.prompt,
-    requires_photo: parsed.requires_photo === "1",
+    prompt: parsed.data.prompt,
+    requires_photo: parsed.data.requires_photo === "1",
   } as never);
   if (error) throw new Error(error.message);
   revalidatePath(`/console/procurement/purchase-orders/${poId}/checklist`);

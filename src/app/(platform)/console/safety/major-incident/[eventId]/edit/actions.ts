@@ -39,7 +39,8 @@ export async function updateMajorIncident(id: string, _: State, fd: FormData): P
 export async function deleteMajorIncident(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("major_incidents").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("major_incidents").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete major incident: ${error.message}`);
   revalidatePath("/console/safety/major-incident");
   redirect("/console/safety/major-incident");
 }

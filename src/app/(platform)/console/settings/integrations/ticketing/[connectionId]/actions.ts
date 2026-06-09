@@ -58,11 +58,12 @@ export async function recordSalesSnapshotAction(_: State, fd: FormData): Promise
   if (insertError) return { error: insertError.message };
 
   // Bump connection's last_synced_at
-  await supabase
+  const { error: updateError } = await supabase
     .from("ticketing_connections")
     .update({ last_synced_at: new Date().toISOString() })
     .eq("id", parsed.data.connection_id)
     .eq("org_id", session.orgId);
+  if (updateError) return { error: updateError.message };
 
   revalidatePath(`/console/settings/integrations/ticketing/${parsed.data.connection_id}`);
   revalidatePath("/console/settings/integrations/ticketing");

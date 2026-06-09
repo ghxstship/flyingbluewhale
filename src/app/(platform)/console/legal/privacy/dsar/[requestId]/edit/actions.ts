@@ -41,7 +41,8 @@ export async function updateDsarRequest(id: string, _: State, fd: FormData): Pro
 export async function deleteDsarRequest(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("dsar_requests").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("dsar_requests").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete dsar request: ${error.message}`);
   revalidatePath("/console/legal/privacy/dsar");
   redirect("/console/legal/privacy/dsar");
 }

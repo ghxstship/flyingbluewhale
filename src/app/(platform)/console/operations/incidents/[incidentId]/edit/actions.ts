@@ -43,7 +43,8 @@ export async function updateIncident(incidentId: string, _: State, fd: FormData)
 export async function deleteIncident(incidentId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("incidents").delete().eq("id", incidentId).eq("org_id", session.orgId);
+  const { error } = await supabase.from("incidents").delete().eq("id", incidentId).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete incident: ${error.message}`);
   revalidatePath("/console/operations/incidents");
   redirect("/console/operations/incidents");
 }

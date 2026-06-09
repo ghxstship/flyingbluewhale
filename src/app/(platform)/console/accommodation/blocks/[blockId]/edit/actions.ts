@@ -51,7 +51,8 @@ export async function updateBlock(id: string, _: State, fd: FormData): Promise<S
 export async function deleteBlock(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("accommodation_blocks").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("accommodation_blocks").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete accommodation block: ${error.message}`);
   revalidatePath("/console/accommodation/blocks");
   redirect("/console/accommodation/blocks");
 }

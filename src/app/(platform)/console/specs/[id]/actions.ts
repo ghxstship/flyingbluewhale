@@ -24,7 +24,7 @@ export async function issueSection(fd: FormData): Promise<void> {
   const s = section as { id: string; section_state: string };
   if (s.section_state === "issued" || s.section_state === "superseded") return;
 
-  await supabase
+  const { error } = await supabase
     .from("spec_sections")
     .update({
       section_state: "issued",
@@ -33,6 +33,7 @@ export async function issueSection(fd: FormData): Promise<void> {
     })
     .eq("id", s.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update spec section: ${error.message}`);
 
   revalidatePath(`/console/specs/${s.id}`);
 }
@@ -52,7 +53,7 @@ export async function supersedeSection(fd: FormData): Promise<void> {
   if (!section) return;
   const s = section as { id: string; section_state: string };
 
-  await supabase
+  const { error } = await supabase
     .from("spec_sections")
     .update({
       section_state: "superseded",
@@ -60,6 +61,7 @@ export async function supersedeSection(fd: FormData): Promise<void> {
     })
     .eq("id", s.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update spec section: ${error.message}`);
 
   revalidatePath(`/console/specs/${s.id}`);
 }

@@ -26,6 +26,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   return withAuth(async (session) => {
     const body = await parseJson(req, PatchSchema);
     if (body instanceof Response) return body;
+    // All fields optional — an empty patch would reach PostgREST as
+    // `update({})`, which it rejects as a 400 we'd surface as 500.
+    if (Object.keys(body).length === 0) return apiError("bad_request", "No fields to update");
     const supabase = (await createClient()) as unknown as LooseSupabase;
     const { error } = await supabase
       .from("drawing_markups")

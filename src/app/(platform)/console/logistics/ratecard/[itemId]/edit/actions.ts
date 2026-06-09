@@ -43,7 +43,8 @@ export async function updateRateCardItem(id: string, _: State, fd: FormData): Pr
 export async function deleteRateCardItem(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("rate_card_items").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("rate_card_items").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete rate card item: ${error.message}`);
   revalidatePath("/console/logistics/ratecard");
   redirect("/console/logistics/ratecard");
 }

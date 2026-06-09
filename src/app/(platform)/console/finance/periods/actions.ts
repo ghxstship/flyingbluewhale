@@ -44,7 +44,7 @@ export async function createAccountingPeriodAction(_: State, fd: FormData): Prom
     .single();
   if (error) return { error: error.message };
 
-  await supabase.from("accounting_period_state_transitions").insert({
+  const { error: transitionErr } = await supabase.from("accounting_period_state_transitions").insert({
     org_id: session.orgId,
     accounting_period_id: data.id,
     from_state: null,
@@ -52,6 +52,7 @@ export async function createAccountingPeriodAction(_: State, fd: FormData): Prom
     reason: "Period opened",
     transitioned_by: session.userId,
   });
+  if (transitionErr) return { error: transitionErr.message };
 
   revalidatePath("/console/finance/periods");
   redirect(`/console/finance/periods/${data.id}`);

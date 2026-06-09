@@ -57,9 +57,19 @@ export async function upsertSsoProvider(fd: FormData): Promise<void> {
 
   let writtenId: string | null = id;
   if (id) {
-    await supabase.from("org_sso_providers").update(payload).eq("id", id).eq("org_id", session.orgId);
+    const { error: updateError } = await supabase
+      .from("org_sso_providers")
+      .update(payload)
+      .eq("id", id)
+      .eq("org_id", session.orgId);
+    if (updateError) throw new Error(`Could not update org sso provider: ${updateError.message}`);
   } else {
-    const { data: inserted } = await supabase.from("org_sso_providers").insert(payload).select("id").maybeSingle();
+    const { error, data: inserted } = await supabase
+      .from("org_sso_providers")
+      .insert(payload)
+      .select("id")
+      .maybeSingle();
+    if (error) throw new Error(`Could not create org sso provider: ${error.message}`);
     writtenId = (inserted as { id: string } | null)?.id ?? null;
   }
 
@@ -93,11 +103,12 @@ export async function toggleSsoProvider(fd: FormData): Promise<void> {
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("org_sso_providers")
     .update({ enabled: parsed.data.enabled, updated_at: new Date().toISOString() })
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update org sso provider: ${error.message}`);
 
   await emitAudit({
     actorId: session.userId,
@@ -118,13 +129,14 @@ export async function deleteSsoProvider(id: string): Promise<void> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return;
 
   const supabase = await createClient();
-  const { data: deleted } = await supabase
+  const { error, data: deleted } = await supabase
     .from("org_sso_providers")
     .delete()
     .eq("id", id)
     .eq("org_id", session.orgId)
     .select("id")
     .maybeSingle();
+  if (error) throw new Error(`Could not delete org sso provider: ${error.message}`);
 
   if (deleted) {
     await emitAudit({

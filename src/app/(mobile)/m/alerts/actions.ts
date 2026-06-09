@@ -9,7 +9,8 @@ const Schema = z.object({ alertId: z.string().uuid() });
 
 export async function acknowledgeAlert(fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = Schema.parse(Object.fromEntries(fd));
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   // Cross-tenant FK guard on alert_id. Without this, a member of org A
@@ -18,13 +19,13 @@ export async function acknowledgeAlert(fd: FormData): Promise<void> {
   const { data: alert } = await supabase
     .from("crisis_alerts")
     .select("id")
-    .eq("id", parsed.alertId)
+    .eq("id", parsed.data.alertId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!alert) return;
 
   // Upsert receipt for (alert_id, user_id) and stamp acknowledged_at.
-  await (
+  const { error } = await (
     supabase.from("crisis_alert_receipts") as unknown as {
       upsert: (
         p: Record<string, unknown>,
@@ -34,11 +35,12 @@ export async function acknowledgeAlert(fd: FormData): Promise<void> {
   ).upsert(
     {
       org_id: session.orgId,
-      alert_id: parsed.alertId,
+      alert_id: parsed.data.alertId,
       user_id: session.userId,
       acknowledged_at: new Date().toISOString(),
     },
     { onConflict: "alert_id,user_id" },
   );
+  if (error) throw new Error(`Could not acknowledge alert: ${error.message}`);
   revalidatePath("/m/alerts");
 }

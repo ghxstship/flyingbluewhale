@@ -134,7 +134,8 @@ export async function deleteFab(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase.from("fabrication_orders").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("fabrication_orders").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete fabrication order: ${error.message}`);
   revalidatePath("/console/production/fabrication");
   redirect("/console/production/fabrication");
 }

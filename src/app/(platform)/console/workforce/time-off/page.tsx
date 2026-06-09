@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
-import { decideTimeOff } from "./actions";
+import { DecideTimeOffButtons } from "./DecideButtons";
 
 export const dynamic = "force-dynamic";
 
@@ -187,22 +187,11 @@ export default async function TimeOffAdminPage() {
               header: t("console.workforce.timeOff.column.action", undefined, "Action"),
               render: (r) =>
                 r.request_state === "pending" ? (
-                  <div className="flex items-center gap-1">
-                    <form action={decideTimeOff}>
-                      <input type="hidden" name="id" value={r.id} />
-                      <input type="hidden" name="decision" value="approved" />
-                      <button type="submit" className="ps-btn btn-xs">
-                        {t("console.workforce.timeOff.action.approve", undefined, "Approve")}
-                      </button>
-                    </form>
-                    <form action={decideTimeOff}>
-                      <input type="hidden" name="id" value={r.id} />
-                      <input type="hidden" name="decision" value="denied" />
-                      <button type="submit" className="ps-btn ps-btn--ghost btn-xs">
-                        {t("console.workforce.timeOff.action.deny", undefined, "Deny")}
-                      </button>
-                    </form>
-                  </div>
+                  <DecideTimeOffButtons
+                    requestId={r.id}
+                    approveLabel={t("console.workforce.timeOff.action.approve", undefined, "Approve")}
+                    denyLabel={t("console.workforce.timeOff.action.deny", undefined, "Deny")}
+                  />
                 ) : (
                   <span className="text-xs text-[var(--p-text-2)]">—</span>
                 ),

@@ -124,7 +124,8 @@ export async function removeProjectMemberAction(projectId: string, userId: strin
   // org-level removePerson is the one that forbids self-removal.
 
   const supabase = await createClient();
-  await supabase.from("project_members").delete().eq("project_id", projectId).eq("user_id", userId);
+  const { error } = await supabase.from("project_members").delete().eq("project_id", projectId).eq("user_id", userId);
+  if (error) throw new Error(`Could not remove project member: ${error.message}`);
 
   await emitAudit({
     actorId: session.userId,

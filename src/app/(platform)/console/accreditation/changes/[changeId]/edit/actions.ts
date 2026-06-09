@@ -37,7 +37,8 @@ export async function updateAccreditationChange(id: string, _: State, fd: FormDa
 export async function deleteAccreditationChange(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("accreditation_changes").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("accreditation_changes").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete accreditation change: ${error.message}`);
   revalidatePath("/console/accreditation/changes");
   redirect("/console/accreditation/changes");
 }

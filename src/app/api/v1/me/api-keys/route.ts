@@ -32,7 +32,8 @@ export async function GET() {
       .from("api_keys")
       .select("id, name, prefix, scopes, last_used_at, expires_at, revoked_at, created_at, created_by")
       .eq("org_id", session.orgId)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(500);
     if (error) return apiError("internal", error.message);
     return apiOk({ keys: data ?? [] });
   });

@@ -41,7 +41,8 @@ export async function updateTask(id: string, _: State, fd: FormData): Promise<St
 export async function deleteTask(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("tasks").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("tasks").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete task: ${error.message}`);
   revalidatePath("/console/tasks");
   redirect("/console/tasks");
 }

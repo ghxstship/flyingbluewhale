@@ -95,7 +95,7 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
   // Insert the signature audit row + event ONLY after the proposal
   // claims the signature. This way a re-attempt doesn't leave orphan
   // signature rows or duplicate signature_completed events.
-  await svc.from("proposal_signatures").insert({
+  const { error: sigErr } = await svc.from("proposal_signatures").insert({
     proposal_id: resolved.link.proposal_id,
     share_token: parsed.data.token,
     signer_name: parsed.data.name,
@@ -105,13 +105,15 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
     signature_hash: hash,
     signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
   });
+  if (sigErr) return { error: sigErr.message };
 
-  await svc.from("proposal_events").insert({
+  const { error: eventErr } = await svc.from("proposal_events").insert({
     proposal_id: resolved.link.proposal_id,
     share_token: parsed.data.token,
     event_type: "signature_completed",
     metadata: { name: parsed.data.name, kind: parsed.data.kind },
   });
+  if (eventErr) return { error: eventErr.message };
 
   revalidatePath(`/proposals/${parsed.data.token}`);
   return { ok: { hash, signedAt } };

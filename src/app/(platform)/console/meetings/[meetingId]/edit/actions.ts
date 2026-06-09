@@ -45,7 +45,8 @@ export async function updateMeeting(id: string, _: State, fd: FormData): Promise
 export async function deleteMeeting(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("events").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("events").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete event: ${error.message}`);
   revalidatePath("/console/meetings");
   redirect("/console/meetings");
 }

@@ -100,11 +100,12 @@ export async function toggleDrawn(projectId: string, drawId: string): Promise<vo
     .eq("org_id", session.orgId)
     .maybeSingle();
   const nextDrawn = !(row?.drawn ?? false);
-  await loose
+  const { error: toggleErr } = await loose
     .from("project_billing_draws")
     .update({ drawn: nextDrawn, drawn_at: nextDrawn ? new Date().toISOString() : null })
     .eq("id", drawId)
     .eq("org_id", session.orgId);
+  if (toggleErr) throw new Error(`Could not toggle draw: ${toggleErr.message}`);
   revalidatePath(`/console/projects/${projectId}/finance/draws`);
 }
 
@@ -112,10 +113,11 @@ export async function deleteDraw(projectId: string, drawId: string): Promise<voi
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
   const supabase = await createClient();
-  await (supabase as unknown as LooseSupabase)
+  const { error: deleteErr } = await (supabase as unknown as LooseSupabase)
     .from("project_billing_draws")
     .delete()
     .eq("id", drawId)
     .eq("org_id", session.orgId);
+  if (deleteErr) throw new Error(`Could not delete draw: ${deleteErr.message}`);
   revalidatePath(`/console/projects/${projectId}/finance/draws`);
 }

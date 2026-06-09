@@ -38,12 +38,13 @@ export async function addVersion(fd: FormData): Promise<void> {
     .single();
   if (error || !version) return;
 
-  await supabase
+  const { error: updateError } = await supabase
     .from("sheet_sets")
     .update({ current_version_id: (version as { id: string }).id })
     .eq("id", parsed.data.sheet_set_id)
     .eq("org_id", session.orgId)
     .is("current_version_id", null);
+  if (updateError) throw new Error(`Could not update sheet set: ${updateError.message}`);
 
   revalidatePath(`/console/drawings/${parsed.data.sheet_set_id}`);
 }
@@ -87,13 +88,14 @@ export async function addMember(fd: FormData): Promise<void> {
   const existingRows = (existing ?? []) as Array<{ ordinal: number }>;
   const nextOrdinal = existingRows[0] ? existingRows[0].ordinal + 1 : 1;
 
-  await supabase.from("sheet_set_members").insert({
+  const { error } = await supabase.from("sheet_set_members").insert({
     org_id: session.orgId,
     sheet_set_version_id: parsed.data.version_id,
     site_plan_id: parsed.data.site_plan_id,
     revision_letter_at_publish: (sitePlan as { revision_letter: string | null }).revision_letter,
     ordinal: nextOrdinal,
   });
+  if (error) throw new Error(`Could not create sheet set member: ${error.message}`);
 
   revalidatePath(`/console/drawings/${v.sheet_set_id}`);
 }
@@ -116,7 +118,7 @@ export async function publishVersion(fd: FormData): Promise<void> {
   const v = version as { id: string; sheet_set_id: string; set_state: string };
   if (v.set_state === "published") return;
 
-  await supabase
+  const { error: updateError } = await supabase
     .from("sheet_set_versions")
     .update({
       set_state: "published",
@@ -125,12 +127,14 @@ export async function publishVersion(fd: FormData): Promise<void> {
     })
     .eq("id", v.id)
     .eq("org_id", session.orgId);
+  if (updateError) throw new Error(`Could not update sheet set version: ${updateError.message}`);
 
-  await supabase
+  const { error } = await supabase
     .from("sheet_sets")
     .update({ current_version_id: v.id })
     .eq("id", v.sheet_set_id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update sheet set: ${error.message}`);
 
   revalidatePath(`/console/drawings/${v.sheet_set_id}`);
 }
@@ -150,7 +154,7 @@ export async function supersedeVersion(fd: FormData): Promise<void> {
   if (!version) return;
   const v = version as { id: string; sheet_set_id: string; set_state: string };
 
-  await supabase
+  const { error } = await supabase
     .from("sheet_set_versions")
     .update({
       set_state: "superseded",
@@ -158,6 +162,7 @@ export async function supersedeVersion(fd: FormData): Promise<void> {
     })
     .eq("id", v.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update sheet set version: ${error.message}`);
 
   revalidatePath(`/console/drawings/${v.sheet_set_id}`);
 }

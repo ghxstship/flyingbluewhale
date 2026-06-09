@@ -41,7 +41,8 @@ export async function updateTimeEntry(id: string, _: State, fd: FormData): Promi
 export async function deleteTimeEntry(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("time_entries").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("time_entries").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete time entry: ${error.message}`);
   revalidatePath("/console/finance/time");
   redirect("/console/finance/time");
 }

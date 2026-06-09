@@ -37,7 +37,8 @@ export async function updateReadinessExercise(id: string, _: State, fd: FormData
 export async function deleteReadinessExercise(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("readiness_exercises").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("readiness_exercises").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete readiness exercis: ${error.message}`);
   revalidatePath("/console/programs/readiness");
   redirect("/console/programs/readiness");
 }

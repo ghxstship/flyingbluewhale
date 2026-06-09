@@ -41,7 +41,8 @@ export async function updateShipment(id: string, _: State, fd: FormData): Promis
 export async function deleteShipment(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("purchase_orders").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("purchase_orders").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete purchase order: ${error.message}`);
   revalidatePath("/console/logistics/freight");
   redirect("/console/logistics/freight");
 }

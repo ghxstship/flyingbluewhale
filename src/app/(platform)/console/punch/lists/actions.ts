@@ -32,13 +32,14 @@ export async function createPunchList(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!project) return;
 
-  await supabase.from("punch_lists").insert({
+  const { error } = await supabase.from("punch_lists").insert({
     org_id: session.orgId,
     project_id: parsed.data.project_id,
     name: parsed.data.name,
     category: parsed.data.category?.trim() || null,
     created_by: session.userId,
   });
+  if (error) throw new Error(`Could not create punch list: ${error.message}`);
 
   revalidatePath("/console/punch/lists");
   revalidatePath("/console/punch");
@@ -56,11 +57,12 @@ export async function toggleListStatus(fd: FormData): Promise<void> {
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("punch_lists")
     .update({ status: parsed.data.status, updated_at: new Date().toISOString() })
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update punch list: ${error.message}`);
 
   revalidatePath("/console/punch/lists");
   revalidatePath("/console/punch");
@@ -74,7 +76,8 @@ export async function deletePunchList(id: string): Promise<void> {
   const supabase = await createClient();
   // FK on punch_items.punch_list_id is ON DELETE SET NULL so items
   // survive the list deletion — they just lose their grouping.
-  await supabase.from("punch_lists").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("punch_lists").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete punch list: ${error.message}`);
 
   revalidatePath("/console/punch/lists");
   revalidatePath("/console/punch");

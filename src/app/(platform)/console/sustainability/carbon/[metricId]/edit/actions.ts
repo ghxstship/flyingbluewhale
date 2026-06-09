@@ -43,7 +43,12 @@ export async function updateMetric(metricId: string, _: State, fd: FormData): Pr
 export async function deleteMetric(metricId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("sustainability_metrics").delete().eq("id", metricId).eq("org_id", session.orgId);
+  const { error } = await supabase
+    .from("sustainability_metrics")
+    .delete()
+    .eq("id", metricId)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete sustainability metric: ${error.message}`);
   revalidatePath("/console/sustainability/carbon");
   redirect("/console/sustainability/carbon");
 }

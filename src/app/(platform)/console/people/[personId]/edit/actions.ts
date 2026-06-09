@@ -138,7 +138,7 @@ export async function removePerson(userId: string): Promise<void> {
   // target_id references; soft delete preserves the record while
   // immediately revoking access (every session/api-key/calendar.ics/
   // workspace-switch path already filters .is("deleted_at", null)).
-  const { data: removed } = await supabase
+  const { error: updateError3, data: removed } = await supabase
     .from("memberships")
     .update({ deleted_at: new Date().toISOString() })
     .eq("user_id", userId)
@@ -146,6 +146,7 @@ export async function removePerson(userId: string): Promise<void> {
     .is("deleted_at", null)
     .select("id")
     .maybeSingle();
+  if (updateError3) throw new Error(`Could not update membership: ${updateError3.message}`);
 
   // Cascade everything that survives a membership soft-delete and would
   // either resurrect on re-invite OR keep working through alternate
@@ -162,7 +163,12 @@ export async function removePerson(userId: string): Promise<void> {
     const { data: orgProjectIds } = await supabase.from("projects").select("id").eq("org_id", session.orgId);
     const projectIds = ((orgProjectIds ?? []) as Array<{ id: string }>).map((p) => p.id);
     if (projectIds.length > 0) {
-      await supabase.from("project_members").delete().eq("user_id", userId).in("project_id", projectIds);
+      const { error: deleteError2 } = await supabase
+        .from("project_members")
+        .delete()
+        .eq("user_id", userId)
+        .in("project_id", projectIds);
+      if (deleteError2) throw new Error(`Could not delete project member: ${deleteError2.message}`);
     }
 
     // ② api_keys — PATs minted by the offboarded user in this org. The
@@ -170,23 +176,25 @@ export async function removePerson(userId: string): Promise<void> {
     //    membership is soft-deleted, but a re-invite restores them; the
     //    deliberate offboard intent is lost. Explicit revoke captures the
     //    decision permanently.
-    await supabase
+    const { error: updateError2 } = await supabase
       .from("api_keys")
       .update({ revoked_at: new Date().toISOString() })
       .eq("created_by", userId)
       .eq("org_id", session.orgId)
       .is("revoked_at", null);
+    if (updateError2) throw new Error(`Could not update api key: ${updateError2.message}`);
 
     // ③ account_manager_assignments — the user is either a portal_user
     //    or a manager_user on some assignments in this org. Deactivate
     //    (not hard-delete) so the chat_room thread history is preserved
     //    on the chat_room_id pointer.
-    await supabase
+    const { error: updateError } = await supabase
       .from("account_manager_assignments")
       .update({ active: false })
       .eq("org_id", session.orgId)
       .or(`portal_user_id.eq.${userId},manager_user_id.eq.${userId}`)
       .eq("active", true);
+    if (updateError) throw new Error(`Could not update account manager assignment: ${updateError.message}`);
 
     // ④ chat_room_members — drop the offboarded user from every chat
     //    room owned by this org. Cross-org rooms (portal threads to
@@ -194,7 +202,12 @@ export async function removePerson(userId: string): Promise<void> {
     const { data: orgRoomIds } = await supabase.from("chat_rooms").select("id").eq("org_id", session.orgId);
     const roomIds = ((orgRoomIds ?? []) as Array<{ id: string }>).map((r) => r.id);
     if (roomIds.length > 0) {
-      await supabase.from("chat_room_members").delete().eq("user_id", userId).in("room_id", roomIds);
+      const { error: deleteError } = await supabase
+        .from("chat_room_members")
+        .delete()
+        .eq("user_id", userId)
+        .in("room_id", roomIds);
+      if (deleteError) throw new Error(`Could not delete chat room member: ${deleteError.message}`);
     }
 
     // ⑤ push_subscriptions — only safe to disable if the user has no
@@ -206,11 +219,12 @@ export async function removePerson(userId: string): Promise<void> {
       .eq("user_id", userId)
       .is("deleted_at", null);
     if (!otherMemberships || otherMemberships.length === 0) {
-      await supabase
+      const { error } = await supabase
         .from("push_subscriptions")
         .update({ disabled_at: new Date().toISOString() })
         .eq("user_id", userId)
         .is("disabled_at", null);
+      if (error) throw new Error(`Could not update push subscription: ${error.message}`);
     }
   }
 

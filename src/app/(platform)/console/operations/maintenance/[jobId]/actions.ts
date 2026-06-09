@@ -12,7 +12,8 @@ const Schema = z.object({
 
 export async function completeJob(jobId: string, fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = Schema.parse(Object.fromEntries(fd));
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   const { data: job } = await supabase
@@ -23,16 +24,17 @@ export async function completeJob(jobId: string, fd: FormData): Promise<void> {
     .maybeSingle();
   if (!job) return;
 
-  await supabase
+  const { error: updateError } = await supabase
     .from("maintenance_jobs")
     .update({
       completed_at: new Date().toISOString(),
       completed_by: session.userId,
-      outcome: parsed.outcome,
-      notes: parsed.notes ?? null,
+      outcome: parsed.data.outcome,
+      notes: parsed.data.notes ?? null,
     } as never)
     .eq("id", jobId)
     .eq("org_id", session.orgId);
+  if (updateError) throw new Error(`Could not update maintenance job: ${updateError.message}`);
 
   // Spawn the next job from the schedule's cadence so the queue stays alive.
   if (job.schedule_id) {
@@ -43,7 +45,7 @@ export async function completeJob(jobId: string, fd: FormData): Promise<void> {
       .maybeSingle();
     if (schedule && schedule.active) {
       const nextDue = new Date(Date.now() + schedule.cadence_days * 86400_000).toISOString();
-      await supabase.from("maintenance_jobs").insert({
+      const { error: insertError } = await supabase.from("maintenance_jobs").insert({
         org_id: session.orgId,
         schedule_id: job.schedule_id,
         kind: schedule.kind as "inspection" | "service" | "cert_renewal" | "compliance",
@@ -51,10 +53,12 @@ export async function completeJob(jobId: string, fd: FormData): Promise<void> {
         target_id: schedule.target_id ?? null,
         due_at: nextDue,
       });
-      await supabase
+      if (insertError) throw new Error(`Could not create maintenance job: ${insertError.message}`);
+      const { error } = await supabase
         .from("maintenance_schedules")
         .update({ last_run_at: new Date().toISOString(), next_run_at: nextDue } as never)
         .eq("id", job.schedule_id);
+      if (error) throw new Error(`Could not update maintenance schedule: ${error.message}`);
     }
   }
 

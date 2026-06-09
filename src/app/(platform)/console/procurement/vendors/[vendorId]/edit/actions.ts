@@ -48,12 +48,13 @@ export async function deleteVendor(id: string): Promise<void> {
   // referencing the vendor, breaking historical procurement reports.
   // Soft delete preserves the record; .is(deleted_at, null) makes
   // the action idempotent.
-  await supabase
+  const { error } = await supabase
     .from("vendors")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null);
+  if (error) throw new Error(`Could not archive vendor: ${error.message}`);
   revalidatePath("/console/procurement/vendors");
   redirect("/console/procurement/vendors");
 }

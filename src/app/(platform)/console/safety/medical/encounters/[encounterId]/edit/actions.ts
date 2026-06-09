@@ -46,7 +46,12 @@ export async function deleteEncounter(encounterId: string): Promise<void> {
   // (HIPAA-adjacent), but the right fix is a migration to ADD
   // deleted_at first, then switch behavior — not a hopeful column
   // reference in app code.
-  await supabase.from("medical_encounters").delete().eq("id", encounterId).eq("org_id", session.orgId);
+  const { error } = await supabase
+    .from("medical_encounters")
+    .delete()
+    .eq("id", encounterId)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete medical encounter: ${error.message}`);
   revalidatePath("/console/safety/medical/encounters");
   redirect("/console/safety/medical/encounters");
 }

@@ -62,13 +62,14 @@ export async function createServiceRequest(_: CreateState, fd: FormData): Promis
     .select("id")
     .single();
   if (error) return { error: error.message };
-  await supabase.from("service_request_events").insert({
+  const { error: insertError } = await supabase.from("service_request_events").insert({
     request_id: data.id,
     org_id: session.orgId,
     actor_id: session.userId,
     kind: "opened",
     payload: { severity: parsed.data.severity, category: parsed.data.category },
   });
+  if (insertError) return { error: insertError.message };
   revalidatePath("/console/services/requests");
   if (parsed.data.shell === "mobile") {
     revalidatePath("/m/requests");
@@ -94,7 +95,8 @@ const REQUEST_TRANSITIONS: Record<string, readonly string[]> = {
 
 export async function transitionRequest(requestId: string, fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = TransitionSchema.parse(Object.fromEntries(fd));
+  const parsed = TransitionSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   const { data: existing } = await supabase
@@ -107,16 +109,16 @@ export async function transitionRequest(requestId: string, fd: FormData): Promis
 
   const current = existing.status as string;
   const allowed = REQUEST_TRANSITIONS[current] ?? [];
-  if (!allowed.includes(parsed.to)) {
-    throw new Error(`Cannot move ${current} → ${parsed.to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
+  if (!allowed.includes(parsed.data.to)) {
+    throw new Error(`Cannot move ${current} → ${parsed.data.to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
   }
 
-  const patch: Record<string, unknown> = { status: parsed.to, updated_at: new Date().toISOString() };
+  const patch: Record<string, unknown> = { status: parsed.data.to, updated_at: new Date().toISOString() };
   const now = new Date().toISOString();
-  if (parsed.to === "acknowledged" && current === "open") patch.acknowledged_at = now;
-  if (parsed.to === "resolved") patch.resolved_at = now;
-  if (parsed.to === "cancelled") patch.cancelled_at = now;
-  if (parsed.note && parsed.to === "resolved") patch.resolution_note = parsed.note;
+  if (parsed.data.to === "acknowledged" && current === "open") patch.acknowledged_at = now;
+  if (parsed.data.to === "resolved") patch.resolved_at = now;
+  if (parsed.data.to === "cancelled") patch.cancelled_at = now;
+  if (parsed.data.note && parsed.data.to === "resolved") patch.resolution_note = parsed.data.note;
 
   // Conditional update closes the TOCTOU between the SELECT above and
   // this write. Without it, two operators clicking acknowledge at the
@@ -133,13 +135,14 @@ export async function transitionRequest(requestId: string, fd: FormData): Promis
     throw new Error("Service request status changed concurrently — refresh and retry");
   }
 
-  await supabase.from("service_request_events").insert({
+  const { error: insertError } = await supabase.from("service_request_events").insert({
     request_id: requestId,
     org_id: session.orgId,
     actor_id: session.userId,
-    kind: parsed.to === "resolved" ? "resolved" : parsed.to === "cancelled" ? "cancelled" : "status_changed",
-    payload: { from: current, to: parsed.to, note: parsed.note ?? null },
+    kind: parsed.data.to === "resolved" ? "resolved" : parsed.data.to === "cancelled" ? "cancelled" : "status_changed",
+    payload: { from: current, to: parsed.data.to, note: parsed.data.note ?? null },
   });
+  if (insertError) throw new Error(`Could not create service request event: ${insertError.message}`);
   revalidatePath(`/console/services/requests/${requestId}`);
   revalidatePath("/console/services/requests");
 }

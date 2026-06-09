@@ -117,7 +117,8 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
     .eq("org_id", session.orgId)
     .eq("pipeline_id", active.id)
     .is("closed_at", null)
-    .order("updated_at", { ascending: false });
+    .order("updated_at", { ascending: false })
+    .limit(500);
   const opportunities = (oppData ?? []) as unknown as OpportunityRow[];
 
   const totalValue = opportunities.reduce((sum, o) => sum + (o.estimated_value_minor ?? 0), 0);

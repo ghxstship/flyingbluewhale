@@ -62,7 +62,7 @@ export async function createSubscriptionAction(_: State, fd: FormData): Promise<
     .single();
   if (error) return { error: error.message };
 
-  await supabase.from("subscription_state_transitions").insert({
+  const { error: insertError } = await supabase.from("subscription_state_transitions").insert({
     org_id: session.orgId,
     subscription_id: data.id,
     from_state: null,
@@ -70,6 +70,7 @@ export async function createSubscriptionAction(_: State, fd: FormData): Promise<
     reason: "Created",
     transitioned_by: session.userId,
   });
+  if (insertError) return { error: insertError.message };
 
   revalidatePath("/console/subscriptions");
   redirect(`/console/subscriptions/${data.id}`);

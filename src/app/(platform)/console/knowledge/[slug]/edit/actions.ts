@@ -64,7 +64,8 @@ export async function updateKnowledgeArticle(_: State, fd: FormData): Promise<St
 export async function deleteKnowledgeArticle(slug: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("kb_articles").delete().eq("slug", slug).eq("org_id", session.orgId);
+  const { error } = await supabase.from("kb_articles").delete().eq("slug", slug).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete kb article: ${error.message}`);
   revalidatePath("/console/knowledge");
   redirect("/console/knowledge");
 }

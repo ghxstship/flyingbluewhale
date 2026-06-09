@@ -315,12 +315,13 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
   // Backfill the proposal → project pointer iff still empty. Avoids
   // clobbering a deliberately-attached prior project.
   if (!proposal.project_id) {
-    await supabase
+    const { error: updateError } = await supabase
       .from("proposals")
       .update({ project_id: projectId })
       .eq("org_id", session.orgId)
       .eq("id", proposalId)
       .is("project_id", null);
+    if (updateError) return { error: updateError.message };
   }
 
   // Seed deposit + balance invoices on the 60/40 convention. The

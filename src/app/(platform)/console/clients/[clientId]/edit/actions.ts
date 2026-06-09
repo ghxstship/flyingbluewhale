@@ -46,12 +46,13 @@ export async function deleteClient(id: string): Promise<void> {
   // breaking historical reporting; soft delete preserves the record
   // and the .is("deleted_at", null) below makes the action
   // idempotent.
-  await supabase
+  const { error } = await supabase
     .from("clients")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null);
+  if (error) throw new Error(`Could not update client: ${error.message}`);
   revalidatePath("/console/clients");
   redirect("/console/clients");
 }

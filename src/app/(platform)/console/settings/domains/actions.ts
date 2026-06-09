@@ -60,11 +60,12 @@ export async function verifyDomainAction(formData: FormData) {
     matched = false;
   }
   if (matched) {
-    await supabase
+    const { error } = await supabase
       .from("org_domains")
       .update({ verified_at: new Date().toISOString() })
       .eq("id", id)
       .eq("org_id", session.orgId);
+    if (error) throw new Error(`Could not update org domain: ${error.message}`);
   }
   revalidatePath("/console/settings/domains");
 }
@@ -75,6 +76,7 @@ export async function deleteDomainAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase.from("org_domains").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("org_domains").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete org domain: ${error.message}`);
   revalidatePath("/console/settings/domains");
 }

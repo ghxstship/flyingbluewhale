@@ -42,9 +42,10 @@ export async function createPollAction(_: State, fd: FormData): Promise<State> {
     .single();
   if (error) return { error: error.message };
 
-  await supabase
+  const { error: insertError } = await supabase
     .from("poll_options")
     .insert(options.map((label, idx) => ({ poll_id: poll.id, ordinal: idx + 1, label })));
+  if (insertError) return { error: insertError.message };
 
   revalidatePath("/console/comms/polls");
   redirect(`/console/comms/polls/${poll.id}`);

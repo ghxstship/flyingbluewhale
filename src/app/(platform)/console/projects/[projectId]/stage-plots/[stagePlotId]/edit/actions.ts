@@ -51,12 +51,13 @@ export async function deleteStagePlot(projectId: string, id: string): Promise<vo
   const session = await requireSession();
   const supabase = await createClient();
   // Soft delete.
-  await supabase
+  const { error } = await supabase
     .from("stage_plots")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("project_id", projectId)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete stage plot: ${error.message}`);
   revalidatePath(`/console/projects/${projectId}/stage-plots`);
   redirect(`/console/projects/${projectId}/stage-plots`);
 }

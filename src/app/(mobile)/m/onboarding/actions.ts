@@ -12,14 +12,15 @@ const StepSchema = z.object({
 
 export async function completeStep(fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = StepSchema.parse(Object.fromEntries(fd));
+  const parsed = StepSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   // Caller must own the assignment.
   const { data: assignment } = await supabase
     .from("new_hire_assignments")
     .select("id, flow_id, progress, started_at, assignment_phase")
-    .eq("id", parsed.assignmentId)
+    .eq("id", parsed.data.assignmentId)
     .eq("assignee_id", session.userId)
     .maybeSingle();
   if (!assignment) return;
@@ -35,22 +36,23 @@ export async function completeStep(fd: FormData): Promise<void> {
   const { data: step } = await supabase
     .from("new_hire_flow_steps")
     .select("id")
-    .eq("id", parsed.stepId)
+    .eq("id", parsed.data.stepId)
     .eq("flow_id", a.flow_id)
     .maybeSingle();
   if (!step) return;
 
-  const progress = { ...(a.progress ?? {}), [parsed.stepId]: true };
-  await supabase
+  const progress = { ...(a.progress ?? {}), [parsed.data.stepId]: true };
+  const { error } = await supabase
     .from("new_hire_assignments")
     .update({
       progress,
       assignment_phase: a.assignment_phase === "not_started" ? "in_progress" : a.assignment_phase,
       started_at: a.started_at ?? new Date().toISOString(),
     })
-    .eq("id", parsed.assignmentId);
+    .eq("id", parsed.data.assignmentId);
+  if (error) throw new Error(`Could not save step progress: ${error.message}`);
 
-  revalidatePath(`/m/onboarding/${parsed.assignmentId}`);
+  revalidatePath(`/m/onboarding/${parsed.data.assignmentId}`);
   revalidatePath("/m/onboarding");
 }
 
@@ -58,13 +60,14 @@ const FinalizeSchema = z.object({ assignmentId: z.string().uuid() });
 
 export async function finalizeAssignment(fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = FinalizeSchema.parse(Object.fromEntries(fd));
+  const parsed = FinalizeSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   const { data: assignment } = await supabase
     .from("new_hire_assignments")
     .select("id, flow_id, progress")
-    .eq("id", parsed.assignmentId)
+    .eq("id", parsed.data.assignmentId)
     .eq("assignee_id", session.userId)
     .maybeSingle();
   if (!assignment) return;
@@ -79,12 +82,13 @@ export async function finalizeAssignment(fd: FormData): Promise<void> {
     .every((s) => progress[s.id]);
   if (!requiredDone) return;
 
-  await supabase
+  const { error } = await supabase
     .from("new_hire_assignments")
     .update({ assignment_phase: "completed", completed_at: new Date().toISOString() })
-    .eq("id", parsed.assignmentId)
+    .eq("id", parsed.data.assignmentId)
     .neq("assignment_phase", "completed");
+  if (error) throw new Error(`Could not finalize onboarding: ${error.message}`);
 
-  revalidatePath(`/m/onboarding/${parsed.assignmentId}`);
+  revalidatePath(`/m/onboarding/${parsed.data.assignmentId}`);
   revalidatePath("/m/onboarding");
 }

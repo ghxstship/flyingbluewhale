@@ -56,10 +56,11 @@ export async function revokeLinkAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("assignment_scan_codes")
     .update({ active: false, voided_at: new Date().toISOString(), voided_by: session.userId })
     .eq("id", id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update assignment scan code: ${error.message}`);
   revalidatePath("/console/people/credentials/asset-linker");
 }

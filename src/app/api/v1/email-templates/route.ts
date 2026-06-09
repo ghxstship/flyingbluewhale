@@ -28,7 +28,8 @@ export async function GET() {
       .select("id, slug, name, subject, body_html, body_text, merge_tags, is_active, updated_at")
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
-      .order("slug", { ascending: true });
+      .order("slug", { ascending: true })
+      .limit(500);
     if (error) return apiError("internal", error.message);
     return apiOk({ templates: data ?? [] });
   });

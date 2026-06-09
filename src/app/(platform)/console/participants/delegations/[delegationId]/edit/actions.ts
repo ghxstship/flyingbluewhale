@@ -41,7 +41,8 @@ export async function updateDelegation(id: string, _: State, fd: FormData): Prom
 export async function deleteDelegation(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("delegations").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("delegations").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete delegation: ${error.message}`);
   revalidatePath("/console/participants/delegations");
   redirect("/console/participants/delegations");
 }

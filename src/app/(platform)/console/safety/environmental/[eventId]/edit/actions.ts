@@ -44,7 +44,8 @@ export async function deleteEnvEvent(eventId: string): Promise<void> {
   // misattributed deleted_at to this table; the schema confirms no
   // such column exists. If retention requirements change, the right
   // fix is a migration to ADD deleted_at first, then switch behavior.
-  await supabase.from("environmental_events").delete().eq("id", eventId).eq("org_id", session.orgId);
+  const { error } = await supabase.from("environmental_events").delete().eq("id", eventId).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete environmental event: ${error.message}`);
   revalidatePath("/console/safety/environmental");
   redirect("/console/safety/environmental");
 }

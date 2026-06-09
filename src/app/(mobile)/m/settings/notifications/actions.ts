@@ -12,7 +12,9 @@ export async function savePreferences(fd: FormData): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
 
-  const digest = DigestSchema.parse(fd.get("digest") ?? "immediate");
+  const parsedDigest = DigestSchema.safeParse(fd.get("digest") ?? "immediate");
+  if (!parsedDigest.success) throw new Error(parsedDigest.error.issues[0]?.message ?? "Invalid input");
+  const digest = parsedDigest.data;
 
   // Read the canonical kind list — anything not in the catalog is
   // ignored. Trust the wire as little as possible.
@@ -28,12 +30,13 @@ export async function savePreferences(fd: FormData): Promise<void> {
   }
 
   // Upsert by user_id — table PK is user_id.
-  await supabase
+  const { error } = await supabase
     .from("notification_preferences")
     .upsert(
       { user_id: session.userId, digest, matrix, updated_at: new Date().toISOString() },
       { onConflict: "user_id" },
     );
+  if (error) throw new Error(`Could not save preferences: ${error.message}`);
 
   revalidatePath("/m/settings/notifications");
   revalidatePath("/m/settings");

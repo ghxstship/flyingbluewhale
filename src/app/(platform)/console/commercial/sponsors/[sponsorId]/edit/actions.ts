@@ -41,7 +41,8 @@ export async function updateSponsorEntitlement(id: string, _: State, fd: FormDat
 export async function deleteSponsorEntitlement(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("sponsor_entitlements").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("sponsor_entitlements").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete sponsor entitlement: ${error.message}`);
   revalidatePath("/console/commercial/sponsors");
   redirect("/console/commercial/sponsors");
 }

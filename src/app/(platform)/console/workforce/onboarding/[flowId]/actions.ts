@@ -27,8 +27,9 @@ const StepSchema = z.object({
 export async function addStep(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = StepSchema.parse(Object.fromEntries(fd));
-  if (!(await guardFlow(parsed.flowId, session.orgId))) return;
+  const parsed = StepSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardFlow(parsed.data.flowId, session.orgId))) return;
   const supabase = await createClient();
 
   // Ordinal: next-after-max keeps display order stable when steps are
@@ -36,16 +37,17 @@ export async function addStep(fd: FormData): Promise<void> {
   const { count } = await supabase
     .from("new_hire_flow_steps")
     .select("id", { count: "exact", head: true })
-    .eq("flow_id", parsed.flowId);
-  await supabase.from("new_hire_flow_steps").insert({
-    flow_id: parsed.flowId,
+    .eq("flow_id", parsed.data.flowId);
+  const { error } = await supabase.from("new_hire_flow_steps").insert({
+    flow_id: parsed.data.flowId,
     ordinal: (count ?? 0) + 1,
-    title: parsed.title,
-    description: parsed.description || null,
-    step_kind: parsed.step_kind,
+    title: parsed.data.title,
+    description: parsed.data.description || null,
+    step_kind: parsed.data.step_kind,
     required: true,
   });
-  revalidatePath(`/console/workforce/onboarding/${parsed.flowId}`);
+  if (error) throw new Error(`Could not create new hire flow step: ${error.message}`);
+  revalidatePath(`/console/workforce/onboarding/${parsed.data.flowId}`);
 }
 
 const PubSchema = z.object({ flowId: z.string().uuid() });
@@ -53,16 +55,18 @@ const PubSchema = z.object({ flowId: z.string().uuid() });
 export async function publishFlow(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = PubSchema.parse(Object.fromEntries(fd));
-  if (!(await guardFlow(parsed.flowId, session.orgId))) return;
+  const parsed = PubSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardFlow(parsed.data.flowId, session.orgId))) return;
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("new_hire_flows")
     .update({ publish_state: "published" })
-    .eq("id", parsed.flowId)
+    .eq("id", parsed.data.flowId)
     .eq("org_id", session.orgId)
     .eq("publish_state", "draft");
-  revalidatePath(`/console/workforce/onboarding/${parsed.flowId}`);
+  if (error) throw new Error(`Could not update new hire flow: ${error.message}`);
+  revalidatePath(`/console/workforce/onboarding/${parsed.data.flowId}`);
   revalidatePath("/console/workforce/onboarding");
 }
 
@@ -74,8 +78,9 @@ const AssignSchema = z.object({
 export async function assignFlow(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = AssignSchema.parse(Object.fromEntries(fd));
-  if (!(await guardFlow(parsed.flowId, session.orgId))) return;
+  const parsed = AssignSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!(await guardFlow(parsed.data.flowId, session.orgId))) return;
   const supabase = await createClient();
 
   // Assignee must be an org member.
@@ -83,15 +88,16 @@ export async function assignFlow(fd: FormData): Promise<void> {
     .from("memberships")
     .select("user_id")
     .eq("org_id", session.orgId)
-    .eq("user_id", parsed.assignee_id)
+    .eq("user_id", parsed.data.assignee_id)
     .is("deleted_at", null)
     .maybeSingle();
   if (!member) return;
 
-  await supabase.from("new_hire_assignments").insert({
+  const { error } = await supabase.from("new_hire_assignments").insert({
     org_id: session.orgId,
-    flow_id: parsed.flowId,
-    assignee_id: parsed.assignee_id,
+    flow_id: parsed.data.flowId,
+    assignee_id: parsed.data.assignee_id,
   });
-  revalidatePath(`/console/workforce/onboarding/${parsed.flowId}`);
+  if (error) throw new Error(`Could not create new hire assignment: ${error.message}`);
+  revalidatePath(`/console/workforce/onboarding/${parsed.data.flowId}`);
 }

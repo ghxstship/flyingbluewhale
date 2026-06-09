@@ -39,11 +39,12 @@ export async function reconcileBudget(formData: FormData) {
   // (spent_cents) see the reconciliation result. The expenses trigger
   // keeps them in sync automatically on regular writes; this manual
   // path repeats the contract.
-  await supabase
+  const { error } = await supabase
     .from("budgets")
     .update({ spent_cents: computed, actual_cents: computed })
     .eq("id", id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not reconcile budget: ${error.message}`);
   revalidatePath("/console/finance/budgets");
   revalidatePath(`/console/finance/budgets/${id}`);
 }

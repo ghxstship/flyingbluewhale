@@ -33,18 +33,20 @@ export async function activateBaseline(fd: FormData): Promise<void> {
 
   // Archive any currently-active baseline for this project (partial unique
   // index enforces one-active; we flip the existing active first).
-  await supabase
+  const { error: updateError } = await supabase
     .from("schedule_baselines")
     .update({ baseline_state: "archived" })
     .eq("project_id", b.project_id)
     .eq("org_id", session.orgId)
     .eq("baseline_state", "active");
+  if (updateError) throw new Error(`Could not update schedule baseline: ${updateError.message}`);
 
-  await supabase
+  const { error } = await supabase
     .from("schedule_baselines")
     .update({ baseline_state: "active", snapshot_at: new Date().toISOString() })
     .eq("id", b.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update schedule baseline: ${error.message}`);
 
   revalidatePath(`/console/schedule/baselines/${b.id}`);
 }
@@ -56,11 +58,12 @@ export async function archiveBaseline(fd: FormData): Promise<void> {
   if (!parsed.success) return;
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
-  await supabase
+  const { error } = await supabase
     .from("schedule_baselines")
     .update({ baseline_state: "archived" })
     .eq("id", parsed.data.baseline_id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update schedule baseline: ${error.message}`);
 
   revalidatePath(`/console/schedule/baselines/${parsed.data.baseline_id}`);
 }
@@ -143,7 +146,7 @@ export async function runCpm(fd: FormData): Promise<void> {
   // the action self-contained; for large schedules a future revision can
   // batch via RPC.
   for (const a of result.activities) {
-    await supabase
+    const { error } = await supabase
       .from("schedule_activities")
       .update({
         early_start: a.early_start,
@@ -156,6 +159,7 @@ export async function runCpm(fd: FormData): Promise<void> {
       })
       .eq("id", a.id)
       .eq("org_id", session.orgId);
+    if (error) throw new Error(`Could not update schedule activity: ${error.message}`);
   }
 
   revalidatePath(`/console/schedule/baselines/${parsed.data.baseline_id}`);
@@ -203,21 +207,23 @@ export async function importSchedule(_: ImportState, fd: FormData): Promise<Impo
   }
 
   // Replace semantics: clear existing rows.
-  await supabase
+  const { error: deleteError2 } = await supabase
     .from("schedule_activity_dependencies")
     .delete()
     .eq("baseline_id", parsed.data.baseline_id)
     .eq("org_id", session.orgId);
-  await supabase
+  if (deleteError2) return { error: deleteError2.message };
+  const { error: deleteError } = await supabase
     .from("schedule_activities")
     .delete()
     .eq("baseline_id", parsed.data.baseline_id)
     .eq("org_id", session.orgId);
+  if (deleteError) return { error: deleteError.message };
 
   // Insert activities. We need our DB id per source_id for dependency mapping.
   const sourceIdToDbId = new Map<string, string>();
   for (const a of result.activities) {
-    const { data: inserted } = await supabase
+    const { error: insertError, data: inserted } = await supabase
       .from("schedule_activities")
       .insert({
         org_id: session.orgId,
@@ -235,6 +241,7 @@ export async function importSchedule(_: ImportState, fd: FormData): Promise<Impo
       })
       .select("id")
       .single();
+    if (insertError) return { error: insertError.message };
     if (inserted) sourceIdToDbId.set(a.source_id, (inserted as { id: string }).id);
   }
 
@@ -256,7 +263,7 @@ export async function importSchedule(_: ImportState, fd: FormData): Promise<Impo
   }
 
   // Mark the baseline as imported.
-  await supabase
+  const { error: updateError } = await supabase
     .from("schedule_baselines")
     .update({
       imported_from: result.source_format,
@@ -265,6 +272,7 @@ export async function importSchedule(_: ImportState, fd: FormData): Promise<Impo
     })
     .eq("id", parsed.data.baseline_id)
     .eq("org_id", session.orgId);
+  if (updateError) return { error: updateError.message };
 
   revalidatePath(`/console/schedule/baselines/${parsed.data.baseline_id}`);
   return {

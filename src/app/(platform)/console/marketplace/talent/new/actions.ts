@@ -142,13 +142,14 @@ export async function createRiderAction(_: State, fd: FormData): Promise<State> 
   if (!talent) return { error: "Talent profile not found in your organization" };
 
   // Demote the previous current rider of this kind.
-  await supabase
+  const { error: updateError } = await supabase
     .from("talent_riders")
     .update({ is_current: false })
     .eq("org_id", session.orgId)
     .eq("talent_profile_id", parsed.data.talent_id)
     .eq("kind", parsed.data.kind)
     .eq("is_current", true);
+  if (updateError) return { error: updateError.message };
 
   const { error: insertError } = await supabase.from("talent_riders").insert({
     org_id: session.orgId,

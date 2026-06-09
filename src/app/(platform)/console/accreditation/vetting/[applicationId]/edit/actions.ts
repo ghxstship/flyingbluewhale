@@ -41,7 +41,8 @@ export async function updateVettingApp(id: string, _: State, fd: FormData): Prom
 export async function deleteVettingApp(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("accreditations").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("accreditations").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete accreditation: ${error.message}`);
   revalidatePath("/console/accreditation/vetting");
   redirect("/console/accreditation/vetting");
 }

@@ -26,16 +26,29 @@ export async function requestSwap(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!shift) redirect("/m/shift/swap?error=not_found");
 
+  // Duplicate guard — repeated submits (double-tap, back-button replay)
+  // created one shift_swaps row + one admin notification storm each.
+  const { data: existing } = await supabase
+    .from("shift_swaps")
+    .select("id")
+    .eq("org_id", session.orgId)
+    .eq("shift_id", parsed.data!.shift_id)
+    .eq("requested_by", session.userId)
+    .eq("swap_state", "requested")
+    .maybeSingle();
+  if (existing) redirect("/m/shift?swap=requested");
+
   // Canonical record — shift_swaps carries the state machine. The
   // notification fan-out below stays so admins see the request before
   // they navigate to /console/workforce/shift-swaps.
-  await supabase.from("shift_swaps").insert({
+  const { error } = await supabase.from("shift_swaps").insert({
     org_id: session.orgId,
     shift_id: parsed.data!.shift_id,
     requested_by: session.userId,
     reason: parsed.data!.reason,
     swap_state: "requested",
   });
+  if (error) throw new Error(`Could not request swap: ${error.message}`);
 
   // Notify all admin/manager members of the org via service role.
   // .is("deleted_at", null) so we don't notify offboarded admins

@@ -72,7 +72,7 @@ export async function revokeApiKeyAction(formData: FormData) {
   // .is("revoked_at", null) — don't re-stamp revoked_at on an already-
   // revoked key (would change the audit timestamp from the original
   // revocation to "now").
-  const { data: revoked } = await supabase
+  const { error, data: revoked } = await supabase
     .from("api_keys")
     .update({ revoked_at: new Date().toISOString() })
     .eq("id", id)
@@ -80,6 +80,7 @@ export async function revokeApiKeyAction(formData: FormData) {
     .is("revoked_at", null)
     .select("id")
     .maybeSingle();
+  if (error) throw new Error(`Could not update api key: ${error.message}`);
   if (revoked) {
     await emitAudit({
       actorId: session.userId,

@@ -37,7 +37,8 @@ export async function updateTrainingCourse(id: string, _: State, fd: FormData): 
 export async function deleteTrainingCourse(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("kb_articles").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("kb_articles").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete kb article: ${error.message}`);
   revalidatePath("/console/workforce/training");
   redirect("/console/workforce/training");
 }

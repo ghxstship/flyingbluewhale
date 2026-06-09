@@ -49,7 +49,8 @@ export async function updateLocation(id: string, _: State, fd: FormData): Promis
 export async function deleteLocation(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("locations").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("locations").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete location: ${error.message}`);
   revalidatePath("/console/locations");
   redirect("/console/locations");
 }

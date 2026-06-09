@@ -66,7 +66,7 @@ export async function deleteCustomRole(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  const { data: deleted } = await supabase
+  const { error, data: deleted } = await supabase
     .from("org_roles")
     .delete()
     .eq("id", id)
@@ -74,6 +74,7 @@ export async function deleteCustomRole(formData: FormData) {
     .eq("is_system", false)
     .select("id")
     .maybeSingle();
+  if (error) throw new Error(`Could not delete org role: ${error.message}`);
   if (deleted) {
     await emitAudit({
       actorId: session.userId,

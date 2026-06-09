@@ -45,7 +45,8 @@ export async function GET() {
       .select("id, url, description, events, is_active, last_delivery_at, last_error, failure_count, created_at")
       .eq("org_id", session.orgId ?? "")
       .is("deleted_at", null)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(500);
     if (error) return apiError("internal", error.message);
     return apiOk({ endpoints: data ?? [] });
   });

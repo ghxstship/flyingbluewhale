@@ -30,7 +30,7 @@ export async function sendWaiver(fd: FormData): Promise<void> {
   const w = await loadWaiver(supabase, parsed.data.waiver_id, session.orgId);
   if (!w || w.waiver_state !== "drafted") return;
 
-  await supabase
+  const { error } = await supabase
     .from("lien_waivers")
     .update({
       waiver_state: "sent",
@@ -39,6 +39,7 @@ export async function sendWaiver(fd: FormData): Promise<void> {
     })
     .eq("id", w.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not send waiver: ${error.message}`);
 
   revalidatePath(`/console/finance/lien-waivers/${w.id}`);
 }
@@ -57,7 +58,7 @@ export async function recordSignature(fd: FormData): Promise<void> {
   const w = await loadWaiver(supabase, parsed.data.waiver_id, session.orgId);
   if (!w || (w.waiver_state !== "drafted" && w.waiver_state !== "sent")) return;
 
-  await supabase
+  const { error } = await supabase
     .from("lien_waivers")
     .update({
       waiver_state: "signed",
@@ -67,6 +68,7 @@ export async function recordSignature(fd: FormData): Promise<void> {
     })
     .eq("id", w.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not record signature: ${error.message}`);
 
   revalidatePath(`/console/finance/lien-waivers/${w.id}`);
 }
@@ -80,11 +82,12 @@ export async function markReturned(fd: FormData): Promise<void> {
   const w = await loadWaiver(supabase, parsed.data.waiver_id, session.orgId);
   if (!w || w.waiver_state !== "signed") return;
 
-  await supabase
+  const { error } = await supabase
     .from("lien_waivers")
     .update({ waiver_state: "returned", returned_at: new Date().toISOString() })
     .eq("id", w.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not mark waiver returned: ${error.message}`);
 
   revalidatePath(`/console/finance/lien-waivers/${w.id}`);
 }
@@ -98,11 +101,12 @@ export async function releaseWaiver(fd: FormData): Promise<void> {
   const w = await loadWaiver(supabase, parsed.data.waiver_id, session.orgId);
   if (!w || w.waiver_state !== "returned") return;
 
-  await supabase
+  const { error } = await supabase
     .from("lien_waivers")
     .update({ waiver_state: "released", released_at: new Date().toISOString() })
     .eq("id", w.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not release waiver: ${error.message}`);
 
   revalidatePath(`/console/finance/lien-waivers/${w.id}`);
 }
@@ -118,7 +122,7 @@ export async function voidWaiver(fd: FormData): Promise<void> {
   const w = await loadWaiver(supabase, parsed.data.waiver_id, session.orgId);
   if (!w || w.waiver_state === "voided" || w.waiver_state === "released") return;
 
-  await supabase
+  const { error } = await supabase
     .from("lien_waivers")
     .update({
       waiver_state: "voided",
@@ -127,6 +131,7 @@ export async function voidWaiver(fd: FormData): Promise<void> {
     })
     .eq("id", w.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not void waiver: ${error.message}`);
 
   revalidatePath(`/console/finance/lien-waivers/${w.id}`);
 }

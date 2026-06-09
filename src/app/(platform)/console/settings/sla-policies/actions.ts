@@ -35,7 +35,7 @@ export async function upsertSlaPolicy(fd: FormData): Promise<void> {
     .maybeSingle();
 
   if (existing) {
-    await supabase
+    const { error: updateError } = await supabase
       .from("service_sla_policies")
       .update({
         response_minutes: parsed.data.response_minutes,
@@ -45,8 +45,9 @@ export async function upsertSlaPolicy(fd: FormData): Promise<void> {
       })
       .eq("id", (existing as { id: string }).id)
       .eq("org_id", session.orgId);
+    if (updateError) throw new Error(`Could not update service sla policy: ${updateError.message}`);
   } else {
-    await supabase.from("service_sla_policies").insert({
+    const { error } = await supabase.from("service_sla_policies").insert({
       org_id: session.orgId,
       severity: parsed.data.severity,
       response_minutes: parsed.data.response_minutes,
@@ -54,6 +55,7 @@ export async function upsertSlaPolicy(fd: FormData): Promise<void> {
       business_hours_only: parsed.data.business_hours_only ?? false,
       active: true,
     });
+    if (error) throw new Error(`Could not create service sla policy: ${error.message}`);
   }
 
   revalidatePath("/console/settings/sla-policies");
@@ -71,11 +73,12 @@ export async function toggleSlaPolicy(fd: FormData): Promise<void> {
   if (!parsed.success) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error } = await supabase
     .from("service_sla_policies")
     .update({ active: parsed.data.active, updated_at: new Date().toISOString() })
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update service sla policy: ${error.message}`);
 
   revalidatePath("/console/settings/sla-policies");
 }
@@ -86,7 +89,8 @@ export async function deleteSlaPolicy(id: string): Promise<void> {
   if (!/^[0-9a-f-]{36}$/.test(id)) return;
 
   const supabase = await createClient();
-  await supabase.from("service_sla_policies").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("service_sla_policies").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete service sla policy: ${error.message}`);
 
   revalidatePath("/console/settings/sla-policies");
 }

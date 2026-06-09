@@ -47,7 +47,8 @@ export async function updateAdManifest(id: string, _: State, fd: FormData): Prom
 export async function deleteAdManifest(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("ad_manifests").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("ad_manifests").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete ad manifest: ${error.message}`);
   revalidatePath("/console/transport/ad");
   redirect("/console/transport/ad");
 }

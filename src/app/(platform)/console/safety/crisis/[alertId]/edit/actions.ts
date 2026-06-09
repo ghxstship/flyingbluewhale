@@ -39,7 +39,8 @@ export async function updateAlert(alertId: string, _: State, fd: FormData): Prom
 export async function deleteAlert(alertId: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("crisis_alerts").delete().eq("id", alertId).eq("org_id", session.orgId);
+  const { error } = await supabase.from("crisis_alerts").delete().eq("id", alertId).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete crisis alert: ${error.message}`);
   revalidatePath("/console/safety/crisis");
   redirect("/console/safety/crisis");
 }

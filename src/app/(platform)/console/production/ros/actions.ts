@@ -73,6 +73,7 @@ export async function deleteCue(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
-  await supabase.from("cues").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("cues").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete cue: ${error.message}`);
   revalidatePath("/console/production/ros");
 }

@@ -38,33 +38,36 @@ const AdvanceSchema = z.object({
 export async function advanceState(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = AdvanceSchema.parse(Object.fromEntries(fd));
-  const a = await guardAssignment(parsed.projectId, parsed.assignmentId, session.orgId);
+  const parsed = AdvanceSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  const a = await guardAssignment(parsed.data.projectId, parsed.data.assignmentId, session.orgId);
   if (!a) return;
 
   // Refuse illegal transitions server-side.
-  if (!NEXT_FULFILLMENT_STATES[a.fulfillment_state]?.includes(parsed.next_state as FulfillmentState)) return;
+  if (!NEXT_FULFILLMENT_STATES[a.fulfillment_state]?.includes(parsed.data.next_state as FulfillmentState)) return;
 
   const supabase = await createClient();
-  const { data: updated } = await supabase
+  const { data: updated, error: updateErr } = await supabase
     .from("assignments")
-    .update({ fulfillment_state: parsed.next_state })
-    .eq("id", parsed.assignmentId)
+    .update({ fulfillment_state: parsed.data.next_state })
+    .eq("id", parsed.data.assignmentId)
     .eq("org_id", session.orgId)
     .eq("fulfillment_state", a.fulfillment_state)
     .select("id, fulfillment_state")
     .maybeSingle();
+  if (updateErr) throw new Error(`Could not advance assignment state: ${updateErr.message}`);
   if (!updated) return;
 
   // Append to the universal event journal.
-  await supabase.from("assignment_events").insert({
-    assignment_id: parsed.assignmentId,
+  const { error: eventErr } = await supabase.from("assignment_events").insert({
+    assignment_id: parsed.data.assignmentId,
     org_id: session.orgId,
     event_kind: "state_change",
     actor_user_id: session.userId,
     from_state: a.fulfillment_state,
-    to_state: parsed.next_state,
+    to_state: parsed.data.next_state,
   });
+  if (eventErr) throw new Error(`Could not record state change event: ${eventErr.message}`);
 
   // Notify the assignee (user kind only — external holders aren't on the platform).
   if (a.party_kind === "user" && a.party_user_id) {
@@ -75,14 +78,14 @@ export async function advanceState(fd: FormData): Promise<void> {
       sourceType: "assignments",
       sourceId: crypto.randomUUID(),
       actorId: session.userId,
-      title: `Assignment ${toTitle(parsed.next_state)}`,
+      title: `Assignment ${toTitle(parsed.data.next_state)}`,
       body: a.title ?? "",
       href: "/m/advances",
     });
   }
 
-  revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments/${parsed.assignmentId}`);
-  revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments`);
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments`);
 }
 
 const ReassignSchema = z.object({
@@ -94,8 +97,9 @@ const ReassignSchema = z.object({
 export async function reassignAssignment(fd: FormData): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;
-  const parsed = ReassignSchema.parse(Object.fromEntries(fd));
-  const a = await guardAssignment(parsed.projectId, parsed.assignmentId, session.orgId);
+  const parsed = ReassignSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  const a = await guardAssignment(parsed.data.projectId, parsed.data.assignmentId, session.orgId);
   if (!a) return;
 
   const supabase = await createClient();
@@ -103,25 +107,26 @@ export async function reassignAssignment(fd: FormData): Promise<void> {
     .from("memberships")
     .select("user_id")
     .eq("org_id", session.orgId)
-    .eq("user_id", parsed.party_user_id)
+    .eq("user_id", parsed.data.party_user_id)
     .is("deleted_at", null)
     .maybeSingle();
   if (!member) return;
-  if (parsed.party_user_id === a.party_user_id) return;
+  if (parsed.data.party_user_id === a.party_user_id) return;
 
-  await supabase
+  const { error: reassignErr } = await supabase
     .from("assignments")
     .update({
       party_kind: "user",
-      party_user_id: parsed.party_user_id,
+      party_user_id: parsed.data.party_user_id,
       party_crew_id: null,
       party_external_id: null,
     })
-    .eq("id", parsed.assignmentId)
+    .eq("id", parsed.data.assignmentId)
     .eq("org_id", session.orgId);
+  if (reassignErr) throw new Error(`Could not reassign assignment: ${reassignErr.message}`);
 
   void writeInbox({
-    userId: parsed.party_user_id,
+    userId: parsed.data.party_user_id,
     orgId: session.orgId,
     kind: "assignment",
     sourceType: "assignment_reassignments",
@@ -132,8 +137,8 @@ export async function reassignAssignment(fd: FormData): Promise<void> {
     href: "/m/advances",
   });
 
-  revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments/${parsed.assignmentId}`);
-  revalidatePath(`/console/projects/${parsed.projectId}/advancing/assignments`);
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
+  revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments`);
 }
 
 const CommentSchema = z.object({
@@ -150,13 +155,14 @@ export async function postComment(fd: FormData): Promise<void> {
   if (!a) return;
 
   const supabase = await createClient();
-  await supabase.from("assignment_events").insert({
+  const { error: commentErr } = await supabase.from("assignment_events").insert({
     assignment_id: parsed.data.assignmentId,
     org_id: session.orgId,
     event_kind: "comment",
     actor_user_id: session.userId,
     body: parsed.data.body,
   });
+  if (commentErr) throw new Error(`Could not post comment: ${commentErr.message}`);
 
   if (a.party_kind === "user" && a.party_user_id && a.party_user_id !== session.userId) {
     void writeInbox({
@@ -232,7 +238,7 @@ export async function upsertTicketDetails(fd: FormData): Promise<void> {
   if (!ok) return;
 
   const supabase = await createClient();
-  await supabase.from("ticket_assignment_details").upsert(
+  const { error: ticketErr } = await supabase.from("ticket_assignment_details").upsert(
     {
       assignment_id: parsed.data.assignmentId,
       tier_code: emptyToNull(parsed.data.tier_code),
@@ -247,6 +253,7 @@ export async function upsertTicketDetails(fd: FormData): Promise<void> {
     },
     { onConflict: "assignment_id" },
   );
+  if (ticketErr) throw new Error(`Could not save ticket details: ${ticketErr.message}`);
 
   revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
 }
@@ -277,7 +284,7 @@ export async function upsertCredentialDetails(fd: FormData): Promise<void> {
   if (parent === parsed.data.assignmentId) return;
 
   const supabase = await createClient();
-  await supabase.from("credential_assignment_details").upsert(
+  const { error: credentialErr } = await supabase.from("credential_assignment_details").upsert(
     {
       assignment_id: parsed.data.assignmentId,
       access_level: emptyToNull(parsed.data.access_level),
@@ -288,6 +295,7 @@ export async function upsertCredentialDetails(fd: FormData): Promise<void> {
     },
     { onConflict: "assignment_id" },
   );
+  if (credentialErr) throw new Error(`Could not save credential details: ${credentialErr.message}`);
 
   revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
 }
@@ -316,7 +324,7 @@ export async function upsertLodgingDetails(fd: FormData): Promise<void> {
   if (roommate === parsed.data.assignmentId) return; // self-room would be nonsense
 
   const supabase = await createClient();
-  await supabase.from("lodging_assignment_details").upsert(
+  const { error: lodgingErr } = await supabase.from("lodging_assignment_details").upsert(
     {
       assignment_id: parsed.data.assignmentId,
       property_name: emptyToNull(parsed.data.property_name),
@@ -328,6 +336,7 @@ export async function upsertLodgingDetails(fd: FormData): Promise<void> {
     },
     { onConflict: "assignment_id" },
   );
+  if (lodgingErr) throw new Error(`Could not save lodging details: ${lodgingErr.message}`);
 
   revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
 }
@@ -355,7 +364,7 @@ export async function upsertTravelDetails(fd: FormData): Promise<void> {
   if (!ok) return;
 
   const supabase = await createClient();
-  await supabase.from("travel_assignment_details").upsert(
+  const { error: travelErr } = await supabase.from("travel_assignment_details").upsert(
     {
       assignment_id: parsed.data.assignmentId,
       mode: parsed.data.mode ? parsed.data.mode : null,
@@ -369,6 +378,7 @@ export async function upsertTravelDetails(fd: FormData): Promise<void> {
     },
     { onConflict: "assignment_id" },
   );
+  if (travelErr) throw new Error(`Could not save travel details: ${travelErr.message}`);
 
   revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
 }
@@ -408,7 +418,7 @@ export async function upsertVehicleDetails(fd: FormData): Promise<void> {
   }
 
   const supabase = await createClient();
-  await supabase.from("vehicle_assignment_details").upsert(
+  const { error: vehicleErr } = await supabase.from("vehicle_assignment_details").upsert(
     {
       assignment_id: parsed.data.assignmentId,
       vehicle_label: emptyToNull(parsed.data.vehicle_label),
@@ -420,6 +430,7 @@ export async function upsertVehicleDetails(fd: FormData): Promise<void> {
     },
     { onConflict: "assignment_id" },
   );
+  if (vehicleErr) throw new Error(`Could not save vehicle details: ${vehicleErr.message}`);
 
   revalidatePath(`/console/projects/${parsed.data.projectId}/advancing/assignments/${parsed.data.assignmentId}`);
 }
@@ -431,11 +442,12 @@ export async function deleteAssignment(projectId: string, assignmentId: string):
   if (!a) return;
 
   const supabase = await createClient();
-  await supabase
+  const { error: deleteErr } = await supabase
     .from("assignments")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", assignmentId)
     .eq("org_id", session.orgId);
+  if (deleteErr) throw new Error(`Could not delete assignment: ${deleteErr.message}`);
 
   revalidatePath(`/console/projects/${projectId}/advancing/assignments`);
   redirect(`/console/projects/${projectId}/advancing/assignments`);

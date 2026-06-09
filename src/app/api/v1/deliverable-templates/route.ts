@@ -45,7 +45,8 @@ export async function GET(req: NextRequest) {
       .from("deliverable_templates")
       .select("id, type, name, description, data, is_global, updated_at")
       .is("deleted_at", null)
-      .order("name", { ascending: true });
+      .order("name", { ascending: true })
+      .limit(500);
     if (typeFilter) q = q.eq("type", typeFilter as never);
     const { data, error } = await q;
     if (error) return apiError("internal", error.message);

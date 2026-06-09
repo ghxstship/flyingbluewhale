@@ -43,7 +43,8 @@ export async function updateDispatchRun(id: string, _: State, fd: FormData): Pro
 export async function deleteDispatchRun(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("dispatch_runs").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("dispatch_runs").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete dispatch run: ${error.message}`);
   revalidatePath("/console/transport/dispatch");
   redirect("/console/transport/dispatch");
 }

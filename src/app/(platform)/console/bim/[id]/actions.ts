@@ -30,7 +30,7 @@ export async function addBimModelLink(fd: FormData): Promise<void> {
     .maybeSingle();
   if (!model) return;
 
-  await supabase.from("bim_model_links").insert({
+  const { error } = await supabase.from("bim_model_links").insert({
     org_id: session.orgId,
     model_id: parsed.data.model_id,
     element_global_id: parsed.data.element_global_id.trim(),
@@ -39,6 +39,7 @@ export async function addBimModelLink(fd: FormData): Promise<void> {
     note: parsed.data.note || null,
     created_by: session.userId,
   });
+  if (error) throw new Error(`Could not create bim model link: ${error.message}`);
 
   revalidatePath(`/console/bim/${parsed.data.model_id}`);
 }
@@ -54,7 +55,12 @@ export async function deleteBimModelLink(fd: FormData): Promise<void> {
   if (!parsed.success) return;
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
-  await supabase.from("bim_model_links").delete().eq("id", parsed.data.link_id).eq("org_id", session.orgId);
+  const { error } = await supabase
+    .from("bim_model_links")
+    .delete()
+    .eq("id", parsed.data.link_id)
+    .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete bim model link: ${error.message}`);
 
   revalidatePath(`/console/bim/${parsed.data.model_id}`);
 }
@@ -67,11 +73,12 @@ export async function markBimModelReady(fd: FormData): Promise<void> {
   if (!parsed.success) return;
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
-  await supabase
+  const { error } = await supabase
     .from("bim_models")
     .update({ model_state: "ready", processed_at: new Date().toISOString() })
     .eq("id", parsed.data.model_id)
     .eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not update bim model: ${error.message}`);
 
   revalidatePath(`/console/bim/${parsed.data.model_id}`);
 }

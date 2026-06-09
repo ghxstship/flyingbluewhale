@@ -20,8 +20,9 @@ const Schema = z.object({
  */
 export async function createKudosFromConsole(fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = Schema.parse(Object.fromEntries(fd));
-  if (parsed.to_user_id === session.userId) return;
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (parsed.data.to_user_id === session.userId) return;
   const supabase = await createClient();
 
   // Recipient must be an active org member — same gate as the mobile action.
@@ -29,35 +30,36 @@ export async function createKudosFromConsole(fd: FormData): Promise<void> {
     .from("memberships")
     .select("user_id")
     .eq("org_id", session.orgId)
-    .eq("user_id", parsed.to_user_id)
+    .eq("user_id", parsed.data.to_user_id)
     .is("deleted_at", null)
     .maybeSingle();
   if (!member) return;
 
-  const { data: post } = await supabase
+  const { error, data: post } = await supabase
     .from("recognition_posts")
     .insert({
       org_id: session.orgId,
       from_user_id: session.userId,
-      to_user_id: parsed.to_user_id,
-      message: parsed.message,
-      value_tag: parsed.value_tag || null,
+      to_user_id: parsed.data.to_user_id,
+      message: parsed.data.message,
+      value_tag: parsed.data.value_tag || null,
       points: 0,
       visibility_state: "public",
     })
     .select("id")
     .single();
+  if (error) throw new Error(`Could not create recognition post: ${error.message}`);
 
   if (post) {
     void writeInbox({
-      userId: parsed.to_user_id,
+      userId: parsed.data.to_user_id,
       orgId: session.orgId,
       kind: "kudos",
       sourceType: "recognition_posts",
       sourceId: (post as { id: string }).id,
       actorId: session.userId,
       title: "You got kudos",
-      body: parsed.message,
+      body: parsed.data.message,
       href: "/m/kudos",
     });
   }

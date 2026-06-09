@@ -47,7 +47,8 @@ export async function updateRisk(id: string, _: State, fd: FormData): Promise<St
 export async function deleteRisk(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("risks").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("risks").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete risk: ${error.message}`);
   revalidatePath("/console/programs/risk");
   redirect("/console/programs/risk");
 }

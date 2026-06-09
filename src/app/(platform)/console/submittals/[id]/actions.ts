@@ -12,36 +12,39 @@ const StampSchema = z.object({
 
 export async function stampRevision(submittalId: string, revisionId: string, fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = StampSchema.parse(Object.fromEntries(fd));
+  const parsed = StampSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
   const now = new Date().toISOString();
 
-  await supabase
+  const { error: updateError } = await supabase
     .from("submittal_revisions")
     .update({
-      stamp: parsed.stamp,
-      stamp_notes: parsed.stamp_notes || null,
+      stamp: parsed.data.stamp,
+      stamp_notes: parsed.data.stamp_notes || null,
       stamped_by: session.userId,
       stamped_at: now,
     } as never)
     .eq("org_id", session.orgId)
     .eq("id", revisionId);
+  if (updateError) throw new Error(`Could not update submittal revision: ${updateError.message}`);
 
   // Roll the parent submittal status to match the stamp result.
   const newStatus =
-    parsed.stamp === "approved"
+    parsed.data.stamp === "approved"
       ? "approved"
-      : parsed.stamp === "approved_with_comments"
+      : parsed.data.stamp === "approved_with_comments"
         ? "approved_with_comments"
-        : parsed.stamp === "revise_resubmit"
+        : parsed.data.stamp === "revise_resubmit"
           ? "revise_resubmit"
           : "rejected";
 
-  await supabase
+  const { error } = await supabase
     .from("submittals")
     .update({ status: newStatus } as never)
     .eq("org_id", session.orgId)
     .eq("id", submittalId);
+  if (error) throw new Error(`Could not update submittal: ${error.message}`);
 
   revalidatePath(`/console/submittals/${submittalId}`);
   revalidatePath("/console/submittals");

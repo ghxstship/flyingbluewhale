@@ -26,7 +26,8 @@ export async function GET(req: NextRequest) {
       .select("id, project_id, name, width_ft, depth_ft, elements, svg_url, notes, updated_at")
       .is("deleted_at", null)
       .eq("org_id", session.orgId)
-      .order("updated_at", { ascending: false });
+      .order("updated_at", { ascending: false })
+      .limit(500);
     if (projectId) q = q.eq("project_id", projectId);
     const { data, error } = await q;
     if (error) return apiError("internal", error.message);

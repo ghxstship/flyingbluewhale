@@ -16,8 +16,9 @@ export async function updatePayAppLine(appId: string, lineId: string, fd: FormDa
   const session = await requireSession();
   // % complete on pay-app lines drives draw-down totals — manager+ only.
   if (!isManagerPlus(session)) return;
-  const parsed = PctSchema.parse(Object.fromEntries(fd));
-  const newPct = Math.max(0, Math.min(100, Number(parsed.pct) || 0));
+  const parsed = PctSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  const newPct = Math.max(0, Math.min(100, Number(parsed.data.pct) || 0));
   const supabase = await createClient();
 
   const { data: line } = await supabase
@@ -43,7 +44,7 @@ export async function updatePayAppLine(appId: string, lineId: string, fd: FormDa
   const retention = Math.round(newCompleted * (Number(app.retention_pct) / 100));
   const pctThisPeriod = scheduled === 0 ? 0 : (thisPeriod / scheduled) * 100;
 
-  await supabase
+  const { error: lineErr } = await supabase
     .from("payment_application_lines")
     .update({
       pct_complete_to_date: newPct,
@@ -54,6 +55,7 @@ export async function updatePayAppLine(appId: string, lineId: string, fd: FormDa
     } as never)
     .eq("org_id", session.orgId)
     .eq("id", lineId);
+  if (lineErr) throw new Error(`Could not update pay-app line: ${lineErr.message}`);
 
   // Roll up totals on the parent application.
   const { data: allLines } = await supabase
@@ -68,7 +70,7 @@ export async function updatePayAppLine(appId: string, lineId: string, fd: FormDa
     }),
     { completed: 0, retention: 0, thisPeriod: 0 },
   );
-  await supabase
+  const { error: totalsErr } = await supabase
     .from("payment_applications")
     .update({
       total_completed_cents: totals.completed,
@@ -77,6 +79,7 @@ export async function updatePayAppLine(appId: string, lineId: string, fd: FormDa
     } as never)
     .eq("org_id", session.orgId)
     .eq("id", appId);
+  if (totalsErr) throw new Error(`Could not update pay-app totals: ${totalsErr.message}`);
 
   revalidatePath(`/console/finance/pay-apps/${appId}`);
 }

@@ -78,11 +78,12 @@ export async function uploadAndExtract(_: UploadState, fd: FormData): Promise<Up
   // Call Anthropic Vision.
   const result = await extractApInvoice(pdfBytes);
   if ("error" in result) {
-    await supabase
+    const { error: failErr } = await supabase
       .from("ap_invoice_extractions")
       .update({ state: "failed", error_message: result.error })
       .eq("id", extractionId)
       .eq("org_id", session.orgId);
+    if (failErr) return { error: failErr.message };
     return { error: result.error };
   }
 
@@ -115,7 +116,7 @@ export async function uploadAndExtract(_: UploadState, fd: FormData): Promise<Up
     matchedPoId = (po as { id: string } | null)?.id ?? null;
   }
 
-  await supabase
+  const { error: updErr } = await supabase
     .from("ap_invoice_extractions")
     .update({
       state,
@@ -138,6 +139,7 @@ export async function uploadAndExtract(_: UploadState, fd: FormData): Promise<Up
     })
     .eq("id", extractionId)
     .eq("org_id", session.orgId);
+  if (updErr) return { error: updErr.message };
 
   revalidatePath("/console/finance/ap-ocr");
   return {
@@ -208,7 +210,7 @@ export async function promoteExtractionToInvoice(fd: FormData): Promise<void> {
 
   // Insert line items.
   for (const [i, l] of e.line_items.entries()) {
-    await supabase.from("invoice_line_items").insert({
+    const { error: lineErr } = await supabase.from("invoice_line_items").insert({
       org_id: session.orgId,
       invoice_id: invoiceId,
       description: l.description,
@@ -216,9 +218,10 @@ export async function promoteExtractionToInvoice(fd: FormData): Promise<void> {
       unit_price_cents: l.unit_price_cents,
       position: i,
     });
+    if (lineErr) throw new Error(`Could not create invoice line item: ${lineErr.message}`);
   }
 
-  await supabase
+  const { error: promoteErr } = await supabase
     .from("ap_invoice_extractions")
     .update({
       state: "promoted",
@@ -227,6 +230,7 @@ export async function promoteExtractionToInvoice(fd: FormData): Promise<void> {
     })
     .eq("id", e.id)
     .eq("org_id", session.orgId);
+  if (promoteErr) throw new Error(`Could not mark extraction promoted: ${promoteErr.message}`);
 
   revalidatePath("/console/finance/ap-ocr");
   redirect(`/console/finance/invoices/${invoiceId}`);

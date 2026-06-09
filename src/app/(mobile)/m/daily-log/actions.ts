@@ -15,7 +15,8 @@ const Schema = z.object({
 
 export async function quickCreateDailyLog(fd: FormData): Promise<void> {
   const session = await requireSession();
-  const parsed = Schema.parse(Object.fromEntries(fd));
+  const parsed = Schema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
   const supabase = await createClient();
 
   // Cross-tenant FK guard: confirm the submitted project_id belongs
@@ -27,7 +28,7 @@ export async function quickCreateDailyLog(fd: FormData): Promise<void> {
   const { data: project } = await supabase
     .from("projects")
     .select("id")
-    .eq("id", parsed.project_id)
+    .eq("id", parsed.data.project_id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
@@ -39,18 +40,19 @@ export async function quickCreateDailyLog(fd: FormData): Promise<void> {
     .from("daily_logs")
     .select("id")
     .eq("org_id", session.orgId)
-    .eq("project_id", parsed.project_id)
-    .eq("log_date", parsed.log_date)
+    .eq("project_id", parsed.data.project_id)
+    .eq("log_date", parsed.data.log_date)
     .maybeSingle();
 
   if (existing) {
-    await supabase
+    const { error: updateError } = await supabase
       .from("daily_logs")
       .update({
-        weather_summary: parsed.weather_summary || null,
-        notes: parsed.notes || null,
+        weather_summary: parsed.data.weather_summary || null,
+        notes: parsed.data.notes || null,
       } as never)
       .eq("id", existing.id);
+    if (updateError) throw new Error(`Could not update daily log: ${updateError.message}`);
     revalidatePath("/m/daily-log");
     redirect(`/console/operations/daily-log/${existing.id}`);
   }
@@ -59,10 +61,10 @@ export async function quickCreateDailyLog(fd: FormData): Promise<void> {
     .from("daily_logs")
     .insert({
       org_id: session.orgId,
-      project_id: parsed.project_id,
-      log_date: parsed.log_date,
-      weather_summary: parsed.weather_summary || null,
-      notes: parsed.notes || null,
+      project_id: parsed.data.project_id,
+      log_date: parsed.data.log_date,
+      weather_summary: parsed.data.weather_summary || null,
+      notes: parsed.data.notes || null,
       created_by: session.userId,
     } as never)
     .select("id")

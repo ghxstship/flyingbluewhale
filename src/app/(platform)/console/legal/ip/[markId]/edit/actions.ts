@@ -43,7 +43,8 @@ export async function updateTrademark(id: string, _: State, fd: FormData): Promi
 export async function deleteTrademark(id: string): Promise<void> {
   const session = await requireSession();
   const supabase = await createClient();
-  await supabase.from("trademarks").delete().eq("id", id).eq("org_id", session.orgId);
+  const { error } = await supabase.from("trademarks").delete().eq("id", id).eq("org_id", session.orgId);
+  if (error) throw new Error(`Could not delete trademark: ${error.message}`);
   revalidatePath("/console/legal/ip");
   redirect("/console/legal/ip");
 }

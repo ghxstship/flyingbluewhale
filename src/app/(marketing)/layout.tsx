@@ -2,14 +2,12 @@ import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
 import {
   InstagramLogo,
-  XLogo,
   TiktokLogo,
   YoutubeLogo,
   LinkedinLogo,
   SoundcloudLogo,
   ThreadsLogo,
   FacebookLogo,
-  GithubLogo,
 } from "@phosphor-icons/react/dist/ssr";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
@@ -20,14 +18,12 @@ import { BRAND } from "@/lib/brand";
 /** Phosphor brand glyph per BRAND.socials key. */
 const SOCIAL_ICONS: Record<string, typeof InstagramLogo> = {
   instagram: InstagramLogo,
-  x: XLogo,
   tiktok: TiktokLogo,
   youtube: YoutubeLogo,
   linkedin: LinkedinLogo,
   soundcloud: SoundcloudLogo,
   threads: ThreadsLogo,
   facebook: FacebookLogo,
-  github: GithubLogo,
 };
 
 const FOOTER_NAV: Array<{ headingKey: string; items: Array<{ labelKey: string; href: string }> }> = [

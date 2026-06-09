@@ -82,14 +82,12 @@ export const BRAND = {
    */
   socials: [
     { key: "instagram", label: "Instagram", href: "https://www.instagram.com/ghxstship.xyz" },
-    { key: "x", label: "X", href: "https://x.com/ghxstship_xyz" },
     { key: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@ghxstship.pro" },
     { key: "youtube", label: "YouTube", href: "https://www.youtube.com/@ghxstship" },
     { key: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/ghxstship" },
     { key: "soundcloud", label: "SoundCloud", href: "https://www.soundcloud.com/ghxstship" },
     { key: "threads", label: "Threads", href: "https://www.threads.com/@ghxstship.xyz" },
     { key: "facebook", label: "Facebook", href: "https://www.facebook.com/ghxstship.xyz" },
-    { key: "github", label: "GitHub", href: "https://github.com/ghxstship" },
   ],
 
   /**

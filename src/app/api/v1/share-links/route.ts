@@ -3,7 +3,7 @@ import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createShareLink, listShareLinksForResource } from "@/lib/share/links";
-import { emitAudit, type AuditAction } from "@/lib/audit";
+import { emitAudit } from "@/lib/audit";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 
 /**

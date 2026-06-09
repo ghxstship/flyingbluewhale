@@ -143,88 +143,10 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
     refetchMarkups();
   }, [refetchMarkups]);
 
-  // ── Overlay paint ────────────────────────────────────────────────────────
-  const paintOverlay = useCallback(() => {
-    const canvas = overlayCanvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const dpr = window.devicePixelRatio || 1;
-    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
-    ctx.clearRect(0, 0, canvas.width / (dpr * scale), canvas.height / (dpr * scale));
-
-    for (const m of markups) {
-      if (m.geometry && (m.geometry.page ?? 1) !== page) continue;
-      drawMarkup(ctx, m);
-    }
-    const live = drawingRef.current;
-    if (live) {
-      drawMarkup(ctx, {
-        id: "live",
-        layer_id: null,
-        kind: live.kind,
-        geometry: kindGeometry(live),
-        color,
-        fill_color: null,
-        fill_opacity: null,
-        stroke_width: stroke,
-        text_content: live.kind === "text" ? text : null,
-        text_size: 12,
-      });
-    }
-  }, [markups, page, scale, color, stroke, text]);
-
-  useEffect(() => {
-    paintOverlay();
-  }, [paintOverlay]);
-
-  // ── Pointer handlers ─────────────────────────────────────────────────────
-  function toPageXY(e: React.PointerEvent): { x: number; y: number } {
-    const rect = overlayCanvasRef.current!.getBoundingClientRect();
-    return {
-      x: (e.clientX - rect.left) / scale,
-      y: (e.clientY - rect.top) / scale,
-    };
-  }
-
-  function onPointerDown(e: React.PointerEvent) {
-    const p = toPageXY(e);
-    drawingRef.current = { kind: tool, start: p, current: p, points: [[p.x, p.y]] };
-    overlayCanvasRef.current?.setPointerCapture(e.pointerId);
-  }
-
-  function onPointerMove(e: React.PointerEvent) {
-    if (!drawingRef.current) return;
-    const p = toPageXY(e);
-    drawingRef.current.current = p;
-    if (drawingRef.current.kind === "freehand" || drawingRef.current.kind === "polyline") {
-      drawingRef.current.points.push([p.x, p.y]);
-    }
-    paintOverlay();
-  }
-
-  async function onPointerUp(e: React.PointerEvent) {
-    const live = drawingRef.current;
-    if (!live) return;
-    overlayCanvasRef.current?.releasePointerCapture(e.pointerId);
-    drawingRef.current = null;
-
-    const body = {
-      kind: live.kind,
-      geometry: kindGeometry(live),
-      color,
-      stroke_width: stroke,
-      text_content: live.kind === "text" || live.kind === "callout" ? text : undefined,
-      text_size: live.kind === "text" || live.kind === "callout" ? 12 : undefined,
-    };
-    const res = await fetch(`/api/v1/drawings/${siteplanId}/markups`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (res.ok) await refetchMarkups();
-  }
-
+  // ── Geometry + draw helpers ──────────────────────────────────────────────
+  // Declared BEFORE paintOverlay: they close over reactive values
+  // (page / scale / calibrationInchesPerFoot), so the react-compiler
+  // reactivity analysis needs them in scope when paintOverlay captures them.
   function kindGeometry(live: NonNullable<typeof drawingRef.current>): Record<string, unknown> {
     const x = Math.min(live.start.x, live.current.x);
     const y = Math.min(live.start.y, live.current.y);
@@ -336,6 +258,88 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
       ctx.fill();
     }
     ctx.restore();
+  }
+
+  // ── Overlay paint ────────────────────────────────────────────────────────
+  const paintOverlay = useCallback(() => {
+    const canvas = overlayCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const dpr = window.devicePixelRatio || 1;
+    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+    ctx.clearRect(0, 0, canvas.width / (dpr * scale), canvas.height / (dpr * scale));
+
+    for (const m of markups) {
+      if (m.geometry && (m.geometry.page ?? 1) !== page) continue;
+      drawMarkup(ctx, m);
+    }
+    const live = drawingRef.current;
+    if (live) {
+      drawMarkup(ctx, {
+        id: "live",
+        layer_id: null,
+        kind: live.kind,
+        geometry: kindGeometry(live),
+        color,
+        fill_color: null,
+        fill_opacity: null,
+        stroke_width: stroke,
+        text_content: live.kind === "text" ? text : null,
+        text_size: 12,
+      });
+    }
+  }, [markups, page, scale, color, stroke, text]);
+
+  useEffect(() => {
+    paintOverlay();
+  }, [paintOverlay]);
+
+  // ── Pointer handlers ─────────────────────────────────────────────────────
+  function toPageXY(e: React.PointerEvent): { x: number; y: number } {
+    const rect = overlayCanvasRef.current!.getBoundingClientRect();
+    return {
+      x: (e.clientX - rect.left) / scale,
+      y: (e.clientY - rect.top) / scale,
+    };
+  }
+
+  function onPointerDown(e: React.PointerEvent) {
+    const p = toPageXY(e);
+    drawingRef.current = { kind: tool, start: p, current: p, points: [[p.x, p.y]] };
+    overlayCanvasRef.current?.setPointerCapture(e.pointerId);
+  }
+
+  function onPointerMove(e: React.PointerEvent) {
+    if (!drawingRef.current) return;
+    const p = toPageXY(e);
+    drawingRef.current.current = p;
+    if (drawingRef.current.kind === "freehand" || drawingRef.current.kind === "polyline") {
+      drawingRef.current.points.push([p.x, p.y]);
+    }
+    paintOverlay();
+  }
+
+  async function onPointerUp(e: React.PointerEvent) {
+    const live = drawingRef.current;
+    if (!live) return;
+    overlayCanvasRef.current?.releasePointerCapture(e.pointerId);
+    drawingRef.current = null;
+
+    const body = {
+      kind: live.kind,
+      geometry: kindGeometry(live),
+      color,
+      stroke_width: stroke,
+      text_content: live.kind === "text" || live.kind === "callout" ? text : undefined,
+      text_size: live.kind === "text" || live.kind === "callout" ? 12 : undefined,
+    };
+    const res = await fetch(`/api/v1/drawings/${siteplanId}/markups`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (res.ok) await refetchMarkups();
   }
 
   return (

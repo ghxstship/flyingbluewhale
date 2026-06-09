@@ -159,7 +159,7 @@ export function DrawScheduleClient({
                       <span className="mx-2 text-[var(--p-text-2)]">·</span>
                       <button
                         type="button"
-                        className="text-xs text-red-500 underline"
+                        className="text-xs text-[var(--p-danger)] underline"
                         onClick={() => startTransition(async () => void (await drop(r.id)))}
                         disabled={pending}
                       >
@@ -232,7 +232,7 @@ export function DrawScheduleClient({
               <input name="sort_order" type="number" defaultValue={rows.length + 1} className={INPUT_CLASS} />
             </label>
           </div>
-          {createState?.error && <p className="text-xs text-red-500">{createState.error}</p>}
+          {createState?.error && <p className="text-xs text-[var(--p-danger)]">{createState.error}</p>}
           <div className="flex justify-end">
             <Button type="submit" disabled={pending}>
               {t("console.draws.addDraw", undefined, "Add draw")}

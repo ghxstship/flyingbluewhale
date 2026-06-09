@@ -31,28 +31,13 @@ const MIGRATIONS_DIR = join(REPO_ROOT, "supabase/migrations");
 // rename destination. Adding new files to this list is the antipattern
 // this spec is meant to catch.
 const LEGACY_ALLOWLIST = new Set<string>([
-  // Initial remote DB snapshot (44 grandfathered status columns).
-  "0001_remote_snapshot.sql",
-  // Marketplace canon (May 2026, pre-LDP) — uses `status` for talent_offers,
-  // job_applications, etc. Documented in LDP_NAMING_AUDIT_v2.md.
-  "0002_marketplace_canon.sql",
-  // Booking canon — same pre-LDP era.
-  "0003_booking_canon.sql",
-  // Salvage City playbook alignment (May 5–8) — pre-LDP window.
-  "0004_salvage_city_playbook_v2_alignment.sql",
-  "0006_salvage_city_per_diem_travelers_only.sql",
-  "0013_salvage_city_offer_letter_playbook_v3_alignment.sql",
-  // Onboarding v2 industry lead (May 6) — pre-LDP enforcement window.
-  "0007_onboarding_v2_industry_lead.sql",
-  // LDP remediation migrations themselves reference `status` while
-  // performing the rename — they're allowed to touch the column.
-  "0017_ldp_lifecycle_columns.sql",
-  "0018_ldp_proposal_phase_status_rename.sql",
-  "0020_ldp_lifecycle_remediations_reconciled.sql",
-  // USNP canon local parity (May 2026) — recreates pre-LDP table shape
-  // for accounting_periods locally so the LDP rename in 0020 has a column
-  // to operate on. The `status` column is dropped/renamed downstream.
-  "0019_usnp_canon_local_parity.sql",
+  // The 2026-06-06 migration squash consolidated all pre-squash history
+  // (incl. the 75 grandfathered legacy `status` columns inventoried in
+  // reports/AUDIT_2026-06-09_HARDENING_PLAN.md §6.3) into this single
+  // baseline. TEMPORARY: the approved status-column rename program
+  // (plan Phase 6) migrates every bare `status` column to *_phase/*_state,
+  // after which this entry is removed and the allowlist goes empty.
+  "20260606230000_baseline.sql",
 ]);
 
 const STATUS_DECL_RE = /^\s+"?status"?\s+("?(text|character\s+varying|public\.[a-z_]+)"?)/i;

@@ -177,8 +177,12 @@ describe("ADR-0005 super-persona collapse", () => {
       const group = portalNav("demo", p);
       expect(group.label).toBe(SUPER_PERSONA_LABEL[superPersonaOf(p)]);
       expect(group.sections).toBeDefined();
-      expect(group.sections).toHaveLength(2);
-      const [workspace, personaSection] = group.sections!;
+      // ADR-0008 Move 3: vendor (14 items) splits its persona section
+      // into Engagement + Operations to stay inside Miller's 9-item
+      // ceiling — 3 sections total. Every other persona keeps the
+      // single persona section — 2 sections total.
+      expect(group.sections).toHaveLength(p === "vendor" ? 3 : 2);
+      const [workspace, ...personaSections] = group.sections!;
       expect(workspace.label).toBe("Workspace");
       // Workspace section is the shared 6 — same across every persona.
       expect(workspace.items).toHaveLength(6);
@@ -190,7 +194,9 @@ describe("ADR-0005 super-persona collapse", () => {
         "Tasks",
         "Messages",
       ]);
-      expect(personaSection.items.length).toBeGreaterThan(0);
+      for (const section of personaSections) {
+        expect(section.items.length).toBeGreaterThan(0);
+      }
     }
   });
 });

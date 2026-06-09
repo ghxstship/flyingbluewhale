@@ -242,6 +242,9 @@ const config = [
     ignores: [
       ".next/**",
       "node_modules/**",
+      // Claude Code worktrees are full repo copies — linting them doubles
+      // (or worse) every run, and they're git-ignored anyway.
+      ".claude/**",
       "public/service-worker.js",
       "src/lib/supabase/database.types.ts",
     ],

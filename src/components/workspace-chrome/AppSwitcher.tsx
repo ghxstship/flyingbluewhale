@@ -16,8 +16,9 @@ import * as Popover from "@radix-ui/react-popover";
  * access to a shell, the layout omits that entry from `entries`.
  * The switcher is purely presentational.
  *
- * Brand accent dots mirror the sub-product palette per CLAUDE.md:
- *   ATLVS = red, GVTEWAY = blue, COMPVSS = yellow.
+ * Brand accent dots mirror the sub-product palette per CLAUDE.md,
+ * via the --brand-* identity tokens (atlvs-product.css):
+ *   ATLVS = nebula, GVTEWAY = plasma, COMPVSS = brass.
  */
 export type AppSwitcherEntry = {
   shell: "platform" | "portal" | "mobile";
@@ -26,9 +27,9 @@ export type AppSwitcherEntry = {
 };
 
 const ACCENT: Record<AppSwitcherEntry["shell"], string> = {
-  platform: "bg-red-500",
-  portal: "bg-blue-500",
-  mobile: "bg-yellow-400",
+  platform: "bg-[var(--brand-atlvs)]",
+  portal: "bg-[var(--brand-gvteway)]",
+  mobile: "bg-[var(--brand-compvss)]",
 };
 
 export function AppSwitcher({ current, entries }: { current: AppSwitcherEntry["shell"]; entries: AppSwitcherEntry[] }) {

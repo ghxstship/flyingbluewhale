@@ -649,3 +649,55 @@ paths:
     get: { summary: Zapier polling trigger — recent invoices for the caller's org. }
   /api/v1/zapier/triggers/assignment-scans:
     get: { summary: Zapier polling trigger — recent assignment scan events for the caller's org (replaces ticket-scans; covers every catalog kind). }
+
+  /api/v1/graphql:
+    get:  { summary: GraphiQL explorer (dev only) — disabled in production. }
+    post: { summary: GraphQL endpoint for partner integrations — session-authenticated reads over the canonical org-scoped entities. GraphQL-spec response shape, not the ATLVS envelope. }
+
+  /api/v1/ai/embed-source:
+    post: { summary: Ingest a source document into the org's AI embedding index for retrieval. }
+
+  /api/v1/bim/{modelId}/download:
+    get: { summary: 302-redirect to a signed download URL for a BIM/IFC model file. }
+
+  /api/v1/daily-logs/{id}/refresh-weather:
+    post: { summary: Re-fetch and persist the weather snapshot on a daily log. }
+
+  /api/v1/drawings/{siteplanId}/markups:
+    get:  { summary: List visible markups on a drawing sheet, colored by layer. }
+    post: { summary: Create a markup (shape/annotation) on a drawing sheet. }
+  /api/v1/drawings/markups/{id}:
+    patch:  { summary: Update a markup's geometry, layer, or note. }
+    delete: { summary: Delete a markup. }
+
+  /api/v1/integrations/{system}/sync:
+    post: { summary: Trigger an inbound sync pull from a connected accounting system. }
+  /api/v1/integrations/fx/refresh:
+    post: { summary: Refresh cached FX rates for the org's enabled currencies. }
+  /api/v1/integrations/qb-online/oauth-start:
+    get: { summary: Begin the QuickBooks Online OAuth consent flow — redirects to Intuit. }
+  /api/v1/integrations/qb-online/callback:
+    get: { summary: QuickBooks Online OAuth callback. Exchanges code for tokens, persists the connection, redirects to accounting settings. }
+  /api/v1/integrations/qb-online/sync:
+    post: { summary: Pull vendors / accounts / cost codes from the connected QuickBooks realm. }
+  /api/v1/integrations/qb-online/push:
+    post: { summary: Push org invoices to the connected QuickBooks realm. }
+
+  /api/v1/me/restore:
+    post: { summary: Cancel a pending account deletion within the 30-day grace window. }
+
+  /api/v1/pay-apps/{payAppId}/pdf:
+    get: { summary: Render a payment application (G702/G703-style) to PDF. }
+  /api/v1/payroll-runs/{runId}/pdf:
+    get: { summary: Render a payroll run summary to PDF. }
+  /api/v1/payroll-runs/{runId}/state-xml:
+    get: { summary: State payroll filing XML export for a payroll run. }
+  /api/v1/site-plans/{id}/pdf:
+    get: { summary: Render a site plan with its markup layers to PDF. }
+  /api/v1/wip/snapshot-pdf:
+    get: { summary: Work-in-progress (WIP) financial snapshot report PDF. }
+
+  /api/v1/webhooks/docusign:
+    post: { summary: DocuSign Connect webhook receiver. HMAC-verified; advances contract envelope state on signer/completion events. }
+  /api/v1/webhooks/ses-inbound:
+    post: { summary: AWS SES inbound-email webhook. Shared-secret header auth; routes messages to the matching project email inbox. }

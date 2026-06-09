@@ -8,14 +8,17 @@
  * root layout entirely when it kicks in.
  *
  * Without this file, a root-layout exception renders a blank white page in
- * production. Sentry still gets the report via instrumentation, but the user
- * sees nothing actionable.
+ * production. Server-side renders report via instrumentation.ts
+ * onRequestError; CLIENT render errors only reach Sentry through the
+ * explicit captureException below — the server hook never sees them.
  */
 
 import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
+    Sentry.captureException(error);
     console.error("[global-error]", error);
   }, [error]);
 

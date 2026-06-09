@@ -26,27 +26,6 @@ const KIND_LABEL: Record<string, string> = {
   official: "Officials",
 };
 
-const KIND_FILTERS = [
-  { kind: null, label: "All" },
-  { kind: "paid_staff", label: "Paid Staff" },
-  { kind: "volunteer", label: "Volunteers" },
-  { kind: "contractor", label: "Contractors" },
-  { kind: "official", label: "Officials" },
-] as const;
-
-// Workforce-adjacent surfaces that are real concepts (not type filters of
-// the workforce_members table). Kept here as a tile band so they remain
-// reachable after the WAYFINDER consolidation removed them from the
-// primary sidebar.
-const RELATED = [
-  { href: "/console/workforce/planning", label: "Planning", sub: "Capacity + needs" },
-  { href: "/console/workforce/deployment", label: "Deployment", sub: "Where they go" },
-  { href: "/console/workforce/call-sheets", label: "Call Sheets", sub: "Day-of-show" },
-  { href: "/console/workforce/housing", label: "Housing", sub: "Crew accommodation" },
-  { href: "/console/workforce/uniforms", label: "Uniforms", sub: "Issue + return" },
-  { href: "/console/workforce/services", label: "Services", sub: "Service requests" },
-];
-
 export default async function Page({ searchParams }: { searchParams: Promise<{ kind?: string }> }) {
   const sp = await searchParams;
   const { t } = await getRequestT();

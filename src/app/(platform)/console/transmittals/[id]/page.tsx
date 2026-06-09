@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -169,13 +170,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.transmittals.detail.itemsHeading", undefined, "Items")} ({items.length})
           </h2>
           {items.length === 0 ? (
-            <p className="text-xs text-[var(--p-text-2)]">
-              {t(
+            <EmptyState
+              size="compact"
+              title={t("console.transmittals.detail.noItemsTitle", undefined, "No Items Yet")}
+              description={t(
                 "console.transmittals.detail.noItems",
                 undefined,
-                "No items yet. Add drawings, specs, RFIs, or files to dispatch.",
+                "Add drawings, specs, RFIs, or files to dispatch.",
               )}
-            </p>
+            />
           ) : (
             <ul className="space-y-1">
               {items.map((it) => (
@@ -239,13 +242,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {t("console.transmittals.detail.recipientsHeading", undefined, "Recipients")} ({recipients.length})
           </h2>
           {recipients.length === 0 ? (
-            <p className="text-xs text-[var(--p-text-2)]">
-              {t(
-                "console.transmittals.detail.noRecipients",
-                undefined,
-                "No recipients yet. Add at least one to enable Send.",
-              )}
-            </p>
+            <EmptyState
+              size="compact"
+              title={t("console.transmittals.detail.noRecipientsTitle", undefined, "No Recipients Yet")}
+              description={t("console.transmittals.detail.noRecipients", undefined, "Add at least one to enable Send.")}
+            />
           ) : (
             <ul className="space-y-1">
               {recipients.map((r) => {

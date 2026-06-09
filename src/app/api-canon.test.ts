@@ -106,6 +106,11 @@ describe("API canon — parseJson enforcement", () => {
       // no JSON envelope to surface; using apiError would break the redirect
       // contract OAuth callers depend on.
       "src/app/api/v1/auth/oauth/route.ts",
+      // GraphQL endpoint — graphql-yoga owns the entire request/response
+      // cycle (GraphQL-spec response shape: { data, errors }, GraphiQL HTML
+      // in dev). The ATLVS envelope cannot wrap a spec-compliant GraphQL
+      // response; auth + errors flow through buildGqlContext/GraphQLError.
+      "src/app/api/v1/graphql/route.ts",
     ]);
     const V1_RE = /^src\/app\/api\/v1\//;
     for (const file of ROUTES) {

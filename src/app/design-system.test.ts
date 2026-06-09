@@ -351,14 +351,15 @@ describe("Design system — component primitive adoption", () => {
     // them. Without this, a 375px phone gives 135px / 151px main
     // content — sub-readable.
     const sidebarTxt = readFileSync(join(REPO_ROOT, "src/components/PlatformSidebar.tsx"), "utf8");
-    const shellTxt = readFileSync(join(REPO_ROOT, "src/components/Shell.tsx"), "utf8");
+    // PortalRail was extracted from Shell.tsx into its own module.
+    const railTxt = readFileSync(join(REPO_ROOT, "src/components/PortalRail.tsx"), "utf8");
     expect(
       sidebarTxt.includes("hidden md:block") || sidebarTxt.includes("hidden md:flex"),
       "PlatformSidebar must hide below md — add `hidden md:block` (or `md:flex`) to the outer <aside>",
     ).toBe(true);
     expect(
-      shellTxt.includes("hidden w-56") && shellTxt.includes("md:flex"),
-      "PortalRail (Shell.tsx) must hide below md — add `hidden md:flex` to the outer <aside>",
+      railTxt.includes("hidden w-56") && railTxt.includes("md:flex"),
+      "PortalRail (PortalRail.tsx) must hide below md — add `hidden md:flex` to the outer <aside>",
     ).toBe(true);
   });
 });

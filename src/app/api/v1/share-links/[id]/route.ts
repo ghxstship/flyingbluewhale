@@ -2,7 +2,7 @@ import { type NextRequest } from "next/server";
 import { apiError, apiOk } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { revokeShareLink } from "@/lib/share/links";
-import { emitAudit, type AuditAction } from "@/lib/audit";
+import { emitAudit } from "@/lib/audit";
 
 /**
  * DELETE /api/v1/share-links/[id] — revoke a share link.

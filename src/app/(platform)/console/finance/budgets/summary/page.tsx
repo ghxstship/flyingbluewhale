@@ -258,7 +258,7 @@ function RollupTable({
                 <td className="px-3 py-2 text-right font-mono">{fmt(r.budget)}</td>
                 <td className="px-3 py-2 text-right font-mono">{fmt(r.forecast)}</td>
                 <td className="px-3 py-2 text-right font-mono">{fmt(r.actual)}</td>
-                <td className={`px-3 py-2 text-right font-mono ${r.variance < 0 ? "text-red-500" : ""}`}>
+                <td className={`px-3 py-2 text-right font-mono ${r.variance < 0 ? "text-[var(--p-danger)]" : ""}`}>
                   {fmt(r.variance)}
                 </td>
                 {showPercent && (

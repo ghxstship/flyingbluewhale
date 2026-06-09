@@ -1,14 +1,16 @@
 import "server-only";
 import { env, hasResend } from "./env";
 import { httpFetch } from "./http";
+import { BRAND } from "./brand";
+import { SITE } from "./seo";
 
 /**
  * Resolve the absolute brand-asset URL — emails can't ship relative
  * paths because the recipient's mail client has no concept of our
- * origin. Falls back to atlvs.pro in prod.
+ * origin. `SITE.baseUrl` carries the canonical apex fallback.
  */
 function brandAssetUrl(path: string): string {
-  const base = (env.NEXT_PUBLIC_APP_URL || "https://atlvs.pro").replace(/\/+$/, "");
+  const base = SITE.baseUrl.replace(/\/+$/, "");
   return `${base}${path.startsWith("/") ? path : "/" + path}`;
 }
 
@@ -49,7 +51,7 @@ export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent
           <table role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td style="padding-right:14px;vertical-align:middle"><img src="${markUrl}" width="36" height="36" alt="" style="display:block;border-radius:8px"/></td>
             <td style="vertical-align:middle">
-              <div style="font-size:16px;font-weight:700;letter-spacing:0.04em;color:#181B23;text-transform:uppercase;line-height:1">A T L V S</div>
+              <div style="font-size:16px;font-weight:700;letter-spacing:0.04em;color:#181B23;text-transform:uppercase;line-height:1">${BRAND.mark}</div>
               <div style="font-family:'Space Mono','Courier New',monospace;font-size:10px;letter-spacing:0.12em;color:#8C95A3;text-transform:uppercase;margin-top:4px">Technologies</div>
             </td>
           </tr></table>
@@ -58,7 +60,7 @@ export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent
         <tr><td style="padding:28px 24px;background:#FFFFFF">${bodyHtml}</td></tr>
         <!-- Endorsement footer band — GHXSTSHIP parent -->
         <tr><td style="padding:18px 24px;border-top:1px solid #E4E7EC;background:#F7F8FA;font-family:'Space Mono','Courier New',monospace;font-size:11px;letter-spacing:0.1em;color:#8C95A3;text-transform:uppercase;text-align:center">
-          a G H X S T S H I P Industries company · <a href="${brandAssetUrl("/")}" style="color:${accent.fill};text-decoration:none;font-weight:600">atlvs.pro</a>
+          a ${BRAND.parent.mark} Industries company · <a href="${brandAssetUrl("/")}" style="color:${accent.fill};text-decoration:none;font-weight:600">${BRAND.apexDomain}</a>
         </td></tr>
       </table>
     </td></tr>
@@ -101,7 +103,7 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      from: env.RESEND_FROM ?? "ATLVS Technologies <no-reply@atlvs.pro>",
+      from: env.RESEND_FROM ?? `${BRAND.legalName} <${BRAND.emails.noReply}>`,
       to: Array.isArray(payload.to) ? payload.to : [payload.to],
       subject: payload.subject,
       html: payload.html,
@@ -137,7 +139,7 @@ export async function sendProposalShareEmail({
 }) {
   return sendEmail({
     to,
-    subject: `${senderName ?? "ATLVS Technologies"} sent you a proposal: ${proposalTitle}`,
+    subject: `${senderName ?? BRAND.legalName} sent you a proposal: ${proposalTitle}`,
     html: wrapEmailHtml(
       `<p style="margin:0;color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
        <h1 style="font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;margin:12px 0 8px;letter-spacing:-0.01em;color:#181B23">${proposalTitle}</h1>

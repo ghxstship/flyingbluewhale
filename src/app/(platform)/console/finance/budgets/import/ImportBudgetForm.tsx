@@ -56,7 +56,7 @@ export function ImportBudgetForm() {
       </div>
 
       {state && "error" in state && state.error && (
-        <div className="surface border-red-500/20 p-3 text-sm text-red-500">{state.error}</div>
+        <div className="surface border-[var(--p-danger)]/20 p-3 text-sm text-[var(--p-danger)]">{state.error}</div>
       )}
       {state && "ok" in state && state.ok && (
         <div className="surface p-3 text-sm">

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { DataTable } from "@/components/DataTable";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -169,13 +170,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </span>
           </header>
           {versionRows.length === 0 ? (
-            <p className="text-xs text-[var(--p-text-2)]">
-              {t(
+            <EmptyState
+              size="compact"
+              title={t("console.drawings.detail.noVersionsTitle", undefined, "No Versions Yet")}
+              description={t(
                 "console.drawings.detail.noVersionsEmpty",
                 undefined,
-                "No versions yet. Add one below to start collecting sheets.",
+                "Add one below to start collecting sheets.",
               )}
-            </p>
+            />
           ) : (
             <ul className="space-y-1.5">
               {versionRows.map((v) => (

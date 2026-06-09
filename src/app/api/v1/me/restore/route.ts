@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 import { apiError, apiOk } from "@/lib/api";
 import { emitAudit } from "@/lib/audit";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";

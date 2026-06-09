@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { emitAudit } from "@/lib/audit";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   role: z.enum(PLATFORM_ROLES),
@@ -16,7 +17,12 @@ const Schema = z.object({
     .transform((v) => v === "on" || v === "true"),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updatePerson(userId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -31,7 +37,7 @@ export async function updatePerson(userId: string, _: State, fd: FormData): Prom
   // accidentally demote themselves and lock the org out of admin.
   if (userId === session.userId) return { error: "Use the leave-org flow to change your own role" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Read the row we're about to change so we know the prior role (for the
@@ -79,7 +85,7 @@ export async function updatePerson(userId: string, _: State, fd: FormData): Prom
     .is("deleted_at", null)
     .select("id")
     .maybeSingle();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   if (!data) return { error: STALE_ROW_MESSAGE };
 
   // Role changes are the most security-sensitive console write; emit

@@ -14,6 +14,7 @@ import {
   type SitePlanShellType,
 } from "@/lib/siteplan/types";
 import { getPreset } from "@/lib/siteplan/presets";
+import { echoValues as echo, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   code: z.string().min(1).max(40),
@@ -42,17 +43,7 @@ const Schema = z.object({
   preset_code: z.string().max(80).optional(),
 });
 
-export type State = { error?: string; values?: Record<string, string> } | null;
-
-// Capture submitted strings to echo on validation failure — keeps user
-// input alive across the React form-action reset (see FormShell `values`).
-function echo(fd: FormData): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const [k, v] of fd.entries()) {
-    if (typeof v === "string") out[k] = v;
-  }
-  return out;
-}
+export type State = { error?: string; fieldErrors?: Record<string, string>; values?: Record<string, string> } | null;
 
 export async function createSitePlanSheet(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -61,9 +52,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
   if (raw.preset_code === "") delete raw.preset_code;
 
   const parsed = Schema.safeParse(raw);
-  if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Invalid input", values: echo(fd) };
-  }
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const projectId = parsed.data.project_id || null;

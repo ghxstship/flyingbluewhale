@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1),
@@ -15,12 +16,17 @@ const Schema = z.object({
   notes: z.string().optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createLocationAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { error } = await supabase.from("locations").insert({
     org_id: session.orgId,
@@ -32,7 +38,7 @@ export async function createLocationAction(_: State, fd: FormData): Promise<Stat
     postcode: parsed.data.postcode || null,
     notes: parsed.data.notes || null,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/locations");
   redirect("/console/locations");
 }

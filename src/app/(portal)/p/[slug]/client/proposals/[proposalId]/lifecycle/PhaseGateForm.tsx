@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
@@ -32,7 +33,8 @@ export function PhaseGateForm({
     fd.set("slug", slug);
     fd.set("proposalId", proposalId);
     startTransition(async () => {
-      await toggleGateAction(null, fd);
+      const result = await toggleGateAction(null, fd);
+      if (result?.error) toast.error(result.error);
     });
   }
 
@@ -42,7 +44,8 @@ export function PhaseGateForm({
     fd.set("slug", slug);
     fd.set("proposalId", proposalId);
     startTransition(async () => {
-      await approvePhaseAction(null, fd);
+      const result = await approvePhaseAction(null, fd);
+      if (result?.error) toast.error(result.error);
     });
   }
 

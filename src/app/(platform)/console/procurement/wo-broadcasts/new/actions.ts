@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { nextOrgCode } from "@/lib/codes";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -16,14 +17,19 @@ const Schema = z.object({
   needed_by: z.string().optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createBroadcast(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Work-order broadcasts fan out to vendors — manager+ only.
   if (!isManagerPlus(session)) return { error: "Only manager+ can broadcast work orders" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard for the optional project_id.
@@ -56,7 +62,7 @@ export async function createBroadcast(_: State, fd: FormData): Promise<State> {
     } as never)
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/procurement/wo-broadcasts");
   redirect(`/console/procurement/wo-broadcasts/${data.id}`);
 }

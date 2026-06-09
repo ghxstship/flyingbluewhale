@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { haptic } from "@/lib/haptics";
 import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 import { CameraScanner, type ScannedCode } from "@/components/scanners";
+import { usePendingCount } from "@/lib/offline/queue-status";
 
 type ScanRecord = {
   id: string;
@@ -17,12 +18,17 @@ type ScanRecord = {
   scanned_at: string;
 };
 
-type ScanResp = { ok: true; data: { scan: ScanRecord } } | { ok: false; error: { message: string } };
+type ScanResp =
+  // 202 shim from the service worker — scan captured offline, queued
+  // for background-sync replay.
+  | { ok: true; queued: true }
+  | { ok: true; queued?: undefined; data: { scan: ScanRecord } }
+  | { ok: false; error: { message: string } };
 
 type LogEntry = {
   at: string;
   barcode: string;
-  result: "allow" | "deny" | "warn";
+  result: "allow" | "deny" | "warn" | "queued";
   detail: string;
 };
 
@@ -47,6 +53,7 @@ export function GateScanner() {
   const announce = useAnnounce();
   const fmt = useFormatters();
   const t = useT();
+  const { count: pendingCount, refresh: refreshPending } = usePendingCount("/api/v1/accreditation/scan");
 
   // Hydrate mode from localStorage after mount (avoids SSR drift).
   useEffect(() => {
@@ -92,6 +99,24 @@ export function GateScanner() {
               "assertive",
             );
             toast.error(json.error.message);
+          } else if (json.queued) {
+            // Service worker queued the scan offline — it will replay on
+            // reconnect. Distinct state: not a verified allow/deny.
+            haptic("warning");
+            const msg = t("m.offline.queuedToast", undefined, "Queued — will sync when online");
+            announce(msg, "polite");
+            toast.info(msg);
+            setLog((l) =>
+              [
+                {
+                  at: new Date().toISOString(),
+                  barcode: trimmed,
+                  result: "queued" as const,
+                  detail: t("m.offline.queuedDetail", undefined, "offline — pending sync"),
+                },
+                ...l,
+              ].slice(0, 50),
+            );
           } else {
             const { result, reason } = json.data.scan;
             if (result === "allow") {
@@ -124,12 +149,13 @@ export function GateScanner() {
         } catch (e) {
           toast.error(e instanceof Error ? e.message : t("common.networkError", undefined, "Network error"));
         } finally {
+          refreshPending();
           setBarcode("");
           if (mode === "wedge") inputRef.current?.focus();
         }
       });
     },
-    [announce, mode, t],
+    [announce, mode, refreshPending, t],
   );
 
   const handleCameraScan = useCallback(
@@ -139,10 +165,12 @@ export function GateScanner() {
     [submit],
   );
 
-  const counts = log.reduce((acc, e) => (acc[e.result]++, acc), { allow: 0, deny: 0, warn: 0 } as Record<
-    LogEntry["result"],
-    number
-  >);
+  const counts = log.reduce((acc, e) => (acc[e.result]++, acc), {
+    allow: 0,
+    deny: 0,
+    warn: 0,
+    queued: 0,
+  } as Record<LogEntry["result"], number>);
 
   return (
     <div className="space-y-4">
@@ -161,6 +189,13 @@ export function GateScanner() {
             <Badge variant="error">{t("m.gate.scan.badge.deny", undefined, "Deny")}</Badge>
           </div>
         </div>
+        {pendingCount > 0 && (
+          <div className="mt-3 text-center">
+            <Badge variant="warning">
+              {t("m.offline.pendingBadge", { count: pendingCount }, `${pendingCount} Pending — Will Sync When Online`)}
+            </Badge>
+          </div>
+        )}
       </div>
 
       <div
@@ -263,12 +298,24 @@ export function GateScanner() {
                 </span>
                 <span className="flex items-center gap-2 text-[var(--color-text-tertiary)]">
                   {fmt.time(e.at, { seconds: true })}
-                  <Badge variant={e.result === "allow" ? "success" : e.result === "warn" ? "warning" : "error"}>
+                  <Badge
+                    variant={
+                      e.result === "allow"
+                        ? "success"
+                        : e.result === "warn"
+                          ? "warning"
+                          : e.result === "queued"
+                            ? "muted"
+                            : "error"
+                    }
+                  >
                     {e.result === "allow"
                       ? t("m.gate.scan.badge.allow", undefined, "Allow")
                       : e.result === "warn"
                         ? t("m.gate.scan.badge.warn", undefined, "Warn")
-                        : t("m.gate.scan.badge.deny", undefined, "Deny")}
+                        : e.result === "queued"
+                          ? t("m.offline.queuedBadge", undefined, "Queued")
+                          : t("m.gate.scan.badge.deny", undefined, "Deny")}
                   </Badge>
                 </span>
               </li>

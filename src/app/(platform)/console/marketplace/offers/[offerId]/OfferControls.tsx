@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { sendOfferAction, acceptOfferAction, declineOfferAction } from "../new/actions";
@@ -29,7 +30,8 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
             <form
               action={(fd) => {
                 startTransition(async () => {
-                  await sendOfferAction(null, fd);
+                  const result = await sendOfferAction(null, fd);
+                  if (result?.error) toast.error(result.error);
                 });
               }}
             >
@@ -44,7 +46,8 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
               <form
                 action={(fd) => {
                   startTransition(async () => {
-                    await acceptOfferAction(null, fd);
+                    const result = await acceptOfferAction(null, fd);
+                    if (result?.error) toast.error(result.error);
                   });
                 }}
               >
@@ -56,7 +59,8 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
               <form
                 action={(fd) => {
                   startTransition(async () => {
-                    await declineOfferAction(null, fd);
+                    const result = await declineOfferAction(null, fd);
+                    if (result?.error) toast.error(result.error);
                   });
                 }}
               >

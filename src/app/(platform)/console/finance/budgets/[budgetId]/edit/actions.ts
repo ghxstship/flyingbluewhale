@@ -15,6 +15,7 @@ import {
   XPMS_TIERS,
   XPMS_XYZ,
 } from "@/lib/finance/xpms-budget";
+import { formFail } from "@/lib/forms/fail";
 
 // ADR-1 — XPMS Universal Budget Template v08 fields. Edit path mirrors
 // the create schema; all XPMS columns optional, line_type defaults to
@@ -45,12 +46,17 @@ const Schema = z.object({
   internal_notes: z.string().max(4000).optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updateBudget(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const data = parsed.data;
 
   // Amount: prefer the new dollar-string `amount` field; fall back to

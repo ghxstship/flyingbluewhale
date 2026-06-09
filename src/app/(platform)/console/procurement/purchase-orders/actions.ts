@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -13,14 +14,19 @@ const Schema = z.object({
   amount: z.string().min(1),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createPoAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // POs commit money to vendors — manager+ only at the app layer.
   if (!isManagerPlus(session)) return { error: "Only manager+ can create purchase orders" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guards on the optional FK fields. POs reference
@@ -62,7 +68,7 @@ export async function createPoAction(_: State, fd: FormData): Promise<State> {
     })
     .select()
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/procurement/purchase-orders");
   redirect(`/console/procurement/purchase-orders/${data.id}`);
 }

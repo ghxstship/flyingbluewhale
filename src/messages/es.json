@@ -17014,7 +17014,14 @@
         "emptyTitle": "Aún Sin Account Manager",
         "accountManager": "Account Manager",
         "openThread": "Abrir Conversación",
-        "startThread": "Iniciar Conversación"
+        "startThread": "Iniciar Conversación",
+        "room": {
+          "backToMessages": "Todos los Mensajes",
+          "directMessage": "Mensaje Directo",
+          "subtitle": "Conversación directa con tu account manager para {projectName}.",
+          "empty": "Aún no hay mensajes. Saluda — tu account manager recibirá una notificación.",
+          "messagePlaceholder": "Mensaje"
+        }
       },
       "gateway": {
         "artist": {

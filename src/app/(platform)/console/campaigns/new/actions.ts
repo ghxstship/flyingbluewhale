@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z
   .object({
@@ -20,12 +21,17 @@ const Schema = z
   // Sea Trial R2 FINDING-018: when both supplied, end must follow start.
   .refine(...dateRangeRefine("starts_on", "ends_on"));
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createCampaign(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { error } = await supabase.from("campaigns").insert({
     org_id: session.orgId,
@@ -38,7 +44,7 @@ export async function createCampaign(_: State, fd: FormData): Promise<State> {
     budget_cents: parsed.data.budget_cents,
     status: "draft",
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/campaigns");
   redirect("/console/campaigns");
 }

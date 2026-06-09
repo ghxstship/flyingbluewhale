@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const CreateSchema = z.object({
   category: z.enum(["AV", "cleaning", "repair", "IT", "hospitality", "security", "other"]),
@@ -18,12 +19,16 @@ const CreateSchema = z.object({
   shell: z.enum(["console", "mobile"]).optional(),
 });
 
-export type CreateState = { error?: string } | null;
+export type CreateState = {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createServiceRequest(_: CreateState, fd: FormData): Promise<CreateState> {
   const session = await requireSession();
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guards on project_id + venue_id.
@@ -61,7 +66,7 @@ export async function createServiceRequest(_: CreateState, fd: FormData): Promis
     })
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   const { error: insertError } = await supabase.from("service_request_events").insert({
     request_id: data.id,
     org_id: session.orgId,
@@ -69,7 +74,7 @@ export async function createServiceRequest(_: CreateState, fd: FormData): Promis
     kind: "opened",
     payload: { severity: parsed.data.severity, category: parsed.data.category },
   });
-  if (insertError) return { error: insertError.message };
+  if (insertError) return actionFail(insertError.message, fd);
   revalidatePath("/console/services/requests");
   if (parsed.data.shell === "mobile") {
     revalidatePath("/m/requests");

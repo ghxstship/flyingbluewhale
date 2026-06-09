@@ -3,13 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
-import { settingsNav } from "@/lib/nav";
+import { filterNavByRole, settingsNav } from "@/lib/nav";
 import { matchRoute } from "@/lib/hooks/useActiveRoute";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
-export function SettingsSidebar() {
+export function SettingsSidebar({ role }: { role?: string | null }) {
   const pathname = usePathname();
   const t = useT();
+  // Role-filtered view — members no longer browse admin tools they can't
+  // use and discover their limits via failed mutations. Each target page
+  // still enforces its own session/RLS gates.
+  const groups = filterNavByRole(settingsNav, role);
   return (
     <aside
       aria-label={t("console.settings.sidebar.ariaLabel", undefined, "Settings")}
@@ -29,7 +33,7 @@ export function SettingsSidebar() {
           </div>
         </div>
         <nav className="flex-1 overflow-y-auto p-2">
-          {settingsNav.map((g) => (
+          {groups.map((g) => (
             <div key={g.label} className="mb-3">
               <div className="px-2 text-[10px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase">
                 {g.label}

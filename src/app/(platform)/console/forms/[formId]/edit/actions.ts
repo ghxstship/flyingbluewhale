@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
+import { formFail } from "@/lib/forms/fail";
 
 // Field shape stored on form_defs.schema. Kept narrow on purpose — adding
 // new field kinds is a deliberate schema bump, not an open-ended free-for-all.
@@ -40,7 +41,12 @@ const Schema = z.object({
   schema_json: z.string().min(2),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updateFormDefAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -52,7 +58,7 @@ export async function updateFormDefAction(_: State, fd: FormData): Promise<State
     status: fd.get("status"),
     schema_json: fd.get("schema_json"),
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   // Parse + validate the JSON schema body separately so we can give a useful error.
   let parsedSchema: Json;

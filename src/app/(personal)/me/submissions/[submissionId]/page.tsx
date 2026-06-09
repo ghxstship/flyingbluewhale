@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
@@ -12,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 type Sub = {
   id: string;
+  org_id: string;
   status: string;
   cover_note: string | null;
   fee_proposed_cents: number | null;
@@ -65,6 +67,27 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
               {t("me.submissions.detail.proposedFee", undefined, "Proposed fee")}
             </div>
             <div className="mt-1 font-mono text-sm">{formatMoney(s.fee_proposed_cents)}</div>
+          </div>
+        )}
+        {s.status === "awarded" && (
+          <div className="card-elevated flex items-center justify-between p-4">
+            <div>
+              <div className="text-label text-[var(--color-text-tertiary)]">
+                {t("me.submissions.detail.review.label", undefined, "Awarded and wrapped?")}
+              </div>
+              <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                {t(
+                  "me.submissions.detail.review.body",
+                  undefined,
+                  "Rate the working relationship. Reviews stay hidden until both sides post.",
+                )}
+              </div>
+            </div>
+            <Button
+              href={`/me/reviews/new?transactionType=open_call_submission&transactionId=${s.id}&subjectType=org&subjectId=${s.org_id}`}
+            >
+              {t("me.submissions.detail.review.cta", undefined, "Write A Review")}
+            </Button>
           </div>
         )}
       </div>

@@ -24,6 +24,7 @@ type App = {
   day_rate_proposed_cents: number | null;
   reviewer_notes: string | null;
   applied_at: string;
+  answers: Record<string, unknown>;
 };
 
 export default async function Page({ params }: { params: Promise<{ postingId: string; applicationId: string }> }) {
@@ -96,6 +97,16 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
                   {t("console.marketplace.postings.applicants.detail.proposedRateLabel", undefined, "Proposed rate:")}
                 </span>{" "}
                 {a.day_rate_proposed_cents ? `$${(a.day_rate_proposed_cents / 100).toFixed(0)}` : "—"}
+              </div>
+              <div>
+                <span className="text-[var(--p-text-2)]">
+                  {t("console.marketplace.postings.applicants.detail.phoneLabel", undefined, "Phone:")}
+                </span>{" "}
+                {typeof a.answers?.phone === "string" && a.answers.phone ? (
+                  <span className="font-mono">{a.answers.phone}</span>
+                ) : (
+                  "—"
+                )}
               </div>
             </dl>
           </div>

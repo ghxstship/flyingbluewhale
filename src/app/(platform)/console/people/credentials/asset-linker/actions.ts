@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   assignment_id: z.string().uuid(),
@@ -11,7 +12,12 @@ const Schema = z.object({
   code: z.string().min(1).max(120),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 /**
  * Bind a physical scan token (NFC tag, RFID card, barcode, QR, wristband)
@@ -24,7 +30,7 @@ export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can bind scan codes" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   const { data: a } = await supabase

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Lane = z.enum(["show", "lights", "audio", "video", "talent", "safety", "transport"]);
 
@@ -15,7 +16,12 @@ const Schema = z.object({
   duration_seconds: z.coerce.number().int().min(0).max(86400).optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createCueAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -26,7 +32,7 @@ export async function createCueAction(_: State, fd: FormData): Promise<State> {
     description: fd.get("description"),
     duration_seconds: fd.get("duration_seconds") || undefined,
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { error } = await supabase.from("cues").insert({
     org_id: session.orgId,
@@ -37,7 +43,7 @@ export async function createCueAction(_: State, fd: FormData): Promise<State> {
     duration_seconds: parsed.data.duration_seconds ?? null,
     created_by: session.userId,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/production/ros");
   revalidatePath("/m/ros");
   return null;

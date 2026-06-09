@@ -1,4 +1,5 @@
 import "server-only";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { apiError } from "./api";
 import { createClient } from "./supabase/server";
@@ -169,8 +170,20 @@ export async function requireSession(redirectTo?: string): Promise<Session> {
   // where the auth shell actually lives. A bare "/login" here 404s on every
   // subdomain — that's the bug this default exists to prevent. Callers passing
   // a relative path get the same treatment.
+  //
+  // The proxy injects x-pathname (the internal route path) so an expired
+  // session returns to where it was after re-auth instead of the shell root.
   if (!s) {
-    const target = redirectTo ?? urlFor("auth", "/login");
+    let target = redirectTo;
+    if (!target) {
+      const h = await headers();
+      const path = h.get("x-pathname");
+      const next =
+        path && path.startsWith("/") && !path.startsWith("//") && path !== "/login" && path.length <= 512
+          ? `?next=${encodeURIComponent(path)}`
+          : "";
+      target = urlFor("auth", `/login${next}`);
+    }
     redirect(target);
   }
   return s;

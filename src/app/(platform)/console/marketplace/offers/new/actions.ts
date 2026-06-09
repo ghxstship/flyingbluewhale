@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
+import { writeInbox } from "@/lib/inbox";
+import { log } from "@/lib/log";
 
 const Schema = z.object({
   talent_profile_id: z.string().uuid(),
@@ -21,7 +24,12 @@ const Schema = z.object({
   balance_terms: z.string().default("load_in"),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createOfferAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -29,7 +37,7 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
   // manager+ at the app layer.
   if (!isManagerPlus(session)) return { error: "Only manager+ can send booking offers" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const feeCents = Math.round(Number(parsed.data.fee.replace(/[$,]/g, "")) * 100);
   if (!Number.isFinite(feeCents) || feeCents <= 0) return { error: "Invalid fee" };
@@ -78,12 +86,59 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
     .select("id")
     .single();
 
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/marketplace/offers");
   redirect(`/console/marketplace/offers/${(data as { id: string }).id}`);
 }
 
 const Transition = z.object({ offer_id: z.string().uuid() });
+
+/**
+ * Tell the talent an org-side transition happened — sends used to land
+ * silently and acts only saw the new state by revisiting /me/offers.
+ * In-app only (no marketplace PushKind exists in the catalog yet).
+ * Best-effort: a notify failure never rolls back the transition.
+ */
+async function notifyTalentOfTransition(args: {
+  offerId: string;
+  orgId: string;
+  actorId: string;
+  title: string;
+  decision: string;
+}): Promise<void> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("talent_offers")
+      .select("id, performance_date, talent_profiles!inner(user_id)")
+      .eq("id", args.offerId)
+      .eq("org_id", args.orgId)
+      .maybeSingle();
+    const row = data as unknown as {
+      performance_date: string;
+      talent_profiles: { user_id: string | null };
+    } | null;
+    const talentUserId = row?.talent_profiles?.user_id;
+    if (!talentUserId) return; // unclaimed profile — nobody to ping
+    await writeInbox({
+      userId: talentUserId,
+      orgId: args.orgId,
+      kind: "talent_offer",
+      sourceType: "talent_offers",
+      sourceId: args.offerId,
+      actorId: args.actorId,
+      title: args.title,
+      body: `Your booking offer for ${row.performance_date} was ${args.decision}.`,
+      href: "/me/offers",
+      push: false,
+    });
+  } catch (e) {
+    log.warn("talent_offer.transition_notify_failed", {
+      offerId: args.offerId,
+      err: e instanceof Error ? e.message : String(e),
+    });
+  }
+}
 
 // Offer state machine — canonical transitions:
 //   draft     → sent
@@ -110,6 +165,13 @@ export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Offer can't be sent from its current state" };
+  await notifyTalentOfTransition({
+    offerId: parsed.data.offer_id,
+    orgId: session.orgId,
+    actorId: session.userId,
+    title: "Booking Offer Received",
+    decision: "sent",
+  });
   revalidatePath(`/console/marketplace/offers/${parsed.data.offer_id}`);
   return { error: undefined };
 }
@@ -128,6 +190,13 @@ export async function acceptOfferAction(_: State, fd: FormData): Promise<State> 
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Offer can only be accepted from sent or countered" };
+  await notifyTalentOfTransition({
+    offerId: parsed.data.offer_id,
+    orgId: session.orgId,
+    actorId: session.userId,
+    title: "Booking Offer Accepted",
+    decision: "marked accepted",
+  });
   revalidatePath(`/console/marketplace/offers/${parsed.data.offer_id}`);
   return { error: undefined };
 }
@@ -146,6 +215,13 @@ export async function declineOfferAction(_: State, fd: FormData): Promise<State>
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Only a sent or countered offer can be declined" };
+  await notifyTalentOfTransition({
+    offerId: parsed.data.offer_id,
+    orgId: session.orgId,
+    actorId: session.userId,
+    title: "Booking Offer Declined",
+    decision: "declined",
+  });
   revalidatePath(`/console/marketplace/offers/${parsed.data.offer_id}`);
   return { error: undefined };
 }

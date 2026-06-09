@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const CreateSchema = z
   .object({
@@ -18,12 +19,17 @@ const CreateSchema = z
   // .refine pattern used on rentals/projects/site-plans.
   .refine(...dateRangeRefine("starts_at", "ends_at"));
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function addAvailabilityAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { error } = await supabase.from("availability_slots").insert({
     user_id: session.userId,
@@ -33,7 +39,7 @@ export async function addAvailabilityAction(_: State, fd: FormData): Promise<Sta
     all_day: parsed.data.all_day === "on",
     label: parsed.data.label || null,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/me/availability");
   return { ok: true };
 }

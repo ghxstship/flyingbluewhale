@@ -9,18 +9,25 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { haptic } from "@/lib/haptics";
 import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 import { CameraScanner, type ScannedCode } from "@/components/scanners";
+import { usePendingCount } from "@/lib/offline/queue-status";
+
+type ScanData =
+  | { result: "accepted"; ticketId: string; holderName: string | null; tier: string }
+  | { result: "duplicate"; ticketId: string; scannedAt: string }
+  | { result: "voided"; ticketId: string }
+  | { result: "not_found" };
 
 type ScanResp =
-  | { ok: true; data: { result: "accepted"; ticketId: string; holderName: string | null; tier: string } }
-  | { ok: true; data: { result: "duplicate"; ticketId: string; scannedAt: string } }
-  | { ok: true; data: { result: "voided"; ticketId: string } }
-  | { ok: true; data: { result: "not_found" } }
+  // 202 shim from the service worker — scan captured offline, queued
+  // for background-sync replay.
+  | { ok: true; queued: true }
+  | { ok: true; queued?: undefined; data: ScanData }
   | { ok: false; error: { message: string } };
 
 type LogEntry = {
   at: string;
   code: string;
-  result: "accepted" | "duplicate" | "voided" | "not_found";
+  result: "accepted" | "duplicate" | "voided" | "not_found" | "queued";
 };
 
 type ScannerMode = "wedge" | "camera";
@@ -35,6 +42,7 @@ export function CheckInScanner() {
   const announce = useAnnounce();
   const fmt = useFormatters();
   const t = useT();
+  const { count: pendingCount, refresh: refreshPending } = usePendingCount("/api/v1/scan");
 
   // Hydrate mode from localStorage after mount (avoids SSR drift).
   useEffect(() => {
@@ -95,6 +103,16 @@ export function CheckInScanner() {
             setLog((l) =>
               [{ at: new Date().toISOString(), code: trimmed, result: "not_found" as const }, ...l].slice(0, 50),
             );
+          } else if (json.queued) {
+            // Service worker queued the scan offline — it will replay on
+            // reconnect. Distinct state: not a verified accept.
+            haptic("warning");
+            const msg = t("m.offline.queuedToast", undefined, "Queued — will sync when online");
+            announce(msg, "polite");
+            toast.info(msg);
+            setLog((l) =>
+              [{ at: new Date().toISOString(), code: trimmed, result: "queued" as const }, ...l].slice(0, 50),
+            );
           } else {
             const result = json.data.result;
             if (result === "accepted") {
@@ -124,6 +142,7 @@ export function CheckInScanner() {
         } catch (e) {
           toast.error(e instanceof Error ? e.message : t("m.checkIn.toast.networkError", undefined, "Network error"));
         } finally {
+          refreshPending();
           setCode("");
           // Only steal focus when keyboard-wedge mode is active so the camera
           // preview isn't blurred by an invisible <input>.
@@ -131,7 +150,7 @@ export function CheckInScanner() {
         }
       });
     },
-    [announce, mode, t],
+    [announce, mode, refreshPending, t],
   );
 
   const handleCameraScan = useCallback(
@@ -146,6 +165,7 @@ export function CheckInScanner() {
     duplicate: 0,
     voided: 0,
     not_found: 0,
+    queued: 0,
   } as Record<LogEntry["result"], number>);
 
   return (
@@ -184,6 +204,13 @@ export function CheckInScanner() {
             </div>
           ))}
         </div>
+        {pendingCount > 0 && (
+          <div className="mt-3 text-center">
+            <Badge variant="warning">
+              {t("m.offline.pendingBadge", { count: pendingCount }, `${pendingCount} Pending — Will Sync When Online`)}
+            </Badge>
+          </div>
+        )}
       </div>
 
       <div
@@ -296,7 +323,9 @@ export function CheckInScanner() {
                         ? t("m.checkIn.result.duplicate", undefined, "duplicate")
                         : e.result === "voided"
                           ? t("m.checkIn.result.voided", undefined, "voided")
-                          : t("m.checkIn.result.notFound", undefined, "not_found")}
+                          : e.result === "queued"
+                            ? t("m.offline.queuedBadge", undefined, "Queued")
+                            : t("m.checkIn.result.notFound", undefined, "not_found")}
                   </Badge>
                 </span>
               </li>

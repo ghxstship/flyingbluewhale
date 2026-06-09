@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { publishCallAction, closeCallAction } from "../new/actions";
@@ -28,7 +29,8 @@ export function CallControls({ callId, status, publicSlug }: { callId: string; s
             <form
               action={(fd) => {
                 startTransition(async () => {
-                  await publishCallAction(null, fd);
+                  const result = await publishCallAction(null, fd);
+                  if (result?.error) toast.error(result.error);
                 });
               }}
             >
@@ -42,7 +44,8 @@ export function CallControls({ callId, status, publicSlug }: { callId: string; s
             <form
               action={(fd) => {
                 startTransition(async () => {
-                  await closeCallAction(null, fd);
+                  const result = await closeCallAction(null, fd);
+                  if (result?.error) toast.error(result.error);
                 });
               }}
             >

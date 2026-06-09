@@ -113,7 +113,7 @@ export default async function PortalMessages({ params }: { params: Promise<{ slu
                     </div>
                     <div className="mt-3 flex justify-end">
                       {r.chat_room_id ? (
-                        <Link href={`/m/inbox/${r.chat_room_id}`} className="ps-btn ps-btn--sm">
+                        <Link href={`/p/${slug}/messages/${r.chat_room_id}`} className="ps-btn ps-btn--sm">
                           {t("p.shared.messages.openThread", undefined, "Open Thread")}
                         </Link>
                       ) : (

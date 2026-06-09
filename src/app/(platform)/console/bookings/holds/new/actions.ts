@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   tier: z.string().regex(/^[1-5]$/),
@@ -16,7 +17,12 @@ const Schema = z.object({
   auto_release_on: z.string().optional().or(z.literal("")),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createTieredHoldAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -24,7 +30,7 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
   // manager+ at the app layer.
   if (!isManagerPlus(session)) return { error: "Only manager+ can create tiered holds" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guards on the optional venue_id + talent_profile_id.
@@ -62,7 +68,7 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
     talent_profile_id: talentId,
     auto_release_on: parsed.data.auto_release_on || null,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/bookings/holds");
   redirect("/console/bookings/holds");
 }

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { dollarsToCents } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const slugify = (s: string) =>
   s
@@ -45,14 +46,19 @@ const Schema = z
     { message: "Expires-at is too far in the past", path: ["expires_at"] },
   );
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createProposalAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Proposals are sales documents; manager+ only at app layer.
   if (!isManagerPlus(session)) return { error: "Only manager+ can create proposals" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
 
@@ -118,7 +124,7 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
     })
     .select()
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/proposals");
   redirect(`/console/proposals/${data.id}`);
 }

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
+import { formFail } from "@/lib/forms/fail";
 
 const BUCKET = "procore-parity";
 const MAX_BYTES = 25 * 1024 * 1024; // 25 MB per file
@@ -17,7 +18,13 @@ const Schema = z.object({
   caption: z.string().max(280).optional(),
 });
 
-export type State = { error?: string; ok?: true; uploaded?: number } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  uploaded?: number;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 function safeFilename(name: string): string {
   const cleaned = name
@@ -35,7 +42,7 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
     album: fd.get("album") || undefined,
     caption: fd.get("caption") || undefined,
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const files = fd.getAll("files").filter((v): v is File => v instanceof File && v.size > 0);
   if (files.length === 0) return { error: "Pick at least one photo" };

@@ -5,6 +5,7 @@ import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Alert } from "@/components/ui/Alert";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -20,8 +21,9 @@ type AppRow = {
   posting: { title: string; public_slug: string; org_id: string } | null;
 };
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ applied?: string }> }) {
   const { t } = await getRequestT();
+  const { applied } = await searchParams;
   if (!hasSupabase) {
     return (
       <div>
@@ -53,6 +55,18 @@ export default async function Page() {
           "Job applications you've submitted. Stage updates land here when an operator moves you through their ATS.",
         )}
       </p>
+
+      {applied === "1" && (
+        <div className="mt-4">
+          <Alert kind="success">
+            {t(
+              "me.applications.appliedBanner",
+              undefined,
+              "Application submitted. The operator sees it in their ATS now.",
+            )}
+          </Alert>
+        </div>
+      )}
 
       {rows.length === 0 ? (
         <div className="mt-6">

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
@@ -29,12 +30,17 @@ const Schema = z.object({
   vendor: z.string().max(160).optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createExpenseAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard on project_id.
@@ -79,7 +85,7 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
     item: parsed.data.item || null,
     vendor: parsed.data.vendor || null,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/finance/expenses");
   redirect("/console/finance/expenses");
 }

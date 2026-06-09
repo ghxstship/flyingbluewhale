@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Create = z.object({
   kind: z.enum(["rfq", "gig", "talent_call", "talent", "crew", "vendor"]),
@@ -14,12 +15,17 @@ const Create = z.object({
   alert_push: z.string().optional(),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createSavedSearchAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Create.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   let query: Json = {};
   if (parsed.data.query) {
@@ -38,7 +44,7 @@ export async function createSavedSearchAction(_: State, fd: FormData): Promise<S
     alert_email: parsed.data.alert_email === "on",
     alert_push: parsed.data.alert_push === "on",
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/me/saved-searches");
   return { ok: true };
 }

@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { env } from "@/lib/env";
 import { httpFetch } from "@/lib/http";
+import { formFail } from "@/lib/forms/fail";
 
 const NumStr = z.string().optional().or(z.literal(""));
 const toCents = (v: string | undefined): number => {
@@ -38,14 +39,19 @@ const Schema = z.object({
   deposit_received: NumStr,
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function upsertSettlementAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Show settlement records BO numbers + payouts — manager+ only.
   if (!isManagerPlus(session)) return { error: "Only manager+ can edit settlement records" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard on offer_id (talent_offers is the FK target).

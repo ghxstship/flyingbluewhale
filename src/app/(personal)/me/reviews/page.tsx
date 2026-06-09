@@ -2,6 +2,8 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { Alert } from "@/components/ui/Alert";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -18,8 +20,9 @@ type Row = {
   reviewer_user_id: string;
 };
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ reviewed?: string }> }) {
   const { t } = await getRequestT();
+  const { reviewed } = await searchParams;
   if (!hasSupabase) return <div>{t("me.reviews.configure", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
@@ -44,15 +47,32 @@ export default async function Page() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <div className="text-label text-[var(--color-text-tertiary)]">
-          {t("me.reviews.eyebrow", undefined, "My reviews")}
+      <header className="flex items-start justify-between gap-4">
+        <div>
+          <div className="text-label text-[var(--color-text-tertiary)]">
+            {t("me.reviews.eyebrow", undefined, "My reviews")}
+          </div>
+          <h1 className="text-display mt-1 text-3xl">{t("me.reviews.title", undefined, "Reviews")}</h1>
+          <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+            {t(
+              "me.reviews.subtitle",
+              undefined,
+              "Reviews remain hidden until both sides post. No retaliation surface.",
+            )}
+          </p>
         </div>
-        <h1 className="text-display mt-1 text-3xl">{t("me.reviews.title", undefined, "Reviews")}</h1>
-        <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
-          {t("me.reviews.subtitle", undefined, "Reviews remain hidden until both sides post. No retaliation surface.")}
-        </p>
+        <Button href="/me/reviews/new">{t("me.reviews.writeCta", undefined, "Write A Review")}</Button>
       </header>
+
+      {reviewed === "1" && (
+        <Alert kind="success">
+          {t(
+            "me.reviews.reviewedBanner",
+            undefined,
+            "Review posted. It stays hidden until the other side posts theirs — then both release together.",
+          )}
+        </Alert>
+      )}
 
       <section>
         <h2 className="text-label mb-3 text-[var(--color-text-tertiary)]">

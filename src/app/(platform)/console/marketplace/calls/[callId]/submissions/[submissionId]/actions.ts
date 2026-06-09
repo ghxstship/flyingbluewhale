@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { SUBMISSION_STATUSES, type SubmissionStatus } from "@/lib/marketplace";
+import { formFail } from "@/lib/forms/fail";
 
 const Transition = z.object({
   submission_id: z.string().uuid(),
@@ -13,7 +14,12 @@ const Transition = z.object({
   score: z.string().optional().or(z.literal("")),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 // Open-call submission FSM — submitter-initiated `withdrawn` is reachable
 // from `submitted` and `shortlisted` only. Reviewer-initiated `awarded`
@@ -34,7 +40,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
   // /me/applications surface (per-user RLS).
   if (!isManagerPlus(session)) return { error: "Only manager+ can decide submission outcomes" };
   const parsed = Transition.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const score = parsed.data.score ? Math.min(100, Math.max(0, Math.round(Number(parsed.data.score)))) : null;
 

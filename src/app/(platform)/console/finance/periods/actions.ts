@@ -10,6 +10,7 @@ import {
   transitionAccountingPeriod,
   type AccountingPeriodState,
 } from "@/lib/accounting-periods";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const CreateSchema = z.object({
   period_label: z.string().min(1).max(64),
@@ -17,7 +18,12 @@ const CreateSchema = z.object({
   ends_on: z.string().date(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createAccountingPeriodAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -25,7 +31,7 @@ export async function createAccountingPeriodAction(_: State, fd: FormData): Prom
   // is org-policy, closing one locks journal entries. Owner/admin only.
   if (!isAdmin(session)) return { error: "Only owners and admins can manage accounting periods" };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   if (parsed.data.ends_on < parsed.data.starts_on) {
     return { error: "ends_on must be on or after starts_on" };
   }
@@ -42,7 +48,7 @@ export async function createAccountingPeriodAction(_: State, fd: FormData): Prom
     })
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
 
   const { error: transitionErr } = await supabase.from("accounting_period_state_transitions").insert({
     org_id: session.orgId,

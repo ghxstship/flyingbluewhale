@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
+import { formFail } from "@/lib/forms/fail";
 
 const UUID = z.string().uuid();
 const OPT_UUID = z.union([UUID, z.literal("")]).optional();
@@ -29,7 +30,12 @@ const Schema = z
   // both are supplied.
   .refine(...dateRangeRefine("start_date", "end_date"));
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 type GeoScope = "local" | "regional" | "national" | "international";
 type TourStructure = "single_stop" | "multi_stop_sequential" | "simultaneous_multi_city";
@@ -38,7 +44,7 @@ type ProductionStyle = "editorial" | "documentary" | "narrative" | "spectacle" |
 export async function updateProject(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   // Sea Trial FINDING-022: optimistic concurrency.
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("projects", session.orgId, id, expectedUpdatedAt, {

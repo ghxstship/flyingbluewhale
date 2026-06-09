@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z
   .object({
@@ -17,12 +18,17 @@ const Schema = z
   // Sea Trial R2 FINDING-018: a rental can't end before it starts.
   .refine(...dateRangeRefine("starts_at", "ends_at"));
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updateRental(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   // Sea Trial FINDING-022: optimistic concurrency.
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("rentals", session.orgId, id, expectedUpdatedAt, {

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   triage: z.enum(["green", "yellow", "red", "black"]),
@@ -17,12 +18,17 @@ const Schema = z.object({
   signature: z.string().max(200_000).optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function logEncounter(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   // Clinician signature lives inside phi_encrypted (clinical record domain).
   // Storing kind + raw payload keeps the bytes scoped to the encounter row;

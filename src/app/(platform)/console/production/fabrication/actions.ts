@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { FabricationStatus } from "@/lib/supabase/types";
 import { PRODUCTION_PHASES, transitionProductionPhase, type ProductionPhase } from "@/lib/production-phase";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -14,12 +15,17 @@ const Schema = z.object({
   project_id: z.string().uuid().optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createFabAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard on project_id.
@@ -41,7 +47,7 @@ export async function createFabAction(_: State, fd: FormData): Promise<State> {
     due_at: parsed.data.due_at || null,
     project_id: parsed.data.project_id || null,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/production/fabrication");
   redirect("/console/production/fabrication");
 }

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   project_id: z.string().uuid(),
@@ -15,7 +16,12 @@ const Schema = z.object({
   notes: z.string().max(4000).optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 function num(s: string | undefined): number | null {
   if (!s) return null;
@@ -26,7 +32,7 @@ function num(s: string | undefined): number | null {
 export async function createDailyLog(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard.
@@ -57,7 +63,7 @@ export async function createDailyLog(_: State, fd: FormData): Promise<State> {
     if (error.code === "23505") {
       return { error: "A daily log already exists for this project on that date. Open it to edit." };
     }
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
   revalidatePath("/console/operations/daily-log");
   redirect(`/console/operations/daily-log/${data.id}`);

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { JOB_APPLICATION_STATUSES, type JobApplicationStatus } from "@/lib/marketplace";
+import { formFail } from "@/lib/forms/fail";
 
 const Transition = z.object({
   application_id: z.string().uuid(),
@@ -13,7 +14,12 @@ const Transition = z.object({
   score: z.string().optional().or(z.literal("")),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 // Job application FSM mirrors a standard ATS pipeline. `withdrawn` is
 // applicant-initiated and reachable from any non-terminal stage.
@@ -35,7 +41,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
   // withdrawal lives on /me/applications (per-user RLS).
   if (!isManagerPlus(session)) return { error: "Only manager+ can decide applications" };
   const parsed = Transition.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const score = parsed.data.score ? Math.min(100, Math.max(0, Math.round(Number(parsed.data.score)))) : null;
 

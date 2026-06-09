@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { PERSONA_TIERS } from "@/lib/db/guides";
 import type { GuidePersona } from "@/lib/supabase/types";
+import { formFail } from "@/lib/forms/fail";
 
 const PERSONAS: GuidePersona[] = ["artist", "vendor", "client", "sponsor", "guest", "crew", "staff", "custom"];
 
@@ -18,12 +19,17 @@ const Schema = z.object({
   config: z.string(), // JSON string
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function upsertGuideAction(projectId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   let config: import("@/lib/supabase/database.types").Json;
   try {

@@ -7,6 +7,7 @@ import { STATUS_TONE } from "@/lib/marketplace";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { MyOfferActions } from "./MyOfferActions";
 
 export const dynamic = "force-dynamic";
 
@@ -79,7 +80,10 @@ export default async function Page() {
                   )}
                 </p>
               </div>
-              <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>
+              <div className="flex items-center gap-3">
+                {(o.status === "sent" || o.status === "countered") && <MyOfferActions offerId={o.id} />}
+                <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>
+              </div>
             </li>
           ))}
         </ul>

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 // BCP-47 shape: 2–3 char primary tag, optional 4-char script, optional region
 // (2-char alpha or 3-digit). Mirrors the DB check constraint added in
@@ -29,7 +30,12 @@ const Schema = z.object({
   marketing: z.string().optional(),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function savePreferencesAction(_: State, fd: FormData): Promise<State> {
   const parsed = Schema.safeParse({
@@ -40,7 +46,7 @@ export async function savePreferencesAction(_: State, fd: FormData): Promise<Sta
     analytics: fd.get("analytics") || undefined,
     marketing: fd.get("marketing") || undefined,
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
   const { data: u } = await supabase.auth.getUser();
@@ -64,7 +70,7 @@ export async function savePreferencesAction(_: State, fd: FormData): Promise<Sta
     { onConflict: "user_id" },
   );
 
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   // Revalidate the whole layout so `<html lang dir>` and every locale-aware
   // formatter pick up the new preference on the next paint without a full
   // browser reload.

@@ -5,8 +5,14 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { addTeamMember, createTeam, deleteTeam, removeTeamMember, updateTeam, updateTeamMember } from "@/lib/db/teams";
+import { formFail } from "@/lib/forms/fail";
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 const SLUG_RE = /^[a-z0-9-]{1,40}$/;
 
@@ -36,7 +42,7 @@ export async function createTeamAction(_: State, fd: FormData): Promise<State> {
   if (!isManagerPlus(session)) return { error: "Only managers and above can create teams." };
 
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   try {
     const team = await createTeam({
@@ -61,7 +67,7 @@ export async function updateTeamAction(teamId: string, _: State, fd: FormData): 
   if (!isManagerPlus(session)) return { error: "Only managers and above can edit teams." };
 
   const parsed = UpdateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   try {
     await updateTeam({
@@ -90,7 +96,7 @@ export async function addMemberAction(teamId: string, _: State, fd: FormData): P
   if (!isManagerPlus(session)) return { error: "Only managers and above can add members." };
 
   const parsed = AddMemberSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   try {
     await addTeamMember({ teamId, userId: parsed.data.user_id, role: parsed.data.role });
@@ -108,7 +114,7 @@ export async function updateMemberRoleAction(teamId: string, _: State, fd: FormD
   if (!isManagerPlus(session)) return { error: "Only managers and above can change roles." };
 
   const parsed = UpdateMemberRoleSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   try {
     await updateTeamMember({ teamId, userId: parsed.data.user_id, role: parsed.data.role });

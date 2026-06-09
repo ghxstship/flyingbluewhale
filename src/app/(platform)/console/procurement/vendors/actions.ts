@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
@@ -14,13 +15,18 @@ const Schema = z.object({
   w9: z.string().optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createVendorAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can create vendors" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { error } = await supabase.from("vendors").insert({
     org_id: session.orgId,
@@ -31,7 +37,7 @@ export async function createVendorAction(_: State, fd: FormData): Promise<State>
     coi_expires_at: parsed.data.coi_expires_at || null,
     w9_on_file: parsed.data.w9 === "on",
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/procurement/vendors");
   redirect("/console/procurement/vendors");
 }

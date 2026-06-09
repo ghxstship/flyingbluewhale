@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createProject, updateProject } from "@/lib/db/projects";
+import { formFail } from "@/lib/forms/fail";
 
 const slugify = (s: string) =>
   s
@@ -38,13 +39,17 @@ const CreateSchema = z.object({
   productionStyle: OPT_ENUM(["editorial", "documentary", "narrative", "spectacle", "intimate", "brutalist"]),
 });
 
-export type CreateProjectState = { error?: string } | null;
+export type CreateProjectState = {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createProjectAction(_: CreateProjectState, formData: FormData): Promise<CreateProjectState> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can create projects" };
   const parsed = CreateSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, formData);
 
   const budgetCents =
     parsed.data.budget && parsed.data.budget.length > 0
@@ -98,7 +103,7 @@ export async function updateProjectAction(projectId: string, formData: FormData)
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can change project state" };
   const parsed = UpdateSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message };
+  if (!parsed.success) return formFail(parsed.error, formData);
 
   await updateProject(session.orgId, projectId, parsed.data);
   revalidatePath(`/console/projects/${projectId}`);

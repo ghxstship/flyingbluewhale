@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { applyProjectTemplate } from "@/lib/db/templates";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
@@ -12,14 +13,19 @@ const Schema = z.object({
     .max(64),
 });
 
-export type ApplyResult = { error?: string; projectId?: string } | null;
+export type ApplyResult = {
+  error?: string;
+  projectId?: string;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function applyTemplateAction(templateId: string, fd: FormData): Promise<ApplyResult> {
   const session = await requireSession();
   if (!session.orgId) return { error: "User is not in an organization" };
 
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   try {
     const result = await applyProjectTemplate({

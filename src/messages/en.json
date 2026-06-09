@@ -4348,6 +4348,12 @@
       "title": "Something Went Wrong",
       "tryAgain": "Try Again"
     },
+    "offline": {
+      "queuedToast": "Queued — will sync when online",
+      "queuedDetail": "offline — pending sync",
+      "queuedBadge": "Queued",
+      "pendingBadge": "{count} Pending — Will Sync When Online"
+    },
     "home": {
       "tabs": {
         "ariaLabel": "Mobile home sections",
@@ -16443,7 +16449,14 @@
         "emptyTitle": "No Account Manager Yet",
         "accountManager": "Account Manager",
         "openThread": "Open Thread",
-        "startThread": "Start Thread"
+        "startThread": "Start Thread",
+        "room": {
+          "backToMessages": "All Messages",
+          "directMessage": "Direct Message",
+          "subtitle": "Direct thread with your account manager for {projectName}.",
+          "empty": "No messages yet. Say hello — your account manager gets notified.",
+          "messagePlaceholder": "Message"
+        }
       },
       "gateway": {
         "artist": {

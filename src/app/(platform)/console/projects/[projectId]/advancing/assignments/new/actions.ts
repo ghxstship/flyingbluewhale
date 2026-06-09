@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
 import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 /**
  * Author a new assignment from a master_catalog_items row + an assignee.
@@ -23,13 +24,18 @@ const Schema = z.object({
   atom_id: z.string().uuid().optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createAssignmentAction(projectId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can assign catalog items" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   const { data: project } = await supabase
@@ -89,7 +95,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     })
     .select("id, catalog_kind")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   const kind = (created as { catalog_kind: CatalogKind }).catalog_kind;
 
   void writeInbox({

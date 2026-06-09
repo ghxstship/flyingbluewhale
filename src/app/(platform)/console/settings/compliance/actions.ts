@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   retention_audit_days: z.coerce.number().int().min(30).max(3650).default(365),
@@ -13,7 +14,12 @@ const Schema = z.object({
   data_residency: z.enum(["us", "eu", "global"]).default("us"),
 });
 
-export type State = { error?: string; saved?: boolean } | null;
+export type State = {
+  error?: string;
+  saved?: boolean;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function saveComplianceSettings(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -28,7 +34,7 @@ export async function saveComplianceSettings(_: State, fd: FormData): Promise<St
     dpa_signed: fd.get("dpa_signed") ? "on" : "off",
     data_residency: fd.get("data_residency"),
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("orgs")
@@ -36,7 +42,7 @@ export async function saveComplianceSettings(_: State, fd: FormData): Promise<St
     .eq("id", session.orgId)
     .select("id")
     .maybeSingle();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   if (!data) return { error: "Org not found in your session" };
   revalidatePath("/console/settings/compliance");
   return { saved: true };

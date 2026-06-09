@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { formFail } from "@/lib/forms/fail";
 
 const CATEGORY_VALUES = [
   "rigging",
@@ -32,7 +33,12 @@ const Schema = z.object({
   items: z.string().max(20000).optional(),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createInspectionTemplateAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -43,7 +49,7 @@ export async function createInspectionTemplateAction(_: State, fd: FormData): Pr
     description: fd.get("description") || undefined,
     items: fd.get("items") || undefined,
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
   const { data: tpl, error: tplErr } = await supabase

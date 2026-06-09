@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline — COMPVSS</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #14100a;
+        color: #f5f2ec;
+        text-align: center;
+        padding: 24px;
+      }
+      main { max-width: 420px; }
+      .eyebrow {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #e9a23b;
+        margin-bottom: 12px;
+      }
+      h1 { font-size: 26px; margin: 0 0 12px; line-height: 1.15; }
+      p { font-size: 14px; color: #c9c2b4; margin: 0 0 20px; }
+      button {
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        background: #e9a23b;
+        color: #1b1305;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="eyebrow">C O M P V S S</div>
+      <h1>You're Offline</h1>
+      <p>
+        No connection right now. Clock punches and scans you submit are queued on this device and will sync
+        automatically when you're back online.
+      </p>
+      <button onclick="location.reload()">Try Again</button>
+    </main>
+  </body>
+</html>

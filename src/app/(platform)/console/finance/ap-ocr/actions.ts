@@ -8,6 +8,7 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { extractApInvoice } from "@/lib/ai/extract-ap-invoice";
 import { log } from "@/lib/log";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   file_name: z.string().max(400),
@@ -17,6 +18,8 @@ const Schema = z.object({
 
 export type UploadState = {
   error?: string;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
   success?: {
     id: string;
     confidence: number;
@@ -27,7 +30,7 @@ export type UploadState = {
 export async function uploadAndExtract(_: UploadState, fd: FormData): Promise<UploadState> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const sizeBytes = Number(parsed.data.size_bytes);

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(2).max(120),
@@ -37,12 +38,17 @@ const Schema = z.object({
   docs_url: z.string().url().max(400).optional().or(z.literal("")),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function submitPartnerIntegration(_: State, fd: FormData): Promise<State> {
   const raw = Object.fromEntries(fd);
   const parsed = Schema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid submission" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const capabilities = (parsed.data.capabilities ?? "")
     .split("\n")
@@ -81,7 +87,7 @@ export async function submitPartnerIntegration(_: State, fd: FormData): Promise<
     docs_url: parsed.data.docs_url || null,
     certification_tier: "submitted",
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
 
   revalidatePath("/console/settings/integrations/submissions");
   redirect("/integrations/submit/thanks");

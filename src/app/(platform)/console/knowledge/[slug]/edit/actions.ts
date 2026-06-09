@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   slug_current: z.string().min(1),
@@ -19,12 +20,17 @@ const Schema = z.object({
   tags: z.string().optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updateKnowledgeArticle(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const tagList = parsed.data.tags
     ? parsed.data.tags
         .split(",")
@@ -53,7 +59,7 @@ export async function updateKnowledgeArticle(_: State, fd: FormData): Promise<St
     .eq("updated_at", expectedUpdatedAt)
     .select("id")
     .maybeSingle();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   if (!data) return { error: STALE_ROW_MESSAGE };
   revalidatePath(`/console/knowledge/${slug}`);
   if (slug !== parsed.data.slug_current) revalidatePath(`/console/knowledge/${parsed.data.slug_current}`);

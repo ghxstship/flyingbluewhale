@@ -31,20 +31,16 @@ function kindLabels(t: Translator): Record<TriggerKind, string> {
 function kindDescriptions(t: Translator): Record<TriggerKind, string> {
   return {
     manual: t("components.triggerEditor.desc.manual", undefined, "Triggered by a user clicking Run now on this page."),
-    schedule: t(
-      "components.triggerEditor.desc.schedule",
-      undefined,
-      "Runs on a recurring cron / RRULE schedule. Backend lands in Phase 4.3.",
-    ),
+    schedule: t("components.triggerEditor.desc.schedule", undefined, "Runs on a recurring cron / RRULE schedule."),
     webhook: t(
       "components.triggerEditor.desc.webhook",
       undefined,
-      "Runs when an inbound HTTP POST hits the URL below. Backend lands in Phase 4.3.",
+      "Runs when an inbound HTTP POST hits the URL below.",
     ),
     event: t(
       "components.triggerEditor.desc.event",
       undefined,
-      "Runs when a record event matches — created or updated. Backend lands in Phase 4.5.",
+      "Runs when a record event matches — created or updated.",
     ),
   };
 }
@@ -112,21 +108,15 @@ function ScheduleConfig({
   const rrule = typeof config.rrule === "string" ? config.rrule : "";
   return (
     <div className="grid gap-2 rounded-md border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-3">
-      <div className="flex items-center gap-2">
-        <Badge variant="warning">{t("components.triggerEditor.comingSoon", undefined, "Coming Soon")}</Badge>
-        <span className="text-[11px] text-[var(--p-text-2)]">
-          {t("components.triggerEditor.scheduleSoon", undefined, "Schedule trigger lands in Phase 4.3.")}
-        </span>
-      </div>
       <Input
-        label={t("components.triggerEditor.rruleLabel", undefined, "RRULE / cron")}
+        label={t("components.triggerEditor.rruleLabel", undefined, "RRULE / Cron")}
         placeholder="FREQ=DAILY;BYHOUR=9;BYMINUTE=0"
         value={rrule}
         onChange={(e) => onChange({ ...config, rrule: e.target.value })}
         hint={t(
           "components.triggerEditor.rruleHint",
           undefined,
-          "iCal RRULE syntax. Saved now; runner enables it in P4.3.",
+          "iCal RRULE syntax. The schedule runner picks it up on the next evaluation pass.",
         )}
       />
     </div>
@@ -146,12 +136,6 @@ function WebhookConfig({
   const secret = typeof config.secret === "string" ? config.secret : "";
   return (
     <div className="grid gap-2 rounded-md border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-3">
-      <div className="flex items-center gap-2">
-        <Badge variant="warning">{t("components.triggerEditor.comingSoon", undefined, "Coming Soon")}</Badge>
-        <span className="text-[11px] text-[var(--p-text-2)]">
-          {t("components.triggerEditor.webhookSoon", undefined, "Inbound endpoint lands in Phase 4.3.")}
-        </span>
-      </div>
       <div className="flex flex-col gap-1.5">
         <span className="text-xs font-medium text-[var(--p-text-2)]">
           {t("components.triggerEditor.inboundUrl", undefined, "Inbound URL")}
@@ -193,12 +177,6 @@ function EventConfig({
   const eventType = typeof config.eventType === "string" ? config.eventType : "";
   return (
     <div className="grid gap-2 rounded-md border border-dashed border-[var(--p-border)] bg-[var(--p-surface-2)] p-3">
-      <div className="flex items-center gap-2">
-        <Badge variant="warning">{t("components.triggerEditor.comingSoon", undefined, "Coming Soon")}</Badge>
-        <span className="text-[11px] text-[var(--p-text-2)]">
-          {t("components.triggerEditor.eventSoon", undefined, "Event subscription lands in Phase 4.5.")}
-        </span>
-      </div>
       <div className="flex flex-col gap-1.5">
         <label htmlFor={tableId} className="text-xs font-medium text-[var(--p-text-2)]">
           {t("components.triggerEditor.targetTable", undefined, "Target Table")}

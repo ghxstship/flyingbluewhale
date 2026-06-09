@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { compute, type ActivityInput, type DependencyInput, type DepType } from "@/lib/schedule/cpm";
 import { parseSchedule } from "@/lib/schedule/import";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({ baseline_id: z.string().uuid() });
 
@@ -181,6 +182,8 @@ const ImportScheduleSchema = z.object({
 
 export type ImportState = {
   error?: string;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
   success?: { activities: number; dependencies: number; warnings: string[] };
 } | null;
 
@@ -188,7 +191,7 @@ export async function importSchedule(_: ImportState, fd: FormData): Promise<Impo
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only owners, admins, and managers can import a schedule." };
   const parsed = ImportScheduleSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   // Cross-tenant guard.

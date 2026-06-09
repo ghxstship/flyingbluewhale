@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { TICKETING_PROVIDERS } from "@/lib/marketplace";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   provider: z.enum(TICKETING_PROVIDERS),
@@ -14,7 +15,12 @@ const Schema = z.object({
   api_key: z.string().max(500).optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createTicketingConnectionAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -23,7 +29,7 @@ export async function createTicketingConnectionAction(_: State, fd: FormData): P
   // /console/settings/integrations install/uninstall gate).
   if (!isAdmin(session)) return { error: "Only owners and admins can connect ticketing providers" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("ticketing_connections")
@@ -37,7 +43,7 @@ export async function createTicketingConnectionAction(_: State, fd: FormData): P
     })
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/settings/integrations/ticketing");
   // Land on the new connection's detail page so the operator can record
   // a sales snapshot immediately.

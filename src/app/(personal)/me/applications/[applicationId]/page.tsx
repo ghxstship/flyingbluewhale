@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -11,6 +12,7 @@ export const dynamic = "force-dynamic";
 
 type App = {
   id: string;
+  org_id: string;
   status: string;
   applied_at: string;
   cover_note: string | null;
@@ -71,6 +73,27 @@ export default async function Page({ params }: { params: Promise<{ applicationId
                 `$${(a.day_rate_proposed_cents / 100).toFixed(0)}/day`,
               )}
             </div>
+          </div>
+        )}
+        {a.status === "booked" && (
+          <div className="card-elevated flex items-center justify-between p-4">
+            <div>
+              <div className="text-label text-[var(--color-text-tertiary)]">
+                {t("me.applications.detail.review.label", undefined, "Booked and wrapped?")}
+              </div>
+              <div className="mt-1 text-sm text-[var(--color-text-secondary)]">
+                {t(
+                  "me.applications.detail.review.body",
+                  undefined,
+                  "Rate the working relationship. Reviews stay hidden until both sides post.",
+                )}
+              </div>
+            </div>
+            <Button
+              href={`/me/reviews/new?transactionType=job_application&transactionId=${a.id}&subjectType=org&subjectId=${a.org_id}`}
+            >
+              {t("me.applications.detail.review.cta", undefined, "Write A Review")}
+            </Button>
           </div>
         )}
         {a.resume_url && (

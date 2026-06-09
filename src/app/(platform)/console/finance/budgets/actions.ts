@@ -14,6 +14,7 @@ import {
   XPMS_TIERS,
   XPMS_XYZ,
 } from "@/lib/finance/xpms-budget";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 // ADR-1 — XPMS Universal Budget Template v08 fields, mirrors migration
 // 0070. All XPMS columns optional except line_type (defaults to Scope).
@@ -42,13 +43,18 @@ const Schema = z.object({
   internal_notes: z.string().max(4000).optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createBudgetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can create budgets" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const data = parsed.data;
 
@@ -99,7 +105,7 @@ export async function createBudgetAction(_: State, fd: FormData): Promise<State>
   // `npm run gen:types` is run. Same documented pattern marketplace
   // queries use.
   const { error } = await (supabase as unknown as LooseSupabase).from("budgets").insert(insert);
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/finance/budgets");
   redirect("/console/finance/budgets");
 }

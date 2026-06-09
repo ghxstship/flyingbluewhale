@@ -238,6 +238,12 @@ export async function proxy(request: NextRequest) {
     request.headers.set("x-request-id", requestId);
   }
 
+  // Expose the INTERNAL route path (post host-rewrite, so it carries the
+  // /console|/p|/m prefix in every mode) to server components. Lets
+  // requireSession() preserve the caller's location as a ?next= deep link
+  // when bouncing an expired session to /login.
+  request.headers.set("x-pathname", rewriteUrl?.pathname ?? pathname);
+
   const response = await updateSession(request, rewriteUrl);
 
   // ────────────────────────────────────────────────────────────────────

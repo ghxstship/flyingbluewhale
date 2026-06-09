@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import { sendPushBulk } from "@/lib/push/send";
+import { log } from "@/lib/log";
 
 const Schema = z
   .object({
@@ -49,6 +51,37 @@ export async function createTimeOffRequest(fd: FormData): Promise<void> {
     reason: parsed.data.reason || null,
   });
   if (error) throw new Error(`Could not submit time-off request: ${error.message}`);
+
+  // Tell the approvers — the console decision→requester direction was
+  // already wired, but submissions used to land silently and managers
+  // only found them by visiting /console/workforce/time-off.
+  // Best-effort: a notify failure never rolls back the request.
+  try {
+    if (isServiceClientAvailable()) {
+      const service = createServiceClient();
+      const { data: approvers } = await service
+        .from("memberships")
+        .select("user_id")
+        .eq("org_id", session.orgId)
+        .in("role", ["owner", "admin", "manager"])
+        .is("deleted_at", null);
+      const approverIds = ((approvers ?? []) as Array<{ user_id: string }>)
+        .map((a) => a.user_id)
+        .filter((id) => id !== session.userId);
+      if (approverIds.length > 0) {
+        await sendPushBulk(approverIds, {
+          title: "Time Off Requested",
+          body: `${parsed.data.starts_on} – ${parsed.data.ends_on}${parsed.data.reason ? ` · ${parsed.data.reason}` : ""}`,
+          url: "/console/workforce/time-off",
+          kind: "time_off",
+          scope: "platform",
+          orgId: session.orgId,
+        });
+      }
+    }
+  } catch (e) {
+    log.warn("time_off.request_notify_failed", { err: e instanceof Error ? e.message : String(e) });
+  }
 
   revalidatePath("/m/time-off");
   redirect("/m/time-off");

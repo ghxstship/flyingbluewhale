@@ -11,6 +11,7 @@ import {
   transitionSubscription,
   type SubscriptionState,
 } from "@/lib/subscriptions";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const CreateSchema = z.object({
   label: z.string().min(1).max(200),
@@ -20,12 +21,17 @@ const CreateSchema = z.object({
   trial_days: z.coerce.number().int().min(0).max(365).optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createSubscriptionAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
 
@@ -60,7 +66,7 @@ export async function createSubscriptionAction(_: State, fd: FormData): Promise<
     })
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
 
   const { error: insertError } = await supabase.from("subscription_state_transitions").insert({
     org_id: session.orgId,
@@ -70,7 +76,7 @@ export async function createSubscriptionAction(_: State, fd: FormData): Promise<
     reason: "Created",
     transitioned_by: session.userId,
   });
-  if (insertError) return { error: insertError.message };
+  if (insertError) return actionFail(insertError.message, fd);
 
   revalidatePath("/console/subscriptions");
   redirect(`/console/subscriptions/${data.id}`);

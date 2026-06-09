@@ -9,6 +9,7 @@ import { useAnnounce } from "@/components/ui/LiveRegion";
 import { haptic } from "@/lib/haptics";
 import { toTitle } from "@/lib/format";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { usePendingCount } from "@/lib/offline/queue-status";
 
 type Entry = {
   at: string;
@@ -16,7 +17,7 @@ type Entry = {
   name: string | null;
   previous: string | null;
   status: string | null;
-  result: "ok" | "not_found" | "error";
+  result: "ok" | "not_found" | "error" | "queued";
   error?: string;
 };
 
@@ -26,6 +27,7 @@ export function InventoryScanner() {
   const [log, setLog] = useState<Entry[]>([]);
   const [pending, startTransition] = useTransition();
   const announce = useAnnounce();
+  const { count: pendingCount, refresh: refreshPending } = usePendingCount("/api/v1/equipment/scan");
 
   function submit(raw: string, action: "toggle" | "check_in" | "check_out" = "toggle") {
     const trimmed = raw.trim();
@@ -55,6 +57,29 @@ export function InventoryScanner() {
           );
           toast.error(body?.error?.message ?? t("m.inventory.scan.toast.failed", undefined, "Scan failed"));
           haptic("error");
+          return;
+        }
+        if (body.queued) {
+          // Service worker queued the scan offline — it will replay on
+          // reconnect. Distinct state: the toggle hasn't landed yet.
+          haptic("warning");
+          const msg = t("m.offline.queuedToast", undefined, "Queued — will sync when online");
+          announce(msg, "polite");
+          toast.info(msg);
+          setLog((l) =>
+            [
+              {
+                at: new Date().toISOString(),
+                tag: trimmed,
+                name: null,
+                previous: null,
+                status: null,
+                result: "queued" as const,
+              },
+              ...l,
+            ].slice(0, 50),
+          );
+          setTag("");
           return;
         }
         const data = body.data as {
@@ -123,12 +148,21 @@ export function InventoryScanner() {
           ].slice(0, 50),
         );
         toast.error((err as Error).message);
+      } finally {
+        refreshPending();
       }
     });
   }
 
   return (
     <div className="space-y-4">
+      {pendingCount > 0 && (
+        <div className="card-elevated p-3 text-center">
+          <Badge variant="warning">
+            {t("m.offline.pendingBadge", { count: pendingCount }, `${pendingCount} Pending — Will Sync When Online`)}
+          </Badge>
+        </div>
+      )}
       <form
         className="card-elevated space-y-3 p-4"
         onSubmit={(e) => {
@@ -198,6 +232,9 @@ export function InventoryScanner() {
                   )}
                   {e.result === "not_found" && (
                     <Badge variant="muted">{t("m.inventory.scan.badge.notFound", undefined, "not found")}</Badge>
+                  )}
+                  {e.result === "queued" && (
+                    <Badge variant="warning">{t("m.offline.queuedBadge", undefined, "Queued")}</Badge>
                   )}
                   {e.result === "error" && (
                     <Badge variant="error">{e.error ?? t("m.inventory.scan.badge.error", undefined, "error")}</Badge>

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   purchase_order_id: z.string().uuid(),
@@ -14,14 +15,19 @@ const Schema = z.object({
   notes: z.string().max(2000).optional(),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createPayApp(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Pay applications draw down PO retention — manager+ only at app layer.
   if (!isManagerPlus(session)) return { error: "Only manager+ can create payment applications" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   const { data: po } = await supabase
@@ -69,7 +75,7 @@ export async function createPayApp(_: State, fd: FormData): Promise<State> {
     } as never)
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
 
   // Seed lines from PO line items so the user fills in % complete instead
   // of re-typing each row.

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { slugify } from "@/lib/marketplace";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   act_name: z.string().min(1).max(200),
@@ -17,7 +18,12 @@ const Schema = z.object({
   is_public: z.string().optional(),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 const toCents = (v: string | undefined): number | null => {
   if (!v) return null;
@@ -34,7 +40,7 @@ const toArray = (v: string | undefined): string[] =>
 export async function upsertMyTalentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   const existingResp = await supabase

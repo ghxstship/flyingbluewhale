@@ -6,8 +6,15 @@ import { requireSession } from "@/lib/auth";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { runAutomation } from "@/lib/automations/run";
 import { log } from "@/lib/log";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
-export type State = { error?: string; runId?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  runId?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 const StepSchema = z.object({
   id: z.string().min(1).max(64),
@@ -42,7 +49,7 @@ export async function saveStepsAction(automationId: string, _prev: State, fd: Fo
   }
   const validated = StepsArraySchema.safeParse(parsed);
   if (!validated.success) {
-    return { error: validated.error.issues[0]?.message ?? "invalid steps" };
+    return formFail(validated.error, fd);
   }
 
   const supabase = await createClient();
@@ -51,7 +58,7 @@ export async function saveStepsAction(automationId: string, _prev: State, fd: Fo
     .update({ steps: validated.data as never })
     .eq("id", automationId)
     .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath(`/console/ai/automations/${automationId}`);
   return { ok: true };
 }

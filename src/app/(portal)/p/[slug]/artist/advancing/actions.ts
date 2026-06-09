@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const TALENT = ["technical_rider", "hospitality_rider", "input_list", "stage_plot", "crew_list", "guest_list"] as const;
 const PRODUCTION = [
@@ -28,7 +29,12 @@ const Schema = z.object({
   deadline: z.string().optional(),
 });
 
-export type SubmitState = { error?: string; ok?: true } | null;
+export type SubmitState = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function submitDeliverableAction(_: SubmitState, fd: FormData): Promise<SubmitState> {
   const session = await requireSession();
@@ -39,7 +45,7 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
     notes: fd.get("notes") ?? undefined,
     deadline: fd.get("deadline") ?? undefined,
   });
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const project = await projectIdFromSlug(parsed.data.slug);
   if (!project) return { error: "Project not found" };
@@ -108,7 +114,7 @@ export async function submitDeliverableAction(_: SubmitState, fd: FormData): Pro
     submitted_at: new Date().toISOString(),
     deadline,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
 
   revalidatePath(`/p/${parsed.data.slug}/artist/advancing`);
   revalidatePath(`/p/${parsed.data.slug}/production/vendor-submissions`);

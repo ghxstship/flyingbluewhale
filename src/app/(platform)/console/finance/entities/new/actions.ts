@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   legal_name: z.string().min(1).max(200),
@@ -24,12 +25,17 @@ const Schema = z.object({
   effective_to: z.string().optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createOrgEntity(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
@@ -67,7 +73,7 @@ export async function createOrgEntity(_: State, fd: FormData): Promise<State> {
     })
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
 
   revalidatePath("/console/finance/entities");
   redirect(`/console/finance/entities/${(row as { id: string }).id}`);

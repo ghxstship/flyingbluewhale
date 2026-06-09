@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
@@ -23,14 +24,19 @@ const Schema = z.object({
   }, "Radius must be 25..5000 meters"),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createZoneAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Time-clock zones are an operations-trust surface — manager+ only.
   if (!isManagerPlus(session)) return { error: "Only manager+ can manage time-clock zones" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard on project_id.
@@ -58,7 +64,7 @@ export async function createZoneAction(_: State, fd: FormData): Promise<State> {
     })
     .select("id")
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
 
   revalidatePath("/console/settings/time-clock-zones");
   redirect(`/console/settings/time-clock-zones/${data.id}`);

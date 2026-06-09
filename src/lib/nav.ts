@@ -121,6 +121,13 @@ export type NavItem = {
   /** Icon registry key. Resolved to a Lucide component in
    *  `src/components/nav-icons.ts`. Each item carries a unique key. */
   icon?: IconName;
+  /**
+   * Minimum platform role required to see this entry. Unset = visible to
+   * every member. Hiding nav is UX, not security — every gated surface
+   * still enforces its own session/RLS checks; this just stops members
+   * discovering admin tools via failed mutations.
+   */
+  minRole?: "manager" | "admin";
 };
 /**
  * Optional sub-grouping inside a NavGroup. Use when a class group exceeds
@@ -130,6 +137,25 @@ export type NavItem = {
  */
 export type NavSection = { label: string; items: NavItem[] };
 export type NavGroup = { label: string; items: NavItem[]; sections?: NavSection[] };
+
+/** Rank order for NavItem.minRole filtering. Owner/admin share the top tier. */
+const ROLE_RANK: Record<string, number> = { owner: 3, admin: 3, manager: 2 };
+
+/**
+ * Strip nav entries above the caller's role. Groups/sections that end up
+ * empty disappear entirely. Items without `minRole` always pass.
+ */
+export function filterNavByRole(groups: NavGroup[], role: string | null | undefined): NavGroup[] {
+  const rank = ROLE_RANK[role ?? ""] ?? 1;
+  const passes = (item: NavItem) => rank >= (item.minRole === "admin" ? 3 : item.minRole === "manager" ? 2 : 1);
+  return groups
+    .map((g) => ({
+      ...g,
+      items: g.items.filter(passes),
+      sections: g.sections?.map((s) => ({ ...s, items: s.items.filter(passes) })).filter((s) => s.items.length > 0),
+    }))
+    .filter((g) => g.items.length > 0 || (g.sections?.length ?? 0) > 0);
+}
 
 /**
  * Console nav rendering mode. Per-user preference stored in
@@ -913,21 +939,21 @@ export const settingsNav: NavGroup[] = [
   {
     label: "Workspace",
     items: [
-      { label: "Organization", href: "/console/settings/organization" },
-      { label: "Branding", href: "/console/settings/branding" },
-      { label: "Domains", href: "/console/settings/domains" },
-      { label: "Email Templates", href: "/console/settings/email-templates" },
+      { label: "Organization", href: "/console/settings/organization", minRole: "admin" },
+      { label: "Branding", href: "/console/settings/branding", minRole: "admin" },
+      { label: "Domains", href: "/console/settings/domains", minRole: "admin" },
+      { label: "Email Templates", href: "/console/settings/email-templates", minRole: "manager" },
       { label: "Locations", href: "/console/locations" },
-      { label: "Marketplace", href: "/console/marketplace/settings" },
+      { label: "Marketplace", href: "/console/marketplace/settings", minRole: "admin" },
     ],
   },
   {
     label: "Team & Access",
     items: [
-      { label: "Roles", href: "/console/people/roles" },
-      { label: "Invites", href: "/console/people/invites" },
-      { label: "Account Managers", href: "/console/settings/account-managers" },
-      { label: "Governance", href: "/console/settings/governance" },
+      { label: "Roles", href: "/console/people/roles", minRole: "admin" },
+      { label: "Invites", href: "/console/people/invites", minRole: "admin" },
+      { label: "Account Managers", href: "/console/settings/account-managers", minRole: "admin" },
+      { label: "Governance", href: "/console/settings/governance", minRole: "admin" },
     ],
   },
   {
@@ -940,13 +966,13 @@ export const settingsNav: NavGroup[] = [
   {
     label: "Billing & Data",
     items: [
-      { label: "Billing", href: "/console/settings/billing" },
-      { label: "Exports", href: "/console/settings/exports" },
-      { label: "Imports", href: "/console/settings/imports" },
+      { label: "Billing", href: "/console/settings/billing", minRole: "admin" },
+      { label: "Exports", href: "/console/settings/exports", minRole: "manager" },
+      { label: "Imports", href: "/console/settings/imports", minRole: "manager" },
       // ADR-0005 hoist: the project-level Import Jobs queue surfaced
       // as an orphan top-level prefix; it shares its mental model
       // with Exports, so it lands in the same admin sub-section.
-      { label: "Import Jobs", href: "/console/import" },
+      { label: "Import Jobs", href: "/console/import", minRole: "manager" },
     ],
   },
   {
@@ -955,19 +981,19 @@ export const settingsNav: NavGroup[] = [
     // home for config that drives behavior across the app.
     label: "Integrations",
     items: [
-      { label: "Apps", href: "/console/settings/integrations" },
-      { label: "Marketplace", href: "/console/settings/integrations/marketplace" },
-      { label: "Ticketing", href: "/console/settings/integrations/ticketing" },
-      { label: "Automations", href: "/console/ai/automations" },
-      { label: "API", href: "/console/settings/api" },
-      { label: "Webhooks", href: "/console/settings/webhooks" },
+      { label: "Apps", href: "/console/settings/integrations", minRole: "admin" },
+      { label: "Marketplace", href: "/console/settings/integrations/marketplace", minRole: "admin" },
+      { label: "Ticketing", href: "/console/settings/integrations/ticketing", minRole: "admin" },
+      { label: "Automations", href: "/console/ai/automations", minRole: "manager" },
+      { label: "API", href: "/console/settings/api", minRole: "admin" },
+      { label: "Webhooks", href: "/console/settings/webhooks", minRole: "admin" },
     ],
   },
   {
     label: "Compliance",
     items: [
-      { label: "Audit Log", href: "/console/settings/audit" },
-      { label: "Compliance", href: "/console/settings/compliance" },
+      { label: "Audit Log", href: "/console/settings/audit", minRole: "admin" },
+      { label: "Compliance", href: "/console/settings/compliance", minRole: "manager" },
       { label: "Marketplace Reviews", href: "/console/marketplace/reviews" },
       { label: "Privacy", href: "/console/legal/privacy" },
       { label: "DSAR", href: "/console/legal/privacy/dsar" },

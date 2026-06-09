@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z
   .object({
@@ -18,12 +19,17 @@ const Schema = z
   // Sea Trial R2 FINDING-018: a rental can't end before it starts.
   .refine(...dateRangeRefine("starts_at", "ends_at"));
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createRentalAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guards on equipment_id + project_id.
@@ -53,7 +59,7 @@ export async function createRentalAction(_: State, fd: FormData): Promise<State>
     project_id: parsed.data.project_id || null,
     rate_cents: parsed.data.rate ? dollarsToCents(parsed.data.rate) : null,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/production/rentals");
   redirect("/console/production/rentals");
 }

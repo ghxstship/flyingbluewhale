@@ -16,11 +16,24 @@ import { log } from "./log";
  * of duplicating. Use the originating record's table + uuid.
  */
 
+/**
+ * Inbox-row kinds: every push-catalog kind, plus in-app-only kinds that
+ * have no `notification_kind_catalog` entry yet. In-app-only kinds never
+ * fan out to push (there is no per-kind opt-out row to gate them), they
+ * only land in the `notifications` bell.
+ */
+export type InboxOnlyKind = "talent_offer";
+export type InboxKind = PushKind | InboxOnlyKind;
+
+function pushKindFor(kind: InboxKind): PushKind | null {
+  return kind === "talent_offer" ? null : kind;
+}
+
 export type InboxEntry = {
   userId: string;
   orgId: string;
   /** Per-kind preference key + push channel kind. */
-  kind: PushKind;
+  kind: InboxKind;
   /** Originating table (e.g. "deliverables", "chat_messages"). */
   sourceType: string;
   /** Originating row id. Idempotent — repeated writes collapse. */
@@ -71,13 +84,14 @@ export async function writeInbox(entry: InboxEntry): Promise<{ inboxed: boolean;
     inboxed = true;
   }
 
-  if (entry.push !== false) {
+  const pushKind = pushKindFor(entry.kind);
+  if (entry.push !== false && pushKind) {
     const payload: PushPayload = {
       title: entry.title,
       body: (entry.body ?? "").slice(0, 200),
       url: entry.href ?? "/me/notifications/inbox",
       tag: `${entry.sourceType}:${entry.sourceId}`,
-      kind: entry.kind,
+      kind: pushKind,
     };
     const result = await sendPushTo(entry.userId, payload);
     pushed = result.sent > 0;
@@ -126,13 +140,14 @@ export async function writeInboxBulk(
     }
   }
 
-  if (entry.push !== false) {
+  const pushKind = pushKindFor(entry.kind);
+  if (entry.push !== false && pushKind) {
     const payload: PushPayload = {
       title: entry.title,
       body: (entry.body ?? "").slice(0, 200),
       url: entry.href ?? "/me/notifications/inbox",
       tag: `${entry.sourceType}:${entry.sourceId}`,
-      kind: entry.kind,
+      kind: pushKind,
     };
     const result = await sendPushBulk(userIds, payload);
     pushed = result.sent;

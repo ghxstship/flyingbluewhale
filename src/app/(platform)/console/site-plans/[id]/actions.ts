@@ -12,8 +12,14 @@ import {
   SITEPLAN_TRANSITIONS,
   SITEPLAN_UTILITY_SERVICES,
 } from "@/lib/siteplan/types";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 // ---------------------------------------------------------------------------
 // State machine transition
@@ -34,7 +40,7 @@ function cleanTransitionError(msg: string): string {
 export async function transitionSheet(_: State, fd: FormData): Promise<State> {
   await requireSession();
   const parsed = TransitionSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase.rpc("siteplan_transition_state", {
@@ -63,7 +69,7 @@ const RegionSchema = z.object({
 export async function addRegion(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = RegionSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase.from("siteplan_zone_region").insert({
     org_id: session.orgId,
@@ -76,7 +82,7 @@ export async function addRegion(_: State, fd: FormData): Promise<State> {
   });
   if (error) {
     if (error.code === "23505") return { error: `Region code "${parsed.data.code}" already exists on this sheet.` };
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   return { ok: true };
@@ -87,7 +93,7 @@ const DeleteSchema = z.object({ id: z.string().uuid(), sheet_id: z.string().uuid
 export async function deleteRegion(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
     .from("siteplan_zone_region")
@@ -114,7 +120,7 @@ const BandSchema = z.object({
 export async function addBand(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = BandSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase.from("siteplan_band").insert({
     org_id: session.orgId,
@@ -125,7 +131,7 @@ export async function addBand(_: State, fd: FormData): Promise<State> {
     label: parsed.data.label || null,
     created_by: session.userId,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   return { ok: true };
 }
@@ -133,7 +139,7 @@ export async function addBand(_: State, fd: FormData): Promise<State> {
 export async function deleteBand(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase.from("siteplan_band").delete().eq("id", parsed.data.id).eq("org_id", session.orgId);
   if (error) return { error: error.message };
@@ -157,7 +163,7 @@ const StationSchema = z.object({
 export async function addStation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = StationSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase.from("siteplan_station").insert({
     org_id: session.orgId,
@@ -172,7 +178,7 @@ export async function addStation(_: State, fd: FormData): Promise<State> {
   if (error) {
     if (error.code === "23505")
       return { error: `Station code "${parsed.data.station_code}" already exists on this sheet.` };
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   return { ok: true };
@@ -181,7 +187,7 @@ export async function addStation(_: State, fd: FormData): Promise<State> {
 export async function deleteStation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
     .from("siteplan_station")
@@ -211,7 +217,7 @@ const PlacementSchema = z.object({
 export async function addPlacement(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = PlacementSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase.from("siteplan_placement").insert({
     org_id: session.orgId,
@@ -227,7 +233,7 @@ export async function addPlacement(_: State, fd: FormData): Promise<State> {
   });
   if (error) {
     if (error.code === "23505") return { error: `Placement tag "${parsed.data.tag}" already exists on this sheet.` };
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   return { ok: true };
@@ -236,7 +242,7 @@ export async function addPlacement(_: State, fd: FormData): Promise<State> {
 export async function deletePlacement(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
     .from("siteplan_placement")
@@ -264,7 +270,7 @@ const UtilitySchema = z.object({
 export async function addUtility(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = UtilitySchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const loads = (parsed.data.loads ?? "")
     .split(",")
@@ -282,7 +288,7 @@ export async function addUtility(_: State, fd: FormData): Promise<State> {
   });
   if (error) {
     if (error.code === "23505") return { error: `Drop code "${parsed.data.drop_code}" already exists on this sheet.` };
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   return { ok: true };
@@ -291,7 +297,7 @@ export async function addUtility(_: State, fd: FormData): Promise<State> {
 export async function deleteUtility(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
     .from("siteplan_utility")
@@ -319,7 +325,7 @@ const AdjacencySchema = z.object({
 export async function addAdjacency(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = AdjacencySchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase.from("siteplan_adjacency").insert({
     org_id: session.orgId,
@@ -333,7 +339,7 @@ export async function addAdjacency(_: State, fd: FormData): Promise<State> {
   });
   if (error) {
     if (error.code === "23505") return { error: `Edge ${parsed.data.edge} is already declared on this sheet.` };
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
   return { ok: true };
@@ -342,7 +348,7 @@ export async function addAdjacency(_: State, fd: FormData): Promise<State> {
 export async function deleteAdjacency(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const { error } = await supabase
     .from("siteplan_adjacency")

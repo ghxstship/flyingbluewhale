@@ -4,18 +4,24 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
   avatar_url: z.string().url().max(500).optional().or(z.literal("")),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updateProfile(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   // .is("deleted_at", null) — refuse to update a soft-deleted user's
   // profile. /api/v1/me/delete sets users.deleted_at to a 30-day-out
@@ -30,7 +36,7 @@ export async function updateProfile(_: State, fd: FormData): Promise<State> {
     })
     .eq("id", session.userId)
     .is("deleted_at", null);
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/me/profile");
   revalidatePath("/me");
   return { ok: true };
@@ -83,7 +89,7 @@ export async function updatePublicProfile(_: State, fd: FormData): Promise<State
   const session = await requireSession();
   const parsed = PublicProfileSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+    return formFail(parsed.error, fd);
   }
 
   const supabase = await createClient();
@@ -113,7 +119,7 @@ export async function updatePublicProfile(_: State, fd: FormData): Promise<State
     if (error.message.includes("user_profiles_handle_unique")) {
       return { error: "That handle is already taken — try a different one." };
     }
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
 
   revalidatePath("/me/profile");

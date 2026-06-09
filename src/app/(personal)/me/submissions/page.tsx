@@ -5,6 +5,7 @@ import { hasSupabase } from "@/lib/env";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Alert } from "@/components/ui/Alert";
 import { STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -18,8 +19,9 @@ type Row = {
   open_call: { title: string; public_slug: string } | null;
 };
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ submitted?: string }> }) {
   const { t } = await getRequestT();
+  const { submitted } = await searchParams;
   if (!hasSupabase) return <div>{t("common.configureSupabase", undefined, "Configure Supabase.")}</div>;
   const session = await requireSession();
   const supabase = await createClient();
@@ -40,6 +42,18 @@ export default async function Page() {
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         {t("me.submissions.subtitle", undefined, "Open-call submissions you've made.")}
       </p>
+
+      {submitted === "1" && (
+        <div className="mt-4">
+          <Alert kind="success">
+            {t(
+              "me.submissions.submittedBanner",
+              undefined,
+              "Submission received. You'll see shortlist and award updates here.",
+            )}
+          </Alert>
+        </div>
+      )}
 
       {rows.length === 0 ? (
         <div className="mt-6">

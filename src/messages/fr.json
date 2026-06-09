@@ -16982,7 +16982,14 @@
         "emptyTitle": "Aucun Account Manager pour le Moment",
         "accountManager": "Account Manager",
         "openThread": "Ouvrir le Fil",
-        "startThread": "Démarrer un Fil"
+        "startThread": "Démarrer un Fil",
+        "room": {
+          "backToMessages": "Tous les Messages",
+          "directMessage": "Message Direct",
+          "subtitle": "Fil direct avec votre account manager pour {projectName}.",
+          "empty": "Pas encore de messages. Dites bonjour — votre account manager sera notifié.",
+          "messagePlaceholder": "Message"
+        }
       },
       "gateway": {
         "artist": {

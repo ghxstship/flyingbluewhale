@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z
   .object({
@@ -18,12 +19,17 @@ const Schema = z
   // Sea Trial R2 FINDING-018: ends_at must not precede starts_at.
   .refine(...dateRangeRefine("starts_at", "ends_at"));
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createEventAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guards on location_id + project_id.
@@ -60,7 +66,7 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
     description: parsed.data.description || null,
     created_by: session.userId,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/events");
   revalidatePath("/console/schedule");
   redirect("/console/events");

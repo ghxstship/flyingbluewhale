@@ -16,7 +16,20 @@ import type { FormState } from "@/components/FormShell";
 const LoginSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(1, "Password is required"),
+  next: z.string().optional(),
 });
+
+/**
+ * Validate a post-login destination. Internal absolute paths only —
+ * rejects protocol-relative (`//evil.com`), absolute URLs, and anything
+ * not starting with a single `/`. Mirrors the OAuth NextSchema guard.
+ */
+function safeNextPath(raw: string | undefined): string | null {
+  if (!raw) return null;
+  if (!raw.startsWith("/") || raw.startsWith("//") || raw.includes("\\")) return null;
+  if (raw.length > 512) return null;
+  return raw;
+}
 
 const SignupSchema = z.object({
   name: z.string().min(1, "Name is required").max(120),
@@ -48,10 +61,15 @@ export async function loginAction(_: FormState, formData: FormData): Promise<For
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  const { email, password } = parsed.data;
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: "Invalid email or password" };
 
-  redirect("/auth/resolve");
+  // Preserve the deep-link destination through the resolve gateway —
+  // before this, every link through auth dumped users at their shell
+  // root and lost their place.
+  const next = safeNextPath(parsed.data.next);
+  redirect(next ? `/auth/resolve?next=${encodeURIComponent(next)}` : "/auth/resolve");
 }
 
 export async function signupAction(_: FormState, formData: FormData): Promise<FormState> {

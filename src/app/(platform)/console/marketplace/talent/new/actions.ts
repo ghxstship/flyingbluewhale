@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { TALENT_RIDER_KINDS, slugify } from "@/lib/marketplace";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   act_name: z.string().min(1).max(200),
@@ -25,7 +26,12 @@ const Schema = z.object({
   video_reel_url: z.string().url().optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 const toCents = (v: string | undefined): number | null => {
   if (!v) return null;
@@ -43,7 +49,7 @@ export async function createTalentAction(_: State, fd: FormData): Promise<State>
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can create talent profiles" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const baseHandle = slugify(parsed.data.act_name);
   const handleSuffix = Math.random().toString(36).slice(2, 6);
@@ -74,7 +80,7 @@ export async function createTalentAction(_: State, fd: FormData): Promise<State>
     .select("id")
     .single();
 
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/marketplace/talent");
   redirect(`/console/marketplace/talent/${(data as { id: string }).id}`);
 }
@@ -126,7 +132,7 @@ const RiderSchema = z.object({
 export async function createRiderAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = RiderSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard on talent_id. Without it, the demote+insert
@@ -149,7 +155,7 @@ export async function createRiderAction(_: State, fd: FormData): Promise<State> 
     .eq("talent_profile_id", parsed.data.talent_id)
     .eq("kind", parsed.data.kind)
     .eq("is_current", true);
-  if (updateError) return { error: updateError.message };
+  if (updateError) return actionFail(updateError.message, fd);
 
   const { error: insertError } = await supabase.from("talent_riders").insert({
     org_id: session.orgId,
@@ -161,7 +167,7 @@ export async function createRiderAction(_: State, fd: FormData): Promise<State> 
     is_current: true,
     created_by: session.userId,
   });
-  if (insertError) return { error: insertError.message };
+  if (insertError) return actionFail(insertError.message, fd);
   revalidatePath(`/console/marketplace/talent/${parsed.data.talent_id}/riders`);
   redirect(`/console/marketplace/talent/${parsed.data.talent_id}/riders`);
 }

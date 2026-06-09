@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { validateBlocks } from "@/lib/proposals/validate";
 import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const UpdateSchema = z.object({
   title: z.string().min(1).max(200),
@@ -18,12 +19,17 @@ const UpdateSchema = z.object({
   blocks: z.string(),
 });
 
-export type EditState = { error?: string; ok?: true } | null;
+export type EditState = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function saveProposalAction(proposalId: string, _: EditState, fd: FormData): Promise<EditState> {
   const session = await requireSession();
   const parsed = UpdateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   let parsedBlocks: unknown;
   try {
@@ -68,7 +74,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
     .eq("id", proposalId)
     .eq("version", currentVersion)
     .select("id");
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   if (!updated || updated.length === 0) {
     return {
       error:
@@ -86,7 +92,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
     theme: current.theme,
     changed_by: session.userId,
   });
-  if (insertError) return { error: insertError.message };
+  if (insertError) return actionFail(insertError.message, fd);
 
   revalidatePath(`/console/proposals/${proposalId}/edit`);
   revalidatePath(`/console/proposals/${proposalId}`);

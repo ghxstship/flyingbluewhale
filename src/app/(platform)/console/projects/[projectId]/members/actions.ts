@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { PROJECT_ROLES } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
+import { formFail } from "@/lib/forms/fail";
 
 // Adding an existing org member to a project. Project_members RLS already
 // constrains writes to is_org_manager_plus(project.org_id), so a normal
@@ -38,12 +39,7 @@ export async function addProjectMemberAction(projectId: string, _: FormState, fd
   if (!project) return { error: "Project not found or insufficient permissions." };
 
   const parsed = AddSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) {
-    return {
-      error: parsed.error.issues[0]?.message ?? "Invalid input",
-      values: Object.fromEntries(fd) as Record<string, string>,
-    };
-  }
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
 

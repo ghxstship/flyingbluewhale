@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { SITEPLAN_SHEET_TYPES, SITEPLAN_SHELL_TYPES } from "@/lib/siteplan/types";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const DISCIPLINES = [
   "site",
@@ -49,13 +50,18 @@ const Schema = z.object({
   notes: z.string().max(2000).optional(),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const raw = Object.fromEntries(fd);
   const parsed = Schema.safeParse(raw);
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const { id, ...patch } = parsed.data;
 
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -132,7 +138,7 @@ export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State
     .select("id")
     .maybeSingle();
 
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   if (!updated) {
     // Either the row no longer exists or the concurrency token didn't match.
     const { data: stillThere } = await supabase

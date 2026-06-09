@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createAccessCode, revokeAccessCode } from "@/lib/db/guide-access";
 import type { GuidePersona } from "@/lib/supabase/types";
+import { formFail } from "@/lib/forms/fail";
 
 const PERSONAS: GuidePersona[] = [
   "staff",
@@ -30,13 +31,16 @@ const CreateSchema = z.object({
     .transform((v) => (v && v.trim() ? Number(v) : null)),
 });
 
-export type CreateState = { ok: true; plainCode: string; persona: GuidePersona } | { error: string } | null;
+export type CreateState =
+  | { ok: true; plainCode: string; persona: GuidePersona }
+  | { error: string; fieldErrors?: Record<string, string>; values?: Record<string, string> }
+  | null;
 
 export async function createCodeAction(projectId: string, _: CreateState, fd: FormData): Promise<CreateState> {
   const session = await requireSession();
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+    return formFail(parsed.error, fd);
   }
   const expiresAt =
     typeof parsed.data.expires_in_days === "number" && !Number.isNaN(parsed.data.expires_in_days)

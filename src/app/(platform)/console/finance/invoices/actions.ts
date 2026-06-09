@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z
   .object({
@@ -26,7 +27,12 @@ const Schema = z
   // issued.
   .refine(...dateRangeRefine("issued_at", "due_at"));
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createInvoiceAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -35,7 +41,7 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
   // capability that gates the Stripe checkout/portal endpoints).
   if (!isManagerPlus(session)) return { error: "Only manager+ can create invoices" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
 
@@ -81,7 +87,7 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
     })
     .select()
     .single();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/finance/invoices");
   revalidatePath("/console/finance");
   redirect(`/console/finance/invoices/${data.id}`);

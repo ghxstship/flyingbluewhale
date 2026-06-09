@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   connection_id: z.string().uuid(),
@@ -16,7 +17,12 @@ const Schema = z.object({
     .default("USD"),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 const toCents = (v: string | undefined): number => {
   if (!v) return 0;
@@ -31,7 +37,7 @@ export async function recordSalesSnapshotAction(_: State, fd: FormData): Promise
   // data; RLS likely refuses but app-layer gate is sharper.)
   if (!isManagerPlus(session)) return { error: "Only manager+ can record sales snapshots" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard on connection_id.

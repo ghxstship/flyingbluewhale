@@ -5,6 +5,7 @@ import { z } from "zod";
 import { promises as dns } from "node:dns";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const HOSTNAME = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
 
@@ -13,7 +14,12 @@ const AddSchema = z.object({
   purpose: z.enum(["portal", "marketing", "email"]).default("portal"),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function addDomainAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -22,14 +28,14 @@ export async function addDomainAction(_: State, fd: FormData): Promise<State> {
   // admin can extend the org boundary.
   if (!isAdmin(session)) return { error: "Only owners and admins can manage domains" };
   const parsed = AddSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { error } = await supabase.from("org_domains").insert({
     org_id: session.orgId,
     hostname: parsed.data.hostname.toLowerCase(),
     purpose: parsed.data.purpose,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath("/console/settings/domains");
   return null;
 }

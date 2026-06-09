@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { MARKETPLACE_KINDS } from "@/lib/marketplace";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   call_id: z.string().uuid(),
@@ -27,7 +28,12 @@ const Schema = z.object({
   deadline_at: z.string().optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 const toCents = (v: string | undefined): number | null => {
   if (!v) return null;
@@ -45,7 +51,7 @@ export async function updateCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can edit open calls" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const { error } = await supabase
     .from("open_calls")
@@ -66,7 +72,7 @@ export async function updateCallAction(_: State, fd: FormData): Promise<State> {
     })
     .eq("id", parsed.data.call_id)
     .eq("org_id", session.orgId);
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath(`/console/marketplace/calls/${parsed.data.call_id}`);
   redirect(`/console/marketplace/calls/${parsed.data.call_id}`);
 }

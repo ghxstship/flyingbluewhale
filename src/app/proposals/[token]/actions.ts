@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
 import { resolveProposalShareLink } from "@/lib/proposals/share";
+import { formFail } from "@/lib/forms/fail";
 
 const SignSchema = z.object({
   token: z.string().min(8),
@@ -16,7 +17,12 @@ const SignSchema = z.object({
   data: z.string().max(200_000).optional(),
 });
 
-export type SignState = { error?: string; ok?: { hash: string; signedAt: string } } | null;
+export type SignState = {
+  error?: string;
+  ok?: { hash: string; signedAt: string };
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 function randomRef() {
   const ts = Date.now().toString(36).toUpperCase();
@@ -29,7 +35,7 @@ function randomRef() {
 
 export async function signProposalAction(_: SignState, fd: FormData): Promise<SignState> {
   const parsed = SignSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   // IP-bucketed ratelimit on the public sign action. Without this, a
   // crawler that scrapes share links can brute-force `signer_name` /

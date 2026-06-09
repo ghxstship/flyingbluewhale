@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { XPMS_DEFAULT_DRAW_SCHEDULE, XPMS_PHASES } from "@/lib/finance/xpms-budget";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const DrawSchema = z.object({
   draw_name: z.string().min(1).max(120),
@@ -15,7 +16,12 @@ const DrawSchema = z.object({
   sort_order: z.string().optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 function normalizePct(raw: string): number | null {
   const n = Number(raw);
@@ -65,7 +71,7 @@ export async function createDraw(projectId: string, _: State, fd: FormData): Pro
   const session = await requireSession();
   if (!isManagerPlus(session)) return { error: "Only manager+ can create draws" };
   const parsed = DrawSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const pct = normalizePct(parsed.data.percentage);
   if (pct === null || pct < 0 || pct > 1) return { error: "Percentage must be between 0% and 100%" };
 
@@ -81,7 +87,7 @@ export async function createDraw(projectId: string, _: State, fd: FormData): Pro
     percentage: pct,
     sort_order: parsed.data.sort_order ? Number(parsed.data.sort_order) : 0,
   });
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   revalidatePath(`/console/projects/${projectId}/finance/draws`);
   return null;
 }

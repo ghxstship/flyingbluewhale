@@ -16982,7 +16982,14 @@
         "emptyTitle": "アカウントマネージャー未割当",
         "accountManager": "アカウントマネージャー",
         "openThread": "スレッドを開く",
-        "startThread": "スレッドを開始"
+        "startThread": "スレッドを開始",
+        "room": {
+          "backToMessages": "メッセージ一覧",
+          "directMessage": "ダイレクトメッセージ",
+          "subtitle": "{projectName}のアカウントマネージャーとの直接スレッドです。",
+          "empty": "まだメッセージはありません。挨拶を送るとアカウントマネージャーに通知されます。",
+          "messagePlaceholder": "メッセージ"
+        }
       },
       "gateway": {
         "artist": {

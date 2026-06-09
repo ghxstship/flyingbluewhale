@@ -38,6 +38,8 @@ export type NotifyEvent =
   | "po.acknowledged"
   | "po.fulfilled"
   | "incident.filed"
+  | "offer_letter.accepted"
+  | "offer_letter.declined"
   | "job.failed"
   | "passkey.registered"
   | "account.deletion_requested";

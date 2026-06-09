@@ -107,6 +107,24 @@ async function route(req: Request) {
   // anyone to anything other than `/p/<slug>`.
   const rawSlug = url.searchParams.get("slug") ?? "select";
   const slug = /^[a-z0-9-]{1,64}$/i.test(rawSlug) ? rawSlug : "select";
+
+  // Deep-link restore: a validated internal `?next=` path wins over the
+  // persona default. Internal-path-only guard (no `//`, no scheme) and
+  // the prefix is mapped to its shell so subdomain mode emits the right
+  // host. A user landing on a shell they can't access is handled by that
+  // shell's own session/RLS guards.
+  const rawNext = url.searchParams.get("next") ?? "";
+  if (rawNext.startsWith("/") && !rawNext.startsWith("//") && !rawNext.includes("\\") && rawNext.length <= 512) {
+    const nextTarget = rawNext.startsWith("/console")
+      ? urlFor("platform", rawNext.slice("/console".length) || "/")
+      : rawNext === "/p" || rawNext.startsWith("/p/")
+        ? urlFor("portal", rawNext.slice("/p".length) || "/")
+        : rawNext === "/m" || rawNext.startsWith("/m/")
+          ? urlFor("mobile", rawNext.slice("/m".length) || "/")
+          : urlFor("marketing", rawNext);
+    return NextResponse.redirect(nextTarget);
+  }
+
   const target =
     resolved === "/p" ? urlFor("portal", `/${slug}`) : resolved === "/me" ? urlFor("personal", "/me") : urlFor(shell);
 

@@ -13,7 +13,7 @@ import { loginAction } from "../actions";
 import type { FormState } from "@/components/FormShell";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
-export function LoginForm() {
+export function LoginForm({ next }: { next?: string | null }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<FormState, FormData>(loginAction, null);
 
@@ -37,6 +37,7 @@ export function LoginForm() {
       <OAuthButtons />
       <AuthDivider />
       <form action={formAction} className="space-y-4" noValidate>
+        {next ? <input type="hidden" name="next" value={next} /> : null}
         <Input
           label={t("auth.login.email", undefined, "Email")}
           name="email"

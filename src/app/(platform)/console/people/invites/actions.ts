@@ -10,6 +10,7 @@ import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { PLATFORM_ROLES, PROJECT_ROLES } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const CreateSchema = z
   .object({
@@ -37,7 +38,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   if (!isAdmin(session)) return { error: "Only owners and admins can invite." };
 
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
 
@@ -72,7 +73,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
     if (error.code === "23505") {
       return { error: "A pending invite already exists for this email." };
     }
-    return { error: error.message };
+    return actionFail(error.message, fd);
   }
 
   if (!invite) return { error: "Failed to create invite" };

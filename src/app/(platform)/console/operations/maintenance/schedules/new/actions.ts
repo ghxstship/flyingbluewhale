@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(160),
@@ -14,12 +15,17 @@ const Schema = z.object({
   target_id: z.string().uuid().optional().or(z.literal("")),
 });
 
-export type State = { error?: string } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function createSchedule(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
   const next = new Date(Date.now() + parsed.data.cadence_days * 86400_000).toISOString();
@@ -63,7 +69,7 @@ export async function createSchedule(_: State, fd: FormData): Promise<State> {
     })
     .select("id")
     .single();
-  if (scheduleError) return { error: scheduleError.message };
+  if (scheduleError) return actionFail(scheduleError.message, fd);
 
   // Materialise the first job immediately so it shows up in the queue.
   const { error: insertError } = await supabase.from("maintenance_jobs").insert({
@@ -74,7 +80,7 @@ export async function createSchedule(_: State, fd: FormData): Promise<State> {
     target_id: parsed.data.target_id || null,
     due_at: next,
   });
-  if (insertError) return { error: insertError.message };
+  if (insertError) return actionFail(insertError.message, fd);
 
   revalidatePath("/console/operations/maintenance");
   redirect("/console/operations/maintenance");

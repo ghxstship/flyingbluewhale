@@ -5075,7 +5075,14 @@
         "emptyTitle": "Noch kein Account Manager",
         "accountManager": "Account Manager",
         "openThread": "Thread öffnen",
-        "startThread": "Thread starten"
+        "startThread": "Thread starten",
+        "room": {
+          "backToMessages": "Alle Nachrichten",
+          "directMessage": "Direktnachricht",
+          "subtitle": "Direkter Thread mit deinem Account Manager für {projectName}.",
+          "empty": "Noch keine Nachrichten. Sag hallo — dein Account Manager wird benachrichtigt.",
+          "messagePlaceholder": "Nachricht"
+        }
       },
       "gateway": {
         "artist": {

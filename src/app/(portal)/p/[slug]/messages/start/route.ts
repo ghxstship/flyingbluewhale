@@ -8,14 +8,14 @@ import { createClient } from "@/lib/supabase/server";
  * account_manager_assignments row that doesn't yet have one. The
  * caller must be the portal_user_id on the assignment; we create the
  * room as `direct`, add both users as members, and redirect to the
- * chat surface (/m/inbox/[roomId]) which already handles message
- * posting + realtime.
+ * portal chat surface — /p/[slug]/messages/[roomId] — which handles
+ * message posting + realtime without leaving the portal shell.
  */
 
 const Schema = z.object({ assignment_id: z.string().uuid() });
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
-  await params; // slug isn't used; presence-only validation by the framework.
+  const { slug } = await params;
   const session = await requireSession();
   const form = await req.formData();
   const parsed = Schema.safeParse({ assignment_id: form.get("assignment_id") });
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
 
   // Idempotent: if the room exists, jump straight to it.
   if (a.chat_room_id) {
-    return NextResponse.redirect(new URL(`/m/inbox/${a.chat_room_id}`, req.url), 303);
+    return NextResponse.redirect(new URL(`/p/${slug}/messages/${a.chat_room_id}`, req.url), 303);
   }
 
   // Create the direct-message room scoped to the assignment's org.
@@ -68,5 +68,5 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
   // short-circuits the create path.
   await supabase.from("account_manager_assignments").update({ chat_room_id: room.id }).eq("id", a.id);
 
-  return NextResponse.redirect(new URL(`/m/inbox/${room.id}`, req.url), 303);
+  return NextResponse.redirect(new URL(`/p/${slug}/messages/${room.id}`, req.url), 303);
 }

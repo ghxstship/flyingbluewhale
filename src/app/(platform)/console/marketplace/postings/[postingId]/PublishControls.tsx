@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -39,7 +40,8 @@ export function PublishControls({
             <form
               action={(fd) => {
                 startTransition(async () => {
-                  await publishPostingAction(null, fd);
+                  const result = await publishPostingAction(null, fd);
+                  if (result?.error) toast.error(result.error);
                 });
               }}
               className="flex items-end gap-2"
@@ -60,7 +62,8 @@ export function PublishControls({
             <form
               action={(fd) => {
                 startTransition(async () => {
-                  await closePostingAction(null, fd);
+                  const result = await closePostingAction(null, fd);
+                  if (result?.error) toast.error(result.error);
                 });
               }}
             >

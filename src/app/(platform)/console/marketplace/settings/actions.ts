@@ -4,13 +4,19 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   marketplace_enabled: z.string().optional(),
   marketplace_take_rate_bps: z.string().default("0"),
 });
 
-export type State = { error?: string; ok?: true } | null;
+export type State = {
+  error?: string;
+  ok?: true;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
 
 export async function updateMarketplaceSettingsAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
@@ -20,7 +26,7 @@ export async function updateMarketplaceSettingsAction(_: State, fd: FormData): P
   // app boundary beats a silent 0-row update.
   if (!isAdmin(session)) return { error: "Only owners and admins can change marketplace settings" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const bps = Math.min(5000, Math.max(0, Math.round(Number(parsed.data.marketplace_take_rate_bps))));
 
@@ -34,7 +40,7 @@ export async function updateMarketplaceSettingsAction(_: State, fd: FormData): P
     .select("id")
     .maybeSingle();
 
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   if (!data) return { error: "Org not found in your session" };
   revalidatePath("/console/marketplace/settings");
   return { ok: true };

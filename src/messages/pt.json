@@ -16982,7 +16982,14 @@
         "emptyTitle": "Sem Gerente de Conta",
         "accountManager": "Gerente de Conta",
         "openThread": "Abrir Conversa",
-        "startThread": "Iniciar Conversa"
+        "startThread": "Iniciar Conversa",
+        "room": {
+          "backToMessages": "Todas as Mensagens",
+          "directMessage": "Mensagem Direta",
+          "subtitle": "Conversa direta com seu gerente de conta para {projectName}.",
+          "empty": "Ainda não há mensagens. Diga olá — seu gerente de conta será notificado.",
+          "messagePlaceholder": "Mensagem"
+        }
       },
       "gateway": {
         "artist": {

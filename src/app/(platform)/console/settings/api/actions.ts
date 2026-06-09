@@ -6,6 +6,7 @@ import { isAdmin, requireSession } from "@/lib/auth";
 import { mintToken } from "@/lib/api-keys";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const CreateSchema = z.object({
   name: z.string().min(1).max(120),
@@ -13,7 +14,13 @@ const CreateSchema = z.object({
 });
 
 export type CreateState =
-  | { error?: string; secret?: undefined; prefix?: undefined }
+  | {
+      error?: string;
+      secret?: undefined;
+      prefix?: undefined;
+      fieldErrors?: Record<string, string>;
+      values?: Record<string, string>;
+    }
   | { error?: undefined; secret: string; prefix: string }
   | null;
 
@@ -27,7 +34,7 @@ export async function createApiKeyAction(_: CreateState, fd: FormData): Promise<
   // API keys grant programmatic org access — owner/admin only.
   if (!isAdmin(session)) return { error: "Only owners and admins can mint API keys" };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   // Single mint implementation — src/lib/api-keys.ts owns the token format.
   // A second hand-rolled copy here once drifted from the verifier's charset
@@ -49,7 +56,7 @@ export async function createApiKeyAction(_: CreateState, fd: FormData): Promise<
     })
     .select("id")
     .maybeSingle();
-  if (error) return { error: error.message };
+  if (error) return actionFail(error.message, fd);
   await emitAudit({
     actorId: session.userId,
     orgId: session.orgId,

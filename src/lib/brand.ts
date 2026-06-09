@@ -70,8 +70,27 @@ export const BRAND = {
     noReply: "no-reply@atlvs.pro",
   },
 
-  /** Social handle. Same string everywhere — no Twitter/X. */
+  /** Social handle used in @-mentions / Twitter Card `site` attribution. */
   socialHandle: "@atlvs.pro",
+
+  /**
+   * Canonical social profiles. ATLVS Technologies does not run its own
+   * social accounts — the company presence lives on the parent
+   * GHXSTSHIP profiles (source of truth: linktr.ee/ghxstship). Centralized
+   * here so the footer + Organization JSON-LD `sameAs` read one list.
+   * `key` maps to a brand icon at the render site; order = footer order.
+   */
+  socials: [
+    { key: "instagram", label: "Instagram", href: "https://www.instagram.com/ghxstship.xyz" },
+    { key: "x", label: "X", href: "https://x.com/ghxstship_xyz" },
+    { key: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@ghxstship.pro" },
+    { key: "youtube", label: "YouTube", href: "https://www.youtube.com/@ghxstship" },
+    { key: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/ghxstship" },
+    { key: "soundcloud", label: "SoundCloud", href: "https://www.soundcloud.com/ghxstship" },
+    { key: "threads", label: "Threads", href: "https://www.threads.com/@ghxstship.xyz" },
+    { key: "facebook", label: "Facebook", href: "https://www.facebook.com/ghxstship.xyz" },
+    { key: "github", label: "GitHub", href: "https://github.com/ghxstship" },
+  ],
 
   /**
    * Parent company — GHXSTSHIP Industries LLC. The umbrella brand that

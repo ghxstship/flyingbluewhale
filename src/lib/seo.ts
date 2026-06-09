@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+import { BRAND } from "@/lib/brand";
+
+/** Canonical social profile URLs (parent GHXSTSHIP) — Organization `sameAs`. */
+export const SOCIAL_SAME_AS: readonly string[] = BRAND.socials.map((s) => s.href);
 
 /**
  * Canonical CTA pair — every marketing surface that needs a primary +
@@ -158,9 +162,10 @@ export function organizationSchema() {
     legalName: "ATLVS Technologies, Inc.",
     url: SITE.baseUrl,
     logo: `${SITE.baseUrl}/icon-512.png`,
-    // ATLVS does not run an X/Twitter account — sameAs stays empty until
-    // we publish profile URLs on the platforms we actually use.
-    sameAs: [],
+    // Company social presence lives on the parent GHXSTSHIP profiles
+    // (source of truth: src/lib/brand.ts `socials`, mirrored from
+    // linktr.ee/ghxstship).
+    sameAs: SOCIAL_SAME_AS,
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer support",

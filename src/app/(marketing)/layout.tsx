@@ -1,9 +1,34 @@
 import { MarketingHeader } from "@/components/MarketingHeader";
 import Link from "next/link";
+import {
+  InstagramLogo,
+  XLogo,
+  TiktokLogo,
+  YoutubeLogo,
+  LinkedinLogo,
+  SoundcloudLogo,
+  ThreadsLogo,
+  FacebookLogo,
+  GithubLogo,
+} from "@phosphor-icons/react/dist/ssr";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { WebVitalsReporter } from "@/components/marketing/WebVitalsReporter";
 import { StickyCTABar } from "@/components/marketing/StickyCTABar";
 import { getRequestT } from "@/lib/i18n/request";
+import { BRAND } from "@/lib/brand";
+
+/** Phosphor brand glyph per BRAND.socials key. */
+const SOCIAL_ICONS: Record<string, typeof InstagramLogo> = {
+  instagram: InstagramLogo,
+  x: XLogo,
+  tiktok: TiktokLogo,
+  youtube: YoutubeLogo,
+  linkedin: LinkedinLogo,
+  soundcloud: SoundcloudLogo,
+  threads: ThreadsLogo,
+  facebook: FacebookLogo,
+  github: GithubLogo,
+};
 
 const FOOTER_NAV: Array<{ headingKey: string; items: Array<{ labelKey: string; href: string }> }> = [
   {
@@ -130,23 +155,27 @@ export default async function MarketingLayout({ children }: { children: React.Re
                 <Wordmark word="ATLVS" subtitle="TECHNOLOGIES" style={{ fontSize: 16, fontWeight: 500 }} />
               </Link>
               <p className="mt-3 text-xs text-[var(--p-text-2)]">{t("marketing.layout.footer.brand.tagline")}</p>
-              <div className="mt-4 flex gap-3 text-xs text-[var(--p-text-2)]">
-                <a
-                  href="https://twitter.com/atlvs.pro"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-[var(--p-text-1)]"
-                >
-                  {t("marketing.layout.footer.social.twitter")}
-                </a>
-                <a
-                  href="https://github.com/ghxstship"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-[var(--p-text-1)]"
-                >
-                  {t("marketing.layout.footer.social.github")}
-                </a>
+              {/* Company social presence — the parent GHXSTSHIP profiles
+                  (SSOT: src/lib/brand.ts `socials`, mirrored from
+                  linktr.ee/ghxstship). ATLVS Technologies has no separate
+                  accounts. */}
+              <div className="mt-4 flex flex-wrap gap-3 text-[var(--p-text-2)]">
+                {BRAND.socials.map((s) => {
+                  const Glyph = SOCIAL_ICONS[s.key];
+                  return (
+                    <a
+                      key={s.key}
+                      href={s.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={s.label}
+                      title={s.label}
+                      className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
+                    >
+                      {Glyph ? <Glyph size={18} weight="regular" aria-hidden="true" /> : s.label}
+                    </a>
+                  );
+                })}
               </div>
             </div>
             {FOOTER_NAV.map((col) => (

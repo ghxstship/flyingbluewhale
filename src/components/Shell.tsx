@@ -14,22 +14,9 @@ export function MobileTabBar({ items, badges }: { items: NavItem[]; badges?: Rec
   return <MobileTabBarClient items={items} badges={badges} />;
 }
 
-/**
- * PageStub — render-time placeholder for routes scaffolded via
- * `scripts/generate-stubs.sh` that haven't been wired up yet.
- */
-import { ModuleHeader } from "./ModuleHeader";
-
-export function PageStub({ title, description }: { title: string; description?: string }) {
-  return (
-    <>
-      <ModuleHeader title={title} subtitle={description} />
-      <div className="page-content">
-        <div className="surface p-6 text-sm text-[var(--p-text-2)]">This surface is scaffolded but not yet wired.</div>
-      </div>
-    </>
-  );
-}
+// PageStub was the generate-stubs.sh placeholder; zero routes render it
+// anymore (audit 2026-06-09 confirmed), so the export is gone. New stub
+// routes should build real pages — never resurrect a placeholder export.
 
 export function PageSkeleton({
   rows = 5,

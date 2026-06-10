@@ -64,7 +64,7 @@ export function LetterShareCard({
         <Button variant="secondary" size="sm" onClick={() => copy("url")}>
           {copied === "url"
             ? t("console.people.offerLetters.share.copied", undefined, "Copied")
-            : t("console.people.offerLetters.share.copyLink", undefined, "Copy link")}
+            : t("console.people.offerLetters.share.copyLink", undefined, "Copy Link")}
         </Button>
       </div>
 

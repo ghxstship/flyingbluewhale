@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
   SITEPLAN_ADJACENCY_RELS,
   SITEPLAN_BAND_TYPES,
@@ -42,7 +41,7 @@ export async function transitionSheet(_: State, fd: FormData): Promise<State> {
   const parsed = TransitionSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.rpc("siteplan_transition_state", {
     p_sheet_id: parsed.data.sheet_id,
     p_transition: parsed.data.transition,
@@ -70,7 +69,7 @@ export async function addRegion(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = RegionSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("siteplan_zone_region").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
@@ -94,7 +93,7 @@ export async function deleteRegion(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("siteplan_zone_region")
     .delete()
@@ -121,7 +120,7 @@ export async function addBand(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = BandSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("siteplan_band").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
@@ -140,7 +139,7 @@ export async function deleteBand(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("siteplan_band").delete().eq("id", parsed.data.id).eq("org_id", session.orgId);
   if (error) return { error: error.message };
   revalidatePath(`/console/site-plans/${parsed.data.sheet_id}`);
@@ -164,7 +163,7 @@ export async function addStation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = StationSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("siteplan_station").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
@@ -188,7 +187,7 @@ export async function deleteStation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("siteplan_station")
     .delete()
@@ -218,7 +217,7 @@ export async function addPlacement(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = PlacementSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("siteplan_placement").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
@@ -243,7 +242,7 @@ export async function deletePlacement(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("siteplan_placement")
     .delete()
@@ -271,7 +270,7 @@ export async function addUtility(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = UtilitySchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const loads = (parsed.data.loads ?? "")
     .split(",")
     .map((s) => s.trim())
@@ -298,7 +297,7 @@ export async function deleteUtility(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("siteplan_utility")
     .delete()
@@ -326,7 +325,7 @@ export async function addAdjacency(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = AdjacencySchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase.from("siteplan_adjacency").insert({
     org_id: session.orgId,
     sheet_id: parsed.data.sheet_id,
@@ -349,7 +348,7 @@ export async function deleteAdjacency(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = DeleteSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("siteplan_adjacency")
     .delete()

@@ -169,7 +169,8 @@ export type SitePlanZoneRegion = {
   sheet_id: string;
   code: string;
   label: string;
-  bbox: { x: number; y: number; w: number; h: number } | null;
+  /** JSONB { x, y, w, h } — untyped in the generated client. */
+  bbox: unknown;
   class_tag: number | null;
   notes: string | null;
   created_at: string;
@@ -201,7 +202,7 @@ export type SitePlanStation = {
   position_in: number | null;
   station_code: string;
   function: string | null;
-  head_count: number;
+  head_count: number | null;
   notes: string | null;
   created_at: string;
   updated_at: string;
@@ -218,7 +219,8 @@ export type SitePlanPlacement = {
   uac_atom_id: string | null;
   tpc_atom_id: string | null;
   tag: string;
-  footprint: { x: number; y: number; w: number; h: number; rotation_deg: number } | null;
+  /** JSONB { x, y, w, h, rotation_deg } — untyped in the generated client. */
+  footprint: unknown;
   power_drop_id: string | null;
   qty: number;
   notes: string | null;
@@ -233,8 +235,9 @@ export type SitePlanUtility = {
   sheet_id: string;
   drop_code: string;
   service_type: SitePlanUtilityService;
-  loads: string[];
-  location: { x: number; y: number } | null;
+  loads: string[] | null;
+  /** JSONB { x, y } — untyped in the generated client. */
+  location: unknown;
   circuit_id: string | null;
   notes: string | null;
   created_at: string;

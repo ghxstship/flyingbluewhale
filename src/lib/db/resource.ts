@@ -4,7 +4,10 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { Database } from "@/lib/supabase/types";
 
-type PublicTables = Database["public"]["Tables"];
+// Tables ∪ Views — these helpers are read-oriented (`select` only), and some
+// org-scoped surfaces (e.g. `audit_log`) are exposed as public views over
+// private tables. Views contribute a `Row` shape just like tables.
+type PublicTables = Database["public"]["Tables"] & Database["public"]["Views"];
 type TableName = keyof PublicTables;
 
 export type ListOpts = {

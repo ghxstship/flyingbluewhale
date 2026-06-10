@@ -35,7 +35,7 @@ async function probe<T>(
       log.warn("dsar_export.table_error", { table, err: r.error.message });
       return { table, data: null, error: r.error.message };
     }
-    return { table, data: (r.data ?? []) as unknown[], error: null };
+    return { table, data: r.data ?? [], error: null };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     log.warn("dsar_export.table_exception", { table, err: msg });
@@ -60,7 +60,7 @@ export async function GET(req: Request) {
   // Pre-fetch conversation ids so the ai_messages query can fan out
   // alongside the rest (ai_messages has no user_id column).
   const { data: convoRows } = await supabase.from("ai_conversations").select("id").eq("user_id", userId).limit(10_000);
-  const userConversationIds: string[] = (convoRows ?? []).map((r) => r.id as string);
+  const userConversationIds: string[] = (convoRows ?? []).map((r) => r.id);
 
   // Identity + access surfaces.
   // Activity / event log surfaces.
@@ -85,160 +85,24 @@ export async function GET(req: Request) {
           supabase.from("ai_messages").select("*").in("conversation_id", userConversationIds).limit(10_000),
         ),
     // Connecteam parity surfaces (CLAUDE.md §"Connecteam parity (0046–0048)").
-    // Tables are LooseSupabase-typed at the call site but the queries are
-    // valid Postgres; failures land in _errors.
-    probe(
-      "announcement_reads",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("announcement_reads")
-        .select("*")
-        .eq("user_id", userId)
-        .limit(10_000),
-    ),
-    probe(
-      "chat_messages",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("chat_messages")
-        .select("*")
-        .eq("author_id", userId)
-        .limit(10_000),
-    ),
-    probe(
-      "personal_documents",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("personal_documents")
-        .select("*")
-        .eq("user_id", userId)
-        .limit(10_000),
-    ),
+    // Failures land in _errors.
+    probe("announcement_reads", supabase.from("announcement_reads").select("*").eq("user_id", userId).limit(10_000)),
+    probe("chat_messages", supabase.from("chat_messages").select("*").eq("author_id", userId).limit(10_000)),
+    probe("personal_documents", supabase.from("personal_documents").select("*").eq("user_id", userId).limit(10_000)),
     probe(
       "recognition_posts_sent",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("recognition_posts")
-        .select("*")
-        .eq("from_user_id", userId)
-        .limit(10_000),
+      supabase.from("recognition_posts").select("*").eq("from_user_id", userId).limit(10_000),
     ),
     probe(
       "recognition_posts_received",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("recognition_posts")
-        .select("*")
-        .eq("to_user_id", userId)
-        .limit(10_000),
+      supabase.from("recognition_posts").select("*").eq("to_user_id", userId).limit(10_000),
     ),
-    probe(
-      "time_off_requests",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("time_off_requests")
-        .select("*")
-        .eq("user_id", userId)
-        .limit(10_000),
-    ),
+    probe("time_off_requests", supabase.from("time_off_requests").select("*").eq("user_id", userId).limit(10_000)),
     probe(
       "course_assignments",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("course_assignments")
-        .select("*")
-        .eq("assignee_id", userId)
-        .limit(10_000),
+      supabase.from("course_assignments").select("*").eq("assignee_id", userId).limit(10_000),
     ),
-    probe(
-      "badge_awards",
-      (
-        supabase as unknown as {
-          from: (t: string) => {
-            select: (c: string) => {
-              eq: (
-                k: string,
-                v: string,
-              ) => { limit: (n: number) => Promise<{ data: unknown[] | null; error: { message: string } | null }> };
-            };
-          };
-        }
-      )
-        .from("badge_awards")
-        .select("*")
-        .eq("user_id", userId)
-        .limit(10_000),
-    ),
+    probe("badge_awards", supabase.from("badge_awards").select("*").eq("user_id", userId).limit(10_000)),
   ];
 
   const results = await Promise.all(probes);

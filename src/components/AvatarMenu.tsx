@@ -82,7 +82,7 @@ export function AvatarMenu({ name, email, src }: { name: string; email?: string 
           <form action="/auth/signout" method="POST">
             <button type="submit" className="flex w-full items-center gap-2">
               <LogOut size={14} aria-hidden="true" />
-              {t("common.signOut", undefined, "Sign out")}
+              {t("common.signOut", undefined, "Sign Out")}
             </button>
           </form>
         </DropdownMenuItem>

@@ -92,6 +92,7 @@ export type Database = {
           rooms_reserved: number
           stakeholder_group: string | null
           starts_on: string | null
+          updated_at: string
         }
         Insert: {
           city?: string | null
@@ -106,6 +107,7 @@ export type Database = {
           rooms_reserved?: number
           stakeholder_group?: string | null
           starts_on?: string | null
+          updated_at?: string
         }
         Update: {
           city?: string | null
@@ -120,6 +122,7 @@ export type Database = {
           rooms_reserved?: number
           stakeholder_group?: string | null
           starts_on?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -526,6 +529,7 @@ export type Database = {
           id: string
           name: string
           org_id: string
+          updated_at: string
           zone_privileges: Json
         }
         Insert: {
@@ -536,6 +540,7 @@ export type Database = {
           id?: string
           name: string
           org_id: string
+          updated_at?: string
           zone_privileges?: Json
         }
         Update: {
@@ -546,6 +551,7 @@ export type Database = {
           id?: string
           name?: string
           org_id?: string
+          updated_at?: string
           zone_privileges?: Json
         }
         Relationships: []
@@ -562,6 +568,7 @@ export type Database = {
           org_id: string
           requested_by: string | null
           status: string
+          updated_at: string
         }
         Insert: {
           accreditation_id: string
@@ -574,6 +581,7 @@ export type Database = {
           org_id: string
           requested_by?: string | null
           status?: string
+          updated_at?: string
         }
         Update: {
           accreditation_id?: string
@@ -586,6 +594,7 @@ export type Database = {
           org_id?: string
           requested_by?: string | null
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -718,6 +727,7 @@ export type Database = {
           party_size: number
           scheduled_at: string | null
           status: string
+          updated_at: string
         }
         Insert: {
           actual_at?: string | null
@@ -732,6 +742,7 @@ export type Database = {
           party_size?: number
           scheduled_at?: string | null
           status?: string
+          updated_at?: string
         }
         Update: {
           actual_at?: string | null
@@ -746,6 +757,7 @@ export type Database = {
           party_size?: number
           scheduled_at?: string | null
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -6787,6 +6799,7 @@ export type Database = {
           sent_at: string | null
           severity: string
           title: string
+          updated_at: string
         }
         Insert: {
           audience?: Json
@@ -6800,6 +6813,7 @@ export type Database = {
           sent_at?: string | null
           severity?: string
           title: string
+          updated_at?: string
         }
         Update: {
           audience?: Json
@@ -6813,6 +6827,7 @@ export type Database = {
           sent_at?: string | null
           severity?: string
           title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -7601,6 +7616,7 @@ export type Database = {
           org_id: string
           participant_name: string
           status: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -7611,6 +7627,7 @@ export type Database = {
           org_id: string
           participant_name: string
           status?: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -7621,6 +7638,7 @@ export type Database = {
           org_id?: string
           participant_name?: string
           status?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -8017,6 +8035,7 @@ export type Database = {
           scheduled_arrive: string | null
           scheduled_depart: string
           status: string
+          updated_at: string
           vehicle_ref: string | null
         }
         Insert: {
@@ -8033,6 +8052,7 @@ export type Database = {
           scheduled_arrive?: string | null
           scheduled_depart: string
           status?: string
+          updated_at?: string
           vehicle_ref?: string | null
         }
         Update: {
@@ -8049,6 +8069,7 @@ export type Database = {
           scheduled_arrive?: string | null
           scheduled_depart?: string
           status?: string
+          updated_at?: string
           vehicle_ref?: string | null
         }
         Relationships: [
@@ -8493,6 +8514,7 @@ export type Database = {
           reading: Json
           severity: string
           started_at: string
+          updated_at: string
           venue_id: string | null
         }
         Insert: {
@@ -8504,6 +8526,7 @@ export type Database = {
           reading?: Json
           severity: string
           started_at?: string
+          updated_at?: string
           venue_id?: string | null
         }
         Update: {
@@ -8515,6 +8538,7 @@ export type Database = {
           reading?: Json
           severity?: string
           started_at?: string
+          updated_at?: string
           venue_id?: string | null
         }
         Relationships: [
@@ -11030,6 +11054,7 @@ export type Database = {
           created_at: string
           days_away: number
           days_restricted: number
+          deleted_at: string | null
           description: string | null
           id: string
           injury_source: string | null
@@ -11055,6 +11080,7 @@ export type Database = {
           created_at?: string
           days_away?: number
           days_restricted?: number
+          deleted_at?: string | null
           description?: string | null
           id?: string
           injury_source?: string | null
@@ -11080,6 +11106,7 @@ export type Database = {
           created_at?: string
           days_away?: number
           days_restricted?: number
+          deleted_at?: string | null
           description?: string | null
           id?: string
           injury_source?: string | null
@@ -11526,6 +11553,7 @@ export type Database = {
           limits: Json
           org_id: string
           policy_no: string
+          updated_at: string
         }
         Insert: {
           carrier: string
@@ -11538,6 +11566,7 @@ export type Database = {
           limits?: Json
           org_id: string
           policy_no: string
+          updated_at?: string
         }
         Update: {
           carrier?: string
@@ -11550,6 +11579,7 @@ export type Database = {
           limits?: Json
           org_id?: string
           policy_no?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -13906,6 +13936,7 @@ export type Database = {
           org_id: string
           status: string
           timeline: Json
+          updated_at: string
         }
         Insert: {
           closed_at?: string | null
@@ -13918,6 +13949,7 @@ export type Database = {
           org_id: string
           status?: string
           timeline?: Json
+          updated_at?: string
         }
         Update: {
           closed_at?: string | null
@@ -13930,6 +13962,7 @@ export type Database = {
           org_id?: string
           status?: string
           timeline?: Json
+          updated_at?: string
         }
         Relationships: [
           {
@@ -13937,6 +13970,65 @@ export type Database = {
             columns: ["incident_id"]
             isOneToOne: false
             referencedRelation: "incidents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_inquiries: {
+        Row: {
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          event_date: string | null
+          id: string
+          inquirer_user_id: string
+          inquiry_state: Database["public"]["Enums"]["marketplace_inquiry_state"]
+          message: string
+          org_id: string
+          subject_handle: string
+          subject_id: string
+          subject_kind: Database["public"]["Enums"]["marketplace_inquiry_subject"]
+          subject_name: string
+          updated_at: string
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          event_date?: string | null
+          id?: string
+          inquirer_user_id: string
+          inquiry_state?: Database["public"]["Enums"]["marketplace_inquiry_state"]
+          message: string
+          org_id: string
+          subject_handle: string
+          subject_id: string
+          subject_kind: Database["public"]["Enums"]["marketplace_inquiry_subject"]
+          subject_name: string
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          event_date?: string | null
+          id?: string
+          inquirer_user_id?: string
+          inquiry_state?: Database["public"]["Enums"]["marketplace_inquiry_state"]
+          message?: string
+          org_id?: string
+          subject_handle?: string
+          subject_id?: string
+          subject_kind?: Database["public"]["Enums"]["marketplace_inquiry_subject"]
+          subject_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_inquiries_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -14047,6 +14139,7 @@ export type Database = {
           patient_ref: string | null
           phi_encrypted: Json | null
           triage: string | null
+          updated_at: string
           venue_id: string | null
         }
         Insert: {
@@ -14060,6 +14153,7 @@ export type Database = {
           patient_ref?: string | null
           phi_encrypted?: Json | null
           triage?: string | null
+          updated_at?: string
           venue_id?: string | null
         }
         Update: {
@@ -14073,6 +14167,7 @@ export type Database = {
           patient_ref?: string | null
           phi_encrypted?: Json | null
           triage?: string | null
+          updated_at?: string
           venue_id?: string | null
         }
         Relationships: [
@@ -15672,8 +15767,11 @@ export type Database = {
           cover_note: string | null
           crew_member_id: string | null
           fee_proposed_cents: number | null
+          guest_email: string | null
+          guest_name: string | null
           id: string
           internal_notes: string | null
+          media_links: Json
           open_call_id: string
           org_id: string
           reviewed_at: string | null
@@ -15682,7 +15780,7 @@ export type Database = {
           status: Database["public"]["Enums"]["submission_status"]
           submission_state: Database["public"]["Enums"]["submission_status"]
           submitted_at: string
-          submitter_user_id: string
+          submitter_user_id: string | null
           talent_profile_id: string | null
           updated_at: string
           vendor_id: string | null
@@ -15696,8 +15794,11 @@ export type Database = {
           cover_note?: string | null
           crew_member_id?: string | null
           fee_proposed_cents?: number | null
+          guest_email?: string | null
+          guest_name?: string | null
           id?: string
           internal_notes?: string | null
+          media_links?: Json
           open_call_id: string
           org_id: string
           reviewed_at?: string | null
@@ -15706,7 +15807,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["submission_status"]
           submission_state?: Database["public"]["Enums"]["submission_status"]
           submitted_at?: string
-          submitter_user_id: string
+          submitter_user_id?: string | null
           talent_profile_id?: string | null
           updated_at?: string
           vendor_id?: string | null
@@ -15720,8 +15821,11 @@ export type Database = {
           cover_note?: string | null
           crew_member_id?: string | null
           fee_proposed_cents?: number | null
+          guest_email?: string | null
+          guest_name?: string | null
           id?: string
           internal_notes?: string | null
+          media_links?: Json
           open_call_id?: string
           org_id?: string
           reviewed_at?: string | null
@@ -15730,7 +15834,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["submission_status"]
           submission_state?: Database["public"]["Enums"]["submission_status"]
           submitted_at?: string
-          submitter_user_id?: string
+          submitter_user_id?: string | null
           talent_profile_id?: string | null
           updated_at?: string
           vendor_id?: string | null
@@ -20054,6 +20158,48 @@ export type Database = {
           },
         ]
       }
+      proposal_views: {
+        Row: {
+          id: string
+          org_id: string
+          proposal_id: string
+          viewed_at: string
+          viewer_persona: string | null
+          viewer_user_id: string | null
+        }
+        Insert: {
+          id?: string
+          org_id: string
+          proposal_id: string
+          viewed_at?: string
+          viewer_persona?: string | null
+          viewer_user_id?: string | null
+        }
+        Update: {
+          id?: string
+          org_id?: string
+          proposal_id?: string
+          viewed_at?: string
+          viewer_persona?: string | null
+          viewer_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "proposal_views_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "proposal_views_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposals: {
         Row: {
           amount_cents: number | null
@@ -20589,6 +20735,7 @@ export type Database = {
           org_id: string
           sku: string
           unit_price_cents: number
+          updated_at: string
         }
         Insert: {
           active?: boolean
@@ -20602,6 +20749,7 @@ export type Database = {
           org_id: string
           sku: string
           unit_price_cents?: number
+          updated_at?: string
         }
         Update: {
           active?: boolean
@@ -20615,6 +20763,7 @@ export type Database = {
           org_id?: string
           sku?: string
           unit_price_cents?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -26039,6 +26188,7 @@ export type Database = {
           period_start: string
           scope: number
           source: string | null
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -26050,6 +26200,7 @@ export type Database = {
           period_start: string
           scope?: number
           source?: string | null
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -26061,6 +26212,7 @@ export type Database = {
           period_start?: string
           scope?: number
           source?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -27980,6 +28132,7 @@ export type Database = {
           registered_on: string | null
           registration_no: string | null
           status: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
@@ -27991,6 +28144,7 @@ export type Database = {
           registered_on?: string | null
           registration_no?: string | null
           status?: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
@@ -28002,6 +28156,7 @@ export type Database = {
           registered_on?: string | null
           registration_no?: string | null
           status?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -31277,6 +31432,69 @@ export type Database = {
           },
         ]
       }
+      workforce_demand_forecasts: {
+        Row: {
+          actual_cost_cents: number | null
+          actual_hours: number | null
+          created_at: string
+          created_by: string | null
+          expected_cost_cents: number
+          expected_hours: number
+          forecast_date: string
+          id: string
+          notes: string | null
+          org_id: string
+          project_id: string | null
+          role_tag: string | null
+          updated_at: string
+        }
+        Insert: {
+          actual_cost_cents?: number | null
+          actual_hours?: number | null
+          created_at?: string
+          created_by?: string | null
+          expected_cost_cents?: number
+          expected_hours?: number
+          forecast_date: string
+          id?: string
+          notes?: string | null
+          org_id: string
+          project_id?: string | null
+          role_tag?: string | null
+          updated_at?: string
+        }
+        Update: {
+          actual_cost_cents?: number | null
+          actual_hours?: number | null
+          created_at?: string
+          created_by?: string | null
+          expected_cost_cents?: number
+          expected_hours?: number
+          forecast_date?: string
+          id?: string
+          notes?: string | null
+          org_id?: string
+          project_id?: string | null
+          role_tag?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workforce_demand_forecasts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workforce_demand_forecasts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workforce_deployments: {
         Row: {
           actual_fte: number
@@ -31286,6 +31504,7 @@ export type Database = {
           org_id: string
           planned_fte: number
           shift_window: unknown
+          updated_at: string
           venue_id: string
           zone_id: string | null
         }
@@ -31297,6 +31516,7 @@ export type Database = {
           org_id: string
           planned_fte?: number
           shift_window?: unknown
+          updated_at?: string
           venue_id: string
           zone_id?: string | null
         }
@@ -31308,6 +31528,7 @@ export type Database = {
           org_id?: string
           planned_fte?: number
           shift_window?: unknown
+          updated_at?: string
           venue_id?: string
           zone_id?: string | null
         }
@@ -34953,6 +35174,17 @@ export type Database = {
         Args: { geom: unknown; move: number; wrap: number }
         Returns: unknown
       }
+      submit_marketplace_inquiry: {
+        Args: {
+          p_contact_email?: string
+          p_contact_phone?: string
+          p_event_date?: string
+          p_handle: string
+          p_message: string
+          p_subject_kind: string
+        }
+        Returns: string
+      }
       sync_budget_for_bucket: {
         Args: { p_category: string; p_org_id: string; p_project_id: string }
         Returns: undefined
@@ -35373,6 +35605,13 @@ export type Database = {
         | "released"
         | "voided"
       lien_waiver_type: "conditional" | "unconditional"
+      marketplace_inquiry_state: "new" | "responded" | "closed" | "withdrawn"
+      marketplace_inquiry_subject:
+        | "vendor"
+        | "crew"
+        | "agency"
+        | "talent"
+        | "rfq"
       marketplace_kind: "rfq" | "gig" | "talent_call" | "audition"
       meeting_kind:
         | "kickoff"
@@ -36469,6 +36708,8 @@ export const Constants = {
         "voided",
       ],
       lien_waiver_type: ["conditional", "unconditional"],
+      marketplace_inquiry_state: ["new", "responded", "closed", "withdrawn"],
+      marketplace_inquiry_subject: ["vendor", "crew", "agency", "talent", "rfq"],
       marketplace_kind: ["rfq", "gig", "talent_call", "audition"],
       meeting_kind: [
         "kickoff",

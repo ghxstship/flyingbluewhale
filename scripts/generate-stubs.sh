@@ -15,11 +15,18 @@ write_stub() {
   dir="$(dirname "$file")"
   mkdir -p "$dir"
   if [[ -e "$file" ]]; then return 0; fi
+  # PageStub was retired (audit 2026-06-09) — new stubs render a real,
+  # if minimal, page so nothing ships a "scaffolded but not wired" wall.
   cat > "$file" <<EOF
-import { PageStub } from "@/components/Shell";
+import { ModuleHeader } from "@/components/Shell";
 
 export default function Page() {
-  return <PageStub title="$title" description="$desc" />;
+  return (
+    <>
+      <ModuleHeader title="$title" subtitle="$desc" />
+      <div className="page-content" />
+    </>
+  );
 }
 EOF
 }

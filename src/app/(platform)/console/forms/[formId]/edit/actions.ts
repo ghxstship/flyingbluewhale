@@ -78,10 +78,7 @@ export async function updateFormDefAction(_: State, fd: FormData): Promise<State
     slug: parsed.data.slug,
     description: parsed.data.description || null,
     status: parsed.data.status,
-    // form_defs.schema is `Json` in the schema; the helper narrows to the
-    // table's Update shape which expects an object/array, not the full
-    // Json union — cast through unknown.
-    schema: parsedSchema as unknown as Record<string, unknown>,
+    schema: parsedSchema,
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Form Def not found." };

@@ -24,15 +24,8 @@ export default async function Page() {
         "VIP package management, allocations, fulfillment.",
       ),
     },
-    {
-      href: "/console/commercial/tickets",
-      title: t("console.commercial.sections.tickets.title", undefined, "Ticketing"),
-      body: t(
-        "console.commercial.sections.tickets.body",
-        undefined,
-        "Inventory, sales, transfers, gate scan integrations.",
-      ),
-    },
+    // Ticketing card removed: /console/commercial/tickets never existed —
+    // ticketing lives in unified assignments (catalog kind "ticket").
     {
       href: "/console/commercial/licensing",
       title: t("console.commercial.sections.licensing.title", undefined, "Licensing"),

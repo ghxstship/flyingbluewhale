@@ -1,8 +1,8 @@
 import "server-only";
 
 import { createClient, createServiceClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { ImportJob, ImportJobState, ImportResource, ImportRowError } from "@/lib/import/types";
+import type { TablesUpdate } from "@/lib/supabase/types";
 
 function rowToImportJob(r: Record<string, unknown>): ImportJob {
   return {
@@ -53,7 +53,7 @@ export async function createImportJob(opts: {
   storagePath?: string;
   createdBy: string;
 }): Promise<ImportJob> {
-  const admin = createServiceClient() as unknown as LooseSupabase;
+  const admin = createServiceClient();
   const { data, error } = await admin
     .from("import_jobs")
     .insert({
@@ -82,8 +82,8 @@ export async function updateImportJob(opts: {
   startedAt?: string;
   finishedAt?: string;
 }): Promise<void> {
-  const admin = createServiceClient() as unknown as LooseSupabase;
-  const patch: Record<string, unknown> = {};
+  const admin = createServiceClient();
+  const patch: TablesUpdate<"import_jobs"> = {};
   if (opts.state !== undefined) patch.state = opts.state;
   if (opts.rowsTotal !== undefined) patch.rows_total = opts.rowsTotal;
   if (opts.rowsSucceeded !== undefined) patch.rows_succeeded = opts.rowsSucceeded;

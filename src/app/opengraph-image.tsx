@@ -15,6 +15,7 @@
  * any nested route segment — Next.js picks the closest one to the URL.
  */
 import { ImageResponse } from "next/og";
+import { BRAND } from "@/lib/brand";
 
 // Route segment config — Next.js requires these exports.
 // Runtime defaults to Node here (not edge) because Turbopack dev mode
@@ -81,7 +82,7 @@ export default async function OpenGraphImage() {
               lineHeight: 1,
             }}
           >
-            A T L V S
+            {BRAND.mark}
           </div>
           <div
             style={{

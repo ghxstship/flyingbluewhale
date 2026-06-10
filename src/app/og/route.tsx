@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BRAND } from "@/lib/brand";
 
 // Node runtime — next/og works on both edge and node; staying on node
 // keeps the route eligible for ISR/caching and avoids the
@@ -58,7 +59,7 @@ export async function GET(req: Request) {
       </div>
       <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase" }}>
-          A T L V S
+          {BRAND.mark}
         </div>
         <div style={{ fontSize: 16, color: "#555", fontFamily: "ui-monospace, SFMono-Regular, monospace" }}>
           ATLVS · GVTEWAY · COMPVSS

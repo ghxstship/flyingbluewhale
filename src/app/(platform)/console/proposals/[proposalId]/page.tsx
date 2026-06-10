@@ -28,16 +28,13 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
   // cites this proposal — not just any project the proposal happens to
   // be attached to.
   const supabase = await createClient();
-  const { data: linkedProject } = await supabase
+  const { data: project } = await supabase
     .from("projects")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .select("id, slug, name" as any)
+    .select("id, slug, name")
     .eq("org_id", session.orgId)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .eq("proposal_id" as any, proposal.id)
+    .eq("proposal_id", proposal.id)
     .is("deleted_at", null)
     .maybeSingle();
-  const project = linkedProject as { id: string; slug: string; name: string } | null;
 
   return (
     <>

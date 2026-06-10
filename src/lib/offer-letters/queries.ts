@@ -16,8 +16,9 @@ export async function listOfferLetters(orgId: string, projectId?: string): Promi
   const supabase = await createClient();
   let q = supabase.from("offer_letters_resolved").select("*").eq("org_id", orgId);
   if (projectId) q = q.eq("project_id", projectId);
-  const { data } = await q.order("recipient_name", { ascending: true });
-  return ((data ?? []) as unknown as OfferLetterResolved[]) ?? [];
+  // View rows are generated all-nullable + Json — shape to the app contract.
+  const { data } = await q.order("recipient_name", { ascending: true }).returns<OfferLetterResolved[]>();
+  return data ?? [];
 }
 
 /** Returns the *raw* row + resolved view in parallel. Admin needs both — the
@@ -27,12 +28,20 @@ export async function getOfferLetter(
   id: string,
 ): Promise<{ raw: OfferLetter; resolved: OfferLetterResolved } | null> {
   const supabase = await createClient();
+  // JSONB columns (schedule_items, onboarding_items, snapshot, …) carry typed
+  // shapes the generated client can only express as Json — shape explicitly.
   const [{ data: raw }, { data: resolved }] = await Promise.all([
-    supabase.from("offer_letters").select("*").eq("org_id", orgId).eq("id", id).maybeSingle(),
-    supabase.from("offer_letters_resolved").select("*").eq("org_id", orgId).eq("id", id).maybeSingle(),
+    supabase.from("offer_letters").select("*").eq("org_id", orgId).eq("id", id).returns<OfferLetter[]>().maybeSingle(),
+    supabase
+      .from("offer_letters_resolved")
+      .select("*")
+      .eq("org_id", orgId)
+      .eq("id", id)
+      .returns<OfferLetterResolved[]>()
+      .maybeSingle(),
   ]);
   if (!raw || !resolved) return null;
-  return { raw: raw as unknown as OfferLetter, resolved: resolved as unknown as OfferLetterResolved };
+  return { raw, resolved };
 }
 
 export async function listOfferLetterActivity(orgId: string, letterId: string): Promise<OfferLetterActivity[]> {
@@ -42,8 +51,10 @@ export async function listOfferLetterActivity(orgId: string, letterId: string): 
     .select("*")
     .eq("org_id", orgId)
     .eq("offer_letter_id", letterId)
-    .order("occurred_at", { ascending: false });
-  return ((data ?? []) as unknown as OfferLetterActivity[]) ?? [];
+    .order("occurred_at", { ascending: false })
+    // `meta` is JSONB with a typed shape — shape the rows to the app contract.
+    .returns<OfferLetterActivity[]>();
+  return data ?? [];
 }
 
 // ── PICKER OPTIONS (for admin FK selectors) ─────────────────────────────────
@@ -55,7 +66,7 @@ export async function listCrewMembers(orgId: string): Promise<CrewMemberOption[]
     .select("id,name,email,phone,role")
     .eq("org_id", orgId)
     .order("name", { ascending: true });
-  return ((data ?? []) as unknown as CrewMemberOption[]) ?? [];
+  return data ?? [];
 }
 
 export async function listOrgRoles(orgId: string): Promise<OrgRoleOption[]> {
@@ -65,7 +76,7 @@ export async function listOrgRoles(orgId: string): Promise<OrgRoleOption[]> {
     .select("id,slug,label,department")
     .eq("org_id", orgId)
     .order("label", { ascending: true });
-  return ((data ?? []) as unknown as OrgRoleOption[]) ?? [];
+  return data ?? [];
 }
 
 export async function listVenues(orgId: string, projectId: string): Promise<VenueOption[]> {
@@ -75,10 +86,11 @@ export async function listVenues(orgId: string, projectId: string): Promise<Venu
     .select("id,name,locations(city)")
     .eq("org_id", orgId)
     .eq("project_id", projectId)
-    .order("name", { ascending: true });
-  return (
-    (data ?? []) as unknown as Array<{ id: string; name: string; locations: { city: string | null } | null }>
-  ).map((r) => ({ id: r.id, name: r.name, city: r.locations?.city ?? null }));
+    .order("name", { ascending: true })
+    // venues.location_id → locations FK is not in the generated relationship
+    // metadata, so the embed can't be inferred — shape explicitly.
+    .returns<Array<{ id: string; name: string; locations: { city: string | null } | null }>>();
+  return (data ?? []).map((r) => ({ id: r.id, name: r.name, city: r.locations?.city ?? null }));
 }
 
 export async function listRateCardItems(orgId: string, catalog = "crew_day_rates"): Promise<RateCardOption[]> {
@@ -90,7 +102,7 @@ export async function listRateCardItems(orgId: string, catalog = "crew_day_rates
     .eq("catalog", catalog)
     .eq("active", true)
     .order("name", { ascending: true });
-  return ((data ?? []) as unknown as RateCardOption[]) ?? [];
+  return data ?? [];
 }
 
 // ── PUBLIC ACCESS (RPCs returning JSONB — snapshot or resolved) ─────────────
@@ -109,7 +121,8 @@ export async function getOfferLetterByToken(token: string, code: string): Promis
     p_code: code,
   });
   if (error || !data) return null;
-  return data as unknown as OfferLetterResolved;
+  // RPC declares `Returns: Json` — the JSONB payload is a resolved letter.
+  return data as OfferLetterResolved;
 }
 
 export async function recordOfferLetterView(token: string, code: string): Promise<void> {
@@ -133,7 +146,8 @@ export async function acceptOfferLetterByToken(
     p_user_agent: userAgent ?? "",
   });
   if (error) throw new Error(error.message);
-  return data as unknown as OfferLetterResolved;
+  // RPC declares `Returns: Json` — the JSONB payload is a resolved letter.
+  return data as OfferLetterResolved;
 }
 
 export async function declineOfferLetterByToken(
@@ -148,5 +162,6 @@ export async function declineOfferLetterByToken(
     p_reason: reason,
   });
   if (error) throw new Error(error.message);
-  return data as unknown as OfferLetterResolved;
+  // RPC declares `Returns: Json` — the JSONB payload is a resolved letter.
+  return data as OfferLetterResolved;
 }

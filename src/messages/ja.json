@@ -113,7 +113,16 @@
       "bar": "フーバー"
     },
     "pin": "{name}をピン留め",
-    "unpin": "{name}のピン留めを解除"
+    "unpin": "{name}のピン留めを解除",
+    "group": {
+      "projects": "プロジェクト",
+      "production": "プロダクション",
+      "workforce": "ワークフォース",
+      "sales": "セールス",
+      "finance": "ファイナンス",
+      "procurement": "調達",
+      "operations": "オペレーション"
+    }
   },
   "marketing": {
     "header": {
@@ -1448,7 +1457,7 @@
         "faqs": {
           "reportBug": {
             "q": "バグはどこで報告しますか?",
-            "a": "support@atlvs.pro に、発生した URL とスクリーンショット(あれば)を添えてメールしてください。すべての報告は監査ログエントリでタグ付けされ、私たち側で何が起きたかを正確に確認できます。"
+            "a": "sos@atlvs.pro に、発生した URL とスクリーンショット(あれば)を添えてメールしてください。すべての報告は監査ログエントリでタグ付けされ、私たち側で何が起きたかを正確に確認できます。"
           },
           "statusPage": {
             "q": "ステータスページはありますか?",
@@ -2321,7 +2330,8 @@
               "sourceAvailable": "ソースアベイラブルライセンスオプション",
               "customIntegrations": "あなたと共に構築するカスタム連携"
             },
-            "cta": "スタジオに相談する"
+            "cta": "スタジオに相談する",
+            "per": ""
           }
         },
         "comparison": {
@@ -3243,6 +3253,658 @@
           "subtitle": "小規模チームには永久無料。それ以上は組織単位の料金で。"
         }
       }
+    },
+    "legal": {
+      "privacy": {
+        "title": "プライバシーポリシー",
+        "lastUpdated": "最終更新: {date}",
+        "collect": {
+          "heading": "収集する情報",
+          "body": "アカウント情報、アップロードされるワークスペースコンテンツ、運用テレメトリー — ページビュー、エラー、API タイミング。"
+        },
+        "use": {
+          "heading": "利用目的",
+          "body": "サービスの運営、不正利用の防止、信頼性の向上のために使用します。顧客データを販売することはありません。"
+        },
+        "subprocessors": {
+          "heading": "サブプロセッサー",
+          "body": "Supabase(ホスティング + データベース)、Stripe(請求)、Anthropic(AI)、Vercel(エッジ + CDN)。"
+        },
+        "retention": {
+          "heading": "保持期間",
+          "body": "監査ログはデフォルト90日。顧客コンテンツは、削除されるか組織が削除されるまで保持されます。"
+        }
+      },
+      "terms": {
+        "title": "利用規約",
+        "lastUpdated": "最終更新: {date}",
+        "acceptance": {
+          "heading": "1. 規約への同意",
+          "body": "ATLVS Technologies プラットフォームにアクセスまたは利用することで、本規約に同意したものとみなされます。同意しない場合は、本サービスを利用しないでください。"
+        },
+        "accounts": {
+          "heading": "2. アカウント",
+          "body": "アカウントへのアクセスに使用する認証情報の保護、およびアカウント上のあらゆる活動について、お客様が責任を負います。"
+        },
+        "billing": {
+          "heading": "3. サブスクリプションと請求",
+          "body": "有料プランは Stripe 経由で請求されます。税金、解約、返金のポリシーはアプリ内の請求設定に記載されています。"
+        },
+        "data": {
+          "heading": "4. データの所有権",
+          "body": "アップロードしたコンテンツの所有権はお客様にあります。当社はサービス提供のためにのみ処理します。Settings → Compliance からいつでもエクスポートできます。"
+        },
+        "termination": {
+          "heading": "5. 解約",
+          "body": "いずれの当事者もいつでも解約できます。データは解約後30日間エクスポート可能です。"
+        }
+      },
+      "dpa": {
+        "title": "データ処理補遺",
+        "lastUpdated": "最終更新: {date}",
+        "intro": "当社の DPA は EU SCC と UK IDTA を組み込んでいます。サブスクリプション登録時に自動適用されます。副署済みのコピーは Settings → Compliance からリクエストできます。",
+        "roles": "役割: お客様が管理者、当社が処理者です。",
+        "subprocessors": "サブプロセッサー: Supabase、Stripe、Anthropic、Vercel。",
+        "breach": "侵害通知: 確認後48時間以内。",
+        "transfers": "データ移転: SCC + 該当する場合は UK IDTA。"
+      },
+      "sla": {
+        "title": "サービスレベル契約",
+        "applies": "Enterprise ティアに適用 · 発効 {date}",
+        "uptime": {
+          "before": "目標は",
+          "after": "の月間稼働率です。定期メンテナンスウィンドウは除外されます。"
+        },
+        "credits": "SLA 未達時のサービスクレジット: 10%(99.0–99.9%)、25%(98.0–99.0%)、50%(98.0% 未満)。",
+        "report": {
+          "before": "インシデントの報告先:"
+        }
+      }
+    },
+    "tools": {
+      "eyebrow": "無料ツール",
+      "crumbsToolsLabel": "ツール",
+      "capacity": {
+        "meta": {
+          "title": "会場キャパシティ計算ツール — 用途別の最大収容人数",
+          "description": "床面積と用途タイプから法定最大収容人数を見積もります。集会、密集、立見、飲食向けの IBC 準拠デフォルト。"
+        },
+        "title": "会場キャパシティ計算ツール。",
+        "crumbsLabel": "キャパシティ計算ツール",
+        "schemaName": "ATLVS キャパシティ計算ツール",
+        "schemaDescription": "床面積と用途タイプから会場の最大収容人数を見積もります。",
+        "lead": "床面積と用途タイプから法定最大収容人数を見積もります。集会、密集、立見、飲食の各構成向けの IBC 準拠デフォルト。公表前に AHJ に確認してください。",
+        "how": {
+          "heading": "収容人数の算定方法。",
+          "body1": "収容人数とは、国際建築基準(IBC)が定め、米国のほとんどの管轄区域が(修正を加えて)採用している、空間に許容される最大人数です。IBC は用途タイプごとに1人あたりの面積係数を定めています — 立見は1人あたり7平方フィート、テーブルありの非密集集会は15平方フィート、待合エリアは5平方フィート。使用可能な床面積に適切な係数を掛けて(割って)収容人数を算出します。",
+          "body2": "実際のキャパシティは、IBC の収容人数と会場の避難能力が支える人数の低い方です — 出口幅、固定座席レイアウト、スプリンクラーのカバー範囲、AHJ の判断がすべて影響します。この計算ツールは初期見積もりとして使い、公表前に地元の管轄当局(AHJ)に確認してください。"
+        },
+        "cta": {
+          "title": "キャパシティは ATLVS の中に。",
+          "subtitle": "会場ごとのキャパシティ、チケット割当、ゲートスキャン上限 — ひとつのレコードに。"
+        }
+      },
+      "perDiem": {
+        "meta": {
+          "title": "日当計算ツール — クルー&タレントの出張手当",
+          "description": "複数都市・複数日にわたるクルーやタレントの日当合計を計算。GSA 準拠のデフォルトレートとカスタムレート上書き。"
+        },
+        "title": "日当計算ツール。",
+        "crumbsLabel": "日当計算ツール",
+        "schemaName": "ATLVS 日当計算ツール",
+        "schemaDescription": "プロダクションクルーとタレントのための日当合計計算ツール。",
+        "lead": "複数都市・複数日にわたるクルーやタレントの日当合計を計算します。GSA 準拠のデフォルトレート。都市ごとに上書き可能。",
+        "how": {
+          "heading": "日当の仕組み。",
+          "body1": "日当とは、ホームベースを離れている間の食事や雑費のために、出張者 — 通常はクルー、タレント、契約スタッフ — に支払われる1日あたりの手当です。米国一般調達局(GSA)は連邦出張向けに都市別の日当レートを公表しており、ほとんどのプロダクション予算はこれを根拠あるベースラインとして使います。国際レートは国務省の DSSR テーブルに基づきます。",
+          "body2": "日当は通常、ショー単位または週単位で現金か給与明細で精算されます。ツアーマネージャーは都市 × 日のレートマトリクスに対して日当を追跡し、予測と実績の乖離を防ぎます。"
+        },
+        "cta": {
+          "title": "計算は省略。",
+          "subtitle": "ATLVS ではすべてのショーで日当が自動計算され、ロスターに紐づきます。"
+        }
+      }
+    },
+    "marketplace": {
+      "crumbsLabel": "マーケットプレイス",
+      "calendar": {
+        "meta": {
+          "title": "イベントカレンダー — オンセール + アナウンス",
+          "description": "今後のオンセール日、プレセールウィンドウ、アナウンス。"
+        },
+        "eyebrow": "マーケットプレイス · カレンダー",
+        "title": "イベントカレンダー",
+        "crumbsLabel": "カレンダー",
+        "summary": {
+          "one": "{count} 件の今後のアナウンス + オンセールマイルストーン",
+          "many": "{count} 件の今後のアナウンス + オンセールマイルストーン"
+        },
+        "empty": "直近のウィンドウに公開マイルストーンはありません。"
+      },
+      "agencies": {
+        "meta": {
+          "title": "エージェンシーディレクトリ — ブッキングエージェンシー",
+          "description": "ATLVS ネットワーク上の認証済みブッキングエージェンシー。"
+        },
+        "eyebrow": "マーケットプレイス · エージェンシー",
+        "title": "エージェンシーディレクトリ",
+        "crumbsLabel": "エージェンシー",
+        "count": {
+          "one": "{count} エージェンシー",
+          "many": "{count} エージェンシー"
+        },
+        "empty": "公開済みのエージェンシーはまだありません。",
+        "artistCount": {
+          "one": "{count} アーティスト",
+          "many": "{count} アーティスト"
+        },
+        "commission": "デフォルトコミッション {pct}%",
+        "detail": {
+          "verified": "認証済み",
+          "about": "概要",
+          "profile": "プロフィール",
+          "rosterSize": "ロスター規模:",
+          "defaultCommission": "デフォルトコミッション:",
+          "web": "Web:",
+          "sendInquiry": "問い合わせを送る",
+          "needAccount": "アカウントが必要ですか?"
+        }
+      }
+    },
+    "integrations": {
+      "eyebrow": "パートナープログラム",
+      "crumbsLabel": "インテグレーション",
+      "thanks": {
+        "meta": {
+          "title": "送信を受け付けました — ATLVS パートナープログラム",
+          "description": "パートナーインテグレーションの提案がキューに入りました。"
+        },
+        "crumbsLabel": "送信受付済み",
+        "title": "送信を受け付けました。",
+        "body": {
+          "before": "提案はキューに入りました。ATLVS パートナー AM チームは通常5営業日以内に返信します。送信に使った受信トレイをご確認ください — こちらから連絡します:"
+        },
+        "cta": {
+          "back": "公開中のインテグレーションへ戻る",
+          "directory": "パートナーディレクトリを見る"
+        }
+      },
+      "partners": {
+        "meta": {
+          "title": "パートナーインテグレーション — ATLVS 認定 + 検証済みパートナーディレクトリ",
+          "description": "ATLVS パートナーが構築したサードパーティインテグレーション。検証済みパートナーは技術レビューを通過、認定インテグレーションはエンドツーエンド QA も通過しています。"
+        },
+        "crumbsLabel": "パートナーディレクトリ",
+        "title": "パートナーが構築。私たちが検証。",
+        "lead": "ATLVS の REST + GraphQL サーフェスを叩くサードパーティインテグレーション。検証済みパートナーは技術レビューを通過、認定インテグレーションはライブテナントでのエンドツーエンド QA も通過しています。自分で作るなら —",
+        "submitLink": "提案を送る",
+        "cta": {
+          "submit": "パートナーインテグレーションを提出",
+          "back": "公開中のインテグレーションへ戻る",
+          "bringTitle": "あなたのスタックを中へ。",
+          "bringSubtitle": "オープン API + オープンなパートナープログラム。レベニューシェアなし、ゲートキーピングなし。"
+        },
+        "emptyBefore": "公開されているパートナーインテグレーションはまだありません。",
+        "emptyLink": "最初の一社に。",
+        "tier": {
+          "certified": "認定",
+          "verified": "検証済み"
+        },
+        "by": "by {name}",
+        "details": "詳細"
+      },
+      "submit": {
+        "meta": {
+          "title": "パートナーインテグレーションを提出 — ATLVS パートナープログラム",
+          "description": "ATLVS の REST + GraphQL API に対してインテグレーションを構築すれば、パートナーディレクトリに掲載します。検証済みパートナーレビューは技術チェックリストを通過、認定はライブテナントでのエンドツーエンド QA を通過します。"
+        },
+        "title": "作る。出荷する。私たちが掲載する。",
+        "crumbsLabel": "パートナーインテグレーションを提出",
+        "h1": "パートナーインテグレーションを提出",
+        "lead": "送信すると、提案は ATLVS パートナー AM のキューに入ります。通常5営業日以内に返信します。検証済みパートナーレビューは技術チェックリストを通過、認定はさらにライブテナントでのエンドツーエンド QA を通過します。",
+        "submitLabel": "提案を送信",
+        "fields": {
+          "name": "インテグレーション名",
+          "slug": "スラッグ",
+          "partnerOrg": "パートナー組織",
+          "category": "カテゴリー",
+          "contactEmail": "連絡先メール",
+          "contactName": "連絡先名",
+          "shortDescription": "短い説明 — 一文で",
+          "longDescription": "詳しい説明",
+          "capabilities": "機能 — 1行に1つ",
+          "homepageUrl": "ホームページ URL",
+          "docsUrl": "インテグレーションドキュメント URL"
+        },
+        "placeholders": {
+          "shortDescription": "フィールドレポートの収集と ATLVS デイリーログへの自動同期。",
+          "longDescription": "何をするか、誰のためか、ATLVS とどう統合するか。"
+        }
+      },
+      "detail": {
+        "fallbackTitle": "インテグレーション",
+        "meta": {
+          "title": "{name} インテグレーション — {short}"
+        },
+        "eyebrow": "インテグレーション · {category}",
+        "eyebrowBase": "インテグレーション",
+        "whatItDoes": "何をするか。",
+        "technicalAnchor": "技術アンカー",
+        "modulesDepend": "これに依存するモジュール。",
+        "faqTitle": "{name} · FAQ",
+        "other": "その他のインテグレーション。",
+        "cta": {
+          "title": "ATLVS はオープン。",
+          "subtitle": "小規模チームは無料。すべてのインテグレーション込み。"
+        }
+      },
+      "partnerDetail": {
+        "fallbackTitle": "パートナーインテグレーション",
+        "meta": {
+          "title": "{name} — ATLVS パートナーインテグレーション"
+        },
+        "ogCertified": "認定パートナー",
+        "ogVerified": "検証済みパートナー",
+        "eyebrow": "パートナーインテグレーション",
+        "capabilities": "機能",
+        "partnerSite": "パートナーサイト",
+        "docs": "インテグレーションドキュメント",
+        "backToDirectory": "ディレクトリへ戻る",
+        "cta": {
+          "title": "作ってみたい?",
+          "subtitle": "オープンな API サーフェス。レベニューシェアなし、ゲートキーピングなし。/integrations/submit から応募してください。"
+        }
+      }
+    },
+    "features": {
+      "crumbsLabel": "機能",
+      "detail": {
+        "fallbackTitle": "機能",
+        "fallbackDescription": "ATLVS Technologies — 統合プロダクションマネジメントプラットフォーム。",
+        "beforeAfter": {
+          "heading": "ビフォーとアフター。",
+          "sub": "このモジュールがスタックに入ると何が変わるか。",
+          "without": "なし",
+          "with": "ATLVS あり"
+        },
+        "whatItDoes": "このモジュールがすること。",
+        "builtFor": "対象",
+        "whoRuns": "日々これを回すのは誰か。",
+        "restOfAtlvs": "ATLVS の残りすべて。",
+        "restOfAtlvsSub": "ひとつのデータベース。すべてのモジュールが同じレコードを読みます。",
+        "faqTitle": "{name} · FAQ",
+        "cta": {
+          "runTitle": "次のショーで {name} を回そう。",
+          "runSubtitle": "小規模チームは永久無料。その先は組織単位の料金。",
+          "openTitle": "ATLVS はオープン。",
+          "openSubtitle": "小規模チームは永久無料。その先は組織単位の料金。"
+        }
+      },
+      "industry": {
+        "fallbackTitle": "機能 × 業界",
+        "meta": {
+          "title": "{industry} のための {module} — {sub}",
+          "description": "{blurb} {tagline} を回す {industry} チームのために。"
+        },
+        "ogTitle": "{industry} のための {module}",
+        "useCase": "{title} — {body} {industry} の現場では、これは {tagline} として現れます。",
+        "howItShowsUp": "現場での現れ方",
+        "teamsRunOn": "{industry} チームが {module} で回すもの。",
+        "industryOutcomes": "業界での成果",
+        "whatChanges": "{industry} オペレーターにとって何が変わるか。",
+        "featureSet": "{module} の機能セット。",
+        "featureSetSub": "{module} モジュールに搭載されているのと同じプリミティブ — {industry} のワークフローに適用。",
+        "cta": {
+          "runTitle": "{industry} のプロダクションで {module} を回そう。",
+          "runSubtitle": "小規模チームは無料で登録。その先は組織単位の料金。"
+        },
+        "faqTitle": "{industry} のための {module} · FAQ",
+        "otherModules": "{industry} のためのその他のモジュール。",
+        "oneDatabase": "ひとつのデータベース。すべてのモジュールが同じレコードを読みます。",
+        "otherIndustries": "他業界のための {module}。"
+      }
+    },
+    "solutions": {
+      "crumbsLabel": "ソリューション",
+      "detail": {
+        "fallbackTitle": "ソリューション",
+        "fallbackDescription": "業界ソリューション",
+        "meta": {
+          "title": "{name} — ATLVS Technologies で {tagline}"
+        },
+        "cta": {
+          "bookDemo": "デモを予約"
+        },
+        "outcomes": "成果",
+        "modulesUsed": "使用モジュール",
+        "faqTitle": "{name} · FAQ",
+        "related": "関連業界"
+      }
+    },
+    "teams": {
+      "crumbsLabel": "対象チーム",
+      "detail": {
+        "fallbackTitle": "チーム",
+        "meta": {
+          "title": "{role} — {hero}"
+        },
+        "workflows": "{role} が日々回すもの。",
+        "familiar": "心当たりは?",
+        "painHeading": "あなたが回避し続けている痛み。",
+        "modulesYouLive": "あなたが住むモジュール。",
+        "industriesYouWork": "あなたが働く業界。",
+        "faqTitle": "{role} · FAQ",
+        "cta": {
+          "runTitle": "{role} のワークフローを ATLVS で。",
+          "runSubtitle": "小規模チームは無料。その先は組織単位の料金。"
+        },
+        "otherRoles": "その他のロール。"
+      }
+    },
+    "glossary": {
+      "crumbsLabel": "用語集",
+      "detail": {
+        "fallbackTitle": "用語集",
+        "meta": {
+          "title": "{term} — 定義"
+        },
+        "eyebrow": "用語集 · {category}",
+        "also": "別称: {list}",
+        "howAtlvsHandles": "ATLVS での扱い方",
+        "relatedTerms": "関連用語",
+        "cta": {
+          "title": "ATLVS はオープン。",
+          "subtitle": "小規模チームは永久無料。その先は組織単位の料金。"
+        }
+      }
+    },
+    "brandKit": {
+      "foundations": {
+        "meta": {
+          "title": "ファンデーション · ATLVS Technologies — ブランド & UI キット",
+          "description": "ATLVS Technologies のブランドファンデーション: Waypoint マーク、カラー、タイポグラフィ — Industrial Wide / Archivo expanded、スペーシング、角丸、エレベーション、モーション、アイコノグラフィ。"
+        },
+        "nav": {
+          "aria": "ファンデーションのセクション",
+          "brand": "ブランド",
+          "waypoint": "Waypoint",
+          "appIcons": "アプリアイコン",
+          "clearspace": "クリアスペースと使用法",
+          "foundations": "ファンデーション",
+          "color": "カラー",
+          "typography": "タイポグラフィ",
+          "spacing": "スペーシング",
+          "radii": "角丸",
+          "elevation": "エレベーション",
+          "motion": "モーション",
+          "iconography": "アイコノグラフィ"
+        },
+        "logo": {
+          "eyebrow": "ブランド · ロゴ",
+          "heading": "Waypoint",
+          "lead": {
+            "before": "ATLVS のマークは",
+            "waypoint": "ウェイポイント",
+            "after": "— 中心に空洞を持つ八芒の航海星、ナビゲーションシステムをひとつの幾何学グリフとして表現したものです。ニュートラルな SaaS のレジスターで、プロダクトごとにリカラーされます。コズミックな GHXSTSHIP のゴーストシップ・スカルとは別物で、あちらは親会社専用のマークです。"
+          },
+          "note": "タイルがプロダクトアクセントを担い、星は白のまま — 明るい地ではインク。ワードマークは常にスペース入り大文字かつ折り返しなし — 小文字にしない、URL と ID 以外でスペースを詰めない。",
+          "spec": {
+            "colWordmark": "ワードマーク仕様",
+            "colSetting": "組み方",
+            "faceLabel": "書体",
+            "faceValue": "— ジオメトリック、ロゴのロックアップ専用。UI と見出しは Space Grotesk / Archivo Expanded のまま。",
+            "aLabel": "A について",
+            "aBefore": "むき出しの頂点 —",
+            "aBold": "横棒なし",
+            "aAfter": "、V を反転した形。A と V は鏡像として読めます。",
+            "settingLabel": "組み方",
+            "settingBefore": "スペース入り大文字、折り返しなし。フルロックアップでは、",
+            "settingAfter": "が ATLVS と同じ幅になるよう字間調整されます。",
+            "subtitleLabel": "サブタイトル",
+            "subtitleBefore": "サブタイトルを持つのは ATLVS のみ:",
+            "subtitleAfter": "。COMPVSS と GVTEWAY は単独で立ちます。"
+          },
+          "productWordmarks": "プロダクトワードマーク"
+        },
+        "appIcons": {
+          "heading": "ひとつのマーク、3つのアクセント",
+          "lead": "各プロダクトは、それぞれのアクセントタイルに載った同じウェイポイント — 一目でファミリー、一目で区別できます。",
+          "roleAtlvs": "プロデューサー / 内部",
+          "roleCompvss": "クルー / ベンダー / タレント",
+          "roleGvteway": "ゲスト / クライアント",
+          "inkTitle": "インク",
+          "roleInk": "ニュートラル / スイート",
+          "minSize": "最小サイズ — マークはどのスケールでも保ちます",
+          "bare16": "16 · ベア"
+        },
+        "clearspace": {
+          "heading": "クリアスペースと使用法",
+          "lead": "全辺にマーク高さの半分のマージンを確保してください。",
+          "do": "やること",
+          "dont": "やらないこと",
+          "doItems": {
+            "1": "タイルをプロダクトアクセントにリカラーする。星は白のまま — 明るい地ではインク。",
+            "2": "クリアスペース = マーク高さの½を維持する。",
+            "3": "16px 以下ではベアマーク、32px 以上ではタイル付きアイコンを使う。",
+            "4before": "スペース入りの",
+            "4after": "ワードマークと組み合わせる、折り返しなしで。"
+          },
+          "dontItems": {
+            "1": "星そのものをリカラーやグラデーションにする — 色を持つのはタイルだけ。",
+            "2": "回転、引き伸ばし、コズミックなハーフトーンやスカルの追加。",
+            "3": "ワードマークをスペースなしや小文字で組む。",
+            "4": "ソリッドタイルなしで、賑やかな写真の上にベアマークを置く。"
+          },
+          "endorsement": {
+            "label": "親会社エンドースメント。",
+            "body": "GHXSTSHIP のスカルはエンドースメントロックアップにのみ登場します — “an ATLVS Technologies, a GHXSTSHIP Industries company.” プロダクトのアプリアイコンには決して使いません。"
+          }
+        },
+        "color": {
+          "eyebrow": "ファンデーション · カラー",
+          "heading": "カラー",
+          "lead": {
+            "before": "ニュートラルなサーフェスが仕事をし、プロダクトごとのひとつのアクセントがアイデンティティを担います。すべての値は",
+            "after": "ネームスペースから解決され、AA コントラストのためにモードごとに再調整されます。"
+          },
+          "surfacesText": "サーフェスとテキスト",
+          "productIdentity": "プロダクトアイデンティティ — 各アプリが持つアクセント",
+          "accentWeakTint": "アクセント弱ティント",
+          "semantic": "セマンティック — プロダクト横断で共有",
+          "swatch": {
+            "canvas": "キャンバス",
+            "surface": "サーフェス",
+            "surface2": "サーフェス 2",
+            "border": "ボーダー",
+            "text1": "テキスト 1",
+            "text2": "テキスト 2",
+            "text3": "テキスト 3",
+            "accentLive": "アクセント — ライブ",
+            "success": "成功",
+            "warning": "警告",
+            "danger": "危険",
+            "info": "情報"
+          }
+        },
+        "type": {
+          "eyebrow": "ファンデーション · タイプ",
+          "heading": "タイポグラフィ",
+          "lead": {
+            "industrialWide": "Industrial Wide。",
+            "s1": "見出しとメトリクスは",
+            "archivoExpanded": "Archivo の expanded 幅軸",
+            "s2": "で組みます — プロダクトに存在感を与える、自信に満ちた構造的グロテスクです。本文と UI は",
+            "s3": "のままにし、テーブルとフォームをクリーンに読ませます。",
+            "s4": "はアイブロウと座標の語彙です — ID、コード、ラベル。",
+            "s5": "は長文本文の代替書体です。見出しとラベルはタイトルケース、本文はセンテンスケース。"
+          },
+          "face": {
+            "archivo": "見出し · 統計 · 700–900",
+            "grotesk": "本文 · UI · 400–700",
+            "mono": "アイブロウ · ID · コード",
+            "inter": "長文本文の代替"
+          },
+          "specimen": {
+            "body": "テーブル、フォーム、インターフェースコピーのデフォルト読み取りサイズ。",
+            "small": "二次メタデータとヘルパーテキスト。"
+          },
+          "headerTreatments": "ヘッダートリートメント",
+          "headerTreatmentsNote": "ワイドヘッドラインを展開する3つの公認の方法。コンテキストに合ったものを使い、1ビューに2つ以上混ぜないでください。",
+          "a2": {
+            "title": "A2 · エブリデイ",
+            "note": "アクセントバー + ライブモノキッカー。アプリクロームとページヘッダーのデフォルト。"
+          },
+          "a3": {
+            "title": "A3 · ヒーロー",
+            "sampleBefore": "Run the",
+            "samplePop": "show",
+            "note": "一語だけがプロダクトアクセントを取り、ヘッドラインが自らブランドを示します。カバー、マーケティング、スプラッシュ向け。"
+          },
+          "a4": {
+            "title": "A4 · メトリクス",
+            "statLabel": "オンタイム率",
+            "statDelta": "▲ 2% vs Q3",
+            "note": "900 / expanded のタビュラー数字。ダッシュボードとレポート向け。"
+          }
+        },
+        "spacing": {
+          "eyebrow": "ファンデーション · スペース",
+          "heading": "スペーシング",
+          "lead": {
+            "before": "4px ベースのグリッド。密度はコントロールと行のリズムを切り替えます — 同じトークンが次の指定下で詰まります:"
+          }
+        },
+        "radii": {
+          "eyebrow": "ファンデーション · 角丸",
+          "heading": "角丸",
+          "lead": "柔らかく、生産性ツールに馴染む — ポップアート的な鋭さは決して使いません。ピル形状はチップとトグルのみ。"
+        },
+        "elevation": {
+          "eyebrow": "ファンデーション · エレベーション",
+          "heading": "エレベーション",
+          "lead": "クールで引き締まった3段階のスケール: 静止 → ホバー → ポップオーバー & モーダル。シャドウはライトでは控えめに、ダークではボーダーに頼ります。",
+          "rest": "elev-1 · 静止",
+          "hover": "elev-2 · ホバー",
+          "overlay": "elev-3 · オーバーレイ"
+        },
+        "motion": {
+          "eyebrow": "ファンデーション · モーション",
+          "heading": "モーション",
+          "lead": {
+            "s1": "素早く、気取らず。イージングカーブはひとつ、デュレーションは短く、そして鉄則: テーマ切替をまたいでトークン由来の",
+            "s2": "をトランジションさせないこと — 即座にリカラーし、代わりにアニメーションさせるのは",
+            "or": "または",
+            "instead": "です。"
+          },
+          "col": {
+            "token": "トークン",
+            "value": "値",
+            "use": "用途"
+          },
+          "row": {
+            "ease": "ホバー、プレス、マイクロインタラクション",
+            "hoverLift": "ホバーリフト",
+            "hoverUse": "カード、統計タイル",
+            "skeleton": "スケルトンシマー",
+            "skeletonValue": "1.4s ease、無限",
+            "skeletonUse": "ローディングプレースホルダー — reduced-motion を尊重",
+            "spinner": "スピナー",
+            "spinnerValue": "0.7s linear",
+            "spinnerUse": "実行中のアクション"
+          }
+        },
+        "icons": {
+          "eyebrow": "ファンデーション · アイコン",
+          "heading": "アイコノグラフィ",
+          "lead": {
+            "before": "Phosphor Icons —",
+            "bold": "Bold",
+            "mid": "ウェイトを UI に、",
+            "fill": "Fill",
+            "after": "をステータスシールと強調に。テキストとは 16–20px で揃え、単独アクションは 24px。単色で、継承するのは"
+          }
+        },
+        "footer": {
+          "tagline": "ATLVS Technologies · ファンデーション",
+          "overview": "概要",
+          "logoKit": "ロゴキット"
+        }
+      }
+    },
+    "pricingCalculator": {
+      "eyebrow": "実際にかかるコスト",
+      "heading": "計算してみよう。",
+      "intro": "年間のショー数、ピーク時のクルー数、断片化したスタックへの月額支出を入力してください。両側の年間支出とショーあたりコストを表示します。計算は保守的です — インテグレーション税も、シート超過分も数えていません。",
+      "showsPerYear": "年間ショー数",
+      "showOne": "ショー",
+      "showMany": "ショー",
+      "crewAtPeak": "ピーク時のクルー",
+      "personOne": "名",
+      "personMany": "名",
+      "stackMonthly": "現在のスタック — 月額",
+      "perMo": "/ 月",
+      "stackNote": "デフォルトの月額 $1,400 = Asana + Eventbrite + DocuSign + QuickBooks + Dropbox + Slack + PO ツール。",
+      "stackAnnual": "現在のスタック — 年額",
+      "atlvsAnnual": "ATLVS Production — 年額",
+      "annualSavings": "年間の節約額",
+      "currentPerShow": "現在のショーあたり",
+      "atlvsPerShow": "ATLVS のショーあたり",
+      "ratio": "スタック ÷ ATLVS",
+      "signUpFree": "無料で登録"
+    },
+    "perDiemCalculator": {
+      "presets": {
+        "standardLabel": "標準 CONUS",
+        "standardHint": "米国のほとんどの都市",
+        "tier1Label": "ティア1メトロ",
+        "tier1Hint": "NYC、SF、LA、シカゴ",
+        "tier2Label": "ティア2メトロ",
+        "tier2Hint": "主要な地方都市",
+        "intlLabel": "国際 — 平均",
+        "intlHint": "DSSR ベースライン"
+      },
+      "leg": "レグ {n}",
+      "removeLeg": "レグを削除",
+      "cityVenue": "都市 / 会場",
+      "cityPlaceholder": "例: ラスベガス",
+      "days": "日数",
+      "headcount": "人数",
+      "dailyRate": "日額レート — USD",
+      "legTotal": "レグ合計",
+      "addLeg": "レグを追加",
+      "total": "合計",
+      "summaryOne": "{legs} レグで {days} クルー日",
+      "summaryMany": "{legs} レグで {days} クルー日"
+    },
+    "logoKit": {
+      "eyebrow": "ATLVS Technologies · ブランド",
+      "title": "ロゴキット",
+      "intro": "ATLVS のマークはウェイポイント — 中心に空洞を持つ八芒の航海星で、ナビゲーションシステムをひとつの幾何学グリフとして表現したものです。ニュートラルな SaaS のレジスターで、プロダクトごとにリカラーされます。コズミックな GHXSTSHIP のゴーストシップ・スカル — 親会社のマーク — とは別物です。",
+      "primaryLockup": "プライマリーロックアップ",
+      "appIcons": "プロダクトアプリアイコン — ひとつのマーク、3つのアクセント",
+      "favicon": "ファビコン / 最小サイズ — マークはどのスケールでも保ちます",
+      "clearspace": "クリアスペース — 全辺にマーク高さの½のマージンを確保",
+      "endorsement": "エンドースメント — ATLVS + GHXSTSHIP 親会社",
+      "parentCompany": "Industries company",
+      "doDont": "やること · やらないこと",
+      "do": "やること",
+      "dont": "やらないこと",
+      "do1": "タイルをプロダクトアクセントにリカラーする。マークは白のまま — 明るい地ではインク。",
+      "do2": "クリアスペース = マーク高さの½を維持する。",
+      "do3": "16px 以下ではベアマーク、32px 以上ではタイル付きアイコンを使う。",
+      "do4Prefix": "スペース入りの",
+      "do4Suffix": "ワードマークと組み合わせる、折り返しなしで。",
+      "dont1": "星そのものをリカラーやグラデーションにする — 色を持つのはタイルだけ。",
+      "dont2": "回転、引き伸ばし、コズミックなハーフトーンやスカルの追加。",
+      "dont3": "ワードマークをスペースなしや小文字で組む。",
+      "dont4": "ソリッドタイルなしで、賑やかな写真の上にマークを置く。",
+      "back": "← ブランドキットへ戻る",
+      "markAlt": "ATLVS マーク",
+      "iconAlt": "{label} アイコン",
+      "meta": {
+        "title": "ATLVS ロゴキット · The Waypoint",
+        "description": "ATLVS のマークは Waypoint — 中心に空洞を持つ八芒の航海星。プライマリーロックアップ、プロダクト別アプリアイコン、クリアスペース、エンドースメント、やること/やらないこと。"
+      }
     }
   },
   "auth": {
@@ -3372,7 +4034,9 @@
       "submitting": "検証中",
       "submit": "検証する",
       "useAuthenticator": "認証アプリのコードを使用",
-      "useRecovery": "リカバリーコードを使用"
+      "useRecovery": "リカバリーコードを使用",
+      "pageTitle": "二要素認証",
+      "pageSubtitle": "続行するには、認証アプリの6桁コードを入力してください。"
     },
     "notFound": {
       "title": "認証パスが見つかりません。"
@@ -3483,6 +4147,25 @@
     "mobile": {
       "brand": "COMPVSS",
       "aboutSuffix": "· v{version}"
+    },
+    "nav": {
+      "openNavigation": "ナビゲーションを開く",
+      "closeNavigation": "ナビゲーションを閉じる"
+    },
+    "sidebar": {
+      "primary": "プライマリー",
+      "collapseHint": "サイドバーを折りたたむ · ⌘B",
+      "collapse": "サイドバーを折りたたむ",
+      "searchNavPlaceholder": "ナビを検索…",
+      "searchNavAria": "ナビゲーションを検索",
+      "openSearch": "サイドバー検索を開く",
+      "search": "検索",
+      "pinned": "ピン留め",
+      "expandHint": "サイドバーを展開 · ⌘B",
+      "expand": "サイドバーを展開",
+      "resize": "サイドバーをリサイズ",
+      "shortcutToggle": "サイドバーの折りたたみ / 展開",
+      "shortcutSearch": "サイドバー検索にフォーカス"
     }
   },
   "a11y": {
@@ -4608,6 +5291,16 @@
       "noTag": "タグなし",
       "returnsDue": "返却期限",
       "due": "期限 {date}"
+    },
+    "offline": {
+      "queuedToast": "キューに追加 — オンライン時に同期します",
+      "queuedDetail": "オフライン — 同期待ち",
+      "queuedBadge": "キュー済み",
+      "pendingBadge": "{count} 件保留中 — オンライン時に同期"
+    },
+    "checkInSummary": {
+      "eyebrow": "フィールド",
+      "title": "チェックインサマリー"
     }
   },
   "avatarMenu": {
@@ -6378,6 +7071,41 @@
           "spent": "消化済",
           "budget": "予算",
           "utilization": "消化率"
+        },
+        "summary": {
+          "eyebrow": "ファイナンス",
+          "title": "予算サマリー",
+          "subtitle": "ライブの XPMS ロールアップ。フェーズカーブはスコープのみ — フィーとコンティンジェンシーは別途集計。",
+          "byDepartment": "部門別 — XPMS クラス",
+          "byPhase": "フェーズ別 — 8ゲートライフサイクル · スコープのみ",
+          "byLineType": "ラインタイプ別",
+          "byDiscipline": "ディシプリン別 — スコープのみ",
+          "byXyz": "XYZ 別 — コスト挙動 · オールイン",
+          "total": "合計",
+          "grandTotal": "総合計",
+          "totalContract": "契約総額",
+          "col": {
+            "segment": "セグメント",
+            "estimate": "見積",
+            "budget": "予算",
+            "forecast": "予測",
+            "actual": "実績",
+            "variance": "差異",
+            "pctOfTotal": "全体比 %"
+          },
+          "draw": {
+            "title": "プロジェクト請求 / ドロースケジュール · 契約総額比 %",
+            "colDraw": "ドロー",
+            "colTrigger": "トリガー",
+            "colPct": "%",
+            "colAmount": "金額",
+            "mobilizationLabel": "モビライゼーションデポジット",
+            "mobilizationTrigger": "フェーズ 1 · ディスカバリー / 契約",
+            "progressLabel": "プログレスドロー",
+            "progressTrigger": "フェーズ 5 · ビルド開始",
+            "finalLabel": "最終残額",
+            "finalTrigger": "フェーズ 8 · クローズ / 最終検収"
+          }
         }
       },
       "eyebrow": "ファイナンス",
@@ -10522,7 +11250,36 @@
         "byStatus": "ステータス別",
         "drillIn": "ドリルダウン"
       },
-      "eyebrow": "プロダクション"
+      "eyebrow": "プロダクション",
+      "hub": {
+        "eyebrow": "プロダクション",
+        "title": "プロダクション",
+        "subtitle": "インベントリ、ビルド、ショーシステム。",
+        "sections": {
+          "inventory": "インベントリ",
+          "build": "ビルド",
+          "show": "ショー"
+        },
+        "cards": {
+          "equipment": "機材",
+          "equipmentDesc": "保有資産 + メンテナンス",
+          "equipmentUtil": "機材稼働率",
+          "equipmentUtilDesc": "30/90日ロールアップ + 遊休収益",
+          "avInventory": "AV インベントリ",
+          "rentals": "レンタル",
+          "fabrication": "ファブリケーション",
+          "compounds": "コンパウンド",
+          "yard": "ヤード",
+          "punchList": "パンチリスト",
+          "realityCaptures": "リアリティキャプチャ",
+          "photoLog": "フォトログ",
+          "warranties": "保証",
+          "runOfShow": "ランオブショー",
+          "runOfShowDesc": "キューごとのタイムライン",
+          "liveDispatch": "ライブディスパッチ",
+          "productionLogistics": "プロダクションロジスティクス"
+        }
+      }
     },
     "programs": {
       "cases": {
@@ -14186,7 +14943,20 @@
         },
         "eyebrow": "ワークフォース",
         "title": "バッジ",
-        "configureSupabase": "Supabaseを設定してください。"
+        "configureSupabase": "Supabaseを設定してください。",
+        "detail": {
+          "eyebrow": "バッジ",
+          "awardedOne": "{count} 件授与",
+          "awardedMany": "{count} 件授与",
+          "deleteConfirm": "このバッジを完全削除しますか?授与履歴もすべて削除されます。",
+          "awardThis": "このバッジを授与",
+          "notePlaceholder": "この人が獲得した理由 · 任意",
+          "award": "授与",
+          "recentAwards": "最近の授与",
+          "noAwardsTitle": "授与はまだありません",
+          "noAwardsDescription": "上のフォームからこのバッジを授与できます。",
+          "unknown": "不明"
+        }
       },
       "contractors": {
         "edit": {
@@ -14755,6 +15525,18 @@
           "role": "役割",
           "email": "メール"
         }
+      },
+      "callSheets": {
+        "eyebrow": "ワークフォース",
+        "title": "コールシート",
+        "subtitleOne": "{count} 名がシフト中 · {date}",
+        "subtitleMany": "{count} 名がシフト中 · {date}",
+        "emptyTitle": "{date} に予定されたシフトはありません",
+        "emptyDescription": "ロスターとシフトを作成すると、個人別のコールシートが生成されます。",
+        "call": "コール",
+        "wrap": "ラップ",
+        "shiftOne": "{count} シフト",
+        "shiftMany": "{count} シフト"
       }
     },
     "xpms": {
@@ -14882,6 +15664,66 @@
           "costDelta": "コストΔ（セント）"
         }
       }
+    },
+    "sales": {
+      "hub": {
+        "eyebrow": "セールス",
+        "title": "セールス",
+        "subtitle": "パイプライン、パートナーシップ、マーケットプレイス、収益。",
+        "sections": {
+          "pipeline": "パイプラインとパートナー",
+          "hospitality": "ホスピタリティ",
+          "marketplace": "マーケットプレイス",
+          "revenue": "収益"
+        },
+        "cards": {
+          "leads": "リード",
+          "leadsDesc": "パイプラインかんばん + 保存ビュー",
+          "clients": "クライアント",
+          "sponsors": "スポンサー",
+          "marketing": "マーケティング",
+          "hospitality": "ホスピタリティ",
+          "hospitalityDesc": "タレント · スポンサー · アスリート · 業界 · メディア & プレス · VVIP",
+          "marketplace": "マーケットプレイス",
+          "marketplaceDesc": "求人、オープンコール、タレント、オファー、レビュー",
+          "bookings": "ブッキング",
+          "bookingsDesc": "ディール、ホールド、カレンダー、清算",
+          "tours": "ツアー",
+          "talentRoster": "タレントロスター",
+          "offers": "オファー",
+          "tickets": "チケット",
+          "analytics": "アナリティクス",
+          "analyticsDesc": "横断的な BI ロールアップ"
+        }
+      }
+    },
+    "draws": {
+      "projectBudget": "プロジェクト予算",
+      "totalScheduled": "スケジュール済み合計",
+      "drawnToDate": "これまでのドロー実績",
+      "draws": "ドロー",
+      "seedDefault": "50 / 30 / 20 デフォルトをシード",
+      "colDraw": "ドロー",
+      "colTrigger": "トリガー",
+      "colPct": "%",
+      "colAmount": "金額",
+      "colState": "状態",
+      "colActions": "アクション",
+      "empty": "スケジュールされたドローはまだありません。50 / 30 / 20 デフォルトをシードするか、下からカスタムドローを追加してください。",
+      "drawn": "ドロー済み",
+      "pending": "保留中",
+      "markPending": "保留中にする",
+      "markDrawn": "ドロー済みにする",
+      "delete": "削除",
+      "addHeading": "ドローを追加",
+      "drawName": "ドロー名",
+      "triggerLabel": "トリガーラベル",
+      "triggerPlaceholder": "例: フェーズ 3 · アドバンス / 契約",
+      "triggerPhase": "トリガーフェーズ",
+      "percentage": "パーセンテージ",
+      "pctPlaceholder": "50 または 0.5",
+      "sortOrder": "並び順",
+      "addDraw": "ドローを追加"
     }
   },
   "formShell": {
@@ -17559,5 +18401,2041 @@
     "fallbackName": "ワークスペース",
     "manage": "ワークスペースを管理",
     "menuLabel": "ワークスペース"
+  },
+  "cookieConsent": {
+    "title": "Cookie とプライバシー",
+    "description": "サインイン状態の維持とアカウント保護のため、必須 Cookie を使用しています。許可をいただければ、プロダクト改善のためにアナリティクスとマーケティングの Cookie も使用します。",
+    "essential": {
+      "label": "必須",
+      "description": "認証、セキュリティ、レート制限。",
+      "alwaysOn": " · 常時オン"
+    },
+    "analytics": {
+      "label": "アナリティクス",
+      "description": "集計された利用統計。販売や個人への紐付けは一切しません。"
+    },
+    "marketing": {
+      "label": "マーケティング",
+      "description": "マーケティングサイトのコンバージョントラッキング。プロダクト内では使用しません。"
+    },
+    "customize": "カスタマイズ",
+    "hideDetails": "詳細を隠す",
+    "rejectAll": "すべて拒否",
+    "savePreferences": "設定を保存",
+    "acceptAll": "すべて許可",
+    "toggle": "{label} を切り替え"
+  },
+  "dataTable": {
+    "emptyLabel": "レコードはまだありません",
+    "toast": {
+      "linkCopied": "ビューリンクをコピーしました",
+      "copyFailed": "リンクをコピーできませんでした",
+      "viewReset": "ビューをリセットしました",
+      "importFailed": "インポートに失敗しました",
+      "imported": "{name} をインポートしました"
+    },
+    "search": "検索",
+    "filterRows": "行を絞り込み",
+    "clearSearch": "検索をクリア",
+    "shareViewLink": "ビューリンクを共有",
+    "exportCsv": "表示中の行を CSV にエクスポート",
+    "importFile": "ファイルから行をインポート — CSV / TSV / JSON / XLSX",
+    "importFileAria": "ファイルから行をインポート",
+    "refresh": "テーブルデータを更新",
+    "selectAllPage": "このページをすべて選択",
+    "sortHint": "クリックで並び替え · Shift+クリックで複数並び替え",
+    "total": "合計",
+    "prevPage": "前のページ",
+    "nextPage": "次のページ",
+    "bulkActions": "一括アクション",
+    "clearSelection": "選択を解除",
+    "density": {
+      "aria": "行の密度",
+      "comfortable": "ゆったり表示",
+      "compact": "コンパクト表示"
+    },
+    "group": {
+      "groupedBy": "{header} でグループ化",
+      "groupByColumn": "列で行をグループ化",
+      "groupByAria": "列でグループ化",
+      "noGrouping": "グループ化なし",
+      "groupLabel": "グループ"
+    },
+    "noRows": "表示する行がありません",
+    "filter": {
+      "activeHint": "フィルター · {count} 件有効",
+      "addHint": "フィルターを追加して行を絞り込む",
+      "activeAria": "フィルター({count} 件有効)",
+      "addAria": "フィルターを追加",
+      "activeLabel": "フィルター · {count}",
+      "label": "フィルター",
+      "clearAll": "すべてのフィルターをクリア",
+      "backToColumns": "フィルター列へ戻る",
+      "clearColumn": "この列をクリア",
+      "filterBy": "絞り込み条件",
+      "noValues": "値がありません"
+    },
+    "sort": {
+      "sortedBy": "{count} 列で並び替え中",
+      "sortedByPlural": "{count} 列で並び替え中",
+      "addAria": "並び替えを追加",
+      "hintSingular": "{count} 列で並び替え中 · 列ヘッダーを Shift+クリックで並び替えを追加",
+      "hintPlural": "{count} 列で並び替え中 · 列ヘッダーを Shift+クリックで並び替えを追加",
+      "idleHint": "行を並び替え · 列ヘッダーを Shift+クリックで複数並び替え",
+      "activeLabel": "並び替え · {count}",
+      "label": "並び替え",
+      "sortByLabel": "並び替え条件",
+      "noSort": "並び替えなし",
+      "addSortLabel": "並び替えを追加",
+      "clearAll": "すべての並び替えをクリア",
+      "toggleDir": "{key} の方向を切り替え({dir})",
+      "removeSort": "{key} の並び替えを解除"
+    },
+    "viewOptions": "ビューオプション",
+    "clearFilter": "フィルターをクリア",
+    "columns": {
+      "hint": "列の表示 / 非表示 / ピン留め / 並べ替え",
+      "settingsAria": "列の設定",
+      "resetOrder": "並び順をリセット",
+      "showAll": "すべての列を表示"
+    },
+    "rowSingular": "行",
+    "rowPlural": "行",
+    "exportButton": "エクスポート",
+    "importButton": "インポート",
+    "clearFilters": "フィルターをクリア",
+    "filterColumn": "{header} で絞り込み",
+    "empty": {
+      "query": "「{query}」に一致する行はありません",
+      "queryAndFilter": "有効なフィルター下で「{query}」に一致する行はありません",
+      "queryAndFilters": "有効なフィルター下で「{query}」に一致する行はありません",
+      "filter": "有効なフィルターに一致する行はありません",
+      "filters": "有効なフィルターに一致する行はありません"
+    },
+    "view": {
+      "hintActive": "ビュー · テーブルごとに自動保存。クリックでデフォルトにリセット",
+      "hintIdle": "保存ビュー · テーブルごとに自動保存",
+      "modified": "ビュー · 変更あり",
+      "label": "ビュー",
+      "savedView": "保存ビュー",
+      "defaultAutoSaved": "デフォルト · 自動保存",
+      "resetToDefaults": "ビューをデフォルトにリセット"
+    },
+    "chips": {
+      "remove": "{header} フィルター {value} を解除",
+      "clearAll": "すべてクリア"
+    }
+  },
+  "commandPalette": {
+    "shortcut": "コマンドパレットを開く",
+    "title": "コマンドパレット",
+    "description": "ページを検索し、コマンドを実行します。",
+    "menuLabel": "コマンドメニュー",
+    "placeholder": "検索またはコマンドを実行…",
+    "searchLabel": "検索",
+    "noResults": "「{query}」の結果はありません",
+    "footerHint": "↑↓ 移動 · ↵ 選択 · ⌘↵ 新しいタブで開く · esc 閉じる",
+    "actionCount": "{count} アクション",
+    "groups": {
+      "recent": "最近",
+      "navigate": "移動",
+      "create": "作成",
+      "switch": "切り替え",
+      "settings": "設定",
+      "results": "結果"
+    },
+    "hint": {
+      "settings": "設定 · {group}",
+      "tab": "タブ",
+      "tool": "ツール"
+    },
+    "actions": {
+      "newProject": "新規プロジェクト",
+      "newClient": "新規クライアント",
+      "newInvoice": "新規請求書",
+      "newPo": "新規 PO",
+      "newProposal": "新規提案書",
+      "addEquipment": "機材を追加",
+      "reportIncident": "インシデントを報告",
+      "logMedical": "医療イベントを記録",
+      "openRequest": "リクエストを開く",
+      "editProfile": "プロフィールを編集",
+      "switchOrg": "組織を切り替え",
+      "preferences": "環境設定",
+      "lightMode": "ライトモードに切り替え",
+      "darkMode": "ダークモードに切り替え",
+      "signOut": "ログアウト"
+    }
+  },
+  "savedViews": {
+    "toast": {
+      "nameRequired": "名前は必須です",
+      "updated": "ビューを更新しました",
+      "saved": "ビューを保存しました",
+      "saveFailed": "ビューを保存できませんでした"
+    },
+    "editTitle": "保存ビューを編集",
+    "newTitle": "現在のビューを保存",
+    "editDescription": "この保存ビューの名前変更、スコープ変更、ロック変更ができます。既存の設定スナップショットは保持されます。",
+    "newDescription": "現在の並び替え、フィルター、列、密度を、後で戻れる名前付きビューとして保存します。",
+    "nameLabel": "名前",
+    "namePlaceholder": "例: オープン RFI · クリティカル",
+    "descriptionLabel": "説明",
+    "descriptionHint": "任意 — このビューが役立つ場面を説明してください。",
+    "descriptionPlaceholder": "チームメイト向けのコンテキストを追加",
+    "visibility": "公開範囲",
+    "scope": {
+      "private": "プライベート",
+      "privateHint": "自分のみ。あなたのビュー一覧に保存されます。",
+      "org": "組織と共有",
+      "orgHint": "「共有」の下で組織の全メンバーに表示されます。",
+      "public": "公開",
+      "publicHint": "共有リンク経由でアクセス可能。"
+    },
+    "viewType": "ビュータイプ",
+    "viewTypeNote": "現時点ではグリッドのみレンダリングされます。他のタイプは今後の代替レンダラーのために行を予約しています。",
+    "cancel": "キャンセル",
+    "saveChanges": "変更を保存",
+    "saveView": "ビューを保存",
+    "types": {
+      "grid": "グリッド",
+      "kanban": "かんばん",
+      "calendar": "カレンダー",
+      "timeline": "タイムライン",
+      "chart": "チャート",
+      "map": "マップ",
+      "gantt": "ガント",
+      "card": "カード",
+      "form": "フォーム"
+    },
+    "selector": {
+      "modifiedHint": "保存ビュー · 現在の状態に未保存の変更があります",
+      "switchHint": "保存ビューを切り替え",
+      "aria": "保存ビューセレクター",
+      "unsavedChanges": "未保存の変更",
+      "defaultView": "デフォルトビュー",
+      "autoSaved": "自動保存",
+      "saveCurrent": "現在のビューを保存…",
+      "deleteConfirm": "「{name}」を削除しますか?この操作は元に戻せません。",
+      "toast": {
+        "deleted": "ビューを削除しました",
+        "deleteFailed": "ビューを削除できませんでした",
+        "defaultUpdated": "デフォルトを更新しました",
+        "defaultFailed": "デフォルトを設定できませんでした"
+      },
+      "locked": "(ロック中)",
+      "lockedAria": "ロックされたビュー",
+      "setDefaultHint": "このスコープのデフォルトに設定",
+      "setDefaultAria": "「{name}」をデフォルトに設定",
+      "editHint": "名前 / スコープを編集",
+      "editAria": "「{name}」を編集",
+      "deleteHint": "ビューを削除",
+      "deleteAria": "「{name}」を削除",
+      "scopeHeadings": {
+        "private": "マイビュー",
+        "org": "共有",
+        "public": "公開"
+      }
+    }
+  },
+  "shareDialog": {
+    "shareButton": "共有",
+    "expiry": {
+      "1h": "1時間",
+      "24h": "24時間",
+      "7d": "7日",
+      "30d": "30日",
+      "never": "無期限"
+    },
+    "errors": {
+      "loadFailed": "リンクの読み込みに失敗しました",
+      "createFailed": "リンクの作成に失敗しました",
+      "revokeFailed": "取り消しに失敗しました"
+    },
+    "title": "{label} を共有",
+    "titleFallback": "このリソース",
+    "description": "URL を知っていれば誰でも開ける公開リンクを作成します。パスコードや有効期限でアクセスを絞れます。",
+    "createHeading": "リンクを作成",
+    "labelField": "ラベル · 任意",
+    "labelPlaceholder": "例: プロデューサープレビュー",
+    "expiresIn": "有効期限",
+    "passcodeField": "パスコード · 任意",
+    "passcodePlaceholder": "なしの場合は空欄",
+    "maxUsesField": "最大使用回数 · 任意",
+    "maxUsesPlaceholder": "無制限",
+    "access": "アクセス",
+    "roleViewer": "閲覧者 · 読み取り専用",
+    "roleCommenter": "コメンター · 注釈を残せます",
+    "copy": "コピー",
+    "createLink": "リンクを作成",
+    "activeHeading": "有効なリンク",
+    "loading": "読み込み中…",
+    "noLinks": "有効なリンクはまだありません。",
+    "unlabeled": "(ラベルなし)",
+    "passcodeBadge": "パスコード",
+    "useSingular": "{count} 回使用",
+    "usePlural": "{count} 回使用",
+    "maxSuffix": " / {max}",
+    "expiresSuffix": " · 期限 {date}",
+    "noExpiry": " · 無期限",
+    "revokeAria": "リンク {name} を取り消す",
+    "revoke": "取り消す",
+    "done": "完了"
+  },
+  "components": {
+    "navModeToggle": {
+      "legend": "コンソールサイドバー",
+      "domain": "ドメイン",
+      "domainHint": "平易な言葉のグループ · プロジェクト、セールス、ファイナンス…。デフォルト。",
+      "xpms": "XPMS スパイン",
+      "xpmsHint": "数値クラス分類 · 0 EXECUTIVE … 9 TECHNOLOGY。"
+    },
+    "stickyCta": {
+      "region": "クイックアクセス",
+      "open": "ATLVS はオープン。",
+      "tagline": "小規模チームは無料。カード不要。",
+      "dismiss": "閉じる"
+    },
+    "signatureField": {
+      "label": "署名",
+      "placeholder": "フルネームを入力",
+      "type": "入力",
+      "draw": "手書き",
+      "clear": "クリア",
+      "captured": "取得済み",
+      "signAbove": "上に署名してください"
+    },
+    "addressField": {
+      "street": "番地と通り",
+      "street2": "部屋番号、スイート、階",
+      "streetLabel": "番地",
+      "street2Label": "部屋 / スイート · 任意",
+      "city": "市区町村",
+      "region": "州 / 地域",
+      "postalCode": "郵便番号",
+      "country": "国"
+    },
+    "datePicker": {
+      "placeholder": "日付を選択",
+      "prevMonth": "前の月",
+      "nextMonth": "次の月"
+    },
+    "triggerEditor": {
+      "kind": {
+        "manual": "手動",
+        "schedule": "スケジュール",
+        "webhook": "Webhook",
+        "event": "レコードイベント"
+      },
+      "desc": {
+        "manual": "このページで「今すぐ実行」をクリックしたユーザーによりトリガーされます。",
+        "schedule": "繰り返しの cron / RRULE スケジュールで実行されます。バックエンドはフェーズ 4.3 で着地。",
+        "webhook": "下記 URL に HTTP POST が届いたときに実行されます。バックエンドはフェーズ 4.3 で着地。",
+        "event": "レコードイベントが一致したとき — 作成または更新 — に実行されます。バックエンドはフェーズ 4.5 で着地。"
+      },
+      "kindLabel": "種類",
+      "kindAria": "トリガー種類",
+      "manualNote": "追加の設定はありません。コントロール下の「今すぐ実行」ボタンで実行をトリガーしてください。",
+      "comingSoon": "近日公開",
+      "scheduleSoon": "スケジュールトリガーはフェーズ 4.3 で着地します。",
+      "rruleLabel": "RRULE / cron",
+      "rruleHint": "iCal RRULE 構文。今すぐ保存され、ランナーは P4.3 で有効化されます。",
+      "webhookSoon": "受信エンドポイントはフェーズ 4.3 で着地します。",
+      "inboundUrl": "受信 URL",
+      "secretLabel": "共有シークレット — HMAC",
+      "secretPlaceholder": "任意 — オートメーション単位のシークレットにフォールバック",
+      "secretHint": "設定すると、ランナーはディスパッチ前に x-lyt-signature を検証します。",
+      "eventSoon": "イベントサブスクリプションはフェーズ 4.5 で着地します。",
+      "targetTable": "対象テーブル",
+      "targetTableAria": "対象テーブル",
+      "selectPlaceholder": "選択…",
+      "eventType": "イベントタイプ",
+      "eventTypeAria": "イベントタイプ",
+      "recordCreated": "レコード作成",
+      "recordUpdated": "レコード更新",
+      "recordDeleted": "レコード削除"
+    },
+    "stepBuilder": {
+      "steps": "ステップ",
+      "noSteps": "ステップはまだありません。",
+      "noStepsHint": "アクションを追加して始めましょう。",
+      "savingTrigger": "トリガーを保存中…",
+      "savingSteps": "ステップを保存中…",
+      "triggerSaved": "トリガーを保存しました",
+      "stepsSaved": "ステップを保存しました",
+      "unknownError": "不明なエラー",
+      "triggerFailed": "トリガーの保存に失敗しました: {error}",
+      "stepsFailed": "ステップの保存に失敗しました: {error}"
+    },
+    "addStepMenu": {
+      "addStep": "ステップを追加",
+      "actions": "アクション",
+      "noActions": "登録されたアクションはありません。"
+    },
+    "runTimeline": {
+      "status": {
+        "pending": "保留中",
+        "running": "実行中",
+        "success": "成功",
+        "failed": "失敗",
+        "skipped": "スキップ"
+      },
+      "empty": "{label}: 空",
+      "noSteps": "記録されたステップはありません。",
+      "unknownAction": "不明",
+      "input": "入力",
+      "output": "出力"
+    },
+    "calendarView": {
+      "mode": {
+        "month": "月",
+        "week": "週",
+        "day": "日",
+        "agenda": "アジェンダ"
+      },
+      "rescheduledTo": "{date} に変更しました",
+      "rescheduleFailed": "日程変更に失敗しました",
+      "upcoming": "今後の予定",
+      "today": "今日",
+      "previous": "前へ",
+      "next": "次へ",
+      "jumpToDate": "日付へジャンプ",
+      "calendarMode": "カレンダーモード"
+    },
+    "timelineView": {
+      "zoom": {
+        "day": "日",
+        "week": "週",
+        "month": "月",
+        "quarter": "四半期"
+      },
+      "movedOne": "{title} を {count} 日移動しました",
+      "movedMany": "{title} を {count} 日移動しました",
+      "moveFailed": "{title} の移動に失敗しました",
+      "resizeFailed": "{title} のリサイズに失敗しました",
+      "resized": "{title} をリサイズしました",
+      "noLanes": "レーンがありません",
+      "noLanesDesc": "タイムラインを描画するには、少なくとも1つのレーンを指定してください。",
+      "timeline": "タイムライン",
+      "timelineZoom": "タイムラインズーム",
+      "lane": "レーン",
+      "noItems": "範囲内にアイテムがありません",
+      "noItemsDesc": "開始日と終了日を持つレコードを追加すると、タイムラインに表示されます。"
+    },
+    "mapView": {
+      "tone": {
+        "info": "情報",
+        "warn": "警告",
+        "error": "エラー",
+        "success": "成功",
+        "neutral": "ニュートラル",
+        "accent": "アクセント"
+      },
+      "clusterLocations": "{count} 拠点",
+      "noLocations": "マップ上に拠点がありません",
+      "noLocationsDesc": "レコードに住所か緯度経度を追加すると、ここに表示されます。",
+      "legend": "マップ凡例",
+      "viewDetails": "詳細を表示"
+    },
+    "trackerView": {
+      "noAtoms": "アトムはまだありません",
+      "noAtomsDesc": "作業を正規の XPMS アトムにピン留めすると、予算、スケジュール、サブミッタルの進捗が WBS ツリーにロールアップされます。",
+      "budget": "予算",
+      "committed": "コミット済み",
+      "variance": "差異",
+      "progress": "進捗",
+      "actual": "実績",
+      "tasks": "タスク",
+      "submittals": "サブミッタル",
+      "colWbsAtom": "WBS / アトム",
+      "actualDelta": "実績 {amount}",
+      "remainingDelta": "残り {amount}",
+      "overBaseline": "ベースライン超過",
+      "underBaseline": "ベースライン未満",
+      "tasksDoneDelta": "タスク {done}/{total} 完了",
+      "submittalsApprovedDelta": "サブミッタル {done}/{total} 承認済み",
+      "progressAria": "進捗 {pct}%",
+      "openCount": "{count} 件オープン"
+    },
+    "atomDrillIn": {
+      "taskStatus": {
+        "todo": "未着手",
+        "in_progress": "進行中",
+        "blocked": "ブロック中",
+        "review": "レビュー",
+        "done": "完了"
+      },
+      "deliverableState": {
+        "briefed": "ブリーフ済み",
+        "draft": "ドラフト",
+        "submitted": "提出済み",
+        "in_review": "レビュー中",
+        "revision_requested": "修正依頼",
+        "approved": "承認済み",
+        "delivered": "納品済み",
+        "rejected": "却下"
+      },
+      "tabTasks": "タスク",
+      "tabSubmittals": "サブミッタル",
+      "tabExpenses": "経費",
+      "tabPos": "PO",
+      "tabVariance": "差異",
+      "noTasks": "このアトムにピン留めされたタスクはありません。",
+      "noSubmittals": "このアトムにピン留めされたサブミッタルはありません。",
+      "noExpenses": "このアトムにピン留めされた経費はありません。",
+      "noPos": "このアトムにピン留めされた PO 明細はありません。",
+      "noVariance": "このアトムの差異エントリーはありません。"
+    },
+    "activityDrawer": {
+      "today": "今日",
+      "yesterday": "昨日",
+      "noActivity": "アクティビティはまだありません",
+      "noActivityDesc": "編集、遷移、コメントがここに表示されます。",
+      "activity": "アクティビティ",
+      "refresh": "アクティビティを更新",
+      "loadMore": "さらに読み込む"
+    },
+    "incidentForm": {
+      "uploadFailed": "アップロード失敗: {name}",
+      "summaryRequired": "概要は必須です",
+      "reported": "インシデントを報告しました",
+      "submitFailed": "送信に失敗しました",
+      "summaryLabel": "概要",
+      "summaryPlaceholder": "例: バックステージの濡れた床で転倒",
+      "severityLabel": "深刻度",
+      "severity": {
+        "nearMiss": "ヒヤリハット",
+        "minor": "軽微",
+        "major": "重大",
+        "critical": "クリティカル"
+      },
+      "occurredAtLabel": "発生日時",
+      "projectLabel": "プロジェクト",
+      "projectNone": "— なし —",
+      "locationLabel": "場所",
+      "locationPlaceholder": "例: ステージ右のモニターワールド",
+      "descriptionLabel": "詳細",
+      "descriptionPlaceholder": "何が起きたか、どう対応したか、目撃者…",
+      "photosLabel": "写真",
+      "chooseFiles": "ファイルを選択",
+      "camera": "カメラ",
+      "uploading": "アップロード中…",
+      "photoAlt": "アップロードされたインシデント写真",
+      "removePhoto": "写真を削除",
+      "emergencyNotice": "緊急時はまず地域の救急サービスに通報し、その後ここに記録してください。",
+      "submitting": "送信中…",
+      "submit": "レポートを送信"
+    },
+    "guideComments": {
+      "postFailed": "コメントを投稿できませんでした",
+      "postFailedShort": "投稿できませんでした",
+      "posted": "投稿しました",
+      "heading": "コメント",
+      "namePlaceholder": "お名前 · 任意",
+      "nameLabel": "お名前",
+      "bodyPlaceholder": "コメントや質問を追加…",
+      "bodyLabel": "コメント本文",
+      "post": "投稿",
+      "empty": "コメントはまだありません。",
+      "anonymous": "匿名"
+    },
+    "guideView": {
+      "accessTier": "アクセスティア {tier}",
+      "lastUpdated": "最終更新 {date}",
+      "allowed": "許可",
+      "notAllowed": "不可",
+      "setTimes": {
+        "artist": "アーティスト",
+        "stage": "ステージ",
+        "start": "開始",
+        "end": "終了"
+      },
+      "credentials": {
+        "area": "エリア"
+      },
+      "ppe": {
+        "item": "アイテム",
+        "required": "必須",
+        "note": "備考",
+        "requiredLabel": "必須",
+        "notRequiredLabel": "不要"
+      },
+      "radio": {
+        "channel": "チャンネル",
+        "purpose": "用途",
+        "code": "コード",
+        "meaning": "意味"
+      },
+      "evacuation": {
+        "from": "出発点",
+        "to": "到達点",
+        "via": "経由",
+        "direct": "直行",
+        "assemblyPoint": "集合地点"
+      }
+    },
+    "templatePicker": {
+      "trigger": "テンプレートから開始",
+      "title": "テンプレートを選択",
+      "description": "保存済みテンプレートで Deliverable を事前入力します。組織スコープのテンプレートはプラットフォーム共通のものと並んで表示されます。",
+      "filterPlaceholder": "テンプレートを絞り込み…",
+      "filterLabel": "テンプレートを絞り込み",
+      "loading": "テンプレートを読み込み中…",
+      "platformTemplate": "プラットフォームテンプレート",
+      "emptyNone": "テンプレートはまだありません。/console/settings/templates から作成してください。",
+      "emptyNoMatch": "「{query}」に一致するテンプレートはありません。"
+    },
+    "portalPrivacyPanel": {
+      "eyebrow": "ポータル",
+      "privacy": "プライバシー",
+      "configureSupabase": "Supabase を設定してください。",
+      "headerEyebrow": "ポータル · プライバシー",
+      "title": "あなたのデータ",
+      "subtitle": "データ主体アクセス要求の提出、同意の管理、保有データのダウンロードができます。",
+      "openRequests": "オープンなリクエスト",
+      "totalRequests": "リクエスト総数",
+      "activeConsents": "有効な同意",
+      "submitRequest": "リクエストを提出",
+      "submitRequestBody": "お住まいの管轄区域のプライバシー法 — GDPR、CCPA、LGPD など — に基づき、当社が処理する個人データへのアクセス、ポータビリティ、訂正、消去を要求できます。",
+      "downloadData": "自分のデータをダウンロード · JSON",
+      "emailDsar": "DSAR をメールで送る",
+      "yourRequests": "あなたのリクエスト",
+      "noRequests": "記録されたリクエストはありません。提出すると新しいものがここに表示されます。",
+      "filed": "提出 {date}",
+      "due": "期限 {date}",
+      "fulfilled": "対応完了 {date}",
+      "consentLedger": "同意台帳",
+      "noConsents": "同意の記録はまだありません。特定の目的に対して同意を付与または取り消すと、ここに表示されます。",
+      "granted": "付与 {date}",
+      "revoked": "取り消し {date}",
+      "statusGranted": "付与済み",
+      "statusRevoked": "取り消し済み",
+      "roleNoteBefore": "当社が処理するあなたのデータはロールによって異なります。",
+      "roleNoteAfter": "として、アクレディテーション、クレデンシャル、アドバンシングライダー、契約、支払い、スキャン、署名済み開示書類にレコードがある可能性があります。消去を要求すると進行中のエンゲージメントに影響する場合があります — 処理前に確認のご連絡をします。"
+    },
+    "proposalBlockRenderer": {
+      "schedule": {
+        "phase": "フェーズ",
+        "milestone": "マイルストーン",
+        "date": "日付"
+      },
+      "totalInvestment": "投資総額",
+      "engagementDeposit": "エンゲージメントデポジット",
+      "dueOnSignature": "契約署名時に支払い",
+      "balance": "残額",
+      "dueBeforeEvent": "イベント30日前に支払い",
+      "paymentMethod": "支払い方法",
+      "technicalPackage": "テクニカルプロダクションパッケージ",
+      "available": "利用可能"
+    },
+    "stagePlotCanvas": {
+      "palette": {
+        "mic": "マイク",
+        "monitor": "モニター",
+        "amp": "アンプ",
+        "drum_kit": "ドラムキット",
+        "guitar": "ギター",
+        "keys": "キーボード",
+        "speaker": "スピーカー",
+        "di_box": "DI",
+        "light_truss": "ライトトラス",
+        "riser": "ライザー"
+      },
+      "saved": "ステージプロットを保存しました",
+      "saveFailed": "保存に失敗しました",
+      "plotNameLabel": "プロット名",
+      "width": "幅",
+      "depth": "奥行き",
+      "feetAbbr": "ft",
+      "undoLabel": "直前の変更を元に戻す",
+      "undo": "元に戻す",
+      "deleteLabel": "選択中の要素を削除",
+      "delete": "削除",
+      "saving": "保存中…",
+      "save": "保存",
+      "paletteHeading": "パレット",
+      "paletteHelp": "ツールを選び、ステージをクリックして配置。ドラッグで移動。Delete で削除。⌘Z で元に戻す。",
+      "canvasLabel": "ステージプロットキャンバス",
+      "downstage": "ダウンステージ · 客席側",
+      "dimensions": "{width}′ × {depth}′ ステージ",
+      "elementCountOne": "{count} 要素",
+      "elementCountMany": "{count} 要素"
+    },
+    "publicFormRenderer": {
+      "redirecting": "リダイレクト中…",
+      "thankYouTitle": "ありがとうございます — 受け付けました。",
+      "thankYouBody": "回答が記録されました。このタブは閉じて構いません。",
+      "submitted": "送信済み",
+      "leaveBlank": "空欄のまま",
+      "submitting": "送信中",
+      "submit": "送信",
+      "selectPlaceholder": "選択…",
+      "fileHelp": "最大 10 MB。画像または PDF。"
+    }
+  },
+  "pdf": {
+    "invoice": {
+      "eyebrow": "請求書",
+      "statusPaid": "支払い済み",
+      "statusIssued": "発行済み",
+      "titleFallback": "請求書 {number}",
+      "classificationDue": "支払期限",
+      "billTo": "請求先",
+      "client": "クライアント",
+      "invoiceNumber": "請求書番号",
+      "issued": "発行日",
+      "due": "期日",
+      "currency": "通貨",
+      "lineItems": "明細",
+      "colDescription": "内容",
+      "colQty": "数量",
+      "colUnit": "単価",
+      "colAmount": "金額",
+      "subtotal": "小計",
+      "taxesFees": "税 / 手数料",
+      "notes": "備考"
+    },
+    "proposal": {
+      "eyebrow": "提案書",
+      "statusSigned": "署名済み",
+      "classificationExecuted": "締結済み",
+      "summary": "サマリー",
+      "proposalNumber": "提案書番号",
+      "status": "ステータス",
+      "total": "合計",
+      "deposit": "デポジット",
+      "sent": "送付日",
+      "expires": "有効期限",
+      "notes": "備考",
+      "signatures": "署名",
+      "signature": "署名",
+      "signedFromLine": "{date} に {ip} から署名",
+      "signaturePending": "保留中 — 共有リンクで提案書に署名すると締結されます。",
+      "sectionFallback": "セクション",
+      "colItem": "項目",
+      "colDescription": "内容",
+      "colAmount": "金額",
+      "colMilestone": "マイルストーン",
+      "colDate": "日付"
+    },
+    "reports": {
+      "expense": {
+        "title": "経費レポート",
+        "eyebrow": "経費レポート",
+        "total": "合計",
+        "expenses": "経費",
+        "timeEntries": "時間エントリー",
+        "mileage": "走行距離",
+        "colDate": "日付",
+        "colDescription": "内容",
+        "colCategory": "カテゴリー",
+        "colAmount": "金額",
+        "colMember": "メンバー",
+        "colHours": "時間",
+        "colRate": "レート",
+        "colMiles": "マイル",
+        "colRatePerMile": "レート/マイル"
+      },
+      "task": {
+        "title": "タスクレポート",
+        "eyebrow": "タスクレポート",
+        "tasksWord": "タスク",
+        "countSubtitle": "{count} タスク",
+        "colTask": "タスク",
+        "colStatus": "ステータス",
+        "colPriority": "優先度",
+        "colAssignee": "担当者",
+        "colDue": "期日"
+      },
+      "pullSheet": {
+        "title": "プルシート",
+        "subject": "レンタルプルシート",
+        "eyebrow": "レンタル · プルシート",
+        "pageLabel": "レンタル {number}",
+        "colQty": "数量",
+        "colItem": "アイテム",
+        "colSerial": "シリアル",
+        "colNote": "備考"
+      },
+      "signage": {
+        "signageWord": "サイネージ",
+        "gridLabel": "サイネージグリッド",
+        "countSubtitle": "{count} サイネージ設置箇所",
+        "colLocation": "場所",
+        "colType": "タイプ",
+        "colSize": "サイズ",
+        "colInstall": "設置",
+        "colStrike": "撤去",
+        "colNote": "備考"
+      }
+    },
+    "callSheet": {
+      "eyebrow": "コールシート",
+      "eyebrowLabor": "レイバーコール",
+      "venue": "会場",
+      "venueName": "名称",
+      "venueAddress": "住所",
+      "schedule": "スケジュール",
+      "laborSchedule": "レイバースケジュール",
+      "crew": "クルー",
+      "laborRoster": "レイバーロスター",
+      "weather": "天気",
+      "colStart": "開始",
+      "colEnd": "終了",
+      "colActivity": "アクティビティ",
+      "colLocation": "場所",
+      "colName": "名前",
+      "colRole": "ロール",
+      "colContact": "連絡先"
+    },
+    "certifiedPayroll": {
+      "title": "認証給与",
+      "formWh347": "米国労働省 Form WH-347 — Davis-Bacon 認証給与",
+      "formGeneric": "認証給与 — {type}",
+      "weekEndingShort": "WE",
+      "weekEnding": "週末日",
+      "statementOfCompliance": "コンプライアンス声明",
+      "projectContractor": "プロジェクトとコントラクター",
+      "project": "プロジェクト",
+      "projectAddress": "プロジェクト住所",
+      "contractor": "コントラクター",
+      "contractorAddress": "コントラクター住所",
+      "form": "フォーム",
+      "payPeriod": "給与期間",
+      "state": "州",
+      "workerDetail": "ワーカー明細",
+      "hoursColumnsNote": "時間列は日 / 月 / 火 / 水 / 木 / 金 / 土。金額は USD。",
+      "colWorker": "ワーカー",
+      "colSsn": "SSN",
+      "colClass": "クラス",
+      "colSun": "日",
+      "colMon": "月",
+      "colTue": "火",
+      "colWed": "水",
+      "colThu": "木",
+      "colFri": "金",
+      "colSat": "土",
+      "colSt": "ST",
+      "colOt": "OT",
+      "colRate": "レート",
+      "colGross": "総支給",
+      "colNet": "手取り",
+      "colHours": "時間",
+      "colFringes": "フリンジ",
+      "totals": "合計",
+      "attestIntroLead": "私、",
+      "certifierNamePlaceholder": "[認証者名]",
+      "attestIntroTrail": "は、ここに以下を表明します:",
+      "clause1": "(1) 私は {project} プロジェクトにおいて {contractor} が雇用する者への支払いを行いまたは監督していること。{start} 日に始まり {end} 日に終わる給与期間中、当該プロジェクトに雇用されたすべての者に対して稼得した週給の全額が支払われたこと。いかなる者の稼得した週給の全額からも、当該コントラクターまたはサブコントラクターに対してもしくはその代理として、直接的にも間接的にもリベートが行われておらず今後も行われないこと。また、規則 Part 3(29 CFR Subtitle A)に定義される許容控除を除き、いかなる者の稼得した賃金の全額からも直接的にも間接的にも控除が行われていないこと。",
+      "clause2": "(2) 上記期間について本契約のもとで提出が求められるその他の給与記録が正確かつ完全であること。そこに含まれる労働者または技能工の賃金率が、契約に組み込まれた賃金決定に含まれる適用賃金率を下回らないこと。各労働者または技能工について記載された職種分類が、その者が実施した作業に適合していること。",
+      "clause3": "(3) 上記期間に雇用された見習工は、米国労働省 Bureau of Apprenticeship and Training に認められた州の見習い機関に登録された正規の見習いプログラムに正式に登録されているか、州にそのような認定機関が存在しない場合は、米国労働省 Bureau of Apprenticeship and Training に登録されていること。",
+      "clause4WithFringes": "(4) 賃金決定により求められるフリンジベネフィットは該当に応じて支払われていること — 本期間のフリンジ支払い総額: {amount}。",
+      "clause4NoFringes": "(4) 賃金決定により求められるフリンジベネフィットは該当に応じて支払われていること — 本期間に支払うべきフリンジはありません。",
+      "certified": "認証済み",
+      "signedBy": "署名者",
+      "notes": "備考"
+    },
+    "aiaPayApp": {
+      "title": "支払申請 #{number}",
+      "eyebrow": "支払申請および証明書",
+      "appAbbrev": "申請 #{number}",
+      "projectContract": "プロジェクトと契約",
+      "project": "プロジェクト",
+      "projectAddress": "プロジェクト住所",
+      "contractorVendor": "コントラクター / ベンダー",
+      "vendorAddress": "ベンダー住所",
+      "contractPo": "契約 / PO",
+      "formVersion": "フォームバージョン",
+      "applicationPeriod": "申請期間",
+      "periodThrough": "{start} から {end} まで",
+      "status": "ステータス",
+      "applicationSummary": "申請サマリー",
+      "colLine": "行",
+      "colDescription": "内容",
+      "colAmount": "金額",
+      "lineOriginalContractSum": "当初契約金額",
+      "lineNetChangeByChangeOrders": "チェンジオーダーによる純変動",
+      "lineContractSumToDate": "現時点の契約金額 — 行 1 ± 2",
+      "lineTotalCompletedStored": "現時点の完了および保管合計",
+      "lineRetainage": "保留金 — {pct}",
+      "lineTotalEarnedLessRetainage": "保留金控除後の稼得合計 — 行 4 − 5",
+      "lineLessPreviousCertificates": "過去の支払証明書分を控除",
+      "lineCurrentPaymentDue": "今回の支払額 — 行 6 − 7",
+      "lineBalanceToFinish": "完了までの残額 — 保留金含む",
+      "contractorCertification": "コントラクター証明",
+      "contractorCertificationBody": "署名したコントラクターは、その知識・情報・確信の及ぶ限りにおいて、本支払申請の対象となる工事が契約書類に従って完了していること、過去に支払証明書が発行されオーナーから支払いを受領した工事についてコントラクターがすべての金額を支払済みであること、そして本書に示す今回の支払いが現在支払われるべきものであることを証明します。",
+      "submitted": "提出済み",
+      "architectCertificate": "建築士証明書",
+      "architectCertificateBody": "契約書類に従い、現地観察および本申請を構成するデータに基づき、建築士はオーナーに対し、その知識・情報・確信の及ぶ限りにおいて、工事が示されたとおりに進捗していること、工事の品質が契約書類に適合していること、コントラクターが「証明金額」の支払いを受ける権利を有することを証明します。",
+      "amountCertified": "証明金額",
+      "architect": "建築士",
+      "certified": "証明済み",
+      "notes": "備考",
+      "scheduleOfValues": "出来高内訳書 — 継続シート",
+      "columnsNote": "AIA G703 準拠の列 A–I。金額は USD。",
+      "colScheduled": "予定額",
+      "colPrior": "前回まで",
+      "colThisPeriod": "今期間",
+      "colStored": "保管分",
+      "colTotalAndPct": "合計 & %",
+      "colBalance": "残額",
+      "colRetainage": "保留金",
+      "colTotal": "合計",
+      "totals": "合計"
+    },
+    "wipReport": {
+      "titleShort": "WIP レポート",
+      "subjectPrefix": "仕掛工事",
+      "eyebrow": "仕掛工事レポート",
+      "asOf": "{date} 時点",
+      "coverSubtitle": "{count} 件のアクティブプロジェクト · {bonded} 件ボンド付き · {over} 件過剰請求 · {under} 件過少請求",
+      "over": "超過",
+      "under": "不足",
+      "portfolioSummary": "ポートフォリオサマリー",
+      "snapshotDate": "スナップショット日",
+      "activeProjects": "アクティブプロジェクト",
+      "aggregateRevisedContract": "改定契約額合計",
+      "aggregateCostsToDate": "累計原価合計",
+      "aggregateEarned": "稼得額合計",
+      "aggregateBilled": "請求額合計",
+      "netOverUnderBilled": "過剰/過少請求の純額",
+      "aggregateEac": "EAC 合計",
+      "projects": "プロジェクト",
+      "tableNote": "金額はすべて USD。% Comp は原価ベース。Over/Under = 稼得 − 請求(正 = 過剰請求)。",
+      "colProject": "プロジェクト",
+      "colRevised": "改定額",
+      "colCostToDate": "累計原価",
+      "colEarned": "稼得額",
+      "colBilled": "請求額",
+      "colOverUnder": "O/U",
+      "colEac": "EAC",
+      "totals": "合計",
+      "projectsCount": "{count} プロジェクト",
+      "methodology": "算定方法",
+      "methodologyBody": "進捗率 = costs_to_date / estimated_at_completion。稼得収益 = revised_contract × 進捗率。過剰/過少請求 = 稼得 − 請求(正 = 過剰請求、負 = 過少請求)。完了までの見積原価 = EAC − costs_to_date。"
+    },
+    "vendorRfp": {
+      "eyebrow": "提案依頼書",
+      "subtitle": "{vendor} 宛",
+      "subtitleWithDeadline": "{vendor} 宛 · 回答期限 {deadline}",
+      "scope": "スコープ",
+      "deliverablesRequested": "依頼する Deliverable",
+      "colDeliverable": "Deliverable",
+      "colDescription": "内容",
+      "colDue": "期日",
+      "howToRespond": "回答方法"
+    },
+    "brandKit": {
+      "title": "ブランドキット",
+      "eyebrow": "ブランドキット",
+      "coverSubtitle": "デザイントークン、ロゴ、スタイルルール。",
+      "color": "カラー",
+      "accent": "アクセント",
+      "legalFooter": "リーガルフッター",
+      "typography": "タイポグラフィ",
+      "displaySample": "ディスプレイ 24pt",
+      "titleSample": "タイトル 14pt",
+      "bodySample": "本文 11pt、行間 1.45。フィールド印刷での互換性のため Helvetica を使用してください。",
+      "usageRules": "使用ルール",
+      "usageRule1": "• ランニングヘッダーバーとプライマリー CTA にはアクセントカラーを使用。",
+      "usageRule2": "• ティア4以上のドキュメントにはクリムゾンの機密区分バナーが付きます — アクセントの上書きはバナーのみ。",
+      "usageRule3": "• リーガルフッターは、プロデューサー生成のすべてのドキュメントの全ページに表示されます。"
+    },
+    "deliverablesViews": {
+      "inputList": {
+        "heading": "インプットリスト",
+        "colCh": "Ch",
+        "colSource": "ソース",
+        "colMic": "マイク/DI",
+        "colInsert": "インサート",
+        "colNote": "備考"
+      },
+      "stagePlot": {
+        "heading": "ステージプロット",
+        "elementsHeading": "ステージプロット要素",
+        "colElement": "要素",
+        "colKind": "種類",
+        "colPosition": "位置",
+        "colRot": "回転"
+      },
+      "crewList": {
+        "heading": "クルーリスト",
+        "colName": "名前",
+        "colRole": "ロール",
+        "colDept": "部門",
+        "colCall": "コール",
+        "colContact": "連絡先"
+      },
+      "guestList": {
+        "heading": "ゲストリスト",
+        "colName": "名前",
+        "colTier": "ティア",
+        "colNote": "備考"
+      },
+      "equipmentPullList": {
+        "heading": "機材プルリスト",
+        "colQty": "数量",
+        "colItem": "アイテム",
+        "colCategory": "カテゴリー",
+        "colNote": "備考"
+      },
+      "powerPlan": {
+        "servicesHeading": "電源サービス",
+        "generatorsHeading": "発電機",
+        "colLocation": "場所",
+        "colAmps": "アンペア",
+        "colVolts": "ボルト",
+        "colPhase": "相",
+        "colSource": "ソース",
+        "colNote": "備考",
+        "colUnit": "ユニット",
+        "colKw": "kW",
+        "colFuel": "燃料"
+      },
+      "riggingPlan": {
+        "heading": "リギングポイント",
+        "colPoint": "ポイント",
+        "colCapacity": "耐荷重 · lbs",
+        "colHeight": "高さ · ft",
+        "colNote": "備考"
+      },
+      "sitePlan": {
+        "heading": "サイトプラン",
+        "zonesHeading": "ゾーン"
+      },
+      "buildSchedule": {
+        "heading": "ビルドスケジュール",
+        "colDay": "日",
+        "colTime": "時刻",
+        "colActivity": "アクティビティ",
+        "colCrew": "クルー",
+        "colNote": "備考"
+      },
+      "vendorPackage": {
+        "vendorEyebrow": "ベンダー",
+        "deliverablesHeading": "Deliverable",
+        "colDeliverable": "Deliverable",
+        "colDue": "期日",
+        "colStatus": "ステータス"
+      },
+      "safetyCompliance": {
+        "heading": "安全 + コンプライアンスチェックリスト",
+        "colTopic": "トピック",
+        "colRequirement": "要件",
+        "colOwner": "担当",
+        "colStatus": "ステータス"
+      },
+      "commsPlan": {
+        "radioChannelsHeading": "無線チャンネル",
+        "codeWordsHeading": "コードワード",
+        "colChannel": "チャンネル",
+        "colPurpose": "用途"
+      },
+      "signageGrid": {
+        "heading": "サイネージグリッド",
+        "colLocation": "場所",
+        "colType": "タイプ",
+        "colSize": "サイズ",
+        "colInstall": "設置",
+        "colStrike": "撤去",
+        "colNote": "備考"
+      },
+      "generic": {
+        "heading": "Deliverable データ"
+      }
+    }
+  },
+  "ghxstship": {
+    "common": {
+      "startProject": "プロジェクトを始める",
+      "seePricing": "料金を見る",
+      "servicesCatalog": "サービスカタログ",
+      "browseIndustries": "業界を見る",
+      "all19Industries": "全19業界 →"
+    },
+    "header": {
+      "pricing": "料金",
+      "contact": "お問い合わせ",
+      "startProject": "プロジェクトを始める",
+      "openMenu": "メニューを開く",
+      "closeMenu": "メニューを閉じる",
+      "services": {
+        "label": "サービス",
+        "fullCatalog": {
+          "label": "フルカタログ",
+          "description": "全114サービス"
+        },
+        "production": {
+          "label": "プロダクション",
+          "description": "音響、照明、映像、ステージング"
+        },
+        "build": {
+          "label": "ビルド",
+          "description": "シーニック、ファブリケーション、設置"
+        },
+        "hospitality": {
+          "label": "ホスピタリティ",
+          "description": "F&B、VIP、プレミアムサービス"
+        },
+        "operations": {
+          "label": "オペレーション",
+          "description": "クルー、ロジスティクス、セキュリティ"
+        },
+        "experience": {
+          "label": "エクスペリエンス",
+          "description": "ゲスト体験、リテール"
+        },
+        "technology": {
+          "label": "テクノロジー",
+          "description": "ネットワーク、RFID、AR / VR"
+        },
+        "executive": {
+          "label": "エグゼクティブ",
+          "description": "許認可、保険、コンプライアンス"
+        },
+        "creative": {
+          "label": "クリエイティブ",
+          "description": "デザイン、アートディレクション、IP"
+        },
+        "marketing": {
+          "label": "マーケティング",
+          "description": "アンバサダー、ドナープログラム"
+        },
+        "talent": {
+          "label": "タレント",
+          "description": "パフォーマー、プログラミング"
+        }
+      },
+      "industries": {
+        "label": "業界",
+        "all": {
+          "label": "すべての業界",
+          "description": "全19バーティカル"
+        },
+        "concertsFestivalsTours": "コンサート、フェスティバル & ツアー",
+        "immersiveExperiences": "イマーシブエクスペリエンス",
+        "brandActivationsPopups": "ブランドアクティベーション & ポップアップ",
+        "themeParksAttractions": "テーマパーク & アトラクション",
+        "cruiseLinesMaritime": "クルーズライン & マリタイム",
+        "premiumSportingFanZones": "プレミアムスポーツ & ファンゾーン",
+        "premiumHospitality": "プレミアムホスピタリティ",
+        "theatricalPerformances": "シアトリカルパフォーマンス"
+      },
+      "studio": {
+        "label": "スタジオ",
+        "phases": {
+          "label": "フェーズ",
+          "description": "ディスカバリーからラップまで"
+        },
+        "experienceModes": {
+          "label": "エクスペリエンスモード",
+          "description": "オーディエンスの関わり方"
+        },
+        "markets": {
+          "label": "マーケット",
+          "description": "12都市、4アンカー"
+        },
+        "about": "会社情報",
+        "contact": "お問い合わせ"
+      }
+    },
+    "footer": {
+      "services": "サービス",
+      "topIndustries": "主要業界",
+      "anchorMarkets": "アンカーマーケット",
+      "allMarkets": "すべてのマーケット",
+      "studio": "スタジオ",
+      "about": "会社情報",
+      "pricing": "料金",
+      "phases": "フェーズ",
+      "experienceModes": "エクスペリエンスモード",
+      "contact": "お問い合わせ",
+      "tagline": {
+        "line1": "エクスペリエンシャルプロダクションカンパニー。",
+        "line2": "フェスティバル。テーマパーク。シアター。",
+        "line3": "一度作れば、どこでも回る。"
+      },
+      "operatingBrands": "ATLVS、GVTEWAY、COMPVSS は、GHXSTSHIP Industries グループの ATLVS Technologies の運営ブランドです。"
+    },
+    "notFound": {
+      "title": "見つかりません。",
+      "body": "このページは存在しないか移動しました。こちらをお試しください。",
+      "services": "サービス",
+      "contact": "お問い合わせ"
+    },
+    "home": {
+      "meta": {
+        "title": "GHXSTSHIP — エクスペリエンシャルプロダクションカンパニー | フェスティバル、テーマパーク、ライブイベント",
+        "description": "スケールで実現するエクスペリエンシャルプロダクション — フェスティバル、イマーシブエクスペリエンス、テーマパークアトラクション、ブランドアクティベーション、シアトリカルプロダクション、プレミアムホスピタリティ。マイアミ、ニューヨーク、シカゴ、ロサンゼルスを拠点に。"
+      },
+      "proof": {
+        "services": {
+          "label": "サービス",
+          "sub": "ひとつ屋根の下のディシプリン"
+        },
+        "industries": {
+          "label": "業界",
+          "sub": "フェスティバルからファンゾーンまで"
+        },
+        "markets": {
+          "label": "マーケット",
+          "sub": "アンカー拠点 + 全国対応"
+        },
+        "phases": {
+          "label": "フェーズ",
+          "sub": "ディスカバリーからラップまで"
+        }
+      },
+      "hero": {
+        "line1": "エクスペリエンシャル",
+        "line2": "プロダクション、",
+        "line3": "一度作れば、",
+        "line4": "どこでも回る。",
+        "established": "Est. マイアミ · ニューヨーク · シカゴ · ロサンゼルス",
+        "body": "私たちはフェスティバル、イマーシブエクスペリエンス、テーマパークアトラクション、シアトリカルプロダクション、ブランドアクティベーション、プレミアムホスピタリティをデザインし、エンジニアリングし、ファブリケーションし、運営します。スタジオ内部で動いているのと同じオペレーティングシステムが、あなたが今読んでいるカタログを公開しています — つまり月曜にブリーフされた仕事は、水曜にはスコープ・価格・アサイン可能なエンゲージメントになります。",
+        "cta": {
+          "startProject": "プロジェクトを始める",
+          "servicesCatalog": "サービスカタログ",
+          "pricing": "料金 →"
+        }
+      },
+      "whatWeDo": {
+        "eyebrow": "私たちの仕事",
+        "heading": {
+          "line1": "適切なチームを見つける、",
+          "line2": "6つの方法。"
+        },
+        "body": "プロダクションは多くのディシプリンに触れます。何を作るか、ライフサイクルのどの時点か、詳細がどこまで深いか、どんな体験か、どの業界か、どこで起きるか — どこからでも検索できます。どの経路も、実在のポートフォリオを持つ実在のプロデューサーに行き着きます。"
+      },
+      "axis": {
+        "open": "開く →",
+        "disciplines": {
+          "title": "ディシプリン",
+          "blurb": "プロダクション、ビルド、ホスピタリティ、テクノロジー、オペレーション、エグゼクティブ — 私たちが触れるすべてをカバーする10のコアディシプリン。"
+        },
+        "phases": {
+          "title": "フェーズ",
+          "blurb": "ディスカバリー、コンセプト、デベロップ、アドバンス、ビルド、ショー、ストライク、ラップ。8つすべてでも、その一部でも。"
+        },
+        "detailDepth": {
+          "title": "詳細の深さ",
+          "blurb": "複数年プログラムから単一のリギングコンポーネントまで。あなたのブリーフが住むレベルで仕事をします。"
+        },
+        "experienceModes": {
+          "title": "エクスペリエンスモード",
+          "blurb": "ソーシャル、デジタル、バーチャル、フィジカル、エクスペリエンシャル、シアトリカル。ほとんどのエンゲージメントは2〜3つにまたがります。"
+        },
+        "industries": {
+          "title": "業界",
+          "blurb": "フェスティバルからファンゾーン、テーマパークからマリタイム、アートギャラリーから F1 パドッククラブまで。19のバーティカル。"
+        },
+        "markets": {
+          "title": "マーケット",
+          "blurb": "マイアミ、ニューヨーク、シカゴ、ロサンゼルス。さらに8つのサテライト。どのアンカーからでも全国・国際対応。"
+        }
+      },
+      "classLabel": "CLASS {code}",
+      "capabilities": {
+        "eyebrow": "ケイパビリティ",
+        "heading": {
+          "line1": "10のディシプリン。",
+          "line2": "ひとつのスタジオ。"
+        },
+        "fullCatalog": "フルサービスカタログ →"
+      },
+      "industries": {
+        "eyebrow": "業界",
+        "heading": {
+          "line1": "仕事が",
+          "line2": "住む場所。"
+        },
+        "all": "全19業界 →",
+        "readMore": "続きを読む →"
+      },
+      "pricingTease": {
+        "eyebrow": "協働の進め方",
+        "heading": {
+          "line1": "プロジェクト単位。",
+          "line2": "またはリテイナー。"
+        },
+        "perProject": {
+          "label": "プロジェクト単位",
+          "body": "— 一夜のアクティベーションから複数年のメガイベントまで、5つのティア。"
+        },
+        "retainer": {
+          "label": "リテイナー",
+          "body": "— コーディネーター2名体制から 24/7 のシニアチームまで、4つのチーム構成バンドル。アドオンはどちらの経路にも積めます。"
+        },
+        "cta": {
+          "seePricing": "料金を見る"
+        }
+      },
+      "markets": {
+        "eyebrow": "アンカーマーケット",
+        "all": "サテライトを含む全12マーケット →"
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "heading": "よくある質問。",
+        "q1": {
+          "q": "GHXSTSHIP はどんなプロダクションを引き受けますか?",
+          "a": "フェスティバルとコンサートツアー、テーマパークアトラクション、イマーシブエクスペリエンス、ブランドアクティベーションとポップアップ、シアトリカルパフォーマンス、アート・文化インスタレーション、プレミアムスポーツホスピタリティとファンゾーン、カンファレンスとトレードショー、ラグジュアリーリテールとダイニング、ウェディングとプライベートエステートイベント、クルーズ船とマリタイムエンターテインメント、ウルトラプレミアムなプライベートイベント。合計19の業界バーティカルです。"
+        },
+        "q2": {
+          "q": "GHXSTSHIP はどこで活動していますか?",
+          "a": "フルタイムチームと専用ファブリケーション能力を持つ4つのアンカーマーケット: マイアミ、ニューヨーク、シカゴ、ロサンゼルス。それらのアンカーからサービスする8つのサテライトマーケット: オーランド、ナッシュビル、オースティン、アトランタ、ミネアポリス、デンバー、ラスベガス、シアトル。全国・国際プロダクションは最寄りのアンカーから対応します。"
+        },
+        "q3": {
+          "q": "GHXSTSHIP は典型的なイベントエージェンシーとどう違いますか?",
+          "a": "GHXSTSHIP はすべてのエンゲージメントを、公開サービスカタログを発行しているのと同じ内部データモデル — Experiential Project Management System(XPMS)— で運営しています。すべての Deliverable、ベンダー、コンプライアンスチェック、予算明細は、エンドツーエンドで監査できる安定した識別子を持ちます。同じスキーマが社内の ATLVS ソフトウェアで動き、同じスキーマをこのサイトで読んでいます。"
+        },
+        "q4": {
+          "q": "プロダクションをエンドツーエンドで請けますか、それとも特定フェーズだけですか?",
+          "a": "どちらもです。8つのプロダクションフェーズ — ディスカバリー、コンセプト、デベロップ、アドバンス、ビルド、ショー、ストライク、ラップ — のすべてでも、任意の一部でもエンゲージします。プロジェクト単位のティアは単一のブリーフにスコープされます。リテイナーは複数ブリーフにまたがる継続的なエンゲージメントを回します。"
+        },
+        "q5": {
+          "q": "エンゲージメント終了時の Deliverable と IP は誰のものですか?",
+          "a": "あなたのものです。すべてのコンセプトアートワーク、デザインファイル、エンジニアリング図面、プロダクションドキュメントは最終請求時にあなたへ移転します。再利用可能なツアー用シーニックシステムとトレードショーブースアセットは、再配備のためデフォルトで当社の空調管理倉庫に保管されますが、所有権はあなたにあります。"
+        }
+      }
+    },
+    "about": {
+      "meta": {
+        "title": "GHXSTSHIP について — エクスペリエンシャルプロダクションカンパニー",
+        "description": "GHXSTSHIP は、フェスティバル、テーマパークアトラクション、シアトリカルプロダクション、ブランドアクティベーション、プレミアムホスピタリティを手がけるエクスペリエンシャルプロダクションカンパニーです。マイアミ、ニューヨーク、シカゴ、ロサンゼルスを拠点に。自分たちの仕事を回すために ATLVS を作り、今はあなたの仕事も回します。"
+      },
+      "hero": {
+        "eyebrow": "会社情報",
+        "heading": {
+          "line1": "スタジオの裏側にある",
+          "line2": "スタジオ。"
+        },
+        "body": "GHXSTSHIP は、フェスティバル、テーマパークアトラクション、イマーシブエクスペリエンス、シアトリカルプロダクション、ブランドアクティベーション、プレミアムホスピタリティをスケールで構築するエクスペリエンシャルプロダクションカンパニーです。{classCount} のディシプリンと {solutionCount} の業界にわたる {serviceCount} のサービスを展開。マイアミ、ニューヨーク、シカゴ、ロサンゼルスを拠点に、全国・国際的にデリバリーします。"
+      },
+      "principles": {
+        "p1": {
+          "title": "ひとつのオペレーティングシステムを、社内にも社外にも。",
+          "body": "すべてのエンゲージメントは、公開サービスカタログを発行しているのと同じデータモデルで動きます。ベンダー、Deliverable、コンプライアンスチェック、予算、スケジュール — すべてがエンドツーエンドで監査できる安定した識別子を持ちます。同じスキーマが社内の ATLVS ソフトウェアで動き、同じスキーマをこのサイトで読んでいます。"
+        },
+        "p2": {
+          "title": "約束ではなく、証憑を。",
+          "body": "押印済みエンジニアリング、署名済み保険証明書、締結済みマスターサービス契約、消防局のサインオフ、サステナビリティレポート — すべての Deliverable が、安定した名前と明確な管理連鎖を持って、あなたのフォルダ構造に着地します。"
+        },
+        "p3": {
+          "title": "オペレーターの言葉で、遠慮なく。",
+          "body": "私たちはロードイン、アドバンス、ランオブショー、RFI、パドック、ドライドック、クリーンゾーン、フロントオブハウス、組合管轄の言葉で話します。これらの言葉の意味をすでに知っているなら、居心地よく感じるはず。知らなくても、翻訳します。"
+        },
+        "p4": {
+          "title": "本社ではなく、アンカーを。",
+          "body": "マイアミ、ニューヨーク、シカゴ、ロサンゼルスにフルタイムチームと専用ファブリケーションを持っています。それらのアンカーから8つのサテライト都市へ、そして全国・国際ティアへと展開します。ブリーフを受けるチームが、作るチームです。"
+        }
+      },
+      "lineage": {
+        "heading": "系譜。",
+        "p1": "GHXSTSHIP Industries が親会社です。ATLVS Technologies — ATLVS、GVTEWAY、COMPVSS を運営 — は、スプレッドシートでプロダクションを回すのをやめるために作ったソフトウェア部門です。",
+        "p2": "ATLVS はプロデューサーのコンソール。GVTEWAY はステークホルダーポータル。COMPVSS はオフラインファーストのフィールドアプリ。同じデータモデルが3つすべてを動かし、同じデータモデルがこのカタログを発行しています。",
+        "p3": "「あなたが私たちを雇う前に読んだカタログを発行しているのと同じシステムで、あなたのエンゲージメントを運営しています」とクライアントに伝えるとき、それは文字どおりの意味です。同じベンダーレコード。同じコンプライアンスフレームワーク。同じ Deliverable 定義。"
+      },
+      "roster": {
+        "heading": "ロスター。",
+        "p1": "プロデューサー、プロジェクトマネージャー、アカウントマネージャー、A1、L1、V1、リガー、エンジニア — 必要な場面では PE 押印付き — ホスピタリティリード、連盟リエゾン、フィクサー、コンサバター、アートハンドラー、ステージマネージャー、放送ディレクター、ブランドアンバサダー。4つのアンカーマーケット内はフルタイムの正規雇用。サテライトマーケットと国際ティアは、マスター契約下の厚いベンチ。",
+        "p2": "名前のあるロールはすべてカタログの行です。カタログのすべての行は、空き状況カレンダーとクレデンシャル状況と公開レートを持つ、実在の人間です。"
+      },
+      "briefUs": {
+        "heading": "ブリーフをください。",
+        "body": "平易な言葉の一段落で構いません。600行の RFP でも構いません。午前2時の酔ったボイスメモがフェスティバルになるのが一番楽しい。3つとも、すべてに答えます。"
+      }
+    },
+    "contact": {
+      "meta": {
+        "title": "GHXSTSHIP に連絡 — プロジェクトを始める",
+        "description": "GHXSTSHIP にブリーフを。平易な一段落でも、RFP でも、ボイスメモでも。すべてのブリーフを同じサービスカタログに照らして解決し、1営業日以内にスコープ、モデル、プロデューサーアサインを添えて返信します。"
+      },
+      "routes": {
+        "studio": {
+          "label": "プロジェクトを始める",
+          "body": "新規エンゲージメント、RFP、スコープの相談。エンゲージメントモデル、プロデューサーアサイン、価格帯を添えて返信します。"
+        },
+        "federation": {
+          "label": "連盟 & メガイベント",
+          "body": "オリンピック、FIFA、F1、スーパーボウル、ワールドカップ、NCAA、OCOG ティア、連盟アクレディテーション、ホストシティリエゾン。"
+        },
+        "press": {
+          "label": "プレス & パートナーシップ",
+          "body": "メディア、スポンサーシップの問い合わせ、ブランドコラボレーション、ポッドキャストの依頼、講演。"
+        },
+        "roster": {
+          "label": "ロスター & クルー",
+          "body": "プロデューサー、テクニシャン、リガー、ホスピタリティ、フィクサー — ポートフォリオと都市を添えて応募してください。四半期ごとにオンボードします。"
+        }
+      },
+      "hero": {
+        "eyebrow": "お問い合わせ",
+        "heading": "ブリーフをください。",
+        "body": "ブリーフ、日程帯、会場または地域、スコープを教えてください。1営業日以内に、エンゲージメントモデル、プロデューサーアサイン、価格帯 — もしくはクリーンにスコープするために必要な情報のリクエスト — を返します。"
+      },
+      "checklist": {
+        "heading": "メールに書くべきこと。",
+        "brief": {
+          "label": "ブリーフ。",
+          "body": "一段落で十分です。適切なフォローアップはこちらから聞きます。"
+        },
+        "dates": {
+          "label": "日程またはウィンドウ。",
+          "body": "確定日でも、流動的なウィンドウでも — どちらでも構いません。"
+        },
+        "venue": {
+          "label": "会場または地域。",
+          "body": "確定していれば具体的な住所、未定ならマーケット名を。"
+        },
+        "audience": {
+          "label": "オーディエンス規模。",
+          "body": "総ゲスト数または1日あたりの来場者数。"
+        },
+        "budget": {
+          "label": "予算の枠。",
+          "body": "幅だけでも — エンゲージメントモデルが一気に絞れます。"
+        },
+        "constraints": {
+          "label": "制約。",
+          "body": "連盟、組合、ホストシティ、クリーンゾーン、ブランド権、NDA — 最初に明示してください。"
+        }
+      },
+      "browse": {
+        "eyebrow": "またはブラウズから始める"
+      }
+    },
+    "pricing": {
+      "meta": {
+        "title": "料金 — プロジェクト単位 & リテイナー | GHXSTSHIP",
+        "description": "プロジェクト単位のティアは $25K から連盟グレードまで。月次リテイナーは $3K — コーディネーター2名体制 — から $13K — 24/7 サポート付きのフルシニアチーム — まで。エンジニアリング、連盟リエゾン、AR/VR、サステナビリティなどの積み増し可能なアドオン。"
+      },
+      "hero": {
+        "eyebrow": "料金",
+        "heading": {
+          "line1": "私たちと働く、",
+          "line2": "2つの方法。"
+        },
+        "body": {
+          "perProject": "は単一のブリーフ向け。一夜のアクティベーションから複数年のメガイベントまで、スコープに応じた5つのティア。",
+          "retainer": "は継続プログラム向け。コーディネーター2名体制から 24/7 サポート付きのシニアチームまで、チーム構成を軸にした4つのバンドル。アドオンはどちらの経路にも積めます。プロダクションコストは実費でパススルー。"
+        }
+      },
+      "nav": {
+        "perProject": "プロジェクト単位",
+        "retainer": "リテイナー",
+        "addOns": "アドオン"
+      },
+      "perProject": {
+        "label": "プロジェクト単位",
+        "heading": {
+          "line1": "5つのティア。",
+          "line2": "ひとつのブリーフ。"
+        },
+        "body": "ティアはスコープに応じてスケールします。Pop は単一ゾーン。Federation はフルシニアチーム付きの複数年メガイベント。願望ではなく、目の前の仕事で選んでください。",
+        "mostEngagements": "最多のエンゲージメント",
+        "startingFee": "開始フィー",
+        "scopeBand": "スコープ帯",
+        "bestFor": "最適な用途"
+      },
+      "retainer": {
+        "label": "リテイナー",
+        "heading": {
+          "line1": "チーム構成で",
+          "line2": "バンドル。"
+        },
+        "body": "各ティアはシニアロールと常時稼働サポートの層を追加します。プログラムの成長に合わせてティアを上げ、閑散期にはティアを下げてください。月次前払い、60日前通知で解約可能。",
+        "mostRetained": "最多のリテイナー",
+        "yourTeam": "あなたのチーム",
+        "cadence": "ケイデンス"
+      },
+      "addOns": {
+        "eyebrow": "アドオン",
+        "heading": "どちらの経路にも積める。",
+        "body": "スコープオブワークまたはチェンジオーダーでアラカルト販売。押印済みエンジニアリングと連盟リエゾンが、全ティアを通じて最もリクエストの多いアドオンです。"
+      },
+      "billing": {
+        "heading": "請求の仕組み。",
+        "fee": {
+          "label": "01 プロフェッショナルフィー",
+          "body": "カードに記載のフィーは、GHXSTSHIP がエンゲージメントのスコープ、計画、運営に対して請求する金額です。スコープオブワークで確定し、スコープが拡大した場合の明確なチェンジオーダーの枠組みがあります。"
+        },
+        "passThrough": {
+          "label": "02 プロダクションパススルー",
+          "body": "機材、レイバー、移動、ファブリケーション、フード & ビバレッジ、輸送 — すべてのプロダクションコストは、実費に合意済みの管理レート(通常12〜18%)を加えてパススルーします。全明細に証憑付き。"
+        },
+        "schedule": {
+          "label": "03 スケジュール",
+          "body": "プロジェクト単位: プロフェッショナルフィーの60%を署名時、40%をロードイン時に。リテイナー: 月次前払い。プロダクションパススルーは発生に応じて請求。"
+        }
+      },
+      "faq": {
+        "eyebrow": "料金 FAQ",
+        "heading": "よくある質問。",
+        "q1": {
+          "q": "カードの価格には実際に何が含まれていますか?",
+          "a": "カードのフィーは GHXSTSHIP のプロフェッショナルサービスフィー — エンゲージメントのスコープ、計画、管理、デリバリーに対する請求です。プロダクションコスト — 機材レンタル、レイバー、移動、ファブリケーション、F&B、輸送 — は実費に合意済みの管理レート(通常12〜18%)を加えてパススルーします。"
+        },
+        "q2": {
+          "q": "プロジェクト単位のエンゲージメントから後でリテイナーに移行できますか?",
+          "a": "はい。多くのクライアントは単一のプロジェクト単位エンゲージメントから始め、2件目・3件目のイベントがカレンダーに載った時点でリテイナーに転換します。未使用のプロジェクト残額は、リテイナー初月に充当します。"
+        },
+        "q3": {
+          "q": "プロジェクト単位のティアでは支払いはどうなりますか?",
+          "a": "GHXSTSHIP フィーの60%を署名時、40%をロードイン時に。プロダクションパススルーは発生に応じて、全証憑付きで請求します。リテイナーは月次前払いです。"
+        },
+        "q4": {
+          "q": "Studio と Bureau の違いは何ですか?",
+          "a": "Studio では、エンゲージメントを率いるシニアプロデューサーと、すべてのショー当日のオンサイト担当者が付きます。Bureau はさらに 24/7 のオフサイトリードを追加します — 天候が急変したとき、ベンダーが消えたとき、連盟がビルド中にクリーンゾーンの更新を出したとき、午前3時に電話を取る人です。"
+        },
+        "q5": {
+          "q": "アドオンはティアとは別に価格設定されますか?",
+          "a": "はい。アドオンは SOW またはチェンジオーダーで明細化されます。ほとんどのエンゲージメントは2〜3個を採用します。押印済みエンジニアリングと連盟リエゾンが、全ティアを通じて最多リクエストです。"
+        }
+      }
+    },
+    "markets": {
+      "meta": {
+        "title": "マーケット — マイアミ、ニューヨーク、シカゴ、ロサンゼルス + 8サテライト | GHXSTSHIP",
+        "description": "フルローカルチームと専用ファブリケーションを備えたアンカーマーケット: マイアミ、ニューヨーク、シカゴ、ロサンゼルス。アンカーからサービスする8つのサテライトマーケット: オーランド、ナッシュビル、オースティン、アトランタ、ミネアポリス、デンバー、ラスベガス、シアトル。"
+      },
+      "hero": {
+        "eyebrow": "マーケット",
+        "heading": {
+          "line1": "4つのアンカー。",
+          "line2": "8つのサテライト。"
+        },
+        "body": "アンカーマーケットには完全なローカルプレゼンス、専任チーム、ファブリケーション能力があります。サテライトは、会場と許認可に精通したアンカーからサービスします。全国・国際プロダクションは最寄りのアンカーから対応します。"
+      },
+      "anchor": {
+        "eyebrow": "アンカーマーケット"
+      },
+      "satellite": {
+        "eyebrow": "サテライトマーケット"
+      },
+      "servicedFrom": "{city} からサービス"
+    },
+    "market": {
+      "meta": {
+        "title": "{name} プロダクションカンパニー — フェスティバル、イベント、アクティベーション | GHXSTSHIP",
+        "anchorCapacity": "フルローカルチームとファブリケーション能力。",
+        "satelliteCapacity": "最寄りのアンカーマーケットからサービスします。"
+      },
+      "crumb": "マーケット",
+      "type": {
+        "anchor": "アンカーマーケット",
+        "satellite": "サテライトマーケット"
+      },
+      "servicedFrom": "サービス元:",
+      "venuesAnchors": "会場 & アンカー",
+      "strongholds": "{name} が強みを持つ業界",
+      "cta": {
+        "heading": "{name} で何かを動かそう。",
+        "body": "会場、組合、許認可のウィンドウ、フィクサーを知り尽くしています。日程と現地の状況を添えてブリーフをください。"
+      }
+    },
+    "phase": {
+      "meta": {
+        "title": "{name} フェーズ — プロダクションサービス | GHXSTSHIP"
+      },
+      "crumb": "フェーズ",
+      "counter": "フェーズ {number} / 08",
+      "whatHappens": "このフェーズで起きること",
+      "servicesActive": "{name} でアクティブな {count} のサービス",
+      "moveThrough": "ライフサイクルを進む"
+    },
+    "services": {
+      "meta": {
+        "title": "サービスカタログ — プロダクション、ビルド、ホスピタリティ、テクノロジー | GHXSTSHIP",
+        "description": "GHXSTSHIP のフルサービスカタログ — 10のディシプリンにわたる114のプロダクションサービス: エグゼクティブ、クリエイティブ、タレント、マーケティング、ビルド、プロダクション、オペレーション、エクスペリエンス、ホスピタリティ、テクノロジー。"
+      },
+      "hero": {
+        "eyebrow": "サービスカタログ",
+        "heading": {
+          "line1": "{count} のサービス。",
+          "line2": "{count} のディシプリン。",
+          "line3": "すべての行の裏に実在のプロデューサー。"
+        },
+        "body": "各サービスは、マーケティングのバズワードではなく、実在しスコープされ価格設定可能な仕事の単位です。下のディシプリンからブラウズするか、あなたの業界バーティカルに直接ジャンプしてください。各サービス詳細ページには、それが何か、プロジェクトのいつ必要か、何を受け取るか、どこで運用されるかが書かれています。"
+      },
+      "classLabel": "Class {code}",
+      "servicesCount": "{count} サービス",
+      "cta": {
+        "heading": "何と呼べばいいかわからない?",
+        "body": "平易な言葉でブリーフをください。カタログに照らして解決し、スコープ、推奨エンゲージメントモデル、担当プロデューサーを添えて返信します。",
+        "browseByIndustry": "業界からブラウズ"
+      }
+    },
+    "serviceClass": {
+      "meta": {
+        "title": "{name} サービス — {count} ディシプリン | GHXSTSHIP"
+      },
+      "crumb": "サービス",
+      "classLabel": "Class {code}",
+      "servicesInDiscipline": "このディシプリンのサービス",
+      "relatedServices": "{name} に関わる関連サービス",
+      "primaryDiscipline": "主ディシプリン: {name}",
+      "cta": {
+        "heading": "手元にあるものでブリーフを。",
+        "body": "一段落のメールでも。デッキの説明でも。会場の住所とカレンダーのウィンドウだけでも。1営業日以内に、スコープ、プロデューサー、価格帯を返します。"
+      }
+    },
+    "service": {
+      "meta": {
+        "title": "{name} | GHXSTSHIP"
+      },
+      "crumb": "サービス",
+      "label": "サービス {number} · {name}",
+      "whatItIs": "これは何か",
+      "whenYouNeed": "いつ必要か",
+      "whatYouReceive": "何を受け取るか",
+      "whereItOperates": "どこで運用されるか",
+      "primaryPhase": "主フェーズ",
+      "alsoActiveIn": "他にアクティブなフェーズ:",
+      "activeFullLifecycle": "プロジェクトの全ライフサイクルでアクティブ",
+      "detailDepth": "詳細の深さ",
+      "experienceModes": "エクスペリエンスモード",
+      "industriesAnchor": "このサービスがアンカーとなる業界",
+      "relatedServices": "{name} の関連サービス",
+      "cta": {
+        "heading": "これをエンゲージメントに追加。",
+        "body": "ほとんどのエンゲージメントはカタログから8〜40のサービスをバンドルします。ブリーフをください。スコープ、エンゲージメントモデル、プロデューサーを添えて返します。"
+      },
+      "depth": {
+        "L1": "プロジェクト — 複数イベントのコンテナ",
+        "L2": "イベント — 単一の機会",
+        "L3": "ゾーン — イベント内のエリア",
+        "L4": "アクティベーション — 体験ユニット",
+        "L5": "コンポーネント — ビルド要素",
+        "L6": "アイテム — 最小単位"
+      }
+    },
+    "solution": {
+      "meta": {
+        "title": "{name} — プロダクションカンパニー | GHXSTSHIP"
+      },
+      "crumb": "業界",
+      "facts": {
+        "whenWorkHappens": "仕事が起きるタイミング",
+        "depthOfDetail": "詳細の深さ",
+        "experienceModes": "エクスペリエンスモード",
+        "whereItLands": "着地しやすい場所"
+      },
+      "servicesAnchor": "{disciplines} のディシプリンにわたる {count} のサービスがこの業界をアンカー",
+      "allClassServices": "すべての {name} サービス →",
+      "cta": {
+        "heading": "{name} のエンゲージメントを動かそう。",
+        "body": "あなたのブリーフを、ここにアンカーされた {count} のサービスに照らして解決し、推奨エンゲージメントモデルとプロデューサーアサインを返信します。"
+      }
+    }
+  },
+  "legal": {
+    "offer": {
+      "acceptedNotice": "このレターに署名しました。コピーがあなたのチームに送られ、GHXSTSHIP に保管されています。",
+      "declinedNotice": "このオファーを辞退しました。状況が変わったらご連絡ください。",
+      "inactiveNotice": "このレターはすでに有効ではありません。更新のリクエストはプロダクションに連絡してください。",
+      "yourResponseHeading": "あなたの回答",
+      "yourResponseBody": "上のレターを確認してください。準備ができたら、タイプ署名で承諾するか、簡単な理由を添えて辞退してください。",
+      "acceptAndSign": "承諾して署名",
+      "decline": "辞退",
+      "cancel": "キャンセル",
+      "acceptBody": "このエンゲージメントを承諾するには、法的な氏名のフルネームを入力してください。タイプ署名、IP アドレス、タイムスタンプが合意の証拠として記録されます。",
+      "signAndAccept": "署名して承諾",
+      "typedSignatureLabel": "タイプ署名 · 法的氏名のフルネーム",
+      "declineHeading": "このオファーを辞退",
+      "declineBody": "状況が変わった際にプロダクションがフォローアップできるよう、簡単な理由を共有してください。",
+      "declineLetter": "レターを辞退",
+      "reasonLabel": "理由",
+      "reasonPlaceholder": "例: スケジュールの競合 — 5月14〜18日はすでにブッキング済み。"
+    },
+    "offerCheckin": {
+      "title": "チェックイン",
+      "lockedPrefix": "チェックインを解放するには、まずエンゲージメントレターを開いてください —",
+      "returnToLetter": "レターへ戻る",
+      "dayOneEyebrow": "初日チェックイン",
+      "welcome": "Salvage City へようこそ、{name}。",
+      "checkedIn": "チェックイン完了です。",
+      "checkedInBody": "プロダクションには即座に表示されます。クレデンシャルの受け取りと安全ブリーフィングのため、プロダクショントレーラーへ向かってください。",
+      "nextLabel": "次:",
+      "nextBody": "プロダクショントレーラーでクレデンシャルを受け取ってください。安全ブリーフィングの確認書に署名し、ロールに必要なら無線機を受け取ってください。",
+      "directorOnCall": "オンコールのプロジェクトディレクター:",
+      "seeOnboarding": "オンボーディングトラッカーを見る",
+      "engagementLetter": "エンゲージメントレター"
+    },
+    "offerOnboarding": {
+      "title": "オンボーディング",
+      "lockedPrefix": "オンボーディングを解放するには、まずエンゲージメントレターを開いてください —",
+      "returnToLetter": "レターへ戻る",
+      "stateNotStarted": "未着手",
+      "stateInProgress": "進行中",
+      "stateDone": "完了",
+      "stateWaived": "免除",
+      "stateBlocked": "ブロック中",
+      "eyebrow": "オンボーディング",
+      "welcome": "ようこそ、{name}",
+      "progress": "進捗",
+      "criticalOpenOne": "クリティカルパスのステップが {count} 件オープン",
+      "criticalOpenOther": "クリティカルパスのステップが {count} 件オープン",
+      "criticalBody": "クリティカルパスのステップはクレデンシャルとファーストコールのゲートです。下記の ★ 印の項目です。",
+      "due": "期限 {date}",
+      "completed": "· 完了 {date}",
+      "backToLetter": "← エンゲージメントレターへ戻る"
+    },
+    "offerPrint": {
+      "instructionsBefore": "クリック:",
+      "printSaveAsPdf": "印刷 / PDF として保存",
+      "instructionsMiddle": "、次に選択:",
+      "saveAsPdf": "PDF として保存",
+      "instructionsAfter": "をブラウザの印刷ダイアログで。",
+      "backToLetter": "← レターへ戻る"
+    },
+    "msaSign": {
+      "submit": "署名して送信",
+      "exhibitBHeading": "別紙 B — その他のクライアント",
+      "exhibitBHint": "過去24か月間に実質的に類似のサービスを提供したクライアントを2社以上記入してください。開示するものが少ない場合は行を空欄のままにしてください。",
+      "exhibitBClientPlaceholder": "クライアント {n}",
+      "exhibitBProjectPlaceholder": "プロジェクト / エンゲージメント",
+      "exhibitBDatesPlaceholder": "期間 · 例: 2025年 Q3",
+      "exhibitCHeading": "別紙 C — 資本投資",
+      "exhibitCHint": "持ち込むものを項目化してください — 事業体、保険、機材、工具、資格など。",
+      "exhibitCBusinessEntity": "事業体",
+      "exhibitCInsurance": "保険",
+      "exhibitCToolsEquipment": "工具 / 機材",
+      "exhibitCItemCategory": "項目 / カテゴリー",
+      "exhibitCDescriptionPlaceholder": "説明 / 価額",
+      "nscbHeading": "NSCB ライセンス — Chapter 624",
+      "nscbHint": "NRS Chapter 624 に該当するトレードスコープ — 大工、電気、リギングなど — に必要です。該当しない場合はスキップしてください。",
+      "nscbLicensePlaceholder": "ライセンス番号 · 例: 0012345",
+      "nscbClassificationPlaceholder": "分類 · 例: C-3",
+      "nscbMonetaryLimitPlaceholder": "金額上限 · セント単位、例: 50000000",
+      "attestation": "私は、自身または自身の事業体を代表して本契約に署名する権限を有します。別紙 B および C に記載した表明は、私の知る限り真実かつ正確です。",
+      "signatureLabel": "署名 · 法的氏名のフルネームを入力",
+      "signaturePlaceholder": "法的氏名のフルネーム"
+    },
+    "msaUnlock": {
+      "title": "マスターサービス契約",
+      "expiredHint": "セッションが期限切れか、アクセスコードが変更されました。このリンクと一緒に送られた6文字のアクセスコードを再入力してください。",
+      "hint": "MSA を表示するには、このリンクと一緒に送られた6文字のアクセスコードを入力してください。",
+      "openMsa": "MSA を開く",
+      "accessCodeLabel": "アクセスコード",
+      "troubleContact": "お困りですか?連絡先:"
+    },
+    "msaPrint": {
+      "instructionsBefore": "クリック:",
+      "printSaveAsPdf": "印刷 / PDF として保存",
+      "instructionsMiddle": "、次に選択:",
+      "saveAsPdf": "PDF として保存",
+      "instructionsAfter": "をブラウザの印刷ダイアログで。",
+      "backToMsa": "← MSA へ戻る"
+    },
+    "proposalSignature": {
+      "signedToast": "署名済み · {hash}",
+      "signedEyebrow": "署名済み",
+      "thankYou": "ありがとうございます、{name}",
+      "signerFallback": "署名者",
+      "signedOn": "署名日 {date}",
+      "authorizeEyebrow": "承認",
+      "acceptHeading": "この提案書を承諾",
+      "yourNameLabel": "お名前",
+      "emailLabel": "メール",
+      "titleRoleLabel": "肩書 / ロール",
+      "titleRolePlaceholder": "ファウンダー、プロデューサー、COO…",
+      "type": "入力",
+      "draw": "手書き",
+      "typeSignaturePlaceholder": "署名を入力",
+      "clear": "クリア",
+      "signing": "署名中…",
+      "signAndAccept": "署名して承諾"
+    },
+    "msaDocument": {
+      "title": "独立請負人マスターサービス契約",
+      "version": "バージョン {version}",
+      "issued": "発行 {date}",
+      "contractor": "コントラクター",
+      "recitalsHeading": "前文",
+      "relationshipHeading": "1. 当事者の関係",
+      "termsHeading": "2. 条項",
+      "governingLawHeading": "3. 準拠法と機密保持",
+      "exhibitBHeading": "別紙 B — その他のクライアント",
+      "exhibitBHint": "コントラクターは、本契約の発効日に先立つ24か月以内に、以下のクライアントに対し実質的に類似のサービスを提供したことを表明します。",
+      "colClient": "クライアント",
+      "colProject": "プロジェクト",
+      "colDates": "期間",
+      "exhibitCHeading": "別紙 C — 資本投資の項目化",
+      "exhibitCHint": "サービスに関連するコントラクターの事業への資本投資には、事業体の設立、加入保険、保有するソフトウェア・機材・工具、エンゲージメント前の準備と資格、該当する場合はトレード固有の NSCB ライセンスなどが含まれますが、これらに限定されません。",
+      "colItemCategory": "項目 / カテゴリー",
+      "colDescriptionValue": "説明 / 価額",
+      "nscbLicenseHeading": "NSCB ライセンス · Chapter 624",
+      "licenseNumberLabel": "ライセンス番号:",
+      "classificationLabel": "分類:",
+      "monetaryLimitLabel": "金額上限:",
+      "signed": "署名済み",
+      "counterSigned": "副署 {when}",
+      "awaitingCounterSignature": "副署待ち",
+      "awaitingBody": "このマスターサービス契約の承諾を正式なものにするには、法的氏名のフルネームを入力してください。タイプ署名、IP アドレス、タイムスタンプが監査証跡として記録されます。",
+      "forOrg": "{org} 代表",
+      "signerTitle": "プロデューサー & オペレーションズディレクター",
+      "reference": "参照"
+    },
+    "letterDocument": {
+      "title": "エンゲージメントレター",
+      "issued": "発行 {date}",
+      "recipient": "宛先",
+      "greeting": "ご挨拶",
+      "introLead": "あなたはマニフェストに載りました。{employer} を代表して、次のロールであなたをお迎えできることを嬉しく思います:",
+      "introFor": "対象:",
+      "introTail": "エンゲージメントの詳細は以下のとおりです — ご一読のうえ、末尾に副署して正式なものにしてください。",
+      "questionsBeforeSigning": "署名前の質問は、こちらへ:",
+      "at": "·",
+      "engagementSummaryHeading": "1. エンゲージメントサマリー",
+      "role": "ロール",
+      "department": "部門",
+      "classification": "区分",
+      "reportsTo": "レポート先",
+      "workLocation": "勤務場所",
+      "engagementWindow": "エンゲージメント期間",
+      "travelIn": "移動イン",
+      "onSiteStart": "オンサイト開始",
+      "onSiteEnd": "オンサイト終了",
+      "travelOut": "移動アウト",
+      "serviceDayOne": "日のオンサイト稼働予定。",
+      "serviceDayOther": "日のオンサイト稼働予定。",
+      "compensationHeading": "2. 報酬",
+      "basis": "基準",
+      "compensation": "報酬",
+      "travelLodgingReimbursement": "移動 + 宿泊の実費精算",
+      "paymentSchedule": "支払いスケジュール",
+      "inclusionsHeading": "3. 含まれるもの",
+      "noInclusions": "追加で含まれるものの指定はありません。",
+      "travelProvided": "移動の提供 / 手配あり",
+      "lodgingProvided": "宿泊の提供あり",
+      "mealsProvided": "コール日のクルーミール",
+      "scopeHeading": "4. 作業範囲",
+      "scheduleHeading": "5. 稼働スケジュール",
+      "scheduleHint": "プロジェクトのプロダクションスケジュールのマイルストーン。日程とアクティビティはプロダクションの状況により変更される場合があります。重要な変更は標準のプロダクションチャネルを通じてお知らせします。",
+      "colDate": "日付",
+      "colCall": "コール",
+      "colWrap": "ラップ",
+      "colMilestones": "マイルストーン",
+      "onboardingHeading": "6. オンボーディングチェックリスト",
+      "onboardingHint": "準備を整えるための短いリストです。クレデンシャルを発送できるよう、承諾から48時間以内のクローズを目指してください。",
+      "signMsa": "マスターサービス契約に署名",
+      "openMsaLink": "MSA を開く ↗",
+      "msaOneTimeNote": "一度きりです。署名は今後ブッキングするすべてのエンゲージメントに適用されます — このステップは二度と表示されません。",
+      "openLink": "開く ↗",
+      "reviewGuide": "Salvage City プロダクションガイドを確認",
+      "accepted": "承諾済み",
+      "counterSigned": "副署 {when}",
+      "awaitingCounterSignature": "副署待ち",
+      "awaitingBody": "承諾を正式なものにするには、下に法的氏名のフルネームを入力してください。タイプ署名、IP アドレス、タイムスタンプが監査証跡として記録されます。",
+      "forEmployer": "{employer} 代表",
+      "signerTitle": "プロデューサー & オペレーションズディレクター",
+      "reference": "参照",
+      "footerMsaOnFile": "このエンゲージメントは、{date} に署名されたあなたの独立請負人マスターサービス契約 · v{version} に従います。",
+      "viewMsaLink": "MSA を見る ↗",
+      "footerMsaPendingPrefix": "このエンゲージメントは当社の独立請負人マスターサービス契約に従います —",
+      "readAndSignLink": "あなたのコピーを読んで署名 ↗",
+      "footerMsaPendingSuffix": "一度きりで、今後のすべてのエンゲージメントに適用されます。",
+      "footerMsaSeparateEmail": "このエンゲージメントは当社の独立請負人マスターサービス契約に従います — あなた専用のコピーが別のメールで届きます。初回の稼働日までに署名が必要です。",
+      "governingLaw": "準拠法: ネバダ州法。管轄: ネバダ州クラーク郡。{employer} の機密情報および専有情報。"
+    },
+    "heatProposal": {
+      "navOverview": "概要",
+      "navBuilds": "ビルド",
+      "navRetainer": "リテイナー",
+      "navScope": "スコープ",
+      "navLifecycle": "ライフサイクル",
+      "navInvestment": "投資",
+      "navAddons": "アドオン",
+      "navSign": "署名",
+      "sectionNavLabel": "セクションナビゲーション",
+      "heroEyebrow": "ポップアップアクティベーションプログラム · {window}",
+      "heroHeadlineLine2": "イーストプラザ アクティベーション",
+      "heroSub": "Kaseya Center のイーストプラザに常駐するアクティベーションスタジオ — コンセプト、エンジニアリング、ファブリケーション、設置、撤去まで。パートナーアンロック、ホームスタンドのリズム、シグネチャーなプラザテイクオーバーに合わせて調整されたティア制のポップアップメニューで展開します。",
+      "metaClient": "クライアント",
+      "metaProducer": "プロデューサー",
+      "metaVenue": "会場",
+      "metaDocument": "ドキュメント",
+      "metaReference": "参照",
+      "heroConfidential": "機密 · Miami HEAT の {contact} 宛に作成 · {validity}",
+      "overviewEyebrow": "プロジェクト概要",
+      "overviewTitle": "ティア制のビルド。確保されたキャパシティ。",
+      "overviewSub": "3つのエンゲージメントベクトルが、複利で効くように設計されています。各アクティベーションはティア制のビルドメニューから引き出します。月次リテイナー — 3ティアから1つを選択 — がプログラムの背後に専任スタジオキャパシティを確保します。アドオンはどちらにも、オンデマンドで積めます。",
+      "perActivation": "アクティベーション単位",
+      "buildMenu": "ビルドメニュー",
+      "sizeSmall": "スモール",
+      "sizeMedium": "ミディアム",
+      "sizeLarge": "ラージ",
+      "includes": "含まれるもの",
+      "includesValue": "プロダクション · ファブ · 設置 · 撤去",
+      "retainer": "リテイナー",
+      "threeTiers": "3つのティア",
+      "tierBase": "ベース",
+      "tierElevated": "エレベーテッド",
+      "tierPremium": "プレミアム",
+      "perMonth": "{amount} / 月",
+      "commitment": "コミットメント",
+      "upgrades": "アップグレード",
+      "optionalUpgrades": "オプションのアップグレード",
+      "addonMenu": "アドオンメニュー",
+      "addonMenuValue": "{count} アイテム · 5カテゴリー",
+      "addsTo": "追加先",
+      "addsToValue": "リテイナー · アクティベーション · 両方",
+      "buildDiscount": "ビルドディスカウント",
+      "buildDiscountValue": "定価から最大12%オフ",
+      "assetReuse": "アセット再利用",
+      "assetReuseValue": "再配備時に30〜50%のクレジット",
+      "upsellSeeElevated": "もっと必要?エレベーテッドを見る →",
+      "upsellSeePremium": "もっと必要?プレミアムを見る →",
+      "retainerTiersEyebrow": "リテイナーティア",
+      "retainerTiersTitle": "ベース。エレベーテッド。プレミアム。",
+      "retainerTiersSub": "アクティベーションのケイデンスに合わせてスケールする3つのリテイナーティア。各ティアは前のティアの上に積み上がります — エレベーテッドはベースのすべてを含み、プレミアムはエレベーテッドのすべてに加え、最上位ティア専用のラインを含みます。",
+      "monthly": "月次",
+      "perYear": "· {amount} / 年",
+      "fitFor": "向いているのは",
+      "choose": "{name} を選ぶ",
+      "premiumExclusivesEyebrow": "プレミアム限定 · 最上位ティア専用",
+      "premiumExclusivesTitle": "他では手に入らないライン。",
+      "premiumExclusivesSub": "プレミアムティアでのみ利用できる4つのライン — アラカルトでも、エレベーテッドでも、単発購入でも提供しません。シーズンを定義づけるプログラムを私たちと走らせるパートナーのために確保されています。",
+      "activationBuildsEyebrow": "アクティベーションビルド",
+      "activationBuildsTitle": "スモール。ミディアム。ラージ。",
+      "activationBuildsSub": "その瞬間に合わせて調整された3つのビルドティア。各ティアはベース仕様からトップ仕様までのタイトなレンジを持ち、より大きな建築的・リテール的な展開はアドオンメニューから別途見積もります。",
+      "buildRange": "ビルドレンジ",
+      "precedent": "前例 · {name}",
+      "includedInBase": "ベースに含む · {amount}",
+      "upgradesInTier": "このティアのアップグレード · 最大 {amount}",
+      "tierFootnotePrefix": "より大きな建築的展開 — ケメタルクラッディング、コンテナアーキテクチャ、フル POS リテール、ホスピタリティビルド — は、別途見積もります:",
+      "addonsMenuLink": "アドオンメニュー",
+      "tierFootnoteSuffix": "から。その瞬間に合うティアの上に重ねられます。",
+      "scopeEyebrow": "作業範囲",
+      "scopeTitle": "描く。作る。刷る。設置する。",
+      "scopeSub": "ファブリケーションとプリントのすべての要素、そしてそれをショップからプラザへ、また戻すプロダクションサービスをカバーする11のスコープノード。ティアが決めるのは広さと仕上げ — どのノードに触れるかではありません。",
+      "fabricationPrint": "ファブリケーション & プリント",
+      "productionServices": "プロダクションサービス",
+      "appliesTo": "適用対象 · {list}",
+      "sitesEyebrow": "アクティベーションサイト",
+      "sitesTitle": "すべての要素が着地する場所。",
+      "sitesSub": "イーストプラザ全体の3つのゾーン。それぞれ異なるティアと滞留パターンに対応し、トリートメントはその瞬間に合わせてスケールします。",
+      "site": "サイト · {tag}",
+      "cadenceAriaLabel": "ケイデンス",
+      "cadenceSmall": "スモールケイデンス",
+      "cadenceMedium": "ミディアムケイデンス",
+      "cadenceLarge": "ラージケイデンス",
+      "lifecycleEyebrow": "プロダクションライフサイクル",
+      "lifecycleTitle": "ブリーフからストライクまで。",
+      "lifecycleSub": "8つのフェーズ、すべてのアクティベーションで同一の構造。滑走路はビルドティアに応じてスケールします — スモールは5週間に凝縮、ミディアムは9週間、ラージは13週間に伸びます。",
+      "milestones": "マイルストーン",
+      "deliverables": "Deliverable",
+      "approvalGate": "承認ゲート",
+      "workbackEyebrow": "ワークバックスケジュール · {runway}",
+      "workbackTitle": "アクティベーション日から逆算。",
+      "workbackSub": "{tier} ビルドでは、すべての締切がアクティベーション日から逆算されます。上のケイデンスを切り替えると、スモール、ミディアム、ラージの比較が見られます。",
+      "colPhase": "フェーズ",
+      "colMilestone": "マイルストーン",
+      "colDeadline": "締切",
+      "investmentEyebrow": "投資サマリー",
+      "investmentTitle": "ビルド + リテイナー。",
+      "investmentSub": "プログラムの総投資額は、アクティベーションのケイデンスとリテイナーティアに応じてスケールします。メニューからビルドを選び、プログラムの背後にスタジオキャパシティを確保するリテイナーを選び、その瞬間に合うアップグレードを重ねてください。すべての金額はプロダクション、ファブリケーション、設置、撤去をカバーします。",
+      "perActivationBuild": "アクティベーション単位のビルド",
+      "rangeBaseToTopSpec": "レンジ · ベース仕様からトップ仕様まで",
+      "tierBuild": "{name} ビルド",
+      "retainerTierPickOne": "リテイナーティア · 1つ選択",
+      "monthlyAnnual": "月次 · 年次",
+      "retainerNamePitch": "{name} リテイナー · {pitch}",
+      "perMoSuffix": "/ 月",
+      "addonsUpgrades": "アドオン & アップグレード",
+      "addToAnyTier": "どのティアにも追加可能",
+      "menuItemsCount": "5カテゴリーにわたる {count} のメニューアイテム",
+      "addonsCategoriesBody": "素材 & 仕上げ · 機能アップグレード · サービスオーバーレイ · ロジスティクス · ドキュメンテーション。どのリテイナーにもアクティベーションにも、いくつでも追加できます。",
+      "pricedByRequest": "価格は要相談",
+      "programInvestment": "プログラム投資",
+      "retainerBuildAddons": "リテイナー + ビルド + アドオン",
+      "investmentFootnote": "すべてのアクティベーションは、このマスター契約に組み込まれた個別の署名済みサインオフのもとで実行されます。各ビルドティアはベース仕様からトップ仕様までのタイトなレンジを持ち、そのレンジ内のアップグレードはティア内に収まります。より大きな建築的展開はアドオンメニューから別途見積もります。",
+      "addonsEyebrow": "アドオン & アップグレード",
+      "addonsTitle": "何でも、何にでも積める。",
+      "addonsSub": "オプションアップグレードのフルメニュー — 素材、機能、サービス、ロジスティクス、ドキュメンテーション。どのアイテムでも選んで、どのリテイナーにもどのビルドにも追加できます。価格は要相談。",
+      "itemsCount": "{count} アイテム",
+      "appliesRetainerActivation": "リテイナー + アクティベーション",
+      "appliesRetainer": "リテイナー",
+      "appliesActivation": "アクティベーション",
+      "minTier": "最低ティア · {tier}",
+      "activationDeposit": "アクティベーションデポジット",
+      "depositDue": "各アクティベーションの作業範囲記述書の書面承認時に支払い。",
+      "balance": "残額",
+      "balanceDue": "ロードインの5営業日前までに支払い。リテイナーは別途、月次 net-15 で請求。",
+      "paymentMethodAch": "支払い方法 · ACH / 電信送金",
+      "payableTo": "支払先",
+      "achWire": "ACH / 電信送金",
+      "achWireValue": "銀行情報は契約締結時に発行",
+      "currency": "通貨",
+      "optionalScopeEyebrow": "オプションスコープ",
+      "changeOrdersTitle": "利用可能なチェンジオーダー。",
+      "changeOrdersSub": "ベースティアメニュー外のスコープ — 個別発行、または単一のアクティベーション SOW へまとめて積めます。",
+      "available": "利用可能",
+      "scopeBoundariesEyebrow": "スコープの境界",
+      "exclusionsTitle": "このエンゲージメントの外側。",
+      "termsEyebrow": "条項",
+      "termsTitle": "運用合意。",
+      "authorizationEyebrow": "承認",
+      "authorizationTitle": "マスター契約を締結。",
+      "authorizationSub": "ここに署名すると、ベースラインのリテイナーが承認され、HEAT は個別 SOW のもとでティアメニューからアクティベーションを発注できるようになります。アクティベーション単位の署名は各 SOW にあります。",
+      "draw": "手書き",
+      "type": "入力",
+      "drawSignatureAria": "署名を手書き",
+      "typeFullNamePlaceholder": "法的氏名のフルネームを入力",
+      "typedSignatureAria": "タイプ署名",
+      "printedName": "活字体氏名",
+      "titleField": "肩書",
+      "executeAlert": "締結するには署名と活字体氏名を追加してください。",
+      "executed": "締結済み",
+      "executeAgreement": "契約を締結",
+      "clear": "クリア",
+      "executionReceipt": "締結レシート",
+      "executedBy": "締結者",
+      "emailProducer": "プロデューサーにメール",
+      "printSavePdf": "印刷 / PDF 保存",
+      "footerProducer": "プロデューサー",
+      "footerProject": "プロジェクト",
+      "footerConfidential": "機密",
+      "footerConfidentialBody": "{client} 宛に作成。価格と構造の詳細は当事者間の機密です。© {year} {producer}。"
+    }
+  },
+  "publicFormSubmit": {
+    "submitted": "送信済み",
+    "thankYouTitle": "ありがとうございます — 受け付けました。",
+    "thankYouBody": "回答が記録されました。このタブは閉じて構いません。",
+    "leaveBlank": "空欄のまま",
+    "selectPlaceholder": "選択…",
+    "submitting": "送信中",
+    "submit": "送信"
+  },
+  "apiDocs": {
+    "meta": {
+      "title": "API リファレンス",
+      "description": "ATLVS パブリック API の REST + OpenAPI 3.1 ドキュメント。認証はセッション Cookie または Bearer PAT。レート制限はプランティアに応じてスケールします。"
+    },
+    "docDescription": "ATLVS Technologies のパブリック REST サーフェス。",
+    "eyebrow": "REST API · v1",
+    "heading": "ATLVS API リファレンス",
+    "downloadOpenApi": "OpenAPI 3.1 をダウンロード · JSON",
+    "manageApiKeys": "API キーを管理",
+    "authentication": "認証",
+    "authBody": "パーソナルアクセストークンを次のヘッダーで渡します:",
+    "authBodyHeader": "ヘッダー:",
+    "authCookieBefore": "またはサインインで設定されるセッション Cookie を使用:",
+    "rateLimits": "レート制限",
+    "rateLimitsBody": "制限は組織のプランに応じてスケールします。すべてのレスポンスに含まれるもの:",
+    "retryAfterNote": "429 のときのみ",
+    "resources": "リソース",
+    "parameters": "パラメーター",
+    "paramName": "名前",
+    "paramIn": "場所",
+    "paramType": "型",
+    "paramRequired": "必須",
+    "yes": "はい",
+    "no": "いいえ",
+    "requestBody": "リクエストボディ",
+    "responses": "レスポンス",
+    "footer": "OpenAPI 3.1 · {count} パス · 登録済み Zod スキーマからリクエスト時に生成。"
   }
 }

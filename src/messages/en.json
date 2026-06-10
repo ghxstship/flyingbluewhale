@@ -18,10 +18,10 @@
     "import": "Import",
     "settings": "Settings",
     "help": "Help",
-    "signOut": "Sign out",
+    "signOut": "Sign Out",
     "signIn": "Sign in",
-    "signUp": "Sign up",
-    "startFree": "Start free",
+    "signUp": "Sign Up",
+    "startFree": "Start Free",
     "back": "Back",
     "next": "Next",
     "previous": "Previous",
@@ -30,7 +30,7 @@
     "retry": "Retry",
     "copy": "Copy",
     "copied": "Copied",
-    "copyLink": "Copy link",
+    "copyLink": "Copy Link",
     "all": "All",
     "none": "None",
     "yes": "Yes",
@@ -206,12 +206,12 @@
       "ctaTired": "Built for production teams who are tired of duct tape."
     },
     "cta": {
-      "startFree": "Start free",
+      "startFree": "Start Free",
       "bookDemo": "Book a Demo",
       "viewDocs": "View the Docs",
       "startFreeForLife": "Start Free for Life",
-      "contactSales": "Contact sales",
-      "pitchStory": "Pitch a story"
+      "contactSales": "Contact Sales",
+      "pitchStory": "Pitch a Story"
     },
     "pages": {
       "about": {
@@ -804,7 +804,7 @@
             "outcome": "Outcome"
           },
           "modules": {
-            "label": "Modules used"
+            "label": "Modules Used"
           },
           "more": {
             "title": "More From the Community",
@@ -1364,7 +1364,7 @@
         "faqs": {
           "reportBug": {
             "q": "Where do I report a bug?",
-            "a": "Email support@atlvs.pro with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side."
+            "a": "Email sos@atlvs.pro with the URL where it happened and a screenshot if you have one. We tag every report with the audit log entry so we can see exactly what happened on our side."
           },
           "statusPage": {
             "q": "Do you have a status page?",
@@ -4082,7 +4082,7 @@
       "community": "Community — minimal"
     },
     "pending": {
-      "heading": "Pending ({count})",
+      "heading": "Pending · {count}",
       "emptyAdmin": "Send one above to get started.",
       "emptyMember": "Ask an admin to invite new members.",
       "columns": {
@@ -5207,7 +5207,7 @@
         "reason": "Reason"
       },
       "title": "Time Off",
-      "balancesHeading": "Balances ({year})",
+      "balancesHeading": "Balances · {year}",
       "noPolicies": "No policies assigned yet.",
       "policyFallback": "Policy",
       "hours": "{hours}h",
@@ -6516,7 +6516,7 @@
         "urnPrefix": "URN",
         "markReady": "Mark Ready",
         "storageHeading": "Storage",
-        "hotLinksHeading": "Hot Links ({count})",
+        "hotLinksHeading": "Hot Links · {count}",
         "linkType": {
           "rfi": "RFI",
           "submittal": "Submittal",
@@ -9870,8 +9870,8 @@
           "projectPlaceholder": "Select a project…",
           "dateLabel": "Date",
           "weatherSummaryLabel": "Weather summary",
-          "tempHighLabel": "Temp high (°F)",
-          "tempLowLabel": "Temp low (°F)",
+          "tempHighLabel": "Temp High — °F",
+          "tempLowLabel": "Temp Low — °F",
           "notesLabel": "Notes"
         },
         "eyebrow": "Operations",
@@ -10434,7 +10434,7 @@
         "title": "Invites",
         "subtitle": "Pending organization invitations",
         "inviteSomeone": "Invite Someone",
-        "pendingHeading": "Pending ({count})",
+        "pendingHeading": "Pending · {count}",
         "empty": {
           "title": "No Pending Invites",
           "adminDescription": "Send one above to get started."
@@ -10448,7 +10448,7 @@
           "when": "When"
         },
         "projectFallback": "project",
-        "copyLink": "Copy link",
+        "copyLink": "Copy Link",
         "history": "History"
       },
       "msas": {
@@ -10561,7 +10561,7 @@
           "statusDraft": "Draft — not yet sent",
           "statusActive": "Public link active",
           "copied": "Copied",
-          "copyLink": "Copy link",
+          "copyLink": "Copy Link",
           "copyCode": "Copy code",
           "copyBoth": "Copy both"
         },
@@ -11037,7 +11037,7 @@
             "eyebrow": "Procurement",
             "title": "Add Bid Response",
             "vendorLabel": "Vendor",
-            "totalLabel": "Total ($)"
+            "totalLabel": "Total — $"
           },
           "eyebrow": "Procurement",
           "breadcrumbs": {
@@ -14617,7 +14617,7 @@
           "xpmsClass": "XPMS Class",
           "tier": "Tier",
           "shellType": "Shell Type",
-          "orientation": "Orientation (° true-north)",
+          "orientation": "Orientation — ° True-North",
           "lengthIn": "Length — in",
           "widthIn": "Width — in",
           "heightIn": "Height — in",

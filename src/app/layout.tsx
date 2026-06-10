@@ -22,6 +22,7 @@ import { LiveRegionProvider } from "@/components/ui/LiveRegion";
 import { CookieConsent } from "@/components/compliance/CookieConsent";
 import { ShortcutDialog } from "@/components/ShortcutDialog";
 import { isRtl } from "@/lib/i18n/config";
+import { BRAND } from "@/lib/brand";
 import { LocaleProvider } from "@/lib/i18n/LocaleProvider";
 import { getRequestT } from "@/lib/i18n/request";
 import { getRequestFormatters } from "@/lib/i18n/request";
@@ -65,8 +66,8 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.baseUrl),
   title: {
-    default: "ATLVS Technologies — Production Runs On It",
-    template: "%s · ATLVS Technologies",
+    default: `${BRAND.legalName} — Production Runs On It`,
+    template: `%s · ${BRAND.legalName}`,
   },
   description:
     "ATLVS · COMPVSS · GVTEWAY — proprietary production, workforce, and ticketing software from GHXSTSHIP. Three instruments, one connected bridge for experiential production at scale.",
@@ -80,7 +81,7 @@ export const metadata: Metadata = {
     "ATLVS",
     "GVTEWAY",
     "COMPVSS",
-    "ATLVS Technologies",
+    BRAND.legalName,
   ],
   manifest: "/manifest.json",
   // Favicon/touch-icon wiring — src/app/icon.svg auto-loads via Next.js
@@ -95,14 +96,14 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "ATLVS Technologies",
+    title: BRAND.legalName,
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
-    siteName: "ATLVS Technologies",
+    siteName: BRAND.legalName,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ATLVS Technologies",
+    title: BRAND.legalName,
     description: "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers.",
   },
   robots: { index: true, follow: true },
@@ -168,7 +169,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             and inherits across every route. */}
         <StructuredData
           data={organization({
-            name: "ATLVS Technologies",
+            name: BRAND.legalName,
             url: SITE.baseUrl,
             description:
               "ATLVS · GVTEWAY · COMPVSS — the Itinerary for cultural tastemakers. Production operations workspace, stakeholder portals, and mobile PWA for events, fabrication, and creative ops.",

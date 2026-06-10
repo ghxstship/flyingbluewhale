@@ -1,6 +1,5 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { generateCode, hashCode, codePrefix, normalizeCode } from "@/lib/guides/access-token";
 import type { GuidePersona } from "@/lib/guides/types";
 
@@ -24,7 +23,7 @@ export type GuideAccessCode = {
 
 export async function listAccessCodes(orgId: string, projectId: string): Promise<GuideAccessCode[]> {
   if (!orgId || !projectId) return [];
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("guide_access_codes")
     .select(
@@ -49,7 +48,7 @@ export async function createAccessCode(args: {
   const plain = generateCode();
   const hash = await hashCode(plain);
   const prefix = codePrefix(plain);
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("guide_access_codes")
     .insert({
@@ -72,7 +71,7 @@ export async function createAccessCode(args: {
 }
 
 export async function revokeAccessCode(codeId: string): Promise<void> {
-  const supabase = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
   const { error } = await supabase
     .from("guide_access_codes")
     .update({ revoked_at: new Date().toISOString() })
@@ -122,14 +121,14 @@ export async function redeemAccessCode(args: {
   userAgent?: string | null;
 }): Promise<RedeemSuccess | RedeemFailure> {
   const hash = await hashCode(normalizeCode(args.rawCode));
-  const sb = (await createClient()) as unknown as LooseSupabase;
+  const sb = await createClient();
   const { data, error } = (await sb.rpc("redeem_guide_access_code", {
     p_project_id: args.projectId,
     p_persona: args.persona,
     p_code_hash: hash,
     p_jti: args.jti,
-    p_ip: args.ip ?? null,
-    p_user_agent: args.userAgent ?? null,
+    p_ip: args.ip ?? undefined,
+    p_user_agent: args.userAgent ?? undefined,
   })) as { data: RedeemRpcRow[] | RedeemRpcRow | null; error: unknown };
   if (error) return { ok: false, reason: "service_unavailable" };
   const row: RedeemRpcRow | null = Array.isArray(data) ? (data[0] ?? null) : data;
@@ -179,7 +178,7 @@ export async function listRedemptions(
   }>
 > {
   if (!orgId || !projectId) return [];
-  const sb = (await createClient()) as unknown as LooseSupabase;
+  const sb = await createClient();
   const { data } = (await sb
     .from("guide_access_redemption_log")
     .select("id, code_id, persona, redeemed_at, ip, user_agent, code_label, code_prefix, org_id")

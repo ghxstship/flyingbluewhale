@@ -1,6 +1,7 @@
 import "server-only";
 import webpush from "web-push";
 import { createServiceClient } from "../supabase/server";
+import type { Json, TablesInsert } from "../supabase/types";
 import { log } from "../log";
 import { hasVapid, vapid } from "./vapid";
 
@@ -81,26 +82,8 @@ function ensureVapid(): boolean {
 async function fetchActiveSubs(userId: string): Promise<PushSubRow[]> {
   try {
     const svc = createServiceClient();
-    // Cast through `any` because `push_subscriptions` is added by a fresh
-    // migration and may not yet be in the regenerated database.types.
-    const { data, error } = await (
-      svc.from as unknown as (table: string) => {
-        select: (cols: string) => {
-          eq: (
-            col: string,
-            val: string,
-          ) => {
-            is: (
-              col: string,
-              val: null,
-            ) => Promise<{
-              data: PushSubRow[] | null;
-              error: { message: string } | null;
-            }>;
-          };
-        };
-      }
-    )("push_subscriptions")
+    const { data, error } = await svc
+      .from("push_subscriptions")
       .select("id, endpoint, p256dh, auth, failure_count")
       .eq("user_id", userId)
       .is("disabled_at", null);
@@ -120,24 +103,8 @@ async function fetchActiveSubsBulk(userIds: string[]): Promise<Map<string, PushS
   if (userIds.length === 0) return map;
   try {
     const svc = createServiceClient();
-    const { data, error } = await (
-      svc.from as unknown as (table: string) => {
-        select: (cols: string) => {
-          in: (
-            col: string,
-            vals: string[],
-          ) => {
-            is: (
-              col: string,
-              val: null,
-            ) => Promise<{
-              data: Array<PushSubRow & { user_id: string }> | null;
-              error: { message: string } | null;
-            }>;
-          };
-        };
-      }
-    )("push_subscriptions")
+    const { data, error } = await svc
+      .from("push_subscriptions")
       .select("id, user_id, endpoint, p256dh, auth, failure_count")
       .in("user_id", userIds)
       .is("disabled_at", null);
@@ -166,15 +133,7 @@ async function fetchActiveSubsBulk(userIds: string[]): Promise<Map<string, PushS
 async function markDisabled(id: string): Promise<void> {
   try {
     const svc = createServiceClient();
-    await (
-      svc.from as unknown as (table: string) => {
-        update: (patch: Record<string, unknown>) => {
-          eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
-        };
-      }
-    )("push_subscriptions")
-      .update({ disabled_at: new Date().toISOString() })
-      .eq("id", id);
+    await svc.from("push_subscriptions").update({ disabled_at: new Date().toISOString() }).eq("id", id);
   } catch (err) {
     log.warn("push.mark_disabled_exception", { id, err: (err as Error).message });
   }
@@ -187,17 +146,8 @@ async function bumpFailure(id: string, current: number): Promise<void> {
     // lose increments (read-modify-write on the same value: both fail,
     // both read N, both write N+1, the disable threshold takes 2× the
     // failures to trip).
-    type FromUpdate = (table: string) => {
-      update: (patch: Record<string, unknown>) => {
-        eq: (
-          col: string,
-          val: string | number,
-        ) => {
-          eq: (col: string, val: string | number) => Promise<{ error: { message: string } | null }>;
-        };
-      };
-    };
-    await (svc.from as unknown as FromUpdate)("push_subscriptions")
+    await svc
+      .from("push_subscriptions")
       .update({ failure_count: current + 1 })
       .eq("id", id)
       .eq("failure_count", current);
@@ -209,15 +159,7 @@ async function bumpFailure(id: string, current: number): Promise<void> {
 async function bumpLastSeen(id: string): Promise<void> {
   try {
     const svc = createServiceClient();
-    await (
-      svc.from as unknown as (table: string) => {
-        update: (patch: Record<string, unknown>) => {
-          eq: (col: string, val: string) => Promise<{ error: { message: string } | null }>;
-        };
-      }
-    )("push_subscriptions")
-      .update({ last_seen_at: new Date().toISOString() })
-      .eq("id", id);
+    await svc.from("push_subscriptions").update({ last_seen_at: new Date().toISOString() }).eq("id", id);
   } catch {
     // last_seen is best-effort; never fail a push because we couldn't bump it.
   }
@@ -252,11 +194,11 @@ async function recordNotifications(userIds: string[], payload: PushPayload): Pro
       project_id: payload.projectId ?? null,
       org_id: payload.orgId ?? null,
     }));
-    const { error } = await (
-      svc.from as unknown as (table: string) => {
-        insert: (rows: Array<Record<string, unknown>>) => Promise<{ error: { message: string } | null }>;
-      }
-    )("notifications").insert(rows);
+    // KEPT CAST: the rows deliberately send explicit nulls for kind/org_id
+    // (both NOT NULL in the schema) when the payload omits them — the
+    // generated Insert type rightly rejects that. Fixing the payload is a
+    // behavior change tracked separately (push.record_notifications_error).
+    const { error } = await svc.from("notifications").insert(rows as unknown as TablesInsert<"notifications">[]);
     if (error) log.warn("push.record_notifications_error", { err: error.message, count: rows.length });
   } catch (err) {
     log.warn("push.record_notifications_exception", { err: (err as Error).message });
@@ -289,15 +231,13 @@ async function enqueuePushRetry(
   try {
     const svc = createServiceClient();
     const nextAt = new Date(Date.now() + nextBackoffMs(1)).toISOString();
-    await (
-      svc.from as unknown as (table: string) => {
-        insert: (rows: Array<Record<string, unknown>>) => Promise<{ error: { message: string } | null }>;
-      }
-    )("push_send_failures").insert([
+    await svc.from("push_send_failures").insert([
       {
         user_id: userId,
         subscription_id: sub.id,
-        payload,
+        // KEPT CAST: PushPayload.data is Record<string, unknown>, which the
+        // Json type can't absorb without widening the public payload API.
+        payload: payload as unknown as Json,
         attempt: 1,
         max_attempts: 3,
         next_attempt_at: nextAt,
@@ -353,9 +293,14 @@ async function filterByPushPrefs(userIds: string[], kind: PushKind | undefined):
   // No kind → broadcast to everyone (system-level pings).
   if (!kind || userIds.length === 0) return new Set();
   const supabase = createServiceClient();
-  const { data } = await supabase.from("notification_preferences").select("user_id, matrix").in("user_id", userIds);
+  const { data } = await supabase
+    .from("notification_preferences")
+    .select("user_id, matrix")
+    .in("user_id", userIds)
+    // `matrix` is JSONB keyed by PushKind — shape to the prefs contract.
+    .returns<Array<{ user_id: string; matrix: Record<string, { push?: boolean }> | null }>>();
   const excluded = new Set<string>();
-  for (const row of (data ?? []) as Array<{ user_id: string; matrix: Record<string, { push?: boolean }> | null }>) {
+  for (const row of data ?? []) {
     const cell = row.matrix?.[kind];
     if (cell?.push === false) excluded.add(row.user_id);
   }

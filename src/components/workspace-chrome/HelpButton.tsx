@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { HelpCircle, BookOpen, ExternalLink } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
+import { urlFor } from "@/lib/urls";
 
 /**
  * `?` Help affordance (ADR-0007).
@@ -46,7 +47,7 @@ export function HelpButton({ knowledgeUrl = "/console/knowledge" }: { knowledgeU
             <span>What's new</span>
           </Link>
           <a
-            href="https://atlvs.pro/docs"
+            href={urlFor("marketing", "/docs")}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-[var(--p-surface)]"

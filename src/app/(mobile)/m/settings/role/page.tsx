@@ -35,7 +35,7 @@ export default async function MobileRoleChooserPage() {
   }
   return (
     <div className="px-4 pt-4 pb-24">
-      <ModuleHeader eyebrow="Settings" title="Mobile role" subtitle="Pick the role that matches your job today." />
+      <ModuleHeader eyebrow="Settings" title="Mobile Role" subtitle="Pick the role that matches your job today." />
       <div className="page-content">
         <RoleChooser current={current} roles={MOBILE_ROLES} />
       </div>

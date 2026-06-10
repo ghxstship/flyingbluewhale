@@ -9,6 +9,7 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { FAQSection, type FAQ } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema, SITE } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
+import { BRAND } from "@/lib/brand";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -44,8 +45,8 @@ export default async function HelpPage() {
       icon: MessageCircle,
       title: t("marketing.pages.help.channels.concierge.title"),
       body: t("marketing.pages.help.channels.concierge.body"),
-      cta: "support@atlvs.pro",
-      href: "mailto:support@atlvs.pro",
+      cta: BRAND.emails.support,
+      href: `mailto:${BRAND.emails.support}`,
     },
     {
       icon: Headset,
@@ -174,7 +175,7 @@ export default async function HelpPage() {
         title={t("marketing.pages.help.cta.title")}
         subtitle={t("marketing.pages.help.cta.subtitle")}
         primaryLabel={t("marketing.pages.help.cta.primaryLabel")}
-        primaryHref="mailto:support@atlvs.pro"
+        primaryHref={`mailto:${BRAND.emails.support}`}
         secondaryLabel={t("marketing.pages.help.cta.secondaryLabel")}
         secondaryHref="/docs"
       />

@@ -60,23 +60,26 @@ export function zodToJsonSchema(schema: ZodTypeAny): JsonSchema {
  * spec — string/number/boolean/enum/object/array, optional+nullable
  * unwrapping. Anything else collapses to `{}`.
  */
-function walk(schema: ZodTypeAny): JsonSchema {
+function walk(schema: z.core.$ZodType): JsonSchema {
   // The schema may be wrapped in optional/nullable; unwrap until we hit
   // the inner type. OpenAPI handles "optional" via the `required` array
   // on the parent object, not on the field itself.
-  const def = (schema as unknown as { _def?: { type?: string; innerType?: ZodTypeAny } })._def;
-  if (!def) return {};
+  //
+  // `_zod.def` is Zod 4's typed internals surface — the base def only
+  // carries the `type` discriminator, so each branch narrows to the
+  // published per-kind def interface from `z.core`.
+  const def = schema._zod.def;
   const t = def.type;
 
   if (t === "optional" || t === "nullable" || t === "default") {
-    if (def.innerType) return walk(def.innerType);
+    const inner = (def as z.core.$ZodOptionalDef | z.core.$ZodNullableDef | z.core.$ZodDefaultDef).innerType;
+    if (inner) return walk(inner);
     return {};
   }
 
   if (t === "string") {
     const node: JsonSchema = { type: "string" };
-    const checks = (schema as unknown as { _def: { checks?: Array<{ _zod?: { def?: Record<string, unknown> } }> } })
-      ._def.checks;
+    const checks = (def as z.core.$ZodStringDef).checks;
     for (const c of checks ?? []) {
       const cd = c._zod?.def as { check?: string; format?: string; minimum?: number; maximum?: number } | undefined;
       if (!cd) continue;
@@ -93,8 +96,7 @@ function walk(schema: ZodTypeAny): JsonSchema {
 
   if (t === "number") {
     const node: JsonSchema = { type: "number" };
-    const checks = (schema as unknown as { _def: { checks?: Array<{ _zod?: { def?: Record<string, unknown> } }> } })
-      ._def.checks;
+    const checks = (def as z.core.$ZodNumberDef).checks;
     for (const c of checks ?? []) {
       const cd = c._zod?.def as { check?: string; value?: number; format?: string; inclusive?: boolean } | undefined;
       if (!cd) continue;
@@ -116,27 +118,23 @@ function walk(schema: ZodTypeAny): JsonSchema {
   if (t === "boolean") return { type: "boolean" };
 
   if (t === "enum") {
-    const entries = (schema as unknown as { _def: { entries?: Record<string, unknown> } })._def.entries;
+    const entries = (def as z.core.$ZodEnumDef).entries;
     const values = entries ? Object.values(entries) : [];
     return { type: "string", enum: values };
   }
 
   if (t === "array") {
-    const el = (schema as unknown as { _def: { element?: ZodTypeAny } })._def.element;
+    const el = (def as z.core.$ZodArrayDef).element;
     return { type: "array", items: el ? walk(el) : {} };
   }
 
   if (t === "object") {
-    const shape =
-      (schema as unknown as { _def: { shape?: Record<string, ZodTypeAny> }; shape?: Record<string, ZodTypeAny> })._def
-        .shape ??
-      (schema as unknown as { shape?: Record<string, ZodTypeAny> }).shape ??
-      {};
+    const shape = (def as z.core.$ZodObjectDef).shape ?? {};
     const properties: Record<string, JsonSchema> = {};
     const required: string[] = [];
     for (const [key, value] of Object.entries(shape)) {
       properties[key] = walk(value);
-      const innerType = (value as unknown as { _def?: { type?: string } })._def?.type;
+      const innerType = value._zod.def.type;
       if (innerType !== "optional" && innerType !== "default") {
         required.push(key);
       }
@@ -179,7 +177,7 @@ function pathItemForEndpoint(d: EndpointDescriptor): Record<string, unknown> {
     });
   }
   for (const [name, schema] of Object.entries(d.queryParams ?? {})) {
-    const isOptional = (schema as unknown as { _def?: { type?: string } })._def?.type === "optional";
+    const isOptional = schema._zod.def.type === "optional";
     parameters.push({
       name,
       in: "query",

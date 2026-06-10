@@ -40,7 +40,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ projectId: st
     const project = await updateProject(session.orgId, parsed.data, {
       ...(input.name !== undefined ? { name: input.name } : {}),
       ...(input.description !== undefined ? { description: input.description } : {}),
-      ...(input.status !== undefined ? { status: input.status } : {}),
+      // Wire field stays `status` for API compat; the column was renamed
+      // to `project_state` by the LDP naming pass. The old `status: …`
+      // passthrough hit a nonexistent column (42703) — masked by `as any`.
+      ...(input.status !== undefined ? { project_state: input.status } : {}),
       ...(input.startDate !== undefined ? { start_date: input.startDate } : {}),
       ...(input.endDate !== undefined ? { end_date: input.endDate } : {}),
     });

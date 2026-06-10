@@ -121,7 +121,7 @@ export default async function InvitesPage() {
                     <td className="text-[var(--p-text-2)]">{relTime(i.expires_at)}</td>
                     <td>
                       <Button href={`/accept-invite/${i.token}`} variant="ghost" size="sm">
-                        {t("console.people.invites.copyLink", undefined, "Copy link")}
+                        {t("console.people.invites.copyLink", undefined, "Copy Link")}
                       </Button>
                     </td>
                   </tr>

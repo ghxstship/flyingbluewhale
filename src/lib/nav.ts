@@ -347,11 +347,13 @@ export const platformNavXpms: NavGroup[] = [
     // hub that tabs into postings/calls/talent/offers/reviews.
     label: "3 MARKETING",
     items: [
+      { label: "Sales", href: "/console/sales", icon: "TrendingUp" },
       { label: "Leads", href: "/console/leads", icon: "UserPlus" },
       { label: "Pipeline", href: "/console/pipeline", icon: "GitBranch" },
       { label: "Clients", href: "/console/clients", icon: "Handshake" },
       { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
       { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
+      { label: "Campaigns", href: "/console/campaigns", icon: "Star" },
       { label: "Insights", href: "/console/insights", icon: "BarChart3" },
       { label: "Marketplace", href: "/console/marketplace", icon: "Globe" },
     ],
@@ -497,6 +499,7 @@ export const platformNavXpms: NavGroup[] = [
           { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
           { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
           { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
+          { label: "Code of Conduct", href: "/console/compliance/coc", icon: "FileSignature" },
         ],
       },
     ],
@@ -506,7 +509,8 @@ export const platformNavXpms: NavGroup[] = [
     // activations, retail, accessibility, sponsor fulfillment.
     label: "7 EXPERIENCE",
     items: [
-      { label: "Tickets", href: "/console/commercial/tickets", icon: "Ticket" },
+      // Tickets entry removed: /console/commercial/tickets never existed —
+      // ticketing lives in unified assignments (catalog kind "ticket").
       { label: "Guest Hospitality", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
       { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
     ],
@@ -716,10 +720,12 @@ export const platformNavDomain: NavGroup[] = [
       {
         label: "Pipeline & Partners",
         items: [
+          { label: "Sales", href: "/console/sales", icon: "TrendingUp" },
           { label: "Leads", href: "/console/leads", icon: "UserPlus" },
           { label: "Clients", href: "/console/clients", icon: "Handshake" },
           { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
           { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
+          { label: "Campaigns", href: "/console/campaigns", icon: "Star" },
         ],
       },
       {
@@ -734,12 +740,14 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Tours", href: "/console/agency/tours", icon: "Route" },
           { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
           { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
+          { label: "Inquiries", href: "/console/marketplace/inquiries", icon: "Inbox" },
         ],
       },
       {
         label: "Revenue",
         items: [
-          { label: "Tickets", href: "/console/commercial/tickets", icon: "Ticket" },
+          // Tickets entry removed: /console/commercial/tickets never
+          // existed — ticketing lives in unified assignments.
           { label: "Analytics", href: "/console/insights", icon: "BarChart3" },
         ],
       },
@@ -892,6 +900,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "OSHA 300", href: "/console/safety/osha", icon: "ShieldAlert" },
           { label: "Briefings", href: "/console/safety/briefings", icon: "ClipboardPlus" },
           { label: "Playbooks", href: "/console/safety/playbooks", icon: "BookOpenCheck" },
+          { label: "Code of Conduct", href: "/console/compliance/coc", icon: "FileSignature" },
         ],
       },
       {

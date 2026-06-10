@@ -6,20 +6,13 @@ import { ConversationPanel } from "@/components/ConversationPanel";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import {
   SITEPLAN_ADJACENCY_RELS,
   SITEPLAN_BAND_TYPES,
   SITEPLAN_EDGES,
   SITEPLAN_UTILITY_SERVICES,
-  type SitePlanAdjacency,
-  type SitePlanBand,
-  type SitePlanPlacement,
   type SitePlanSheet,
-  type SitePlanStation,
-  type SitePlanUtility,
-  type SitePlanZoneRegion,
 } from "@/lib/siteplan/types";
 import { STATE_LABEL, STATE_TONE, transitionsFromState, TRANSITION_LABEL } from "@/lib/siteplan/state";
 import { BAND_VOCAB } from "@/lib/siteplan/bands";
@@ -62,34 +55,36 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!hasSupabase) return null;
   const session = await requireSession();
   const supabase = await createClient();
-  const loose = supabase as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
   const { t } = await getRequestT();
   const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
 
+  // Embedded relations (project/venue/event names) need explicit shaping.
+  type SheetRow = SitePlanSheet & {
+    project: { name: string | null } | null;
+    venue: { name: string | null } | null;
+    event: { name: string | null } | null;
+  };
   const { data: sheet } = await supabase
     .from("site_plans")
     .select("*, project:project_id(name), venue:venue_id(name), event:event_id(name)")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .is("deleted_at", null)
+    .returns<SheetRow[]>()
     .maybeSingle();
   if (!sheet) notFound();
-  const sp = sheet as unknown as SitePlanSheet & {
-    project: { name: string | null } | null;
-    venue: { name: string | null } | null;
-    event: { name: string | null } | null;
-  };
+  const sp = sheet;
 
   const [regions, bands, stations, placements, utilities, adjacencies, acceptance, revisions, pins] = await Promise.all(
     [
-      loose.from("siteplan_zone_region").select("*").eq("sheet_id", id).order("code"),
-      loose.from("siteplan_band").select("*").eq("sheet_id", id).order("created_at"),
-      loose.from("siteplan_station").select("*").eq("sheet_id", id).order("station_code"),
-      loose.from("siteplan_placement").select("*").eq("sheet_id", id).order("tag"),
-      loose.from("siteplan_utility").select("*").eq("sheet_id", id).order("drop_code"),
-      loose.from("siteplan_adjacency").select("*").eq("sheet_id", id).order("edge"),
-      loose.from("v_siteplan_sheet_acceptance").select("*").eq("sheet_id", id).maybeSingle(),
+      supabase.from("siteplan_zone_region").select("*").eq("sheet_id", id).order("code"),
+      supabase.from("siteplan_band").select("*").eq("sheet_id", id).order("created_at"),
+      supabase.from("siteplan_station").select("*").eq("sheet_id", id).order("station_code"),
+      supabase.from("siteplan_placement").select("*").eq("sheet_id", id).order("tag"),
+      supabase.from("siteplan_utility").select("*").eq("sheet_id", id).order("drop_code"),
+      supabase.from("siteplan_adjacency").select("*").eq("sheet_id", id).order("edge"),
+      supabase.from("v_siteplan_sheet_acceptance").select("*").eq("sheet_id", id).maybeSingle(),
       supabase
         .from("site_plan_revisions")
         .select("*")
@@ -99,15 +94,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     ],
   );
 
-  const regionRows = (regions.data ?? []) as unknown as SitePlanZoneRegion[];
-  const bandRows = (bands.data ?? []) as unknown as SitePlanBand[];
-  const stationRows = (stations.data ?? []) as unknown as SitePlanStation[];
-  const placementRows = (placements.data ?? []) as unknown as SitePlanPlacement[];
-  const utilityRows = (utilities.data ?? []) as unknown as SitePlanUtility[];
-  const adjRows = (adjacencies.data ?? []) as unknown as SitePlanAdjacency[];
-  const acc = acceptance.data as
-    | (Record<string, boolean | string | null> & { sheet_id: string; document_state: string })
-    | null;
+  const regionRows = regions.data ?? [];
+  const bandRows = bands.data ?? [];
+  const stationRows = stations.data ?? [];
+  const placementRows = placements.data ?? [];
+  const utilityRows = utilities.data ?? [];
+  const adjRows = adjacencies.data ?? [];
+  const acc = acceptance.data;
 
   const legalTransitions = transitionsFromState(sp.document_state);
   const violations = validatePlacementLaws({
@@ -772,10 +765,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </thead>
               <tbody>
                 {(revisions.data ?? []).map((r) => (
-                  <tr key={(r as { id: string }).id}>
-                    <td className="font-mono text-xs">{(r as { revision_label: string }).revision_label}</td>
-                    <td className="font-mono text-xs">{fmtDate((r as { uploaded_at: string }).uploaded_at)}</td>
-                    <td>{(r as { notes: string | null }).notes ?? "—"}</td>
+                  <tr key={r.id}>
+                    <td className="font-mono text-xs">{r.revision_label}</td>
+                    <td className="font-mono text-xs">{fmtDate(r.uploaded_at)}</td>
+                    <td>{r.notes ?? "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -795,8 +788,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </Empty>
           ) : (
             <ul className="mt-3 space-y-1.5">
-              {(pins.data ?? []).map((p) => {
-                const pin = p as { id: string; pin_type: string; label: string | null; x_pct: number; y_pct: number };
+              {(pins.data ?? []).map((pin) => {
                 return (
                   <li key={pin.id} className="surface-inset p-2 text-xs">
                     <span className="font-mono text-[10px]">{pin.pin_type}</span> · {pin.label ?? "—"} ·

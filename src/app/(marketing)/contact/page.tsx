@@ -8,6 +8,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { FAQSection } from "@/components/marketing/FAQ";
 import { buildMetadata, organizationSchema } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
+import { BRAND } from "@/lib/brand";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -43,8 +44,8 @@ export default async function ContactPage() {
       icon: MessageCircle,
       title: t("marketing.pages.contact.routes.concierge.title"),
       body: t("marketing.pages.contact.routes.concierge.body"),
-      cta: "support@atlvs.pro",
-      href: "mailto:support@atlvs.pro",
+      cta: BRAND.emails.support,
+      href: `mailto:${BRAND.emails.support}`,
     },
     {
       icon: Building2,

@@ -7,7 +7,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
-import type { FabricationOrder } from "@/lib/supabase/types";
+import type { Tables } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +39,7 @@ export default async function FabricationPage() {
         }
       />
       <div className="page-content">
-        <DataTable<FabricationOrder>
+        <DataTable<Tables<"fabrication_orders">>
           rows={rows}
           rowHref={(r) => `/console/production/fabrication/${r.id}`}
           emptyLabel={t("console.production.fabrication.emptyLabel", undefined, "No fabrication orders")}

@@ -44,6 +44,7 @@ export default async function PersonalLayout({ children }: { children: React.Rea
         { label: t("me.layout.tabs.talent", undefined, "Talent"), href: "/me/talent" },
         { label: t("me.layout.tabs.applications", undefined, "Applications"), href: "/me/applications" },
         { label: t("me.layout.tabs.submissions", undefined, "Submissions"), href: "/me/submissions" },
+        { label: t("me.layout.tabs.inquiries", undefined, "Inquiries"), href: "/me/inquiries" },
         { label: t("me.layout.tabs.offers", undefined, "Offers"), href: "/me/offers" },
         { label: t("me.layout.tabs.availability", undefined, "Availability"), href: "/me/availability" },
         { label: t("me.layout.tabs.savedSearches", undefined, "Saved Searches"), href: "/me/saved-searches" },

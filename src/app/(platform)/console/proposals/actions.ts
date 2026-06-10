@@ -243,16 +243,12 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
   // already cites this proposal, return it.
   const { data: existing } = await supabase
     .from("projects")
-    // proposal_id is added by 20260603100000 migration — cast through
-    // a loose alias until the generated types pick it up on next gen.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .select("id" as any)
+    .select("id")
     .eq("org_id", session.orgId)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .eq("proposal_id" as any, proposalId)
+    .eq("proposal_id", proposalId)
     .is("deleted_at", null)
     .maybeSingle();
-  const existingId = (existing as unknown as { id?: string } | null)?.id;
+  const existingId = existing?.id;
   if (existingId) {
     revalidatePath(`/console/proposals/${proposalId}`);
     redirect(`/console/projects/${existingId}`);
@@ -272,8 +268,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
     if (attached) {
       await supabase
         .from("projects")
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .update({ proposal_id: proposalId } as any)
+        .update({ proposal_id: proposalId })
         .eq("org_id", session.orgId)
         .eq("id", attached.id);
       revalidatePath(`/console/proposals/${proposalId}`);
@@ -311,8 +306,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
       budget_cents: proposal.amount_cents,
       proposal_id: proposalId,
       created_by: session.userId,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any)
+    })
     .select("id")
     .single();
   if (projectError) return { error: projectError.message };

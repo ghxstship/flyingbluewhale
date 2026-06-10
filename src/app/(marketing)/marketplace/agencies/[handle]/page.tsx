@@ -126,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         </div>
 
         <div className="flex items-center gap-3">
-          <Button href={`/login?redirect=/marketplace/agencies/${a.public_handle}/inquire`}>
+          <Button href={`/marketplace/agencies/${a.public_handle}/inquire`}>
             {t("marketing.marketplace.agencies.detail.sendInquiry", undefined, "Send Inquiry")}
           </Button>
           <Button href="/signup" variant="ghost">

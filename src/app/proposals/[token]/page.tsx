@@ -7,6 +7,7 @@ import { ProposalTopBar } from "./ProposalTopBar";
 import type { ProposalBlock } from "@/lib/proposals/types";
 import type { Proposal } from "@/lib/supabase/types";
 import { resolveProposalShareLink } from "@/lib/proposals/share";
+import { BRAND } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
 
@@ -75,7 +76,7 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
         <div className="flex items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/atlvs-mark.svg" alt="" width={18} height={18} aria-hidden="true" />
-          <span className="font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">A T L V S</span>
+          <span className="font-semibold tracking-[0.18em] text-[var(--p-text-2)] uppercase">{BRAND.mark}</span>
           <span>· Technologies</span>
         </div>
         <div className="font-mono">

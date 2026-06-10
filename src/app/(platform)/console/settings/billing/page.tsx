@@ -51,7 +51,7 @@ const TIERS: TierDef[] = [
   {
     tier: "enterprise",
     priceKey: "console.settings.billing.tiers.enterprise.price",
-    priceFallback: "Contact sales",
+    priceFallback: "Contact Sales",
     featureKeys: [
       { key: "console.settings.billing.tiers.enterprise.feature1", fallback: "SSO, SCIM, audit" },
       { key: "console.settings.billing.tiers.enterprise.feature2", fallback: "Custom integrations" },

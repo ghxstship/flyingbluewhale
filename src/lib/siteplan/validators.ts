@@ -70,7 +70,7 @@ export function validatePlacementLaws(args: {
     if (!p.band_id) continue;
     const band = bandById.get(p.band_id);
     if (!band) continue;
-    const drivesPower = utilities.some((u) => u.loads.includes(p.tag) && u.service_type.startsWith("power_"));
+    const drivesPower = utilities.some((u) => (u.loads ?? []).includes(p.tag) && u.service_type.startsWith("power_"));
     if (drivesPower && band.band_type !== "appliance") {
       violations.push(
         `Placement ${p.tag} draws power but sits on a ${band.band_type} band — powered equipment must sit on an appliance band (§9.1).`,
@@ -121,7 +121,7 @@ export function validatePlacementLaws(args: {
 
   // Power-drop integrity: every load on a power utility must reference a real placement tag.
   for (const u of utilities) {
-    for (const tag of u.loads) {
+    for (const tag of u.loads ?? []) {
       if (!placementByTag.has(tag)) {
         violations.push(`Utility drop ${u.drop_code} references unknown placement tag "${tag}".`);
       }

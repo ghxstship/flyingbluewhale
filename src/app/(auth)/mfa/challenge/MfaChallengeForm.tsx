@@ -72,7 +72,7 @@ export function MfaChallengeForm({ factorId, next }: { factorId: string; next: s
             : t("auth.mfa.useRecovery", undefined, "Use a recovery code")}
         </button>
         <Link href="/auth/signout" className="hover:text-[var(--p-text-1)]">
-          {t("common.signOut", undefined, "Sign out")}
+          {t("common.signOut", undefined, "Sign Out")}
         </Link>
       </div>
     </form>

@@ -3,6 +3,7 @@ import { EMPLOYER_LABEL, CLASSIFICATION_LABEL, BASIS_LABEL } from "@/lib/offer-l
 import { formatCompensation, formatPerDiem } from "@/lib/offer-letters/format";
 import { formatDate, formatDateTime } from "@/lib/i18n/format";
 import type { CrewMemberActiveMsa } from "@/lib/msa/types";
+import { BRAND } from "@/lib/brand";
 
 type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
@@ -502,7 +503,7 @@ export function LetterDocument({
           <div className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/brand/atlvs-mark.svg" alt="" width={14} height={14} aria-hidden="true" />
-            <span className="font-semibold tracking-[0.18em] uppercase">A T L V S</span>
+            <span className="font-semibold tracking-[0.18em] uppercase">{BRAND.mark}</span>
             <span>· Technologies</span>
           </div>
           <div className="flex items-center gap-2">

@@ -50,6 +50,21 @@ export const REVIEW_TRANSACTIONS = [
 
 export const REVIEW_SUBJECTS = ["vendor", "talent", "crew", "org", "user"] as const;
 
+export const INQUIRY_SUBJECT_KINDS = ["vendor", "crew", "agency", "talent", "rfq"] as const;
+export type InquirySubjectKind = (typeof INQUIRY_SUBJECT_KINDS)[number];
+
+export const INQUIRY_STATES = ["new", "responded", "closed", "withdrawn"] as const;
+export type InquiryState = (typeof INQUIRY_STATES)[number];
+
+/** Public list path per inquiry subject kind — builds back-links from inquiry rows. */
+export const INQUIRY_SUBJECT_PATHS: Record<InquirySubjectKind, string> = {
+  vendor: "/marketplace/vendors",
+  crew: "/marketplace/crew",
+  agency: "/marketplace/agencies",
+  talent: "/marketplace/talent",
+  rfq: "/marketplace/rfqs",
+};
+
 /**
  * Slug a free-form title for a public marketplace surface.
  *  - lowercase, ASCII alphanumerics + hyphens
@@ -163,6 +178,8 @@ export const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning
   submitted: "info",
   shortlisted: "warning",
   awarded: "success",
+  // inquiries
+  responded: "success",
   // offers
   sent: "info",
   countered: "warning",

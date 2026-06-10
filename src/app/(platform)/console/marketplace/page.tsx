@@ -136,6 +136,15 @@ export default async function Page() {
             )}
           />
           <Tile
+            title={t("console.marketplace.tiles.inquiries.title", undefined, "Inquiries")}
+            href="/console/marketplace/inquiries"
+            blurb={t(
+              "console.marketplace.tiles.inquiries.blurb",
+              undefined,
+              "Quote requests and booking inquiries from your public profiles and RFQs.",
+            )}
+          />
+          <Tile
             title={t("console.marketplace.tiles.reviews.title", undefined, "Reviews")}
             href="/console/marketplace/reviews"
             blurb={t(

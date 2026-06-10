@@ -143,7 +143,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         </div>
 
         <div className="flex items-center gap-3">
-          <Button href={`/login?redirect=/marketplace/vendors/${v.public_handle}/inquire`}>
+          <Button href={`/marketplace/vendors/${v.public_handle}/inquire`}>
             {t("marketing.pages.marketplace-vendors-detail.cta.requestQuote")}
           </Button>
           <Button href="/signup" variant="ghost">

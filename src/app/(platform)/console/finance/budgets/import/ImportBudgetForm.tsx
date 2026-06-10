@@ -80,7 +80,7 @@ export function ImportBudgetForm() {
         <Button href="/console/finance/budgets" variant="secondary">
           Cancel
         </Button>
-        <Button type="submit">Import rows</Button>
+        <Button type="submit">Import Rows</Button>
       </div>
     </form>
   );

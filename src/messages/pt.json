@@ -113,7 +113,16 @@
       "bar": "Foo Bar"
     },
     "pin": "Fixar {name}",
-    "unpin": "Desafixar {name}"
+    "unpin": "Desafixar {name}",
+    "group": {
+      "projects": "Projetos",
+      "production": "Produção",
+      "workforce": "Equipe",
+      "sales": "Vendas",
+      "finance": "Financeiro",
+      "procurement": "Suprimentos",
+      "operations": "Operações"
+    }
   },
   "marketing": {
     "header": {
@@ -1448,7 +1457,7 @@
         "faqs": {
           "reportBug": {
             "q": "Onde reporto um bug?",
-            "a": "Mande um e-mail para support@atlvs.pro com a URL onde aconteceu e um screenshot se tiver. Taguamos todo report com a entrada do audit log para vermos exatamente o que aconteceu do nosso lado."
+            "a": "Mande um e-mail para sos@atlvs.pro com a URL onde aconteceu e um screenshot se tiver. Taguamos todo report com a entrada do audit log para vermos exatamente o que aconteceu do nosso lado."
           },
           "statusPage": {
             "q": "Vocês têm uma página de status?",
@@ -2321,7 +2330,8 @@
               "sourceAvailable": "Opção de licença source-available",
               "customIntegrations": "Integrações customizadas construídas com você"
             },
-            "cta": "Falar com o estúdio"
+            "cta": "Falar com o estúdio",
+            "per": ""
           }
         },
         "comparison": {
@@ -3243,6 +3253,658 @@
           "subtitle": "Grátis, para sempre, para times pequenos. Preço por organização do resto do caminho."
         }
       }
+    },
+    "legal": {
+      "privacy": {
+        "title": "Política de Privacidade",
+        "lastUpdated": "Última atualização: {date}",
+        "collect": {
+          "heading": "O Que Coletamos",
+          "body": "Informações da conta, conteúdo do workspace que você envia e telemetria operacional (visualizações de página, erros, tempos de API)."
+        },
+        "use": {
+          "heading": "Como Usamos",
+          "body": "Para operar o Serviço, prevenir abusos e melhorar a confiabilidade. Não vendemos dados de clientes."
+        },
+        "subprocessors": {
+          "heading": "Suboperadores",
+          "body": "Supabase (hospedagem + banco de dados), Stripe (cobrança), Anthropic (IA), Vercel (edge + CDN)."
+        },
+        "retention": {
+          "heading": "Retenção",
+          "body": "Padrão de 90 dias para logs de auditoria; o conteúdo do cliente é mantido até você excluí-lo ou até a exclusão da sua organização."
+        }
+      },
+      "terms": {
+        "title": "Termos de Serviço",
+        "lastUpdated": "Última atualização: {date}",
+        "acceptance": {
+          "heading": "1. Aceitação dos Termos",
+          "body": "Ao acessar ou usar a plataforma ATLVS Technologies, você concorda com estes Termos. Se não concordar, não use o Serviço."
+        },
+        "accounts": {
+          "heading": "2. Contas",
+          "body": "Você é responsável por proteger as credenciais usadas para acessar sua conta e por qualquer atividade realizada nela."
+        },
+        "billing": {
+          "heading": "3. Assinatura e Cobrança",
+          "body": "Planos pagos são cobrados via Stripe. Impostos, cancelamento e políticas de reembolso estão documentados nas configurações de cobrança dentro do app."
+        },
+        "data": {
+          "heading": "4. Propriedade dos Dados",
+          "body": "Você é dono do conteúdo que envia. Nós o processamos exclusivamente para fornecer o Serviço. Exporte a qualquer momento em Configurações → Conformidade."
+        },
+        "termination": {
+          "heading": "5. Rescisão",
+          "body": "Qualquer das partes pode rescindir a qualquer momento. Seus dados permanecem exportáveis por 30 dias após a rescisão."
+        }
+      },
+      "dpa": {
+        "title": "Adendo de Processamento de Dados",
+        "lastUpdated": "Última atualização: {date}",
+        "intro": "Nosso DPA incorpora as SCCs da UE e o IDTA do Reino Unido. Ele se aplica automaticamente quando você assina. Solicite uma cópia contra-assinada em Configurações → Conformidade.",
+        "roles": "Papéis: você é o Controlador; nós somos o Operador.",
+        "subprocessors": "Suboperadores: Supabase, Stripe, Anthropic, Vercel.",
+        "breach": "Notificação de violação: em até 48 horas após a confirmação.",
+        "transfers": "Transferências de dados: SCCs + IDTA do Reino Unido quando aplicável."
+      },
+      "sla": {
+        "title": "Acordo de Nível de Serviço",
+        "applies": "Aplica-se ao plano Enterprise · vigente desde {date}",
+        "uptime": {
+          "before": "Nossa meta é",
+          "after": "de disponibilidade mensal. Janelas de manutenção programada são excluídas."
+        },
+        "credits": "Créditos de serviço por SLA não cumprido: 10% (99,0–99,9%), 25% (98,0–99,0%), 50% (abaixo de 98,0%).",
+        "report": {
+          "before": "Reporte incidentes para"
+        }
+      }
+    },
+    "tools": {
+      "eyebrow": "Ferramenta Gratuita",
+      "crumbsToolsLabel": "Ferramentas",
+      "capacity": {
+        "meta": {
+          "title": "Calculadora de Capacidade de Local — Ocupação Máxima por Uso",
+          "description": "Estime a ocupação máxima legal a partir da metragem quadrada e do tipo de uso. Padrões alinhados ao IBC para assembleia, concentrado, em pé e refeições."
+        },
+        "title": "Calculadora de Capacidade de Local.",
+        "crumbsLabel": "Calculadora de Capacidade",
+        "schemaName": "Calculadora de Capacidade ATLVS",
+        "schemaDescription": "Estime a ocupação máxima do local a partir da metragem quadrada e do tipo de uso.",
+        "lead": "Estime a ocupação máxima legal a partir da metragem quadrada e do tipo de uso. Padrões alinhados ao IBC para configurações de assembleia, concentrado, em pé e refeições. Confirme com a autoridade competente antes de publicar.",
+        "how": {
+          "heading": "Como Funciona a Carga de Ocupação.",
+          "body1": "A carga de ocupação é o número máximo de pessoas permitido em um espaço, definida pelo International Building Code (IBC) e adotada (com modificações) pela maioria das jurisdições dos EUA. O IBC define fatores de área por ocupante segundo o tipo de uso — 7 sq ft por pessoa em pé, 15 sq ft para assembleia não concentrada com mesas, 5 sq ft para áreas de espera. Multiplique a área útil do piso pelo fator apropriado (e divida) para chegar à carga.",
+          "body2": "A capacidade real é o menor valor entre a carga do IBC e o que a capacidade de evacuação do local suporta — largura das saídas, layout de assentos fixos, cobertura de sprinklers e o julgamento da autoridade competente entram na conta. Use esta calculadora como estimativa inicial; confirme com a autoridade competente local antes de publicar a capacidade."
+        },
+        "cta": {
+          "title": "A Capacidade Vive No ATLVS.",
+          "subtitle": "Capacidade por local, alocações de ingressos e limites de escaneamento no portão — um único registro."
+        }
+      },
+      "perDiem": {
+        "meta": {
+          "title": "Calculadora de Diárias — Ajuda de Custo de Viagem para Equipe e Talentos",
+          "description": "Calcule o total de diárias para equipe ou talentos em várias cidades e dias. Tarifas padrão alinhadas à GSA com substituições personalizadas."
+        },
+        "title": "Calculadora de Diárias.",
+        "crumbsLabel": "Calculadora de Diárias",
+        "schemaName": "Calculadora de Diárias ATLVS",
+        "schemaDescription": "Calculadora de total de diárias para equipe de produção e talentos.",
+        "lead": "Calcule o total de diárias para equipe ou talentos em várias cidades e dias. Tarifas padrão alinhadas à GSA; substituíveis por cidade.",
+        "how": {
+          "heading": "Como Funcionam as Diárias.",
+          "body1": "A diária é o valor pago por dia a um viajante — normalmente equipe, talentos ou contratados — para refeições e despesas incidentais enquanto está fora de sua base. A General Services Administration (GSA) dos EUA publica tarifas de diárias por cidade para viagens federais; a maioria dos orçamentos de produção as usa como referência defensável. Tarifas internacionais vêm das tabelas DSSR do Departamento de Estado.",
+          "body2": "As diárias normalmente são acertadas por show ou semanalmente, em dinheiro ou no contracheque. Tour managers acompanham as diárias contra a matriz cidade × dia para evitar desvios entre o projetado e o realizado."
+        },
+        "cta": {
+          "title": "Pule a Conta.",
+          "subtitle": "As diárias são calculadas automaticamente em cada show no ATLVS, vinculadas ao seu elenco."
+        }
+      }
+    },
+    "marketplace": {
+      "crumbsLabel": "Marketplace",
+      "calendar": {
+        "meta": {
+          "title": "Calendário de Eventos — Inícios de Venda + Anúncios",
+          "description": "Próximas datas de início de venda, janelas de pré-venda e anúncios."
+        },
+        "eyebrow": "Marketplace · Calendário",
+        "title": "Calendário de Eventos",
+        "crumbsLabel": "Calendário",
+        "summary": {
+          "one": "{count} marco próximo de anúncio + início de venda",
+          "many": "{count} marcos próximos de anúncios + inícios de venda"
+        },
+        "empty": "Nenhum marco público no período à frente."
+      },
+      "agencies": {
+        "meta": {
+          "title": "Diretório de Agências — Agências de Booking",
+          "description": "Agências de booking verificadas na rede ATLVS."
+        },
+        "eyebrow": "Marketplace · Agências",
+        "title": "Diretório de Agências",
+        "crumbsLabel": "Agências",
+        "count": {
+          "one": "{count} agência",
+          "many": "{count} agências"
+        },
+        "empty": "Nenhuma agência publicada ainda.",
+        "artistCount": {
+          "one": "{count} artista",
+          "many": "{count} artistas"
+        },
+        "commission": "{pct}% de comissão padrão",
+        "detail": {
+          "verified": "verificada",
+          "about": "Sobre",
+          "profile": "Perfil",
+          "rosterSize": "Tamanho do elenco:",
+          "defaultCommission": "Comissão padrão:",
+          "web": "Site:",
+          "sendInquiry": "Enviar Consulta",
+          "needAccount": "Precisa de uma conta?"
+        }
+      }
+    },
+    "integrations": {
+      "eyebrow": "Programa de Parceiros",
+      "crumbsLabel": "Integrações",
+      "thanks": {
+        "meta": {
+          "title": "Envio Recebido — Programa de Parceiros ATLVS",
+          "description": "Sua proposta de integração de parceiro está na fila."
+        },
+        "crumbsLabel": "Envio Recebido",
+        "title": "Envio Recebido.",
+        "body": {
+          "before": "Sua proposta está na fila. A equipe de AM de parceiros do ATLVS normalmente responde em até 5 dias úteis. Fique de olho na caixa de entrada usada no envio — entraremos em contato pelo"
+        },
+        "cta": {
+          "back": "Voltar às integrações ativas",
+          "directory": "Ver o diretório de parceiros"
+        }
+      },
+      "partners": {
+        "meta": {
+          "title": "Integrações de Parceiros — Diretório de Parceiros Certificados + Verificados ATLVS",
+          "description": "Integrações de terceiros criadas por parceiros ATLVS. Integrações de Parceiro Verificado passam pela nossa revisão técnica; integrações Certificadas também passam por QA de ponta a ponta."
+        },
+        "crumbsLabel": "Diretório de Parceiros",
+        "title": "Criadas Por Parceiros. Verificadas Por Nós.",
+        "lead": "Integrações de terceiros que usam a superfície REST + GraphQL do ATLVS. Integrações de Parceiro Verificado passam pela nossa revisão técnica; integrações Certificadas também passam por QA de ponta a ponta em um tenant ativo. Crie a sua —",
+        "submitLink": "envie uma proposta",
+        "cta": {
+          "submit": "Enviar uma integração de parceiro",
+          "back": "Voltar às integrações ativas",
+          "bringTitle": "Traga Seu Stack Para Dentro.",
+          "bringSubtitle": "API aberta + programa de parceiros aberto. Sem divisão de receita, sem barreiras."
+        },
+        "emptyBefore": "Nenhuma integração de parceiro listada publicamente ainda.",
+        "emptyLink": "Seja o primeiro.",
+        "tier": {
+          "certified": "Certificada",
+          "verified": "Verificada"
+        },
+        "by": "por {name}",
+        "details": "Detalhes"
+      },
+      "submit": {
+        "meta": {
+          "title": "Enviar uma Integração de Parceiro — Programa de Parceiros ATLVS",
+          "description": "Crie uma integração com a API REST + GraphQL do ATLVS e nós a listaremos em nosso diretório de parceiros. A revisão de Parceiro Verificado passa pelo nosso checklist técnico; Certificado passa por QA de ponta a ponta em um tenant ativo."
+        },
+        "title": "Crie. Lance. Nós Listamos.",
+        "crumbsLabel": "Enviar Integração de Parceiro",
+        "h1": "Enviar Uma Integração De Parceiro",
+        "lead": "Após o envio, sua proposta entra na fila de AM de parceiros do ATLVS. Normalmente respondemos em até 5 dias úteis. A revisão de Parceiro Verificado passa pelo nosso checklist técnico; Certificado adicionalmente passa por QA de ponta a ponta em um tenant ativo.",
+        "submitLabel": "Enviar Proposta",
+        "fields": {
+          "name": "Nome da Integração",
+          "slug": "Slug",
+          "partnerOrg": "Organização Parceira",
+          "category": "Categoria",
+          "contactEmail": "E-mail de Contato",
+          "contactName": "Nome do Contato",
+          "shortDescription": "Descrição Curta — Uma Frase",
+          "longDescription": "Descrição Longa",
+          "capabilities": "Capacidades — Uma por Linha",
+          "homepageUrl": "URL da Página Inicial",
+          "docsUrl": "URL da Documentação da Integração"
+        },
+        "placeholders": {
+          "shortDescription": "Captura de relatórios de campo com sincronização automática aos diários do ATLVS.",
+          "longDescription": "O que faz, para quem é, como se integra ao ATLVS."
+        }
+      },
+      "detail": {
+        "fallbackTitle": "Integrações",
+        "meta": {
+          "title": "Integração {name} — {short}"
+        },
+        "eyebrow": "Integração · {category}",
+        "eyebrowBase": "Integração",
+        "whatItDoes": "O Que Ela Faz.",
+        "technicalAnchor": "Âncora Técnica",
+        "modulesDepend": "Módulos Que Dependem Dela.",
+        "faqTitle": "{name} · FAQ",
+        "other": "Outras Integrações.",
+        "cta": {
+          "title": "O ATLVS É Aberto.",
+          "subtitle": "Grátis para equipes pequenas. Todas as integrações incluídas."
+        }
+      },
+      "partnerDetail": {
+        "fallbackTitle": "Integração de Parceiro",
+        "meta": {
+          "title": "{name} — Integração de Parceiro ATLVS"
+        },
+        "ogCertified": "Parceiro Certificado",
+        "ogVerified": "Parceiro Verificado",
+        "eyebrow": "Integração de Parceiro",
+        "capabilities": "Capacidades",
+        "partnerSite": "Site do parceiro",
+        "docs": "Documentação da integração",
+        "backToDirectory": "Voltar ao diretório",
+        "cta": {
+          "title": "Quer Criar Uma?",
+          "subtitle": "Superfície de API aberta. Sem divisão de receita, sem barreiras. Candidate-se em /integrations/submit."
+        }
+      }
+    },
+    "features": {
+      "crumbsLabel": "Recursos",
+      "detail": {
+        "fallbackTitle": "Recurso",
+        "fallbackDescription": "ATLVS Technologies — a plataforma unificada de gestão de produção.",
+        "beforeAfter": {
+          "heading": "Antes E Depois.",
+          "sub": "O que muda quando este módulo chega ao seu stack.",
+          "without": "Sem",
+          "with": "Com ATLVS"
+        },
+        "whatItDoes": "O Que Este Módulo Faz.",
+        "builtFor": "Feito Para",
+        "whoRuns": "Quem Opera Isso No Dia A Dia.",
+        "restOfAtlvs": "O Resto Do ATLVS.",
+        "restOfAtlvsSub": "Um banco de dados. Todo módulo lê do mesmo registro.",
+        "faqTitle": "{name} · FAQ",
+        "cta": {
+          "runTitle": "Use {name} No Seu Próximo Show.",
+          "runSubtitle": "Grátis, para sempre, para equipes pequenas. Preço por organização daí em diante.",
+          "openTitle": "O ATLVS É Aberto.",
+          "openSubtitle": "Grátis, para sempre, para equipes pequenas. Preço por organização daí em diante."
+        }
+      },
+      "industry": {
+        "fallbackTitle": "Recurso × Setor",
+        "meta": {
+          "title": "{module} para {industry} — {sub}",
+          "description": "{blurb} Feito para equipes de {industry} operando {tagline}."
+        },
+        "ogTitle": "{module} para {industry}",
+        "useCase": "{title} — {body} Em trabalhos de {industry}, isso aparece como {tagline}.",
+        "howItShowsUp": "Como Aparece",
+        "teamsRunOn": "O Que Equipes De {industry} Operam No {module}.",
+        "industryOutcomes": "Resultados Do Setor",
+        "whatChanges": "O Que Muda Para Operadores De {industry}.",
+        "featureSet": "O Conjunto De Recursos Do {module}.",
+        "featureSetSub": "As mesmas primitivas do nosso módulo {module} — aplicadas a fluxos de trabalho de {industry}.",
+        "cta": {
+          "runTitle": "Use {module} Na Produção De {industry}.",
+          "runSubtitle": "Cadastre-se grátis para equipes pequenas. Preço por organização daí em diante."
+        },
+        "faqTitle": "{module} para {industry} · FAQ",
+        "otherModules": "Outros Módulos Para {industry}.",
+        "oneDatabase": "Um banco de dados. Todo módulo lê do mesmo registro.",
+        "otherIndustries": "{module} Para Outros Setores."
+      }
+    },
+    "solutions": {
+      "crumbsLabel": "Soluções",
+      "detail": {
+        "fallbackTitle": "Solução",
+        "fallbackDescription": "Solução para o setor",
+        "meta": {
+          "title": "{name} — {tagline} no ATLVS Technologies"
+        },
+        "cta": {
+          "bookDemo": "Agendar uma Demo"
+        },
+        "outcomes": "Resultados",
+        "modulesUsed": "Módulos Usados",
+        "faqTitle": "{name} · FAQ",
+        "related": "Setores Relacionados"
+      }
+    },
+    "teams": {
+      "crumbsLabel": "Feito Para",
+      "detail": {
+        "fallbackTitle": "Equipes",
+        "meta": {
+          "title": "{role} — {hero}"
+        },
+        "workflows": "O Que {role} Operam No Dia A Dia.",
+        "familiar": "Familiar?",
+        "painHeading": "A Dor Que Você Está Contornando.",
+        "modulesYouLive": "Módulos Em Que Você Vive.",
+        "industriesYouWork": "Setores Em Que Você Trabalha.",
+        "faqTitle": "{role} · FAQ",
+        "cta": {
+          "runTitle": "Rode O Fluxo De {role} No ATLVS.",
+          "runSubtitle": "Grátis para equipes pequenas. Preço por organização daí em diante."
+        },
+        "otherRoles": "Outras Funções."
+      }
+    },
+    "glossary": {
+      "crumbsLabel": "Glossário",
+      "detail": {
+        "fallbackTitle": "Glossário",
+        "meta": {
+          "title": "{term} — Definição"
+        },
+        "eyebrow": "Glossário · {category}",
+        "also": "Também: {list}",
+        "howAtlvsHandles": "Como o ATLVS Lida Com Isso",
+        "relatedTerms": "Termos relacionados",
+        "cta": {
+          "title": "O ATLVS É Aberto.",
+          "subtitle": "Grátis para sempre para equipes pequenas. Preço por organização daí em diante."
+        }
+      }
+    },
+    "brandKit": {
+      "foundations": {
+        "meta": {
+          "title": "Fundamentos · ATLVS Technologies — Kit de Marca e UI",
+          "description": "Fundamentos da marca ATLVS Technologies: marca Waypoint, cor, tipografia (Industrial Wide / Archivo expandida), espaçamento, raios, elevação, movimento e iconografia."
+        },
+        "nav": {
+          "aria": "Seções de fundamentos",
+          "brand": "Marca",
+          "waypoint": "O Waypoint",
+          "appIcons": "Ícones de app",
+          "clearspace": "Área de proteção e uso",
+          "foundations": "Fundamentos",
+          "color": "Cor",
+          "typography": "Tipografia",
+          "spacing": "Espaçamento",
+          "radii": "Raios",
+          "elevation": "Elevação",
+          "motion": "Movimento",
+          "iconography": "Iconografia"
+        },
+        "logo": {
+          "eyebrow": "Marca · Logo",
+          "heading": "O Waypoint",
+          "lead": {
+            "before": "A marca ATLVS é um",
+            "waypoint": "waypoint",
+            "after": "— uma estrela de navegação de oito pontas com vazio central, o sistema de navegação renderizado como um único glifo geométrico. Registro SaaS neutro, recolorido por produto. É distinto da caveira cósmica do navio-fantasma da GHXSTSHIP, que é a marca exclusiva da empresa-mãe."
+          },
+          "note": "O tile carrega o acento do produto; a estrela permanece branca — ou tinta sobre fundos claros. O wordmark é sempre em caixa alta espaçada e sem quebra — nunca em minúsculas, nunca sem espaços, exceto em URLs e IDs.",
+          "spec": {
+            "colWordmark": "Especificação do wordmark",
+            "colSetting": "Composição",
+            "faceLabel": "Fonte",
+            "faceValue": "— geométrica, apenas no lockup do logo. UI e títulos permanecem em Space Grotesk / Archivo Expanded.",
+            "aLabel": "O A",
+            "aBefore": "Um pico nu —",
+            "aBold": "sem barra transversal",
+            "aAfter": ", o V invertido. A e V leem-se como formas espelhadas.",
+            "settingLabel": "Composição",
+            "settingBefore": "Caixa alta espaçada, sem quebra. No lockup completo,",
+            "settingAfter": "tem espaçamento de letras ajustado à largura exata de ATLVS.",
+            "subtitleLabel": "Subtítulo",
+            "subtitleBefore": "Apenas ATLVS carrega",
+            "subtitleAfter": ". COMPVSS e GVTEWAY ficam sozinhos."
+          },
+          "productWordmarks": "Wordmarks de produto"
+        },
+        "appIcons": {
+          "heading": "Uma marca, três acentos",
+          "lead": "Cada produto é o mesmo waypoint sobre seu próprio tile de acento — instantaneamente uma família, instantaneamente distinto.",
+          "roleAtlvs": "Produtor / Interno",
+          "roleCompvss": "Equipe / Fornecedor / Talento",
+          "roleGvteway": "Convidado / Cliente",
+          "inkTitle": "Tinta",
+          "roleInk": "Neutro / Suíte",
+          "minSize": "Tamanho mínimo — a marca se sustenta em qualquer escala",
+          "bare16": "16 · sem tile"
+        },
+        "clearspace": {
+          "heading": "Área de proteção e uso",
+          "lead": "Mantenha margem igual a metade da altura da marca em todos os lados.",
+          "do": "Faça",
+          "dont": "Não faça",
+          "doItems": {
+            "1": "Recolorir o tile com o acento do produto; manter a estrela branca — ou tinta sobre fundos claros.",
+            "2": "Manter área de proteção = ½ da altura da marca.",
+            "3": "Usar a marca sem tile em ≤16px; o ícone com tile em ≥32px.",
+            "4before": "Combinar com o wordmark espaçado",
+            "4after": ", sem quebra."
+          },
+          "dontItems": {
+            "1": "Recolorir ou aplicar gradiente à própria estrela — somente o tile carrega cor.",
+            "2": "Girar, esticar ou adicionar o meio-tom cósmico ou a caveira.",
+            "3": "Compor o wordmark sem espaços ou em minúsculas.",
+            "4": "Colocar a marca sem tile sobre uma foto carregada sem o tile sólido."
+          },
+          "endorsement": {
+            "label": "Endosso da empresa-mãe.",
+            "body": "A caveira da GHXSTSHIP aparece apenas no lockup de endosso — “uma ATLVS Technologies, uma empresa GHXSTSHIP Industries”. Ela nunca é o ícone de app do produto."
+          }
+        },
+        "color": {
+          "eyebrow": "Fundamentos · Cor",
+          "heading": "Cor",
+          "lead": {
+            "before": "Superfícies neutras fazem o trabalho; um acento por produto carrega a identidade. Todo valor resolve a partir do namespace",
+            "after": "e se reajusta por modo para contraste AA."
+          },
+          "surfacesText": "Superfícies e texto",
+          "productIdentity": "Identidade de produto — o acento que cada app possui",
+          "accentWeakTint": "Tom de acento fraco",
+          "semantic": "Semânticas — compartilhadas entre produtos",
+          "swatch": {
+            "canvas": "Canvas",
+            "surface": "Superfície",
+            "surface2": "Superfície 2",
+            "border": "Borda",
+            "text1": "Texto 1",
+            "text2": "Texto 2",
+            "text3": "Texto 3",
+            "accentLive": "Acento — ao vivo",
+            "success": "Sucesso",
+            "warning": "Aviso",
+            "danger": "Perigo",
+            "info": "Informação"
+          }
+        },
+        "type": {
+          "eyebrow": "Fundamentos · Tipografia",
+          "heading": "Tipografia",
+          "lead": {
+            "industrialWide": "Industrial Wide.",
+            "s1": "Títulos e métricas são compostos em",
+            "archivoExpanded": "Archivo no eixo de largura expandido",
+            "s2": "— uma grotesca confiante e estrutural que dá presença ao produto. Corpo e UI permanecem em",
+            "s3": "para que tabelas e formulários leiam limpos;",
+            "s4": "é o vernáculo de eyebrows e coordenadas (IDs, códigos, rótulos);",
+            "s5": "é a alternativa para corpo de texto longo. Title Case em títulos e rótulos; sentence case no corpo."
+          },
+          "face": {
+            "archivo": "Títulos · estatísticas · 700–900",
+            "grotesk": "Corpo · UI · 400–700",
+            "mono": "Eyebrows · IDs · códigos",
+            "inter": "Alternativa para corpo de texto longo"
+          },
+          "specimen": {
+            "body": "O tamanho de leitura padrão para tabelas, formulários e textos de interface.",
+            "small": "Metadados secundários e texto de apoio."
+          },
+          "headerTreatments": "Tratamentos de cabeçalho",
+          "headerTreatmentsNote": "Três formas sancionadas de aplicar o título largo. Use a certa para o contexto — não misture mais de uma por visualização.",
+          "a2": {
+            "title": "A2 · Cotidiano",
+            "note": "Barra de acento + kicker mono ao vivo. O padrão para o chrome do app e cabeçalhos de página."
+          },
+          "a3": {
+            "title": "A3 · Hero",
+            "sampleBefore": "Comande o",
+            "samplePop": "show",
+            "note": "Uma palavra recebe o acento do produto — os títulos se auto-marcam. Capas, marketing, splash."
+          },
+          "a4": {
+            "title": "A4 · Métricas",
+            "statLabel": "Taxa de Pontualidade",
+            "statDelta": "▲ 2% vs T3",
+            "note": "Algarismos tabulares em 900 / expandido. Dashboards e relatórios."
+          }
+        },
+        "spacing": {
+          "eyebrow": "Fundamentos · Espaço",
+          "heading": "Espaçamento",
+          "lead": {
+            "before": "Uma grade base de 4px. A densidade troca o ritmo de controles e linhas — os mesmos tokens se comprimem sob"
+          }
+        },
+        "radii": {
+          "eyebrow": "Fundamentos · Raio",
+          "heading": "Raios",
+          "lead": "Suaves, amigáveis a ferramentas de produtividade — nunca afiados como pop-art. Pills somente para chips e toggles."
+        },
+        "elevation": {
+          "eyebrow": "Fundamentos · Elevação",
+          "heading": "Elevação",
+          "lead": "Uma escala fria e compacta de três passos: repouso → hover → popover e modal. As sombras são sutis no claro e se apoiam em bordas no escuro.",
+          "rest": "elev-1 · repouso",
+          "hover": "elev-2 · hover",
+          "overlay": "elev-3 · overlay"
+        },
+        "motion": {
+          "eyebrow": "Fundamentos · Movimento",
+          "heading": "Movimento",
+          "lead": {
+            "s1": "Rápido e sem firulas. Uma curva de easing, durações curtas e uma regra rígida: nunca transicione um",
+            "s2": "baseado em token durante a troca de tema — recolora instantaneamente e anime",
+            "or": "ou",
+            "instead": "em vez disso."
+          },
+          "col": {
+            "token": "Token",
+            "value": "Valor",
+            "use": "Uso"
+          },
+          "row": {
+            "ease": "Hover, pressionar, microinterações",
+            "hoverLift": "Elevação no hover",
+            "hoverUse": "Cards, tiles de estatísticas",
+            "skeleton": "Brilho de skeleton",
+            "skeletonValue": "1,4s ease, infinito",
+            "skeletonUse": "Placeholders de carregamento — respeita movimento reduzido",
+            "spinner": "Spinner",
+            "spinnerValue": "0,7s linear",
+            "spinnerUse": "Ações em andamento"
+          }
+        },
+        "icons": {
+          "eyebrow": "Fundamentos · Ícones",
+          "heading": "Iconografia",
+          "lead": {
+            "before": "Phosphor Icons — peso",
+            "bold": "Bold",
+            "mid": "para UI,",
+            "fill": "Fill",
+            "after": "para selos de estado e ênfase. Alinhe com o texto em 16–20px; ações independentes em 24px. Cor única, herdando"
+          }
+        },
+        "footer": {
+          "tagline": "ATLVS Technologies · Fundamentos",
+          "overview": "Visão Geral",
+          "logoKit": "Kit de Logo"
+        }
+      }
+    },
+    "pricingCalculator": {
+      "eyebrow": "O que realmente custa",
+      "heading": "Faça as contas.",
+      "intro": "Informe shows por ano, equipe no pico e quanto você gasta por mês com o stack fragmentado. Mostramos o gasto anual e o custo por show dos dois lados. A matemática é conservadora — sem taxa de integração, sem excedentes por assento contabilizados.",
+      "showsPerYear": "Shows por ano",
+      "showOne": "show",
+      "showMany": "shows",
+      "crewAtPeak": "Equipe no pico",
+      "personOne": "pessoa",
+      "personMany": "pessoas",
+      "stackMonthly": "Stack atual — mensal",
+      "perMo": "/ mês",
+      "stackNote": "O padrão de US$ 1.400/mês = Asana + Eventbrite + DocuSign + QuickBooks + Dropbox + Slack + ferramenta de PO.",
+      "stackAnnual": "Stack atual — anual",
+      "atlvsAnnual": "ATLVS Production — anual",
+      "annualSavings": "Economia anual",
+      "currentPerShow": "Atual por show",
+      "atlvsPerShow": "ATLVS por show",
+      "ratio": "Stack ÷ ATLVS",
+      "signUpFree": "Cadastre-se grátis"
+    },
+    "perDiemCalculator": {
+      "presets": {
+        "standardLabel": "CONUS Padrão",
+        "standardHint": "Maioria das cidades dos EUA",
+        "tier1Label": "Metrópole Tier 1",
+        "tier1Hint": "NYC, SF, LA, Chicago",
+        "tier2Label": "Metrópole Tier 2",
+        "tier2Hint": "Principais cidades regionais",
+        "intlLabel": "Internacional — média",
+        "intlHint": "Referência DSSR"
+      },
+      "leg": "Trecho {n}",
+      "removeLeg": "Remover trecho",
+      "cityVenue": "Cidade / local",
+      "cityPlaceholder": "ex.: Las Vegas",
+      "days": "Dias",
+      "headcount": "Quantidade de pessoas",
+      "dailyRate": "Tarifa Diária — USD",
+      "legTotal": "Total do trecho",
+      "addLeg": "Adicionar trecho",
+      "total": "Total",
+      "summaryOne": "{days} diárias de equipe em {legs} trecho",
+      "summaryMany": "{days} diárias de equipe em {legs} trechos"
+    },
+    "logoKit": {
+      "eyebrow": "ATLVS Technologies · Marca",
+      "title": "O Kit de Logo",
+      "intro": "A marca ATLVS é um waypoint — uma estrela de navegação de oito pontas com vazio central, o sistema de navegação renderizado como um único glifo geométrico. Registro SaaS neutro; recolore por produto. Distinta da caveira cósmica do navio-fantasma da GHXSTSHIP — a marca da empresa-mãe.",
+      "primaryLockup": "Lockup Primário",
+      "appIcons": "Ícones de app dos produtos — uma marca, três acentos",
+      "favicon": "Favicon / Tamanho mínimo — a marca se sustenta em qualquer escala",
+      "clearspace": "Área de proteção — mantenha margem = ½ da altura da marca em todos os lados",
+      "endorsement": "Endosso — ATLVS + empresa-mãe GHXSTSHIP",
+      "parentCompany": "uma empresa Industries",
+      "doDont": "Faça · Não Faça",
+      "do": "Faça",
+      "dont": "Não faça",
+      "do1": "Recolorir o tile com o acento do produto; manter a marca branca — ou tinta sobre fundos claros.",
+      "do2": "Manter área de proteção = ½ da altura da marca.",
+      "do3": "Usar a marca sem tile em ≤16px; o ícone com tile em ≥32px.",
+      "do4Prefix": "Combinar com o wordmark espaçado",
+      "do4Suffix": ", sem quebra.",
+      "dont1": "Recolorir ou aplicar gradiente à própria estrela — somente o tile carrega cor.",
+      "dont2": "Girar, esticar ou adicionar o meio-tom cósmico/caveira a ela.",
+      "dont3": "Compor o wordmark sem espaços ou em minúsculas.",
+      "dont4": "Colocar a marca sobre uma foto carregada sem o tile sólido.",
+      "back": "← Voltar ao kit de marca",
+      "markAlt": "Marca ATLVS",
+      "iconAlt": "Ícone {label}",
+      "meta": {
+        "title": "Kit de Logo ATLVS · O Waypoint",
+        "description": "A marca ATLVS é o Waypoint — uma estrela de navegação de 8 pontas com vazio centralizado. Lockup primário, ícones de app por produto, área de proteção, endosso, faça/não faça."
+      }
     }
   },
   "auth": {
@@ -3375,7 +4037,9 @@
       "submitting": "Verificando",
       "submit": "Verificar",
       "useAuthenticator": "Usar código do autenticador",
-      "useRecovery": "Usar um código de recuperação"
+      "useRecovery": "Usar um código de recuperação",
+      "pageTitle": "Verificação em Duas Etapas",
+      "pageSubtitle": "Digite o código de seis dígitos do seu app autenticador para continuar."
     },
     "onboarding": {
       "title": "Nomeie seu workspace",
@@ -3483,6 +4147,25 @@
     "mobile": {
       "brand": "COMPVSS",
       "aboutSuffix": "· v{version}"
+    },
+    "nav": {
+      "openNavigation": "Abrir navegação",
+      "closeNavigation": "Fechar navegação"
+    },
+    "sidebar": {
+      "primary": "Principal",
+      "collapseHint": "Recolher barra lateral · ⌘B",
+      "collapse": "Recolher barra lateral",
+      "searchNavPlaceholder": "Buscar na navegação…",
+      "searchNavAria": "Buscar na navegação",
+      "openSearch": "Abrir busca da barra lateral",
+      "search": "Buscar",
+      "pinned": "Fixados",
+      "expandHint": "Expandir barra lateral · ⌘B",
+      "expand": "Expandir barra lateral",
+      "resize": "Redimensionar barra lateral",
+      "shortcutToggle": "Recolher / expandir barra lateral",
+      "shortcutSearch": "Focar busca da barra lateral"
     }
   },
   "a11y": {
@@ -5427,6 +6110,41 @@
           "spent": "Gasto",
           "budget": "Orçamento",
           "utilization": "Utilização"
+        },
+        "summary": {
+          "eyebrow": "Financeiro",
+          "title": "Resumo do Orçamento",
+          "subtitle": "Rollups XPMS ao vivo. Curva de fases = apenas Escopo — Fee e Contingência consolidam separadamente.",
+          "byDepartment": "Por Departamento — Classe XPMS",
+          "byPhase": "Por Fase — Ciclo de 8 Gates · Apenas Escopo",
+          "byLineType": "Por Tipo de Linha",
+          "byDiscipline": "Por Disciplina — Apenas Escopo",
+          "byXyz": "Por XYZ — Comportamento de Custo · Total",
+          "total": "TOTAL",
+          "grandTotal": "TOTAL GERAL",
+          "totalContract": "CONTRATO TOTAL",
+          "col": {
+            "segment": "Segmento",
+            "estimate": "Estimativa",
+            "budget": "Orçamento",
+            "forecast": "Previsão",
+            "actual": "Realizado",
+            "variance": "Variação",
+            "pctOfTotal": "% do Total"
+          },
+          "draw": {
+            "title": "Faturamento do Projeto / Cronograma de Parcelas · % do contrato total",
+            "colDraw": "Parcela",
+            "colTrigger": "Gatilho",
+            "colPct": "%",
+            "colAmount": "Valor",
+            "mobilizationLabel": "Depósito de mobilização",
+            "mobilizationTrigger": "Fase 1 · Descoberta / contrato",
+            "progressLabel": "Parcela de progresso",
+            "progressTrigger": "Fase 5 · Início da construção",
+            "finalLabel": "Saldo final",
+            "finalTrigger": "Fase 8 · Encerramento / aceitação final"
+          }
         }
       },
       "eyebrow": "Financeiro",
@@ -9571,7 +10289,36 @@
         "byStatus": "Por Status",
         "drillIn": "Detalhar"
       },
-      "eyebrow": "Produção"
+      "eyebrow": "Produção",
+      "hub": {
+        "eyebrow": "Produção",
+        "title": "Produção",
+        "subtitle": "Inventário, construção, sistemas de show.",
+        "sections": {
+          "inventory": "Inventário",
+          "build": "Construção",
+          "show": "Show"
+        },
+        "cards": {
+          "equipment": "Equipamentos",
+          "equipmentDesc": "Ativos próprios + manutenção",
+          "equipmentUtil": "Utilização de Equipamentos",
+          "equipmentUtilDesc": "Rollup de 30/90 dias + receita ociosa",
+          "avInventory": "Inventário de AV",
+          "rentals": "Locações",
+          "fabrication": "Fabricação",
+          "compounds": "Complexos",
+          "yard": "Pátio",
+          "punchList": "Lista de Pendências",
+          "realityCaptures": "Capturas de Realidade",
+          "photoLog": "Registro Fotográfico",
+          "warranties": "Garantias",
+          "runOfShow": "Run of Show",
+          "runOfShowDesc": "Linha do tempo cue a cue",
+          "liveDispatch": "Despacho ao Vivo",
+          "productionLogistics": "Logística de Produção"
+        }
+      }
     },
     "programs": {
       "cases": {
@@ -13235,7 +13982,20 @@
         },
         "eyebrow": "Força de Trabalho",
         "title": "Badges",
-        "configureSupabase": "Configure o Supabase."
+        "configureSupabase": "Configure o Supabase.",
+        "detail": {
+          "eyebrow": "Distintivo",
+          "awardedOne": "{count} concedido",
+          "awardedMany": "{count} concedidos",
+          "deleteConfirm": "Excluir permanentemente este distintivo? Todo o histórico de concessões também será removido.",
+          "awardThis": "Conceder Este Distintivo",
+          "notePlaceholder": "Por que esta pessoa o mereceu · opcional",
+          "award": "Conceder",
+          "recentAwards": "Concessões Recentes",
+          "noAwardsTitle": "Nenhuma concessão ainda",
+          "noAwardsDescription": "Conceda este distintivo pelo formulário acima.",
+          "unknown": "Desconhecido"
+        }
       },
       "contractors": {
         "edit": {
@@ -13804,6 +14564,18 @@
           "role": "Função",
           "email": "E-mail"
         }
+      },
+      "callSheets": {
+        "eyebrow": "Equipe",
+        "title": "Folhas de Chamada",
+        "subtitleOne": "{count} membro em turno · {date}",
+        "subtitleMany": "{count} membros em turno · {date}",
+        "emptyTitle": "Nenhum turno agendado para {date}",
+        "emptyDescription": "Crie uma escala + turnos para materializar folhas de chamada por pessoa.",
+        "call": "Chamada",
+        "wrap": "Encerramento",
+        "shiftOne": "{count} turno",
+        "shiftMany": "{count} turnos"
       }
     },
     "xpms": {
@@ -13931,6 +14703,66 @@
           "costDelta": "Δ Custo (centavos)"
         }
       }
+    },
+    "sales": {
+      "hub": {
+        "eyebrow": "Vendas",
+        "title": "Vendas",
+        "subtitle": "Pipeline, parcerias, marketplace, receita.",
+        "sections": {
+          "pipeline": "Pipeline e Parceiros",
+          "hospitality": "Hospitalidade",
+          "marketplace": "Marketplace",
+          "revenue": "Receita"
+        },
+        "cards": {
+          "leads": "Leads",
+          "leadsDesc": "Kanban de pipeline + visualizações salvas",
+          "clients": "Clientes",
+          "sponsors": "Patrocinadores",
+          "marketing": "Marketing",
+          "hospitality": "Hospitalidade",
+          "hospitalityDesc": "Talentos · Patrocinadores · Atletas · Indústria · Mídia e Imprensa · VVIP",
+          "marketplace": "Marketplace",
+          "marketplaceDesc": "Vagas, chamadas, talentos, ofertas, avaliações",
+          "bookings": "Reservas",
+          "bookingsDesc": "Negócios, holds, calendário, acertos",
+          "tours": "Turnês",
+          "talentRoster": "Elenco de Talentos",
+          "offers": "Ofertas",
+          "tickets": "Ingressos",
+          "analytics": "Análises",
+          "analyticsDesc": "Rollup de BI transversal"
+        }
+      }
+    },
+    "draws": {
+      "projectBudget": "Orçamento do projeto",
+      "totalScheduled": "Total programado",
+      "drawnToDate": "Sacado até a data",
+      "draws": "Parcelas",
+      "seedDefault": "Semear padrão 50 / 30 / 20",
+      "colDraw": "Parcela",
+      "colTrigger": "Gatilho",
+      "colPct": "%",
+      "colAmount": "Valor",
+      "colState": "Estado",
+      "colActions": "Ações",
+      "empty": "Nenhuma parcela programada ainda. Semeie o padrão 50 / 30 / 20 ou adicione uma parcela personalizada abaixo.",
+      "drawn": "Sacada",
+      "pending": "Pendente",
+      "markPending": "Marcar como pendente",
+      "markDrawn": "Marcar como sacada",
+      "delete": "Excluir",
+      "addHeading": "Adicionar uma parcela",
+      "drawName": "Nome da parcela",
+      "triggerLabel": "Rótulo do gatilho",
+      "triggerPlaceholder": "ex.: Fase 3 · Advance / contratos",
+      "triggerPhase": "Fase do gatilho",
+      "percentage": "Porcentagem",
+      "pctPlaceholder": "50 ou 0,5",
+      "sortOrder": "Ordem de exibição",
+      "addDraw": "Adicionar parcela"
     }
   },
   "formShell": {
@@ -14889,6 +15721,16 @@
       "noTag": "sem tag",
       "returnsDue": "Devoluções Pendentes",
       "due": "Vence {date}"
+    },
+    "offline": {
+      "queuedToast": "Na fila — sincroniza quando estiver online",
+      "queuedDetail": "offline — sincronização pendente",
+      "queuedBadge": "Na Fila",
+      "pendingBadge": "{count} Pendentes — Sincronizam Quando Estiver Online"
+    },
+    "checkInSummary": {
+      "eyebrow": "Campo",
+      "title": "Resumo de Check-in"
     }
   },
   "me": {
@@ -17559,5 +18401,2041 @@
     "fallbackName": "Workspace",
     "manage": "Gerenciar workspaces",
     "menuLabel": "Workspaces"
+  },
+  "cookieConsent": {
+    "title": "Cookies e privacidade",
+    "description": "Usamos cookies essenciais para manter você conectado e proteger sua conta. Com sua permissão, também usaríamos cookies de análise e marketing para melhorar o produto.",
+    "essential": {
+      "label": "Essenciais",
+      "description": "Autenticação, segurança, limitação de taxa.",
+      "alwaysOn": " · sempre ativos"
+    },
+    "analytics": {
+      "label": "Análise",
+      "description": "Estatísticas de uso agregadas. Nunca vendemos nem correlacionamos à identidade."
+    },
+    "marketing": {
+      "label": "Marketing",
+      "description": "Rastreamento de conversão no site de marketing. Nenhum dentro do produto."
+    },
+    "customize": "Personalizar",
+    "hideDetails": "Ocultar Detalhes",
+    "rejectAll": "Rejeitar Tudo",
+    "savePreferences": "Salvar Preferências",
+    "acceptAll": "Aceitar Tudo",
+    "toggle": "Alternar {label}"
+  },
+  "dataTable": {
+    "emptyLabel": "Nenhum registro ainda",
+    "toast": {
+      "linkCopied": "Link da Visualização Copiado",
+      "copyFailed": "Não foi possível copiar o link",
+      "viewReset": "Visualização Redefinida",
+      "importFailed": "Falha na importação",
+      "imported": "{name} importado"
+    },
+    "search": "Buscar",
+    "filterRows": "Filtrar Linhas",
+    "clearSearch": "Limpar busca",
+    "shareViewLink": "Compartilhar link da visualização",
+    "exportCsv": "Exportar linhas visíveis para CSV",
+    "importFile": "Importar linhas de um arquivo — CSV / TSV / JSON / XLSX",
+    "importFileAria": "Importar linhas de um arquivo",
+    "refresh": "Atualizar dados da tabela",
+    "selectAllPage": "Selecionar tudo nesta página",
+    "sortHint": "Clique para ordenar · shift+clique para ordenação múltipla",
+    "total": "Total",
+    "prevPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "bulkActions": "Ações em massa",
+    "clearSelection": "Limpar seleção",
+    "density": {
+      "aria": "Densidade das linhas",
+      "comfortable": "Densidade confortável",
+      "compact": "Densidade compacta"
+    },
+    "group": {
+      "groupedBy": "Agrupado por {header}",
+      "groupByColumn": "Agrupar linhas por uma coluna",
+      "groupByAria": "Agrupar por coluna",
+      "noGrouping": "Sem agrupamento",
+      "groupLabel": "Agrupar"
+    },
+    "noRows": "Nenhuma linha para exibir",
+    "filter": {
+      "activeHint": "Filtros · {count} ativos",
+      "addHint": "Adicione um filtro para restringir as linhas",
+      "activeAria": "Filtros ({count} ativos)",
+      "addAria": "Adicionar filtro",
+      "activeLabel": "Filtro · {count}",
+      "label": "Filtro",
+      "clearAll": "Limpar Todos os Filtros",
+      "backToColumns": "Voltar às colunas de filtro",
+      "clearColumn": "Limpar Esta Coluna",
+      "filterBy": "Filtrar Por",
+      "noValues": "Sem valores"
+    },
+    "sort": {
+      "sortedBy": "Ordenado por {count} coluna",
+      "sortedByPlural": "Ordenado por {count} colunas",
+      "addAria": "Adicionar ordenação",
+      "hintSingular": "Ordenado por {count} coluna · shift+clique em qualquer cabeçalho para adicionar outra ordenação",
+      "hintPlural": "Ordenado por {count} colunas · shift+clique em qualquer cabeçalho para adicionar outra ordenação",
+      "idleHint": "Ordenar linhas · shift+clique nos cabeçalhos para ordenação múltipla",
+      "activeLabel": "Ordenação · {count}",
+      "label": "Ordenar",
+      "sortByLabel": "Ordenar Por",
+      "noSort": "Nenhuma ordenação aplicada",
+      "addSortLabel": "Adicionar Ordenação",
+      "clearAll": "Limpar Todas as Ordenações",
+      "toggleDir": "Alternar direção de {key} ({dir})",
+      "removeSort": "Remover ordenação de {key}"
+    },
+    "viewOptions": "Opções de visualização",
+    "clearFilter": "Limpar filtro",
+    "columns": {
+      "hint": "Mostrar / ocultar / fixar / reordenar colunas",
+      "settingsAria": "Configurações de colunas",
+      "resetOrder": "Redefinir ordem",
+      "showAll": "Mostrar todas as colunas"
+    },
+    "rowSingular": "linha",
+    "rowPlural": "linhas",
+    "exportButton": "Exportar",
+    "importButton": "Importar",
+    "clearFilters": "Limpar Filtros",
+    "filterColumn": "Filtrar {header}",
+    "empty": {
+      "query": "Nenhuma linha corresponde a \"{query}\"",
+      "queryAndFilter": "Nenhuma linha corresponde a \"{query}\" com o filtro ativo",
+      "queryAndFilters": "Nenhuma linha corresponde a \"{query}\" com os filtros ativos",
+      "filter": "Nenhuma linha corresponde ao filtro ativo",
+      "filters": "Nenhuma linha corresponde aos filtros ativos"
+    },
+    "view": {
+      "hintActive": "Visualização · salva automaticamente por tabela; clique para redefinir aos padrões",
+      "hintIdle": "Visualização salva · salva automaticamente por tabela",
+      "modified": "Visualização · Modificada",
+      "label": "Visualização",
+      "savedView": "Visualização Salva",
+      "defaultAutoSaved": "Padrão · Salva Automaticamente",
+      "resetToDefaults": "Redefinir Visualização Aos Padrões"
+    },
+    "chips": {
+      "remove": "Remover filtro de {header} {value}",
+      "clearAll": "Limpar tudo"
+    }
+  },
+  "commandPalette": {
+    "shortcut": "Abrir paleta de comandos",
+    "title": "Paleta de Comandos",
+    "description": "Busque páginas e execute comandos.",
+    "menuLabel": "Menu de Comandos",
+    "placeholder": "Busque ou execute um comando…",
+    "searchLabel": "Buscar",
+    "noResults": "Nenhum resultado para \"{query}\"",
+    "footerHint": "↑↓ navegar · ↵ selecionar · ⌘↵ abrir em nova aba · esc fechar",
+    "actionCount": "{count} ações",
+    "groups": {
+      "recent": "Recentes",
+      "navigate": "Navegar",
+      "create": "Criar",
+      "switch": "Alternar",
+      "settings": "Configurações",
+      "results": "Resultados"
+    },
+    "hint": {
+      "settings": "Configurações · {group}",
+      "tab": "Aba",
+      "tool": "Ferramenta"
+    },
+    "actions": {
+      "newProject": "Novo Projeto",
+      "newClient": "Novo Cliente",
+      "newInvoice": "Nova Fatura",
+      "newPo": "Novo PO",
+      "newProposal": "Nova Proposta",
+      "addEquipment": "Adicionar Equipamento",
+      "reportIncident": "Reportar Incidente",
+      "logMedical": "Registrar Evento Médico",
+      "openRequest": "Abrir Solicitação",
+      "editProfile": "Editar Perfil",
+      "switchOrg": "Trocar de Organização",
+      "preferences": "Preferências",
+      "lightMode": "Mudar para Modo Claro",
+      "darkMode": "Mudar para Modo Escuro",
+      "signOut": "Sair"
+    }
+  },
+  "savedViews": {
+    "toast": {
+      "nameRequired": "O nome é obrigatório",
+      "updated": "Visualização Atualizada",
+      "saved": "Visualização Salva",
+      "saveFailed": "Não foi possível salvar a visualização"
+    },
+    "editTitle": "Editar Visualização Salva",
+    "newTitle": "Salvar Visualização Atual",
+    "editDescription": "Renomeie, redefina o escopo ou rebloqueie esta visualização salva. O snapshot de configuração existente é preservado.",
+    "newDescription": "Capture a ordenação, os filtros, as colunas e a densidade atuais como uma visualização nomeada à qual você pode voltar.",
+    "nameLabel": "Nome",
+    "namePlaceholder": "ex.: RFIs Abertas · Críticas",
+    "descriptionLabel": "Descrição",
+    "descriptionHint": "Opcional — explique quando esta visualização é útil.",
+    "descriptionPlaceholder": "Adicione contexto para colegas",
+    "visibility": "Visibilidade",
+    "scope": {
+      "private": "Privada",
+      "privateHint": "Somente você. Armazenada na sua lista de visualizações.",
+      "org": "Compartilhada com a organização",
+      "orgHint": "Visível para todo membro da organização em Compartilhadas.",
+      "public": "Pública",
+      "publicHint": "Acessível via link de compartilhamento."
+    },
+    "viewType": "Tipo de Visualização",
+    "viewTypeNote": "Hoje apenas Grade é renderizada. Os outros tipos reservam a linha para um renderizador alternativo futuro.",
+    "cancel": "Cancelar",
+    "saveChanges": "Salvar Alterações",
+    "saveView": "Salvar Visualização",
+    "types": {
+      "grid": "Grade",
+      "kanban": "Kanban",
+      "calendar": "Calendário",
+      "timeline": "Linha do Tempo",
+      "chart": "Gráfico",
+      "map": "Mapa",
+      "gantt": "Gantt",
+      "card": "Card",
+      "form": "Formulário"
+    },
+    "selector": {
+      "modifiedHint": "Visualização salva · o estado atual tem alterações não salvas",
+      "switchHint": "Trocar visualização salva",
+      "aria": "Seletor de visualizações salvas",
+      "unsavedChanges": "Alterações não salvas",
+      "defaultView": "Visualização Padrão",
+      "autoSaved": "Salva Automaticamente",
+      "saveCurrent": "Salvar Visualização Atual…",
+      "deleteConfirm": "Excluir \"{name}\"? Isso não pode ser desfeito.",
+      "toast": {
+        "deleted": "Visualização Excluída",
+        "deleteFailed": "Não foi possível excluir a visualização",
+        "defaultUpdated": "Padrão Atualizado",
+        "defaultFailed": "Não foi possível definir o padrão"
+      },
+      "locked": "— bloqueada",
+      "lockedAria": "Visualização bloqueada",
+      "setDefaultHint": "Definir como padrão para este escopo",
+      "setDefaultAria": "Definir \"{name}\" como padrão",
+      "editHint": "Editar nome / escopo",
+      "editAria": "Editar \"{name}\"",
+      "deleteHint": "Excluir visualização",
+      "deleteAria": "Excluir \"{name}\"",
+      "scopeHeadings": {
+        "private": "Minhas Visualizações",
+        "org": "Compartilhadas",
+        "public": "Públicas"
+      }
+    }
+  },
+  "shareDialog": {
+    "shareButton": "Compartilhar",
+    "expiry": {
+      "1h": "1 hora",
+      "24h": "24 horas",
+      "7d": "7 dias",
+      "30d": "30 dias",
+      "never": "Nunca expira"
+    },
+    "errors": {
+      "loadFailed": "Falha ao carregar os links",
+      "createFailed": "Falha ao criar o link",
+      "revokeFailed": "Falha ao revogar"
+    },
+    "title": "Compartilhar {label}",
+    "titleFallback": "este recurso",
+    "description": "Crie um link público que qualquer pessoa com a URL pode abrir. Adicione uma senha ou expiração para delimitar o acesso.",
+    "createHeading": "Criar um link",
+    "labelField": "Rótulo · Opcional",
+    "labelPlaceholder": "ex.: Prévia do produtor",
+    "expiresIn": "Expira em",
+    "passcodeField": "Senha · Opcional",
+    "passcodePlaceholder": "Deixe em branco para nenhuma",
+    "maxUsesField": "Usos Máximos · Opcional",
+    "maxUsesPlaceholder": "Ilimitado",
+    "access": "Acesso",
+    "roleViewer": "Visualizador · Somente Leitura",
+    "roleCommenter": "Comentarista · Pode Deixar Anotações",
+    "copy": "Copiar",
+    "createLink": "Criar link",
+    "activeHeading": "Links ativos",
+    "loading": "Carregando…",
+    "noLinks": "Nenhum link ativo ainda.",
+    "unlabeled": "(sem rótulo)",
+    "passcodeBadge": "senha",
+    "useSingular": "{count} uso",
+    "usePlural": "{count} usos",
+    "maxSuffix": " / {max}",
+    "expiresSuffix": " · expira em {date}",
+    "noExpiry": " · sem expiração",
+    "revokeAria": "Revogar link {name}",
+    "revoke": "Revogar",
+    "done": "Concluído"
+  },
+  "components": {
+    "navModeToggle": {
+      "legend": "Barra lateral do console",
+      "domain": "Domínio",
+      "domainHint": "Grupos em linguagem simples · Projetos, Vendas, Financeiro…. Padrão.",
+      "xpms": "Espinha XPMS",
+      "xpmsHint": "Taxonomia numérica de classes · 0 EXECUTIVO … 9 TECNOLOGIA."
+    },
+    "stickyCta": {
+      "region": "Acesso rápido",
+      "open": "O ATLVS é aberto.",
+      "tagline": "Grátis para equipes pequenas. Sem cartão.",
+      "dismiss": "Dispensar"
+    },
+    "signatureField": {
+      "label": "Assinatura",
+      "placeholder": "Digite seu nome completo",
+      "type": "Digitar",
+      "draw": "Desenhar",
+      "clear": "Limpar",
+      "captured": "Capturada",
+      "signAbove": "Assine acima"
+    },
+    "addressField": {
+      "street": "Rua e número",
+      "street2": "Apto, sala, andar",
+      "streetLabel": "Rua",
+      "street2Label": "Apto / Sala · Opcional",
+      "city": "Cidade",
+      "region": "Estado / Região",
+      "postalCode": "CEP",
+      "country": "País"
+    },
+    "datePicker": {
+      "placeholder": "Selecione a data",
+      "prevMonth": "Mês anterior",
+      "nextMonth": "Próximo mês"
+    },
+    "triggerEditor": {
+      "kind": {
+        "manual": "Manual",
+        "schedule": "Agendamento",
+        "webhook": "Webhook",
+        "event": "Evento de Registro"
+      },
+      "desc": {
+        "manual": "Disparado por um usuário clicando em Executar agora nesta página.",
+        "schedule": "Executa em um agendamento recorrente cron / RRULE. O backend chega na Fase 4.3.",
+        "webhook": "Executa quando um HTTP POST de entrada atinge a URL abaixo. O backend chega na Fase 4.3.",
+        "event": "Executa quando um evento de registro corresponde — criado ou atualizado. O backend chega na Fase 4.5."
+      },
+      "kindLabel": "Tipo",
+      "kindAria": "Tipo de gatilho",
+      "manualNote": "Sem configuração adicional. Use o botão Executar agora em Controles para disparar uma execução.",
+      "comingSoon": "Em Breve",
+      "scheduleSoon": "O gatilho de agendamento chega na Fase 4.3.",
+      "rruleLabel": "RRULE / cron",
+      "rruleHint": "Sintaxe RRULE do iCal. Salvo agora; o runner o habilita na P4.3.",
+      "webhookSoon": "O endpoint de entrada chega na Fase 4.3.",
+      "inboundUrl": "URL de Entrada",
+      "secretLabel": "Segredo Compartilhado — HMAC",
+      "secretPlaceholder": "Opcional — recai no segredo por automação",
+      "secretHint": "Se definido, o runner verifica x-lyt-signature antes do despacho.",
+      "eventSoon": "A assinatura de eventos chega na Fase 4.5.",
+      "targetTable": "Tabela Alvo",
+      "targetTableAria": "Tabela alvo",
+      "selectPlaceholder": "Selecione…",
+      "eventType": "Tipo de Evento",
+      "eventTypeAria": "Tipo de evento",
+      "recordCreated": "Registro criado",
+      "recordUpdated": "Registro atualizado",
+      "recordDeleted": "Registro excluído"
+    },
+    "stepBuilder": {
+      "steps": "Etapas",
+      "noSteps": "Nenhuma etapa ainda.",
+      "noStepsHint": "Adicione uma ação para começar.",
+      "savingTrigger": "Salvando gatilho…",
+      "savingSteps": "Salvando etapas…",
+      "triggerSaved": "Gatilho salvo",
+      "stepsSaved": "Etapas salvas",
+      "unknownError": "erro desconhecido",
+      "triggerFailed": "Falha ao salvar o gatilho: {error}",
+      "stepsFailed": "Falha ao salvar as etapas: {error}"
+    },
+    "addStepMenu": {
+      "addStep": "Adicionar Etapa",
+      "actions": "AÇÕES",
+      "noActions": "Nenhuma ação registrada."
+    },
+    "runTimeline": {
+      "status": {
+        "pending": "Pendente",
+        "running": "Executando",
+        "success": "Sucesso",
+        "failed": "Falhou",
+        "skipped": "Ignorada"
+      },
+      "empty": "{label}: vazio",
+      "noSteps": "Nenhuma etapa registrada.",
+      "unknownAction": "Desconhecida",
+      "input": "Entrada",
+      "output": "Saída"
+    },
+    "calendarView": {
+      "mode": {
+        "month": "Mês",
+        "week": "Semana",
+        "day": "Dia",
+        "agenda": "Agenda"
+      },
+      "rescheduledTo": "Reagendado para {date}",
+      "rescheduleFailed": "Falha no reagendamento",
+      "upcoming": "Próximos",
+      "today": "Hoje",
+      "previous": "Anterior",
+      "next": "Próximo",
+      "jumpToDate": "Ir para a data",
+      "calendarMode": "Modo do calendário"
+    },
+    "timelineView": {
+      "zoom": {
+        "day": "Dia",
+        "week": "Semana",
+        "month": "Mês",
+        "quarter": "Trimestre"
+      },
+      "movedOne": "{title} movido em {count} dia",
+      "movedMany": "{title} movido em {count} dias",
+      "moveFailed": "Falha ao mover {title}",
+      "resizeFailed": "Falha ao redimensionar {title}",
+      "resized": "{title} redimensionado",
+      "noLanes": "Sem Faixas",
+      "noLanesDesc": "Forneça pelo menos uma faixa para renderizar a linha do tempo.",
+      "timeline": "Linha do Tempo",
+      "timelineZoom": "Zoom da linha do tempo",
+      "lane": "Faixa",
+      "noItems": "Nenhum Item no Intervalo",
+      "noItemsDesc": "Adicione um registro com data de início e fim para popular a linha do tempo."
+    },
+    "mapView": {
+      "tone": {
+        "info": "Informação",
+        "warn": "Aviso",
+        "error": "Erro",
+        "success": "Sucesso",
+        "neutral": "Neutro",
+        "accent": "Acento"
+      },
+      "clusterLocations": "{count} locais",
+      "noLocations": "Nenhum Local no Mapa",
+      "noLocationsDesc": "Adicione um endereço ou lat/lng a um registro para vê-lo aqui.",
+      "legend": "Legenda do mapa",
+      "viewDetails": "Ver Detalhes"
+    },
+    "trackerView": {
+      "noAtoms": "Nenhum Átomo Ainda",
+      "noAtomsDesc": "Fixe o trabalho em átomos XPMS canônicos para ver orçamento, cronograma e progresso de submittals consolidarem na árvore WBS.",
+      "budget": "Orçamento",
+      "committed": "Comprometido",
+      "variance": "Variação",
+      "progress": "Progresso",
+      "actual": "Realizado",
+      "tasks": "Tarefas",
+      "submittals": "Submittals",
+      "colWbsAtom": "WBS / Átomo",
+      "actualDelta": "{amount} realizado",
+      "remainingDelta": "{amount} restante",
+      "overBaseline": "acima da linha de base",
+      "underBaseline": "abaixo da linha de base",
+      "tasksDoneDelta": "{done}/{total} tarefas concluídas",
+      "submittalsApprovedDelta": "{done}/{total} submittals aprovados",
+      "progressAria": "Progresso {pct}%",
+      "openCount": "{count} em aberto"
+    },
+    "atomDrillIn": {
+      "taskStatus": {
+        "todo": "A Fazer",
+        "in_progress": "Em Andamento",
+        "blocked": "Bloqueada",
+        "review": "Revisão",
+        "done": "Concluída"
+      },
+      "deliverableState": {
+        "briefed": "Briefado",
+        "draft": "Rascunho",
+        "submitted": "Enviado",
+        "in_review": "Em Revisão",
+        "revision_requested": "Revisão Solicitada",
+        "approved": "Aprovado",
+        "delivered": "Entregue",
+        "rejected": "Rejeitado"
+      },
+      "tabTasks": "Tarefas",
+      "tabSubmittals": "Submittals",
+      "tabExpenses": "Despesas",
+      "tabPos": "POs",
+      "tabVariance": "Variação",
+      "noTasks": "Nenhuma tarefa fixada neste átomo.",
+      "noSubmittals": "Nenhum submittal fixado neste átomo.",
+      "noExpenses": "Nenhuma despesa fixada neste átomo.",
+      "noPos": "Nenhum item de linha de PO fixado neste átomo.",
+      "noVariance": "Nenhuma entrada de variação para este átomo."
+    },
+    "activityDrawer": {
+      "today": "Hoje",
+      "yesterday": "Ontem",
+      "noActivity": "Nenhuma atividade ainda",
+      "noActivityDesc": "Edições, transições e comentários aparecerão aqui.",
+      "activity": "Atividade",
+      "refresh": "Atualizar atividade",
+      "loadMore": "Carregar Mais"
+    },
+    "incidentForm": {
+      "uploadFailed": "Falha no upload: {name}",
+      "summaryRequired": "O resumo é obrigatório",
+      "reported": "Incidente reportado",
+      "submitFailed": "Falha no envio",
+      "summaryLabel": "Resumo",
+      "summaryPlaceholder": "ex.: Escorregão em piso molhado nos bastidores",
+      "severityLabel": "Gravidade",
+      "severity": {
+        "nearMiss": "Quase acidente",
+        "minor": "Leve",
+        "major": "Grave",
+        "critical": "Crítico"
+      },
+      "occurredAtLabel": "Ocorrido Em",
+      "projectLabel": "Projeto",
+      "projectNone": "— Nenhum —",
+      "locationLabel": "Local",
+      "locationPlaceholder": "ex.: Monitor world lado direito do palco",
+      "descriptionLabel": "Descrição",
+      "descriptionPlaceholder": "O que aconteceu, qual foi a resposta, testemunhas…",
+      "photosLabel": "Fotos",
+      "chooseFiles": "Escolher arquivos",
+      "camera": "Câmera",
+      "uploading": "Enviando…",
+      "photoAlt": "Foto do incidente enviada",
+      "removePhoto": "Remover foto",
+      "emergencyNotice": "Em emergências, ligue primeiro para os serviços locais — depois registre aqui.",
+      "submitting": "Enviando…",
+      "submit": "Enviar relatório"
+    },
+    "guideComments": {
+      "postFailed": "Não foi possível publicar o comentário",
+      "postFailedShort": "Não foi possível publicar",
+      "posted": "Publicado",
+      "heading": "Comentários",
+      "namePlaceholder": "Seu nome · opcional",
+      "nameLabel": "Seu Nome",
+      "bodyPlaceholder": "Adicione um comentário ou pergunta…",
+      "bodyLabel": "Corpo do Comentário",
+      "post": "Publicar",
+      "empty": "Nenhum comentário ainda.",
+      "anonymous": "Anônimo"
+    },
+    "guideView": {
+      "accessTier": "Nível de acesso {tier}",
+      "lastUpdated": "Última atualização em {date}",
+      "allowed": "Permitido",
+      "notAllowed": "Não permitido",
+      "setTimes": {
+        "artist": "Artista",
+        "stage": "Palco",
+        "start": "Início",
+        "end": "Fim"
+      },
+      "credentials": {
+        "area": "Área"
+      },
+      "ppe": {
+        "item": "Item",
+        "required": "Obrigatório",
+        "note": "Nota",
+        "requiredLabel": "Obrigatório",
+        "notRequiredLabel": "Não obrigatório"
+      },
+      "radio": {
+        "channel": "Canal",
+        "purpose": "Finalidade",
+        "code": "Código",
+        "meaning": "Significado"
+      },
+      "evacuation": {
+        "from": "De",
+        "to": "Para",
+        "via": "Via",
+        "direct": "direto",
+        "assemblyPoint": "Ponto de Encontro"
+      }
+    },
+    "templatePicker": {
+      "trigger": "Começar de um modelo",
+      "title": "Escolha um modelo",
+      "description": "Pré-preencha o entregável com um modelo salvo. Modelos da organização aparecem junto aos globais da plataforma.",
+      "filterPlaceholder": "Filtrar modelos…",
+      "filterLabel": "Filtrar Modelos",
+      "loading": "Carregando modelos…",
+      "platformTemplate": "Modelo da plataforma",
+      "emptyNone": "Nenhum modelo ainda. Crie um em /console/settings/templates.",
+      "emptyNoMatch": "Nenhum modelo corresponde a “{query}”."
+    },
+    "portalPrivacyPanel": {
+      "eyebrow": "Portal",
+      "privacy": "Privacidade",
+      "configureSupabase": "Configure o Supabase.",
+      "headerEyebrow": "Portal · Privacidade",
+      "title": "Seus Dados",
+      "subtitle": "Envie uma solicitação de acesso do titular dos dados, gerencie consentimentos ou baixe o que mantemos sobre você.",
+      "openRequests": "Solicitações Abertas",
+      "totalRequests": "Total de Solicitações",
+      "activeConsents": "Consentimentos Ativos",
+      "submitRequest": "Enviar uma Solicitação",
+      "submitRequestBody": "Sob a lei de privacidade da sua jurisdição (GDPR, CCPA, LGPD etc.), você pode solicitar acesso, portabilidade, correção ou exclusão dos dados pessoais que processamos sobre você.",
+      "downloadData": "Baixar meus dados · JSON",
+      "emailDsar": "Enviar um DSAR por e-mail",
+      "yourRequests": "Suas Solicitações",
+      "noRequests": "Nenhuma solicitação registrada. Novas aparecem aqui após o envio.",
+      "filed": "registrada em {date}",
+      "due": "vence em {date}",
+      "fulfilled": "atendida em {date}",
+      "consentLedger": "Registro de Consentimentos",
+      "noConsents": "Nenhum registro de consentimento ainda. Quando você conceder ou revogar consentimento para uma finalidade específica, ele aparecerá aqui.",
+      "granted": "concedido em {date}",
+      "revoked": "revogado em {date}",
+      "statusGranted": "concedido",
+      "statusRevoked": "revogado",
+      "roleNoteBefore": "Os dados que processamos sobre você dependem do seu papel. Como",
+      "roleNoteAfter": "você pode ter registros em: acreditações, credenciais, rider de advancing, contratos, pagamentos, escaneamentos e termos assinados. Solicitar exclusão pode impactar seu engajamento ativo — confirmaremos antes de processar."
+    },
+    "proposalBlockRenderer": {
+      "schedule": {
+        "phase": "Fase",
+        "milestone": "Marco",
+        "date": "Data"
+      },
+      "totalInvestment": "Investimento total",
+      "engagementDeposit": "Depósito de contratação",
+      "dueOnSignature": "Devido na assinatura do contrato",
+      "balance": "Saldo",
+      "dueBeforeEvent": "Devido 30 dias antes do evento",
+      "paymentMethod": "Forma de pagamento",
+      "technicalPackage": "Pacote de produção técnica",
+      "available": "Disponível"
+    },
+    "stagePlotCanvas": {
+      "palette": {
+        "mic": "Microfone",
+        "monitor": "Monitor",
+        "amp": "Amplificador",
+        "drum_kit": "Bateria",
+        "guitar": "Guitarra",
+        "keys": "Teclados",
+        "speaker": "Caixa de Som",
+        "di_box": "DI",
+        "light_truss": "Treliça de Luz",
+        "riser": "Praticável"
+      },
+      "saved": "Stage plot salvo",
+      "saveFailed": "Falha ao salvar",
+      "plotNameLabel": "Nome do Plot",
+      "width": "Largura",
+      "depth": "Profundidade",
+      "feetAbbr": "pés",
+      "undoLabel": "Desfazer última alteração",
+      "undo": "Desfazer",
+      "deleteLabel": "Excluir elemento selecionado",
+      "delete": "Excluir",
+      "saving": "Salvando…",
+      "save": "Salvar",
+      "paletteHeading": "Paleta",
+      "paletteHelp": "Escolha uma ferramenta e clique no palco para posicionar. Arraste para mover. Delete para remover. ⌘Z desfaz.",
+      "canvasLabel": "Canvas do stage plot",
+      "downstage": "Boca de cena · plateia",
+      "dimensions": "Palco de {width}′ × {depth}′",
+      "elementCountOne": "{count} elemento",
+      "elementCountMany": "{count} elementos"
+    },
+    "publicFormRenderer": {
+      "redirecting": "Redirecionando…",
+      "thankYouTitle": "Obrigado — recebemos.",
+      "thankYouBody": "Sua resposta foi registrada. Você pode fechar esta aba.",
+      "submitted": "Enviado",
+      "leaveBlank": "Deixe em branco",
+      "submitting": "Enviando",
+      "submit": "Enviar",
+      "selectPlaceholder": "Selecione…",
+      "fileHelp": "Até 10 MB. Imagens ou PDF."
+    }
+  },
+  "pdf": {
+    "invoice": {
+      "eyebrow": "Fatura",
+      "statusPaid": "PAGA",
+      "statusIssued": "EMITIDA",
+      "titleFallback": "Fatura {number}",
+      "classificationDue": "A VENCER",
+      "billTo": "Faturar Para",
+      "client": "Cliente",
+      "invoiceNumber": "Fatura nº",
+      "issued": "Emitida",
+      "due": "Vencimento",
+      "currency": "Moeda",
+      "lineItems": "Itens de Linha",
+      "colDescription": "Descrição",
+      "colQty": "Qtd",
+      "colUnit": "Unidade",
+      "colAmount": "Valor",
+      "subtotal": "Subtotal",
+      "taxesFees": "Impostos / taxas",
+      "notes": "Notas"
+    },
+    "proposal": {
+      "eyebrow": "Proposta",
+      "statusSigned": "ASSINADA",
+      "classificationExecuted": "EXECUTADA",
+      "summary": "Resumo",
+      "proposalNumber": "Proposta nº",
+      "status": "Status",
+      "total": "Total",
+      "deposit": "Depósito",
+      "sent": "Enviada",
+      "expires": "Expira",
+      "notes": "Notas",
+      "signatures": "Assinaturas",
+      "signature": "Assinatura",
+      "signedFromLine": "Assinada em {date} de {ip}",
+      "signaturePending": "Pendente — assine a proposta no link compartilhado para executar.",
+      "sectionFallback": "Seção",
+      "colItem": "Item",
+      "colDescription": "Descrição",
+      "colAmount": "Valor",
+      "colMilestone": "Marco",
+      "colDate": "Data"
+    },
+    "reports": {
+      "expense": {
+        "title": "Relatório de despesas",
+        "eyebrow": "Relatório de Despesas",
+        "total": "Total",
+        "expenses": "Despesas",
+        "timeEntries": "Registros de Horas",
+        "mileage": "Quilometragem",
+        "colDate": "Data",
+        "colDescription": "Descrição",
+        "colCategory": "Categoria",
+        "colAmount": "Valor",
+        "colMember": "Membro",
+        "colHours": "Horas",
+        "colRate": "Tarifa",
+        "colMiles": "Milhas",
+        "colRatePerMile": "Tarifa/milha"
+      },
+      "task": {
+        "title": "Relatório de tarefas",
+        "eyebrow": "Relatório de tarefas",
+        "tasksWord": "Tarefas",
+        "countSubtitle": "{count} tarefas",
+        "colTask": "Tarefa",
+        "colStatus": "Status",
+        "colPriority": "Prioridade",
+        "colAssignee": "Responsável",
+        "colDue": "Prazo"
+      },
+      "pullSheet": {
+        "title": "Lista de retirada",
+        "subject": "Lista de retirada de locação",
+        "eyebrow": "Locação · lista de retirada",
+        "pageLabel": "Locação {number}",
+        "colQty": "Qtd",
+        "colItem": "Item",
+        "colSerial": "Série",
+        "colNote": "Nota"
+      },
+      "signage": {
+        "signageWord": "Sinalização",
+        "gridLabel": "Grade de sinalização",
+        "countSubtitle": "{count} pontos de sinalização",
+        "colLocation": "Local",
+        "colType": "Tipo",
+        "colSize": "Tamanho",
+        "colInstall": "Instalação",
+        "colStrike": "Desmontagem",
+        "colNote": "Nota"
+      }
+    },
+    "callSheet": {
+      "eyebrow": "Folha de chamada",
+      "eyebrowLabor": "Chamada de mão de obra",
+      "venue": "Local",
+      "venueName": "Nome",
+      "venueAddress": "Endereço",
+      "schedule": "Cronograma",
+      "laborSchedule": "Cronograma de mão de obra",
+      "crew": "Equipe",
+      "laborRoster": "Escala de mão de obra",
+      "weather": "Clima",
+      "colStart": "Início",
+      "colEnd": "Fim",
+      "colActivity": "Atividade",
+      "colLocation": "Local",
+      "colName": "Nome",
+      "colRole": "Função",
+      "colContact": "Contato"
+    },
+    "certifiedPayroll": {
+      "title": "Folha de Pagamento Certificada",
+      "formWh347": "Formulário WH-347 do DOL dos EUA — Folha de Pagamento Certificada Davis-Bacon",
+      "formGeneric": "Folha de Pagamento Certificada — {type}",
+      "weekEndingShort": "FS",
+      "weekEnding": "Semana encerrada em",
+      "statementOfCompliance": "Declaração de Conformidade",
+      "projectContractor": "Projeto e Contratada",
+      "project": "Projeto",
+      "projectAddress": "Endereço do projeto",
+      "contractor": "Contratada",
+      "contractorAddress": "Endereço da contratada",
+      "form": "Formulário",
+      "payPeriod": "Período de pagamento",
+      "state": "Estado",
+      "workerDetail": "Detalhe por Trabalhador",
+      "hoursColumnsNote": "As colunas de horas são Dom / Seg / Ter / Qua / Qui / Sex / Sáb. Valores em USD.",
+      "colWorker": "Trabalhador",
+      "colSsn": "SSN",
+      "colClass": "Classe",
+      "colSun": "D",
+      "colMon": "S",
+      "colTue": "T",
+      "colWed": "Q",
+      "colThu": "Q",
+      "colFri": "S",
+      "colSat": "S",
+      "colSt": "HN",
+      "colOt": "HE",
+      "colRate": "Tarifa",
+      "colGross": "Bruto",
+      "colNet": "Líquido",
+      "colHours": "Horas",
+      "colFringes": "Benefícios",
+      "totals": "Totais",
+      "attestIntroLead": "Eu,",
+      "certifierNamePlaceholder": "[Nome do Certificador]",
+      "attestIntroTrail": ", declaro pelo presente:",
+      "clause1": "(1) Que pago ou superviso o pagamento das pessoas empregadas por {contractor} no projeto {project}; que durante o período de folha iniciado no dia {start} e encerrado no dia {end}, todas as pessoas empregadas no referido projeto receberam integralmente os salários semanais devidos, que nenhum reembolso foi ou será feito direta ou indiretamente para ou em nome da referida contratada ou subcontratada a partir dos salários semanais integrais devidos a qualquer pessoa, e que nenhuma dedução foi feita direta ou indiretamente dos salários integrais devidos a qualquer pessoa, além das deduções permitidas conforme definidas nos Regulamentos, Parte 3 (29 CFR Subtítulo A).",
+      "clause2": "(2) Que quaisquer folhas de pagamento exigidas sob este contrato para o período acima estão corretas e completas; que as taxas salariais de operários ou mecânicos nelas contidas não são inferiores às taxas salariais aplicáveis contidas em qualquer determinação salarial incorporada ao contrato; que as classificações nelas estabelecidas para cada operário ou mecânico correspondem ao trabalho que ele executou.",
+      "clause3": "(3) Que quaisquer aprendizes empregados no período acima estão devidamente registrados em um programa legítimo de aprendizagem registrado junto a uma agência estadual de aprendizagem reconhecida pelo Bureau of Apprenticeship and Training, Departamento do Trabalho dos Estados Unidos, ou, caso não exista tal agência reconhecida em um Estado, estão registrados junto ao Bureau of Apprenticeship and Training, Departamento do Trabalho dos Estados Unidos.",
+      "clause4WithFringes": "(4) Que os benefícios exigidos pela determinação salarial foram pagos conforme aplicável — total de benefícios pagos neste período: {amount}.",
+      "clause4NoFringes": "(4) Que os benefícios exigidos pela determinação salarial foram pagos conforme aplicável — nenhum benefício devido neste período.",
+      "certified": "Certificada",
+      "signedBy": "Assinada por",
+      "notes": "Notas"
+    },
+    "aiaPayApp": {
+      "title": "Solicitação de Pagamento nº {number}",
+      "eyebrow": "Solicitação e Certificado de Pagamento",
+      "appAbbrev": "Sol. nº {number}",
+      "projectContract": "Projeto e Contrato",
+      "project": "Projeto",
+      "projectAddress": "Endereço do projeto",
+      "contractorVendor": "Contratada / Fornecedor",
+      "vendorAddress": "Endereço do fornecedor",
+      "contractPo": "Contrato / PO",
+      "formVersion": "Versão do formulário",
+      "applicationPeriod": "Período da solicitação",
+      "periodThrough": "{start} até {end}",
+      "status": "Status",
+      "applicationSummary": "Resumo da Solicitação",
+      "colLine": "Linha",
+      "colDescription": "Descrição",
+      "colAmount": "Valor",
+      "lineOriginalContractSum": "Valor Original do Contrato",
+      "lineNetChangeByChangeOrders": "Variação líquida por Ordens de Mudança",
+      "lineContractSumToDate": "Valor do Contrato até a Data — Linha 1 ± 2",
+      "lineTotalCompletedStored": "Total Concluído e Armazenado até a Data",
+      "lineRetainage": "Retenção — {pct}",
+      "lineTotalEarnedLessRetainage": "Total Apurado Menos Retenção — Linha 4 − 5",
+      "lineLessPreviousCertificates": "Menos Certificados de Pagamento Anteriores",
+      "lineCurrentPaymentDue": "Pagamento Atual Devido — Linha 6 − 7",
+      "lineBalanceToFinish": "Saldo para Concluir, Incluindo Retenção",
+      "contractorCertification": "Certificação da Contratada",
+      "contractorCertificationBody": "A Contratada abaixo assinada certifica que, segundo seu melhor conhecimento, informação e convicção, o Trabalho coberto por esta Solicitação de Pagamento foi concluído de acordo com os Documentos Contratuais, que todos os valores foram pagos pela Contratada por Trabalhos para os quais Certificados de Pagamento anteriores foram emitidos e pagamentos recebidos do Proprietário, e que o pagamento atual aqui indicado é agora devido.",
+      "submitted": "Enviada",
+      "architectCertificate": "Certificado do Arquiteto",
+      "architectCertificateBody": "De acordo com os Documentos Contratuais, com base em observações no local e nos dados que compõem esta Solicitação, o Arquiteto certifica ao Proprietário que, segundo seu melhor conhecimento, informação e convicção, o Trabalho progrediu conforme indicado, a qualidade do Trabalho está de acordo com os Documentos Contratuais e a Contratada tem direito ao pagamento do VALOR CERTIFICADO.",
+      "amountCertified": "Valor Certificado",
+      "architect": "Arquiteto",
+      "certified": "Certificado",
+      "notes": "Notas",
+      "scheduleOfValues": "Cronograma de Valores — Folha de Continuação",
+      "columnsNote": "Colunas A–I conforme AIA G703. Valores em USD.",
+      "colScheduled": "Programado",
+      "colPrior": "Anterior",
+      "colThisPeriod": "Este Período",
+      "colStored": "Armazenado",
+      "colTotalAndPct": "Total e %",
+      "colBalance": "Saldo",
+      "colRetainage": "Retenção",
+      "colTotal": "Total",
+      "totals": "Totais"
+    },
+    "wipReport": {
+      "titleShort": "Relatório WIP",
+      "subjectPrefix": "Obras em Andamento",
+      "eyebrow": "Relatório de Obras em Andamento",
+      "asOf": "Em {date}",
+      "coverSubtitle": "{count} projetos ativos · {bonded} com seguro-garantia · {over} sobrefaturados · {under} subfaturados",
+      "over": "Acima",
+      "under": "Abaixo",
+      "portfolioSummary": "Resumo do Portfólio",
+      "snapshotDate": "Data do snapshot",
+      "activeProjects": "Projetos ativos",
+      "aggregateRevisedContract": "Contrato revisado agregado",
+      "aggregateCostsToDate": "Custos agregados até a data",
+      "aggregateEarned": "Apurado agregado",
+      "aggregateBilled": "Faturado agregado",
+      "netOverUnderBilled": "Sobre/subfaturamento líquido",
+      "aggregateEac": "EAC agregado",
+      "projects": "Projetos",
+      "tableNote": "Todos os valores em USD. % Concl. é por custo. Sobre/Sub = Apurado − Faturado (positivo = sobrefaturado).",
+      "colProject": "Projeto",
+      "colRevised": "Revisado",
+      "colCostToDate": "Custo até a Data",
+      "colEarned": "Apurado",
+      "colBilled": "Faturado",
+      "colOverUnder": "S/S",
+      "colEac": "EAC",
+      "totals": "Totais",
+      "projectsCount": "{count} projetos",
+      "methodology": "Metodologia",
+      "methodologyBody": "Percentual concluído = costs_to_date / estimated_at_completion. Receita apurada = revised_contract × % concl. Sobre/subfaturado = apurado − faturado (positivo = sobrefaturado, negativo = subfaturado). Custo estimado para concluir = EAC − costs_to_date."
+    },
+    "vendorRfp": {
+      "eyebrow": "Solicitação de Proposta",
+      "subtitle": "Para {vendor}",
+      "subtitleWithDeadline": "Para {vendor} · respostas até {deadline}",
+      "scope": "Escopo",
+      "deliverablesRequested": "Entregáveis Solicitados",
+      "colDeliverable": "Entregável",
+      "colDescription": "Descrição",
+      "colDue": "Prazo",
+      "howToRespond": "Como Responder"
+    },
+    "brandKit": {
+      "title": "Kit de marca",
+      "eyebrow": "Kit de Marca",
+      "coverSubtitle": "Tokens de design, logo e regras de estilo.",
+      "color": "Cor",
+      "accent": "Acento",
+      "legalFooter": "Rodapé Legal",
+      "typography": "Tipografia",
+      "displaySample": "Display 24pt",
+      "titleSample": "Título 14pt",
+      "bodySample": "Corpo 11pt, entrelinha 1,45. Use Helvetica para interoperabilidade em impressões de campo.",
+      "usageRules": "Regras de Uso",
+      "usageRule1": "• Use a cor de acento nas barras de cabeçalho corrido + CTAs primários.",
+      "usageRule2": "• Documentos Tier 4+ carregam um banner de classificação carmesim — substitua o acento apenas no banner.",
+      "usageRule3": "• O rodapé legal aparece em todas as páginas de todo documento gerado pelo produtor."
+    },
+    "deliverablesViews": {
+      "inputList": {
+        "heading": "Lista de Inputs",
+        "colCh": "Canal",
+        "colSource": "Fonte",
+        "colMic": "Mic/DI",
+        "colInsert": "Insert",
+        "colNote": "Nota"
+      },
+      "stagePlot": {
+        "heading": "Stage Plot",
+        "elementsHeading": "Elementos do Stage Plot",
+        "colElement": "Elemento",
+        "colKind": "Tipo",
+        "colPosition": "Posição",
+        "colRot": "Rot"
+      },
+      "crewList": {
+        "heading": "Lista de Equipe",
+        "colName": "Nome",
+        "colRole": "Função",
+        "colDept": "Depto",
+        "colCall": "Chamada",
+        "colContact": "Contato"
+      },
+      "guestList": {
+        "heading": "Lista de Convidados",
+        "colName": "Nome",
+        "colTier": "Tier",
+        "colNote": "Nota"
+      },
+      "equipmentPullList": {
+        "heading": "Lista de Retirada de Equipamentos",
+        "colQty": "Qtd",
+        "colItem": "Item",
+        "colCategory": "Categoria",
+        "colNote": "Nota"
+      },
+      "powerPlan": {
+        "servicesHeading": "Serviços de Energia",
+        "generatorsHeading": "Geradores",
+        "colLocation": "Local",
+        "colAmps": "Ampères",
+        "colVolts": "Volts",
+        "colPhase": "Fase",
+        "colSource": "Fonte",
+        "colNote": "Nota",
+        "colUnit": "Unidade",
+        "colKw": "kW",
+        "colFuel": "Combustível"
+      },
+      "riggingPlan": {
+        "heading": "Pontos de Rigging",
+        "colPoint": "Ponto",
+        "colCapacity": "Cap · lbs",
+        "colHeight": "Altura · pés",
+        "colNote": "Nota"
+      },
+      "sitePlan": {
+        "heading": "Planta do Site",
+        "zonesHeading": "Zonas"
+      },
+      "buildSchedule": {
+        "heading": "Cronograma de Montagem",
+        "colDay": "Dia",
+        "colTime": "Hora",
+        "colActivity": "Atividade",
+        "colCrew": "Equipe",
+        "colNote": "Nota"
+      },
+      "vendorPackage": {
+        "vendorEyebrow": "Fornecedor",
+        "deliverablesHeading": "Entregáveis",
+        "colDeliverable": "Entregável",
+        "colDue": "Prazo",
+        "colStatus": "Status"
+      },
+      "safetyCompliance": {
+        "heading": "Checklist de segurança + conformidade",
+        "colTopic": "Tópico",
+        "colRequirement": "Requisito",
+        "colOwner": "Responsável",
+        "colStatus": "Status"
+      },
+      "commsPlan": {
+        "radioChannelsHeading": "Canais de Rádio",
+        "codeWordsHeading": "Palavras-Código",
+        "colChannel": "Canal",
+        "colPurpose": "Finalidade"
+      },
+      "signageGrid": {
+        "heading": "Grade de Sinalização",
+        "colLocation": "Local",
+        "colType": "Tipo",
+        "colSize": "Tamanho",
+        "colInstall": "Instalação",
+        "colStrike": "Desmontagem",
+        "colNote": "Nota"
+      },
+      "generic": {
+        "heading": "Dados do Entregável"
+      }
+    }
+  },
+  "ghxstship": {
+    "common": {
+      "startProject": "Iniciar um Projeto",
+      "seePricing": "Ver preços",
+      "servicesCatalog": "Catálogo de Serviços",
+      "browseIndustries": "Explorar Setores",
+      "all19Industries": "Todos os 19 setores →"
+    },
+    "header": {
+      "pricing": "Preços",
+      "contact": "Contato",
+      "startProject": "Iniciar um Projeto",
+      "openMenu": "Abrir menu",
+      "closeMenu": "Fechar menu",
+      "services": {
+        "label": "Serviços",
+        "fullCatalog": {
+          "label": "Catálogo Completo",
+          "description": "Todos os 114 serviços"
+        },
+        "production": {
+          "label": "Produção",
+          "description": "Áudio, iluminação, vídeo, palco"
+        },
+        "build": {
+          "label": "Construção",
+          "description": "Cenografia, fabricação, instalação"
+        },
+        "hospitality": {
+          "label": "Hospitalidade",
+          "description": "A&B, VIP, serviço premium"
+        },
+        "operations": {
+          "label": "Operações",
+          "description": "Equipe, logística, segurança"
+        },
+        "experience": {
+          "label": "Experiência",
+          "description": "Experiência do público, varejo"
+        },
+        "technology": {
+          "label": "Tecnologia",
+          "description": "Redes, RFID, AR / VR"
+        },
+        "executive": {
+          "label": "Executivo",
+          "description": "Licenças, seguros, conformidade"
+        },
+        "creative": {
+          "label": "Criativo",
+          "description": "Design, direção de arte, IP"
+        },
+        "marketing": {
+          "label": "Marketing",
+          "description": "Embaixadores, programas de doadores"
+        },
+        "talent": {
+          "label": "Talentos",
+          "description": "Performers, programação"
+        }
+      },
+      "industries": {
+        "label": "Setores",
+        "all": {
+          "label": "Todos os Setores",
+          "description": "Todos os 19 verticais"
+        },
+        "concertsFestivalsTours": "Shows, Festivais e Turnês",
+        "immersiveExperiences": "Experiências Imersivas",
+        "brandActivationsPopups": "Ativações de Marca e Pop-ups",
+        "themeParksAttractions": "Parques Temáticos e Atrações",
+        "cruiseLinesMaritime": "Cruzeiros e Marítimo",
+        "premiumSportingFanZones": "Esporte Premium e Fan Zones",
+        "premiumHospitality": "Hospitalidade Premium",
+        "theatricalPerformances": "Espetáculos Teatrais"
+      },
+      "studio": {
+        "label": "Estúdio",
+        "phases": {
+          "label": "Fases",
+          "description": "Da Descoberta ao Encerramento"
+        },
+        "experienceModes": {
+          "label": "Modos de Experiência",
+          "description": "Como o público se engaja"
+        },
+        "markets": {
+          "label": "Mercados",
+          "description": "12 cidades, 4 âncoras"
+        },
+        "about": "Sobre",
+        "contact": "Contato"
+      }
+    },
+    "footer": {
+      "services": "Serviços",
+      "topIndustries": "Principais Setores",
+      "anchorMarkets": "Mercados Âncora",
+      "allMarkets": "Todos os Mercados",
+      "studio": "Estúdio",
+      "about": "Sobre",
+      "pricing": "Preços",
+      "phases": "Fases",
+      "experienceModes": "Modos de Experiência",
+      "contact": "Contato",
+      "tagline": {
+        "line1": "Produtora de experiências.",
+        "line2": "Festivais. Parques temáticos. Teatro.",
+        "line3": "Construído uma vez, operado em qualquer lugar."
+      },
+      "operatingBrands": "ATLVS, GVTEWAY e COMPVSS são marcas operacionais da ATLVS Technologies, uma empresa GHXSTSHIP Industries."
+    },
+    "notFound": {
+      "title": "Não Encontrado.",
+      "body": "A página não existe ou foi movida. Tente uma destas.",
+      "services": "Serviços",
+      "contact": "Contato"
+    },
+    "home": {
+      "meta": {
+        "title": "GHXSTSHIP — Produtora de Experiências | Festivais, Parques Temáticos, Eventos ao Vivo",
+        "description": "Produção experiencial em escala — festivais, experiências imersivas, atrações de parques temáticos, ativações de marca, produções teatrais e hospitalidade premium. Ancorada em Miami, Nova York, Chicago e Los Angeles."
+      },
+      "proof": {
+        "services": {
+          "label": "Serviços",
+          "sub": "Disciplinas sob o mesmo teto"
+        },
+        "industries": {
+          "label": "Setores",
+          "sub": "De festivais a fan zones"
+        },
+        "markets": {
+          "label": "Mercados",
+          "sub": "Âncoras + alcance nacional"
+        },
+        "phases": {
+          "label": "Fases",
+          "sub": "Da descoberta ao encerramento"
+        }
+      },
+      "hero": {
+        "line1": "Produção",
+        "line2": "experiencial,",
+        "line3": "construída uma vez,",
+        "line4": "operada em qualquer lugar.",
+        "established": "Est. Miami · Nova York · Chicago · Los Angeles",
+        "body": "Projetamos, fazemos a engenharia, fabricamos e operamos festivais, experiências imersivas, atrações de parques temáticos, produções teatrais, ativações de marca e hospitalidade premium. O mesmo sistema operacional que roda dentro do nosso estúdio publica o catálogo que você está lendo — então o trabalho que você nos briefa na segunda vira um engajamento escopado, precificado e atribuível na quarta.",
+        "cta": {
+          "startProject": "Iniciar um Projeto",
+          "servicesCatalog": "Catálogo de Serviços",
+          "pricing": "Preços →"
+        }
+      },
+      "whatWeDo": {
+        "eyebrow": "O Que Fazemos",
+        "heading": {
+          "line1": "Seis maneiras de encontrar",
+          "line2": "a equipe certa."
+        },
+        "body": "Produção toca muitas disciplinas. Busque pelo que você constrói, por quando no ciclo de vida, pela profundidade do detalhe, pelo tipo de experiência, pelo setor que atende ou pelo lugar onde acontece. Todo caminho leva a um produtor real com um portfólio real."
+      },
+      "axis": {
+        "open": "Abrir →",
+        "disciplines": {
+          "title": "Disciplinas",
+          "blurb": "Produção, construção, hospitalidade, tecnologia, operações, executivo — dez disciplinas centrais cobrindo tudo o que tocamos."
+        },
+        "phases": {
+          "title": "Fases",
+          "blurb": "Descoberta, conceito, desenvolvimento, advance, construção, show, desmontagem, encerramento. Engaje nas oito ou em qualquer subconjunto."
+        },
+        "detailDepth": {
+          "title": "Profundidade de Detalhe",
+          "blurb": "De programas plurianuais a componentes individuais de rigging. Trabalhamos no nível em que vive o seu brief."
+        },
+        "experienceModes": {
+          "title": "Modos de Experiência",
+          "blurb": "Social, digital, virtual, físico, experiencial, teatral. A maioria dos engajamentos abrange dois ou três."
+        },
+        "industries": {
+          "title": "Setores",
+          "blurb": "De festivais a fan zones, parques temáticos a marítimo, galerias de arte a paddock clubs de F1. Dezenove verticais."
+        },
+        "markets": {
+          "title": "Mercados",
+          "blurb": "Miami, Nova York, Chicago, Los Angeles. Mais oito satélites. Nacional e internacional a partir de qualquer âncora."
+        }
+      },
+      "classLabel": "CLASSE {code}",
+      "capabilities": {
+        "eyebrow": "Capacidades",
+        "heading": {
+          "line1": "Dez disciplinas.",
+          "line2": "Um estúdio."
+        },
+        "fullCatalog": "Catálogo completo de serviços →"
+      },
+      "industries": {
+        "eyebrow": "Setores",
+        "heading": {
+          "line1": "Onde o",
+          "line2": "trabalho vive."
+        },
+        "all": "Todos os 19 setores →",
+        "readMore": "Leia mais →"
+      },
+      "pricingTease": {
+        "eyebrow": "Como Trabalhamos Juntos",
+        "heading": {
+          "line1": "Por projeto.",
+          "line2": "Ou por retainer."
+        },
+        "perProject": {
+          "label": "Por Projeto",
+          "body": "— cinco tiers, de uma ativação de uma noite a um megaevento plurianual."
+        },
+        "retainer": {
+          "label": "Retainer",
+          "body": "— quatro pacotes de composição de equipe, de uma dupla de coordenadores a uma equipe sênior 24/7. Complementos se acumulam em qualquer caminho."
+        },
+        "cta": {
+          "seePricing": "Ver preços"
+        }
+      },
+      "markets": {
+        "eyebrow": "Mercados Âncora",
+        "all": "Todos os doze mercados, incluindo satélites →"
+      },
+      "faq": {
+        "eyebrow": "FAQ",
+        "heading": "Perguntas comuns.",
+        "q1": {
+          "q": "Que tipo de produções a GHXSTSHIP assume?",
+          "a": "Festivais e turnês de shows, atrações de parques temáticos, experiências imersivas, ativações de marca e pop-ups, espetáculos teatrais, instalações artísticas e culturais, hospitalidade esportiva premium e fan zones, conferências e feiras de negócios, varejo e gastronomia de luxo, casamentos e eventos em propriedades privadas, entretenimento em navios de cruzeiro e marítimo, e eventos privados ultra premium. Dezenove verticais de setor no total."
+        },
+        "q2": {
+          "q": "Onde a GHXSTSHIP opera?",
+          "a": "Quatro mercados âncora com equipes em tempo integral e capacidade de fabricação dedicada: Miami, Nova York, Chicago e Los Angeles. Oito mercados satélites atendidos a partir dessas âncoras: Orlando, Nashville, Austin, Atlanta, Minneapolis, Denver, Las Vegas e Seattle. Produções nacionais e internacionais são conduzidas a partir da âncora mais próxima."
+        },
+        "q3": {
+          "q": "Como a GHXSTSHIP se diferencia de uma agência de eventos típica?",
+          "a": "A GHXSTSHIP executa cada engajamento no mesmo modelo de dados interno — o Experiential Project Management System (XPMS) — que publica nosso catálogo público de serviços. Cada entregável, fornecedor, verificação de conformidade e linha de orçamento carrega um identificador estável que você pode auditar de ponta a ponta. O mesmo schema roda internamente no nosso software ATLVS. O mesmo schema é o que você lê neste site."
+        },
+        "q4": {
+          "q": "Vocês cuidam da produção de ponta a ponta ou só de fases específicas?",
+          "a": "Ambos. Engajamos nas oito fases de produção — Descoberta, Conceito, Desenvolvimento, Advance, Construção, Show, Desmontagem e Encerramento — ou em qualquer subconjunto. Tiers por projeto são escopados a um único brief. Retainers operam engajamentos contínuos através de múltiplos briefs."
+        },
+        "q5": {
+          "q": "Quem fica com os entregáveis e o IP ao final de um engajamento?",
+          "a": "Você. Toda arte conceitual, arquivos de design, desenhos de engenharia e documentação de produção são transferidos a você na fatura final. Sistemas cenográficos de turnê reutilizáveis e ativos de estandes de feiras permanecem em nosso armazenamento climatizado por padrão para redistribuição, mas a propriedade é sua."
+        }
+      }
+    },
+    "about": {
+      "meta": {
+        "title": "Sobre a GHXSTSHIP — Produtora de Experiências",
+        "description": "A GHXSTSHIP é a produtora de experiências por trás de festivais, atrações de parques temáticos, produções teatrais, ativações de marca e hospitalidade premium. Ancorada em Miami, Nova York, Chicago, Los Angeles. Construiu o ATLVS para operar o próprio trabalho — e agora o seu."
+      },
+      "hero": {
+        "eyebrow": "Sobre",
+        "heading": {
+          "line1": "O estúdio",
+          "line2": "por trás do estúdio."
+        },
+        "body": "A GHXSTSHIP é uma produtora de experiências construindo festivais, atrações de parques temáticos, experiências imersivas, produções teatrais, ativações de marca e hospitalidade premium em escala. Abrangemos {serviceCount} serviços em {classCount} disciplinas e {solutionCount} setores. Estamos ancorados em Miami, Nova York, Chicago e Los Angeles, e entregamos nacional e internacionalmente."
+      },
+      "principles": {
+        "p1": {
+          "title": "Um sistema operacional, interno e externo.",
+          "body": "Cada engajamento roda no mesmo modelo de dados que publica nosso catálogo público de serviços. Fornecedores, entregáveis, verificações de conformidade, orçamentos, cronogramas — todos carregam identificadores estáveis que você pode auditar de ponta a ponta. O mesmo schema roda internamente no nosso software ATLVS. O mesmo schema é o que você lê neste site."
+        },
+        "p2": {
+          "title": "Comprovantes, não promessas.",
+          "body": "Engenharia com carimbo, certificados de seguro assinados, contratos-mestres de serviço executados, aprovações do corpo de bombeiros, relatórios de sustentabilidade — cada entregável chega à sua estrutura de pastas com um nome estável e uma cadeia de custódia clara."
+        },
+        "p3": {
+          "title": "Linguagem de operador, sem desculpas.",
+          "body": "Falamos em load-in, advance, run-of-show, RFI, paddock, dique seco, zona limpa, front-of-house e jurisdições sindicais. Se você já sabe o que essas palavras significam, vai se sentir em casa. Se não, nós traduzimos."
+        },
+        "p4": {
+          "title": "Ancorados, não sediados.",
+          "body": "Temos equipes em tempo integral e fabricação dedicada em Miami, Nova York, Chicago e Los Angeles. Implantamos a partir dessas âncoras em oito cidades satélites e através dos tiers nacional e internacional. A equipe que recebe seu brief é a equipe que constrói."
+        }
+      },
+      "lineage": {
+        "heading": "A linhagem.",
+        "p1": "A GHXSTSHIP Industries é a matriz. A ATLVS Technologies — operando ATLVS, GVTEWAY e COMPVSS — é o braço de software que construímos para parar de rodar produção em planilhas.",
+        "p2": "O ATLVS é o console do produtor. O GVTEWAY é o portal de stakeholders. O COMPVSS é o app de campo offline-first. O mesmo modelo de dados alimenta os três. O mesmo modelo de dados publica este catálogo.",
+        "p3": "Quando dizemos a um cliente que estamos rodando seu engajamento no mesmo sistema que publica o catálogo que ele leu antes de nos contratar, é literal. Os mesmos registros de fornecedores. O mesmo framework de conformidade. As mesmas definições de entregáveis."
+      },
+      "roster": {
+        "heading": "O elenco.",
+        "p1": "Produtores, gerentes de projeto, gerentes de conta, A1s, L1s, V1s, riggers, engenheiros — com carimbo de PE onde importa — líderes de hospitalidade, liaisons de federações, fixers, conservadores, manuseadores de arte, diretores de palco, diretores de transmissão, embaixadores de marca. Dentro dos nossos quatro mercados âncora, em tempo integral na folha. Nos mercados satélites e no tier internacional, banco profundo sob contrato-mestre.",
+        "p2": "Cada função nomeada é uma linha no catálogo. Cada linha do catálogo é um humano real com calendário de disponibilidade, postura de credenciamento e tarifa publicada."
+      },
+      "briefUs": {
+        "heading": "Mande seu brief.",
+        "body": "Um parágrafo em linguagem simples serve. Um RFP de seiscentas linhas serve. Um áudio bêbado às 2h da manhã que vira um festival é o mais divertido. Respondemos aos três."
+      }
+    },
+    "contact": {
+      "meta": {
+        "title": "Contato GHXSTSHIP — Inicie um Projeto",
+        "description": "Mande seu brief para a GHXSTSHIP. Um parágrafo em linguagem simples, um RFP ou um áudio. Resolvemos cada brief contra o mesmo catálogo de serviços e respondemos com escopo, modelo e produtor designado em um dia útil."
+      },
+      "routes": {
+        "studio": {
+          "label": "Iniciar um Projeto",
+          "body": "Novo engajamento, RFP ou conversa de escopo. Respondemos com modelo de engajamento, produtor designado e faixa de preço."
+        },
+        "federation": {
+          "label": "Federações e Megaeventos",
+          "body": "Olimpíadas, FIFA, F1, Super Bowl, Copa do Mundo, NCAA, nível OCOG, acreditação de federações, liaison com cidade-sede."
+        },
+        "press": {
+          "label": "Imprensa e Parcerias",
+          "body": "Mídia, propostas de patrocínio, colaborações de marca, convites para podcasts, palestras."
+        },
+        "roster": {
+          "label": "Elenco e Equipe",
+          "body": "Produtores, técnicos, riggers, hospitalidade, fixers — candidate-se com seu portfólio e cidade. Integramos trimestralmente."
+        }
+      },
+      "hero": {
+        "eyebrow": "Contato",
+        "heading": "Mande seu brief.",
+        "body": "Conte-nos o brief, a janela de datas, o local ou a geografia e seu escopo. Voltamos em um dia útil com o modelo de engajamento, o produtor designado e uma faixa de preço — ou um pedido das informações que precisaríamos para escopar com precisão."
+      },
+      "checklist": {
+        "heading": "O que colocar no e-mail.",
+        "brief": {
+          "label": "Brief.",
+          "body": "Um parágrafo basta. Faremos as perguntas certas na sequência."
+        },
+        "dates": {
+          "label": "Datas ou janela.",
+          "body": "Data fixa ou janela móvel — ambas servem."
+        },
+        "venue": {
+          "label": "Local ou geografia.",
+          "body": "Endereço específico se fechado, nome do mercado se não."
+        },
+        "audience": {
+          "label": "Tamanho do público.",
+          "body": "Contagem total de convidados ou público diário."
+        },
+        "budget": {
+          "label": "Envelope de orçamento.",
+          "body": "Mesmo uma faixa — ela afina o modelo de engajamento rapidamente."
+        },
+        "constraints": {
+          "label": "Restrições.",
+          "body": "Federação, sindicato, cidade-sede, zona limpa, direitos de marca, NDA — sinalize desde o início."
+        }
+      },
+      "browse": {
+        "eyebrow": "Ou comece explorando"
+      }
+    },
+    "pricing": {
+      "meta": {
+        "title": "Preços — Por Projeto e Retainer | GHXSTSHIP",
+        "description": "Tiers por projeto de US$ 25 mil até nível federação. Retainers mensais de US$ 3 mil — dupla de coordenadores — a US$ 13 mil — equipe sênior completa com suporte 24/7. Complementos empilháveis para engenharia, liaison de federações, AR/VR, sustentabilidade e mais."
+      },
+      "hero": {
+        "eyebrow": "Preços",
+        "heading": {
+          "line1": "Duas formas",
+          "line2": "de trabalhar conosco."
+        },
+        "body": {
+          "perProject": "para um único brief. Cinco tiers escalados ao escopo, de uma ativação de uma noite a um megaevento plurianual.",
+          "retainer": "para programas contínuos. Quatro pacotes construídos em torno da composição da equipe, de uma dupla de coordenadores a uma equipe sênior com suporte 24/7. Complementos se acumulam em qualquer caminho. Custos de produção repassam a custo."
+        }
+      },
+      "nav": {
+        "perProject": "Por Projeto",
+        "retainer": "Retainer",
+        "addOns": "Complementos"
+      },
+      "perProject": {
+        "label": "Por Projeto",
+        "heading": {
+          "line1": "Cinco tiers.",
+          "line2": "Um brief."
+        },
+        "body": "Os tiers escalam ao escopo. O Pop é uma zona única. O Federation é um megaevento plurianual com equipe sênior completa. Escolha pelo trabalho à sua frente, não pela aspiração.",
+        "mostEngagements": "Maioria dos engajamentos",
+        "startingFee": "fee inicial",
+        "scopeBand": "Faixa de escopo",
+        "bestFor": "Ideal para"
+      },
+      "retainer": {
+        "label": "Retainer",
+        "heading": {
+          "line1": "Pacotes por",
+          "line2": "composição de equipe."
+        },
+        "body": "Cada tier adiciona um papel sênior e uma camada de suporte sempre ativo. Suba de tier conforme seu programa cresce. Desça de tier na baixa temporada. Cobrado mensalmente de forma antecipada, cancelável com aviso de 60 dias.",
+        "mostRetained": "Mais contratado",
+        "yourTeam": "Sua equipe",
+        "cadence": "Cadência"
+      },
+      "addOns": {
+        "eyebrow": "Complementos",
+        "heading": "Empilhe em qualquer caminho.",
+        "body": "Vendidos à la carte no escopo de trabalho ou em ordem de mudança. Engenharia com carimbo e liaison de federações são os mais solicitados em todos os tiers."
+      },
+      "billing": {
+        "heading": "Como funciona a cobrança.",
+        "fee": {
+          "label": "01 Fee Profissional",
+          "body": "O fee no card é o que a GHXSTSHIP cobra para escopar, planejar e operar o engajamento. Travado no escopo de trabalho, com um framework claro de ordens de mudança caso o escopo cresça."
+        },
+        "passThrough": {
+          "label": "02 Repasse de Produção",
+          "body": "Equipamentos, mão de obra, viagens, fabricação, alimentos e bebidas, frete — todos os custos de produção repassam a custo mais uma taxa administrativa acordada, normalmente de 12 a 18 por cento. Comprovantes completos em cada linha."
+        },
+        "schedule": {
+          "label": "03 Cronograma",
+          "body": "Por projeto: 60% do fee profissional na assinatura, 40% no load-in. Retainers: mensalmente, de forma antecipada. Repasses de produção faturados conforme se acumulam."
+        }
+      },
+      "faq": {
+        "eyebrow": "FAQ de Preços",
+        "heading": "Perguntas comuns.",
+        "q1": {
+          "q": "O que está realmente incluído no preço do card?",
+          "a": "O fee no card é o fee de serviços profissionais da GHXSTSHIP — o que cobramos para escopar, planejar, gerenciar e entregar o engajamento. Custos de produção — locação de equipamentos, mão de obra, viagens, fabricação, A&B, frete — repassam a custo mais uma taxa de administração acordada, normalmente de 12 a 18 por cento."
+        },
+        "q2": {
+          "q": "Posso migrar de um engajamento por projeto para um retainer depois?",
+          "a": "Sim. Muitos clientes começam com um único engajamento por projeto e convertem para retainer quando um segundo ou terceiro evento entra no calendário. Creditamos qualquer saldo de projeto não utilizado contra o primeiro mês do retainer."
+        },
+        "q3": {
+          "q": "Como funciona o pagamento nos tiers por projeto?",
+          "a": "Sessenta por cento do fee da GHXSTSHIP na assinatura, quarenta por cento no load-in. Repasses de produção são faturados conforme se acumulam, com comprovantes completos. Retainers cobram mensalmente de forma antecipada."
+        },
+        "q4": {
+          "q": "Qual a diferença entre Studio e Bureau?",
+          "a": "O Studio entrega um produtor sênior liderando o engajamento e um representante no local em cada dia de show. O Bureau adiciona um líder remoto 24/7 — a pessoa que atende o telefone às 3h da manhã quando o clima vira, um fornecedor some ou uma federação emite uma atualização de zona limpa no meio da montagem."
+        },
+        "q5": {
+          "q": "Os complementos são precificados separadamente do tier?",
+          "a": "Sim. Complementos são itens de linha no SOW ou em ordem de mudança. A maioria dos engajamentos acaba puxando dois a três. Engenharia com carimbo e liaison de federações são os mais solicitados em todos os tiers."
+        }
+      }
+    },
+    "markets": {
+      "meta": {
+        "title": "Mercados — Miami, Nova York, Chicago, Los Angeles + 8 Satélites | GHXSTSHIP",
+        "description": "Mercados âncora em Miami, Nova York, Chicago e Los Angeles com equipes locais completas e fabricação dedicada. Oito mercados satélites atendidos a partir das âncoras: Orlando, Nashville, Austin, Atlanta, Minneapolis, Denver, Las Vegas, Seattle."
+      },
+      "hero": {
+        "eyebrow": "Mercados",
+        "heading": {
+          "line1": "Quatro âncoras.",
+          "line2": "Oito satélites."
+        },
+        "body": "Mercados âncora têm presença local completa, equipe dedicada e capacidade de fabricação. Satélites são atendidos a partir das âncoras com profunda familiaridade com locais e licenças. Produções nacionais e internacionais são conduzidas a partir da âncora mais próxima."
+      },
+      "anchor": {
+        "eyebrow": "Mercados Âncora"
+      },
+      "satellite": {
+        "eyebrow": "Mercados Satélites"
+      },
+      "servicedFrom": "Atendido a partir de {city}"
+    },
+    "market": {
+      "meta": {
+        "title": "Produtora em {name} — Festivais, Eventos, Ativações | GHXSTSHIP",
+        "anchorCapacity": "Equipe local completa e capacidade de fabricação.",
+        "satelliteCapacity": "Atendido a partir do nosso mercado âncora mais próximo."
+      },
+      "crumb": "Mercados",
+      "type": {
+        "anchor": "Mercado Âncora",
+        "satellite": "Mercado Satélite"
+      },
+      "servicedFrom": "atendido a partir de",
+      "venuesAnchors": "Locais e Âncoras",
+      "strongholds": "Setores em que {name} é um reduto",
+      "cta": {
+        "heading": "Faça algo acontecer em {name}.",
+        "body": "Conhecemos os locais, os sindicatos, as janelas de licenças e os fixers. Mande seu brief com suas datas e a postura local."
+      }
+    },
+    "phase": {
+      "meta": {
+        "title": "Fase {name} — Serviços de Produção | GHXSTSHIP"
+      },
+      "crumb": "Fases",
+      "counter": "Fase {number} de 08",
+      "whatHappens": "O que acontece nesta fase",
+      "servicesActive": "{count} serviços ativos em {name}",
+      "moveThrough": "Percorra o ciclo de vida"
+    },
+    "services": {
+      "meta": {
+        "title": "Catálogo de Serviços — Produção, Construção, Hospitalidade, Tecnologia | GHXSTSHIP",
+        "description": "O catálogo completo de serviços da GHXSTSHIP — 114 serviços de produção em 10 disciplinas: Executivo, Criativo, Talentos, Marketing, Construção, Produção, Operações, Experiência, Hospitalidade, Tecnologia."
+      },
+      "hero": {
+        "eyebrow": "Catálogo de Serviços",
+        "heading": {
+          "line1": "{count} serviços.",
+          "line2": "{count} disciplinas.",
+          "line3": "Produtores reais por trás de cada linha."
+        },
+        "body": "Cada serviço é uma linha de trabalho real, escopada e precificável — não um chavão de marketing. Explore por disciplina abaixo, ou vá direto ao vertical do setor em que você está. Cada página de detalhe de serviço diz o que é, em que momento do projeto você precisa dele, o que você recebe e onde ele opera."
+      },
+      "classLabel": "Classe {code}",
+      "servicesCount": "{count} serviços",
+      "cta": {
+        "heading": "Não sabe como chamar?",
+        "body": "Mande o brief em linguagem simples. Nós o resolvemos contra o catálogo e respondemos com um escopo, um modelo de engajamento recomendado e o produtor que será o dono dele.",
+        "browseByIndustry": "Explorar por setor"
+      }
+    },
+    "serviceClass": {
+      "meta": {
+        "title": "Serviços de {name} — {count} Disciplinas | GHXSTSHIP"
+      },
+      "crumb": "Serviços",
+      "classLabel": "Classe {code}",
+      "servicesInDiscipline": "Serviços nesta disciplina",
+      "relatedServices": "Serviços relacionados que tocam {name}",
+      "primaryDiscipline": "Disciplina principal: {name}",
+      "cta": {
+        "heading": "Mande o brief com o que você tem.",
+        "body": "Envie um parágrafo por e-mail. Apresente um deck. Solte um endereço de local e uma janela de calendário. Voltamos em um dia útil com o escopo, o produtor e a faixa de preço."
+      }
+    },
+    "service": {
+      "meta": {
+        "title": "{name} | GHXSTSHIP"
+      },
+      "crumb": "Serviços",
+      "label": "Serviço {number} · {name}",
+      "whatItIs": "O que é",
+      "whenYouNeed": "Quando você precisa",
+      "whatYouReceive": "O que você recebe",
+      "whereItOperates": "Onde opera",
+      "primaryPhase": "Fase principal",
+      "alsoActiveIn": "Também ativo em:",
+      "activeFullLifecycle": "Ativo em todo o ciclo de vida do projeto",
+      "detailDepth": "Profundidade de detalhe",
+      "experienceModes": "Modos de experiência",
+      "industriesAnchor": "Setores em que este serviço se ancora",
+      "relatedServices": "Serviços relacionados em {name}",
+      "cta": {
+        "heading": "Adicione isto ao seu engajamento.",
+        "body": "A maioria dos engajamentos agrupa de oito a quarenta serviços do catálogo. Conte-nos o brief; voltamos com o escopo, o modelo de engajamento e o produtor."
+      },
+      "depth": {
+        "L1": "Projeto — contêiner multievento",
+        "L2": "Evento — ocasião única",
+        "L3": "Zona — área dentro de um evento",
+        "L4": "Ativação — unidade de experiência",
+        "L5": "Componente — elemento de construção",
+        "L6": "Item — unidade atômica"
+      }
+    },
+    "solution": {
+      "meta": {
+        "title": "{name} — Produtora | GHXSTSHIP"
+      },
+      "crumb": "Setores",
+      "facts": {
+        "whenWorkHappens": "Quando o trabalho acontece",
+        "depthOfDetail": "Profundidade de detalhe",
+        "experienceModes": "Modos de experiência",
+        "whereItLands": "Onde costuma acontecer"
+      },
+      "servicesAnchor": "{count} serviços ancoram este setor em {disciplines} disciplinas",
+      "allClassServices": "Todos os serviços de {name} →",
+      "cta": {
+        "heading": "Faça um engajamento de {name}.",
+        "body": "Resolveremos seu brief contra os {count} serviços ancorados aqui e responderemos com o modelo de engajamento recomendado e o produtor designado."
+      }
+    }
+  },
+  "legal": {
+    "offer": {
+      "acceptedNotice": "Você assinou esta carta. Uma cópia foi enviada à sua equipe e está arquivada na GHXSTSHIP.",
+      "declinedNotice": "Você recusou esta oferta. Entre em contato se algo mudar.",
+      "inactiveNotice": "Esta carta não está mais ativa. Contate a produção para solicitar uma atualização.",
+      "yourResponseHeading": "Sua Resposta",
+      "yourResponseBody": "Revise a carta acima. Quando estiver pronto, aceite com uma assinatura digitada ou recuse com um breve motivo.",
+      "acceptAndSign": "Aceitar e Assinar",
+      "decline": "Recusar",
+      "cancel": "Cancelar",
+      "acceptBody": "Digite seu nome legal completo para aceitar este engajamento. Sua assinatura digitada, endereço IP e carimbo de data e hora são registrados como evidência de acordo.",
+      "signAndAccept": "Assinar e Aceitar",
+      "typedSignatureLabel": "Assinatura Digitada · Nome Legal Completo",
+      "declineHeading": "Recusar Esta Oferta",
+      "declineBody": "Compartilhe um breve motivo para que a produção possa fazer contato se algo mudar.",
+      "declineLetter": "Recusar Carta",
+      "reasonLabel": "Motivo",
+      "reasonPlaceholder": "ex.: Conflito de agenda — já reservado de 14 a 18 de maio."
+    },
+    "offerCheckin": {
+      "title": "Check-in",
+      "lockedPrefix": "Abra sua carta de engajamento primeiro para desbloquear o check-in —",
+      "returnToLetter": "voltar à carta",
+      "dayOneEyebrow": "Check-in do Dia 1",
+      "welcome": "Bem-vindo a Salvage City, {name}.",
+      "checkedIn": "Você fez check-in.",
+      "checkedInBody": "A produção vê isso imediatamente. Dirija-se ao trailer de produção para credenciais e o briefing de segurança.",
+      "nextLabel": "Próximo:",
+      "nextBody": "Retire suas credenciais no trailer de produção. Assine o termo do briefing de segurança e retire seu rádio se sua função exigir um.",
+      "directorOnCall": "Diretor de Projeto de plantão:",
+      "seeOnboarding": "Veja seu tracker de onboarding",
+      "engagementLetter": "Carta de engajamento"
+    },
+    "offerOnboarding": {
+      "title": "Onboarding",
+      "lockedPrefix": "Abra sua carta de engajamento primeiro para desbloquear o onboarding —",
+      "returnToLetter": "voltar à carta",
+      "stateNotStarted": "Não iniciado",
+      "stateInProgress": "Em andamento",
+      "stateDone": "Concluído",
+      "stateWaived": "Dispensado",
+      "stateBlocked": "Bloqueado",
+      "eyebrow": "Onboarding",
+      "welcome": "Bem-vindo, {name}",
+      "progress": "Progresso",
+      "criticalOpenOne": "{count} etapa de caminho crítico em aberto",
+      "criticalOpenOther": "{count} etapas de caminho crítico em aberto",
+      "criticalBody": "Etapas de caminho crítico condicionam suas credenciais e a primeira chamada. Itens marcados com ★ abaixo.",
+      "due": "Vence em {date}",
+      "completed": "· Concluído em {date}",
+      "backToLetter": "← Voltar à carta de engajamento"
+    },
+    "offerPrint": {
+      "instructionsBefore": "Clique em",
+      "printSaveAsPdf": "Imprimir / Salvar como PDF",
+      "instructionsMiddle": "e escolha",
+      "saveAsPdf": "Salvar como PDF",
+      "instructionsAfter": "na caixa de impressão do seu navegador.",
+      "backToLetter": "← Voltar à carta"
+    },
+    "msaSign": {
+      "submit": "Assinar e Enviar",
+      "exhibitBHeading": "Anexo B — Outros Clientes",
+      "exhibitBHint": "Liste pelo menos dois (2) clientes que você atendeu com serviços substancialmente similares nos últimos 24 meses. Deixe linhas em branco se tiver menos a declarar.",
+      "exhibitBClientPlaceholder": "Cliente {n}",
+      "exhibitBProjectPlaceholder": "Projeto / Engajamento",
+      "exhibitBDatesPlaceholder": "Datas · ex.: T3 2025",
+      "exhibitCHeading": "Anexo C — Investimento de Capital",
+      "exhibitCHint": "Detalhe o que você traz para a mesa — entidade empresarial, seguros, equipamentos, ferramentas, certificações etc.",
+      "exhibitCBusinessEntity": "Entidade empresarial",
+      "exhibitCInsurance": "Seguro",
+      "exhibitCToolsEquipment": "Ferramentas / Equipamentos",
+      "exhibitCItemCategory": "Item / Categoria",
+      "exhibitCDescriptionPlaceholder": "Descrição / valor",
+      "nscbHeading": "Licença NSCB — Capítulo 624",
+      "nscbHint": "Obrigatória para escopos de ofício abrangidos pelo NRS Capítulo 624 — carpintaria, elétrica, rigging etc. Pule se não for aplicável.",
+      "nscbLicensePlaceholder": "Licença nº · ex.: 0012345",
+      "nscbClassificationPlaceholder": "Classificação · ex.: C-3",
+      "nscbMonetaryLimitPlaceholder": "Limite monetário · centavos de $, ex.: 50000000",
+      "attestation": "Estou autorizado a assinar este Contrato em meu nome ou em nome da minha entidade empresarial. As declarações feitas nos Anexos B e C são verdadeiras e corretas segundo meu melhor conhecimento.",
+      "signatureLabel": "Assinatura · Digite Seu Nome Legal Completo",
+      "signaturePlaceholder": "Seu nome legal completo"
+    },
+    "msaUnlock": {
+      "title": "Contrato-Mestre de Serviços",
+      "expiredHint": "Sua sessão expirou ou o código de acesso mudou. Digite novamente o código de acesso de 6 caracteres enviado com este link.",
+      "hint": "Digite o código de acesso de 6 caracteres enviado com este link para ver seu MSA.",
+      "openMsa": "Abrir MSA",
+      "accessCodeLabel": "Código de Acesso",
+      "troubleContact": "Problemas? Contate"
+    },
+    "msaPrint": {
+      "instructionsBefore": "Clique em",
+      "printSaveAsPdf": "Imprimir / Salvar como PDF",
+      "instructionsMiddle": "e escolha",
+      "saveAsPdf": "Salvar como PDF",
+      "instructionsAfter": "na caixa de impressão do seu navegador.",
+      "backToMsa": "← Voltar ao MSA"
+    },
+    "proposalSignature": {
+      "signedToast": "Assinado · {hash}",
+      "signedEyebrow": "Assinado",
+      "thankYou": "Obrigado, {name}",
+      "signerFallback": "signatário",
+      "signedOn": "Assinado em {date}",
+      "authorizeEyebrow": "Autorizar",
+      "acceptHeading": "Aceitar esta proposta",
+      "yourNameLabel": "Seu Nome",
+      "emailLabel": "E-mail",
+      "titleRoleLabel": "Cargo / função",
+      "titleRolePlaceholder": "Fundador, Produtor, COO…",
+      "type": "Digitar",
+      "draw": "Desenhar",
+      "typeSignaturePlaceholder": "Digite sua assinatura",
+      "clear": "Limpar",
+      "signing": "Assinando…",
+      "signAndAccept": "Assinar e aceitar"
+    },
+    "msaDocument": {
+      "title": "Contrato-Mestre de Serviços de Contratado Independente",
+      "version": "Versão {version}",
+      "issued": "Emitido em {date}",
+      "contractor": "Contratado",
+      "recitalsHeading": "Considerandos",
+      "relationshipHeading": "1. Relação entre as Partes",
+      "termsHeading": "2. Termos e Condições",
+      "governingLawHeading": "3. Lei Aplicável e Confidencialidade",
+      "exhibitBHeading": "Anexo B — Outros Clientes",
+      "exhibitBHint": "O Contratado declara que prestou serviços substancialmente similares aos seguintes clientes nos vinte e quatro (24) meses anteriores à data de vigência deste Contrato.",
+      "colClient": "Cliente",
+      "colProject": "Projeto",
+      "colDates": "Datas",
+      "exhibitCHeading": "Anexo C — Detalhamento de Investimento de Capital",
+      "exhibitCHint": "O investimento de capital do Contratado em seu negócio relevante aos serviços pode incluir, sem limitação, constituição de entidade empresarial, seguros mantidos, software/equipamentos/ferramentas próprios, preparação e certificações pré-engajamento e licenciamento NSCB específico do ofício quando aplicável.",
+      "colItemCategory": "Item / Categoria",
+      "colDescriptionValue": "Descrição / Valor",
+      "nscbLicenseHeading": "Licença NSCB · Capítulo 624",
+      "licenseNumberLabel": "Licença nº:",
+      "classificationLabel": "Classificação:",
+      "monetaryLimitLabel": "Limite Monetário:",
+      "signed": "Assinado",
+      "counterSigned": "Contra-assinado {when}",
+      "awaitingCounterSignature": "Aguardando Contra-Assinatura",
+      "awaitingBody": "Digite seu nome legal completo para formalizar a aceitação deste Contrato-Mestre de Serviços. Sua assinatura digitada, endereço IP e carimbo de data e hora serão capturados como trilha de auditoria.",
+      "forOrg": "Por {org}",
+      "signerTitle": "Produtor e Diretor de Operações",
+      "reference": "Referência"
+    },
+    "letterDocument": {
+      "title": "Carta de Engajamento",
+      "issued": "Emitida em {date}",
+      "recipient": "Destinatário",
+      "greeting": "Saudações",
+      "introLead": "Você está no manifesto. Em nome de {employer}, temos o prazer de trazê-lo como",
+      "introFor": "para",
+      "introTail": "Os detalhes completos do engajamento estão descritos abaixo — leia com atenção e contra-assine ao final para oficializar.",
+      "questionsBeforeSigning": "Dúvidas antes de assinar? Fale com",
+      "at": "em",
+      "engagementSummaryHeading": "1. Resumo do Engajamento",
+      "role": "Função",
+      "department": "Departamento",
+      "classification": "Classificação",
+      "reportsTo": "Reporta-se A",
+      "workLocation": "Local de Trabalho",
+      "engagementWindow": "Janela do Engajamento",
+      "travelIn": "Viagem de Ida",
+      "onSiteStart": "Início no Local",
+      "onSiteEnd": "Fim no Local",
+      "travelOut": "Viagem de Volta",
+      "serviceDayOne": "dia de serviço projetado no local.",
+      "serviceDayOther": "dias de serviço projetados no local.",
+      "compensationHeading": "2. Remuneração",
+      "basis": "Base",
+      "compensation": "Remuneração",
+      "travelLodgingReimbursement": "Reembolso de Viagem + Hospedagem",
+      "paymentSchedule": "Cronograma de Pagamento",
+      "inclusionsHeading": "3. Inclusões",
+      "noInclusions": "Nenhuma inclusão adicional especificada.",
+      "travelProvided": "Viagem fornecida / organizada",
+      "lodgingProvided": "Hospedagem fornecida",
+      "mealsProvided": "Refeições da equipe nos dias de chamada",
+      "scopeHeading": "4. Escopo de Trabalho",
+      "scheduleHeading": "5. Cronograma de Trabalho",
+      "scheduleHint": "Marcos do cronograma de produção do projeto. Datas e atividades estão sujeitas a revisão conforme as circunstâncias da produção; avisaremos sobre mudanças relevantes pelos canais padrão de produção.",
+      "colDate": "Data",
+      "colCall": "Chamada",
+      "colWrap": "Encerramento",
+      "colMilestones": "Marcos",
+      "onboardingHeading": "6. Checklist de Onboarding",
+      "onboardingHint": "Uma lista curta para deixá-lo pronto. Tente concluir estes itens em até 48 horas após a aceitação para que as credenciais possam ser enviadas.",
+      "signMsa": "Assine seu Contrato-Mestre de Serviços",
+      "openMsaLink": "Abrir MSA ↗",
+      "msaOneTimeNote": "Única vez. Vale para todo engajamento em que reservarmos você — não verá esta etapa de novo.",
+      "openLink": "Abrir ↗",
+      "reviewGuide": "Revise o Guia de Produção de Salvage City",
+      "accepted": "Aceita",
+      "counterSigned": "Contra-assinada {when}",
+      "awaitingCounterSignature": "Aguardando Contra-Assinatura",
+      "awaitingBody": "Digite seu nome legal completo abaixo para formalizar a aceitação. Sua assinatura digitada, endereço IP e carimbo de data e hora serão capturados como trilha de auditoria.",
+      "forEmployer": "Por {employer}",
+      "signerTitle": "Produtor e Diretor de Operações",
+      "reference": "Referência",
+      "footerMsaOnFile": "Este engajamento está sujeito ao seu Contrato-Mestre de Serviços de Contratado Independente assinado em {date} · v{version}.",
+      "viewMsaLink": "Ver MSA ↗",
+      "footerMsaPendingPrefix": "Este engajamento está sujeito ao nosso Contrato-Mestre de Serviços de Contratado Independente —",
+      "readAndSignLink": "leia e assine sua cópia ↗",
+      "footerMsaPendingSuffix": "única vez, aplica-se a todo engajamento futuro.",
+      "footerMsaSeparateEmail": "Este engajamento está sujeito ao nosso Contrato-Mestre de Serviços de Contratado Independente — sua cópia pessoal chegará em um e-mail separado e é exigida antes do seu primeiro dia de serviço.",
+      "governingLaw": "Lei aplicável: Estado de Nevada. Foro: Condado de Clark, NV. Confidencial e de propriedade de {employer}."
+    },
+    "heatProposal": {
+      "navOverview": "Visão Geral",
+      "navBuilds": "Construções",
+      "navRetainer": "Retainer",
+      "navScope": "Escopo",
+      "navLifecycle": "Ciclo de Vida",
+      "navInvestment": "Investimento",
+      "navAddons": "Complementos",
+      "navSign": "Assinar",
+      "sectionNavLabel": "Navegação de seções",
+      "heroEyebrow": "Programa de Ativações Pop-Up · {window}",
+      "heroHeadlineLine2": "Ativações da East Plaza",
+      "heroSub": "Um estúdio de ativações retido para a East Plaza dentro do Kaseya Center — conceito, engenharia, fabricação, instalação e desmontagem em um menu por tiers de momentos pop-up calibrados a unlocks de parceiros, ritmo de homestand e takeovers assinatura da plaza.",
+      "metaClient": "Cliente",
+      "metaProducer": "Produtor",
+      "metaVenue": "Local",
+      "metaDocument": "Documento",
+      "metaReference": "Referência",
+      "heroConfidential": "Confidencial · Preparado para {contact} no Miami HEAT · {validity}",
+      "overviewEyebrow": "Visão Geral do Projeto",
+      "overviewTitle": "Construções Por Tier. Capacidade Retida.",
+      "overviewSub": "Três vetores de engajamento, projetados para compor. Cada ativação puxa de um menu de construções por tier. Um retainer mensal — escolha um de três tiers — garante capacidade dedicada de estúdio por trás do programa. Complementos empilham em qualquer um, sob demanda.",
+      "perActivation": "Por Ativação",
+      "buildMenu": "Menu de Construções",
+      "sizeSmall": "Pequena",
+      "sizeMedium": "Média",
+      "sizeLarge": "Grande",
+      "includes": "Inclui",
+      "includesValue": "Produção · Fabricação · Instalação · Desmontagem",
+      "retainer": "Retainer",
+      "threeTiers": "Três Tiers",
+      "tierBase": "Base",
+      "tierElevated": "Elevated",
+      "tierPremium": "Premium",
+      "perMonth": "{amount} / mês",
+      "commitment": "Compromisso",
+      "upgrades": "Upgrades",
+      "optionalUpgrades": "Upgrades Opcionais",
+      "addonMenu": "Menu de Complementos",
+      "addonMenuValue": "{count} Itens · 5 Categorias",
+      "addsTo": "Acrescenta A",
+      "addsToValue": "Retainer · Ativação · Ambos",
+      "buildDiscount": "Desconto de Construção",
+      "buildDiscountValue": "Até 12% Sobre a Lista",
+      "assetReuse": "Reuso de Ativos",
+      "assetReuseValue": "Crédito de 30–50% na Reimplantação",
+      "upsellSeeElevated": "Precisa de Mais? Veja Elevated →",
+      "upsellSeePremium": "Precisa de Mais? Veja Premium →",
+      "retainerTiersEyebrow": "Tiers de Retainer",
+      "retainerTiersTitle": "Base. Elevated. Premium.",
+      "retainerTiersSub": "Três tiers de retainer, escalados à sua cadência de ativações. Cada tier constrói sobre o anterior — o Elevated inclui tudo do Base, e o Premium inclui tudo do Elevated mais linhas exclusivas reservadas ao tier mais alto.",
+      "monthly": "Mensal",
+      "perYear": "· {amount} / ano",
+      "fitFor": "Ideal Para",
+      "choose": "Escolher {name}",
+      "premiumExclusivesEyebrow": "Exclusivos Premium · Reservados Ao Tier Mais Alto",
+      "premiumExclusivesTitle": "Linhas Que Você Não Encontra Em Nenhum Outro Lugar.",
+      "premiumExclusivesSub": "Quatro linhas disponíveis apenas no tier Premium — não à la carte, não no Elevated, não como compra avulsa. Reservadas a parceiros que rodam conosco um programa que define a temporada.",
+      "activationBuildsEyebrow": "Construções de Ativação",
+      "activationBuildsTitle": "Pequena. Média. Grande.",
+      "activationBuildsSub": "Três tiers de construção, calibrados para o momento. Cada tier mantém uma faixa estreita do spec base ao spec topo, com movimentos arquitetônicos e de varejo maiores cotados separadamente no menu de Complementos.",
+      "buildRange": "Faixa de Construção",
+      "precedent": "Precedente · {name}",
+      "includedInBase": "Incluído no Base · {amount}",
+      "upgradesInTier": "Upgrades Neste Tier · Até {amount}",
+      "tierFootnotePrefix": "Movimentos arquitetônicos maiores — revestimento em chemetal, arquitetura de contêineres, varejo POS completo, construções de hospitalidade — são cotados separadamente no",
+      "addonsMenuLink": "menu de Complementos",
+      "tierFootnoteSuffix": "e sobrepostos ao tier que servir ao momento.",
+      "scopeEyebrow": "Escopo de Trabalho",
+      "scopeTitle": "Desenhado. Construído. Impresso. Instalado.",
+      "scopeSub": "Onze nós de escopo cobrindo cada elemento fabricado e impresso mais os serviços de produção que o levam da oficina à plaza e de volta. O tier define amplitude e acabamento — não quais nós são tocados.",
+      "fabricationPrint": "Fabricação e Impressão",
+      "productionServices": "Serviços de Produção",
+      "appliesTo": "Aplica-se A · {list}",
+      "sitesEyebrow": "Sites de Ativação",
+      "sitesTitle": "Onde Cada Elemento Acontece.",
+      "sitesSub": "Três zonas na East Plaza. Cada uma acomoda um tier e um padrão de permanência diferentes; o tratamento escala com o momento.",
+      "site": "Site · {tag}",
+      "cadenceAriaLabel": "Cadência",
+      "cadenceSmall": "Cadência Pequena",
+      "cadenceMedium": "Cadência Média",
+      "cadenceLarge": "Cadência Grande",
+      "lifecycleEyebrow": "Ciclo de Vida da Produção",
+      "lifecycleTitle": "Do Brief À Desmontagem.",
+      "lifecycleSub": "Oito fases, estrutura idêntica em toda ativação. A pista escala com o tier de construção — Pequena condensa em cinco semanas, Média corre em nove, Grande se estende a treze.",
+      "milestones": "Marcos",
+      "deliverables": "Entregáveis",
+      "approvalGate": "Gate de Aprovação",
+      "workbackEyebrow": "Cronograma Reverso · {runway}",
+      "workbackTitle": "Calibrado Contra a Data de Ativação.",
+      "workbackSub": "Todo prazo conta de trás para frente a partir da data de ativação para uma construção {tier}. Alterne a cadência acima para ver como Pequena, Média e Grande se comparam.",
+      "colPhase": "Fase",
+      "colMilestone": "Marco",
+      "colDeadline": "Prazo",
+      "investmentEyebrow": "Resumo de Investimento",
+      "investmentTitle": "Construção Mais Retainer.",
+      "investmentSub": "O investimento total do programa escala com sua cadência de ativações e o tier de retainer. Escolha construções do menu, escolha um retainer para garantir capacidade de estúdio por trás do programa e adicione os upgrades que servem ao momento. Cada valor cobre produção, fabricação, instalação e desmontagem.",
+      "perActivationBuild": "Construção Por Ativação",
+      "rangeBaseToTopSpec": "Faixa · Do Spec Base Ao Topo",
+      "tierBuild": "Construção {name}",
+      "retainerTierPickOne": "Tier de Retainer · Escolha Um",
+      "monthlyAnnual": "Mensal · Anual",
+      "retainerNamePitch": "Retainer {name} · {pitch}",
+      "perMoSuffix": "/ mês",
+      "addonsUpgrades": "Complementos e Upgrades",
+      "addToAnyTier": "Adicione A Qualquer Tier",
+      "menuItemsCount": "{count} itens de menu em 5 categorias",
+      "addonsCategoriesBody": "Material e Acabamento · Upgrades Funcionais · Sobreposições de Serviço · Logística · Documentação. Adicione quantos quiser a qualquer retainer ou ativação.",
+      "pricedByRequest": "Preço Sob Consulta",
+      "programInvestment": "Investimento do Programa",
+      "retainerBuildAddons": "Retainer + Construção + Complementos",
+      "investmentFootnote": "Cada ativação roda sob seu próprio aceite assinado, integrado a este contrato-mestre. Cada tier de construção mantém uma faixa estreita do spec base ao spec topo, e upgrades dentro dessa faixa permanecem dentro do tier. Movimentos arquitetônicos maiores são cotados separadamente no menu de Complementos.",
+      "addonsEyebrow": "Complementos e Upgrades",
+      "addonsTitle": "Empilhe Qualquer Coisa. Sobre Qualquer Coisa.",
+      "addonsSub": "O menu completo de upgrades opcionais — material, funcional, serviço, logística e documentação. Escolha qualquer item, adicione a qualquer retainer ou qualquer construção. Preço sob consulta.",
+      "itemsCount": "{count} itens",
+      "appliesRetainerActivation": "Retainer + Ativação",
+      "appliesRetainer": "Retainer",
+      "appliesActivation": "Ativação",
+      "minTier": "Tier Mínimo · {tier}",
+      "activationDeposit": "Depósito de Ativação",
+      "depositDue": "Devido na aprovação por escrito de cada Declaração de Trabalho de ativação.",
+      "balance": "Saldo",
+      "balanceDue": "Devido cinco (5) dias úteis antes do load-in. Retainer faturado separadamente, mensal com prazo de 15 dias.",
+      "paymentMethodAch": "Forma de Pagamento · ACH / Transferência",
+      "payableTo": "Pagável A",
+      "achWire": "ACH / Transferência",
+      "achWireValue": "Dados bancários emitidos com o contrato executado",
+      "currency": "Moeda",
+      "optionalScopeEyebrow": "Escopo Opcional",
+      "changeOrdersTitle": "Ordens de Mudança Disponíveis.",
+      "changeOrdersSub": "Escopo fora do menu do tier base — emitidas individualmente ou empilhadas em um único SOW de ativação.",
+      "available": "Disponível",
+      "scopeBoundariesEyebrow": "Limites de Escopo",
+      "exclusionsTitle": "Fora Deste Engajamento.",
+      "termsEyebrow": "Termos e Condições",
+      "termsTitle": "O Acordo Operacional.",
+      "authorizationEyebrow": "Autorização",
+      "authorizationTitle": "Execute O Contrato-Mestre.",
+      "authorizationSub": "Assinar aqui autoriza o retainer base e dá ao HEAT o direito de acionar ativações do menu de tiers sob SOWs individuais. Assinaturas por ativação vivem em cada SOW.",
+      "draw": "Desenhar",
+      "type": "Digitar",
+      "drawSignatureAria": "Desenhe sua assinatura",
+      "typeFullNamePlaceholder": "Digite seu nome legal completo",
+      "typedSignatureAria": "Assinatura digitada",
+      "printedName": "Nome por extenso",
+      "titleField": "Cargo",
+      "executeAlert": "Adicione sua assinatura e nome por extenso para executar.",
+      "executed": "Executado",
+      "executeAgreement": "Executar Contrato",
+      "clear": "Limpar",
+      "executionReceipt": "Recibo de Execução",
+      "executedBy": "Executado por",
+      "emailProducer": "Enviar E-mail ao Produtor",
+      "printSavePdf": "Imprimir / Salvar PDF",
+      "footerProducer": "Produtor",
+      "footerProject": "Projeto",
+      "footerConfidential": "Confidencial",
+      "footerConfidentialBody": "Preparado para {client}. Preços e detalhes estruturais são confidenciais entre as partes. © {year} {producer}."
+    }
+  },
+  "publicFormSubmit": {
+    "submitted": "Enviado",
+    "thankYouTitle": "Obrigado — recebemos.",
+    "thankYouBody": "Sua resposta foi registrada. Você pode fechar esta aba.",
+    "leaveBlank": "Deixe em branco",
+    "selectPlaceholder": "Selecione…",
+    "submitting": "Enviando",
+    "submit": "Enviar"
+  },
+  "apiDocs": {
+    "meta": {
+      "title": "Referência da API",
+      "description": "Documentação REST + OpenAPI 3.1 da API pública do ATLVS. Autenticação via cookie de sessão ou PAT Bearer; limites de taxa escalam com o tier do seu plano."
+    },
+    "docDescription": "Superfície REST pública da ATLVS Technologies.",
+    "eyebrow": "API REST · v1",
+    "heading": "Referência da API ATLVS",
+    "downloadOpenApi": "Baixar OpenAPI 3.1 · JSON",
+    "manageApiKeys": "Gerenciar chaves de API",
+    "authentication": "Autenticação",
+    "authBody": "Passe um token de acesso pessoal no cabeçalho",
+    "authBodyHeader": ":",
+    "authCookieBefore": "Ou use o cookie de sessão definido ao entrar em",
+    "rateLimits": "Limites de taxa",
+    "rateLimitsBody": "Os limites escalam com o plano da sua organização. Toda resposta inclui:",
+    "retryAfterNote": "apenas em 429",
+    "resources": "Recursos",
+    "parameters": "Parâmetros",
+    "paramName": "Nome",
+    "paramIn": "Em",
+    "paramType": "Tipo",
+    "paramRequired": "Obrigatório",
+    "yes": "sim",
+    "no": "não",
+    "requestBody": "Corpo da requisição",
+    "responses": "Respostas",
+    "footer": "OpenAPI 3.1 · {count} caminhos · Gerado no momento da requisição a partir de schemas Zod registrados."
   }
 }

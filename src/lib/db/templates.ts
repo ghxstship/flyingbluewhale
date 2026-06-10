@@ -1,7 +1,8 @@
 import "server-only";
 
 import { createClient, createServiceClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
+import { Constants } from "@/lib/supabase/database.types";
+import type { DeliverableType } from "@/lib/supabase/types";
 import type { ProjectTemplate, TemplateCategory } from "@/lib/templates/types";
 import { coerceBlueprint } from "@/lib/templates/types";
 
@@ -67,12 +68,15 @@ export async function applyProjectTemplate(opts: {
   // Either a global template (orgId === null) or one owned by this org.
   if (tpl.orgId !== null && tpl.orgId !== opts.orgId) throw new Error("Template not available for this organization");
 
-  const admin = createServiceClient() as unknown as LooseSupabase;
+  const admin = createServiceClient();
   const insertProject = {
     org_id: opts.orgId,
     name: opts.name,
     slug: opts.slug,
-    status: "draft" as const,
+    // LDP rename: the column is `project_state` — the old `status` key hit a
+    // nonexistent column and 42703'd every template apply (masked by the
+    // LooseSupabase cast this helper used to compile through).
+    project_state: "draft" as const,
     created_by: opts.createdBy,
   };
   const { data: project, error: pErr } = await admin.from("projects").insert(insertProject).select("id").single();
@@ -82,13 +86,16 @@ export async function applyProjectTemplate(opts: {
   // Best-effort seed: write deliverables + tasks where the schema allows it.
   // Skip on unknown tables — the project is created either way.
   if (tpl.blueprint.deliverables?.length) {
+    // `deliverables` has no kind/description/created_by columns — the doc-spec
+    // type lives in the `type` enum column and free-form context in `data`.
+    // Blueprint kinds are unvalidated strings; coerce unknowns to "custom".
+    const deliverableTypes: readonly string[] = Constants.public.Enums.deliverable_type;
     const rows = tpl.blueprint.deliverables.map((d) => ({
       org_id: opts.orgId,
       project_id: projectId,
       title: d.title,
-      kind: d.kind,
-      description: d.description ?? null,
-      created_by: opts.createdBy,
+      type: (deliverableTypes.includes(d.kind) ? d.kind : "custom") as DeliverableType,
+      data: d.description ? { description: d.description } : {},
     }));
     await admin.from("deliverables").insert(rows).select("id");
   }
@@ -98,7 +105,7 @@ export async function applyProjectTemplate(opts: {
       project_id: projectId,
       title: t.title,
       description: t.description ?? null,
-      status: "todo",
+      status: "todo" as const,
       created_by: opts.createdBy,
     }));
     await admin.from("tasks").insert(rows).select("id");

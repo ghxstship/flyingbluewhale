@@ -8,7 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
-import type { Proposal } from "@/lib/supabase/types";
+import type { Tables } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
 
@@ -44,7 +44,7 @@ export default async function ProposalsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Proposal>
+        <DataTable<Tables<"proposals">>
           rows={rows}
           rowHref={(r) => `/console/proposals/${r.id}`}
           columns={[

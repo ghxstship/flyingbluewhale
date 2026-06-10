@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -5,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { notFound } from "next/navigation";
+import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -25,13 +28,42 @@ type Rfq = {
   org_slug: string;
 };
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  if (!hasSupabase) return notFound();
+// React cache() memoizes per request, so generateMetadata and the page body
+// share a single Supabase round-trip.
+const getRfq = cache(async (slug: string): Promise<Rfq | null> => {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("public_rfq_marketplace").select("*").eq("public_slug", slug).maybeSingle();
-  if (!data) return notFound();
-  const r = data as Rfq;
+  return (data as Rfq | null) ?? null;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const r = await getRfq(slug);
+  if (!r) {
+    return buildMetadata({
+      title: "Open RFQs on the ATLVS Marketplace",
+      description: "Browse open requests for quote from production teams on the ATLVS marketplace and submit a bid.",
+      path: `/marketplace/rfqs/${slug}`,
+      noIndex: true,
+    });
+  }
+  return buildMetadata({
+    title: `${r.title} — Open RFQ on ATLVS`,
+    description: metaDescription(
+      r.description,
+      `${r.org_name} is sourcing vendors for ${r.title} through the ATLVS marketplace. Review the scope and submit a bid.`,
+    ),
+    path: `/marketplace/rfqs/${r.public_slug}`,
+    ogImageEyebrow: "ATLVS Marketplace · Open RFQ",
+    ogImageTitle: r.title,
+  });
+}
+
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const r = await getRfq(slug);
+  if (!r) return notFound();
   const { t } = await getRequestT();
 
   return (

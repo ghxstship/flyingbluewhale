@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -7,6 +9,7 @@ import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -34,13 +37,44 @@ type Row = {
   org_slug: string;
 };
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  if (!hasSupabase) return notFound();
+// React cache() memoizes per request, so generateMetadata and the page body
+// share a single Supabase round-trip.
+const getGig = cache(async (slug: string): Promise<Row | null> => {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("public_job_board").select("*").eq("public_slug", slug).maybeSingle();
-  if (!data) return notFound();
-  const r = data as Row;
+  return (data as Row | null) ?? null;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const r = await getGig(slug);
+  if (!r) {
+    return buildMetadata({
+      title: "Crew Gigs on the ATLVS Marketplace",
+      description:
+        "Browse open crew gigs from production teams on the ATLVS marketplace — rates, locations, and requirements up front.",
+      path: `/marketplace/gigs/${slug}`,
+      noIndex: true,
+    });
+  }
+  const where = [r.city, r.region, r.country].filter(Boolean).join(", ");
+  return buildMetadata({
+    title: `${r.title} — Crew Gig on ATLVS`,
+    description: metaDescription(
+      r.description,
+      `${r.org_name} is hiring for ${r.title}${where ? ` in ${where}` : ""} through the ATLVS marketplace. Review the role and apply.`,
+    ),
+    path: `/marketplace/gigs/${r.public_slug}`,
+    ogImageEyebrow: "ATLVS Marketplace · Crew Gig",
+    ogImageTitle: r.title,
+  });
+}
+
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const r = await getGig(slug);
+  if (!r) return notFound();
   const { t } = await getRequestT();
 
   return (

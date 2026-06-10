@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { KanbanBoard, type KanbanLane } from "@/components/views";
+import { KanbanBoard, type KanbanLane } from "@/components/views/KanbanBoard";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import type { Task, TaskStatus } from "@/lib/supabase/types";

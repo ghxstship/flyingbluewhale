@@ -1,4 +1,12 @@
 import { getRequestT } from "@/lib/i18n/request";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Terms of Service",
+  description:
+    "The terms that govern your use of the ATLVS Technologies platform — accounts, acceptable use, billing, liability, and termination.",
+  path: "/legal/terms",
+});
 
 export default async function TermsPage() {
   const { t } = await getRequestT();

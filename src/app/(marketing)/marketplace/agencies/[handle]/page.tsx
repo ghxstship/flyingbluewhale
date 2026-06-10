@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -5,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { getRequestT } from "@/lib/i18n/request";
+import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +23,42 @@ type Row = {
   artist_count: number;
 };
 
-export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
-  const { handle } = await params;
-  if (!hasSupabase) return notFound();
+// React cache() memoizes per request, so generateMetadata and the page body
+// share a single Supabase round-trip.
+const getAgency = cache(async (handle: string): Promise<Row | null> => {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("public_agency_directory").select("*").eq("public_handle", handle).maybeSingle();
-  if (!data) return notFound();
-  const a = data as Row;
+  return (data as Row | null) ?? null;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
+  const { handle } = await params;
+  const a = await getAgency(handle);
+  if (!a) {
+    return buildMetadata({
+      title: "Agencies on the ATLVS Marketplace",
+      description: "Browse booking agency profiles and artist rosters on the ATLVS marketplace.",
+      path: `/marketplace/agencies/${handle}`,
+      noIndex: true,
+    });
+  }
+  return buildMetadata({
+    title: `${a.display_name} — Agency on ATLVS`,
+    description: metaDescription(
+      a.bio,
+      `Work with ${a.display_name} through the ATLVS marketplace — roster, commission terms, and booking inquiries in one profile.`,
+    ),
+    path: `/marketplace/agencies/${a.public_handle}`,
+    ogImageEyebrow: "ATLVS Marketplace",
+    ogImageTitle: a.display_name,
+  });
+}
+
+export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
+  const { handle } = await params;
+  const a = await getAgency(handle);
+  if (!a) return notFound();
   const { t } = await getRequestT();
 
   return (

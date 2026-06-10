@@ -84,16 +84,15 @@ export const metadata: Metadata = {
   ],
   manifest: "/manifest.json",
   // Favicon/touch-icon wiring — src/app/icon.svg auto-loads via Next.js
-  // convention for the standard favicon. The apple-touch-icon needs an
-  // explicit pointer because Next's app/apple-icon.* convention only
-  // accepts raster formats (png/jpg) — pointing iOS Safari at the SVG
-  // tile keeps the brand canon (pink Waypoint) without needing a PNG
-  // export pipeline. The shortcut icon points at the bare ink mark for
-  // the 16px browser-tab affordance per the v4 logo-kit canon.
+  // convention for the standard favicon. The apple-touch-icon is a real
+  // 180px PNG: iOS Safari does NOT render SVG touch icons (the previous
+  // SVG pointer produced a screenshot-letter tile on home-screen
+  // installs). The shortcut icon points at the bare ink mark for the
+  // 16px browser-tab affordance per the v4 logo-kit canon.
   icons: {
     icon: "/icon.svg",
     shortcut: "/brand/atlvs-mark.svg",
-    apple: "/brand/atlvs-icon-atlvs.svg",
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     title: "ATLVS Technologies",

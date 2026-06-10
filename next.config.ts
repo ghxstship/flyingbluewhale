@@ -80,6 +80,22 @@ const config: NextConfig = {
     root: workspaceRoot,
   },
 
+  // Remote image optimization — user-generated imagery (org logos, portal
+  // branding, incident photos, avatars) lives in Supabase storage. Without
+  // remotePatterns, next/image can't serve those hosts and surfaces fell
+  // back to raw <img> with no resizing/AVIF.
+  images: {
+    // supabaseHost resolves to the project host (e.g. xyz.supabase.co)
+    // when the env is set, else the "*.supabase.co" wildcard — both are
+    // valid remotePatterns hostnames.
+    remotePatterns: [{ protocol: "https" as const, hostname: supabaseHost }],
+  },
+
+  // Server-only document generators — keep them out of the bundled server
+  // chunks (they're large, CJS-heavy, and only ~20 API routes touch them).
+  // Trims build time and serverless cold starts.
+  serverExternalPackages: ["exceljs", "@react-pdf/renderer", "pptxgenjs", "archiver"],
+
   async headers() {
     return [
       {

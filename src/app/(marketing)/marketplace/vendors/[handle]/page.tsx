@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -5,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { notFound } from "next/navigation";
+import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -25,13 +28,43 @@ type Row = {
   year_founded: number | null;
 };
 
-export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
-  const { handle } = await params;
-  if (!hasSupabase) return notFound();
+// React cache() memoizes per request, so generateMetadata and the page body
+// share a single Supabase round-trip.
+const getVendor = cache(async (handle: string): Promise<Row | null> => {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("public_vendor_directory").select("*").eq("public_handle", handle).maybeSingle();
-  if (!data) return notFound();
-  const v = data as Row;
+  return (data as Row | null) ?? null;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
+  const { handle } = await params;
+  const v = await getVendor(handle);
+  if (!v) {
+    return buildMetadata({
+      title: "Vendors on the ATLVS Marketplace",
+      description:
+        "Browse production vendor profiles, trade categories, and coverage regions on the ATLVS marketplace.",
+      path: `/marketplace/vendors/${handle}`,
+      noIndex: true,
+    });
+  }
+  return buildMetadata({
+    title: `${v.name} — Vendor on ATLVS`,
+    description: metaDescription(
+      v.tagline ?? v.bio,
+      `Request a quote from ${v.name} through the ATLVS marketplace — trades, coverage regions, and reviews in one profile.`,
+    ),
+    path: `/marketplace/vendors/${v.public_handle}`,
+    ogImageEyebrow: "ATLVS Marketplace",
+    ogImageTitle: v.name,
+  });
+}
+
+export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
+  const { handle } = await params;
+  const v = await getVendor(handle);
+  if (!v) return notFound();
   const { t } = await getRequestT();
 
   return (

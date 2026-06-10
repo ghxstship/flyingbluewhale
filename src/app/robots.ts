@@ -1,16 +1,22 @@
 import { headers } from "next/headers";
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/seo";
+import { shellForHost } from "@/lib/urls";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
   const base = SITE.baseUrl;
 
-  // App subdomains (atlvs/gvteway/compvss) are auth-walled — disallow all
-  // crawling on those hosts, allow only the apex marketing site.
-  const host = (await headers()).get("host")?.split(":")[0].toLowerCase() ?? "";
-  const isAppSubdomain = host.startsWith("atlvs.") || host.startsWith("gvteway.") || host.startsWith("compvss.");
+  // App subdomains (app/gvteway/compvss) are auth-walled — disallow all
+  // crawling on those hosts; only the apex marketing site is indexable.
+  // Resolution goes through shellForHost (the canon subdomain map): the
+  // old prefix check `host.startsWith("atlvs.")` matched the APEX
+  // `atlvs.pro` itself — telling crawlers to skip the entire marketing
+  // site in production — while missing the real console host `app.`.
+  const host = (await headers()).get("host") ?? "";
+  const { shell } = shellForHost(host);
+  const isAppShell = shell === "platform" || shell === "portal" || shell === "mobile";
 
-  if (isAppSubdomain) {
+  if (isAppShell) {
     return { rules: [{ userAgent: "*", disallow: "/" }] };
   }
 

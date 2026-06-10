@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
@@ -55,7 +56,6 @@ export default async function ConsoleDashboard() {
 
   const session = await requireSession();
 
-  const fmt = await getRequestFormatters();
   // No-org users (community/viewer with no membership, or fresh accounts mid-invite)
   // would otherwise pass `""` into a UUID column and crash with 22P02. Render a
   // first-class empty state inviting them to create or join an org instead.
@@ -91,8 +91,6 @@ export default async function ConsoleDashboard() {
     );
   }
 
-  const [projects, stats] = await Promise.all([listProjects(session.orgId), projectStats(session.orgId)]);
-
   return (
     <>
       <ModuleHeader
@@ -108,25 +106,9 @@ export default async function ConsoleDashboard() {
         tabs={<RouteTabs tabs={DASHBOARD_TABS} />}
       />
       <div className="page-content space-y-6">
-        <div className="metric-grid">
-          <MetricCard
-            label={t("console.dashboard.metrics.projects", undefined, "Projects")}
-            value={fmt.number(stats.total)}
-          />
-          <MetricCard
-            label={t("console.dashboard.metrics.active", undefined, "Active")}
-            value={fmt.number(stats.byState.active)}
-            accent
-          />
-          <MetricCard
-            label={t("console.dashboard.metrics.draft", undefined, "Draft")}
-            value={fmt.number(stats.byState.draft)}
-          />
-          <MetricCard
-            label={t("console.dashboard.metrics.archived", undefined, "Archived")}
-            value={fmt.number(stats.byState.archived + stats.byState.complete)}
-          />
-        </div>
+        <Suspense fallback={<MetricGridSkeleton count={4} />}>
+          <DashboardMetrics orgId={session.orgId} />
+        </Suspense>
 
         <section>
           <div className="flex items-center justify-between pb-3">
@@ -137,67 +119,133 @@ export default async function ConsoleDashboard() {
               {t("console.dashboard.viewAll", undefined, "View all →")}
             </Link>
           </div>
-          {projects.length === 0 ? (
-            <div className="surface">
-              <EmptyState
-                size="compact"
-                title={t("console.dashboard.noProjects.title", undefined, "No Projects Yet")}
-                description={t(
-                  "console.dashboard.noProjects.description",
-                  undefined,
-                  "Spin up your first project to see it here.",
-                )}
-                action={
-                  <Button href="/console/projects/new" size="sm">
-                    {t("console.dashboard.newProject", undefined, "+ New Project")}
-                  </Button>
-                }
-              />
-            </div>
-          ) : (
-            <DataTable
-              rows={projects.slice(0, 8)}
-              rowHref={(p) => `/console/projects/${p.id}`}
-              tableId="t:/console:recent-projects"
-              searchable={false}
-              emptyLabel={t("console.dashboard.noRecentProjects", undefined, "No Recent Projects")}
-              columns={[
-                {
-                  key: "name",
-                  header: t("console.dashboard.columns.name", undefined, "Name"),
-                  render: (p) => p.name,
-                  accessor: (p) => p.name,
-                  sortable: true,
-                },
-                {
-                  key: "project_state",
-                  header: t("console.dashboard.columns.state", undefined, "State"),
-                  render: (p) => <StatusBadge status={p.project_state} />,
-                  accessor: (p) => p.project_state,
-                  filterable: true,
-                },
-                {
-                  key: "start_date",
-                  header: t("console.dashboard.columns.start", undefined, "Start"),
-                  render: (p) => p.start_date ?? "—",
-                  accessor: (p) => p.start_date ?? "",
-                  mono: true,
-                  sortable: true,
-                },
-                {
-                  key: "end_date",
-                  header: t("console.dashboard.columns.end", undefined, "End"),
-                  render: (p) => p.end_date ?? "—",
-                  accessor: (p) => p.end_date ?? "",
-                  mono: true,
-                  sortable: true,
-                },
-              ]}
-            />
-          )}
+          <Suspense fallback={<TableSkeleton rows={6} />}>
+            <RecentProjects orgId={session.orgId} />
+          </Suspense>
         </section>
       </div>
     </>
+  );
+}
+
+/**
+ * Streaming island — portfolio metric cards. Queries `projectStats`
+ * independently of the recent-projects table so whichever resolves
+ * first paints first; the header chrome above never waits on either.
+ */
+async function DashboardMetrics({ orgId }: { orgId: string }) {
+  const [{ t }, fmt, stats] = await Promise.all([getRequestT(), getRequestFormatters(), projectStats(orgId)]);
+  return (
+    <div className="metric-grid">
+      <MetricCard
+        label={t("console.dashboard.metrics.projects", undefined, "Projects")}
+        value={fmt.number(stats.total)}
+      />
+      <MetricCard
+        label={t("console.dashboard.metrics.active", undefined, "Active")}
+        value={fmt.number(stats.byState.active)}
+        accent
+      />
+      <MetricCard
+        label={t("console.dashboard.metrics.draft", undefined, "Draft")}
+        value={fmt.number(stats.byState.draft)}
+      />
+      <MetricCard
+        label={t("console.dashboard.metrics.archived", undefined, "Archived")}
+        value={fmt.number(stats.byState.archived + stats.byState.complete)}
+      />
+    </div>
+  );
+}
+
+/** Streaming island — recent-projects table (or its empty state). */
+async function RecentProjects({ orgId }: { orgId: string }) {
+  const [{ t }, projects] = await Promise.all([getRequestT(), listProjects(orgId)]);
+  return (
+    <>
+      {projects.length === 0 ? (
+        <div className="surface">
+          <EmptyState
+            size="compact"
+            title={t("console.dashboard.noProjects.title", undefined, "No Projects Yet")}
+            description={t(
+              "console.dashboard.noProjects.description",
+              undefined,
+              "Spin up your first project to see it here.",
+            )}
+            action={
+              <Button href="/console/projects/new" size="sm">
+                {t("console.dashboard.newProject", undefined, "+ New Project")}
+              </Button>
+            }
+          />
+        </div>
+      ) : (
+        <DataTable
+          rows={projects.slice(0, 8)}
+          rowHref={(p) => `/console/projects/${p.id}`}
+          tableId="t:/console:recent-projects"
+          searchable={false}
+          emptyLabel={t("console.dashboard.noRecentProjects", undefined, "No Recent Projects")}
+          columns={[
+            {
+              key: "name",
+              header: t("console.dashboard.columns.name", undefined, "Name"),
+              render: (p) => p.name,
+              accessor: (p) => p.name,
+              sortable: true,
+            },
+            {
+              key: "project_state",
+              header: t("console.dashboard.columns.state", undefined, "State"),
+              render: (p) => <StatusBadge status={p.project_state} />,
+              accessor: (p) => p.project_state,
+              filterable: true,
+            },
+            {
+              key: "start_date",
+              header: t("console.dashboard.columns.start", undefined, "Start"),
+              render: (p) => p.start_date ?? "—",
+              accessor: (p) => p.start_date ?? "",
+              mono: true,
+              sortable: true,
+            },
+            {
+              key: "end_date",
+              header: t("console.dashboard.columns.end", undefined, "End"),
+              render: (p) => p.end_date ?? "—",
+              accessor: (p) => p.end_date ?? "",
+              mono: true,
+              sortable: true,
+            },
+          ]}
+        />
+      )}
+    </>
+  );
+}
+
+function MetricGridSkeleton({ count }: { count: number }) {
+  return (
+    <div className="metric-grid" aria-busy="true">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="ps-skel h-24" />
+      ))}
+    </div>
+  );
+}
+
+function TableSkeleton({ rows }: { rows: number }) {
+  return (
+    <div className="surface overflow-hidden" aria-busy="true">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex items-center gap-3 border-b border-[var(--p-border)] px-4 py-2.5 last:border-0">
+          <div className="ps-skel h-4 flex-1" />
+          <div className="ps-skel h-4 w-24" />
+          <div className="ps-skel h-4 w-16" />
+        </div>
+      ))}
+    </div>
   );
 }
 

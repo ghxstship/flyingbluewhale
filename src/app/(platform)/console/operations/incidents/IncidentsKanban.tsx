@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { KanbanBoard, type KanbanLane } from "@/components/views";
+import { KanbanBoard, type KanbanLane } from "@/components/views/KanbanBoard";
 import { StatusChip, type StatusTone } from "@/components/ui/StatusChip";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { setIncidentStatus, type IncidentStatus } from "./actions";

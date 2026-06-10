@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
@@ -7,7 +8,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { Presence } from "@/components/collab/Presence";
 import { getPresenceUser } from "@/components/collab/getPresenceUser";
 import { ActivityDrawer } from "@/components/collab/activity";
-import { requireSession } from "@/lib/auth";
+import { requireSession, type Session } from "@/lib/auth";
 import { getActivityForRecord } from "@/lib/db/activity";
 import { getProject } from "@/lib/db/projects";
 import { hasSupabase } from "@/lib/env";
@@ -26,13 +27,6 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
   const session = await requireSession();
   const project = await getProject(session.orgId, projectId);
   if (!project) notFound();
-  const presenceUser = await getPresenceUser(session);
-  const activity = await getActivityForRecord({
-    orgId: session.orgId,
-    targetTable: "projects",
-    targetId: project.id,
-    limit: 50,
-  });
 
   return (
     <>
@@ -50,7 +44,9 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
         ]}
         action={
           <div className="flex items-center gap-2">
-            <Presence targetTable="projects" targetId={project.id} currentUser={presenceUser} />
+            <Suspense fallback={null}>
+              <PresenceSlot session={session} projectId={project.id} />
+            </Suspense>
             <ProjectStatusToggle projectId={project.id} projectState={project.project_state} />
             <Button href={`/console/projects/${projectId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
@@ -122,11 +118,34 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           <div aria-label={t("console.projects.detail.commentsAria", undefined, "Comments")}>
             {/* CommentThread (P2.1) lands here */}
           </div>
-          <ActivityDrawer targetTable="projects" targetId={project.id} initial={activity} />
+          <Suspense fallback={<div className="ps-skel h-40" aria-busy="true" />}>
+            <ActivitySection orgId={session.orgId} projectId={project.id} />
+          </Suspense>
         </div>
       </div>
     </>
   );
+}
+
+/**
+ * Streaming island — presence avatars in the header action row. The
+ * `users` lookup behind `getPresenceUser` no longer blocks first paint
+ * of the project header and detail fields.
+ */
+async function PresenceSlot({ session, projectId }: { session: Session; projectId: string }) {
+  const presenceUser = await getPresenceUser(session);
+  return <Presence targetTable="projects" targetId={projectId} currentUser={presenceUser} />;
+}
+
+/** Streaming island — audit-log activity feed (50-row query). */
+async function ActivitySection({ orgId, projectId }: { orgId: string; projectId: string }) {
+  const activity = await getActivityForRecord({
+    orgId,
+    targetTable: "projects",
+    targetId: projectId,
+    limit: 50,
+  });
+  return <ActivityDrawer targetTable="projects" targetId={projectId} initial={activity} />;
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {

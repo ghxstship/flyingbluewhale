@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -6,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
 import { getRequestT } from "@/lib/i18n/request";
+import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -30,13 +33,44 @@ type Row = {
   is_verified: boolean;
 };
 
-export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
-  const { handle } = await params;
-  if (!hasSupabase) return notFound();
+// React cache() memoizes per request, so generateMetadata and the page body
+// share a single Supabase round-trip (supabase calls don't get the fetch()
+// request-dedupe for free).
+const getTalent = cache(async (handle: string): Promise<Row | null> => {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("public_talent_directory").select("*").eq("public_handle", handle).maybeSingle();
-  if (!data) return notFound();
-  const t = data as Row;
+  return (data as Row | null) ?? null;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
+  const { handle } = await params;
+  const t = await getTalent(handle);
+  if (!t) {
+    return buildMetadata({
+      title: "Talent on the ATLVS Marketplace",
+      description:
+        "Browse artist EPKs, fee bands, and riders on the ATLVS marketplace — bookable talent, verified by operators.",
+      path: `/marketplace/talent/${handle}`,
+      noIndex: true,
+    });
+  }
+  return buildMetadata({
+    title: `${t.act_name} — Talent on ATLVS`,
+    description: metaDescription(
+      t.tagline ?? t.bio,
+      `Book ${t.act_name} through the ATLVS marketplace — EPK, fee band, and booking inquiry in one place.`,
+    ),
+    path: `/marketplace/talent/${t.public_handle}`,
+    ogImageEyebrow: "ATLVS Marketplace",
+    ogImageTitle: t.act_name,
+  });
+}
+
+export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
+  const { handle } = await params;
+  const t = await getTalent(handle);
+  if (!t) return notFound();
   const { t: tr } = await getRequestT();
 
   return (

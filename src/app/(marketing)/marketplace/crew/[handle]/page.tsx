@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -6,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
 import { getRequestT } from "@/lib/i18n/request";
+import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -29,13 +32,42 @@ type Row = {
   photo_url: string | null;
 };
 
-export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
-  const { handle } = await params;
-  if (!hasSupabase) return notFound();
+// React cache() memoizes per request, so generateMetadata and the page body
+// share a single Supabase round-trip.
+const getCrew = cache(async (handle: string): Promise<Row | null> => {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("public_crew_directory").select("*").eq("public_handle", handle).maybeSingle();
-  if (!data) return notFound();
-  const c = data as Row;
+  return (data as Row | null) ?? null;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
+  const { handle } = await params;
+  const c = await getCrew(handle);
+  if (!c) {
+    return buildMetadata({
+      title: "Crew on the ATLVS Marketplace",
+      description: "Browse production crew profiles, day rates, unions, and certifications on the ATLVS marketplace.",
+      path: `/marketplace/crew/${handle}`,
+      noIndex: true,
+    });
+  }
+  return buildMetadata({
+    title: `${c.name} — Crew on ATLVS`,
+    description: metaDescription(
+      c.tagline ?? c.bio,
+      `Hire ${c.name} through the ATLVS marketplace — roles, day rate, unions, and certifications in one profile.`,
+    ),
+    path: `/marketplace/crew/${c.public_handle}`,
+    ogImageEyebrow: "ATLVS Marketplace",
+    ogImageTitle: c.name,
+  });
+}
+
+export default async function Page({ params }: { params: Promise<{ handle: string }> }) {
+  const { handle } = await params;
+  const c = await getCrew(handle);
+  if (!c) return notFound();
   const { t } = await getRequestT();
 
   return (

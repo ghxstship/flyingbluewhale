@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { Badge } from "@/components/ui/Badge";
@@ -36,9 +37,34 @@ export default async function ReportsPage() {
     );
   }
   const session = await requireSession();
-  const [invoices, expenses] = await Promise.all([
-    listOrgScoped("invoices", session.orgId),
-    listOrgScoped("expenses", session.orgId),
+
+  return (
+    <>
+      <ModuleHeader
+        eyebrow={t("console.finance.reports.eyebrow", undefined, "Finance")}
+        title={t("console.finance.reports.title", undefined, "Reports")}
+        subtitle={t("console.finance.reports.subtitle", undefined, "Live P&L from current books")}
+      />
+      <div className="page-content space-y-5">
+        <Suspense fallback={<ReportsSkeleton />}>
+          <ReportsBody orgId={session.orgId} />
+        </Suspense>
+      </div>
+    </>
+  );
+}
+
+/**
+ * Streaming island — the entire report body. Invoices + expenses jointly
+ * feed the metric row, the charts, and the AR-aging table (monthlySeries
+ * consumes both), so the two queries stay in a single boundary; only the
+ * header chrome paints ahead of them.
+ */
+async function ReportsBody({ orgId }: { orgId: string }) {
+  const [{ t }, invoices, expenses] = await Promise.all([
+    getRequestT(),
+    listOrgScoped("invoices", orgId),
+    listOrgScoped("expenses", orgId),
   ]);
   const revenue = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
   const costs = expenses.reduce((s, r) => s + r.amount_cents, 0);
@@ -52,76 +78,92 @@ export default async function ReportsPage() {
 
   return (
     <>
-      <ModuleHeader
-        eyebrow={t("console.finance.reports.eyebrow", undefined, "Finance")}
-        title={t("console.finance.reports.title", undefined, "Reports")}
-        subtitle={t("console.finance.reports.subtitle", undefined, "Live P&L from current books")}
-      />
-      <div className="page-content space-y-5">
-        <div className="metric-grid-3">
-          <MetricCard
-            label={t("console.finance.reports.metrics.revenuePaid", undefined, "Revenue — Paid")}
-            value={formatMoney(revenue)}
-            sparkline={sparklineRevenue}
-            accent
-          />
-          <MetricCard
-            label={t("console.finance.reports.metrics.expenses", undefined, "Expenses")}
-            value={formatMoney(costs)}
-          />
-          <MetricCard
-            label={t("console.finance.reports.metrics.grossMargin", undefined, "Gross Margin")}
-            value={formatMoney(gross)}
-            delta={{ value: `${marginPct}%`, positive: gross >= 0 }}
-          />
-        </div>
-
-        <ReportsCharts monthly={series} aging={aging} categories={expenseCategories} />
-
-        <section className="overflow-x-auto">
-          <header className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-2.5">
-            <h3 className="text-sm font-semibold">
-              {t("console.finance.reports.arAging.title", undefined, "AR aging")}
-            </h3>
-            <span className="text-xs text-[var(--p-text-2)]">
-              {t("console.finance.reports.arAging.subtitle", undefined, "Outstanding invoices by days overdue")}
-            </span>
-          </header>
-          <table className="ps-table w-full text-sm">
-            <thead>
-              <tr>
-                <th>{t("console.finance.reports.arAging.col.bucket", undefined, "Bucket")}</th>
-                <th>{t("console.finance.reports.arAging.col.invoices", undefined, "Invoices")}</th>
-                <th>{t("console.finance.reports.arAging.col.total", undefined, "Total")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {aging.map((b) => (
-                <tr key={b.bucket}>
-                  <td>
-                    <Badge
-                      variant={
-                        b.bucket === "Current"
-                          ? "success"
-                          : b.bucket === "1–30"
-                            ? "info"
-                            : b.bucket === "31–60"
-                              ? "warning"
-                              : "error"
-                      }
-                    >
-                      {t(`console.finance.reports.arAging.bucket.${b.bucket}`, undefined, b.bucket)}
-                    </Badge>
-                  </td>
-                  <td className="font-mono text-xs">{b.count}</td>
-                  <td className="font-mono text-xs">{formatMoney(b.amount)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
+      <div className="metric-grid-3">
+        <MetricCard
+          label={t("console.finance.reports.metrics.revenuePaid", undefined, "Revenue — Paid")}
+          value={formatMoney(revenue)}
+          sparkline={sparklineRevenue}
+          accent
+        />
+        <MetricCard
+          label={t("console.finance.reports.metrics.expenses", undefined, "Expenses")}
+          value={formatMoney(costs)}
+        />
+        <MetricCard
+          label={t("console.finance.reports.metrics.grossMargin", undefined, "Gross Margin")}
+          value={formatMoney(gross)}
+          delta={{ value: `${marginPct}%`, positive: gross >= 0 }}
+        />
       </div>
+
+      <ReportsCharts monthly={series} aging={aging} categories={expenseCategories} />
+
+      <section className="overflow-x-auto">
+        <header className="flex items-center justify-between border-b border-[var(--p-border)] px-4 py-2.5">
+          <h3 className="text-sm font-semibold">{t("console.finance.reports.arAging.title", undefined, "AR aging")}</h3>
+          <span className="text-xs text-[var(--p-text-2)]">
+            {t("console.finance.reports.arAging.subtitle", undefined, "Outstanding invoices by days overdue")}
+          </span>
+        </header>
+        <table className="ps-table w-full text-sm">
+          <thead>
+            <tr>
+              <th>{t("console.finance.reports.arAging.col.bucket", undefined, "Bucket")}</th>
+              <th>{t("console.finance.reports.arAging.col.invoices", undefined, "Invoices")}</th>
+              <th>{t("console.finance.reports.arAging.col.total", undefined, "Total")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {aging.map((b) => (
+              <tr key={b.bucket}>
+                <td>
+                  <Badge
+                    variant={
+                      b.bucket === "Current"
+                        ? "success"
+                        : b.bucket === "1–30"
+                          ? "info"
+                          : b.bucket === "31–60"
+                            ? "warning"
+                            : "error"
+                    }
+                  >
+                    {t(`console.finance.reports.arAging.bucket.${b.bucket}`, undefined, b.bucket)}
+                  </Badge>
+                </td>
+                <td className="font-mono text-xs">{b.count}</td>
+                <td className="font-mono text-xs">{formatMoney(b.amount)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
     </>
+  );
+}
+
+function ReportsSkeleton() {
+  return (
+    <div className="space-y-5" aria-busy="true">
+      <div className="metric-grid-3">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="ps-skel h-24" />
+        ))}
+      </div>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="ps-skel h-64" />
+        <div className="ps-skel h-64" />
+      </div>
+      <div className="surface overflow-hidden">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-3 border-b border-[var(--p-border)] px-4 py-2.5 last:border-0">
+            <div className="ps-skel h-4 w-24" />
+            <div className="ps-skel h-4 w-16" />
+            <div className="ps-skel h-4 flex-1" />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

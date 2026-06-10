@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -23,17 +24,6 @@ export default async function FinanceHub() {
       </>
     );
   const session = await requireSession();
-  const [invoices, expenses, budgets] = await Promise.all([
-    listOrgScoped("invoices", session.orgId),
-    listOrgScoped("expenses", session.orgId),
-    listOrgScoped("budgets", session.orgId),
-  ]);
-  const outstanding = invoices
-    .filter((i) => ["sent", "overdue"].includes(i.status))
-    .reduce((s, r) => s + r.amount_cents, 0);
-  const paid = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
-  const spent = expenses.reduce((s, r) => s + r.amount_cents, 0);
-  const budgetTotal = budgets.reduce((s, r) => s + r.amount_cents, 0);
 
   const tiles = [
     { href: "/console/finance/invoices", label: t("console.finance.tiles.invoices", undefined, "Invoices") },
@@ -58,27 +48,9 @@ export default async function FinanceHub() {
         subtitle={t("console.finance.hubSubtitle", undefined, "AR, AP, budgets, and reporting at a glance")}
       />
       <div className="page-content space-y-6">
-        <div className="metric-grid">
-          <MetricCard
-            label={t("console.finance.metrics.outstanding", undefined, "Outstanding")}
-            value={formatMoney(outstanding)}
-            accent
-          />
-          <MetricCard label={t("console.finance.metrics.paid", undefined, "Paid")} value={formatMoney(paid)} />
-          <MetricCard label={t("console.finance.metrics.expenses", undefined, "Expenses")} value={formatMoney(spent)} />
-          <MetricCard
-            label={t("console.finance.metrics.budgetTotal", undefined, "Budget Total")}
-            value={formatMoney(budgetTotal)}
-          />
-        </div>
-        <div className="metric-grid">
-          <MetricCard label={t("console.finance.metrics.invoices", undefined, "Invoices")} value={invoices.length} />
-          <MetricCard
-            label={t("console.finance.metrics.expenseItems", undefined, "Expense Items")}
-            value={expenses.length}
-          />
-          <MetricCard label={t("console.finance.metrics.budgets", undefined, "Budgets")} value={budgets.length} />
-        </div>
+        <Suspense fallback={<MetricsSkeleton />}>
+          <FinanceMetrics orgId={session.orgId} />
+        </Suspense>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {tiles.map((tile) => (
             <Link key={tile.href} href={tile.href} className="surface hover-lift p-5">
@@ -87,6 +59,69 @@ export default async function FinanceHub() {
             </Link>
           ))}
         </div>
+      </div>
+    </>
+  );
+}
+
+/**
+ * Streaming island — both metric grids. The three queries land in one
+ * boundary because the grids interleave values from all of them; the
+ * header and the static nav tiles below paint without waiting.
+ */
+async function FinanceMetrics({ orgId }: { orgId: string }) {
+  const [{ t }, invoices, expenses, budgets] = await Promise.all([
+    getRequestT(),
+    listOrgScoped("invoices", orgId),
+    listOrgScoped("expenses", orgId),
+    listOrgScoped("budgets", orgId),
+  ]);
+  const outstanding = invoices
+    .filter((i) => ["sent", "overdue"].includes(i.status))
+    .reduce((s, r) => s + r.amount_cents, 0);
+  const paid = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
+  const spent = expenses.reduce((s, r) => s + r.amount_cents, 0);
+  const budgetTotal = budgets.reduce((s, r) => s + r.amount_cents, 0);
+
+  return (
+    <>
+      <div className="metric-grid">
+        <MetricCard
+          label={t("console.finance.metrics.outstanding", undefined, "Outstanding")}
+          value={formatMoney(outstanding)}
+          accent
+        />
+        <MetricCard label={t("console.finance.metrics.paid", undefined, "Paid")} value={formatMoney(paid)} />
+        <MetricCard label={t("console.finance.metrics.expenses", undefined, "Expenses")} value={formatMoney(spent)} />
+        <MetricCard
+          label={t("console.finance.metrics.budgetTotal", undefined, "Budget Total")}
+          value={formatMoney(budgetTotal)}
+        />
+      </div>
+      <div className="metric-grid">
+        <MetricCard label={t("console.finance.metrics.invoices", undefined, "Invoices")} value={invoices.length} />
+        <MetricCard
+          label={t("console.finance.metrics.expenseItems", undefined, "Expense Items")}
+          value={expenses.length}
+        />
+        <MetricCard label={t("console.finance.metrics.budgets", undefined, "Budgets")} value={budgets.length} />
+      </div>
+    </>
+  );
+}
+
+function MetricsSkeleton() {
+  return (
+    <>
+      <div className="metric-grid" aria-busy="true">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="ps-skel h-24" />
+        ))}
+      </div>
+      <div className="metric-grid" aria-busy="true">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="ps-skel h-24" />
+        ))}
       </div>
     </>
   );

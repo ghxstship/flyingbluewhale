@@ -93,6 +93,20 @@ export type PageMeta = {
   noIndex?: boolean;
 };
 
+/**
+ * Squeeze entity copy (bio / tagline / scope text) into a meta description:
+ * collapse whitespace, truncate at a word boundary near 155 chars, and fall
+ * back when the source text is missing or empty.
+ */
+export function metaDescription(text: string | null | undefined, fallback: string, max = 155): string {
+  const clean = (text ?? "").replace(/\s+/g, " ").trim();
+  if (!clean) return fallback;
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[\s,;:.!?—-]+$/, "")}…`;
+}
+
 export function buildMetadata(m: PageMeta): Metadata {
   const url = `${SITE.baseUrl}${m.path}`;
   const ogImage = `${SITE.baseUrl}/og?${new URLSearchParams({
@@ -161,7 +175,7 @@ export function organizationSchema() {
     name: SITE.name,
     legalName: "ATLVS Technologies, Inc.",
     url: SITE.baseUrl,
-    logo: `${SITE.baseUrl}/icon-512.png`,
+    logo: `${SITE.baseUrl}/og/logo.png`,
     // Company social presence lives on the parent GHXSTSHIP profiles
     // (source of truth: src/lib/brand.ts `socials`, mirrored from
     // linktr.ee/ghxstship).
@@ -260,7 +274,7 @@ export function articleSchema({
     publisher: {
       "@type": "Organization",
       name: SITE.name,
-      logo: { "@type": "ImageObject", url: `${SITE.baseUrl}/icon-512.png` },
+      logo: { "@type": "ImageObject", url: `${SITE.baseUrl}/og/logo.png` },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
   };

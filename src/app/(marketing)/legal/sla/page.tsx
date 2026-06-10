@@ -1,4 +1,12 @@
 import { getRequestT } from "@/lib/i18n/request";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Service Level Agreement",
+  description:
+    "The ATLVS Technologies SLA for the Enterprise tier — 99.9% monthly uptime target, service credits, and incident reporting.",
+  path: "/legal/sla",
+});
 
 export default async function SlaPage() {
   const { t } = await getRequestT();

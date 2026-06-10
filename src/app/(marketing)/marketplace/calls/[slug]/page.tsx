@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -7,6 +9,7 @@ import { notFound } from "next/navigation";
 import { formatFeeRange } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { buildMetadata, metaDescription } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -30,13 +33,43 @@ type Row = {
   org_name: string;
 };
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  if (!hasSupabase) return notFound();
+// React cache() memoizes per request, so generateMetadata and the page body
+// share a single Supabase round-trip.
+const getCall = cache(async (slug: string): Promise<Row | null> => {
+  if (!hasSupabase) return null;
   const supabase = await createClient();
   const { data } = await supabase.from("public_open_calls").select("*").eq("public_slug", slug).maybeSingle();
-  if (!data) return notFound();
-  const c = data as Row;
+  return (data as Row | null) ?? null;
+});
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const c = await getCall(slug);
+  if (!c) {
+    return buildMetadata({
+      title: "Open Calls on the ATLVS Marketplace",
+      description:
+        "Browse open calls and casting briefs from production teams on the ATLVS marketplace and submit your act.",
+      path: `/marketplace/calls/${slug}`,
+      noIndex: true,
+    });
+  }
+  return buildMetadata({
+    title: `${c.title} — Open Call on ATLVS`,
+    description: metaDescription(
+      c.description,
+      `${c.org_name} posted an open call for ${c.title} on the ATLVS marketplace. Review the brief and submit before the deadline.`,
+    ),
+    path: `/marketplace/calls/${c.public_slug}`,
+    ogImageEyebrow: "ATLVS Marketplace · Open Call",
+    ogImageTitle: c.title,
+  });
+}
+
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const c = await getCall(slug);
+  if (!c) return notFound();
   const { t } = await getRequestT();
 
   return (

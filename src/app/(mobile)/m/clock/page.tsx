@@ -4,6 +4,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { CheckInControls } from "./CheckInControls";
+import { ShiftConfirmControls } from "./ShiftConfirmControls";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
@@ -17,6 +18,7 @@ type ShiftRow = {
   role: string | null;
   checked_in_at: string | null;
   checked_out_at: string | null;
+  worker_confirmed_at: string | null;
   venue: { name: string | null } | null;
 };
 
@@ -58,7 +60,7 @@ export default async function CheckInPage() {
 
     const { data } = await supabase
       .from("shifts")
-      .select("id, starts_at, ends_at, attendance, role, checked_in_at, checked_out_at, venue:venue_id(name)")
+      .select("id, starts_at, ends_at, attendance, role, checked_in_at, checked_out_at, worker_confirmed_at, venue:venue_id(name)")
       .eq("org_id", session.orgId)
       .eq("workforce_member_id", wfm.id)
       .gte("starts_at", startOfDay)
@@ -140,7 +142,15 @@ export default async function CheckInPage() {
                 </div>
                 <Badge variant={ATT_TONE[s.attendance]}>{toTitle(s.attendance)}</Badge>
               </div>
-              <div className="mt-4">
+              {/* Confirmation quick-action (Connecteam parity) — only for
+                  scheduled shifts not yet confirmed. Sits above the clock-in
+                  controls so the user sees it before the shift starts. */}
+              {s.attendance === "scheduled" && (
+                <div className="mt-3 border-t border-[var(--p-border)] pt-3">
+                  <ShiftConfirmControls shiftId={s.id} confirmedAt={s.worker_confirmed_at} />
+                </div>
+              )}
+              <div className="mt-3">
                 <CheckInControls shiftId={s.id} attendance={s.attendance} />
               </div>
             </li>

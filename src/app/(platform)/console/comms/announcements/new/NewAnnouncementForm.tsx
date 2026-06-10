@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState, useTransition } from "react";
+import { Sparkles } from "lucide-react";
 import { Alert } from "@/components/ui/Alert";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -28,20 +29,104 @@ export function NewAnnouncementForm({
 }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(createAnnouncementAction, null);
+  const [draftPending, startDraft] = useTransition();
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [showAiPanel, setShowAiPanel] = useState(false);
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const [titleVal, setTitleVal] = useState(state?.values?.title ?? "");
+  const [bodyVal, setBodyVal] = useState(state?.values?.body ?? "");
+  const [audienceVal, setAudienceVal] = useState<string>(state?.values?.audience ?? "all");
+
+  const draftWithAi = () => {
+    if (!aiPrompt.trim()) return;
+    setDraftError(null);
+    startDraft(async () => {
+      try {
+        const res = await fetch("/api/v1/ai/draft-announcement", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ prompt: aiPrompt.trim(), audience: audienceVal }),
+        });
+        const json = (await res.json()) as { ok: boolean; data?: { title: string; body: string }; error?: { message: string } };
+        if (!json.ok || !json.data) {
+          setDraftError(json.error?.message ?? "Draft failed. Try again.");
+          return;
+        }
+        setTitleVal(json.data.title ?? "");
+        setBodyVal(json.data.body ?? "");
+        setShowAiPanel(false);
+        setAiPrompt("");
+      } catch {
+        setDraftError("Network error. Check your connection and try again.");
+      }
+    });
+  };
 
   return (
+    <div className="space-y-3">
+      {/* AI draft panel */}
+      <div className="surface overflow-hidden rounded-lg border border-[var(--p-border)]">
+        <button
+          type="button"
+          onClick={() => setShowAiPanel((v) => !v)}
+          className="flex w-full items-center justify-between px-5 py-3 text-sm font-medium hover:bg-[var(--p-surface-raised)] transition-colors"
+        >
+          <span className="flex items-center gap-2">
+            <Sparkles size={14} className="text-[var(--p-accent)]" aria-hidden="true" />
+            {t("console.comms.announcements.new.draftWithAi", undefined, "Draft with AI")}
+          </span>
+          <span className="text-[11px] text-[var(--p-text-2)]">{showAiPanel ? "▲" : "▼"}</span>
+        </button>
+        {showAiPanel && (
+          <div className="border-t border-[var(--p-border)] px-5 py-4 space-y-3">
+            <p className="text-xs text-[var(--p-text-2)]">
+              {t("console.comms.announcements.new.draftHint", undefined, "Describe what you need to communicate and we'll draft the title and body.")}
+            </p>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-[var(--p-text-2)]">
+                {t("console.comms.announcements.new.promptLabel", undefined, "What's the announcement about?")}
+              </span>
+              <textarea
+                value={aiPrompt}
+                onChange={(e) => setAiPrompt(e.target.value)}
+                rows={3}
+                maxLength={500}
+                placeholder={t("console.comms.announcements.new.promptPlaceholder", undefined, "e.g. Load-in tomorrow starts at 06:00. All crew must check in at Gate B. Safety briefing mandatory before rigging.")}
+                className="ps-input w-full text-sm"
+              />
+            </label>
+            {draftError && (
+              <p className="text-xs text-[var(--p-danger)]">{draftError}</p>
+            )}
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setShowAiPanel(false)}>
+                {t("common.cancel", undefined, "Cancel")}
+              </Button>
+              <Button type="button" size="sm" disabled={draftPending || !aiPrompt.trim()} onClick={draftWithAi}>
+                {draftPending
+                  ? t("console.comms.announcements.new.drafting", undefined, "Drafting…")
+                  : t("console.comms.announcements.new.draft", undefined, "Draft")}
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+
     <form action={formAction} className="surface space-y-4 p-6">
       <Input
         label={t("console.comms.announcements.new.title", undefined, "Title")}
         name="title"
         required
         maxLength={200}
+        value={titleVal}
+        onChange={(e) => setTitleVal(e.target.value)}
       />
       <label className="flex flex-col gap-1.5">
         <span className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.comms.announcements.new.body", undefined, "Body")}
         </span>
-        <textarea name="body" rows={6} required maxLength={8000} className="ps-input focus-ring w-full" />
+        <textarea name="body" rows={6} required maxLength={8000} className="ps-input focus-ring w-full"
+          value={bodyVal} onChange={(e) => setBodyVal(e.target.value)} />
       </label>
 
       <fieldset className="space-y-3 rounded-md border border-[var(--p-border)] p-3">
@@ -53,7 +138,7 @@ export function NewAnnouncementForm({
             <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.announcements.new.roleBand", undefined, "Role Band")}
             </span>
-            <select name="audience" className="ps-input focus-ring w-full" defaultValue="all">
+            <select name="audience" className="ps-input focus-ring w-full" value={audienceVal} onChange={(e) => setAudienceVal(e.target.value)}>
               <option value="all">
                 {t("console.comms.announcements.new.roleBand.everyone", undefined, "Everyone")}
               </option>
@@ -128,5 +213,6 @@ export function NewAnnouncementForm({
         </Button>
       </div>
     </form>
+    </div>
   );
 }

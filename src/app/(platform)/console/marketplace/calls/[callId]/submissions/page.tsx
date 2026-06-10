@@ -48,6 +48,21 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
   const call = callResp.data as { id: string; title: string; submission_count: number };
   const rows = (subsResp.data ?? []) as Row[];
 
+  // Competitive Insights (GigSalad Lead Insights parity) — computed server-side
+  const total = rows.length;
+  const byState = rows.reduce<Record<string, number>>((acc, r) => {
+    acc[r.submission_state] = (acc[r.submission_state] ?? 0) + 1;
+    return acc;
+  }, {});
+  const scored = rows.filter((r) => r.score != null);
+  const avgScore = scored.length > 0 ? scored.reduce((s, r) => s + (r.score ?? 0), 0) / scored.length : null;
+  const priced = rows.filter((r) => r.fee_proposed_cents != null);
+  const avgFee =
+    priced.length > 0 ? priced.reduce((s, r) => s + (r.fee_proposed_cents ?? 0), 0) / priced.length : null;
+  const unreviewed = byState["submitted"] ?? 0;
+  const shortlisted = (byState["shortlisted"] ?? 0) + (byState["approved"] ?? 0);
+  const declined = byState["declined"] ?? 0;
+
   return (
     <>
       <ModuleHeader
@@ -60,6 +75,53 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         )}
       />
       <div className="page-content space-y-5">
+        {/* Competitive insights panel — shows how the call is performing */}
+        {total > 0 && (
+          <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="surface p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.submissions.insights.total", undefined, "Total")}
+              </p>
+              <p className="mt-1 text-2xl font-bold tabular-nums">{total}</p>
+            </div>
+            <div className="surface p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.submissions.insights.unreviewed", undefined, "Unreviewed")}
+              </p>
+              <p className={`mt-1 text-2xl font-bold tabular-nums ${unreviewed > 0 ? "text-[var(--p-warning)]" : ""}`}>
+                {unreviewed}
+              </p>
+            </div>
+            <div className="surface p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.submissions.insights.shortlisted", undefined, "Shortlisted")}
+              </p>
+              <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--p-success)]">{shortlisted}</p>
+            </div>
+            <div className="surface p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--p-text-2)]">
+                {t("console.marketplace.calls.submissions.insights.declined", undefined, "Declined")}
+              </p>
+              <p className="mt-1 text-2xl font-bold tabular-nums">{declined}</p>
+            </div>
+            {avgScore != null && (
+              <div className="surface p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--p-text-2)]">
+                  {t("console.marketplace.calls.submissions.insights.avgScore", undefined, "Avg Score")}
+                </p>
+                <p className="mt-1 text-2xl font-bold tabular-nums">{avgScore.toFixed(1)}</p>
+              </div>
+            )}
+            {avgFee != null && (
+              <div className="surface p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--p-text-2)]">
+                  {t("console.marketplace.calls.submissions.insights.avgProposedFee", undefined, "Avg Proposed Fee")}
+                </p>
+                <p className="mt-1 text-2xl font-bold tabular-nums">{formatMoney(Math.round(avgFee))}</p>
+              </div>
+            )}
+          </section>
+        )}
         <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/marketplace/calls/${call.id}/submissions/${r.id}`}

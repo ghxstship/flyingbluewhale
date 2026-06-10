@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { notifyOrgAdmins } from "@/lib/notify";
+import { writeInboxBulk } from "@/lib/inbox";
 import { log } from "@/lib/log";
 
 const Schema = z.object({
@@ -16,6 +17,8 @@ export async function quickFileIncident(fd: FormData): Promise<void> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) redirect("/m/incident/new?error=invalid");
+  // Multiple checkboxes share the same name — getAll collects them all.
+  const notifyIds = fd.getAll("notify_user_ids").map(String).filter(Boolean);
 
   const supabase = await createClient();
   // Defaults: severity=minor, incident_state=open — supervisor fills the rest
@@ -50,6 +53,26 @@ export async function quickFileIncident(fd: FormData): Promise<void> {
       });
     } catch (e) {
       log.warn("incident.quick_file_notify_failed", { err: e instanceof Error ? e.message : String(e) });
+    }
+
+    // Targeted supervisor notification — Blerter parity. Only fires for the
+    // explicitly selected recipients beyond the default admin fan-out above.
+    if (notifyIds.length > 0) {
+      try {
+        const incidentId = (data as { id: string }).id;
+        await writeInboxBulk(notifyIds, {
+          orgId: session.orgId,
+          kind: "incident",
+          sourceType: "incidents",
+          sourceId: incidentId,
+          actorId: session.userId,
+          title: `Incident filed: ${parsed.data!.summary.slice(0, 80)}`,
+          body: "You were directly notified by the reporter.",
+          href: `/console/operations/incidents/${incidentId}`,
+        });
+      } catch (e) {
+        log.warn("incident.quick_file_targeted_notify_failed", { err: e instanceof Error ? e.message : String(e) });
+      }
     }
   }
 

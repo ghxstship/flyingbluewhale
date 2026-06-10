@@ -18,7 +18,7 @@ type Risk = {
   likelihood: string;
   impact: string;
   owner_id: string | null;
-  status: string;
+  risk_state: string;
   due_on: string | null;
 };
 
@@ -43,7 +43,7 @@ export default async function ProducerRisk({ params }: { params: Promise<{ slug:
   const { data } = project
     ? await supabase
         .from("risks")
-        .select("id, title, category, likelihood, impact, owner_id, status, due_on")
+        .select("id, title, category, likelihood, impact, owner_id, risk_state, due_on")
         .eq("org_id", session.orgId)
         .eq("project_id", project.id)
         .order("due_on", { ascending: true, nullsFirst: false })
@@ -98,7 +98,7 @@ export default async function ProducerRisk({ params }: { params: Promise<{ slug:
                 <th>{t("p.producer.risk.col.impact", undefined, "Impact")}</th>
                 <th>{t("p.producer.risk.col.owner", undefined, "Owner")}</th>
                 <th>{t("p.producer.risk.col.due", undefined, "Due")}</th>
-                <th>{t("p.producer.risk.col.status", undefined, "Status")}</th>
+                <th>{t("p.producer.risk.col.risk_state", undefined, "Status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -111,7 +111,7 @@ export default async function ProducerRisk({ params }: { params: Promise<{ slug:
                   <td>{r.owner_id ? (ownerMap.get(r.owner_id) ?? "—") : "—"}</td>
                   <td className="font-mono text-xs">{r.due_on ? fmt.date(r.due_on) : "—"}</td>
                   <td>
-                    <Badge variant={RISK_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                    <Badge variant={RISK_TONE[r.risk_state] ?? "muted"}>{toTitle(r.risk_state)}</Badge>
                   </td>
                 </tr>
               ))}

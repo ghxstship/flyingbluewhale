@@ -40,7 +40,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
   const [{ data: tasks }, { data: org }] = await Promise.all([
     supabase
       .from("tasks")
-      .select("title, status, priority, assigned_to, due_at")
+      .select("title, task_state, priority, assigned_to, due_at")
       .eq("project_id", project.id)
       .order("due_at", { ascending: true })
       .limit(1000),
@@ -59,7 +59,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
           project={{ name: project.name }}
           tasks={(tasks ?? []).map((t) => ({
             title: t.title,
-            status: (t.status as string | null) ?? null,
+            status: (t.task_state as string | null) ?? null,
             priority: t.priority != null ? String(t.priority) : null,
             assignee_name: null,
             due_at: t.due_at ?? null,

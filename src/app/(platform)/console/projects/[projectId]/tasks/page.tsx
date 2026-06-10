@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .maybeSingle(),
     supabase
       .from("tasks")
-      .select("id, title, status, priority, due_at, assigned_to")
+      .select("id, title, task_state, priority, due_at, assigned_to")
       .eq("project_id", projectId)
       .order("due_at", { ascending: true, nullsFirst: false }),
   ]);
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                     </Link>
                   </td>
                   <td>
-                    <StatusBadge status={task.status ?? "open"} />
+                    <StatusBadge status={task.task_state ?? "open"} />
                   </td>
                   <td className="font-mono text-xs">{task.priority ?? "—"}</td>
                   <td className="font-mono text-xs">{fmtDate(task.due_at)}</td>

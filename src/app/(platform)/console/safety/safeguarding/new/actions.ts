@@ -10,7 +10,7 @@ import { actionFail, formFail } from "@/lib/forms/fail";
 const Schema = z.object({
   narrative: z.string().min(1).max(5000),
   subject_ref: z.string().max(120).optional(),
-  status: z.string().max(40).optional(),
+  report_state: z.string().max(40).optional(),
 });
 
 export type State = {
@@ -31,7 +31,7 @@ export async function createSafeguardingReport(_: State, fd: FormData): Promise<
       org_id: session.orgId,
       narrative: parsed.data.narrative,
       subject_ref: parsed.data.subject_ref || null,
-      status: parsed.data.status || "received",
+      report_state: parsed.data.report_state || "received",
     })
     .select("id")
     .single();

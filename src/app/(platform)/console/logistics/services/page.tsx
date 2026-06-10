@@ -12,7 +12,7 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_TONE: Record<ServiceRequest["status"], "muted" | "info" | "success" | "warning" | "error"> = {
+const STATUS_TONE: Record<ServiceRequest["request_state"], "muted" | "info" | "success" | "warning" | "error"> = {
   open: "warning",
   acknowledged: "info",
   in_progress: "info",
@@ -64,7 +64,7 @@ export default async function Page() {
   })) as ServiceRequest[];
 
   const rows = all.filter((r) => LOGISTICS_CATEGORIES.includes(r.category));
-  const open = rows.filter((r) => !["resolved", "cancelled"].includes(r.status)).length;
+  const open = rows.filter((r) => !["resolved", "cancelled"].includes(r.request_state)).length;
   const breached = rows.filter((r) => r.sla_response_breached || r.sla_resolution_breached).length;
 
   return (
@@ -145,12 +145,12 @@ export default async function Page() {
               accessor: (r) => r.opened_at ?? null,
             },
             {
-              key: "status",
-              header: t("console.logistics.services.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status]}>{toTitle(r.status)}</Badge>,
+              key: "request_state",
+              header: t("console.logistics.services.columns.request_state", undefined, "Status"),
+              render: (r) => <Badge variant={STATUS_TONE[r.request_state]}>{toTitle(r.request_state)}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.request_state ?? null,
             },
           ]}
         />

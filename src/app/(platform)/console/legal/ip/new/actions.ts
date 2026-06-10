@@ -13,7 +13,7 @@ const Schema = z.object({
   registration_no: z.string().max(120).optional(),
   registered_on: z.string().optional(),
   expires_on: z.string().optional(),
-  status: z.string().max(40).optional(),
+  trademark_state: z.string().max(40).optional(),
 });
 
 export type State = {
@@ -37,7 +37,7 @@ export async function createTrademark(_: State, fd: FormData): Promise<State> {
       registration_no: parsed.data.registration_no || null,
       registered_on: parsed.data.registered_on || null,
       expires_on: parsed.data.expires_on || null,
-      status: parsed.data.status || "active",
+      trademark_state: parsed.data.trademark_state || "active",
     })
     .select("id")
     .single();

@@ -19,7 +19,7 @@ type TrademarkRow = {
   registration_no: string | null;
   registered_on: string | null;
   expires_on: string | null;
-  status: string;
+  trademark_state: string;
 };
 
 const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
@@ -54,7 +54,7 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("trademarks")
-    .select("id, mark, jurisdiction, registration_no, registered_on, expires_on, status")
+    .select("id, mark, jurisdiction, registration_no, registered_on, expires_on, trademark_state")
     .eq("org_id", session.orgId)
     .order("expires_on", { ascending: true })
     .limit(500);
@@ -63,10 +63,12 @@ export default async function Page() {
   const now = Date.now();
   const expiringSoon = rows.filter(
     (r) =>
-      r.expires_on && new Date(r.expires_on).getTime() - now < SOON_DAYS * 24 * 60 * 60 * 1000 && r.status === "active",
+      r.expires_on &&
+      new Date(r.expires_on).getTime() - now < SOON_DAYS * 24 * 60 * 60 * 1000 &&
+      r.trademark_state === "active",
   );
-  const active = rows.filter((r) => r.status === "active").length;
-  const expired = rows.filter((r) => r.status === "expired").length;
+  const active = rows.filter((r) => r.trademark_state === "active").length;
+  const expired = rows.filter((r) => r.trademark_state === "expired").length;
 
   return (
     <>
@@ -137,8 +139,10 @@ export default async function Page() {
                       <td className="font-mono text-xs">{r.expires_on ?? "—"}</td>
                       <td>
                         <div className="flex flex-wrap gap-1.5">
-                          <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
-                          {r.status === "active" && soon && (
+                          <Badge variant={STATUS_TONE[r.trademark_state] ?? "muted"}>
+                            {toTitle(r.trademark_state)}
+                          </Badge>
+                          {r.trademark_state === "active" && soon && (
                             <Badge variant="warning">
                               {t("console.commercial.licensing.renewSoon", undefined, "Renew Soon")}
                             </Badge>

@@ -20,7 +20,7 @@ export default async function Page() {
     .from("purchase_orders")
     .select("id, number, title, project_id, vendor_id, project:project_id(name), vendor:vendor_id(name)")
     .eq("org_id", session.orgId)
-    .in("status", ["sent", "acknowledged", "fulfilled"])
+    .in("po_state", ["sent", "acknowledged", "fulfilled"])
     .order("number", { ascending: false })
     .limit(200);
 

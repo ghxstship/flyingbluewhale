@@ -11,7 +11,7 @@ import { formFail } from "@/lib/forms/fail";
 const Schema = z.object({
   title: z.string().min(1).max(200),
   number: z.string().min(1).max(80),
-  status: z.string(),
+  po_state: z.string(),
   amount_cents: z.string().optional(),
   currency: z.string().min(1).max(3),
 });
@@ -32,7 +32,7 @@ export async function updateShipment(id: string, _: State, fd: FormData): Promis
   const result = await updateOrgScopedWithCheck("purchase_orders", session.orgId, id, expectedUpdatedAt, {
     title: parsed.data.title,
     number: parsed.data.number,
-    status: parsed.data.status as "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled",
+    po_state: parsed.data.po_state as "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled",
     amount_cents: parsed.data.amount_cents ? Number(parsed.data.amount_cents) : 0,
     currency: parsed.data.currency,
   });

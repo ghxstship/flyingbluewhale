@@ -28,7 +28,7 @@ export async function resolveProposalContext(slug: string, proposalId: string) {
 
   const { data: proposal } = await supabase
     .from("proposals")
-    .select("id,title,amount_cents,status,sent_at,signed_at,expires_at,notes,created_at,updated_at")
+    .select("id,title,amount_cents,proposal_state,sent_at,signed_at,expires_at,notes,created_at,updated_at")
     .eq("project_id", project.id)
     .eq("id", proposalId)
     .maybeSingle();
@@ -163,8 +163,8 @@ export async function getProposalSummary(proposalId: string, baseAmountCents: nu
     listRevisionRounds(proposalId),
     listApprovals(proposalId),
   ]);
-  const completedPhases = phases.filter((p) => p.status === "complete" || p.status === "approved").length;
-  const activePhase = phases.find((p) => p.status === "active" || p.status === "in_review") ?? null;
+  const completedPhases = phases.filter((p) => p.phase_state === "complete" || p.phase_state === "approved").length;
+  const activePhase = phases.find((p) => p.phase_state === "active" || p.phase_state === "in_review") ?? null;
   const pendingApprovals = approvals.filter((a) => a.state === "pending").length;
   const openChangeOrders = changeOrders.filter(
     (c) => c.state === "requested" || c.state === "priced" || c.state === "client_review",

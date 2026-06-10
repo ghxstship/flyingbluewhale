@@ -57,11 +57,11 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
 
   const { data: rfqData } = await supabase
     .from("rfqs")
-    .select("id, title, status")
+    .select("id, title, rfq_state")
     .eq("id", rfqId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  const rfq = rfqData as { id: string; title: string; status: string } | null;
+  const rfq = rfqData as { id: string; title: string; rfq_state: string } | null;
   if (!rfq) notFound();
 
   const { data: respData } = await supabase

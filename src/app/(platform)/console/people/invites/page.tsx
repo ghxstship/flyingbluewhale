@@ -30,7 +30,7 @@ export default async function InvitesPage() {
   const [{ data: rawInvites }, { data: projects }] = await Promise.all([
     supabase
       .from("invites")
-      .select("id, email, role, status, expires_at, accepted_at, created_at, token, project_id, project_role")
+      .select("id, email, role, invite_state, expires_at, accepted_at, created_at, token, project_id, project_role")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false }),
     supabase.from("projects").select("id, name").eq("org_id", session.orgId).is("deleted_at", null).order("name"),
@@ -41,8 +41,8 @@ export default async function InvitesPage() {
   // scoped invites without an extra join.
   const projectName = new Map<string, string>((projects ?? []).map((p) => [p.id, p.name]));
 
-  const pending = invites.filter((i) => i.status === "pending");
-  const history = invites.filter((i) => i.status !== "pending");
+  const pending = invites.filter((i) => i.invite_state === "pending");
+  const history = invites.filter((i) => i.invite_state !== "pending");
 
   return (
     <>
@@ -139,7 +139,7 @@ export default async function InvitesPage() {
                 <tr>
                   <th>{t("console.people.invites.col.email", undefined, "Email")}</th>
                   <th>{t("console.people.invites.col.role", undefined, "Role")}</th>
-                  <th>{t("console.people.invites.col.status", undefined, "Status")}</th>
+                  <th>{t("console.people.invites.col.invite_state", undefined, "Status")}</th>
                   <th>{t("console.people.invites.col.when", undefined, "When")}</th>
                 </tr>
               </thead>
@@ -149,7 +149,9 @@ export default async function InvitesPage() {
                     <td>{i.email}</td>
                     <td className="text-[var(--p-text-2)]">{i.role}</td>
                     <td>
-                      <Badge variant={i.status === "accepted" ? "success" : "muted"}>{toTitle(i.status)}</Badge>
+                      <Badge variant={i.invite_state === "accepted" ? "success" : "muted"}>
+                        {toTitle(i.invite_state)}
+                      </Badge>
                     </td>
                     <td className="text-[var(--p-text-2)]">{relTime(i.accepted_at ?? i.created_at)}</td>
                   </tr>

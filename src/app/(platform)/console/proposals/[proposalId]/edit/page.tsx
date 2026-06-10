@@ -44,7 +44,7 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
       <ModuleHeader
         eyebrow={t("console.proposals.edit.eyebrow", undefined, "Proposal")}
         title={t("console.proposals.edit.title", { title: proposal.title }, `Edit · ${proposal.title}`)}
-        subtitle={`v${proposal.version} · ${proposal.status}`}
+        subtitle={`v${proposal.version} · ${proposal.proposal_state}`}
         action={
           <div className="flex items-center gap-2">
             <Link href={`/console/proposals/${proposalId}`} className="ps-btn ps-btn--ghost ps-btn--sm">

@@ -17,7 +17,7 @@ type IncidentRow = {
   summary: string;
   description: string | null;
   severity: string;
-  status: string;
+  incident_state: string;
 };
 
 const SEVERITY_TONE: Record<string, "muted" | "warning" | "error"> = {
@@ -70,7 +70,7 @@ export default async function Page() {
   const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase
     .from("incidents")
-    .select("id, occurred_at, summary, description, severity, status")
+    .select("id, occurred_at, summary, description, severity, incident_state")
     .eq("org_id", session.orgId)
     .gte("occurred_at", since)
     .order("occurred_at", { ascending: false })
@@ -80,8 +80,8 @@ export default async function Page() {
   const rows = all.filter(
     (r) => CYBER_PATTERN.test(r.summary) || (r.description ? CYBER_PATTERN.test(r.description) : false),
   );
-  const open = rows.filter((r) => !["resolved", "closed"].includes(r.status)).length;
-  const containment = rows.filter((r) => r.status === "in_progress").length;
+  const open = rows.filter((r) => !["resolved", "closed"].includes(r.incident_state)).length;
+  const containment = rows.filter((r) => r.incident_state === "in_progress").length;
 
   return (
     <>
@@ -158,10 +158,12 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.safety.cyberIr.columnStatus", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.incident_state] ?? "muted"}>{toTitle(r.incident_state)}</Badge>
+              ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.incident_state ?? null,
             },
           ]}
         />

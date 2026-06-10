@@ -49,14 +49,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Presence targetTable="rfis" targetId={id} currentUser={presenceUser} />
-            <Badge variant="info">{toTitle(rfi.status)}</Badge>
+            <Badge variant="info">{toTitle(rfi.rfi_state)}</Badge>
             <a
               href={`/console/rfis/${rfi.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
             >
               {t("common.edit", undefined, "Edit")}
             </a>
-            {rfi.status === "answered" && (
+            {rfi.rfi_state === "answered" && (
               <form action={closeRfi.bind(null, id)}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   {t("console.rfis.detail.closeRfi", undefined, "Close RFI")}
@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </p>
             </div>
           ) : (
-            rfi.status === "open" && (
+            rfi.rfi_state === "open" && (
               <form action={answerRfi.bind(null, id)} className="mt-2 space-y-2">
                 <textarea
                   name="official_answer"

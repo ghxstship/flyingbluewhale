@@ -25,7 +25,7 @@ export const dynamic = "force-dynamic";
 type Settlement = {
   id: string;
   show_date: string;
-  status: string;
+  settlement_state: string;
   gross_box_office_cents: number;
   sales_tax_cents: number;
   amusement_tax_cents: number;
@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>
+            <Badge variant={STATUS_TONE[s.settlement_state] ?? "muted"}>{toTitle(s.settlement_state)}</Badge>
             {s.talent_offer_id && (
               <Button href={`/console/bookings/deals/${s.talent_offer_id}/settlement`} size="sm" variant="ghost">
                 {t("console.bookings.settlements.detail.editOnDeal", undefined, "Edit on deal")}

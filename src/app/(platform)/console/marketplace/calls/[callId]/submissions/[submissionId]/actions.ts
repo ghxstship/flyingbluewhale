@@ -46,12 +46,12 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
 
   const { data: row } = await supabase
     .from("open_call_submissions")
-    .select("status")
+    .select("submission_state")
     .eq("id", parsed.data.submission_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!row) return { error: "Submission not found" };
-  const current = (row as { status: SubmissionStatus }).status;
+  const current = (row as { submission_state: SubmissionStatus }).submission_state;
   const allowed = SUBMISSION_TRANSITIONS[current] ?? [];
   if (current !== parsed.data.status && !allowed.includes(parsed.data.status)) {
     return { error: `Cannot move ${current} → ${parsed.data.status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
@@ -60,7 +60,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
   const { data: updated, error } = await supabase
     .from("open_call_submissions")
     .update({
-      status: parsed.data.status,
+      submission_state: parsed.data.status,
       internal_notes: parsed.data.internal_notes || null,
       score,
       reviewed_by: session.userId,
@@ -68,7 +68,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
     })
     .eq("id", parsed.data.submission_id)
     .eq("org_id", session.orgId)
-    .eq("status", current as "submitted")
+    .eq("submission_state", current as "submitted")
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {

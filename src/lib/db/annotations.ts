@@ -14,7 +14,7 @@ export type Annotation = {
   parent_id: string | null;
   kind: AnnotationKind;
   severity: AnnotationSeverity;
-  status: AnnotationStatus;
+  annotation_state: AnnotationStatus;
   title: string | null;
   body: string;
   tags: string[];
@@ -55,7 +55,7 @@ export async function listAnnotations(filters: {
   projectId?: string;
   targetTable?: string;
   targetId?: string;
-  status?: AnnotationStatus | AnnotationStatus[];
+  annotation_state?: AnnotationStatus | AnnotationStatus[];
   assignedTo?: string;
   parentId?: string | null;
 }): Promise<Annotation[]> {
@@ -78,9 +78,9 @@ export async function listAnnotations(filters: {
   if (filters.assignedTo) q = q.eq("assigned_to", filters.assignedTo);
   if (filters.parentId === null) q = q.is("parent_id", null);
   else if (filters.parentId) q = q.eq("parent_id", filters.parentId);
-  if (filters.status) {
-    if (Array.isArray(filters.status)) q = q.in("status", filters.status);
-    else q = q.eq("status", filters.status);
+  if (filters.annotation_state) {
+    if (Array.isArray(filters.annotation_state)) q = q.in("annotation_state", filters.annotation_state);
+    else q = q.eq("annotation_state", filters.annotation_state);
   }
 
   const { data, error } = await q;
@@ -118,7 +118,7 @@ export async function acknowledgeAnnotation(id: string, orgId: string): Promise<
   const supabase = await createClient();
   const { error } = await supabase
     .from("annotations")
-    .update({ status: "acknowledged" })
+    .update({ annotation_state: "acknowledged" })
     .eq("id", id)
     .eq("org_id", orgId);
   if (error) throw error;
@@ -134,7 +134,7 @@ export async function resolveAnnotation(
   const { error } = await supabase
     .from("annotations")
     .update({
-      status: "resolved",
+      annotation_state: "resolved",
       resolved_by: resolvedBy,
       resolved_at: new Date().toISOString(),
       resolution_note: resolutionNote ?? null,
@@ -154,7 +154,7 @@ export async function dismissAnnotation(
   const { error } = await supabase
     .from("annotations")
     .update({
-      status: "dismissed",
+      annotation_state: "dismissed",
       resolved_by: resolvedBy,
       resolved_at: new Date().toISOString(),
       resolution_note: resolutionNote ?? null,

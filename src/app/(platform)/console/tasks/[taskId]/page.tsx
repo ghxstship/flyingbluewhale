@@ -26,10 +26,10 @@ export default async function TaskPage({ params }: { params: Promise<{ taskId: s
       <ModuleHeader
         eyebrow={t("console.tasks.detail.eyebrow", { priority: task.priority }, `P${task.priority} task`)}
         title={task.title}
-        subtitle={`${task.status} · ${t("console.tasks.detail.dueLabel", undefined, "due")} ${formatDate(task.due_at, "medium")}`}
+        subtitle={`${task.task_state} · ${t("console.tasks.detail.dueLabel", undefined, "due")} ${formatDate(task.due_at, "medium")}`}
         action={
           <div className="flex items-center gap-2">
-            <TaskStatusControls id={task.id} status={task.status} />
+            <TaskStatusControls id={task.id} status={task.task_state} />
             <Button href={`/console/tasks/${taskId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>
@@ -47,7 +47,7 @@ export default async function TaskPage({ params }: { params: Promise<{ taskId: s
       <div className="page-content space-y-6">
         <div className="metric-grid">
           <Field label={t("console.tasks.detail.status", undefined, "Status")}>
-            <StatusBadge status={task.status} />
+            <StatusBadge status={task.task_state} />
           </Field>
           <Field label={t("console.tasks.detail.priority", undefined, "Priority")}>P{task.priority}</Field>
           <Field label={t("console.tasks.detail.due", undefined, "Due")}>{formatDate(task.due_at, "medium")}</Field>

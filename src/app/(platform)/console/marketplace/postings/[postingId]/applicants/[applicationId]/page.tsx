@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 type App = {
   id: string;
   applicant_user_id: string;
-  status: string;
+  job_application_state: string;
   score: number | null;
   cover_note: string | null;
   resume_url: string | null;
@@ -53,7 +53,9 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           { date: new Date(a.applied_at).toLocaleDateString() },
           `Applied ${new Date(a.applied_at).toLocaleDateString()}`,
         )}
-        action={<Badge variant={STATUS_TONE[a.status] ?? "muted"}>{toTitle(a.status)}</Badge>}
+        action={
+          <Badge variant={STATUS_TONE[a.job_application_state] ?? "muted"}>{toTitle(a.job_application_state)}</Badge>
+        }
       />
       <div className="page-content max-w-2xl space-y-5">
         <section className="surface p-5">
@@ -140,7 +142,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.applicants.detail.stageLabel", undefined, "Stage")}
               </label>
-              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={a.status}>
+              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={a.job_application_state}>
                 {JOB_APPLICATION_STATUSES.map((s) => (
                   <option key={s} value={s}>
                     {s}

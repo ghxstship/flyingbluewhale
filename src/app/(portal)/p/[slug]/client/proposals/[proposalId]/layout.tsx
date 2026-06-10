@@ -42,8 +42,8 @@ export default async function ProposalPortalLayout({
           title={ctx.proposal.title}
           subtitle={t(
             "p.client.proposals.layout.statusSubtitle",
-            { status: ctx.proposal.status },
-            `Status: ${ctx.proposal.status}`,
+            { status: ctx.proposal.proposal_state },
+            `Status: ${ctx.proposal.proposal_state}`,
           )}
         />
         <div className="px-6 pt-2">

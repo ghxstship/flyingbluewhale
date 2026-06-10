@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
           rowsTotal: result.rowCount,
           rowsImported: 0,
           rowsFailed: result.rowCount,
-          status: "failed",
+          run_state: "failed",
           error: upErr.message,
         });
         return apiError("internal", upErr.message);
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
       rowsTotal: result.rowCount,
       rowsImported: insertedCount,
       rowsFailed: result.invalid.length,
-      status: "succeeded",
+      run_state: "succeeded",
     });
 
     return apiCreated({

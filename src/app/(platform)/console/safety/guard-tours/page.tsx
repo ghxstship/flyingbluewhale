@@ -45,8 +45,8 @@ export default async function Page() {
     limit: 500,
   })) as GuardTourRow[];
 
-  const overdue = rows.filter((r) => r.status === "overdue").length;
-  const inProgress = rows.filter((r) => r.status === "in_progress").length;
+  const overdue = rows.filter((r) => r.tour_state === "overdue").length;
+  const inProgress = rows.filter((r) => r.tour_state === "in_progress").length;
 
   return (
     <>
@@ -123,14 +123,14 @@ export default async function Page() {
               accessor: (r) => r.next_run_at ?? null,
             },
             {
-              key: "status",
-              header: t("console.safety.guardTours.col.status", undefined, "Status"),
+              key: "tour_state",
+              header: t("console.safety.guardTours.col.tour_state", undefined, "Status"),
               render: (r) => (
-                <Badge variant={STATUS_TONE[String(r.status)] ?? "muted"}>{toTitle(String(r.status))}</Badge>
+                <Badge variant={STATUS_TONE[String(r.tour_state)] ?? "muted"}>{toTitle(String(r.tour_state))}</Badge>
               ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.tour_state ?? null,
             },
           ]}
         />

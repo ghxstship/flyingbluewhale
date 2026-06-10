@@ -18,7 +18,7 @@ export async function quickFileIncident(fd: FormData): Promise<void> {
   if (!parsed.success) redirect("/m/incident/new?error=invalid");
 
   const supabase = await createClient();
-  // Defaults: severity=minor, status=open — supervisor fills the rest
+  // Defaults: severity=minor, incident_state=open — supervisor fills the rest
   // from /console/safety/incidents. Reporter_id is the caller, gating
   // visibility on /m/incident to "mine only".
   const { data, error } = await supabase
@@ -28,7 +28,7 @@ export async function quickFileIncident(fd: FormData): Promise<void> {
       reporter_id: session.userId,
       summary: parsed.data!.summary,
       severity: "minor",
-      status: "open",
+      incident_state: "open",
     })
     .select("id")
     .single();

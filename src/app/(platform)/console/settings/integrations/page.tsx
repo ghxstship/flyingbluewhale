@@ -30,9 +30,9 @@ export default async function IntegrationsPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("org_integrations")
-    .select("connector, status, installed_at")
+    .select("connector, integration_state, installed_at")
     .eq("org_id", session.orgId);
-  const installed = new Map((data ?? []).map((r) => [r.connector, r.status]));
+  const installed = new Map((data ?? []).map((r) => [r.connector, r.integration_state]));
 
   // Some integrations are auto-detected from env (Stripe key, Anthropic key)
   // so we surface those as "connected" even before the install row exists.

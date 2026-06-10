@@ -24,7 +24,9 @@ export async function GET(req: NextRequest) {
     const supabase = await createClient();
     let q = supabase
       .from("incidents")
-      .select("id, project_id, summary, severity, status, occurred_at, location, reporter_id, created_at")
+      .select(
+        "id, project_id, summary, severity, incident_state:incident_state, occurred_at, location, reporter_id, created_at",
+      )
       .eq("org_id", session.orgId)
       .order("occurred_at", { ascending: false })
       .limit(500);

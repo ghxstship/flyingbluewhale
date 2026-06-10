@@ -36,9 +36,9 @@ export default async function AnnotationsPage() {
   const rows = await listAnnotations({
     orgId: session.orgId,
     parentId: null,
-    status: ["open", "acknowledged"],
+    annotation_state: ["open", "acknowledged"],
   });
-  const open = rows.filter((r) => r.status === "open").length;
+  const open = rows.filter((r) => r.annotation_state === "open").length;
   const critical = rows.filter((r) => r.severity === "critical").length;
 
   return (
@@ -104,9 +104,9 @@ export default async function AnnotationsPage() {
             },
             {
               key: "status",
-              header: t("console.annotations.col.status", undefined, "Status"),
-              render: (r) => <StatusBadge status={r.status} />,
-              accessor: (r) => r.status,
+              header: t("console.annotations.col.annotation_state", undefined, "Status"),
+              render: (r) => <StatusBadge status={r.annotation_state} />,
+              accessor: (r) => r.annotation_state,
               filterable: true,
               groupable: true,
             },

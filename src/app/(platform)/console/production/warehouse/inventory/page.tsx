@@ -41,7 +41,7 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("equipment")
-    .select("id, name, asset_tag, category, status, serial, location:location_id(name)")
+    .select("id, name, asset_tag, category, equipment_state, serial, location:location_id(name)")
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .order("name", { ascending: true })

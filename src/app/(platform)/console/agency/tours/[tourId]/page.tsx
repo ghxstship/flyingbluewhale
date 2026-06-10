@@ -32,7 +32,7 @@ type Leg = {
   id: string;
   performance_date: string;
   fee_cents: number;
-  status: string;
+  talent_offer_state: string;
   tour_leg_index: number | null;
 };
 
@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
     supabase.from("tour_p_and_l").select("*").eq("tour_id", tourId).eq("org_id", session.orgId).maybeSingle(),
     supabase
       .from("talent_offers")
-      .select("id, performance_date, fee_cents, status, tour_leg_index")
+      .select("id, performance_date, fee_cents, talent_offer_state, tour_leg_index")
       .eq("tour_id", tourId)
       .eq("org_id", session.orgId)
       .order("performance_date", { ascending: true }),
@@ -119,7 +119,9 @@ export default async function Page({ params }: { params: Promise<{ tourId: strin
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-xs">{formatMoney(l.fee_cents)}</span>
-                    <Badge variant={STATUS_TONE[l.status] ?? "muted"}>{toTitle(l.status)}</Badge>
+                    <Badge variant={STATUS_TONE[l.talent_offer_state] ?? "muted"}>
+                      {toTitle(l.talent_offer_state)}
+                    </Badge>
                     <Link href={`/console/bookings/deals/${l.id}`} className="text-xs text-[var(--brand-color)]">
                       {t("console.agency.tours.detail.legs.open", undefined, "Open →")}
                     </Link>

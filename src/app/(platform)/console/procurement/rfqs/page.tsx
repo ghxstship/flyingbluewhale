@@ -54,9 +54,9 @@ export default async function Page() {
   const fmtDate = (iso: string): string => fmt.dateParts(iso, { month: "short", day: "numeric", year: "numeric" });
   const { data } = await supabase
     .from("requisitions")
-    .select("id, title, description, estimated_cents, status, created_at, project:project_id(name)")
+    .select("id, title, description, estimated_cents, requisition_state, created_at, project:project_id(name)")
     .eq("org_id", session.orgId)
-    .in("status", ["submitted", "approved"])
+    .in("requisition_state", ["submitted", "approved"])
     .order("created_at", { ascending: false })
     .limit(200);
 

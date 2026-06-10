@@ -51,15 +51,24 @@ export default async function Page({ params }: { params: Promise<{ changeId: str
             <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.changes.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
-              <option value="pending">{t("console.accreditation.changes.status.pending", undefined, "pending")}</option>
+            <select
+              name="change_state"
+              defaultValue={row.change_state ?? ""}
+              required
+              className="ps-input focus-ring w-full"
+            >
+              <option value="pending">
+                {t("console.accreditation.changes.change_state.pending", undefined, "pending")}
+              </option>
               <option value="approved">
-                {t("console.accreditation.changes.status.approved", undefined, "approved")}
+                {t("console.accreditation.changes.change_state.approved", undefined, "approved")}
               </option>
               <option value="rejected">
-                {t("console.accreditation.changes.status.rejected", undefined, "rejected")}
+                {t("console.accreditation.changes.change_state.rejected", undefined, "rejected")}
               </option>
-              <option value="applied">{t("console.accreditation.changes.status.applied", undefined, "applied")}</option>
+              <option value="applied">
+                {t("console.accreditation.changes.change_state.applied", undefined, "applied")}
+              </option>
             </select>
           </label>
           <label className="flex flex-col gap-1.5">

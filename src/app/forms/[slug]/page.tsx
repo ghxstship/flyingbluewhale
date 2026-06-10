@@ -42,9 +42,9 @@ async function loadForm(slug: string): Promise<FormDef | null> {
   const supabase = createServiceClient();
   const { data } = await supabase
     .from("form_defs")
-    .select("id, org_id, slug, title, description, status, schema")
+    .select("id, org_id, slug, title, description, form_state, schema")
     .eq("slug", slug)
-    .eq("status", "published")
+    .eq("form_state", "published")
     .maybeSingle();
   return (data as FormDef | null) ?? null;
 }

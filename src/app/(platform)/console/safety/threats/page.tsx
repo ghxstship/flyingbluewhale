@@ -18,7 +18,7 @@ const SEVERITY_TONE: Record<Threat["severity"], "muted" | "warning" | "error"> =
   critical: "error",
 };
 
-const STATUS_TONE: Record<Threat["status"], "muted" | "info" | "success" | "warning"> = {
+const STATUS_TONE: Record<Threat["threat_state"], "muted" | "info" | "success" | "warning"> = {
   draft: "muted",
   active: "info",
   closed: "success",
@@ -49,7 +49,7 @@ export default async function Page() {
     limit: 500,
   })) as Threat[];
 
-  const active = rows.filter((r) => r.status === "active").length;
+  const active = rows.filter((r) => r.threat_state === "active").length;
   const critical = rows.filter((r) => r.severity === "critical").length;
 
   return (
@@ -118,10 +118,10 @@ export default async function Page() {
               accessor: (r) => r.classification ?? null,
             },
             {
-              key: "status",
-              header: t("console.safety.threats.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status]}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              key: "threat_state",
+              header: t("console.safety.threats.col.threat_state", undefined, "Status"),
+              render: (r) => <Badge variant={STATUS_TONE[r.threat_state]}>{toTitle(r.threat_state)}</Badge>,
+              accessor: (r) => r.threat_state ?? null,
               filterable: true,
               groupable: true,
             },

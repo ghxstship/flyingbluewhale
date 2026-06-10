@@ -40,9 +40,9 @@ export async function submitFormAction(slug: string, _: SubmitState, fd: FormDat
   // Lookup form by slug + published status.
   const { data: form, error: lookupErr } = await supabase
     .from("form_defs")
-    .select("id, org_id, status, schema")
+    .select("id, org_id, form_state, schema")
     .eq("slug", slug)
-    .eq("status", "published")
+    .eq("form_state", "published")
     .maybeSingle();
 
   if (lookupErr) return { error: lookupErr.message };

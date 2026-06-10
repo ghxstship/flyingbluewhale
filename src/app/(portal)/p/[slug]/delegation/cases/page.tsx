@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   // Cases = service requests filed by anyone in this delegation, severity high or urgent
   const { data } = await supabase
     .from("service_requests")
-    .select("id, category, description, severity, status, opened_at, resolved_at")
+    .select("id, category, description, severity, request_state, opened_at, resolved_at")
     .eq("org_id", session.orgId)
     .in("severity", ["high", "urgent"])
     .order("opened_at", { ascending: false })

@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
     .from("invoices")
     .select("id, number, amount_cents, paid_at")
     .eq("org_id", session.orgId)
-    .eq("status", "paid");
+    .eq("invoice_state", "paid");
   if (budget.project_id) invoicesQ = invoicesQ.eq("project_id", budget.project_id);
   const { data: invoices } = await invoicesQ.order("paid_at", { ascending: false }).limit(50);
 

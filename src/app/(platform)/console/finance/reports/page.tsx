@@ -66,7 +66,7 @@ async function ReportsBody({ orgId }: { orgId: string }) {
     listOrgScoped("invoices", orgId),
     listOrgScoped("expenses", orgId),
   ]);
-  const revenue = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
+  const revenue = invoices.filter((i) => i.invoice_state === "paid").reduce((s, r) => s + r.amount_cents, 0);
   const costs = expenses.reduce((s, r) => s + r.amount_cents, 0);
   const gross = revenue - costs;
   const marginPct = revenue > 0 ? Math.round((gross / revenue) * 100) : 0;
@@ -181,7 +181,7 @@ function monthlySeries(invoices: Invoice[], expenses: Expense[]): MonthPoint[] {
     buckets.set(key, { revenue: 0, expenses: 0 });
   }
   for (const inv of invoices) {
-    if (inv.status !== "paid" || !inv.paid_at) continue;
+    if (inv.invoice_state !== "paid" || !inv.paid_at) continue;
     const key = inv.paid_at.slice(0, 7);
     const row = buckets.get(key);
     if (row) row.revenue += inv.amount_cents / 100;
@@ -211,7 +211,7 @@ function arAging(invoices: Invoice[]): AgingRow[] {
   ];
   const today = Date.now();
   for (const i of invoices) {
-    if (i.status === "paid" || i.status === "voided" || !i.due_at) continue;
+    if (i.invoice_state === "paid" || i.invoice_state === "voided" || !i.due_at) continue;
     const overdue = Math.floor((today - new Date(i.due_at).getTime()) / 86400000);
     const idx = overdue <= 0 ? 0 : overdue <= 30 ? 1 : overdue <= 60 ? 2 : overdue <= 90 ? 3 : 4;
     buckets[idx].count += 1;

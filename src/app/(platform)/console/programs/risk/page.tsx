@@ -55,7 +55,7 @@ export default async function Page() {
           id: r.id,
           title: r.title,
           score: r.inherent_score,
-          status: r.status,
+          status: r.risk_state,
         })),
       });
     }
@@ -127,10 +127,10 @@ export default async function Page() {
               accessor: (r) => r.inherent_score ?? null,
             },
             {
-              key: "status",
-              header: t("console.programs.risk.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant="muted">{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              key: "risk_state",
+              header: t("console.programs.risk.columns.risk_state", undefined, "Status"),
+              render: (r) => <Badge variant="muted">{toTitle(r.risk_state)}</Badge>,
+              accessor: (r) => r.risk_state ?? null,
               filterable: true,
               groupable: true,
             },

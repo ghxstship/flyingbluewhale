@@ -53,7 +53,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
       .from("deliverables")
       .select("id, type, fulfillment_state, version, deadline, data")
       .eq("project_id", parsed.data.projectId)
-      .in("status", ["approved", "submitted"] as never)
+      .in("fulfillment_state", ["approved", "submitted"])
       .order("type", { ascending: true }),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
     supabase

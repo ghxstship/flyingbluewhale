@@ -17,7 +17,7 @@ type OfferRow = {
   performance_date: string;
   fee_cents: number;
   currency: string;
-  status: string;
+  talent_offer_state: string;
   deposit_pct: number;
   talent_profile_id: string;
   sent_at: string | null;
@@ -45,13 +45,15 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("talent_offers")
-    .select("id, performance_date, fee_cents, currency, status, deposit_pct, talent_profile_id, sent_at, accepted_at")
+    .select(
+      "id, performance_date, fee_cents, currency, talent_offer_state, deposit_pct, talent_profile_id, sent_at, accepted_at",
+    )
     .eq("org_id", session.orgId)
     .order("performance_date", { ascending: false })
     .limit(500);
 
   const rows = (data ?? []) as OfferRow[];
-  const live = rows.filter((r) => r.status === "sent" || r.status === "countered").length;
+  const live = rows.filter((r) => r.talent_offer_state === "sent" || r.talent_offer_state === "countered").length;
 
   return (
     <>
@@ -107,10 +109,12 @@ export default async function Page() {
               className: "font-mono text-xs",
             },
             {
-              key: "status",
+              key: "talent_offer_state",
               header: t("console.marketplace.offers.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.talent_offer_state] ?? "muted"}>{toTitle(r.talent_offer_state)}</Badge>
+              ),
+              accessor: (r) => r.talent_offer_state,
               filterable: true,
               groupable: true,
             },

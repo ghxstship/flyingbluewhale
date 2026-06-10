@@ -72,13 +72,19 @@ export async function notify(args: {
       void shouldNotify(pushUserId, args.eventType, "push")
         .then((allowPush) => {
           if (!allowPush) return;
-          return sendPushTo(pushUserId, {
-            title: args.title,
-            body: args.body ?? "",
-            url: args.href ?? undefined,
-            tag: args.eventType,
-            data: { event: args.eventType, ...(args.data ?? {}) },
-          });
+          // recordBell: false — the emit_notification RPC below writes
+          // the notifications row (gated on the in_app preference).
+          return sendPushTo(
+            pushUserId,
+            {
+              title: args.title,
+              body: args.body ?? "",
+              url: args.href ?? undefined,
+              tag: args.eventType,
+              data: { event: args.eventType, ...(args.data ?? {}) },
+            },
+            { recordBell: false },
+          );
         })
         .catch((err: unknown) => {
           log.warn("notify.push_send_failed", {
@@ -199,13 +205,19 @@ export async function notifyOrgAdmins(args: {
     void shouldNotify(uid, args.eventType, "push")
       .then((allowPush) => {
         if (!allowPush) return;
-        return sendPushTo(uid, {
-          title: args.title,
-          body: args.body ?? "",
-          url: args.href ?? undefined,
-          tag: args.eventType,
-          data: { event: args.eventType, ...(args.data ?? {}) },
-        });
+        // recordBell: false — step 1's bulk insert is this event's
+        // notifications row (already filtered by the in_app pref).
+        return sendPushTo(
+          uid,
+          {
+            title: args.title,
+            body: args.body ?? "",
+            url: args.href ?? undefined,
+            tag: args.eventType,
+            data: { event: args.eventType, ...(args.data ?? {}) },
+          },
+          { recordBell: false },
+        );
       })
       .catch((err: unknown) => {
         log.warn("notify.admins_push_send_failed", {

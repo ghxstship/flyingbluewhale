@@ -46,14 +46,14 @@ try {
   // 2) PO in draft referencing the vendor — should SUCCEED (gate only fires on bind)
   const { data: po, error: pe } = await sb.from("purchase_orders").insert({
     org_id: orgId, vendor_id: vendorId, number: `GATE-${stamp}`, title: "Gate test PO",
-    amount_cents: 100000, status: "draft",
+    amount_cents: 100000, po_state: "draft",
   }).select("id").single();
   if (pe) { fail(`create draft PO: ${pe.message}`); process.exit(1); }
   poId = po.id;
   log("✓ draft PO created (gate dormant in draft) — correct");
 
   // 3) Bind PO (status->sent) with NO W-9 — expect BLOCK
-  let r = await sb.from("purchase_orders").update({ status: "sent" }).eq("id", poId);
+  let r = await sb.from("purchase_orders").update({ po_state: "sent" }).eq("id", poId);
   if (r.error && /W-9|missing W-9|PO blocked/i.test(r.error.message)) {
     log("✓ BIND BLOCKED (no W-9):", r.error.message);
   } else if (r.error) {
@@ -64,7 +64,7 @@ try {
 
   // 4) Add W-9 but still no COI — expect BLOCK on COI
   await sb.from("vendors").update({ w9_on_file: true, coi_expires_at: null }).eq("id", vendorId);
-  r = await sb.from("purchase_orders").update({ status: "sent" }).eq("id", poId);
+  r = await sb.from("purchase_orders").update({ po_state: "sent" }).eq("id", poId);
   if (r.error && /COI|insurance|PO blocked/i.test(r.error.message)) {
     log("✓ BIND BLOCKED (W-9 ok, COI missing):", r.error.message);
   } else if (r.error) {
@@ -76,7 +76,7 @@ try {
   // 5) Add a future COI — expect bind to SUCCEED
   const future = new Date(stamp + 365 * 864e5).toISOString().slice(0, 10);
   await sb.from("vendors").update({ w9_on_file: true, coi_expires_at: future }).eq("id", vendorId);
-  r = await sb.from("purchase_orders").update({ status: "sent" }).eq("id", poId).select("id,status").single();
+  r = await sb.from("purchase_orders").update({ po_state: "sent" }).eq("id", poId).select("id,po_state").single();
   if (r.error) {
     fail(`compliant vendor bind should SUCCEED but was blocked: ${r.error.message}`);
   } else {
@@ -84,9 +84,9 @@ try {
   }
 
   // 6) Expired COI — expect BLOCK again (move PO back to draft first, then re-bind)
-  await sb.from("purchase_orders").update({ status: "draft" }).eq("id", poId);
+  await sb.from("purchase_orders").update({ po_state: "draft" }).eq("id", poId);
   await sb.from("vendors").update({ coi_expires_at: "2020-01-01" }).eq("id", vendorId);
-  r = await sb.from("purchase_orders").update({ status: "sent" }).eq("id", poId);
+  r = await sb.from("purchase_orders").update({ po_state: "sent" }).eq("id", poId);
   if (r.error && /COI|insurance|PO blocked/i.test(r.error.message)) {
     log("✓ BIND BLOCKED (COI expired 2020-01-01):", r.error.message);
   } else if (r.error) {

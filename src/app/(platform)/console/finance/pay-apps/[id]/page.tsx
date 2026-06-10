@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     .eq("payment_application_id", id);
 
   const allLines = lines ?? [];
-  const isEditable = app.status === "draft";
+  const isEditable = app.application_state === "draft";
 
   return (
     <>
@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${t("console.finance.payApps.detail.poLabel", undefined, "PO")} ${(app.purchase_order as unknown as { number: string } | null)?.number ?? "—"} · ${(app.vendor as unknown as { name: string | null } | null)?.name ?? "—"} · ${fmt(app.period_start)} — ${fmt(app.period_end)}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[app.status] ?? "muted"}>{toTitle(app.status)}</Badge>
+            <Badge variant={STATUS_TONE[app.application_state] ?? "muted"}>{toTitle(app.application_state)}</Badge>
             {/* AIA G702/G703 PDF — round 51. Opens in a new tab; server route
                 signs the storage URL with a 60-second TTL. */}
             <a
@@ -81,13 +81,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             >
               {t("console.finance.payApps.detail.aiaPdf", undefined, "AIA PDF")}
             </a>
-            {app.status === "draft" && (
+            {app.application_state === "draft" && (
               <StatusForm
                 action={transitionPayApp.bind(null, id, "submitted")}
                 label={t("console.finance.payApps.detail.submit", undefined, "Submit")}
               />
             )}
-            {app.status === "submitted" && (
+            {app.application_state === "submitted" && (
               <>
                 <StatusForm
                   action={transitionPayApp.bind(null, id, "approved")}
@@ -99,7 +99,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 />
               </>
             )}
-            {app.status === "approved" && (
+            {app.application_state === "approved" && (
               <StatusForm
                 action={transitionPayApp.bind(null, id, "paid")}
                 label={t("console.finance.payApps.detail.markPaid", undefined, "Mark paid")}

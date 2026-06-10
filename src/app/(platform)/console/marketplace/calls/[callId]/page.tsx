@@ -18,7 +18,7 @@ type Call = {
   public_slug: string;
   kind: string;
   description: string | null;
-  status: string;
+  open_call_phase: string;
   region: string | null;
   venue_type: string | null;
   genre_tags: string[];
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         subtitle={[c.region, c.venue_type].filter(Boolean).join(" · ") || undefined}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
+            <Badge variant={STATUS_TONE[c.open_call_phase] ?? "muted"}>{toTitle(c.open_call_phase)}</Badge>
             <Button href={`/console/marketplace/calls/${c.id}/submissions`} size="sm" variant="ghost">
               {t(
                 "console.marketplace.calls.detail.submissionsCount",
@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         }
       />
       <div className="page-content space-y-5">
-        <CallControls callId={c.id} status={c.status} publicSlug={c.public_slug} />
+        <CallControls callId={c.id} status={c.open_call_phase} publicSlug={c.public_slug} />
 
         <section className="surface p-5">
           <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">

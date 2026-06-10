@@ -11,7 +11,7 @@ import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_TONE: Record<Playbook["status"], "muted" | "success" | "warning"> = {
+const STATUS_TONE: Record<Playbook["playbook_state"], "muted" | "success" | "warning"> = {
   draft: "muted",
   published: "success",
   archived: "warning",
@@ -41,7 +41,7 @@ export default async function Page() {
     limit: 500,
   })) as Playbook[];
 
-  const published = rows.filter((r) => r.status === "published").length;
+  const published = rows.filter((r) => r.playbook_state === "published").length;
 
   // Aggregate by kind
   const byKind = rows.reduce<Record<string, number>>((acc, r) => {
@@ -130,10 +130,10 @@ export default async function Page() {
               accessor: (r) => r.version ?? null,
             },
             {
-              key: "status",
-              header: t("console.safety.playbooks.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status]}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              key: "playbook_state",
+              header: t("console.safety.playbooks.col.playbook_state", undefined, "Status"),
+              render: (r) => <Badge variant={STATUS_TONE[r.playbook_state]}>{toTitle(r.playbook_state)}</Badge>,
+              accessor: (r) => r.playbook_state ?? null,
               filterable: true,
               groupable: true,
             },

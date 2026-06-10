@@ -15,7 +15,7 @@ type Row = {
   number: string;
   title: string;
   amount_cents: number;
-  status: string;
+  invoice_state: string;
   issued_at: string | null;
   due_at: string | null;
   paid_at: string | null;
@@ -37,14 +37,14 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
   const supabase = await createClient();
   const { data } = await supabase
     .from("invoices")
-    .select("id,number,title,amount_cents,status,issued_at,due_at,paid_at")
+    .select("id,number,title,amount_cents,invoice_state,issued_at,due_at,paid_at")
     .eq("org_id", session.orgId)
     .eq("client_id", clientId)
     .order("issued_at", { ascending: false, nullsFirst: false });
   const rows = (data ?? []) as Row[];
 
   const total = rows.reduce((s, r) => s + Number(r.amount_cents), 0);
-  const paid = rows.filter((r) => r.status === "paid").reduce((s, r) => s + Number(r.amount_cents), 0);
+  const paid = rows.filter((r) => r.invoice_state === "paid").reduce((s, r) => s + Number(r.amount_cents), 0);
 
   return (
     <>
@@ -90,8 +90,10 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
             {
               key: "status",
               header: t("console.clients.invoices.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => (
+                <Badge variant={STATUS_VARIANT[r.invoice_state] ?? "default"}>{toTitle(r.invoice_state)}</Badge>
+              ),
+              accessor: (r) => r.invoice_state,
               filterable: true,
               groupable: true,
             },

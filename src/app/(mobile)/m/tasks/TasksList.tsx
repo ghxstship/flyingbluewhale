@@ -13,7 +13,7 @@ export function TasksList({ initial }: { initial: Task[] }) {
   const t = useT();
   const [tasks] = useState(initial);
   const router = useRouter();
-  const open = tasks.filter((r) => r.status !== "done");
+  const open = tasks.filter((r) => r.task_state !== "done");
 
   async function refresh() {
     // Plain refresh — avoids wrapping router.refresh in a transition, which
@@ -51,7 +51,7 @@ export function TasksList({ initial }: { initial: Task[] }) {
                       {t("m.tasks.dueLabel", { date: formatDate(task.due_at) }, `Due ${formatDate(task.due_at)}`)}
                     </div>
                   </div>
-                  <StatusBadge status={task.status} />
+                  <StatusBadge status={task.task_state} />
                 </Link>
               </li>
             ))

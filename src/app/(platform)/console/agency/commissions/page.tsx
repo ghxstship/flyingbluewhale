@@ -14,7 +14,7 @@ type Row = {
   show_date: string;
   agent_commission_cents: number;
   artist_payout_cents: number;
-  status: string;
+  settlement_state: string;
   talent_offer_id: string | null;
 };
 
@@ -39,14 +39,16 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("settlements")
-    .select("id, show_date, agent_commission_cents, artist_payout_cents, status, talent_offer_id")
+    .select("id, show_date, agent_commission_cents, artist_payout_cents, settlement_state, talent_offer_id")
     .eq("org_id", session.orgId)
     .gt("agent_commission_cents", 0)
     .order("show_date", { ascending: false })
     .limit(500);
   const rows = (data ?? []) as Row[];
   const total = rows.reduce((s, r) => s + (r.agent_commission_cents ?? 0), 0);
-  const finalized = rows.filter((r) => r.status === "final").reduce((s, r) => s + r.agent_commission_cents, 0);
+  const finalized = rows
+    .filter((r) => r.settlement_state === "final")
+    .reduce((s, r) => s + r.agent_commission_cents, 0);
 
   return (
     <>
@@ -112,10 +114,10 @@ export default async function Page() {
               className: "font-mono text-xs",
             },
             {
-              key: "status",
-              header: t("console.agency.commissions.col.status", undefined, "Status"),
-              render: (r) => r.status,
-              accessor: (r) => r.status,
+              key: "settlement_state",
+              header: t("console.agency.commissions.col.settlement_state", undefined, "Status"),
+              render: (r) => r.settlement_state,
+              accessor: (r) => r.settlement_state,
               filterable: true,
             },
           ]}

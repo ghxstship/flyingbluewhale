@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
   const { data: row } = await supabase
     .from("expenses")
     .select(
-      "id, description, amount_cents, currency, category, status, spent_at, receipt_path, project_id, department, discipline, xpms_phase, item, vendor",
+      "id, description, amount_cents, currency, category, expense_state, spent_at, receipt_path, project_id, department, discipline, xpms_phase, item, vendor",
     )
     .eq("org_id", session.orgId)
     .eq("id", expenseId)
@@ -44,8 +44,8 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
         row
           ? [
               {
-                label: t("console.finance.expenses.detail.fields.status", undefined, "Status"),
-                value: <StatusBadge status={row.status ?? "pending"} />,
+                label: t("console.finance.expenses.detail.fields.expense_state", undefined, "Status"),
+                value: <StatusBadge status={row.expense_state ?? "pending"} />,
               },
               {
                 label: t("console.finance.expenses.detail.fields.amount", undefined, "Amount"),

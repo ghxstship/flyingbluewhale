@@ -14,7 +14,7 @@ type Campaign = {
   id: string;
   name: string;
   channel: string | null;
-  status: string;
+  campaign_state: string;
   starts_on: string | null;
   ends_on: string | null;
   spent_cents: number | null;
@@ -39,7 +39,7 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
   // their share-link, so all active campaigns are relevant.
   const { data } = await supabase
     .from("campaigns")
-    .select("id, name, channel, status, starts_on, ends_on, spent_cents")
+    .select("id, name, channel, campaign_state, starts_on, ends_on, spent_cents")
     .eq("org_id", session.orgId)
     .order("starts_on", { ascending: true, nullsFirst: false });
   const rows = (data ?? []) as Campaign[];
@@ -77,7 +77,7 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
                 <th>{t("p.promoter.marketing.table.channel", undefined, "Channel")}</th>
                 <th>{t("p.promoter.marketing.table.dates", undefined, "Dates")}</th>
                 <th>{t("p.promoter.marketing.table.spend", undefined, "Spend")}</th>
-                <th>{t("p.promoter.marketing.table.status", undefined, "Status")}</th>
+                <th>{t("p.promoter.marketing.table.campaign_state", undefined, "Status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -95,8 +95,12 @@ export default async function PromoterMarketing({ params }: { params: Promise<{ 
                       : "—"}
                   </td>
                   <td>
-                    <Badge variant={c.status === "live" ? "success" : c.status === "scheduled" ? "info" : "muted"}>
-                      {c.status}
+                    <Badge
+                      variant={
+                        c.campaign_state === "live" ? "success" : c.campaign_state === "scheduled" ? "info" : "muted"
+                      }
+                    >
+                      {c.campaign_state}
                     </Badge>
                   </td>
                 </tr>

@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const { data } = await supabase
     .from("playbooks")
-    .select("id, slug, title, summary, kind, status, version, content, created_at, updated_at")
+    .select("id, slug, title, summary, kind, playbook_state, version, content, created_at, updated_at")
     .eq("slug", slug)
     .eq("org_id", session.orgId)
     .maybeSingle();

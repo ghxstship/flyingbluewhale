@@ -18,7 +18,7 @@ const Schema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(4000).optional(),
   project_id: z.string().uuid().optional(),
-  status: z.enum(["todo", "in_progress", "blocked", "review", "done"]).optional(),
+  task_state: z.enum(["todo", "in_progress", "blocked", "review", "done"]).optional(),
   priority: z.number().int().min(1).max(5).optional(),
   due_at: z.string().datetime({ offset: true }).optional(),
   assigned_to: z.string().uuid().optional(),
@@ -61,13 +61,13 @@ export async function POST(req: NextRequest) {
         project_id: input.project_id ?? null,
         title: input.title,
         description: input.description ?? null,
-        status: input.status ?? "todo",
+        task_state: input.task_state ?? "todo",
         priority: input.priority ?? 3,
         due_at: input.due_at ?? null,
         assigned_to: input.assigned_to ?? null,
         created_by: session.userId,
       })
-      .select("id, title, description, status, priority, project_id, assigned_to, due_at, created_at, updated_at")
+      .select("id, title, description, task_state, priority, project_id, assigned_to, due_at, created_at, updated_at")
       .single();
     if (error) return apiError("internal", error.message);
     return apiCreated(toZapierTask(data));

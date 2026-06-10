@@ -43,7 +43,9 @@ export default async function Page() {
   const { t } = await getRequestT();
   const { data } = await supabase
     .from("vendor_prequalifications")
-    .select("id, status, score, expires_at, vendor:vendor_id(name), questionnaire:questionnaire_id(name)")
+    .select(
+      "id, prequalification_state, score, expires_at, vendor:vendor_id(name), questionnaire:questionnaire_id(name)",
+    )
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false })
     .limit(200);

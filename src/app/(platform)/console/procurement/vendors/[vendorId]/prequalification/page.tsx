@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 type Row = {
   id: string;
-  status: string;
+  prequalification_state: string;
   score: number | null;
   submitted_at: string | null;
   approved_at: string | null;
@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const { t } = await getRequestT();
   const { data } = await supabase
     .from("vendor_prequalifications")
-    .select("id,status,score,submitted_at,approved_at,expires_at,questionnaire_id")
+    .select("id,prequalification_state,score,submitted_at,approved_at,expires_at,questionnaire_id")
     .eq("org_id", session.orgId)
     .eq("vendor_id", vendorId)
     .order("submitted_at", { ascending: false });
@@ -91,10 +91,18 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
               sortable: true,
             },
             {
-              key: "status",
-              header: t("console.procurement.vendors.prequalification.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              key: "prequalification_state",
+              header: t(
+                "console.procurement.vendors.prequalification.columns.prequalification_state",
+                undefined,
+                "Status",
+              ),
+              render: (r) => (
+                <Badge variant={STATUS_VARIANT[r.prequalification_state] ?? "default"}>
+                  {toTitle(r.prequalification_state)}
+                </Badge>
+              ),
+              accessor: (r) => r.prequalification_state,
               filterable: true,
               groupable: true,
             },

@@ -67,14 +67,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         )}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[sub.status] ?? "muted"}>{toTitle(sub.status)}</Badge>
+            <Badge variant={STATUS_TONE[sub.submittal_state] ?? "muted"}>{toTitle(sub.submittal_state)}</Badge>
             <a
               href={`/console/submittals/${sub.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
             >
               {t("common.edit", undefined, "Edit")}
             </a>
-            {sub.status !== "closed" && sub.status !== "void" && (
+            {sub.submittal_state !== "closed" && sub.submittal_state !== "void" && (
               <form action={closeSubmittal.bind(null, id)}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   {t("common.close", undefined, "Close")}

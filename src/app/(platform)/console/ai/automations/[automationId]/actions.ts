@@ -200,7 +200,7 @@ export async function recordManualRunAction(automationId: string, _prev: State, 
       trigger_kind: "manual",
       trigger_payload: {},
       triggered_by: session.userId,
-      status: "pending",
+      run_state: "pending",
     })
     .select("id")
     .single()) as { data: { id: string } | null; error: { message: string } | null };
@@ -227,7 +227,7 @@ export async function recordManualRunAction(automationId: string, _prev: State, 
       await svc2
         .from("automation_runs")
         .update({
-          status: "failed",
+          run_state: "failed",
           finished_at: new Date().toISOString(),
           error_summary: (err as Error).message,
         })

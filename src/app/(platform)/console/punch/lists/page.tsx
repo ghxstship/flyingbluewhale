@@ -17,7 +17,7 @@ type Row = {
   id: string;
   name: string;
   category: string | null;
-  status: "open" | "closed";
+  list_state: "open" | "closed";
   created_at: string;
   project_name: string | null;
   item_count: number;
@@ -57,7 +57,7 @@ export default async function Page() {
   const [{ data: listsData }, { data: projects }] = await Promise.all([
     supabase
       .from("punch_lists")
-      .select("id, name, category, status, created_at, project_id")
+      .select("id, name, category, list_state, created_at, project_id")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false }),
     supabase
@@ -73,7 +73,7 @@ export default async function Page() {
     id: string;
     name: string;
     category: string | null;
-    status: "open" | "closed";
+    list_state: "open" | "closed";
     created_at: string;
     project_id: string | null;
   };
@@ -83,17 +83,17 @@ export default async function Page() {
   const { data: itemCounts } = listIds.length
     ? await supabase
         .from("punch_items")
-        .select("punch_list_id, status")
+        .select("punch_list_id, item_state")
         .in("punch_list_id", listIds)
         .eq("org_id", session.orgId)
-    : { data: [] as Array<{ punch_list_id: string; status: string }> };
+    : { data: [] as Array<{ punch_list_id: string; list_state: string }> };
 
-  type CountRow = { punch_list_id: string; status: string };
+  type CountRow = { punch_list_id: string; list_state: string };
   const totals = new Map<string, { total: number; open: number }>();
   for (const r of (itemCounts ?? []) as CountRow[]) {
     const tally = totals.get(r.punch_list_id) ?? { total: 0, open: 0 };
     tally.total += 1;
-    if (r.status !== "complete" && r.status !== "void") tally.open += 1;
+    if (r.list_state !== "complete" && r.list_state !== "void") tally.open += 1;
     totals.set(r.punch_list_id, tally);
   }
 
@@ -106,7 +106,7 @@ export default async function Page() {
       id: l.id,
       name: l.name,
       category: l.category,
-      status: l.status,
+      list_state: l.list_state,
       created_at: l.created_at,
       // project_id is NOT NULL on punch_lists; project_name is only
       // null when the FK target was deleted (CASCADE means usually
@@ -117,7 +117,7 @@ export default async function Page() {
     };
   });
 
-  const openLists = hydrated.filter((l) => l.status === "open").length;
+  const openLists = hydrated.filter((l) => l.list_state === "open").length;
   const openItems = hydrated.reduce((s, l) => s + l.open_count, 0);
 
   return (
@@ -207,13 +207,13 @@ export default async function Page() {
               render: (r) => (
                 <form action={toggleListStatus}>
                   <input type="hidden" name="id" value={r.id} />
-                  <input type="hidden" name="status" value={r.status === "open" ? "closed" : "open"} />
+                  <input type="hidden" name="status" value={r.list_state === "open" ? "closed" : "open"} />
                   <Button type="submit" variant="ghost" size="sm">
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                    <Badge variant={STATUS_TONE[r.list_state] ?? "muted"}>{toTitle(r.list_state)}</Badge>
                   </Button>
                 </form>
               ),
-              accessor: (r) => r.status,
+              accessor: (r) => r.list_state,
               filterable: true,
             },
             {

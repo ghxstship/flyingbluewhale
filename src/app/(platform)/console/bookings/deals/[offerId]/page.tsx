@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
     .eq("talent_offer_id", d.id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  const settlement = settlementResp.data as { id: string; status: string } | null;
+  const settlement = settlementResp.data as { id: string; settlement_state: string } | null;
 
   // Break-even compute. Estimate total expenses + guarantee, divide by avg
   // ticket price across ticket_scaling.

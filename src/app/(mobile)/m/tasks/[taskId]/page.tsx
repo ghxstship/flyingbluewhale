@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
       </Link>
       <h1 className="mt-2 text-2xl leading-snug font-semibold">{task.title}</h1>
       <div className="mt-3 flex items-center gap-2">
-        <StatusBadge status={task.status} />
+        <StatusBadge status={task.task_state} />
         <span className="text-xs text-[var(--p-text-2)]">
           {t("m.tasks.detail.dueLabel", { date: formatDate(task.due_at) }, `Due ${formatDate(task.due_at)}`)}
         </span>
@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
           {t("m.tasks.detail.updateStatus", undefined, "Update Status")}
         </div>
         <div className="mt-3 grid grid-cols-2 gap-2">
-          {TRANSITIONS.filter((tx) => tx.value !== task.status).map((tx) => (
+          {TRANSITIONS.filter((tx) => tx.value !== task.task_state).map((tx) => (
             <form key={tx.value} action={setTaskStatus.bind(null, taskId)}>
               <input type="hidden" name="status" value={tx.value} />
               <button type="submit" className="ps-btn ps-btn--ghost w-full">

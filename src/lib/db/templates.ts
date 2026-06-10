@@ -105,7 +105,7 @@ export async function applyProjectTemplate(opts: {
       project_id: projectId,
       title: t.title,
       description: t.description ?? null,
-      status: "todo" as const,
+      task_state: "todo" as const,
       created_by: opts.createdBy,
     }));
     await admin.from("tasks").insert(rows).select("id");

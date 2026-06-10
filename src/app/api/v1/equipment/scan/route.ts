@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const supabase = await createClient();
     const { data: row } = await supabase
       .from("equipment")
-      .select("id, name, asset_tag, status")
+      .select("id, name, asset_tag, equipment_state")
       .eq("org_id", session.orgId)
       .eq("asset_tag", input.assetTag)
       .is("deleted_at", null)
@@ -45,21 +45,21 @@ export async function POST(req: NextRequest) {
     }
     // equipment_status enum: available | reserved | in_use | maintenance | retired.
     // Check-out maps to `in_use`; check-in to `available`.
-    let nextStatus: "available" | "reserved" | "in_use" | "maintenance" | "retired" = row.status;
+    let nextStatus: "available" | "reserved" | "in_use" | "maintenance" | "retired" = row.equipment_state;
     if (input.action === "check_in") nextStatus = "available";
     else if (input.action === "check_out") nextStatus = "in_use";
-    else nextStatus = row.status === "in_use" ? "available" : "in_use";
+    else nextStatus = row.equipment_state === "in_use" ? "available" : "in_use";
 
-    // Conditional update on .eq("status", row.status) closes the TOCTOU
+    // Conditional update on .eq("equipment_state", row.equipment_state) closes the TOCTOU
     // between the SELECT above and this write — concurrent scans on the
     // same asset would otherwise overwrite each other's transitions.
     // The org_id filter is defense in depth alongside RLS.
     const { data: updated, error } = await supabase
       .from("equipment")
-      .update({ status: nextStatus })
+      .update({ equipment_state: nextStatus })
       .eq("id", row.id)
       .eq("org_id", session.orgId)
-      .eq("status", row.status)
+      .eq("equipment_state", row.equipment_state)
       .select("id");
     if (error) return apiError("internal", error.message);
     if (!updated || updated.length === 0) {
@@ -70,8 +70,8 @@ export async function POST(req: NextRequest) {
       equipmentId: row.id,
       name: row.name,
       assetTag: row.asset_tag,
-      previousStatus: row.status,
-      status: nextStatus,
+      previousStatus: row.equipment_state,
+      equipment_state: nextStatus,
     });
   });
 }

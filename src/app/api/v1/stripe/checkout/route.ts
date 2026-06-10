@@ -62,10 +62,10 @@ async function handler(req: Request) {
       // generates.
       await supabase
         .from("invoices")
-        .update({ stripe_payment_intent: s.payment_intent, status: "sent" })
+        .update({ stripe_payment_intent: s.payment_intent, invoice_state: "sent" })
         .eq("id", invoice.id)
         .eq("org_id", session.orgId)
-        .neq("status", "paid");
+        .neq("invoice_state", "paid");
     }
 
     return apiOk({ checkoutUrl: s.url, sessionId: s.id });

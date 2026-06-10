@@ -14,7 +14,7 @@ const Schema = z.object({
   amount_cents: z.string().optional(),
   currency: z.string().min(1).max(3),
   category: z.string().max(120).optional().or(z.literal("")),
-  status: z.string(),
+  expense_state: z.string(),
   spent_at: z.string().min(1),
   // XPMS taxonomy parity with the create action
   department: z.enum(XPMS_DEPARTMENTS).optional().or(z.literal("")),
@@ -42,7 +42,7 @@ export async function updateExpense(id: string, _: State, fd: FormData): Promise
     amount_cents: parsed.data.amount_cents ? Number(parsed.data.amount_cents) : 0,
     currency: parsed.data.currency,
     category: parsed.data.category || null,
-    status: parsed.data.status as "pending" | "approved" | "rejected" | "reimbursed",
+    expense_state: parsed.data.expense_state as "pending" | "approved" | "rejected" | "reimbursed",
     spent_at: parsed.data.spent_at,
     department: parsed.data.department || null,
     discipline: parsed.data.discipline || null,

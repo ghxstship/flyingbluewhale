@@ -17,7 +17,7 @@ type ManifestRow = {
   party_size: number;
   scheduled_at: string | null;
   actual_at: string | null;
-  status: string;
+  manifest_state: string;
 };
 
 const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
@@ -101,7 +101,7 @@ export default async function MobileAdPage() {
                         {m.flight_ref ?? "—"}{" "}
                         {m.carrier ? <span className="text-[var(--p-text-2)]">· {m.carrier}</span> : null}
                       </div>
-                      <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
+                      <Badge variant={STATUS_TONE[m.manifest_state] ?? "muted"}>{toTitle(m.manifest_state)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}
@@ -141,7 +141,7 @@ export default async function MobileAdPage() {
                         {m.flight_ref ?? "—"}{" "}
                         {m.carrier ? <span className="text-[var(--p-text-2)]">· {m.carrier}</span> : null}
                       </div>
-                      <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
+                      <Badge variant={STATUS_TONE[m.manifest_state] ?? "muted"}>{toTitle(m.manifest_state)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}

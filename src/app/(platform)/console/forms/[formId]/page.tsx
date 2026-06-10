@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
   const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("form_defs")
-    .select("id, title, slug, status, description, schema, created_at, updated_at")
+    .select("id, title, slug, form_state, description, schema, created_at, updated_at")
     .eq("id", formId)
     .eq("org_id", session.orgId)
     .maybeSingle();

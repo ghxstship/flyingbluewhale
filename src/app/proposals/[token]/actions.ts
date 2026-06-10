@@ -76,7 +76,7 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
   const hash = randomRef();
   const signedAt = new Date().toISOString();
 
-  // Conditional proposal update FIRST. The .neq("status","signed") guard
+  // Conditional proposal update FIRST. The .neq("proposal_state","signed") guard
   // refuses to overwrite an existing signature — without it a second
   // signer (or a stale tab) would clobber the legally-binding signer
   // metadata + hash on a proposal that's already executed.
@@ -88,10 +88,10 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
       signer_email: parsed.data.email || null,
       signature_hash: hash,
       signature_data: parsed.data.data?.slice(0, 180_000) ?? null,
-      status: "signed",
+      proposal_state: "signed",
     })
     .eq("id", resolved.link.proposal_id)
-    .neq("status", "signed")
+    .neq("proposal_state", "signed")
     .select("id");
   if (updateErr) return { error: updateErr.message };
   if (!signed || signed.length === 0) {

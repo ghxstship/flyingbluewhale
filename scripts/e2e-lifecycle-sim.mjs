@@ -260,7 +260,7 @@ async function runEvent(ev) {
   c.event = await step(ev.tier, "Operate", "event.create", async () =>
     await ins("events", { org_id: ORG_ID, name: `Casa Miami — ${ev.artist}`, starts_at: "2026-10-17T19:00:00-04:00", ends_at: "2026-10-18T02:00:00-04:00", project_id: c.project.id }));
   await step(ev.tier, "Operate", "cues fire pending→done", async () => {
-    for (const id of c.cues || []) { await upd("cues", id, { status: "live" }); await upd("cues", id, { status: "done" }); }
+    for (const id of c.cues || []) { await upd("cues", id, { cue_state: "live" }); await upd("cues", id, { cue_state: "done" }); }
   });
   await step(ev.tier, "Operate", "uis_role→active · project→Operate", async () => {
     await upd("uis_roles", c.uis.id, { lifecycle_state: "active" });

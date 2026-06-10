@@ -17,7 +17,7 @@ type RequisitionRow = {
   id: string;
   title: string;
   estimated_cents: number | null;
-  status: string;
+  requisition_state: string;
   created_at: string;
 };
 
@@ -26,7 +26,7 @@ type PORow = {
   number: string;
   title: string;
   amount_cents: number;
-  status: string;
+  requisition_state: string;
   vendor: { name: string | null } | null;
 };
 
@@ -70,13 +70,13 @@ export default async function Page() {
   const [{ data: reqData }, { data: poData }] = await Promise.all([
     supabase
       .from("requisitions")
-      .select("id, title, estimated_cents, status, created_at")
+      .select("id, title, estimated_cents, requisition_state, created_at")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false })
       .limit(50),
     supabase
       .from("purchase_orders")
-      .select("id, number, title, amount_cents, status, vendor:vendor_id(name)")
+      .select("id, number, title, amount_cents, po_state, vendor:vendor_id(name)")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false })
       .limit(20),
@@ -84,8 +84,8 @@ export default async function Page() {
 
   const reqs = (reqData ?? []) as RequisitionRow[];
   const pos = (poData ?? []) as unknown as PORow[];
-  const open = reqs.filter((r) => !["converted", "rejected"].includes(r.status)).length;
-  const converted = reqs.filter((r) => r.status === "converted").length;
+  const open = reqs.filter((r) => !["converted", "rejected"].includes(r.requisition_state)).length;
+  const converted = reqs.filter((r) => r.requisition_state === "converted").length;
   const conversionRate = reqs.length > 0 ? Math.round((converted / reqs.length) * 100) : null;
 
   return (
@@ -150,7 +150,9 @@ export default async function Page() {
                         {formatMoney(r.estimated_cents ?? 0)}
                       </div>
                     </div>
-                    <Badge variant={REQ_STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                    <Badge variant={REQ_STATUS_TONE[r.requisition_state] ?? "muted"}>
+                      {toTitle(r.requisition_state)}
+                    </Badge>
                   </Link>
                 </li>
               ))}
@@ -184,7 +186,9 @@ export default async function Page() {
                         {formatMoney(p.amount_cents)}
                       </div>
                     </div>
-                    <Badge variant={PO_STATUS_TONE[p.status] ?? "muted"}>{toTitle(p.status)}</Badge>
+                    <Badge variant={PO_STATUS_TONE[p.requisition_state] ?? "muted"}>
+                      {toTitle(p.requisition_state)}
+                    </Badge>
                   </Link>
                 </li>
               ))}

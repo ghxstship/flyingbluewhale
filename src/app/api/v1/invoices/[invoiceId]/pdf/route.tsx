@@ -46,7 +46,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ invoiceId: stri
   const { data: invoice, error } = await supabase
     .from("invoices")
     .select(
-      "id, org_id, project_id, client_id, number, title, currency, amount_cents, status, issued_at, due_at, paid_at, stripe_payment_intent, notes",
+      "id, org_id, project_id, client_id, number, title, currency, amount_cents, invoice_state, issued_at, due_at, paid_at, stripe_payment_intent, notes",
     )
     .eq("id", parsed.data.invoiceId)
     .eq("org_id", session.orgId)
@@ -85,7 +85,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ invoiceId: stri
             issued_at: invoice.issued_at ?? null,
             due_at: invoice.due_at ?? null,
             paid_at: invoice.paid_at ?? null,
-            status: invoice.status ?? "issued",
+            status: invoice.invoice_state ?? "issued",
             notes: invoice.notes ?? null,
           }}
           lineItems={(lineItems ?? []).map((li) => ({

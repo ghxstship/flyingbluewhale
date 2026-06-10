@@ -23,11 +23,11 @@ export async function answerRfi(id: string, fd: FormData): Promise<void> {
       official_answer: parsed.data.official_answer,
       answered_by: session.userId,
       answered_at: new Date().toISOString(),
-      status: "answered",
+      rfi_state: "answered",
     } as never)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", "open")
+    .eq("rfi_state", "open")
     .select("id");
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("Only an open RFI can be answered");
@@ -40,10 +40,10 @@ export async function closeRfi(id: string): Promise<void> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("rfis")
-    .update({ status: "closed", closed_at: new Date().toISOString() } as never)
+    .update({ rfi_state: "closed", closed_at: new Date().toISOString() } as never)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .in("status", ["answered", "open"])
+    .in("rfi_state", ["answered", "open"])
     .select("id");
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("RFI is already closed or voided");

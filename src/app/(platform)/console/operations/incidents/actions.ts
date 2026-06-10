@@ -29,24 +29,24 @@ export async function setIncidentStatus(id: string, to: IncidentStatus): Promise
   const session = await requireSession();
   const supabase = await createClient();
 
-  // Read current status so we can validate the transition AND scope the
+  // Read current incident_state so we can validate the transition AND scope the
   // conditional update — Kanban drag-drop is the canonical
   // double-trigger path and we don't want a stale board to "re-open" an
   // incident that ops already closed.
   const { data: row } = await supabase
     .from("incidents")
-    .select("status")
+    .select("incident_state")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
   if (!row) throw new Error("Incident not found");
-  const current = (row as { status: IncidentStatus }).status;
+  const current = (row as { incident_state: IncidentStatus }).incident_state;
   const allowed = INCIDENT_TRANSITIONS[current] ?? [];
   if (current !== parsed.data && !allowed.includes(parsed.data)) {
     throw new Error(`Cannot move ${current} → ${parsed.data}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
   }
 
-  const patch: Record<string, unknown> = { status: parsed.data };
+  const patch: Record<string, unknown> = { incident_state: parsed.data };
   if (parsed.data === "closed") {
     patch.closed_at = new Date().toISOString();
   }
@@ -55,7 +55,7 @@ export async function setIncidentStatus(id: string, to: IncidentStatus): Promise
     .update(patch as never)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", current as "open")
+    .eq("incident_state", current as "open")
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {

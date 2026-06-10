@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const { data } = await supabase
     .from("rate_card_orders")
-    .select("id, catalog, status, total_cents, currency, notes, delegation:delegation_id(name, code), created_at")
+    .select("id, catalog, order_state, total_cents, currency, notes, delegation:delegation_id(name, code), created_at")
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false });
 

@@ -10,7 +10,7 @@ import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
-  status: z.string(),
+  incident_state: z.string(),
   opened_at: z.string().optional().or(z.literal("")),
   closed_at: z.string().optional().or(z.literal("")),
 });
@@ -30,7 +30,7 @@ export async function updateMajorIncident(id: string, _: State, fd: FormData): P
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("major_incidents", session.orgId, id, expectedUpdatedAt, {
     name: parsed.data.name,
-    status: parsed.data.status,
+    incident_state: parsed.data.incident_state,
     opened_at: parsed.data.opened_at,
     closed_at: parsed.data.closed_at || null,
   });

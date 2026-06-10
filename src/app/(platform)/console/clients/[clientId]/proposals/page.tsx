@@ -14,7 +14,7 @@ type Row = {
   id: string;
   title: string;
   amount_cents: number | null;
-  status: string;
+  proposal_state: string;
   sent_at: string | null;
   signed_at: string | null;
 };
@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
   const supabase = await createClient();
   const { data } = await supabase
     .from("proposals")
-    .select("id,title,amount_cents,status,sent_at,signed_at")
+    .select("id,title,amount_cents,proposal_state,sent_at,signed_at")
     .eq("org_id", session.orgId)
     .eq("client_id", clientId)
     .order("created_at", { ascending: false });
@@ -68,10 +68,12 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
               sortable: true,
             },
             {
-              key: "status",
-              header: t("console.clients.proposals.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              key: "proposal_state",
+              header: t("console.clients.proposals.col.proposal_state", undefined, "Status"),
+              render: (r) => (
+                <Badge variant={STATUS_VARIANT[r.proposal_state] ?? "default"}>{toTitle(r.proposal_state)}</Badge>
+              ),
+              accessor: (r) => r.proposal_state,
               filterable: true,
               groupable: true,
             },

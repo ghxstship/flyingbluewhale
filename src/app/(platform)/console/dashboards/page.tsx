@@ -58,7 +58,7 @@ export default async function Page() {
     .from("projects")
     .select("id, name, budget_cents")
     .eq("org_id", session.orgId)
-    .in("status", ["active", "draft"])
+    .in("project_state", ["active", "draft"])
     .order("name")
     .limit(50);
 
@@ -72,19 +72,19 @@ export default async function Page() {
         .from("rfis")
         .select("project_id")
         .eq("org_id", session.orgId)
-        .eq("status", "open")
+        .eq("rfi_state", "open")
         .in("project_id", projectIds),
       supabase
         .from("punch_items")
         .select("project_id")
         .eq("org_id", session.orgId)
-        .in("status", ["open", "in_progress", "ready_for_review"])
+        .in("item_state", ["open", "in_progress", "ready_for_review"])
         .in("project_id", projectIds),
       supabase
         .from("inspections")
         .select("project_id")
         .eq("org_id", session.orgId)
-        .in("status", ["scheduled", "in_progress"])
+        .in("inspection_state", ["scheduled", "in_progress"])
         .in("project_id", projectIds),
       supabase
         .from("incidents")

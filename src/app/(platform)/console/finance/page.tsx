@@ -77,9 +77,9 @@ async function FinanceMetrics({ orgId }: { orgId: string }) {
     listOrgScoped("budgets", orgId),
   ]);
   const outstanding = invoices
-    .filter((i) => ["sent", "overdue"].includes(i.status))
+    .filter((i) => ["sent", "overdue"].includes(i.invoice_state))
     .reduce((s, r) => s + r.amount_cents, 0);
-  const paid = invoices.filter((i) => i.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
+  const paid = invoices.filter((i) => i.invoice_state === "paid").reduce((s, r) => s + r.amount_cents, 0);
   const spent = expenses.reduce((s, r) => s + r.amount_cents, 0);
   const budgetTotal = budgets.reduce((s, r) => s + r.amount_cents, 0);
 

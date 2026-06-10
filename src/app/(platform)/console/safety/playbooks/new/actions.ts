@@ -34,7 +34,7 @@ export async function createPlaybook(_: State, fd: FormData): Promise<State> {
     title: parsed.data.title,
     summary: parsed.data.summary || null,
     kind: parsed.data.kind,
-    status: "draft",
+    playbook_state: "draft",
     version: 1,
     content: { sections: [] },
   });

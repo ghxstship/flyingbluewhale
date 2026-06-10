@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 type ReportRow = {
   id: string;
-  status: string;
+  report_state: string;
   narrative: string;
   subject_ref: string | null;
   created_at: string;
@@ -40,7 +40,7 @@ export default async function SafeguardingPage() {
   const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("safeguarding_reports")
-    .select("id, status, narrative, subject_ref, created_at")
+    .select("id, report_state, narrative, subject_ref, created_at")
     .eq("org_id", session.orgId)
     .eq("reporter_id", session.userId)
     .order("created_at", { ascending: false })
@@ -95,7 +95,7 @@ export default async function SafeguardingPage() {
             reports.map((r) => (
               <li key={r.id} className="surface p-4">
                 <div className="flex items-start justify-between gap-3">
-                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                  <Badge variant={STATUS_TONE[r.report_state] ?? "muted"}>{toTitle(r.report_state)}</Badge>
                   <span className="font-mono text-xs text-[var(--p-text-2)]">
                     {fmt.dateParts(r.created_at, { month: "short", day: "numeric" })}
                   </span>

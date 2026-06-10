@@ -43,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
 
   const { data } = await supabase
     .from("form_defs")
-    .select("id, title, slug, status, description, schema, updated_at")
+    .select("id, title, slug, form_state, description, schema, updated_at")
     .eq("id", formId)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
     id: string;
     title: string;
     slug: string;
-    status: string;
+    form_state: string;
     description: string | null;
     schema: Json;
     updated_at: string;
@@ -125,16 +125,16 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
 
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.forms.edit.fields.status", undefined, "Status")}
+              {t("console.forms.edit.fields.form_state", undefined, "Status")}
             </label>
             <div className="mt-1.5 grid grid-cols-3 gap-1.5">
               {(["draft", "published", "archived"] as const).map((s) => (
                 <label key={s} className="surface hover-lift flex cursor-pointer items-center gap-2 px-3 py-2 text-sm">
                   <input
                     type="radio"
-                    name="status"
+                    name="form_state"
                     value={s}
-                    defaultChecked={form.status === s}
+                    defaultChecked={form.form_state === s}
                     className="accent-[var(--p-accent)]"
                   />
                   {toTitle(s)}

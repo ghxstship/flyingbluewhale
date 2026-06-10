@@ -26,10 +26,10 @@ export default async function POPage({ params }: { params: Promise<{ poId: strin
       <ModuleHeader
         eyebrow={po.number}
         title={po.title}
-        subtitle={`${formatMoney(po.amount_cents, po.currency)} · ${po.status}`}
+        subtitle={`${formatMoney(po.amount_cents, po.currency)} · ${po.po_state}`}
         action={
           <div className="flex items-center gap-2">
-            <PoStatusControls id={po.id} status={po.status} />
+            <PoStatusControls id={po.id} status={po.po_state} />
             <Button href={`/console/procurement/purchase-orders/${poId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>
@@ -46,8 +46,8 @@ export default async function POPage({ params }: { params: Promise<{ poId: strin
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label={t("console.procurement.purchaseOrders.detail.status", undefined, "Status")}>
-            <StatusBadge status={po.status} />
+          <Field label={t("console.procurement.purchaseOrders.detail.po_state", undefined, "Status")}>
+            <StatusBadge status={po.po_state} />
           </Field>
           <Field label={t("console.procurement.purchaseOrders.detail.amount", undefined, "Amount")}>
             {formatMoney(po.amount_cents, po.currency)}

@@ -60,13 +60,13 @@ const Status = z.enum(["pending", "standby", "live", "done", "skipped"]);
 export async function setCueStatus(formData: FormData): Promise<void> {
   const session = await requireSession();
   const id = String(formData.get("id") ?? "");
-  const status = Status.safeParse(formData.get("status"));
+  const status = Status.safeParse(formData.get("cue_state"));
   if (!id) throw new Error("Missing cue id");
   if (!status.success) throw new Error("Invalid cue status");
   const supabase = await createClient();
   const { error } = await supabase
     .from("cues")
-    .update({ status: status.data, updated_at: new Date().toISOString() })
+    .update({ cue_state: status.data, updated_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId);
   if (error) throw new Error(error.message);

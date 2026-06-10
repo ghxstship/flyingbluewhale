@@ -43,7 +43,7 @@ export async function fetchAtomDrillIn(
     await Promise.all([
       supabase
         .from("tasks")
-        .select("id, title, status, due_at")
+        .select("id, title, task_state, due_at")
         .eq("org_id", orgId)
         .eq("xpms_atom_id", atomId)
         .order("due_at", { ascending: true, nullsFirst: false }),

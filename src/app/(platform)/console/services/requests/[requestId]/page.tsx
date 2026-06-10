@@ -19,7 +19,7 @@ const SEV: Record<ServiceRequest["severity"], "error" | "warning" | "info" | "mu
   P4: "muted",
 };
 
-const STATUS: Record<ServiceRequest["status"], "warning" | "info" | "success" | "muted"> = {
+const STATUS: Record<ServiceRequest["request_state"], "warning" | "info" | "success" | "muted"> = {
   open: "warning",
   acknowledged: "info",
   in_progress: "info",
@@ -28,7 +28,7 @@ const STATUS: Record<ServiceRequest["status"], "warning" | "info" | "success" | 
 };
 
 const NEXT_STATES: Record<
-  ServiceRequest["status"],
+  ServiceRequest["request_state"],
   Array<{
     value: "acknowledged" | "in_progress" | "resolved" | "cancelled";
     label: string;
@@ -88,7 +88,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
     .limit(50);
   const events = (eventsData ?? []) as ServiceRequestEvent[];
 
-  const transitions = NEXT_STATES[r.status];
+  const transitions = NEXT_STATES[r.request_state];
 
   return (
     <>
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
         <div className="surface p-5">
           <div className="flex items-center gap-3">
             <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
-            <Badge variant={STATUS[r.status]}>{toTitle(r.status)}</Badge>
+            <Badge variant={STATUS[r.request_state]}>{toTitle(r.request_state)}</Badge>
             <span className="font-mono text-xs text-[var(--p-text-2)]">{r.category}</span>
           </div>
           {r.description && <p className="mt-4 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{r.description}</p>}

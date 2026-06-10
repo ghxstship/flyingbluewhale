@@ -12,7 +12,7 @@ const Schema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(200),
   project_id: z.string().uuid().optional().or(z.literal("")),
-  status: z.enum(["scheduled", "in_progress", "passed", "failed", "cancelled"]),
+  inspection_state: z.enum(["scheduled", "in_progress", "passed", "failed", "cancelled"]),
   scheduled_for: z.string().optional(),
   inspector_id: z.string().uuid().optional().or(z.literal("")),
   notes: z.string().max(2000).optional(),
@@ -49,12 +49,13 @@ export async function updateInspection(_: State, fd: FormData): Promise<State> {
   const result = await updateOrgScopedWithCheck("inspections", session.orgId, id, expectedUpdatedAt, {
     name: patch.name,
     project_id: patch.project_id || null,
-    status: patch.status,
+    inspection_state: patch.inspection_state,
     scheduled_for: patch.scheduled_for || null,
     inspector_id: patch.inspector_id || null,
     notes: patch.notes || null,
-    signed_at: patch.status === "passed" || patch.status === "failed" ? new Date().toISOString() : null,
-    signed_by: patch.status === "passed" || patch.status === "failed" ? session.userId : null,
+    signed_at:
+      patch.inspection_state === "passed" || patch.inspection_state === "failed" ? new Date().toISOString() : null,
+    signed_by: patch.inspection_state === "passed" || patch.inspection_state === "failed" ? session.userId : null,
   } as never);
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Inspection not found." };

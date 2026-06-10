@@ -33,7 +33,7 @@ type UpdatePayload = Partial<
 
 export async function updateOfferLetter(orgId: string, id: string, patch: UpdatePayload): Promise<void> {
   const supabase = await createClient();
-  // .select("id") so we can detect when the .eq("status", "draft") guard
+  // .select("id") so we can detect when the .eq("letter_state", "draft") guard
   // matched no rows (caller tried to edit a non-draft letter). Without
   // this we silently no-op AND log the edit as if it succeeded — a
   // misleading audit trail.
@@ -42,7 +42,7 @@ export async function updateOfferLetter(orgId: string, id: string, patch: Update
     .update(patch)
     .eq("org_id", orgId)
     .eq("id", id)
-    .eq("status", "draft")
+    .eq("letter_state", "draft")
     .select("id");
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("Letter not found or no longer in draft state");
@@ -53,10 +53,10 @@ export async function markOfferLetterSent(orgId: string, id: string, actorLabel:
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("offer_letters")
-    .update({ status: "sent" satisfies OfferLetterStatus, sent_at: new Date().toISOString() })
+    .update({ letter_state: "sent" satisfies OfferLetterStatus, sent_at: new Date().toISOString() })
     .eq("org_id", orgId)
     .eq("id", id)
-    .eq("status", "draft") // only drafts can be sent
+    .eq("letter_state", "draft") // only drafts can be sent
     .select("*")
     .maybeSingle();
   if (error) throw new Error(error.message);
@@ -71,7 +71,7 @@ export async function withdrawOfferLetter(orgId: string, id: string, actorLabel:
   // Read prior status so the transition log captures from_state correctly.
   const { data: prior } = await supabase
     .from("offer_letters")
-    .select("status")
+    .select("letter_state")
     .eq("org_id", orgId)
     .eq("id", id)
     .maybeSingle();
@@ -83,17 +83,17 @@ export async function withdrawOfferLetter(orgId: string, id: string, actorLabel:
   // The .in() filter is the conditional update; .select() proves it landed.
   const { data: updated, error } = await supabase
     .from("offer_letters")
-    .update({ status: "withdrawn" satisfies OfferLetterStatus, withdrawn_at: new Date().toISOString() })
+    .update({ letter_state: "withdrawn" satisfies OfferLetterStatus, withdrawn_at: new Date().toISOString() })
     .eq("org_id", orgId)
     .eq("id", id)
-    .in("status", ["draft", "sent"])
+    .in("letter_state", ["draft", "sent"])
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
     throw new Error("Cannot withdraw a signed/active letter — use void/supersede instead");
   }
   await logActivity(orgId, id, "withdrawn", "Letter withdrawn — public link disabled.", actorLabel);
-  await logDocumentTransition(orgId, id, prior.status, "withdrawn", actorLabel);
+  await logDocumentTransition(orgId, id, prior.letter_state, "withdrawn", actorLabel);
 }
 
 export async function rotateAccessCode(orgId: string, id: string, actorLabel: string): Promise<string> {

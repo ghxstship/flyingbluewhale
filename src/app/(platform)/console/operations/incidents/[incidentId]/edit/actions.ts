@@ -12,7 +12,7 @@ const Schema = z.object({
   summary: z.string().min(1).max(500),
   description: z.string().max(5000).optional(),
   severity: z.enum(["near_miss", "minor", "major", "critical"]),
-  status: z.enum(["open", "investigating", "resolved", "closed"]),
+  incident_state: z.enum(["open", "investigating", "resolved", "closed"]),
   location: z.string().max(200).optional(),
   occurred_at: z.string().optional(),
 });
@@ -34,7 +34,7 @@ export async function updateIncident(incidentId: string, _: State, fd: FormData)
     summary: parsed.data.summary,
     description: parsed.data.description || null,
     severity: parsed.data.severity,
-    status: parsed.data.status,
+    incident_state: parsed.data.incident_state,
     location: parsed.data.location || null,
     occurred_at: parsed.data.occurred_at || undefined,
   });

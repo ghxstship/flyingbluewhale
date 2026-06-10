@@ -56,7 +56,7 @@ export async function updateRfi(_: State, fd: FormData): Promise<State> {
     category: patch.category || null,
     ball_in_court_id: patch.ball_in_court_id || null,
     priority: patch.priority,
-    status: patch.status,
+    rfi_state: patch.status,
     due_at: patch.due_at || null,
     official_answer: patch.official_answer || null,
     answered_at: patch.status === "answered" || patch.status === "closed" ? new Date().toISOString() : null,

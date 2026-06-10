@@ -95,7 +95,7 @@ export async function approvePhase(phaseStateId: string, actor: ActorContext): P
   await supabase
     .from("proposal_phase_states")
     .update({
-      status: "approved",
+      phase_state: "approved",
       approved_at: new Date().toISOString(),
       approved_by: actor.userId,
     })
@@ -113,16 +113,16 @@ export async function approvePhase(phaseStateId: string, actor: ActorContext): P
   // Auto-unlock next phase if it's locked
   const { data: nextPhase } = await supabase
     .from("proposal_phase_states")
-    .select("id,phase_num,phase_name,status")
+    .select("id,phase_num,phase_name,phase_state")
     .eq("org_id", actor.orgId)
     .eq("proposal_id", phase.proposal_id)
     .eq("phase_num", phase.phase_num + 1)
     .maybeSingle();
 
-  if (nextPhase && nextPhase.status === "locked") {
+  if (nextPhase && nextPhase.phase_state === "locked") {
     await supabase
       .from("proposal_phase_states")
-      .update({ status: "active", started_at: new Date().toISOString() })
+      .update({ phase_state: "active", started_at: new Date().toISOString() })
       .eq("id", nextPhase.id)
       .eq("org_id", actor.orgId);
     await logActivity(

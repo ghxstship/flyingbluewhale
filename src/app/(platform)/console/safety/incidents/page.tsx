@@ -18,7 +18,7 @@ type IncidentRow = {
   location: string | null;
   summary: string;
   severity: string;
-  status: string;
+  incident_state: string;
 };
 
 const SEVERITY_TONE: Record<string, "muted" | "warning" | "error"> = {
@@ -70,7 +70,7 @@ export default async function Page() {
   const [{ data: incidents }, { count: medCount }, { count: cyberCount }] = await Promise.all([
     supabase
       .from("incidents")
-      .select("id, occurred_at, location, summary, severity, status")
+      .select("id, occurred_at, location, summary, severity, incident_state")
       .eq("org_id", session.orgId)
       .gte("occurred_at", since)
       .order("occurred_at", { ascending: false })
@@ -89,7 +89,7 @@ export default async function Page() {
   ]);
 
   const rows = (incidents ?? []) as IncidentRow[];
-  const open = rows.filter((r) => !["resolved", "closed"].includes(r.status)).length;
+  const open = rows.filter((r) => !["resolved", "closed"].includes(r.incident_state)).length;
   const critical = rows.filter((r) => r.severity === "critical").length;
   const totalThirtyDay = rows.length;
 
@@ -217,10 +217,12 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.safety.incidents.column.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.incident_state] ?? "muted"}>{toTitle(r.incident_state)}</Badge>
+              ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.incident_state ?? null,
             },
           ]}
         />

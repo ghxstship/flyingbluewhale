@@ -51,7 +51,7 @@ export default async function OrgSettingsPage() {
       .from("invites")
       .select("*", { count: "exact", head: true })
       .eq("org_id", session.orgId)
-      .eq("status", "pending"),
+      .eq("invite_state", "pending"),
     supabase
       .from("projects")
       .select("*", { count: "exact", head: true })

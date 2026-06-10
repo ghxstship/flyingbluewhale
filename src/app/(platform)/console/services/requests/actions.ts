@@ -106,19 +106,19 @@ export async function transitionRequest(requestId: string, fd: FormData): Promis
 
   const { data: existing } = await supabase
     .from("service_requests")
-    .select("status, severity")
+    .select("request_state, severity")
     .eq("id", requestId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!existing) throw new Error("Service request not found");
 
-  const current = existing.status as string;
+  const current = existing.request_state as string;
   const allowed = REQUEST_TRANSITIONS[current] ?? [];
   if (!allowed.includes(parsed.data.to)) {
     throw new Error(`Cannot move ${current} → ${parsed.data.to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
   }
 
-  const patch: Record<string, unknown> = { status: parsed.data.to, updated_at: new Date().toISOString() };
+  const patch: Record<string, unknown> = { request_state: parsed.data.to, updated_at: new Date().toISOString() };
   const now = new Date().toISOString();
   if (parsed.data.to === "acknowledged" && current === "open") patch.acknowledged_at = now;
   if (parsed.data.to === "resolved") patch.resolved_at = now;
@@ -133,7 +133,7 @@ export async function transitionRequest(requestId: string, fd: FormData): Promis
     .update(patch as never)
     .eq("id", requestId)
     .eq("org_id", session.orgId)
-    .eq("status", current)
+    .eq("request_state", current)
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {

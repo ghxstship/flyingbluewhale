@@ -141,7 +141,12 @@ export async function listOrgScoped<T extends TableName>(
     else if (f.op === "gte") q = q.gte(f.column, f.value);
     else if (f.op === "lte") q = q.lte(f.column, f.value);
   }
+  // Default ordering: when the 100-row cap applies without an explicit
+  // order, WHICH rows survive is arbitrary and can differ per request.
+  // created_at desc is the universal house column (every org-scoped
+  // table carries it) and matches what list pages expect.
   if (opts.orderBy) q = q.order(opts.orderBy, { ascending: opts.ascending ?? false });
+  else q = q.order("created_at", { ascending: false });
   // P2 hardening — default limit of 100 if caller doesn't pass one.
   // The audit found 155 .select("*") sites that shipped unbounded
   // result sets; this is the centralized guard. Caller can pass

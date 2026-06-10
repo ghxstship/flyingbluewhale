@@ -35,11 +35,11 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
       <ModuleHeader
         eyebrow={root.kind.toUpperCase()}
         title={root.title ?? root.body.slice(0, 80)}
-        subtitle={`${root.severity} · ${root.status}${root.due_at ? ` · ${t("console.annotations.detail.dueLabel", undefined, "due")} ${formatDate(root.due_at, "medium")}` : ""}`}
+        subtitle={`${root.severity} · ${root.annotation_state}${root.due_at ? ` · ${t("console.annotations.detail.dueLabel", undefined, "due")} ${formatDate(root.due_at, "medium")}` : ""}`}
         action={
           <AnnotationActions
             id={root.id}
-            status={root.status}
+            annotation_state={root.annotation_state}
             confirmationRequired={root.confirmation_required}
             confirmedAt={root.confirmed_at}
           />
@@ -52,8 +52,8 @@ export default async function AnnotationDetailPage({ params }: { params: Promise
               {root.severity}
             </Badge>
           </Field>
-          <Field label={t("console.annotations.detail.status", undefined, "Status")}>
-            <StatusBadge status={root.status} />
+          <Field label={t("console.annotations.detail.annotation_state", undefined, "Status")}>
+            <StatusBadge status={root.annotation_state} />
           </Field>
           <Field label={t("console.annotations.detail.target", undefined, "Target")}>
             <span className="font-mono text-xs">

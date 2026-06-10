@@ -39,10 +39,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           const total = p.gateItems.length;
           const done = p.gateItems.filter((g) => g.is_done).length;
           const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-          const tone = PHASE_STATUS_TONE[p.status];
+          const tone = PHASE_STATUS_TONE[p.phase_state];
           const variantMap = { muted: "muted", info: "info", warning: "warning", success: "success" } as const;
-          const isLocked = p.status === "locked";
-          const canApprove = p.status === "in_review" || p.status === "active";
+          const isLocked = p.phase_state === "locked";
+          const canApprove = p.phase_state === "in_review" || p.phase_state === "active";
 
           return (
             <li key={p.id} className="surface p-5">
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                   <div>
                     <h2 className="text-lg leading-tight font-semibold">{p.phase_name}</h2>
                     <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-[var(--p-text-2)]">
-                      <Badge variant={variantMap[tone]}>{PHASE_STATUS_LABEL[p.status]}</Badge>
+                      <Badge variant={variantMap[tone]}>{PHASE_STATUS_LABEL[p.phase_state]}</Badge>
                       {p.started_at && (
                         <span>
                           {t(

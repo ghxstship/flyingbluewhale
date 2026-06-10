@@ -110,12 +110,12 @@ export default async function Page() {
   if (ids.length > 0) {
     const { data: signers } = await supabase
       .from("contract_envelope_signers")
-      .select("envelope_id, status")
+      .select("envelope_id, signer_state")
       .in("envelope_id", ids);
-    for (const s of (signers ?? []) as { envelope_id: string; status: string }[]) {
+    for (const s of (signers ?? []) as { envelope_id: string; signer_state: string }[]) {
       const r = signerCounts[s.envelope_id] ?? { total: 0, signed: 0 };
       r.total += 1;
-      if (s.status === "signed") r.signed += 1;
+      if (s.signer_state === "signed") r.signed += 1;
       signerCounts[s.envelope_id] = r;
     }
   }

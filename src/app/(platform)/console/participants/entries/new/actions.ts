@@ -12,7 +12,7 @@ const Schema = z.object({
   participant_name: z.string().min(1).max(200),
   discipline: z.string().max(120).optional(),
   event: z.string().max(120).optional(),
-  status: z.string().max(40).optional(),
+  entry_state: z.string().max(40).optional(),
 });
 
 export type State = {
@@ -45,7 +45,7 @@ export async function createEntry(_: State, fd: FormData): Promise<State> {
       participant_name: parsed.data.participant_name,
       discipline: parsed.data.discipline || null,
       event: parsed.data.event || null,
-      status: parsed.data.status || "nominated",
+      entry_state: parsed.data.entry_state || "nominated",
     })
     .select("id")
     .single();

@@ -67,7 +67,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("rfis")
     .select(
-      "id, code, subject, category, status, priority, due_at, closed_at, asked_at, project:project_id(name), ball_in_court:ball_in_court_id(name, email)",
+      "id, code, subject, category, rfi_state, priority, due_at, closed_at, asked_at, project:project_id(name), ball_in_court:ball_in_court_id(name, email)",
     )
     .eq("org_id", session.orgId)
     .order("asked_at", { ascending: false })

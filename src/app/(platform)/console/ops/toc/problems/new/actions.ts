@@ -33,7 +33,7 @@ export async function createProblem(_: State, fd: FormData): Promise<State> {
     title: parsed.data.title,
     description: parsed.data.description || null,
     priority: parsed.data.priority,
-    status: "new",
+    problem_state: "new",
     workaround: parsed.data.workaround || null,
     reporter_id: session.userId,
   });

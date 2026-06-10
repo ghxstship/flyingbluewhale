@@ -58,9 +58,9 @@ export default async function Page({ params }: { params: Promise<{ markId: strin
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.legal.ip.edit.status", undefined, "Status")}
+              {t("console.legal.ip.edit.trademark_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} className="ps-input focus-ring w-full">
+            <select name="trademark_state" defaultValue={row.trademark_state} className="ps-input focus-ring w-full">
               <option value="pending">{t("console.legal.ip.edit.statusPending", undefined, "pending")}</option>
               <option value="registered">{t("console.legal.ip.edit.statusRegistered", undefined, "registered")}</option>
               <option value="abandoned">{t("console.legal.ip.edit.statusAbandoned", undefined, "abandoned")}</option>

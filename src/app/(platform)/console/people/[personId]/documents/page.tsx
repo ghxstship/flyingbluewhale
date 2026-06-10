@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 type Row = {
   id: string;
-  status: string;
+  letter_state: string;
   onsite_start_date: string | null;
   sent_at: string | null;
   accepted_at: string | null;
@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: Promise<{ personId: str
   const { data } = ids.length
     ? await supabase
         .from("offer_letters")
-        .select("id,status,onsite_start_date,sent_at,accepted_at,declined_at,classification")
+        .select("id,letter_state,onsite_start_date,sent_at,accepted_at,declined_at,classification")
         .eq("org_id", session.orgId)
         .in("crew_member_id", ids)
         .order("created_at", { ascending: false })
@@ -79,10 +79,12 @@ export default async function Page({ params }: { params: Promise<{ personId: str
               filterable: true,
             },
             {
-              key: "status",
-              header: t("console.people.documents.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              key: "letter_state",
+              header: t("console.people.documents.col.letter_state", undefined, "Status"),
+              render: (r) => (
+                <Badge variant={STATUS_VARIANT[r.letter_state] ?? "default"}>{toTitle(r.letter_state)}</Badge>
+              ),
+              accessor: (r) => r.letter_state,
               filterable: true,
               groupable: true,
             },

@@ -17,7 +17,7 @@ type PostingRow = {
   title: string;
   region: string | null;
   city: string | null;
-  status: string;
+  job_posting_phase: string;
   posting_type: string;
   applicant_count: number;
   day_rate_min_cents: number | null;
@@ -51,7 +51,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("job_postings")
     .select(
-      "id, title, region, city, status, posting_type, applicant_count, day_rate_min_cents, day_rate_max_cents, currency, published_at, expires_at",
+      "id, title, region, city, job_posting_phase, posting_type, applicant_count, day_rate_min_cents, day_rate_max_cents, currency, published_at, expires_at",
     )
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -60,8 +60,8 @@ export default async function Page() {
     .limit(200);
 
   const rows = (data ?? []) as PostingRow[];
-  const published = rows.filter((r) => r.status === "published").length;
-  const drafts = rows.filter((r) => r.status === "draft").length;
+  const published = rows.filter((r) => r.job_posting_phase === "published").length;
+  const drafts = rows.filter((r) => r.job_posting_phase === "draft").length;
   const totalApplicants = rows.reduce((s, r) => s + (r.applicant_count ?? 0), 0);
 
   return (
@@ -147,10 +147,12 @@ export default async function Page() {
               className: "font-mono text-xs tabular-nums",
             },
             {
-              key: "status",
+              key: "job_posting_phase",
               header: t("console.marketplace.postings.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.job_posting_phase] ?? "muted"}>{toTitle(r.job_posting_phase)}</Badge>
+              ),
+              accessor: (r) => r.job_posting_phase,
               filterable: true,
               groupable: true,
             },

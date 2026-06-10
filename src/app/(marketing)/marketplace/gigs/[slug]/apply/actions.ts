@@ -26,7 +26,7 @@ export async function applyToGig(slug: string, _prev: FormState, fd: FormData): 
     .from("job_postings")
     .select("id, org_id, expires_at")
     .eq("public_slug", slug)
-    .eq("status", "published")
+    .eq("job_posting_phase", "published")
     .is("deleted_at", null)
     .maybeSingle();
   if (postingError) return actionFail(postingError.message, fd);
@@ -40,7 +40,7 @@ export async function applyToGig(slug: string, _prev: FormState, fd: FormData): 
     .select("id")
     .eq("job_posting_id", posting.id)
     .eq("applicant_user_id", session.userId)
-    .neq("status", "withdrawn")
+    .neq("job_application_state", "withdrawn")
     .maybeSingle();
   if (existingError) return actionFail(existingError.message, fd);
   if (existing) {

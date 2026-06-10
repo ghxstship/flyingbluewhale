@@ -16,7 +16,7 @@ type InvoiceRow = {
   number: string;
   amount_cents: number;
   currency: string;
-  status: string;
+  invoice_state: string;
   due_at: string | null;
 };
 
@@ -24,7 +24,7 @@ type ExpenseRow = {
   id: string;
   amount_cents: number;
   currency: string;
-  status: string;
+  expense_state: string;
 };
 
 type StripeEventRow = {
@@ -62,13 +62,13 @@ export default async function Page() {
   const [{ data: invData }, { data: expData }, { data: stripeData }] = await Promise.all([
     supabase
       .from("invoices")
-      .select("id, number, amount_cents, currency, status, due_at")
+      .select("id, number, amount_cents, currency, invoice_state, due_at")
       .eq("org_id", session.orgId)
       .order("issued_at", { ascending: false })
       .limit(500),
     supabase
       .from("expenses")
-      .select("id, amount_cents, currency, status")
+      .select("id, amount_cents, currency, expense_state")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false })
       .limit(500),
@@ -87,20 +87,22 @@ export default async function Page() {
   // Group by currency
   const byCurrency = invoices.reduce<Map<string, { paid: number; outstanding: number }>>((map, inv) => {
     const cur = map.get(inv.currency) ?? { paid: 0, outstanding: 0 };
-    if (inv.status === "paid") cur.paid += inv.amount_cents;
-    else if (["sent", "overdue", "draft"].includes(inv.status)) cur.outstanding += inv.amount_cents;
+    if (inv.invoice_state === "paid") cur.paid += inv.amount_cents;
+    else if (["sent", "overdue", "draft"].includes(inv.invoice_state)) cur.outstanding += inv.amount_cents;
     map.set(inv.currency, cur);
     return map;
   }, new Map());
 
   const expByCurrency = expenses.reduce<Map<string, number>>((map, ex) => {
-    if (["pending", "approved"].includes(ex.status)) {
+    if (["pending", "approved"].includes(ex.expense_state)) {
       map.set(ex.currency, (map.get(ex.currency) ?? 0) + ex.amount_cents);
     }
     return map;
   }, new Map());
 
-  const overdue = invoices.filter((i) => i.due_at && new Date(i.due_at).getTime() < Date.now() && i.status !== "paid");
+  const overdue = invoices.filter(
+    (i) => i.due_at && new Date(i.due_at).getTime() < Date.now() && i.invoice_state !== "paid",
+  );
   const overdueTotal = overdue.reduce((s, i) => s + i.amount_cents, 0);
 
   const HUB_TILES: Array<{ href: string; label: string; description: string }> = [

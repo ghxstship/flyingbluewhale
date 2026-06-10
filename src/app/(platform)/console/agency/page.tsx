@@ -33,12 +33,12 @@ export default async function Page() {
   const [agencies, roster, tours] = await Promise.all([
     supabase.from("agencies").select("id").eq("org_id", session.orgId).is("deleted_at", null),
     supabase.from("agency_artists").select("id").eq("org_id", session.orgId).is("ended_at", null),
-    supabase.from("tours").select("id, status").eq("org_id", session.orgId).is("deleted_at", null),
+    supabase.from("tours").select("id, tour_state").eq("org_id", session.orgId).is("deleted_at", null),
   ]);
   const agencyCount = (agencies.data ?? []).length;
   const rosterCount = (roster.data ?? []).length;
-  const tourRows = (tours.data ?? []) as Array<{ status: string }>;
-  const activeTours = tourRows.filter((r) => ["routing", "confirmed"].includes(r.status)).length;
+  const tourRows = (tours.data ?? []) as Array<{ tour_state: string }>;
+  const activeTours = tourRows.filter((r) => ["routing", "confirmed"].includes(r.tour_state)).length;
 
   return (
     <>

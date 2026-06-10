@@ -13,7 +13,7 @@ type TaskRow = {
   id: string;
   title: string;
   description: string | null;
-  status: string;
+  task_state: string;
   priority: number;
   due_at: string | null;
   project: { name: string | null } | null;
@@ -47,10 +47,10 @@ export default async function MobilePunchPage() {
 
   const { data } = await supabase
     .from("tasks")
-    .select("id, title, description, status, priority, due_at, project:project_id(name)")
+    .select("id, title, description, task_state, priority, due_at, project:project_id(name)")
     .eq("org_id", session.orgId)
     .eq("assigned_to", session.userId)
-    .neq("status", "done")
+    .neq("task_state", "done")
     .order("priority", { ascending: true })
     .order("due_at", { ascending: true })
     .limit(50);
@@ -108,7 +108,7 @@ export default async function MobilePunchPage() {
                       <p className="mt-1 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.description}</p>
                     )}
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                      <Badge variant={STATUS_TONE[r.task_state] ?? "muted"}>{toTitle(r.task_state)}</Badge>
                       <Badge variant="muted">{PRIORITY_LABEL[r.priority] ?? `P${r.priority}`}</Badge>
                       {r.project?.name && <Badge variant="muted">{r.project.name}</Badge>}
                       {overdue && <Badge variant="error">{t("m.punch.overdue", undefined, "Overdue")}</Badge>}

@@ -17,7 +17,7 @@ type Posting = {
   title: string;
   public_slug: string;
   description: string | null;
-  status: string;
+  job_posting_phase: string;
   posting_type: string;
   employment_type: string;
   city: string | null;
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           .join(" · ")}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[p.status] ?? "muted"}>{toTitle(p.status)}</Badge>
+            <Badge variant={STATUS_TONE[p.job_posting_phase] ?? "muted"}>{toTitle(p.job_posting_phase)}</Badge>
             <Button href={`/console/marketplace/postings/${p.id}/applicants`} size="sm" variant="ghost">
               {t(
                 "console.marketplace.postings.detail.applicants",
@@ -77,7 +77,12 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         }
       />
       <div className="page-content space-y-5">
-        <PublishControls postingId={p.id} status={p.status} publicSlug={p.public_slug} expiresAt={p.expires_at} />
+        <PublishControls
+          postingId={p.id}
+          status={p.job_posting_phase}
+          publicSlug={p.public_slug}
+          expiresAt={p.expires_at}
+        />
 
         <section className="surface p-5">
           <h2 className="mb-2 text-sm font-semibold tracking-wide uppercase">

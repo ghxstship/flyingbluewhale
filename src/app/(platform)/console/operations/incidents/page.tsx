@@ -23,7 +23,7 @@ type IncidentRow = {
   id: string;
   summary: string;
   severity: string;
-  status: string;
+  incident_state: string;
   occurred_at: string;
   closed_at: string | null;
   location: string | null;
@@ -40,7 +40,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
   // supabase type generation hasn't been re-run yet so we widen via unknown.
   const { data } = await supabase
     .from("incidents")
-    .select("id, summary, severity, status, occurred_at, closed_at, location")
+    .select("id, summary, severity, incident_state, occurred_at, closed_at, location")
     .eq("org_id", session.orgId)
     .order("occurred_at", { ascending: false })
     .limit(200);
@@ -82,7 +82,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
                 id: r.id,
                 summary: r.summary,
                 severity: r.severity,
-                status: r.status,
+                incident_state: r.incident_state,
                 occurred_at: r.occurred_at,
                 closed_at: r.closed_at,
                 location: r.location,
@@ -138,11 +138,11 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
                 header: t("console.operations.incidents.columns.status", undefined, "Status"),
                 render: (r) => (
                   <span className="inline-flex items-center gap-2">
-                    <span>{r.status}</span>
-                    <DueDateBadge closedAt={r.closed_at} status={r.status} iconOnly size="sm" />
+                    <span>{r.incident_state}</span>
+                    <DueDateBadge closedAt={r.closed_at} status={r.incident_state} iconOnly size="sm" />
                   </span>
                 ),
-                accessor: (r) => r.status,
+                accessor: (r) => r.incident_state,
                 filterable: true,
                 groupable: true,
               },

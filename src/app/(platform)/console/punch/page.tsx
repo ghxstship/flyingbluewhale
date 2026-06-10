@@ -78,16 +78,16 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
   const { data: activeList } = listFilter
     ? await supabase
         .from("punch_lists")
-        .select("id, name, status")
+        .select("id, name, list_state")
         .eq("id", listFilter)
         .eq("org_id", session.orgId)
         .maybeSingle()
-    : { data: null as { id: string; name: string; status: string } | null };
+    : { data: null as { id: string; name: string; list_state: string } | null };
 
   let itemQuery = supabase
     .from("punch_items")
     .select(
-      "id, code, title, status, priority, due_at, closed_at, show_ready_gate, project:project_id(name), assignee:assignee_id(name, email)",
+      "id, code, title, item_state, priority, due_at, closed_at, show_ready_gate, project:project_id(name), assignee:assignee_id(name, email)",
     )
     .eq("org_id", session.orgId);
   if (listFilter) itemQuery = itemQuery.eq("punch_list_id", listFilter);

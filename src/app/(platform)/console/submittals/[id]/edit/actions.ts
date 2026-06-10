@@ -71,7 +71,7 @@ export async function updateSubmittal(_: State, fd: FormData): Promise<State> {
     spec_section: patch.spec_section || null,
     vendor_id: patch.vendor_id || null,
     ball_in_court_id: patch.ball_in_court_id || null,
-    status: patch.status,
+    submittal_state: patch.status,
     due_at: patch.due_at || null,
   } as never);
   if (!result.ok) {

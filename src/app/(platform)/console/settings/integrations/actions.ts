@@ -19,7 +19,7 @@ export async function installConnector(formData: FormData) {
     {
       org_id: session.orgId,
       connector,
-      status: "installed",
+      integration_state: "installed",
       installed_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -37,7 +37,7 @@ export async function uninstallConnector(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase
     .from("org_integrations")
-    .update({ status: "disabled", installed_at: null, updated_at: new Date().toISOString() })
+    .update({ integration_state: "disabled", installed_at: null, updated_at: new Date().toISOString() })
     .eq("org_id", session.orgId)
     .eq("connector", connector);
   if (error) throw new Error(`Could not update org integration: ${error.message}`);

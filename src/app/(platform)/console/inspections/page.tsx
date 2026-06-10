@@ -16,7 +16,7 @@ type Row = {
   code: string;
   name: string;
   category: string | null;
-  status: string;
+  inspection_state: string;
   scheduled_for: string | null;
   project: { name: string | null } | null;
   inspector: { name: string | null; email: string | null } | null;
@@ -63,16 +63,16 @@ export default async function Page() {
   const { data } = await supabase
     .from("inspections")
     .select(
-      "id, code, name, category, status, scheduled_for, project:project_id(name), inspector:inspector_id(name, email)",
+      "id, code, name, category, inspection_state, scheduled_for, project:project_id(name), inspector:inspector_id(name, email)",
     )
     .eq("org_id", session.orgId)
     .order("scheduled_for", { ascending: false, nullsFirst: false })
     .limit(200);
 
   const rows = (data ?? []) as unknown as Row[];
-  const open = rows.filter((r) => r.status === "scheduled" || r.status === "in_progress").length;
-  const passed30 = rows.filter((r) => r.status === "passed").length;
-  const failed30 = rows.filter((r) => r.status === "failed").length;
+  const open = rows.filter((r) => r.inspection_state === "scheduled" || r.inspection_state === "in_progress").length;
+  const passed30 = rows.filter((r) => r.inspection_state === "passed").length;
+  const failed30 = rows.filter((r) => r.inspection_state === "failed").length;
 
   return (
     <>
@@ -151,10 +151,12 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.inspections.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.inspection_state] ?? "muted"}>{toTitle(r.inspection_state)}</Badge>
+              ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.inspection_state ?? null,
             },
           ]}
         />

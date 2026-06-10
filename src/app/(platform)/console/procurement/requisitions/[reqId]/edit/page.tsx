@@ -59,9 +59,14 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.procurement.requisitions.edit.fields.status", undefined, "Status")}
+              {t("console.procurement.requisitions.edit.fields.requisition_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
+            <select
+              name="requisition_state"
+              defaultValue={row.requisition_state}
+              required
+              className="ps-input focus-ring w-full"
+            >
               <option value="draft">draft</option>
               <option value="submitted">submitted</option>
               <option value="approved">approved</option>

@@ -42,7 +42,7 @@ export async function createCampaign(_: State, fd: FormData): Promise<State> {
     starts_on: parsed.data.starts_on || null,
     ends_on: parsed.data.ends_on || null,
     budget_cents: parsed.data.budget_cents,
-    status: "draft",
+    campaign_state: "draft",
   });
   if (error) return actionFail(error.message, fd);
   revalidatePath("/console/campaigns");

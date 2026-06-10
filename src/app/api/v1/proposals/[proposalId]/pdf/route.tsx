@@ -36,7 +36,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ proposalId: str
   const { data: p, error } = await supabase
     .from("proposals")
     .select(
-      "id, org_id, client_id, doc_number, title, status, currency, amount_cents, deposit_percent, sent_at, signed_at, expires_at, version, notes, blocks",
+      "id, org_id, client_id, doc_number, title, proposal_state, currency, amount_cents, deposit_percent, sent_at, signed_at, expires_at, version, notes, blocks",
     )
     .eq("id", parsed.data.proposalId)
     .eq("org_id", session.orgId)
@@ -69,7 +69,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ proposalId: str
           proposal={{
             doc_number: p.doc_number ?? null,
             title: p.title,
-            status: p.status ?? null,
+            status: p.proposal_state ?? null,
             currency: p.currency ?? "USD",
             amount_cents: Number(p.amount_cents),
             deposit_percent: p.deposit_percent ?? null,

@@ -161,7 +161,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ aut
       org_id: automation.org_id,
       trigger_kind: "webhook",
       trigger_payload: parsed,
-      status: "pending",
+      run_state: "pending",
     })
     .select("id")
     .single();

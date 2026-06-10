@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { FabricationStatus } from "@/lib/supabase/types";
 import { PRODUCTION_PHASES, transitionProductionPhase, type ProductionPhase } from "@/lib/production-phase";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
@@ -52,15 +51,31 @@ export async function createFabAction(_: State, fd: FormData): Promise<State> {
   redirect("/console/production/fabrication");
 }
 
-const StatusEnum = z.enum(["open", "in_progress", "blocked", "complete"]);
+const StatusEnum = z.enum([
+  "DISCOVERY",
+  "CONCEPT",
+  "ENGINEERING",
+  "PRE_PRO",
+  "FAB",
+  "LOGISTICS",
+  "INSTALL",
+  "STRIKE",
+  "ARCHIVED",
+]);
 
 // Workflow status FSM (separate from production_phase, the design→install
 // macro arc). The matrix mirrors the comment below: complete is terminal.
 const FAB_STATUS_TRANSITIONS: Record<z.infer<typeof StatusEnum>, readonly z.infer<typeof StatusEnum>[]> = {
-  open: ["in_progress", "blocked"],
-  in_progress: ["complete", "blocked"],
-  blocked: ["in_progress"],
-  complete: [],
+  // Sequential XPMS production arc; ARCHIVED is reachable from any phase.
+  DISCOVERY: ["CONCEPT", "ARCHIVED"],
+  CONCEPT: ["ENGINEERING", "ARCHIVED"],
+  ENGINEERING: ["PRE_PRO", "ARCHIVED"],
+  PRE_PRO: ["FAB", "ARCHIVED"],
+  FAB: ["LOGISTICS", "ARCHIVED"],
+  LOGISTICS: ["INSTALL", "ARCHIVED"],
+  INSTALL: ["STRIKE", "ARCHIVED"],
+  STRIKE: ["ARCHIVED"],
+  ARCHIVED: [],
 };
 
 /**
@@ -76,7 +91,7 @@ const FAB_STATUS_TRANSITIONS: Record<z.infer<typeof StatusEnum>, readonly z.infe
 export async function setFabStatus(formData: FormData): Promise<void> {
   const session = await requireSession();
   const id = String(formData.get("id") ?? "");
-  const next = StatusEnum.safeParse(formData.get("status"));
+  const next = StatusEnum.safeParse(formData.get("production_phase"));
   if (!id) throw new Error("Missing fabrication order id");
   if (!next.success) throw new Error("Invalid target status");
 
@@ -85,12 +100,12 @@ export async function setFabStatus(formData: FormData): Promise<void> {
   // conditional update.
   const { data: row } = await supabase
     .from("fabrication_orders")
-    .select("status")
+    .select("production_phase")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!row) throw new Error("Fabrication order not found");
-  const current = row.status as z.infer<typeof StatusEnum>;
+  const current = row.production_phase as z.infer<typeof StatusEnum>;
   const allowed = FAB_STATUS_TRANSITIONS[current] ?? [];
   if (!allowed.includes(next.data)) {
     throw new Error(`Cannot move ${current} → ${next.data}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
@@ -101,10 +116,10 @@ export async function setFabStatus(formData: FormData): Promise<void> {
   // otherwise overwrite each other.
   const { data: updated, error } = await supabase
     .from("fabrication_orders")
-    .update({ status: next.data as FabricationStatus })
+    .update({ production_phase: next.data })
     .eq("id", id)
     .eq("org_id", session.orgId)
-    .eq("status", current)
+    .eq("production_phase", current)
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {

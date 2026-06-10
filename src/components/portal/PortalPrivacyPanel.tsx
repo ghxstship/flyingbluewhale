@@ -87,7 +87,7 @@ export async function PortalPrivacyPanel({
   const [{ data: dsarData }, { data: consentData }] = await Promise.all([
     supabase
       .from("dsar_requests")
-      .select("id, kind, status, requester_email, due_by, fulfilled_at, created_at")
+      .select("id, kind, request_state, requester_email, due_by, fulfilled_at, created_at")
       .eq("org_id", session.orgId)
       .eq("requester_user_id", session.userId)
       .order("created_at", { ascending: false })

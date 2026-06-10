@@ -22,7 +22,7 @@ type Offer = {
   talent_profile_id: string | null;
   guarantee_cents: number | null;
   door_pct: number | null;
-  status: string;
+  talent_offer_state: string;
   currency: string | null;
   performance_date: string | null;
 };
@@ -40,7 +40,7 @@ export default async function PromoterCoPro({ params }: { params: Promise<{ slug
   const { data } = project
     ? await supabase
         .from("talent_offers")
-        .select("id, talent_profile_id, guarantee_cents, door_pct, status, currency, performance_date")
+        .select("id, talent_profile_id, guarantee_cents, door_pct, talent_offer_state, currency, performance_date")
         .eq("org_id", session.orgId)
         .eq("project_id", project.id)
         .order("performance_date", { ascending: true, nullsFirst: false })
@@ -92,7 +92,7 @@ export default async function PromoterCoPro({ params }: { params: Promise<{ slug
                 <th>{t("p.promoter.coPro.col.showDate", undefined, "Show Date")}</th>
                 <th>{t("p.promoter.coPro.col.guarantee", undefined, "Guarantee")}</th>
                 <th>{t("p.promoter.coPro.col.doorPct", undefined, "Door %")}</th>
-                <th>{t("p.promoter.coPro.col.status", undefined, "Status")}</th>
+                <th>{t("p.promoter.coPro.col.talent_offer_state", undefined, "Status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -110,7 +110,9 @@ export default async function PromoterCoPro({ params }: { params: Promise<{ slug
                   </td>
                   <td className="font-mono text-xs">{o.door_pct != null ? `${o.door_pct}%` : "—"}</td>
                   <td>
-                    <Badge variant={o.status === "contracted" ? "success" : "info"}>{toTitle(o.status)}</Badge>
+                    <Badge variant={o.talent_offer_state === "contracted" ? "success" : "info"}>
+                      {toTitle(o.talent_offer_state)}
+                    </Badge>
                   </td>
                 </tr>
               ))}

@@ -64,7 +64,12 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
             <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.privacy.dsar.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
+            <select
+              name="request_state"
+              defaultValue={row.request_state ?? ""}
+              required
+              className="ps-input focus-ring w-full"
+            >
               <option value="received">received</option>
               <option value="verifying">verifying</option>
               <option value="in_progress">in_progress</option>

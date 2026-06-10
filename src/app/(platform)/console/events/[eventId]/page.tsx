@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("events")
-    .select("id, name, description, status, starts_at, ends_at, location_id, project_id")
+    .select("id, name, description, event_state, starts_at, ends_at, location_id, project_id")
     .eq("org_id", session.orgId)
     .eq("id", eventId)
     .maybeSingle();
@@ -36,8 +36,8 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
         row
           ? [
               {
-                label: t("console.events.detail.fields.status", undefined, "Status"),
-                value: <StatusBadge status={row.status ?? "draft"} />,
+                label: t("console.events.detail.fields.event_state", undefined, "Status"),
+                value: <StatusBadge status={row.event_state ?? "draft"} />,
               },
               {
                 label: t("console.events.detail.fields.starts", undefined, "Starts"),

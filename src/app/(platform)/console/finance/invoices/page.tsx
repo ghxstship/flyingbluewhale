@@ -62,9 +62,9 @@ export default async function InvoicesPage() {
 async function InvoiceSummary({ orgId }: { orgId: string }) {
   const [{ t }, rows] = await Promise.all([getRequestT(), getInvoices(orgId)]);
   const outstanding = rows
-    .filter((r) => ["sent", "overdue"].includes(r.status))
+    .filter((r) => ["sent", "overdue"].includes(r.invoice_state))
     .reduce((s, r) => s + r.amount_cents, 0);
-  const paid = rows.filter((r) => r.status === "paid").reduce((s, r) => s + r.amount_cents, 0);
+  const paid = rows.filter((r) => r.invoice_state === "paid").reduce((s, r) => s + r.amount_cents, 0);
   return (
     <>
       {t(
@@ -106,8 +106,8 @@ async function InvoiceTable({ orgId }: { orgId: string }) {
         {
           key: "status",
           header: t("console.finance.invoices.columns.status", undefined, "Status"),
-          render: (r) => <StatusBadge status={r.status} />,
-          accessor: (r) => r.status,
+          render: (r) => <StatusBadge status={r.invoice_state} />,
+          accessor: (r) => r.invoice_state,
           filterable: true,
           groupable: true,
         },

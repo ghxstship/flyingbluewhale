@@ -50,7 +50,9 @@ export default async function Page() {
   const { t } = await getRequestT();
   const { data } = await supabase
     .from("safety_briefings")
-    .select("id, topic, status, scheduled_for, conducted_at, briefer:briefer_id(name, email), project:project_id(name)")
+    .select(
+      "id, topic, briefing_state, scheduled_for, conducted_at, briefer:briefer_id(name, email), project:project_id(name)",
+    )
     .eq("org_id", session.orgId)
     .order("scheduled_for", { ascending: false })
     .limit(200);

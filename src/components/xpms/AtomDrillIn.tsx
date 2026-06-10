@@ -18,7 +18,7 @@ export type AtomMeta = {
   wbs_path: string;
 };
 
-export type AtomTask = { id: string; title: string; status: string; due_at: string | null };
+export type AtomTask = { id: string; title: string; task_state: string; due_at: string | null };
 export type AtomDeliverable = {
   id: string;
   title: string | null;
@@ -168,7 +168,9 @@ export function AtomDrillIn({
                   <span className="truncate">{task.title}</span>
                   <div className="flex items-center gap-2">
                     {task.due_at && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{task.due_at}</span>}
-                    <Badge variant={TASK_STATUS_TONE[task.status] ?? "muted"}>{taskStatusLabel(task.status, tr)}</Badge>
+                    <Badge variant={TASK_STATUS_TONE[task.task_state] ?? "muted"}>
+                      {taskStatusLabel(task.task_state, tr)}
+                    </Badge>
                   </div>
                 </div>
               ))

@@ -29,7 +29,7 @@ export default async function ProcurementHub() {
     listOrgScoped("purchase_orders", session.orgId),
   ]);
   const open = pos
-    .filter((p) => !["fulfilled", "cancelled"].includes(p.status))
+    .filter((p) => !["fulfilled", "cancelled"].includes(p.po_state))
     .reduce((s, r) => s + r.amount_cents, 0);
   return (
     <>
@@ -43,11 +43,11 @@ export default async function ProcurementHub() {
           <MetricCard label={t("console.procurement.metrics.vendors", undefined, "Vendors")} value={vendors.length} />
           <MetricCard
             label={t("console.procurement.metrics.openRequisitions", undefined, "Open Requisitions")}
-            value={reqs.filter((r) => r.status !== "converted").length}
+            value={reqs.filter((r) => r.requisition_state !== "converted").length}
           />
           <MetricCard
             label={t("console.procurement.metrics.openPOs", undefined, "Open POs")}
-            value={pos.filter((p) => !["fulfilled", "cancelled"].includes(p.status)).length}
+            value={pos.filter((p) => !["fulfilled", "cancelled"].includes(p.po_state)).length}
             accent
           />
           <MetricCard

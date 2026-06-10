@@ -67,8 +67,11 @@ export default async function Page() {
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
-  const { data } = await supabase.from("org_integrations").select("connector, status").eq("org_id", session.orgId);
-  const installed = new Map((data ?? []).map((r) => [r.connector, r.status]));
+  const { data } = await supabase
+    .from("org_integrations")
+    .select("connector, integration_state")
+    .eq("org_id", session.orgId);
+  const installed = new Map((data ?? []).map((r) => [r.connector, r.integration_state]));
   const installedCount = Array.from(installed.values()).filter((s) => s === "installed").length;
 
   // Group by category

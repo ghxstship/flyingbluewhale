@@ -14,7 +14,7 @@ export type PhaseState = {
   phase_num: number;
   phase_key: string;
   phase_name: string;
-  status: PhaseStatus;
+  phase_state: PhaseStatus;
   started_at: string | null;
   approved_at: string | null;
   approved_by: string | null;

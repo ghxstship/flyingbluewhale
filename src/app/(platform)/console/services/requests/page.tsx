@@ -20,7 +20,7 @@ const SEV_TONE: Record<ServiceRequest["severity"], SeverityTone> = {
 };
 
 type StatusTone = "info" | "warning" | "success" | "muted";
-const STATUS_TONE: Record<ServiceRequest["status"], StatusTone> = {
+const STATUS_TONE: Record<ServiceRequest["request_state"], StatusTone> = {
   open: "warning",
   acknowledged: "info",
   in_progress: "info",
@@ -75,7 +75,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("service_requests")
     .select(
-      "id, category, severity, summary, status, opened_at, sla_response_due, sla_resolution_due, sla_response_breached, sla_resolution_breached, venue_id",
+      "id, category, severity, summary, request_state, opened_at, sla_response_due, sla_resolution_due, sla_response_breached, sla_resolution_breached, venue_id",
     )
     .eq("org_id", session.orgId)
     .order("opened_at", { ascending: false })
@@ -86,7 +86,7 @@ export default async function Page() {
     | "category"
     | "severity"
     | "summary"
-    | "status"
+    | "request_state"
     | "opened_at"
     | "sla_response_due"
     | "sla_resolution_due"
@@ -96,7 +96,7 @@ export default async function Page() {
   >[];
 
   const now = Date.now();
-  const open = rows.filter((r) => r.status !== "resolved" && r.status !== "cancelled").length;
+  const open = rows.filter((r) => r.request_state !== "resolved" && r.request_state !== "cancelled").length;
   const breached = rows.filter((r) => r.sla_response_breached || r.sla_resolution_breached).length;
 
   return (
@@ -156,23 +156,27 @@ export default async function Page() {
               accessor: (r) => r.summary ?? null,
             },
             {
-              key: "status",
-              header: t("console.services.requests.columns.status", undefined, "Status"),
+              key: "request_state",
+              header: t("console.services.requests.columns.request_state", undefined, "Status"),
               render: (r) => (
                 <span className="flex items-center">
-                  <Badge variant={STATUS_TONE[r.status as ServiceRequest["status"]]}>{toTitle(String(r.status))}</Badge>
-                  {(r.status === "open" || r.status === "acknowledged" || r.status === "in_progress") &&
+                  <Badge variant={STATUS_TONE[r.request_state as ServiceRequest["request_state"]]}>
+                    {toTitle(String(r.request_state))}
+                  </Badge>
+                  {(r.request_state === "open" ||
+                    r.request_state === "acknowledged" ||
+                    r.request_state === "in_progress") &&
                     slaChip(
-                      (r.status === "open" ? r.sla_response_due : r.sla_resolution_due) as string | null,
+                      (r.request_state === "open" ? r.sla_response_due : r.sla_resolution_due) as string | null,
                       now,
-                      Boolean(r.status === "open" ? r.sla_response_breached : r.sla_resolution_breached),
+                      Boolean(r.request_state === "open" ? r.sla_response_breached : r.sla_resolution_breached),
                       t,
                     )}
                 </span>
               ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.request_state ?? null,
             },
             {
               key: "opened",

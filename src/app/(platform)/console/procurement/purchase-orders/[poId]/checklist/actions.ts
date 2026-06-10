@@ -49,13 +49,13 @@ export async function completeChecklistItem(poId: string, itemId: string): Promi
   const { data, error } = await supabase
     .from("po_checklist_items")
     .update({
-      status: "complete",
+      item_state: "complete",
       completed_at: new Date().toISOString(),
       completed_by: session.userId,
     } as never)
     .eq("org_id", session.orgId)
     .eq("id", itemId)
-    .neq("status", "complete")
+    .neq("item_state", "complete")
     .select("id");
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("Checklist item is already complete");
@@ -69,10 +69,10 @@ export async function skipChecklistItem(poId: string, itemId: string): Promise<v
   // would lose the completion record.
   const { data, error } = await supabase
     .from("po_checklist_items")
-    .update({ status: "skipped" } as never)
+    .update({ item_state: "skipped" } as never)
     .eq("org_id", session.orgId)
     .eq("id", itemId)
-    .eq("status", "pending")
+    .eq("item_state", "pending")
     .select("id");
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("Only a pending checklist item can be skipped");

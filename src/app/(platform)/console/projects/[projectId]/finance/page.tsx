@@ -16,7 +16,7 @@ type InvoiceRow = {
   number: string;
   title: string;
   amount_cents: number;
-  status: string;
+  invoice_state: string;
   due_at: string | null;
 };
 type ExpenseRow = {
@@ -24,10 +24,10 @@ type ExpenseRow = {
   description: string;
   category: string | null;
   amount_cents: number;
-  status: string;
+  expense_state: string;
   spent_at: string;
 };
-type POrow = { id: string; number: string; title: string; amount_cents: number; status: string; created_at: string };
+type POrow = { id: string; number: string; title: string; amount_cents: number; po_state: string; created_at: string };
 
 const INVOICE_REVENUE_STATUSES = new Set(["paid"]);
 const INVOICE_PIPELINE_STATUSES = new Set(["sent", "overdue"]);
@@ -64,19 +64,19 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         .maybeSingle(),
       supabase
         .from("invoices")
-        .select("id, number, title, amount_cents, status, due_at")
+        .select("id, number, title, amount_cents, invoice_state, due_at")
         .eq("org_id", session.orgId)
         .eq("project_id", projectId)
         .order("created_at", { ascending: false }),
       supabase
         .from("expenses")
-        .select("id, description, category, amount_cents, status, spent_at")
+        .select("id, description, category, amount_cents, expense_state, spent_at")
         .eq("org_id", session.orgId)
         .eq("project_id", projectId)
         .order("spent_at", { ascending: false }),
       supabase
         .from("purchase_orders")
-        .select("id, number, title, amount_cents, status, created_at")
+        .select("id, number, title, amount_cents, po_state, created_at")
         .eq("org_id", session.orgId)
         .eq("project_id", projectId)
         .order("created_at", { ascending: false }),
@@ -103,15 +103,15 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const poList = (pos ?? []) as POrow[];
 
   const revenue = invList
-    .filter((i) => INVOICE_REVENUE_STATUSES.has(i.status))
+    .filter((i) => INVOICE_REVENUE_STATUSES.has(i.invoice_state))
     .reduce((s, i) => s + (i.amount_cents ?? 0), 0);
   const pipeline = invList
-    .filter((i) => INVOICE_PIPELINE_STATUSES.has(i.status))
+    .filter((i) => INVOICE_PIPELINE_STATUSES.has(i.invoice_state))
     .reduce((s, i) => s + (i.amount_cents ?? 0), 0);
   const expensesCommitted = expList
-    .filter((e) => EXPENSE_COMMITTED.has(e.status))
+    .filter((e) => EXPENSE_COMMITTED.has(e.expense_state))
     .reduce((s, e) => s + (e.amount_cents ?? 0), 0);
-  const poCommitted = poList.filter((p) => PO_COMMITTED.has(p.status)).reduce((s, p) => s + (p.amount_cents ?? 0), 0);
+  const poCommitted = poList.filter((p) => PO_COMMITTED.has(p.po_state)).reduce((s, p) => s + (p.amount_cents ?? 0), 0);
   const spent = expensesCommitted + poCommitted;
   const margin = revenue - spent;
   const marginPct = revenue > 0 ? Math.round((margin / revenue) * 100) : null;
@@ -256,13 +256,15 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 key: "status",
                 header: t("console.projects.finance.columns.status", undefined, "Status"),
                 render: (r) => (
-                  <Badge variant={r.status === "paid" ? "success" : r.status === "overdue" ? "error" : "muted"}>
-                    {r.status}
+                  <Badge
+                    variant={r.invoice_state === "paid" ? "success" : r.invoice_state === "overdue" ? "error" : "muted"}
+                  >
+                    {r.invoice_state}
                   </Badge>
                 ),
                 filterable: true,
                 groupable: true,
-                accessor: (r) => r.status ?? null,
+                accessor: (r) => r.invoice_state ?? null,
               },
               {
                 key: "due",
@@ -319,8 +321,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {
                 key: "status",
                 header: t("console.projects.finance.columns.status", undefined, "Status"),
-                render: (r) => r.status,
-                accessor: (r) => r.status,
+                render: (r) => r.po_state,
+                accessor: (r) => r.po_state,
                 filterable: true,
                 groupable: true,
               },
@@ -372,8 +374,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {
                 key: "status",
                 header: t("console.projects.finance.columns.status", undefined, "Status"),
-                render: (r) => r.status,
-                accessor: (r) => r.status,
+                render: (r) => r.expense_state,
+                accessor: (r) => r.expense_state,
                 filterable: true,
                 groupable: true,
               },

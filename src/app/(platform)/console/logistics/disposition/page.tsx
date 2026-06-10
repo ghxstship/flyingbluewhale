@@ -17,7 +17,7 @@ type AssetRow = {
   name: string;
   category: string | null;
   asset_tag: string | null;
-  status: string;
+  equipment_state: string;
   daily_rate_cents: number | null;
 };
 
@@ -55,17 +55,17 @@ export default async function Page() {
   const [{ data: assetData }, { count: totalAssets }] = await Promise.all([
     supabase
       .from("equipment")
-      .select("id, name, category, asset_tag, status, daily_rate_cents")
+      .select("id, name, category, asset_tag, equipment_state, daily_rate_cents")
       .eq("org_id", session.orgId)
-      .in("status", [...DISPOSITION_KINDS])
+      .in("equipment_state", [...DISPOSITION_KINDS])
       .order("category", { ascending: true })
       .limit(500),
     supabase.from("equipment").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
   ]);
 
   const rows = (assetData ?? []) as AssetRow[];
-  const retired = rows.filter((r) => r.status === "retired").length;
-  const maintenance = rows.filter((r) => r.status === "maintenance").length;
+  const retired = rows.filter((r) => r.equipment_state === "retired").length;
+  const maintenance = rows.filter((r) => r.equipment_state === "maintenance").length;
   const totalReplaceable = rows.reduce((s, r) => s + (r.daily_rate_cents != null ? r.daily_rate_cents * 30 * 6 : 0), 0);
 
   return (
@@ -146,10 +146,12 @@ export default async function Page() {
               accessor: (r) => Number(r.daily_rate_cents ?? 0),
             },
             {
-              key: "status",
-              header: t("console.logistics.disposition.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              key: "equipment_state",
+              header: t("console.logistics.disposition.col.equipment_state", undefined, "Status"),
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.equipment_state] ?? "muted"}>{toTitle(r.equipment_state)}</Badge>
+              ),
+              accessor: (r) => r.equipment_state ?? null,
               filterable: true,
               groupable: true,
             },

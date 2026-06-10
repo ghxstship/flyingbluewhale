@@ -56,7 +56,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("po_change_orders")
     .select(
-      "id, number, title, status, amount_cents, schedule_impact_days, proposed_at, purchase_order:purchase_order_id(number), project:project_id(name)",
+      "id, number, title, change_order_state, amount_cents, schedule_impact_days, proposed_at, purchase_order:purchase_order_id(number), project:project_id(name)",
     )
     .eq("org_id", session.orgId)
     .order("proposed_at", { ascending: false })

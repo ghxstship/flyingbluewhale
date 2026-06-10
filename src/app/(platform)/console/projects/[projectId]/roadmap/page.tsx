@@ -32,8 +32,12 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
       .is("deleted_at", null)
       .eq("id", projectId)
       .maybeSingle(),
-    supabase.from("tasks").select("id, title, due_at, status").eq("project_id", projectId),
-    supabase.from("events").select("id, name, starts_at, status").eq("project_id", projectId).eq("status", "scheduled"),
+    supabase.from("tasks").select("id, title, due_at, task_state").eq("project_id", projectId),
+    supabase
+      .from("events")
+      .select("id, name, starts_at, event_state")
+      .eq("project_id", projectId)
+      .eq("event_state", "scheduled"),
   ]);
   type Item = { id: string; label: string; kind: "task" | "milestone"; date: string | null; status: string };
   const unscheduledLabel = t("console.projects.roadmap.unscheduled", undefined, "Unscheduled");
@@ -44,11 +48,17 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         label: task.title,
         kind: "task",
         date: task.due_at,
-        status: task.status ?? "open",
+        status: task.task_state ?? "open",
       }),
     ),
     ...(events ?? []).map(
-      (e): Item => ({ id: e.id, label: e.name, kind: "milestone", date: e.starts_at, status: e.status ?? "scheduled" }),
+      (e): Item => ({
+        id: e.id,
+        label: e.name,
+        kind: "milestone",
+        date: e.starts_at,
+        status: e.event_state ?? "scheduled",
+      }),
     ),
   ];
   const byQuarter = new Map<string, Item[]>();

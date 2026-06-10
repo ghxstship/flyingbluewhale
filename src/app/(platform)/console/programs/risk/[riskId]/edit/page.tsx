@@ -102,9 +102,14 @@ export default async function Page({ params }: { params: Promise<{ riskId: strin
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.programs.risk.edit.fields.status", undefined, "Status")}
+              {t("console.programs.risk.edit.fields.risk_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
+            <select
+              name="risk_state"
+              defaultValue={row.risk_state ?? ""}
+              required
+              className="ps-input focus-ring w-full"
+            >
               <option value="open">open</option>
               <option value="mitigating">mitigating</option>
               <option value="accepted">accepted</option>

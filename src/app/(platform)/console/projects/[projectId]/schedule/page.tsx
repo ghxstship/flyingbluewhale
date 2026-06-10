@@ -63,12 +63,12 @@ export default async function Page({
       .maybeSingle(),
     supabase
       .from("tasks")
-      .select("id, title, status, due_at, created_at")
+      .select("id, title, task_state, due_at, created_at")
       .eq("project_id", projectId)
       .order("due_at", { ascending: true, nullsFirst: false }),
     supabase
       .from("events")
-      .select("id, name, description, status, starts_at, ends_at, location_id")
+      .select("id, name, description, event_state, starts_at, ends_at, location_id")
       .eq("project_id", projectId)
       .order("starts_at", { ascending: true }),
   ]);
@@ -159,13 +159,13 @@ export default async function Page({
               name: e.name,
               starts_at: e.starts_at,
               ends_at: e.ends_at,
-              status: e.status,
+              status: e.event_state,
             }))}
             tasks={taskRows.map((task) => ({
               id: task.id,
               title: task.title,
               due_at: task.due_at,
-              status: task.status,
+              status: task.task_state,
             }))}
             initialMonth={monthParam || defaultMonth(project?.start_date)}
           />
@@ -176,14 +176,14 @@ export default async function Page({
                 id: task.id,
                 kind: "task" as const,
                 title: task.title,
-                status: task.status ?? "open",
+                status: task.task_state ?? "open",
                 due: task.due_at,
               })),
               ...eventRows.map((e) => ({
                 id: e.id,
                 kind: "event" as const,
                 title: e.name,
-                status: e.status ?? "draft",
+                status: e.event_state ?? "draft",
                 due: e.starts_at,
               })),
             ]}
@@ -204,7 +204,7 @@ export default async function Page({
                 id: task.id,
                 kind: "task" as const,
                 title: task.title,
-                status: task.status ?? "open",
+                status: task.task_state ?? "open",
                 when: task.due_at,
                 endsAt: null,
               })),
@@ -212,7 +212,7 @@ export default async function Page({
                 id: e.id,
                 kind: "event" as const,
                 title: e.name,
-                status: e.status ?? "draft",
+                status: e.event_state ?? "draft",
                 when: e.starts_at,
                 endsAt: e.ends_at,
               })),
@@ -227,8 +227,8 @@ export default async function Page({
 }
 
 function toTimelineRows(
-  tasks: { id: string; title: string; status: string | null; due_at: string | null; created_at: string }[],
-  events: { id: string; name: string; status: string | null; starts_at: string | null; ends_at: string | null }[],
+  tasks: { id: string; title: string; task_state: string | null; due_at: string | null; created_at: string }[],
+  events: { id: string; name: string; event_state: string | null; starts_at: string | null; ends_at: string | null }[],
 ): TimelineRow[] {
   return [
     ...tasks.map((t) => ({
@@ -237,7 +237,7 @@ function toTimelineRows(
       lane: "Tasks" as const,
       start: t.created_at,
       end: t.due_at ?? t.created_at,
-      status: t.status ?? "open",
+      status: t.task_state ?? "open",
     })),
     ...events.map((e) => ({
       id: `event-${e.id}`,
@@ -245,7 +245,7 @@ function toTimelineRows(
       lane: "Events" as const,
       start: e.starts_at ?? "",
       end: e.ends_at ?? e.starts_at ?? "",
-      status: e.status ?? "draft",
+      status: e.event_state ?? "draft",
     })),
   ].filter((r) => r.start && r.end);
 }
@@ -263,11 +263,11 @@ async function ListView({
     id: string;
     name: string;
     description: string | null;
-    status: string | null;
+    event_state: string | null;
     starts_at: string | null;
     ends_at: string | null;
   }>;
-  tasks: Array<{ id: string; title: string; status: string | null; due_at: string | null }>;
+  tasks: Array<{ id: string; title: string; task_state: string | null; due_at: string | null }>;
 }) {
   const { t } = await getRequestT();
   return (
@@ -288,7 +288,7 @@ async function ListView({
                         <div className="mt-1 truncate text-xs text-[var(--p-text-2)]">{e.description}</div>
                       )}
                     </div>
-                    <StatusBadge status={e.status ?? "draft"} />
+                    <StatusBadge status={e.event_state ?? "draft"} />
                   </div>
                   <div className="mt-2 font-mono text-xs text-[var(--p-text-2)]">
                     {fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}
@@ -316,7 +316,7 @@ async function ListView({
                           ? fmtDateTime(task.due_at)
                           : t("console.projects.schedule.list.noDueDate", undefined, "No due date")}
                       </span>
-                      <StatusBadge status={task.status ?? "open"} />
+                      <StatusBadge status={task.task_state ?? "open"} />
                     </div>
                   </div>
                 </Link>

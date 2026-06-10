@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
   const [{ data: row }, { data: movementsData }] = await Promise.all([
     supabase
       .from("equipment")
-      .select("id, name, category, asset_tag, serial, status, daily_rate_cents, notes, deleted_at, created_at")
+      .select("id, name, category, asset_tag, serial, equipment_state, daily_rate_cents, notes, deleted_at, created_at")
       .eq("org_id", session.orgId)
       .eq("id", equipmentId)
       .maybeSingle(),
@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
     );
   }
 
-  const transitions = NEXT[row.status as EquipmentStatus];
+  const transitions = NEXT[row.equipment_state as EquipmentStatus];
 
   // asset_movements is the LDP §3 append-only state ledger and had zero
   // UI exposure before this page — the equipment status was visible but
@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
             {transitions.map((to) => (
               <form key={to} action={setEquipmentStatus} className="inline">
                 <input type="hidden" name="id" value={row.id} />
-                <input type="hidden" name="status" value={to} />
+                <input type="hidden" name="equipment_state" value={to} />
                 <button
                   type="submit"
                   className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
@@ -115,7 +115,11 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
                       : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                   }`}
                 >
-                  {t("console.production.equipment.detail.markStatus", { status: toTitle(to) }, `Mark ${toTitle(to)}`)}
+                  {t(
+                    "console.production.equipment.detail.markStatus",
+                    { equipment_state: toTitle(to) },
+                    `Mark ${toTitle(to)}`,
+                  )}
                 </button>
               </form>
             ))}
@@ -132,8 +136,8 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             <Field
-              label={t("console.production.equipment.detail.field.status", undefined, "Status")}
-              value={<StatusBadge status={row.status} />}
+              label={t("console.production.equipment.detail.field.equipment_state", undefined, "Status")}
+              value={<StatusBadge status={row.equipment_state} />}
             />
             <Field
               label={t("console.production.equipment.detail.field.category", undefined, "Category")}

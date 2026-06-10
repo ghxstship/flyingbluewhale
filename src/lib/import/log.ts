@@ -13,7 +13,7 @@ export async function logImportRun(args: {
   rowsTotal: number;
   rowsImported: number;
   rowsFailed: number;
-  status: "succeeded" | "failed";
+  run_state: "succeeded" | "failed";
   filename?: string | null;
   error?: string | null;
 }): Promise<void> {
@@ -27,7 +27,7 @@ export async function logImportRun(args: {
       rows_total: args.rowsTotal,
       rows_imported: args.rowsImported,
       rows_failed: args.rowsFailed,
-      status: args.status,
+      run_state: args.run_state,
       error: args.error ?? null,
       created_by: args.userId,
       started_at: new Date().toISOString(),

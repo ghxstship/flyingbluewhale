@@ -20,7 +20,7 @@ type DealRow = {
   guarantee_cents: number | null;
   door_pct: number | null;
   deal_type: string;
-  status: string;
+  talent_offer_state: string;
   deposit_pct: number;
   talent_profile_id: string;
   sent_at: string | null;
@@ -60,16 +60,16 @@ export default async function Page() {
   const { data } = await supabase
     .from("talent_offers")
     .select(
-      "id, performance_date, fee_cents, guarantee_cents, door_pct, deal_type, status, deposit_pct, talent_profile_id, sent_at",
+      "id, performance_date, fee_cents, guarantee_cents, door_pct, deal_type, talent_offer_state, deposit_pct, talent_profile_id, sent_at",
     )
     .eq("org_id", session.orgId)
     .order("performance_date", { ascending: false })
     .limit(500);
 
   const rows = (data ?? []) as DealRow[];
-  const live = rows.filter((r) => ["sent", "countered"].includes(r.status)).length;
+  const live = rows.filter((r) => ["sent", "countered"].includes(r.talent_offer_state)).length;
   const stuck = rows.filter((r) => {
-    if (r.status !== "sent" || !r.sent_at) return false;
+    if (r.talent_offer_state !== "sent" || !r.sent_at) return false;
     const ageDays = (Date.now() - new Date(r.sent_at).getTime()) / 86_400_000;
     return ageDays > 7;
   }).length;
@@ -163,9 +163,11 @@ export default async function Page() {
               key: "stage",
               header: t("console.bookings.deals.col.stage", undefined, "Stage"),
               render: (r) => (
-                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{STAGE_BUCKETS[r.status] ?? r.status}</Badge>
+                <Badge variant={STATUS_TONE[r.talent_offer_state] ?? "muted"}>
+                  {STAGE_BUCKETS[r.talent_offer_state] ?? r.talent_offer_state}
+                </Badge>
               ),
-              accessor: (r) => r.status,
+              accessor: (r) => r.talent_offer_state,
               filterable: true,
               groupable: true,
             },

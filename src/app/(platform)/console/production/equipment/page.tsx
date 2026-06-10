@@ -38,7 +38,7 @@ export default async function EquipmentPage() {
   // Hide soft-deleted rows from the list. Retired equipment stays visible
   // (it's part of the org history); only true deletes get hidden.
   const rows = allRows.filter((r) => r.deleted_at == null);
-  const available = rows.filter((r) => r.status === "available").length;
+  const available = rows.filter((r) => r.equipment_state === "available").length;
   const itemsLabel =
     rows.length === 1
       ? t("console.production.equipment.itemSingular", undefined, "Item")
@@ -94,12 +94,12 @@ export default async function EquipmentPage() {
               accessor: (r) => r.asset_tag ?? null,
             },
             {
-              key: "status",
-              header: t("console.production.equipment.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_BG[r.status]}>{toTitle(r.status)}</Badge>,
+              key: "equipment_state",
+              header: t("console.production.equipment.columns.equipment_state", undefined, "Status"),
+              render: (r) => <Badge variant={STATUS_BG[r.equipment_state]}>{toTitle(r.equipment_state)}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.equipment_state ?? null,
             },
             {
               key: "rate",

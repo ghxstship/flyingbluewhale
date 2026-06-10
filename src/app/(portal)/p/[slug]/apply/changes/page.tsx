@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   // Filter to changes the requester filed themselves.
   const { data } = await supabase
     .from("accreditation_changes")
-    .select("id, kind, status, note, created_at, decided_at, accreditation:accreditation_id(id, person_name)")
+    .select("id, kind, change_state, note, created_at, decided_at, accreditation:accreditation_id(id, person_name)")
     .eq("org_id", session.orgId)
     .eq("requested_by", session.userId)
     .order("created_at", { ascending: false });

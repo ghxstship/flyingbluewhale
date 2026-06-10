@@ -21,7 +21,7 @@ type ManifestRow = {
   scheduled_at: string | null;
   actual_at: string | null;
   party_size: number;
-  status: string;
+  order_state: string;
   delegation: { code: string | null; name: string | null } | null;
 };
 
@@ -30,7 +30,7 @@ type OrderRow = {
   catalog: string;
   total_cents: number;
   currency: string;
-  status: string;
+  order_state: string;
 };
 
 const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
@@ -89,7 +89,7 @@ export default async function Page() {
       .limit(200),
     supabase
       .from("rate_card_orders")
-      .select("id, catalog, total_cents, currency, status")
+      .select("id, catalog, total_cents, currency, order_state")
       .eq("org_id", session.orgId)
       .order("updated_at", { ascending: false })
       .limit(50),
@@ -168,7 +168,7 @@ export default async function Page() {
                     <th className="text-end">
                       {t("console.logistics.freight.manifests.col.party", undefined, "Party")}
                     </th>
-                    <th>{t("console.logistics.freight.manifests.col.status", undefined, "Status")}</th>
+                    <th>{t("console.logistics.freight.manifests.col.order_state", undefined, "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -183,7 +183,7 @@ export default async function Page() {
                       <td className="font-mono text-xs">{fmt(m.actual_at)}</td>
                       <td className="text-end font-mono text-xs">{fmtIntl.number(m.party_size)}</td>
                       <td>
-                        <Badge variant={STATUS_TONE[m.status] ?? "muted"}>{toTitle(m.status)}</Badge>
+                        <Badge variant={STATUS_TONE[m.order_state] ?? "muted"}>{toTitle(m.order_state)}</Badge>
                       </td>
                     </tr>
                   ))}
@@ -217,7 +217,7 @@ export default async function Page() {
                       {formatMoney(o.total_cents, o.currency)}
                     </div>
                   </div>
-                  <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>
+                  <Badge variant={STATUS_TONE[o.order_state] ?? "muted"}>{toTitle(o.order_state)}</Badge>
                 </li>
               ))}
             </ul>

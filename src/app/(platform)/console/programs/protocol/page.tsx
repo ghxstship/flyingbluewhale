@@ -71,7 +71,7 @@ export default async function Page() {
     supabase
       .from("dispatch_runs")
       .select(
-        "id, scheduled_depart, scheduled_arrive, status, origin:origin_venue_id(name), destination:destination_venue_id(name)",
+        "id, scheduled_depart, scheduled_arrive, run_state, origin:origin_venue_id(name), destination:destination_venue_id(name)",
       )
       .eq("org_id", session.orgId)
       .eq("fleet", "t3")

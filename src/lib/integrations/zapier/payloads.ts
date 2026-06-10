@@ -220,7 +220,7 @@ type InvoiceRow = Pick<
   | "id"
   | "number"
   | "title"
-  | "status"
+  | "invoice_state"
   | "amount_cents"
   | "currency"
   | "client_id"
@@ -237,7 +237,7 @@ export function toZapierInvoice(row: InvoiceRow): ZapierInvoice {
     id: row.id,
     number: row.number,
     title: row.title,
-    status: row.status,
+    status: row.invoice_state,
     amount_cents: row.amount_cents,
     amount: row.amount_cents / 100,
     currency: row.currency,
@@ -257,7 +257,7 @@ type TaskRow = Pick<
   | "id"
   | "title"
   | "description"
-  | "status"
+  | "task_state"
   | "priority"
   | "project_id"
   | "assigned_to"
@@ -271,7 +271,7 @@ export function toZapierTask(row: TaskRow): ZapierTask {
     id: row.id,
     title: row.title,
     description: row.description,
-    status: row.status,
+    status: row.task_state,
     priority: row.priority,
     project_id: row.project_id,
     assigned_to: row.assigned_to,
@@ -287,7 +287,7 @@ type ExpenseRow = Pick<
   | "id"
   | "description"
   | "category"
-  | "status"
+  | "expense_state"
   | "amount_cents"
   | "currency"
   | "project_id"
@@ -302,7 +302,7 @@ export function toZapierExpense(row: ExpenseRow): ZapierExpense {
     id: row.id,
     description: row.description,
     category: row.category,
-    status: row.status,
+    status: row.expense_state,
     amount_cents: row.amount_cents,
     amount: row.amount_cents / 100,
     currency: row.currency,

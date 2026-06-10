@@ -59,7 +59,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("payment_applications")
     .select(
-      "id, application_number, period_start, period_end, status, total_completed_cents, total_due_cents, retention_pct, vendor:vendor_id(name), purchase_order:purchase_order_id(number, title)",
+      "id, application_number, period_start, period_end, application_state, total_completed_cents, total_due_cents, retention_pct, vendor:vendor_id(name), purchase_order:purchase_order_id(number, title)",
     )
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false })

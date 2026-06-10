@@ -63,7 +63,7 @@ export default async function Page() {
   const horizon = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase
     .from("events")
-    .select("id, name, starts_at, ends_at, status, project:project_id(name)")
+    .select("id, name, starts_at, ends_at, event_state, project:project_id(name)")
     .eq("org_id", session.orgId)
     .gte("starts_at", since)
     .lt("starts_at", horizon)

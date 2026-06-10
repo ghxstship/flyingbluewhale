@@ -14,7 +14,7 @@ type CueRow = {
   lane: string;
   label: string;
   description: string | null;
-  status: "pending" | "standby" | "live" | "done" | "cancelled" | string;
+  cue_state: "pending" | "standby" | "live" | "done" | "cancelled" | string;
   duration_seconds: number | null;
 };
 
@@ -55,7 +55,7 @@ export default async function MobileRosPage() {
 
   const { data } = await supabase
     .from("cues")
-    .select("id, scheduled_at, lane, label, description, status, duration_seconds")
+    .select("id, scheduled_at, lane, label, description, cue_state, duration_seconds")
     .eq("org_id", session.orgId)
     .gte("scheduled_at", startOfToday)
     .lt("scheduled_at", startOfTomorrow)
@@ -63,8 +63,8 @@ export default async function MobileRosPage() {
     .limit(500);
   const cues = (data ?? []) as CueRow[];
 
-  const live = cues.filter((c) => c.status === "live").length;
-  const upcoming = cues.filter((c) => c.status === "pending" || c.status === "standby").length;
+  const live = cues.filter((c) => c.cue_state === "live").length;
+  const upcoming = cues.filter((c) => c.cue_state === "pending" || c.cue_state === "standby").length;
 
   return (
     <div className="px-4 pt-6 pb-24">
@@ -97,8 +97,8 @@ export default async function MobileRosPage() {
           </li>
         ) : (
           cues.map((c) => {
-            const tone = STATUS_TONE[c.status] ?? "muted";
-            const isLive = c.status === "live";
+            const tone = STATUS_TONE[c.cue_state] ?? "muted";
+            const isLive = c.cue_state === "live";
             return (
               <li
                 key={c.id}
@@ -115,7 +115,7 @@ export default async function MobileRosPage() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-sm leading-snug font-semibold">{c.label}</div>
-                    <Badge variant={tone}>{toTitle(c.status)}</Badge>
+                    <Badge variant={tone}>{toTitle(c.cue_state)}</Badge>
                   </div>
                   {c.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{c.description}</p>}
                   <div className="mt-1.5">

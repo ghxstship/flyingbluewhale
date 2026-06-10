@@ -24,9 +24,9 @@ export default async function Page() {
     supabase.from("site_plans").select("id, code, title").eq("org_id", session.orgId).order("code"),
     supabase
       .from("punch_lists")
-      .select("id, name, project_id, status")
+      .select("id, name, project_id, list_state")
       .eq("org_id", session.orgId)
-      .eq("status", "open")
+      .eq("list_state", "open")
       .order("created_at", { ascending: false }),
   ]);
 

@@ -47,12 +47,12 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
 
   const { data: row } = await supabase
     .from("job_applications")
-    .select("status")
+    .select("job_application_state")
     .eq("id", parsed.data.application_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!row) return { error: "Application not found" };
-  const current = (row as { status: JobApplicationStatus }).status;
+  const current = (row as { job_application_state: JobApplicationStatus }).job_application_state;
   const allowed = APPLICATION_TRANSITIONS[current] ?? [];
   if (current !== parsed.data.status && !allowed.includes(parsed.data.status)) {
     return { error: `Cannot move ${current} → ${parsed.data.status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
@@ -61,7 +61,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
   const { data: updated, error } = await supabase
     .from("job_applications")
     .update({
-      status: parsed.data.status,
+      job_application_state: parsed.data.status,
       reviewer_notes: parsed.data.reviewer_notes || null,
       score,
       reviewed_by: session.userId,
@@ -69,7 +69,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
     })
     .eq("id", parsed.data.application_id)
     .eq("org_id", session.orgId)
-    .eq("status", current as "new")
+    .eq("job_application_state", current as "new")
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {

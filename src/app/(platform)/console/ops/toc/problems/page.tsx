@@ -72,7 +72,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("itil_problems")
     .select(
-      "id, code, title, priority, status, detected_at, resolved_at, reporter:reporter_id(name, email), assigned:assigned_to(name, email)",
+      "id, code, title, priority, problem_state, detected_at, resolved_at, reporter:reporter_id(name, email), assigned:assigned_to(name, email)",
     )
     .eq("org_id", session.orgId)
     .order("detected_at", { ascending: false })

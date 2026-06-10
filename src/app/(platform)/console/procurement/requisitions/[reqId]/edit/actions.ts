@@ -12,7 +12,7 @@ const Schema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(4000).optional().or(z.literal("")),
   estimated_cents: z.string().optional(),
-  status: z.string(),
+  requisition_state: z.string(),
 });
 
 export type State = {
@@ -32,7 +32,7 @@ export async function updateRequisition(id: string, _: State, fd: FormData): Pro
     title: parsed.data.title,
     description: parsed.data.description || null,
     estimated_cents: parsed.data.estimated_cents ? Number(parsed.data.estimated_cents) : null,
-    status: parsed.data.status as "draft" | "submitted" | "approved" | "rejected" | "converted",
+    requisition_state: parsed.data.requisition_state as "draft" | "submitted" | "approved" | "rejected" | "converted",
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Requisition not found." };

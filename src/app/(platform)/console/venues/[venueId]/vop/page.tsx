@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     supabase.from("venues").select("id, name").eq("id", venueId).eq("org_id", session.orgId).maybeSingle(),
     supabase
       .from("venue_vop_sections")
-      .select("id, section_key, title, body, status, approved_at, updated_at")
+      .select("id, section_key, title, body, section_state, approved_at, updated_at")
       .eq("venue_id", venueId)
       .eq("org_id", session.orgId),
   ]);

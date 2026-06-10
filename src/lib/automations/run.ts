@@ -110,9 +110,9 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
     // double-fire every step's outbound side effects.
     const { data: claimed, error: claimErr } = await svc
       .from("automation_runs")
-      .update({ status: "running", started_at: startIso })
+      .update({ run_state: "running", started_at: startIso })
       .eq("id", runId)
-      .eq("status", "pending")
+      .eq("run_state", "pending")
       .select("id");
     if (claimErr) throw new Error(`run claim failed: ${claimErr.message}`);
     if (!claimed || (claimed as unknown as Array<{ id: string }>).length === 0) {
@@ -128,7 +128,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
         trigger_kind: opts.triggerKind,
         trigger_payload: (opts.triggerPayload ?? {}) as never,
         triggered_by: opts.triggeredBy ?? null,
-        status: "running",
+        run_state: "running",
         started_at: startIso,
       })
       .select("id")
@@ -166,7 +166,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
         step_index: i,
         action_type: actionType || "(unknown)",
         input: rawInput as never,
-        status: "running",
+        step_state: "running",
         started_at: stepStartIso,
       })
       .select("id")
@@ -202,7 +202,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
       await svc
         .from("automation_step_runs")
         .update({
-          status: "skipped",
+          step_state: "skipped",
           finished_at: finishedAt,
           latency_ms: Date.now() - new Date(stepStartIso).getTime(),
         })
@@ -218,7 +218,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
       await svc
         .from("automation_step_runs")
         .update({
-          status: "failed",
+          step_state: "failed",
           error: msg,
           finished_at: nowIso(),
           latency_ms: Date.now() - new Date(stepStartIso).getTime(),
@@ -239,7 +239,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
         await svc
           .from("automation_step_runs")
           .update({
-            status: "failed",
+            step_state: "failed",
             error: msg,
             input: resolvedInput as never,
             finished_at: nowIso(),
@@ -259,7 +259,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
       await svc
         .from("automation_step_runs")
         .update({
-          status: "success",
+          step_state: "success",
           input: resolvedInput as never,
           output: (result.output ?? {}) as never,
           finished_at: finishedAt,
@@ -275,7 +275,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
       await svc
         .from("automation_step_runs")
         .update({
-          status: "failed",
+          step_state: "failed",
           error: msg,
           finished_at: finishedAt,
           latency_ms: Date.now() - new Date(stepStartIso).getTime(),
@@ -298,7 +298,7 @@ export async function runAutomation(opts: RunInput): Promise<RunResult> {
   await svc
     .from("automation_runs")
     .update({
-      status: runStatus,
+      run_state: runStatus,
       finished_at: finishedAtIso,
       action_count: actionCount,
       error_summary: errorSummary,

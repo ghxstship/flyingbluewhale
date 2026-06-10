@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={project}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[item.status] ?? "muted"}>{toTitle(item.status)}</Badge>
+            <Badge variant={STATUS_TONE[item.item_state] ?? "muted"}>{toTitle(item.item_state)}</Badge>
             {item.show_ready_gate && (
               <Badge variant="error">{t("console.punch.detail.doorsGate", undefined, "Doors Gate")}</Badge>
             )}
@@ -65,21 +65,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             >
               {t("common.edit", undefined, "Edit")}
             </a>
-            {item.status === "open" && (
+            {item.item_state === "open" && (
               <form action={transitionPunchItem.bind(null, id, "in_progress")}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   {t("console.punch.detail.start", undefined, "Start")}
                 </button>
               </form>
             )}
-            {item.status === "in_progress" && (
+            {item.item_state === "in_progress" && (
               <form action={transitionPunchItem.bind(null, id, "ready_for_review")}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   {t("console.punch.detail.markReady", undefined, "Mark ready")}
                 </button>
               </form>
             )}
-            {item.status === "ready_for_review" && (
+            {item.item_state === "ready_for_review" && (
               <form action={transitionPunchItem.bind(null, id, "complete")}>
                 <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
                   {t("console.punch.detail.close", undefined, "Close")}

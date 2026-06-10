@@ -26,18 +26,18 @@ export async function transitionPunchItem(
 
   const { data: row } = await supabase
     .from("punch_items")
-    .select("status")
+    .select("item_state")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
   if (!row) throw new Error("Punch item not found");
-  const current = (row as { status: PunchStatus }).status;
+  const current = (row as { item_state: PunchStatus }).item_state;
   const allowed = PUNCH_TRANSITIONS[current] ?? [];
   if (!allowed.includes(to)) {
     throw new Error(`Cannot move ${current} → ${to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
   }
 
-  const patch: Record<string, unknown> = { status: to };
+  const patch: Record<string, unknown> = { item_state: to };
   if (to === "complete") {
     patch.closed_at = new Date().toISOString();
     patch.closed_by = session.userId;
@@ -47,7 +47,7 @@ export async function transitionPunchItem(
     .update(patch as never)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", current as "open")
+    .eq("item_state", current as "open")
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {

@@ -42,9 +42,9 @@ export default async function MobileGuardPage() {
   })) as TourRow[];
   const rows = all.filter((r) => r.guard_id === session.userId).slice(0, 50);
 
-  const active = rows.filter((r) => r.status === "in_progress").length;
-  const overdue = rows.filter((r) => r.status === "overdue").length;
-  const upcoming = rows.filter((r) => r.status === "scheduled").length;
+  const active = rows.filter((r) => r.tour_state === "in_progress").length;
+  const overdue = rows.filter((r) => r.tour_state === "overdue").length;
+  const upcoming = rows.filter((r) => r.tour_state === "scheduled").length;
 
   return (
     <div className="px-4 pt-6 pb-24">
@@ -95,8 +95,8 @@ export default async function MobileGuardPage() {
                       : ""}
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
-                    {r.next_run_at && r.status === "scheduled" && (
+                    <Badge variant={STATUS_TONE[r.tour_state] ?? "muted"}>{toTitle(r.tour_state)}</Badge>
+                    {r.next_run_at && r.tour_state === "scheduled" && (
                       <Badge variant="muted">
                         {t("m.guard.badge.next", { time: fmtTime(r.next_run_at) }, `Next ${fmtTime(r.next_run_at)}`)}
                       </Badge>

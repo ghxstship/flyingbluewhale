@@ -59,26 +59,26 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           <div className="flex items-center gap-2">
-            <Badge variant="info">{toTitle(insp.status)}</Badge>
+            <Badge variant="info">{toTitle(insp.inspection_state)}</Badge>
             <a
               href={`/console/inspections/${insp.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
             >
               {t("common.edit", undefined, "Edit")}
             </a>
-            {insp.status === "scheduled" && (
+            {insp.inspection_state === "scheduled" && (
               <StatusForm
                 action={transitionInspection.bind(null, id, "in_progress")}
                 label={t("console.inspections.detail.start", undefined, "Start")}
               />
             )}
-            {insp.status === "in_progress" && totals.fail === 0 && (
+            {insp.inspection_state === "in_progress" && totals.fail === 0 && (
               <StatusForm
                 action={transitionInspection.bind(null, id, "passed")}
                 label={t("console.inspections.detail.pass", undefined, "Pass")}
               />
             )}
-            {insp.status === "in_progress" && (
+            {insp.inspection_state === "in_progress" && (
               <StatusForm
                 action={transitionInspection.bind(null, id, "failed")}
                 label={t("console.inspections.detail.fail", undefined, "Fail")}
@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     </span>
                     <Badge variant={RESULT_TONE[it.result] ?? "muted"}>{it.result}</Badge>
                   </div>
-                  {insp.status === "in_progress" && (
+                  {insp.inspection_state === "in_progress" && (
                     <div className="mt-2 flex gap-1.5">
                       {(["pass", "fail", "na"] as const).map((r) => (
                         <form key={r} action={setInspectionItemResult.bind(null, id, it.id, r)}>

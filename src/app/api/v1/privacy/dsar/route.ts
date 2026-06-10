@@ -18,7 +18,7 @@ export async function GET() {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("dsar_requests")
-      .select("id, requester_email, kind, status, due_by, fulfilled_at, created_at")
+      .select("id, requester_email, kind, request_state, due_by, fulfilled_at, created_at")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false })
       .limit(200);
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
         due_by: due.toISOString().slice(0, 10),
         notes: input.notes ?? null,
       })
-      .select("id, kind, status, due_by")
+      .select("id, kind, request_state, due_by")
       .single();
     if (error) return apiError("internal", error.message);
     return apiCreated({ request: data });

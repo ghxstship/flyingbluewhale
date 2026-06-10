@@ -28,7 +28,7 @@ export async function GET() {
     const { data, error } = await supabase
       .from("risks")
       .select(
-        "id, kind, title, category, likelihood, impact, inherent_score, residual_score, status, owner_id, due_on, created_at",
+        "id, kind, title, category, likelihood, impact, inherent_score, residual_score, risk_state, owner_id, due_on, created_at",
       )
       .eq("org_id", session.orgId)
       .order("inherent_score", { ascending: false })
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
         due_on: input.dueOn ?? null,
         created_by: session.userId,
       })
-      .select("id, title, inherent_score, status")
+      .select("id, title, inherent_score, risk_state")
       .single();
     if (error) return apiError("internal", error.message);
     return apiCreated({ risk: data });

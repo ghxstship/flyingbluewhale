@@ -16,7 +16,7 @@ type Row = {
   title: string;
   amount_cents: number;
   currency: string;
-  status: string;
+  po_state: string;
   created_at: string;
 };
 
@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const supabase = await createClient();
   const { data } = await supabase
     .from("purchase_orders")
-    .select("id,number,title,amount_cents,currency,status,created_at")
+    .select("id,number,title,amount_cents,currency,po_state,created_at")
     .eq("org_id", session.orgId)
     .eq("vendor_id", vendorId)
     .order("created_at", { ascending: false });
@@ -86,10 +86,10 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
               sortable: true,
             },
             {
-              key: "status",
-              header: t("console.procurement.vendors.pos.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              key: "po_state",
+              header: t("console.procurement.vendors.pos.col.po_state", undefined, "Status"),
+              render: (r) => <Badge variant={STATUS_VARIANT[r.po_state] ?? "default"}>{toTitle(r.po_state)}</Badge>,
+              accessor: (r) => r.po_state,
               filterable: true,
               groupable: true,
             },

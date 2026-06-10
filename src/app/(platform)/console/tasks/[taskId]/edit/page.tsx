@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
             <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.tasks.edit.fields.status", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
+            <select name="status" defaultValue={row.task_state} required className="ps-input focus-ring w-full">
               <option value="todo">todo</option>
               <option value="in_progress">in_progress</option>
               <option value="blocked">blocked</option>

@@ -23,7 +23,7 @@ type VendorRow = {
 type POAggRow = {
   vendor_id: string;
   amount_cents: number;
-  status: string;
+  po_state: string;
 };
 
 const COMPLIANCE_DAYS = 30;
@@ -58,7 +58,7 @@ export default async function Page() {
       .limit(500),
     supabase
       .from("purchase_orders")
-      .select("vendor_id, amount_cents, status")
+      .select("vendor_id, amount_cents, po_state")
       .eq("org_id", session.orgId)
       .not("vendor_id", "is", null)
       .limit(5000),
@@ -72,8 +72,8 @@ export default async function Page() {
       const acc = map.get(p.vendor_id) ?? { count: 0, total: 0, fulfilled: 0, cancelled: 0 };
       acc.count += 1;
       acc.total += p.amount_cents;
-      if (p.status === "fulfilled") acc.fulfilled += 1;
-      if (p.status === "cancelled") acc.cancelled += 1;
+      if (p.po_state === "fulfilled") acc.fulfilled += 1;
+      if (p.po_state === "cancelled") acc.cancelled += 1;
       map.set(p.vendor_id, acc);
       return map;
     },

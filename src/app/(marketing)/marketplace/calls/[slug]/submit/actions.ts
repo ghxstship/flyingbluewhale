@@ -36,7 +36,7 @@ export async function submitToCall(slug: string, _prev: FormState, fd: FormData)
     .from("open_calls")
     .select("id, org_id, deadline_at")
     .eq("public_slug", slug)
-    .eq("status", "published")
+    .eq("open_call_phase", "published")
     .is("deleted_at", null)
     .maybeSingle();
   if (callError) return actionFail(callError.message, fd);
@@ -50,7 +50,7 @@ export async function submitToCall(slug: string, _prev: FormState, fd: FormData)
     .select("id")
     .eq("open_call_id", call.id)
     .eq("submitter_user_id", session.userId)
-    .neq("status", "withdrawn")
+    .neq("submission_state", "withdrawn")
     .maybeSingle();
   if (existingError) return actionFail(existingError.message, fd);
   if (existing) {

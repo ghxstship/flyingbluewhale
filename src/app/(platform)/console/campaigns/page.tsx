@@ -12,7 +12,7 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_TONE: Record<Campaign["status"], "muted" | "info" | "success" | "warning" | "error"> = {
+const STATUS_TONE: Record<Campaign["campaign_state"], "muted" | "info" | "success" | "warning" | "error"> = {
   draft: "muted",
   scheduled: "info",
   live: "success",
@@ -45,7 +45,7 @@ export default async function Page() {
     limit: 500,
   })) as Campaign[];
 
-  const live = rows.filter((r) => r.status === "live").length;
+  const live = rows.filter((r) => r.campaign_state === "live").length;
   const totalBudget = rows.reduce((s, r) => s + (r.budget_cents ?? 0), 0);
   const totalSpent = rows.reduce((s, r) => s + (r.spent_cents ?? 0), 0);
 
@@ -122,10 +122,10 @@ export default async function Page() {
               accessor: (r) => Number(r.spent_cents ?? 0),
             },
             {
-              key: "status",
-              header: t("console.campaigns.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status]}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              key: "campaign_state",
+              header: t("console.campaigns.columns.campaign_state", undefined, "Status"),
+              render: (r) => <Badge variant={STATUS_TONE[r.campaign_state]}>{toTitle(r.campaign_state)}</Badge>,
+              accessor: (r) => r.campaign_state ?? null,
               filterable: true,
               groupable: true,
             },

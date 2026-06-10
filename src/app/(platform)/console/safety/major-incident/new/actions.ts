@@ -9,7 +9,7 @@ import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
-  status: z.string().max(40).optional(),
+  incident_state: z.string().max(40).optional(),
 });
 
 export type State = {
@@ -29,7 +29,7 @@ export async function createMajorIncident(_: State, fd: FormData): Promise<State
     .insert({
       org_id: session.orgId,
       name: parsed.data.name,
-      status: parsed.data.status || "activated",
+      incident_state: parsed.data.incident_state || "activated",
     })
     .select("id")
     .single();

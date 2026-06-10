@@ -9,19 +9,19 @@ import type { Annotation } from "@/lib/db/annotations";
 
 export function AnnotationActions({
   id,
-  status,
+  annotation_state,
   confirmationRequired,
   confirmedAt,
 }: {
   id: string;
-  status: Annotation["status"];
+  annotation_state: Annotation["annotation_state"];
   confirmationRequired: boolean;
   confirmedAt: string | null;
 }) {
   const t = useT();
   const [pending, start] = useTransition();
-  const isOpen = status === "open";
-  const isClosed = status === "resolved" || status === "dismissed";
+  const isOpen = annotation_state === "open";
+  const isClosed = annotation_state === "resolved" || annotation_state === "dismissed";
   const needsConfirmation = confirmationRequired && !confirmedAt;
 
   const run = (label: string, fn: () => Promise<{ error?: string } | undefined>) => () =>

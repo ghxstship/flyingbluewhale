@@ -16,7 +16,7 @@ type CallRow = {
   title: string;
   kind: string;
   region: string | null;
-  status: string;
+  open_call_phase: string;
   fee_min_cents: number | null;
   fee_max_cents: number | null;
   currency: string;
@@ -61,7 +61,9 @@ export default async function Page() {
 
   const { data } = await supabase
     .from("open_calls")
-    .select("id, title, kind, region, status, fee_min_cents, fee_max_cents, currency, deadline_at, submission_count")
+    .select(
+      "id, title, kind, region, open_call_phase, fee_min_cents, fee_max_cents, currency, deadline_at, submission_count",
+    )
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .order("published_at", { ascending: false, nullsFirst: false })
@@ -69,7 +71,7 @@ export default async function Page() {
     .limit(200);
 
   const rows = (data ?? []) as CallRow[];
-  const published = rows.filter((r) => r.status === "published").length;
+  const published = rows.filter((r) => r.open_call_phase === "published").length;
   const totalSubs = rows.reduce((s, r) => s + (r.submission_count ?? 0), 0);
 
   return (
@@ -162,12 +164,14 @@ export default async function Page() {
               className: "font-mono text-xs tabular-nums",
             },
             {
-              key: "status",
+              key: "open_call_phase",
               header: t("console.marketplace.calls.col.status", undefined, "Status"),
               render: (r) => (
-                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{STATUS_LABEL[r.status] ?? r.status}</Badge>
+                <Badge variant={STATUS_TONE[r.open_call_phase] ?? "muted"}>
+                  {STATUS_LABEL[r.open_call_phase] ?? r.open_call_phase}
+                </Badge>
               ),
-              accessor: (r) => r.status,
+              accessor: (r) => r.open_call_phase,
               filterable: true,
               groupable: true,
             },

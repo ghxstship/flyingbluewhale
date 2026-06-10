@@ -11,7 +11,7 @@ import { formFail } from "@/lib/forms/fail";
 const Schema = z.object({
   narrative: z.string().min(1).max(8000),
   subject_ref: z.string().max(200).optional().or(z.literal("")),
-  status: z.string(),
+  report_state: z.string(),
 });
 
 export type State = {
@@ -30,7 +30,7 @@ export async function updateSafeguardingReport(id: string, _: State, fd: FormDat
   const result = await updateOrgScopedWithCheck("safeguarding_reports", session.orgId, id, expectedUpdatedAt, {
     narrative: parsed.data.narrative,
     subject_ref: parsed.data.subject_ref || null,
-    status: parsed.data.status,
+    report_state: parsed.data.report_state,
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Safeguarding Report not found." };

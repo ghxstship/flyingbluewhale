@@ -23,21 +23,21 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const [{ data: pos }, { data: subs }] = await Promise.all([
     supabase
       .from("purchase_orders")
-      .select("id,status,amount_cents")
+      .select("id,po_state,amount_cents")
       .eq("org_id", session.orgId)
       .eq("vendor_id", vendorId),
-    supabase.from("submittals").select("id,status").eq("org_id", session.orgId).eq("vendor_id", vendorId),
+    supabase.from("submittals").select("id,submittal_state").eq("org_id", session.orgId).eq("vendor_id", vendorId),
   ]);
 
   const poRows = pos ?? [];
   const subRows = subs ?? [];
-  const fulfilled = poRows.filter((p) => p.status === "fulfilled").length;
-  const cancelled = poRows.filter((p) => p.status === "cancelled").length;
+  const fulfilled = poRows.filter((p) => p.po_state === "fulfilled").length;
+  const cancelled = poRows.filter((p) => p.po_state === "cancelled").length;
   const totalPos = poRows.length;
   const fulfillmentRate = totalPos > 0 ? Math.round((fulfilled / totalPos) * 100) : null;
   const totalCommitted = poRows.reduce((s, r) => s + Number(r.amount_cents), 0);
-  const approved = subRows.filter((s) => s.status === "approved").length;
-  const rejected = subRows.filter((s) => s.status === "rejected").length;
+  const approved = subRows.filter((s) => s.submittal_state === "approved").length;
+  const rejected = subRows.filter((s) => s.submittal_state === "rejected").length;
   const submittalRate = subRows.length > 0 ? Math.round((approved / subRows.length) * 100) : null;
 
   const hasSignal = totalPos > 0 || subRows.length > 0;

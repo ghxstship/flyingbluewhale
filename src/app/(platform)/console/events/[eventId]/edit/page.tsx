@@ -72,9 +72,9 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.events.edit.status", undefined, "Status")}
+              {t("console.events.edit.event_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
+            <select name="event_state" defaultValue={row.event_state} required className="ps-input focus-ring w-full">
               <option value="draft">{t("console.events.edit.statusDraft", undefined, "draft")}</option>
               <option value="scheduled">{t("console.events.edit.statusScheduled", undefined, "scheduled")}</option>
               <option value="live">{t("console.events.edit.statusLive", undefined, "live")}</option>

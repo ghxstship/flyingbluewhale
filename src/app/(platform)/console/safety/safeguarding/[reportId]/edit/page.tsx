@@ -60,9 +60,14 @@ export default async function Page({ params }: { params: Promise<{ reportId: str
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.safety.safeguarding.edit.status", undefined, "Status")}
+              {t("console.safety.safeguarding.edit.report_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
+            <select
+              name="report_state"
+              defaultValue={row.report_state ?? ""}
+              required
+              className="ps-input focus-ring w-full"
+            >
               <option value="new">new</option>
               <option value="triage">triage</option>
               <option value="investigating">investigating</option>

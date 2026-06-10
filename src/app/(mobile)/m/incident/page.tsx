@@ -20,7 +20,7 @@ type IncidentRow = {
   id: string;
   summary: string;
   severity: string;
-  status: string;
+  incident_state: string;
   location: string | null;
   occurred_at: string;
 };
@@ -48,13 +48,13 @@ export default async function MyIncidentsPage() {
 
   const { data } = await supabase
     .from("incidents")
-    .select("id, summary, severity, status, location, occurred_at")
+    .select("id, summary, severity, incident_state, location, occurred_at")
     .eq("org_id", session.orgId)
     .eq("reporter_id", session.userId)
     .order("occurred_at", { ascending: false })
     .limit(50);
   const rows = (data ?? []) as IncidentRow[];
-  const openCount = rows.filter((r) => r.status === "open" || r.status === "investigating").length;
+  const openCount = rows.filter((r) => r.incident_state === "open" || r.incident_state === "investigating").length;
 
   return (
     <div className="px-4 pt-6 pb-24">
@@ -102,7 +102,7 @@ export default async function MyIncidentsPage() {
                 </div>
                 <h2 className="mt-2 line-clamp-2 text-sm font-semibold">{r.summary}</h2>
                 <div className="mt-1 flex items-center gap-2 text-xs text-[var(--p-text-2)]">
-                  <Badge variant={r.status === "closed" ? "muted" : "info"}>{toTitle(r.status)}</Badge>
+                  <Badge variant={r.incident_state === "closed" ? "muted" : "info"}>{toTitle(r.incident_state)}</Badge>
                   {r.location && <span className="font-mono">{r.location}</span>}
                 </div>
               </Link>

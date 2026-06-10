@@ -67,7 +67,7 @@ export async function computeBudgetSpend(
   const expensesTotal = (expenses ?? []).reduce((s, r) => s + (r.amount_cents ?? 0), 0);
 
   // Paid invoices count as spend too when categorized.
-  let iq = supabase.from("invoices").select("amount_cents").eq("org_id", args.orgId).eq("status", "paid");
+  let iq = supabase.from("invoices").select("amount_cents").eq("org_id", args.orgId).eq("invoice_state", "paid");
   if (args.projectId) iq = iq.eq("project_id", args.projectId);
   const { data: invoices } = await iq;
   const invoicesTotal = (invoices ?? []).reduce((s, r) => s + (r.amount_cents ?? 0), 0);

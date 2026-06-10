@@ -18,7 +18,7 @@ type Sub = {
   id: string;
   submitter_user_id: string;
   talent_profile_id: string | null;
-  status: string;
+  submission_state: string;
   score: number | null;
   internal_notes: string | null;
   cover_note: string | null;
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           { date: new Date(s.submitted_at).toLocaleString() },
           `Submitted ${new Date(s.submitted_at).toLocaleString()}`,
         )}
-        action={<Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>}
+        action={<Badge variant={STATUS_TONE[s.submission_state] ?? "muted"}>{toTitle(s.submission_state)}</Badge>}
       />
       <div className="page-content max-w-2xl space-y-5">
         <section className="surface p-5">
@@ -127,7 +127,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.statusLabel", undefined, "Status")}
               </label>
-              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={s.status}>
+              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={s.submission_state}>
                 {SUBMISSION_STATUSES.map((st) => (
                   <option key={st} value={st}>
                     {st}

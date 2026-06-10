@@ -83,7 +83,7 @@ export async function createPostingAction(_: State, fd: FormData): Promise<State
       vetted_only: parsed.data.vetted_only === "on",
       travel_paid: parsed.data.travel_paid === "on",
       lodging_provided: parsed.data.lodging_provided === "on",
-      status: "draft",
+      job_posting_phase: "draft",
       created_by: session.userId,
     })
     .select("id")
@@ -115,13 +115,13 @@ export async function publishPostingAction(_: State, fd: FormData): Promise<Stat
   const { data, error } = await supabase
     .from("job_postings")
     .update({
-      status: "published",
+      job_posting_phase: "published",
       published_at: new Date().toISOString(),
       expires_at: parsed.data.expires_at || null,
     })
     .eq("id", parsed.data.posting_id)
     .eq("org_id", session.orgId)
-    .eq("status", "draft")
+    .eq("job_posting_phase", "draft")
     .select("id");
 
   if (error) return { error: error.message };
@@ -139,10 +139,10 @@ export async function closePostingAction(_: State, fd: FormData): Promise<State>
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("job_postings")
-    .update({ status: "closed" })
+    .update({ job_posting_phase: "closed" })
     .eq("id", id)
     .eq("org_id", session.orgId)
-    .eq("status", "published")
+    .eq("job_posting_phase", "published")
     .select("id");
   if (error) return { error: error.message };
   if (!data || data.length === 0) return { error: "Only a published posting can be closed" };

@@ -46,7 +46,7 @@ export async function publishRfqAction(_: State, fd: FormData): Promise<State> {
   // Fetch the RFQ to slug from title
   const rfqResp = await supabase
     .from("rfqs")
-    .select("id, title, public_slug, visibility, status")
+    .select("id, title, public_slug, visibility, rfq_state")
     .eq("id", parsed.data.rfq_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -56,7 +56,7 @@ export async function publishRfqAction(_: State, fd: FormData): Promise<State> {
     title: string;
     public_slug: string | null;
     visibility: string;
-    status: string;
+    rfq_state: string;
   };
 
   // Slug is sticky once minted — flipping visibility back and forth must
@@ -76,9 +76,9 @@ export async function publishRfqAction(_: State, fd: FormData): Promise<State> {
       requires_insurance: parsed.data.requires_insurance === "on",
       requires_w9: parsed.data.requires_w9 === "on",
       nda_required: parsed.data.nda_required === "on",
-      status: parsed.data.visibility === "private" ? rfq.status : "sent",
+      rfq_state: parsed.data.visibility === "private" ? rfq.rfq_state : "sent",
       published_at:
-        parsed.data.visibility === "private" ? null : rfq.status === "sent" ? undefined : new Date().toISOString(),
+        parsed.data.visibility === "private" ? null : rfq.rfq_state === "sent" ? undefined : new Date().toISOString(),
     })
     .eq("id", parsed.data.rfq_id)
     .eq("org_id", session.orgId);

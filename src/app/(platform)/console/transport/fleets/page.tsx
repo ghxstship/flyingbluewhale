@@ -26,7 +26,7 @@ type RunRow = {
   id: string;
   fleet: string;
   vehicle_ref: string | null;
-  status: string;
+  run_state: string;
   scheduled_depart: string;
 };
 
@@ -51,7 +51,7 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("dispatch_runs")
-    .select("id, fleet, vehicle_ref, status, scheduled_depart")
+    .select("id, fleet, vehicle_ref, run_state, scheduled_depart")
     .eq("org_id", session.orgId)
     .order("scheduled_depart", { ascending: false })
     .limit(500);
@@ -131,7 +131,7 @@ export default async function Page() {
                     <th>{t("console.transport.fleets.vehicle", undefined, "Vehicle")}</th>
                     <th>{t("console.transport.fleets.totalRuns", undefined, "Total runs")}</th>
                     <th>{t("console.transport.fleets.latestRun", undefined, "Latest run")}</th>
-                    <th>{t("console.transport.fleets.status", undefined, "Status")}</th>
+                    <th>{t("console.transport.fleets.run_state", undefined, "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,16 +152,16 @@ export default async function Page() {
                         <td>
                           <Badge
                             variant={
-                              v.latest.status === "in_transit"
+                              v.latest.run_state === "in_transit"
                                 ? "info"
-                                : v.latest.status === "arrived"
+                                : v.latest.run_state === "arrived"
                                   ? "success"
-                                  : v.latest.status === "delayed"
+                                  : v.latest.run_state === "delayed"
                                     ? "warning"
                                     : "muted"
                             }
                           >
-                            {toTitle(v.latest.status)}
+                            {toTitle(v.latest.run_state)}
                           </Badge>
                         </td>
                       </tr>

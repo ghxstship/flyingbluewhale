@@ -36,7 +36,7 @@ export default async function ImportsPage() {
   const fmt = await getRequestFormatters();
   const { data: runs } = await supabase
     .from("import_runs")
-    .select("id, kind, source, filename, rows_total, rows_imported, rows_failed, status, error, created_at")
+    .select("id, kind, source, filename, rows_total, rows_imported, rows_failed, run_state, error, created_at")
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false })
     .limit(20);
@@ -65,7 +65,7 @@ export default async function ImportsPage() {
                   <th>{t("console.settings.imports.col.source", undefined, "Source")}</th>
                   <th>{t("console.settings.imports.col.imported", undefined, "Imported")}</th>
                   <th>{t("console.settings.imports.col.failed", undefined, "Failed")}</th>
-                  <th>{t("console.settings.imports.col.status", undefined, "Status")}</th>
+                  <th>{t("console.settings.imports.col.run_state", undefined, "Status")}</th>
                   <th>{t("console.settings.imports.col.started", undefined, "Started")}</th>
                 </tr>
               </thead>
@@ -85,9 +85,11 @@ export default async function ImportsPage() {
                       <td className="font-mono text-xs">{r.rows_failed}</td>
                       <td>
                         <Badge
-                          variant={r.status === "succeeded" ? "success" : r.status === "failed" ? "error" : "muted"}
+                          variant={
+                            r.run_state === "succeeded" ? "success" : r.run_state === "failed" ? "error" : "muted"
+                          }
                         >
-                          {r.status}
+                          {r.run_state}
                         </Badge>
                       </td>
                       <td className="font-mono text-xs">{fmt.dateTime(r.created_at)}</td>

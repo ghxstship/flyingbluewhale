@@ -10,7 +10,7 @@ import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   kind: z.string().min(1).max(80),
-  status: z.string(),
+  change_state: z.string(),
   note: z.string().max(2000).optional().or(z.literal("")),
 });
 
@@ -29,7 +29,7 @@ export async function updateAccreditationChange(id: string, _: State, fd: FormDa
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("accreditation_changes", session.orgId, id, expectedUpdatedAt, {
     kind: parsed.data.kind,
-    status: parsed.data.status,
+    change_state: parsed.data.change_state,
     note: parsed.data.note || null,
   });
   if (!result.ok) {

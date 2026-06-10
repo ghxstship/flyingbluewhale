@@ -77,8 +77,8 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
               {t("console.operations.incidents.edit.statusLabel", undefined, "Status")}
             </label>
             <select
-              name="status"
-              defaultValue={(r.status as string | undefined) ?? "open"}
+              name="incident_state"
+              defaultValue={(r.incident_state as string | undefined) ?? "open"}
               className="ps-input mt-1.5 w-full"
               required
             >

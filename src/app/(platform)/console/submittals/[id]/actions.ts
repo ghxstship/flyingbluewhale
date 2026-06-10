@@ -41,7 +41,7 @@ export async function stampRevision(submittalId: string, revisionId: string, fd:
 
   const { error } = await supabase
     .from("submittals")
-    .update({ status: newStatus } as never)
+    .update({ submittal_state: newStatus } as never)
     .eq("org_id", session.orgId)
     .eq("id", submittalId);
   if (error) throw new Error(`Could not update submittal: ${error.message}`);
@@ -61,7 +61,7 @@ export async function addNextRound(submittalId: string): Promise<void> {
   // the race window is small, but the RPC removes it entirely.
   const { data: sub, error: readErr } = await supabase
     .from("submittals")
-    .select("current_round, status")
+    .select("current_round, submittal_state")
     .eq("org_id", session.orgId)
     .eq("id", submittalId)
     .maybeSingle();
@@ -76,7 +76,7 @@ export async function addNextRound(submittalId: string): Promise<void> {
   // revision.
   const { data: updated, error: upErr } = await supabase
     .from("submittals")
-    .update({ current_round: nextRound, status: "submitted" } as never)
+    .update({ current_round: nextRound, submittal_state: "submitted" } as never)
     .eq("org_id", session.orgId)
     .eq("id", submittalId)
     .eq("current_round", observedRound)
@@ -110,10 +110,10 @@ export async function closeSubmittal(submittalId: string): Promise<void> {
   // sends a confusing "closed at <newer time>" through revalidate.
   const { data, error } = await supabase
     .from("submittals")
-    .update({ status: "closed", closed_at: new Date().toISOString() } as never)
+    .update({ submittal_state: "closed", closed_at: new Date().toISOString() } as never)
     .eq("org_id", session.orgId)
     .eq("id", submittalId)
-    .neq("status", "closed")
+    .neq("submittal_state", "closed")
     .select("id");
   if (error) throw new Error(error.message);
   if (!data || data.length === 0) throw new Error("Submittal is already closed");

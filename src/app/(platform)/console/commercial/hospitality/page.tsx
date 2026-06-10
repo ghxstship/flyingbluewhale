@@ -30,7 +30,7 @@ type EntitlementRow = {
   title: string;
   quantity: number;
   delivered: number;
-  status: string;
+  entitlement_state: string;
   due_by: string | null;
 };
 
@@ -79,7 +79,7 @@ export default async function Page() {
       .limit(200),
     supabase
       .from("sponsor_entitlements")
-      .select("id, title, quantity, delivered, status, due_by")
+      .select("id, title, quantity, delivered, entitlement_state, due_by")
       .eq("org_id", session.orgId)
       .ilike("title", "%hospitality%")
       .order("due_by", { ascending: true })
@@ -221,7 +221,7 @@ export default async function Page() {
                       {e.due_by ? ` · ${t("console.commercial.hospitality.due", undefined, "due")} ${e.due_by}` : ""}
                     </div>
                   </div>
-                  <Badge variant={STATUS_TONE[e.status] ?? "muted"}>{toTitle(e.status)}</Badge>
+                  <Badge variant={STATUS_TONE[e.entitlement_state] ?? "muted"}>{toTitle(e.entitlement_state)}</Badge>
                 </li>
               ))}
             </ul>

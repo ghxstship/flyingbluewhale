@@ -14,7 +14,7 @@ type Row = {
   code: string;
   title: string;
   spec_section: string | null;
-  status: string;
+  submittal_state: string;
   created_at: string;
 };
 
@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const supabase = await createClient();
   const { data } = await supabase
     .from("submittals")
-    .select("id,code,title,spec_section,status,created_at")
+    .select("id,code,title,spec_section,submittal_state,created_at")
     .eq("org_id", session.orgId)
     .eq("vendor_id", vendorId)
     .order("created_at", { ascending: false });
@@ -86,10 +86,12 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
               filterable: true,
             },
             {
-              key: "status",
-              header: t("console.procurement.vendors.submittals.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_VARIANT[r.status] ?? "default"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              key: "submittal_state",
+              header: t("console.procurement.vendors.submittals.col.submittal_state", undefined, "Status"),
+              render: (r) => (
+                <Badge variant={STATUS_VARIANT[r.submittal_state] ?? "default"}>{toTitle(r.submittal_state)}</Badge>
+              ),
+              accessor: (r) => r.submittal_state,
               filterable: true,
               groupable: true,
             },

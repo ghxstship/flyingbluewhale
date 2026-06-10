@@ -36,7 +36,7 @@ export default async function GovernancePage() {
       .order("created_at", { ascending: false }),
     supabase
       .from("governance_policies")
-      .select("id, name, category, status, effective_at, next_review_at")
+      .select("id, name, category, policy_state, effective_at, next_review_at")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false }),
   ]);
@@ -96,7 +96,7 @@ export default async function GovernancePage() {
               <tr>
                 <th>{t("console.settings.governance.columns.name", undefined, "Name")}</th>
                 <th>{t("console.settings.governance.columns.category", undefined, "Category")}</th>
-                <th>{t("console.settings.governance.columns.status", undefined, "Status")}</th>
+                <th>{t("console.settings.governance.columns.policy_state", undefined, "Status")}</th>
                 <th>{t("console.settings.governance.columns.nextReview", undefined, "Next review")}</th>
               </tr>
             </thead>
@@ -113,7 +113,9 @@ export default async function GovernancePage() {
                     <td>{p.name}</td>
                     <td className="text-xs text-[var(--p-text-2)]">{p.category ? toTitle(p.category) : "—"}</td>
                     <td>
-                      <Badge variant={p.status === "active" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
+                      <Badge variant={p.policy_state === "active" ? "success" : "muted"}>
+                        {toTitle(p.policy_state)}
+                      </Badge>
                     </td>
                     <td className="font-mono text-xs">
                       {p.next_review_at ? new Date(p.next_review_at).toLocaleDateString() : "—"}

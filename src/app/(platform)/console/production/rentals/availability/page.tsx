@@ -15,7 +15,7 @@ type EquipmentRow = {
   name: string;
   asset_tag: string | null;
   category: string | null;
-  status: "available" | "reserved" | "in_use" | "maintenance" | "retired" | string;
+  equipment_state: "available" | "reserved" | "in_use" | "maintenance" | "retired" | string;
 };
 
 type RentalRow = {
@@ -61,10 +61,10 @@ export default async function Page() {
   const [{ data: equipment }, { data: rentals }] = await Promise.all([
     supabase
       .from("equipment")
-      .select("id, name, asset_tag, category, status")
+      .select("id, name, asset_tag, category, equipment_state")
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
-      .neq("status", "retired")
+      .neq("equipment_state", "retired")
       .order("name", { ascending: true })
       .limit(500),
     supabase
@@ -93,7 +93,7 @@ export default async function Page() {
   }
 
   function statusForDay(eq: EquipmentRow, day: Date): "free" | "booked" | "blocked" {
-    if (eq.status === "maintenance") return "blocked";
+    if (eq.equipment_state === "maintenance") return "blocked";
     const dayStart = new Date(day.getFullYear(), day.getMonth(), day.getDate()).toISOString();
     const dayEnd = new Date(day.getFullYear(), day.getMonth(), day.getDate() + 1).toISOString();
     const list = rentalsByEq.get(eq.id) ?? [];
@@ -101,9 +101,9 @@ export default async function Page() {
   }
 
   // Roll-up: how many available now
-  const availableNow = eqList.filter((e) => e.status === "available").length;
-  const reservedNow = eqList.filter((e) => e.status === "reserved").length;
-  const inUseNow = eqList.filter((e) => e.status === "in_use").length;
+  const availableNow = eqList.filter((e) => e.equipment_state === "available").length;
+  const reservedNow = eqList.filter((e) => e.equipment_state === "reserved").length;
+  const inUseNow = eqList.filter((e) => e.equipment_state === "in_use").length;
 
   return (
     <>
@@ -137,7 +137,7 @@ export default async function Page() {
               <thead>
                 <tr>
                   <th>{t("console.production.rentals.availability.col.asset", undefined, "Asset")}</th>
-                  <th>{t("console.production.rentals.availability.col.status", undefined, "Status")}</th>
+                  <th>{t("console.production.rentals.availability.col.equipment_state", undefined, "Status")}</th>
                   {days.map((d) => (
                     <th key={d.toISOString()} className="text-center text-xs">
                       {fmt.dateParts(d, { weekday: "short", month: "numeric", day: "numeric" })}
@@ -155,7 +155,7 @@ export default async function Page() {
                       </div>
                     </td>
                     <td>
-                      <StatusBadge status={eq.status} />
+                      <StatusBadge status={eq.equipment_state} />
                     </td>
                     {days.map((d) => {
                       const s = statusForDay(eq, d);

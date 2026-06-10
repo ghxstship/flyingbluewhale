@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 type AppRow = {
   id: string;
   applicant_user_id: string;
-  status: string;
+  job_application_state: string;
   score: number | null;
   day_rate_proposed_cents: number | null;
   applied_at: string;
@@ -33,20 +33,20 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
   const [postingResp, appsResp] = await Promise.all([
     supabase
       .from("job_postings")
-      .select("id, title, applicant_count, status")
+      .select("id, title, applicant_count, job_posting_phase")
       .eq("id", postingId)
       .eq("org_id", session.orgId)
       .maybeSingle(),
     supabase
       .from("job_applications")
-      .select("id, applicant_user_id, status, score, day_rate_proposed_cents, applied_at, cover_note")
+      .select("id, applicant_user_id, job_application_state, score, day_rate_proposed_cents, applied_at, cover_note")
       .eq("job_posting_id", postingId)
       .eq("org_id", session.orgId)
       .order("applied_at", { ascending: false })
       .limit(500),
   ]);
   if (!postingResp.data) return notFound();
-  const posting = postingResp.data as { id: string; title: string; applicant_count: number; status: string };
+  const posting = postingResp.data as { id: string; title: string; applicant_count: number; job_posting_phase: string };
   const rows = (appsResp.data ?? []) as AppRow[];
 
   return (
@@ -56,8 +56,8 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
         title={t("console.marketplace.postings.applicants.title", undefined, "Applicants")}
         subtitle={t(
           "console.marketplace.postings.applicants.subtitle",
-          { total: rows.length, unreviewed: rows.filter((r) => r.status === "new").length },
-          `${rows.length} Total · ${rows.filter((r) => r.status === "new").length} unreviewed`,
+          { total: rows.length, unreviewed: rows.filter((r) => r.job_application_state === "new").length },
+          `${rows.length} Total · ${rows.filter((r) => r.job_application_state === "new").length} unreviewed`,
         )}
       />
       <div className="page-content space-y-5">
@@ -85,10 +85,14 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               accessor: (r) => r.applicant_user_id,
             },
             {
-              key: "status",
+              key: "job_application_state",
               header: t("console.marketplace.postings.applicants.columns.stage", undefined, "Stage"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.job_application_state] ?? "muted"}>
+                  {toTitle(r.job_application_state)}
+                </Badge>
+              ),
+              accessor: (r) => r.job_application_state,
               filterable: true,
               groupable: true,
             },

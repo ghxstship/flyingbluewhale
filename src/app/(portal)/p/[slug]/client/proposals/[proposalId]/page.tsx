@@ -108,16 +108,16 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <span className="font-mono text-xs text-[var(--p-text-2)]">{String(p.phase_num).padStart(2, "0")}</span>
                 <Badge
                   variant={
-                    PHASE_STATUS_TONE[p.status] === "muted"
+                    PHASE_STATUS_TONE[p.phase_state] === "muted"
                       ? "muted"
-                      : PHASE_STATUS_TONE[p.status] === "info"
+                      : PHASE_STATUS_TONE[p.phase_state] === "info"
                         ? "info"
-                        : PHASE_STATUS_TONE[p.status] === "warning"
+                        : PHASE_STATUS_TONE[p.phase_state] === "warning"
                           ? "warning"
                           : "success"
                   }
                 >
-                  {PHASE_STATUS_LABEL[p.status]}
+                  {PHASE_STATUS_LABEL[p.phase_state]}
                 </Badge>
               </div>
               <div className="mt-1 text-sm leading-tight font-medium">{p.phase_name}</div>

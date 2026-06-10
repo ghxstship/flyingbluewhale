@@ -63,7 +63,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ payAppId: strin
     application_number: number;
     period_start: string;
     period_end: string;
-    status: string;
+    application_state: string;
     retention_pct: number;
     total_completed_cents: number;
     total_retention_cents: number;
@@ -178,7 +178,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ payAppId: strin
             aia_form_version: pa.aia_form_version,
             period_start: pa.period_start,
             period_end: pa.period_end,
-            status: pa.status,
+            status: pa.application_state,
             submitted_at: pa.submitted_at,
             approved_at: pa.approved_at,
             paid_at: pa.paid_at,

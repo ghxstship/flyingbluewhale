@@ -17,7 +17,7 @@ export default async function ExportsPage() {
   const supabase = await createClient();
   const { data: runs } = await supabase
     .from("export_runs")
-    .select("id, kind, params, status, file_path, size_bytes, row_count, created_at, completed_at, last_error")
+    .select("id, kind, params, run_state, file_path, size_bytes, row_count, created_at, completed_at, last_error")
     .eq("org_id", session.orgId)
     .order("created_at", { ascending: false })
     .limit(50);

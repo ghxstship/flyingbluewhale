@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 type AppRow = {
   id: string;
-  status: string;
+  job_application_state: string;
   applied_at: string;
   cover_note: string | null;
   job_posting_id: string;
@@ -36,7 +36,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
   const supabase = await createClient();
   const { data } = await supabase
     .from("job_applications")
-    .select("id, status, applied_at, cover_note, job_posting_id, posting:job_posting_id(title, public_slug, org_id)")
+    .select(
+      "id, job_application_state, applied_at, cover_note, job_posting_id, posting:job_posting_id(title, public_slug, org_id)",
+    )
     .eq("applicant_user_id", session.userId)
     .order("applied_at", { ascending: false })
     .limit(200);
@@ -98,7 +100,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ a
                   )}
                 </p>
               </div>
-              <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+              <Badge variant={STATUS_TONE[r.job_application_state] ?? "muted"}>
+                {toTitle(r.job_application_state)}
+              </Badge>
             </li>
           ))}
         </ul>

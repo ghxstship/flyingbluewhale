@@ -27,7 +27,7 @@ export function TasksKanban({ rows }: { rows: Task[] }): React.ReactElement {
     <KanbanBoard<Task>
       rows={rows}
       lanes={LANES}
-      laneOf={(r) => r.status}
+      laneOf={(r) => r.task_state}
       hrefOf={(r) => `/console/tasks/${r.id}`}
       onMove={onMove}
       emptyTitle={t("console.tasks.kanban.emptyTitle", undefined, "No tasks yet")}
@@ -43,7 +43,7 @@ export function TasksKanban({ rows }: { rows: Task[] }): React.ReactElement {
             <span className="font-mono text-[10px] text-[var(--p-text-2)]">P{r.priority}</span>
           </div>
           <div className="flex items-center justify-between gap-2">
-            <DueDateBadge dueAt={r.due_at} status={r.status} size="sm" />
+            <DueDateBadge dueAt={r.due_at} status={r.task_state} size="sm" />
           </div>
         </div>
       )}

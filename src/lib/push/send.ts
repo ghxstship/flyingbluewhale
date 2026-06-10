@@ -60,6 +60,14 @@ export type PushPayload = {
 
 export type PushSendResult = { sent: number; failed: number; disabled: number };
 
+export type PushSendOptions = {
+  /** ADR-0010 Move 1 — sendPushTo/Bulk write a `notifications` bell row
+   *  per recipient by default. Callers that already maintain their own
+   *  rows (writeInbox's idempotent upsert, notify()'s emit_notification
+   *  RPC) pass false so the bell doesn't get a duplicate row. */
+  recordBell?: boolean;
+};
+
 type PushSubRow = {
   id: string;
   endpoint: string;
@@ -184,9 +192,11 @@ async function recordNotifications(userIds: string[], payload: PushPayload): Pro
   if (userIds.length === 0) return;
   try {
     const svc = createServiceClient();
-    const rows = userIds.map((userId) => ({
+    const rows: TablesInsert<"notifications">[] = userIds.map((userId) => ({
       user_id: userId,
-      kind: payload.kind ?? null,
+      // Omit kind when the payload has none so the column's 'system'
+      // default applies — an explicit null would violate NOT NULL.
+      ...(payload.kind ? { kind: payload.kind } : {}),
       title: payload.title,
       body: payload.body,
       href: payload.url ?? null,
@@ -194,11 +204,7 @@ async function recordNotifications(userIds: string[], payload: PushPayload): Pro
       project_id: payload.projectId ?? null,
       org_id: payload.orgId ?? null,
     }));
-    // KEPT CAST: the rows deliberately send explicit nulls for kind/org_id
-    // (both NOT NULL in the schema) when the payload omits them — the
-    // generated Insert type rightly rejects that. Fixing the payload is a
-    // behavior change tracked separately (push.record_notifications_error).
-    const { error } = await svc.from("notifications").insert(rows as unknown as TablesInsert<"notifications">[]);
+    const { error } = await svc.from("notifications").insert(rows);
     if (error) log.warn("push.record_notifications_error", { err: error.message, count: rows.length });
   } catch (err) {
     log.warn("push.record_notifications_exception", { err: (err as Error).message });
@@ -307,12 +313,16 @@ async function filterByPushPrefs(userIds: string[], kind: PushKind | undefined):
   return excluded;
 }
 
-export async function sendPushTo(userId: string, payload: PushPayload): Promise<PushSendResult> {
+export async function sendPushTo(
+  userId: string,
+  payload: PushPayload,
+  opts?: PushSendOptions,
+): Promise<PushSendResult> {
   // ADR-0010 Move 1 — write the notifications row BEFORE the push-pref
   // gate. The matrix is the canonical event log, independent of whether
   // the user has push delivery enabled for this kind. Bell on every
   // shell reads from here; push is the optional channel.
-  await recordNotifications([userId], payload);
+  if (opts?.recordBell !== false) await recordNotifications([userId], payload);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   // Pref gate: if the user has toggled this kind off, short-circuit
   // (push channel only — the notifications row above is already written).
@@ -337,12 +347,16 @@ export async function sendPushTo(userId: string, payload: PushPayload): Promise<
   return { sent, failed, disabled };
 }
 
-export async function sendPushBulk(userIds: string[], payload: PushPayload): Promise<PushSendResult> {
+export async function sendPushBulk(
+  userIds: string[],
+  payload: PushPayload,
+  opts?: PushSendOptions,
+): Promise<PushSendResult> {
   if (userIds.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   // ADR-0010 Move 1 — write notifications rows for every recipient
   // before the push-pref gate. Single batch insert; bell on every shell
   // reads from here regardless of push delivery state.
-  await recordNotifications(userIds, payload);
+  if (opts?.recordBell !== false) await recordNotifications(userIds, payload);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
   // Pref gate: drop users who've toggled this kind off before we hit
   // the push_subscriptions read (push channel only).

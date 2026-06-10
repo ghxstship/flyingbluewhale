@@ -74,19 +74,22 @@ export default async function Page() {
   const [{ count: assetCount }, { data: statusData }, { count: locationCount }, { count: maintenanceCount }] =
     await Promise.all([
       supabase.from("equipment").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
-      supabase.from("equipment").select("status").eq("org_id", session.orgId).limit(2000),
+      supabase.from("equipment").select("equipment_state").eq("org_id", session.orgId).limit(2000),
       supabase.from("locations").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
       supabase
         .from("equipment")
         .select("*", { count: "exact", head: true })
         .eq("org_id", session.orgId)
-        .eq("status", "maintenance"),
+        .eq("equipment_state", "maintenance"),
     ]);
 
-  const buckets = ((statusData ?? []) as Array<{ status: string }>).reduce<Record<string, number>>((acc, r) => {
-    acc[r.status] = (acc[r.status] ?? 0) + 1;
-    return acc;
-  }, {});
+  const buckets = ((statusData ?? []) as Array<{ equipment_state: string }>).reduce<Record<string, number>>(
+    (acc, r) => {
+      acc[r.equipment_state] = (acc[r.equipment_state] ?? 0) + 1;
+      return acc;
+    },
+    {},
+  );
 
   return (
     <>

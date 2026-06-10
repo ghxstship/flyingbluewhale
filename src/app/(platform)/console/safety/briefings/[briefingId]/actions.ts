@@ -11,7 +11,7 @@ export async function markConducted(briefingId: string): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("safety_briefings")
-    .update({ status: "conducted", conducted_at: new Date().toISOString() })
+    .update({ briefing_state: "conducted", conducted_at: new Date().toISOString() })
     .eq("id", briefingId)
     .eq("org_id", session.orgId);
   if (error) throw new Error(error.message);

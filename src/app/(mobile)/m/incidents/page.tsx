@@ -15,7 +15,7 @@ type IncidentRow = {
   location: string | null;
   summary: string;
   severity: string;
-  status: string;
+  incident_state: string;
 };
 
 const SEVERITY_TONE: Record<string, "muted" | "warning" | "error"> = {
@@ -60,14 +60,14 @@ export default async function MobileIncidentPage() {
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase
     .from("incidents")
-    .select("id, occurred_at, location, summary, severity, status")
+    .select("id, occurred_at, location, summary, severity, incident_state")
     .eq("org_id", session.orgId)
     .gte("occurred_at", since)
     .order("occurred_at", { ascending: false })
     .limit(50);
   const rows = (data ?? []) as IncidentRow[];
 
-  const open = rows.filter((r) => !["resolved", "closed"].includes(r.status)).length;
+  const open = rows.filter((r) => !["resolved", "closed"].includes(r.incident_state)).length;
   const critical = rows.filter((r) => r.severity === "critical").length;
 
   return (
@@ -113,7 +113,7 @@ export default async function MobileIncidentPage() {
                   {r.location && <div className="mt-1 text-xs text-[var(--p-text-2)]">{r.location}</div>}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                    <Badge variant={STATUS_TONE[r.incident_state] ?? "muted"}>{toTitle(r.incident_state)}</Badge>
                   </div>
                 </div>
               </Link>

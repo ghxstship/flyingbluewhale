@@ -109,19 +109,19 @@ export async function transitionPayApp(id: string, to: "submitted" | "approved" 
 
   const { data: row } = await supabase
     .from("payment_applications")
-    .select("status")
+    .select("application_state")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
   if (!row) throw new Error("Pay app not found");
-  const current = (row as { status: PayAppStatus }).status;
+  const current = (row as { application_state: PayAppStatus }).application_state;
   const allowed = PAYAPP_TRANSITIONS[current] ?? [];
   if (!allowed.includes(to)) {
     throw new Error(`Cannot move ${current} → ${to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
   }
 
   const now = new Date().toISOString();
-  const patch: Record<string, unknown> = { status: to };
+  const patch: Record<string, unknown> = { application_state: to };
   if (to === "submitted") patch.submitted_at = now;
   if (to === "approved") {
     patch.approved_at = now;
@@ -133,7 +133,7 @@ export async function transitionPayApp(id: string, to: "submitted" | "approved" 
     .update(patch as never)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", current as "draft")
+    .eq("application_state", current as "draft")
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {

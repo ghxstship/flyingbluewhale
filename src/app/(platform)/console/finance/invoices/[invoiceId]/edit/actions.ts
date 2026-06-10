@@ -55,7 +55,7 @@ export async function deleteInvoice(id: string): Promise<void> {
   // Hard-deleting an invoice cascades onto invoice_line_items and
   // breaks Stripe-webhook reconciliation (which still receives
   // payment events for the deleted PI). Soft-delete preserves the
-  // record + the .neq("status","paid") guard below refuses to
+  // record + the .neq("invoice_state","paid") guard below refuses to
   // tombstone an already-paid invoice (use refund/void flows for
   // those — the audit trail must keep the paid record intact).
   const { error } = await supabase
@@ -63,7 +63,7 @@ export async function deleteInvoice(id: string): Promise<void> {
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id)
     .eq("org_id", session.orgId)
-    .neq("status", "paid")
+    .neq("invoice_state", "paid")
     .is("deleted_at", null);
   if (error) throw new Error(`Could not archive invoice: ${error.message}`);
   revalidatePath("/console/finance/invoices");

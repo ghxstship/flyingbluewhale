@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
         project_id: project.id,
         title: r.title,
         description: r.description ?? null,
-        status: r.status,
+        task_state: r.status,
         priority: r.priority ?? 3,
         due_at: r.due_at ?? null,
         created_by: session.userId,
@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
           rowsTotal: result.rowCount,
           rowsImported: 0,
           rowsFailed: result.rowCount,
-          status: "failed",
+          run_state: "failed",
           error: error.message,
         });
         return apiError("internal", error.message);
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
       rowsTotal: result.rowCount,
       rowsImported: insertedCount,
       rowsFailed: result.invalid.length,
-      status: "succeeded",
+      run_state: "succeeded",
     });
 
     return apiCreated({

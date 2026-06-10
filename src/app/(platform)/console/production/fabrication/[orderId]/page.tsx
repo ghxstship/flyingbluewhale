@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
   const { t } = await getRequestT();
   const { data: row } = await supabase
     .from("fabrication_orders")
-    .select("id, title, description, status, due_at, project_id, created_at")
+    .select("id, title, description, production_phase, due_at, project_id, created_at")
     .eq("org_id", session.orgId)
     .eq("id", orderId)
     .maybeSingle();
@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
     );
   }
 
-  const transitions = NEXT[row.status as FabricationStatus];
+  const transitions = NEXT[row.production_phase as FabricationStatus];
 
   return (
     <>
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             {transitions.map((b) => (
               <form key={b.to} action={setFabStatus} className="inline">
                 <input type="hidden" name="id" value={row.id} />
-                <input type="hidden" name="status" value={b.to} />
+                <input type="hidden" name="production_phase" value={b.to} />
                 <button
                   type="submit"
                   className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
@@ -109,8 +109,8 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
         <section className="surface p-5">
           <div className="grid grid-cols-2 gap-4">
             <Field
-              label={t("console.production.fabrication.detail.fields.status", undefined, "Status")}
-              value={<StatusBadge status={row.status} />}
+              label={t("console.production.fabrication.detail.fields.production_phase", undefined, "Status")}
+              value={<StatusBadge status={row.production_phase} />}
             />
             <Field
               label={t("console.production.fabrication.detail.fields.due", undefined, "Due")}

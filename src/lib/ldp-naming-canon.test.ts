@@ -32,11 +32,12 @@ const MIGRATIONS_DIR = join(REPO_ROOT, "supabase/migrations");
 // this spec is meant to catch.
 const LEGACY_ALLOWLIST = new Set<string>([
   // The 2026-06-06 migration squash consolidated all pre-squash history
-  // (incl. the 75 grandfathered legacy `status` columns inventoried in
-  // reports/AUDIT_2026-06-09_HARDENING_PLAN.md §6.3) into this single
-  // baseline. TEMPORARY: the approved status-column rename program
-  // (plan Phase 6) migrates every bare `status` column to *_phase/*_state,
-  // after which this entry is removed and the allowlist goes empty.
+  // into this single baseline, whose TEXT still declares the legacy
+  // `status` columns. The live schema has ZERO bare status columns since
+  // migration 20260609220000_ldp_status_rename (69 renames + 6 drops —
+  // see docs/LDP_STATUS_RENAME_MAP.md). This entry remains only because
+  // an applied migration file is immutable history; it is not a grant
+  // for new `status` columns anywhere.
   "20260606230000_baseline.sql",
 ]);
 

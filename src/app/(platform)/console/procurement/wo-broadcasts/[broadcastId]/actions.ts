@@ -9,12 +9,12 @@ async function guardBroadcastEditable(broadcastId: string, orgId: string): Promi
   const supabase = await createClient();
   const { data } = await supabase
     .from("work_order_broadcasts")
-    .select("status")
+    .select("broadcast_state")
     .eq("id", broadcastId)
     .eq("org_id", orgId)
     .maybeSingle();
   if (!data) return false;
-  const s = (data as { status: string }).status;
+  const s = (data as { broadcast_state: string }).broadcast_state;
   // Lock invitee management once the broadcast is awarded / closed /
   // cancelled — at that point the invitee list is a historical record
   // of who got the ping, not a live roster.
@@ -60,7 +60,7 @@ export async function inviteVendor(fd: FormData): Promise<void> {
     org_id: session.orgId,
     broadcast_id: parsed.data.broadcastId,
     vendor_id: parsed.data.vendor_id,
-    status: "invited",
+    invite_state: "invited",
   });
   if (inviteErr) throw new Error(`Could not invite vendor: ${inviteErr.message}`);
 
@@ -105,28 +105,28 @@ export async function awardToInvite(fd: FormData): Promise<void> {
   const supabase = await createClient();
   const { data: invite } = await supabase
     .from("work_order_broadcast_invites")
-    .select("id, vendor_id, status")
+    .select("id, vendor_id, invite_state")
     .eq("id", parsed.data.inviteId)
     .eq("broadcast_id", parsed.data.broadcastId)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!invite) return;
-  const inv = invite as { id: string; vendor_id: string; status: string };
+  const inv = invite as { id: string; vendor_id: string; invite_state: string };
 
   // Conditional update on the parent so two simultaneous awards don't
-  // both succeed — the .eq("status", "open") guard means only the
+  // both succeed — the .eq("invite_state", "open") guard means only the
   // first wins; the second sees zero rows updated and returns.
   const { data: updated, error: awardErr } = await supabase
     .from("work_order_broadcasts")
     .update({
-      status: "awarded",
+      broadcast_state: "awarded",
       awarded_to_vendor_id: inv.vendor_id,
       awarded_at: new Date().toISOString(),
       awarded_by: session.userId,
     })
     .eq("id", parsed.data.broadcastId)
     .eq("org_id", session.orgId)
-    .eq("status", "open")
+    .eq("broadcast_state", "open")
     .select("id");
   if (awardErr) throw new Error(`Could not award broadcast: ${awardErr.message}`);
   if (!updated || updated.length === 0) return; // already awarded / closed
@@ -136,7 +136,7 @@ export async function awardToInvite(fd: FormData): Promise<void> {
   // history of who responded how.
   const { error: acceptErr } = await supabase
     .from("work_order_broadcast_invites")
-    .update({ status: "accepted", responded_at: new Date().toISOString() })
+    .update({ invite_state: "accepted", responded_at: new Date().toISOString() })
     .eq("id", inv.id)
     .eq("org_id", session.orgId);
   if (acceptErr) throw new Error(`Could not accept invite: ${acceptErr.message}`);
@@ -147,7 +147,7 @@ export async function awardToInvite(fd: FormData): Promise<void> {
 
 const StatusSchema = z.object({
   broadcastId: z.string().uuid(),
-  status: z.enum(["draft", "open", "closed", "cancelled"]),
+  broadcast_state: z.enum(["draft", "open", "closed", "cancelled"]),
 });
 
 export async function transitionBroadcast(fd: FormData): Promise<void> {
@@ -159,7 +159,7 @@ export async function transitionBroadcast(fd: FormData): Promise<void> {
   const supabase = await createClient();
   const { error: transitionErr } = await supabase
     .from("work_order_broadcasts")
-    .update({ status: parsed.data.status })
+    .update({ broadcast_state: parsed.data.broadcast_state })
     .eq("id", parsed.data.broadcastId)
     .eq("org_id", session.orgId);
   if (transitionErr) throw new Error(`Could not transition broadcast: ${transitionErr.message}`);

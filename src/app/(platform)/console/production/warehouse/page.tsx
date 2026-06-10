@@ -97,17 +97,21 @@ export default async function Page() {
         .eq("org_id", session.orgId)
         .gte("ends_at", new Date().toISOString())
         .limit(500),
-      supabase.from("equipment").select("status").eq("org_id", session.orgId).is("deleted_at", null).limit(2000),
+      supabase
+        .from("equipment")
+        .select("equipment_state")
+        .eq("org_id", session.orgId)
+        .is("deleted_at", null)
+        .limit(2000),
     ]);
 
   const activeRentals = (rentalsData ?? []).length;
-  const statusBuckets = ((equipmentByStatus ?? []) as Array<{ status: string }>).reduce<Record<string, number>>(
-    (acc, r) => {
-      acc[r.status] = (acc[r.status] ?? 0) + 1;
-      return acc;
-    },
-    {},
-  );
+  const statusBuckets = ((equipmentByStatus ?? []) as Array<{ equipment_state: string }>).reduce<
+    Record<string, number>
+  >((acc, r) => {
+    acc[r.equipment_state] = (acc[r.equipment_state] ?? 0) + 1;
+    return acc;
+  }, {});
 
   return (
     <>

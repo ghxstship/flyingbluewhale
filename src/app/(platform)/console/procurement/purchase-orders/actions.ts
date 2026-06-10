@@ -95,22 +95,22 @@ export async function setPoStatusAction(
   // → draft and overwrite the historical record.
   const { data: row } = await supabase
     .from("purchase_orders")
-    .select("status")
+    .select("po_state")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
   if (!row) return { error: "Purchase order not found" };
-  const current = row.status as string;
+  const current = row.po_state as string;
   const allowed = PO_TRANSITIONS[current] ?? [];
   if (!allowed.includes(status)) {
     return { error: `Cannot move ${current} → ${status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
   }
   const { data: updated, error } = await supabase
     .from("purchase_orders")
-    .update({ status })
+    .update({ po_state: status as "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled" })
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", current as "draft")
+    .eq("po_state", current as "draft")
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) return { error: "PO status changed concurrently — refresh and retry" };

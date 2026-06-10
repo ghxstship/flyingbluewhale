@@ -18,7 +18,7 @@ type EquipmentRow = {
   name: string;
   asset_tag: string | null;
   category: string | null;
-  status: string;
+  equipment_state: string;
   serial: string | null;
   notes: string | null;
 };
@@ -44,7 +44,7 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("equipment")
-    .select("id, name, asset_tag, category, status, serial, notes")
+    .select("id, name, asset_tag, category, equipment_state, serial, notes")
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .order("name", { ascending: true })
@@ -129,10 +129,10 @@ export default async function Page() {
               accessor: (r) => r.serial ?? null,
             },
             {
-              key: "status",
-              header: t("console.production.av.columns.status", undefined, "Status"),
-              render: (r) => <StatusBadge status={r.status} />,
-              accessor: (r) => r.status,
+              key: "equipment_state",
+              header: t("console.production.av.columns.equipment_state", undefined, "Status"),
+              render: (r) => <StatusBadge status={r.equipment_state} />,
+              accessor: (r) => r.equipment_state,
               filterable: true,
               groupable: true,
             },

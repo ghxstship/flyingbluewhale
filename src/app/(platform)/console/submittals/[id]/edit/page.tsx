@@ -48,7 +48,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const [{ data }, { data: projects }, { data: vendors }, { data: users }] = await Promise.all([
     supabase
       .from("submittals")
-      .select("id, code, title, project_id, spec_section, vendor_id, ball_in_court_id, status, due_at, updated_at")
+      .select(
+        "id, code, title, project_id, spec_section, vendor_id, ball_in_court_id, submittal_state, due_at, updated_at",
+      )
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),

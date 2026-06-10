@@ -33,7 +33,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
   const sp = await searchParams;
   const view = VALID_VIEWS.has(sp.view ?? "") ? (sp.view as "list" | "kanban") : "list";
   const rows = await listOrgScoped("tasks", session.orgId, { orderBy: "due_at", ascending: true });
-  const open = rows.filter((r) => r.status !== "done").length;
+  const open = rows.filter((r) => r.task_state !== "done").length;
   return (
     <>
       <ModuleHeader
@@ -64,7 +64,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
           </a>
         </div>
         {view === "kanban" ? (
-          <TasksKanban rows={rows as Array<Task & { status: TaskStatus }>} />
+          <TasksKanban rows={rows as Array<Task & { task_state: TaskStatus }>} />
         ) : (
           <DataTable<Task>
             rows={rows}
@@ -79,8 +79,8 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
               {
                 key: "status",
                 header: t("console.tasks.columns.status", undefined, "Status"),
-                render: (r) => <StatusBadge status={r.status} />,
-                accessor: (r) => r.status,
+                render: (r) => <StatusBadge status={r.task_state} />,
+                accessor: (r) => r.task_state,
                 filterable: true,
                 groupable: true,
               },
@@ -98,7 +98,7 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
                 render: (r) => (
                   <span className="inline-flex items-center gap-2">
                     {formatDate(r.due_at, "medium")}
-                    <DueDateBadge dueAt={r.due_at} status={r.status} iconOnly size="sm" />
+                    <DueDateBadge dueAt={r.due_at} status={r.task_state} iconOnly size="sm" />
                   </span>
                 ),
                 className: "font-mono text-xs",

@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     .select("id")
     .eq("job_posting_id", r.id)
     .eq("applicant_user_id", session.userId)
-    .neq("status", "withdrawn")
+    .neq("job_application_state", "withdrawn")
     .maybeSingle();
   if (existing) {
     return (

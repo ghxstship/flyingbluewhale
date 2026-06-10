@@ -24,7 +24,7 @@ export default async function DispatchPage() {
   const [{ data: events }, { data: rentals }] = await Promise.all([
     supabase
       .from("events")
-      .select("id, name, status, starts_at, ends_at, project_id")
+      .select("id, name, event_state, starts_at, ends_at, project_id")
       .eq("org_id", session.orgId)
       .gte("starts_at", nowIso)
       .lte("starts_at", in48h)
@@ -39,7 +39,7 @@ export default async function DispatchPage() {
   const eventRows = (events ?? []) as Array<{
     id: string;
     name: string;
-    status: string;
+    event_state: string;
     starts_at: string;
     ends_at: string;
     project_id: string | null;
@@ -76,7 +76,7 @@ export default async function DispatchPage() {
                       {fmtDateTime(e.starts_at)} → {fmtDateTime(e.ends_at)}
                     </div>
                   </div>
-                  <StatusBadge status={e.status ?? "draft"} />
+                  <StatusBadge status={e.event_state ?? "draft"} />
                 </Link>
               </li>
             ))}

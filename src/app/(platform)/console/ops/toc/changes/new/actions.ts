@@ -39,7 +39,7 @@ export async function createChange(_: State, fd: FormData): Promise<State> {
     type: parsed.data.type,
     risk: parsed.data.risk,
     impact: parsed.data.impact,
-    status: "proposed",
+    change_state: "proposed",
     requested_by: session.userId,
     planned_start: parsed.data.planned_start || null,
     planned_end: parsed.data.planned_end || null,

@@ -76,19 +76,21 @@ export default async function Page({ params }: { params: Promise<{ ceremonyId: s
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.programs.ceremonies.edit.fields.status", undefined, "Status")}
+              {t("console.programs.ceremonies.edit.fields.event_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
-              <option value="draft">{t("console.programs.ceremonies.edit.status.draft", undefined, "draft")}</option>
-              <option value="scheduled">
-                {t("console.programs.ceremonies.edit.status.scheduled", undefined, "scheduled")}
+            <select name="status" defaultValue={row.event_state ?? ""} required className="ps-input focus-ring w-full">
+              <option value="draft">
+                {t("console.programs.ceremonies.edit.event_state.draft", undefined, "draft")}
               </option>
-              <option value="live">{t("console.programs.ceremonies.edit.status.live", undefined, "live")}</option>
+              <option value="scheduled">
+                {t("console.programs.ceremonies.edit.event_state.scheduled", undefined, "scheduled")}
+              </option>
+              <option value="live">{t("console.programs.ceremonies.edit.event_state.live", undefined, "live")}</option>
               <option value="complete">
-                {t("console.programs.ceremonies.edit.status.complete", undefined, "complete")}
+                {t("console.programs.ceremonies.edit.event_state.complete", undefined, "complete")}
               </option>
               <option value="cancelled">
-                {t("console.programs.ceremonies.edit.status.cancelled", undefined, "cancelled")}
+                {t("console.programs.ceremonies.edit.event_state.cancelled", undefined, "cancelled")}
               </option>
             </select>
           </label>

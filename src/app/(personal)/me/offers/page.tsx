@@ -16,7 +16,7 @@ type Offer = {
   performance_date: string;
   fee_cents: number;
   currency: string;
-  status: string;
+  talent_offer_state: string;
   deposit_pct: number;
   talent_profile_id: string;
 };
@@ -34,7 +34,7 @@ export default async function Page() {
   if (profileIds.length > 0) {
     const { data } = await supabase
       .from("talent_offers")
-      .select("id, performance_date, fee_cents, currency, status, deposit_pct, talent_profile_id")
+      .select("id, performance_date, fee_cents, currency, talent_offer_state, deposit_pct, talent_profile_id")
       .in("talent_profile_id", profileIds)
       .order("performance_date", { ascending: false })
       .limit(200);
@@ -81,8 +81,10 @@ export default async function Page() {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                {(o.status === "sent" || o.status === "countered") && <MyOfferActions offerId={o.id} />}
-                <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>
+                {(o.talent_offer_state === "sent" || o.talent_offer_state === "countered") && (
+                  <MyOfferActions offerId={o.id} />
+                )}
+                <Badge variant={STATUS_TONE[o.talent_offer_state] ?? "muted"}>{toTitle(o.talent_offer_state)}</Badge>
               </div>
             </li>
           ))}

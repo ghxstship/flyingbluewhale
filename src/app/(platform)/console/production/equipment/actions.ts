@@ -64,19 +64,19 @@ const EQUIPMENT_TRANSITIONS: Record<z.infer<typeof StatusEnum>, readonly z.infer
 export async function setEquipmentStatus(formData: FormData): Promise<void> {
   const session = await requireSession();
   const id = String(formData.get("id") ?? "");
-  const next = StatusEnum.safeParse(formData.get("status"));
+  const next = StatusEnum.safeParse(formData.get("equipment_state"));
   if (!id) throw new Error("Missing equipment id");
   if (!next.success) throw new Error("Invalid target status");
 
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("equipment")
-    .select("status")
+    .select("equipment_state")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (!row) throw new Error("Equipment not found");
-  const current = row.status as z.infer<typeof StatusEnum>;
+  const current = row.equipment_state as z.infer<typeof StatusEnum>;
   const allowed = EQUIPMENT_TRANSITIONS[current] ?? [];
   if (!allowed.includes(next.data)) {
     throw new Error(`Cannot move ${current} → ${next.data}. Allowed: ${allowed.join(", ") || "(terminal — retired)"}`);
@@ -85,10 +85,10 @@ export async function setEquipmentStatus(formData: FormData): Promise<void> {
   // Conditional update closes the TOCTOU between SELECT and write.
   const { data: updated, error } = await supabase
     .from("equipment")
-    .update({ status: next.data as EquipmentStatus })
+    .update({ equipment_state: next.data as EquipmentStatus })
     .eq("id", id)
     .eq("org_id", session.orgId)
-    .eq("status", current)
+    .eq("equipment_state", current)
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {

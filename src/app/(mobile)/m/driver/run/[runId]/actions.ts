@@ -36,13 +36,13 @@ export async function transitionRun(
   // conditional update — the field PWA doubles up clicks all the time.
   const { data: row } = await supabase
     .from("dispatch_runs")
-    .select("status")
+    .select("run_state")
     .eq("id", runId)
     .eq("org_id", session.orgId)
     .eq("driver_id", session.userId)
     .maybeSingle();
   if (!row) return { error: "Run not found" };
-  const current = (row as { status: string }).status;
+  const current = (row as { run_state: string }).run_state;
   const allowed = RUN_TRANSITIONS[current] ?? [];
   if (!allowed.includes(target)) {
     return { error: `Cannot move ${current} → ${target}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
@@ -51,10 +51,10 @@ export async function transitionRun(
   const now = new Date().toISOString();
   const patch =
     transition === "depart"
-      ? { status: "in_transit", actual_depart: now }
+      ? { run_state: "in_transit", actual_depart: now }
       : transition === "arrive"
-        ? { status: "arrived", actual_arrive: now }
-        : { status: "cancelled" };
+        ? { run_state: "arrived", actual_arrive: now }
+        : { run_state: "cancelled" };
 
   const { data: updated, error } = await supabase
     .from("dispatch_runs")
@@ -62,7 +62,7 @@ export async function transitionRun(
     .eq("id", runId)
     .eq("org_id", session.orgId)
     .eq("driver_id", session.userId)
-    .eq("status", current as "scheduled")
+    .eq("run_state", current as "scheduled")
     .select("id");
 
   if (error) return { error: error.message };

@@ -50,7 +50,11 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
       .eq("project_id", project.id)
       .maybeSingle(),
     supabase.from("expenses").select("amount_cents").eq("org_id", session.orgId).eq("project_id", project.id),
-    supabase.from("invoices").select("amount_cents, status").eq("org_id", session.orgId).eq("project_id", project.id),
+    supabase
+      .from("invoices")
+      .select("amount_cents, invoice_state")
+      .eq("org_id", session.orgId)
+      .eq("project_id", project.id),
   ]);
   const b = budget as {
     budget_cents: number;
@@ -63,8 +67,8 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
     (s, e) => s + (e.amount_cents ?? 0),
     0,
   );
-  const invoiceTotal = ((invoicesRes.data ?? []) as Array<{ amount_cents: number; status: string }>)
-    .filter((i) => i.status === "paid")
+  const invoiceTotal = ((invoicesRes.data ?? []) as Array<{ amount_cents: number; invoice_state: string }>)
+    .filter((i) => i.invoice_state === "paid")
     .reduce((s, i) => s + (i.amount_cents ?? 0), 0);
   const margin = invoiceTotal - expenseTotal;
   const fmtMoney = (cents: number) => (cents / 100).toLocaleString("en-US", { style: "currency", currency });

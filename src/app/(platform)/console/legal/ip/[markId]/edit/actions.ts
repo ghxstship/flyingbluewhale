@@ -12,7 +12,7 @@ const Schema = z.object({
   mark: z.string().min(1).max(200),
   jurisdiction: z.string().max(120).optional().or(z.literal("")),
   registration_no: z.string().max(120).optional().or(z.literal("")),
-  status: z.string().max(60).optional().or(z.literal("")),
+  trademark_state: z.string().max(60).optional().or(z.literal("")),
   registered_on: z.string().optional().or(z.literal("")),
   expires_on: z.string().optional().or(z.literal("")),
 });
@@ -34,7 +34,7 @@ export async function updateTrademark(id: string, _: State, fd: FormData): Promi
     mark: parsed.data.mark,
     jurisdiction: parsed.data.jurisdiction || null,
     registration_no: parsed.data.registration_no || null,
-    status: parsed.data.status || "pending",
+    trademark_state: parsed.data.trademark_state || "pending",
     registered_on: parsed.data.registered_on || null,
     expires_on: parsed.data.expires_on || null,
   });

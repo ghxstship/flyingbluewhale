@@ -21,10 +21,10 @@ export default async function CatalogPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("equipment")
-    .select("id, name, category, asset_tag, daily_rate_cents, status")
+    .select("id, name, category, asset_tag, daily_rate_cents, equipment_state")
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
-    .neq("status", "retired")
+    .neq("equipment_state", "retired")
     .order("category", { ascending: true, nullsFirst: false })
     .order("name", { ascending: true });
   const rows = (data ?? []) as Array<{
@@ -33,7 +33,7 @@ export default async function CatalogPage() {
     category: string | null;
     asset_tag: string | null;
     daily_rate_cents: number | null;
-    status: string;
+    equipment_state: string;
   }>;
   const grouped = new Map<string, typeof rows>();
   for (const r of rows) {
@@ -92,7 +92,7 @@ export default async function CatalogPage() {
                     <th>{t("console.procurement.catalog.column.name", undefined, "Name")}</th>
                     <th>{t("console.procurement.catalog.column.assetTag", undefined, "Asset tag")}</th>
                     <th>{t("console.procurement.catalog.column.dailyRate", undefined, "Daily rate")}</th>
-                    <th>{t("console.procurement.catalog.column.status", undefined, "Status")}</th>
+                    <th>{t("console.procurement.catalog.column.equipment_state", undefined, "Status")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -105,7 +105,7 @@ export default async function CatalogPage() {
                       </td>
                       <td className="font-mono text-xs">{i.asset_tag ?? "—"}</td>
                       <td className="font-mono text-xs">{money(i.daily_rate_cents)}</td>
-                      <td className="font-mono text-xs">{toTitle(i.status)}</td>
+                      <td className="font-mono text-xs">{toTitle(i.equipment_state)}</td>
                     </tr>
                   ))}
                 </tbody>

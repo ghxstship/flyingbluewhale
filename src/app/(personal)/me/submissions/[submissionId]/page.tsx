@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 type Sub = {
   id: string;
   org_id: string;
-  status: string;
+  submission_state: string;
   cover_note: string | null;
   fee_proposed_cents: number | null;
   submitted_at: string;
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
       </div>
       <div className="mt-1 flex items-center gap-2">
         <h1 className="text-display text-3xl">#{s.id.slice(0, 8)}</h1>
-        <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>
+        <Badge variant={STATUS_TONE[s.submission_state] ?? "muted"}>{toTitle(s.submission_state)}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         {t(
@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
             <div className="mt-1 font-mono text-sm">{formatMoney(s.fee_proposed_cents)}</div>
           </div>
         )}
-        {s.status === "awarded" && (
+        {s.submission_state === "awarded" && (
           <div className="card-elevated flex items-center justify-between p-4">
             <div>
               <div className="text-label text-[var(--color-text-tertiary)]">

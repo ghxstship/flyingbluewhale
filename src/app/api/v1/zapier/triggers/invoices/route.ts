@@ -18,10 +18,10 @@ export async function GET() {
     const { data, error } = await supabase
       .from("invoices")
       .select(
-        "id, number, title, status, amount_cents, currency, client_id, project_id, issued_at, due_at, paid_at, created_at, updated_at",
+        "id, number, title, invoice_state, amount_cents, currency, client_id, project_id, issued_at, due_at, paid_at, created_at, updated_at",
       )
       .eq("org_id", session.orgId)
-      .eq("status", "paid")
+      .eq("invoice_state", "paid")
       .not("paid_at", "is", null)
       .order("paid_at", { ascending: false })
       .limit(50);

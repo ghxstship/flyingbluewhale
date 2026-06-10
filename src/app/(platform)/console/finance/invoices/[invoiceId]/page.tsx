@@ -27,7 +27,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
       <ModuleHeader
         eyebrow={invoice.number}
         title={invoice.title}
-        subtitle={`${formatMoney(invoice.amount_cents, invoice.currency)} · ${invoice.status}`}
+        subtitle={`${formatMoney(invoice.amount_cents, invoice.currency)} · ${invoice.invoice_state}`}
         breadcrumbs={[
           {
             label: t("console.finance.invoices.breadcrumbs.finance", undefined, "Finance"),
@@ -41,7 +41,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
         ]}
         action={
           <div className="flex items-center gap-2">
-            <InvoiceStatusControls id={invoice.id} status={invoice.status} />
+            <InvoiceStatusControls id={invoice.id} status={invoice.invoice_state} />
             <Button href={`/console/finance/invoices/${invoiceId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>
@@ -59,7 +59,7 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
       <div className="page-content space-y-6">
         <div className="metric-grid">
           <Field label={t("console.finance.invoices.fields.status", undefined, "Status")}>
-            <StatusBadge status={invoice.status} />
+            <StatusBadge status={invoice.invoice_state} />
           </Field>
           <Field label={t("console.finance.invoices.fields.amount", undefined, "Amount")} mono>
             {formatMoney(invoice.amount_cents, invoice.currency)}

@@ -203,10 +203,10 @@ describe("runAutomation", () => {
     expect(echoAction.mock.calls[0][0]).toEqual({ value: 7 });
 
     expect(db.tables.automation_runs).toHaveLength(1);
-    expect(db.tables.automation_runs[0].status).toBe("success");
+    expect(db.tables.automation_runs[0].run_state).toBe("success");
     expect(db.tables.automation_runs[0].action_count).toBe(2);
     expect(db.tables.automation_step_runs).toHaveLength(2);
-    expect(db.tables.automation_step_runs.every((r) => r.status === "success")).toBe(true);
+    expect(db.tables.automation_step_runs.every((r) => r.step_state === "success")).toBe(true);
   });
 
   it("resolves {{trigger.*}} placeholders before validating step input", async () => {
@@ -249,13 +249,13 @@ describe("runAutomation", () => {
     expect(failingAction).toHaveBeenCalledTimes(1);
 
     const run = db.tables.automation_runs[0];
-    expect(run.status).toBe("failed");
+    expect(run.run_state).toBe("failed");
     expect(run.error_summary).toContain("boom");
 
     const steps = db.tables.automation_step_runs;
     expect(steps).toHaveLength(2); // noop succeeded + failing step recorded
-    expect(steps[0].status).toBe("success");
-    expect(steps[1].status).toBe("failed");
+    expect(steps[0].step_state).toBe("success");
+    expect(steps[1].step_state).toBe("failed");
     expect(steps[1].error).toContain("boom");
   });
 
@@ -266,7 +266,7 @@ describe("runAutomation", () => {
 
     expect(result.status).toBe("failed");
     expect(noopAction).not.toHaveBeenCalled();
-    expect(db.tables.automation_step_runs[0].status).toBe("failed");
+    expect(db.tables.automation_step_runs[0].step_state).toBe("failed");
     expect(db.tables.automation_step_runs[0].error).toContain("validation failed");
   });
 
@@ -292,7 +292,7 @@ describe("runAutomation", () => {
       id: "preexisting-run-id",
       automation_id: id,
       org_id: "org-1",
-      status: "pending",
+      run_state: "pending",
     });
 
     const result = await runAutomation({
@@ -303,7 +303,7 @@ describe("runAutomation", () => {
 
     expect(result.runId).toBe("preexisting-run-id");
     expect(db.tables.automation_runs).toHaveLength(1);
-    expect(db.tables.automation_runs[0].status).toBe("success");
+    expect(db.tables.automation_runs[0].run_state).toBe("success");
   });
 
   it("registry contains the registered fake actions", () => {
@@ -337,9 +337,9 @@ describe("runAutomation", () => {
 
     const stepRows = db.tables.automation_step_runs.sort((a, b) => Number(a.step_index) - Number(b.step_index));
     expect(stepRows).toHaveLength(3);
-    expect(stepRows[0].status).toBe("success");
-    expect(stepRows[1].status).toBe("skipped");
-    expect(stepRows[2].status).toBe("success");
+    expect(stepRows[0].step_state).toBe("success");
+    expect(stepRows[1].step_state).toBe("skipped");
+    expect(stepRows[2].step_state).toBe("success");
   });
 
   it("runs a step whose condition resolves to true", async () => {

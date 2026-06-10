@@ -23,7 +23,7 @@ type PlaybookRow = {
   id: string;
   slug: string;
   title: string;
-  status: string;
+  playbook_state: string;
   version: number;
   updated_at: string;
 };
@@ -70,7 +70,7 @@ export default async function Page() {
       .limit(50),
     supabase
       .from("playbooks")
-      .select("id, slug, title, status, version, updated_at")
+      .select("id, slug, title, playbook_state, version, updated_at")
       .eq("org_id", session.orgId)
       .eq("kind", "crisis")
       .order("updated_at", { ascending: false })
@@ -80,7 +80,7 @@ export default async function Page() {
   const exercises = (exData ?? []) as ExerciseRow[];
   const playbooks = (pbData ?? []) as PlaybookRow[];
   const upcoming = exercises.filter((e) => e.scheduled_at && new Date(e.scheduled_at).getTime() >= Date.now());
-  const published = playbooks.filter((p) => p.status === "published").length;
+  const published = playbooks.filter((p) => p.playbook_state === "published").length;
 
   return (
     <>
@@ -145,7 +145,9 @@ export default async function Page() {
                     </Link>
                     <div className="font-mono text-xs text-[var(--p-text-2)]">v{p.version}</div>
                   </div>
-                  <Badge variant={p.status === "published" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
+                  <Badge variant={p.playbook_state === "published" ? "success" : "muted"}>
+                    {toTitle(p.playbook_state)}
+                  </Badge>
                 </li>
               ))
             )}

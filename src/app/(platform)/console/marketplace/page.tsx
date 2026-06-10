@@ -31,21 +31,23 @@ export default async function Page() {
   const fmt = await getRequestFormatters();
 
   const [postings, calls, offers, applications] = await Promise.all([
-    supabase.from("job_postings").select("id, status").eq("org_id", session.orgId),
-    supabase.from("open_calls").select("id, status").eq("org_id", session.orgId),
-    supabase.from("talent_offers").select("id, status").eq("org_id", session.orgId),
-    supabase.from("job_applications").select("id, status").eq("org_id", session.orgId),
+    supabase.from("job_postings").select("id, job_posting_phase").eq("org_id", session.orgId),
+    supabase.from("open_calls").select("id, open_call_phase").eq("org_id", session.orgId),
+    supabase.from("talent_offers").select("id, talent_offer_state").eq("org_id", session.orgId),
+    supabase.from("job_applications").select("id, job_application_state").eq("org_id", session.orgId),
   ]);
 
-  const postingRows = (postings.data ?? []) as Array<{ status: string }>;
-  const callRows = (calls.data ?? []) as Array<{ status: string }>;
-  const offerRows = (offers.data ?? []) as Array<{ status: string }>;
-  const appRows = (applications.data ?? []) as Array<{ status: string }>;
+  const postingRows = (postings.data ?? []) as Array<{ job_posting_phase: string }>;
+  const callRows = (calls.data ?? []) as Array<{ open_call_phase: string }>;
+  const offerRows = (offers.data ?? []) as Array<{ talent_offer_state: string }>;
+  const appRows = (applications.data ?? []) as Array<{ job_application_state: string }>;
 
-  const publishedPostings = postingRows.filter((r) => r.status === "published").length;
-  const publishedCalls = callRows.filter((r) => r.status === "published").length;
-  const liveOffers = offerRows.filter((r) => r.status === "sent" || r.status === "countered").length;
-  const newApplicants = appRows.filter((r) => r.status === "new").length;
+  const publishedPostings = postingRows.filter((r) => r.job_posting_phase === "published").length;
+  const publishedCalls = callRows.filter((r) => r.open_call_phase === "published").length;
+  const liveOffers = offerRows.filter(
+    (r) => r.talent_offer_state === "sent" || r.talent_offer_state === "countered",
+  ).length;
+  const newApplicants = appRows.filter((r) => r.job_application_state === "new").length;
 
   return (
     <>

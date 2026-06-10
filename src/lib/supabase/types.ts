@@ -119,7 +119,7 @@ export type Annotation = {
   parent_id: string | null;
   kind: AnnotationKind;
   severity: AnnotationSeverity;
-  status: AnnotationStatus;
+  annotation_state: AnnotationStatus;
   title: string | null;
   body: string;
   tags: string[];
@@ -273,7 +273,7 @@ export type Proposal = {
   client_id: string | null;
   title: string;
   amount_cents: number | null;
-  status: ProposalStatus;
+  proposal_state: ProposalStatus;
   sent_at: string | null;
   signed_at: string | null;
   expires_at: string | null;
@@ -330,7 +330,7 @@ export type Invoice = {
   title: string;
   amount_cents: number;
   currency: string;
-  status: InvoiceStatus;
+  invoice_state: InvoiceStatus;
   issued_at: string | null;
   due_at: string | null;
   paid_at: string | null;
@@ -357,7 +357,7 @@ export type Expense = {
   description: string;
   amount_cents: number;
   currency: string;
-  status: ExpenseStatus;
+  expense_state: ExpenseStatus;
   receipt_path: string | null;
   spent_at: string;
   created_at: string;
@@ -469,7 +469,7 @@ export type Requisition = {
   title: string;
   description: string | null;
   estimated_cents: number | null;
-  status: ReqStatus;
+  requisition_state: ReqStatus;
   created_at: string;
   updated_at: string;
 };
@@ -483,7 +483,7 @@ export type PurchaseOrder = {
   title: string;
   amount_cents: number;
   currency: string;
-  status: POStatus;
+  po_state: POStatus;
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -505,7 +505,7 @@ export type Equipment = {
   category: string | null;
   asset_tag: string | null;
   serial: string | null;
-  status: EquipmentStatus;
+  equipment_state: EquipmentStatus;
   location_id: string | null;
   daily_rate_cents: number | null;
   notes: string | null;
@@ -532,7 +532,7 @@ export type FabricationOrder = {
   title: string;
   description: string | null;
   due_at: string | null;
-  status: FabricationStatus;
+  production_phase: FabricationStatus;
   created_at: string;
   updated_at: string;
 };
@@ -544,7 +544,7 @@ export type Task = {
   project_id: string | null;
   title: string;
   description: string | null;
-  status: TaskStatus;
+  task_state: TaskStatus;
   priority: number;
   due_at: string | null;
   assigned_to: string | null;
@@ -560,7 +560,7 @@ export type EventRow = {
   starts_at: string;
   ends_at: string;
   location_id: string | null;
-  status: EventStatus;
+  event_state: EventStatus;
   description: string | null;
   created_by: string | null;
   created_at: string;
@@ -695,7 +695,7 @@ export type Risk = {
   impact: RiskImpact;
   inherent_score: number;
   residual_score: number | null;
-  status: RiskStatus;
+  risk_state: RiskStatus;
   owner_id: string | null;
   treatment: string | null;
   due_on: string | null;
@@ -816,7 +816,7 @@ export type AccreditationChange = {
   accreditation_id: string;
   kind: string;
   requested_by: string | null;
-  status: string;
+  change_state: string;
   decided_by: string | null;
   decided_at: string | null;
   note: string | null;
@@ -888,7 +888,7 @@ export type Incident = {
   summary: string;
   description: string | null;
   severity: string;
-  status: string;
+  incident_state: string;
   photos: unknown;
   ai_summary: string | null;
   created_at: string;
@@ -905,7 +905,7 @@ export type Threat = {
   treatment: "mitigate" | "accept" | "transfer" | "avoid";
   classification: string;
   owner_id: string | null;
-  status: "draft" | "active" | "closed" | "superseded";
+  threat_state: "draft" | "active" | "closed" | "superseded";
   active: boolean;
   created_at: string;
   updated_at: string;
@@ -919,7 +919,7 @@ export type Playbook = {
   kind: string;
   content: unknown;
   version: number;
-  status: "draft" | "published" | "archived";
+  playbook_state: "draft" | "published" | "archived";
   owner_id: string | null;
   created_at: string;
   updated_at: string;
@@ -933,7 +933,7 @@ export type GuardTour = {
   route: unknown;
   cadence_minutes: number | null;
   next_run_at: string | null;
-  status: "scheduled" | "in_progress" | "completed" | "cancelled" | "overdue";
+  tour_state: "scheduled" | "in_progress" | "completed" | "cancelled" | "overdue";
   guard_id: string | null;
   started_at: string | null;
   completed_at: string | null;
@@ -948,7 +948,7 @@ export type Campaign = {
   description: string | null;
   channel: string;
   kind: string;
-  status: "draft" | "scheduled" | "live" | "paused" | "complete" | "cancelled";
+  campaign_state: "draft" | "scheduled" | "live" | "paused" | "complete" | "cancelled";
   starts_on: string | null;
   ends_on: string | null;
   budget_cents: number;
@@ -973,7 +973,7 @@ export type ServiceRequest = {
   requester_email: string | null;
   requester_name: string | null;
   assigned_to: string | null;
-  status: "open" | "acknowledged" | "in_progress" | "resolved" | "cancelled";
+  request_state: "open" | "acknowledged" | "in_progress" | "resolved" | "cancelled";
   opened_at: string;
   acknowledged_at: string | null;
   resolved_at: string | null;
@@ -1048,7 +1048,7 @@ export type MajorIncident = {
   closed_at: string | null;
   ics_roles: unknown;
   timeline: unknown;
-  status: string;
+  incident_state: string;
   created_at: string;
   updated_at: string;
 };
@@ -1059,7 +1059,7 @@ export type SafeguardingReport = {
   subject_ref: string | null;
   narrative: string;
   evidence_paths: unknown;
-  status: string;
+  report_state: string;
   assigned_to: string | null;
   created_at: string;
   updated_at: string;
@@ -1133,7 +1133,7 @@ export type DelegationEntry = {
   discipline: string | null;
   event: string | null;
   participant_name: string;
-  status: string;
+  entry_state: string;
   created_at: string;
   updated_at: string;
 };
@@ -1144,7 +1144,7 @@ export type VisaCase = {
   person_name: string;
   nationality: string | null;
   passport_no: string | null;
-  status: string;
+  case_state: string;
   letter_path: string | null;
   created_at: string;
   updated_at: string;
@@ -1169,7 +1169,7 @@ export type RateCardOrder = {
   catalog: string;
   delegation_id: string | null;
   requester_id: string | null;
-  status: string;
+  order_state: string;
   total_cents: number;
   currency: string;
   line_items: unknown;
@@ -1190,7 +1190,7 @@ export type DispatchRun = {
   actual_depart: string | null;
   actual_arrive: string | null;
   manifest: unknown;
-  status: string;
+  run_state: string;
   created_at: string;
   updated_at: string;
 };
@@ -1205,7 +1205,7 @@ export type AdManifest = {
   party_size: number;
   delegation_id: string | null;
   notes: string | null;
-  status: string;
+  manifest_state: string;
   created_at: string;
   updated_at: string;
 };
@@ -1231,7 +1231,7 @@ export type SponsorEntitlement = {
   title: string;
   quantity: number;
   delivered: number;
-  status: string;
+  entitlement_state: string;
   due_by: string | null;
   evidence_path: string | null;
   created_at: string;
@@ -1243,7 +1243,7 @@ export type DsarRequest = {
   requester_user_id: string | null;
   requester_email: string;
   kind: DsarKind;
-  status: DsarStatus;
+  request_state: DsarStatus;
   identity_verified: boolean;
   due_by: string | null;
   fulfilled_at: string | null;
@@ -1270,7 +1270,7 @@ export type Trademark = {
   registration_no: string | null;
   registered_on: string | null;
   expires_on: string | null;
-  status: string;
+  trademark_state: string;
   created_at: string;
   updated_at: string;
 };
@@ -1347,7 +1347,7 @@ export type FormDef = {
   title: string;
   description: string | null;
   schema: Record<string, unknown>;
-  status: "draft" | "published" | "archived";
+  form_state: "draft" | "published" | "archived";
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -1360,7 +1360,7 @@ export type Rfq = {
   project_id: string | null;
   title: string;
   description: string | null;
-  status: "draft" | "sent" | "closed" | "awarded" | "cancelled";
+  rfq_state: "draft" | "sent" | "closed" | "awarded" | "cancelled";
   due_at: string | null;
   awarded_to_vendor_id: string | null;
   created_by: string | null;
@@ -1377,7 +1377,7 @@ export type Cue = {
   lane: "show" | "lights" | "audio" | "video" | "talent" | "safety" | "transport";
   label: string;
   description: string | null;
-  status: "pending" | "standby" | "live" | "done" | "skipped";
+  cue_state: "pending" | "standby" | "live" | "done" | "skipped";
   owner_id: string | null;
   duration_seconds: number | null;
   created_by: string | null;
@@ -1413,7 +1413,7 @@ export type OrgIntegration = {
   id: string;
   org_id: string;
   connector: string;
-  status: string;
+  integration_state: string;
   config: Record<string, unknown>;
   installed_at: string | null;
   last_error: string | null;
@@ -1429,7 +1429,7 @@ export type ImportRun = {
   rows_total: number;
   rows_imported: number;
   rows_failed: number;
-  status: string;
+  run_state: string;
   error: string | null;
   log: unknown;
   created_by: string | null;
@@ -1456,7 +1456,7 @@ export type GovernancePolicy = {
   effective_at: string | null;
   reviewed_at: string | null;
   next_review_at: string | null;
-  status: string;
+  policy_state: string;
   owner_user_id: string | null;
   created_at: string;
 };
@@ -1499,7 +1499,7 @@ export type DailyLog = {
   weather_wind_mph: number | null;
   weather_source: string | null;
   notes: string | null;
-  status: "draft" | "submitted" | "approved";
+  log_state: "draft" | "submitted" | "approved";
   submitted_by: string | null;
   submitted_at: string | null;
   approved_by: string | null;
@@ -1652,7 +1652,7 @@ export type Inspection = {
   code: string;
   name: string;
   category: string | null;
-  status: "scheduled" | "in_progress" | "passed" | "failed" | "cancelled";
+  inspection_state: "scheduled" | "in_progress" | "passed" | "failed" | "cancelled";
   inspector_id: string | null;
   scheduled_for: string | null;
   started_at: string | null;
@@ -1687,7 +1687,7 @@ export type Rfi = {
   category: string | null;
   asked_by: string | null;
   ball_in_court_id: string | null;
-  status: "open" | "answered" | "closed" | "void";
+  rfi_state: "open" | "answered" | "closed" | "void";
   priority: "low" | "normal" | "high" | "urgent";
   due_at: string | null;
   asked_at: string;
@@ -1710,7 +1710,7 @@ export type Submittal = {
   spec_section: string | null;
   vendor_id: string | null;
   ball_in_court_id: string | null;
-  status:
+  submittal_state:
     | "draft"
     | "submitted"
     | "in_review"
@@ -1748,7 +1748,7 @@ export type PunchList = {
   project_id: string;
   name: string;
   category: string | null;
-  status: "open" | "closed";
+  list_state: "open" | "closed";
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -1761,7 +1761,7 @@ export type PunchItem = {
   code: string;
   title: string;
   description: string | null;
-  status: "open" | "in_progress" | "ready_for_review" | "complete" | "void";
+  item_state: "open" | "in_progress" | "ready_for_review" | "complete" | "void";
   priority: "low" | "normal" | "high" | "urgent";
   assignee_id: string | null;
   vendor_id: string | null;
@@ -1786,7 +1786,7 @@ export type PaymentApplication = {
   application_number: number;
   period_start: string;
   period_end: string;
-  status: "draft" | "submitted" | "in_review" | "approved" | "rejected" | "paid";
+  application_state: "draft" | "submitted" | "in_review" | "approved" | "rejected" | "paid";
   retention_pct: number;
   total_completed_cents: number;
   total_retention_cents: number;
@@ -1824,7 +1824,7 @@ export type PoChangeOrder = {
   title: string;
   description: string | null;
   reason: string | null;
-  status: "proposed" | "submitted" | "in_review" | "approved" | "rejected" | "void";
+  change_order_state: "proposed" | "submitted" | "in_review" | "approved" | "rejected" | "void";
   amount_cents: number;
   schedule_impact_days: number;
   proposed_at: string;
@@ -1898,7 +1898,14 @@ export type VendorPrequalification = {
   org_id: string;
   vendor_id: string;
   questionnaire_id: string;
-  status: "invited" | "in_progress" | "submitted" | "approved" | "approved_conditional" | "rejected" | "expired";
+  prequalification_state:
+    | "invited"
+    | "in_progress"
+    | "submitted"
+    | "approved"
+    | "approved_conditional"
+    | "rejected"
+    | "expired";
   score: number | null;
   approved_at: string | null;
   approved_by: string | null;
@@ -1929,7 +1936,7 @@ export type SafetyBriefing = {
   conducted_at: string | null;
   notes: string | null;
   attachment_path: string | null;
-  status: "scheduled" | "conducted" | "cancelled";
+  briefing_state: "scheduled" | "conducted" | "cancelled";
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -1980,7 +1987,7 @@ export type WorkOrderBroadcast = {
   category: string | null;
   budget_cents: number | null;
   needed_by: string | null;
-  status: "draft" | "open" | "closed" | "awarded" | "cancelled";
+  broadcast_state: "draft" | "open" | "closed" | "awarded" | "cancelled";
   awarded_to_vendor_id: string | null;
   awarded_at: string | null;
   awarded_by: string | null;
@@ -1993,7 +2000,7 @@ export type WorkOrderBroadcastInvite = {
   org_id: string;
   broadcast_id: string;
   vendor_id: string;
-  status: "invited" | "viewed" | "accepted" | "declined";
+  invite_state: "invited" | "viewed" | "accepted" | "declined";
   responded_at: string | null;
   notes: string | null;
   created_at: string;
@@ -2005,7 +2012,7 @@ export type PoChecklistItem = {
   position: number;
   prompt: string;
   requires_photo: boolean;
-  status: "pending" | "complete" | "skipped";
+  item_state: "pending" | "complete" | "skipped";
   completed_at: string | null;
   completed_by: string | null;
   photo_path: string | null;

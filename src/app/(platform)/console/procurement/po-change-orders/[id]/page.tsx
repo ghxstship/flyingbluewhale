@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const lines = (linesData ?? []) as unknown as LineRow[];
   const linesTotal = lines.reduce((acc, l) => acc + Math.round(Number(l.quantity) * l.unit_price_cents), 0);
   const totalsMatch = lines.length === 0 || linesTotal === co.amount_cents;
-  const editable = co.status === "draft" || co.status === "submitted";
+  const editable = co.change_order_state === "draft" || co.change_order_state === "submitted";
 
   return (
     <>
@@ -74,14 +74,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${po?.number ?? "—"} · ${po?.vendor?.name ?? ""}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[co.status] ?? "muted"}>{toTitle(co.status)}</Badge>
-            {co.status === "proposed" && (
+            <Badge variant={STATUS_TONE[co.change_order_state] ?? "muted"}>{toTitle(co.change_order_state)}</Badge>
+            {co.change_order_state === "proposed" && (
               <StatusForm
                 action={transitionPoChangeOrder.bind(null, id, "submitted")}
                 label={t("common.submit", undefined, "Submit")}
               />
             )}
-            {(co.status === "submitted" || co.status === "in_review") && (
+            {(co.change_order_state === "submitted" || co.change_order_state === "in_review") && (
               <>
                 <StatusForm
                   action={transitionPoChangeOrder.bind(null, id, "approved")}

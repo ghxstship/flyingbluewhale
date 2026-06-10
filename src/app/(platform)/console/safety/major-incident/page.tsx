@@ -67,8 +67,8 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.safety.majorIncident.columns.status", undefined, "Status"),
-              render: (r) => String(r.status ?? "—"),
-              accessor: (r) => r.status ?? null,
+              render: (r) => String(r.incident_state ?? "—"),
+              accessor: (r) => r.incident_state ?? null,
               filterable: true,
               groupable: true,
             },

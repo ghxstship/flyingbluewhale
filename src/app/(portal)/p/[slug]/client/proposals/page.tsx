@@ -60,9 +60,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           },
           {
             key: "status",
-            header: t("p.client.proposals.col.status", undefined, "Status"),
-            render: (r) => <StatusBadge status={r.status} />,
-            accessor: (r) => r.status,
+            header: t("p.client.proposals.col.proposal_state", undefined, "Status"),
+            render: (r) => <StatusBadge status={r.proposal_state} />,
+            accessor: (r) => r.proposal_state,
             filterable: true,
             groupable: true,
           },

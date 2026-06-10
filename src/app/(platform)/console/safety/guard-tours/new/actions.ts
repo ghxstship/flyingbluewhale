@@ -51,7 +51,7 @@ export async function createGuardTour(_: State, fd: FormData): Promise<State> {
     route: [],
     cadence_minutes: cadence,
     next_run_at: nextRunAt,
-    status: cadence ? "scheduled" : "scheduled",
+    tour_state: cadence ? "scheduled" : "scheduled",
   });
   if (error) return actionFail(error.message, fd);
   revalidatePath("/console/safety/guard-tours");

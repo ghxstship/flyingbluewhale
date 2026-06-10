@@ -11,7 +11,7 @@ const Schema = z.object({
   title: z.string().min(1).max(160),
   quantity: z.coerce.number().int().min(0).max(1_000_000).default(1),
   due_by: z.string().optional(),
-  status: z.string().max(40).optional(),
+  entitlement_state: z.string().max(40).optional(),
 });
 
 export type State = {
@@ -33,7 +33,7 @@ export async function createEntitlement(_: State, fd: FormData): Promise<State> 
       title: parsed.data.title,
       quantity: parsed.data.quantity,
       due_by: parsed.data.due_by || null,
-      status: parsed.data.status || "open",
+      entitlement_state: parsed.data.entitlement_state || "open",
     })
     .select("id")
     .single();

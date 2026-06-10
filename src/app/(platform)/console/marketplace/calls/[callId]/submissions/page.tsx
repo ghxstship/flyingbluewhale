@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 type Row = {
   id: string;
   submitter_user_id: string;
-  status: string;
+  submission_state: string;
   score: number | null;
   fee_proposed_cents: number | null;
   cover_note: string | null;
@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
       .maybeSingle(),
     supabase
       .from("open_call_submissions")
-      .select("id, submitter_user_id, status, score, fee_proposed_cents, cover_note, submitted_at")
+      .select("id, submitter_user_id, submission_state, score, fee_proposed_cents, cover_note, submitted_at")
       .eq("open_call_id", callId)
       .eq("org_id", session.orgId)
       .order("submitted_at", { ascending: false })
@@ -55,8 +55,8 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
         title={t("console.marketplace.calls.submissions.title", undefined, "Submissions")}
         subtitle={t(
           "console.marketplace.calls.submissions.subtitle",
-          { total: rows.length, unreviewed: rows.filter((r) => r.status === "submitted").length },
-          `${rows.length} Total · ${rows.filter((r) => r.status === "submitted").length} unreviewed`,
+          { total: rows.length, unreviewed: rows.filter((r) => r.submission_state === "submitted").length },
+          `${rows.length} Total · ${rows.filter((r) => r.submission_state === "submitted").length} unreviewed`,
         )}
       />
       <div className="page-content space-y-5">
@@ -84,10 +84,12 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               accessor: (r) => r.submitter_user_id,
             },
             {
-              key: "status",
+              key: "submission_state",
               header: t("console.marketplace.calls.submissions.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.submission_state] ?? "muted"}>{toTitle(r.submission_state)}</Badge>
+              ),
+              accessor: (r) => r.submission_state,
               filterable: true,
               groupable: true,
             },

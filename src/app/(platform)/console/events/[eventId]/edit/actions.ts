@@ -15,7 +15,7 @@ const Schema = z
     description: z.string().max(4000).optional().or(z.literal("")),
     starts_at: z.string().min(1),
     ends_at: z.string().min(1),
-    status: z.string(),
+    event_state: z.string(),
   })
   // Sea Trial R2 FINDING-018: ends_at must not precede starts_at.
   .refine(...dateRangeRefine("starts_at", "ends_at"));
@@ -38,7 +38,7 @@ export async function updateEvent(id: string, _: State, fd: FormData): Promise<S
     description: parsed.data.description || null,
     starts_at: new Date(parsed.data.starts_at).toISOString(),
     ends_at: new Date(parsed.data.ends_at).toISOString(),
-    status: parsed.data.status as "draft" | "scheduled" | "live" | "complete" | "cancelled",
+    event_state: parsed.data.event_state as "draft" | "scheduled" | "live" | "complete" | "cancelled",
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Event not found." };

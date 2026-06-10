@@ -10,7 +10,7 @@ import { formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   kind: z.string(),
-  status: z.string(),
+  manifest_state: z.string(),
   flight_ref: z.string().max(80).optional().or(z.literal("")),
   carrier: z.string().max(120).optional().or(z.literal("")),
   party_size: z.string().optional(),
@@ -34,7 +34,7 @@ export async function updateAdManifest(id: string, _: State, fd: FormData): Prom
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("ad_manifests", session.orgId, id, expectedUpdatedAt, {
     kind: parsed.data.kind,
-    status: parsed.data.status,
+    manifest_state: parsed.data.manifest_state,
     flight_ref: parsed.data.flight_ref || null,
     carrier: parsed.data.carrier || null,
     party_size: parsed.data.party_size ? Number(parsed.data.party_size) : 0,

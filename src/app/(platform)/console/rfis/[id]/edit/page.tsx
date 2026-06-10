@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     supabase
       .from("rfis")
       .select(
-        "id, code, subject, question, project_id, category, ball_in_court_id, priority, status, due_at, official_answer",
+        "id, code, subject, question, project_id, category, ball_in_court_id, priority, rfi_state, due_at, official_answer",
       )
       .eq("id", id)
       .eq("org_id", session.orgId)

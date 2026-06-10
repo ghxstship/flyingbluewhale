@@ -12,7 +12,7 @@ type FormRow = {
   id: string;
   title: string;
   slug: string;
-  status: string;
+  form_state: string;
   description: string | null;
   created_at: string;
   updated_at: string;
@@ -39,7 +39,7 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("form_defs")
-    .select("id, title, slug, status, description, created_at, updated_at")
+    .select("id, title, slug, form_state, description, created_at, updated_at")
     .eq("org_id", session.orgId)
     .order("updated_at", { ascending: false })
     .limit(500);
@@ -90,10 +90,10 @@ export default async function Page() {
               accessor: (r) => r.slug ?? null,
             },
             {
-              key: "status",
-              header: t("console.forms.column.status", undefined, "Status"),
-              render: (r) => r.status,
-              accessor: (r) => r.status,
+              key: "form_state",
+              header: t("console.forms.column.form_state", undefined, "Status"),
+              render: (r) => r.form_state,
+              accessor: (r) => r.form_state,
               filterable: true,
               groupable: true,
             },

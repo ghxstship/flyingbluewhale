@@ -69,14 +69,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
       .order("starts_at", { ascending: true }),
     supabase
       .from("tasks")
-      .select("id, title, due_at, status, project_id")
+      .select("id, title, due_at, task_state, project_id")
       .eq("org_id", session.orgId)
       .gte("due_at", start)
       .lt("due_at", end)
       .order("due_at", { ascending: true }),
     supabase
       .from("dispatch_runs")
-      .select("id, fleet, vehicle_ref, status, scheduled_depart, scheduled_arrive")
+      .select("id, fleet, vehicle_ref, run_state, scheduled_depart, scheduled_arrive")
       .eq("org_id", session.orgId)
       .gte("scheduled_depart", start)
       .lt("scheduled_depart", end)
@@ -96,7 +96,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
     id: string;
     fleet: string | null;
     vehicle_ref: string | null;
-    status: string | null;
+    run_state: string | null;
     scheduled_depart: string;
     scheduled_arrive: string | null;
   };
@@ -124,7 +124,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
       tone: "info",
     });
   }
-  for (const task of (tasks ?? []) as Array<{ id: string; title: string; due_at: string; status: string }>) {
+  for (const task of (tasks ?? []) as Array<{ id: string; title: string; due_at: string; task_state: string }>) {
     const startH = asHour(task.due_at, focus);
     blocks.push({
       laneId: "venue:unassigned",
@@ -133,7 +133,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
       label: task.title,
       href: `/console/tasks/${task.id}`,
       source: "task",
-      tone: task.status === "done" ? "muted" : "warning",
+      tone: task.task_state === "done" ? "muted" : "warning",
     });
   }
   for (const r of runRows) {

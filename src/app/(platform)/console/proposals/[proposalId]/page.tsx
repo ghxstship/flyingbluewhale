@@ -55,8 +55,8 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
             <Link href={`/console/proposals/${proposal.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("console.proposals.detail.editDocument", undefined, "Edit Document")}
             </Link>
-            <ProposalStatusControls id={proposal.id} status={proposal.status} />
-            {proposal.status === "signed" && !project && <ProposalConvertButton id={proposal.id} />}
+            <ProposalStatusControls id={proposal.id} status={proposal.proposal_state} />
+            {proposal.proposal_state === "signed" && !project && <ProposalConvertButton id={proposal.id} />}
             {project && (
               <Link href={`/console/projects/${project.id}`} className="ps-btn ps-btn--sm">
                 {t("console.proposals.detail.viewProject", undefined, "View Project")}
@@ -67,8 +67,8 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label={t("console.proposals.detail.fields.status", undefined, "Status")}>
-            <StatusBadge status={proposal.status} />
+          <Field label={t("console.proposals.detail.fields.proposal_state", undefined, "Status")}>
+            <StatusBadge status={proposal.proposal_state} />
           </Field>
           <Field label={t("console.proposals.detail.fields.amount", undefined, "Amount")}>
             {formatMoney(proposal.amount_cents ?? 0)}

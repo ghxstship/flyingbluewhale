@@ -37,7 +37,7 @@ const Schema = z.object({
     .max(120)
     .regex(/^[a-z0-9-]+$/, "Lowercase letters, digits, dashes only"),
   description: z.string().max(2000).optional(),
-  status: z.enum(["draft", "published", "archived"]),
+  form_state: z.enum(["draft", "published", "archived"]),
   schema_json: z.string().min(2),
 });
 
@@ -55,7 +55,7 @@ export async function updateFormDefAction(_: State, fd: FormData): Promise<State
     title: fd.get("title"),
     slug: fd.get("slug"),
     description: fd.get("description") || undefined,
-    status: fd.get("status"),
+    form_state: fd.get("form_state"),
     schema_json: fd.get("schema_json"),
   });
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -77,7 +77,7 @@ export async function updateFormDefAction(_: State, fd: FormData): Promise<State
     title: parsed.data.title,
     slug: parsed.data.slug,
     description: parsed.data.description || null,
-    status: parsed.data.status,
+    form_state: parsed.data.form_state,
     schema: parsedSchema,
   });
   if (!result.ok) {

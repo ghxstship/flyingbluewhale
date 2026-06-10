@@ -30,18 +30,18 @@ export async function transitionPoChangeOrder(id: string, to: PoChangeOrderStatu
 
   const { data: co } = await supabase
     .from("po_change_orders")
-    .select("status, amount_cents, purchase_order_id")
+    .select("change_order_state, amount_cents, purchase_order_id")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
   if (!co) throw new Error("Change order not found");
-  const current = (co as { status: PoChangeOrderStatus }).status;
+  const current = (co as { change_order_state: PoChangeOrderStatus }).change_order_state;
   const allowed = PO_CO_TRANSITIONS[current] ?? [];
   if (!allowed.includes(to)) {
     throw new Error(`Cannot move ${current} → ${to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
   }
 
-  const patch: Record<string, unknown> = { status: to };
+  const patch: Record<string, unknown> = { change_order_state: to };
   if (to === "approved") {
     patch.approved_at = new Date().toISOString();
     patch.approved_by = session.userId;
@@ -55,7 +55,7 @@ export async function transitionPoChangeOrder(id: string, to: PoChangeOrderStatu
     .update(patch as never)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", current as "draft")
+    .eq("change_order_state", current as "draft")
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {
@@ -108,12 +108,12 @@ async function guardCoEditable(coId: string, orgId: string): Promise<boolean> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("po_change_orders")
-    .select("status")
+    .select("change_order_state")
     .eq("id", coId)
     .eq("org_id", orgId)
     .maybeSingle();
   if (!data) return false;
-  const s = (data as { status: PoChangeOrderStatus }).status;
+  const s = (data as { change_order_state: PoChangeOrderStatus }).change_order_state;
   // Lines are locked once the CO leaves the proposed/draft window — after
   // submit, the bid is "in flight" and shouldn't drift under the
   // approver's feet.

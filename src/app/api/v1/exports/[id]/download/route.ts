@@ -15,13 +15,13 @@ export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string
     const supabase = await createClient();
     const { data: run, error } = await supabase
       .from("export_runs")
-      .select("id, file_path, status, org_id")
+      .select("id, file_path, run_state, org_id")
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle();
     if (error) return apiError("internal", error.message);
     if (!run) return apiError("not_found", "Export run not found");
-    if (run.status !== "done" || !run.file_path) {
+    if (run.run_state !== "done" || !run.file_path) {
       return apiError("bad_request", "Run is not complete");
     }
     // Signed URLs for storage require service role on private buckets

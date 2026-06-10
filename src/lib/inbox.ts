@@ -93,7 +93,9 @@ export async function writeInbox(entry: InboxEntry): Promise<{ inboxed: boolean;
       tag: `${entry.sourceType}:${entry.sourceId}`,
       kind: pushKind,
     };
-    const result = await sendPushTo(entry.userId, payload);
+    // recordBell: false — the upsert above IS this event's bell row;
+    // letting sendPushTo write its own would double up the inbox.
+    const result = await sendPushTo(entry.userId, payload, { recordBell: false });
     pushed = result.sent > 0;
   }
 
@@ -149,7 +151,8 @@ export async function writeInboxBulk(
       tag: `${entry.sourceType}:${entry.sourceId}`,
       kind: pushKind,
     };
-    const result = await sendPushBulk(userIds, payload);
+    // recordBell: false — the bulk upsert above already wrote the rows.
+    const result = await sendPushBulk(userIds, payload, { recordBell: false });
     pushed = result.sent;
   }
 

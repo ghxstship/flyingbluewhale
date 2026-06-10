@@ -132,13 +132,13 @@ export default async function Page({
     // automation_runs may not yet be in the generated database.types.ts;
     // cast through unknown to keep the page compiling pre-typegen.
     .from("automation_runs" as never)
-    .select("id, trigger_kind, status, started_at, finished_at, action_count, error_summary, triggered_by")
+    .select("id, trigger_kind, run_state, started_at, finished_at, action_count, error_summary, triggered_by")
     .eq("automation_id", automationId)
     .order("started_at", { ascending: false })
     .limit(200);
 
   if (statusFilter !== "all") {
-    query = query.eq("status", statusFilter);
+    query = query.eq("run_state", statusFilter);
   }
 
   const { data: runsData } = await query;

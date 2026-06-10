@@ -12,7 +12,7 @@ const Schema = z.object({
   person_name: z.string().min(1).max(200),
   nationality: z.string().max(120).optional().or(z.literal("")),
   passport_no: z.string().max(80).optional().or(z.literal("")),
-  status: z.string(),
+  case_state: z.string(),
 });
 
 export type State = {
@@ -32,7 +32,7 @@ export async function updateVisaCase(id: string, _: State, fd: FormData): Promis
     person_name: parsed.data.person_name,
     nationality: parsed.data.nationality || null,
     passport_no: parsed.data.passport_no || null,
-    status: parsed.data.status,
+    case_state: parsed.data.case_state,
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Visa Case not found." };

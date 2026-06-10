@@ -38,7 +38,7 @@ export async function createThreat(_: State, fd: FormData): Promise<State> {
     likelihood: parsed.data.likelihood,
     treatment: parsed.data.treatment,
     classification: parsed.data.classification,
-    status: "active",
+    threat_state: "active",
   });
   if (error) return actionFail(error.message, fd);
   revalidatePath("/console/safety/threats");

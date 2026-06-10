@@ -68,7 +68,7 @@ export function CueForm() {
   );
 }
 
-const NEXT_STATUS: Record<Cue["status"], { to: Cue["status"]; label: string }[]> = {
+const NEXT_STATUS: Record<Cue["cue_state"], { to: Cue["cue_state"]; label: string }[]> = {
   pending: [
     { to: "standby", label: "Standby" },
     { to: "skipped", label: "Skip" },
@@ -85,7 +85,7 @@ const NEXT_STATUS: Record<Cue["status"], { to: Cue["status"]; label: string }[]>
 export function CueRow({ cue }: { cue: Cue }) {
   const t = useT();
   const [pendingTo, setPendingTo] = React.useState<string | null>(null);
-  const buttons = NEXT_STATUS[cue.status] ?? [];
+  const buttons = NEXT_STATUS[cue.cue_state] ?? [];
   return (
     <tr>
       <td className="font-mono text-xs">
@@ -100,14 +100,14 @@ export function CueRow({ cue }: { cue: Cue }) {
         {cue.description && <div className="text-xs text-[var(--p-text-2)]">{cue.description}</div>}
       </td>
       <td>
-        <Badge variant={statusVariant(cue.status)}>{toTitle(cue.status)}</Badge>
+        <Badge variant={statusVariant(cue.cue_state)}>{toTitle(cue.cue_state)}</Badge>
       </td>
       <td className="text-end">
         <div className="inline-flex items-center gap-1">
           {buttons.map((b) => (
             <form key={b.to} action={setCueStatus} className="inline">
               <input type="hidden" name="id" value={cue.id} />
-              <input type="hidden" name="status" value={b.to} />
+              <input type="hidden" name="cue_state" value={b.to} />
               <button
                 type="submit"
                 disabled={pendingTo !== null}
@@ -152,7 +152,7 @@ function laneVariant(lane: Cue["lane"]): "brand" | "info" | "warning" | "muted" 
   return "muted";
 }
 
-function statusVariant(s: Cue["status"]): "muted" | "info" | "success" | "warning" | "error" {
+function statusVariant(s: Cue["cue_state"]): "muted" | "info" | "success" | "warning" | "error" {
   if (s === "live") return "warning";
   if (s === "done") return "success";
   if (s === "standby") return "info";

@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const since = new Date().toISOString();
   const { data } = await supabase
     .from("events")
-    .select("id, name, starts_at, ends_at, status, description, location:location_id(name)")
+    .select("id, name, starts_at, ends_at, event_state, description, location:location_id(name)")
     .eq("org_id", session.orgId)
     .gte("starts_at", since)
     .order("starts_at", { ascending: true })

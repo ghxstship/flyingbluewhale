@@ -78,7 +78,11 @@ export async function createTaskAction(_: State, fd: FormData): Promise<State> {
 export async function setTaskStatusAction(id: string, status: "todo" | "in_progress" | "blocked" | "review" | "done") {
   const session = await requireSession();
   const supabase = await createClient();
-  const { error } = await supabase.from("tasks").update({ status }).eq("org_id", session.orgId).eq("id", id);
+  const { error } = await supabase
+    .from("tasks")
+    .update({ task_state: status })
+    .eq("org_id", session.orgId)
+    .eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/console/tasks");
   return { ok: true as const };

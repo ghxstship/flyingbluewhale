@@ -15,7 +15,7 @@ type EquipmentRow = {
   name: string;
   asset_tag: string | null;
   category: string | null;
-  status: string;
+  equipment_state: string;
 };
 
 type RentalRow = {
@@ -49,9 +49,9 @@ export default async function MobileWmsPage() {
   const [{ data: maintData }, { data: rentalsData }] = await Promise.all([
     supabase
       .from("equipment")
-      .select("id, name, asset_tag, category, status")
+      .select("id, name, asset_tag, category, equipment_state")
       .eq("org_id", session.orgId)
-      .eq("status", "maintenance")
+      .eq("equipment_state", "maintenance")
       .order("name", { ascending: true })
       .limit(20),
     supabase
@@ -109,7 +109,7 @@ export default async function MobileWmsPage() {
                     {r.category ? ` · ${r.category}` : ""}
                   </div>
                 </div>
-                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                <Badge variant={STATUS_TONE[r.equipment_state] ?? "muted"}>{toTitle(r.equipment_state)}</Badge>
               </li>
             ))
           )}

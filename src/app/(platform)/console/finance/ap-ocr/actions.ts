@@ -198,7 +198,9 @@ export async function promoteExtractionToInvoice(fd: FormData): Promise<void> {
       title: e.vendor_name ? `Invoice from ${e.vendor_name}` : "AP Invoice (OCR)",
       currency: e.currency ?? "USD",
       amount_cents: e.total_amount_cents ?? 0,
-      status: "issued",
+      // AP invoices arrive already issued by the vendor — "sent" is the
+      // matching invoice_status enum value.
+      invoice_state: "sent",
       issued_at: e.invoice_date ?? new Date().toISOString().slice(0, 10),
       due_at: e.due_date,
       notes: `Auto-extracted from AP OCR (extraction ${e.id})`,

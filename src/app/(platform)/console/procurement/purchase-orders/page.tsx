@@ -28,7 +28,7 @@ export default async function POsPage() {
   const session = await requireSession();
   const rows = await listOrgScoped("purchase_orders", session.orgId, { orderBy: "created_at" });
   const committed = rows
-    .filter((r) => ["sent", "acknowledged", "fulfilled"].includes(r.status))
+    .filter((r) => ["sent", "acknowledged", "fulfilled"].includes(r.po_state))
     .reduce((s, r) => s + r.amount_cents, 0);
   return (
     <>
@@ -71,10 +71,10 @@ export default async function POsPage() {
               accessor: (r) => r.amount_cents ?? null,
             },
             {
-              key: "status",
-              header: t("console.procurement.purchaseOrders.col.status", undefined, "Status"),
-              render: (r) => <StatusBadge status={r.status} />,
-              accessor: (r) => r.status,
+              key: "po_state",
+              header: t("console.procurement.purchaseOrders.col.po_state", undefined, "Status"),
+              render: (r) => <StatusBadge status={r.po_state} />,
+              accessor: (r) => r.po_state,
               filterable: true,
               groupable: true,
             },

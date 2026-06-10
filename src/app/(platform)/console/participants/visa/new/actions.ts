@@ -11,7 +11,7 @@ const Schema = z.object({
   person_name: z.string().min(1).max(160),
   nationality: z.string().max(80).optional(),
   passport_no: z.string().max(60).optional(),
-  status: z.string().max(40).optional(),
+  case_state: z.string().max(40).optional(),
 });
 
 export type State = {
@@ -33,7 +33,7 @@ export async function createVisaCase(_: State, fd: FormData): Promise<State> {
       person_name: parsed.data.person_name,
       nationality: parsed.data.nationality || null,
       passport_no: parsed.data.passport_no || null,
-      status: parsed.data.status || "open",
+      case_state: parsed.data.case_state || "open",
     })
     .select("id")
     .single();

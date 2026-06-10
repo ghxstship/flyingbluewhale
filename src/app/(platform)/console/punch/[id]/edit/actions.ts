@@ -72,7 +72,7 @@ export async function updatePunchItem(_: State, fd: FormData): Promise<State> {
     description: patch.description || null,
     project_id: patch.project_id,
     priority: patch.priority,
-    status: patch.status,
+    item_state: patch.status,
     assignee_id: patch.assignee_id || null,
     vendor_id: patch.vendor_id || null,
     due_at: patch.due_at || null,

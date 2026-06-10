@@ -10,7 +10,7 @@ export type IncidentKanbanRow = {
   id: string;
   summary: string;
   severity: string;
-  status: string;
+  incident_state: string;
   occurred_at: string;
   closed_at: string | null;
   location: string | null;
@@ -54,7 +54,7 @@ export function IncidentsKanban({ rows }: { rows: IncidentKanbanRow[] }): React.
     <KanbanBoard<IncidentKanbanRow>
       rows={rows}
       lanes={lanes}
-      laneOf={(r) => r.status}
+      laneOf={(r) => r.incident_state}
       hrefOf={(r) => `/console/operations/incidents/${r.id}`}
       onMove={onMove}
       emptyTitle={t("console.operations.incidents.kanban.emptyTitle", undefined, "No incidents reported")}

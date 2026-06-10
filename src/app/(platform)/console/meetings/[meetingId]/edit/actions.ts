@@ -15,7 +15,7 @@ const Schema = z
     description: z.string().max(4000).optional().or(z.literal("")),
     starts_at: z.string().optional().or(z.literal("")),
     ends_at: z.string().optional().or(z.literal("")),
-    status: z.string(),
+    event_state: z.string(),
   })
   // Sea Trial R2 FINDING-018: when both supplied, end must follow start.
   .refine(...dateRangeRefine("starts_at", "ends_at"));
@@ -38,7 +38,7 @@ export async function updateMeeting(id: string, _: State, fd: FormData): Promise
     description: parsed.data.description || null,
     starts_at: parsed.data.starts_at,
     ends_at: parsed.data.ends_at,
-    status: parsed.data.status as "draft" | "scheduled" | "live" | "complete" | "cancelled",
+    event_state: parsed.data.event_state as "draft" | "scheduled" | "live" | "complete" | "cancelled",
   });
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Event not found." };

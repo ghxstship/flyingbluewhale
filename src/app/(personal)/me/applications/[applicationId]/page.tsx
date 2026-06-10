@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 type App = {
   id: string;
   org_id: string;
-  status: string;
+  job_application_state: string;
   applied_at: string;
   cover_note: string | null;
   resume_url: string | null;
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
       </div>
       <div className="mt-1 flex items-center gap-2">
         <h1 className="text-display text-3xl">{a.id.slice(0, 8)}</h1>
-        <Badge variant={STATUS_TONE[a.status] ?? "muted"}>{toTitle(a.status)}</Badge>
+        <Badge variant={STATUS_TONE[a.job_application_state] ?? "muted"}>{toTitle(a.job_application_state)}</Badge>
       </div>
       <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
         {t(
@@ -75,7 +75,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
             </div>
           </div>
         )}
-        {a.status === "booked" && (
+        {a.job_application_state === "booked" && (
           <div className="card-elevated flex items-center justify-between p-4">
             <div>
               <div className="text-label text-[var(--color-text-tertiary)]">

@@ -45,7 +45,7 @@ export default async function Page() {
     supabase.from("delegations").select("*", { count: "exact", head: true }).eq("org_id", session.orgId),
     supabase
       .from("delegation_entries")
-      .select("id, discipline, event, participant_name, status, delegation:delegation_id(code, name)")
+      .select("id, discipline, event, participant_name, entry_state, delegation:delegation_id(code, name)")
       .eq("org_id", session.orgId)
       .order("discipline", { ascending: true })
       .limit(2000),

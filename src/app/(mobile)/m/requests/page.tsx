@@ -31,15 +31,15 @@ export default async function MobileRequests() {
   const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("service_requests")
-    .select("id, severity, category, summary, status, opened_at")
+    .select("id, severity, category, summary, request_state, opened_at")
     .eq("org_id", session.orgId)
-    .neq("status", "resolved")
-    .neq("status", "cancelled")
+    .neq("request_state", "resolved")
+    .neq("request_state", "cancelled")
     .order("opened_at", { ascending: false })
     .limit(50);
   const rows = (data ?? []) as Pick<
     ServiceRequest,
-    "id" | "severity" | "category" | "summary" | "status" | "opened_at"
+    "id" | "severity" | "category" | "summary" | "request_state" | "opened_at"
   >[];
 
   return (
@@ -76,7 +76,7 @@ export default async function MobileRequests() {
                   <span className="ms-auto font-mono text-[10px] text-[var(--p-text-2)]">{fmt.time(r.opened_at)}</span>
                 </div>
                 <div className="text-sm font-medium">{r.summary}</div>
-                <div className="font-mono text-[10px] text-[var(--p-text-2)]">{toTitle(r.status)}</div>
+                <div className="font-mono text-[10px] text-[var(--p-text-2)]">{toTitle(r.request_state)}</div>
               </Link>
             </li>
           ))

@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const supabase = await createClient();
   const { data } = await supabase
     .from("invoices")
-    .select("id, number, title, amount_cents, status, issued_at, due_at")
+    .select("id, number, title, amount_cents, invoice_state, issued_at, due_at")
     .eq("org_id", session.orgId)
     .eq("created_by", session.userId)
     .order("issued_at", { ascending: false });
@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     number: string | null;
     title: string | null;
     amount_cents: number;
-    status: string;
+    invoice_state: string;
     issued_at: string | null;
     due_at: string | null;
   }>;
@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <th>{t("p.vendor.invoices.col.number", undefined, "#")}</th>
               <th>{t("p.vendor.invoices.col.title", undefined, "Title")}</th>
               <th>{t("p.vendor.invoices.col.amount", undefined, "Amount")}</th>
-              <th>{t("p.vendor.invoices.col.status", undefined, "Status")}</th>
+              <th>{t("p.vendor.invoices.col.invoice_state", undefined, "Status")}</th>
               <th>{t("p.vendor.invoices.col.issued", undefined, "Issued")}</th>
               <th>{t("p.vendor.invoices.col.due", undefined, "Due")}</th>
             </tr>
@@ -63,7 +63,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <td>{r.title ?? "—"}</td>
                 <td className="font-mono text-xs">{money(r.amount_cents)}</td>
                 <td>
-                  <StatusBadge status={r.status} />
+                  <StatusBadge status={r.invoice_state} />
                 </td>
                 <td className="font-mono text-xs">{fmtDate(r.issued_at)}</td>
                 <td className="font-mono text-xs">{fmtDate(r.due_at)}</td>

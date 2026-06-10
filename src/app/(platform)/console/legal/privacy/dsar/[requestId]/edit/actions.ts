@@ -11,7 +11,7 @@ import { formFail } from "@/lib/forms/fail";
 const Schema = z.object({
   requester_email: z.string().email(),
   kind: z.string(),
-  status: z.string(),
+  request_state: z.string(),
   due_by: z.string().optional().or(z.literal("")),
   notes: z.string().max(4000).optional().or(z.literal("")),
 });
@@ -32,7 +32,7 @@ export async function updateDsarRequest(id: string, _: State, fd: FormData): Pro
   const result = await updateOrgScopedWithCheck("dsar_requests", session.orgId, id, expectedUpdatedAt, {
     requester_email: parsed.data.requester_email,
     kind: parsed.data.kind as "access" | "deletion" | "correction" | "portability" | "objection",
-    status: parsed.data.status as "received" | "verifying" | "in_progress" | "fulfilled" | "rejected",
+    request_state: parsed.data.request_state as "received" | "verifying" | "in_progress" | "fulfilled" | "rejected",
     due_by: parsed.data.due_by || null,
     notes: parsed.data.notes || null,
   });

@@ -76,14 +76,18 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.meetings.edit.fields.status", undefined, "Status")}
+              {t("console.meetings.edit.fields.event_state", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
-              <option value="draft">{t("console.meetings.edit.status.draft", undefined, "draft")}</option>
-              <option value="scheduled">{t("console.meetings.edit.status.scheduled", undefined, "scheduled")}</option>
-              <option value="live">{t("console.meetings.edit.status.live", undefined, "live")}</option>
-              <option value="complete">{t("console.meetings.edit.status.complete", undefined, "complete")}</option>
-              <option value="cancelled">{t("console.meetings.edit.status.cancelled", undefined, "cancelled")}</option>
+            <select name="status" defaultValue={row.event_state ?? ""} required className="ps-input focus-ring w-full">
+              <option value="draft">{t("console.meetings.edit.event_state.draft", undefined, "draft")}</option>
+              <option value="scheduled">
+                {t("console.meetings.edit.event_state.scheduled", undefined, "scheduled")}
+              </option>
+              <option value="live">{t("console.meetings.edit.event_state.live", undefined, "live")}</option>
+              <option value="complete">{t("console.meetings.edit.event_state.complete", undefined, "complete")}</option>
+              <option value="cancelled">
+                {t("console.meetings.edit.event_state.cancelled", undefined, "cancelled")}
+              </option>
             </select>
           </label>
         </FormShell>

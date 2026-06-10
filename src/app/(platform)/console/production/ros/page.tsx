@@ -31,7 +31,7 @@ export default async function RunOfShowPage() {
   const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("cues")
-    .select("id, scheduled_at, lane, label, description, status, duration_seconds, owner_id")
+    .select("id, scheduled_at, lane, label, description, cue_state, duration_seconds, owner_id")
     .eq("org_id", session.orgId)
     .order("scheduled_at", { ascending: true })
     .limit(500);
@@ -99,7 +99,7 @@ export default async function RunOfShowPage() {
                     <th>{t("console.production.ros.col.time", undefined, "Time")}</th>
                     <th>{t("console.production.ros.col.lane", undefined, "Lane")}</th>
                     <th>{t("console.production.ros.col.cue", undefined, "Cue")}</th>
-                    <th>{t("console.production.ros.col.status", undefined, "Status")}</th>
+                    <th>{t("console.production.ros.col.cue_state", undefined, "Status")}</th>
                     <th className="text-end">{t("console.production.ros.col.actions", undefined, "Actions")}</th>
                   </tr>
                 </thead>

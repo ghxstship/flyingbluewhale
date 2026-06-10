@@ -47,7 +47,7 @@ export async function createPunchList(fd: FormData): Promise<void> {
 
 const ToggleSchema = z.object({
   id: z.string().uuid(),
-  status: z.enum(["open", "closed"]),
+  list_state: z.enum(["open", "closed"]),
 });
 
 export async function toggleListStatus(fd: FormData): Promise<void> {
@@ -59,7 +59,7 @@ export async function toggleListStatus(fd: FormData): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("punch_lists")
-    .update({ status: parsed.data.status, updated_at: new Date().toISOString() })
+    .update({ list_state: parsed.data.list_state, updated_at: new Date().toISOString() })
     .eq("id", parsed.data.id)
     .eq("org_id", session.orgId);
   if (error) throw new Error(`Could not update punch list: ${error.message}`);

@@ -56,7 +56,12 @@ export default async function Page({ params }: { params: Promise<{ manifestId: s
             <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.transport.ad.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status ?? ""} required className="ps-input focus-ring w-full">
+            <select
+              name="manifest_state"
+              defaultValue={row.manifest_state ?? ""}
+              required
+              className="ps-input focus-ring w-full"
+            >
               <option value="scheduled">scheduled</option>
               <option value="boarded">boarded</option>
               <option value="in_transit">in_transit</option>

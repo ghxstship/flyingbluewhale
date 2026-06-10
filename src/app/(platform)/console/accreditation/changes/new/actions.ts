@@ -42,7 +42,7 @@ export async function createChange(_: State, fd: FormData): Promise<State> {
       accreditation_id: parsed.data.accreditation_id,
       kind: parsed.data.kind,
       note: parsed.data.note || null,
-      status: "pending",
+      change_state: "pending",
     })
     .select("id")
     .single();

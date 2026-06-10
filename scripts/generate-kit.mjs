@@ -120,7 +120,7 @@ async function persistKit(sb, orgId, kit) {
   const { error: ce } = await sb.from("cues").insert(frame.ros.map((c) => ({
     org_id: orgId, kit_id: kitId, scope, lane: c.lane, label: c.label, description: c.description ?? null,
     owner_role: c.ownerRole, xpms_phase: c.phase ?? null, done_when: c.doneWhen ?? null,
-    duration_seconds: c.durationSeconds ?? null, status: "pending",
+    duration_seconds: c.durationSeconds ?? null, cue_state: "pending",
     scheduled_at: `${DEMO_DATE}T${String(c.scheduledAt).padStart(5, "0")}:00-04:00`,
   })));
   if (ce) throw new Error(`cues: ${ce.message}`);

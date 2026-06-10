@@ -12,7 +12,7 @@ const Schema = z.object({
   title: z.string().min(1).max(200),
   quantity: z.string().optional(),
   delivered: z.string().optional(),
-  status: z.string(),
+  entitlement_state: z.string(),
   due_by: z.string().optional().or(z.literal("")),
 });
 
@@ -33,7 +33,7 @@ export async function updateSponsorEntitlement(id: string, _: State, fd: FormDat
     title: parsed.data.title,
     quantity: parsed.data.quantity ? Number(parsed.data.quantity) : 0,
     delivered: parsed.data.delivered ? Number(parsed.data.delivered) : 0,
-    status: parsed.data.status,
+    entitlement_state: parsed.data.entitlement_state,
     due_by: parsed.data.due_by || null,
   });
   if (!result.ok) {

@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
   const { data } = await supabase
     .from("rfqs")
     .select(
-      "id, title, description, status, due_at, created_at, updated_at, " +
+      "id, title, description, rfq_state, due_at, created_at, updated_at, " +
         "project:project_id(name), awarded_vendor:awarded_to_vendor_id(name)",
     )
     .eq("id", rfqId)

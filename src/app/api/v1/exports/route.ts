@@ -81,10 +81,10 @@ export async function POST(req: NextRequest) {
           org_id: session.orgId,
           kind: input.kind,
           params: { table, projectId: input.projectId ?? null },
-          status: "pending",
+          run_state: "pending",
           requested_by: session.userId,
         })
-        .select("id, status, kind, created_at")
+        .select("id, run_state, kind, created_at")
         .single();
       if (runErr) return apiError("internal", runErr.message);
       const { error: qErr } = await (
@@ -175,7 +175,7 @@ export async function POST(req: NextRequest) {
         org_id: session.orgId,
         kind: input.kind,
         params: { table, projectId: input.projectId ?? null },
-        status: "done",
+        run_state: "done",
         file_path: path,
         size_bytes: bytes.byteLength,
         row_count: rows.length,
@@ -209,7 +209,7 @@ export async function GET() {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("export_runs")
-      .select("id, kind, params, status, file_path, size_bytes, row_count, created_at, completed_at, last_error")
+      .select("id, kind, params, run_state, file_path, size_bytes, row_count, created_at, completed_at, last_error")
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: false })
       .limit(50);

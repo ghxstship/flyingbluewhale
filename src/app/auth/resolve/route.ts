@@ -25,7 +25,7 @@ async function route(req: Request) {
     const { data: pendingInvite } = await supabase
       .from("invites")
       .select("token")
-      .eq("status", "pending")
+      .eq("invite_state", "pending")
       .gt("expires_at", new Date().toISOString())
       .order("created_at", { ascending: false })
       .limit(1)

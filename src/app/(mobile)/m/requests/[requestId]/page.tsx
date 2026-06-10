@@ -19,7 +19,7 @@ const SEV: Record<ServiceRequest["severity"], "error" | "warning" | "info" | "mu
   P4: "muted",
 };
 
-const STATUS: Record<ServiceRequest["status"], "warning" | "info" | "success" | "muted"> = {
+const STATUS: Record<ServiceRequest["request_state"], "warning" | "info" | "success" | "muted"> = {
   open: "warning",
   acknowledged: "info",
   in_progress: "info",
@@ -28,7 +28,7 @@ const STATUS: Record<ServiceRequest["status"], "warning" | "info" | "success" | 
 };
 
 const NEXT_STATES: Record<
-  ServiceRequest["status"],
+  ServiceRequest["request_state"],
   Array<{ value: "acknowledged" | "in_progress" | "resolved" | "cancelled"; labelKey: string; labelFallback: string }>
 > = {
   open: [
@@ -68,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
       <h1 className="mt-2 text-xl leading-snug font-semibold">{r.summary}</h1>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Badge variant={SEV[r.severity]}>{toTitle(r.severity)}</Badge>
-        <Badge variant={STATUS[r.status]}>{toTitle(r.status)}</Badge>
+        <Badge variant={STATUS[r.request_state]}>{toTitle(r.request_state)}</Badge>
         <span className="font-mono text-[10px] text-[var(--p-text-2)]">{r.category}</span>
       </div>
       {r.description && <div className="surface mt-4 p-4 text-sm whitespace-pre-wrap">{r.description}</div>}
@@ -93,13 +93,13 @@ export default async function Page({ params }: { params: Promise<{ requestId: st
           </div>
         </div>
       </div>
-      {NEXT_STATES[r.status].length > 0 && (
+      {NEXT_STATES[r.request_state].length > 0 && (
         <div className="mt-5 space-y-2">
           <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
             {t("m.requests.detail.update", undefined, "Update")}
           </div>
           <div className="grid grid-cols-2 gap-2">
-            {NEXT_STATES[r.status].map((action) => (
+            {NEXT_STATES[r.request_state].map((action) => (
               <form key={action.value} action={transitionRequest.bind(null, requestId)}>
                 <input type="hidden" name="to" value={action.value} />
                 <Button type="submit" variant="secondary" size="md" className="w-full">

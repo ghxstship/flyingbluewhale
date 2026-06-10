@@ -41,7 +41,7 @@ export default async function SchedulePage() {
     title: e.name,
     start: e.starts_at,
     end: e.ends_at,
-    tone: toneForStatus(e.status),
+    tone: toneForStatus(e.event_state),
     href: `/console/events/${e.id}`,
   }));
 
@@ -92,10 +92,10 @@ export default async function SchedulePage() {
               accessor: (r) => r.ends_at,
             },
             {
-              key: "status",
-              header: t("console.schedule.col.status", undefined, "Status"),
-              render: (r) => <StatusBadge status={r.status} />,
-              accessor: (r) => r.status,
+              key: "event_state",
+              header: t("console.schedule.col.event_state", undefined, "Status"),
+              render: (r) => <StatusBadge status={r.event_state} />,
+              accessor: (r) => r.event_state,
               filterable: true,
               groupable: true,
             },

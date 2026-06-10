@@ -131,12 +131,23 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
             <span className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.finance.expenses.edit.statusLabel", undefined, "Status")}
             </span>
-            <select name="status" defaultValue={row.status} required className="ps-input focus-ring w-full">
-              <option value="pending">{t("console.finance.expenses.status.pending", undefined, "pending")}</option>
-              <option value="approved">{t("console.finance.expenses.status.approved", undefined, "approved")}</option>
-              <option value="rejected">{t("console.finance.expenses.status.rejected", undefined, "rejected")}</option>
+            <select
+              name="expense_state"
+              defaultValue={row.expense_state}
+              required
+              className="ps-input focus-ring w-full"
+            >
+              <option value="pending">
+                {t("console.finance.expenses.expense_state.pending", undefined, "pending")}
+              </option>
+              <option value="approved">
+                {t("console.finance.expenses.expense_state.approved", undefined, "approved")}
+              </option>
+              <option value="rejected">
+                {t("console.finance.expenses.expense_state.rejected", undefined, "rejected")}
+              </option>
               <option value="reimbursed">
-                {t("console.finance.expenses.status.reimbursed", undefined, "reimbursed")}
+                {t("console.finance.expenses.expense_state.reimbursed", undefined, "reimbursed")}
               </option>
             </select>
           </label>

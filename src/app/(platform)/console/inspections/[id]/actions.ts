@@ -27,19 +27,19 @@ export async function transitionInspection(
 
   const { data: row } = await supabase
     .from("inspections")
-    .select("status")
+    .select("inspection_state")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
   if (!row) throw new Error("Inspection not found");
-  const current = (row as { status: InspectionStatus }).status;
+  const current = (row as { inspection_state: InspectionStatus }).inspection_state;
   const allowed = INSPECTION_TRANSITIONS[current] ?? [];
   if (!allowed.includes(to)) {
     throw new Error(`Cannot move ${current} → ${to}. Allowed: ${allowed.join(", ") || "(terminal)"}`);
   }
 
   const now = new Date().toISOString();
-  const patch: Record<string, unknown> = { status: to };
+  const patch: Record<string, unknown> = { inspection_state: to };
   if (to === "in_progress") patch.started_at = now;
   if (to === "passed" || to === "failed") patch.completed_at = now;
   const { data: updated, error } = await supabase
@@ -47,7 +47,7 @@ export async function transitionInspection(
     .update(patch as never)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", current as "scheduled")
+    .eq("inspection_state", current as "scheduled")
     .select("id");
   if (error) throw new Error(error.message);
   if (!updated || updated.length === 0) {

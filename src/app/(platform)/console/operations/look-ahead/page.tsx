@@ -38,7 +38,7 @@ export default async function Page() {
       .from("tasks")
       .select("id, title, due_at, project:project_id(name)")
       .eq("org_id", session.orgId)
-      .in("status", ["todo", "in_progress", "blocked", "review"])
+      .in("task_state", ["todo", "in_progress", "blocked", "review"])
       .gte("due_at", now.toISOString().slice(0, 10))
       .lte("due_at", end.toISOString().slice(0, 10))
       .order("due_at"),
@@ -53,7 +53,7 @@ export default async function Page() {
       .from("safety_briefings")
       .select("id, topic, scheduled_for, project:project_id(name)")
       .eq("org_id", session.orgId)
-      .eq("status", "scheduled")
+      .eq("briefing_state", "scheduled")
       .gte("scheduled_for", now.toISOString())
       .lte("scheduled_for", end.toISOString())
       .order("scheduled_for"),
@@ -61,7 +61,7 @@ export default async function Page() {
       .from("inspections")
       .select("id, name, scheduled_for, project:project_id(name)")
       .eq("org_id", session.orgId)
-      .in("status", ["scheduled", "in_progress"])
+      .in("inspection_state", ["scheduled", "in_progress"])
       .gte("scheduled_for", now.toISOString())
       .lte("scheduled_for", end.toISOString())
       .order("scheduled_for"),

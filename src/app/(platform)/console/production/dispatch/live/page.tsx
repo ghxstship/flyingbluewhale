@@ -38,7 +38,7 @@ export default async function LiveDispatchPage() {
   const { data: runs } = await supabase
     .from("dispatch_runs")
     .select(
-      "id, fleet, vehicle_ref, status, scheduled_depart, scheduled_arrive, actual_depart, actual_arrive, " +
+      "id, fleet, vehicle_ref, run_state, scheduled_depart, scheduled_arrive, actual_depart, actual_arrive, " +
         "origin:origin_venue_id(name, locations(lat, lng)), " +
         "destination:destination_venue_id(name, locations(lat, lng))",
     )
@@ -50,7 +50,7 @@ export default async function LiveDispatchPage() {
     id: string;
     fleet: string | null;
     vehicle_ref: string | null;
-    status: string | null;
+    run_state: string | null;
     scheduled_depart: string;
     scheduled_arrive: string | null;
     actual_depart: string | null;
@@ -73,7 +73,7 @@ export default async function LiveDispatchPage() {
     .map((r) => ({
       id: r.id,
       vehicle: r.vehicle_ref ?? r.fleet ?? "—",
-      status: r.status ?? "scheduled",
+      status: r.run_state ?? "scheduled",
       origin: {
         name: r.origin?.name ?? "—",
         lat: r.origin!.locations!.lat as number,

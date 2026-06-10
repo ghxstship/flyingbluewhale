@@ -30,7 +30,7 @@ const Schema = z.object({ offer_id: z.string().uuid() });
 type OwnOffer = {
   id: string;
   org_id: string;
-  status: string;
+  talent_offer_state: string;
   performance_date: string;
   created_by: string | null;
   act_name: string;
@@ -40,7 +40,7 @@ async function loadOwnOffer(offerId: string, userId: string): Promise<OwnOffer |
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
-    .select("id, org_id, status, performance_date, created_by, talent_profiles!inner(user_id, act_name)")
+    .select("id, org_id, talent_offer_state, performance_date, created_by, talent_profiles!inner(user_id, act_name)")
     .eq("id", offerId)
     .maybeSingle();
   if (error) return { error: error.message };
@@ -48,7 +48,7 @@ async function loadOwnOffer(offerId: string, userId: string): Promise<OwnOffer |
   const row = data as unknown as {
     id: string;
     org_id: string;
-    status: string;
+    talent_offer_state: string;
     performance_date: string;
     created_by: string | null;
     talent_profiles: { user_id: string | null; act_name: string };
@@ -60,7 +60,7 @@ async function loadOwnOffer(offerId: string, userId: string): Promise<OwnOffer |
   return {
     id: row.id,
     org_id: row.org_id,
-    status: row.status,
+    talent_offer_state: row.talent_offer_state,
     performance_date: row.performance_date,
     created_by: row.created_by,
     act_name: row.talent_profiles.act_name,
@@ -125,13 +125,15 @@ async function decide(prevState: State, fd: FormData, decision: "accepted" | "de
   // a stale tab can't redo a decided offer; `.select` confirms a row
   // actually flipped.
   const service = createServiceClient();
-  const patch: { status: "accepted" | "declined"; accepted_at?: string } =
-    decision === "accepted" ? { status: "accepted", accepted_at: new Date().toISOString() } : { status: "declined" };
+  const patch: { talent_offer_state: "accepted" | "declined"; accepted_at?: string } =
+    decision === "accepted"
+      ? { talent_offer_state: "accepted", accepted_at: new Date().toISOString() }
+      : { talent_offer_state: "declined" };
   const { data: updated, error } = await service
     .from("talent_offers")
     .update(patch)
     .eq("id", parsed.data.offer_id)
-    .in("status", ["sent", "countered"])
+    .in("talent_offer_state", ["sent", "countered"])
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {

@@ -4,7 +4,9 @@ import { log } from "@/lib/log";
 import { verifyStripeWebhook } from "@/lib/stripe";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 
-type StripeEventData = { object: { metadata?: Record<string, string>; id?: string; amount?: number; status?: string } };
+type StripeEventData = {
+  object: { metadata?: Record<string, string>; id?: string; amount?: number; invoice_state?: string };
+};
 type StripeEvent = { type: string; data: StripeEventData; id: string; livemode?: boolean };
 
 export async function POST(req: Request) {
@@ -88,9 +90,9 @@ export async function POST(req: Request) {
           // not these distinct-event-same-state cases.
           const { data: paid } = await supabase
             .from("invoices")
-            .update({ status: "paid", paid_at: new Date().toISOString() })
+            .update({ invoice_state: "paid", paid_at: new Date().toISOString() })
             .eq("stripe_payment_intent", pi.id)
-            .neq("status", "paid")
+            .neq("invoice_state", "paid")
             .select("id, org_id, number, title, amount_cents, created_by")
             .maybeSingle();
           if (paid) {
@@ -121,7 +123,7 @@ export async function POST(req: Request) {
       case "customer.subscription.deleted":
       case "invoice.paid":
       case "invoice.payment_failed": {
-        const obj = event.data.object as { id?: string; subscription?: string; status?: string };
+        const obj = event.data.object as { id?: string; subscription?: string; invoice_state?: string };
         const stripeSubId = obj?.subscription ?? obj?.id;
         if (stripeSubId && supabase) {
           const { data: sub } = await supabase
@@ -130,7 +132,7 @@ export async function POST(req: Request) {
             .eq("stripe_subscription_id", stripeSubId)
             .maybeSingle();
           if (sub) {
-            const targetState = mapStripeEventToSubscriptionState(event.type, obj?.status, sub.state);
+            const targetState = mapStripeEventToSubscriptionState(event.type, obj?.invoice_state, sub.state);
             if (targetState && targetState !== sub.state) {
               const { transitionSubscription } = await import("@/lib/subscriptions");
               const result = await transitionSubscription({

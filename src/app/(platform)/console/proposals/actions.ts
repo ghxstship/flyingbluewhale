@@ -151,17 +151,21 @@ export async function setProposalStatusAction(
   const supabase = await createClient();
   const { data: before } = await supabase
     .from("proposals")
-    .select("doc_number, title, amount_cents, created_by, status")
+    .select("doc_number, title, amount_cents, created_by, proposal_state")
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
   if (!before) return { error: "Proposal not found" };
-  const current = before.status as string;
+  const current = before.proposal_state as string;
   const allowed = PROPOSAL_TRANSITIONS[current] ?? [];
   if (!allowed.includes(status)) {
     return { error: `Cannot move ${current} → ${status}. Allowed: ${allowed.join(", ") || "(terminal)"}` };
   }
-  const patch: { status: typeof status; sent_at?: string; signed_at?: string } = { status };
+  const patch: {
+    proposal_state: "draft" | "sent" | "approved" | "rejected" | "expired" | "signed";
+    sent_at?: string;
+    signed_at?: string;
+  } = { proposal_state: status };
   if (status === "sent") patch.sent_at = new Date().toISOString();
   if (status === "signed") patch.signed_at = new Date().toISOString();
   // Conditional update on the observed status closes the TOCTOU
@@ -173,7 +177,7 @@ export async function setProposalStatusAction(
     .update(patch)
     .eq("org_id", session.orgId)
     .eq("id", id)
-    .eq("status", current as "draft")
+    .eq("proposal_state", current as "draft")
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) return { error: "Proposal status changed concurrently — refresh and retry" };
@@ -227,7 +231,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
   const { data: proposal, error: loadError } = await supabase
     .from("proposals")
     .select(
-      "id, org_id, title, client_id, project_id, amount_cents, status, deposit_percent, currency, doc_number, notes, blocks",
+      "id, org_id, title, client_id, project_id, amount_cents, proposal_state, deposit_percent, currency, doc_number, notes, blocks",
     )
     .eq("org_id", session.orgId)
     .eq("id", proposalId)
@@ -235,8 +239,8 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
     .maybeSingle();
   if (loadError) return { error: loadError.message };
   if (!proposal) return { error: "Proposal not found" };
-  if (proposal.status !== "signed") {
-    return { error: `Proposal must be signed before conversion (currently ${proposal.status})` };
+  if (proposal.proposal_state !== "signed") {
+    return { error: `Proposal must be signed before conversion (currently ${proposal.proposal_state})` };
   }
 
   // Layer 2: app-level idempotency via the new reverse FK. If a project
@@ -343,7 +347,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
         title: `${proposal.title} — Deposit (${depositPct}%)`,
         amount_cents: depositCents,
         currency,
-        status: "draft",
+        invoice_state: "draft",
         created_by: session.userId,
       },
       {
@@ -354,7 +358,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
         title: `${proposal.title} — Balance on Load-In (${100 - depositPct}%)`,
         amount_cents: balanceCents,
         currency,
-        status: "draft",
+        invoice_state: "draft",
         created_by: session.userId,
       },
     ]);

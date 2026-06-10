@@ -26,11 +26,11 @@ export default async function Page() {
       .from("projects")
       .select("id, name")
       .eq("org_id", session.orgId)
-      .in("status", ["active", "draft"])
+      .in("log_state", ["active", "draft"])
       .order("name"),
     supabase
       .from("daily_logs")
-      .select("id, log_date, status, project:project_id(name)")
+      .select("id, log_date, log_state, project:project_id(name)")
       .eq("org_id", session.orgId)
       .order("log_date", { ascending: false })
       .limit(7),
@@ -86,7 +86,7 @@ export default async function Page() {
               (recent ?? []) as Array<{
                 id: string;
                 log_date: string;
-                status: string;
+                log_state: string;
                 project: { name: string | null } | null;
               }>
             ).map((r) => (
@@ -98,7 +98,7 @@ export default async function Page() {
                   <span>
                     {fmtDate(r.log_date)} · {r.project?.name ?? "—"}
                   </span>
-                  <span className="text-xs text-[var(--p-text-2)]">{r.status}</span>
+                  <span className="text-xs text-[var(--p-text-2)]">{r.log_state}</span>
                 </Link>
               </li>
             ))}

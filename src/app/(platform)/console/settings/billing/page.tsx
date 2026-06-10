@@ -89,7 +89,7 @@ export default async function BillingPage() {
   // Recent invoices — bridges to the canonical /finance/invoices list.
   const { data: invoiceRows } = await supabase
     .from("invoices")
-    .select("id, number, status, amount_cents, currency, issued_at, due_at")
+    .select("id, number, invoice_state, amount_cents, currency, issued_at, due_at")
     .eq("org_id", session.orgId)
     .order("issued_at", { ascending: false })
     .limit(5);
@@ -195,7 +195,7 @@ export default async function BillingPage() {
                         </Link>
                       </td>
                       <td>
-                        <Badge variant="muted">{toTitle(i.status)}</Badge>
+                        <Badge variant="muted">{toTitle(i.invoice_state)}</Badge>
                       </td>
                       <td className="font-mono text-xs">{money(i.amount_cents)}</td>
                       <td className="font-mono text-xs">

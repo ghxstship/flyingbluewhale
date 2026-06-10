@@ -32,7 +32,7 @@ export async function updateTask(id: string, _: State, fd: FormData): Promise<St
   const result = await updateOrgScopedWithCheck("tasks", session.orgId, id, expectedUpdatedAt, {
     title: parsed.data.title,
     description: parsed.data.description || null,
-    status: parsed.data.status as "todo" | "in_progress" | "blocked" | "review" | "done",
+    task_state: parsed.data.status as "todo" | "in_progress" | "blocked" | "review" | "done",
     priority: parsed.data.priority ? Number(parsed.data.priority) : 0,
     due_at: parsed.data.due_at ? new Date(parsed.data.due_at).toISOString() : null,
   });

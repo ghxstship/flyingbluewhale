@@ -24,7 +24,7 @@ type PlaybookRow = {
   id: string;
   slug: string;
   title: string;
-  status: string;
+  playbook_state: string;
   version: number;
 };
 
@@ -72,7 +72,7 @@ export default async function Page() {
       .limit(500),
     supabase
       .from("playbooks")
-      .select("id, slug, title, status, version")
+      .select("id, slug, title, playbook_state, version")
       .eq("org_id", session.orgId)
       .eq("kind", "safety")
       .ilike("title", "%medical%")
@@ -196,7 +196,9 @@ export default async function Page() {
                     </Link>
                     <div className="font-mono text-xs text-[var(--p-text-2)]">v{p.version}</div>
                   </div>
-                  <Badge variant={p.status === "published" ? "success" : "muted"}>{toTitle(p.status)}</Badge>
+                  <Badge variant={p.playbook_state === "published" ? "success" : "muted"}>
+                    {toTitle(p.playbook_state)}
+                  </Badge>
                 </li>
               ))
             )}

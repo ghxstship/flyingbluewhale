@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
     .order("position");
 
   const all = items ?? [];
-  const done = all.filter((i) => i.status !== "pending").length;
+  const done = all.filter((i) => i.item_state !== "pending").length;
 
   return (
     <>
@@ -86,9 +86,9 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
                     <span className="flex-1">
                       {it.position + 1}. {it.prompt}
                     </span>
-                    <Badge variant={STATUS_TONE[it.status] ?? "muted"}>{toTitle(it.status)}</Badge>
+                    <Badge variant={STATUS_TONE[it.item_state] ?? "muted"}>{toTitle(it.item_state)}</Badge>
                   </div>
-                  {it.status === "pending" && (
+                  {it.item_state === "pending" && (
                     <div className="mt-2 flex gap-1.5">
                       <form action={completeChecklistItem.bind(null, poId, it.id)}>
                         <button

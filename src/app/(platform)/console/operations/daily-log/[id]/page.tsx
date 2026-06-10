@@ -88,7 +88,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       return { ...p, signed_url: signed?.signedUrl ?? null };
     }),
   );
-  const photosEditable = log.status !== "approved";
+  const photosEditable = log.log_state !== "approved";
 
   const totalHeadcount = (manpower ?? []).reduce((s, m) => s + (m.headcount ?? 0), 0);
   const totalHours = (manpower ?? []).reduce((s, m) => s + Number(m.hours_worked ?? 0), 0);
@@ -110,14 +110,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Presence targetTable="daily_logs" targetId={id} currentUser={presenceUser} />
-            <Badge variant={STATUS_TONE[log.status] ?? "muted"}>{toTitle(log.status)}</Badge>
-            {log.status === "draft" && (
+            <Badge variant={STATUS_TONE[log.log_state] ?? "muted"}>{toTitle(log.log_state)}</Badge>
+            {log.log_state === "draft" && (
               <StatusForm
                 action={transitionDailyLog.bind(null, id, "submitted")}
                 label={t("common.submit", undefined, "Submit")}
               />
             )}
-            {log.status === "submitted" && (
+            {log.log_state === "submitted" && (
               <StatusForm
                 action={transitionDailyLog.bind(null, id, "approved")}
                 label={t("common.approve", undefined, "Approve")}

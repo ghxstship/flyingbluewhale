@@ -14,7 +14,7 @@ const Schema = z.object({
   kind: z.string(),
   likelihood: z.string(),
   impact: z.string(),
-  status: z.string(),
+  risk_state: z.string(),
   due_on: z.string().optional().or(z.literal("")),
   treatment: z.string().max(4000).optional().or(z.literal("")),
 });
@@ -38,7 +38,7 @@ export async function updateRisk(id: string, _: State, fd: FormData): Promise<St
     kind: parsed.data.kind as "risk" | "assumption" | "issue" | "dependency",
     likelihood: parsed.data.likelihood as "rare" | "unlikely" | "possible" | "likely" | "almost_certain",
     impact: parsed.data.impact as "insignificant" | "minor" | "moderate" | "major" | "severe",
-    status: parsed.data.status as "open" | "mitigating" | "accepted" | "closed",
+    risk_state: parsed.data.risk_state as "open" | "mitigating" | "accepted" | "closed",
     due_on: parsed.data.due_on || null,
     treatment: parsed.data.treatment || null,
   });

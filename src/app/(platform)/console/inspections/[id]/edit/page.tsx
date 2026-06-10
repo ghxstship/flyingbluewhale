@@ -20,7 +20,7 @@ type Inspection = {
   code: string | null;
   name: string;
   project_id: string | null;
-  status: (typeof STATUSES)[number];
+  inspection_state: (typeof STATUSES)[number];
   scheduled_for: string | null;
   inspector_id: string | null;
   notes: string | null;
@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const [{ data }, { data: projects }, { data: users }] = await Promise.all([
     supabase
       .from("inspections")
-      .select("id, code, name, project_id, status, scheduled_for, inspector_id, notes, updated_at")
+      .select("id, code, name, project_id, inspection_state, scheduled_for, inspector_id, notes, updated_at")
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle(),
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>{t("console.inspections.edit.fields.status", undefined, "Status")}</span>
-              <select name="status" defaultValue={insp.status} className={INPUT}>
+              <select name="inspection_state" defaultValue={insp.inspection_state} className={INPUT}>
                 {STATUSES.map((s) => (
                   <option key={s} value={s}>
                     {toTitle(s)}

@@ -43,8 +43,8 @@ export default async function Page() {
   const cells: RiskCell[] = [];
   for (let i = IMPACT.length - 1; i >= 0; i--) {
     for (let l = 0; l < LIKELIHOOD.length; l++) {
-      const impact = IMPACT[i];
-      const likelihood = LIKELIHOOD[l];
+      const impact = IMPACT[i]!;
+      const likelihood = LIKELIHOOD[l]!;
       const matched = rows.filter((r) => r.impact === impact && r.likelihood === likelihood);
       cells.push({
         impact,

@@ -33,7 +33,7 @@ test.describe("console — state-machine transitions", () => {
     const s = stamp();
     await createInModule(page, "/console/procurement/requisitions/new", { title: `E2E Req ${s}` });
     // on the requisition detail (/console/procurement/requisitions/<id>) → edit form
-    const detailUrl = page.url().split("?")[0].replace(/\/$/, "");
+    const detailUrl = page.url().split("?")[0]!.replace(/\/$/, "");
     await page.goto(`${detailUrl}/edit`, { timeout: 90000 }); // cold-compile headroom (dev)
     await expect(page.locator('select[name="status"]')).toBeVisible({ timeout: 20000 });
     await page.locator('select[name="status"]').selectOption("submitted");

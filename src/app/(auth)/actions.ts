@@ -141,7 +141,7 @@ async function bootstrapOrgIfNeeded(
     // name on /onboarding/org. They have an authenticated session either way.
     return null;
   }
-  return { orgId: data[0].org_id, orgSlug: data[0].org_slug };
+  return { orgId: data[0]!.org_id, orgSlug: data[0]!.org_slug };
 }
 
 export async function resendVerificationAction(_: FormState, formData: FormData): Promise<FormState> {

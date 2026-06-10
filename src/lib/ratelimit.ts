@@ -67,7 +67,7 @@ function inMemorySlidingWindow(key: string, max: number, windowMs: number): Rate
   bucket.timestamps = bucket.timestamps.filter((t) => now - t < windowMs);
   if (bucket.timestamps.length >= max) {
     buckets.set(key, bucket);
-    return { ok: false, remaining: 0, resetAt: bucket.timestamps[0] + windowMs };
+    return { ok: false, remaining: 0, resetAt: (bucket.timestamps[0] ?? now) + windowMs };
   }
   bucket.timestamps.push(now);
   buckets.set(key, bucket);
@@ -171,7 +171,7 @@ export function keyFromRequest(req: Request, prefix: string): string {
   const principal = principalFromRequest(req);
   if (principal) return `${prefix}:user:${principal}`;
   const fwd = req.headers.get("x-forwarded-for") ?? "";
-  const ip = fwd.split(",")[0].trim() || req.headers.get("x-real-ip") || "unknown";
+  const ip = fwd.split(",")[0]!.trim() || req.headers.get("x-real-ip") || "unknown";
   return `${prefix}:ip:${ip}`;
 }
 

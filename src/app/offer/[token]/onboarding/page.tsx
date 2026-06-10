@@ -77,7 +77,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
           <h1 className="text-2xl font-semibold">
             {t(
               "legal.offerOnboarding.welcome",
-              { name: letter.recipient_name.split(" ")[0] },
+              { name: letter.recipient_name.split(" ")[0]! },
               `Welcome, ${letter.recipient_name.split(" ")[0]}`,
             )}
           </h1>

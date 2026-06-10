@@ -28,6 +28,7 @@ function deepMerge(base: DeepRecord, overlay: DeepRecord): DeepRecord {
   for (const k of Object.keys(overlay)) {
     const b = base[k];
     const o = overlay[k];
+    if (o === undefined) continue;
     if (o && typeof o === "object" && b && typeof b === "object") {
       out[k] = deepMerge(b as DeepRecord, o as DeepRecord);
     } else {

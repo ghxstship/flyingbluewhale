@@ -54,7 +54,7 @@ function lookupPath(path: string, ctx: ResolveContext): unknown {
 
   for (let i = 1; i < segments.length; i++) {
     if (current == null) return undefined;
-    const seg = segments[i];
+    const seg = segments[i]!;
     if (Array.isArray(current)) {
       const idx = Number.parseInt(seg, 10);
       if (Number.isNaN(idx)) return undefined;
@@ -82,7 +82,7 @@ function coerceToString(value: unknown): string {
 function resolveString(template: string, ctx: ResolveContext): unknown {
   const whole = template.match(WHOLE_TEMPLATE_RE);
   if (whole) {
-    return lookupPath(whole[1], ctx);
+    return lookupPath(whole[1]!, ctx);
   }
   // Partial interpolation — coerce each placeholder to a string and splice in.
   return template.replace(ANY_TEMPLATE_RE, (_match, path: string) => coerceToString(lookupPath(path, ctx)));

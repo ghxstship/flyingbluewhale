@@ -43,12 +43,13 @@ export function parseScimFilter(input: string | null | undefined): ScimFilter | 
 
   // Presence: "<attr> pr"
   const prMatch = trimmed.match(/^([a-zA-Z_][a-zA-Z0-9_.]*)\s+pr$/i);
-  if (prMatch) return { op: "pr", attr: prMatch[1] };
+  if (prMatch) return { op: "pr", attr: prMatch[1]! };
 
   // Equality: '<attr> eq "<value>"' or '<attr> eq <bool|number>'
   const eqMatch = trimmed.match(/^([a-zA-Z_][a-zA-Z0-9_.]*)\s+eq\s+(.+)$/i);
   if (eqMatch) {
-    const [, attr, raw] = eqMatch;
+    const attr = eqMatch[1]!;
+    const raw = eqMatch[2]!;
     let value: string;
     if (raw.startsWith('"') && raw.endsWith('"') && raw.length >= 2) {
       value = raw.slice(1, -1);

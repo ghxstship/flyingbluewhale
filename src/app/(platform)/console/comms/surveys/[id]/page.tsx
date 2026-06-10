@@ -70,16 +70,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     for (const q of qs) {
       const ans = r.answers?.[q.id];
       if (ans == null) continue;
+      // Both maps are seeded for every question in the loop above.
+      const tally = tallies[q.id]!;
+      const samples = textSamples[q.id]!;
       if (q.question_kind === "text") {
-        if (textSamples[q.id].length < 5 && typeof ans === "string") textSamples[q.id].push(ans);
+        if (samples.length < 5 && typeof ans === "string") samples.push(ans);
       } else if (Array.isArray(ans)) {
         for (const v of ans) {
           const k = String(v);
-          tallies[q.id].set(k, (tallies[q.id].get(k) ?? 0) + 1);
+          tally.set(k, (tally.get(k) ?? 0) + 1);
         }
       } else {
         const k = String(ans);
-        tallies[q.id].set(k, (tallies[q.id].get(k) ?? 0) + 1);
+        tally.set(k, (tally.get(k) ?? 0) + 1);
       }
     }
   }

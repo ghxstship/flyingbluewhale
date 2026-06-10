@@ -135,7 +135,7 @@ export function CalendarGrid({
 }
 
 function parseMonth(m: string): Date {
-  const [y, mo] = m.split("-").map((n) => Number.parseInt(n, 10));
+  const [y = Number.NaN, mo = Number.NaN] = m.split("-").map((n) => Number.parseInt(n, 10));
   if (!Number.isFinite(y) || !Number.isFinite(mo)) return new Date();
   return new Date(y, mo - 1, 1);
 }

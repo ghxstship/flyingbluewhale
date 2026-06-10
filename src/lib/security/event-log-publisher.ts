@@ -100,6 +100,7 @@ export async function publishEventLogs(): Promise<{ published: number; orgs: num
 
     if (ok) {
       const last = events[events.length - 1];
+      if (!last) continue;
       await admin
         .from("org_event_log_destinations")
         .update({ last_published_id: last.id, last_published_at: last.at })

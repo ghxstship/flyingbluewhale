@@ -9,7 +9,7 @@ import type { Database } from "./database.types";
  * `undefined` for localhost/lvh.me/vercel.app — host-only cookies there.
  */
 function cookieDomainForHost(host: string): string | undefined {
-  const bare = host.split(":")[0].toLowerCase();
+  const bare = host.split(":")[0]!.toLowerCase();
   if (bare.endsWith("atlvs.pro")) return ".atlvs.pro";
   return undefined;
 }

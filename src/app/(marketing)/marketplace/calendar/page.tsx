@@ -85,7 +85,7 @@ export default async function Page() {
             <div key={d} className="surface p-5">
               <h2 className="mb-2 font-mono text-sm text-[var(--p-text-2)]">{new Date(d).toDateString()}</h2>
               <ul className="divide-y divide-[var(--border-subtle)]">
-                {byDay[d].map((r) => (
+                {(byDay[d] ?? []).map((r) => (
                   <li key={r.id} className="flex items-center justify-between py-2 text-sm">
                     <div className="flex items-center gap-3">
                       <Badge variant={STATUS_TONE[r.kind] ?? "muted"}>{toTitle(r.kind)}</Badge>

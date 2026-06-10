@@ -129,7 +129,8 @@ export async function getSession(): Promise<Session | null> {
   const realRows = rows.filter((r) => r.orgs?.slug !== DEMO_ORG_SLUG);
   const preferred = lastOrgId ? realRows.find((r) => r.org_id === lastOrgId) : null;
   const real = preferred ?? realRows[0] ?? null;
-  const chosen = real ?? rows[0];
+  // rows.length === 0 already returned above, so rows[0] exists.
+  const chosen = real ?? rows[0]!;
   const isGuest = chosen.orgs?.slug === DEMO_ORG_SLUG && !real;
 
   return {

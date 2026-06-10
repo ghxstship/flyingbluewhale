@@ -18,10 +18,16 @@ import { z } from "zod";
 type Row = Record<string, unknown>;
 
 function makeDb() {
-  const tables: Record<string, Row[]> = {
-    automations: [],
-    automation_runs: [],
-    automation_step_runs: [],
+  const tables = {
+    automations: [] as Row[],
+    automation_runs: [] as Row[],
+    automation_step_runs: [] as Row[],
+  };
+  const tableMap: Record<string, Row[]> = tables;
+  const rowsFor = (table: string): Row[] => {
+    const rows = tableMap[table];
+    if (!rows) throw new Error(`unknown table: ${table}`);
+    return rows;
   };
   let idCounter = 0;
   const nextId = () => `00000000-0000-0000-0000-${String(++idCounter).padStart(12, "0")}`;
@@ -40,12 +46,12 @@ function makeDb() {
           id: pendingInsert.id ?? nextId(),
           ...pendingInsert,
         };
-        tables[table].push(newRow);
+        rowsFor(table).push(newRow);
         return { data: newRow, error: null };
       }
       if (mode === "update" && pendingUpdate) {
         const updated: Row[] = [];
-        for (const row of tables[table]) {
+        for (const row of rowsFor(table)) {
           if (matches(row)) {
             Object.assign(row, pendingUpdate);
             updated.push(row);
@@ -54,7 +60,7 @@ function makeDb() {
         return { data: updated[0] ?? null, error: null };
       }
       if (mode === "select") {
-        const found = tables[table].filter(matches);
+        const found = rowsFor(table).filter(matches);
         return { data: found[0] ?? null, error: null };
       }
       return { data: null, error: { message: "no-op" } };
@@ -200,11 +206,11 @@ describe("runAutomation", () => {
     expect(result.actionCount).toBe(2);
     expect(noopAction).toHaveBeenCalledTimes(1);
     expect(echoAction).toHaveBeenCalledTimes(1);
-    expect(echoAction.mock.calls[0][0]).toEqual({ value: 7 });
+    expect(echoAction.mock.calls[0]?.[0]).toEqual({ value: 7 });
 
     expect(db.tables.automation_runs).toHaveLength(1);
-    expect(db.tables.automation_runs[0].run_state).toBe("success");
-    expect(db.tables.automation_runs[0].action_count).toBe(2);
+    expect(db.tables.automation_runs[0]?.run_state).toBe("success");
+    expect(db.tables.automation_runs[0]?.action_count).toBe(2);
     expect(db.tables.automation_step_runs).toHaveLength(2);
     expect(db.tables.automation_step_runs.every((r) => r.step_state === "success")).toBe(true);
   });
@@ -218,7 +224,7 @@ describe("runAutomation", () => {
       triggerPayload: { greeting: "hi there" },
     });
 
-    expect(echoAction.mock.calls[0][0]).toEqual({ value: "hi there" });
+    expect(echoAction.mock.calls[0]?.[0]).toEqual({ value: "hi there" });
   });
 
   it("resolves {{step.<n>.output.*}} placeholders from prior steps", async () => {
@@ -230,7 +236,7 @@ describe("runAutomation", () => {
     await runAutomation({ automationId: id, triggerKind: "manual" });
 
     expect(echoAction).toHaveBeenCalledTimes(2);
-    expect(echoAction.mock.calls[1][0]).toEqual({ value: 99 });
+    expect(echoAction.mock.calls[1]?.[0]).toEqual({ value: 99 });
   });
 
   it("marks the run failed and stops on the first throwing step", async () => {
@@ -249,14 +255,14 @@ describe("runAutomation", () => {
     expect(failingAction).toHaveBeenCalledTimes(1);
 
     const run = db.tables.automation_runs[0];
-    expect(run.run_state).toBe("failed");
-    expect(run.error_summary).toContain("boom");
+    expect(run?.run_state).toBe("failed");
+    expect(run?.error_summary).toContain("boom");
 
     const steps = db.tables.automation_step_runs;
     expect(steps).toHaveLength(2); // noop succeeded + failing step recorded
-    expect(steps[0].step_state).toBe("success");
-    expect(steps[1].step_state).toBe("failed");
-    expect(steps[1].error).toContain("boom");
+    expect(steps[0]?.step_state).toBe("success");
+    expect(steps[1]?.step_state).toBe("failed");
+    expect(steps[1]?.error).toContain("boom");
   });
 
   it("fails the run when the schema rejects resolved input", async () => {
@@ -266,8 +272,8 @@ describe("runAutomation", () => {
 
     expect(result.status).toBe("failed");
     expect(noopAction).not.toHaveBeenCalled();
-    expect(db.tables.automation_step_runs[0].step_state).toBe("failed");
-    expect(db.tables.automation_step_runs[0].error).toContain("validation failed");
+    expect(db.tables.automation_step_runs[0]?.step_state).toBe("failed");
+    expect(db.tables.automation_step_runs[0]?.error).toContain("validation failed");
   });
 
   it("fails when the action type is not registered", async () => {
@@ -281,7 +287,7 @@ describe("runAutomation", () => {
 
   it("rejects disabled automations", async () => {
     const id = seedAutomation([{ type: "test.noop", input: {} }]);
-    db.tables.automations[0].enabled = false;
+    db.tables.automations[0]!.enabled = false;
 
     await expect(runAutomation({ automationId: id, triggerKind: "manual" })).rejects.toThrow(/disabled/);
   });
@@ -303,7 +309,7 @@ describe("runAutomation", () => {
 
     expect(result.runId).toBe("preexisting-run-id");
     expect(db.tables.automation_runs).toHaveLength(1);
-    expect(db.tables.automation_runs[0].run_state).toBe("success");
+    expect(db.tables.automation_runs[0]?.run_state).toBe("success");
   });
 
   it("registry contains the registered fake actions", () => {
@@ -337,9 +343,9 @@ describe("runAutomation", () => {
 
     const stepRows = db.tables.automation_step_runs.sort((a, b) => Number(a.step_index) - Number(b.step_index));
     expect(stepRows).toHaveLength(3);
-    expect(stepRows[0].step_state).toBe("success");
-    expect(stepRows[1].step_state).toBe("skipped");
-    expect(stepRows[2].step_state).toBe("success");
+    expect(stepRows[0]?.step_state).toBe("success");
+    expect(stepRows[1]?.step_state).toBe("skipped");
+    expect(stepRows[2]?.step_state).toBe("success");
   });
 
   it("runs a step whose condition resolves to true", async () => {

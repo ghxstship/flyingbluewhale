@@ -42,7 +42,7 @@ function parseAcceptLanguage(header: string): string[] {
   return header
     .split(",")
     .map((part) => {
-      const [tag, q = "q=1"] = part.trim().split(";");
+      const [tag = "", q = "q=1"] = part.trim().split(";");
       const quality = parseFloat(q.replace("q=", "")) || 1;
       return { tag, quality };
     })

@@ -153,6 +153,7 @@ async function main() {
 
   for (let i = 0; i < partySpecs.length; i++) {
     const spec = partySpecs[i];
+    if (!spec) continue;
     const email = `${SEED_PREFIX.toLowerCase()}party-${String(i + 1).padStart(2, "0")}@e2e.invalid`;
     const password = `e2e-${randomUUID().slice(0, 12)}`;
 

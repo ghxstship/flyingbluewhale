@@ -214,8 +214,8 @@ export async function proxy(request: NextRequest) {
   const targetPath = rewriteUrl?.pathname ?? pathname;
   const aliasMatch = targetPath.match(MOBILE_ROLE_ALIAS);
   if (aliasMatch) {
-    const [, , rest] = aliasMatch;
-    const firstSegment = rest.split("/")[0];
+    const rest = aliasMatch[2]!;
+    const firstSegment = rest.split("/")[0]!;
     const isExplicitRolePrefixed = ROLE_PREFIXED_PAGES.has(firstSegment);
     const isRoleChooser = rest === "settings/role";
     const isRoleOwned = ROLE_OWNED_SURFACES.has(firstSegment);
@@ -391,7 +391,8 @@ async function checkMfaForRequest(request: NextRequest, pathname: string): Promi
   type MembershipRow = { org_id: string; role: string; orgs: { slug: string } | null };
   const memberships = (rawMemberships ?? []) as unknown as MembershipRow[];
   if (memberships.length === 0) return null;
-  const real = memberships.find((m) => m.orgs?.slug !== "demo") ?? memberships[0];
+  // memberships.length === 0 already returned above.
+  const real = memberships.find((m) => m.orgs?.slug !== "demo") ?? memberships[0]!;
 
   // Lookup the org's MFA-required map.
   const { data: orgRow } = await supabase.from("orgs").select("require_2fa_for").eq("id", real.org_id).maybeSingle();

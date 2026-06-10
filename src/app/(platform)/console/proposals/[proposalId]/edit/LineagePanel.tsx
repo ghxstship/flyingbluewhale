@@ -72,7 +72,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                     value={d.label}
                     onChange={(e) => {
                       const next = [...deliverables];
-                      next[i] = { ...next[i], label: e.target.value };
+                      next[i] = { ...d, label: e.target.value };
                       onChange({ ...block, deliverables: next });
                     }}
                     placeholder={t(
@@ -88,7 +88,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                       const next = [...deliverables];
                       const v = e.target.value;
                       next[i] = {
-                        ...next[i],
+                        ...d,
                         deliverableType: v ? (v as DocDeliverableType) : undefined,
                       };
                       onChange({ ...block, deliverables: next });
@@ -129,7 +129,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                     value={it.label}
                     onChange={(e) => {
                       const next = [...items];
-                      next[i] = { ...next[i], label: e.target.value };
+                      next[i] = { ...it, label: e.target.value };
                       onChange({ ...block, items: next });
                     }}
                     placeholder={t("console.proposals.edit.lineage.itemLabelPlaceholder", undefined, "Item label")}
@@ -139,7 +139,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                     value={it.catalogCode ?? ""}
                     onChange={(e) => {
                       const next = [...items];
-                      next[i] = { ...next[i], catalogCode: e.target.value || undefined };
+                      next[i] = { ...it, catalogCode: e.target.value || undefined };
                       onChange({ ...block, items: next });
                     }}
                     placeholder={t("console.proposals.edit.lineage.codePlaceholder", undefined, "CODE")}
@@ -151,7 +151,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
                       const next = [...items];
                       const v = e.target.value;
                       next[i] = {
-                        ...next[i],
+                        ...it,
                         catalogKind: v ? (v as CatalogKind) : undefined,
                       };
                       onChange({ ...block, items: next });
@@ -188,7 +188,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
               value={g.label}
               onChange={(e) => {
                 const next = [...block.groups];
-                next[i] = { ...next[i], label: e.target.value };
+                next[i] = { ...g, label: e.target.value };
                 onChange({ ...block, groups: next });
               }}
               placeholder={t("console.proposals.edit.lineage.groupLabelPlaceholder", undefined, "Group label")}
@@ -198,7 +198,7 @@ export function LineagePanel({ block, onChange }: { block: AnyBlock; onChange: (
               value={g.budgetCategory ?? ""}
               onChange={(e) => {
                 const next = [...block.groups];
-                next[i] = { ...next[i], budgetCategory: e.target.value || undefined };
+                next[i] = { ...g, budgetCategory: e.target.value || undefined };
                 onChange({ ...block, groups: next });
               }}
               placeholder={t(

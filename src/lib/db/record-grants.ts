@@ -42,7 +42,7 @@ export function compareRecordRoles(a: RecordRole, b: RecordRole): number {
 /** Highest-priority role in a list. Returns null when list is empty. */
 export function maxRecordRole(roles: RecordRole[]): RecordRole | null {
   if (roles.length === 0) return null;
-  return roles.reduce((acc, r) => (compareRecordRoles(r, acc) > 0 ? r : acc), roles[0]);
+  return roles.reduce((acc, r) => (compareRecordRoles(r, acc) > 0 ? r : acc), roles[0]!);
 }
 
 /**

@@ -147,9 +147,9 @@ describe("monthMarkers", () => {
     const markers = monthMarkers(start, end, "month", 6);
     // Apr, May, Jun
     expect(markers.length).toBe(3);
-    expect(markers[0].date.toISOString()).toBe("2026-04-01T00:00:00.000Z");
-    expect(markers[1].date.toISOString()).toBe("2026-05-01T00:00:00.000Z");
-    expect(markers[2].date.toISOString()).toBe("2026-06-01T00:00:00.000Z");
+    expect(markers[0]?.date.toISOString()).toBe("2026-04-01T00:00:00.000Z");
+    expect(markers[1]?.date.toISOString()).toBe("2026-05-01T00:00:00.000Z");
+    expect(markers[2]?.date.toISOString()).toBe("2026-06-01T00:00:00.000Z");
   });
 
   it("includes the year in the January label only", () => {
@@ -163,9 +163,9 @@ describe("monthMarkers", () => {
   it("respects pxPerDay when computing offsets", () => {
     const markers = monthMarkers(start, end, "month", 6);
     // April 1 → offset 0
-    expect(markers[0].offset).toBe(0);
+    expect(markers[0]?.offset).toBe(0);
     // May 1 is 30 days after April 1 → 30 * 6 = 180
-    expect(markers[1].offset).toBe(180);
+    expect(markers[1]?.offset).toBe(180);
   });
 
   it("zoom='week' yields one marker per Monday", () => {
@@ -181,8 +181,8 @@ describe("monthMarkers", () => {
   it("zoom='quarter' yields one marker per quarter", () => {
     const markers = monthMarkers(new Date(iso(2026, 1, 1)), new Date(iso(2027, 1, 1)), "quarter", 2);
     expect(markers.length).toBe(4);
-    expect(markers[0].label).toMatch(/Q1 2026/);
-    expect(markers[3].label).toMatch(/Q4 2026/);
+    expect(markers[0]?.label).toMatch(/Q1 2026/);
+    expect(markers[3]?.label).toMatch(/Q4 2026/);
   });
 
   it("zoom='day' yields one marker per day", () => {

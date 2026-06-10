@@ -34,10 +34,10 @@ const USE_TYPES: Array<{ slug: string; label: string; sqftPerPerson: number; hin
 
 export function CapacityCalculator() {
   const [sqft, setSqft] = useState(5000);
-  const [useType, setUseType] = useState(USE_TYPES[0].slug);
+  const [useType, setUseType] = useState(USE_TYPES[0]!.slug);
   const [usableFactor, setUsableFactor] = useState(80);
 
-  const selectedUse = USE_TYPES.find((u) => u.slug === useType) ?? USE_TYPES[0];
+  const selectedUse = USE_TYPES.find((u) => u.slug === useType) ?? USE_TYPES[0]!;
 
   const usableSqft = useMemo(() => Math.max(0, sqft) * (Math.max(0, usableFactor) / 100), [sqft, usableFactor]);
   const occupancy = useMemo(() => Math.floor(usableSqft / selectedUse.sqftPerPerson), [usableSqft, selectedUse]);

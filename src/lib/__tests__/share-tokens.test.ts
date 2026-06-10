@@ -18,7 +18,7 @@ describe("signShareToken / verifyShareToken", () => {
 
   it("returns null on tampered signature", () => {
     const t = signShareToken({ id: "abc-123" });
-    const [payload, sig] = t.split(".");
+    const [payload, sig = ""] = t.split(".");
     // Flip one base64url char in the signature, preserving length so the
     // length-pre-check in the verifier passes and we exercise timingSafeEqual.
     const swap = sig[0] === "A" ? "B" : "A";

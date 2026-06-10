@@ -214,7 +214,7 @@ describe("Design system — component primitive adoption", () => {
       const txt = readFileSync(file, "utf8");
       const lines = txt.split("\n");
       for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const line = lines[i]!;
         // Skip pure-comment lines (// or *).
         if (/^\s*(\/\/|\*)/.test(line)) continue;
         if (TAILWIND_PALETTE_RE.test(line)) {
@@ -261,12 +261,12 @@ describe("Design system — component primitive adoption", () => {
       const txt = readFileSync(file, "utf8");
       const lines = txt.split("\n");
       for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const line = lines[i]!;
         if (/^\s*(\/\/|\*)/.test(line)) continue;
         let m: RegExpExecArray | null;
         const re = new RegExp(MIN_W_RE.source, "g");
         while ((m = re.exec(line)) !== null) {
-          const px = parseInt(m[1], 10);
+          const px = parseInt(m[1]!, 10);
           // Treat rem ≥ 24 as ≥ 384px (24×16). Conservative threshold.
           if (px >= 375) {
             offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 120)}`);
@@ -332,7 +332,7 @@ describe("Design system — component primitive adoption", () => {
       const txt = readFileSync(file, "utf8");
       const lines = txt.split("\n");
       for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const line = lines[i]!;
         if (/^\s*(\/\/|\*|#)/.test(line)) continue;
         if (importRe.test(line) || varRe.test(line)) {
           offenders.push(`${rel}:${i + 1}: ${line.trim().slice(0, 120)}`);

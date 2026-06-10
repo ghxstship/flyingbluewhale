@@ -38,7 +38,7 @@ export async function setLocalePreferences(input: {
   // compvss.) — matches the Supabase session and guide-unlock cookie
   // strategy. Local dev (lvh.me / localhost / vercel.app previews)
   // omits the attribute so the browser scopes to the exact host.
-  const host = (hs.get("host") ?? "").split(":")[0].toLowerCase();
+  const host = (hs.get("host") ?? "").split(":")[0]!.toLowerCase();
   const apexDomain = host.endsWith("atlvs.pro") ? ".atlvs.pro" : undefined;
   const cookieOpts = {
     path: "/",

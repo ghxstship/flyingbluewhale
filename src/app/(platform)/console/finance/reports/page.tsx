@@ -214,8 +214,8 @@ function arAging(invoices: Invoice[]): AgingRow[] {
     if (i.invoice_state === "paid" || i.invoice_state === "voided" || !i.due_at) continue;
     const overdue = Math.floor((today - new Date(i.due_at).getTime()) / 86400000);
     const idx = overdue <= 0 ? 0 : overdue <= 30 ? 1 : overdue <= 60 ? 2 : overdue <= 90 ? 3 : 4;
-    buckets[idx].count += 1;
-    buckets[idx].amount += i.amount_cents;
+    buckets[idx]!.count += 1;
+    buckets[idx]!.amount += i.amount_cents;
   }
   return buckets;
 }

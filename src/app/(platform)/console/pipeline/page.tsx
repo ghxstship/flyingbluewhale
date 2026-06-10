@@ -100,7 +100,8 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
     );
   }
 
-  const active = pipelines.find((p) => p.slug === pipelineSlug) ?? pipelines[0];
+  // The empty-pipelines case already returned above.
+  const active = pipelines.find((p) => p.slug === pipelineSlug) ?? pipelines[0]!;
 
   const { data: stagesData } = await supabase
     .from("pipeline_stages")

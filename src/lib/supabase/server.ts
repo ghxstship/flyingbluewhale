@@ -15,7 +15,7 @@ import type { Database } from "./database.types";
 async function cookieDomainForRequest(): Promise<string | undefined> {
   try {
     const h = await headers();
-    const host = (h.get("host") ?? "").split(":")[0].toLowerCase();
+    const host = (h.get("host") ?? "").split(":")[0]!.toLowerCase();
     if (host.endsWith("atlvs.pro")) return ".atlvs.pro";
     // Dev parity — `lvh.me` resolves to 127.0.0.1 and is the canonical local
     // dev host (per CLAUDE.md). Without a `.lvh.me` domain the session

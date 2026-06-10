@@ -119,7 +119,8 @@ export function aggregateByGroup<T extends AnyRow>(
       buckets.set(groupValue, bucket);
     }
     opts.series.forEach((s, i) => {
-      reduce(bucket!.accs[i], row[s.field]);
+      const acc = bucket!.accs[i];
+      if (acc) reduce(acc, row[s.field]);
     });
   }
 
@@ -127,7 +128,8 @@ export function aggregateByGroup<T extends AnyRow>(
   for (const bucket of buckets.values()) {
     const row: AnyRow = { [groupKey]: bucket.groupValue };
     opts.series.forEach((s, i) => {
-      row[s.field] = finalize(bucket.accs[i], s.agg ?? "sum");
+      const acc = bucket.accs[i];
+      if (acc) row[s.field] = finalize(acc, s.agg ?? "sum");
     });
     out.push(row);
   }

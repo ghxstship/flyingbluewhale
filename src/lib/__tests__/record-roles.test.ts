@@ -15,8 +15,8 @@ describe("compareRecordRoles", () => {
   it("orders roles per the SmartSuite ladder", () => {
     const ladder: RecordRole[] = ["viewer", "commenter", "assignee", "contributor", "editor", "full"];
     for (let i = 1; i < ladder.length; i++) {
-      expect(compareRecordRoles(ladder[i], ladder[i - 1])).toBeGreaterThan(0);
-      expect(compareRecordRoles(ladder[i - 1], ladder[i])).toBeLessThan(0);
+      expect(compareRecordRoles(ladder[i]!, ladder[i - 1]!)).toBeGreaterThan(0);
+      expect(compareRecordRoles(ladder[i - 1]!, ladder[i]!)).toBeLessThan(0);
     }
   });
 

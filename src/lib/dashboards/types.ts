@@ -163,6 +163,7 @@ export function findOverlap(widgets: DashboardWidget[]): [DashboardWidget, Dashb
     for (let j = i + 1; j < widgets.length; j++) {
       const a = widgets[i];
       const b = widgets[j];
+      if (!a || !b) continue;
       if (rectanglesOverlap(a, b)) return [a, b];
     }
   }

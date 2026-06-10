@@ -552,7 +552,7 @@ export function DataTableInteractive({
       setSortStack((prev) => {
         const ix = prev.findIndex((s) => s.key === key);
         if (ix === -1) return [...prev, { key, dir: "asc" }];
-        if (prev[ix].dir === "asc") {
+        if (prev[ix]!.dir === "asc") {
           const next = [...prev];
           next[ix] = { key, dir: "desc" };
           return next;
@@ -982,6 +982,7 @@ export function DataTableInteractive({
                 )}
                 {virtualizer.getVirtualItems().map((virtualRow) => {
                   const row = visible[virtualRow.index];
+                  if (!row) return null;
                   return (
                     <TableRow
                       key={row.id}
@@ -1651,7 +1652,9 @@ function SortStackMenu({
       onSetPrimary(sortKey, next);
     } else {
       const next = [...sortStack];
-      next[idx - 1] = { ...next[idx - 1], dir: next[idx - 1].dir === "asc" ? "desc" : "asc" };
+      const cur = next[idx - 1];
+      if (!cur) return;
+      next[idx - 1] = { ...cur, dir: cur.dir === "asc" ? "desc" : "asc" };
       onSetStack(next);
     }
   }

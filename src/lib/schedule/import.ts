@@ -200,7 +200,7 @@ function xmlBodies(content: string, tag: string): string[] {
   const out: string[] = [];
   const re = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, "gi");
   let m: RegExpExecArray | null;
-  while ((m = re.exec(content))) out.push(m[1]);
+  while ((m = re.exec(content))) out.push(m[1]!);
   return out;
 }
 

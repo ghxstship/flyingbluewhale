@@ -79,7 +79,7 @@ export async function verifyApiKey(authorizationHeader: string | null | undefine
   if (!authorizationHeader) return null;
   const m = /^Bearer\s+(.+)$/i.exec(authorizationHeader);
   if (!m) return null;
-  const parsed = parseToken(m[1].trim());
+  const parsed = parseToken(m[1]!.trim());
   if (!parsed) return null;
   if (!isServiceClientAvailable()) return null;
 

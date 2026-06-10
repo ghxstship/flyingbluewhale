@@ -103,7 +103,7 @@ function lookupPath(path: string, ctx: ConditionContext): unknown {
   }
   for (let i = 1; i < segments.length; i++) {
     if (current == null) return undefined;
-    const seg = segments[i];
+    const seg = segments[i]!;
     if (Array.isArray(current)) {
       const idx = Number.parseInt(seg, 10);
       if (Number.isNaN(idx)) return undefined;

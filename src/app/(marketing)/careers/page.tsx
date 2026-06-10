@@ -51,8 +51,9 @@ export default async function CareersPage() {
     { label: t("marketing.pages.careers.breadcrumbs.home"), href: "/" },
     { label: t("marketing.pages.careers.breadcrumbs.careers"), href: "/careers" },
   ];
+  // VALUE_ICONS and VALUE_KEYS are parallel 6-element tuples.
   const values = VALUE_KEYS.map((key, i) => ({
-    icon: VALUE_ICONS[i],
+    icon: VALUE_ICONS[i]!,
     title: t(`marketing.pages.careers.values.${key}.title`),
     body: t(`marketing.pages.careers.values.${key}.body`),
   }));

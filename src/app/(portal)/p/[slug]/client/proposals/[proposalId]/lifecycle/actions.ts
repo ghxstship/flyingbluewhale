@@ -12,7 +12,7 @@ function actorFromSession(session: { userId: string; orgId: string; email: strin
   return {
     userId: session.userId,
     orgId: session.orgId,
-    userLabel: session.email.split("@")[0],
+    userLabel: session.email.split("@")[0] ?? null,
   };
 }
 

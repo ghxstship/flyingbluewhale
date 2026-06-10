@@ -72,8 +72,10 @@ export default async function Page({
     .order("starts_at", { ascending: true });
   const shifts = (shiftsData ?? []) as unknown as Shift[];
 
-  const callTime = shifts[0] ? new Date(shifts[0].starts_at) : null;
-  const wrapTime = shifts[shifts.length - 1] ? new Date(shifts[shifts.length - 1].ends_at) : null;
+  const firstShift = shifts[0];
+  const lastShift = shifts[shifts.length - 1];
+  const callTime = firstShift ? new Date(firstShift.starts_at) : null;
+  const wrapTime = lastShift ? new Date(lastShift.ends_at) : null;
 
   return (
     <>

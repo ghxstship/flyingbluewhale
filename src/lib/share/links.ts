@@ -40,8 +40,8 @@ function hashPasscode(passcode: string): string {
 function verifyPasscode(passcode: string, stored: string): boolean {
   const parts = stored.split("$");
   if (parts.length !== 3 || parts[0] !== "scrypt") return false;
-  const salt = Buffer.from(parts[1], "base64");
-  const expected = Buffer.from(parts[2], "base64");
+  const salt = Buffer.from(parts[1]!, "base64");
+  const expected = Buffer.from(parts[2]!, "base64");
   const candidate = scryptSync(passcode, salt, expected.length, {
     N: SCRYPT_N,
     r: SCRYPT_R,

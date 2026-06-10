@@ -181,7 +181,7 @@ function backwardPass(
   const out = new Map<string, { ls: number; lf: number }>();
 
   for (let i = order.length - 1; i >= 0; i--) {
-    const id = order[i];
+    const id = order[i]!;
     const a = input.activities.find((x) => x.id === id)!;
     const durMs = a.duration_days * DAY_MS;
     const succs = succsByActivity.get(id) ?? [];

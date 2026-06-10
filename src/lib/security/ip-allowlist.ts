@@ -30,11 +30,13 @@ const IPV4_RX = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
 export function ipv4ToInt(ip: string): number | null {
   const m = ip.trim().match(IPV4_RX);
   if (!m) return null;
-  const [, a, b, c, d] = m;
-  const oct = [a, b, c, d].map((s) => Number.parseInt(s, 10));
-  if (oct.some((n) => !Number.isInteger(n) || n < 0 || n > 255)) return null;
+  const a = Number.parseInt(m[1]!, 10);
+  const b = Number.parseInt(m[2]!, 10);
+  const c = Number.parseInt(m[3]!, 10);
+  const d = Number.parseInt(m[4]!, 10);
+  if ([a, b, c, d].some((n) => !Number.isInteger(n) || n < 0 || n > 255)) return null;
   // Use unsigned 32-bit math: shift produces a signed int in JS.
-  return ((oct[0] << 24) | (oct[1] << 16) | (oct[2] << 8) | oct[3]) >>> 0;
+  return ((a << 24) | (b << 16) | (c << 8) | d) >>> 0;
 }
 
 /**
@@ -48,7 +50,7 @@ export function parseIpRange(input: string): CidrRange | null {
   if (raw.includes(":")) {
     return { raw, family: 6 };
   }
-  const [addr, prefixRaw] = raw.split("/");
+  const [addr = "", prefixRaw] = raw.split("/");
   const network = ipv4ToInt(addr);
   if (network === null) return null;
   let prefix: number;

@@ -26,7 +26,7 @@ import type { Service, Solution } from "./types";
 
 /** Resolve a list of catalog numbers into Service objects, drop unknowns. */
 export function resolveServices(numbers: number[]): Service[] {
-  return numbers.map((n) => SERVICE_BY_NUMBER[n]).filter(Boolean);
+  return numbers.map((n) => SERVICE_BY_NUMBER[n]).filter((s): s is Service => Boolean(s));
 }
 
 /** Path helpers — single source of truth for /ghxstship URLs. */

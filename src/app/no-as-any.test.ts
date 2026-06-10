@@ -71,7 +71,7 @@ describe("Codebase hygiene — `as any` ban", () => {
       // Skip multi-line `/* ... */` block-comment regions.
       let inBlockComment = false;
       for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
+        const line = lines[i]!;
         const blockStart = line.indexOf("/*");
         const blockEnd = line.indexOf("*/");
 

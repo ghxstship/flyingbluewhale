@@ -74,9 +74,9 @@ export function openTokens<T>(ciphertext: string): T | null {
     const segs = ciphertext.split(".");
     if (segs.length !== 4) return null;
     try {
-      const iv = Buffer.from(segs[1], "base64url");
-      const tag = Buffer.from(segs[2], "base64url");
-      const ct = Buffer.from(segs[3], "base64url");
+      const iv = Buffer.from(segs[1]!, "base64url");
+      const tag = Buffer.from(segs[2]!, "base64url");
+      const ct = Buffer.from(segs[3]!, "base64url");
       const decipher = createDecipheriv("aes-256-gcm", key, iv);
       decipher.setAuthTag(tag);
       const plain = Buffer.concat([decipher.update(ct), decipher.final()]).toString("utf8");

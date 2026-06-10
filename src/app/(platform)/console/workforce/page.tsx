@@ -117,8 +117,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
           activeKind
             ? t(
                 "console.workforce.subtitle.filtered",
-                { count: rows.length, kind: KIND_LABEL_I18N[activeKind].toLowerCase() },
-                `${rows.length} ${KIND_LABEL_I18N[activeKind].toLowerCase()}`,
+                { count: rows.length, kind: (KIND_LABEL_I18N[activeKind] ?? activeKind).toLowerCase() },
+                `${rows.length} ${(KIND_LABEL_I18N[activeKind] ?? activeKind).toLowerCase()}`,
               )
             : t(
                 "console.workforce.subtitle.all",
@@ -162,8 +162,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ k
             activeKind
               ? t(
                   "console.workforce.empty.filtered",
-                  { kind: KIND_LABEL_I18N[activeKind] },
-                  `No ${KIND_LABEL_I18N[activeKind]}`,
+                  { kind: KIND_LABEL_I18N[activeKind] ?? activeKind },
+                  `No ${KIND_LABEL_I18N[activeKind] ?? activeKind}`,
                 )
               : t("console.workforce.empty.all", undefined, "No Workforce Members")
           }

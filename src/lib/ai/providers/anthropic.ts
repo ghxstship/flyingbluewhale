@@ -120,7 +120,7 @@ export function estimateAnthropicCostCents(model: string, inputTokens: number, o
     "claude-opus-4-7": { in: 15, out: 75 },
     "claude-haiku-4-5": { in: 1, out: 5 },
   };
-  const p = pricing[model] ?? pricing["claude-sonnet-4-6"];
+  const p = pricing[model] ?? pricing["claude-sonnet-4-6"]!;
   // dollars per million → cents per token then multiply.
   const cents = (inputTokens / 1_000_000) * p.in * 100 + (outputTokens / 1_000_000) * p.out * 100;
   return Math.round(cents * 100) / 100;

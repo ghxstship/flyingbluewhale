@@ -61,7 +61,7 @@ export default async function PortalSelectPage() {
   const projects = [...byId.values()];
 
   // Exactly one reachable portal — skip the chooser entirely.
-  if (projects.length === 1) redirect(`/p/${projects[0].slug}`);
+  if (projects.length === 1) redirect(`/p/${projects[0]!.slug}`);
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center gap-6 px-6 py-16">

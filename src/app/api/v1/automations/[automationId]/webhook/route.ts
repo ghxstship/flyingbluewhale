@@ -37,7 +37,7 @@ async function verifyHmac(secret: string, body: string, header: string | null): 
   if (!header) return false;
   // Accept either `sha256=<hex>` (common convention) or a bare hex digest.
   const m = header.match(/^sha256=([a-f0-9]+)$/i);
-  const provided = (m ? m[1] : header).toLowerCase();
+  const provided = (m?.[1] ?? header).toLowerCase();
   if (!provided || provided.length !== 64) return false;
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, [

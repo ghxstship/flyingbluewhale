@@ -186,6 +186,6 @@ describe("DataTableInteractive — spotlight (row className)", () => {
     const tds = container.querySelectorAll("tbody td");
     expect(tds.length).toBeGreaterThanOrEqual(2);
     const statusCell = tds[1];
-    expect(statusCell.className).toContain("data-spotlight-warn");
+    expect(statusCell?.className).toContain("data-spotlight-warn");
   });
 });

@@ -41,7 +41,7 @@ export function usePresenceChannel(opts: {
         const state = channel.presenceState<PresentUser>();
         const flat: PresentUser[] = [];
         for (const userIdKey in state) {
-          for (const meta of state[userIdKey]) flat.push(meta);
+          for (const meta of state[userIdKey] ?? []) flat.push(meta);
         }
         setPeers(flat);
       })

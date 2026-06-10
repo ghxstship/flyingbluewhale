@@ -8,7 +8,7 @@ import { signApproval, declineApproval } from "@/lib/proposals/portal/mutations"
 import type { FormState } from "@/components/FormShell";
 
 function actor(session: { userId: string; orgId: string; email: string }) {
-  return { userId: session.userId, orgId: session.orgId, userLabel: session.email.split("@")[0] };
+  return { userId: session.userId, orgId: session.orgId, userLabel: session.email.split("@")[0] ?? null };
 }
 
 export async function signApprovalAction(_prev: FormState, fd: FormData): Promise<FormState> {

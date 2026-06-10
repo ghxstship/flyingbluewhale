@@ -138,8 +138,8 @@ export function shellForHost(host: string | null | undefined): {
 } {
   if (!host) return { shell: "marketing", tenantSlug: null };
 
-  const bareHost = host.split(":")[0].toLowerCase();
-  const bareApex = apexParts().host.split(":")[0].toLowerCase();
+  const bareHost = host.split(":")[0]!.toLowerCase();
+  const bareApex = apexParts().host.split(":")[0]!.toLowerCase();
 
   // Exact apex (or www.apex) → marketing/auth/personal share this host.
   if (bareHost === bareApex || bareHost === `www.${bareApex}`) {

@@ -14,7 +14,8 @@ import { XPMS_CLASSES } from "@/lib/xpms";
 import type { DashboardProps } from "./types";
 
 export function BaseDashboard({ classCode, title, subtitle, branding, sections, footer }: DashboardProps) {
-  const xpmsClass = XPMS_CLASSES[classCode];
+  // XPMS_CLASSES covers all ten XpmsClassCode values in published order.
+  const xpmsClass = XPMS_CLASSES[classCode]!;
   const accent = branding?.accent ?? xpmsClass.accent;
 
   return (

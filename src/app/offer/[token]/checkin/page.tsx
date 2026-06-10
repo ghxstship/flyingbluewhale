@@ -48,7 +48,7 @@ export default async function CheckInPage({ params }: { params: Promise<{ token:
         <h1 className="text-3xl font-semibold">
           {t(
             "legal.offerCheckin.welcome",
-            { name: letter.recipient_name.split(" ")[0] },
+            { name: letter.recipient_name.split(" ")[0]! },
             `Welcome to Salvage City, ${letter.recipient_name.split(" ")[0]}.`,
           )}
         </h1>

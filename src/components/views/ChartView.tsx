@@ -76,7 +76,7 @@ const TONE_VAR: Record<Tone, string> = {
 };
 
 function toneFor(series: ChartSeries, index: number): string {
-  const tone = series.tone ?? DEFAULT_TONE_ROTATION[index % DEFAULT_TONE_ROTATION.length];
+  const tone = series.tone ?? DEFAULT_TONE_ROTATION[index % DEFAULT_TONE_ROTATION.length] ?? "neutral";
   return TONE_VAR[tone];
 }
 
@@ -304,7 +304,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
             onClick={onClick ? (slice) => onClick(slice as unknown as Record<string, unknown>) : undefined}
           >
             {data.map((_, i) => {
-              const tone = DEFAULT_TONE_ROTATION[i % DEFAULT_TONE_ROTATION.length];
+              const tone = DEFAULT_TONE_ROTATION[i % DEFAULT_TONE_ROTATION.length] ?? "neutral";
               return <Cell key={i} fill={TONE_VAR[tone]} />;
             })}
           </Pie>

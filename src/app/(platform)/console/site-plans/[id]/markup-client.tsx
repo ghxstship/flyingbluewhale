@@ -224,8 +224,9 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
       const pts = (g.points as unknown as number[][]) ?? [];
       if (pts.length < 2) return ctx.restore();
       ctx.beginPath();
-      ctx.moveTo(pts[0][0], pts[0][1]);
-      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+      // pts.length >= 2 checked above; each point is an [x, y] pair.
+      ctx.moveTo(pts[0]![0] ?? 0, pts[0]![1] ?? 0);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i]![0] ?? 0, pts[i]![1] ?? 0);
       if (m.kind === "polygon") ctx.closePath();
       ctx.stroke();
     } else if (m.kind === "text" || m.kind === "callout") {
@@ -238,16 +239,16 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
       const a = (g.a as number[]) ?? [0, 0];
       const b = (g.b as number[]) ?? [0, 0];
       ctx.beginPath();
-      ctx.moveTo(a[0], a[1]);
-      ctx.lineTo(b[0], b[1]);
+      ctx.moveTo(a[0] ?? 0, a[1] ?? 0);
+      ctx.lineTo(b[0] ?? 0, b[1] ?? 0);
       ctx.stroke();
       const lengthFt = g.length_ft;
       ctx.fillStyle = m.color;
       ctx.font = `${10 / scale}px sans-serif`;
       ctx.fillText(
         typeof lengthFt === "number" ? `${lengthFt.toFixed(2)} ft` : "—",
-        (a[0] + b[0]) / 2,
-        (a[1] + b[1]) / 2,
+        ((a[0] ?? 0) + (b[0] ?? 0)) / 2,
+        ((a[1] ?? 0) + (b[1] ?? 0)) / 2,
       );
     } else if (m.kind === "measure_count") {
       const x = Number(g.x ?? 0),

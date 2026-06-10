@@ -55,7 +55,7 @@ export async function runAI<S extends ZodTypeAny>(opts: RunAIOptions<S>): Promis
  */
 function extractJson(text: string): unknown | null {
   const fence = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-  const candidate = fence ? fence[1] : text;
+  const candidate = fence?.[1] ?? text;
   // Find the first '{' or '[' and try to parse from there onward, walking
   // backward from the last matching close brace if needed.
   const firstBrace = candidate.search(/[{[]/);

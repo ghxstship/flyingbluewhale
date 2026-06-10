@@ -94,7 +94,7 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
   };
 
   for (let i = 0; i < files.length; i++) {
-    const f = files[i];
+    const f = files[i]!;
     const path = `${session.orgId}/photos/${parsed.data.projectId}/${stamp}-${i}-${safeFilename(f.name)}`;
     const buf = await f.arrayBuffer();
     const { error: upErr } = await supabase.storage

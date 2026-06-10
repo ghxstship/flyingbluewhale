@@ -171,9 +171,9 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
   switch (name) {
     case "IF": {
       if (args.length !== 2 && args.length !== 3) return err("IF requires 2 or 3 arguments");
-      const cond = walk(args[0], ctx);
+      const cond = walk(args[0]!, ctx);
       if (cond.type === "error") return cond;
-      return asBool(cond) ? walk(args[1], ctx) : args[2] ? walk(args[2], ctx) : NULL;
+      return asBool(cond) ? walk(args[1]!, ctx) : args[2] ? walk(args[2], ctx) : NULL;
     }
     case "AND": {
       if (args.length === 0) return { type: "boolean", value: true };
@@ -194,14 +194,14 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
     }
     case "NOT": {
       if (args.length !== 1) return err("NOT requires 1 argument");
-      const v = walk(args[0], ctx);
+      const v = walk(args[0]!, ctx);
       if (v.type === "error") return v;
       return { type: "boolean", value: !asBool(v) };
     }
     case "IFERROR": {
       if (args.length !== 2) return err("IFERROR requires 2 arguments");
-      const v = walk(args[0], ctx);
-      return v.type === "error" ? walk(args[1], ctx) : v;
+      const v = walk(args[0]!, ctx);
+      return v.type === "error" ? walk(args[1]!, ctx) : v;
     }
     case "CONCAT": {
       let out = "";
@@ -214,7 +214,7 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
     }
     case "ROUND": {
       if (args.length < 1 || args.length > 2) return err("ROUND requires 1 or 2 arguments");
-      const n = asNumber(walk(args[0], ctx));
+      const n = asNumber(walk(args[0]!, ctx));
       if (n === null) return err("ROUND: first argument must be a number");
       const digits = args[1] ? (asNumber(walk(args[1], ctx)) ?? 0) : 0;
       const m = Math.pow(10, Math.floor(digits));
@@ -222,7 +222,7 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
     }
     case "ABS": {
       if (args.length !== 1) return err("ABS requires 1 argument");
-      const n = asNumber(walk(args[0], ctx));
+      const n = asNumber(walk(args[0]!, ctx));
       return n === null ? err("ABS: argument must be a number") : { type: "number", value: Math.abs(n) };
     }
     case "TODAY": {
@@ -238,8 +238,8 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
     case "DATEDIFF": {
       // DATEDIFF(end, start, unit?) — unit defaults to "days"
       if (args.length < 2 || args.length > 3) return err("DATEDIFF requires 2 or 3 arguments");
-      const a = asDate(walk(args[0], ctx));
-      const b = asDate(walk(args[1], ctx));
+      const a = asDate(walk(args[0]!, ctx));
+      const b = asDate(walk(args[1]!, ctx));
       if (!a || !b) return err("DATEDIFF: arguments must be dates");
       const unitV = args[2] ? walk(args[2], ctx) : ({ type: "text", value: "days" } as Value);
       const unit = unitV.type === "text" ? unitV.value.toLowerCase() : "days";
@@ -262,8 +262,8 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
     case "DATEADD": {
       // DATEADD(date, n, unit?) — unit defaults to "days"
       if (args.length < 2 || args.length > 3) return err("DATEADD requires 2 or 3 arguments");
-      const d = asDate(walk(args[0], ctx));
-      const n = asNumber(walk(args[1], ctx));
+      const d = asDate(walk(args[0]!, ctx));
+      const n = asNumber(walk(args[1]!, ctx));
       if (!d || n === null) return err("DATEADD: bad arguments");
       const unitV = args[2] ? walk(args[2], ctx) : ({ type: "text", value: "days" } as Value);
       const unit = unitV.type === "text" ? unitV.value.toLowerCase() : "days";
@@ -299,7 +299,7 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
       const isCount = name === "COUNT" || name === "COUNTIF";
       let nonNullSeen = 0;
       for (let i = 0; i < args.length; i++) {
-        const v = walk(args[i], ctx);
+        const v = walk(args[i]!, ctx);
         if (v.type === "error") return v;
         if (v.type === "null") continue;
         nonNullSeen++;
@@ -318,29 +318,29 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
     case "LEN":
     case "LENGTH": {
       if (args.length !== 1) return err("LEN requires 1 argument");
-      const v = walk(args[0], ctx);
+      const v = walk(args[0]!, ctx);
       const s = stringifyValue(v);
       return { type: "number", value: s.length };
     }
     case "UPPER": {
       if (args.length !== 1) return err("UPPER requires 1 argument");
-      const v = walk(args[0], ctx);
+      const v = walk(args[0]!, ctx);
       return { type: "text", value: stringifyValue(v).toUpperCase() };
     }
     case "LOWER": {
       if (args.length !== 1) return err("LOWER requires 1 argument");
-      const v = walk(args[0], ctx);
+      const v = walk(args[0]!, ctx);
       return { type: "text", value: stringifyValue(v).toLowerCase() };
     }
     case "TRIM": {
       if (args.length !== 1) return err("TRIM requires 1 argument");
-      const v = walk(args[0], ctx);
+      const v = walk(args[0]!, ctx);
       return { type: "text", value: stringifyValue(v).trim() };
     }
     case "CONTAINS": {
       if (args.length !== 2) return err("CONTAINS requires 2 arguments");
-      const haystack = stringifyValue(walk(args[0], ctx));
-      const needle = stringifyValue(walk(args[1], ctx));
+      const haystack = stringifyValue(walk(args[0]!, ctx));
+      const needle = stringifyValue(walk(args[1]!, ctx));
       return { type: "boolean", value: haystack.includes(needle) };
     }
     case "BLANK": {
@@ -349,7 +349,7 @@ function evalCall(name: string, args: Expr[], ctx: EvalContext): Value {
     case "ISBLANK":
     case "IS_NOT_NULL": {
       if (args.length !== 1) return err(`${name} requires 1 argument`);
-      const v = walk(args[0], ctx);
+      const v = walk(args[0]!, ctx);
       const blank = v.type === "null" || (v.type === "text" && v.value === "");
       return { type: "boolean", value: name === "ISBLANK" ? blank : !blank };
     }

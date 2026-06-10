@@ -42,7 +42,7 @@ const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
 export function isBlockedIp(ip: string): boolean {
   if (!ip) return true;
   if (isIPv4(ip)) {
-    const [a, b] = ip.split(".").map((n) => Number.parseInt(n, 10));
+    const [a = Number.NaN, b = Number.NaN] = ip.split(".").map((n) => Number.parseInt(n, 10));
     if (Number.isNaN(a) || Number.isNaN(b)) return true;
     if (a === 0) return true; // 0.0.0.0/8
     if (a === 10) return true; // 10/8 RFC1918

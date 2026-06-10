@@ -122,7 +122,12 @@ export default async function Page() {
 
   const all: Job[] = [...jobs, ...credJobs].sort((a, b) => a.due_at.localeCompare(b.due_at));
   const now = Date.now();
-  const grouped: Record<string, Job[]> = { overdue: [], today: [], this_week: [], later: [] };
+  const grouped: Record<ReturnType<typeof bucketDate>, Job[]> = {
+    overdue: [],
+    today: [],
+    this_week: [],
+    later: [],
+  };
   for (const j of all) grouped[bucketDate(j.due_at, now)].push(j);
 
   const overdueCount = grouped.overdue.length;

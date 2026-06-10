@@ -26,12 +26,14 @@ export function PullToRefresh({
   function onTouchStart(e: React.TouchEvent) {
     if (disabled || refreshing) return;
     if (window.scrollY > 0) return;
-    startY.current = e.touches[0].clientY;
+    startY.current = e.touches[0]?.clientY ?? null;
   }
 
   function onTouchMove(e: React.TouchEvent) {
     if (startY.current == null) return;
-    const dy = e.touches[0].clientY - startY.current;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const dy = touch.clientY - startY.current;
     if (dy <= 0) {
       setPull(0);
       return;

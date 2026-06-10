@@ -110,7 +110,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ projectId: stri
     rows
       .filter((r) => r.assignment_scan_codes.length > 0)
       .map(async (r) => {
-        const code = r.assignment_scan_codes[0].code;
+        const code = r.assignment_scan_codes[0]!.code;
         const holderName =
           r.party_kind === "user"
             ? (userMap.get(r.party_user_id!) ?? null)

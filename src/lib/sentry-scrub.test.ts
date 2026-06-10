@@ -75,7 +75,7 @@ describe("scrubSentryEvent", () => {
     expect(event.request.headers.Cookie).toContain("sb-abc-auth-token=[REDACTED]");
     expect(event.request.headers.Cookie).toContain("theme=dark");
     expect(event.message).not.toMatch(/julian@/);
-    expect(event.exception.values[0].value).not.toMatch(/eyJhbGci/);
+    expect(event.exception.values[0]?.value).not.toMatch(/eyJhbGci/);
   });
 
   it("is a no-op for events without request / exception fields", () => {

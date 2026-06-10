@@ -51,13 +51,15 @@ export function CommandPaletteDemo() {
   // Typewriter + suggestion cycle.
   useEffect(() => {
     if (paused) return;
-    const current = SCRIPT[scriptIdx].query;
+    const step = SCRIPT[scriptIdx];
+    if (!step) return;
+    const current = step.query;
     if (typed.length < current.length) {
       const t = setTimeout(() => setTyped(current.slice(0, typed.length + 1)), 38);
       return () => clearTimeout(t);
     }
     // After the query finishes, walk through highlights then advance.
-    if (highlight < SCRIPT[scriptIdx].results.length - 1) {
+    if (highlight < step.results.length - 1) {
       const t = setTimeout(() => setHighlight((h) => h + 1), 900);
       return () => clearTimeout(t);
     }
@@ -69,7 +71,8 @@ export function CommandPaletteDemo() {
     return () => clearTimeout(t);
   }, [typed, scriptIdx, highlight, paused]);
 
-  const results = SCRIPT[scriptIdx].results;
+  const active = SCRIPT[scriptIdx] ?? SCRIPT[0]!;
+  const results = active.results;
 
   return (
     <div
@@ -86,7 +89,7 @@ export function CommandPaletteDemo() {
             className="ms-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse bg-[var(--p-accent)]"
             aria-hidden
           />
-          <span className="sr-only">{SCRIPT[scriptIdx].query}</span>
+          <span className="sr-only">{active.query}</span>
         </div>
         <kbd className="hidden items-center gap-1 rounded border border-[var(--p-border)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--p-text-2)] sm:inline-flex">
           <Command size={10} aria-hidden />K

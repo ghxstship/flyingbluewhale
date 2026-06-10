@@ -16,11 +16,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 type Row = Record<string, unknown>;
 
 function makeDb() {
-  const tables: Record<string, Row[]> = {
-    domain_events: [],
-    automation_subscriptions: [],
-    job_queue: [],
+  const tables = {
+    domain_events: [] as Row[],
+    automation_subscriptions: [] as Row[],
+    job_queue: [] as Row[],
   };
+  const tableMap: Record<string, Row[]> = tables;
+  const rowsFor = (table: string): Row[] => (tableMap[table] ??= []);
   let idCounter = 0;
   const nextId = () => `00000000-0000-0000-0000-${String(++idCounter).padStart(12, "0")}`;
 
@@ -41,20 +43,20 @@ function makeDb() {
         for (const r of rows) {
           // Simulate the partial unique index on (type, dedup_key).
           if (table === "job_queue" && r.dedup_key) {
-            const dup = tables[table].find(
+            const dup = rowsFor(table).find(
               (existing) => existing.type === r.type && existing.dedup_key === r.dedup_key,
             );
             if (dup) {
               return { data: null, error: { message: "duplicate key value violates unique constraint" } };
             }
           }
-          tables[table].push({ id: r.id ?? nextId(), ...r });
+          rowsFor(table).push({ id: r.id ?? nextId(), ...r });
         }
         return { data: rows[0] ?? null, error: null };
       }
       if (mode === "update" && pendingUpdate) {
         const touched: Row[] = [];
-        for (const row of tables[table]) {
+        for (const row of rowsFor(table)) {
           if (matches(row)) {
             Object.assign(row, pendingUpdate);
             touched.push(row);
@@ -66,7 +68,7 @@ function makeDb() {
         return { data: touched, error: null };
       }
       if (mode === "select") {
-        let found = tables[table].filter(matches);
+        let found = rowsFor(table).filter(matches);
         if (orderCol) {
           found = [...found].sort((a, b) => {
             const av = String(a[orderCol!] ?? "");
@@ -130,7 +132,7 @@ function makeDb() {
 
   const client = {
     from: (table: string) => {
-      tables[table] ??= [];
+      rowsFor(table);
       return builderFor(table);
     },
   };
@@ -168,11 +170,11 @@ describe("emitDomainEvent", () => {
 
     expect(db.tables.domain_events).toHaveLength(1);
     const row = db.tables.domain_events[0];
-    expect(row.org_id).toBe("org-1");
-    expect(row.event_type).toBe("invoice.paid");
-    expect(row.source_table).toBe("invoices");
-    expect(row.source_id).toBe("inv-1");
-    expect(row.payload).toEqual({ amountCents: 12345 });
+    expect(row?.org_id).toBe("org-1");
+    expect(row?.event_type).toBe("invoice.paid");
+    expect(row?.source_table).toBe("invoices");
+    expect(row?.source_id).toBe("inv-1");
+    expect(row?.payload).toEqual({ amountCents: 12345 });
   });
 
   it("swallows insert exceptions so the originating notify path never throws", async () => {
@@ -223,7 +225,7 @@ describe("drainPending", () => {
     expect(db.tables.job_queue).toHaveLength(2);
     expect(db.tables.job_queue.map((j) => j.dedup_key).sort()).toEqual(["auto-1:event:ev-1", "auto-2:event:ev-1"]);
     // dispatched_at stamped.
-    expect(db.tables.domain_events[0].dispatched_at).toBeTruthy();
+    expect(db.tables.domain_events[0]?.dispatched_at).toBeTruthy();
   });
 
   it("ignores disabled subscriptions and cross-org rows", async () => {
@@ -296,7 +298,7 @@ describe("drainPending", () => {
     const result = await drainPending();
     expect(result.enqueued).toBe(1);
     expect(db.tables.job_queue).toHaveLength(1);
-    expect(db.tables.job_queue[0].payload).toMatchObject({
+    expect(db.tables.job_queue[0]?.payload).toMatchObject({
       automationId: "auto-match",
       triggerKind: "event",
     });

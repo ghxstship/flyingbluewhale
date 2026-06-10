@@ -86,7 +86,7 @@ export type RetainerTier = {
   exclusive?: { name: string; detail: string }[]; // not available à la carte
 };
 
-export const HEAT_RETAINER_TIERS: RetainerTier[] = [
+export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
   {
     id: "base",
     num: "01",
@@ -722,7 +722,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
 // All ranges are buildout-only per HEAT direction (May 3, 2026 email).
 // ─────────────────────────────────────────────────────────────────────────
 
-export const HEAT_TIERS: ActivationTier[] = [
+export const HEAT_TIERS: [ActivationTier, ActivationTier, ActivationTier] = [
   {
     id: "small",
     num: "01",

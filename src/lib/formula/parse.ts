@@ -22,10 +22,10 @@ class Parser {
   constructor(private readonly tokens: Token[]) {}
 
   peek(): Token {
-    return this.tokens[this.i];
+    return this.tokens[this.i] ?? { kind: "eof" };
   }
   next(): Token {
-    return this.tokens[this.i++];
+    return this.tokens[this.i++] ?? { kind: "eof" };
   }
 
   parseExpression(): Expr {

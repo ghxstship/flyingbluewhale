@@ -49,7 +49,7 @@ export function parseMentions(text: string): ParsedMention[] {
   while ((m = TOKEN_RE.exec(text)) !== null) {
     const start = m.index;
     const matched = m[0];
-    const raw = m[1];
+    const raw = m[1]!;
     const end = start + matched.length;
 
     // Left boundary: must be start-of-string or not in LEFT_REJECT.

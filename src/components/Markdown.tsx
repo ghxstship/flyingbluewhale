@@ -22,7 +22,7 @@ function tokenize(src: string): Block[] {
   const out: Block[] = [];
   let i = 0;
   while (i < lines.length) {
-    const line = lines[i];
+    const line = lines[i]!;
     if (line.trim() === "") {
       i++;
       continue;
@@ -37,8 +37,8 @@ function tokenize(src: string): Block[] {
       const lang = fence[1] ?? null;
       const body: string[] = [];
       i++;
-      while (i < lines.length && !/^```\s*$/.test(lines[i])) {
-        body.push(lines[i]);
+      while (i < lines.length && !/^```\s*$/.test(lines[i]!)) {
+        body.push(lines[i]!);
         i++;
       }
       i++; // skip closing fence
@@ -47,14 +47,14 @@ function tokenize(src: string): Block[] {
     }
     const heading = /^(#{1,6})\s+(.*)$/.exec(line);
     if (heading) {
-      out.push({ kind: "heading", level: heading[1].length as 1, text: heading[2].trim() });
+      out.push({ kind: "heading", level: heading[1]!.length as 1, text: heading[2]!.trim() });
       i++;
       continue;
     }
     if (/^\s*[-*]\s+/.test(line)) {
       const items: string[] = [];
-      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
-        items.push(lines[i].replace(/^\s*[-*]\s+/, ""));
+      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i]!)) {
+        items.push(lines[i]!.replace(/^\s*[-*]\s+/, ""));
         i++;
       }
       out.push({ kind: "ul", items });
@@ -62,8 +62,8 @@ function tokenize(src: string): Block[] {
     }
     if (/^\s*\d+\.\s+/.test(line)) {
       const items: string[] = [];
-      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
-        items.push(lines[i].replace(/^\s*\d+\.\s+/, ""));
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i]!)) {
+        items.push(lines[i]!.replace(/^\s*\d+\.\s+/, ""));
         i++;
       }
       out.push({ kind: "ol", items });
@@ -72,8 +72,8 @@ function tokenize(src: string): Block[] {
     // paragraph — accumulate until blank line / structural token
     const para: string[] = [line];
     i++;
-    while (i < lines.length && lines[i].trim() !== "" && !/^(#{1,6}\s|[-*]\s|\d+\.\s|---|```)/.test(lines[i])) {
-      para.push(lines[i]);
+    while (i < lines.length && lines[i]!.trim() !== "" && !/^(#{1,6}\s|[-*]\s|\d+\.\s|---|```)/.test(lines[i]!)) {
+      para.push(lines[i]!);
       i++;
     }
     out.push({ kind: "paragraph", text: para.join(" ") });
@@ -107,7 +107,7 @@ function renderInline(src: string, keyPrefix: string): React.ReactNode[] {
     } else if (tok.startsWith("[")) {
       const link = /\[([^\]]+)\]\(([^)]+)\)/.exec(tok);
       if (link) {
-        const url = link[2].trim();
+        const url = link[2]!.trim();
         const safe = /^(https?:|\/)/i.test(url) ? url : "#";
         out.push(
           <a

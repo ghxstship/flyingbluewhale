@@ -26,8 +26,8 @@ describe("SavedView shape", () => {
     const v: SavedView = {
       spotlight: [{ when: "row.state === 'overdue'", tone: "error" }],
     };
-    expect(v.spotlight![0].tone).toBe("error");
-    expect(v.spotlight![0].when).toContain("overdue");
+    expect(v.spotlight![0]?.tone).toBe("error");
+    expect(v.spotlight![0]?.when).toContain("overdue");
   });
 
   it("supports multi-key sort", () => {
@@ -38,7 +38,7 @@ describe("SavedView shape", () => {
       ],
     };
     expect(v.sort).toHaveLength(2);
-    expect(v.sort![1].dir).toBe("asc");
+    expect(v.sort![1]?.dir).toBe("asc");
   });
 
   it("supports per-column include-only filters", () => {

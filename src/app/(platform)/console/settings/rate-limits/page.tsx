@@ -22,7 +22,7 @@ type Row = {
 
 function getBucketHint(
   t: (key: string, vars?: Record<string, string | number>, fallback?: string) => string,
-): Record<string, { label: string; description: string }> {
+): Record<Row["bucket"], { label: string; description: string }> {
   return {
     ai: {
       label: t("console.settings.rateLimits.bucket.ai.label", undefined, "AI"),

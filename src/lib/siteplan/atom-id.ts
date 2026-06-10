@@ -62,16 +62,16 @@ export function parseAtomId(raw: string): AtomIdParts | null {
   const m = SITEPLAN_ATOM_ID_RE.exec(raw.trim());
   if (!m) return null;
   return {
-    org: m[1],
-    evt: m[2],
-    yy: m[3],
-    ven: m[4],
-    classCode: m[5],
-    div: m[6],
-    sec: m[7],
-    zon: m[8],
-    seq: m[9],
-    rev: m[10],
+    org: m[1]!,
+    evt: m[2]!,
+    yy: m[3]!,
+    ven: m[4]!,
+    classCode: m[5]!,
+    div: m[6]!,
+    sec: m[7]!,
+    zon: m[8]!,
+    seq: m[9]!,
+    rev: m[10]!,
   };
 }
 

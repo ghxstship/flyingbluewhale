@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+# Trunk-based pushes go straight to main — gate them locally so red main
+# can't happen by accident (it did: audit 2026-06-09 found 9 failing canon
+# tests + 10 lint errors on main). Skip with PUSH_SKIP_CHECKS=1 for
+# emergencies only.
+[ "$PUSH_SKIP_CHECKS" = "1" ] && exit 0
+echo "pre-push: typecheck + unit tests (PUSH_SKIP_CHECKS=1 to bypass)"
+npx tsc --noEmit || exit 1
+npx vitest run --silent || exit 1

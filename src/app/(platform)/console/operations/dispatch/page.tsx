@@ -260,7 +260,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ d
                   {items.map((b, i) => {
                     const startCol = Math.max(0, b.startHour - HOURS[0]);
                     const widthHrs = Math.max(0.25, b.endHour - b.startHour);
-                    if (b.startHour > HOURS[HOURS.length - 1] + 1) return null;
+                    if (b.startHour > HOURS[HOURS.length - 1]! + 1) return null;
                     if (b.endHour < HOURS[0]) return null;
                     return (
                       <Link

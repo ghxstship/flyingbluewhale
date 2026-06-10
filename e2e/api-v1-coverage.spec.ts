@@ -39,12 +39,12 @@ function parseSpec(): Array<{ path: string; method: Method }> {
   const out: Array<{ path: string; method: Method }> = [];
   let current: string | null = null;
   for (let i = pathsIdx + 1; i < lines.length; i++) {
-    const line = lines[i];
+    const line = lines[i]!;
     if (!line.trim()) continue;
     if (/^[^\s#]/.test(line)) break;
     const p = line.match(/^ {2}(\/[^\s:]+):\s*$/);
     if (p) {
-      current = p[1];
+      current = p[1]!;
       continue;
     }
     const m = line.match(/^ {4}(get|post|put|patch|delete)\s*:/);

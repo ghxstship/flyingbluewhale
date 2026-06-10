@@ -8,7 +8,7 @@ import { createChangeOrder, decideChangeOrder } from "@/lib/proposals/portal/mut
 import type { FormState } from "@/components/FormShell";
 
 function actor(session: { userId: string; orgId: string; email: string }) {
-  return { userId: session.userId, orgId: session.orgId, userLabel: session.email.split("@")[0] };
+  return { userId: session.userId, orgId: session.orgId, userLabel: session.email.split("@")[0] ?? null };
 }
 
 export async function createChangeOrderAction(_prev: FormState, fd: FormData): Promise<FormState> {

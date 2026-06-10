@@ -65,7 +65,7 @@ function hexOrRgbToRgb(raw: string): [number, number, number] | null {
   const trimmed = raw.trim();
   const hexMatch = trimmed.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
   if (hexMatch) {
-    const h = hexMatch[1];
+    const h = hexMatch[1]!;
     const full =
       h.length === 3
         ? h
@@ -77,16 +77,18 @@ function hexOrRgbToRgb(raw: string): [number, number, number] | null {
   }
   const rgbMatch = trimmed.match(/rgba?\(([^)]+)\)/);
   if (rgbMatch) {
-    const parts = rgbMatch[1].split(",").map((p) => parseFloat(p.trim()));
-    if (parts.length >= 3) return [parts[0], parts[1], parts[2]];
+    const parts = rgbMatch[1]!.split(",").map((p) => parseFloat(p.trim()));
+    if (parts.length >= 3) return [parts[0]!, parts[1]!, parts[2]!];
   }
   return null;
 }
 
 function relativeLuminance([r, g, b]: [number, number, number]): number {
-  const srgb = [r, g, b].map((v) => v / 255);
-  const lin = srgb.map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
-  return 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+  const lin = (v: number) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
 }
 
 function contrastRatio(a: [number, number, number], b: [number, number, number]): number {
@@ -221,9 +223,9 @@ for (const route of SAMPLE_ROUTES) {
               function toRgb(raw: string): [number, number, number] | null {
                 const m = raw.match(/rgba?\(([^)]+)\)/);
                 if (!m) return null;
-                const parts = m[1].split(",").map((p) => parseFloat(p.trim()));
+                const parts = m[1]!.split(",").map((p) => parseFloat(p.trim()));
                 if (parts.length < 3) return null;
-                return [parts[0], parts[1], parts[2]];
+                return [parts[0]!, parts[1]!, parts[2]!];
               }
               const picks: Array<{ role: string; contrast: number | null }> = [];
               const seen = new Set<string>();
@@ -252,11 +254,11 @@ for (const route of SAMPLE_ROUTES) {
                     continue;
                   }
                   const lum = (c: [number, number, number]) => {
-                    const [r, g, b] = c.map((v) => {
+                    const f = (v: number) => {
                       const n = v / 255;
                       return n <= 0.03928 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
-                    });
-                    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                    };
+                    return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
                   };
                   const la = lum(bg),
                     lb = lum(fg);

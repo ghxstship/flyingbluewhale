@@ -131,6 +131,7 @@ export function ActivityItem({ item }: { item: ActivityItemType }) {
           <dl className="mt-2 space-y-1 text-[11px]">
             {fields.map((field) => {
               const entry = item.diff![field];
+              if (!entry) return null;
               return (
                 <div key={field} className="surface-inset px-2 py-1">
                   <dt className="font-mono text-[10px] tracking-wide text-[var(--p-text-2)] uppercase">{field}</dt>

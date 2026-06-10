@@ -160,7 +160,7 @@ export async function indexSource(args: {
         chunk_ordinal: i,
         embedding_model: model,
         embedding: result[i],
-        token_count: Math.round(chunks[i].length / 4),
+        token_count: Math.round((chunks[i]?.length ?? 0) / 4),
       });
     }
     return { inserted: chunks.length };

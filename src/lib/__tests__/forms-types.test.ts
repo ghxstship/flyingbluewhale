@@ -27,7 +27,7 @@ describe("coerceFormSchema", () => {
     const s = coerceFormSchema(raw);
     expect(s.version).toBe(2);
     expect(s.sections).toHaveLength(1);
-    expect(s.fields[0].conditions).toHaveLength(1);
+    expect(s.fields[0]?.conditions).toHaveLength(1);
     expect(s.submit?.redirectUrl).toBe("https://example.com/done");
     expect(s.antiSpam?.captcha).toBe(true);
   });
@@ -35,7 +35,7 @@ describe("coerceFormSchema", () => {
     const raw = { fields: [{ type: "text" }, { key: "ok", label: "OK", type: "text" }] };
     const s = coerceFormSchema(raw);
     expect(s.fields).toHaveLength(1);
-    expect(s.fields[0].key).toBe("ok");
+    expect(s.fields[0]?.key).toBe("ok");
   });
   it("returns empty fields for null/non-object", () => {
     expect(coerceFormSchema(null).fields).toEqual([]);

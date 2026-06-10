@@ -64,14 +64,14 @@ function parseOpenapi(): Map<string, Set<Method>> {
   const map = new Map<string, Set<Method>>();
   let currentPath: string | null = null;
   for (let i = pathsIdx + 1; i < lines.length; i++) {
-    const line = lines[i];
+    const line = lines[i]!;
     if (!line.trim()) continue;
     // Top-level key (no leading space) ends the paths block.
     if (/^[^\s#]/.test(line)) break;
     // A path entry is indented exactly 2 spaces and starts with `/`.
     const pathMatch = line.match(/^ {2}(\/[^\s:]+):\s*$/);
     if (pathMatch) {
-      currentPath = pathMatch[1];
+      currentPath = pathMatch[1]!;
       map.set(currentPath, new Set());
       continue;
     }

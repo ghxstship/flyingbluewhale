@@ -109,7 +109,11 @@
     "vitest": "^2.1.8"
   },
   "lint-staged": {
-    "*.{ts,tsx,css,md,json}": [
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix --max-warnings=9999"
+    ],
+    "*.{css,md,json}": [
       "prettier --write"
     ]
   },

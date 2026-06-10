@@ -22,7 +22,7 @@ export async function verifyStripeWebhook(
 
   const parts = Object.fromEntries(
     sigHeader.split(",").map((p) => {
-      const [k, v] = p.split("=");
+      const [k = "", v] = p.split("=");
       return [k.trim(), v?.trim() ?? ""];
     }),
   );

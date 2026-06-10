@@ -82,7 +82,7 @@ export async function POST(req: Request) {
   const candidates: Array<{ local: string; raw: string }> = [];
   for (const dest of evt.mail.destination) {
     const match = dest.match(/^([^@]+)@/);
-    if (match) candidates.push({ local: match[1], raw: dest });
+    if (match) candidates.push({ local: match[1]!, raw: dest });
   }
 
   let projectEmail: { id: string; org_id: string; project_id: string } | null = null;

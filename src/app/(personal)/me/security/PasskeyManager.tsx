@@ -64,7 +64,7 @@ export function PasskeyManager() {
       const deviceName =
         prompt(
           t("me.security.passkeys.prompts.deviceName", undefined, "Name this device (optional):"),
-          navigator.userAgent.split("(")[0].trim(),
+          navigator.userAgent.split("(")[0]!.trim(),
         ) ?? null;
 
       const verifyRes = await fetch("/api/v1/auth/webauthn/register/verify", {

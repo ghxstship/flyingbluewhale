@@ -183,10 +183,10 @@ describe("ADR-0005 super-persona collapse", () => {
       // single persona section — 2 sections total.
       expect(group.sections).toHaveLength(p === "vendor" ? 3 : 2);
       const [workspace, ...personaSections] = group.sections!;
-      expect(workspace.label).toBe("Workspace");
+      expect(workspace?.label).toBe("Workspace");
       // Workspace section is the shared 6 — same across every persona.
-      expect(workspace.items).toHaveLength(6);
-      expect(workspace.items.map((i) => i.label)).toEqual([
+      expect(workspace?.items).toHaveLength(6);
+      expect(workspace?.items.map((i) => i.label)).toEqual([
         "Overview",
         "Guide",
         "Updates",

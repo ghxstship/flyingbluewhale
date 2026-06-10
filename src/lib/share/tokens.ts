@@ -67,7 +67,7 @@ export function verifyShareToken(token: string): { id: string; expiresAt: Date |
 
   const segs = payload.split(".");
   if (segs.length !== 3) return null;
-  const [id, expStr, nonce] = segs;
+  const [id, expStr = "", nonce = ""] = segs;
   if (!id) return null;
 
   let expiresAt: Date | null = null;

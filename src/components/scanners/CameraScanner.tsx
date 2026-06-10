@@ -282,8 +282,8 @@ export function CameraScanner({
           if (stoppedRef.current || cancelled) return;
           try {
             const results = await detector.detect(video);
-            if (results.length > 0) {
-              const r = results[0];
+            const r = results[0];
+            if (r) {
               emitIfFresh({ value: r.rawValue, format: r.format, boundingBox: r.boundingBox });
               if (!continuous) {
                 cleanup();

@@ -18,7 +18,7 @@ export function tokenize(source: string): Token[] {
   const n = source.length;
 
   while (i < n) {
-    const c = source[i];
+    const c = source[i]!;
 
     // whitespace
     if (c === " " || c === "\t" || c === "\n" || c === "\r") {
@@ -69,11 +69,11 @@ export function tokenize(source: string): Token[] {
     }
 
     // number
-    if ((c >= "0" && c <= "9") || (c === "." && i + 1 < n && source[i + 1] >= "0" && source[i + 1] <= "9")) {
+    if ((c >= "0" && c <= "9") || (c === "." && i + 1 < n && source[i + 1]! >= "0" && source[i + 1]! <= "9")) {
       let j = i;
       let saw_dot = false;
       while (j < n) {
-        const cc = source[j];
+        const cc = source[j]!;
         if (cc >= "0" && cc <= "9") {
           j++;
         } else if (cc === "." && !saw_dot) {
@@ -94,7 +94,7 @@ export function tokenize(source: string): Token[] {
     if ((c >= "a" && c <= "z") || (c >= "A" && c <= "Z") || c === "_") {
       let j = i;
       while (j < n) {
-        const cc = source[j];
+        const cc = source[j]!;
         if ((cc >= "a" && cc <= "z") || (cc >= "A" && cc <= "Z") || (cc >= "0" && cc <= "9") || cc === "_") {
           j++;
         } else {

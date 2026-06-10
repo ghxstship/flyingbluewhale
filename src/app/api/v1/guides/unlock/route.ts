@@ -98,7 +98,7 @@ export async function POST(req: Request) {
   // works across atlvs/gvteway/compvss subdomains (matches Supabase auth
   // cookie behavior in src/lib/supabase/server.ts).
   const hostHeader = h.get("host") ?? "";
-  const host = hostHeader.split(":")[0].toLowerCase();
+  const host = hostHeader.split(":")[0]!.toLowerCase();
   const domain = host.endsWith("atlvs.pro") ? ".atlvs.pro" : undefined;
   cookieStore.set(guideCookieName(project.id), token, {
     httpOnly: true,

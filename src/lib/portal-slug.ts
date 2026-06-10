@@ -27,7 +27,7 @@ const PORTAL_SLUG_RX = /^\/p\/([^/]+)(?:\/|$)/;
 export function extractPortalSlug(pathname: string): string | null {
   const m = PORTAL_SLUG_RX.exec(pathname);
   if (!m) return null;
-  const slug = m[1];
+  const slug = m[1]!;
   if (slug === "select" || slug === "undefined" || slug === "null") return null;
   return slug;
 }

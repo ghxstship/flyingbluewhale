@@ -123,5 +123,5 @@ export function Breadcrumbs({
  */
 function collapseMiddle(items: Crumb[]): Crumb[] {
   if (items.length <= 4) return items;
-  return [items[0], { label: "…" }, items[items.length - 2], items[items.length - 1]];
+  return [items[0]!, { label: "…" }, items[items.length - 2]!, items[items.length - 1]!];
 }

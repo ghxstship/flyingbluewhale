@@ -99,7 +99,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const tryRead = (key: string) => {
         const re = new RegExp(`(?:^|;\\s*)${key}=([^;]+)`);
         const m = document.cookie.match(re);
-        const v = m ? decodeURIComponent(m[1]) : null;
+        const v = m ? decodeURIComponent(m[1]!) : null;
         return v === "light" || v === "dark" || v === "system" ? (v as ColorMode) : null;
       };
       return tryRead(MODE_COOKIE_NAME) ?? tryRead(LEGACY_MODE_COOKIE_NAME);
@@ -117,7 +117,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const cookieAccent = (() => {
       const re = new RegExp(`(?:^|;\\s*)${ACCENT_COOKIE_NAME}=([^;]+)`);
       const m = document.cookie.match(re);
-      const v = m ? decodeURIComponent(m[1]) : null;
+      const v = m ? decodeURIComponent(m[1]!) : null;
       return isValidAccent(v) ? v : null;
     })();
     const storedAccent = (() => {

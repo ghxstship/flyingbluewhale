@@ -83,7 +83,7 @@ type TokenPayload = {
 
 function b64urlEncode(bytes: Uint8Array): string {
   let bin = "";
-  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]!);
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
@@ -122,7 +122,7 @@ async function hmac(input: Uint8Array): Promise<Uint8Array> {
 function constantTimeEqual(a: Uint8Array, b: Uint8Array): boolean {
   if (a.length !== b.length) return false;
   let out = 0;
-  for (let i = 0; i < a.length; i++) out |= a[i] ^ b[i];
+  for (let i = 0; i < a.length; i++) out |= a[i]! ^ b[i]!;
   return out === 0;
 }
 
@@ -156,7 +156,10 @@ export async function verifyToken(
   if (!token) return null;
   const parts = token.split(".");
   if (parts.length !== 3) return null;
-  const [headerB64, payloadB64, sigB64] = parts;
+  // parts.length === 3 checked above.
+  const headerB64 = parts[0]!;
+  const payloadB64 = parts[1]!;
+  const sigB64 = parts[2]!;
   let signing: Uint8Array;
   let sigBytes: Uint8Array;
   try {

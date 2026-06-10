@@ -41,7 +41,7 @@ const LOCALE_LABELS: Record<Locale, string> = {
 function readLocaleCookie(): Locale {
   if (typeof document === "undefined") return DEFAULT_LOCALE;
   const match = document.cookie.match(/(?:^|;\s*)locale=([^;]+)/);
-  const raw = match ? decodeURIComponent(match[1]) : null;
+  const raw = match?.[1] ? decodeURIComponent(match[1]) : null;
   return isSupportedLocale(raw) ? raw : DEFAULT_LOCALE;
 }
 

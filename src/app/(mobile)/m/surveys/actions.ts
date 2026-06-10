@@ -30,7 +30,7 @@ export async function submitSurvey(fd: FormData): Promise<void> {
     if (!k.startsWith("q_") || seen.has(k)) continue;
     seen.add(k);
     const values = fd.getAll(k).map((v) => String(v));
-    answers[k.slice(2)] = values.length === 1 ? values[0] : values;
+    answers[k.slice(2)] = values.length === 1 ? values[0]! : values;
   }
 
   const { error } = await supabase.from("survey_responses").insert({

@@ -171,8 +171,9 @@ export async function importBudgetCsv(_: State, fd: FormData): Promise<State> {
   const lines = raw.split(/\r?\n/).filter((l) => l.trim().length > 0);
   if (lines.length < 2) return { error: "Need at least a header row plus one data row." };
 
-  const delimiter = detectDelimiter(lines[0]);
-  const headerCells = parseCsvLine(lines[0], delimiter).map((c) => c.trim().toLowerCase());
+  // lines.length >= 2 checked above.
+  const delimiter = detectDelimiter(lines[0]!);
+  const headerCells = parseCsvLine(lines[0]!, delimiter).map((c) => c.trim().toLowerCase());
   const columnMap: (CanonicalKey | null)[] = headerCells.map((h) => HEADER_MAP[h] ?? null);
 
   // Project name → id resolution (cached per call).
@@ -191,7 +192,7 @@ export async function importBudgetCsv(_: State, fd: FormData): Promise<State> {
   const skipped: Array<{ row: number; reason: string }> = [];
 
   for (let li = 1; li < lines.length; li++) {
-    const cells = parseCsvLine(lines[li], delimiter);
+    const cells = parseCsvLine(lines[li]!, delimiter);
     const get = (key: CanonicalKey): string => {
       const idx = columnMap.indexOf(key);
       return idx === -1 ? "" : (cells[idx] ?? "");

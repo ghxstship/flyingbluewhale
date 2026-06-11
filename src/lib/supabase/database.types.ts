@@ -24105,6 +24105,7 @@ export type Database = {
           roster_id: string | null
           starts_at: string
           venue_id: string | null
+          worker_confirmed_at: string | null
           workforce_member_id: string | null
           zone_id: string | null
         }
@@ -24122,6 +24123,7 @@ export type Database = {
           roster_id?: string | null
           starts_at: string
           venue_id?: string | null
+          worker_confirmed_at?: string | null
           workforce_member_id?: string | null
           zone_id?: string | null
         }
@@ -24139,6 +24141,7 @@ export type Database = {
           roster_id?: string | null
           starts_at?: string
           venue_id?: string | null
+          worker_confirmed_at?: string | null
           workforce_member_id?: string | null
           zone_id?: string | null
         }

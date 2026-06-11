@@ -1,11 +1,10 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
-import { Badge, type BadgeVariant } from "@/components/ui/Badge";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
-import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -17,15 +16,6 @@ type Row = {
   proposal_state: string;
   sent_at: string | null;
   signed_at: string | null;
-};
-
-const STATUS_VARIANT: Record<string, BadgeVariant> = {
-  signed: "success",
-  rejected: "error",
-  expired: "muted",
-  draft: "info",
-  sent: "info",
-  approved: "success",
 };
 
 export default async function Page({ params }: { params: Promise<{ clientId: string }> }) {
@@ -70,9 +60,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
             {
               key: "proposal_state",
               header: t("console.clients.proposals.col.proposal_state", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_VARIANT[r.proposal_state] ?? "default"}>{toTitle(r.proposal_state)}</Badge>
-              ),
+              render: (r) => <StatusBadge status={r.proposal_state} />,
               accessor: (r) => r.proposal_state,
               filterable: true,
               groupable: true,

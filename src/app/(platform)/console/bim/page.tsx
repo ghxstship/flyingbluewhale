@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -25,14 +26,6 @@ type Row = {
   model_state: ModelState;
   uploaded_at: string;
   project: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<ModelState, "muted" | "info" | "warning" | "success" | "error"> = {
-  uploaded: "info",
-  processing: "warning",
-  ready: "success",
-  failed: "error",
-  archived: "muted",
 };
 
 function fmtBytes(b: number | null): string {
@@ -165,7 +158,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.bim.columns.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.model_state]}>{toTitle(r.model_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.model_state)}>{toTitle(r.model_state)}</Badge>,
               accessor: (r) => r.model_state,
               filterable: true,
               groupable: true,

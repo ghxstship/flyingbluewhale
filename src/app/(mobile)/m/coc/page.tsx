@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -117,7 +118,7 @@ export default async function MobileCocPage() {
         </ul>
         <p className="mt-4 text-xs text-[var(--p-text-2)]">
           {t("m.coc.desktopPrompt", undefined, "Need the desktop view?")}{" "}
-          <Link href="/console/compliance/coc" className="text-[var(--p-accent)]">
+          <Link href={urlFor("platform", "/compliance/coc")} className="text-[var(--p-accent)]">
             {t("m.coc.desktopLink", undefined, "Open Chain of Custody")}
           </Link>
           .

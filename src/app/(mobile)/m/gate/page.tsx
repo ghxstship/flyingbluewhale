@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -16,13 +17,6 @@ type ScanRow = {
   scanned_at: string;
   gate_code: string | null;
   venue: { name: string | null } | null;
-};
-
-const RESULT_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
-  granted: "success",
-  denied: "error",
-  expired: "warning",
-  unknown: "muted",
 };
 
 export default async function MobileGatePage() {
@@ -94,7 +88,7 @@ export default async function MobileGatePage() {
                   {r.reason && <div className="mt-0.5 truncate text-xs text-[var(--p-text-2)]">{r.reason}</div>}
                 </div>
                 <div className="flex flex-none items-center gap-2">
-                  <Badge variant={RESULT_TONE[r.result] ?? "muted"}>{r.result}</Badge>
+                  <Badge variant={toneFor(r.result)}>{r.result}</Badge>
                   <span className="font-mono text-xs text-[var(--p-text-2)]">{fmtTime(r.scanned_at)}</span>
                 </div>
               </li>

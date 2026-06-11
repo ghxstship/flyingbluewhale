@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
+import { SEVERITY_TONE, toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -16,21 +18,6 @@ type IncidentRow = {
   summary: string;
   severity: string;
   incident_state: string;
-};
-
-const SEVERITY_TONE: Record<string, "muted" | "warning" | "error"> = {
-  low: "muted",
-  medium: "warning",
-  high: "error",
-  critical: "error",
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
-  open: "warning",
-  triage: "info",
-  in_progress: "info",
-  resolved: "success",
-  closed: "muted",
 };
 
 export default async function MobileIncidentPage() {
@@ -102,7 +89,10 @@ export default async function MobileIncidentPage() {
         ) : (
           rows.map((r) => (
             <li key={r.id}>
-              <Link href={`/console/operations/incidents/${r.id}`} className="surface flex items-start gap-3 p-4">
+              <Link
+                href={urlFor("platform", `/operations/incidents/${r.id}`)}
+                className="surface flex items-start gap-3 p-4"
+              >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <div className="text-sm leading-snug font-semibold">{r.summary}</div>
@@ -112,8 +102,8 @@ export default async function MobileIncidentPage() {
                   </div>
                   {r.location && <div className="mt-1 text-xs text-[var(--p-text-2)]">{r.location}</div>}
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
-                    <Badge variant={STATUS_TONE[r.incident_state] ?? "muted"}>{toTitle(r.incident_state)}</Badge>
+                    <Badge variant={SEVERITY_TONE[r.severity] ?? "default"}>{toTitle(r.severity)}</Badge>
+                    <Badge variant={toneFor(r.incident_state)}>{toTitle(r.incident_state)}</Badge>
                   </div>
                 </div>
               </Link>

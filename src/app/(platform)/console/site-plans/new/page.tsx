@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
+import { FormField } from "@/components/ui/FormField";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -9,10 +10,6 @@ import { getRequestT } from "@/lib/i18n/request";
 import { createSitePlanSheet } from "./actions";
 
 export const dynamic = "force-dynamic";
-
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
-const MONO = `${INPUT} font-mono uppercase tracking-wide`;
-const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const XPMS_CLASSES = [
   { value: 0, label: "0 EXECUTIVE" },
@@ -71,50 +68,62 @@ export default async function Page() {
               {t("console.sitePlans.new.section.atomId", undefined, "Atom ID")}
             </h3>
             <div className="grid grid-cols-5 gap-3">
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  ORG<span className="ms-0.5 text-[var(--p-danger)]">*</span>
-                </span>
-                <input name="org_code" required maxLength={4} className={MONO} placeholder="SC" />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  EVT<span className="ms-0.5 text-[var(--p-danger)]">*</span>
-                </span>
-                <input name="evt_code" required maxLength={5} className={MONO} placeholder="EDCLV" />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>YY</span>
+              <FormField label="ORG" required>
+                <input
+                  name="org_code"
+                  required
+                  maxLength={4}
+                  className="ps-input font-mono tracking-wide uppercase"
+                  placeholder="SC"
+                />
+              </FormField>
+              <FormField label="EVT" required>
+                <input
+                  name="evt_code"
+                  required
+                  maxLength={5}
+                  className="ps-input font-mono tracking-wide uppercase"
+                  placeholder="EDCLV"
+                />
+              </FormField>
+              <FormField label="YY">
                 <input
                   name="year"
                   required
                   maxLength={4}
-                  className={MONO}
+                  className="ps-input font-mono tracking-wide uppercase"
                   defaultValue={String(currentYear).padStart(2, "0")}
                 />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  VEN<span className="ms-0.5 text-[var(--p-danger)]">*</span>
-                </span>
-                <input name="ven_code" required maxLength={5} className={MONO} placeholder="LVMS" />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  ZON<span className="ms-0.5 text-[var(--p-danger)]">*</span>
-                </span>
-                <input name="zon_code" required maxLength={8} className={MONO} placeholder="KITPRP" />
-              </label>
+              </FormField>
+              <FormField label="VEN" required>
+                <input
+                  name="ven_code"
+                  required
+                  maxLength={5}
+                  className="ps-input font-mono tracking-wide uppercase"
+                  placeholder="LVMS"
+                />
+              </FormField>
+              <FormField label="ZON" required>
+                <input
+                  name="zon_code"
+                  required
+                  maxLength={8}
+                  className="ps-input font-mono tracking-wide uppercase"
+                  placeholder="KITPRP"
+                />
+              </FormField>
             </div>
             <div className="grid grid-cols-3 gap-3">
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.seq", undefined, "SEQ")}</span>
-                <input name="seq" type="number" min={1} max={999} defaultValue={1} className={INPUT} />
-              </label>
-              <label className="col-span-2 flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.revision", undefined, "Revision")}</span>
-                <input value="A" readOnly className={`${MONO} opacity-60`} />
-              </label>
+              <FormField label={t("console.sitePlans.new.label.seq", undefined, "SEQ")}>
+                <input name="seq" type="number" min={1} max={999} defaultValue={1} className="ps-input" />
+              </FormField>
+              <FormField
+                label={t("console.sitePlans.new.label.revision", undefined, "Revision")}
+                className="col-span-2"
+              >
+                <input value="A" readOnly className="ps-input font-mono tracking-wide uppercase opacity-60" />
+              </FormField>
             </div>
           </section>
 
@@ -123,60 +132,43 @@ export default async function Page() {
             <h3 className="text-sm font-semibold tracking-wide uppercase">
               {t("console.sitePlans.new.section.sheet", undefined, "Sheet")}
             </h3>
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("console.sitePlans.new.label.title", undefined, "Title")}
-                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-              </span>
+            <FormField label={t("console.sitePlans.new.label.title", undefined, "Title")} required>
               <input
                 name="title"
                 required
                 maxLength={200}
-                className={INPUT}
+                className="ps-input"
                 placeholder={t(
                   "console.sitePlans.new.placeholder.title",
                   undefined,
                   "Salvage City — Kitchen Perp Tent",
                 )}
               />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("console.sitePlans.new.label.sheetCode", undefined, "Sheet Code")}
-                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-              </span>
-              <input name="code" required maxLength={40} className={INPUT} placeholder="K-101" />
-            </label>
+            </FormField>
+            <FormField label={t("console.sitePlans.new.label.sheetCode", undefined, "Sheet Code")} required>
+              <input name="code" required maxLength={40} className="ps-input" placeholder="K-101" />
+            </FormField>
             <div className="grid grid-cols-3 gap-3">
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  {t("console.sitePlans.new.label.sheetType", undefined, "Sheet Type")}
-                  <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-                </span>
-                <select name="sheet_type" required defaultValue="floor_plan" className={INPUT}>
+              <FormField label={t("console.sitePlans.new.label.sheetType", undefined, "Sheet Type")} required>
+                <select name="sheet_type" required defaultValue="floor_plan" className="ps-input">
                   {SITEPLAN_SHEET_TYPES.map((sheetType) => (
                     <option key={sheetType} value={sheetType}>
                       {sheetType}
                     </option>
                   ))}
                 </select>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  {t("console.sitePlans.new.label.xpmsClass", undefined, "XPMS Class")}
-                  <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-                </span>
-                <select name="primary_class" required defaultValue="8" className={INPUT}>
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.xpmsClass", undefined, "XPMS Class")} required>
+                <select name="primary_class" required defaultValue="8" className="ps-input">
                   {XPMS_CLASSES.map((c) => (
                     <option key={c.value} value={c.value}>
                       {c.label}
                     </option>
                   ))}
                 </select>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.tier", undefined, "Tier")}</span>
-                <select name="tier_primary" defaultValue="" className={INPUT}>
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.tier", undefined, "Tier")}>
+                <select name="tier_primary" defaultValue="" className="ps-input">
                   <option value="">—</option>
                   {TIERS.map((tier) => (
                     <option key={tier.value} value={tier.value}>
@@ -184,7 +176,7 @@ export default async function Page() {
                     </option>
                   ))}
                 </select>
-              </label>
+              </FormField>
             </div>
           </section>
 
@@ -194,9 +186,8 @@ export default async function Page() {
               {t("console.sitePlans.new.section.shell", undefined, "Shell")}
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.shellType", undefined, "Shell Type")}</span>
-                <select name="shell_type" defaultValue="tent" className={INPUT}>
+              <FormField label={t("console.sitePlans.new.label.shellType", undefined, "Shell Type")}>
+                <select name="shell_type" defaultValue="tent" className="ps-input">
                   <option value="">—</option>
                   {SITEPLAN_SHELL_TYPES.map((s) => (
                     <option key={s} value={s}>
@@ -204,31 +195,24 @@ export default async function Page() {
                     </option>
                   ))}
                 </select>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>
-                  {t("console.sitePlans.new.label.orientation", undefined, "Orientation (° true-north)")}
-                </span>
-                <input name="orientation_deg" type="number" min={0} max={359} defaultValue={0} className={INPUT} />
-              </label>
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.orientation", undefined, "Orientation (° true-north)")}>
+                <input name="orientation_deg" type="number" min={0} max={359} defaultValue={0} className="ps-input" />
+              </FormField>
             </div>
             <div className="grid grid-cols-4 gap-3">
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.lengthIn", undefined, "Length — in")}</span>
-                <input name="shell_length_in" type="number" min={1} className={INPUT} placeholder="480" />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.widthIn", undefined, "Width — in")}</span>
-                <input name="shell_width_in" type="number" min={1} className={INPUT} placeholder="120" />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.heightIn", undefined, "Height — in")}</span>
-                <input name="shell_height_in" type="number" min={0} className={INPUT} placeholder="120" />
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.scale", undefined, "Scale")}</span>
-                <input name="scale" maxLength={40} className={INPUT} placeholder={`1/4" = 1'-0"`} />
-              </label>
+              <FormField label={t("console.sitePlans.new.label.lengthIn", undefined, "Length — in")}>
+                <input name="shell_length_in" type="number" min={1} className="ps-input" placeholder="480" />
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.widthIn", undefined, "Width — in")}>
+                <input name="shell_width_in" type="number" min={1} className="ps-input" placeholder="120" />
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.heightIn", undefined, "Height — in")}>
+                <input name="shell_height_in" type="number" min={0} className="ps-input" placeholder="120" />
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.scale", undefined, "Scale")}>
+                <input name="scale" maxLength={40} className="ps-input" placeholder={`1/4" = 1'-0"`} />
+              </FormField>
             </div>
           </section>
 
@@ -237,11 +221,8 @@ export default async function Page() {
             <h3 className="text-sm font-semibold tracking-wide uppercase">
               {t("console.sitePlans.new.section.preset", undefined, "Preset")}
             </h3>
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("console.sitePlans.new.label.preset", undefined, "Instantiate from Preset · Optional")}
-              </span>
-              <select name="preset_code" defaultValue="" className={INPUT}>
+            <FormField label={t("console.sitePlans.new.label.preset", undefined, "Instantiate from Preset · Optional")}>
+              <select name="preset_code" defaultValue="" className="ps-input">
                 <option value="">{t("console.sitePlans.new.option.none", undefined, "— None —")}</option>
                 {PRESETS.map((p) => (
                   <option key={p.code} value={p.code}>
@@ -249,7 +230,7 @@ export default async function Page() {
                   </option>
                 ))}
               </select>
-            </label>
+            </FormField>
           </section>
 
           {/* CONTEXT */}
@@ -258,9 +239,8 @@ export default async function Page() {
               {t("console.sitePlans.new.section.context", undefined, "Context")}
             </h3>
             <div className="grid grid-cols-3 gap-3">
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.project", undefined, "Project")}</span>
-                <select name="project_id" defaultValue="" className={INPUT}>
+              <FormField label={t("console.sitePlans.new.label.project", undefined, "Project")}>
+                <select name="project_id" defaultValue="" className="ps-input">
                   <option value="">—</option>
                   {(projects ?? []).map((p) => (
                     <option key={p.id} value={p.id}>
@@ -268,10 +248,9 @@ export default async function Page() {
                     </option>
                   ))}
                 </select>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.event", undefined, "Event")}</span>
-                <select name="event_id" defaultValue="" className={INPUT}>
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.event", undefined, "Event")}>
+                <select name="event_id" defaultValue="" className="ps-input">
                   <option value="">—</option>
                   {(events ?? []).map((e) => (
                     <option key={e.id} value={e.id}>
@@ -279,10 +258,9 @@ export default async function Page() {
                     </option>
                   ))}
                 </select>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className={LBL}>{t("console.sitePlans.new.label.venue", undefined, "Venue")}</span>
-                <select name="venue_id" defaultValue="" className={INPUT}>
+              </FormField>
+              <FormField label={t("console.sitePlans.new.label.venue", undefined, "Venue")}>
+                <select name="venue_id" defaultValue="" className="ps-input">
                   <option value="">—</option>
                   {(venues ?? []).map((v) => (
                     <option key={v.id} value={v.id}>
@@ -290,12 +268,11 @@ export default async function Page() {
                     </option>
                   ))}
                 </select>
-              </label>
+              </FormField>
             </div>
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.sitePlans.new.label.notes", undefined, "Notes")}</span>
-              <textarea name="notes" rows={3} maxLength={2000} className={INPUT} />
-            </label>
+            <FormField label={t("console.sitePlans.new.label.notes", undefined, "Notes")}>
+              <textarea name="notes" rows={3} maxLength={2000} className="ps-input" />
+            </FormField>
           </section>
         </FormShell>
       </div>

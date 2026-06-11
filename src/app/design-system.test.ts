@@ -41,7 +41,6 @@ describe("Design system — component primitive adoption", () => {
       "src/components/ui/DensityToggle.tsx",
       "src/components/ui/ThemeToggle.tsx",
       "src/components/ui/Checkbox.tsx",
-      "src/components/ui/RadioGroup.tsx",
       // Controlled state indicators (not buttons)
       "src/components/mobile/FAB.tsx",
       "src/components/NotificationsBell.tsx",

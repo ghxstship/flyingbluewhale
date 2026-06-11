@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { createClient } from "@/lib/supabase/server";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -16,6 +17,21 @@ export const dynamic = "force-dynamic";
 // Per-request memo so the streaming subtitle island and the table island
 // share a single invoices query instead of issuing it twice.
 const getInvoices = cache((orgId: string) => listOrgScoped("invoices", orgId, { orderBy: "created_at" }));
+
+// Narrow, uncapped aggregate source for the header totals. getInvoices
+// runs through listOrgScoped, which silently caps at 100 rows — fine for
+// the table island, but reducing over it truncated the outstanding/paid
+// sums (and the count) once an org passed 100 invoices.
+const getInvoiceAmounts = cache(async (orgId: string) => {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("invoices")
+    .select("amount_cents, invoice_state")
+    .eq("org_id", orgId)
+    .is("deleted_at", null);
+  if (error) throw error;
+  return data ?? [];
+});
 
 export default async function InvoicesPage() {
   const { t } = await getRequestT();
@@ -60,17 +76,21 @@ export default async function InvoicesPage() {
 
 /** Streaming island — header subtitle totals (count · outstanding · paid). */
 async function InvoiceSummary({ orgId }: { orgId: string }) {
-  const [{ t }, rows] = await Promise.all([getRequestT(), getInvoices(orgId)]);
-  const outstanding = rows
+  const [{ t }, count, amounts] = await Promise.all([
+    getRequestT(),
+    countOrgScoped("invoices", orgId),
+    getInvoiceAmounts(orgId),
+  ]);
+  const outstanding = amounts
     .filter((r) => ["sent", "overdue"].includes(r.invoice_state))
     .reduce((s, r) => s + r.amount_cents, 0);
-  const paid = rows.filter((r) => r.invoice_state === "paid").reduce((s, r) => s + r.amount_cents, 0);
+  const paid = amounts.filter((r) => r.invoice_state === "paid").reduce((s, r) => s + r.amount_cents, 0);
   return (
     <>
       {t(
         "console.finance.invoices.subtitle",
-        { count: rows.length, outstanding: formatMoney(outstanding), paid: formatMoney(paid) },
-        `${rows.length} Total · ${formatMoney(outstanding)} outstanding · ${formatMoney(paid)} paid`,
+        { count, outstanding: formatMoney(outstanding), paid: formatMoney(paid) },
+        `${count} Total · ${formatMoney(outstanding)} outstanding · ${formatMoney(paid)} paid`,
       )}
     </>
   );

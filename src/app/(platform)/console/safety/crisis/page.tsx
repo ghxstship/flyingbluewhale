@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { SEVERITY_TONE } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -15,12 +16,6 @@ export default async function Page() {
     info: t("console.safety.crisis.severity.info", undefined, "Info"),
     warn: t("console.safety.crisis.severity.warn", undefined, "Warning"),
     critical: t("console.safety.crisis.severity.critical", undefined, "Critical"),
-  };
-
-  const SEVERITY_TONE: Record<string, "info" | "warning" | "error"> = {
-    info: "info",
-    warn: "warning",
-    critical: "error",
   };
 
   if (!hasSupabase)
@@ -78,7 +73,7 @@ export default async function Page() {
               render: (r) => {
                 const sev = String(r.severity ?? "");
                 if (!sev) return "—";
-                return <Badge variant={SEVERITY_TONE[sev] ?? "muted"}>{SEVERITY_LABEL[sev] ?? sev}</Badge>;
+                return <Badge variant={SEVERITY_TONE[sev] ?? "default"}>{SEVERITY_LABEL[sev] ?? sev}</Badge>;
               },
               accessor: (r) => r.severity ?? null,
               filterable: true,

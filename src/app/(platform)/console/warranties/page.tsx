@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -24,13 +25,6 @@ type Row = {
   warrantor_name: string | null;
   project: { name: string | null } | null;
   vendor: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<WarrantyState, "muted" | "info" | "warning" | "success" | "error"> = {
-  active: "success",
-  expiring_soon: "warning",
-  expired: "muted",
-  voided: "error",
 };
 
 export default async function Page() {
@@ -170,7 +164,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.warranties.columns.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.warranty_state]}>{toTitle(r.warranty_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.warranty_state)}>{toTitle(r.warranty_state)}</Badge>,
               accessor: (r) => r.warranty_state,
               filterable: true,
               groupable: true,

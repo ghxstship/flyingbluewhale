@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { MobileListRow } from "@/components/mobile/MobileListRow";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -103,20 +104,21 @@ export async function DocsSurface({
           </li>
         ) : (
           list.map((d) => (
-            <li key={d.id} className="surface p-3">
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
+            <li key={d.id}>
+              <MobileListRow
+                title={d.label}
+                meta={
+                  <span className="inline-flex items-center gap-2">
                     <Badge variant={KIND_TONE[d.doc_kind] ?? "muted"}>{d.doc_kind}</Badge>
-                    {d.mime_type && <span className="font-mono text-[10px] text-[var(--p-text-2)]">{d.mime_type}</span>}
-                  </div>
-                  <div className="mt-1 truncate text-sm font-semibold">{d.label}</div>
+                    {d.mime_type && <span className="font-mono text-[10px]">{d.mime_type}</span>}
+                  </span>
+                }
+                trailing={<span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(d.uploaded_at)}</span>}
+              >
+                <div className="flex justify-end">
+                  <DocDownloadLink docId={d.id} />
                 </div>
-                <span className="shrink-0 font-mono text-xs text-[var(--p-text-2)]">{fmt.date(d.uploaded_at)}</span>
-              </div>
-              <div className="mt-2 flex justify-end">
-                <DocDownloadLink docId={d.id} />
-              </div>
+              </MobileListRow>
             </li>
           ))
         )}

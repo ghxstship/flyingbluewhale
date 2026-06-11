@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { timeAgo, toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Json } from "@/lib/supabase/database.types";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -21,12 +22,6 @@ type Playbook = {
   content: Json;
   created_at: string;
   updated_at: string;
-};
-
-const STATUS_TONE: Record<Playbook["status"], "muted" | "success" | "warning"> = {
-  draft: "muted",
-  published: "success",
-  archived: "warning",
 };
 
 const KIND_LABEL: Record<string, string> = {
@@ -106,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             <Badge variant="info">
               {t(`console.safety.playbooks.kind.${pb.kind}`, undefined, KIND_LABEL[pb.kind] ?? pb.kind)}
             </Badge>
-            <Badge variant={STATUS_TONE[pb.status]}>
+            <Badge variant={toneFor(pb.status)}>
               {t(`console.safety.playbooks.status.${pb.status}`, undefined, toTitle(pb.status))}
             </Badge>
           </div>

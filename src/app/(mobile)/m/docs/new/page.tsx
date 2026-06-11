@@ -1,3 +1,4 @@
+import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
@@ -26,7 +27,13 @@ export default async function NewDocPage() {
         )}
       </p>
 
-      <form action={uploadPersonalDoc} encType="multipart/form-data" className="mt-5 space-y-4">
+      <FormShell
+        action={uploadPersonalDoc}
+        encType="multipart/form-data"
+        className="mt-5 space-y-4"
+        submitLabel={t("m.docs.new.upload", undefined, "Upload")}
+        cancelHref="/m/docs"
+      >
         <label className="block text-xs font-semibold">
           {t("m.docs.new.label", undefined, "Label")}
           <input
@@ -58,10 +65,7 @@ export default async function NewDocPage() {
           {t("m.docs.new.file", undefined, "File")}
           <input type="file" name="file" required accept="image/*,.pdf,.doc,.docx" className="mt-1 w-full text-sm" />
         </label>
-        <button type="submit" className="ps-btn w-full">
-          {t("m.docs.new.upload", undefined, "Upload")}
-        </button>
-      </form>
+      </FormShell>
     </div>
   );
 }

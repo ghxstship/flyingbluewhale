@@ -6,6 +6,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { Client } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -16,11 +17,7 @@ export default async function ClientsPage() {
     return (
       <>
         <ModuleHeader title={t("console.clients.title", undefined, "Clients")} />
-        <div className="page-content">
-          <div className="surface p-6 text-sm">
-            {t("console.clients.configureSupabase", undefined, "Configure Supabase to load clients.")}
-          </div>
-        </div>
+        <ConfigureSupabase />
       </>
     );
   }

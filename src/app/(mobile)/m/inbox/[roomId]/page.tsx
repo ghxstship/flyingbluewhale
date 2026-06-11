@@ -3,17 +3,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { postMessage, markRoomRead } from "../actions";
-import { RealtimeRefresh } from "@/components/RealtimeRefresh";
+import { markRoomRead } from "../actions";
+import { ChatRoom, type ChatMessage } from "./ChatRoom";
 
 export const dynamic = "force-dynamic";
 
-type Msg = {
-  id: string;
-  author_id: string | null;
-  body: string;
-  created_at: string;
-};
+// Keep in sync with MESSAGES_PAGE_SIZE in ChatRoom.tsx.
+const PAGE_SIZE = 50;
 
 export default async function RoomPage({ params }: { params: Promise<{ roomId: string }> }) {
   const { t } = await getRequestT();
@@ -37,12 +33,17 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
     .maybeSingle();
   if (!room) notFound();
 
+  // Newest page first — descending + limit, reversed in memory for display.
+  // Older history loads on demand via the "Load Older" cursor in <ChatRoom>.
   const { data: msgs } = await supabase
     .from("chat_messages")
     .select("id, author_id, body, created_at")
     .eq("room_id", roomId)
-    .order("created_at", { ascending: true })
-    .limit(200);
+    .order("created_at", { ascending: false })
+    .limit(PAGE_SIZE);
+
+  const latestPage = ((msgs ?? []) as ChatMessage[]).slice().reverse();
+  const hasOlder = (msgs ?? []).length === PAGE_SIZE;
 
   // Mark room read on render — keeps the unread badge in sync without a
   // separate client effect. Side-effect inside RSC is fine for idempotent
@@ -51,51 +52,28 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col">
-      <RealtimeRefresh
-        channelName={`m-inbox-${roomId}`}
-        table="chat_messages"
-        filter={`room_id=eq.${roomId}`}
-        event="INSERT"
-      />
       <div className="border-b border-[var(--p-border)] px-4 pt-4 pb-3">
         <h1 className="truncate text-base font-semibold">
           {room.name ?? t("m.inbox.room.directMessage", undefined, "Direct message")}
         </h1>
         <p className="text-xs text-[var(--p-text-2)]">{room.room_kind}</p>
       </div>
-      <ul className="flex-1 space-y-2 overflow-y-auto px-4 py-3">
-        {((msgs ?? []) as Msg[]).map((m) => {
-          const mine = m.author_id === session.userId;
-          return (
-            <li key={m.id} className={mine ? "flex justify-end" : "flex"}>
-              <div
-                className={
-                  mine
-                    ? "max-w-[80%] rounded-lg bg-[var(--p-accent)] px-3 py-2 text-xs text-[var(--p-accent-contrast)]"
-                    : "surface max-w-[80%] px-3 py-2 text-xs"
-                }
-              >
-                <p className="whitespace-pre-wrap">{m.body}</p>
-                <span className="mt-1 block text-[10px] opacity-70">{fmt.time(m.created_at)}</span>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-      <form action={postMessage} className="flex items-center gap-2 border-t border-[var(--p-border)] p-3">
-        <input type="hidden" name="roomId" value={roomId} />
-        <input
-          type="text"
-          name="body"
-          placeholder={t("m.inbox.room.messagePlaceholder", undefined, "Message")}
-          required
-          maxLength={4000}
-          className="flex-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
-        />
-        <button type="submit" className="ps-btn ps-btn--sm">
-          {t("common.send", undefined, "Send")}
-        </button>
-      </form>
+      <ChatRoom
+        roomId={roomId}
+        userId={session.userId}
+        locale={fmt.settings.locale}
+        timezone={fmt.settings.timezone}
+        initialMessages={latestPage}
+        initialHasOlder={hasOlder}
+        emptyTitle={t("m.inbox.room.emptyTitle", undefined, "No Messages Yet")}
+        emptyDescription={t("m.inbox.room.emptyDescription", undefined, "Say hello to get things started.")}
+        labels={{
+          placeholder: t("m.inbox.room.messagePlaceholder", undefined, "Message"),
+          send: t("common.send", undefined, "Send"),
+          loadOlder: t("m.inbox.room.loadOlder", undefined, "Load Older"),
+          loadingOlder: t("m.inbox.room.loadingOlder", undefined, "Loading…"),
+        }}
+      />
     </div>
   );
 }

@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -22,14 +24,6 @@ type RentalRow = {
   id: string;
   ends_at: string;
   equipment: { name: string | null; asset_tag: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  available: "success",
-  reserved: "info",
-  in_use: "info",
-  maintenance: "warning",
-  retired: "muted",
 };
 
 export default async function MobileWmsPage() {
@@ -82,7 +76,7 @@ export default async function MobileWmsPage() {
           {t("m.wms.scanAsset", undefined, "Scan asset")}
         </Link>
         <Link
-          href="/console/production/equipment"
+          href={urlFor("platform", "/production/equipment")}
           className="surface flex flex-col items-center gap-1 p-4 text-sm font-medium"
         >
           <Package size={20} />
@@ -109,7 +103,7 @@ export default async function MobileWmsPage() {
                     {r.category ? ` · ${r.category}` : ""}
                   </div>
                 </div>
-                <Badge variant={STATUS_TONE[r.equipment_state] ?? "muted"}>{toTitle(r.equipment_state)}</Badge>
+                <Badge variant={toneFor(r.equipment_state)}>{toTitle(r.equipment_state)}</Badge>
               </li>
             ))
           )}

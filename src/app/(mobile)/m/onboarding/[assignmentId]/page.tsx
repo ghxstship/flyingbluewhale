@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
-import { completeStep, finalizeAssignment } from "../actions";
+import { FinalizeButton, MarkStepDoneButton } from "./AssignmentActions";
 
 export const dynamic = "force-dynamic";
 
@@ -74,43 +75,46 @@ export default async function Page({ params }: { params: Promise<{ assignmentId:
         </Badge>
       </div>
 
-      <ol className="mt-5 space-y-3">
-        {stepList.map((s) => {
-          const done = !!progress[s.id];
-          return (
-            <li key={s.id} className={`surface p-4 ${done ? "opacity-60" : ""}`}>
-              <div className="flex items-center justify-between">
-                <Badge variant="muted">{s.step_kind}</Badge>
-                <span className="font-mono text-xs text-[var(--p-text-2)]">#{s.ordinal}</span>
-              </div>
-              <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
-              {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
-              {!done && a.assignment_phase !== "completed" && (
-                <form action={completeStep} className="mt-3 flex justify-end">
-                  <input type="hidden" name="assignmentId" value={a.id} />
-                  <input type="hidden" name="stepId" value={s.id} />
-                  <button type="submit" className="ps-btn ps-btn--sm">
-                    {t("m.onboarding.markDone", undefined, "Mark Done")}
-                  </button>
-                </form>
-              )}
-              {done && (
-                <p className="mt-2 text-xs text-[var(--p-success)]">
-                  {t("m.onboarding.completed", undefined, "✓ Completed")}
-                </p>
-              )}
-            </li>
-          );
-        })}
-      </ol>
+      {stepList.length === 0 ? (
+        <div className="mt-5">
+          <EmptyState
+            size="compact"
+            title={t("m.onboarding.detail.empty.title", undefined, "No Steps Yet")}
+            description={t(
+              "m.onboarding.detail.empty.description",
+              undefined,
+              "This onboarding flow has no steps. Check back once your admin publishes them.",
+            )}
+          />
+        </div>
+      ) : (
+        <ol className="mt-5 space-y-3">
+          {stepList.map((s) => {
+            const done = !!progress[s.id];
+            return (
+              <li key={s.id} className={`surface p-4 ${done ? "opacity-60" : ""}`}>
+                <div className="flex items-center justify-between">
+                  <Badge variant="muted">{s.step_kind}</Badge>
+                  <span className="font-mono text-xs text-[var(--p-text-2)]">#{s.ordinal}</span>
+                </div>
+                <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
+                {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
+                {!done && a.assignment_phase !== "completed" && (
+                  <MarkStepDoneButton assignmentId={a.id} stepId={s.id} />
+                )}
+                {done && (
+                  <p className="mt-2 text-xs text-[var(--p-success)]">
+                    {t("m.onboarding.completed", undefined, "✓ Completed")}
+                  </p>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      )}
 
-      {requiredDone && a.assignment_phase !== "completed" && (
-        <form action={finalizeAssignment} className="mt-6">
-          <input type="hidden" name="assignmentId" value={a.id} />
-          <button type="submit" className="ps-btn w-full">
-            {t("m.onboarding.finish", undefined, "Finish Onboarding")}
-          </button>
-        </form>
+      {stepList.length > 0 && requiredDone && a.assignment_phase !== "completed" && (
+        <FinalizeButton assignmentId={a.id} />
       )}
     </div>
   );

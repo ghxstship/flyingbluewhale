@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -20,13 +21,6 @@ type TrademarkRow = {
   registered_on: string | null;
   expires_on: string | null;
   trademark_state: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  active: "success",
-  pending: "info",
-  expired: "error",
-  abandoned: "muted",
 };
 
 const SOON_DAYS = 90;
@@ -139,9 +133,7 @@ export default async function Page() {
                       <td className="font-mono text-xs">{r.expires_on ?? "—"}</td>
                       <td>
                         <div className="flex flex-wrap gap-1.5">
-                          <Badge variant={STATUS_TONE[r.trademark_state] ?? "muted"}>
-                            {toTitle(r.trademark_state)}
-                          </Badge>
+                          <Badge variant={toneFor(r.trademark_state)}>{toTitle(r.trademark_state)}</Badge>
                           {r.trademark_state === "active" && soon && (
                             <Badge variant="warning">
                               {t("console.commercial.licensing.renewSoon", undefined, "Renew Soon")}

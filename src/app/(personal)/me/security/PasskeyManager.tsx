@@ -7,6 +7,14 @@ import type { PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/ser
 import { Fingerprint, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 import { formatRelative } from "@/lib/i18n/format";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -21,6 +29,10 @@ export function PasskeyManager() {
   const t = useT();
   const [creds, setCreds] = useState<Credential[]>([]);
   const [adding, setAdding] = useState(false);
+  // CN-9 — accessible confirm dialog replaces native confirm(). Holds the
+  // credential id pending removal; null when the dialog is closed.
+  const [removeId, setRemoveId] = useState<string | null>(null);
+  const [removing, setRemoving] = useState(false);
   // Lazy initializer — `browserSupportsWebAuthn` is browser-only, so we
   // can run it once on mount via the lazy-state form rather than calling
   // setState inside an effect (which triggers cascading renders).
@@ -90,7 +102,7 @@ export function PasskeyManager() {
   }
 
   async function remove(id: string) {
-    if (!confirm(t("me.security.passkeys.prompts.removeConfirm", undefined, "Remove this passkey?"))) return;
+    setRemoving(true);
     try {
       const res = await fetch(`/api/v1/auth/webauthn/credentials?id=${encodeURIComponent(id)}`, {
         method: "DELETE",
@@ -100,6 +112,9 @@ export function PasskeyManager() {
       void refresh();
     } catch {
       toast.error(t("me.security.passkeys.errors.removeFailed", undefined, "Couldn't remove"));
+    } finally {
+      setRemoving(false);
+      setRemoveId(null);
     }
   }
 
@@ -149,7 +164,7 @@ export function PasskeyManager() {
             </div>
             <button
               type="button"
-              onClick={() => remove(c.id)}
+              onClick={() => setRemoveId(c.id)}
               aria-label={t("me.security.passkeys.removeAria", undefined, "Remove passkey")}
               className="rounded p-1 text-[var(--p-text-2)] hover:text-[var(--p-danger)]"
             >
@@ -164,6 +179,32 @@ export function PasskeyManager() {
           {t("me.security.passkeys.addButton", undefined, "Add passkey")}
         </Button>
       </div>
+
+      <Dialog open={removeId !== null} onOpenChange={(o) => (!removing && !o ? setRemoveId(null) : null)}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle>{t("me.security.passkeys.removeDialogTitle", undefined, "Remove Passkey")}</DialogTitle>
+            <DialogDescription>
+              {t("me.security.passkeys.prompts.removeConfirm", undefined, "Remove this passkey?")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => setRemoveId(null)} disabled={removing}>
+              {t("common.cancel", undefined, "Cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              loading={removing}
+              onClick={() => {
+                if (removeId) void remove(removeId);
+              }}
+            >
+              {t("common.remove", undefined, "Remove")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

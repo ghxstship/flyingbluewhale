@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -20,14 +21,6 @@ type Row = {
   scheduled_for: string | null;
   project: { name: string | null } | null;
   inspector: { name: string | null; email: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "info",
-  in_progress: "warning",
-  passed: "success",
-  failed: "error",
-  cancelled: "muted",
 };
 
 function fmt(iso: string | null): string {
@@ -151,9 +144,7 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.inspections.col.status", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_TONE[r.inspection_state] ?? "muted"}>{toTitle(r.inspection_state)}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.inspection_state)}>{toTitle(r.inspection_state)}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.inspection_state ?? null,

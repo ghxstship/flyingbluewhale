@@ -7,12 +7,14 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { moneyCentsString } from "@/app/(platform)/console/finance/money";
 
 const Schema = z.object({
   origin: z.string().min(1).max(200),
   destination: z.string().min(1).max(200),
   miles: z.string().optional(),
-  rate_cents: z.string().optional(),
+  // Integer cents per mile from MoneyInput's hidden field.
+  rate_cents: moneyCentsString({ allowEmpty: true }),
   logged_on: z.string().min(1),
   notes: z.string().max(2000).optional().or(z.literal("")),
 });

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   label: z.string().min(1).max(200),
@@ -13,17 +14,25 @@ const Schema = z.object({
 
 const MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB — covers a passport scan, PDF contract, etc.
 
-export async function uploadPersonalDoc(fd: FormData): Promise<void> {
+export type State = {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
+
+export async function uploadPersonalDoc(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isServiceClientAvailable()) redirect("/m/docs?error=upload-unavailable");
+  if (!isServiceClientAvailable()) {
+    return actionFail("Uploads are unavailable right now — try again later.", fd);
+  }
 
   const file = fd.get("file");
-  if (!(file instanceof File) || file.size === 0) redirect("/m/docs/new?error=missing-file");
+  if (!(file instanceof File) || file.size === 0) return actionFail("Choose a file to upload.", fd);
   const f = file as File;
-  if (f.size > MAX_SIZE_BYTES) redirect("/m/docs/new?error=too-large");
+  if (f.size > MAX_SIZE_BYTES) return actionFail("That file is too large — the limit is 20 MB.", fd);
 
   const parsed = Schema.safeParse({ label: fd.get("label"), doc_kind: fd.get("doc_kind") });
-  if (!parsed.success) redirect("/m/docs/new?error=invalid");
+  if (!parsed.success) return formFail(parsed.error, fd);
 
   // Path is {org_id}/{user_id}/{timestamp}-{sanitized-filename}. Matches
   // migration 0045 storage RLS (path[1] must be a member-org). The
@@ -40,19 +49,19 @@ export async function uploadPersonalDoc(fd: FormData): Promise<void> {
     cacheControl: "private, max-age=0",
     upsert: false,
   });
-  if (uploadErr) redirect("/m/docs/new?error=upload-failed");
+  if (uploadErr) return actionFail("Upload failed — check your connection and try again.", fd);
 
   const supabase = await createClient();
   const { error } = await supabase.from("personal_documents").insert({
     org_id: session.orgId,
     user_id: session.userId,
-    label: parsed.data!.label,
-    doc_kind: parsed.data!.doc_kind,
+    label: parsed.data.label,
+    doc_kind: parsed.data.doc_kind,
     storage_path: storagePath,
     mime_type: f.type || null,
     size_bytes: f.size,
   });
-  if (error) throw new Error(`Could not save document record: ${error.message}`);
+  if (error) return actionFail(`Could not save document record: ${error.message}`, fd);
 
   revalidatePath("/m/docs");
   redirect("/m/docs");

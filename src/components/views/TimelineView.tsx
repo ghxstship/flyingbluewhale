@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
+import { Plus } from "lucide-react";
 
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useAnnounce } from "@/components/ui/LiveRegion";
@@ -312,6 +313,15 @@ export function TimelineView({
     onCreate(laneId, dateISO);
   }
 
+  // AX-5 — keyboard-reachable counterpart to the lane click-to-create.
+  // The pointer path encodes a date from the click offset; the keyboard
+  // path defaults to today when in range, else the range anchor.
+  function handleLaneCreateKeyboard(laneId: string) {
+    if (!onCreate) return;
+    const date = todayPx != null ? today : anchor;
+    onCreate(laneId, date.toISOString());
+  }
+
   return (
     <div className={["surface flex flex-col", className ?? ""].join(" ")} data-zoom={zoom}>
       {/* Toolbar */}
@@ -390,7 +400,11 @@ export function TimelineView({
             {lanes.map((lane) => {
               const laneItems = itemsByLane.get(lane.id) ?? [];
               return (
-                <div key={lane.id} className="flex border-b border-[var(--p-border)]" style={{ height: LANE_HEIGHT }}>
+                <div
+                  key={lane.id}
+                  className="group flex border-b border-[var(--p-border)]"
+                  style={{ height: LANE_HEIGHT }}
+                >
                   {/* Sticky lane label */}
                   <div
                     className="sticky start-0 z-10 flex shrink-0 items-center gap-2 border-e border-[var(--p-border)] bg-[var(--p-surface)] px-3 text-xs font-medium text-[var(--p-text-1)]"
@@ -401,6 +415,20 @@ export function TimelineView({
                       <img src={lane.icon} alt="" aria-hidden="true" className="h-4 w-4 rounded-sm object-cover" />
                     )}
                     <span className="truncate">{lane.title}</span>
+                    {onCreate && (
+                      <button
+                        type="button"
+                        onClick={() => handleLaneCreateKeyboard(lane.id)}
+                        aria-label={t(
+                          "components.timelineView.addToLane",
+                          { lane: lane.title },
+                          `Add item to ${lane.title}`,
+                        )}
+                        className="focus-ring ms-auto shrink-0 rounded p-0.5 text-[var(--p-text-2)] opacity-0 transition-opacity group-hover:opacity-100 hover:text-[var(--p-text-1)] focus-visible:opacity-100"
+                      >
+                        <Plus size={12} aria-hidden="true" />
+                      </button>
+                    )}
                   </div>
 
                   {/* Bars region */}

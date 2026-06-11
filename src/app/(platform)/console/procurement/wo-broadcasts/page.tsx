@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -21,14 +22,6 @@ type Row = {
   needed_by: string | null;
   awarded_to: { name: string | null } | null;
   project: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  open: "info",
-  closed: "muted",
-  awarded: "success",
-  cancelled: "error",
 };
 
 function fmt(iso: string | null): string {
@@ -148,7 +141,7 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.procurement.woBroadcasts.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
               groupable: true,

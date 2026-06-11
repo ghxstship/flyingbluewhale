@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -25,14 +26,6 @@ type Row = {
   issued_at: string | null;
   created_at: string;
   project: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<SectionState, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  in_review: "warning",
-  issued: "success",
-  superseded: "info",
-  archived: "muted",
 };
 
 const FORMAT_LABEL: Record<SpecFormat, string> = {
@@ -163,7 +156,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.specs.column.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.section_state]}>{toTitle(r.section_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.section_state)}>{toTitle(r.section_state)}</Badge>,
               accessor: (r) => r.section_state,
               filterable: true,
               groupable: true,

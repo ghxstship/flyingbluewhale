@@ -17,6 +17,7 @@ import { StepBuilder, type AutomationStep } from "@/components/automations/StepB
 import "@/lib/automations/actions";
 import { listActions } from "@/lib/automations/registry";
 import { saveStepsAction, saveTriggerAction } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -39,14 +40,6 @@ const TRIGGER_TONE: Record<string, "muted" | "info" | "success"> = {
   schedule: "info",
   webhook: "info",
   event: "success",
-};
-
-const RUN_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
-  ok: "success",
-  success: "success",
-  failed: "error",
-  error: "error",
-  running: "warning",
 };
 
 function fmt(iso: string | null): string {
@@ -250,7 +243,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
               {t("console.ai.automations.detail.lastRunHeading", undefined, "Last Run")}
             </h3>
             <div className="mt-2 flex items-center gap-2 text-sm">
-              <Badge variant={RUN_TONE[automation.last_run_status] ?? "muted"}>{automation.last_run_status}</Badge>
+              <Badge variant={toneFor(automation.last_run_status)}>{automation.last_run_status}</Badge>
               <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt(automation.last_run_at)}</span>
             </div>
           </section>

@@ -11,6 +11,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { addVersion, addMember, publishVersion, supersedeVersion } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -47,14 +48,6 @@ type Member = {
     sheet_type: string;
     document_state: SitePlanState;
   } | null;
-};
-
-const STATE_TONE: Record<SheetSetState, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  in_review: "warning",
-  published: "success",
-  superseded: "info",
-  archived: "muted",
 };
 
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
@@ -192,7 +185,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     )}
                   </span>
                   <span className="flex items-center gap-2">
-                    <Badge variant={STATE_TONE[v.set_state]}>{toTitle(v.set_state)}</Badge>
+                    <Badge variant={toneFor(v.set_state)}>{toTitle(v.set_state)}</Badge>
                     {v.published_at && (
                       <span className="font-mono text-[10px] text-[var(--p-text-2)]">
                         {fmt.dateParts(v.published_at, { month: "short", day: "numeric", year: "numeric" })}

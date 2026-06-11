@@ -46,6 +46,9 @@ type FormShellProps = {
   submitLabel?: string;
   cancelHref?: string;
   children: ReactNode;
+  /** Unsaved-changes guard (FE-5). Defaults ON — the guard only arms once
+   *  the form is actually dirty, so untouched forms never prompt. Pass
+   *  `dirtyGuard={false}` to opt out (auth/login flows, throwaway forms). */
   dirtyGuard?: boolean;
   className?: string;
 } & Omit<FormHTMLAttributes<HTMLFormElement>, "action">;
@@ -55,7 +58,7 @@ export function FormShell({
   submitLabel,
   cancelHref,
   children,
-  dirtyGuard,
+  dirtyGuard = true,
   className = "surface space-y-4 p-6",
   ...formProps
 }: FormShellProps) {
@@ -161,7 +164,21 @@ export function FormShell({
         {children}
         {state?.error && (
           <div id={errorId}>
-            <Alert kind="error">{state.error}</Alert>
+            <Alert kind="error">
+              {state.error}
+              {/* FE-1 — enumerate per-field errors beneath the summary so
+                  forms built from raw `ps-input` elements (which don't read
+                  FormErrorContext) still tell the user WHICH field failed. */}
+              {state.fieldErrors && Object.keys(state.fieldErrors).length > 0 && (
+                <ul className="mt-1.5 list-disc space-y-0.5 ps-4 text-xs">
+                  {Object.entries(state.fieldErrors).map(([field, message]) => (
+                    <li key={field}>
+                      <span className="font-medium">{humanizeFieldName(field)}</span>: {message}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Alert>
           </div>
         )}
         <div className="flex items-center justify-end gap-2">
@@ -213,6 +230,16 @@ export function FormShell({
       </Dialog>
     </FormErrorContext.Provider>
   );
+}
+
+/** "load_in_date" / "loadInDate" → "Load in date" — best-effort label for
+ *  the error-banner field list when all we have is the input's name. */
+function humanizeFieldName(name: string): string {
+  const spaced = name
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .trim();
+  return spaced ? spaced.charAt(0).toUpperCase() + spaced.slice(1).toLowerCase() : name;
 }
 
 // ────────────────────────────────────────────────────────────────────

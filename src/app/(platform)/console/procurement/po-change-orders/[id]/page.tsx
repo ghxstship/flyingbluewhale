@@ -11,17 +11,9 @@ import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "error"> = {
-  proposed: "muted",
-  submitted: "info",
-  in_review: "info",
-  approved: "success",
-  rejected: "error",
-  void: "muted",
-};
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -74,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${po?.number ?? "—"} · ${po?.vendor?.name ?? ""}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[co.change_order_state] ?? "muted"}>{toTitle(co.change_order_state)}</Badge>
+            <Badge variant={toneFor(co.change_order_state)}>{toTitle(co.change_order_state)}</Badge>
             {co.change_order_state === "proposed" && (
               <StatusForm
                 action={transitionPoChangeOrder.bind(null, id, "submitted")}

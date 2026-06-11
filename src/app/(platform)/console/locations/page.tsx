@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { Location } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -15,11 +16,7 @@ export default async function LocationsPage() {
     return (
       <>
         <ModuleHeader title={t("console.locations.title", undefined, "Locations")} />
-        <div className="page-content">
-          <div className="surface p-6 text-sm">
-            {t("console.locations.configureSupabase", undefined, "Configure Supabase.")}
-          </div>
-        </div>
+        <ConfigureSupabase />
       </>
     );
   const session = await requireSession();

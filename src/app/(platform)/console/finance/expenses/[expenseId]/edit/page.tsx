@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -73,11 +74,13 @@ export default async function Page({ params }: { params: Promise<{ expenseId: st
             required
             maxLength={500}
           />
-          <Input
-            label={t("console.finance.expenses.edit.amountCentsLabel", undefined, "Amount — Cents")}
+          {/* Dollar-denominated entry; MoneyInput submits canonical
+              integer cents via its hidden `amount_cents` field. The old
+              raw-cents input invited 100× entry errors. */}
+          <MoneyInput
+            label={t("console.finance.expenses.edit.amountLabel", undefined, "Amount")}
             name="amount_cents"
-            type="number"
-            defaultValue={String(row.amount_cents ?? 0)}
+            defaultCents={row.amount_cents ?? 0}
           />
           <Input
             label={t("console.finance.expenses.edit.currencyLabel", undefined, "Currency")}

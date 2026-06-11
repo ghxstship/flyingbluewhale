@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { issueSection, supersedeSection } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -30,14 +31,6 @@ type Section = {
 
 type LinkedRfi = { id: string; code: string; title: string };
 type LinkedSubmittal = { id: string; code: string; title: string };
-
-const STATE_TONE: Record<SectionState, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  in_review: "warning",
-  issued: "success",
-  superseded: "info",
-  archived: "muted",
-};
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   if (!hasSupabase) return null;
@@ -97,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-6">
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
-          <Badge variant={STATE_TONE[section.section_state]}>{toTitle(section.section_state)}</Badge>
+          <Badge variant={toneFor(section.section_state)}>{toTitle(section.section_state)}</Badge>
           <span className="text-[var(--p-text-2)]">
             {t("console.specs.detail.formatLabel", undefined, "Format")} · {section.format}
           </span>

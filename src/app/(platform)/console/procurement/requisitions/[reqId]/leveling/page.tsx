@@ -10,6 +10,7 @@ import { formatMoney } from "@/lib/i18n/format";
 import { awardResponse } from "./actions";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 type ResponseRow = {
   id: string;
@@ -20,16 +21,6 @@ type ResponseRow = {
 };
 
 export const dynamic = "force-dynamic";
-
-const STATE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  invited: "muted",
-  viewed: "info",
-  responded: "info",
-  no_bid: "muted",
-  withdrawn: "muted",
-  awarded: "success",
-  declined: "error",
-};
 
 export default async function Page({ params }: { params: Promise<{ reqId: string }> }) {
   const { reqId } = await params;
@@ -104,9 +95,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             {
               key: "response_state",
               header: t("console.procurement.requisitions.leveling.columns.state", undefined, "State"),
-              render: (r) => (
-                <Badge variant={STATE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.response_state)}>{toTitle(r.response_state)}</Badge>,
               accessor: (r) => r.response_state,
               filterable: true,
               groupable: true,

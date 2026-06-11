@@ -8,16 +8,9 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { transitionPunchItem } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  open: "warning",
-  in_progress: "info",
-  ready_for_review: "info",
-  complete: "success",
-  void: "muted",
-};
 
 function fmt(d: string | null): string {
   if (!d) return "—";
@@ -55,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={project}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[item.item_state] ?? "muted"}>{toTitle(item.item_state)}</Badge>
+            <Badge variant={toneFor(item.item_state)}>{toTitle(item.item_state)}</Badge>
             {item.show_ready_gate && (
               <Badge variant="error">{t("console.punch.detail.doorsGate", undefined, "Doors Gate")}</Badge>
             )}

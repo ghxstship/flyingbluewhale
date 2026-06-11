@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
+import { FormField } from "@/components/ui/FormField";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -7,9 +8,6 @@ import { getRequestT } from "@/lib/i18n/request";
 import { createTakeoff } from "./actions";
 
 export const dynamic = "force-dynamic";
-
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const UNITS = ["ea", "lf", "sf", "sy", "cy", "lb", "ton", "hr", "cf", "m", "m2", "m3"];
 
@@ -47,25 +45,17 @@ export default async function Page() {
           cancelHref="/console/takeoffs"
           submitLabel={t("console.takeoffs.new.submit", undefined, "Create Takeoff")}
         >
-          <label className="flex flex-col gap-1.5">
-            <span className={LBL}>
-              {t("console.takeoffs.new.fields.name", undefined, "Name")}
-              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-            </span>
+          <FormField label={t("console.takeoffs.new.fields.name", undefined, "Name")} required>
             <input
               name="name"
               required
               placeholder={t("console.takeoffs.new.placeholders.name", undefined, "Slab-on-grade Level 1")}
-              className={INPUT}
+              className="ps-input"
             />
-          </label>
+          </FormField>
           <div className="grid grid-cols-2 gap-3">
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("console.takeoffs.new.fields.project", undefined, "Project")}
-                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-              </span>
-              <select name="project_id" required className={INPUT}>
+            <FormField label={t("console.takeoffs.new.fields.project", undefined, "Project")} required>
+              <select name="project_id" required className="ps-input">
                 <option value="">{t("common.selectEllipsis", undefined, "Select…")}</option>
                 {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                   <option key={p.id} value={p.id}>
@@ -73,25 +63,20 @@ export default async function Page() {
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("console.takeoffs.new.fields.unit", undefined, "Unit")}
-                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-              </span>
-              <select name="unit" required className={INPUT} defaultValue="sf">
+            </FormField>
+            <FormField label={t("console.takeoffs.new.fields.unit", undefined, "Unit")} required>
+              <select name="unit" required className="ps-input" defaultValue="sf">
                 {UNITS.map((u) => (
                   <option key={u} value={u}>
                     {u}
                   </option>
                 ))}
               </select>
-            </label>
+            </FormField>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.takeoffs.new.fields.sheet", undefined, "Sheet · Optional")}</span>
-              <select name="site_plan_id" className={INPUT}>
+            <FormField label={t("console.takeoffs.new.fields.sheet", undefined, "Sheet · Optional")}>
+              <select name="site_plan_id" className="ps-input">
                 <option value="">—</option>
                 {((sheets ?? []) as Array<{ id: string; code: string; title: string }>).map((s) => (
                   <option key={s.id} value={s.id}>
@@ -99,12 +84,9 @@ export default async function Page() {
                   </option>
                 ))}
               </select>
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("console.takeoffs.new.fields.costCode", undefined, "Cost Code · Optional")}
-              </span>
-              <select name="cost_code_id" className={INPUT}>
+            </FormField>
+            <FormField label={t("console.takeoffs.new.fields.costCode", undefined, "Cost Code · Optional")}>
+              <select name="cost_code_id" className="ps-input">
                 <option value="">—</option>
                 {((cc ?? []) as Array<{ id: string; code: string; name: string }>).map((c) => (
                   <option key={c.id} value={c.id}>
@@ -112,31 +94,27 @@ export default async function Page() {
                   </option>
                 ))}
               </select>
-            </label>
+            </FormField>
           </div>
-          <label className="flex flex-col gap-1.5">
-            <span className={LBL}>
-              {t("console.takeoffs.new.fields.calibration", undefined, "Calibration — Inches per Foot")}
-            </span>
+          <FormField
+            label={t("console.takeoffs.new.fields.calibration", undefined, "Calibration — Inches per Foot")}
+            hint={t(
+              "console.takeoffs.new.hints.calibration",
+              undefined,
+              'Drawing scale used by the measurement engine. Common values: 0.0625 (1/16"), 0.125 (1/8"), 0.25 (1/4").',
+            )}
+          >
             <input
               type="number"
               step="0.001"
               name="calibration_in_per_ft"
               placeholder={t("console.takeoffs.new.placeholders.calibration", undefined, "0.125 for 1/8\" = 1'")}
-              className={INPUT}
+              className="ps-input"
             />
-            <span className="text-[10px] text-[var(--p-text-2)]">
-              {t(
-                "console.takeoffs.new.hints.calibration",
-                undefined,
-                'Drawing scale used by the measurement engine. Common values: 0.0625 (1/16"), 0.125 (1/8"), 0.25 (1/4").',
-              )}
-            </span>
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className={LBL}>{t("console.takeoffs.new.fields.notes", undefined, "Notes")}</span>
-            <textarea name="notes" rows={3} className={INPUT} />
-          </label>
+          </FormField>
+          <FormField label={t("console.takeoffs.new.fields.notes", undefined, "Notes")}>
+            <textarea name="notes" rows={3} className="ps-input" />
+          </FormField>
         </FormShell>
       </div>
     </>

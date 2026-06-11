@@ -85,7 +85,7 @@ export default async function StagePlotsPage({ params }: { params: Promise<{ pro
         ) : (
           <div className="surface p-6 text-center text-sm text-[var(--p-text-2)]">
             {t("console.projects.stagePlots.emptyPrefix", undefined, "No stage plots yet. Click")}{" "}
-            <strong>{t("console.projects.stagePlots.emptyAction", undefined, "New stage plot")}</strong>{" "}
+            <strong>{t("console.projects.stagePlots.emptyAction", undefined, "New Stage Plot")}</strong>{" "}
             {t("console.projects.stagePlots.emptySuffix", undefined, "above to open the canvas editor.")}
           </div>
         )}

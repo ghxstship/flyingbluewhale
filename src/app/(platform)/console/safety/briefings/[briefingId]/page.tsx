@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { acknowledgeAttendee, addAttendee, markConducted, removeAttendee } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +20,6 @@ type Row = {
   notes: string | null;
   briefer: { name: string | null; email: string | null } | null;
   project: { id: string; name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
-  scheduled: "info",
-  conducted: "success",
-  cancelled: "muted",
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -167,7 +162,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
                       )}
               </p>
             </div>
-            <Badge variant={STATUS_TONE[row.status] ?? "muted"}>
+            <Badge variant={toneFor(row.status)}>
               {row.status === "scheduled"
                 ? t("console.safety.briefings.status.scheduled", undefined, "Scheduled")
                 : row.status === "conducted"

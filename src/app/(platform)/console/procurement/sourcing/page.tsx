@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -28,22 +29,6 @@ type PORow = {
   amount_cents: number;
   requisition_state: string;
   vendor: { name: string | null } | null;
-};
-
-const REQ_STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  submitted: "info",
-  approved: "info",
-  rejected: "error",
-  converted: "success",
-};
-
-const PO_STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  sent: "info",
-  acknowledged: "info",
-  fulfilled: "success",
-  cancelled: "error",
 };
 
 export default async function Page() {
@@ -150,9 +135,7 @@ export default async function Page() {
                         {formatMoney(r.estimated_cents ?? 0)}
                       </div>
                     </div>
-                    <Badge variant={REQ_STATUS_TONE[r.requisition_state] ?? "muted"}>
-                      {toTitle(r.requisition_state)}
-                    </Badge>
+                    <Badge variant={toneFor(r.requisition_state)}>{toTitle(r.requisition_state)}</Badge>
                   </Link>
                 </li>
               ))}
@@ -186,9 +169,7 @@ export default async function Page() {
                         {formatMoney(p.amount_cents)}
                       </div>
                     </div>
-                    <Badge variant={PO_STATUS_TONE[p.requisition_state] ?? "muted"}>
-                      {toTitle(p.requisition_state)}
-                    </Badge>
+                    <Badge variant={toneFor(p.requisition_state)}>{toTitle(p.requisition_state)}</Badge>
                   </Link>
                 </li>
               ))}

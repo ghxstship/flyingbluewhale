@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -88,7 +89,11 @@ export default async function MobilePollsPage() {
                     ))}
                   </ul>
                 ) : (
-                  <form action={castVote} className="mt-3 space-y-1.5">
+                  <FormShell
+                    action={castVote}
+                    className="mt-3 space-y-1.5"
+                    submitLabel={t("m.polls.voteButton", undefined, "Vote")}
+                  >
                     <input type="hidden" name="poll_id" value={p.id} />
                     {opts.map((o) => (
                       <label
@@ -99,10 +104,7 @@ export default async function MobilePollsPage() {
                         {o.label}
                       </label>
                     ))}
-                    <button type="submit" className="ps-btn ps-btn--sm mt-2 w-full">
-                      {t("m.polls.voteButton", undefined, "Vote")}
-                    </button>
-                  </form>
+                  </FormShell>
                 )}
               </li>
             );

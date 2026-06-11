@@ -7,11 +7,13 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { moneyCentsString } from "@/app/(platform)/console/finance/money";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
   number: z.string().min(1).max(80),
-  amount_cents: z.string().optional(),
+  // Integer cents from MoneyInput's hidden field — never a dollar string.
+  amount_cents: moneyCentsString({ allowEmpty: true }),
   currency: z.string().min(1).max(3),
   due_at: z.string().optional().or(z.literal("")),
   issued_at: z.string().optional().or(z.literal("")),
@@ -67,5 +69,6 @@ export async function deleteInvoice(id: string): Promise<void> {
     .is("deleted_at", null);
   if (error) throw new Error(`Could not archive invoice: ${error.message}`);
   revalidatePath("/console/finance/invoices");
-  redirect("/console/finance/invoices");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

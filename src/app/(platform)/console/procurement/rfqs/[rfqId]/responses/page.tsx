@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo, toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -30,16 +31,6 @@ type ResponseRow = {
   awarded_at: string | null;
   vendor_id: string | null;
   vendor: { name: string | null } | null;
-};
-
-const RESPONSE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  invited: "muted",
-  viewed: "info",
-  responded: "info",
-  no_bid: "muted",
-  withdrawn: "warning",
-  awarded: "success",
-  declined: "error",
 };
 
 export default async function RfqResponsesPage({ params }: { params: Promise<{ rfqId: string }> }) {
@@ -153,9 +144,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
             {
               key: "response_state",
               header: t("console.procurement.rfqs.responses.colState", undefined, "State"),
-              render: (r) => (
-                <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.response_state)}>{toTitle(r.response_state)}</Badge>,
               accessor: (r) => r.response_state,
               filterable: true,
               groupable: true,

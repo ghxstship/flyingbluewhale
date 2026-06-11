@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { buttonVariants } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -70,7 +71,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content max-w-2xl space-y-4">
         <article className="surface p-6 text-sm whitespace-pre-wrap">{a.body}</article>
         <div className="flex flex-wrap gap-2">
-          <Link href={`/console/comms/announcements/${a.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
+          <Link
+            href={`/console/comms/announcements/${a.id}/edit`}
+            className={buttonVariants({ variant: "ghost", size: "sm" })}
+          >
             {t("common.edit", undefined, "Edit")}
           </Link>
           {a.publish_state === "draft" && (

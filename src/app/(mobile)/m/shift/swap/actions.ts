@@ -6,25 +6,28 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { actionFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   shift_id: z.string().uuid(),
   reason: z.string().min(1).max(500),
 });
 
-export async function requestSwap(fd: FormData): Promise<void> {
+export type State = { error?: string; values?: Record<string, string> } | null;
+
+export async function requestSwap(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) redirect("/m/shift/swap?error=invalid");
+  if (!parsed.success) return actionFail(parsed.error.issues[0]?.message ?? "Invalid input", fd);
 
   const supabase = await createClient();
   const { data: shift } = await supabase
     .from("shifts")
     .select("id, starts_at, ends_at, venue:venue_id(name)")
     .eq("org_id", session.orgId)
-    .eq("id", parsed.data!.shift_id)
+    .eq("id", parsed.data.shift_id)
     .maybeSingle();
-  if (!shift) redirect("/m/shift/swap?error=not_found");
+  if (!shift) return actionFail("Shift not found — it may have been removed from the roster.", fd);
 
   // Duplicate guard — repeated submits (double-tap, back-button replay)
   // created one shift_swaps row + one admin notification storm each.
@@ -32,7 +35,7 @@ export async function requestSwap(fd: FormData): Promise<void> {
     .from("shift_swaps")
     .select("id")
     .eq("org_id", session.orgId)
-    .eq("shift_id", parsed.data!.shift_id)
+    .eq("shift_id", parsed.data.shift_id)
     .eq("requested_by", session.userId)
     .eq("swap_state", "requested")
     .maybeSingle();
@@ -43,12 +46,12 @@ export async function requestSwap(fd: FormData): Promise<void> {
   // they navigate to /console/workforce/shift-swaps.
   const { error } = await supabase.from("shift_swaps").insert({
     org_id: session.orgId,
-    shift_id: parsed.data!.shift_id,
+    shift_id: parsed.data.shift_id,
     requested_by: session.userId,
-    reason: parsed.data!.reason,
+    reason: parsed.data.reason,
     swap_state: "requested",
   });
-  if (error) throw new Error(`Could not request swap: ${error.message}`);
+  if (error) return actionFail(`Could not request swap: ${error.message}`, fd);
 
   // Notify all admin/manager members of the org via service role.
   // .is("deleted_at", null) so we don't notify offboarded admins
@@ -72,7 +75,7 @@ export async function requestSwap(fd: FormData): Promise<void> {
     const startsAt = new Date((shift as { starts_at: string }).starts_at);
     const title = `Shift swap requested: ${venue}`;
     const fmt = await getRequestFormatters();
-    const body = `${fmt.dateParts(startsAt, { weekday: "short", month: "short", day: "numeric" })} · ${parsed.data!.reason}`;
+    const body = `${fmt.dateParts(startsAt, { weekday: "short", month: "short", day: "numeric" })} · ${parsed.data.reason}`;
 
     const inserts = (admins ?? []).map((a) => ({
       org_id: session.orgId,

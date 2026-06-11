@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
@@ -64,11 +65,7 @@ export default async function Page() {
           eyebrow={t("console.captures.eyebrow", undefined, "Field")}
           title={t("console.captures.title", undefined, "Reality Captures")}
         />
-        <div className="page-content">
-          <div className="surface p-6 text-sm">
-            {t("console.captures.configureSupabase", undefined, "Configure Supabase.")}
-          </div>
-        </div>
+        <ConfigureSupabase />
       </>
     );
   }

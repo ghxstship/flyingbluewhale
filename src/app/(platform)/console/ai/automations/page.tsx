@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -27,14 +28,6 @@ const TRIGGER_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
   schedule: "info",
   webhook: "info",
   event: "success",
-};
-
-const RUN_TONE: Record<string, "muted" | "success" | "warning" | "error"> = {
-  ok: "success",
-  success: "success",
-  failed: "error",
-  error: "error",
-  running: "warning",
 };
 
 function relativeTime(
@@ -120,7 +113,7 @@ export default async function Page() {
               "Author AI-driven automations triggered manually, on a cron schedule, by webhooks, or by domain events.",
             )}
             action={
-              <Link href="/console/ai/automations/new" className="ps-btn ps-btn--sm">
+              <Link href="/console/ai/automations/new" className={buttonVariants({ size: "sm" })}>
                 {t("console.ai.automations.newAction", undefined, "+ New Automation")}
               </Link>
             }
@@ -152,9 +145,7 @@ export default async function Page() {
                       )}
                     </div>
                   </div>
-                  {r.last_run_status && (
-                    <Badge variant={RUN_TONE[r.last_run_status] ?? "muted"}>{r.last_run_status}</Badge>
-                  )}
+                  {r.last_run_status && <Badge variant={toneFor(r.last_run_status)}>{r.last_run_status}</Badge>}
                 </Link>
               </li>
             ))}

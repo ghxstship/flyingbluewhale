@@ -1,14 +1,31 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Alert } from "@/components/ui/Alert";
-import { upsertGuideAction, type State } from "../actions";
+import { FormShell, type FormState } from "@/components/FormShell";
+import { upsertGuideAction } from "../actions";
 import type { GuidePersona } from "@/lib/supabase/types";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+/** Returns the parse error message for invalid JSON, or null when valid. */
+function jsonProblem(raw: string): string | null {
+  if (!raw.trim()) return null;
+  try {
+    JSON.parse(raw);
+    return null;
+  } catch (e) {
+    return e instanceof Error ? e.message : "Invalid JSON";
+  }
+}
+
+/**
+ * FE-4 hardening — the raw-JSON guide editor now runs inside FormShell so it
+ * inherits the dirty guard (beforeunload + in-app navigation interception)
+ * and the standard error surface. Client-side JSON validation happens twice:
+ * inline on textarea blur, and as a pre-submit check inside the action
+ * wrapper so an invalid config never reaches the server action.
+ */
 export function GuideEditor({
   projectId,
   persona,
@@ -19,15 +36,32 @@ export function GuideEditor({
   defaultValues: { title: string; subtitle: string; classification: string; published: boolean; config: string };
 }) {
   const t = useT();
-  const [state, formAction, pending] = useActionState<State, FormData>(async (prev, fd) => {
+  const [jsonError, setJsonError] = useState<string | null>(null);
+
+  const invalidJsonMessage = (detail: string) =>
+    t("console.projects.guides.editor.invalidJson", { detail }, `Config must be valid JSON — ${detail}`);
+
+  const action = async (prev: FormState, fd: FormData): Promise<FormState> => {
+    // Client-side validation before the round trip — same check the server
+    // repeats, surfaced instantly with the parser's own message.
+    const problem = jsonProblem(String(fd.get("config") ?? ""));
+    if (problem) {
+      setJsonError(problem);
+      return { error: invalidJsonMessage(problem) };
+    }
     const res = await upsertGuideAction(projectId, prev, fd);
     if (res?.error) toast.error(res.error);
     else toast.success(t("console.projects.guides.editor.savedToast", undefined, "Guide saved"));
     return res;
-  }, null);
+  };
 
   return (
-    <form action={formAction} className="surface space-y-4 p-6">
+    <FormShell
+      action={action}
+      dirtyGuard
+      cancelHref={`/console/projects/${projectId}/guides`}
+      submitLabel={t("console.projects.guides.editor.saveButton", undefined, "Save Guide")}
+    >
       <input type="hidden" name="persona" value={persona} />
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
@@ -60,8 +94,15 @@ export function GuideEditor({
           rows={24}
           spellCheck={false}
           defaultValue={defaultValues.config}
+          aria-invalid={jsonError ? true : undefined}
+          onBlur={(e) => setJsonError(jsonProblem(e.currentTarget.value))}
           className="ps-input mt-1.5 w-full font-mono text-xs"
         />
+        {jsonError && (
+          <p className="mt-1 text-xs text-[var(--p-danger)]" role="alert">
+            {invalidJsonMessage(jsonError)}
+          </p>
+        )}
         <div className="mt-1 text-xs text-[var(--p-text-2)]">
           {t("console.projects.guides.editor.sectionsLabel", undefined, "Sections:")}{" "}
           <span className="font-mono">
@@ -70,17 +111,6 @@ export function GuideEditor({
           </span>
         </div>
       </div>
-      {state?.error && <Alert kind="error">{state.error}</Alert>}
-      <div className="flex items-center justify-end gap-2">
-        <Button href={`/console/projects/${projectId}/guides`} variant="ghost">
-          {t("common.back", undefined, "Back")}
-        </Button>
-        <Button type="submit" disabled={pending}>
-          {pending
-            ? t("console.projects.guides.editor.saving", undefined, "Saving…")
-            : t("console.projects.guides.editor.saveButton", undefined, "Save guide")}
-        </Button>
-      </div>
-    </form>
+    </FormShell>
   );
 }

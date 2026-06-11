@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { SEVERITY_TONE, toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -18,21 +19,6 @@ type IncidentRow = {
   description: string | null;
   severity: string;
   incident_state: string;
-};
-
-const SEVERITY_TONE: Record<string, "muted" | "warning" | "error"> = {
-  low: "muted",
-  medium: "warning",
-  high: "error",
-  critical: "error",
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
-  open: "warning",
-  triage: "info",
-  in_progress: "info",
-  resolved: "success",
-  closed: "muted",
 };
 
 const CYBER_PATTERN = /(cyber|breach|phish|ransom|malware|ddos|intrusion|credential|access\b|c2\b)/i;
@@ -150,7 +136,7 @@ export default async function Page() {
             {
               key: "severity",
               header: t("console.safety.cyberIr.columnSeverity", undefined, "Severity"),
-              render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>,
+              render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "default"}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
               groupable: true,
@@ -158,9 +144,7 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.safety.cyberIr.columnStatus", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_TONE[r.incident_state] ?? "muted"}>{toTitle(r.incident_state)}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.incident_state)}>{toTitle(r.incident_state)}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.incident_state ?? null,

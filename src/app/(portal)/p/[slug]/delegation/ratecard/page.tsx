@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -19,16 +20,6 @@ type Order = {
   notes: string | null;
   delegation: { name: string | null; code: string | null } | null;
   created_at: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  submitted: "info",
-  in_review: "warning",
-  approved: "success",
-  rejected: "error",
-  fulfilled: "success",
-  cancelled: "muted",
 };
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
@@ -139,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className="font-mono text-xs">{money(o.total_cents, o.currency)}</span>
-                    <Badge variant={STATUS_TONE[o.status] ?? "muted"}>{toTitle(o.status)}</Badge>
+                    <Badge variant={toneFor(o.status)}>{toTitle(o.status)}</Badge>
                   </div>
                 </li>
               ))}

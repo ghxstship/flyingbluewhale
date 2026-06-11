@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -17,14 +18,6 @@ type IncidentRow = {
   description: string | null;
   severity: string;
   incident_state: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
-  open: "warning",
-  triage: "info",
-  in_progress: "info",
-  resolved: "success",
-  closed: "muted",
 };
 
 const CASE_PATTERN = /(protest|appeal|jury|disqualif|disq\b|hearing|case\b|grievance|disciplinary|sanction|doping)/i;
@@ -132,9 +125,7 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.programs.cases.col.status", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_TONE[r.incident_state] ?? "muted"}>{toTitle(r.incident_state)}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.incident_state)}>{toTitle(r.incident_state)}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.incident_state ?? null,

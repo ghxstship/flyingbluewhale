@@ -3,9 +3,22 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 import { matchRoute } from "@/lib/hooks/useActiveRoute";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/DropdownMenu";
 
 export type RouteTab = { label: string; href: string };
+
+/** Tab cap per docs/ia/02-navigation-redesign.md §3.4 — the first six
+ *  tabs render inline; everything beyond collapses into a `More`
+ *  overflow menu. The active tab is always visible: when it lives in
+ *  the overflow it swaps places with the last visible tab. */
+const VISIBLE_CAP = 6;
+
+const TAB_BASE_CLASS =
+  "relative inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)]";
+const TAB_ACTIVE_CLASS = "border-[var(--p-accent)] font-medium text-[var(--p-text-1)]";
+const TAB_INACTIVE_CLASS = "border-transparent text-[var(--p-text-2)] hover:text-[var(--p-text-1)]";
 
 /**
  * Presentational tabs strip that uses Next.js routing for state instead of
@@ -18,8 +31,7 @@ export type RouteTab = { label: string; href: string };
  * is current — the same matcher the sidebar and command palette use.
  *
  * Reference patterns: Stripe Dashboard (record tabs), Linear (issue tabs),
- * Attio (record tabs). Tab cap: 6 visible — anything beyond becomes a
- * `More ▾` overflow per `docs/ia/02-navigation-redesign.md §3.4`.
+ * Attio (record tabs).
  */
 export function RouteTabs({
   tabs,
@@ -40,11 +52,29 @@ export function RouteTabs({
   // active on every sub-route via prefix match. Linear and Stripe both
   // apply the same exact-only rule for parent tabs.
   const isParentHref = (href: string) => tabs.some((other) => other.href !== href && other.href.startsWith(`${href}/`));
+  const isTabActive = (tab: RouteTab) => {
+    const m = matchRoute(pathname ?? "", tab.href);
+    return isParentHref(tab.href) ? m.isExact : m.isActive;
+  };
+
+  let visible = tabs;
+  let overflow: RouteTab[] = [];
+  if (tabs.length > VISIBLE_CAP) {
+    visible = tabs.slice(0, VISIBLE_CAP);
+    overflow = tabs.slice(VISIBLE_CAP);
+    const activeIdx = overflow.findIndex(isTabActive);
+    const activeTab = activeIdx >= 0 ? overflow[activeIdx] : undefined;
+    const lastVisible = visible[visible.length - 1];
+    if (activeTab && lastVisible) {
+      visible = [...visible.slice(0, -1), activeTab];
+      overflow = [lastVisible, ...overflow.slice(0, activeIdx), ...overflow.slice(activeIdx + 1)];
+    }
+  }
+
   return (
     <nav role="tablist" aria-label="Section" className={`-mb-px flex items-center gap-1 ${scroll} ${className}`}>
-      {tabs.map((t) => {
-        const m = matchRoute(pathname ?? "", t.href);
-        const isActive = isParentHref(t.href) ? m.isExact : m.isActive;
+      {visible.map((t) => {
+        const isActive = isTabActive(t);
         return (
           <Link
             key={t.href}
@@ -55,16 +85,31 @@ export function RouteTabs({
             // Match the underline-tab styling used by the Radix Tabs primitive
             // ([Tabs.tsx:35]) so the shell looks consistent regardless of
             // whether a page wires URL-state tabs or route-state tabs.
-            className={`relative inline-flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--p-accent)] ${
-              isActive
-                ? "border-[var(--p-accent)] font-medium text-[var(--p-text-1)]"
-                : "border-transparent text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
-            }`}
+            className={`${TAB_BASE_CLASS} ${isActive ? TAB_ACTIVE_CLASS : TAB_INACTIVE_CLASS}`}
           >
             {t.label}
           </Link>
         );
       })}
+      {overflow.length > 0 && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button type="button" aria-label="More Tabs" className={`${TAB_BASE_CLASS} ${TAB_INACTIVE_CLASS}`}>
+              More
+              <ChevronDown size={12} aria-hidden="true" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {overflow.map((t) => (
+              <DropdownMenuItem key={t.href} asChild>
+                <Link href={t.href} className="cursor-pointer">
+                  {t.label}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </nav>
   );
 }

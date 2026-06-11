@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding, brandingToCssVars } from "@/lib/branding";
 import { CommandPalette } from "@/components/CommandPalette";
+import { portalPersonaForSession } from "@/lib/nav";
 import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { getSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
@@ -60,8 +61,17 @@ export default async function PortalSlugLayout({
           switcherEntries={switcherEntries}
         />
       ) : null}
-      {children}
-      <CommandPalette scope="portal" portalSlug={slug} />
+      {/* AX-4 — the portal shell had no <main> landmark, so the root skip
+          link had nothing to land on and screen readers lacked a main-content
+          anchor. tabIndex={-1} lets the skip link move focus here. */}
+      <main id="main" tabIndex={-1}>
+        {children}
+      </main>
+      <CommandPalette
+        scope="portal"
+        portalSlug={slug}
+        portalPersona={portalPersonaForSession(session?.persona) ?? undefined}
+      />
     </div>
   );
 }

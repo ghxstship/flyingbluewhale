@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 
 export const dynamic = "force-dynamic";
 
@@ -29,11 +30,7 @@ export default async function Page() {
           eyebrow={t("console.insights.eyebrow", undefined, "Insights")}
           title={t("console.insights.title", undefined, "Booking Pool")}
         />
-        <div className="page-content">
-          <div className="surface p-6 text-sm">
-            {t("console.insights.configureSupabase", undefined, "Configure Supabase.")}
-          </div>
-        </div>
+        <ConfigureSupabase />
       </>
     );
   }

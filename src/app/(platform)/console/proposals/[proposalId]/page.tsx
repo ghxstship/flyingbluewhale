@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { buttonVariants } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
@@ -52,7 +53,10 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
         ]}
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/proposals/${proposal.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
+            <Link
+              href={`/console/proposals/${proposal.id}/edit`}
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
+            >
               {t("console.proposals.detail.editDocument", undefined, "Edit Document")}
             </Link>
             <ProposalStatusControls id={proposal.id} status={proposal.proposal_state} />

@@ -136,11 +136,19 @@ export type InteractiveRow = {
   cellClassNames?: Record<string, string>;
 };
 
+/**
+ * Optional structured result from a bulk-action `perform`. When returned,
+ * the floating bar surfaces it as a toast — `error` wins over `message`
+ * so partial failures ("3 Of 12 Could Not Transition") reach the user.
+ * Returning void keeps the legacy fire-and-forget contract.
+ */
+export type BulkActionResult = { message?: string; error?: string } | void;
+
 export type BulkAction = {
   id: string;
   label: string;
   variant?: "default" | "danger";
-  perform: (ids: string[]) => void | Promise<void>;
+  perform: (ids: string[]) => BulkActionResult | Promise<BulkActionResult>;
 };
 
 export type InteractiveTableProps = {
@@ -153,6 +161,11 @@ export type InteractiveTableProps = {
   bulkActions?: BulkAction[];
   /** Stable identifier — drives URL keys + saved-view persistence. */
   tableId?: string;
+  /** Total population size when `rows` is a truncated page of a larger
+   *  set (SC-2 truncation honesty). When provided and greater than
+   *  `rows.length`, the toolbar count gains a "Showing First N Of M"
+   *  indicator so operators know the table is not the whole story. */
+  totalCount?: number;
   /** Fixed virtualization row height in px. Falls back to density-based if omitted. */
   rowHeight?: number;
   /** Optional import handler. When provided, an "Import" button surfaces in
@@ -208,6 +221,7 @@ export function DataTableInteractive({
   density: densityProp = "comfortable",
   bulkActions,
   tableId,
+  totalCount,
   rowHeight,
   onImport,
   onRefresh,
@@ -661,6 +675,16 @@ export function DataTableInteractive({
               ? t("dataTable.rowSingular", undefined, "row")
               : t("dataTable.rowPlural", undefined, "rows")}
           </span>
+          {totalCount != null && totalCount > rows.length && (
+            <span className="font-mono text-[10px] text-[var(--p-text-2)] tabular-nums">
+              ·{" "}
+              {t(
+                "dataTable.showingFirst",
+                { shown: rows.length, total: totalCount },
+                `Showing First ${rows.length} Of ${totalCount}`,
+              )}
+            </span>
+          )}
         </div>
 
         {/* ── Section 2 · Shape + Display (filter → sort → density → columns → group) ──
@@ -804,7 +828,10 @@ export function DataTableInteractive({
           without an outer card. Scroll bounds remain (70vh fallback when
           not paginated) and the header stays sticky. */}
       <div ref={scrollRef} className="overflow-auto" style={{ maxHeight: pageSizeEff ? "auto" : "70vh" }}>
-        <table className="ps-table w-full" role="grid" aria-rowcount={sorted.length}>
+        {/* Native table semantics — no role="grid": there is no cell-level
+            focus management here, so the grid role would promise arrow-key
+            navigation that doesn't exist (AX-9). */}
+        <table className="ps-table w-full">
           {/* Sticky header bg switched from --p-surface to --p-bg so
               the sticky thead matches the underlying page paint now that
               there's no surface card behind the table. */}
@@ -1058,7 +1085,15 @@ export function DataTableInteractive({
               key={a.id}
               type="button"
               onClick={async () => {
-                await a.perform(Array.from(selected));
+                try {
+                  const res = await a.perform(Array.from(selected));
+                  if (res?.error) toast.error(res.error);
+                  else if (res?.message) toast.success(res.message);
+                } catch (err) {
+                  toast.error(
+                    err instanceof Error ? err.message : t("dataTable.bulkFailed", undefined, "Bulk Action Failed"),
+                  );
+                }
                 setSelected(new Set());
               }}
               className={`rounded px-2 py-1 text-xs ${

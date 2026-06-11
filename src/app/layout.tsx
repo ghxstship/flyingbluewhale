@@ -194,9 +194,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           <ThemeProvider>
             <TooltipProvider delayDuration={350}>
               <LiveRegionProvider>
-                <div id="main" className="flex min-w-0 flex-1 flex-col">
-                  {children}
-                </div>
+                {/* AX-1 — this wrapper previously carried id="main", which made
+                    the skip link land on the WHOLE shell (nav included) and
+                    duplicated the (platform) layout's <main id="main">. Each
+                    shell layout's <main id="main" tabIndex={-1}> is the skip
+                    target now. */}
+                <div className="flex min-w-0 flex-1 flex-col">{children}</div>
                 <CookieConsent />
                 <ShortcutDialog />
               </LiveRegionProvider>

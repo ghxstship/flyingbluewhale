@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import { FormShell } from "@/components/FormShell";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -51,59 +53,74 @@ export default async function SurveyPage({ params }: { params: Promise<{ surveyI
         <p className="mt-1 text-xs text-[var(--p-text-2)]">{(survey as { description: string }).description}</p>
       )}
 
-      <form action={submitSurvey} className="mt-5 space-y-4">
-        <input type="hidden" name="surveyId" value={surveyId} />
-        {list.map((q) => {
-          const opts = Array.isArray(q.options) ? (q.options as string[]) : [];
-          return (
-            <fieldset key={q.id} className="surface p-4">
-              <legend className="text-sm font-semibold">
-                {q.ordinal}. {q.prompt}
-              </legend>
-              {q.question_kind === "single_choice" || q.question_kind === "scale" ? (
-                <div className="mt-2 space-y-1.5">
-                  {opts.map((o, idx) => (
-                    <label key={idx} className="flex items-center gap-2 text-xs">
-                      <input type="radio" name={`q_${q.id}`} value={o} required={q.required} />
-                      {o}
+      {list.length === 0 ? (
+        <div className="mt-5">
+          <EmptyState
+            size="compact"
+            title={t("m.surveys.detail.empty.title", undefined, "No Questions Yet")}
+            description={t(
+              "m.surveys.detail.empty.description",
+              undefined,
+              "This survey has no questions to answer. Check back later.",
+            )}
+          />
+        </div>
+      ) : (
+        <FormShell
+          action={submitSurvey}
+          className="mt-5 space-y-4"
+          submitLabel={t("common.submit", undefined, "Submit")}
+        >
+          <input type="hidden" name="surveyId" value={surveyId} />
+          {list.map((q) => {
+            const opts = Array.isArray(q.options) ? (q.options as string[]) : [];
+            return (
+              <fieldset key={q.id} className="surface p-4">
+                <legend className="text-sm font-semibold">
+                  {q.ordinal}. {q.prompt}
+                </legend>
+                {q.question_kind === "single_choice" || q.question_kind === "scale" ? (
+                  <div className="mt-2 space-y-1.5">
+                    {opts.map((o, idx) => (
+                      <label key={idx} className="flex items-center gap-2 text-xs">
+                        <input type="radio" name={`q_${q.id}`} value={o} required={q.required} />
+                        {o}
+                      </label>
+                    ))}
+                  </div>
+                ) : q.question_kind === "multi_choice" ? (
+                  <div className="mt-2 space-y-1.5">
+                    {opts.map((o, idx) => (
+                      <label key={idx} className="flex items-center gap-2 text-xs">
+                        <input type="checkbox" name={`q_${q.id}`} value={o} />
+                        {o}
+                      </label>
+                    ))}
+                  </div>
+                ) : q.question_kind === "boolean" ? (
+                  <div className="mt-2 flex gap-3 text-xs">
+                    <label className="flex items-center gap-1">
+                      <input type="radio" name={`q_${q.id}`} value="yes" required={q.required} />{" "}
+                      {t("common.yes", undefined, "Yes")}
                     </label>
-                  ))}
-                </div>
-              ) : q.question_kind === "multi_choice" ? (
-                <div className="mt-2 space-y-1.5">
-                  {opts.map((o, idx) => (
-                    <label key={idx} className="flex items-center gap-2 text-xs">
-                      <input type="checkbox" name={`q_${q.id}`} value={o} />
-                      {o}
+                    <label className="flex items-center gap-1">
+                      <input type="radio" name={`q_${q.id}`} value="no" required={q.required} />{" "}
+                      {t("common.no", undefined, "No")}
                     </label>
-                  ))}
-                </div>
-              ) : q.question_kind === "boolean" ? (
-                <div className="mt-2 flex gap-3 text-xs">
-                  <label className="flex items-center gap-1">
-                    <input type="radio" name={`q_${q.id}`} value="yes" required={q.required} />{" "}
-                    {t("common.yes", undefined, "Yes")}
-                  </label>
-                  <label className="flex items-center gap-1">
-                    <input type="radio" name={`q_${q.id}`} value="no" required={q.required} />{" "}
-                    {t("common.no", undefined, "No")}
-                  </label>
-                </div>
-              ) : (
-                <textarea
-                  name={`q_${q.id}`}
-                  rows={3}
-                  required={q.required}
-                  className="mt-2 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-xs"
-                />
-              )}
-            </fieldset>
-          );
-        })}
-        <button type="submit" className="ps-btn w-full">
-          {t("common.submit", undefined, "Submit")}
-        </button>
-      </form>
+                  </div>
+                ) : (
+                  <textarea
+                    name={`q_${q.id}`}
+                    rows={3}
+                    required={q.required}
+                    className="mt-2 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-xs"
+                  />
+                )}
+              </fieldset>
+            );
+          })}
+        </FormShell>
+      )}
     </div>
   );
 }

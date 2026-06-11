@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +19,6 @@ type EventRow = {
   ends_at: string;
   status: string;
   project: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  scheduled: "info",
-  live: "success",
-  complete: "muted",
-  cancelled: "error",
 };
 
 function fmt(iso: string): string {
@@ -147,7 +140,7 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.programs.schedule.colStatus", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
               groupable: true,

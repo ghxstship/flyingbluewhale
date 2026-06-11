@@ -10,19 +10,11 @@ import { getRequestT } from "@/lib/i18n/request";
 import { transitionPayApp, updatePayAppLine } from "./actions";
 import { StatusForm } from "@/components/StatusForm";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
 const INPUT = "w-24 rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs";
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  submitted: "info",
-  in_review: "info",
-  approved: "success",
-  rejected: "error",
-  paid: "success",
-};
 
 function fmt(d: string): string {
   return new Date(d + "T00:00:00").toLocaleDateString();
@@ -70,7 +62,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${t("console.finance.payApps.detail.poLabel", undefined, "PO")} ${(app.purchase_order as unknown as { number: string } | null)?.number ?? "—"} · ${(app.vendor as unknown as { name: string | null } | null)?.name ?? "—"} · ${fmt(app.period_start)} — ${fmt(app.period_end)}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[app.application_state] ?? "muted"}>{toTitle(app.application_state)}</Badge>
+            <Badge variant={toneFor(app.application_state)}>{toTitle(app.application_state)}</Badge>
             {/* AIA G702/G703 PDF — round 51. Opens in a new tab; server route
                 signs the storage URL with a 60-second TTL. */}
             <a

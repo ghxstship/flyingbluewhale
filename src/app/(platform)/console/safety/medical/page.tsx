@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { SEVERITY_TONE } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -24,13 +25,6 @@ type EnvironmentalRow = {
   severity: string;
   started_at: string;
   ended_at: string | null;
-};
-
-const SEVERITY_TONE: Record<string, "muted" | "warning" | "error"> = {
-  low: "muted",
-  medium: "warning",
-  high: "error",
-  critical: "error",
 };
 
 function fmt(iso: string): string {
@@ -130,7 +124,7 @@ export default async function Page() {
                       {t("console.safety.medical.sincePrefix", undefined, "since")} {fmt(e.started_at)}
                     </span>
                   </div>
-                  <Badge variant={SEVERITY_TONE[e.severity] ?? "muted"}>{toTitle(e.severity)}</Badge>
+                  <Badge variant={SEVERITY_TONE[e.severity] ?? "default"}>{toTitle(e.severity)}</Badge>
                 </li>
               ))}
             </ul>

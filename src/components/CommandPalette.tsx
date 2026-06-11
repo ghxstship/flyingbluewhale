@@ -25,7 +25,16 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
-import { platformNav, portalNav, mobileTabs, mobileSurfaces, settingsNav } from "@/lib/nav";
+import {
+  platformNav,
+  portalNav,
+  mobileTabs,
+  mobileSurfaces,
+  settingsNav,
+  PORTAL_PERSONAS,
+  type NavItem,
+  type PortalPersona,
+} from "@/lib/nav";
 import { navItemKey } from "@/lib/i18n/nav-label";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { registerShortcut } from "@/lib/hooks/useHotkeys";
@@ -47,7 +56,17 @@ type Action = {
 
 type Scope = "platform" | "portal" | "mobile";
 
-export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Scope; portalSlug?: string }) {
+export function CommandPalette({
+  scope = "platform",
+  portalSlug,
+  portalPersona,
+}: {
+  scope?: Scope;
+  portalSlug?: string;
+  /** Viewer's portal sub-persona — scopes the portal index to their own
+   *  rail. Omit for operators previewing portals: all personas index. */
+  portalPersona?: PortalPersona;
+}) {
   const t = useT();
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
@@ -114,18 +133,36 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
   const actions: Action[] = React.useMemo(() => {
     const list: Action[] = [];
     if (scope === "platform") {
+      // Domain-nav groups keep their items in `sections` with `items: []`
+      // (ADR-0006) — flatten both shapes so the palette indexes the full
+      // route surface, not just the flat-items Dashboard group. Dedupe by
+      // href so a route listed in two groups yields one command.
+      const seen = new Set<string>();
+      const pushNav = (item: NavItem, hint: string, keywords: string[]) => {
+        if (seen.has(item.href)) return;
+        seen.add(item.href);
+        list.push({
+          id: `nav-${item.href}`,
+          label: t(navItemKey(item), undefined, item.label),
+          hint,
+          group: "Navigate",
+          icon: iconForRoute(item.href),
+          perform: () => goto(item.href),
+          performAlt: () => gotoNewTab(item.href),
+          keywords,
+        });
+      };
       for (const group of platformNav) {
         for (const item of group.items) {
-          list.push({
-            id: `nav-${item.href}`,
-            label: t(navItemKey(item), undefined, item.label),
-            hint: group.label,
-            group: "Navigate",
-            icon: iconForRoute(item.href),
-            perform: () => goto(item.href),
-            performAlt: () => gotoNewTab(item.href),
-            keywords: [group.label.toLowerCase()],
-          });
+          pushNav(item, group.label, [group.label.toLowerCase()]);
+        }
+        for (const section of group.sections ?? []) {
+          for (const item of section.items) {
+            pushNav(item, `${group.label} · ${section.label}`, [
+              group.label.toLowerCase(),
+              section.label.toLowerCase(),
+            ]);
+          }
         }
       }
       // Settings items are not in the primary sidebar but should still be
@@ -151,7 +188,13 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         { key: "newInvoice", label: "New Invoice", href: "/console/finance/invoices/new", icon: Receipt },
         { key: "newPo", label: "New PO", href: "/console/procurement/purchase-orders/new", icon: FileText },
         { key: "newProposal", label: "New Proposal", href: "/console/proposals/new", icon: FileText },
-        { key: "addEquipment", label: "Add Equipment", href: "/console/equipment/new", icon: Package },
+        { key: "addEquipment", label: "Add Equipment", href: "/console/production/equipment/new", icon: Package },
+        {
+          key: "linkScanCode",
+          label: "Link Scan Code",
+          href: "/console/people/credentials/asset-linker",
+          icon: Ticket,
+        },
       ].forEach((c) =>
         list.push({
           id: `create-${c.href}`,
@@ -163,12 +206,22 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
         }),
       );
     } else if (scope === "portal" && portalSlug) {
-      for (const persona of ["client", "vendor", "artist", "sponsor", "guest", "crew"] as const) {
+      // Scope the index to the viewer's own persona when the chrome knows
+      // it; operators previewing portals get every persona's routes for
+      // the current slug.
+      const personas: readonly PortalPersona[] = portalPersona ? [portalPersona] : PORTAL_PERSONAS;
+      // Workspace items (Guide, Updates, Inbox, …) share one slug-level
+      // URL across personas — dedupe by href so the all-personas fallback
+      // doesn't repeat them 15 times.
+      const seen = new Set<string>();
+      for (const persona of personas) {
         // ADR-0005: portalNav now returns a NavGroup with sections —
         // flatten the sections back to a flat command list for ⌘K.
         const group = portalNav(portalSlug, persona);
         const items = group.sections?.flatMap((s) => s.items) ?? group.items;
         for (const item of items) {
+          if (seen.has(item.href)) continue;
+          seen.add(item.href);
           list.push({
             id: `portal-${persona}-${item.href}`,
             label: t(navItemKey(item), undefined, item.label),
@@ -296,7 +349,7 @@ export function CommandPalette({ scope = "platform", portalSlug }: { scope?: Sco
     );
 
     return list;
-  }, [scope, portalSlug, goto, gotoNewTab, t]);
+  }, [scope, portalSlug, portalPersona, goto, gotoNewTab, t]);
 
   // Build recents list by dereferencing recorded ids
   const recentActions = React.useMemo(() => {

@@ -18378,8 +18378,8 @@
       "dismiss": "Masquer la bannière"
     },
     "connectivity": {
-      "offline": "Vous êtes hors ligne — les actions seront mises en file d'attente et synchronisées à la reconnexion.",
-      "backOnline": "De retour en ligne — synchronisation des actions en file d'attente…"
+      "offline": "Vous êtes hors ligne. Les scans et les pointages seront mis en file d'attente — tout le reste nécessite une connexion.",
+      "backOnline": "De retour en ligne — synchronisation des scans et pointages en file d'attente…"
     },
     "density": {
       "compact": "Compact",

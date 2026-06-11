@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { fmtDate, money } from "@/components/detail/DetailShell";
+import { DeleteForm } from "@/components/DeleteForm";
 import { setEquipmentStatus, deleteEquipment } from "../actions";
 import type { EquipmentStatus } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
@@ -238,12 +239,16 @@ export default async function Page({ params }: { params: Promise<{ equipmentId: 
         <section className="surface p-4 text-xs">
           <div className="flex items-center justify-between">
             <Badge variant="muted">{t("console.production.equipment.detail.lifecycle", undefined, "Lifecycle")}</Badge>
-            <form action={deleteEquipment}>
-              <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--p-danger)] hover:underline">
-                {t("console.production.equipment.detail.retireRemove", undefined, "Retire & remove")}
-              </button>
-            </form>
+            <DeleteForm
+              action={deleteEquipment.bind(null, row.id)}
+              confirm={t(
+                "console.production.equipment.detail.deleteConfirm",
+                undefined,
+                "Retire and remove this equipment? It is soft-deleted and can be restored right after.",
+              )}
+              label={t("console.production.equipment.detail.retireRemove", undefined, "Retire & Remove")}
+              undo={{ table: "equipment", id: row.id, redirectTo: "/console/production/equipment" }}
+            />
           </div>
         </section>
       </div>

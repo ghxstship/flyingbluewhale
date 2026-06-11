@@ -119,7 +119,7 @@ export const DropdownMenuLabel = React.forwardRef<
   return (
     <DropdownMenuPrimitive.Label
       ref={ref}
-      className={`px-2 py-1.5 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] ${className}`}
+      className={`px-2 py-1.5 text-[11px] font-semibold tracking-wide text-[var(--p-text-2)] ${className}`}
       {...props}
     />
   );
@@ -135,5 +135,5 @@ export const DropdownMenuSeparator = React.forwardRef<
 });
 
 export function DropdownMenuShortcut({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return <span className={`ms-auto font-mono text-[10px] text-[var(--p-text-2)] ${className}`}>{children}</span>;
+  return <span className={`ms-auto font-mono text-[11px] text-[var(--p-text-2)] ${className}`}>{children}</span>;
 }

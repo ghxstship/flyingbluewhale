@@ -1,9 +1,18 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
+import { DeleteForm } from "@/components/DeleteForm";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   addMemberAction,
@@ -117,46 +126,62 @@ function UpdateMemberRole({
 
 function RemoveMember({ teamId, userId }: { teamId: string; userId: string }) {
   const t = useT();
+  // CN-9 — accessible confirm dialog replaces native confirm(). Inline
+  // Dialog rather than DeleteForm so the trigger keeps its ghost variant.
+  const [open, setOpen] = useState(false);
+  const [pending, startTransition] = useTransition();
   return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="sm"
-      onClick={async () => {
-        if (!confirm(t("console.people.teams.removeMember.confirm", undefined, "Remove this member from the team?")))
-          return;
-        await removeMemberAction(teamId, userId);
-      }}
-    >
-      {t("common.remove", undefined, "Remove")}
-    </Button>
+    <>
+      <Button type="button" variant="ghost" size="sm" onClick={() => setOpen(true)} loading={pending}>
+        {t("common.remove", undefined, "Remove")}
+      </Button>
+      <Dialog open={open} onOpenChange={(o) => (!pending && !o ? setOpen(false) : null)}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle>{t("console.people.teams.removeMember.title", undefined, "Remove Member")}</DialogTitle>
+            <DialogDescription>
+              {t("console.people.teams.removeMember.confirm", undefined, "Remove this member from the team?")}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => setOpen(false)} disabled={pending}>
+              {t("common.cancel", undefined, "Cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              loading={pending}
+              onClick={() => {
+                startTransition(async () => {
+                  await removeMemberAction(teamId, userId);
+                  setOpen(false);
+                });
+              }}
+            >
+              {t("common.remove", undefined, "Remove")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
 function DeleteTeam({ teamId }: { teamId: string }) {
   const t = useT();
+  // CN-9 — DeleteForm provides the accessible confirm dialog; the bound
+  // action revalidates + redirects server-side (legacy contract, no undo).
   return (
-    <Button
-      type="button"
-      variant="danger"
-      size="sm"
-      onClick={async () => {
-        if (
-          !confirm(
-            t(
-              "console.people.teams.deleteTeam.confirm",
-              undefined,
-              "Delete this team? Members will be detached and any team-scoped record grants will be revoked. This cannot be undone.",
-            ),
-          )
-        ) {
-          return;
-        }
-        await deleteTeamAction(teamId);
-      }}
-    >
-      {t("console.people.teams.deleteTeam.action", undefined, "Delete Team")}
-    </Button>
+    <DeleteForm
+      action={deleteTeamAction.bind(null, teamId)}
+      title={t("console.people.teams.deleteTeam.title", undefined, "Delete Team")}
+      label={t("console.people.teams.deleteTeam.action", undefined, "Delete Team")}
+      confirm={t(
+        "console.people.teams.deleteTeam.confirm",
+        undefined,
+        "Delete this team? Members will be detached and any team-scoped record grants will be revoked. This cannot be undone.",
+      )}
+    />
   );
 }
 

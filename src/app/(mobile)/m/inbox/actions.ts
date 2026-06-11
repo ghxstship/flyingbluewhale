@@ -11,10 +11,20 @@ const MsgSchema = z.object({
   body: z.string().min(1).max(4000),
 });
 
-export async function postMessage(fd: FormData): Promise<void> {
+/** Row echoed back to the client island so it can reconcile its optimistic entry. */
+export type SentMessage = {
+  id: string;
+  author_id: string | null;
+  body: string;
+  created_at: string;
+};
+
+export type State = { error?: string; sent?: SentMessage } | null;
+
+export async function postMessage(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = MsgSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
   // Membership check — RLS gates this too but explicit guard surfaces the
@@ -25,20 +35,20 @@ export async function postMessage(fd: FormData): Promise<void> {
     .eq("room_id", parsed.data.roomId)
     .eq("user_id", session.userId)
     .maybeSingle();
-  if (!member) return;
+  if (!member) return { error: "You are not a member of this room." };
 
   const now = new Date().toISOString();
   const { data: msg, error: msgError } = await supabase
     .from("chat_messages")
     .insert({ org_id: session.orgId, room_id: parsed.data.roomId, author_id: session.userId, body: parsed.data.body })
-    .select("id")
+    .select("id, author_id, body, created_at")
     .single();
-  if (msgError) throw new Error(`Could not send message: ${msgError.message}`);
+  if (msgError) return { error: `Could not send message: ${msgError.message}` };
   const { error: roomError } = await supabase
     .from("chat_rooms")
     .update({ last_message_at: now })
     .eq("id", parsed.data.roomId);
-  if (roomError) throw new Error(`Could not update room: ${roomError.message}`);
+  if (roomError) return { error: `Could not update room: ${roomError.message}` };
 
   // Notify room members other than the author. Lands in /me/notifications/inbox
   // AND fires push, gated by the chat preference matrix.
@@ -61,8 +71,12 @@ export async function postMessage(fd: FormData): Promise<void> {
     });
   }
 
-  revalidatePath(`/m/inbox/${parsed.data.roomId}`);
+  // The room view itself is owned by the ChatRoom client island (optimistic
+  // append + realtime INSERT subscription) — only the inbox list needs a
+  // server revalidate for last-message/unread ordering.
   revalidatePath("/m/inbox");
+
+  return { sent: msg as SentMessage };
 }
 
 const ReadSchema = z.object({ roomId: z.string().uuid() });

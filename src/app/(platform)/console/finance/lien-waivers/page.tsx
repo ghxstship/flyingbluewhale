@@ -5,10 +5,12 @@ import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { countOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -28,15 +30,6 @@ type Row = {
   created_at: string;
   project: { name: string | null } | null;
   vendor: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<WaiverState, "muted" | "info" | "warning" | "success" | "error"> = {
-  drafted: "muted",
-  sent: "info",
-  signed: "info",
-  returned: "warning",
-  released: "success",
-  voided: "error",
 };
 
 export default async function Page() {
@@ -60,21 +53,29 @@ export default async function Page() {
   const supabase = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
 
-  const { data } = await supabase
-    .from("lien_waivers")
-    .select(
-      "id, waiver_type, waiver_scope, waiver_state, amount, through_date, state_jurisdiction, signed_at, created_at, project:project_id(name), vendor:vendor_id(name)",
-    )
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .order("created_at", { ascending: false })
-    .limit(300);
+  // Table rows stay capped at 300; the header/metric counts come from an
+  // exact count + a narrow uncapped state query so they don't truncate
+  // once an org passes the cap.
+  const [{ data }, totalCount, { data: stateData }] = await Promise.all([
+    supabase
+      .from("lien_waivers")
+      .select(
+        "id, waiver_type, waiver_scope, waiver_state, amount, through_date, state_jurisdiction, signed_at, created_at, project:project_id(name), vendor:vendor_id(name)",
+      )
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(300),
+    countOrgScoped("lien_waivers", session.orgId),
+    supabase.from("lien_waivers").select("waiver_state").eq("org_id", session.orgId).is("deleted_at", null),
+  ]);
 
   const rows = (data ?? []) as unknown as Row[];
+  const states = (stateData ?? []) as unknown as Array<{ waiver_state: WaiverState }>;
 
-  const outstandingCount = rows.filter((r) => ["drafted", "sent"].includes(r.waiver_state)).length;
-  const signedCount = rows.filter((r) => r.waiver_state === "signed" || r.waiver_state === "returned").length;
-  const releasedCount = rows.filter((r) => r.waiver_state === "released").length;
+  const outstandingCount = states.filter((r) => ["drafted", "sent"].includes(r.waiver_state)).length;
+  const signedCount = states.filter((r) => r.waiver_state === "signed" || r.waiver_state === "returned").length;
+  const releasedCount = states.filter((r) => r.waiver_state === "released").length;
 
   return (
     <>
@@ -84,16 +85,16 @@ export default async function Page() {
         subtitle={t(
           "console.finance.lienWaivers.subtitle",
           {
-            total: rows.length,
+            total: totalCount,
             waiverLabel:
-              rows.length === 1
+              totalCount === 1
                 ? t("console.finance.lienWaivers.waiverSingular", undefined, "Waiver")
                 : t("console.finance.lienWaivers.waiverPlural", undefined, "Waivers"),
             outstanding: outstandingCount,
             signed: signedCount,
             released: releasedCount,
           },
-          `${rows.length} ${rows.length === 1 ? "Waiver" : "Waivers"} · ${outstandingCount} Outstanding · ${signedCount} Signed · ${releasedCount} Released`,
+          `${totalCount} ${totalCount === 1 ? "Waiver" : "Waivers"} · ${outstandingCount} Outstanding · ${signedCount} Signed · ${releasedCount} Released`,
         )}
         action={
           <Button href="/console/finance/lien-waivers/new" size="sm">
@@ -105,7 +106,7 @@ export default async function Page() {
         <div className="metric-grid-4">
           <MetricCard
             label={t("console.finance.lienWaivers.metric.total", undefined, "Total")}
-            value={fmt.number(rows.length)}
+            value={fmt.number(totalCount)}
             accent
           />
           <MetricCard
@@ -182,7 +183,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.finance.lienWaivers.column.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.waiver_state]}>{toTitle(r.waiver_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.waiver_state)}>{toTitle(r.waiver_state)}</Badge>,
               accessor: (r) => r.waiver_state,
               filterable: true,
               groupable: true,

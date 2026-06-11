@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { PRIORITY_TONE, toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -24,19 +25,6 @@ type Row = {
   asked_at: string;
   project: { name: string | null } | null;
   ball_in_court: { name: string | null; email: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
-  open: "info",
-  answered: "success",
-  closed: "muted",
-  void: "muted",
-};
-const PRIORITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
-  low: "muted",
-  normal: "info",
-  high: "warning",
-  urgent: "error",
 };
 
 export default async function Page() {
@@ -146,7 +134,7 @@ export default async function Page() {
             {
               key: "priority",
               header: t("console.rfis.column.priority", undefined, "Priority"),
-              render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{toTitle(r.priority)}</Badge>,
+              render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "default"}>{toTitle(r.priority)}</Badge>,
               accessor: (r) => r.priority ?? null,
               filterable: true,
               groupable: true,
@@ -156,7 +144,7 @@ export default async function Page() {
               header: t("console.rfis.column.status", undefined, "Status"),
               render: (r) => (
                 <span className="inline-flex items-center gap-2">
-                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                  <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                   <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} iconOnly size="sm" />
                 </span>
               ),

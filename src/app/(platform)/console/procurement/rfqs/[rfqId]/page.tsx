@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -31,24 +32,6 @@ type ResponseRow = {
   submitted_at: string | null;
   awarded_at: string | null;
   vendor: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  open: "info",
-  closed: "warning",
-  awarded: "success",
-  cancelled: "error",
-};
-
-const RESPONSE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  invited: "muted",
-  viewed: "info",
-  responded: "info",
-  no_bid: "muted",
-  withdrawn: "warning",
-  awarded: "success",
-  declined: "error",
 };
 
 export default async function Page({ params }: { params: Promise<{ rfqId: string }> }) {
@@ -118,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
           { label: t("console.procurement.rfqs.breadcrumb", undefined, "RFQs"), href: "/console/procurement/rfqs" },
           { label: rfq.title },
         ]}
-        action={<Badge variant={STATUS_TONE[rfq.status] ?? "muted"}>{toTitle(rfq.status)}</Badge>}
+        action={<Badge variant={toneFor(rfq.status)}>{toTitle(rfq.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         {rfq.description && <p className="text-sm text-[var(--p-text-2)]">{rfq.description}</p>}
@@ -176,7 +159,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="font-mono text-xs">{fmtMoney(r.total_cents)}</span>
-                      <Badge variant={RESPONSE_TONE[r.response_state] ?? "muted"}>{toTitle(r.response_state)}</Badge>
+                      <Badge variant={toneFor(r.response_state)}>{toTitle(r.response_state)}</Badge>
                     </div>
                   </li>
                 ))}

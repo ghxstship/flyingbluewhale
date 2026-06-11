@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -47,18 +48,6 @@ type Row = {
   project: { name: string | null } | null;
   signer_count: number;
   signed_count: number;
-};
-
-const STATE_TONE: Record<EnvelopeState, "muted" | "info" | "warning" | "success" | "error"> = {
-  drafted: "muted",
-  sent: "info",
-  delivered: "info",
-  partially_signed: "warning",
-  signed: "success",
-  completed: "success",
-  declined: "error",
-  voided: "muted",
-  expired: "muted",
 };
 
 export default async function Page() {
@@ -230,7 +219,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.envelopes.column.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.envelope_state]}>{toTitle(r.envelope_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.envelope_state)}>{toTitle(r.envelope_state)}</Badge>,
               accessor: (r) => r.envelope_state,
               filterable: true,
               groupable: true,

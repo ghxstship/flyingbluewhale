@@ -16,6 +16,7 @@ import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { ProjectStatusToggle } from "./ProjectStatusToggle";
 import { deleteProject } from "./edit/actions";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
                 `Archive project "${project.name}"? It will be soft-deleted; no data is lost.`,
               )}
               label={t("console.projects.detail.archive", undefined, "Archive")}
+              undo={{ table: "projects", id: projectId, redirectTo: "/console/projects" }}
             />
           </div>
         }
@@ -106,7 +108,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
             )}
           </p>
           <Link
-            href={`/p/${project.slug}/overview`}
+            href={urlFor("portal", `/${project.slug}/overview`)}
             className="mt-3 inline-block font-mono text-xs text-[var(--p-accent)] hover:underline"
           >
             /p/{project.slug}/overview →

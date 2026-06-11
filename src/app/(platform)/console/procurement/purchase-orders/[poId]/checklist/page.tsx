@@ -7,16 +7,11 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { addChecklistItem, completeChecklistItem, skipChecklistItem } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
-
-const STATUS_TONE: Record<string, "muted" | "success"> = {
-  pending: "muted",
-  complete: "success",
-  skipped: "muted",
-};
 
 export default async function Page({ params }: { params: Promise<{ poId: string }> }) {
   const { poId } = await params;
@@ -86,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ poId: string 
                     <span className="flex-1">
                       {it.position + 1}. {it.prompt}
                     </span>
-                    <Badge variant={STATUS_TONE[it.item_state] ?? "muted"}>{toTitle(it.item_state)}</Badge>
+                    <Badge variant={toneFor(it.item_state)}>{toTitle(it.item_state)}</Badge>
                   </div>
                   {it.item_state === "pending" && (
                     <div className="mt-2 flex gap-1.5">

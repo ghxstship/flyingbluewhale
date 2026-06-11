@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -81,7 +82,7 @@ export default async function MobileWayfindPage() {
               "Author venues from Console → Venues. Each venue's zones become the routable points here.",
             )}
             action={
-              <Link href="/console/venues" className="ps-btn ps-btn--ghost ps-btn--sm">
+              <Link href={urlFor("platform", "/venues")} className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t("m.wayfind.empty.action", undefined, "Open Venues")}
               </Link>
             }
@@ -97,7 +98,10 @@ export default async function MobileWayfindPage() {
               <ul className="mt-2 space-y-2">
                 {list.map((v) => (
                   <li key={v.id}>
-                    <Link href={`/console/venues/${v.id}`} className="surface flex items-center justify-between p-3">
+                    <Link
+                      href={urlFor("platform", `/venues/${v.id}`)}
+                      className="surface flex items-center justify-between p-3"
+                    >
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 text-sm font-medium">
                           <MapPin size={14} className="text-[var(--p-text-2)]" />

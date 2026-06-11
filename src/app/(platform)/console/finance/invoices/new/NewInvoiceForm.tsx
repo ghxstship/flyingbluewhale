@@ -2,6 +2,7 @@
 
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createInvoiceAction } from "../actions";
 
@@ -55,12 +56,9 @@ export function NewInvoiceForm({
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
-        <Input
+        <MoneyInput
           label={t("console.finance.invoices.new.amount", undefined, "Amount")}
-          name="amount"
-          type="number"
-          inputMode="decimal"
-          step="0.01"
+          name="amount_cents"
           required
         />
         <div>

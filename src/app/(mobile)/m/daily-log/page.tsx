@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { FormShell } from "@/components/FormShell";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { quickCreateDailyLog } from "./actions";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -36,6 +39,13 @@ export default async function Page() {
       .limit(7),
   ]);
 
+  const recentRows = (recent ?? []) as Array<{
+    id: string;
+    log_date: string;
+    log_state: string;
+    project: { name: string | null } | null;
+  }>;
+
   return (
     <>
       <ModuleHeader
@@ -44,7 +54,11 @@ export default async function Page() {
         subtitle={t("m.dailyLog.subtitle", undefined, "Quick capture from the floor")}
       />
       <div className="page-content space-y-4">
-        <form action={quickCreateDailyLog} className="surface space-y-3 p-4">
+        <FormShell
+          action={quickCreateDailyLog}
+          submitLabel={t("m.dailyLog.saveLog", undefined, "Save Log")}
+          className="surface space-y-3 p-4"
+        >
           <h3 className="text-sm font-semibold">
             {t("m.dailyLog.todaysLog", { date: fmtDate(today) }, "Today's log — {date}")}
           </h3>
@@ -72,37 +86,39 @@ export default async function Page() {
             className={INPUT}
           />
           <input type="hidden" name="log_date" value={today} />
-          <button type="submit" className="surface hover-lift w-full rounded-md py-2.5 text-sm font-medium">
-            {t("m.dailyLog.saveLog", undefined, "Save log")}
-          </button>
-        </form>
+        </FormShell>
 
         <section className="surface p-3">
           <h3 className="text-xs font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
             {t("m.dailyLog.recent", undefined, "Recent")}
           </h3>
-          <ul className="mt-2 space-y-1.5">
-            {(
-              (recent ?? []) as Array<{
-                id: string;
-                log_date: string;
-                log_state: string;
-                project: { name: string | null } | null;
-              }>
-            ).map((r) => (
-              <li key={r.id}>
-                <Link
-                  href={`/console/operations/daily-log/${r.id}`}
-                  className="surface-inset flex items-center justify-between p-2 text-sm"
-                >
-                  <span>
-                    {fmtDate(r.log_date)} · {r.project?.name ?? "—"}
-                  </span>
-                  <span className="text-xs text-[var(--p-text-2)]">{r.log_state}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {recentRows.length === 0 ? (
+            <EmptyState
+              size="compact"
+              title={t("m.dailyLog.empty.title", undefined, "No Logs Yet")}
+              description={t(
+                "m.dailyLog.empty.description",
+                undefined,
+                "Logs you file appear here for quick reopening.",
+              )}
+            />
+          ) : (
+            <ul className="mt-2 space-y-1.5">
+              {recentRows.map((r) => (
+                <li key={r.id}>
+                  <Link
+                    href={urlFor("platform", `/operations/daily-log/${r.id}`)}
+                    className="surface-inset flex items-center justify-between p-2 text-sm"
+                  >
+                    <span>
+                      {fmtDate(r.log_date)} · {r.project?.name ?? "—"}
+                    </span>
+                    <span className="text-xs text-[var(--p-text-2)]">{r.log_state}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
     </>

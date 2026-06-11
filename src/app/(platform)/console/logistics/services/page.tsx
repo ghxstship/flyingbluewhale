@@ -9,16 +9,9 @@ import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<ServiceRequest["request_state"], "muted" | "info" | "success" | "warning" | "error"> = {
-  open: "warning",
-  acknowledged: "info",
-  in_progress: "info",
-  resolved: "success",
-  cancelled: "muted",
-};
 
 const SEVERITY_TONE: Record<ServiceRequest["severity"], "muted" | "info" | "warning" | "error"> = {
   P1: "error",
@@ -147,7 +140,7 @@ export default async function Page() {
             {
               key: "request_state",
               header: t("console.logistics.services.columns.request_state", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.request_state]}>{toTitle(r.request_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.request_state)}>{toTitle(r.request_state)}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.request_state ?? null,

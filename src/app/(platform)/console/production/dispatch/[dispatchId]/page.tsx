@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -23,14 +24,6 @@ type DispatchRow = {
   origin: { name: string | null } | null;
   destination: { name: string | null } | null;
   driver: { name: string | null; email: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "muted",
-  in_transit: "info",
-  arrived: "success",
-  delayed: "warning",
-  cancelled: "error",
 };
 
 const FLEET_LABEL: Record<string, string> = {
@@ -93,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
   if (!run) notFound();
 
   const passengers = manifestLength(run.manifest);
-  const tone = STATUS_TONE[run.status] ?? "muted";
+  const tone = toneFor(run.status);
 
   let onTimeNote = "";
   if (run.actual_depart && run.scheduled_depart) {

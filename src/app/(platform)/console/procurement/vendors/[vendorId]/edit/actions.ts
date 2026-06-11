@@ -62,5 +62,6 @@ export async function deleteVendor(id: string): Promise<void> {
     .is("deleted_at", null);
   if (error) throw new Error(`Could not archive vendor: ${error.message}`);
   revalidatePath("/console/procurement/vendors");
-  redirect("/console/procurement/vendors");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

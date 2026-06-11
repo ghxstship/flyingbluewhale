@@ -34,20 +34,24 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
   const routes: MapRoute[] = [];
 
   for (const p of points) {
-    const tone = statusColor(p.status);
+    // Markers are DOM elements inside MapShell, so theme CSS vars resolve.
+    const markerTone = statusColor(p.status);
+    // Route lines are maplibre canvas paint — `line-color` can't resolve a
+    // CSS var, so routes keep concrete hexes (see statusRouteColor).
+    const routeTone = statusRouteColor(p.status);
     markers.push({
       id: `${p.id}-origin`,
       lng: p.origin.lng,
       lat: p.origin.lat,
       label: `${p.vehicle} · ${p.origin.name}`,
-      color: tone,
+      color: markerTone,
     });
     markers.push({
       id: `${p.id}-destination`,
       lng: p.destination.lng,
       lat: p.destination.lat,
       label: `${p.vehicle} → ${p.destination.name}`,
-      color: tone,
+      color: markerTone,
     });
     routes.push({
       id: p.id,
@@ -55,7 +59,7 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
         [p.origin.lng, p.origin.lat],
         [p.destination.lng, p.destination.lat],
       ],
-      color: tone,
+      color: routeTone,
       width: 3,
     });
   }
@@ -76,7 +80,26 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
   );
 }
 
+// CN-12 — semantic theme tokens for DOM-rendered markers.
 function statusColor(status: string): string {
+  switch (status) {
+    case "in_transit":
+      return "var(--p-info)";
+    case "arrived":
+      return "var(--p-success)";
+    case "delayed":
+      return "var(--p-warning)";
+    case "cancelled":
+      return "var(--p-danger)";
+    default:
+      return "var(--p-text-2)";
+  }
+}
+
+// Maplibre paints route lines on canvas — CSS vars don't resolve in
+// `line-color`, so these stay concrete hexes mirroring the semantic
+// tokens above. Revisit if MapShell grows a computed-style resolver.
+function statusRouteColor(status: string): string {
   switch (status) {
     case "in_transit":
       return "#3b82f6";

@@ -154,7 +154,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
                 )}
           </p>
           <Button type="button" onClick={() => setMode("new")}>
-            {t("console.settings.emailTemplates.newTemplate", undefined, "New template")}
+            {t("console.settings.emailTemplates.newTemplate", undefined, "New Template")}
           </Button>
         </div>
         {templates.length === 0 ? (
@@ -167,7 +167,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
             )}
             action={
               <Button type="button" onClick={() => setMode("new")}>
-                {t("console.settings.emailTemplates.newTemplate", undefined, "New template")}
+                {t("console.settings.emailTemplates.newTemplate", undefined, "New Template")}
               </Button>
             }
           />
@@ -214,7 +214,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">
           {mode === "new"
-            ? t("console.settings.emailTemplates.newTemplate", undefined, "New template")
+            ? t("console.settings.emailTemplates.newTemplate", undefined, "New Template")
             : t("console.settings.emailTemplates.editTemplate", undefined, "Edit template")}
         </div>
         <button

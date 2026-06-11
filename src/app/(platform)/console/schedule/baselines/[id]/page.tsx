@@ -12,6 +12,7 @@ import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { activateBaseline, archiveBaseline, runCpm } from "./actions";
 import { ImportScheduleClient } from "./import-client";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -38,12 +39,6 @@ type Activity = {
   total_float_days: number | null;
   is_critical: boolean;
   percent_complete: number;
-};
-
-const STATE_TONE: Record<BaselineState, "muted" | "info" | "success" | "warning"> = {
-  draft: "muted",
-  active: "success",
-  archived: "info",
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -116,7 +111,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-6">
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
-          <Badge variant={STATE_TONE[baseline.baseline_state]}>{toTitle(baseline.baseline_state)}</Badge>
+          <Badge variant={toneFor(baseline.baseline_state)}>{toTitle(baseline.baseline_state)}</Badge>
           {baseline.imported_from && (
             <span className="font-mono text-[var(--p-text-2)]">
               {t(

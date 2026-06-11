@@ -10,6 +10,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { sendTransmittal, closeTransmittal, addRecipient, addItem } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -47,14 +48,6 @@ type Item = {
   item_id: string;
   description: string | null;
   ordinal: number;
-};
-
-const STATE_TONE: Record<TransmittalState, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  sent: "info",
-  acknowledged: "success",
-  closed: "muted",
-  voided: "error",
 };
 
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
@@ -125,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-6">
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
-          <Badge variant={STATE_TONE[transmittal.transmittal_state]}>{toTitle(transmittal.transmittal_state)}</Badge>
+          <Badge variant={toneFor(transmittal.transmittal_state)}>{toTitle(transmittal.transmittal_state)}</Badge>
           {transmittal.sent_at && (
             <span className="font-mono text-[var(--p-text-2)]">
               {t("console.transmittals.detail.sent", undefined, "Sent")} ·{" "}

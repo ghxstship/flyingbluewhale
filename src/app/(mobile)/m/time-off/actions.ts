@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { sendPushBulk } from "@/lib/push/send";
 import { log } from "@/lib/log";
+import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z
   .object({
@@ -24,10 +25,16 @@ const Schema = z
     path: ["ends_on"],
   });
 
-export async function createTimeOffRequest(fd: FormData): Promise<void> {
+export type State = {
+  error?: string;
+  fieldErrors?: Record<string, string>;
+  values?: Record<string, string>;
+} | null;
+
+export async function createTimeOffRequest(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return formFail(parsed.error, fd, parsed.error.issues[0]?.message);
   const supabase = await createClient();
 
   // Cross-tenant guard on policy_id — RLS would block but the form-replay
@@ -39,7 +46,7 @@ export async function createTimeOffRequest(fd: FormData): Promise<void> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!policy) return;
+  if (!policy) return actionFail("Time-off policy not found", fd);
 
   const { error } = await supabase.from("time_off_requests").insert({
     org_id: session.orgId,
@@ -50,7 +57,7 @@ export async function createTimeOffRequest(fd: FormData): Promise<void> {
     hours_requested: Number(parsed.data.hours_requested),
     reason: parsed.data.reason || null,
   });
-  if (error) throw new Error(`Could not submit time-off request: ${error.message}`);
+  if (error) return actionFail(`Could not submit time-off request: ${error.message}`, fd);
 
   // Tell the approvers — the console decision→requester direction was
   // already wired, but submissions used to land silently and managers

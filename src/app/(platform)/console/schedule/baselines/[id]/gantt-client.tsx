@@ -46,9 +46,11 @@ const HEADER_H = 36;
 const LABEL_W = 280;
 const DAY_W = 18; // px per day
 const PADDING = 16;
-const CRITICAL_COLOR = "#DC2626";
-const NORMAL_COLOR = "#1F2937";
-const ARROW_COLOR = "#94A3B8";
+// CN-12 — theme tokens, not hex: stays legible in dark mode and tracks the
+// active brand overlay. CSS var() strings resolve in SVG presentation attrs.
+const CRITICAL_COLOR = "var(--p-danger)";
+const NORMAL_COLOR = "var(--p-text-1)";
+const ARROW_COLOR = "var(--p-text-2)";
 
 function dayDiff(a: Date, b: Date): number {
   return Math.round((a.getTime() - b.getTime()) / 86_400_000);
@@ -191,8 +193,15 @@ export default function GanttClient({ activities, dependencies }: Props) {
           <g>
             {monthMarks.map((m) => (
               <g key={m.x}>
-                <line x1={m.x} y1={HEADER_H - 12} x2={m.x} y2={HEADER_H + chartH} stroke="#E5E7EB" strokeWidth={1} />
-                <text x={m.x + 4} y={HEADER_H - 16} fontSize="10" fill="#6B7280">
+                <line
+                  x1={m.x}
+                  y1={HEADER_H - 12}
+                  x2={m.x}
+                  y2={HEADER_H + chartH}
+                  stroke="var(--p-border)"
+                  strokeWidth={1}
+                />
+                <text x={m.x + 4} y={HEADER_H - 16} fontSize="10" fill="var(--p-text-2)">
                   {m.label}
                 </text>
               </g>
@@ -207,11 +216,11 @@ export default function GanttClient({ activities, dependencies }: Props) {
                 y1={HEADER_H - 12}
                 x2={todayX}
                 y2={HEADER_H + chartH}
-                stroke="#2563EB"
+                stroke="var(--p-info)"
                 strokeWidth={1.5}
                 strokeDasharray="3 3"
               />
-              <text x={todayX + 4} y={HEADER_H - 2} fontSize="10" fill="#2563EB">
+              <text x={todayX + 4} y={HEADER_H - 2} fontSize="10" fill="var(--p-info)">
                 {t("console.schedule.baselines.gantt.today", undefined, "today")}
               </text>
             </g>
@@ -219,8 +228,8 @@ export default function GanttClient({ activities, dependencies }: Props) {
 
           {/* Row labels */}
           {rendered.map(({ a, y }) => (
-            <text key={`label-${a.id}`} x={4} y={y + ROW_H / 2 + 4} fontSize="11" fill="#0A0A0A">
-              <tspan fontFamily="ui-monospace, monospace" fill="#6B7280">
+            <text key={`label-${a.id}`} x={4} y={y + ROW_H / 2 + 4} fontSize="11" fill="var(--p-text-1)">
+              <tspan fontFamily="ui-monospace, monospace" fill="var(--p-text-2)">
                 {a.code}
               </tspan>
               <tspan dx="6">{a.name.length > 30 ? a.name.slice(0, 30) + "…" : a.name}</tspan>

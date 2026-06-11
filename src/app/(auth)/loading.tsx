@@ -7,8 +7,8 @@ import { PageSkeleton } from "@/components/Shell";
 
 export default function Loading() {
   return (
-    <main className="mx-auto max-w-md px-6 py-12">
+    <div className="mx-auto max-w-md px-6 py-12">
       <PageSkeleton variant="form" rows={3} />
-    </main>
+    </div>
   );
 }

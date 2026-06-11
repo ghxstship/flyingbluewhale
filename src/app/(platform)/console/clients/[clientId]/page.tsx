@@ -45,6 +45,7 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
                 { name: client.name },
                 `Delete client "${client.name}"? Linked proposals and invoices will remain but become unattached.`,
               )}
+              undo={{ table: "clients", id: clientId, redirectTo: "/console/clients" }}
             />
           </div>
         }

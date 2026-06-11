@@ -9,15 +9,9 @@ import { hasSupabase } from "@/lib/env";
 import { deleteSponsorEntitlement } from "./edit/actions";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
-  open: "warning",
-  in_progress: "info",
-  delivered: "success",
-  waived: "muted",
-};
 
 function fmtDate(v: unknown): string {
   if (typeof v !== "string" || !v) return "—";
@@ -87,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ sponsorId: st
         ]}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[status] ?? "muted"}>{toTitle(status)}</Badge>
+            <Badge variant={toneFor(status)}>{toTitle(status)}</Badge>
             <Button href={`/console/commercial/sponsors/${p.sponsorId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>

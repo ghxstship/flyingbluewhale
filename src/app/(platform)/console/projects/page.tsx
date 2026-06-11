@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { listProjects } from "@/lib/db/projects";
+import { countOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { toTitle } from "@/lib/format";
@@ -15,8 +16,11 @@ import { ProjectPortfolioGrid, type PortfolioEntry } from "./ProjectPortfolioGri
 export const dynamic = "force-dynamic";
 
 // Per-request memo so the streaming subtitle count and the body island
-// share a single projects query instead of issuing it twice.
+// share a single query each instead of issuing them twice. listProjects
+// is capped (SC-8), so the header count comes from an exact COUNT —
+// projects.length under-reported once an org passed the cap.
 const getProjects = cache((orgId: string) => listProjects(orgId));
+const getProjectsCount = cache((orgId: string) => countOrgScoped("projects", orgId));
 
 export default async function ProjectsPage() {
   const { t } = await getRequestT();
@@ -60,13 +64,13 @@ export default async function ProjectsPage() {
 
 /** Streaming island — header subtitle project count. */
 async function ProjectsCount({ orgId }: { orgId: string }) {
-  const [{ t }, projects] = await Promise.all([getRequestT(), getProjects(orgId)]);
-  return <>{t("console.projects.totalCount", { count: projects.length }, `${projects.length} Total`)}</>;
+  const [{ t }, count] = await Promise.all([getRequestT(), getProjectsCount(orgId)]);
+  return <>{t("console.projects.totalCount", { count }, `${count} Total`)}</>;
 }
 
 /** Streaming island — portfolio grid + projects table (or empty state). */
 async function ProjectsBody({ orgId }: { orgId: string }) {
-  const [{ t }, projects] = await Promise.all([getRequestT(), getProjects(orgId)]);
+  const [{ t }, projects, count] = await Promise.all([getRequestT(), getProjects(orgId), getProjectsCount(orgId)]);
   return (
     <>
       {projects.length === 0 ? (
@@ -97,6 +101,7 @@ async function ProjectsBody({ orgId }: { orgId: string }) {
           />
           <DataTable
             rows={projects}
+            totalCount={count}
             rowHref={(p) => `/console/projects/${p.id}`}
             emptyLabel={t("console.projects.emptyLabel", undefined, "No Projects")}
             columns={[

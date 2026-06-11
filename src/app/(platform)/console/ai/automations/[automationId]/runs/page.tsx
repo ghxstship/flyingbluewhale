@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 /**
  * Run history — list view.
@@ -31,14 +32,6 @@ type RunRow = {
   action_count: number;
   error_summary: string | null;
   triggered_by: string | null;
-};
-
-const STATUS_TONE: Record<RunRow["status"], "muted" | "info" | "success" | "warning" | "error"> = {
-  pending: "muted",
-  running: "info",
-  success: "success",
-  failed: "error",
-  cancelled: "warning",
 };
 
 const STATUS_FILTERS: Array<{ key: "all" | RunRow["status"]; label: string }> = [
@@ -240,7 +233,7 @@ export default async function Page({
                       </td>
                       <td className="px-3 py-2 font-mono text-xs">{r.trigger_kind}</td>
                       <td className="px-3 py-2">
-                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                        <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                         {r.status === "failed" && r.error_summary && (
                           <span
                             className="ms-2 truncate font-mono text-[10px] text-[var(--p-danger)]"

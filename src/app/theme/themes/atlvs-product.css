@@ -126,6 +126,10 @@
   /* WCAG 1.4.3 — deepened from kit #8c95a3 (3.0:1) to 4.5:1+ */
   --p-text-3: #656d7a;
   --p-accent-contrast: #ffffff;
+  /* AX-3 — focus-ring color. Defaults to the accent (ATLVS pink passes
+     WCAG 1.4.11 3:1 on both canvases); the COMPVSS/GVTEWAY overlays below
+     repoint it at their AA-grade --p-accent-cta values. */
+  --p-focus: var(--p-accent);
   color-scheme: light;
 }
 
@@ -143,6 +147,7 @@
   /* WCAG — lightened from kit #6e7682 (3.7:1) */
   --p-text-3: #9098a4;
   --p-accent-contrast: #0e1014;
+  --p-focus: var(--p-accent);
   color-scheme: dark;
 }
 
@@ -180,6 +185,9 @@
   --p-accent-contrast: #1b1305;
   --p-accent-cta: #8a5a0f;
   --p-accent-cta-contrast: #ffffff;
+  /* AX-3 — amber accent #e9a23b is ≈2.2:1 on the light canvas; the CTA
+     amber is AA. Dark-mode override below restores the brighter value. */
+  --p-focus: var(--p-accent-cta);
 }
 [data-ui="saas"][data-product="compvss"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="compvss"],
@@ -190,6 +198,7 @@
   --p-accent-contrast: #1b1305;
   --p-accent-cta: #f0b255;
   --p-accent-cta-contrast: #1b1305;
+  --p-focus: var(--p-accent);
 }
 
 /* GVTEWAY — guest · client · cyan */
@@ -201,6 +210,9 @@
   --p-accent-weak: rgba(33, 212, 212, 0.14);
   --p-accent-cta: #0a7373;
   --p-accent-cta-contrast: #ffffff;
+  /* AX-3 — cyan accent #12b5b5 is ≈2.5:1 on the light canvas; the CTA
+     teal is AA. Dark-mode override below restores the brighter value. */
+  --p-focus: var(--p-accent-cta);
 }
 [data-ui="saas"][data-product="gvteway"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
@@ -210,6 +222,7 @@
   --p-accent-weak: rgba(33, 212, 212, 0.18);
   --p-accent-cta: #2bd6d6;
   --p-accent-cta-contrast: #0e1014;
+  --p-focus: var(--p-accent);
 }
 
 /* ============================================================================

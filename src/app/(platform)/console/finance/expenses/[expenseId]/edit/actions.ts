@@ -8,10 +8,12 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 import { formFail } from "@/lib/forms/fail";
+import { moneyCentsString } from "@/app/(platform)/console/finance/money";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
-  amount_cents: z.string().optional(),
+  // Integer cents from MoneyInput's hidden field — never a dollar string.
+  amount_cents: moneyCentsString({ allowEmpty: true }),
   currency: z.string().min(1).max(3),
   category: z.string().max(120).optional().or(z.literal("")),
   expense_state: z.string(),

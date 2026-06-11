@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -19,14 +20,6 @@ type RunRow = {
   scheduled_arrive: string | null;
   origin: { name: string | null } | null;
   destination: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "muted",
-  in_transit: "info",
-  arrived: "success",
-  delayed: "warning",
-  cancelled: "error",
 };
 
 export default async function Page() {
@@ -157,7 +150,7 @@ export default async function Page() {
                       </td>
                       <td className="font-mono text-xs">{r.vehicle_ref ?? "—"}</td>
                       <td>
-                        <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                        <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                       </td>
                     </tr>
                   ))}

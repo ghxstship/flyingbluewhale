@@ -12,6 +12,8 @@ import { fmtDate } from "@/components/detail/DetailShell";
 import { ActivityDrawer } from "@/components/collab/activity";
 import { getActivityForRecord } from "@/lib/db/activity";
 import { getRequestT } from "@/lib/i18n/request";
+import { RouteTabs } from "@/components/ui/RouteTabs";
+import { urlFor } from "@/lib/urls";
 import { AdvancingTransitionRow } from "./AdvancingTransitionRow";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
@@ -69,13 +71,30 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         ]}
         action={
           project ? (
-            <Button href={`/p/${project.slug}/artist/advancing`} size="sm">
+            <Button href={urlFor("portal", `/${project.slug}/artist/advancing`)} size="sm">
               {t("console.projects.advancing.openPortalView", undefined, "Open Portal View →")}
             </Button>
           ) : undefined
         }
       />
       <div className="page-content max-w-6xl space-y-5">
+        {/* Sub-tabs inside the content band — the module-header tabs slot
+            already carries the project record tabs from the layout's
+            RecordTabsProvider, so the advancing split renders one level
+            down. Doc specs (this page) vs per-individual assignments. */}
+        <RouteTabs
+          tabs={[
+            {
+              label: t("console.projects.advancing.tabs.docSpecs", undefined, "Doc Specs"),
+              href: `/console/projects/${projectId}/advancing`,
+            },
+            {
+              label: t("console.projects.advancing.tabs.assignments", undefined, "Assignments"),
+              href: `/console/projects/${projectId}/advancing/assignments`,
+            },
+          ]}
+          className="border-b border-[var(--p-border)]"
+        />
         {!deliverables || deliverables.length === 0 ? (
           <EmptyState
             title={t("console.projects.advancing.empty.title", undefined, "No Deliverables Yet")}

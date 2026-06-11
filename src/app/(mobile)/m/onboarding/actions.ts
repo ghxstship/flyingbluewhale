@@ -10,10 +10,12 @@ const StepSchema = z.object({
   stepId: z.string().uuid(),
 });
 
-export async function completeStep(fd: FormData): Promise<void> {
+export type State = { error?: string } | null;
+
+export async function completeStep(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = StepSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
   // Caller must own the assignment.
@@ -23,7 +25,7 @@ export async function completeStep(fd: FormData): Promise<void> {
     .eq("id", parsed.data.assignmentId)
     .eq("assignee_id", session.userId)
     .maybeSingle();
-  if (!assignment) return;
+  if (!assignment) return { error: "Onboarding assignment not found" };
   const a = assignment as {
     id: string;
     flow_id: string;
@@ -39,7 +41,7 @@ export async function completeStep(fd: FormData): Promise<void> {
     .eq("id", parsed.data.stepId)
     .eq("flow_id", a.flow_id)
     .maybeSingle();
-  if (!step) return;
+  if (!step) return { error: "Step not found in this flow" };
 
   const progress = { ...(a.progress ?? {}), [parsed.data.stepId]: true };
   const { error } = await supabase
@@ -50,18 +52,19 @@ export async function completeStep(fd: FormData): Promise<void> {
       started_at: a.started_at ?? new Date().toISOString(),
     })
     .eq("id", parsed.data.assignmentId);
-  if (error) throw new Error(`Could not save step progress: ${error.message}`);
+  if (error) return { error: `Could not save step progress: ${error.message}` };
 
   revalidatePath(`/m/onboarding/${parsed.data.assignmentId}`);
   revalidatePath("/m/onboarding");
+  return null;
 }
 
 const FinalizeSchema = z.object({ assignmentId: z.string().uuid() });
 
-export async function finalizeAssignment(fd: FormData): Promise<void> {
+export async function finalizeAssignment(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = FinalizeSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
   const { data: assignment } = await supabase
@@ -70,7 +73,7 @@ export async function finalizeAssignment(fd: FormData): Promise<void> {
     .eq("id", parsed.data.assignmentId)
     .eq("assignee_id", session.userId)
     .maybeSingle();
-  if (!assignment) return;
+  if (!assignment) return { error: "Onboarding assignment not found" };
   const a = assignment as { id: string; flow_id: string; progress: Record<string, boolean> | null };
 
   // Verify every required step is done — re-check on the server so a
@@ -80,15 +83,16 @@ export async function finalizeAssignment(fd: FormData): Promise<void> {
   const requiredDone = ((steps ?? []) as Array<{ id: string; required: boolean }>)
     .filter((s) => s.required)
     .every((s) => progress[s.id]);
-  if (!requiredDone) return;
+  if (!requiredDone) return { error: "Complete every required step before finishing" };
 
   const { error } = await supabase
     .from("new_hire_assignments")
     .update({ assignment_phase: "completed", completed_at: new Date().toISOString() })
     .eq("id", parsed.data.assignmentId)
     .neq("assignment_phase", "completed");
-  if (error) throw new Error(`Could not finalize onboarding: ${error.message}`);
+  if (error) return { error: `Could not finalize onboarding: ${error.message}` };
 
   revalidatePath(`/m/onboarding/${parsed.data.assignmentId}`);
   revalidatePath("/m/onboarding");
+  return null;
 }

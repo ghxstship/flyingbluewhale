@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -63,11 +64,12 @@ export default async function Page({ params }: { params: Promise<{ mileageId: st
               step="any"
               defaultValue={String(row.miles ?? 0)}
             />
-            <Input
-              label={t("console.finance.mileage.edit.rateCents", undefined, "Rate — Cents/Mile")}
+            {/* Dollar-denominated entry; MoneyInput submits canonical
+                integer cents via its hidden `rate_cents` field. */}
+            <MoneyInput
+              label={t("console.finance.mileage.edit.rate", undefined, "Rate — Per Mile")}
               name="rate_cents"
-              type="number"
-              defaultValue={String(row.rate_cents ?? 0)}
+              defaultCents={row.rate_cents ?? 0}
             />
           </div>
           <Input

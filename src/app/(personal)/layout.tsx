@@ -110,7 +110,9 @@ export default async function PersonalLayout({ children }: { children: React.Rea
             ))}
           </nav>
         </div>
-        <main className="animate-page-enter mx-auto max-w-5xl px-6 py-8">{children}</main>
+        <main id="main" tabIndex={-1} className="animate-page-enter mx-auto max-w-5xl px-6 py-8">
+          {children}
+        </main>
       </div>
     </TenantShell>
   );

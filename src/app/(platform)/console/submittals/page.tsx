@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -24,18 +25,6 @@ type Row = {
   project: { name: string | null } | null;
   vendor: { name: string | null } | null;
   ball: { name: string | null; email: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  submitted: "info",
-  in_review: "info",
-  approved: "success",
-  approved_with_comments: "success",
-  revise_resubmit: "warning",
-  rejected: "error",
-  void: "muted",
-  closed: "muted",
 };
 
 function fmt(d: string | null): string {
@@ -166,7 +155,7 @@ export default async function Page() {
               header: t("console.submittals.columns.status", undefined, "Status"),
               render: (r) => (
                 <span className="inline-flex items-center gap-2">
-                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                  <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                   <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} iconOnly size="sm" />
                 </span>
               ),

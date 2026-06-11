@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   project_id: z.string().uuid(),
@@ -13,10 +14,12 @@ const Schema = z.object({
   notes: z.string().max(4000).optional(),
 });
 
-export async function quickCreateDailyLog(fd: FormData): Promise<void> {
+export type State = { error?: string; values?: Record<string, string> } | null;
+
+export async function quickCreateDailyLog(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return actionFail(parsed.error.issues[0]?.message ?? "Invalid input", fd);
   const supabase = await createClient();
 
   // Cross-tenant FK guard: confirm the submitted project_id belongs
@@ -32,7 +35,7 @@ export async function quickCreateDailyLog(fd: FormData): Promise<void> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) throw new Error("Project not found in your organization");
+  if (!project) return actionFail("Project not found in your organization", fd);
 
   // Upsert by (org_id, project_id, log_date) — idempotent so a foreman
   // re-submitting at end of shift doesn't create duplicates.
@@ -52,7 +55,7 @@ export async function quickCreateDailyLog(fd: FormData): Promise<void> {
         notes: parsed.data.notes || null,
       } as never)
       .eq("id", existing.id);
-    if (updateError) throw new Error(`Could not update daily log: ${updateError.message}`);
+    if (updateError) return actionFail(`Could not update daily log: ${updateError.message}`, fd);
     revalidatePath("/m/daily-log");
     redirect(`/console/operations/daily-log/${existing.id}`);
   }
@@ -69,7 +72,7 @@ export async function quickCreateDailyLog(fd: FormData): Promise<void> {
     } as never)
     .select("id")
     .single();
-  if (error) throw new Error(error.message);
+  if (error) return actionFail(`Could not create daily log: ${error.message}`, fd);
   revalidatePath("/m/daily-log");
   redirect(`/console/operations/daily-log/${data.id}`);
 }

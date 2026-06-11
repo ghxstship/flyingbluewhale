@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -17,14 +19,6 @@ type TaskRow = {
   priority: number;
   due_at: string | null;
   project: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
-  todo: "warning",
-  in_progress: "info",
-  blocked: "warning",
-  review: "info",
-  done: "success",
 };
 
 const PRIORITY_LABEL: Record<number, string> = {
@@ -90,7 +84,7 @@ export default async function MobilePunchPage() {
                 "Open items assigned to you appear here. Visit Tasks on desktop to assign new ones.",
               )}
               action={
-                <Link href="/console/tasks" className="ps-btn ps-btn--ghost ps-btn--sm">
+                <Link href={urlFor("platform", "/tasks")} className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("m.punch.empty.action", undefined, "Open Tasks")}
                 </Link>
               }
@@ -108,7 +102,7 @@ export default async function MobilePunchPage() {
                       <p className="mt-1 line-clamp-2 text-xs text-[var(--p-text-2)]">{r.description}</p>
                     )}
                     <div className="mt-2 flex flex-wrap gap-1.5">
-                      <Badge variant={STATUS_TONE[r.task_state] ?? "muted"}>{toTitle(r.task_state)}</Badge>
+                      <Badge variant={toneFor(r.task_state)}>{toTitle(r.task_state)}</Badge>
                       <Badge variant="muted">{PRIORITY_LABEL[r.priority] ?? `P${r.priority}`}</Badge>
                       {r.project?.name && <Badge variant="muted">{r.project.name}</Badge>}
                       {overdue && <Badge variant="error">{t("m.punch.overdue", undefined, "Overdue")}</Badge>}

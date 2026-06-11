@@ -6,6 +6,8 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -18,15 +20,6 @@ type ManifestRow = {
   scheduled_at: string | null;
   actual_at: string | null;
   manifest_state: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "muted",
-  in_progress: "info",
-  arrived: "success",
-  departed: "success",
-  delayed: "warning",
-  cancelled: "error",
 };
 
 export default async function MobileAdPage() {
@@ -88,7 +81,7 @@ export default async function MobileAdPage() {
           ) : (
             arrivals.map((m) => (
               <li key={m.id}>
-                <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
+                <Link href={urlFor("platform", `/transport/ad/${m.id}`)} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
                     <span className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
@@ -101,7 +94,7 @@ export default async function MobileAdPage() {
                         {m.flight_ref ?? "—"}{" "}
                         {m.carrier ? <span className="text-[var(--p-text-2)]">· {m.carrier}</span> : null}
                       </div>
-                      <Badge variant={STATUS_TONE[m.manifest_state] ?? "muted"}>{toTitle(m.manifest_state)}</Badge>
+                      <Badge variant={toneFor(m.manifest_state)}>{toTitle(m.manifest_state)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}
@@ -128,7 +121,7 @@ export default async function MobileAdPage() {
           ) : (
             departures.map((m) => (
               <li key={m.id}>
-                <Link href={`/console/transport/ad/${m.id}`} className="surface flex items-start gap-3 p-4">
+                <Link href={urlFor("platform", `/transport/ad/${m.id}`)} className="surface flex items-start gap-3 p-4">
                   <div className="mt-0.5 flex flex-none flex-col items-center">
                     <span className="font-mono text-base font-semibold tabular-nums">{fmtClock(m.scheduled_at)}</span>
                     <span className="mt-0.5 font-mono text-[10px] text-[var(--p-text-2)]">
@@ -141,7 +134,7 @@ export default async function MobileAdPage() {
                         {m.flight_ref ?? "—"}{" "}
                         {m.carrier ? <span className="text-[var(--p-text-2)]">· {m.carrier}</span> : null}
                       </div>
-                      <Badge variant={STATUS_TONE[m.manifest_state] ?? "muted"}>{toTitle(m.manifest_state)}</Badge>
+                      <Badge variant={toneFor(m.manifest_state)}>{toTitle(m.manifest_state)}</Badge>
                     </div>
                     <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
                       {t("m.ad.partyOf", { count: m.party_size }, `Party of ${m.party_size}`)}

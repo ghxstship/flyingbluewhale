@@ -1,28 +1,12 @@
-import { Badge, type BadgeVariant } from "./Badge";
+import { Badge } from "./Badge";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
-const MAP: Record<string, BadgeVariant> = {
-  draft: "muted",
-  pending: "muted",
-  active: "success",
-  submitted: "info",
-  paused: "warning",
-  revision_requested: "warning",
-  open: "warning",
-  archived: "muted",
-  complete: "default",
-  closed: "default",
-  approved: "success",
-  paid: "success",
-  sent: "info",
-  rejected: "error",
-  voided: "error",
-  overdue: "error",
-  scanned: "success",
-  issued: "info",
-  transferred: "info",
-};
-
+/**
+ * Domain-status badge — colors any lifecycle/state enum via the
+ * canonical tone maps in `src/lib/tones.ts` (fulfillment_state,
+ * generic document states, etc.). Unknown values render as "default".
+ */
 export function StatusBadge({ status }: { status: string }) {
-  return <Badge variant={MAP[status] ?? "default"}>{toTitle(status)}</Badge>;
+  return <Badge variant={toneFor(status)}>{toTitle(status)}</Badge>;
 }

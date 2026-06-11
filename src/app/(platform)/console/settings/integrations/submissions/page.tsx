@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -25,14 +26,6 @@ type Row = {
   certification_tier: Tier;
   published_at: string | null;
   created_at: string;
-};
-
-const TIER_TONE: Record<Tier, "muted" | "info" | "success" | "warning" | "error"> = {
-  submitted: "muted",
-  reviewing: "info",
-  verified: "info",
-  certified: "success",
-  rejected: "error",
 };
 
 export default async function Page() {
@@ -178,7 +171,7 @@ export default async function Page() {
             {
               key: "tier",
               header: t("console.settings.integrations.submissions.col.tier", undefined, "Tier"),
-              render: (r) => <Badge variant={TIER_TONE[r.certification_tier]}>{toTitle(r.certification_tier)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.certification_tier)}>{toTitle(r.certification_tier)}</Badge>,
             },
             {
               key: "live",

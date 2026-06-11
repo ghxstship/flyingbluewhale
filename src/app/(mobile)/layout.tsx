@@ -57,7 +57,9 @@ export default async function MobileLayout({ children }: { children: React.React
           messagesHref="/m/inbox"
           switcherEntries={switcherEntries}
         />
-        <main className="animate-fade-in">{children}</main>
+        <main id="main" tabIndex={-1} className="animate-fade-in">
+          {children}
+        </main>
         <MobileTabBar items={tabs} />
         <CommandPalette scope="mobile" />
       </div>

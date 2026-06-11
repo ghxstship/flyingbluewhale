@@ -1,6 +1,7 @@
 "use client";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createBudgetAction } from "../actions";
 import {
@@ -136,20 +137,14 @@ export function NewBudgetForm() {
             inputMode="decimal"
             step="0.01"
           />
-          <Input
+          <MoneyInput
             label={t("console.finance.budgets.new.rate", undefined, "Rate — USD")}
-            name="rate"
-            type="number"
-            inputMode="decimal"
-            step="0.01"
+            name="rate_cents"
             hint={t("console.finance.budgets.new.rateHint", undefined, "Estimate = Quantity × Rate (computed by DB)")}
           />
-          <Input
+          <MoneyInput
             label={t("console.finance.budgets.new.amount", undefined, "Budget — USD")}
-            name="amount"
-            type="number"
-            inputMode="decimal"
-            step="0.01"
+            name="amount_cents"
             required
             hint={t("console.finance.budgets.new.amountHint", undefined, "The approved baseline")}
           />

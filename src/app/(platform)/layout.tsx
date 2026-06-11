@@ -100,7 +100,7 @@ export default async function PlatformLayout({ children }: { children: React.Rea
            * <main id="main"> lets the layout's "Skip to content" link land
            * correctly and matches the marketing/portal/mobile shells.
            */}
-          <main id="main" className="console-content animate-page-enter">
+          <main id="main" tabIndex={-1} className="console-content animate-page-enter">
             {children}
           </main>
         </div>

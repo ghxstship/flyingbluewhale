@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +19,6 @@ type Row = {
   conducted_at: string | null;
   briefer: { name: string | null; email: string | null } | null;
   project: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
-  scheduled: "info",
-  conducted: "success",
-  cancelled: "muted",
 };
 
 const STATUS_LABEL_KEYS: Record<string, { key: string; fallback: string }> = {
@@ -135,7 +130,7 @@ export default async function Page() {
               render: (r) => {
                 const label = STATUS_LABEL_KEYS[r.status];
                 return (
-                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>
+                  <Badge variant={toneFor(r.status)}>
                     {label ? t(label.key, undefined, label.fallback) : r.status}
                   </Badge>
                 );

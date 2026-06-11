@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
@@ -38,5 +37,6 @@ export async function deleteItem(id: string): Promise<void> {
     .eq("org_id", session.orgId);
   if (error) throw new Error(`Could not update master catalog item: ${error.message}`);
   revalidatePath("/console/settings/catalog");
-  redirect("/console/settings/catalog");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -25,13 +25,18 @@ export default async function BudgetsPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("budgets", session.orgId, { orderBy: "created_at" });
+  // Exact count for the header — rows below stay on the capped default,
+  // but rows.length under-reported the total past 100 budgets.
+  const [rows, count] = await Promise.all([
+    listOrgScoped("budgets", session.orgId, { orderBy: "created_at" }),
+    countOrgScoped("budgets", session.orgId),
+  ]);
   return (
     <>
       <ModuleHeader
         eyebrow={t("console.finance.eyebrow", undefined, "Finance")}
         title={t("console.finance.budgets.title", undefined, "Budgets")}
-        subtitle={t("console.finance.budgets.countSubtitle", { count: rows.length }, `${rows.length} Budgets`)}
+        subtitle={t("console.finance.budgets.countSubtitle", { count }, `${count} Budgets`)}
         action={
           <div className="flex items-center gap-2">
             <Button href="/console/finance/budgets/import" variant="secondary">

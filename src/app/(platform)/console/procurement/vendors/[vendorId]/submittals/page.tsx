@@ -1,10 +1,9 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
-import { Badge, type BadgeVariant } from "@/components/ui/Badge";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -16,14 +15,6 @@ type Row = {
   spec_section: string | null;
   submittal_state: string;
   created_at: string;
-};
-
-const STATUS_VARIANT: Record<string, BadgeVariant> = {
-  approved: "success",
-  rejected: "error",
-  draft: "info",
-  submitted: "info",
-  in_review: "info",
 };
 
 export default async function Page({ params }: { params: Promise<{ vendorId: string }> }) {
@@ -88,9 +79,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             {
               key: "submittal_state",
               header: t("console.procurement.vendors.submittals.col.submittal_state", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_VARIANT[r.submittal_state] ?? "default"}>{toTitle(r.submittal_state)}</Badge>
-              ),
+              render: (r) => <StatusBadge status={r.submittal_state} />,
               accessor: (r) => r.submittal_state,
               filterable: true,
               groupable: true,

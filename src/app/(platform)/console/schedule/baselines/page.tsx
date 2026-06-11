@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +26,6 @@ type Row = {
   created_at: string;
   project: { name: string | null } | null;
   activity_count: number;
-};
-
-const STATE_TONE: Record<BaselineState, "muted" | "info" | "success" | "warning"> = {
-  draft: "muted",
-  active: "success",
-  archived: "info",
 };
 
 export default async function Page() {
@@ -156,7 +151,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.schedule.baselines.colState", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.baseline_state]}>{toTitle(r.baseline_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.baseline_state)}>{toTitle(r.baseline_state)}</Badge>,
               accessor: (r) => r.baseline_state,
               filterable: true,
               groupable: true,

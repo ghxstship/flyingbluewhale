@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -36,13 +37,6 @@ type Row = {
   project: { name: string | null } | null;
   attendee_count: number;
   open_action_count: number;
-};
-
-const STATE_TONE: Record<MeetingState, "muted" | "info" | "success" | "error"> = {
-  scheduled: "info",
-  in_progress: "info",
-  completed: "success",
-  cancelled: "error",
 };
 
 const KIND_LABEL: Record<MeetingKind, string> = {
@@ -235,7 +229,7 @@ export default async function Page() {
               key: "state",
               header: t("console.meetings.columns.state", undefined, "State"),
               render: (r) => (
-                <Badge variant={STATE_TONE[r.meeting_state]}>{toTitle(r.meeting_state.replace(/_/g, " "))}</Badge>
+                <Badge variant={toneFor(r.meeting_state)}>{toTitle(r.meeting_state.replace(/_/g, " "))}</Badge>
               ),
               accessor: (r) => r.meeting_state,
               filterable: true,

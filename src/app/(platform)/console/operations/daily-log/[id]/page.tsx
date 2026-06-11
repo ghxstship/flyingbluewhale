@@ -15,14 +15,9 @@ import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
-  draft: "muted",
-  submitted: "info",
-  approved: "success",
-};
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -110,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         action={
           <div className="flex items-center gap-2">
             <Presence targetTable="daily_logs" targetId={id} currentUser={presenceUser} />
-            <Badge variant={STATUS_TONE[log.log_state] ?? "muted"}>{toTitle(log.log_state)}</Badge>
+            <Badge variant={toneFor(log.log_state)}>{toTitle(log.log_state)}</Badge>
             {log.log_state === "draft" && (
               <StatusForm
                 action={transitionDailyLog.bind(null, id, "submitted")}

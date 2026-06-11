@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { decideSwap } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -21,14 +22,6 @@ type Row = {
   reason: string | null;
   swap_state: string;
   created_at: string;
-};
-
-const STATE_TONE: Record<string, "info" | "success" | "muted" | "error"> = {
-  requested: "info",
-  accepted: "info",
-  approved: "success",
-  declined: "muted",
-  cancelled: "muted",
 };
 
 export default async function Page() {
@@ -205,7 +198,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.workforce.shiftSwaps.column.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.swap_state] ?? "muted"}>{toTitle(r.swap_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.swap_state)}>{toTitle(r.swap_state)}</Badge>,
               accessor: (r) => r.swap_state,
               filterable: true,
               groupable: true,

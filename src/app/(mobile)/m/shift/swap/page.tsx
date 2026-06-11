@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -111,7 +112,11 @@ export default async function MobileShiftSwapPage() {
                 </div>
                 <Badge variant="muted">{toTitle(s.attendance)}</Badge>
               </div>
-              <form action={requestSwap} className="mt-3 space-y-2">
+              <FormShell
+                action={requestSwap}
+                className="mt-3 space-y-2"
+                submitLabel={t("m.shift.swap.requestButton", undefined, "Request Swap")}
+              >
                 <input type="hidden" name="shift_id" value={s.id} />
                 <textarea
                   name="reason"
@@ -121,10 +126,7 @@ export default async function MobileShiftSwapPage() {
                   placeholder={t("m.shift.swap.reasonPlaceholder", undefined, "Reason for swap…")}
                   className="ps-input w-full text-sm"
                 />
-                <button type="submit" className="ps-btn ps-btn--sm w-full">
-                  {t("m.shift.swap.requestButton", undefined, "Request swap")}
-                </button>
-              </form>
+              </FormShell>
             </li>
           ))
         )}

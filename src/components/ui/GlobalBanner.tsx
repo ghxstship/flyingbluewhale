@@ -101,14 +101,18 @@ export function ConnectivityBanner() {
   if (!online) {
     return (
       <GlobalBanner kind="offline" persistent>
-        {t("ui.connectivity.offline", undefined, "You're offline — actions will queue and sync when you reconnect.")}
+        {t(
+          "ui.connectivity.offline",
+          undefined,
+          "You're offline. Scans and clock punches will queue — everything else needs a connection.",
+        )}
       </GlobalBanner>
     );
   }
   if (justReconnected) {
     return (
       <GlobalBanner kind="online" persistent>
-        {t("ui.connectivity.backOnline", undefined, "Back online — syncing queued actions…")}
+        {t("ui.connectivity.backOnline", undefined, "Back online — syncing queued scans and punches…")}
       </GlobalBanner>
     );
   }

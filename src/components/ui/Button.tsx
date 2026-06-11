@@ -24,6 +24,28 @@ const SIZE_CLASS: Record<ButtonSize, string> = {
   icon: "ps-btn--icon",
 };
 
+/**
+ * CN-13 — class-string helper for the Link-as-button idiom. Produces the
+ * same `.ps-btn` class composition `<Button>` renders, for call sites that
+ * need a styled `<Link>` (or other element) without the Button wrapper:
+ *
+ *   <Link href="/console/projects/new" className={buttonVariants({ size: "sm" })}>
+ *
+ * Prefer `<Button href=...>` where possible; reach for this when you need
+ * Link-specific props (prefetch, scroll) or a non-Link element.
+ */
+export function buttonVariants({
+  variant = "primary",
+  size = "md",
+  className = "",
+}: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
+} = {}): string {
+  return `${VARIANT_CLASS[variant]} ${SIZE_CLASS[size]} ${className}`.replace(/\s+/g, " ").trim();
+}
+
 interface BaseProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -64,7 +86,7 @@ export function Button(props: ButtonProps) {
     href?: string;
   } & Record<string, unknown>;
 
-  const cls = `${VARIANT_CLASS[variant]} ${SIZE_CLASS[size]} ${className}`.replace(/\s+/g, " ").trim();
+  const cls = buttonVariants({ variant, size, className });
 
   // Dev-only enforcement: icon-only buttons MUST have aria-label.
   if (process.env.NODE_ENV !== "production") {

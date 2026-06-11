@@ -8,6 +8,8 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { DecideTimeOffButtons } from "./DecideButtons";
+import { bulkDecideTimeOff } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -21,13 +23,6 @@ type Row = {
   request_state: string;
   reason: string | null;
   created_at: string;
-};
-
-const STATE_TONE: Record<string, "info" | "success" | "error" | "muted"> = {
-  pending: "info",
-  approved: "success",
-  denied: "error",
-  cancelled: "muted",
 };
 
 export default async function TimeOffAdminPage() {
@@ -131,6 +126,19 @@ export default async function TimeOffAdminPage() {
         <DataTable<Row>
           tableId="workforce.time_off"
           rows={rows}
+          bulkActions={[
+            {
+              id: "approve",
+              label: t("console.workforce.timeOff.action.approve", undefined, "Approve"),
+              perform: bulkDecideTimeOff.bind(null, "approved"),
+            },
+            {
+              id: "deny",
+              label: t("console.workforce.timeOff.action.deny", undefined, "Deny"),
+              variant: "danger",
+              perform: bulkDecideTimeOff.bind(null, "denied"),
+            },
+          ]}
           emptyLabel={t("console.workforce.timeOff.emptyLabel", undefined, "No time-off requests")}
           emptyDescription={t(
             "console.workforce.timeOff.emptyDescription",
@@ -177,7 +185,7 @@ export default async function TimeOffAdminPage() {
             {
               key: "state",
               header: t("console.workforce.timeOff.column.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.request_state] ?? "muted"}>{toTitle(r.request_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.request_state)}>{toTitle(r.request_state)}</Badge>,
               accessor: (r) => r.request_state,
               filterable: true,
               groupable: true,

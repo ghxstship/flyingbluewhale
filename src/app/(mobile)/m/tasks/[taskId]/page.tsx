@@ -7,16 +7,9 @@ import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Task } from "@/lib/supabase/types";
-import { setTaskStatus } from "./actions";
+import { TaskTransitions } from "./TaskTransitions";
 
 export const dynamic = "force-dynamic";
-
-const TRANSITIONS = [
-  { value: "in_progress", labelKey: "m.tasks.detail.transition.start", labelFallback: "Start" },
-  { value: "blocked", labelKey: "m.tasks.detail.transition.block", labelFallback: "Block" },
-  { value: "review", labelKey: "m.tasks.detail.transition.review", labelFallback: "Review" },
-  { value: "done", labelKey: "m.tasks.detail.transition.done", labelFallback: "Done" },
-] as const;
 
 export default async function Page({ params }: { params: Promise<{ taskId: string }> }) {
   const { taskId } = await params;
@@ -48,15 +41,8 @@ export default async function Page({ params }: { params: Promise<{ taskId: strin
         <div className="text-xs font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
           {t("m.tasks.detail.updateStatus", undefined, "Update Status")}
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          {TRANSITIONS.filter((tx) => tx.value !== task.task_state).map((tx) => (
-            <form key={tx.value} action={setTaskStatus.bind(null, taskId)}>
-              <input type="hidden" name="status" value={tx.value} />
-              <button type="submit" className="ps-btn ps-btn--ghost w-full">
-                {t(tx.labelKey, undefined, tx.labelFallback)}
-              </button>
-            </form>
-          ))}
+        <div className="mt-3">
+          <TaskTransitions taskId={taskId} taskState={task.task_state} />
         </div>
       </div>
     </div>

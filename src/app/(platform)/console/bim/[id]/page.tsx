@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { addBimModelLink, deleteBimModelLink, markBimModelReady } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -37,14 +38,6 @@ type LinkRow = {
   target_id: string;
   note: string | null;
   created_at: string;
-};
-
-const STATE_TONE: Record<ModelState, "muted" | "info" | "warning" | "success" | "error"> = {
-  uploaded: "info",
-  processing: "warning",
-  ready: "success",
-  failed: "error",
-  archived: "muted",
 };
 
 const LINK_TYPE_LABEL: Record<LinkRow["link_type"], string> = {
@@ -129,7 +122,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-6">
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
-          <Badge variant={STATE_TONE[m.model_state]}>{toTitle(m.model_state)}</Badge>
+          <Badge variant={toneFor(m.model_state)}>{toTitle(m.model_state)}</Badge>
           <span className="text-[var(--p-text-2)]">
             {t("console.bim.detail.uploadedLabel", undefined, "Uploaded")} ·{" "}
             {fmt.dateParts(m.uploaded_at, { year: "numeric", month: "short", day: "numeric" })}

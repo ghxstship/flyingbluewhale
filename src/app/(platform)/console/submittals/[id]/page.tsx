@@ -8,22 +8,11 @@ import { hasSupabase } from "@/lib/env";
 import { stampRevision, addNextRound, closeSubmittal } from "./actions";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  submitted: "info",
-  in_review: "info",
-  approved: "success",
-  approved_with_comments: "success",
-  revise_resubmit: "warning",
-  rejected: "error",
-  void: "muted",
-  closed: "muted",
-};
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -67,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         )}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[sub.submittal_state] ?? "muted"}>{toTitle(sub.submittal_state)}</Badge>
+            <Badge variant={toneFor(sub.submittal_state)}>{toTitle(sub.submittal_state)}</Badge>
             <a
               href={`/console/submittals/${sub.id}/edit`}
               className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium"
@@ -104,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <td className="font-mono text-xs">#{r.round}</td>
                   <td className="font-mono text-xs">{new Date(r.submitted_at).toLocaleDateString()}</td>
                   <td>
-                    <Badge variant={STATUS_TONE[r.stamp] ?? "muted"}>{toTitle(r.stamp)}</Badge>
+                    <Badge variant={toneFor(r.stamp)}>{toTitle(r.stamp)}</Badge>
                   </td>
                   <td>{r.stamp_notes ?? "—"}</td>
                 </tr>

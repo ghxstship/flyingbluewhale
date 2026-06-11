@@ -12,11 +12,13 @@ const Schema = z.object({
   courseId: z.string().uuid(),
 });
 
-export async function submitQuiz(fd: FormData): Promise<void> {
+export type State = { error?: string } | null;
+
+export async function submitQuiz(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const entries = Object.fromEntries(fd);
   const parsed = Schema.safeParse({ assignmentId: entries.assignmentId, courseId: entries.courseId });
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
   // Verify assignment is the caller's. RLS gates writes too but this
@@ -27,7 +29,7 @@ export async function submitQuiz(fd: FormData): Promise<void> {
     .eq("id", parsed.data.assignmentId)
     .eq("assignee_id", session.userId)
     .maybeSingle();
-  if (!assignment) return;
+  if (!assignment) return { error: "Course assignment not found" };
 
   // Pull the course's optional completion_badge_id so we can auto-award
   // on pass. Cheap single-row read, kept on the optimistic happy path.
@@ -59,13 +61,13 @@ export async function submitQuiz(fd: FormData): Promise<void> {
     passed,
     answers,
   });
-  if (completionError) throw new Error(`Could not record quiz result: ${completionError.message}`);
+  if (completionError) return { error: `Could not record quiz result: ${completionError.message}` };
 
   const { error: assignmentError } = await supabase
     .from("course_assignments")
     .update({ assignment_state: passed ? "completed" : "in_progress" })
     .eq("id", parsed.data.assignmentId);
-  if (assignmentError) throw new Error(`Could not update course progress: ${assignmentError.message}`);
+  if (assignmentError) return { error: `Could not update course progress: ${assignmentError.message}` };
 
   // Auto-award the completion badge on pass. The badge_awards insert
   // re-checks RLS via the caller's session — they're org-scoped, so the
@@ -84,7 +86,7 @@ export async function submitQuiz(fd: FormData): Promise<void> {
       })
       .select("id")
       .single();
-    if (awardError) throw new Error(`Could not award badge: ${awardError.message}`);
+    if (awardError) return { error: `Could not award badge: ${awardError.message}` };
     if (award) {
       void writeInbox({
         userId: session.userId,
@@ -101,4 +103,5 @@ export async function submitQuiz(fd: FormData): Promise<void> {
 
   revalidatePath(`/m/learning/${parsed.data.courseId}`);
   revalidatePath("/m/learning");
+  return null;
 }

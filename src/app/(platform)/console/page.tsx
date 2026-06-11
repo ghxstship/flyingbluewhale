@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { RouteTabs } from "@/components/ui/RouteTabs";
 import { DataTable } from "@/components/DataTable";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { listProjects, projectStats } from "@/lib/db/projects";
@@ -247,15 +247,4 @@ function TableSkeleton({ rows }: { rows: number }) {
       ))}
     </div>
   );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, "success" | "info" | "warning" | "muted" | "default"> = {
-    active: "success",
-    draft: "info",
-    paused: "warning",
-    archived: "muted",
-    complete: "default",
-  };
-  return <Badge variant={map[status] ?? "default"}>{status}</Badge>;
 }

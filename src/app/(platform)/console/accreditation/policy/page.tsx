@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonVariants } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
@@ -95,10 +95,10 @@ export default async function Page() {
             )}
             action={
               <div className="flex items-center gap-2">
-                <Link href="/console/accreditation/categories/new" className="ps-btn ps-btn--sm">
+                <Link href="/console/accreditation/categories/new" className={buttonVariants({ size: "sm" })}>
                   {t("console.accreditation.policy.newCategory", undefined, "+ New Category")}
                 </Link>
-                <Link href="/console/venues" className="ps-btn ps-btn--ghost ps-btn--sm">
+                <Link href="/console/venues" className={buttonVariants({ variant: "ghost", size: "sm" })}>
                   {t("console.accreditation.policy.openVenues", undefined, "Open Venues")}
                 </Link>
               </div>

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/Badge";
 import { getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 const PERSONAS: Array<{
   slug: "guest" | "artist" | "vendor" | "client" | "sponsor" | "crew";
@@ -56,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               return (
                 <li key={p.slug}>
                   <Link
-                    href={`/p/${project.slug}/${p.slug}`}
+                    href={urlFor("portal", `/${project.slug}/${p.slug}`)}
                     className="surface hover-lift flex items-center justify-between p-4"
                   >
                     <div>

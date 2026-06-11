@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -17,14 +19,6 @@ type Report = {
   subject_ref: string | null;
   created_at: string;
   updated_at: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  filed: "info",
-  triage: "warning",
-  in_progress: "warning",
-  closed: "success",
-  escalated: "error",
 };
 
 function fmt(iso: string): string {
@@ -106,7 +100,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             >
               {t("p.athlete.safeguarding.emailLead", undefined, "Email safeguarding lead")}
             </Link>
-            <Link href={`/m/incidents/new?kind=safeguarding`} className="ps-btn ps-btn--ghost ps-btn--sm">
+            <Link
+              href={urlFor("mobile", "/incidents/new?kind=safeguarding")}
+              className="ps-btn ps-btn--ghost ps-btn--sm"
+            >
               {t("p.athlete.safeguarding.fileViaMobile", undefined, "File via mobile")}
             </Link>
           </div>
@@ -153,7 +150,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                       )}
                     </div>
                   </div>
-                  <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                  <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                 </li>
               ))}
             </ul>

@@ -6,6 +6,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -84,7 +85,10 @@ export default async function MobileHandoverPage() {
           ) : (
             open.map((v) => (
               <li key={v.id}>
-                <Link href={`/console/venues/${v.id}`} className="surface flex items-center justify-between p-4">
+                <Link
+                  href={urlFor("platform", `/venues/${v.id}`)}
+                  className="surface flex items-center justify-between p-4"
+                >
                   <div>
                     <div className="text-sm font-semibold">{v.name}</div>
                     <div className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
@@ -109,7 +113,7 @@ export default async function MobileHandoverPage() {
             {done.map((v) => (
               <li key={v.id}>
                 <Link
-                  href={`/console/venues/${v.id}`}
+                  href={urlFor("platform", `/venues/${v.id}`)}
                   className="surface flex items-center justify-between p-3 opacity-70"
                 >
                   <div className="text-sm">

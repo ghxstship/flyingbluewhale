@@ -83,5 +83,6 @@ export async function deleteProject(id: string): Promise<void> {
     .is("deleted_at", null);
   if (error) throw new Error(`Could not delete project: ${error.message}`);
   revalidatePath("/console/projects");
-  redirect("/console/projects");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

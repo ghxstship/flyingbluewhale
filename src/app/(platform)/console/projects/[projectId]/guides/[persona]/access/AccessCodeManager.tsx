@@ -1,10 +1,18 @@
 "use client";
 
-import { useActionState, useTransition } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createCodeAction, revokeCodeAction, type CreateState } from "./actions";
 import type { GuideAccessCode } from "@/lib/db/guide-access";
@@ -39,6 +47,9 @@ export function AccessCodeManager({
   }, null);
 
   const [revokeBusy, startRevoke] = useTransition();
+  // CN-9 — accessible confirm dialog replaces native confirm(). Holds the
+  // code pending revocation; null when the dialog is closed.
+  const [confirmRevoke, setConfirmRevoke] = useState<GuideAccessCode | null>(null);
 
   const active = codes.filter((c) => !c.revoked_at);
   const revoked = codes.filter((c) => c.revoked_at);
@@ -184,26 +195,7 @@ export function AccessCodeManager({
                     {c.max_uses ? ` / ${c.max_uses}` : ""}
                   </td>
                   <td className="text-right">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      disabled={revokeBusy}
-                      onClick={() => {
-                        if (
-                          !confirm(
-                            t(
-                              "console.projects.guides.access.revokeConfirm",
-                              { prefix: c.code_prefix },
-                              `Revoke code ${c.code_prefix}-…? Anyone holding it loses access.`,
-                            ),
-                          )
-                        )
-                          return;
-                        startRevoke(async () => {
-                          await revokeCodeAction(projectId, persona, c.id);
-                        });
-                      }}
-                    >
+                    <Button type="button" variant="ghost" disabled={revokeBusy} onClick={() => setConfirmRevoke(c)}>
                       {t("console.projects.guides.access.revoke", undefined, "Revoke")}
                     </Button>
                   </td>
@@ -297,6 +289,42 @@ export function AccessCodeManager({
           "Codes are case-insensitive and dashes are optional when entered. Rotate regularly; revoking is instant.",
         )}
       </div>
+
+      <Dialog open={confirmRevoke !== null} onOpenChange={(o) => (!revokeBusy && !o ? setConfirmRevoke(null) : null)}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle>{t("console.projects.guides.access.revokeDialogTitle", undefined, "Revoke Code")}</DialogTitle>
+            <DialogDescription>
+              {confirmRevoke &&
+                t(
+                  "console.projects.guides.access.revokeConfirm",
+                  { prefix: confirmRevoke.code_prefix },
+                  `Revoke code ${confirmRevoke.code_prefix}-…? Anyone holding it loses access.`,
+                )}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => setConfirmRevoke(null)} disabled={revokeBusy}>
+              {t("common.cancel", undefined, "Cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              loading={revokeBusy}
+              onClick={() => {
+                const code = confirmRevoke;
+                if (!code) return;
+                startRevoke(async () => {
+                  await revokeCodeAction(projectId, persona, code.id);
+                });
+                setConfirmRevoke(null);
+              }}
+            >
+              {t("console.projects.guides.access.revoke", undefined, "Revoke")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

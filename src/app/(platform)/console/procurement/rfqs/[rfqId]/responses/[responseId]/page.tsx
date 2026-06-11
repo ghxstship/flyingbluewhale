@@ -10,18 +10,9 @@ import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo, toTitle } from "@/lib/format";
 import { addResponseLine, deleteResponseLine } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const RESPONSE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  invited: "muted",
-  viewed: "info",
-  responded: "info",
-  no_bid: "muted",
-  withdrawn: "warning",
-  awarded: "success",
-  declined: "error",
-};
 
 type ResponseRow = {
   id: string;
@@ -99,9 +90,7 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
         }
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
-            <Badge variant={RESPONSE_TONE[response.response_state] ?? "muted"}>
-              {toTitle(response.response_state)}
-            </Badge>
+            <Badge variant={toneFor(response.response_state)}>{toTitle(response.response_state)}</Badge>
             {response.submitted_at && (
               <span className="font-mono text-xs">
                 {t(

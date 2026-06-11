@@ -10,10 +10,12 @@ const Schema = z.object({
   option_id: z.string().uuid(),
 });
 
-export async function castVote(fd: FormData): Promise<void> {
+export type State = { error?: string } | null;
+
+export async function castVote(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Pick an option first" };
   const supabase = await createClient();
 
   // Poll must be in caller's org AND live. Without this, anyone could
@@ -24,7 +26,9 @@ export async function castVote(fd: FormData): Promise<void> {
     .eq("id", parsed.data.poll_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!poll || (poll as { publish_state: string }).publish_state !== "live") return;
+  if (!poll || (poll as { publish_state: string }).publish_state !== "live") {
+    return { error: "This poll is no longer live" };
+  }
 
   // Option must belong to the same poll.
   const { data: option } = await supabase
@@ -33,7 +37,7 @@ export async function castVote(fd: FormData): Promise<void> {
     .eq("id", parsed.data.option_id)
     .eq("poll_id", parsed.data.poll_id)
     .maybeSingle();
-  if (!option) return;
+  if (!option) return { error: "That option does not belong to this poll" };
 
   const { error } = await supabase.from("poll_votes").upsert(
     {
@@ -44,7 +48,8 @@ export async function castVote(fd: FormData): Promise<void> {
     },
     { onConflict: "poll_id,voter_id" },
   );
-  if (error) throw new Error(`Could not record vote: ${error.message}`);
+  if (error) return { error: `Could not record vote: ${error.message}` };
 
   revalidatePath("/m/polls");
+  return null;
 }

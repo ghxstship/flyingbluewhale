@@ -49,6 +49,7 @@ Six route groups, three of them are full shells with distinct layouts:
 - **Route pattern:** `/<resource>` (list) · `/<resource>/new` (create) · `/<resource>/[id]` (detail).
 - **Server actions:** `"use server"` in `actions.ts` next to the page. Shape: `export type State = { error?: string } | null;` — feeds `useActionState`.
 - **Forms:** Use `<FormShell action={...}>` from `src/components/FormShell.tsx` for the standard layout + error surface.
+- **Selects:** Native `<select className="ps-input">` is the sanctioned pattern for simple enum selects in server-component forms. Reserve `ui/Select` (Radix) for client components that need controlled behavior, and `ui/Combobox` for searchable/async option lists.
 - **Data fetching:** Server components use `listOrgScoped(table, orgId)` / `getOrgScoped(table, orgId, id)` from `src/lib/db/resource.ts`.
 - **External portal prefix:** `/p/[slug]/...` (internal route). Don't add external features to `/console/*`.
 - **Cross-shell URLs:** Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode `https://...atlvs.pro` and never concat `NEXT_PUBLIC_APP_URL` with `/console`/`/p`/`/m`. The helper is the single switch between subdomain mode and path-prefix fallback (preview deploys). Examples: `urlFor("platform", "/projects/abc")`, `urlFor("portal", "/mmw26/guide")`, `urlFor("auth", "/login")`.

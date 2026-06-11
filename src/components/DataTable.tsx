@@ -5,6 +5,7 @@ import {
   type InteractiveColumn,
   type InteractiveRow,
   type BulkAction as InteractiveBulkAction,
+  type BulkActionResult,
 } from "./DataTableInteractive";
 import type { RowActionItem } from "./ui/RowActions";
 import { EmptyState } from "./ui/EmptyState";
@@ -121,14 +122,22 @@ export type DataTableProps<T extends { id: string }> = {
    *  initial render; refresh the page after bulk-action completion to refetch. */
   rowActions?: (row: T) => RowActionItem[] | null | undefined;
   /** Bulk-action toolbar — receives the selected row IDs (strings). Must
-   *  be a client-safe callable: pass a server action ref or a wrapper that
-   *  fires a fetch. */
+   *  be a client-safe callable: pass a server action ref (`.bind` for
+   *  extra args) or a wrapper that fires a fetch. Returning a
+   *  `BulkActionResult` surfaces a success/error toast — use it to report
+   *  partial failures. */
   bulkActions?: Array<{
     id: string;
     label: string;
     variant?: "default" | "danger";
-    perform: (ids: string[]) => void | Promise<void>;
+    perform: (ids: string[]) => BulkActionResult | Promise<BulkActionResult>;
   }>;
+  /** Total population size when `rows` is a truncated slice of a larger
+   *  set. Surfaces a "Showing First N Of M" indicator in the toolbar
+   *  (SC-2 truncation honesty). Pages that paginate should pair this with
+   *  cursor links rendered below the table — see
+   *  `console/settings/audit/page.tsx` for the canonical pattern. */
+  totalCount?: number;
   /** Optional Import handler. Surfaces an "Import" button in the toolbar
    *  that opens a file picker; selected file is passed to this callback for
    *  the page to parse / upload. */
@@ -217,6 +226,7 @@ export async function DataTable<T extends { id: string }>({
   tableId,
   searchable,
   pageSize,
+  totalCount,
   rowActions,
   bulkActions,
   onImport,
@@ -331,6 +341,7 @@ export async function DataTable<T extends { id: string }>({
       // feel broken / muscle memory ("⌘F isn't here?") miss.
       searchable={searchable ?? true}
       pageSize={pageSize}
+      totalCount={totalCount}
       density={density}
       bulkActions={interactiveBulk}
       tableId={resolvedTableId}
@@ -365,8 +376,15 @@ function DataTableEmpty({
   ghostRows?: number;
 }) {
   return (
-    <div className="relative overflow-x-auto" aria-label={title} role="status">
-      <table className="ps-table" role="grid" aria-hidden="true">
+    <div className="relative overflow-x-auto">
+      {/* Screen-reader announcement lives in its own status region so the
+          interactive empty-state action below is NOT nested inside a live
+          region (AX-9). The ghost table is purely decorative. */}
+      <p role="status" className="sr-only">
+        {title}
+        {description ? ` — ${description}` : null}
+      </p>
+      <table className="ps-table" aria-hidden="true">
         <thead>
           <tr>
             {columns.map((c) => (

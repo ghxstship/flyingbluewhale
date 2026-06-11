@@ -45,7 +45,7 @@ export function AdvancingForm({ slug }: { slug: string }) {
       <input type="hidden" name="slug" value={slug} />
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">
-          {t("p.artist.advancing.form.newDeliverable", undefined, "New deliverable")}
+          {t("p.artist.advancing.form.newDeliverable", undefined, "New Deliverable")}
         </div>
         <TemplatePicker
           onPick={(tpl) => {

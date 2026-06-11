@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 import { addProjectMemberAction, removeProjectMemberAction, updateProjectMemberRoleAction } from "./actions";
 import { PROJECT_ROLES, type ProjectRole } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
@@ -115,6 +123,8 @@ export function MemberRow({
   const updateAction = updateProjectMemberRoleAction.bind(null, projectId);
   const [, updateFormAction, updating] = useActionState<FormState, FormData>(updateAction, null);
   const [removing, setRemoving] = useState(false);
+  // CN-9 — accessible confirm dialog replaces native confirm().
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   async function onChangeRole(role: string) {
     const fd = new FormData();
@@ -124,16 +134,6 @@ export function MemberRow({
   }
 
   async function onRemove() {
-    if (
-      !confirm(
-        t(
-          "console.projects.members.removeConfirm",
-          { name: member.name ?? member.email },
-          `Remove ${member.name ?? member.email} from this project?`,
-        ),
-      )
-    )
-      return;
     setRemoving(true);
     try {
       await removeProjectMemberAction(projectId, member.user_id);
@@ -141,6 +141,7 @@ export function MemberRow({
       router.refresh();
     } finally {
       setRemoving(false);
+      setConfirmOpen(false);
     }
   }
 
@@ -168,11 +169,46 @@ export function MemberRow({
         </select>
       </td>
       <td className="text-right">
-        <Button type="button" variant="ghost" size="sm" onClick={onRemove} loading={removing} disabled={removing}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={() => setConfirmOpen(true)}
+          loading={removing}
+          disabled={removing}
+        >
           {isSelf
             ? t("console.projects.members.leaveButton", undefined, "Leave")
             : t("console.projects.members.removeButton", undefined, "Remove")}
         </Button>
+        <Dialog open={confirmOpen} onOpenChange={(o) => (!removing && !o ? setConfirmOpen(false) : null)}>
+          <DialogContent size="sm">
+            <DialogHeader>
+              <DialogTitle>
+                {isSelf
+                  ? t("console.projects.members.leaveDialogTitle", undefined, "Leave Project")
+                  : t("console.projects.members.removeDialogTitle", undefined, "Remove Member")}
+              </DialogTitle>
+              <DialogDescription>
+                {t(
+                  "console.projects.members.removeConfirm",
+                  { name: member.name ?? member.email },
+                  `Remove ${member.name ?? member.email} from this project?`,
+                )}
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button type="button" variant="secondary" onClick={() => setConfirmOpen(false)} disabled={removing}>
+                {t("common.cancel", undefined, "Cancel")}
+              </Button>
+              <Button type="button" variant="danger" loading={removing} onClick={() => void onRemove()}>
+                {isSelf
+                  ? t("console.projects.members.leaveButton", undefined, "Leave")
+                  : t("console.projects.members.removeButton", undefined, "Remove")}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </td>
     </tr>
   );

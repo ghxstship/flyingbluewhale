@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -17,14 +18,6 @@ type Request = {
   status: string;
   opened_at: string;
   resolved_at: string | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  open: "info",
-  acknowledged: "info",
-  in_progress: "warning",
-  resolved: "success",
-  cancelled: "muted",
 };
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
@@ -140,7 +133,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <Badge variant={c.severity === "urgent" ? "error" : "warning"}>{toTitle(c.severity)}</Badge>
-                    <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
+                    <Badge variant={toneFor(c.status)}>{toTitle(c.status)}</Badge>
                   </div>
                 </li>
               ))}

@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -20,14 +21,6 @@ type RunRow = {
   actual_arrive: string | null;
   origin: { name: string | null } | null;
   destination: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "muted",
-  in_transit: "info",
-  arrived: "success",
-  delayed: "warning",
-  cancelled: "error",
 };
 
 export default async function MobileDriverPage() {
@@ -108,7 +101,7 @@ export default async function MobileDriverPage() {
                       <div className="text-sm leading-snug font-semibold">
                         {r.origin?.name ?? "—"} → {r.destination?.name ?? "—"}
                       </div>
-                      <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                      <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                     </div>
                     <div className="mt-1 flex flex-wrap gap-1.5 font-mono text-[10px] text-[var(--p-text-2)]">
                       <span>{r.fleet}</span>
@@ -149,7 +142,7 @@ export default async function MobileDriverPage() {
                       : t("m.driver.cancelled", undefined, "Cancelled")}
                   </div>
                 </div>
-                <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
               </li>
             ))}
           </ul>

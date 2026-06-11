@@ -7,18 +7,12 @@ import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
 type TourRow = GuardTour;
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "muted",
-  in_progress: "info",
-  completed: "success",
-  cancelled: "muted",
-  overdue: "error",
-};
 
 export default async function MobileGuardPage() {
   const { t } = await getRequestT();
@@ -74,7 +68,7 @@ export default async function MobileGuardPage() {
                 "Patrol routes appear here when a supervisor assigns you. See all tours in Safety → Guard tours.",
               )}
               action={
-                <Link href="/console/safety/guard-tours" className="ps-btn ps-btn--ghost ps-btn--sm">
+                <Link href={urlFor("platform", "/safety/guard-tours")} className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("m.guard.empty.action", undefined, "Open guard tours")}
                 </Link>
               }
@@ -95,7 +89,7 @@ export default async function MobileGuardPage() {
                       : ""}
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    <Badge variant={STATUS_TONE[r.tour_state] ?? "muted"}>{toTitle(r.tour_state)}</Badge>
+                    <Badge variant={toneFor(r.tour_state)}>{toTitle(r.tour_state)}</Badge>
                     {r.next_run_at && r.tour_state === "scheduled" && (
                       <Badge variant="muted">
                         {t("m.guard.badge.next", { time: fmtTime(r.next_run_at) }, `Next ${fmtTime(r.next_run_at)}`)}

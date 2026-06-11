@@ -64,7 +64,11 @@ export default async function PortalSelectPage() {
   if (projects.length === 1) redirect(`/p/${projects[0]!.slug}`);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center gap-6 px-6 py-16">
+    <main
+      id="main"
+      tabIndex={-1}
+      className="mx-auto flex min-h-screen w-full max-w-2xl flex-col justify-center gap-6 px-6 py-16"
+    >
       <header className="space-y-1">
         <p className="text-xs font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
           {t("p.select.eyebrow", undefined, "Portal")}

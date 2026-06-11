@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { SEVERITY_TONE } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -23,14 +24,6 @@ type IncidentRow = {
   incident_state: string;
   location: string | null;
   occurred_at: string;
-};
-
-const SEVERITY_TONE: Record<string, "info" | "warning" | "error" | "muted"> = {
-  minor: "info",
-  moderate: "warning",
-  major: "error",
-  critical: "error",
-  fatal: "error",
 };
 
 export default async function MyIncidentsPage() {
@@ -97,7 +90,7 @@ export default async function MyIncidentsPage() {
             <li key={r.id}>
               <Link href={`/m/incidents`} className="surface block p-4">
                 <div className="flex items-center justify-between gap-3">
-                  <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
+                  <Badge variant={SEVERITY_TONE[r.severity] ?? "default"}>{toTitle(r.severity)}</Badge>
                   <span className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(r.occurred_at)}</span>
                 </div>
                 <h2 className="mt-2 line-clamp-2 text-sm font-semibold">{r.summary}</h2>

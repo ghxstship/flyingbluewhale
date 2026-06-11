@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -49,13 +50,6 @@ const SECTION_LABEL: Record<string, string> = {
   communications: "Communications",
   sustainability: "Sustainability",
   annexes: "Annexes",
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
-  draft: "muted",
-  in_review: "info",
-  approved: "success",
-  published: "success",
 };
 
 export default async function Page({ params }: { params: Promise<{ venueId: string }> }) {
@@ -148,7 +142,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
                       </p>
                     )}
                   </div>
-                  <Badge variant={s ? (STATUS_TONE[s.status] ?? "muted") : "muted"}>
+                  <Badge variant={s ? toneFor(s.status) : "muted"}>
                     {s ? toTitle(s.status) : t("console.venues.vop.missing", undefined, "missing")}
                   </Badge>
                 </li>

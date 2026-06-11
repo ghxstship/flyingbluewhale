@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -25,15 +26,6 @@ type Row = {
   submitted_at: string | null;
   created_at: string;
   project: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<EstimateState, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  in_review: "warning",
-  submitted: "info",
-  won: "success",
-  lost: "error",
-  archived: "muted",
 };
 
 export default async function Page() {
@@ -157,7 +149,7 @@ export default async function Page() {
             {
               key: "state",
               header: t("console.estimates.columns.state", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.estimate_state]}>{toTitle(r.estimate_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.estimate_state)}>{toTitle(r.estimate_state)}</Badge>,
               accessor: (r) => r.estimate_state,
               filterable: true,
               groupable: true,

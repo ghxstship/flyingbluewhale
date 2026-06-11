@@ -7,6 +7,8 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { urlFor } from "@/lib/urls";
+import { PRIORITY_TONE, toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -20,21 +22,6 @@ type RequestRow = {
   resolved_at: string | null;
   sla_response_breached: boolean;
   sla_resolution_breached: boolean;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  open: "info",
-  acknowledged: "info",
-  in_progress: "warning",
-  resolved: "success",
-  cancelled: "muted",
-};
-
-const SEVERITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
-  low: "muted",
-  normal: "info",
-  high: "warning",
-  urgent: "error",
 };
 
 function fmt(iso: string | null): string {
@@ -106,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           { label: t("p.athlete.requests.breadcrumb.requests", undefined, "Requests") },
         ]}
         action={
-          <Link href={`/m/requests/new`} className="ps-btn ps-btn--sm">
+          <Link href={urlFor("mobile", "/requests/new")} className="ps-btn ps-btn--sm">
             {t("p.athlete.requests.actions.new", undefined, "+ New Request")}
           </Link>
         }
@@ -153,8 +140,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
-                    <Badge variant={SEVERITY_TONE[r.severity] ?? "muted"}>{toTitle(r.severity)}</Badge>
+                    <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
+                    <Badge variant={PRIORITY_TONE[r.severity] ?? "default"}>{toTitle(r.severity)}</Badge>
                     {(r.sla_response_breached || r.sla_resolution_breached) && (
                       <Badge variant="error">{t("p.athlete.requests.badge.sla", undefined, "SLA")}</Badge>
                     )}

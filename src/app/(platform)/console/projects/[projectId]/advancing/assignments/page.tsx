@@ -2,13 +2,20 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { DataTable } from "@/components/DataTable";
+import { RouteTabs } from "@/components/ui/RouteTabs";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
-import { CATALOG_KINDS, CATALOG_KIND_LABEL, listProjectAssignments, type CatalogKind } from "@/lib/db/assignments";
+import {
+  CATALOG_KIND_LABEL_SINGULAR,
+  countProjectAssignments,
+  listProjectAssignments,
+  type AssignmentListRow,
+} from "@/lib/db/assignments";
+import { bulkAdvanceAssignments } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +27,16 @@ export const dynamic = "force-dynamic";
  * one lifecycle (`fulfillment_state`), one set of UI controls — the same
  * row shows up on the assignee's portal (/p/[slug]/crew/advances) and
  * field (/m/advances) surfaces.
+ *
+ * PF-6 + FE-2: renders through DataTable (client search / sort /
+ * virtualization), kind surfaces as a filterable + groupable column
+ * instead of N stacked per-kind tables, the 500-row read cap is surfaced
+ * honestly via `totalCount`, and bulk fulfillment transitions ride the
+ * built-in selection system (server re-validates every row against
+ * NEXT_FULFILLMENT_STATES and reports partial failures).
  */
+
+type Row = AssignmentListRow & { party: string; kindLabel: string };
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { t } = await getRequestT();
@@ -53,7 +69,10 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     .maybeSingle();
   if (!project) notFound();
 
-  const rows = await listProjectAssignments(session.orgId, projectId);
+  const [rows, totalCount] = await Promise.all([
+    listProjectAssignments(session.orgId, projectId),
+    countProjectAssignments(session.orgId, projectId),
+  ]);
 
   // Hydrate party names across all three kinds in parallel.
   const userIds = Array.from(new Set(rows.filter((r) => r.party_user_id).map((r) => r.party_user_id!)));
@@ -82,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     ]),
   );
 
-  function partyLabel(r: (typeof rows)[number]): string {
+  function partyLabel(r: AssignmentListRow): string {
     if (r.party_kind === "user" && r.party_user_id)
       return (
         userMap.get(r.party_user_id) ??
@@ -98,91 +117,130 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     return t("console.projects.advancing.assignments.unassigned", undefined, "Unassigned");
   }
 
-  const byKind = new Map<CatalogKind, typeof rows>();
-  for (const r of rows) {
-    const list = byKind.get(r.catalog_kind) ?? [];
-    list.push(r);
-    byKind.set(r.catalog_kind, list);
-  }
+  const tableRows: Row[] = rows.map((r) => ({
+    ...r,
+    party: partyLabel(r),
+    kindLabel: CATALOG_KIND_LABEL_SINGULAR[r.catalog_kind] ?? r.catalog_kind,
+  }));
+
+  // Bulk transitions — the common operator verbs. The server skips and
+  // reports any selected row whose current state can't legally reach the
+  // target, so a mixed selection degrades to a partial-failure toast
+  // instead of an illegal jump.
+  const bulkApprove = bulkAdvanceAssignments.bind(null, projectId, "approved");
+  const bulkIssue = bulkAdvanceAssignments.bind(null, projectId, "issued");
+  const bulkVoid = bulkAdvanceAssignments.bind(null, projectId, "voided");
 
   return (
     <>
       <ModuleHeader
         eyebrow={project.name as string}
         title={t("console.projects.advancing.assignments.title", undefined, "Individual Assignments")}
-        subtitle={`${rows.length} ${rows.length === 1 ? t("console.projects.advancing.assignments.assignmentSingular", undefined, "Assignment") : t("console.projects.advancing.assignments.assignmentPlural", undefined, "Assignments")} · ${t("console.projects.advancing.assignments.subtitleKinds", undefined, "Tickets, Credentials, Catering, Radios, Tools, Equipment, Uniforms, Travel, Lodging, Vehicles")}`}
+        subtitle={`${totalCount} ${totalCount === 1 ? t("console.projects.advancing.assignments.assignmentSingular", undefined, "Assignment") : t("console.projects.advancing.assignments.assignmentPlural", undefined, "Assignments")} · ${t("console.projects.advancing.assignments.subtitleKinds", undefined, "Tickets, Credentials, Catering, Radios, Tools, Equipment, Uniforms, Travel, Lodging, Vehicles")}`}
         action={
           <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
             {t("console.projects.advancing.assignments.newAssignment", undefined, "+ New Assignment")}
           </Button>
         }
       />
-      <div className="page-content">
-        {rows.length === 0 ? (
-          <EmptyState
-            title={t("console.projects.advancing.assignments.emptyTitle", undefined, "No Assignments Yet")}
-            description={t(
-              "console.projects.advancing.assignments.emptyDescription",
-              undefined,
-              "Whatever you assign here lands on the assignee's portal and mobile views in real time.",
-            )}
-            action={
-              <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
-                {t("console.projects.advancing.assignments.newAssignment", undefined, "+ New Assignment")}
-              </Button>
-            }
-          />
-        ) : (
-          <div className="space-y-6">
-            {CATALOG_KINDS.filter((k) => byKind.has(k)).map((kind) => {
-              const items = byKind.get(kind) ?? [];
-              return (
-                <section key={kind} className="surface p-4">
-                  <h2 className="text-sm font-semibold">
-                    {CATALOG_KIND_LABEL[kind]} <span className="text-[var(--p-text-2)]">· {items.length}</span>
-                  </h2>
-                  <table className="ps-table mt-3 w-full text-sm">
-                    <thead>
-                      <tr>
-                        <th>{t("console.projects.advancing.assignments.columns.title", undefined, "Title")}</th>
-                        <th>{t("console.projects.advancing.assignments.columns.party", undefined, "Party")}</th>
-                        <th>{t("console.projects.advancing.assignments.columns.state", undefined, "State")}</th>
-                        <th>{t("console.projects.advancing.assignments.columns.due", undefined, "Due")}</th>
-                        <th>{t("console.projects.advancing.assignments.columns.updated", undefined, "Updated")}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {items.map((r) => (
-                        <tr key={r.id}>
-                          <td>
-                            <a
-                              className="underline-offset-2 hover:underline"
-                              href={`/console/projects/${projectId}/advancing/assignments/${r.id}`}
-                            >
-                              {r.title ?? t("console.projects.advancing.assignments.untitled", undefined, "Untitled")}
-                            </a>
-                          </td>
-                          <td>
-                            {r.party_kind === "external_holder" ? (
-                              <Badge variant="warning">{partyLabel(r)}</Badge>
-                            ) : (
-                              partyLabel(r)
-                            )}
-                          </td>
-                          <td>
-                            <StatusBadge status={r.fulfillment_state} />
-                          </td>
-                          <td className="font-mono text-xs">{r.deadline ? fmt.date(r.deadline) : "—"}</td>
-                          <td className="font-mono text-xs text-[var(--p-text-2)]">{fmt.date(r.updated_at)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </section>
-              );
-            })}
-          </div>
-        )}
+      <div className="page-content space-y-5">
+        {/* Sub-tabs inside the content band — mirrors the doc-specs page so
+            the Doc Specs ⇄ Assignments split is one click in both
+            directions. */}
+        <RouteTabs
+          tabs={[
+            {
+              label: t("console.projects.advancing.tabs.docSpecs", undefined, "Doc Specs"),
+              href: `/console/projects/${projectId}/advancing`,
+            },
+            {
+              label: t("console.projects.advancing.tabs.assignments", undefined, "Assignments"),
+              href: `/console/projects/${projectId}/advancing/assignments`,
+            },
+          ]}
+          className="border-b border-[var(--p-border)]"
+        />
+        <DataTable<Row>
+          tableId="projects.advancing.assignments"
+          rows={tableRows}
+          totalCount={totalCount}
+          rowHref={(r) => `/console/projects/${projectId}/advancing/assignments/${r.id}`}
+          emptyLabel={t("console.projects.advancing.assignments.emptyTitle", undefined, "No Assignments Yet")}
+          emptyDescription={t(
+            "console.projects.advancing.assignments.emptyDescription",
+            undefined,
+            "Whatever you assign here lands on the assignee's portal and mobile views in real time.",
+          )}
+          emptyAction={
+            <Button href={`/console/projects/${projectId}/advancing/assignments/new`} size="sm">
+              {t("console.projects.advancing.assignments.newAssignment", undefined, "+ New Assignment")}
+            </Button>
+          }
+          bulkActions={[
+            {
+              id: "approve",
+              label: t("console.projects.advancing.assignments.bulk.approve", undefined, "Approve"),
+              perform: bulkApprove,
+            },
+            {
+              id: "issue",
+              label: t("console.projects.advancing.assignments.bulk.issue", undefined, "Issue"),
+              perform: bulkIssue,
+            },
+            {
+              id: "void",
+              label: t("console.projects.advancing.assignments.bulk.void", undefined, "Void"),
+              variant: "danger",
+              perform: bulkVoid,
+            },
+          ]}
+          columns={[
+            {
+              key: "party",
+              header: t("console.projects.advancing.assignments.columns.party", undefined, "Party"),
+              render: (r) =>
+                r.party_kind === "external_holder" ? <Badge variant="warning">{r.party}</Badge> : r.party,
+              accessor: (r) => r.party,
+              filterable: true,
+            },
+            {
+              key: "title",
+              header: t("console.projects.advancing.assignments.columns.title", undefined, "Catalog Item"),
+              render: (r) => r.title ?? t("console.projects.advancing.assignments.untitled", undefined, "Untitled"),
+              accessor: (r) => r.title ?? null,
+            },
+            {
+              key: "kind",
+              header: t("console.projects.advancing.assignments.columns.kind", undefined, "Kind"),
+              render: (r) => r.kindLabel,
+              accessor: (r) => r.kindLabel,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "state",
+              header: t("console.projects.advancing.assignments.columns.state", undefined, "State"),
+              render: (r) => <StatusBadge status={r.fulfillment_state} />,
+              accessor: (r) => r.fulfillment_state,
+              filterable: true,
+              groupable: true,
+            },
+            {
+              key: "deadline",
+              header: t("console.projects.advancing.assignments.columns.due", undefined, "Due"),
+              render: (r) => (r.deadline ? fmt.date(r.deadline) : "—"),
+              accessor: (r) => r.deadline ?? null,
+              mono: true,
+            },
+            {
+              key: "updated",
+              header: t("console.projects.advancing.assignments.columns.updated", undefined, "Updated"),
+              render: (r) => fmt.date(r.updated_at),
+              accessor: (r) => r.updated_at,
+              mono: true,
+            },
+          ]}
+        />
       </div>
     </>
   );

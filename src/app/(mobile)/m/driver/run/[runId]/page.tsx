@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { RunActions } from "./RunActions";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -31,14 +32,6 @@ type ManifestEntry = {
   pickup?: string;
   dropoff?: string;
   notes?: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "muted",
-  in_transit: "info",
-  arrived: "success",
-  delayed: "warning",
-  cancelled: "error",
 };
 
 function parseManifest(raw: unknown): ManifestEntry[] {
@@ -79,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ runId: string
   if (!run) notFound();
 
   const manifest = parseManifest(run.manifest);
-  const tone = STATUS_TONE[run.status] ?? "muted";
+  const tone = toneFor(run.status);
 
   return (
     <div className="px-4 pt-6 pb-24">

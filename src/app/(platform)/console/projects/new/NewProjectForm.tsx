@@ -120,7 +120,7 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
         <Button type="submit" disabled={pending}>
           {pending
             ? t("console.projects.new.creating", undefined, "Creating…")
-            : t("console.projects.new.createProject", undefined, "Create project")}
+            : t("console.projects.new.createProject", undefined, "Create Project")}
         </Button>
       </div>
     </form>

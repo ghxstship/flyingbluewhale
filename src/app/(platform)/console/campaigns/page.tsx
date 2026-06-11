@@ -9,17 +9,9 @@ import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Campaign } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<Campaign["campaign_state"], "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  scheduled: "info",
-  live: "success",
-  paused: "warning",
-  complete: "success",
-  cancelled: "error",
-};
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -124,7 +116,7 @@ export default async function Page() {
             {
               key: "campaign_state",
               header: t("console.campaigns.columns.campaign_state", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.campaign_state]}>{toTitle(r.campaign_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.campaign_state)}>{toTitle(r.campaign_state)}</Badge>,
               accessor: (r) => r.campaign_state ?? null,
               filterable: true,
               groupable: true,

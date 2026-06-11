@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -19,14 +20,6 @@ type Booking = {
 };
 
 const TRAIN_PATTERN = /(training|practice|warm[- ]?up|drill)/i;
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "info",
-  in_progress: "warning",
-  live: "success",
-  complete: "muted",
-  cancelled: "error",
-};
 
 function fmt(iso: string): string {
   return new Date(iso).toLocaleString(undefined, {
@@ -136,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                       {b.location?.name ? ` · ${b.location.name}` : ""}
                     </div>
                   </div>
-                  <Badge variant={STATUS_TONE[b.status] ?? "muted"}>{toTitle(b.status)}</Badge>
+                  <Badge variant={toneFor(b.status)}>{toTitle(b.status)}</Badge>
                 </li>
               ))}
             </ul>

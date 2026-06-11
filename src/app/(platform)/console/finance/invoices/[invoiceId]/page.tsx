@@ -50,8 +50,9 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
               confirm={t(
                 "console.finance.invoices.deleteConfirm",
                 { number: invoice.number },
-                `Delete invoice "${invoice.number}"? This cannot be undone.`,
+                `Delete invoice "${invoice.number}"?`,
               )}
+              undo={{ table: "invoices", id: invoiceId, redirectTo: "/console/finance/invoices" }}
             />
           </div>
         }

@@ -14773,8 +14773,8 @@
       "dismiss": "Descartar banner"
     },
     "connectivity": {
-      "offline": "Estás sin conexión — las acciones se pondrán en cola y se sincronizarán al reconectarte.",
-      "backOnline": "De vuelta en línea — sincronizando acciones en cola…"
+      "offline": "Estás sin conexión. Los escaneos y fichajes se pondrán en cola — todo lo demás requiere conexión.",
+      "backOnline": "De vuelta en línea — sincronizando escaneos y fichajes en cola…"
     },
     "density": {
       "compact": "Compacta",

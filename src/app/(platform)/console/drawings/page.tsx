@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -24,14 +25,6 @@ type Row = {
   project: { name: string | null } | null;
   current_version: { id: string; version_label: string; set_state: SheetSetState; published_at: string | null } | null;
   member_count: number;
-};
-
-const STATE_TONE: Record<SheetSetState, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  in_review: "warning",
-  published: "success",
-  superseded: "info",
-  archived: "muted",
 };
 
 export default async function Page() {
@@ -177,9 +170,7 @@ export default async function Page() {
               header: t("console.drawings.col.state", undefined, "State"),
               render: (r) =>
                 r.current_version ? (
-                  <Badge variant={STATE_TONE[r.current_version.set_state]}>
-                    {toTitle(r.current_version.set_state)}
-                  </Badge>
+                  <Badge variant={toneFor(r.current_version.set_state)}>{toTitle(r.current_version.set_state)}</Badge>
                 ) : (
                   <Badge variant="muted">{t("console.drawings.draft", undefined, "Draft")}</Badge>
                 ),

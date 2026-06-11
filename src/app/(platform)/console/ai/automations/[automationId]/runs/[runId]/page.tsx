@@ -9,6 +9,7 @@ import { toTitle } from "@/lib/format";
 import { RunTimeline, type RunTimelineStep } from "@/components/automations/RunTimeline";
 import { RunsAutoRefresh } from "@/components/automations/RunsAutoRefresh";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 /**
  * Run detail — single run view with per-step timeline.
@@ -46,14 +47,6 @@ type StepRow = {
   started_at: string | null;
   finished_at: string | null;
   latency_ms: number | null;
-};
-
-const STATUS_TONE: Record<RunRow["status"], "muted" | "info" | "success" | "warning" | "error"> = {
-  pending: "muted",
-  running: "info",
-  success: "success",
-  failed: "error",
-  cancelled: "warning",
 };
 
 function fmt(iso: string | null): string {
@@ -172,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
           },
           { label: fmt(run.started_at) },
         ]}
-        action={<Badge variant={STATUS_TONE[run.status] ?? "muted"}>{toTitle(run.status)}</Badge>}
+        action={<Badge variant={toneFor(run.status)}>{toTitle(run.status)}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">

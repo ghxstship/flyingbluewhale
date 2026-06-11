@@ -1,11 +1,10 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
-import { Badge, type BadgeVariant } from "@/components/ui/Badge";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
-import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -19,14 +18,6 @@ type Row = {
   issued_at: string | null;
   due_at: string | null;
   paid_at: string | null;
-};
-
-const STATUS_VARIANT: Record<string, BadgeVariant> = {
-  paid: "success",
-  overdue: "error",
-  voided: "muted",
-  draft: "info",
-  sent: "info",
 };
 
 export default async function Page({ params }: { params: Promise<{ clientId: string }> }) {
@@ -90,9 +81,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
             {
               key: "status",
               header: t("console.clients.invoices.columns.status", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_VARIANT[r.invoice_state] ?? "default"}>{toTitle(r.invoice_state)}</Badge>
-              ),
+              render: (r) => <StatusBadge status={r.invoice_state} />,
               accessor: (r) => r.invoice_state,
               filterable: true,
               groupable: true,

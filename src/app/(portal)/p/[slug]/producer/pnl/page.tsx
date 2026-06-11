@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { projectIdFromSlug } from "@/lib/db/advancing";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -126,7 +127,7 @@ export default async function ProducerPnL({ params }: { params: Promise<{ slug: 
             `Last updated ${fmt.date(new Date().toISOString())}.`,
           )}{" "}
           {t("p.producer.pnl.fullBreakdownOn", undefined, "Full breakdown on")}{" "}
-          <a className="underline" href="/console/finance/reports">
+          <a className="underline" href={urlFor("platform", "/finance/reports")}>
             /console/finance/reports
           </a>
           .

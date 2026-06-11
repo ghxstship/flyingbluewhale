@@ -7,6 +7,7 @@ import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { EventRow } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -17,11 +18,7 @@ export default async function EventsPage() {
     return (
       <>
         <ModuleHeader title={t("console.events.title", undefined, "Events")} />
-        <div className="page-content">
-          <div className="surface p-6 text-sm">
-            {t("console.events.configureSupabase", undefined, "Configure Supabase.")}
-          </div>
-        </div>
+        <ConfigureSupabase />
       </>
     );
   const session = await requireSession();

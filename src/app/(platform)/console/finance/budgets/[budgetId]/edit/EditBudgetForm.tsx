@@ -1,6 +1,7 @@
 "use client";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import type { State } from "./actions";
 import {
@@ -58,9 +59,9 @@ export function EditBudgetForm({
 }) {
   const t = useT();
   const get = (k: string) => (row[k] != null ? String(row[k]) : "");
-  const getMoney = (k: string) => {
+  const getCents = (k: string) => {
     const v = row[k];
-    return typeof v === "number" ? (v / 100).toFixed(2) : "";
+    return typeof v === "number" ? v : null;
   };
   return (
     <FormShell
@@ -188,23 +189,17 @@ export function EditBudgetForm({
             step="0.01"
             defaultValue={get("quantity")}
           />
-          <Input
+          <MoneyInput
             label={t("console.finance.budgets.edit.rate", undefined, "Rate — USD")}
-            name="rate"
-            type="number"
-            inputMode="decimal"
-            step="0.01"
-            defaultValue={getMoney("rate_cents")}
+            name="rate_cents"
+            defaultCents={getCents("rate_cents")}
             hint={t("console.finance.budgets.edit.rateHint", undefined, "Estimate = Quantity × Rate (computed by DB)")}
           />
-          <Input
+          <MoneyInput
             label={t("console.finance.budgets.edit.amount", undefined, "Budget — USD")}
-            name="amount"
-            type="number"
-            inputMode="decimal"
-            step="0.01"
+            name="amount_cents"
             required
-            defaultValue={getMoney("amount_cents")}
+            defaultCents={getCents("amount_cents")}
           />
           <Input
             label={t("console.finance.budgets.edit.vendor", undefined, "Vendor")}

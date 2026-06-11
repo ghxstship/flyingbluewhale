@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { money } from "@/components/detail/DetailShell";
 import { SELECT_COLUMNS, trackerTotals, type TrackerRow } from "@/components/xpms/TrackerView";
 import { getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -101,7 +102,7 @@ export default async function MobileTrackerPage() {
         sections.map(({ project, projectId, totals, atomCount }) => (
           <Link
             key={projectId}
-            href={`/console/projects/${projectId}/tracker`}
+            href={urlFor("platform", `/projects/${projectId}/tracker`)}
             className="surface hover-lift block p-3"
           >
             <div className="flex items-center justify-between gap-2">

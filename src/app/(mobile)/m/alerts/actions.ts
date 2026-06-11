@@ -7,10 +7,12 @@ import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({ alertId: z.string().uuid() });
 
-export async function acknowledgeAlert(fd: FormData): Promise<void> {
+export type State = { error?: string } | null;
+
+export async function acknowledgeAlert(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
   // Cross-tenant FK guard on alert_id. Without this, a member of org A
@@ -22,7 +24,7 @@ export async function acknowledgeAlert(fd: FormData): Promise<void> {
     .eq("id", parsed.data.alertId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!alert) return;
+  if (!alert) return { error: "Alert not found" };
 
   // Upsert receipt for (alert_id, user_id) and stamp acknowledged_at.
   const { error } = await (
@@ -41,6 +43,7 @@ export async function acknowledgeAlert(fd: FormData): Promise<void> {
     },
     { onConflict: "alert_id,user_id" },
   );
-  if (error) throw new Error(`Could not acknowledge alert: ${error.message}`);
+  if (error) return { error: `Could not acknowledge alert: ${error.message}` };
   revalidatePath("/m/alerts");
+  return null;
 }

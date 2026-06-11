@@ -44,6 +44,8 @@ const ICONS: Record<string, typeof Home> = {
   "/m/admin": Home,
   "/m/driver": Map,
   "/m/medic": ClipboardList,
+  "/m/medic/new": ClipboardList,
+  "/m/ad": Map,
   "/m/guard": ShieldCheck,
   "/m/gate": QrCode,
   "/m/incidents": Siren,
@@ -58,6 +60,12 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
   const pathname = usePathname();
   const t = useT();
 
+  // Root tabs match exactly only — the shell root (/m) and role homes
+  // (/m/medic, /m/crew, …) are prefixes of every sibling tab's href, so
+  // a startsWith match would light Home on every route.
+  const isRootHref = (href: string) =>
+    href === "/m" || items.some((other) => other.href !== href && other.href.startsWith(`${href}/`));
+
   return (
     <nav
       role="navigation"
@@ -67,7 +75,9 @@ export function MobileTabBarClient({ items, badges }: { items: NavItem[]; badges
     >
       <ul className="grid grid-cols-5">
         {items.map((i) => {
-          const active = pathname === i.href || pathname?.startsWith(`${i.href}/`);
+          const active = isRootHref(i.href)
+            ? pathname === i.href
+            : pathname === i.href || pathname?.startsWith(`${i.href}/`);
           const Icon = ICONS[i.href] ?? Home;
           const badgeCount = badges?.[i.href] ?? 0;
           return (

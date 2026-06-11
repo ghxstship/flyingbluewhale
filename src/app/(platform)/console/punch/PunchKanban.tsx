@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { transitionPunchItem } from "./[id]/actions";
+import { PRIORITY_TONE } from "@/lib/tones";
 
 export type PunchKanbanRow = {
   id: string;
@@ -16,13 +17,6 @@ export type PunchKanbanRow = {
   due_at: string | null;
   closed_at: string | null;
   show_ready_gate: boolean;
-};
-
-const PRIORITY_TONE: Record<PunchKanbanRow["priority"], "muted" | "info" | "warning" | "error"> = {
-  low: "muted",
-  normal: "info",
-  high: "warning",
-  urgent: "error",
 };
 
 export function PunchKanban({ rows }: { rows: PunchKanbanRow[] }): React.ReactElement {
@@ -68,7 +62,7 @@ export function PunchKanban({ rows }: { rows: PunchKanbanRow[] }): React.ReactEl
           </div>
           <div className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.title}</div>
           <div className="flex items-center justify-between gap-2">
-            <Badge variant={PRIORITY_TONE[r.priority]} className="text-[10px] uppercase">
+            <Badge variant={PRIORITY_TONE[r.priority] ?? "default"} className="text-[10px] uppercase">
               {r.priority}
             </Badge>
             <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} size="sm" />

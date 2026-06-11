@@ -1,12 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 export default function AuthError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const t = useT();
   useEffect(() => {
+    // SC-7 — client render errors only reach Sentry through this explicit
+    // capture; the server-side onRequestError hook never sees them.
+    Sentry.captureException(error);
     console.error("[auth error]", error);
   }, [error]);
   return (

@@ -5,18 +5,20 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { dollarsToCents, generateNumber } from "@/lib/format";
-import { moneyDollarsString } from "@/lib/zod/money";
+import { generateNumber } from "@/lib/format";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { moneyCentsString } from "@/app/(platform)/console/finance/money";
 
 const Schema = z
   .object({
     title: z.string().min(1).max(200),
     client_id: z.string().uuid().optional().or(z.literal("")),
     project_id: z.string().uuid().optional().or(z.literal("")),
-    // Sea Trial R3 FINDING-019: invoices must be a positive dollar amount.
-    amount: moneyDollarsString({ allowZero: false }),
+    // Sea Trial R3 FINDING-019: invoices must be a positive amount.
+    // Integer cents from MoneyInput's hidden field — do NOT run this
+    // through dollarsToCents (100× trap).
+    amount_cents: moneyCentsString({ allowZero: false }),
     currency: z.string().min(3).max(3).default("USD"),
     issued_at: z.string().date().optional().or(z.literal("")),
     due_at: z.string().date().optional().or(z.literal("")),
@@ -78,7 +80,7 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
       title: parsed.data.title,
       client_id: clientId,
       project_id: projectId,
-      amount_cents: dollarsToCents(parsed.data.amount),
+      amount_cents: Number(parsed.data.amount_cents),
       currency: parsed.data.currency.toUpperCase(),
       issued_at: parsed.data.issued_at || null,
       due_at: parsed.data.due_at || null,

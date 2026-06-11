@@ -7,13 +7,15 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { moneyCentsString } from "@/app/(platform)/console/finance/money";
 
 const Schema = z.object({
   project_id: z.string().uuid(),
   vendor_id: z.string().uuid().optional().or(z.literal("")),
   waiver_type: z.enum(["conditional", "unconditional"]),
   waiver_scope: z.enum(["partial", "final"]),
-  amount: z.string().optional(),
+  // Integer cents from MoneyInput's hidden field.
+  amount_cents: moneyCentsString({ allowEmpty: true }),
   through_date: z.string().optional(),
   state_jurisdiction: z.string().max(4).optional(),
   notes: z.string().max(4000).optional(),
@@ -52,8 +54,10 @@ export async function createLienWaiver(_: State, fd: FormData): Promise<State> {
     if (!vendor) return { error: "Vendor not found in your organization" };
   }
 
-  const amount = parsed.data.amount ? Number(parsed.data.amount) : 0;
-  if (Number.isNaN(amount) || amount < 0) return { error: "Amount must be a positive number" };
+  // lien_waivers.amount is a dollars-denominated numeric column (the
+  // list + detail pages multiply by 100 for display) — convert the
+  // validated cents back to dollars at the boundary.
+  const amount = parsed.data.amount_cents ? Number(parsed.data.amount_cents) / 100 : 0;
 
   const { data: row, error } = await supabase
     .from("lien_waivers")

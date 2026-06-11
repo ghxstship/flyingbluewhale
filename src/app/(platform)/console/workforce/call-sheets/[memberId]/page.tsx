@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -153,7 +154,7 @@ export default async function Page({
 
           <footer className="border-t border-[var(--p-border)] pt-3 text-[10px] text-[var(--p-text-2)]">
             Generated {fmt.dateTime(new Date())} · Check{" "}
-            <Link href="/m/clock" className="text-[var(--p-accent)] underline">
+            <Link href={urlFor("mobile", "/clock")} className="text-[var(--p-accent)] underline">
               /m/clock
             </Link>{" "}
             on arrival to clock in.

@@ -8,11 +8,13 @@ import { createClient } from "@/lib/supabase/server";
 
 const Schema = z.object({ surveyId: z.string().uuid() });
 
-export async function submitSurvey(fd: FormData): Promise<void> {
+export type State = { error?: string } | null;
+
+export async function submitSurvey(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const entries = Object.fromEntries(fd.entries());
   const parsed = Schema.safeParse({ surveyId: entries.surveyId });
-  if (!parsed.success) throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   const supabase = await createClient();
 
   const { data: survey } = await supabase
@@ -21,7 +23,9 @@ export async function submitSurvey(fd: FormData): Promise<void> {
     .eq("id", parsed.data.surveyId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!survey || (survey as { publish_state: string }).publish_state !== "published") return;
+  if (!survey || (survey as { publish_state: string }).publish_state !== "published") {
+    return { error: "This survey is no longer accepting responses" };
+  }
 
   // Collate q_<id> → answer (handle multi-select by reading getAll).
   const answers: Record<string, string | string[]> = {};
@@ -38,7 +42,7 @@ export async function submitSurvey(fd: FormData): Promise<void> {
     respondent_id: (survey as { anonymous: boolean }).anonymous ? null : session.userId,
     answers,
   });
-  if (error) throw new Error(`Could not submit survey: ${error.message}`);
+  if (error) return { error: `Could not submit survey: ${error.message}` };
 
   revalidatePath("/m/surveys");
   redirect("/m/surveys");

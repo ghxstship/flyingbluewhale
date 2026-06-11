@@ -8,22 +8,9 @@ import { hasSupabase } from "@/lib/env";
 import type { Threat } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { SEVERITY_TONE, toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const SEVERITY_TONE: Record<Threat["severity"], "muted" | "warning" | "error"> = {
-  low: "muted",
-  medium: "warning",
-  high: "error",
-  critical: "error",
-};
-
-const STATUS_TONE: Record<Threat["threat_state"], "muted" | "info" | "success" | "warning"> = {
-  draft: "muted",
-  active: "info",
-  closed: "success",
-  superseded: "warning",
-};
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -94,7 +81,7 @@ export default async function Page() {
             {
               key: "severity",
               header: t("console.safety.threats.col.severity", undefined, "Severity"),
-              render: (r) => <Badge variant={SEVERITY_TONE[r.severity]}>{toTitle(r.severity)}</Badge>,
+              render: (r) => <Badge variant={SEVERITY_TONE[r.severity] ?? "default"}>{toTitle(r.severity)}</Badge>,
               accessor: (r) => r.severity ?? null,
               filterable: true,
               groupable: true,
@@ -120,7 +107,7 @@ export default async function Page() {
             {
               key: "threat_state",
               header: t("console.safety.threats.col.threat_state", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.threat_state]}>{toTitle(r.threat_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.threat_state)}>{toTitle(r.threat_state)}</Badge>,
               accessor: (r) => r.threat_state ?? null,
               filterable: true,
               groupable: true,

@@ -3,7 +3,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { acknowledgeAlert } from "./actions";
+import { AcknowledgeButton } from "./AcknowledgeButton";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 
@@ -113,12 +113,7 @@ export default async function AlertsPage() {
                       {t("m.alerts.acknowledgedAt", { time: fmt.time(ack) }, `Acknowledged ${fmt.time(ack)}`)}
                     </span>
                   ) : (
-                    <form action={acknowledgeAlert}>
-                      <input type="hidden" name="alertId" value={a.id} />
-                      <button type="submit" className="ps-btn ps-btn--sm">
-                        {t("m.alerts.acknowledge", undefined, "Acknowledge")}
-                      </button>
-                    </form>
+                    <AcknowledgeButton alertId={a.id} />
                   )}
                 </div>
               </li>

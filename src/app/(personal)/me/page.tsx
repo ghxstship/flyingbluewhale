@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -104,7 +105,7 @@ export default async function MePage() {
 
       {isManagerPlus && (
         <div className="mt-8">
-          <Link href="/console" className="card flex items-center justify-between p-6">
+          <Link href={urlFor("platform")} className="card flex items-center justify-between p-6">
             <div>
               <div className="text-label text-[var(--brand-color)]">
                 {t("me.dashboard.openConsole", undefined, "Open console →")}

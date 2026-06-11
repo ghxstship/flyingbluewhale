@@ -33,7 +33,9 @@ export default function GhxstshipLayout({ children }: { children: React.ReactNod
       }}
     >
       <GhxstshipHeader />
-      <main>{children}</main>
+      <main id="main" tabIndex={-1}>
+        {children}
+      </main>
       <GhxstshipFooter />
     </div>
   );

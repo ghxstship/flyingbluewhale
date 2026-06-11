@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -18,15 +19,6 @@ type Row = {
   tier_code: string | null;
   fulfillment_state: string;
   fulfilled_at: string | null;
-};
-
-const STATE_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  issued: "info",
-  transferred: "info",
-  redeemed: "success",
-  voided: "error",
-  expired: "warning",
-  briefed: "muted",
 };
 
 function fmt(iso: string | null): string {
@@ -187,9 +179,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {
               key: "state",
               header: t("p.hospitality.guests.column.state", undefined, "State"),
-              render: (r) => (
-                <Badge variant={STATE_TONE[r.fulfillment_state] ?? "muted"}>{toTitle(r.fulfillment_state)}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.fulfillment_state)}>{toTitle(r.fulfillment_state)}</Badge>,
               accessor: (r) => r.fulfillment_state,
               filterable: true,
               groupable: true,

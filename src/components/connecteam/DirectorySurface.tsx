@@ -1,4 +1,5 @@
 import { EmptyState } from "@/components/ui/EmptyState";
+import { MobileListRow } from "@/components/mobile/MobileListRow";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -69,7 +70,7 @@ export async function DirectorySurface({
         {t("m.directory.peopleCount", { count: members.length }, `${members.length} people in your org`)}
       </p>
 
-      <ul className="mt-5 divide-y divide-[var(--p-border)]">
+      <ul className="mt-5 space-y-2">
         {members.length === 0 ? (
           <li className="py-4">
             <EmptyState
@@ -80,12 +81,12 @@ export async function DirectorySurface({
           </li>
         ) : (
           members.map(({ role, user }) => (
-            <li key={user.id} className="flex items-start justify-between gap-3 py-3">
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-sm font-semibold">{user.name ?? user.email}</div>
-                <div className="truncate font-mono text-[11px] text-[var(--p-text-2)]">{user.email}</div>
-              </div>
-              <span className="font-mono text-[10px] text-[var(--p-text-2)] uppercase">{role}</span>
+            <li key={user.id}>
+              <MobileListRow
+                title={user.name ?? user.email}
+                meta={<span className="font-mono text-[11px]">{user.email}</span>}
+                trailing={<span className="font-mono text-[10px] text-[var(--p-text-2)] uppercase">{role}</span>}
+              />
             </li>
           ))
         )}

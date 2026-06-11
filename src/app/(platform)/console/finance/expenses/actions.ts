@@ -5,17 +5,17 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { dollarsToCents } from "@/lib/format";
-import { moneyDollarsString } from "@/lib/zod/money";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { moneyCentsString } from "@/app/(platform)/console/finance/money";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
   // Sea Trial R3 FINDING-019: validator rejects non-numeric, negative,
-  // and zero-dollar expenses at the schema level so dollarsToCents
-  // never silently coerces to 0.
-  amount: moneyDollarsString({ allowZero: false }),
+  // and zero amounts at the schema level. Integer cents from
+  // MoneyInput's hidden field — do NOT run this through dollarsToCents
+  // (100× trap).
+  amount_cents: moneyCentsString({ allowZero: false }),
   category: z.string().max(80).optional().or(z.literal("")),
   spent_at: z.string().date(),
   project_id: z.string().uuid().optional().or(z.literal("")),
@@ -74,7 +74,7 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
     org_id: session.orgId,
     submitter_id: session.userId,
     description: parsed.data.description,
-    amount_cents: dollarsToCents(parsed.data.amount),
+    amount_cents: Number(parsed.data.amount_cents),
     category: parsed.data.category || null,
     spent_at: parsed.data.spent_at,
     project_id: parsed.data.project_id || null,

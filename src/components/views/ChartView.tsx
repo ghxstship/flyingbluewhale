@@ -122,6 +122,7 @@ export function ChartView<T extends Record<string, unknown>>({
         className={className}
       >
         <HeatmapView config={config} rows={data} onCellClick={onClickWide} />
+        {!isEmpty && <SrOnlyDataSummary config={config} data={data} />}
       </ChartShell>
     );
   }
@@ -139,11 +140,58 @@ export function ChartView<T extends Record<string, unknown>>({
       {isEmpty ? (
         <EmptyState size="compact" title="No data" description="This chart populates as records are added." />
       ) : (
-        <ResponsiveContainer width="100%" height={height}>
-          {renderChart({ config, data, onClick: onClickWide })}
-        </ResponsiveContainer>
+        <>
+          <ResponsiveContainer width="100%" height={height}>
+            {renderChart({ config, data, onClick: onClickWide })}
+          </ResponsiveContainer>
+          <SrOnlyDataSummary config={config} data={data} />
+        </>
       )}
     </ChartShell>
+  );
+}
+
+/**
+ * AX-6 — text alternative for the rendered chart. A visually-hidden table
+ * mirroring the pivoted rows so screen-reader users get the same data the
+ * SVG encodes. Complements recharts' `accessibilityLayer` (keyboard focus +
+ * aria on the SVG itself), which can't expose the full series matrix.
+ */
+function SrOnlyDataSummary({
+  config,
+  data,
+}: {
+  config: ChartViewConfig;
+  data: Array<Record<string, unknown>>;
+}): React.ReactElement {
+  const xLabel = config.x.label ?? config.x.field;
+  const yField = config.type === "heatmap" ? (config.yField ?? null) : null;
+  return (
+    <table className="sr-only">
+      <caption>{config.title ?? "Chart data"}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{xLabel}</th>
+          {yField && <th scope="col">{yField}</th>}
+          {config.series.map((s) => (
+            <th key={s.field} scope="col">
+              {s.label ?? s.field}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row, i) => (
+          <tr key={i}>
+            <th scope="row">{formatValue(row[config.x.field], config.x.format ?? "auto", config.x.currency)}</th>
+            {yField && <td>{String(row[yField] ?? "")}</td>}
+            {config.series.map((s) => (
+              <td key={s.field}>{formatValue(row[s.field], config.y?.format ?? "auto", config.y?.currency)}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -192,6 +240,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
       const horizontal = config.type === "bar";
       return (
         <BarChart
+          accessibilityLayer
           data={data}
           layout={horizontal ? "vertical" : "horizontal"}
           onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}
@@ -229,7 +278,11 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
     }
     case "line": {
       return (
-        <LineChart data={data} onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}>
+        <LineChart
+          accessibilityLayer
+          data={data}
+          onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}
+        >
           {xAxisEl}
           {yAxisEl}
           {commonAxes}
@@ -249,7 +302,11 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
     }
     case "area": {
       return (
-        <AreaChart data={data} onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}>
+        <AreaChart
+          accessibilityLayer
+          data={data}
+          onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}
+        >
           <defs>
             {config.series.map((s, i) => {
               const color = toneFor(s, i);
@@ -291,7 +348,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
       const isDonut = config.type === "donut";
       const valueField = config.series[0]?.field ?? "value";
       return (
-        <PieChart>
+        <PieChart accessibilityLayer>
           <Pie
             data={data}
             dataKey={valueField}
@@ -318,7 +375,7 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
       const isBubble = config.type === "bubble";
       const zField = config.series[0]?.zField;
       return (
-        <ScatterChart onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}>
+        <ScatterChart accessibilityLayer onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}>
           {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />}
           <XAxis
             dataKey={config.x.field}
@@ -350,7 +407,11 @@ function renderChart({ config, data, onClick }: RenderArgs): React.ReactElement 
     }
     case "composed": {
       return (
-        <ComposedChart data={data} onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}>
+        <ComposedChart
+          accessibilityLayer
+          data={data}
+          onClick={onClick ? (e: unknown) => handleChartClick(e, onClick) : undefined}
+        >
           {xAxisEl}
           {yAxisEl}
           {commonAxes}

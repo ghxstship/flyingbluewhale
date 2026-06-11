@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -96,7 +97,7 @@ export default async function Page() {
         title={t("console.compliance.coc.title", undefined, "Chain of Custody")}
         subtitle={t("console.compliance.coc.subtitle", undefined, "Audit trail for evidence + samples.")}
         action={
-          <Button href="/m/coc" size="sm">
+          <Button href={urlFor("mobile", "/coc")} size="sm">
             {t("console.compliance.coc.mobileCapture", undefined, "Mobile capture")}
           </Button>
         }

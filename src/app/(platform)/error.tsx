@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import * as Sentry from "@sentry/nextjs";
 // Import ModuleHeader from its dedicated zero-i18n module, NOT from
 // @/components/Shell — Shell.tsx pulls `getRequestT` (server-only) into
 // any importer's module graph, which breaks when error.tsx is rendered
@@ -13,6 +14,9 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 export default function ConsoleError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   const t = useT();
   useEffect(() => {
+    // SC-7 — client render errors only reach Sentry through this explicit
+    // capture; the server-side onRequestError hook never sees them.
+    Sentry.captureException(error);
     console.error("[console error]", error);
   }, [error]);
   return (

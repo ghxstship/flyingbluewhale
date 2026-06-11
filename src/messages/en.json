@@ -3932,7 +3932,7 @@
       "passwordHelp": "At least 8 characters",
       "haveAccount": "Already have an account?",
       "signIn": "Sign in",
-      "submit": "Create account",
+      "submit": "Create Account",
       "submitting": "Creating account…",
       "passwordStrength": {
         "veryWeak": "Very weak",
@@ -4661,7 +4661,7 @@
       "todaysLog": "Today's log — {date}",
       "selectProject": "Select a project…",
       "weatherPlaceholder": "Weather — e.g. 78°F, Sunny",
-      "saveLog": "Save log",
+      "saveLog": "Save Log",
       "recent": "Recent"
     },
     "docs": {
@@ -5170,7 +5170,7 @@
         },
         "unassignedVenue": "Unassigned venue",
         "reasonPlaceholder": "Reason for swap…",
-        "requestButton": "Request swap"
+        "requestButton": "Request Swap"
       }
     },
     "surveys": {
@@ -10627,7 +10627,7 @@
       "relatedSections": "Related Sections",
       "roles": {
         "newRole": "+ New Role",
-        "newCustomRole": "New custom role",
+        "newCustomRole": "New Custom Role",
         "slugLabel": "Slug",
         "slugHint": "Lowercase, dashes ok. Used in API tokens.",
         "labelLabel": "Label",
@@ -12544,7 +12544,7 @@
         "colDimensions": "Dimensions",
         "colLastUpdated": "Last updated",
         "emptyPrefix": "No stage plots yet. Click",
-        "emptyAction": "New stage plot",
+        "emptyAction": "New Stage Plot",
         "emptySuffix": "above to open the canvas editor."
       },
       "sustainability": {
@@ -12614,7 +12614,7 @@
           "brutalist": "Brutalist"
         },
         "creating": "Creating…",
-        "createProject": "Create project",
+        "createProject": "Create Project",
         "title": "New Project",
         "subtitle": "Create a project for your organization"
       },
@@ -13632,7 +13632,7 @@
         "endpoints": {
           "health": "Liveness probe",
           "listProjects": "List Projects — Org-scoped",
-          "createProject": "Create project",
+          "createProject": "Create Project",
           "getProject": "Get a project",
           "updateProject": "Update project",
           "scan": "Scan an Assignment Code — Race-safe, Any Catalog Kind",
@@ -13875,7 +13875,7 @@
         "createdToast": "Template created",
         "saveFailedToast": "Save failed",
         "savedToast": "Template saved",
-        "newTemplate": "New template",
+        "newTemplate": "New Template",
         "emptyTitle": "No Templates Yet",
         "colSlug": "Slug",
         "colName": "Name",
@@ -13928,14 +13928,14 @@
         "forms": {
           "committee": {
             "trigger": "+ Committee",
-            "title": "New committee",
+            "title": "New Committee",
             "name": "Name",
             "cadence": "Cadence",
             "charter": "Charter"
           },
           "policy": {
             "trigger": "+ Policy",
-            "title": "New policy",
+            "title": "New Policy",
             "name": "Name",
             "category": "Category"
           }
@@ -16572,7 +16572,7 @@
           "applied": "Applied {name}"
         },
         "form": {
-          "newDeliverable": "New deliverable",
+          "newDeliverable": "New Deliverable",
           "title": {
             "label": "Title",
             "placeholder": "Stage plot v3"
@@ -18395,8 +18395,8 @@
       "dismiss": "Dismiss banner"
     },
     "connectivity": {
-      "offline": "You're offline — actions will queue and sync when you reconnect.",
-      "backOnline": "Back online — syncing queued actions…"
+      "offline": "You're offline. Scans and clock punches will queue — everything else needs a connection.",
+      "backOnline": "Back online — syncing queued scans and punches…"
     },
     "sortable": {
       "dragToReorder": "Drag to reorder"

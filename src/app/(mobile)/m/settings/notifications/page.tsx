@@ -1,3 +1,4 @@
+import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -56,7 +57,11 @@ export default async function NotifPrefsPage() {
         .
       </p>
 
-      <form action={savePreferences} className="mt-5 space-y-4">
+      <FormShell
+        action={savePreferences}
+        className="mt-5 space-y-4"
+        submitLabel={t("m.settings.notifications.savePreferences", undefined, "Save Preferences")}
+      >
         <div className="surface p-4">
           <h2 className="text-sm font-semibold">{t("m.settings.notifications.digest.heading", undefined, "Digest")}</h2>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
@@ -117,11 +122,7 @@ export default async function NotifPrefsPage() {
             </tbody>
           </table>
         </div>
-
-        <button type="submit" className="ps-btn w-full">
-          {t("m.settings.notifications.savePreferences", undefined, "Save Preferences")}
-        </button>
-      </form>
+      </FormShell>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -103,7 +104,10 @@ export default async function Page() {
               const unread = r.last_message_at && (!lastRead || new Date(r.last_message_at) > new Date(lastRead));
               return (
                 <li key={r.id}>
-                  <Link href={`/m/inbox/${r.id}`} className="surface flex items-start justify-between gap-3 p-4">
+                  <Link
+                    href={urlFor("mobile", `/inbox/${r.id}`)}
+                    className="surface flex items-start justify-between gap-3 p-4"
+                  >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <Badge variant="muted">{toTitle(r.room_kind)}</Badge>

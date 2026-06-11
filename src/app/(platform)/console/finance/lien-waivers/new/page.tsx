@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -95,10 +96,10 @@ export default async function Page() {
             </label>
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>{t("console.finance.lienWaivers.new.amountUsd", undefined, "Amount — USD")}</span>
-              <input type="number" step="0.01" name="amount" placeholder="0.00" className={`${INPUT} font-mono`} />
-            </label>
+            <MoneyInput
+              label={t("console.finance.lienWaivers.new.amountUsd", undefined, "Amount — USD")}
+              name="amount_cents"
+            />
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>{t("console.finance.lienWaivers.new.throughDate", undefined, "Through date")}</span>
               <input type="date" name="through_date" className={INPUT} />

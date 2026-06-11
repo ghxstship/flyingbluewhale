@@ -10,23 +10,9 @@ import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo, toTitle } from "@/lib/format";
 import { awardToInvite, inviteVendor, removeInvite, transitionBroadcast } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  open: "info",
-  closed: "muted",
-  awarded: "success",
-  cancelled: "error",
-};
-
-const INVITE_TONE: Record<string, "muted" | "info" | "success" | "error"> = {
-  invited: "muted",
-  viewed: "info",
-  accepted: "success",
-  declined: "error",
-};
 
 type Broadcast = {
   id: string;
@@ -107,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
         title={`${broadcast.code} — ${broadcast.title}`}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
-            <Badge variant={STATUS_TONE[broadcast.status] ?? "muted"}>{toTitle(broadcast.status)}</Badge>
+            <Badge variant={toneFor(broadcast.status)}>{toTitle(broadcast.status)}</Badge>
             {broadcast.category && <Badge variant="muted">{broadcast.category}</Badge>}
             {broadcast.project?.name && <Badge variant="muted">{broadcast.project.name}</Badge>}
             {broadcast.needed_by && (
@@ -256,7 +242,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                       )}
                     </td>
                     <td>
-                      <Badge variant={INVITE_TONE[i.status] ?? "muted"}>{toTitle(i.status)}</Badge>
+                      <Badge variant={toneFor(i.status)}>{toTitle(i.status)}</Badge>
                     </td>
                     <td className="font-mono text-xs text-[var(--p-text-2)]">
                       {i.responded_at ? timeAgo(i.responded_at) : "—"}

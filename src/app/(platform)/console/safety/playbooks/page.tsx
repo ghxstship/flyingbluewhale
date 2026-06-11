@@ -8,14 +8,9 @@ import { hasSupabase } from "@/lib/env";
 import type { Playbook } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
-
-const STATUS_TONE: Record<Playbook["playbook_state"], "muted" | "success" | "warning"> = {
-  draft: "muted",
-  published: "success",
-  archived: "warning",
-};
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -132,7 +127,7 @@ export default async function Page() {
             {
               key: "playbook_state",
               header: t("console.safety.playbooks.col.playbook_state", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.playbook_state]}>{toTitle(r.playbook_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.playbook_state)}>{toTitle(r.playbook_state)}</Badge>,
               accessor: (r) => r.playbook_state ?? null,
               filterable: true,
               groupable: true,

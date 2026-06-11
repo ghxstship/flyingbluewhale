@@ -76,8 +76,9 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
               confirm={t(
                 "console.procurement.vendors.detail.deleteConfirm",
                 { name: row.name },
-                `Delete vendor "${row.name}"? This cannot be undone.`,
+                `Delete vendor "${row.name}"? You can undo this right after deleting.`,
               )}
+              undo={{ table: "vendors", id: vendorId, redirectTo: "/console/procurement/vendors" }}
             />
           </div>
         ) : undefined

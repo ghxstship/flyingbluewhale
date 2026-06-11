@@ -24,7 +24,7 @@ export function CustomRoleForm() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("console.people.roles.newCustomRole", undefined, "New custom role")}</DialogTitle>
+          <DialogTitle>{t("console.people.roles.newCustomRole", undefined, "New Custom Role")}</DialogTitle>
         </DialogHeader>
         <form action={action} className="space-y-3">
           <Input

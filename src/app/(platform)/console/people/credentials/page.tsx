@@ -43,9 +43,14 @@ export default async function CredentialsPage() {
         title={t("console.people.credentials.title", undefined, "Credentials")}
         subtitle={`${t("console.people.credentials.subtitleCertsTracked", { count: rows.length }, `${rows.length} certs tracked`)}${expiringSoon ? ` · ${t("console.people.credentials.subtitleExpiring", { count: expiringSoon }, `${expiringSoon} expiring in 60d`)}` : ""}`}
         action={
-          <Button href="/console/people/credentials/new" size="sm">
-            {t("console.people.credentials.addCredential", undefined, "+ Add credential")}
-          </Button>
+          <>
+            <Button href="/console/people/credentials/asset-linker" size="sm" variant="secondary">
+              {t("console.people.credentials.scanCodeLinker", undefined, "Scan Code Linker")}
+            </Button>
+            <Button href="/console/people/credentials/new" size="sm">
+              {t("console.people.credentials.addCredential", undefined, "+ Add credential")}
+            </Button>
+          </>
         }
       />
       <div className="page-content">

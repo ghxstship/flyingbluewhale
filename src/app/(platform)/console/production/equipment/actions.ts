@@ -117,9 +117,8 @@ export async function setEquipmentStatus(formData: FormData): Promise<void> {
   revalidatePath(`/console/production/equipment/${id}`);
 }
 
-export async function deleteEquipment(formData: FormData) {
+export async function deleteEquipment(id: string): Promise<void> {
   const session = await requireSession();
-  const id = String(formData.get("id") ?? "");
   if (!id) return;
   const supabase = await createClient();
   // Soft-delete via deleted_at — equipment is referenced by rentals so a
@@ -131,5 +130,6 @@ export async function deleteEquipment(formData: FormData) {
     .eq("org_id", session.orgId);
   if (error) throw new Error(`Could not update equipment: ${error.message}`);
   revalidatePath("/console/production/equipment");
-  redirect("/console/production/equipment");
+  // No redirect — DeleteForm's undo flow navigates client-side after
+  // showing the "Deleted" toast with its Undo action (REC-14).
 }

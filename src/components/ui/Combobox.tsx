@@ -31,6 +31,8 @@ export function Combobox({
   searchPlaceholder = "Search…",
   emptyLabel = "No results",
   className = "",
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledby,
 }: {
   options?: ComboboxOption[];
   /** Async option loader. Takes the current search query and returns options.
@@ -44,6 +46,10 @@ export function Combobox({
   searchPlaceholder?: string;
   emptyLabel?: string;
   className?: string;
+  /** Accessible name for the combobox trigger (AX-10). Without one the
+   *  trigger's name falls back to its visible text content. */
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
@@ -51,17 +57,22 @@ export function Combobox({
   const [loading, setLoading] = React.useState(false);
   const [lastSelectedLabel, setLastSelectedLabel] = React.useState<string | undefined>(undefined);
   const listboxId = React.useId();
+  // PF-8 — request sequence token. The loader is debounced, but a slow
+  // earlier response could still resolve after a faster later one and
+  // clobber the option list; only the latest issued request may commit.
+  const loadSeqRef = React.useRef(0);
 
   // Debounced async load.
   React.useEffect(() => {
     if (!optionsLoader || !open) return;
     setLoading(true);
+    const seq = ++loadSeqRef.current;
     const handle = setTimeout(async () => {
       try {
         const next = await optionsLoader(query);
-        setAsyncOptions(next);
+        if (seq === loadSeqRef.current) setAsyncOptions(next);
       } finally {
-        setLoading(false);
+        if (seq === loadSeqRef.current) setLoading(false);
       }
     }, loaderDebounceMs);
     return () => clearTimeout(handle);
@@ -84,8 +95,10 @@ export function Combobox({
           type="button"
           role="combobox"
           aria-expanded={open}
+          aria-haspopup="listbox"
           aria-controls={listboxId}
-          aria-label={placeholder}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledby}
           className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
           <span className={selectedLabel ? "" : "text-[var(--p-text-2)]"}>{selectedLabel ?? placeholder}</span>
@@ -94,7 +107,6 @@ export function Combobox({
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
-          id={listboxId}
           align="start"
           sideOffset={4}
           className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
@@ -106,11 +118,13 @@ export function Combobox({
                 placeholder={searchPlaceholder}
                 value={query}
                 onValueChange={setQuery}
-                className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--p-text-2)]"
+                className="focus-ring w-full rounded bg-transparent text-sm placeholder:text-[var(--p-text-2)]"
               />
               {loading && <Spinner size="sm" className="shrink-0 text-[var(--p-text-2)]" />}
             </div>
-            <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
+            {/* AX-10 — aria-controls on the trigger points here (the actual
+                cmdk listbox), not the popover wrapper. */}
+            <CommandPrimitive.List id={listboxId} className="max-h-60 overflow-y-auto p-1">
               <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--p-text-2)]">
                 {loading ? "Loading…" : emptyLabel}
               </CommandPrimitive.Empty>
@@ -150,6 +164,8 @@ export function MultiCombobox({
   searchPlaceholder = "Search…",
   emptyLabel = "No results",
   className = "",
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledby,
 }: {
   options: ComboboxOption[];
   value: string[];
@@ -158,6 +174,10 @@ export function MultiCombobox({
   searchPlaceholder?: string;
   emptyLabel?: string;
   className?: string;
+  /** Accessible name for the combobox trigger (AX-10). Without one the
+   *  trigger's name falls back to its visible text content. */
+  "aria-label"?: string;
+  "aria-labelledby"?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const listboxId = React.useId();
@@ -171,8 +191,10 @@ export function MultiCombobox({
           type="button"
           role="combobox"
           aria-expanded={open}
+          aria-haspopup="listbox"
           aria-controls={listboxId}
-          aria-label={placeholder}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledby}
           className={`ps-input focus-ring inline-flex w-full items-center justify-between gap-2 ${className}`}
         >
           <span className={selectedLabels.length ? "" : "text-[var(--p-text-2)]"}>
@@ -183,7 +205,6 @@ export function MultiCombobox({
       </PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
-          id={listboxId}
           align="start"
           sideOffset={4}
           className="z-50 w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-md border border-[var(--p-border)] bg-[var(--p-surface)]"
@@ -192,10 +213,14 @@ export function MultiCombobox({
             <div className="border-b border-[var(--p-border)] px-3 py-2">
               <CommandPrimitive.Input
                 placeholder={searchPlaceholder}
-                className="w-full bg-transparent text-sm outline-none placeholder:text-[var(--p-text-2)]"
+                className="focus-ring w-full rounded bg-transparent text-sm placeholder:text-[var(--p-text-2)]"
               />
             </div>
-            <CommandPrimitive.List className="max-h-60 overflow-y-auto p-1">
+            {/* AX-10/AX-11 — aria-controls targets this listbox; selection is
+                conveyed programmatically via aria-multiselectable +
+                per-option aria-checked, not just the aria-hidden checkbox
+                visual. */}
+            <CommandPrimitive.List id={listboxId} aria-multiselectable="true" className="max-h-60 overflow-y-auto p-1">
               <CommandPrimitive.Empty className="py-6 text-center text-xs text-[var(--p-text-2)]">
                 {emptyLabel}
               </CommandPrimitive.Empty>
@@ -206,6 +231,7 @@ export function MultiCombobox({
                     key={o.value}
                     value={`${o.label} ${(o.keywords ?? []).join(" ")}`}
                     disabled={o.disabled}
+                    aria-checked={checked}
                     onSelect={() => {
                       const next = checked ? value.filter((v) => v !== o.value) : [...value, o.value];
                       onChange(next);

@@ -158,6 +158,21 @@ export async function listProjectAssignments(
   return (data ?? []) as unknown as AssignmentListRow[];
 }
 
+/** Exact population count behind `listProjectAssignments` — that helper
+ *  caps at 500 rows, so list surfaces pair it with this count for honest
+ *  truncation indicators (SC-2). */
+export async function countProjectAssignments(orgId: string, projectId: string): Promise<number> {
+  const supabase = await createClient();
+  const { count, error } = await supabase
+    .from("assignments")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", orgId)
+    .eq("project_id", projectId)
+    .is("deleted_at", null);
+  if (error) throw error;
+  return count ?? 0;
+}
+
 export async function listMyAssignments(
   orgId: string,
   userId: string,

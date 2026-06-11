@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -20,14 +21,6 @@ type RfqRow = {
   status: string;
   created_at: string;
   project: { name: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  draft: "muted",
-  submitted: "info",
-  approved: "success",
-  rejected: "error",
-  converted: "success",
 };
 
 export default async function Page() {
@@ -142,7 +135,7 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.procurement.rfqs.column.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>,
               accessor: (r) => r.status ?? null,
               filterable: true,
               groupable: true,

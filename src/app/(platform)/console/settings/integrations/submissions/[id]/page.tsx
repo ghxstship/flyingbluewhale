@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { transitionTier } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -33,14 +34,6 @@ type Row = {
   published_at: string | null;
   reviewed_at: string | null;
   created_at: string;
-};
-
-const TIER_TONE: Record<Tier, "muted" | "info" | "success" | "error"> = {
-  submitted: "muted",
-  reviewing: "info",
-  verified: "info",
-  certified: "success",
-  rejected: "error",
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -77,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={`${r.partner_org_name} · ${toTitle(r.category)}`}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={TIER_TONE[r.certification_tier]}>{toTitle(r.certification_tier)}</Badge>
+            <Badge variant={toneFor(r.certification_tier)}>{toTitle(r.certification_tier)}</Badge>
             {isLive ? (
               <Badge variant="success">
                 {t("console.settings.integrations.submissions.detail.live", undefined, "Live")}

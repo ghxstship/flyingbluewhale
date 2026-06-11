@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { createPunchList, deletePunchList, toggleListStatus } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -22,11 +23,6 @@ type Row = {
   project_name: string | null;
   item_count: number;
   open_count: number;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success"> = {
-  open: "info",
-  closed: "muted",
 };
 
 export default async function Page() {
@@ -209,7 +205,7 @@ export default async function Page() {
                   <input type="hidden" name="id" value={r.id} />
                   <input type="hidden" name="status" value={r.list_state === "open" ? "closed" : "open"} />
                   <Button type="submit" variant="ghost" size="sm">
-                    <Badge variant={STATUS_TONE[r.list_state] ?? "muted"}>{toTitle(r.list_state)}</Badge>
+                    <Badge variant={toneFor(r.list_state)}>{toTitle(r.list_state)}</Badge>
                   </Button>
                 </form>
               ),

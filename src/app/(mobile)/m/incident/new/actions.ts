@@ -7,15 +7,18 @@ import { requireSession } from "@/lib/auth";
 import { createClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { notifyOrgAdmins } from "@/lib/notify";
 import { log } from "@/lib/log";
+import { actionFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
   summary: z.string().min(5).max(500),
 });
 
-export async function quickFileIncident(fd: FormData): Promise<void> {
+export type State = { error?: string; values?: Record<string, string> } | null;
+
+export async function quickFileIncident(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) redirect("/m/incident/new?error=invalid");
+  if (!parsed.success) return actionFail(parsed.error.issues[0]?.message ?? "Describe what happened first.", fd);
 
   const supabase = await createClient();
   // Defaults: severity=minor, incident_state=open — supervisor fills the rest
@@ -26,13 +29,13 @@ export async function quickFileIncident(fd: FormData): Promise<void> {
     .insert({
       org_id: session.orgId,
       reporter_id: session.userId,
-      summary: parsed.data!.summary,
+      summary: parsed.data.summary,
       severity: "minor",
       incident_state: "open",
     })
     .select("id")
     .single();
-  if (error) throw new Error(`Could not file incident: ${error.message}`);
+  if (error) return actionFail(`Could not file incident: ${error.message}`, fd);
 
   // Fan out to org admins — mirrors the full-form path at
   // /api/v1/incidents. Best-effort: without the service-role key
@@ -43,7 +46,7 @@ export async function quickFileIncident(fd: FormData): Promise<void> {
       await notifyOrgAdmins({
         orgId: session.orgId,
         eventType: "incident.filed",
-        title: `Incident: ${parsed.data!.summary}`,
+        title: `Incident: ${parsed.data.summary}`,
         body: "Severity: minor",
         href: `/console/operations/incidents/${(data as { id: string }).id}`,
         data: { incidentId: (data as { id: string }).id, severity: "minor" },

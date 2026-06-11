@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { Tables } from "@/lib/supabase/types";
 
 export const dynamic = "force-dynamic";
@@ -18,11 +19,7 @@ export default async function ProposalsPage() {
     return (
       <>
         <ModuleHeader title={t("console.proposals.title", undefined, "Proposals")} />
-        <div className="page-content">
-          <div className="surface p-6 text-sm">
-            {t("console.proposals.configureSupabase", undefined, "Configure Supabase.")}
-          </div>
-        </div>
+        <ConfigureSupabase />
       </>
     );
   }

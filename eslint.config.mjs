@@ -21,16 +21,18 @@ const config = [
       "jsx-a11y/aria-props": "error",
       "jsx-a11y/aria-role": "error",
       "jsx-a11y/aria-unsupported-elements": "error",
-      "jsx-a11y/click-events-have-key-events": "off",
+      // AX-7 — interaction/label a11y guardrails re-enabled as warn (not
+      // error: existing violations would break CI; warn keeps the signal
+      // visible so new code doesn't add more while the backlog burns down).
+      "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/heading-has-content": "error",
-      // Turned off: existing forms use the sibling-label pattern
-      // (`<label>X</label><textarea>`) which is screen-reader-accessible
-      // via proximity but doesn't carry an explicit htmlFor/id binding.
-      // FieldLabel primitive migration is tracked separately.
-      "jsx-a11y/label-has-associated-control": "off",
-      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      // Warn (not error): legacy forms still use the sibling-label pattern
+      // (`<label>X</label><textarea>`). New code should use <FormField> /
+      // ui primitives, which carry an explicit htmlFor/id binding.
+      "jsx-a11y/label-has-associated-control": "warn",
+      "jsx-a11y/no-noninteractive-element-interactions": "warn",
       "jsx-a11y/no-redundant-roles": "error",
-      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/no-static-element-interactions": "warn",
       "jsx-a11y/role-has-required-aria-props": "error",
       "jsx-a11y/role-supports-aria-props": "error",
       "jsx-a11y/tabindex-no-positive": "error",

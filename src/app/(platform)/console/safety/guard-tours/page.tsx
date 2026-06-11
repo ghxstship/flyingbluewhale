@@ -8,18 +8,11 @@ import { hasSupabase } from "@/lib/env";
 import type { GuardTour } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
 type GuardTourRow = GuardTour;
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  scheduled: "muted",
-  in_progress: "info",
-  completed: "success",
-  cancelled: "muted",
-  overdue: "error",
-};
 
 export default async function Page() {
   const { t } = await getRequestT();
@@ -125,9 +118,7 @@ export default async function Page() {
             {
               key: "tour_state",
               header: t("console.safety.guardTours.col.tour_state", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_TONE[String(r.tour_state)] ?? "muted"}>{toTitle(String(r.tour_state))}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(String(r.tour_state))}>{toTitle(String(r.tour_state))}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.tour_state ?? null,

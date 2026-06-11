@@ -18378,8 +18378,8 @@
       "dismiss": "Banner schließen"
     },
     "connectivity": {
-      "offline": "Du bist offline — Aktionen werden in die Warteschlange gestellt und synchronisiert, sobald die Verbindung steht.",
-      "backOnline": "Wieder online — Warteschlange wird synchronisiert…"
+      "offline": "Du bist offline. Scans und Stempelungen werden in die Warteschlange gestellt — alles andere braucht eine Verbindung.",
+      "backOnline": "Wieder online — Scans und Stempelungen werden synchronisiert…"
     },
     "density": {
       "compact": "Kompakt",

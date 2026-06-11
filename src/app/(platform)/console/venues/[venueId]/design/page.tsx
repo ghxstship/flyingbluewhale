@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -22,13 +23,6 @@ type SpecRow = {
   file_path: string | null;
   bom_requisition_id: string | null;
   updated_at: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning"> = {
-  draft: "muted",
-  in_review: "info",
-  approved: "success",
-  archived: "warning",
 };
 
 function fmtDate(iso: string): string {
@@ -186,7 +180,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "status",
               header: t("console.venues.design.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>,
               filterable: true,
               groupable: true,
               accessor: (r) => r.status ?? null,

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { AtomPicker } from "@/components/xpms/AtomPicker";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createExpenseAction } from "../actions";
@@ -57,12 +58,9 @@ export function NewExpenseForm({
         maxLength={500}
       />
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input
+        <MoneyInput
           label={t("console.finance.expenses.new.amount", undefined, "Amount — USD")}
-          name="amount"
-          type="number"
-          inputMode="decimal"
-          step="0.01"
+          name="amount_cents"
           required
         />
         <Input

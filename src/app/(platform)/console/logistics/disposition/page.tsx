@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -19,14 +20,6 @@ type AssetRow = {
   asset_tag: string | null;
   equipment_state: string;
   daily_rate_cents: number | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "success" | "warning" | "error"> = {
-  available: "success",
-  reserved: "info",
-  in_use: "info",
-  maintenance: "warning",
-  retired: "muted",
 };
 
 const DISPOSITION_KINDS = ["maintenance", "retired"] as const;
@@ -148,9 +141,7 @@ export default async function Page() {
             {
               key: "equipment_state",
               header: t("console.logistics.disposition.col.equipment_state", undefined, "Status"),
-              render: (r) => (
-                <Badge variant={STATUS_TONE[r.equipment_state] ?? "muted"}>{toTitle(r.equipment_state)}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.equipment_state)}>{toTitle(r.equipment_state)}</Badge>,
               accessor: (r) => r.equipment_state ?? null,
               filterable: true,
               groupable: true,

@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { sendWaiver, recordSignature, markReturned, releaseWaiver, voidWaiver } from "./actions";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -35,15 +36,6 @@ type Waiver = {
   project: { id: string; name: string | null } | null;
   vendor: { id: string; name: string | null } | null;
   payment_application: { id: string; period_label: string | null } | null;
-};
-
-const STATE_TONE: Record<WaiverState, "muted" | "info" | "warning" | "success" | "error"> = {
-  drafted: "muted",
-  sent: "info",
-  signed: "info",
-  returned: "warning",
-  released: "success",
-  voided: "error",
 };
 
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
@@ -82,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-6">
         <div className="surface flex flex-wrap items-center gap-3 p-3 text-xs">
-          <Badge variant={STATE_TONE[w.waiver_state]}>{toTitle(w.waiver_state)}</Badge>
+          <Badge variant={toneFor(w.waiver_state)}>{toTitle(w.waiver_state)}</Badge>
           {w.state_jurisdiction && (
             <span className="font-mono text-[var(--p-text-2)]">
               {t("console.finance.lienWaivers.detail.jdLabel", undefined, "JD")} · {w.state_jurisdiction}

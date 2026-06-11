@@ -1,5 +1,6 @@
 import React from "react";
 import { Breadcrumbs as UnifiedBreadcrumbs } from "@/components/ui/Breadcrumbs";
+import { DerivedBreadcrumbs } from "@/components/DerivedBreadcrumbs";
 import { RecordTabsSlot } from "@/components/ui/RecordTabsContext";
 
 /**
@@ -34,7 +35,10 @@ export function ModuleHeader({
   /** Optional breadcrumb trail rendered above the title. Delegates to the
    *  unified `<Breadcrumbs>` primitive so every shell (console, portal,
    *  mobile, marketing) shares the same JSON-LD + truncation rules.
-   *  See docs/ia/02-navigation-redesign.md §3.7. */
+   *  See docs/ia/02-navigation-redesign.md §3.7.
+   *  When omitted, console pages get a pathname-derived default trail via
+   *  `<DerivedBreadcrumbs>`; pass an empty array to suppress crumbs
+   *  entirely. */
   breadcrumbs?: Array<{ label: string; href?: string }>;
   /** Optional Tabs slot rendered at the bottom of the header (e.g. <TabsList>). */
   tabs?: React.ReactNode;
@@ -43,7 +47,11 @@ export function ModuleHeader({
     <div className="module-header">
       <div className="module-header-inner">
         <div className="min-w-0 flex-1">
-          {breadcrumbs && breadcrumbs.length > 0 && <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />}
+          {breadcrumbs === undefined ? (
+            <DerivedBreadcrumbs className="mb-2" />
+          ) : breadcrumbs.length > 0 ? (
+            <UnifiedBreadcrumbs items={breadcrumbs} className="mb-2" />
+          ) : null}
           {/* Canonical SaaS module header — Space Mono uppercase crumb +
               Inter h1 sentence case per ui_kits/atlvs/dashboard.html .top.
               The pre-v3 cosmic Big Shoulders display + UPPERCASE h1 was

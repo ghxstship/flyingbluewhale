@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -29,19 +30,6 @@ type Row = {
   retainage_pct: number | null;
   end_date: string | null;
   project: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  in_review: "warning",
-  negotiation: "warning",
-  awaiting_signatures: "info",
-  active: "success",
-  expiring: "warning",
-  expired: "muted",
-  terminated: "error",
-  renewed: "success",
-  archived: "muted",
 };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ scope?: string }> }) {
@@ -235,9 +223,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             {
               key: "state",
               header: t("console.contracts.columns.state", undefined, "State"),
-              render: (r) => (
-                <Badge variant={STATE_TONE[r.state] ?? "muted"}>{toTitle(r.state.replace(/_/g, " "))}</Badge>
-              ),
+              render: (r) => <Badge variant={toneFor(r.state)}>{toTitle(r.state.replace(/_/g, " "))}</Badge>,
               accessor: (r) => r.state,
               filterable: true,
               groupable: true,

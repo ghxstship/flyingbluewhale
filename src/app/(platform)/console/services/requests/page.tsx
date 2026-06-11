@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { ServiceRequest } from "@/lib/supabase/types";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -17,15 +18,6 @@ const SEV_TONE: Record<ServiceRequest["severity"], SeverityTone> = {
   P2: "warning",
   P3: "info",
   P4: "muted",
-};
-
-type StatusTone = "info" | "warning" | "success" | "muted";
-const STATUS_TONE: Record<ServiceRequest["request_state"], StatusTone> = {
-  open: "warning",
-  acknowledged: "info",
-  in_progress: "info",
-  resolved: "success",
-  cancelled: "muted",
 };
 
 function slaChip(
@@ -160,9 +152,7 @@ export default async function Page() {
               header: t("console.services.requests.columns.request_state", undefined, "Status"),
               render: (r) => (
                 <span className="flex items-center">
-                  <Badge variant={STATUS_TONE[r.request_state as ServiceRequest["request_state"]]}>
-                    {toTitle(String(r.request_state))}
-                  </Badge>
+                  <Badge variant={toneFor(String(r.request_state))}>{toTitle(String(r.request_state))}</Badge>
                   {(r.request_state === "open" ||
                     r.request_state === "acknowledged" ||
                     r.request_state === "in_progress") &&

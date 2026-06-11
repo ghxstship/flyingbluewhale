@@ -155,8 +155,11 @@ pre,
 }
 
 ::selection {
-  background: var(--p-accent-text);
-  color: white;
+  /* AX-8 — hardcoded `color: white` on --p-accent-text failed contrast in
+     dark overlays (light accent-text + white ≈ 1.5:1). The accent-cta pair
+     is AA-graded per platform × mode in atlvs-product.css. */
+  background: var(--p-accent-cta, var(--p-accent-text));
+  color: var(--p-accent-cta-contrast, var(--p-accent-contrast, white));
 }
 
 /* ───── Keyframes ───── */
@@ -500,11 +503,15 @@ pre,
    * The native-element rule below covers `<a>` / `<button>` / `[role=button]`
    * / `<summary>` automatically so authors don't need to remember the class
    * for the most common cases. */
+  /* AX-3 — rings consume --p-focus (per platform × mode, defined in
+     theme/themes/atlvs-product.css) instead of raw --p-accent: the COMPVSS
+     and GVTEWAY light accents fail WCAG 1.4.11 (≈2.2:1 / ≈2.5:1) so those
+     overlays point --p-focus at their AA-grade --p-accent-cta values. */
   .focus-ring {
     outline: none;
   }
   .focus-ring:focus-visible {
-    outline: 2px solid var(--p-accent);
+    outline: 2px solid var(--p-focus, var(--p-accent));
     outline-offset: 2px;
     border-radius: inherit;
   }
@@ -512,7 +519,7 @@ pre,
     outline: none;
   }
   .focus-ring-strong:focus-visible {
-    outline: 2px solid var(--p-accent);
+    outline: 2px solid var(--p-focus, var(--p-accent));
     outline-offset: 2px;
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--p-bg) 100%, transparent);
     border-radius: inherit;
@@ -521,7 +528,7 @@ pre,
   button:focus-visible,
   [role="button"]:focus-visible,
   summary:focus-visible {
-    outline: 2px solid var(--p-accent);
+    outline: 2px solid var(--p-focus, var(--p-accent));
     outline-offset: 2px;
   }
 

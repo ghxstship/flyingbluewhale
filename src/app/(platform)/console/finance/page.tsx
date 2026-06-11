@@ -3,8 +3,9 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
-import { listOrgScoped } from "@/lib/db/resource";
+import { countOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
+import { createClient } from "@/lib/supabase/server";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -70,18 +71,29 @@ export default async function FinanceHub() {
  * header and the static nav tiles below paint without waiting.
  */
 async function FinanceMetrics({ orgId }: { orgId: string }) {
-  const [{ t }, invoices, expenses, budgets] = await Promise.all([
+  // Counts come from exact head-counts; sums from narrow uncapped
+  // queries. The previous listOrgScoped calls silently capped at 100
+  // rows, so every figure here under-reported past 100 records.
+  const supabase = await createClient();
+  const [{ t }, invoiceCount, expenseCount, budgetCount, invoiceRes, expenseRes, budgetRes] = await Promise.all([
     getRequestT(),
-    listOrgScoped("invoices", orgId),
-    listOrgScoped("expenses", orgId),
-    listOrgScoped("budgets", orgId),
+    countOrgScoped("invoices", orgId),
+    countOrgScoped("expenses", orgId),
+    countOrgScoped("budgets", orgId),
+    supabase.from("invoices").select("amount_cents, invoice_state").eq("org_id", orgId).is("deleted_at", null),
+    supabase.from("expenses").select("amount_cents").eq("org_id", orgId),
+    supabase.from("budgets").select("amount_cents").eq("org_id", orgId),
   ]);
+  if (invoiceRes.error) throw invoiceRes.error;
+  if (expenseRes.error) throw expenseRes.error;
+  if (budgetRes.error) throw budgetRes.error;
+  const invoices = invoiceRes.data ?? [];
   const outstanding = invoices
     .filter((i) => ["sent", "overdue"].includes(i.invoice_state))
     .reduce((s, r) => s + r.amount_cents, 0);
   const paid = invoices.filter((i) => i.invoice_state === "paid").reduce((s, r) => s + r.amount_cents, 0);
-  const spent = expenses.reduce((s, r) => s + r.amount_cents, 0);
-  const budgetTotal = budgets.reduce((s, r) => s + r.amount_cents, 0);
+  const spent = (expenseRes.data ?? []).reduce((s, r) => s + r.amount_cents, 0);
+  const budgetTotal = (budgetRes.data ?? []).reduce((s, r) => s + r.amount_cents, 0);
 
   return (
     <>
@@ -99,12 +111,12 @@ async function FinanceMetrics({ orgId }: { orgId: string }) {
         />
       </div>
       <div className="metric-grid">
-        <MetricCard label={t("console.finance.metrics.invoices", undefined, "Invoices")} value={invoices.length} />
+        <MetricCard label={t("console.finance.metrics.invoices", undefined, "Invoices")} value={invoiceCount} />
         <MetricCard
           label={t("console.finance.metrics.expenseItems", undefined, "Expense Items")}
-          value={expenses.length}
+          value={expenseCount}
         />
-        <MetricCard label={t("console.finance.metrics.budgets", undefined, "Budgets")} value={budgets.length} />
+        <MetricCard label={t("console.finance.metrics.budgets", undefined, "Budgets")} value={budgetCount} />
       </div>
     </>
   );

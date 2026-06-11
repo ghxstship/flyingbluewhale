@@ -18378,8 +18378,8 @@
       "dismiss": "Dispensar banner"
     },
     "connectivity": {
-      "offline": "Você está offline — as ações entrarão na fila e serão sincronizadas quando reconectar.",
-      "backOnline": "De volta online — sincronizando ações em fila…"
+      "offline": "Você está offline. Escaneamentos e registros de ponto entrarão na fila — todo o resto exige conexão.",
+      "backOnline": "De volta online — sincronizando escaneamentos e registros de ponto em fila…"
     },
     "density": {
       "compact": "Compacta",

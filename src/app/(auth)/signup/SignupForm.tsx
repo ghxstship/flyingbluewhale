@@ -86,7 +86,7 @@ export function SignupForm() {
         <Button type="submit" size="lg" className="w-full" loading={pending}>
           {pending
             ? t("auth.signup.submitting", undefined, "Creating account…")
-            : t("auth.signup.submit", undefined, "Create account")}
+            : t("auth.signup.submit", undefined, "Create Account")}
         </Button>
       </form>
     </AuthShell>

@@ -34,6 +34,10 @@ type CategoryRow = { name: string; value: number };
 // distinct categories, not status. Tokenized colors (org-primary + status
 // quartet) are interleaved with neutral fallbacks chosen for hue separation
 // so the chart legend stays distinguishable in any theme.
+// CN-12 note: the four remaining hexes are deliberate — the theme defines
+// no `--p-chart-*` palette tokens yet, and mapping distinct data hues onto
+// semantic tokens would lie about meaning. Swap to chart tokens when the
+// theme grows them.
 const PIE_COLORS = [
   "var(--p-accent)",
   "var(--p-success)",

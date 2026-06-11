@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -27,15 +28,6 @@ type Row = {
   certified_at: string | null;
   submitted_at: string | null;
   project: { name: string | null } | null;
-};
-
-const STATE_TONE: Record<RunState, "muted" | "info" | "warning" | "success" | "error"> = {
-  draft: "muted",
-  in_review: "warning",
-  submitted: "info",
-  accepted: "success",
-  rejected: "error",
-  voided: "muted",
 };
 
 const AGENCY_LABEL: Record<AgencyReport, string> = {
@@ -204,7 +196,7 @@ export default async function Page() {
             {
               key: "run_state",
               header: t("console.finance.payroll.columns.runState", undefined, "State"),
-              render: (r) => <Badge variant={STATE_TONE[r.run_state]}>{toTitle(r.run_state)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.run_state)}>{toTitle(r.run_state)}</Badge>,
               accessor: (r) => r.run_state,
               filterable: true,
               groupable: true,

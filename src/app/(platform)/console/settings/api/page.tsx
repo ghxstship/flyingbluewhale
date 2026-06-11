@@ -19,7 +19,7 @@ export default async function ApiSettingsPage() {
       "/api/v1/projects",
       t("console.settings.api.endpoints.listProjects", undefined, "List Projects — Org-scoped"),
     ],
-    ["POST", "/api/v1/projects", t("console.settings.api.endpoints.createProject", undefined, "Create project")],
+    ["POST", "/api/v1/projects", t("console.settings.api.endpoints.createProject", undefined, "Create Project")],
     ["GET", "/api/v1/projects/[id]", t("console.settings.api.endpoints.getProject", undefined, "Get a project")],
     ["PATCH", "/api/v1/projects/[id]", t("console.settings.api.endpoints.updateProject", undefined, "Update project")],
     [

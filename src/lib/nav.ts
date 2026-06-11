@@ -530,7 +530,9 @@ export const platformNavXpms: NavGroup[] = [
     // is itself a TECHNOLOGY surface).
     label: "9 TECHNOLOGY",
     items: [
-      { label: "Automations", href: "/console/ai/automations", icon: "Bot" },
+      // Automations entry removed — its single nav home is Settings →
+      // Integrations (ADR-0006); a second entry here fought the settings
+      // sidebar + palette for the active highlight.
       // Document-grounded AI assistant w/ RAG citations (round 47).
       { label: "Assistant", href: "/console/assistant", icon: "Sparkles" },
       { label: "Articles", href: "/console/knowledge", icon: "BookOpen" },
@@ -907,11 +909,12 @@ export const platformNavDomain: NavGroup[] = [
         label: "Guest Experience",
         items: [
           { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
-          // Same URL as Sales → Hospitality; the surface will eventually
-          // filter by ?audience=guest. Active-route highlight goes to
-          // whichever entry appears first in nav order (Sales appears
-          // earlier — known limitation, captured in ADR-0006 §2).
-          { label: "Guest Experience", href: "/console/commercial/hospitality", icon: "ConciergeBell" },
+          // Same page as Sales → Hospitality, filtered to the guest
+          // audience via ?audience=guest. The query param keeps the two
+          // entries distinct — matchRoute treats query-bearing hrefs as
+          // never-active, so the Sales entry owns the highlight and only
+          // the Sales group force-opens (ADR-0006 §2).
+          { label: "Guest Experience", href: "/console/commercial/hospitality?audience=guest", icon: "ConciergeBell" },
         ],
       },
       {
@@ -1046,6 +1049,51 @@ export type PortalPersona =
   // EXPERIENCE (7) — audience-facing
   | "guest"
   | "vip";
+
+/** Runtime list of all 15 portal sub-personas, in declaration order. */
+export const PORTAL_PERSONAS: readonly PortalPersona[] = [
+  "promoter",
+  "producer",
+  "stakeholder",
+  "artist",
+  "athlete",
+  "delegation",
+  "client",
+  "sponsor",
+  "media",
+  "vendor",
+  "crew",
+  "volunteer",
+  "hospitality",
+  "guest",
+  "vip",
+];
+
+/**
+ * Map a coarse session persona (memberships.persona) to the portal
+ * sub-persona whose rail/routes the viewer actually uses. Returns null
+ * for operator personas (owner/admin/manager/collaborator) — operators
+ * preview every persona's portal, so callers should fall back to the
+ * full persona set.
+ */
+export function portalPersonaForSession(persona: string | null | undefined): PortalPersona | null {
+  switch (persona) {
+    case "client":
+      return "client";
+    case "contractor":
+      return "vendor";
+    case "crew":
+      return "crew";
+    case "guest":
+    case "member":
+    case "viewer":
+    case "community":
+    case "visitor":
+      return "guest";
+    default:
+      return null;
+  }
+}
 
 /**
  * Map a portal sub-persona to its primary XPMS class (0..9).
@@ -1543,15 +1591,15 @@ export const ROLE_TABS: Record<MobileRole, NavItem[]> = {
   ],
   driver: [
     { label: "Home", href: "/m/driver" },
-    { label: "Run", href: "/m/driver" },
+    { label: "Runs", href: "/m/ad" },
     { label: "Wayfind", href: "/m/wayfind" },
     { label: "Alerts", href: "/m/driver/alerts" },
     { label: "Me", href: "/m/driver/settings" },
   ],
   medic: [
     { label: "Home", href: "/m/medic" },
-    { label: "Log", href: "/m/medic" },
-    { label: "Queue", href: "/m/medic/alerts" },
+    { label: "Log", href: "/m/medic/new" },
+    { label: "Queue", href: "/m/incidents" },
     { label: "Alerts", href: "/m/medic/alerts" },
     { label: "Me", href: "/m/medic/settings" },
   ],

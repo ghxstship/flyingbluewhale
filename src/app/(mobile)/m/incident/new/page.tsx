@@ -1,4 +1,4 @@
-import { quickFileIncident } from "./actions";
+import { QuickFileForm } from "./QuickFileForm";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -30,28 +30,7 @@ export default async function QuickFilePage() {
         .
       </p>
 
-      <form action={quickFileIncident} className="mt-5 space-y-3">
-        <label className="block text-xs font-semibold">
-          {t("m.incident.new.summaryLabel", undefined, "What happened?")}
-          <textarea
-            name="summary"
-            required
-            rows={5}
-            minLength={5}
-            maxLength={500}
-            autoFocus
-            placeholder={t(
-              "m.incident.new.summaryPlaceholder",
-              undefined,
-              "e.g. Cable trip hazard near stage left exit — flagged with cone.",
-            )}
-            className="mt-1 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-3 text-base"
-          />
-        </label>
-        <button type="submit" className="ps-btn w-full">
-          {t("m.incident.new.fileNow", undefined, "File Now")}
-        </button>
-      </form>
+      <QuickFileForm />
     </div>
   );
 }

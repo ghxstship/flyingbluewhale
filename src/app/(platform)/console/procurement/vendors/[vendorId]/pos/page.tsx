@@ -1,11 +1,10 @@
 import { ModuleHeader } from "@/components/Shell";
 import { DataTable } from "@/components/DataTable";
-import { Badge, type BadgeVariant } from "@/components/ui/Badge";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
-import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -18,14 +17,6 @@ type Row = {
   currency: string;
   po_state: string;
   created_at: string;
-};
-
-const STATUS_VARIANT: Record<string, BadgeVariant> = {
-  fulfilled: "success",
-  cancelled: "muted",
-  draft: "info",
-  sent: "info",
-  acknowledged: "info",
 };
 
 export default async function Page({ params }: { params: Promise<{ vendorId: string }> }) {
@@ -88,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
             {
               key: "po_state",
               header: t("console.procurement.vendors.pos.col.po_state", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_VARIANT[r.po_state] ?? "default"}>{toTitle(r.po_state)}</Badge>,
+              render: (r) => <StatusBadge status={r.po_state} />,
               accessor: (r) => r.po_state,
               filterable: true,
               groupable: true,

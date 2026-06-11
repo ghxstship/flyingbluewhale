@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { CheckInControls } from "./CheckInControls";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +19,6 @@ type ShiftRow = {
   checked_in_at: string | null;
   checked_out_at: string | null;
   venue: { name: string | null } | null;
-};
-
-const ATT_TONE: Record<ShiftRow["attendance"], "success" | "info" | "warning" | "muted" | "error"> = {
-  scheduled: "muted",
-  checked_in: "success",
-  on_break: "warning",
-  checked_out: "info",
-  no_show: "error",
 };
 
 export default async function CheckInPage() {
@@ -138,7 +131,7 @@ export default async function CheckInPage() {
                     </div>
                   )}
                 </div>
-                <Badge variant={ATT_TONE[s.attendance]}>{toTitle(s.attendance)}</Badge>
+                <Badge variant={toneFor(s.attendance)}>{toTitle(s.attendance)}</Badge>
               </div>
               <div className="mt-4">
                 <CheckInControls shiftId={s.id} attendance={s.attendance} />

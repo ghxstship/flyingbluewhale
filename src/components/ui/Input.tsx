@@ -2,10 +2,14 @@
 
 import { forwardRef, useId, useState, type InputHTMLAttributes, type ReactNode } from "react";
 import { X } from "lucide-react";
+import { useFieldError } from "@/components/FormShell";
 import { Spinner } from "./Spinner";
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "id" | "prefix"> {
   label?: string;
+  /** Explicit error message. When omitted and the input sits inside a
+   *  <FormShell> whose action returned `fieldErrors`, the error for this
+   *  input's `name` is picked up from context automatically (FE-1). */
   error?: string;
   inputId?: string;
   hint?: string;
@@ -27,7 +31,7 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "id" | 
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
     label,
-    error,
+    error: errorProp,
     inputId,
     hint,
     hideLabel,
@@ -47,6 +51,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 ) {
   const reactId = useId();
   const id = inputId ?? `${reactId}-input`;
+  // FE-1 — fall back to FormShell's per-field error context when no explicit
+  // `error` prop is passed. useFieldError reads a context that is null
+  // outside <FormShell> (or when the action returned no fieldErrors), so
+  // this is a no-op everywhere else. Explicit `error` always wins so callers
+  // that already plumb errors through props don't double-source.
+  const contextError = useFieldError(typeof rest.name === "string" ? rest.name : "");
+  const error = errorProp ?? contextError;
   const errorId = `${id}-error`;
   const hintId = `${id}-hint`;
   const countId = `${id}-count`;

@@ -51,6 +51,46 @@ const ALLOW_FALLBACK_PATTERN = new Set<string>([
   "src/lib/urls.ts",
 ]);
 
+/**
+ * Cross-shell raw-href guard.
+ *
+ * A raw `href="/console/..."` rendered inside the portal/mobile shells (or a
+ * raw `href="/p/..."` / `href="/m/..."` inside the platform shell) 404s in
+ * subdomain mode: `internalPathFor` prefixes non-matching paths, so
+ * `/console/x` on the portal host becomes `/p/console/x`. Cross-shell links
+ * MUST go through `urlFor(shell, path)` from `@/lib/urls`.
+ *
+ * Same-shell links (e.g. `/m/...` inside `(mobile)`) are fine — the prefix
+ * matches the shell and `internalPathFor` is a no-op — so each route group is
+ * only scanned for the *foreign* shell prefixes.
+ */
+const CROSS_SHELL_SCANS: Array<{
+  group: string;
+  foreignPrefixes: string[];
+}> = [
+  // Portal pages must not raw-link into the console or mobile shells.
+  { group: "src/app/(portal)", foreignPrefixes: ["/console", "/m"] },
+  // Mobile pages must not raw-link into the console or portal shells.
+  { group: "src/app/(mobile)", foreignPrefixes: ["/console", "/p"] },
+  // Platform pages must not raw-link into the portal or mobile shells.
+  { group: "src/app/(platform)", foreignPrefixes: ["/p", "/m"] },
+  // Personal (/me) lives on the apex — every shell prefix is foreign.
+  { group: "src/app/(personal)", foreignPrefixes: ["/console", "/p", "/m"] },
+];
+
+const ALLOW_RAW_CROSS_SHELL_HREF = new Set<string>([]);
+
+/** Build matchers for `href="/prefix..."` and `href={\`/prefix...\`}` forms. */
+function rawHrefPatterns(prefix: string): RegExp[] {
+  const p = prefix.replace(/\//g, "\\/");
+  return [
+    // href="/console" · href="/console/..." · href="/p/..." etc.
+    new RegExp(`href="${p}(?:\\/|")`),
+    // href={`/console/${id}`} template-literal form.
+    new RegExp(`href=\\{\`${p}(?:\\/|\\$|\`)`),
+  ];
+}
+
 function walk(dir: string): string[] {
   const out: string[] = [];
   for (const name of readdirSync(dir)) {
@@ -97,6 +137,28 @@ describe("URL canon", () => {
     expect(
       offenders,
       `Files duplicate the NEXT_PUBLIC_APP_URL fallback — use SITE.baseUrl from @/lib/seo instead. Offenders: ${offenders.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  it("no raw cross-shell hrefs — foreign shell prefixes must go through urlFor(shell, path)", () => {
+    const offenders: string[] = [];
+    for (const { group, foreignPrefixes } of CROSS_SHELL_SCANS) {
+      const groupDir = join(REPO_ROOT, group);
+      if (!statSync(groupDir, { throwIfNoEntry: false })?.isDirectory()) continue;
+      for (const file of walk(groupDir).filter((f) => !/\.test\.[tj]sx?$/.test(f))) {
+        const rel = relative(REPO_ROOT, file);
+        if (ALLOW_RAW_CROSS_SHELL_HREF.has(rel)) continue;
+        const txt = readFileSync(file, "utf8");
+        for (const prefix of foreignPrefixes) {
+          if (rawHrefPatterns(prefix).some((re) => re.test(txt))) {
+            offenders.push(`${rel} (raw href into ${prefix})`);
+          }
+        }
+      }
+    }
+    expect(
+      offenders,
+      `Raw cross-shell hrefs 404 in subdomain mode — use urlFor(shell, path) from @/lib/urls instead. Offenders: ${offenders.join(", ")}`,
     ).toEqual([]);
   });
 });

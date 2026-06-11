@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
+import { buttonVariants } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -78,7 +79,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }
         action={
           <div className="flex items-center gap-2">
-            <Link href={`/console/settings/catalog/${item.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
+            <Link
+              href={`/console/settings/catalog/${item.id}/edit`}
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
+            >
               {t("common.edit", undefined, "Edit")}
             </Link>
             <form action={toggleActive}>
@@ -97,6 +101,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 undefined,
                 "Soft-delete this catalog item? Existing deliverable rows keep their catalog_item_id; new assignments can't pick it.",
               )}
+              undo={{ table: "master_catalog_items", id: item.id, redirectTo: "/console/settings/catalog" }}
             />
           </div>
         }

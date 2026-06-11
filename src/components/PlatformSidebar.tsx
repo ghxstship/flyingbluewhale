@@ -489,7 +489,9 @@ function SidebarItems({
             // Prefetch off — see SidebarGroup notes on RSC fetch storms.
             prefetch={false}
             aria-current={active ? "page" : undefined}
-            className={`flex items-center justify-between gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+            className={`flex items-center gap-2 rounded px-2 py-1.5 text-xs transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+              collapsed ? "" : "pe-7"
+            } ${
               active
                 ? "bg-[var(--p-surface)] font-medium text-[var(--p-text-1)]"
                 : "text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
@@ -513,25 +515,6 @@ function SidebarItems({
               ) : null}
               {!collapsed && <span className="truncate">{itemLabel}</span>}
             </span>
-            {!collapsed && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onTogglePin(item.href);
-                }}
-                aria-label={
-                  isPinned
-                    ? t("nav.unpin", { name: itemLabel }, `Unpin ${itemLabel}`)
-                    : t("nav.pin", { name: itemLabel }, `Pin ${itemLabel}`)
-                }
-                className={`shrink-0 rounded p-0.5 text-[var(--p-text-2)] hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
-                  isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                }`}
-              >
-                {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
-              </button>
-            )}
           </Link>
         );
         return (
@@ -542,6 +525,26 @@ function SidebarItems({
               </Hint>
             ) : (
               linkEl
+            )}
+            {/* Pin toggle sits as an absolutely-positioned sibling of the
+                Link — a button nested inside an anchor is invalid HTML.
+                The Link reserves its slot via pe-7; hover reveal still
+                rides the li's `group` class. */}
+            {!collapsed && (
+              <button
+                type="button"
+                onClick={() => onTogglePin(item.href)}
+                aria-label={
+                  isPinned
+                    ? t("nav.unpin", { name: itemLabel }, `Unpin ${itemLabel}`)
+                    : t("nav.pin", { name: itemLabel }, `Pin ${itemLabel}`)
+                }
+                className={`absolute end-1.5 top-1/2 -translate-y-1/2 rounded p-0.5 text-[var(--p-text-2)] hover:text-[var(--p-text-1)] focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--p-accent)] ${
+                  isPinned ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                }`}
+              >
+                {isPinned ? <Pin size={10} /> : <PinOff size={10} />}
+              </button>
             )}
           </li>
         );

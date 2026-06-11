@@ -7,6 +7,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { CATALOG_KINDS, CATALOG_KIND_LABEL, listMyAssignments, type CatalogKind } from "@/lib/db/assignments";
+import { FULFILLMENT_TONE } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -16,23 +17,6 @@ export const dynamic = "force-dynamic";
  * The portal version (/p/[slug]/crew/advances) is scoped to a single
  * show; this is the "across every project I'm on" view.
  */
-
-const STATE_TONE: Record<string, "info" | "success" | "warning" | "error" | "muted"> = {
-  briefed: "muted",
-  draft: "muted",
-  submitted: "info",
-  in_review: "info",
-  revision_requested: "warning",
-  approved: "success",
-  delivered: "success",
-  rejected: "error",
-  issued: "info",
-  transferred: "info",
-  redeemed: "success",
-  expired: "warning",
-  voided: "error",
-  returned: "success",
-};
 
 export default async function MobileAdvancesPage() {
   const { t } = await getRequestT();
@@ -122,9 +106,7 @@ export default async function MobileAdvancesPage() {
                               : ""}
                           </div>
                         </div>
-                        <Badge variant={STATE_TONE[d.fulfillment_state] ?? "muted"}>
-                          {toTitle(d.fulfillment_state)}
-                        </Badge>
+                        <Badge variant={FULFILLMENT_TONE[d.fulfillment_state]}>{toTitle(d.fulfillment_state)}</Badge>
                       </div>
                     </li>
                   ))}

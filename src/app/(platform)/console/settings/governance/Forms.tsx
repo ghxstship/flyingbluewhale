@@ -25,7 +25,7 @@ export function CommitteeForm() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {t("console.settings.governance.forms.committee.title", undefined, "New committee")}
+            {t("console.settings.governance.forms.committee.title", undefined, "New Committee")}
           </DialogTitle>
         </DialogHeader>
         <form action={action} className="space-y-3">
@@ -88,7 +88,7 @@ export function PolicyForm() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t("console.settings.governance.forms.policy.title", undefined, "New policy")}</DialogTitle>
+          <DialogTitle>{t("console.settings.governance.forms.policy.title", undefined, "New Policy")}</DialogTitle>
         </DialogHeader>
         <form action={action} className="space-y-3">
           <Input

@@ -2,12 +2,21 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { Project, ProjectStatus, TablesUpdate } from "@/lib/supabase/types";
 
-export async function listProjects(orgId: string, opts?: { includeArchived?: boolean }): Promise<Project[]> {
+/** Default cap for project lists (SC-8) — `select *` with no limit shipped
+ *  the whole table. Most recently touched first; callers that page should
+ *  pass an explicit `limit` and pair with `countOrgScoped("projects", …)`
+ *  for honest totals. */
+const DEFAULT_PROJECT_LIMIT = 200;
+
+export async function listProjects(
+  orgId: string,
+  opts?: { includeArchived?: boolean; limit?: number },
+): Promise<Project[]> {
   if (!orgId) return [];
   const supabase = await createClient();
   let q = supabase.from("projects").select("*").eq("org_id", orgId).order("updated_at", { ascending: false });
   if (!opts?.includeArchived) q = q.is("deleted_at", null);
-  const { data, error } = await q;
+  const { data, error } = await q.limit(opts?.limit ?? DEFAULT_PROJECT_LIMIT);
   if (error) throw error;
   return data ?? [];
 }

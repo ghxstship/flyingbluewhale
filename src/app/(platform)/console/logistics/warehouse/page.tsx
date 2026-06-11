@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
 
@@ -98,7 +99,7 @@ export default async function Page() {
         title={t("console.logistics.warehouse.title", undefined, "Warehouse")}
         subtitle={t("console.logistics.warehouse.subtitle", undefined, "FF&E + central + venue warehousing")}
         action={
-          <Button href="/m/wms" size="sm">
+          <Button href={urlFor("mobile", "/wms")} size="sm">
             {t("console.logistics.warehouse.mobileScanButton", undefined, "Mobile scan")}
           </Button>
         }

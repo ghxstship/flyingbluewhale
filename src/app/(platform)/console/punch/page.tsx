@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { PunchKanban, type PunchKanbanRow } from "./PunchKanban";
+import { PRIORITY_TONE, toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -26,20 +27,6 @@ type Row = {
   show_ready_gate: boolean;
   project: { name: string | null } | null;
   assignee: { name: string | null; email: string | null } | null;
-};
-
-const STATUS_TONE: Record<string, "muted" | "info" | "warning" | "success" | "error"> = {
-  open: "warning",
-  in_progress: "info",
-  ready_for_review: "info",
-  complete: "success",
-  void: "muted",
-};
-const PRIORITY_TONE: Record<string, "muted" | "info" | "warning" | "error"> = {
-  low: "muted",
-  normal: "info",
-  high: "warning",
-  urgent: "error",
 };
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ view?: string; list?: string }> }) {
@@ -231,7 +218,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
               {
                 key: "priority",
                 header: t("console.punch.column.priority", undefined, "Priority"),
-                render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "muted"}>{toTitle(r.priority)}</Badge>,
+                render: (r) => <Badge variant={PRIORITY_TONE[r.priority] ?? "default"}>{toTitle(r.priority)}</Badge>,
                 accessor: (r) => r.priority ?? null,
                 filterable: true,
                 groupable: true,
@@ -241,7 +228,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
                 header: t("console.punch.column.status", undefined, "Status"),
                 render: (r) => (
                   <span className="inline-flex items-center gap-2">
-                    <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>
+                    <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>
                     <DueDateBadge dueAt={r.due_at} closedAt={r.closed_at} status={r.status} iconOnly size="sm" />
                   </span>
                 ),

@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import type { Json } from "@/lib/supabase/database.types";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
@@ -22,12 +23,6 @@ type FormDefRow = {
   schema: Json;
   created_at: string;
   updated_at: string;
-};
-
-const STATUS_TONE: Record<string, "muted" | "success" | "warning" | "info"> = {
-  draft: "muted",
-  published: "success",
-  archived: "warning",
 };
 
 function fmt(iso: string): string {
@@ -79,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
   if (!form) notFound();
 
   const fields = fieldCount(form.schema);
-  const tone = STATUS_TONE[form.status] ?? "muted";
+  const tone = toneFor(form.status);
 
   return (
     <>

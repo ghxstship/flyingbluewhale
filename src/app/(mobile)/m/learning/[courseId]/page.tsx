@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
+import { FormShell } from "@/components/FormShell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -100,7 +101,11 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
               </p>
             </div>
           ) : (
-            <form action={submitQuiz} className="mt-3 space-y-4">
+            <FormShell
+              action={submitQuiz}
+              className="mt-3 space-y-4"
+              submitLabel={t("common.submit", undefined, "Submit")}
+            >
               <input type="hidden" name="assignmentId" value={(assignment as { id: string }).id} />
               <input type="hidden" name="courseId" value={courseId} />
               {questionList.map((q) => (
@@ -118,10 +123,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
                   </div>
                 </fieldset>
               ))}
-              <button type="submit" className="ps-btn w-full">
-                {t("common.submit", undefined, "Submit")}
-              </button>
-            </form>
+            </FormShell>
           )}
         </section>
       )}

@@ -8,6 +8,14 @@ import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 import { Input } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/EmptyState";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/Dialog";
 import { formatRelative } from "@/lib/i18n/format";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { enrollMfaAction, verifyEnrollmentAction, unenrollMfaAction, regenerateRecoveryCodesAction } from "./actions";
@@ -33,6 +41,9 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
   const [code, setCode] = useState("");
   const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null);
   const [pending, startTransition] = useTransition();
+  // CN-9 — accessible confirm dialog replaces native confirm(). Tracks
+  // which destructive action is awaiting confirmation; null = closed.
+  const [confirming, setConfirming] = useState<{ kind: "remove"; id: string } | { kind: "regenerate" } | null>(null);
 
   const verifiedTotp = factors.find((f) => f.status === "verified");
 
@@ -90,16 +101,6 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
   }
 
   function removeFactor(id: string) {
-    if (
-      !confirm(
-        t(
-          "me.security.twoFactor.confirm.remove",
-          undefined,
-          "Remove this authenticator? You'll need to re-enroll to sign in with TOTP.",
-        ),
-      )
-    )
-      return;
     startTransition(async () => {
       const result = await unenrollMfaAction(id);
       if (result?.error) {
@@ -113,16 +114,6 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
   }
 
   function regenerate() {
-    if (
-      !confirm(
-        t(
-          "me.security.twoFactor.confirm.regenerate",
-          undefined,
-          "Generating new codes invalidates all existing recovery codes. Continue?",
-        ),
-      )
-    )
-      return;
     startTransition(async () => {
       const result = await regenerateRecoveryCodesAction();
       if ("error" in result) {
@@ -279,7 +270,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                 </div>
                 <button
                   type="button"
-                  onClick={() => removeFactor(f.id)}
+                  onClick={() => setConfirming({ kind: "remove", id: f.id })}
                   aria-label={t("me.security.twoFactor.factor.remove", undefined, "Remove authenticator")}
                   className="rounded p-1 text-[var(--p-text-2)] hover:text-[var(--p-danger)]"
                 >
@@ -317,7 +308,12 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
                 )}
               </p>
             </div>
-            <Button variant="secondary" size="sm" onClick={regenerate} loading={pending}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setConfirming({ kind: "regenerate" })}
+              loading={pending}
+            >
               {t("me.security.twoFactor.recovery.generateButton", undefined, "Generate new codes")}
             </Button>
           </div>
@@ -333,6 +329,51 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
           )}
         </span>
       </Alert>
+
+      <Dialog open={confirming !== null} onOpenChange={(o) => (!pending && !o ? setConfirming(null) : null)}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle>
+              {confirming?.kind === "regenerate"
+                ? t("me.security.twoFactor.confirm.regenerateTitle", undefined, "Generate New Codes")
+                : t("me.security.twoFactor.confirm.removeTitle", undefined, "Remove Authenticator")}
+            </DialogTitle>
+            <DialogDescription>
+              {confirming?.kind === "regenerate"
+                ? t(
+                    "me.security.twoFactor.confirm.regenerate",
+                    undefined,
+                    "Generating new codes invalidates all existing recovery codes. Continue?",
+                  )
+                : t(
+                    "me.security.twoFactor.confirm.remove",
+                    undefined,
+                    "Remove this authenticator? You'll need to re-enroll to sign in with TOTP.",
+                  )}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="secondary" onClick={() => setConfirming(null)} disabled={pending}>
+              {t("common.cancel", undefined, "Cancel")}
+            </Button>
+            <Button
+              type="button"
+              variant={confirming?.kind === "regenerate" ? "primary" : "danger"}
+              loading={pending}
+              onClick={() => {
+                if (!confirming) return;
+                if (confirming.kind === "remove") removeFactor(confirming.id);
+                else regenerate();
+                setConfirming(null);
+              }}
+            >
+              {confirming?.kind === "regenerate"
+                ? t("common.continue", undefined, "Continue")
+                : t("common.remove", undefined, "Remove")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

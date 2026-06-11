@@ -11,6 +11,10 @@ import type { ReactNode } from "react";
  * Palettes are intentionally a small, fixed set so the entire app speaks
  * the same color vocabulary for ambient state — no more
  * `bg-emerald-500/10 text-emerald-700` copy-paste per call site.
+ *
+ * Vocabulary note (CN-8): `error` is accepted as an alias for `danger`
+ * so StatusChip shares tone vocabulary with `<Badge>` and the canonical
+ * maps in `src/lib/tones.ts`.
  */
 
 export type StatusTone =
@@ -19,9 +23,10 @@ export type StatusTone =
   | "success" // emerald
   | "warning" // amber
   | "danger" // rose
+  | "error" // alias for danger — shared vocabulary with <Badge> / lib/tones (CN-8)
   | "muted"; // even lower contrast than neutral
 
-const TONE_CLASS: Record<StatusTone, string> = {
+const TONE_CLASS: Record<Exclude<StatusTone, "error">, string> = {
   neutral: "bg-[color-mix(in_srgb,var(--p-text-3)_10%,transparent)] text-[var(--p-text-3)]",
   info: "bg-[color-mix(in_srgb,var(--p-info)_10%,transparent)] text-[var(--p-info)]",
   success: "bg-[color-mix(in_srgb,var(--p-success)_10%,transparent)] text-[var(--p-success)]",
@@ -41,9 +46,12 @@ export function StatusChip({
   className?: string;
   icon?: ReactNode;
 }) {
+  // `error` is a vocabulary alias (Badge / lib/tones say "error",
+  // StatusChip historically said "danger") — same paint either way.
+  const resolved = tone === "error" ? "danger" : tone;
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-wide capitalize ${TONE_CLASS[tone]} ${className}`.trim()}
+      className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-wide capitalize ${TONE_CLASS[resolved]} ${className}`.trim()}
     >
       {icon}
       {children}

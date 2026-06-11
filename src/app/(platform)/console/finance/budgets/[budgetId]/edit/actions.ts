@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { dollarsToCents } from "@/lib/format";
+import { centsOrNull, moneyCentsString } from "@/app/(platform)/console/finance/money";
 import {
   XPMS_DEPARTMENTS,
   XPMS_DISCIPLINES,
@@ -19,11 +20,13 @@ import { formFail } from "@/lib/forms/fail";
 
 // ADR-1 — XPMS Universal Budget Template v08 fields. Edit path mirrors
 // the create schema; all XPMS columns optional, line_type defaults to
-// Scope. amount accepts dollar string (form) and cents string (legacy).
+// Scope. The form posts integer cents via MoneyInput (`amount_cents`,
+// `rate_cents`); the dollar-string `amount`/`rate` fields are kept as
+// legacy fallbacks for pre-XPMS callers.
 const Schema = z.object({
   name: z.string().min(1).max(200),
   amount: z.string().optional().or(z.literal("")),
-  amount_cents: z.string().optional().or(z.literal("")),
+  amount_cents: moneyCentsString({ allowEmpty: true }).optional(),
   category: z.string().max(120).optional().or(z.literal("")),
   // XPMS taxonomy
   department: z.enum(XPMS_DEPARTMENTS).optional().or(z.literal("")),
@@ -37,6 +40,7 @@ const Schema = z.object({
   line_type: z.enum(XPMS_LINE_TYPES).default("Scope"),
   quantity: z.string().optional().or(z.literal("")),
   rate: z.string().optional().or(z.literal("")),
+  rate_cents: moneyCentsString({ allowEmpty: true }).optional(),
   vendor: z.string().max(160).optional().or(z.literal("")),
   budget_status: z.string().max(80).optional().or(z.literal("")),
   event: z.string().max(160).optional().or(z.literal("")),
@@ -59,13 +63,13 @@ export async function updateBudget(id: string, _: State, fd: FormData): Promise<
   if (!parsed.success) return formFail(parsed.error, fd);
   const data = parsed.data;
 
-  // Amount: prefer the new dollar-string `amount` field; fall back to
-  // legacy `amount_cents` for callers still using the pre-XPMS form.
+  // Amount: prefer the integer-cents `amount_cents` posted by
+  // MoneyInput; fall back to the legacy dollar-string `amount`.
   let amount_cents: number;
-  if (data.amount) {
-    amount_cents = dollarsToCents(data.amount);
-  } else if (data.amount_cents) {
+  if (data.amount_cents) {
     amount_cents = Number(data.amount_cents);
+  } else if (data.amount) {
+    amount_cents = dollarsToCents(data.amount);
   } else {
     amount_cents = 0;
   }
@@ -85,7 +89,9 @@ export async function updateBudget(id: string, _: State, fd: FormData): Promise<
     xyz: data.xyz || null,
     line_type: data.line_type,
     quantity: data.quantity ? Number(data.quantity) : null,
-    rate_cents: data.rate ? dollarsToCents(data.rate) : null,
+    // Prefer integer cents from MoneyInput; legacy dollar-string `rate`
+    // as fallback.
+    rate_cents: data.rate_cents ? centsOrNull(data.rate_cents) : data.rate ? dollarsToCents(data.rate) : null,
     vendor: data.vendor || null,
     budget_status: data.budget_status || null,
     event: data.event || null,

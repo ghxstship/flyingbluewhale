@@ -5,7 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { dollarsToCents } from "@/lib/format";
+import { centsOrNull, moneyCentsString } from "@/app/(platform)/console/finance/money";
 import {
   XPMS_DEPARTMENTS,
   XPMS_DISCIPLINES,
@@ -20,7 +20,8 @@ import { actionFail, formFail } from "@/lib/forms/fail";
 // 0070. All XPMS columns optional except line_type (defaults to Scope).
 const Schema = z.object({
   name: z.string().min(1).max(120),
-  amount: z.string().min(1),
+  // Integer cents from MoneyInput's hidden field — never dollar strings.
+  amount_cents: moneyCentsString(),
   project_id: z.string().uuid().optional().or(z.literal("")),
   // XPMS taxonomy
   department: z.enum(XPMS_DEPARTMENTS).optional().or(z.literal("")),
@@ -33,7 +34,7 @@ const Schema = z.object({
   xyz: z.enum(XPMS_XYZ).optional().or(z.literal("")),
   line_type: z.enum(XPMS_LINE_TYPES).default("Scope"),
   quantity: z.string().optional().or(z.literal("")),
-  rate: z.string().optional().or(z.literal("")),
+  rate_cents: moneyCentsString({ allowEmpty: true }),
   vendor: z.string().max(160).optional().or(z.literal("")),
   budget_status: z.string().max(80).optional().or(z.literal("")),
   event: z.string().max(160).optional().or(z.literal("")),
@@ -70,15 +71,16 @@ export async function createBudgetAction(_: State, fd: FormData): Promise<State>
     if (!project) return { error: "Project not found in your organization" };
   }
 
-  // Parse quantity + rate into the canonical cents form. The DB
-  // trigger will compute estimate_cents = quantity * rate_cents.
+  // Quantity is a plain number; rate/amount arrive as integer cents
+  // from MoneyInput. The DB trigger will compute
+  // estimate_cents = quantity * rate_cents.
   const quantity = data.quantity ? Number(data.quantity) : null;
-  const rate_cents = data.rate ? dollarsToCents(data.rate) : null;
+  const rate_cents = centsOrNull(data.rate_cents);
 
   const insert: Record<string, unknown> = {
     org_id: session.orgId,
     name: data.name,
-    amount_cents: dollarsToCents(data.amount),
+    amount_cents: Number(data.amount_cents),
     project_id: data.project_id || null,
     department: data.department || null,
     team: data.team || null,

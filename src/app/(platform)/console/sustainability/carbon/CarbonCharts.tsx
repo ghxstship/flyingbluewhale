@@ -18,10 +18,13 @@ import {
 import { ChartShell } from "@/components/charts/ChartShell";
 import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
+// CN-12 — semantic theme tokens, not hex: Scope 1 (direct combustion) reads
+// as danger, Scope 2 (purchased energy) as warning, Scope 3 (value chain)
+// as success — and all three track light/dark via CSS vars.
 const SCOPE_COLORS: Record<string, string> = {
-  "Scope 1": "#ef4444",
-  "Scope 2": "#f59e0b",
-  "Scope 3": "#22c55e",
+  "Scope 1": "var(--p-danger)",
+  "Scope 2": "var(--p-warning)",
+  "Scope 3": "var(--p-success)",
 };
 
 export function CarbonCharts({
@@ -51,8 +54,8 @@ export function CarbonCharts({
           <AreaChart data={series}>
             <defs>
               <linearGradient id="actual-fill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#22c55e" stopOpacity={0.4} />
-                <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--p-success)" stopOpacity={0.4} />
+                <stop offset="100%" stopColor="var(--p-success)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--p-border)" />
@@ -64,7 +67,7 @@ export function CarbonCharts({
               dataKey="actual"
               name={t("console.sustainability.carbon.charts.monthly.actual", undefined, "Actual")}
               type="monotone"
-              stroke="#22c55e"
+              stroke="var(--p-success)"
               fill="url(#actual-fill)"
               strokeWidth={2}
             />

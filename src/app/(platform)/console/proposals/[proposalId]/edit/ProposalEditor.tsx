@@ -18,7 +18,7 @@ let counter = 0;
 const tagId = () => `blk-${Date.now()}-${++counter}`;
 
 const BLOCK_DEFAULTS: Record<ProposalBlockType, ProposalBlock> = {
-  hero: { type: "hero", eyebrow: "Proposal", title: "New proposal", subtitle: "A short subtitle" },
+  hero: { type: "hero", eyebrow: "Proposal", title: "New Proposal", subtitle: "A short subtitle" },
   section_eyebrow: { type: "section_eyebrow", label: "Section label" },
   heading: { type: "heading", level: 2, text: "Heading" },
   prose: { type: "prose", body: "A paragraph of prose describing the context, approach, or rationale." },

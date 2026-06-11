@@ -131,7 +131,9 @@ export default async function MarketingLayout({ children }: { children: React.Re
     <div data-ui="saas" data-theme="atlvs-product" data-product="atlvs" data-platform="atlvs" className="page-shell">
       <MarketingHeader />
       <WebVitalsReporter />
-      <main>{children}</main>
+      <main id="main" tabIndex={-1}>
+        {children}
+      </main>
       <StickyCTABar />
       <footer className="mt-24 border-t border-[var(--p-border)] bg-[var(--p-surface-2)]">
         <div className="mx-auto max-w-6xl px-6 py-16">

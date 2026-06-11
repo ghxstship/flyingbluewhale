@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
+import { FormField } from "@/components/ui/FormField";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -7,9 +8,6 @@ import { getRequestT } from "@/lib/i18n/request";
 import { createBaseline } from "./actions";
 
 export const dynamic = "force-dynamic";
-
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
-const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 export default async function Page() {
   if (!hasSupabase) return null;
@@ -40,30 +38,19 @@ export default async function Page() {
           cancelHref="/console/schedule/baselines"
           submitLabel={t("console.schedule.baselines.new.submit", undefined, "Create Baseline")}
         >
-          <label className="flex flex-col gap-1.5">
-            <span className={LBL}>
-              {t("console.schedule.baselines.new.nameLabel", undefined, "Name")}
-              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-            </span>
+          <FormField label={t("console.schedule.baselines.new.nameLabel", undefined, "Name")} required>
             <input
               name="name"
               required
               placeholder={t("console.schedule.baselines.new.namePlaceholder", undefined, "Initial 100% CD Baseline")}
-              className={INPUT}
+              className="ps-input"
             />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className={LBL}>
-              {t("console.schedule.baselines.new.descriptionLabel", undefined, "Description")}
-            </span>
-            <textarea name="description" rows={3} className={INPUT} />
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className={LBL}>
-              {t("console.schedule.baselines.new.projectLabel", undefined, "Project")}
-              <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-            </span>
-            <select name="project_id" required className={INPUT}>
+          </FormField>
+          <FormField label={t("console.schedule.baselines.new.descriptionLabel", undefined, "Description")}>
+            <textarea name="description" rows={3} className="ps-input" />
+          </FormField>
+          <FormField label={t("console.schedule.baselines.new.projectLabel", undefined, "Project")} required>
+            <select name="project_id" required className="ps-input">
               <option value="">{t("common.selectPlaceholder", undefined, "Select…")}</option>
               {((projects ?? []) as Array<{ id: string; name: string }>).map((p) => (
                 <option key={p.id} value={p.id}>
@@ -71,7 +58,7 @@ export default async function Page() {
                 </option>
               ))}
             </select>
-          </label>
+          </FormField>
         </FormShell>
       </div>
     </>

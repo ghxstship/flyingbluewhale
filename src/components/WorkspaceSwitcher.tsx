@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { ChevronsUpDown, Check, Plus } from "lucide-react";
 import {
@@ -119,7 +120,11 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
       if (json?.ok) {
         setWorkspaces(json.data.workspaces ?? []);
         setCurrent(json.data.current ?? null);
+      } else {
+        toast.error(json?.error?.message ?? "Couldn't load workspaces");
       }
+    } catch {
+      toast.error("Couldn't load workspaces — check your connection");
     } finally {
       setLoaded(true);
     }
@@ -146,7 +151,11 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
         setCurrent(id);
         setOpen(false);
         router.refresh();
+      } else {
+        toast.error(json?.error?.message ?? "Couldn't switch workspace");
       }
+    } catch {
+      toast.error("Couldn't switch workspace — check your connection");
     } finally {
       setSwitching(null);
     }

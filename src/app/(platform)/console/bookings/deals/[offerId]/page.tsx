@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
 
   const settlementResp = await supabase
     .from("settlements")
-    .select("id, status")
+    .select("id, status:settlement_state")
     .eq("talent_offer_id", d.id)
     .eq("org_id", session.orgId)
     .maybeSingle();

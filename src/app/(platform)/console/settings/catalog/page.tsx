@@ -55,6 +55,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("master_catalog_items")
     .select("id, kind, code, name, unit_cost_cents, currency, inventory_qty, active, created_at")
+    .limit(1000)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .order("kind")

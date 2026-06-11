@@ -101,6 +101,9 @@ function skipReason(path: string, method: Method): string | null {
   if (path === "/api/v1/openapi.json" && method === "get") {
     return "returns raw OpenAPI 3.1 spec, envelope contract N/A";
   }
+  if (path === "/api/v1/graphql") {
+    return "graphql-yoga owns the response (GraphQL-spec { data, errors }); envelope contract N/A — mirrored in api-canon.test.ts allowlist";
+  }
   if (path === "/api/v1/users/{userId}/calendar.ics" && method === "get") {
     return "returns text/calendar, envelope contract N/A";
   }

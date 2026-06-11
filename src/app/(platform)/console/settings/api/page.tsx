@@ -1,8 +1,9 @@
 import { ModuleHeader } from "@/components/Shell";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { revokeApiKeyAction } from "./actions";
 import { CreateApiKeyForm } from "./CreateApiKeyForm";
-import { requireSession } from "@/lib/auth";
+import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
@@ -60,6 +61,25 @@ export default async function ApiSettingsPage() {
     );
   }
   const session = await requireSession();
+  // View gate (readiness finding P1-A): this surface exposes org billing /
+  // API-key state. Mutations were already admin-gated server-side; the page
+  // itself now denies non-admins gracefully instead of relying on nav hiding.
+  if (!isAdmin(session)) {
+    return (
+      <>
+        <ModuleHeader
+          title="Admin Access Required"
+          subtitle="This area is limited to organization owners and admins."
+        />
+        <div className="page-content">
+          <EmptyState
+            title="You Need Admin Access"
+            description="Ask an organization owner or admin if you believe you should have access to this page."
+          />
+        </div>
+      </>
+    );
+  }
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
   const { data } = await supabase

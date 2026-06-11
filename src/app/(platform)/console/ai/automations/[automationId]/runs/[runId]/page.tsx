@@ -123,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
   const { data: runData } = await supabase
     .from("automation_runs" as never)
     .select(
-      "id, automation_id, trigger_kind, trigger_payload, status, started_at, finished_at, error_summary, action_count, triggered_by",
+      "id, automation_id, trigger_kind, trigger_payload, status:run_state, started_at, finished_at, error_summary, action_count, triggered_by",
     )
     .eq("id", runId)
     .eq("automation_id", automationId)
@@ -133,7 +133,7 @@ export default async function Page({ params }: { params: Promise<{ automationId:
 
   const { data: stepsData } = await supabase
     .from("automation_step_runs" as never)
-    .select("id, step_index, action_type, status, input, output, error, started_at, finished_at, latency_ms")
+    .select("id, step_index, action_type, status:step_state, input, output, error, started_at, finished_at, latency_ms")
     .eq("run_id", runId)
     .order("step_index", { ascending: true });
   const stepRows = (stepsData ?? []) as unknown as StepRow[];

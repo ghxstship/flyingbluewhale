@@ -27,7 +27,9 @@ export function ImportForm() {
   function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    f.text().then((text) => setCsv(text));
+    f.text()
+      .then((text) => setCsv(text))
+      .catch(() => setCsv(""));
   }
 
   function submit() {

@@ -68,14 +68,14 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
     supabase
       .from("work_order_broadcasts")
       .select(
-        "id, code, title, description, category, status, budget_cents, needed_by, awarded_to_vendor_id, awarded_at, created_at, project:project_id(name), awarded_to:awarded_to_vendor_id(name)",
+        "id, code, title, description, category, status:broadcast_state, budget_cents, needed_by, awarded_to_vendor_id, awarded_at, created_at, project:project_id(name), awarded_to:awarded_to_vendor_id(name)",
       )
       .eq("id", broadcastId)
       .eq("org_id", session.orgId)
       .maybeSingle(),
     supabase
       .from("work_order_broadcast_invites")
-      .select("id, status, responded_at, notes, vendor_id, created_at, vendor:vendor_id(name, email)")
+      .select("id, status:invite_state, responded_at, notes, vendor_id, created_at, vendor:vendor_id(name, email)")
       .eq("broadcast_id", broadcastId)
       .eq("org_id", session.orgId)
       .order("created_at", { ascending: true }),

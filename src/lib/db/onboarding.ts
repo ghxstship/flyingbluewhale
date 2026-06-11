@@ -64,8 +64,24 @@ export async function listOnboardingByProject(
     done: number;
     critical_path_open: number;
   }> = [];
+  // Single batched query instead of one round trip per letter (N+1).
+  const letterIds = letters.map((l) => l.id);
+  const supabase2 = await createClient();
+  const { data: allSteps, error: stepsErr } = await supabase2
+    .from("onboarding_steps")
+    .select("*")
+    .in("offer_letter_id", letterIds)
+    .order("sort_order", { ascending: true });
+  if (stepsErr) throw stepsErr;
+  const stepsByLetter = new Map<string, OnboardingStep[]>();
+  for (const row of (allSteps ?? []) as unknown as OnboardingStep[]) {
+    const key = (row as unknown as { offer_letter_id: string }).offer_letter_id;
+    const bucket = stepsByLetter.get(key) ?? [];
+    bucket.push(row);
+    stepsByLetter.set(key, bucket);
+  }
   for (const l of letters) {
-    const steps = await listOnboardingSteps(l.id);
+    const steps = stepsByLetter.get(l.id) ?? [];
     out.push({
       letter_id: l.id,
       recipient_name: l.recipient_name,

@@ -9,14 +9,14 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-type EventRow = { id: string; name: string; starts_at: string; ends_at: string; status: string };
+type EventRow = { id: string; name: string; starts_at: string; ends_at: string; event_state: string };
 type CueRow = {
   id: string;
   scheduled_at: string;
   lane: string;
   label: string;
   description: string | null;
-  status: "pending" | "standby" | "live" | "done" | "cancelled" | string;
+  cue_state: "pending" | "standby" | "live" | "done" | "cancelled" | string;
   duration_seconds: number | null;
 };
 
@@ -54,13 +54,13 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
   const [{ data: showData }, { data: cueData }] = await Promise.all([
     supabase
       .from("events")
-      .select("id, name, starts_at, ends_at, status")
+      .select("id, name, starts_at, ends_at, event_state")
       .eq("id", showId)
       .eq("org_id", session.orgId)
       .maybeSingle(),
     supabase
       .from("cues")
-      .select("id, scheduled_at, lane, label, description, status, duration_seconds")
+      .select("id, scheduled_at, lane, label, description, cue_state, duration_seconds")
       .eq("event_id", showId)
       .eq("org_id", session.orgId)
       .order("scheduled_at", { ascending: true }),
@@ -70,9 +70,9 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
   if (!show) notFound();
   const cues = ((cueData ?? []) as unknown as CueRow[]) ?? [];
 
-  const live = cues.find((c) => c.status === "live");
-  const upcoming = cues.filter((c) => c.status === "pending" || c.status === "standby");
-  const done = cues.filter((c) => c.status === "done");
+  const live = cues.find((c) => c.cue_state === "live");
+  const upcoming = cues.filter((c) => c.cue_state === "pending" || c.cue_state === "standby");
+  const done = cues.filter((c) => c.cue_state === "done");
 
   return (
     <div className="px-4 pt-6 pb-24">
@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
       </div>
       <h1 className="mt-1 text-2xl leading-tight font-semibold">{show.name}</h1>
       <p className="mt-1 font-mono text-[10px] text-[var(--p-text-2)]">
-        {fmtTime(show.starts_at)} → {fmtTime(show.ends_at)} · {show.status}
+        {fmtTime(show.starts_at)} → {fmtTime(show.ends_at)} · {show.event_state}
       </p>
 
       {live && (
@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ showId: strin
                         {c.duration_seconds ? ` · ${fmtDuration(c.duration_seconds)}` : ""}
                       </div>
                     </div>
-                    <Badge variant={STATUS_TONE[c.status] ?? "muted"}>{toTitle(c.status)}</Badge>
+                    <Badge variant={STATUS_TONE[c.cue_state] ?? "muted"}>{toTitle(c.cue_state)}</Badge>
                   </div>
                 </div>
               </li>

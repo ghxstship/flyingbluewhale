@@ -74,11 +74,16 @@ export const resolvers = {
     },
 
     project: (_p: unknown, { id }: { id: string }, ctx: GqlContext) =>
-      fetchOne(ctx, "projects", id, "id, name, code, status, start_date, end_date, address, created_at, updated_at"),
+      fetchOne(
+        ctx,
+        "projects",
+        id,
+        "id, name, code:slug, status:project_state, start_date, end_date, created_at, updated_at",
+      ),
     projects: async (_p: unknown, { page }: { page?: Page }, ctx: GqlContext) => {
       let qb = ctx.supabase
         .from("projects")
-        .select("id, name, code, status, start_date, end_date, address, created_at, updated_at")
+        .select("id, name, code:slug, status:project_state, start_date, end_date, created_at, updated_at")
         .eq("org_id", ctx.session.orgId)
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
@@ -92,24 +97,29 @@ export const resolvers = {
         ctx,
         "rfis",
         id,
-        "id, project_id, number, title, status, due_at, asked_at, asked_by, answered_at, answered_by, created_at",
+        "id, project_id, number, title, status:rfi_state, due_at, asked_at, asked_by, answered_at, answered_by, created_at",
       ),
     rfis: (_p: unknown, { projectId, page }: { projectId?: string | null; page?: Page }, ctx: GqlContext) =>
       fetchMany(
         ctx,
         "rfis",
-        "id, project_id, number, title, status, due_at, asked_at, asked_by, answered_at, answered_by, created_at",
+        "id, project_id, number, title, status:rfi_state, due_at, asked_at, asked_by, answered_at, answered_by, created_at",
         projectId ?? null,
         page,
       ),
 
     submittal: (_p: unknown, { id }: { id: string }, ctx: GqlContext) =>
-      fetchOne(ctx, "submittals", id, "id, project_id, number, title, status, submitted_at, required_at, created_at"),
+      fetchOne(
+        ctx,
+        "submittals",
+        id,
+        "id, project_id, number, title, status:submittal_state, submitted_at, required_at, created_at",
+      ),
     submittals: (_p: unknown, { projectId, page }: { projectId?: string | null; page?: Page }, ctx: GqlContext) =>
       fetchMany(
         ctx,
         "submittals",
-        "id, project_id, number, title, status, submitted_at, required_at, created_at",
+        "id, project_id, number, title, status:submittal_state, submitted_at, required_at, created_at",
         projectId ?? null,
         page,
       ),
@@ -135,13 +145,13 @@ export const resolvers = {
         ctx,
         "tasks",
         id,
-        "id, project_id, title, description, status, priority, assignee_id, due_at, created_at",
+        "id, project_id, title, description, status:task_state, priority, assignee_id, due_at, created_at",
       ),
     tasks: (_p: unknown, { projectId, page }: { projectId?: string | null; page?: Page }, ctx: GqlContext) =>
       fetchMany(
         ctx,
         "tasks",
-        "id, project_id, title, description, status, priority, assignee_id, due_at, created_at",
+        "id, project_id, title, description, status:task_state, priority, assignee_id, due_at, created_at",
         projectId ?? null,
         page,
       ),
@@ -151,7 +161,7 @@ export const resolvers = {
         ctx,
         "invoices",
         id,
-        "id, project_id, client_id, entity_id, number, title, amount_cents, currency, status, issued_at, due_at, paid_at, base_currency, base_amount_cents, fx_rate_to_base, created_at",
+        "id, project_id, client_id, entity_id, number, title, amount_cents, currency, status:invoice_state, issued_at, due_at, paid_at, base_currency, base_amount_cents, fx_rate_to_base, created_at",
       ),
     invoices: async (
       _p: unknown,
@@ -161,7 +171,7 @@ export const resolvers = {
       let qb = ctx.supabase
         .from("invoices")
         .select(
-          "id, project_id, client_id, entity_id, number, title, amount_cents, currency, status, issued_at, due_at, paid_at, base_currency, base_amount_cents, fx_rate_to_base, created_at",
+          "id, project_id, client_id, entity_id, number, title, amount_cents, currency, status:invoice_state, issued_at, due_at, paid_at, base_currency, base_amount_cents, fx_rate_to_base, created_at",
         )
         .eq("org_id", ctx.session.orgId)
         .is("deleted_at", null)
@@ -178,7 +188,7 @@ export const resolvers = {
         ctx,
         "expenses",
         id,
-        "id, project_id, entity_id, submitter_id, category, description, amount_cents, currency, status, spent_at, base_currency, base_amount_cents, created_at",
+        "id, project_id, entity_id, submitter_id, category, description, amount_cents, currency, status:expense_state, spent_at, base_currency, base_amount_cents, created_at",
       ),
     expenses: async (
       _p: unknown,
@@ -188,7 +198,7 @@ export const resolvers = {
       let qb = ctx.supabase
         .from("expenses")
         .select(
-          "id, project_id, entity_id, submitter_id, category, description, amount_cents, currency, status, spent_at, base_currency, base_amount_cents, created_at",
+          "id, project_id, entity_id, submitter_id, category, description, amount_cents, currency, status:expense_state, spent_at, base_currency, base_amount_cents, created_at",
         )
         .eq("org_id", ctx.session.orgId)
         .order("created_at", { ascending: false });

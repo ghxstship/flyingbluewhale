@@ -27,9 +27,14 @@ export function CreateApiKeyForm() {
 
   function copy() {
     if (!secret) return;
-    void navigator.clipboard.writeText(secret).then(() => {
-      toast.success(t("console.settings.api.copiedToast", undefined, "Copied to clipboard"));
-    });
+    void navigator.clipboard
+      .writeText(secret)
+      .then(() => {
+        toast.success(t("console.settings.api.copiedToast", undefined, "Copied to clipboard"));
+      })
+      .catch(() => {
+        toast.error(t("console.settings.api.copyFailedToast", undefined, "Copy failed — select the key manually"));
+      });
   }
 
   return (

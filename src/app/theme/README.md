@@ -70,7 +70,7 @@ The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES"
 | `--p-text-1` on `--p-bg`                  | `#181b23` on `#f7f8fa` → 16.0:1 (AAA) | `#f2f4f8` on `#111318` → 17.4:1 (AAA)          |
 | `--p-text-2` on `--p-surface`             | `#5b6472` on `#ffffff` → 7.3:1 (AAA)  | `#a6aebc` on `#1a1d24` → 9.4:1 (AAA)           |
 | `--p-text-3` on `--p-surface`             | `#656d7a` on `#ffffff` → 5.2:1 (AA)   | `#9098a4` on `#1a1d24` → 5.1:1 (AA)            |
-| white on `--p-accent-cta` (atlvs light)   | white on `#d11668` → 5.2:1 (AA)       | atlvs dark uses ink on `#ff4d9b` → 6.1:1 (AA)  |
+| white on `--p-accent-cta` (atlvs light)   | white on `#c91463` → 5.6:1 (AA)       | atlvs dark uses ink on `#ff4d9b` → 6.1:1 (AA)  |
 | white on `--p-accent-cta` (compvss light) | white on `#8a5a0f` → 5.9:1 (AA)       | compvss dark uses ink on `#f0b255` → kit canon |
 | white on `--p-accent-cta` (gvteway light) | white on `#0a7373` → 5.7:1 (AA)       | gvteway dark uses ink on `#2bd6d6` → kit canon |
 

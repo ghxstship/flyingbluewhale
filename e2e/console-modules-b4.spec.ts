@@ -83,7 +83,10 @@ test.describe("console modules — create flows (batch 4)", () => {
   });
 
   test("Logistics · rate card create", async ({ page }) => {
-    await createInModule(page, "/console/logistics/ratecard/new", { name: `E2E Rate ${stamp()}` });
+    await createInModule(page, "/console/logistics/ratecard/new", {
+      name: `E2E Rate ${stamp()}`,
+      sku: `E2E-SKU-${stamp()}`,
+    });
   });
 
   test("ITIL · change create", async ({ page }) => {

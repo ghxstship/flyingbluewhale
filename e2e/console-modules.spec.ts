@@ -155,7 +155,10 @@ test.describe("console modules — create flows", () => {
   });
 
   test("Safety · threat create", async ({ page }) => {
-    await createInModule(page, "/console/safety/threats/new", { title: `E2E Threat ${stamp()}` });
+    await createInModule(page, "/console/safety/threats/new", {
+      title: `E2E Threat ${stamp()}`,
+      code: `THR-${stamp().slice(-7)}`,
+    });
   });
 
   test("Safety · briefing create", async ({ page }) => {

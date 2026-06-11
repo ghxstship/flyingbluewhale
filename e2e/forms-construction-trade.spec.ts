@@ -157,21 +157,28 @@ test.describe("construction-trade CRUD lifecycles", () => {
     const title = `E2E Site Plan ${Date.now()}`;
 
     await page.goto("/console/site-plans/new", { waitUntil: "domcontentloaded", timeout: 60000 });
+    // URID atom fields — required with no defaults on the redesigned creator
+    // (discipline moved to the edit page; classification comes from
+    // primary_class).
+    await page.locator('input[name="org_code"]').fill("E2E");
+    await page.locator('input[name="evt_code"]').fill("TEST");
+    await page.locator('input[name="ven_code"]').fill("VEN");
+    await page.locator('input[name="zon_code"]').fill(`Z${Date.now().toString().slice(-6)}`);
     await page.locator('input[name="code"]').fill(code);
     await page.locator('input[name="title"]').fill(title);
-    await page.locator('select[name="discipline"]').selectOption("rigging");
     await page
       .getByRole("button", { name: /^create sheet$|^create$|^add$|^save$/i })
       .first()
       .click();
 
     await page.waitForURL(/\/console\/site-plans\/[a-f0-9-]{36}/, { timeout: 30000 });
-    await expect(page.getByRole("heading", { name: new RegExp(code) })).toBeVisible({ timeout: 30000 });
+    // Detail h1 renders the sheet TITLE; the code surfaces in the meta strip.
+    await expect(page.getByRole("heading", { name: title })).toBeVisible({ timeout: 30000 });
 
     await page.getByRole("link", { name: /^Edit$/ }).click();
     await page.waitForURL(/\/edit$/, { timeout: 30000 });
     await page.locator('select[name="discipline"]').selectOption("power");
-    await page.getByRole("button", { name: /save site plan/i }).click();
+    await page.getByRole("button", { name: /save sheet|save site plan/i }).click();
 
     await page.waitForURL(/\/console\/site-plans\/[a-f0-9-]{36}$/, { timeout: 30000 });
     await expect(page.getByText(/power/i).first()).toBeVisible({ timeout: 30000 });

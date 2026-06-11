@@ -39,9 +39,11 @@ test.describe("marketing", () => {
 
   test("solutions index renders 3 apps", async ({ page }) => {
     await page.goto("/solutions");
-    await expect(page.getByText(/atlvs/i).first()).toBeVisible();
-    await expect(page.getByText(/gvteway/i).first()).toBeVisible();
-    await expect(page.getByText(/compvss/i).first()).toBeVisible();
+    // Brand names render as <Wordmark role="img" aria-label="..."> lockups
+    // (commit f2b2b543), not visible text nodes.
+    await expect(page.getByRole("img", { name: /atlvs/i }).first()).toBeVisible();
+    await expect(page.getByRole("img", { name: /gvteway/i }).first()).toBeVisible();
+    await expect(page.getByRole("img", { name: /compvss/i }).first()).toBeVisible();
   });
 
   test("compare page lists competitor cards", async ({ page }) => {

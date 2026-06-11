@@ -48,8 +48,12 @@ export type State = { error?: string; fieldErrors?: Record<string, string>; valu
 export async function createSitePlanSheet(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const raw = Object.fromEntries(fd);
-  // Drop empty preset value so optional validates cleanly.
-  if (raw.preset_code === "") delete raw.preset_code;
+  // Drop empty optional values so they validate as absent — z.coerce.number()
+  // turns "" into 0, which fails min() and made the form unsubmittable when
+  // Tier / Shell dimensions were left blank.
+  for (const key of ["preset_code", "tier_primary", "shell_length_in", "shell_width_in", "shell_height_in"]) {
+    if (raw[key] === "") delete raw[key];
+  }
 
   const parsed = Schema.safeParse(raw);
   if (!parsed.success) return formFail(parsed.error, fd);

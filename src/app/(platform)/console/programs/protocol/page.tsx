@@ -22,7 +22,7 @@ type RunRow = {
   id: string;
   scheduled_depart: string;
   scheduled_arrive: string | null;
-  status: string;
+  run_state: string;
   origin: { name: string | null } | null;
   destination: { name: string | null } | null;
 };
@@ -176,7 +176,7 @@ export default async function Page() {
                     </div>
                     <div className="font-mono text-xs text-[var(--p-text-2)]">{fmt(r.scheduled_depart)}</div>
                   </div>
-                  <Badge variant="muted">{toTitle(r.status)}</Badge>
+                  <Badge variant="muted">{toTitle(r.run_state)}</Badge>
                 </li>
               ))}
             </ul>

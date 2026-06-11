@@ -332,7 +332,7 @@ export default async function Home() {
       {/* HERO */}
       <section className="relative px-6 pt-16 pb-20 sm:pt-20">
         <div className="mx-auto max-w-6xl">
-          <div className="grid items-center gap-12 md:grid-cols-[1.5fr_1fr]">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
             <div>
               <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
                 {t("marketing.pages.home.hero.eyebrow")}
@@ -368,14 +368,18 @@ export default async function Home() {
               </div>
               <p className="mt-6 text-xs text-[var(--p-text-3)]">{t("marketing.pages.home.hero.disclaimer")}</p>
             </div>
-            <div className="hidden md:block">
+            {/* lg+ only — the Wordmark letter-row's min-content width (~228px)
+                cannot fit the 768px tablet column and overflowed the viewport
+                (readiness matrix, tablet breakpoint). min-w-0 lets the column
+                shrink to its track. */}
+            <div className="hidden min-w-0 lg:block">
               <div className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-6 shadow-[var(--p-elev-2)]">
                 <div className="mb-3 text-[10px] font-semibold tracking-[0.14em] text-[var(--p-text-3)] uppercase">
                   {t("marketing.pages.home.hero.ecosystemLabel")}
                 </div>
                 {PRODUCTS.map((p) => (
                   <div key={p.slug} className="border-t border-[var(--p-border)] py-3 first:border-t-0 first:pt-0">
-                    <div className="flex items-baseline justify-between gap-3">
+                    <div className="flex flex-wrap items-baseline justify-between gap-3">
                       <Wordmark word={p.title} style={{ color: p.textColor, fontSize: 17 }} />
                       <span className="text-[10px] font-medium tracking-[0.08em] text-[var(--p-text-3)] uppercase">
                         {p.audience.replace(/^For /i, "")}
@@ -417,7 +421,9 @@ export default async function Home() {
             {t("marketing.pages.home.threeApps.title")}
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.threeApps.body")}</p>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {/* lg+ for 3-up — at 768px a third-width card is narrower than the
+              Wordmark letter-row's min-content (~228px) and overflows. */}
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
             {PRODUCTS.map((p) => (
               <Link
                 key={p.slug}

@@ -6,9 +6,8 @@
  *
  * Lifecycle: DISCOVERY -> CONCEPT -> ENGINEERING -> PRE_PRO -> FAB -> LOGISTICS -> INSTALL -> STRIKE -> ARCHIVED
  *
- * Coexists with fabrication_orders.status (text workflow-execution column:
- * open / in_progress / blocked / complete). Phase is the LDP-canonical
- * lifecycle column; status is operational workflow-execution.
+ * production_phase is the LDP-canonical lifecycle column (the legacy bare
+ * `status` twin was dropped in the 2026-06-09 LDP rename migration).
  */
 
 import "server-only";
@@ -34,7 +33,6 @@ export type FabricationOrderWithPhase = {
   title: string;
   description: string | null;
   due_at: string | null;
-  status: string; // workflow-execution: open/in_progress/blocked/complete
   production_phase: ProductionPhase;
   created_at: string;
   updated_at: string;

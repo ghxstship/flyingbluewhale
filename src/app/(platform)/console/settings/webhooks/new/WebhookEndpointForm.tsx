@@ -118,7 +118,13 @@ export function WebhookEndpointForm() {
   }
 
   return (
-    <div className="space-y-4">
+    <form
+      className="space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        submit();
+      }}
+    >
       <Input
         label={t("console.settings.webhooks.new.endpointUrlLabel", undefined, "Endpoint URL")}
         type="url"
@@ -159,12 +165,12 @@ export function WebhookEndpointForm() {
         <Button variant="secondary" href="/console/settings/webhooks">
           {t("common.cancel", undefined, "Cancel")}
         </Button>
-        <Button type="button" onClick={submit} disabled={isPending}>
+        <Button type="submit" disabled={isPending}>
           {isPending
             ? t("console.settings.webhooks.new.registering", undefined, "Registering…")
             : t("console.settings.webhooks.new.registerEndpoint", undefined, "Register endpoint")}
         </Button>
       </div>
-    </div>
+    </form>
   );
 }

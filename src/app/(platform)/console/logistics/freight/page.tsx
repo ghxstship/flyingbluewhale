@@ -82,7 +82,7 @@ export default async function Page() {
     supabase
       .from("ad_manifests")
       .select(
-        "id, kind, flight_ref, carrier, scheduled_at, actual_at, party_size, status, delegation:delegation_id(code, name)",
+        "id, kind, flight_ref, carrier, scheduled_at, actual_at, party_size, status:manifest_state, delegation:delegation_id(code, name)",
       )
       .eq("org_id", session.orgId)
       .order("scheduled_at", { ascending: true })

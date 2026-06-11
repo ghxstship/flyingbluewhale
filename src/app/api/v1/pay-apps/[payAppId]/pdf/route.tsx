@@ -47,7 +47,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ payAppId: strin
   const { data: payApp } = await supabase
     .from("payment_applications")
     .select(
-      "id, org_id, project_id, purchase_order_id, vendor_id, application_number, period_start, period_end, status, retention_pct, total_completed_cents, total_retention_cents, total_previously_paid_cents, total_due_cents, submitted_at, approved_at, paid_at, notes, aia_form_version, stored_materials_amount, prior_period_billed, architect_certification_at, architect_certification_by, requires_lien_waiver_from_subs",
+      "id, org_id, project_id, purchase_order_id, vendor_id, application_number, period_start, period_end, status:application_state, retention_pct, total_completed_cents, total_retention_cents, total_previously_paid_cents, total_due_cents, submitted_at, approved_at, paid_at, notes, aia_form_version, stored_materials_amount, prior_period_billed, architect_certification_at, architect_certification_by, requires_lien_waiver_from_subs",
     )
     .eq("id", parsed.data.payAppId)
     .eq("org_id", session.orgId)

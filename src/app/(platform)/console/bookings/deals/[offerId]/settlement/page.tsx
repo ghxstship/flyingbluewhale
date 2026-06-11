@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 type Settlement = {
   id: string;
   show_date: string;
-  status: string;
+  settlement_state: string;
   gross_box_office_cents: number;
   sales_tax_cents: number;
   amusement_tax_cents: number;
@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
     .eq("org_id", session.orgId)
     .maybeSingle();
   const s = (settlementResp.data ?? null) as Settlement | null;
-  const isFinal = s?.status === "final";
+  const isFinal = s?.settlement_state === "final";
 
   return (
     <>
@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
           `Settlement · ${offer.performance_date}`,
         )}
         title={t("console.bookings.deals.settlement.title", undefined, "Post-Show Reconciliation")}
-        action={s && <Badge variant={STATUS_TONE[s.status] ?? "muted"}>{toTitle(s.status)}</Badge>}
+        action={s && <Badge variant={STATUS_TONE[s.settlement_state] ?? "muted"}>{toTitle(s.settlement_state)}</Badge>}
       />
       <div className="page-content max-w-3xl space-y-5">
         {s && (

@@ -43,7 +43,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     supabase
       .from("punch_items")
       .select(
-        "id, code, title, description, project_id, priority, item_state, assignee_id, vendor_id, due_at, site_plan_id, show_ready_gate",
+        "id, code, title, description, project_id, priority, item_state, assignee_id, vendor_id, due_at, site_plan_id, show_ready_gate, updated_at",
       )
       .eq("id", id)
       .eq("org_id", session.orgId)

@@ -2,28 +2,25 @@ import { expect, test } from "playwright/test";
 import { dismissConsent, loginAs } from "./helpers/auth";
 
 /**
- * CHROMA BEACON e2e — theme persistence, FOUC prevention, color-mode toggle.
+ * Theme system e2e — persistence, FOUC prevention, color-mode toggle.
+ *
+ * Theme canon: the v3 GHXSTSHIP brand sweep retired the pre-v3 CHROMA
+ * exploration palettes, and the kit-wide migration (209245fd, 2026-06-07)
+ * retired `ghxstship` as well. Exactly ONE slug survives in the registry
+ * (src/app/theme/themes.config.ts#THEME_SLUGS): `atlvs-product` — the
+ * neutral SaaS skin, light family, with dark via the orthogonal data-mode
+ * axis and per-product accents via data-platform overlays. The Appearance
+ * page exposes color-mode + density radiogroups only.
  *
  * Fixtures: relies on the seeded test+owner user. The Appearance settings
  * live under /me/settings/appearance (authenticated route).
- *
- * Theme canon: the v3 GHXSTSHIP brand sweep retired the pre-v3 CHROMA
- * exploration palettes (bermuda-triangle, glass, brutal, bento, kinetic,
- * copilot, cyber, soft, earthy). Exactly two slugs survive in the registry
- * (src/app/theme/themes.config.ts#THEME_SLUGS): `ghxstship` (cosmic, dark
- * family, marketing) and `atlvs-product` (neutral SaaS, light family). The
- * Appearance page no longer renders a theme-picker gallery — it exposes the
- * orthogonal color-mode + density radiogroups only.
  */
 
-const SLUGS = ["ghxstship", "atlvs-product"] as const;
+const SLUGS = ["atlvs-product"] as const;
 
-test.describe("CHROMA BEACON", () => {
+test.describe("theme system", () => {
   test("data-theme is set on <html> before first paint (head script)", async ({ page }) => {
     await dismissConsent(page);
-    // atlvs-product is a valid, non-default, light-family slug — proves the
-    // head bootstrap honors the canonical registry set and color-scheme
-    // follows the theme family.
     await page.context().addCookies([{ name: "chroma_theme", value: "atlvs-product", domain: "localhost", path: "/" }]);
     await page.goto("/");
     const theme = await page.getAttribute("html", "data-theme");
@@ -32,13 +29,10 @@ test.describe("CHROMA BEACON", () => {
     expect(scheme).toBe("light");
   });
 
-  test("ghxstship default carries dark color-scheme", async ({ page }) => {
+  test("no cookie resolves to the canonical default", async ({ page }) => {
     await dismissConsent(page);
-    await page.context().addCookies([{ name: "chroma_theme", value: "ghxstship", domain: "localhost", path: "/" }]);
     await page.goto("/");
-    expect(await page.getAttribute("html", "data-theme")).toBe("ghxstship");
-    const scheme = await page.evaluate(() => document.documentElement.style.colorScheme);
-    expect(scheme).toBe("dark");
+    expect(await page.getAttribute("html", "data-theme")).toBe("atlvs-product");
   });
 
   test("invalid cookie falls back to default", async ({ page }) => {
@@ -48,9 +42,8 @@ test.describe("CHROMA BEACON", () => {
       .addCookies([{ name: "chroma_theme", value: "not-a-real-slug", domain: "localhost", path: "/" }]);
     await page.goto("/");
     const theme = await page.getAttribute("html", "data-theme");
-    // Default after the rebrand is ghxstship; a purged slug like cyber must
-    // NOT resurface.
-    expect(theme).toBe("ghxstship");
+    // Purged slugs (ghxstship, cyber, bermuda-triangle, …) must NOT resurface.
+    expect(theme).toBe("atlvs-product");
   });
 
   test("Appearance page renders color-mode + density controls", async ({ page }) => {
@@ -58,10 +51,10 @@ test.describe("CHROMA BEACON", () => {
     await loginAs(page, "owner");
     await page.goto("/me/settings/appearance");
     await expect(page.getByRole("heading", { name: "Appearance", level: 1 })).toBeVisible();
-    // The theme-picker gallery was retired with the two-skin canon; the page
-    // now exposes the orthogonal color-mode (Light / Match system / Dark) and
-    // Density (Compact/Default/Spacious) radiogroups. ThemeToggle labels its
-    // radiogroup "Color theme" (theme.toggle.colorTheme); DensityToggle "Density".
+    // The theme-picker gallery was retired with the single-skin canon; the
+    // page exposes the orthogonal color-mode (Light / Match system / Dark)
+    // and Density (Compact/Default/Spacious) radiogroups. ThemeToggle labels
+    // its radiogroup "Color theme" (theme.toggle.colorTheme); DensityToggle "Density".
     const mode = page.getByRole("main").getByRole("radiogroup", { name: "Color theme", exact: true });
     await expect(mode.getByRole("radio")).toHaveCount(3);
     const density = page.getByRole("main").getByRole("radiogroup", { name: "Density", exact: true });
@@ -90,7 +83,11 @@ test.describe("CHROMA BEACON", () => {
       await page.goto("/");
       const unset = await page.evaluate(() => {
         const style = getComputedStyle(document.documentElement);
-        const required = ["--bg", "--surface", "--text", "--accent", "--radius-md", "--font-body"];
+        // Kit tokens are the --p-* namespace; the legacy unprefixed names
+        // (--bg/--surface/--text/--accent) only exist on the
+        // :root:not([data-theme]) SSR bootstrap and are intentionally unset
+        // once data-theme lands.
+        const required = ["--p-bg", "--p-surface", "--p-text-1", "--p-accent", "--radius-md", "--font-body"];
         return required.filter((k) => !style.getPropertyValue(k).trim());
       });
       expect(unset).toEqual([]);

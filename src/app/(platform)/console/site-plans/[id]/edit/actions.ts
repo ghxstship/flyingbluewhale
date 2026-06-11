@@ -60,6 +60,11 @@ export type State = {
 export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const raw = Object.fromEntries(fd);
+  // Drop empty optional values so they validate as absent — z.coerce.number()
+  // turns "" into 0, which fails min() for tier and rejects blank shell dims.
+  for (const key of ["tier_primary", "shell_length_in", "shell_width_in", "shell_height_in"]) {
+    if (raw[key] === "") delete raw[key];
+  }
   const parsed = Schema.safeParse(raw);
   if (!parsed.success) return formFail(parsed.error, fd);
   const { id, ...patch } = parsed.data;

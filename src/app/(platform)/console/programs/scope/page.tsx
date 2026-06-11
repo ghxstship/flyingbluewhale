@@ -16,7 +16,7 @@ type EntryRow = {
   discipline: string | null;
   event: string | null;
   participant_name: string;
-  status: string;
+  entry_state: string;
   delegation: { code: string | null; name: string | null } | null;
 };
 
@@ -65,7 +65,7 @@ export default async function Page() {
 
   const disciplines = Array.from(byDiscipline.entries()).sort((a, b) => a[0].localeCompare(b[0]));
   const totalEvents = disciplines.reduce((sum, [, evs]) => sum + evs.size, 0);
-  const approved = entries.filter((e) => e.status === "approved").length;
+  const approved = entries.filter((e) => e.entry_state === "approved").length;
 
   return (
     <>

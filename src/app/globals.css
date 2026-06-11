@@ -91,9 +91,14 @@
   --p-text-3: #656d7a;
   --p-accent: #ff2e88;
   --p-accent-hover: #e61e76;
-  --p-accent-text: #d11668;
+  --p-accent-text: #c91463;
   --p-accent-contrast: #ffffff;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
+  /* AA-safe filled-button pair — mirrors the ATLVS light values in
+     atlvs-product.css so .ps-btn resolves outside [data-platform] scopes.
+     White on the display accent #ff2e88 is 3.5:1 and fails WCAG 1.4.3. */
+  --p-accent-cta: #c91463;
+  --p-accent-cta-contrast: #ffffff;
   --p-success: #2fa968;
   --p-warning: #e0a12b;
   --p-danger: #e5484d;

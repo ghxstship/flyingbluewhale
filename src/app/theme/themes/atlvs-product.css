@@ -26,7 +26,7 @@
    ========================================================================== */
 :root {
   --brand-atlvs: #ff2e88;
-  --brand-atlvs-ink: #d11668;
+  --brand-atlvs-ink: #c91463;
   --brand-atlvs-on: #fff;
   --brand-compvss: #e9a23b;
   --brand-compvss-ink: #9a6512;
@@ -155,9 +155,9 @@
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff2e88;
   --p-accent-hover: #e61e76;
-  --p-accent-text: #d11668;
+  --p-accent-text: #c91463;
   --p-accent-weak: rgba(255, 46, 136, 0.12);
-  --p-accent-cta: #d11668;
+  --p-accent-cta: #c91463;
   --p-accent-cta-contrast: #ffffff;
 }
 [data-ui="saas"][data-product="atlvs"][data-mode="dark"],
@@ -220,7 +220,7 @@
 [data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --k-acc: #ff2e88;
-  --k-acc-text: #d11668;
+  --k-acc-text: #c91463;
 }
 [data-ui="saas"][data-product="atlvs"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
@@ -397,8 +397,10 @@
   font-size: var(--k-ctl-fs);
   padding: var(--k-ctl-py) var(--k-ctl-px);
   border-radius: var(--p-r-sm);
-  background-color: var(--p-accent);
-  color: var(--p-accent-contrast);
+  /* Filled default = AA-safe CTA fill, same rule as .ps-btn--cta. The bright
+     display accent (#ff2e88) is 3.5:1 against white text — WCAG 1.4.3 fail. */
+  background-color: var(--p-accent-cta, var(--p-accent));
+  color: var(--p-accent-cta-contrast, var(--p-accent-contrast));
   border: 0;
   cursor: pointer;
   transition: filter 0.15s ease;

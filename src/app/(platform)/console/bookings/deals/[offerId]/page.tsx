@@ -28,7 +28,7 @@ type Deal = {
   agent_commission_bps: number;
   deposit_pct: number;
   deal_type: string;
-  status: string;
+  talent_offer_state: string;
   talent_profile_id: string;
   co_pro_partners: Array<{ org_name: string; split_pct: number }>;
 };
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
 
   const settlementResp = await supabase
     .from("settlements")
-    .select("id, status:settlement_state")
+    .select("id, settlement_state")
     .eq("talent_offer_id", d.id)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ offerId: stri
         )}
         action={
           <div className="flex items-center gap-2">
-            <Badge variant={STATUS_TONE[d.status] ?? "muted"}>{toTitle(d.status)}</Badge>
+            <Badge variant={STATUS_TONE[d.talent_offer_state] ?? "muted"}>{toTitle(d.talent_offer_state)}</Badge>
             <Button href={`/console/marketplace/offers/${d.id}`} size="sm" variant="ghost">
               {t("console.bookings.deals.detail.offerView", undefined, "Offer view")}
             </Button>

@@ -73,7 +73,8 @@ const NEW_ROUTES: string[] = [
   "/console/campaigns/new",
   "/console/clients/new",
   "/console/commercial/sponsors/new",
-  "/console/commercial/tickets/new",
+  // /console/commercial/tickets never existed — ticketing is unified
+  // assignments (dead nav links removed in audit phase 5).
   "/console/events/new",
   "/console/finance/budgets/new",
   "/console/finance/cost-codes/new",

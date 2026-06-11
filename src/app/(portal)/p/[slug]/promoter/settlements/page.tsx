@@ -59,7 +59,7 @@ export default async function PromoterSettlements({ params }: { params: Promise<
     ? await supabase
         .from("settlements")
         .select(
-          "id, show_date, gross_box_office_cents, paid_attendance, comp_count, artist_payout_cents, balance_due_cents, status, finalized_at, currency",
+          "id, show_date, gross_box_office_cents, paid_attendance, comp_count, artist_payout_cents, balance_due_cents, status:settlement_state, finalized_at, currency",
         )
         .eq("org_id", session.orgId)
         .in("talent_offer_id", offerIds)

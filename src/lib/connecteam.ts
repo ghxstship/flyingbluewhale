@@ -128,3 +128,49 @@ export const NEW_HIRE_STEP_KINDS = ["read", "sign", "upload", "quiz", "course", 
 export type NewHireStepKind = (typeof NEW_HIRE_STEP_KINDS)[number];
 export const NEW_HIRE_ASSIGNMENT_PHASES = ["not_started", "in_progress", "completed", "abandoned"] as const;
 export type NewHireAssignmentPhase = (typeof NEW_HIRE_ASSIGNMENT_PHASES)[number];
+
+// ============================================================
+// Shift Pulse  (Deputy "Shift Pulse" parity)
+// Post-checkout per-shift sentiment. Score 1–5 maps to
+// the emoji labels below.
+// ============================================================
+export const PULSE_SCORES = [1, 2, 3, 4, 5] as const;
+export type PulseScore = (typeof PULSE_SCORES)[number];
+export const PULSE_SCORE_LABELS: Record<PulseScore, string> = {
+  1: "Rough",
+  2: "Tough",
+  3: "OK",
+  4: "Good",
+  5: "Great",
+};
+export const PULSE_SCORE_EMOJI: Record<PulseScore, string> = {
+  1: "😞",
+  2: "😐",
+  3: "🙂",
+  4: "😄",
+  5: "🌟",
+};
+
+// ============================================================
+// Compensation fields on workforce_members
+// (Connecteam "Compensation Fields" parity)
+// ============================================================
+export const PAY_RATE_INTERVALS = ["hourly", "daily", "weekly", "flat", "per_show", "per_diem"] as const;
+export type PayRateInterval = (typeof PAY_RATE_INTERVALS)[number];
+export const PAY_RATE_INTERVAL_LABELS: Record<PayRateInterval, string> = {
+  hourly: "Per hour",
+  daily: "Per day",
+  weekly: "Per week",
+  flat: "Flat fee",
+  per_show: "Per show",
+  per_diem: "Per diem",
+};
+
+export const EMPLOYMENT_TYPES = ["w2", "1099", "volunteer", "contract"] as const;
+export type EmploymentType = (typeof EMPLOYMENT_TYPES)[number];
+export const EMPLOYMENT_TYPE_LABELS: Record<EmploymentType, string> = {
+  w2: "W-2 Employee",
+  "1099": "1099 Contractor",
+  volunteer: "Volunteer",
+  contract: "Contract",
+};

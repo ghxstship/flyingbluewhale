@@ -447,6 +447,7 @@ export const platformNavXpms: NavGroup[] = [
           { label: "Courses", href: "/console/workforce/courses", icon: "BookOpen" },
           { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
           { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+          { label: "Shift Pulse", href: "/console/workforce/shift-pulse", icon: "Activity" },
           { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
           { label: "Onboarding", href: "/console/workforce/onboarding", icon: "ClipboardSignature" },
@@ -699,6 +700,7 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Time Off", href: "/console/workforce/time-off", icon: "Calendar" },
           { label: "Shift Swaps", href: "/console/workforce/shift-swaps", icon: "ArrowLeftRight" },
+          { label: "Shift Pulse", href: "/console/workforce/shift-pulse", icon: "Activity" },
           { label: "Recognition", href: "/console/workforce/recognition", icon: "Award" },
           { label: "Badges", href: "/console/workforce/badges", icon: "BadgeCheck" },
           { label: "Resource Forecast", href: "/console/workforce/forecast", icon: "TrendingUp" },

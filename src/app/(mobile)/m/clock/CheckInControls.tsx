@@ -1,9 +1,10 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { ShiftPulseModal } from "./ShiftPulseModal";
 
 type Action = "check_in" | "check_out" | "break_start" | "break_end";
 
@@ -28,6 +29,7 @@ export function CheckInControls({
   attendance: "scheduled" | "checked_in" | "on_break" | "checked_out" | "no_show";
 }) {
   const [pending, start] = useTransition();
+  const [showPulse, setShowPulse] = useState(false);
   const router = useRouter();
   const t = useT();
 
@@ -56,13 +58,14 @@ export function CheckInControls({
           toast.error(json.error?.message ?? t("m.clock.error.couldntUpdate", undefined, "Couldn't update"));
           return;
         }
-        // 202 from the service worker means the punch is queued for
-        // background sync. Surface this so the user knows their action
-        // landed (just not against the server yet).
         if (json.queued) {
           toast.info(t("m.clock.toast.queued", { label }, `${label} (queued — will sync when online)`));
         } else {
           toast.success(label);
+        }
+        // After a successful clock-out, prompt for shift pulse.
+        if (action === "check_out") {
+          setShowPulse(true);
         }
         router.refresh();
       } catch (e) {
@@ -76,57 +79,62 @@ export function CheckInControls({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-2">
-      {attendance === "scheduled" && (
-        <button
-          type="button"
-          className="ps-btn col-span-2"
-          disabled={pending}
-          onClick={() => submit("check_in", t("m.clock.toast.checkedIn", undefined, "Checked in"))}
-        >
-          {pending ? t("m.clock.working", undefined, "Working…") : t("m.clock.clockIn", undefined, "Clock in")}
-        </button>
+    <>
+      {showPulse && (
+        <ShiftPulseModal shiftId={shiftId} onDone={() => setShowPulse(false)} />
       )}
-      {attendance === "checked_in" && (
-        <>
+      <div className="grid grid-cols-2 gap-2">
+        {attendance === "scheduled" && (
           <button
             type="button"
-            className="ps-btn ps-btn--ghost"
+            className="ps-btn col-span-2"
             disabled={pending}
-            onClick={() => submit("break_start", t("m.clock.toast.breakStarted", undefined, "Break started"))}
+            onClick={() => submit("check_in", t("m.clock.toast.checkedIn", undefined, "Checked in"))}
           >
-            {t("m.clock.startBreak", undefined, "Start break")}
+            {pending ? t("m.clock.working", undefined, "Working…") : t("m.clock.clockIn", undefined, "Clock in")}
           </button>
-          <button
-            type="button"
-            className="ps-btn ps-btn--danger"
-            disabled={pending}
-            onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
-          >
-            {t("m.clock.clockOut", undefined, "Clock out")}
-          </button>
-        </>
-      )}
-      {attendance === "on_break" && (
-        <>
-          <button
-            type="button"
-            className="ps-btn"
-            disabled={pending}
-            onClick={() => submit("break_end", t("m.clock.toast.backFromBreak", undefined, "Back from break"))}
-          >
-            {t("m.clock.endBreak", undefined, "End break")}
-          </button>
-          <button
-            type="button"
-            className="ps-btn ps-btn--danger"
-            disabled={pending}
-            onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
-          >
-            {t("m.clock.clockOut", undefined, "Clock out")}
-          </button>
-        </>
-      )}
-    </div>
+        )}
+        {attendance === "checked_in" && (
+          <>
+            <button
+              type="button"
+              className="ps-btn ps-btn--ghost"
+              disabled={pending}
+              onClick={() => submit("break_start", t("m.clock.toast.breakStarted", undefined, "Break started"))}
+            >
+              {t("m.clock.startBreak", undefined, "Start break")}
+            </button>
+            <button
+              type="button"
+              className="ps-btn ps-btn--danger"
+              disabled={pending}
+              onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
+            >
+              {t("m.clock.clockOut", undefined, "Clock out")}
+            </button>
+          </>
+        )}
+        {attendance === "on_break" && (
+          <>
+            <button
+              type="button"
+              className="ps-btn"
+              disabled={pending}
+              onClick={() => submit("break_end", t("m.clock.toast.backFromBreak", undefined, "Back from break"))}
+            >
+              {t("m.clock.endBreak", undefined, "End break")}
+            </button>
+            <button
+              type="button"
+              className="ps-btn ps-btn--danger"
+              disabled={pending}
+              onClick={() => submit("check_out", t("m.clock.toast.clockedOut", undefined, "Clocked out"))}
+            >
+              {t("m.clock.clockOut", undefined, "Clock out")}
+            </button>
+          </>
+        )}
+      </div>
+    </>
   );
 }

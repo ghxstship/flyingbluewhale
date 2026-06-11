@@ -28,6 +28,12 @@ type ExpenseRow = {
   spent_at: string;
 };
 type POrow = { id: string; number: string; title: string; amount_cents: number; po_state: string; created_at: string };
+type TimeEntryRow = {
+  id: string;
+  duration_minutes: number | null;
+  rate_cents: number | null;
+  ended_at: string | null;
+};
 
 const INVOICE_REVENUE_STATUSES = new Set(["paid"]);
 const INVOICE_PIPELINE_STATUSES = new Set(["sent", "overdue"]);
@@ -53,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const session = await requireSession();
   const supabase = await createClient();
 
-  const [{ data: project }, { data: invoices }, { data: expenses }, { data: pos }, { data: budgets }] =
+  const [{ data: project }, { data: invoices }, { data: expenses }, { data: pos }, { data: budgets }, { data: timeEntries }] =
     await Promise.all([
       supabase
         .from("projects")
@@ -82,6 +88,13 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         .order("created_at", { ascending: false }),
       // P4.2 — XPMS canonical actual_cents with spent_cents coalesce.
       supabase.from("budgets").select("amount_cents, actual_cents, spent_cents").eq("project_id", projectId),
+      // Labor costs: closed time entries with a rate (Ubeya P&L parity).
+      supabase
+        .from("time_entries")
+        .select("id, duration_minutes, rate_cents, ended_at")
+        .eq("org_id", session.orgId)
+        .eq("project_id", projectId)
+        .not("ended_at", "is", null),
     ]);
 
   if (!project) {
@@ -101,6 +114,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   const invList = (invoices ?? []) as InvoiceRow[];
   const expList = (expenses ?? []) as ExpenseRow[];
   const poList = (pos ?? []) as POrow[];
+  const teList = (timeEntries ?? []) as TimeEntryRow[];
 
   const revenue = invList
     .filter((i) => INVOICE_REVENUE_STATUSES.has(i.invoice_state))
@@ -112,7 +126,20 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     .filter((e) => EXPENSE_COMMITTED.has(e.expense_state))
     .reduce((s, e) => s + (e.amount_cents ?? 0), 0);
   const poCommitted = poList.filter((p) => PO_COMMITTED.has(p.po_state)).reduce((s, p) => s + (p.amount_cents ?? 0), 0);
-  const spent = expensesCommitted + poCommitted;
+
+  // Labor cost: sum (duration_minutes / 60) * rate_cents for entries that
+  // have an explicit rate. Entries without a rate still contribute tracked
+  // hours but can't be monetized here — they show in the hours tally only.
+  let laborCents = 0;
+  let laborMinutes = 0;
+  for (const te of teList) {
+    const mins = te.duration_minutes ?? 0;
+    laborMinutes += mins;
+    if (te.rate_cents != null) laborCents += Math.round((mins / 60) * te.rate_cents);
+  }
+  const laborHours = Math.round(laborMinutes / 60);
+
+  const spent = expensesCommitted + poCommitted + laborCents;
   const margin = revenue - spent;
   const marginPct = revenue > 0 ? Math.round((margin / revenue) * 100) : null;
 
@@ -164,12 +191,16 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             label={t("console.projects.finance.metrics.posCommitted", undefined, "POs committed")}
             value={formatMoney(poCommitted, currency)}
           />
+          <MetricCard
+            label={t("console.projects.finance.metrics.laborCost", undefined, "Labor Cost (tracked)")}
+            value={laborCents > 0 ? formatMoney(laborCents, currency) : `${laborHours}h`}
+          />
         </div>
         <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "console.projects.finance.marginExplainer",
             undefined,
-            "Margin = revenue (paid invoices) − spent (committed expenses + committed POs).",
+            "Margin = revenue (paid invoices) − spent (committed expenses + committed POs + rated labor).",
           )}
           {marginPct != null &&
             ` ${t("console.projects.finance.marginPctSentence", { pct: marginPct }, `This project is at ${marginPct}% margin against paid revenue.`)}`}{" "}
@@ -178,6 +209,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             undefined,
             "Pipeline is sent + overdue invoices that haven't cleared.",
           )}
+          {laborHours > 0 &&
+            ` ${t("console.projects.finance.laborExplainer", { hours: laborHours }, `Labor: ${laborHours}h tracked; only entries with a rate_cents value are costed.`)}`}
         </p>
 
         {budgetTotal > 0 && (

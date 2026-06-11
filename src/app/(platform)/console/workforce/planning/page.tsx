@@ -8,6 +8,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
+import { AutoScheduleButton } from "./AutoScheduleButton";
 
 export const dynamic = "force-dynamic";
 
@@ -42,14 +43,32 @@ export default async function Page() {
   const supabase = await createClient();
 
   const fmt = await getRequestFormatters();
-  const { data } = await supabase
-    .from("workforce_deployments")
-    .select(
-      "id, planned_fte, actual_fte, functional_area, shift_window, venue:venue_id(name), zone:zone_id(name, code)",
-    )
-    .eq("org_id", session.orgId)
-    .order("functional_area", { ascending: true })
-    .limit(500);
+  const [{ data }, { data: openShifts }, { data: crewList }] = await Promise.all([
+    supabase
+      .from("workforce_deployments")
+      .select(
+        "id, planned_fte, actual_fte, functional_area, shift_window, venue:venue_id(name), zone:zone_id(name, code)",
+      )
+      .eq("org_id", session.orgId)
+      .order("functional_area", { ascending: true })
+      .limit(500),
+    // Open (scheduled, not yet filled) shifts for AI auto-schedule.
+    supabase
+      .from("shifts")
+      .select("id, starts_at, ends_at, role, venue:venue_id(name)")
+      .eq("org_id", session.orgId)
+      .eq("attendance", "scheduled")
+      .gte("starts_at", new Date().toISOString())
+      .order("starts_at", { ascending: true })
+      .limit(200),
+    // Available crew for AI auto-schedule.
+    supabase
+      .from("workforce_members")
+      .select("id, full_name, role, skills, overtime_eligible")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .limit(500),
+  ]);
 
   const rows = (data ?? []) as unknown as DeploymentRow[];
   const totalPlanned = rows.reduce((s, r) => s + r.planned_fte, 0);
@@ -79,6 +98,29 @@ export default async function Page() {
       : "";
   const subtitle = `${rows.length} ${deploymentsLabel} · ${fmt.number(totalActual)} / ${fmt.number(totalPlanned)} FTE${filledSuffix}`;
 
+  const aiShifts = ((openShifts ?? []) as Array<{
+    id: string; starts_at: string; ends_at: string; role: string | null;
+    venue: { name: string | null } | null;
+  }>).map((s) => ({
+    id: s.id,
+    starts_at: s.starts_at,
+    ends_at: s.ends_at,
+    role: s.role,
+    venue_name: s.venue?.name ?? null,
+    required_skills: [] as string[],
+  }));
+
+  const aiCrew = ((crewList ?? []) as Array<{
+    id: string; full_name: string; role: string | null;
+    skills: string[] | null; overtime_eligible: boolean | null;
+  }>).map((c) => ({
+    id: c.id,
+    full_name: c.full_name,
+    role: c.role,
+    skills: (c.skills as string[] | null) ?? [],
+    overtime_eligible: c.overtime_eligible ?? true,
+  }));
+
   return (
     <>
       <ModuleHeader
@@ -92,6 +134,9 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
+        {/* AI Auto-Schedule — Connecteam + Ubeya parity */}
+        <AutoScheduleButton shifts={aiShifts} crew={aiCrew} />
+
         <div className="metric-grid-3">
           <MetricCard
             label={t("console.workforce.planning.plannedFte", undefined, "Planned FTE")}

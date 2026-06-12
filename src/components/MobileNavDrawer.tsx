@@ -123,7 +123,7 @@ function NavRow({ item, active }: { item: NavItem; active: boolean }) {
   return (
     <Link
       href={item.href}
-      className={`flex items-center gap-3 rounded-md px-2 py-2 text-sm transition ${
+      className={`flex items-center gap-3 rounded-md px-2 py-2 text-sm transition-colors ${
         active
           ? "bg-[var(--p-surface-2,var(--p-surface-2))] font-semibold text-[var(--p-accent,var(--p-accent))]"
           : "text-[var(--p-text-1,var(--p-text-1))] hover:bg-[var(--p-surface-2,var(--p-surface-2))]"

@@ -1,4 +1,5 @@
 import { QuickFileForm } from "./QuickFileForm";
+import Link from "next/link";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -24,9 +25,9 @@ export default async function QuickFilePage() {
           undefined,
           "Just describe what happened. We'll log it as a minor open incident — your supervisor will follow up to fill in severity, location, and photos. Need the full form?",
         )}{" "}
-        <a className="underline" href="/m/incidents/new">
+        <Link className="underline" href="/m/incidents/new">
           {t("m.incident.new.openFullForm", undefined, "Open it")}
-        </a>
+        </Link>
         .
       </p>
 

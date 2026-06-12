@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -107,9 +107,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
     return marks;
   }, [earliest, latest]);
 
-  function xForDate(s: string): number {
-    return LABEL_W + dayDiff(new Date(s), earliest) * DAY_W;
-  }
+  const xForDate = useCallback((s: string): number => LABEL_W + dayDiff(new Date(s), earliest) * DAY_W, [earliest]);
 
   const rendered = filteredActivities.map((a, i) => {
     const x = xForDate(a.start_planned);
@@ -142,7 +140,7 @@ export default function GanttClient({ activities, dependencies }: Props) {
       });
     }
     return paths;
-  }, [dependencies, byId, filteredActivities, earliest, xForDate]);
+  }, [dependencies, byId, filteredActivities, xForDate]);
 
   // Today marker.
   const todayX = LABEL_W + dayDiff(new Date(), earliest) * DAY_W;

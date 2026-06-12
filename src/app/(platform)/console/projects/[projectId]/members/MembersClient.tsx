@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
@@ -49,9 +50,9 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
           undefined,
           "No org members available to add. Invite someone via",
         )}{" "}
-        <a href="/console/people/invites" className="underline">
+        <Link href="/console/people/invites" className="underline">
           {t("console.projects.members.peopleInvitesLink", undefined, "People → Invites")}
-        </a>{" "}
+        </Link>{" "}
         {t("console.projects.members.noCandidatesSuffix", undefined, "first.")}
       </Alert>
     );

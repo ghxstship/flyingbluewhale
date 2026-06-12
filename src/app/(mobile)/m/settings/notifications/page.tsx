@@ -1,4 +1,5 @@
 import { FormShell } from "@/components/FormShell";
+import Link from "next/link";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -51,9 +52,9 @@ export default async function NotifPrefsPage() {
           undefined,
           "Choose which event kinds reach you over push and email. The push channel only fires when you've also enabled push subscriptions on",
         )}{" "}
-        <a className="underline" href="/m/settings">
+        <Link className="underline" href="/m/settings">
           {t("m.settings.notifications.pushSettingsLink", undefined, "Settings → Push Notifications")}
-        </a>
+        </Link>
         .
       </p>
 

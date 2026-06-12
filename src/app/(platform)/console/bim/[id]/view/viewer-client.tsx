@@ -188,6 +188,9 @@ export default function ViewerClient({ modelId, ifcUrl }: Props) {
       renderer.dispose();
       mount.removeChild(renderer.domElement);
     };
+    // `t` intentionally omitted: a locale switch must not tear down and
+    // re-download/rebuild the whole IFC scene just to refresh status strings.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ifcUrl]);
 
   return (

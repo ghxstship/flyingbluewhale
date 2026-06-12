@@ -214,6 +214,9 @@ export function IncidentForm({
         <label className="block text-xs font-medium text-[var(--p-text-2)]">
           {t("components.incidentForm.photosLabel", undefined, "Photos")}
         </label>
+        {/* Drag-drop is a pointer-only enhancement — the file-input label
+            inside this zone is the keyboard/screen-reader path. */}
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
         <div
           onDragOver={(e) => {
             e.preventDefault();

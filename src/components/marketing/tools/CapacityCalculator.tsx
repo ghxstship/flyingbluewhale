@@ -46,8 +46,11 @@ export function CapacityCalculator() {
     <div className="surface p-6">
       <div className="space-y-4">
         <div>
-          <label className="eyebrow">Total square footage</label>
+          <label className="eyebrow" htmlFor="capacity-sqft">
+            Total square footage
+          </label>
           <input
+            id="capacity-sqft"
             type="number"
             min={0}
             value={sqft}
@@ -56,8 +59,11 @@ export function CapacityCalculator() {
           />
         </div>
         <div>
-          <label className="eyebrow">Use type</label>
+          <label className="eyebrow" htmlFor="capacity-use-type">
+            Use type
+          </label>
           <select
+            id="capacity-use-type"
             value={useType}
             onChange={(e) => setUseType(e.target.value)}
             className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
@@ -71,8 +77,11 @@ export function CapacityCalculator() {
           <p className="mt-2 text-[11px] text-[var(--p-text-2)]">{selectedUse.hint}</p>
         </div>
         <div>
-          <label className="eyebrow">Usable floor area %</label>
+          <label className="eyebrow" htmlFor="capacity-usable-pct">
+            Usable floor area %
+          </label>
           <input
+            id="capacity-usable-pct"
             type="number"
             min={0}
             max={100}

@@ -29,7 +29,11 @@ const config = [
       // Warn (not error): legacy forms still use the sibling-label pattern
       // (`<label>X</label><textarea>`). New code should use <FormField> /
       // ui primitives, which carry an explicit htmlFor/id binding.
-      "jsx-a11y/label-has-associated-control": "warn",
+      // depth 4: the canonical wrapped-checkbox card pattern
+      // (`<label><input/><div><div>text</div></div></label>`) nests its
+      // text three levels deep — it IS associated; the default depth-2
+      // scan just can't see it.
+      "jsx-a11y/label-has-associated-control": ["warn", { depth: 4 }],
       "jsx-a11y/no-noninteractive-element-interactions": "warn",
       "jsx-a11y/no-redundant-roles": "error",
       "jsx-a11y/no-static-element-interactions": "warn",
@@ -172,6 +176,7 @@ const config = [
       "src/app/(platform)/console/proposals/**/edit/page.tsx",
       "src/app/proposals/**",                              // isolated print stylesheet + themed proposal docs
       "src/app/og/route.tsx",                              // Open Graph server route
+      "src/app/opengraph-image.tsx",                       // OG image — ImageResponse runtime has no CSS vars
       "src/app/layout.tsx",                                // themeColor meta
       "src/app/theme/**",                                  // CHROMA BEACON token definitions
       "src/lib/pdf/**",                                    // @react-pdf/renderer — style objects require hex; no CSS var support
@@ -227,6 +232,14 @@ const config = [
     // E2E tests — Playwright diagnostic logging is intentional and surfaces
     // a11y / regression detail in the test reporter.
     files: ["e2e/**/*.{ts,tsx}"],
+    rules: {
+      "no-console": "off",
+    },
+  },
+  {
+    // CLI scripts — stdout via console.log IS the program output (smoke
+    // harnesses, seeders, i18n tooling). Same rationale as the e2e block.
+    files: ["scripts/**/*.{mjs,js,ts}"],
     rules: {
       "no-console": "off",
     },

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/Badge";
+import Link from "next/link";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -79,9 +80,9 @@ export default async function CheckinPage() {
       <h1 className="mt-1 text-2xl font-semibold">{t("m.checkInSummary.title", undefined, "Check-in Summary")}</h1>
       <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.checkIn.subtitlePrefix", undefined, "Today's clock activity, breaks, and meal credits. Use")}{" "}
-        <a className="underline" href="/m/clock">
+        <Link className="underline" href="/m/clock">
           /m/clock
-        </a>{" "}
+        </Link>{" "}
         {t("m.checkIn.subtitleSuffix", undefined, "to actually punch in or out.")}
       </p>
 

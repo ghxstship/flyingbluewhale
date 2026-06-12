@@ -290,6 +290,10 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
         text_size: 12,
       });
     }
+    // drawMarkup / kindGeometry are render-scope helpers whose only reactive
+    // capture is `scale`, which is already a dependency — the closures can
+    // never go stale.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markups, page, scale, color, stroke, text]);
 
   useEffect(() => {

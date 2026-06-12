@@ -285,10 +285,8 @@ function main() {
     totalTouched += res.touched;
     if (res.changed) totalChanged++;
   }
-  // eslint-disable-next-line no-console
   console.log(`Scanned ${totalFiles} DataTable files; modified ${totalChanged}; touched ${totalTouched}/${totalCols} column defs.`);
   if (skipped.length) {
-    // eslint-disable-next-line no-console
     console.log(`Skipped (no DataTable import): ${skipped.length}`);
   }
 }

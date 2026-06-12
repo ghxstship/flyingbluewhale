@@ -219,11 +219,11 @@ export function NotificationsBell({ pollMs = 60_000 }: { pollMs?: number }) {
             ) : (
               items.map((n) => {
                 const isUnread = !n.read_at;
+                // Click/keyboard handling lives on the wrapping <Link>/<button>
+                // below — both already call markOne, so the row itself stays
+                // non-interactive.
                 const Row = (
-                  <div
-                    className="group flex items-start gap-2.5 rounded-md px-2.5 py-2 hover:bg-[var(--p-surface)]"
-                    onClick={() => (isUnread ? void markOne(n.id) : null)}
-                  >
+                  <div className="group flex items-start gap-2.5 rounded-md px-2.5 py-2 hover:bg-[var(--p-surface)]">
                     <span
                       aria-hidden="true"
                       className={`mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${

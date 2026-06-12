@@ -297,7 +297,6 @@ function main() {
     totalTouched += res.touched;
     if (res.changed) totalChanged++;
   }
-  // eslint-disable-next-line no-console
   console.log(`v3 sweep: modified ${totalChanged} files; touched ${totalTouched}/${totalCols} column defs.`);
 }
 

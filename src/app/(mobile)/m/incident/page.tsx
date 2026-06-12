@@ -57,9 +57,9 @@ export default async function MyIncidentsPage() {
       <h1 className="mt-1 text-2xl font-semibold">{t("m.incident.title", undefined, "My Incidents")}</h1>
       <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.incident.subtitle", { count: openCount }, "Reports you filed. {count} open. See the org-wide queue at")}{" "}
-        <a className="underline" href="/m/incidents">
+        <Link className="underline" href="/m/incidents">
           /m/incidents
-        </a>
+        </Link>
         .
       </p>
 

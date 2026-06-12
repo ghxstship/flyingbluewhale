@@ -134,7 +134,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         }
       });
     }
-  }, [mode, form, active]);
+  }, [mode, form, active, t]);
 
   if (mode === "list") {
     return (

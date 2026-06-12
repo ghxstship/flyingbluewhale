@@ -191,6 +191,9 @@ function Calendar_({
   }, []);
 
   return (
+    // Composite widget: role="application" delegates arrow-key navigation for
+    // the day grid; every actionable child is a real <button>.
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div role="application" onKeyDown={onKey} className="w-64">
       <div className="flex items-center justify-between pb-2">
         <button

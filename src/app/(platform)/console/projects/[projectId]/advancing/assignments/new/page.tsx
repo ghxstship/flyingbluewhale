@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
@@ -93,9 +94,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   undefined,
                   "No active catalog items in this org. Author one at",
                 )}{" "}
-                <a className="underline" href="/console/settings/catalog">
+                <Link className="underline" href="/console/settings/catalog">
                   /console/settings/catalog
-                </a>{" "}
+                </Link>{" "}
                 {t("console.projects.advancing.assignments.new.noCatalogSuffix", undefined, "first.")}
               </p>
             ) : (

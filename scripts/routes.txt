@@ -158,6 +158,11 @@
 (platform)/console/ai/automations/new/page.tsx|New automation|
 (platform)/console/ai/automations/[automationId]/page.tsx|Automation|
 (platform)/console/ai/agents/page.tsx|Agents|Long-running managed agents
+(platform)/console/ai/intelligence/page.tsx|ATLVS Intelligence|Ask / Act / Alert operational AI
+(platform)/console/ai/intelligence/[sessionId]/page.tsx|Intelligence session|Ask or Act session detail
+(platform)/console/ai/intelligence/alerts/page.tsx|Alert rules|Proactive operational monitoring rules
+(platform)/console/ai/intelligence/alerts/new/page.tsx|New alert rule|
+(platform)/console/ai/intelligence/alerts/[alertId]/page.tsx|Alert rule|
 
 # PLATFORM — collab
 (platform)/console/inbox/page.tsx|Inbox|Unified messages and mentions
@@ -239,6 +244,8 @@
 (mobile)/m/inventory/scan/page.tsx|Inventory scan|Equipment scan in/out
 (mobile)/m/incidents/new/page.tsx|Incident|Safety report
 (mobile)/m/settings/page.tsx|Mobile settings|Offline sync, camera perms
+(mobile)/m/crew/inductions/page.tsx|My inductions|Safety briefing compliance status
+(mobile)/m/crew/inductions/[inductionId]/page.tsx|Induction|Complete a safety briefing
 
 # ════════════════════════════════════════════════════════════════════════
 # OLYMPIC-GRADE SCOPE — ATLVS / GVTEWAY / COMPVSS (see docs/ia/benchmarks)
@@ -286,6 +293,9 @@
 (platform)/console/accreditation/scans/page.tsx|Scans|Gate access log
 (platform)/console/accreditation/changes/page.tsx|Changes|Upgrades, revocations, replacements
 (platform)/console/accreditation/changes/[changeId]/page.tsx|Change|
+(platform)/console/accreditation/inductions/page.tsx|Inductions|Briefing-gated compliance inductions (Accredit Induct)
+(platform)/console/accreditation/inductions/new/page.tsx|New induction requirement|
+(platform)/console/accreditation/inductions/[inductionId]/page.tsx|Induction requirement|
 
 # ATLVS — Workforce (WF-016, 190, 191, 192, 193, 194, 195, 196, 197, 082)
 (platform)/console/workforce/page.tsx|Workforce|Plan, roster, services
@@ -303,6 +313,12 @@
 (platform)/console/workforce/training/[courseId]/page.tsx|Course|
 (platform)/console/workforce/rosters/page.tsx|Rosters|Shift engine
 (platform)/console/workforce/rosters/[rosterId]/page.tsx|Roster|
+(platform)/console/workforce/rosters/[rosterId]/phases/page.tsx|Shift phases|Micro-scheduling: load-in, show, load-out segments
+(platform)/console/workforce/policies/page.tsx|Scheduling policies|Policy Builder — compliance rules for scheduling
+(platform)/console/workforce/policies/new/page.tsx|New policy|
+(platform)/console/workforce/policies/[policyId]/page.tsx|Policy|
+(platform)/console/workforce/sales-targets/page.tsx|Sales targets|Projected revenue vs labour %
+(platform)/console/workforce/crew-scores/page.tsx|Crew scores|Talent Intelligence — performance rankings
 (platform)/console/workforce/housing/page.tsx|Housing|Workforce billeting
 
 # ATLVS — Safety & Incidents (WF-060, 061, 062, 064, 065, 090, 092, 094, 142, 241, 252, 035)
@@ -570,6 +586,9 @@
 
 # CONSOLE — reviews moderation
 (platform)/console/marketplace/reviews/page.tsx|Reviews|Bidirectional review log + moderation
+
+# CONSOLE — lead insights (GigSalad Lead Insights analog)
+(platform)/console/marketplace/insights/page.tsx|Lead insights|Per-listing inquiry heat and competition signals
 
 # CONSOLE — RFQ marketplace publish workflow
 (platform)/console/procurement/rfqs/[rfqId]/publish/page.tsx|Publish RFQ|Set visibility, gating, deadline

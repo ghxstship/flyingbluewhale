@@ -113,7 +113,16 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // Competitive features wave 1
+  | "Brain"
+  | "BellRing"
+  | "ShieldPlus"
+  | "Target"
+  | "Trophy"
+  | "SplitSquareVertical"
+  | "LineChart"
+  | "Lightbulb";
 
 export type NavItem = {
   label: string;
@@ -706,6 +715,14 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Resource Forecast", href: "/console/workforce/forecast", icon: "TrendingUp" },
         ],
       },
+      {
+        label: "Intelligence",
+        items: [
+          { label: "Crew Scores", href: "/console/workforce/crew-scores", icon: "Trophy", minRole: "manager" },
+          { label: "Scheduling Policies", href: "/console/workforce/policies", icon: "ShieldPlus", minRole: "manager" },
+          { label: "Sales Targets", href: "/console/workforce/sales-targets", icon: "Target", minRole: "manager" },
+        ],
+      },
     ],
   },
   {
@@ -743,6 +760,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
           { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
           { label: "Inquiries", href: "/console/marketplace/inquiries", icon: "Inbox" },
+          { label: "Lead Insights", href: "/console/marketplace/insights", icon: "Lightbulb", minRole: "manager" },
         ],
       },
       {
@@ -909,6 +927,7 @@ export const platformNavDomain: NavGroup[] = [
         label: "Guest Experience",
         items: [
           { label: "Accreditation", href: "/console/accreditation", icon: "BadgeCheck" },
+          { label: "Inductions", href: "/console/accreditation/inductions", icon: "ShieldPlus", minRole: "manager" },
           // Same page as Sales → Hospitality, filtered to the guest
           // audience via ?audience=guest. The query param keeps the two
           // entries distinct — matchRoute treats query-bearing hrefs as
@@ -921,6 +940,20 @@ export const platformNavDomain: NavGroup[] = [
         label: "Reporting",
         items: [{ label: "Sustainability", href: "/console/sustainability", icon: "Leaf" }],
       },
+    ],
+  },
+  {
+    // ATLVS INTELLIGENCE — Competitive feature wave 1 (Jun 2026).
+    // Surfaces the Ask / Act / Alert AI operations agent (LASSO Intelligence
+    // analog) as a first-class sidebar group so operators can reach it
+    // without navigating through the generic AI hub.
+    label: "Intelligence",
+    items: [
+      { label: "Ask / Act", href: "/console/ai/intelligence", icon: "Brain" },
+      { label: "Alert Rules", href: "/console/ai/intelligence/alerts", icon: "BellRing", minRole: "manager" },
+      { label: "AI Assistant", href: "/console/ai/assistant", icon: "Bot" },
+      { label: "Automations", href: "/console/ai/automations", icon: "Sparkles", minRole: "manager" },
+      { label: "Agents", href: "/console/ai/agents", icon: "Sparkles", minRole: "admin" },
     ],
   },
 ];
@@ -973,7 +1006,10 @@ export const settingsNav: NavGroup[] = [
     // (operational sourcing concern, not admin). Time-Clock Zones stays
     // as it's purely org-level field configuration.
     label: "Field Config",
-    items: [{ label: "Time-Clock Zones", href: "/console/settings/time-clock-zones" }],
+    items: [
+      { label: "Time-Clock Zones", href: "/console/settings/time-clock-zones" },
+      { label: "Scheduling Policies", href: "/console/workforce/policies", minRole: "admin" },
+    ],
   },
   {
     label: "Billing & Data",

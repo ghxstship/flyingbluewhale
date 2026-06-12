@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitize from "sanitize-html";
 
 /**
  * Sanitize untrusted HTML before rendering with
@@ -10,10 +10,16 @@ import DOMPurify from "isomorphic-dompurify";
  * reasonably needs — headings, lists, inline formatting, quotes,
  * images, links with `rel=noopener`, and a few data-oriented elements.
  * Script/style/iframe/object/form are always stripped; event handlers
- * (`onclick`, `onload`, …) are stripped by default config.
+ * (`onclick`, `onload`, …) are stripped because they're not in the
+ * attribute allowlist; `javascript:` URIs die on the scheme allowlist.
  *
- * DOMPurify is battle-tested and XSS-test-suite-covered. Running on
- * the server via jsdom (isomorphic-dompurify handles the environment).
+ * sanitize-html (htmlparser2-based, pure JS) replaced isomorphic-dompurify:
+ * DOMPurify needs a DOM, and its jsdom shim refused to load inside the
+ * Vercel serverless runtime — every public /proposals/[token] render
+ * 500'd with "Failed to load external module jsdom" (externalizing the
+ * wrapper didn't help; jsdom itself wouldn't load). sanitize-html parses
+ * without a DOM, so the same allowlist works identically on server and
+ * client.
  */
 const ALLOWED_TAGS = [
   "a",
@@ -74,15 +80,22 @@ const ALLOWED_ATTR = [
 
 export function sanitizeHtml(input: string): string {
   if (!input) return "";
-  return DOMPurify.sanitize(input, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOW_DATA_ATTR: false,
-    // `rel=noopener noreferrer` added to every external anchor.
-    ADD_ATTR: ["rel"],
-    // Don't leave empty wrappers or HTML comments behind.
-    KEEP_CONTENT: false,
-    USE_PROFILES: { html: true },
+  return sanitize(input, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: { "*": ALLOWED_ATTR },
+    // Match DOMPurify's default URI policy: kill javascript:/vbscript:/
+    // file: etc. on href/src.
+    allowedSchemes: ["http", "https", "mailto", "tel"],
+    allowedSchemesAppliedToAttributes: ["href", "src"],
+    allowProtocolRelative: false,
+    // Disallowed tags are dropped; script/style/textarea also drop their
+    // text content (htmlparser2 nonTextTags default).
+    disallowedTagsMode: "discard",
+    // `rel=noopener noreferrer` enforced on every targeted anchor.
+    transformTags: {
+      a: (tagName, attribs) =>
+        attribs.target ? { tagName, attribs: { ...attribs, rel: "noopener noreferrer" } } : { tagName, attribs },
+    },
   });
 }
 

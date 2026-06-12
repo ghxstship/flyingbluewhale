@@ -94,12 +94,7 @@ const config: NextConfig = {
   // Server-only document generators — keep them out of the bundled server
   // chunks (they're large, CJS-heavy, and only ~20 API routes touch them).
   // Trims build time and serverless cold starts.
-  // isomorphic-dompurify: bundling it while jsdom stays on Next's default
-  // external list strands its require("jsdom") at runtime — every public
-  // /proposals/[token] render 500'd with "Failed to load external module
-  // jsdom". Externalizing the wrapper keeps the pair resolving together
-  // from node_modules.
-  serverExternalPackages: ["exceljs", "@react-pdf/renderer", "pptxgenjs", "archiver", "isomorphic-dompurify"],
+  serverExternalPackages: ["exceljs", "@react-pdf/renderer", "pptxgenjs", "archiver"],
 
   async headers() {
     return [

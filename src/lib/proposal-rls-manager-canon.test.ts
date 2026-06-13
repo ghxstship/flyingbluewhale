@@ -25,10 +25,19 @@ import { join } from "node:path";
 
 const MIGRATIONS_DIR = join(process.cwd(), "supabase/migrations");
 
-// (table, policy) pairs whose write band MUST include 'manager'. These are
-// the three hard-blocking surfaces of the proposal create/convert path:
-// a missing grant here returns "new row violates row-level security policy"
+// (table, policy) pairs whose write band MUST include 'manager'. The first
+// six are the hard-blocking surfaces of the proposal create/convert path
+// (20260612180000_proposal_rls_manager_grant.sql); the last five are the
+// convert-SEED downstream tables that convertProposalToProjectAction writes
+// after the project exists (20260613170000_convert_seed_rls_manager_grant.sql)
+// — without them a manager gets a project but SILENTLY no deposit/balance
+// invoices and no seeded deliverables/budgets, because those seeds soft-fail.
+// A missing grant here returns "new row violates row-level security policy"
 // to a manager who the app already authorized.
+//
+// NOT listed (intentionally): deliverables_insert + master_catalog_items_org_rw
+// gate on private.is_org_member, which already admits a manager — there is no
+// 4-role band to widen, so they carry no manager-specific guard.
 const GUARDED_WRITE_POLICIES: ReadonlyArray<{ table: string; policy: string }> = [
   { table: "proposals", policy: "proposals_insert" },
   { table: "proposals", policy: "proposals_update" },
@@ -36,6 +45,12 @@ const GUARDED_WRITE_POLICIES: ReadonlyArray<{ table: string; policy: string }> =
   { table: "projects", policy: "projects_update" },
   { table: "proposal_share_links", policy: "proposal_share_links_modify__insert" },
   { table: "proposal_share_links", policy: "proposal_share_links_update_consolidated" },
+  // convert-seed downstream (D1 follow-up)
+  { table: "invoices", policy: "invoices_insert" },
+  { table: "invoices", policy: "invoices_update" },
+  { table: "budgets", policy: "budgets_insert" },
+  { table: "budgets", policy: "budgets_update" },
+  { table: "deliverables", policy: "deliverables_update_consolidated" },
 ];
 
 /**

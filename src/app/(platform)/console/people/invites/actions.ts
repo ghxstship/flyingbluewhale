@@ -9,6 +9,7 @@ import { sendEmail } from "@/lib/email";
 import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { PLATFORM_ROLES, PROJECT_ROLES } from "@/lib/supabase/types";
+import { PORTAL_PERSONAS } from "@/lib/nav";
 import type { FormState } from "@/components/FormShell";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
@@ -16,6 +17,13 @@ const CreateSchema = z
   .object({
     email: z.string().email("Enter a valid email"),
     role: z.enum(PLATFORM_ROLES),
+    // Optional pre-set membership persona (P0.5). Empty → derive from role
+    // on acceptance (accept_invite's coalesce). Constrained to the portal
+    // sub-personas; operator personas are already implied by the role.
+    persona: z
+      .enum(PORTAL_PERSONAS as unknown as [string, ...string[]])
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
     // Optional project scope. The form sends empty string when "Org-wide" is
     // selected; coerce that to undefined so .optional() treats it as absent.
     projectId: z
@@ -62,6 +70,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
       org_id: session.orgId,
       email: parsed.data.email.toLowerCase(),
       role: parsed.data.role,
+      persona: parsed.data.persona ?? null,
       invited_by: session.userId,
       project_id: parsed.data.projectId ?? null,
       project_role: parsed.data.projectId ? parsed.data.projectRole : null,
@@ -106,6 +115,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
     metadata: {
       email: parsed.data.email.toLowerCase(),
       role: parsed.data.role,
+      persona: parsed.data.persona ?? null,
       project_id: parsed.data.projectId ?? null,
       project_role: parsed.data.projectRole ?? null,
     },

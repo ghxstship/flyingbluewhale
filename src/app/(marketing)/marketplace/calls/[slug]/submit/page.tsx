@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { FormShell } from "@/components/FormShell";
+import { MultiStepForm } from "@/components/forms/MultiStepForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -147,44 +147,65 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           )}
         </div>
 
-        <div className="surface mt-8 p-6">
-          <FormShell
+        <div className="mt-8">
+          <MultiStepForm
             action={submitToCall.bind(null, c.public_slug)}
             cancelHref={`/marketplace/calls/${c.public_slug}`}
             submitLabel={t("marketing.pages.marketplace.calls.submit.form.submit", undefined, "Submit To This Call")}
-          >
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("marketing.pages.marketplace.calls.submit.form.pitch", undefined, "Pitch")}
-                <span className="ms-0.5 text-[var(--p-danger)]">*</span>
-              </span>
-              <textarea
-                name="cover_note"
-                required
-                rows={6}
-                minLength={10}
-                maxLength={4000}
-                placeholder={t(
-                  "marketing.pages.marketplace.calls.submit.form.pitchPlaceholder",
+            steps={[
+              {
+                title: t("marketing.pages.marketplace.calls.submit.form.pitch", undefined, "Pitch"),
+                description: t(
+                  "marketing.pages.marketplace.calls.submit.form.pitchStep",
                   undefined,
-                  "Who you are, what you'd bring to this slot, and why it fits the brief.",
-                )}
-                className={INPUT}
-              />
-            </label>
-            <label className="flex flex-col gap-1.5">
-              <span className={LBL}>
-                {t("marketing.pages.marketplace.calls.submit.form.links", undefined, "Links — One Per Line")}
-              </span>
-              <textarea
-                name="links"
-                rows={4}
-                maxLength={2000}
-                placeholder={"https://youtube.com/watch?v=…\nhttps://soundcloud.com/…"}
-                className={`${INPUT} font-mono`}
-              />
-            </label>
-          </FormShell>
+                  "Tell them who you are and why you fit the brief.",
+                ),
+                fields: (
+                  <label className="flex flex-col gap-1.5">
+                    <span className={LBL}>
+                      {t("marketing.pages.marketplace.calls.submit.form.pitch", undefined, "Pitch")}
+                      <span className="ms-0.5 text-[var(--p-danger)]">*</span>
+                    </span>
+                    <textarea
+                      name="cover_note"
+                      required
+                      rows={6}
+                      minLength={10}
+                      maxLength={4000}
+                      placeholder={t(
+                        "marketing.pages.marketplace.calls.submit.form.pitchPlaceholder",
+                        undefined,
+                        "Who you are, what you'd bring to this slot, and why it fits the brief.",
+                      )}
+                      className={INPUT}
+                    />
+                  </label>
+                ),
+              },
+              {
+                title: t("marketing.pages.marketplace.calls.submit.form.links", undefined, "Links"),
+                description: t(
+                  "marketing.pages.marketplace.calls.submit.form.linksStep",
+                  undefined,
+                  "Optional — work samples, one URL per line.",
+                ),
+                fields: (
+                  <label className="flex flex-col gap-1.5">
+                    <span className={LBL}>
+                      {t("marketing.pages.marketplace.calls.submit.form.links", undefined, "Links — One Per Line")}
+                    </span>
+                    <textarea
+                      name="links"
+                      rows={4}
+                      maxLength={2000}
+                      placeholder={"https://youtube.com/watch?v=…\nhttps://soundcloud.com/…"}
+                      className={`${INPUT} font-mono`}
+                    />
+                  </label>
+                ),
+              },
+            ]}
+          />
         </div>
       </section>
     </>

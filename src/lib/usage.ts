@@ -109,6 +109,66 @@ export async function currentBucket(orgId: string, metric: Metric | string): Pro
   }
 }
 
+export type UsagePoint = { bucketStart: string; quantity: number };
+
+/**
+ * Read an org's hourly rollup series for one metric over a trailing window
+ * (default 14 days). Backs the per-tenant usage dashboard (P0.2). Goes
+ * through the service client like {@link currentBucket} because usage_rollups
+ * is service-written and isn't in the generated types yet; org scoping is
+ * enforced by the explicit `org_id` filter. Returns [] on any error so a
+ * dashboard widget degrades to "no data" rather than throwing.
+ */
+export async function usageSeries(
+  orgId: string,
+  metric: Metric | string,
+  sinceHours = 24 * 14,
+): Promise<UsagePoint[]> {
+  if (!orgId) return [];
+  try {
+    const svc = createServiceClient();
+    const loose = svc as unknown as LooseSupabase;
+    const cutoff = new Date(Date.now() - sinceHours * 3_600_000).toISOString();
+    const { data, error } = (await loose
+      .from("usage_rollups")
+      .select("bucket_start, quantity")
+      .eq("org_id", orgId)
+      .eq("metric", metric)
+      .gte("bucket_start", cutoff)
+      .order("bucket_start", { ascending: true })) as {
+      data: Array<{ bucket_start: string; quantity: number }> | null;
+      error: { message: string } | null;
+    };
+    if (error || !data) return [];
+    return data.map((r) => ({ bucketStart: r.bucket_start, quantity: Number(r.quantity) || 0 }));
+  } catch {
+    return [];
+  }
+}
+
+/** Sum a usage series to a single scalar total. */
+export function usageTotal(points: UsagePoint[]): number {
+  return points.reduce((acc, p) => acc + (Number.isFinite(p.quantity) ? p.quantity : 0), 0);
+}
+
+/**
+ * Collapse an hourly rollup series into `days` trailing daily totals (UTC),
+ * oldest→newest, gap-filled with 0. Drives the dashboard sparklines so a
+ * sparse hourly series still renders an even, fixed-width trend line.
+ */
+export function dailyTotals(points: UsagePoint[], days = 14): number[] {
+  const buckets = new Array<number>(days).fill(0);
+  const now = Date.now();
+  const dayMs = 24 * 3_600_000;
+  for (const p of points) {
+    const t = Date.parse(p.bucketStart);
+    if (!Number.isFinite(t)) continue;
+    const idx = days - 1 - Math.floor((now - t) / dayMs);
+    if (idx >= 0 && idx < days) buckets[idx] = (buckets[idx] ?? 0) + (Number(p.quantity) || 0);
+  }
+  return buckets;
+}
+
 /**
  * Format a UTC timestamp onto its canonical hour bucket (ISO string).
  * Extracted so the aggregator + test harness can share the same math.

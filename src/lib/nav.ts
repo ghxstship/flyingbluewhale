@@ -985,6 +985,12 @@ export const settingsNav: NavGroup[] = [
       // as an orphan top-level prefix; it shares its mental model
       // with Exports, so it lands in the same admin sub-section.
       { label: "Import Jobs", href: "/console/import", minRole: "manager" },
+      // P0.1 — recycle bin. Browse + restore soft-deleted rows across the
+      // human-meaningful soft-deletable tables. Manager+ (same band that can
+      // delete). Backed by listTrashed + restoreOrgScoped.
+      { label: "Trash", href: "/console/trash", minRole: "manager" },
+      // P0.2 — per-tenant AI & API usage dashboard over usage_rollups.
+      { label: "Usage", href: "/console/settings/usage", minRole: "manager" },
     ],
   },
   {

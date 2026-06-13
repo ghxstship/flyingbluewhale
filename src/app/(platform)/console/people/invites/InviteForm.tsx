@@ -4,6 +4,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { createInviteAction } from "./actions";
 import { PROJECT_ROLES, type ProjectRole } from "@/lib/supabase/types";
+import { PORTAL_PERSONAS } from "@/lib/nav";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 export type ProjectOption = { id: string; name: string };
@@ -47,6 +48,20 @@ export function InviteForm({ projects }: { projects: ProjectOption[] }) {
           {ROLES.map((r) => (
             <option key={r.value} value={r.value}>
               {r.label}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label className="block text-xs font-medium">
+        <span className="mb-1 block">
+          {t("console.people.invites.persona", undefined, "Portal persona · Optional")}
+        </span>
+        <select name="persona" defaultValue="" className="ps-input focus-ring w-full">
+          <option value="">{t("console.people.invites.personaAuto", undefined, "— Derive from role —")}</option>
+          {PORTAL_PERSONAS.map((p) => (
+            <option key={p} value={p}>
+              {p.charAt(0).toUpperCase() + p.slice(1)}
             </option>
           ))}
         </select>

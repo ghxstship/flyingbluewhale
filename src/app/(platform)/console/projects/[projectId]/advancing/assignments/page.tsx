@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
@@ -16,6 +17,7 @@ import {
   type AssignmentListRow,
 } from "@/lib/db/assignments";
 import { bulkAdvanceAssignments } from "./actions";
+import { AssignmentsKanban } from "./AssignmentsKanban";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +40,13 @@ export const dynamic = "force-dynamic";
 
 type Row = AssignmentListRow & { party: string; kindLabel: string };
 
-export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ projectId: string }>;
+  searchParams: Promise<{ view?: string }>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -56,6 +64,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
     );
   }
   const { projectId } = await params;
+  const sp = await searchParams;
+  const view = sp?.view === "board" ? "board" : "list";
   const session = await requireSession();
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
@@ -160,7 +170,49 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           ]}
           className="border-b border-[var(--p-border)]"
         />
-        <DataTable<Row>
+        {/* List ⇄ Board view toggle. Board groups by fulfillment_state and
+            drag-transitions through the same NEXT_FULFILLMENT_STATES guard. */}
+        <div className="flex justify-end">
+          <div className="inline-flex overflow-hidden rounded-md border border-[var(--p-border)] text-xs font-medium">
+            <Link
+              href={`/console/projects/${projectId}/advancing/assignments`}
+              aria-current={view === "list" ? "page" : undefined}
+              className={
+                view === "list"
+                  ? "bg-[var(--p-accent)] px-3 py-1.5 text-white"
+                  : "px-3 py-1.5 text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
+              }
+            >
+              {t("console.projects.advancing.assignments.view.list", undefined, "List")}
+            </Link>
+            <Link
+              href={`/console/projects/${projectId}/advancing/assignments?view=board`}
+              aria-current={view === "board" ? "page" : undefined}
+              className={
+                view === "board"
+                  ? "bg-[var(--p-accent)] px-3 py-1.5 text-white"
+                  : "px-3 py-1.5 text-[var(--p-text-2)] hover:bg-[var(--p-surface)] hover:text-[var(--p-text-1)]"
+              }
+            >
+              {t("console.projects.advancing.assignments.view.board", undefined, "Board")}
+            </Link>
+          </div>
+        </div>
+        {view === "board" ? (
+          <AssignmentsKanban
+            projectId={projectId}
+            rows={tableRows.map((r) => ({
+              id: r.id,
+              fulfillment_state: r.fulfillment_state,
+              party_kind: r.party_kind,
+              party: r.party,
+              kindLabel: r.kindLabel,
+              title: r.title,
+              deadline: r.deadline,
+            }))}
+          />
+        ) : (
+          <DataTable<Row>
           tableId="projects.advancing.assignments"
           rows={tableRows}
           totalCount={totalCount}
@@ -240,7 +292,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               mono: true,
             },
           ]}
-        />
+          />
+        )}
       </div>
     </>
   );

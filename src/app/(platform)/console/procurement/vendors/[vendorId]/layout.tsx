@@ -36,6 +36,10 @@ export default async function VendorLayout({
       label: t("console.procurement.vendors.tabs.scorecard", undefined, "Scorecard"),
       href: `/console/procurement/vendors/${vendorId}/scorecard`,
     },
+    {
+      label: t("console.procurement.vendors.tabs.onboarding", undefined, "Onboarding"),
+      href: `/console/procurement/vendors/${vendorId}/onboarding`,
+    },
   ];
   return <RecordTabsProvider tabs={tabs}>{children}</RecordTabsProvider>;
 }

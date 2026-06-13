@@ -160,6 +160,33 @@ export async function listOrgScoped<T extends TableName>(
   return (data ?? []) as PublicTables[T]["Row"][];
 }
 
+/**
+ * List soft-deleted rows for a soft-deletable table — the read side of the
+ * "Trash" / recycle-bin surface (P0.1). Inverts the `deleted_at IS NULL`
+ * gate that {@link listOrgScoped} applies: returns only rows WHERE
+ * `deleted_at IS NOT NULL`, newest-deleted first. Org-scoped + capped like
+ * the other read helpers. Returns empty for non-soft-deletable tables so the
+ * caller never accidentally lists live rows as "trash".
+ */
+export async function listTrashed<T extends TableName>(
+  table: T,
+  orgId: string,
+  opts: { limit?: number } = {},
+): Promise<PublicTables[T]["Row"][]> {
+  if (!orgId) return [];
+  if (!SOFT_DELETABLE_TABLES.has(table as string)) return [];
+  const effectiveLimit = opts.limit === 0 ? null : (opts.limit ?? 100);
+  let q = (await anyFrom(table as string))
+    .select("*")
+    .eq("org_id", orgId)
+    .not("deleted_at", "is", null)
+    .order("deleted_at", { ascending: false });
+  if (effectiveLimit !== null) q = q.limit(effectiveLimit);
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data ?? []) as PublicTables[T]["Row"][];
+}
+
 export async function getOrgScoped<T extends TableName>(
   table: T,
   orgId: string,

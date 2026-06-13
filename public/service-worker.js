@@ -367,12 +367,56 @@ self.addEventListener("push", (event) => {
     data: payload.data || {},
   };
   if (payload.url) options.data.url = payload.url;
+  // P2.a — actionable notifications. Render up to 2 action buttons and stash
+  // each one's dispatch descriptor (endpoint + body) in data keyed by action
+  // id so notificationclick can POST it without opening the app.
+  if (Array.isArray(payload.actions) && payload.actions.length) {
+    const list = payload.actions.slice(0, 2);
+    options.actions = list.map((a) => ({ action: a.action, title: a.title }));
+    options.data.actions = {};
+    for (const a of list) {
+      options.data.actions[a.action] = { endpoint: a.endpoint, body: a.body || null };
+    }
+  }
   event.waitUntil(self.registration.showNotification(title, options));
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || "/";
+  const data = event.notification.data || {};
+
+  // P2.a — an action button was tapped: POST its descriptor (cookies
+  // included) and surface a short result toast instead of opening the app.
+  const actionId = event.action;
+  if (actionId && data.actions && data.actions[actionId]) {
+    const spec = data.actions[actionId];
+    event.waitUntil(
+      fetch(spec.endpoint, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: spec.body ? JSON.stringify(spec.body) : undefined,
+      })
+        .then((res) =>
+          self.registration.showNotification("ATLVS", {
+            body: res.ok ? "Done." : "Couldn't complete that — open the app to retry.",
+            icon: "/icon-192.png",
+            tag: (event.notification.tag || "action") + "-result",
+          }),
+        )
+        .catch(() =>
+          self.registration.showNotification("ATLVS", {
+            body: "Offline — open the app to retry.",
+            icon: "/icon-192.png",
+            tag: (event.notification.tag || "action") + "-result",
+          }),
+        ),
+    );
+    return;
+  }
+
+  // Default: focus an existing tab on the target URL or open a new one.
+  const url = data.url || "/";
   event.waitUntil(
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((tabs) => {
       const tab = tabs.find((t) => t.url.includes(url));

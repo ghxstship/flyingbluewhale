@@ -346,6 +346,8 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "404": { $ref: "#/components/responses/NotFound" }
 
+  /api/v1/notifications/actions:
+    post: { summary: Execute an actionable-notification action (approve/decline time-off, approve deliverable). Called by the service worker on action-button tap. P2.a. }
   /api/v1/scan:
     post: { summary: Scan an assignment code (any catalog kind — ticket, credential, wristband, vehicle, etc.). Race-safe via assignment_scan_codes unique partial index. }
   /api/v1/equipment/scan:

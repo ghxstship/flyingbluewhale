@@ -13,13 +13,26 @@ import { createAssignmentAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ projectId: string }>;
+  searchParams: Promise<{ party?: string; catalog?: string }>;
+}) {
   const { t } = await getRequestT();
   if (!hasSupabase)
     return (
       <div className="page-content">{t("console.common.configureSupabase", undefined, "Configure Supabase.")}</div>
     );
   const { projectId } = await params;
+  // Prefill (P0.4) — a record-action button elsewhere can deep-link here
+  // with ?party=<userId>&catalog=<catalogItemId> to pre-select the assignee
+  // and SKU. Values are only used as <select> defaults; the action still
+  // validates everything server-side.
+  const sp = await searchParams;
+  const prefillParty = typeof sp?.party === "string" ? sp.party : "";
+  const prefillCatalog = typeof sp?.catalog === "string" ? sp.catalog : "";
   const session = await requireSession();
   const supabase = await createClient();
 
@@ -100,7 +113,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 {t("console.projects.advancing.assignments.new.noCatalogSuffix", undefined, "first.")}
               </p>
             ) : (
-              <select name="catalog_item_id" required className="ps-input mt-1.5 w-full">
+              <select name="catalog_item_id" required defaultValue={prefillCatalog} className="ps-input mt-1.5 w-full">
                 <option value="">
                   {t(
                     "console.projects.advancing.assignments.new.pickCatalogItem",
@@ -138,7 +151,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.advancing.assignments.new.assignee", undefined, "Assignee")}
             </label>
-            <select name="party_user_id" required className="ps-input mt-1.5 w-full">
+            <select name="party_user_id" required defaultValue={prefillParty} className="ps-input mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}

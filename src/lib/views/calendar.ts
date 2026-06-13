@@ -27,6 +27,26 @@ export type CalendarEvent = {
   data?: Record<string, unknown>;
 };
 
+/**
+ * Map an `events.event_state` (event_status enum) to a CalendarEvent tone.
+ * Shared by the console / portal / mobile schedule surfaces so event colors
+ * stay consistent across shells.
+ */
+export function eventStatusTone(status: string | null | undefined): NonNullable<CalendarEvent["tone"]> {
+  switch (status) {
+    case "scheduled":
+      return "info";
+    case "live":
+      return "success";
+    case "cancelled":
+      return "error";
+    case "draft":
+    case "complete":
+    default:
+      return "neutral";
+  }
+}
+
 const MS_PER_DAY = 86_400_000;
 
 /** Snap a Date to the start of the day (UTC). */

@@ -56,6 +56,23 @@ export type PushPayload = {
   /** Optional org scope for the notifications row — the ATLVS bell
    *  filters here on multi-org sessions. */
   orgId?: string;
+  /** P2.a — actionable notification buttons. Each becomes a button on the
+   *  OS notification; tapping it makes the service worker POST `body` to
+   *  `endpoint` (cookies included) without opening the app. The endpoint
+   *  re-authorizes — these descriptors are not a trust boundary. Web
+   *  Notifications render at most ~2 actions, so keep the list short. */
+  actions?: PushAction[];
+};
+
+export type PushAction = {
+  /** Stable action id — matches the SW `notificationclick` `event.action`. */
+  action: string;
+  /** Button label shown on the notification. */
+  title: string;
+  /** Same-origin API path the SW POSTs to (e.g. /api/v1/notifications/actions). */
+  endpoint: string;
+  /** JSON body sent with the POST. */
+  body?: Record<string, unknown>;
 };
 
 export type PushSendResult = { sent: number; failed: number; disabled: number };

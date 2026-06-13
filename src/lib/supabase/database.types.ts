@@ -3546,6 +3546,149 @@ export type Database = {
         }
         Relationships: []
       }
+      bridge_atom_metric: {
+        Row: {
+          atom_id: string
+          metric_id: string
+          role: string | null
+        }
+        Insert: {
+          atom_id: string
+          metric_id: string
+          role?: string | null
+        }
+        Update: {
+          atom_id?: string
+          metric_id?: string
+          role?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bridge_atom_metric_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_package_band_check"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_atom_metric_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_catalog"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_atom_metric_metric_id_fkey"
+            columns: ["metric_id"]
+            isOneToOne: false
+            referencedRelation: "dim_metric"
+            referencedColumns: ["metric_id"]
+          },
+        ]
+      }
+      bridge_atom_permit: {
+        Row: {
+          atom_id: string
+          note: string | null
+          permit_id: string
+        }
+        Insert: {
+          atom_id: string
+          note?: string | null
+          permit_id: string
+        }
+        Update: {
+          atom_id?: string
+          note?: string | null
+          permit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bridge_atom_permit_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_package_band_check"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_atom_permit_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_catalog"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_atom_permit_permit_id_fkey"
+            columns: ["permit_id"]
+            isOneToOne: false
+            referencedRelation: "dim_permit"
+            referencedColumns: ["permit_id"]
+          },
+          {
+            foreignKeyName: "bridge_atom_permit_permit_id_fkey"
+            columns: ["permit_id"]
+            isOneToOne: false
+            referencedRelation: "v_line_permit_flags"
+            referencedColumns: ["permit_id"]
+          },
+        ]
+      }
+      bridge_package_atom: {
+        Row: {
+          component_atom_id: string
+          grade_scope: string | null
+          id: number
+          include_flag: string
+          package_atom_id: string
+          qty_formula: string
+        }
+        Insert: {
+          component_atom_id: string
+          grade_scope?: string | null
+          id?: never
+          include_flag?: string
+          package_atom_id: string
+          qty_formula?: string
+        }
+        Update: {
+          component_atom_id?: string
+          grade_scope?: string | null
+          id?: never
+          include_flag?: string
+          package_atom_id?: string
+          qty_formula?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bridge_package_atom_component_atom_id_fkey"
+            columns: ["component_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_package_band_check"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_package_atom_component_atom_id_fkey"
+            columns: ["component_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_catalog"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_package_atom_package_atom_id_fkey"
+            columns: ["package_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_package_band_check"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_package_atom_package_atom_id_fkey"
+            columns: ["package_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_catalog"
+            referencedColumns: ["xpms_atom_id"]
+          },
+        ]
+      }
       budgets: {
         Row: {
           activation: string | null
@@ -8019,6 +8162,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      dim_metric: {
+        Row: {
+          confidence: string | null
+          formula: string
+          inputs: string | null
+          metric_id: string
+          name: string
+          source: string | null
+        }
+        Insert: {
+          confidence?: string | null
+          formula: string
+          inputs?: string | null
+          metric_id: string
+          name: string
+          source?: string | null
+        }
+        Update: {
+          confidence?: string | null
+          formula?: string
+          inputs?: string | null
+          metric_id?: string
+          name?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
+      dim_permit: {
+        Row: {
+          ahj_default: string | null
+          condition: string | null
+          lead_time: string | null
+          name: string
+          permit_id: string
+          trigger_type: string | null
+        }
+        Insert: {
+          ahj_default?: string | null
+          condition?: string | null
+          lead_time?: string | null
+          name: string
+          permit_id: string
+          trigger_type?: string | null
+        }
+        Update: {
+          ahj_default?: string | null
+          condition?: string | null
+          lead_time?: string | null
+          name?: string
+          permit_id?: string
+          trigger_type?: string | null
+        }
+        Relationships: []
       }
       dispatch_runs: {
         Row: {
@@ -31799,6 +31996,264 @@ export type Database = {
           },
         ]
       }
+      xpms_catalog: {
+        Row: {
+          alias_array: string | null
+          basic_high: number | null
+          basic_low: number | null
+          catalog_state: string | null
+          category: string
+          client_visible: string | null
+          common_name: string | null
+          compliance_tags: string | null
+          consumable_flag: boolean | null
+          created_at: string | null
+          crew: string | null
+          critical_path: string | null
+          currency: string | null
+          department: string
+          description: string | null
+          discipline: string
+          embedding: string | null
+          experience_layer: string | null
+          five_a: string | null
+          footprint: string | null
+          freight_class: string | null
+          fts: unknown
+          gap_flag: string | null
+          keyword_tags: string | null
+          kind: string | null
+          lead_time_hrs: string | null
+          legacy_handle: string | null
+          misspelling_variants: string | null
+          modifiers: string | null
+          name: string
+          options: string | null
+          pack_qty: string | null
+          phase: string | null
+          power: string | null
+          prem_high: number | null
+          prem_low: number | null
+          prerequisites: string | null
+          price_confidence: string | null
+          price_effective_date: string | null
+          price_source: string | null
+          pricing_unit: string | null
+          purchase_cost: string | null
+          region_code: string | null
+          rental_week_multiplier: number | null
+          replacement_cost: string | null
+          sense: string | null
+          setup: string | null
+          specifications: string | null
+          std_high: number | null
+          std_low: number | null
+          strike: string | null
+          sustainability_tags: string | null
+          team: string | null
+          tier: string | null
+          trigram_string: string | null
+          truck_space: string | null
+          unit_cost_usd: number | null
+          unspsc: string | null
+          uom: string | null
+          urid: string
+          vendor_ref_alt: string | null
+          vendor_ref_primary: string | null
+          weather: string | null
+          weight_lbs: number | null
+          xpms_atom_id: string
+          xyz: string | null
+        }
+        Insert: {
+          alias_array?: string | null
+          basic_high?: number | null
+          basic_low?: number | null
+          catalog_state?: string | null
+          category: string
+          client_visible?: string | null
+          common_name?: string | null
+          compliance_tags?: string | null
+          consumable_flag?: boolean | null
+          created_at?: string | null
+          crew?: string | null
+          critical_path?: string | null
+          currency?: string | null
+          department: string
+          description?: string | null
+          discipline: string
+          embedding?: string | null
+          experience_layer?: string | null
+          five_a?: string | null
+          footprint?: string | null
+          freight_class?: string | null
+          fts?: unknown
+          gap_flag?: string | null
+          keyword_tags?: string | null
+          kind?: string | null
+          lead_time_hrs?: string | null
+          legacy_handle?: string | null
+          misspelling_variants?: string | null
+          modifiers?: string | null
+          name: string
+          options?: string | null
+          pack_qty?: string | null
+          phase?: string | null
+          power?: string | null
+          prem_high?: number | null
+          prem_low?: number | null
+          prerequisites?: string | null
+          price_confidence?: string | null
+          price_effective_date?: string | null
+          price_source?: string | null
+          pricing_unit?: string | null
+          purchase_cost?: string | null
+          region_code?: string | null
+          rental_week_multiplier?: number | null
+          replacement_cost?: string | null
+          sense?: string | null
+          setup?: string | null
+          specifications?: string | null
+          std_high?: number | null
+          std_low?: number | null
+          strike?: string | null
+          sustainability_tags?: string | null
+          team?: string | null
+          tier?: string | null
+          trigram_string?: string | null
+          truck_space?: string | null
+          unit_cost_usd?: number | null
+          unspsc?: string | null
+          uom?: string | null
+          urid: string
+          vendor_ref_alt?: string | null
+          vendor_ref_primary?: string | null
+          weather?: string | null
+          weight_lbs?: number | null
+          xpms_atom_id: string
+          xyz?: string | null
+        }
+        Update: {
+          alias_array?: string | null
+          basic_high?: number | null
+          basic_low?: number | null
+          catalog_state?: string | null
+          category?: string
+          client_visible?: string | null
+          common_name?: string | null
+          compliance_tags?: string | null
+          consumable_flag?: boolean | null
+          created_at?: string | null
+          crew?: string | null
+          critical_path?: string | null
+          currency?: string | null
+          department?: string
+          description?: string | null
+          discipline?: string
+          embedding?: string | null
+          experience_layer?: string | null
+          five_a?: string | null
+          footprint?: string | null
+          freight_class?: string | null
+          fts?: unknown
+          gap_flag?: string | null
+          keyword_tags?: string | null
+          kind?: string | null
+          lead_time_hrs?: string | null
+          legacy_handle?: string | null
+          misspelling_variants?: string | null
+          modifiers?: string | null
+          name?: string
+          options?: string | null
+          pack_qty?: string | null
+          phase?: string | null
+          power?: string | null
+          prem_high?: number | null
+          prem_low?: number | null
+          prerequisites?: string | null
+          price_confidence?: string | null
+          price_effective_date?: string | null
+          price_source?: string | null
+          pricing_unit?: string | null
+          purchase_cost?: string | null
+          region_code?: string | null
+          rental_week_multiplier?: number | null
+          replacement_cost?: string | null
+          sense?: string | null
+          setup?: string | null
+          specifications?: string | null
+          std_high?: number | null
+          std_low?: number | null
+          strike?: string | null
+          sustainability_tags?: string | null
+          team?: string | null
+          tier?: string | null
+          trigram_string?: string | null
+          truck_space?: string | null
+          unit_cost_usd?: number | null
+          unspsc?: string | null
+          uom?: string | null
+          urid?: string
+          vendor_ref_alt?: string | null
+          vendor_ref_primary?: string | null
+          weather?: string | null
+          weight_lbs?: number | null
+          xpms_atom_id?: string
+          xyz?: string | null
+        }
+        Relationships: []
+      }
+      xpms_catalog_staging: {
+        Row: {
+          best_atom_id: string | null
+          best_score: number | null
+          created_at: string | null
+          disposition: string | null
+          id: number
+          project_code: string | null
+          qty: number | null
+          raw_text: string
+          unit_hint: string | null
+        }
+        Insert: {
+          best_atom_id?: string | null
+          best_score?: number | null
+          created_at?: string | null
+          disposition?: string | null
+          id?: never
+          project_code?: string | null
+          qty?: number | null
+          raw_text: string
+          unit_hint?: string | null
+        }
+        Update: {
+          best_atom_id?: string | null
+          best_score?: number | null
+          created_at?: string | null
+          disposition?: string | null
+          id?: never
+          project_code?: string | null
+          qty?: number | null
+          raw_text?: string
+          unit_hint?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xpms_catalog_staging_best_atom_id_fkey"
+            columns: ["best_atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_package_band_check"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "xpms_catalog_staging_best_atom_id_fkey"
+            columns: ["best_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_catalog"
+            referencedColumns: ["xpms_atom_id"]
+          },
+        ]
+      }
       xpms_project_composition: {
         Row: {
           computed_at: string
@@ -33557,6 +34012,43 @@ export type Database = {
           },
         ]
       }
+      v_line_permit_flags: {
+        Row: {
+          ahj_default: string | null
+          atom_id: string | null
+          atom_name: string | null
+          lead_time: string | null
+          permit: string | null
+          permit_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bridge_atom_permit_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "v_package_band_check"
+            referencedColumns: ["xpms_atom_id"]
+          },
+          {
+            foreignKeyName: "bridge_atom_permit_atom_id_fkey"
+            columns: ["atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_catalog"
+            referencedColumns: ["xpms_atom_id"]
+          },
+        ]
+      }
+      v_package_band_check: {
+        Row: {
+          bom_std_high: number | null
+          bom_std_low: number | null
+          name: string | null
+          package_std_high: number | null
+          package_std_low: number | null
+          xpms_atom_id: string | null
+        }
+        Relationships: []
+      }
       v_siteplan_sheet_acceptance: {
         Row: {
           atom_id: string | null
@@ -34200,6 +34692,19 @@ export type Database = {
       }
       enablelongtransactions: { Args: never; Returns: string }
       equals: { Args: { geom1: unknown; geom2: unknown }; Returns: boolean }
+      explode_package: {
+        Args: { pkg: string }
+        Returns: {
+          component_atom_id: string
+          grade_scope: string
+          include_flag: string
+          name: string
+          pricing_unit: string
+          qty_formula: string
+          std_high: number
+          std_low: number
+        }[]
+      }
       fx_rate_on: {
         Args: { p_date: string; p_from: string; p_to: string }
         Returns: number
@@ -34441,11 +34946,29 @@ export type Database = {
           reason_code: string
         }[]
       }
+      resolve_atom: {
+        Args: { max_rows?: number; q: string }
+        Returns: {
+          common_name: string
+          gap_flag: string
+          name: string
+          price_confidence: string
+          pricing_unit: string
+          score: number
+          std_high: number
+          std_low: number
+          unit_cost_usd: number
+          urid: string
+          xpms_atom_id: string
+        }[]
+      }
       seed_cornbread_abbey_road: {
         Args: { p_org_slug?: string }
         Returns: string
       }
       seed_salvage_city_ssot: { Args: { p_org_slug?: string }; Returns: number }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
       sign_msa: {
         Args: {
           p_code: string
@@ -35267,7 +35790,14 @@ export type Database = {
         | "Corporate & Brand"
         | "Hospitality & F&B"
         | "Festival & Touring"
-      budget_line_type: "Scope" | "Fee" | "Contingency" | "Allowance" | "Markup"
+      budget_line_type:
+        | "Scope"
+        | "Fee"
+        | "Contingency"
+        | "Allowance"
+        | "Markup"
+        | "Retainer"
+        | "Overhead"
       budget_tier:
         | "01 Social"
         | "02 Digital"
@@ -36348,7 +36878,15 @@ export const Constants = {
         "Hospitality & F&B",
         "Festival & Touring",
       ],
-      budget_line_type: ["Scope", "Fee", "Contingency", "Allowance", "Markup"],
+      budget_line_type: [
+        "Scope",
+        "Fee",
+        "Contingency",
+        "Allowance",
+        "Markup",
+        "Retainer",
+        "Overhead",
+      ],
       budget_tier: [
         "01 Social",
         "02 Digital",

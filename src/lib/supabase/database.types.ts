@@ -4643,12 +4643,14 @@ export type Database = {
       }
       clients: {
         Row: {
+          branding: Json
           contact_email: string | null
           contact_phone: string | null
           created_at: string
           created_by: string | null
           deleted_at: string | null
           id: string
+          logo_url: string | null
           name: string
           notes: string | null
           org_id: string
@@ -4656,12 +4658,14 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          branding?: Json
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
           created_by?: string | null
           deleted_at?: string | null
           id?: string
+          logo_url?: string | null
           name: string
           notes?: string | null
           org_id: string
@@ -4669,12 +4673,14 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          branding?: Json
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
           created_by?: string | null
           deleted_at?: string | null
           id?: string
+          logo_url?: string | null
           name?: string
           notes?: string | null
           org_id?: string
@@ -20320,6 +20326,7 @@ export type Database = {
         Row: {
           amount_cents: number | null
           blocks: Json
+          branding: Json
           client_id: string | null
           created_at: string
           created_by: string | null
@@ -20347,6 +20354,7 @@ export type Database = {
         Insert: {
           amount_cents?: number | null
           blocks?: Json
+          branding?: Json
           client_id?: string | null
           created_at?: string
           created_by?: string | null
@@ -20374,6 +20382,7 @@ export type Database = {
         Update: {
           amount_cents?: number | null
           blocks?: Json
+          branding?: Json
           client_id?: string | null
           created_at?: string
           created_by?: string | null

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
+import type { BrandContext } from "@/lib/branding";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { getRequestT } from "@/lib/i18n/request";
 import { PhaseBlock } from "./PhaseBlock";
@@ -19,17 +20,24 @@ function fmtMoney(m: Money | string | undefined, currency = "USD"): string {
 export async function ProposalBlockRenderer({
   blocks,
   theme,
+  brand,
   currency = "USD",
 }: {
   blocks: ProposalBlock[];
   theme: { primary: string; secondary: string };
+  brand?: BrandContext;
   currency?: string;
 }) {
   const { t } = await getRequestT();
   return (
     <>
       {blocks.map((b, i) => (
-        <BlockSwitch key={i} block={b} theme={theme} currency={currency} t={t} />
+        // Anchor wrapper: ProposalTopBar links to `#section-${i}` and its
+        // active-section IntersectionObserver keys on `[data-section-index]`.
+        // `scroll-mt-16` offsets the sticky top bar so the heading isn't hidden.
+        <div key={i} id={`section-${i}`} data-section-index={i} className="scroll-mt-16">
+          <BlockSwitch block={b} theme={theme} brand={brand} currency={currency} t={t} />
+        </div>
       ))}
     </>
   );
@@ -38,17 +46,19 @@ export async function ProposalBlockRenderer({
 function BlockSwitch({
   block,
   theme,
+  brand,
   currency,
   t,
 }: {
   block: ProposalBlock;
   theme: { primary: string; secondary: string };
+  brand?: BrandContext;
   currency: string;
   t: Translator;
 }) {
   switch (block.type) {
     case "hero":
-      return <HeroBlock block={block} theme={theme} />;
+      return <HeroBlock block={block} theme={theme} brand={brand} />;
     case "section_eyebrow":
       return <EyebrowBlock block={block} theme={theme} />;
     case "heading":
@@ -112,18 +122,37 @@ function accent(theme: { primary: string; secondary: string }, override?: string
 function HeroBlock({
   block,
   theme,
+  brand,
 }: {
   block: Extract<ProposalBlock, { type: "hero" }>;
   theme: { primary: string; secondary: string };
+  brand?: BrandContext;
 }) {
   const a = accent(theme, block.accent);
+  // Co-brand lockup: producer logo × client logo, when both resolve. Falls
+  // back to the text `partners[]` lockup below.
+  const lockup =
+    brand?.producer.logoUrl && brand.client?.logoUrl
+      ? { producer: brand.producer, client: brand.client }
+      : null;
   return (
     <section className="proposal-hero relative overflow-hidden border-b border-[var(--p-border)]">
       <div
         className="absolute inset-y-0 start-0 w-1"
-        style={{ background: `linear-gradient(180deg, ${theme.primary}, ${theme.secondary})` }}
+        style={{ background: `linear-gradient(180deg, var(--p-accent), var(--p-accent-secondary))` }}
       />
       <div className="mx-auto max-w-4xl px-8 py-20">
+        {lockup && (
+          <div className="mb-10 flex items-center gap-5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={lockup.producer.logoUrl!} alt={lockup.producer.name} className="h-12 w-auto object-contain" />
+            <span className="text-2xl text-[var(--p-text-2)]" aria-hidden="true">
+              ×
+            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={lockup.client.logoUrl!} alt={lockup.client.name} className="h-12 w-auto object-contain" />
+          </div>
+        )}
         {block.eyebrow && (
           <div className="text-xs font-semibold tracking-[0.2em] uppercase" style={{ color: a }}>
             {block.eyebrow}

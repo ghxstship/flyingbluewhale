@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { addLesson, addQuizQuestion, publishCourse, assignCourse, setCompletionBadge, deleteCourse } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
 import { getRequestT } from "@/lib/i18n/request";
+import { AICourseGenerator } from "@/components/ai/AICourseGenerator";
 
 export const dynamic = "force-dynamic";
 
@@ -136,6 +137,8 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
         }
       />
       <div className="page-content grid gap-4 lg:grid-cols-2">
+        <AICourseGenerator courseId={c.id} courseTitle={c.title} />
+
         <section className="surface p-4 lg:col-span-2">
           <h2 className="text-sm font-semibold">
             {t("console.workforce.courses.detail.completionBadge.title", undefined, "Completion Badge")}

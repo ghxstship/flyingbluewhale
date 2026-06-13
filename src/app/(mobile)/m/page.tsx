@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { MOBILE_ROLES, type MobileRole } from "@/lib/nav";
 import { MobileHomeTabs } from "./MobileHomeTabs";
+import { ClockOutAlert } from "@/components/mobile/ClockOutAlert";
 
 /**
  * Mobile home — three-tab section (Today / Tools / Reports) replacing the
@@ -179,6 +180,7 @@ export default async function MobileHome() {
     <div className="px-4 pt-6 pb-24">
       <div className="text-label text-[var(--brand-color)]">{t("m.home.eyebrow", undefined, "Field")}</div>
       <h1 className="text-display mt-2 text-3xl">{t("m.home.title", undefined, "Today")}</h1>
+      <ClockOutAlert />
       <MobileHomeTabs today={today} tools={tools} reports={reports} />
       <FAB href="/m/check-in" label={t("m.home.fab.scanTicket", undefined, "Scan Ticket")}>
         <QrCode size={22} />

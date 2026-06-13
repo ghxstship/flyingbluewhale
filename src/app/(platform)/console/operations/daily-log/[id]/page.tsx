@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/Button";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { toneFor } from "@/lib/tones";
+import { AISummaryPanel } from "@/components/ai/AISummaryPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -314,6 +315,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </p>
           )}
         </section>
+
+        <AISummaryPanel dailyLogId={id} />
 
         <div className="grid gap-4 lg:grid-cols-2">
           <ConversationPanel orgId={session.orgId} recordType="daily_log" recordId={id} />

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Alert } from "@/components/ui/Alert";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { LogoUploader } from "@/components/branding/LogoUploader";
 import { updateBrandingAction, type BrandingState } from "./actions";
 
 type Initial = {
@@ -13,6 +14,7 @@ type Initial = {
   logoUrl: string;
   accentColor: string;
   accentForeground: string;
+  secondaryColor: string;
   faviconUrl: string;
   heroImageUrl: string;
   ogImageUrl: string;
@@ -29,8 +31,8 @@ export function BrandingForm({ initial }: { initial: Initial }) {
 
   const [accent, setAccent] = useState(initial.accentColor || "#DC2626");
   const [foreground, setForeground] = useState(initial.accentForeground || "#ffffff");
+  const [secondary, setSecondary] = useState(initial.secondaryColor || "#6D4A2A");
   const [productName, setProductName] = useState(initial.productName);
-  const [logoUrl, setLogoUrl] = useState(initial.logoUrl);
 
   return (
     <form action={formAction} className="space-y-5">
@@ -54,13 +56,11 @@ export function BrandingForm({ initial }: { initial: Initial }) {
             maxLength={48}
             placeholder="ATLVS Technologies"
           />
-          <Input
-            label={t("console.settings.branding.identity.logoUrlLabel", undefined, "Logo URL — HTTPS")}
+          <LogoUploader
             name="logoUrl"
-            type="url"
-            value={logoUrl}
-            onChange={(e) => setLogoUrl(e.target.value)}
-            placeholder="https://cdn.example.com/logo.svg"
+            scope="org"
+            initialUrl={initial.logoUrl}
+            label={t("console.settings.branding.identity.logoUrlLabel", undefined, "Logo")}
           />
         </div>
       </section>
@@ -112,6 +112,28 @@ export function BrandingForm({ initial }: { initial: Initial }) {
                 name="accentForeground"
                 value={foreground}
                 onChange={(e) => setForeground(e.target.value)}
+                pattern="#[0-9a-fA-F]{6}"
+                className="ps-input w-full font-mono"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[var(--p-text-2)]">
+              {t("console.settings.branding.color.secondaryLabel", undefined, "Secondary Color")}
+            </label>
+            <div className="mt-1 flex items-center gap-2">
+              <input
+                type="color"
+                value={secondary}
+                onChange={(e) => setSecondary(e.target.value)}
+                className="h-10 w-10 cursor-pointer rounded border border-[var(--p-border)]"
+                aria-label={t("console.settings.branding.color.pickSecondaryAria", undefined, "Pick Secondary Color")}
+              />
+              <input
+                type="text"
+                name="secondaryColor"
+                value={secondary}
+                onChange={(e) => setSecondary(e.target.value)}
                 pattern="#[0-9a-fA-F]{6}"
                 className="ps-input w-full font-mono"
               />

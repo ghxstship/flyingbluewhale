@@ -146,12 +146,18 @@ export async function createShareLinkAction(
 
   if (recipientEmail) {
     const { sendProposalShareEmail } = await import("@/lib/email");
-    const { data: p } = await supabase.from("proposals").select("title").eq("id", proposalId).maybeSingle();
+    const { resolveBrandContext } = await import("@/lib/branding");
+    const [{ data: p }, { data: org }] = await Promise.all([
+      supabase.from("proposals").select("title").eq("id", proposalId).maybeSingle(),
+      supabase.from("orgs").select("name, name_override, branding, logo_url").eq("id", session.orgId).maybeSingle(),
+    ]);
+    const ctx = resolveBrandContext({ org: org ?? { name: null, branding: {} } });
     await sendProposalShareEmail({
       to: recipientEmail,
       proposalTitle: p?.title ?? "Proposal",
       url,
       senderName: session.email,
+      brand: { producerName: ctx.producer.name, producerLogoUrl: ctx.producer.logoUrl, accent: ctx.joint.accent },
     });
   }
 

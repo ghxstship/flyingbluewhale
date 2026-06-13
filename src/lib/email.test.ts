@@ -34,11 +34,21 @@ describe("wrapEmailHtml", () => {
     expect(gvteway).toContain("/brand/atlvs-icon-gvteway.svg");
   });
 
-  it("carries the brand chrome — spaced mark, parent mark, apex domain", () => {
+  it("carries the default ATLVS chrome — spaced mark + apex endorsement", () => {
     const html = wrapEmailHtml("<p>hi</p>");
-    expect(html).toContain(BRAND.mark); // "A T L V S"
-    expect(html).toContain(BRAND.parent.mark); // "G H X S T S H I P"
-    expect(html).toContain(BRAND.apexDomain); // "atlvs.pro"
+    expect(html).toContain(BRAND.mark); // "A T L V S" header wordmark
+    expect(html).toContain(BRAND.apexDomain); // "atlvs.pro" footer endorsement
+    expect(html).toContain("Powered by"); // co-brand-within-shell footer
+  });
+
+  it("co-brands the header with a producer brand — mark, logo, accent", () => {
+    const html = wrapEmailHtml("<p>hi</p>", {
+      brand: { producerName: "GHXSTSHIP", producerLogoUrl: "https://cdn.example/skull.png", accent: "#000000" },
+    });
+    expect(html).toContain("GHXSTSHIP"); // producer wordmark in header
+    expect(html).toContain("https://cdn.example/skull.png"); // producer logo
+    expect(html).toContain("#000000"); // accent applied to the endorsement link
+    expect(html).toContain("Powered by"); // ATLVS endorsement retained
   });
 
   it("resolves brand assets to absolute URLs rooted at the canonical apex", () => {

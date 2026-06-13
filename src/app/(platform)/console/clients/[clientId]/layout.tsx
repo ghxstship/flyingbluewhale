@@ -29,6 +29,10 @@ export default async function ClientLayout({
       label: t("console.clients.detail.tabs.invoices", undefined, "Invoices"),
       href: `/console/clients/${clientId}/invoices`,
     },
+    {
+      label: t("console.clients.detail.tabs.branding", undefined, "Brand"),
+      href: `/console/clients/${clientId}/branding`,
+    },
   ];
   return <RecordTabsProvider tabs={tabs}>{children}</RecordTabsProvider>;
 }

@@ -37,30 +37,42 @@ const ACCENT_TILE: Record<EmailWrapAccent, { fill: string; contrast: string; ico
   gvteway: { fill: "#12B5B5", contrast: "#FFFFFF", icon: "/brand/atlvs-icon-gvteway.svg" },
 };
 
-export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent } = {}): string {
-  const accent = ACCENT_TILE[opts.accent ?? "atlvs"];
-  const markUrl = brandAssetUrl(accent.icon);
+/**
+ * Optional producer co-brand for the email header (co-brand within shell):
+ * the authoring org's mark/logo + accent lead, and the small ATLVS
+ * endorsement is retained in the footer. Sender stays no-reply@atlvs.pro.
+ */
+export type EmailBrand = { producerName?: string; producerLogoUrl?: string | null; accent?: string };
+
+export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent; brand?: EmailBrand } = {}): string {
+  const tile = ACCENT_TILE[opts.accent ?? "atlvs"];
+  const accentFill = opts.brand?.accent ?? tile.fill;
+  // Header logo: producer logo (already absolute) if provided, else the
+  // platform product icon (relative → absolute via brandAssetUrl).
+  const markUrl = opts.brand?.producerLogoUrl ?? brandAssetUrl(tile.icon);
+  const wordmark = opts.brand?.producerName ?? BRAND.mark;
+  const subline = opts.brand?.producerName ? "" : "Technologies";
   return `<!doctype html>
 <html><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:0;background:#F7F8FA;font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;color:#181B23">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7F8FA;padding:32px 16px">
     <tr><td align="center">
       <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border:1px solid #E4E7EC;border-radius:12px;overflow:hidden">
-        <!-- Header band — Waypoint app-icon + wordmark -->
+        <!-- Header band — producer mark/logo (co-brand within shell) -->
         <tr><td style="padding:20px 24px;border-bottom:1px solid #E4E7EC;background:#FFFFFF">
           <table role="presentation" cellpadding="0" cellspacing="0"><tr>
             <td style="padding-right:14px;vertical-align:middle"><img src="${markUrl}" width="36" height="36" alt="" style="display:block;border-radius:8px"/></td>
             <td style="vertical-align:middle">
-              <div style="font-size:16px;font-weight:700;letter-spacing:0.04em;color:#181B23;text-transform:uppercase;line-height:1">${BRAND.mark}</div>
-              <div style="font-family:'Space Mono','Courier New',monospace;font-size:10px;letter-spacing:0.12em;color:#8C95A3;text-transform:uppercase;margin-top:4px">Technologies</div>
+              <div style="font-size:16px;font-weight:700;letter-spacing:0.04em;color:#181B23;text-transform:uppercase;line-height:1">${wordmark}</div>
+              ${subline ? `<div style="font-family:'Space Mono','Courier New',monospace;font-size:10px;letter-spacing:0.12em;color:#8C95A3;text-transform:uppercase;margin-top:4px">${subline}</div>` : ""}
             </td>
           </tr></table>
         </td></tr>
         <!-- Body content -->
         <tr><td style="padding:28px 24px;background:#FFFFFF">${bodyHtml}</td></tr>
-        <!-- Endorsement footer band — GHXSTSHIP parent -->
+        <!-- Endorsement footer band — small "powered by ATLVS" -->
         <tr><td style="padding:18px 24px;border-top:1px solid #E4E7EC;background:#F7F8FA;font-family:'Space Mono','Courier New',monospace;font-size:11px;letter-spacing:0.1em;color:#8C95A3;text-transform:uppercase;text-align:center">
-          a ${BRAND.parent.mark} Industries company · <a href="${brandAssetUrl("/")}" style="color:${accent.fill};text-decoration:none;font-weight:600">${BRAND.apexDomain}</a>
+          Powered by <a href="${brandAssetUrl("/")}" style="color:${accentFill};text-decoration:none;font-weight:600">${BRAND.mark}</a>
         </td></tr>
       </table>
     </td></tr>
@@ -125,27 +137,48 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
   return { ok: true, id: data.id };
 }
 
-// Convenience: send a proposal share-link notification.
+// Convenience: send a proposal share-link notification. When a producer
+// `brand` is passed, the email co-brands (header mark/logo + accent button)
+// and the from-name becomes the producer org; sender stays no-reply@atlvs.pro.
 export async function sendProposalShareEmail({
   to,
   proposalTitle,
   url,
   senderName,
+  brand,
 }: {
   to: string;
   proposalTitle: string;
   url: string;
   senderName?: string;
+  brand?: EmailBrand;
 }) {
+  const accent = brand?.accent ?? "#FF2E88";
+  const onAccent = pickReadableForeground(accent);
+  const fromName = brand?.producerName ?? senderName ?? BRAND.legalName;
   return sendEmail({
     to,
-    subject: `${senderName ?? BRAND.legalName} sent you a proposal: ${proposalTitle}`,
+    subject: `${fromName} sent you a proposal: ${proposalTitle}`,
     html: wrapEmailHtml(
       `<p style="margin:0;color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
        <h1 style="font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;margin:12px 0 8px;letter-spacing:-0.01em;color:#181B23">${proposalTitle}</h1>
-       <p style="color:#181b23;font-size:14px;margin:0 0 20px">${senderName ?? "The team"} shared a proposal with you.</p>
-       <p style="margin:0 0 20px"><a href="${url}" style="display:inline-block;background:#FF2E88;color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Open proposal</a></p>
+       <p style="color:#181b23;font-size:14px;margin:0 0 20px">${senderName ?? brand?.producerName ?? "The team"} shared a proposal with you.</p>
+       <p style="margin:0 0 20px"><a href="${url}" style="display:inline-block;background:${accent};color:${onAccent};padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Open proposal</a></p>
        <p style="color:#8c95a3;font-size:12px;margin:0;font-family:'Space Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code style="word-break:break-all">${url}</code></p>`,
+      { brand },
     ),
   });
+}
+
+/** WCAG-ish contrast pick: black or white text on a hex accent. */
+function pickReadableForeground(hex: string): string {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex);
+  if (!m?.[1]) return "#ffffff";
+  const n = parseInt(m[1], 16);
+  const r = (n >> 16) & 255,
+    g = (n >> 8) & 255,
+    b = n & 255;
+  // Relative luminance (sRGB approximation).
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return lum > 0.6 ? "#181B23" : "#ffffff";
 }

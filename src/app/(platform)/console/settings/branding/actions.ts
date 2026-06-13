@@ -18,6 +18,7 @@ export async function updateBrandingAction(_prev: BrandingState, fd: FormData): 
   const branding = safeBranding({
     accentColor: (fd.get("accentColor") as string) || undefined,
     accentForeground: (fd.get("accentForeground") as string) || undefined,
+    secondaryColor: (fd.get("secondaryColor") as string) || undefined,
     logoUrl: (fd.get("logoUrl") as string) || undefined,
     faviconUrl: (fd.get("faviconUrl") as string) || undefined,
     heroImageUrl: (fd.get("heroImageUrl") as string) || undefined,

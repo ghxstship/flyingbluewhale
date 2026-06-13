@@ -35,6 +35,7 @@ export default async function BrandingPage() {
             logoUrl: org?.logo_url ?? "",
             accentColor: branding.accentColor ?? "",
             accentForeground: branding.accentForeground ?? "",
+            secondaryColor: branding.secondaryColor ?? "",
             faviconUrl: branding.faviconUrl ?? "",
             heroImageUrl: branding.heroImageUrl ?? "",
             ogImageUrl: branding.ogImageUrl ?? "",

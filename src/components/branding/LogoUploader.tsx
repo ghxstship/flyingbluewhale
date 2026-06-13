@@ -16,14 +16,21 @@ export function LogoUploader({
   scope,
   initialUrl = "",
   label,
+  onChange,
 }: {
   name: string;
   scope: "org" | "client" | "project" | "proposal";
   initialUrl?: string;
   label?: string;
+  /** Optional: notify a parent (e.g. live preview) when the URL changes. */
+  onChange?: (url: string) => void;
 }) {
   const t = useT();
-  const [url, setUrl] = useState(initialUrl);
+  const [url, setUrlRaw] = useState(initialUrl);
+  const setUrl = (v: string) => {
+    setUrlRaw(v);
+    onChange?.(v);
+  };
   const [busy, setBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 

@@ -12,6 +12,7 @@ const Schema = z.object({
   projectId: z.string().uuid(),
   accentColor: z.string().optional(),
   accentForeground: z.string().optional(),
+  secondaryColor: z.string().optional(),
   logoUrl: z.string().optional(),
   faviconUrl: z.string().optional(),
   heroImageUrl: z.string().optional(),

@@ -158,6 +158,7 @@ export async function createShareLinkAction(
       url,
       senderName: session.email,
       brand: { producerName: ctx.producer.name, producerLogoUrl: ctx.producer.logoUrl, accent: ctx.joint.accent },
+      orgId: session.orgId,
     });
   }
 

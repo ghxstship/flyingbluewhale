@@ -1,7 +1,7 @@
 import "server-only";
 
 import React from "react";
-import { Text, View } from "@react-pdf/renderer";
+import { Image, Text, View } from "@react-pdf/renderer";
 import { BrandedPage, CoverPage, KeyValue, PdfDocument, PdfTable, SectionHeading, styles } from "./layout";
 import type { PdfBrand } from "./branding";
 
@@ -96,6 +96,9 @@ export function InvoicePdf({
       />
 
       <BrandedPage brand={brand} pageLabel={invoiceTitleFallback}>
+        {brand.clientLogoUrl ? (
+          <Image src={brand.clientLogoUrl} style={{ width: 96, height: 36, objectFit: "contain", marginBottom: 6 }} />
+        ) : null}
         <SectionHeading
           eyebrow={t("pdf.invoice.billTo", undefined, "Bill To")}
           title={brand.clientName ?? t("pdf.invoice.client", undefined, "Client")}

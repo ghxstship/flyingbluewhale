@@ -5,6 +5,7 @@ import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { brandingToCssVars, type Branding } from "@/lib/branding";
+import { LogoUploader } from "@/components/branding/LogoUploader";
 import { saveBrandingAction } from "./actions";
 
 export function BrandingForm({
@@ -19,6 +20,7 @@ export function BrandingForm({
   const t = useT();
   const [accent, setAccent] = useState(initial.accentColor ?? "#DC2626");
   const [accentFg, setAccentFg] = useState(initial.accentForeground ?? "#FFFFFF");
+  const [secondary, setSecondary] = useState(initial.secondaryColor ?? "#6D4A2A");
   const [logo, setLogo] = useState(initial.logoUrl ?? "");
   const [favicon, setFavicon] = useState(initial.faviconUrl ?? "");
   const [hero, setHero] = useState(initial.heroImageUrl ?? "");
@@ -27,6 +29,7 @@ export function BrandingForm({
   const previewStyle = brandingToCssVars({
     accentColor: accent,
     accentForeground: accentFg,
+    secondaryColor: secondary,
   }) as React.CSSProperties;
 
   return (
@@ -62,16 +65,23 @@ export function BrandingForm({
           placeholder="#FFFFFF"
         />
         <Input
-          label={t("console.projects.branding.logoUrl.label", undefined, "Logo URL")}
-          name="logoUrl"
-          value={logo}
-          onChange={(e) => setLogo(e.target.value)}
+          label={t("console.projects.branding.secondaryColor.label", undefined, "Secondary Color")}
+          name="secondaryColor"
+          value={secondary}
+          onChange={(e) => setSecondary(e.target.value)}
           hint={t(
-            "console.projects.branding.logoUrl.hint",
+            "console.projects.branding.secondaryColor.hint",
             undefined,
-            "Must be https. SVG or PNG with transparent bg recommended.",
+            "Hex — the joint secondary accent (deck gradients, balance cards).",
           )}
-          placeholder="https://…"
+          placeholder="#6D4A2A"
+        />
+        <LogoUploader
+          name="logoUrl"
+          scope="project"
+          initialUrl={logo}
+          onChange={setLogo}
+          label={t("console.projects.branding.logoUrl.label", undefined, "Logo")}
         />
         <Input
           label={t("console.projects.branding.faviconUrl.label", undefined, "Favicon URL")}

@@ -137,37 +137,82 @@ export async function sendEmail(payload: EmailPayload): Promise<{ ok: boolean; i
   return { ok: true, id: data.id };
 }
 
+/**
+ * Look up an org's active transactional template by slug and substitute
+ * `{{merge_tag}}` placeholders. Returns null when no template is set so
+ * callers fall back to the inline default. Body is wrapped in the brand
+ * chrome by the caller (the stored body_html is the inner content).
+ */
+export async function renderOrgEmailTemplate(
+  orgId: string,
+  slug: string,
+  vars: Record<string, string>,
+): Promise<{ subject: string; bodyHtml: string } | null> {
+  try {
+    const { createClient } = await import("@/lib/supabase/server");
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from("email_templates")
+      .select("subject, body_html")
+      .eq("org_id", orgId)
+      .eq("slug", slug)
+      .eq("is_active", true)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (!data?.body_html) return null;
+    const sub = (s: string) => s.replace(/\{\{\s*(\w+)\s*\}\}/g, (_m, k: string) => vars[k] ?? "");
+    return { subject: sub(data.subject ?? slug), bodyHtml: sub(data.body_html) };
+  } catch {
+    return null;
+  }
+}
+
 // Convenience: send a proposal share-link notification. When a producer
 // `brand` is passed, the email co-brands (header mark/logo + accent button)
 // and the from-name becomes the producer org; sender stays no-reply@atlvs.pro.
+// When `orgId` is passed and the org has an active `proposal_sent` template,
+// its subject + body (with merge tags) override the inline default.
 export async function sendProposalShareEmail({
   to,
   proposalTitle,
   url,
   senderName,
   brand,
+  orgId,
 }: {
   to: string;
   proposalTitle: string;
   url: string;
   senderName?: string;
   brand?: EmailBrand;
+  orgId?: string;
 }) {
   const accent = brand?.accent ?? "#FF2E88";
   const onAccent = pickReadableForeground(accent);
   const fromName = brand?.producerName ?? senderName ?? BRAND.legalName;
-  return sendEmail({
-    to,
-    subject: `${fromName} sent you a proposal: ${proposalTitle}`,
-    html: wrapEmailHtml(
-      `<p style="margin:0;color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
+  const sender = senderName ?? brand?.producerName ?? "The team";
+
+  // Per-org template override (Opp #21), else the inline default body.
+  const tpl = orgId
+    ? await renderOrgEmailTemplate(orgId, "proposal_sent", {
+        proposalTitle,
+        url,
+        senderName: sender,
+        producerName: brand?.producerName ?? "",
+        recipientEmail: to,
+      })
+    : null;
+
+  const subject = tpl?.subject || `${fromName} sent you a proposal: ${proposalTitle}`;
+  const bodyHtml =
+    tpl?.bodyHtml ||
+    `<p style="margin:0;color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
        <h1 style="font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;margin:12px 0 8px;letter-spacing:-0.01em;color:#181B23">${proposalTitle}</h1>
-       <p style="color:#181b23;font-size:14px;margin:0 0 20px">${senderName ?? brand?.producerName ?? "The team"} shared a proposal with you.</p>
+       <p style="color:#181b23;font-size:14px;margin:0 0 20px">${sender} shared a proposal with you.</p>
        <p style="margin:0 0 20px"><a href="${url}" style="display:inline-block;background:${accent};color:${onAccent};padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Open proposal</a></p>
-       <p style="color:#8c95a3;font-size:12px;margin:0;font-family:'Space Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code style="word-break:break-all">${url}</code></p>`,
-      { brand },
-    ),
-  });
+       <p style="color:#8c95a3;font-size:12px;margin:0;font-family:'Space Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code style="word-break:break-all">${url}</code></p>`;
+
+  return sendEmail({ to, subject, html: wrapEmailHtml(bodyHtml, { brand }) });
 }
 
 /** WCAG-ish contrast pick: black or white text on a hex accent. */

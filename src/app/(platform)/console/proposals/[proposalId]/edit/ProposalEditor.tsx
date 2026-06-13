@@ -11,6 +11,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { BLOCK_LABELS, BLOCK_TYPES, type ProposalBlock, type ProposalBlockType } from "@/lib/proposals/types";
 import { saveProposalAction, type EditState } from "./actions";
 import { LineagePanel, isLineageBlock } from "./LineagePanel";
+import { ProposalBrandPanel } from "./ProposalBrandPanel";
 
 // Give each block a stable id for sortable purposes.
 type IdentifiedBlock = ProposalBlock & { _dragId: string };
@@ -197,18 +198,7 @@ export function ProposalEditor({
           />
         </div>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Input
-          label={t("console.proposals.edit.fields.themePrimary", undefined, "Theme Primary")}
-          name="theme_primary"
-          defaultValue={defaults.theme.primary}
-        />
-        <Input
-          label={t("console.proposals.edit.fields.themeSecondary", undefined, "Theme Secondary")}
-          name="theme_secondary"
-          defaultValue={defaults.theme.secondary}
-        />
-      </div>
+      <ProposalBrandPanel initialPrimary={defaults.theme.primary} initialSecondary={defaults.theme.secondary} />
 
       <div className="flex items-center justify-between">
         <div className="text-xs text-[var(--p-text-2)]">

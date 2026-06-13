@@ -570,6 +570,8 @@ paths:
     post: { summary: Log a new incident report with optional photo references. }
   /api/v1/incidents/photo-upload:
     post: { summary: Issue a signed upload URL into the `incident-photos` bucket scoped to a draft id. }
+  /api/v1/branding/upload:
+    post: { summary: Issue a signed upload URL into the public `branding` bucket and return the public logo URL for org/client/project/proposal co-branding. }
   /api/v1/email-templates:
     get:  { summary: List the org's transactional email templates. Opp #21. }
     post: { summary: Create an org-scoped email template with merge-tag schema. }

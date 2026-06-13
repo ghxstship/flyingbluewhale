@@ -54,7 +54,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ invoiceId: stri
   if (error) return apiError("internal", error.message);
   if (!invoice) return apiError("not_found", "Invoice not found");
 
-  const [{ data: lineItems }, { data: org }, { data: client }] = await Promise.all([
+  const [{ data: lineItems }, { data: org }, { data: client }, { data: project }] = await Promise.all([
     supabase
       .from("invoice_line_items")
       .select("description, quantity, unit_price_cents, position")
@@ -62,13 +62,16 @@ export async function GET(req: Request, ctx: { params: Promise<{ invoiceId: stri
       .order("position", { ascending: true }),
     supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
     invoice.client_id
-      ? supabase.from("clients").select("name").eq("id", invoice.client_id).maybeSingle()
+      ? supabase.from("clients").select("name, branding, logo_url").eq("id", invoice.client_id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    invoice.project_id
+      ? supabase.from("projects").select("branding").eq("id", invoice.project_id).maybeSingle()
       : Promise.resolve({ data: null }),
   ]);
 
   if (!org) return apiError("internal", "Missing organization row");
 
-  const brand = resolvePdfBrand({ org, client: client ?? null });
+  const brand = resolvePdfBrand({ org, client: client ?? null, project: project ?? null });
   const { t } = await getRequestT();
 
   try {

@@ -360,6 +360,8 @@ paths:
 
   /api/v1/ai/chat:
     post: { summary: Streaming chat completion. }
+  /api/v1/ai/propose:
+    post: { summary: Generate an AI proposal draft (persists an ai_proposal_drafts row). }
   /api/v1/ai/conversations:
     get: { summary: List conversations for the session. Creation is implicit via /api/v1/ai/chat. }
   /api/v1/ai/conversations/{id}:

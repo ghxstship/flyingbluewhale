@@ -182,6 +182,7 @@ export const platformNavDomain: NavGroup[] = [
     label: "Dashboard",
     items: [
       { label: "Overview", href: "/console", icon: "LayoutDashboard" },
+      { label: "Goals", href: "/console/goals", icon: "Crosshair" },
       { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox" },
       { label: "Threads", href: "/console/inbox", icon: "MessageSquare" },
     ],
@@ -406,6 +407,7 @@ export const platformNavDomain: NavGroup[] = [
         label: "Time & Payroll",
         items: [
           { label: "Time", href: "/console/finance/time", icon: "Clock" },
+          { label: "Timesheets", href: "/console/finance/timesheets", icon: "ClipboardCheck" },
           { label: "Certified Payroll", href: "/console/finance/payroll", icon: "FileSignature" },
           { label: "Subscriptions", href: "/console/subscriptions", icon: "BadgeCheck" },
         ],
@@ -631,6 +633,7 @@ export const settingsNav: NavGroup[] = [
       { label: "Marketplace", href: "/console/settings/integrations/marketplace", minRole: "admin" },
       { label: "Ticketing", href: "/console/settings/integrations/ticketing", minRole: "admin" },
       { label: "Automations", href: "/console/ai/automations", minRole: "manager" },
+      { label: "Field Agents", href: "/console/ai/agents", minRole: "manager" },
       { label: "API", href: "/console/settings/api", minRole: "admin" },
       { label: "Webhooks", href: "/console/settings/webhooks", minRole: "admin" },
     ],
@@ -982,6 +985,7 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
       { label: "Call Sheet", href: `${base}/call-sheet` },
       { label: "Schedule", href: `${base}/schedule` },
       { label: "Time", href: `${base}/time` },
+      { label: "Timesheets", href: `${base}/timesheets` },
       { label: "Time Off", href: `${base}/time-off` },
       { label: "Feed", href: `${base}/feed` },
       { label: "Chat", href: `${base}/chat` },

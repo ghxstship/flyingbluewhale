@@ -6,6 +6,15 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { DataViewSwitcher } from "@/components/views/DataViewSwitcher";
+import { resolveDataView } from "@/components/views/resolveDataView";
+import type { DataViewKind } from "@/components/views/DataViewKind";
+import { CatalogGallery } from "./CatalogGallery";
+
+// Catalog rows carry a name + kind + cost — a natural fit for a card
+// gallery alongside the dense table. Default is table.
+const CATALOG_VIEWS = ["table", "gallery"] as const satisfies readonly DataViewKind[];
+type CatalogView = (typeof CATALOG_VIEWS)[number];
 
 export const dynamic = "force-dynamic";
 
@@ -33,8 +42,14 @@ const KIND_LABEL: Record<string, string> = {
   vehicle: "Vehicles",
 };
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string }>;
+}) {
   const { t } = await getRequestT();
+  const sp = await searchParams;
+  const view = resolveDataView<CatalogView>(sp, CATALOG_VIEWS, "table");
   if (!hasSupabase) {
     return (
       <>
@@ -88,13 +103,42 @@ export default async function Page() {
           `${rows.length} ${itemWord} · the assignable inventory for advancing surfaces`,
         )}
         action={
-          <Button href="/console/settings/catalog/new" size="sm">
-            {t("console.settings.catalog.newItem", undefined, "+ New Item")}
-          </Button>
+          <div className="flex items-center gap-3">
+            <DataViewSwitcher
+              current={view}
+              allowed={CATALOG_VIEWS}
+              defaultView="table"
+              ariaLabel={t("console.settings.catalog.viewSwitcherAria", undefined, "Catalog View")}
+            />
+            <Button href="/console/settings/catalog/new" size="sm">
+              {t("console.settings.catalog.newItem", undefined, "+ New Item")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        {view === "gallery" ? (
+          <CatalogGallery
+            items={rows.map((r) => ({
+              id: r.id,
+              title: r.name,
+              eyebrow: KIND_LABEL_I18N[r.kind] ?? KIND_LABEL[r.kind] ?? r.kind,
+              subtitle: r.code,
+              state: r.active ? "active" : "inactive",
+              href: `/console/settings/catalog/${r.id}`,
+              unitCostCents: r.unit_cost_cents,
+              currency: r.currency,
+              inventoryQty: r.inventory_qty,
+            }))}
+            emptyTitle={t("console.settings.catalog.emptyLabel", undefined, "No catalog items yet")}
+            emptyDescription={t(
+              "console.settings.catalog.emptyDescription",
+              undefined,
+              "Define reusable credentials, uniforms, radios, vehicles, etc. so admins can pick from a dropdown when assigning to people.",
+            )}
+          />
+        ) : (
+          <DataTable<Row>
           rows={rows}
           rowHref={(r) => `/console/settings/catalog/${r.id}`}
           emptyLabel={t("console.settings.catalog.emptyLabel", undefined, "No catalog items yet")}
@@ -149,7 +193,8 @@ export default async function Page() {
                 ),
             },
           ]}
-        />
+          />
+        )}
       </div>
     </>
   );

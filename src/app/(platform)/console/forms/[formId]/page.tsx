@@ -94,6 +94,9 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
         action={
           <div className="flex items-center gap-2">
             <Badge variant={tone}>{toTitle(form.status)}</Badge>
+            <Button href={`/console/forms/${form.id}/submissions`} variant="secondary" size="sm">
+              {t("console.forms.detail.viewSubmissions", undefined, "Submissions")}
+            </Button>
             <Button href={`/console/forms/${form.id}/edit`} variant="secondary" size="sm">
               {t("common.edit", undefined, "Edit")}
             </Button>

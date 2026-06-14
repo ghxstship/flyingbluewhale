@@ -20,6 +20,7 @@ import type { ZodTypeAny } from "zod";
 import { Spinner } from "@/components/ui/Spinner";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { actionRegistry } from "@/lib/automations/registry";
+import type { Condition } from "@/lib/automations/conditions";
 import { AddStepMenu, type RegisteredAction } from "./AddStepMenu";
 import { StepCard } from "./StepCard";
 import { TriggerEditor, type TriggerKind } from "./TriggerEditor";
@@ -28,8 +29,8 @@ export type AutomationStep = {
   id: string;
   type: string;
   config: Record<string, unknown>;
-  /** Optional condition — Phase 4.5 lands this; the UI exposes a placeholder. */
-  condition?: unknown;
+  /** Optional "Run when…" gate authored via the StepCard ConditionEditor. */
+  condition?: Condition | null;
 };
 
 type SaveResult = { error?: string; ok?: true } | null;
@@ -199,6 +200,10 @@ export function StepBuilder({
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, config: next } : s)));
   };
 
+  const updateStepCondition = (id: string, next: Condition | null) => {
+    setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, condition: next ?? undefined } : s)));
+  };
+
   const deleteStep = (id: string) => {
     setSteps((prev) => prev.filter((s) => s.id !== id));
   };
@@ -255,7 +260,9 @@ export function StepBuilder({
                       description={meta?.description}
                       schema={schemaByType.get(step.type)}
                       config={step.config}
+                      condition={step.condition}
                       onChange={(next) => updateStepConfig(step.id, next)}
+                      onConditionChange={(next) => updateStepCondition(step.id, next)}
                       onDelete={() => deleteStep(step.id)}
                     />
                   </li>

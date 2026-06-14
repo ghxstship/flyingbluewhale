@@ -9,6 +9,8 @@ import {
 } from "./DataTableInteractive";
 import type { RowActionItem } from "./ui/RowActions";
 import { EmptyState } from "./ui/EmptyState";
+import type { ViewConfigRow, ViewScope } from "@/lib/views/types";
+import type { SaveViewSubmit } from "./views/SaveViewDialog";
 
 /**
  * DataTable — server-side wrapper around DataTableInteractive.
@@ -156,6 +158,22 @@ export type DataTableProps<T extends { id: string }> = {
    *  land in P3.2-3.6 and read this off the saved-view row's `type`.
    *  Defaults to `'grid'`. */
   viewType?: "grid" | "kanban" | "calendar" | "timeline" | "chart" | "map";
+  /** Named saved views the caller can pick from for this `tableId`. The
+   *  host page loads these server-side (`listViewConfigs`) and threads them
+   *  through. When undefined the SavedViewSelector stays hidden — the
+   *  implicit per-user `user_preferences.table_views` working copy keeps
+   *  working regardless. Pair with `onSaveView` to surface the selector. */
+  viewConfigsForTable?: ViewConfigRow[];
+  /** Scopes the caller is allowed to publish saved views to. Manager+
+   *  roles unlock `'org'` / `'public'`. Defaults to private only. */
+  allowedSaveScopes?: ViewScope[];
+  /** Server-action ref — persist a saved view to `view_configs`. Required
+   *  for the SavedViewSelector to render. */
+  onSaveView?: (input: SaveViewSubmit) => Promise<void>;
+  /** Server-action ref — delete a saved view by id. */
+  onDeleteView?: (id: string) => Promise<void>;
+  /** Server-action ref — set a saved view as the default for its scope. */
+  onSetDefaultView?: (id: string) => Promise<void>;
 };
 
 // Helpers — defined above the component because Turbopack's server runtime
@@ -234,6 +252,11 @@ export async function DataTable<T extends { id: string }>({
   rowClassName,
   spotlight,
   viewType = "grid",
+  viewConfigsForTable,
+  allowedSaveScopes,
+  onSaveView,
+  onDeleteView,
+  onSetDefaultView,
 }: DataTableProps<T>) {
   if (loading) {
     return <DataTableSkeleton columns={columns.length} rows={6} />;
@@ -348,6 +371,11 @@ export async function DataTable<T extends { id: string }>({
       onImport={onImport}
       onRefresh={onRefresh}
       viewType={viewType}
+      viewConfigsForTable={viewConfigsForTable}
+      allowedSaveScopes={allowedSaveScopes}
+      onSaveView={onSaveView}
+      onDeleteView={onDeleteView}
+      onSetDefaultView={onSetDefaultView}
     />
   );
   // `stickyHeader` and `maxHeight` are absorbed: the interactive table

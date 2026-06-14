@@ -37,6 +37,27 @@ export type { MapMarkerProps } from "./MapMarker";
 export { DashboardCanvas } from "../dashboards/DashboardCanvas";
 export type { DashboardCanvasProps, DashboardWidgetData } from "../dashboards/DashboardCanvas";
 
+// Phase 3.x — GalleryView (thumbnail/preview cards; the "gallery"/"card"
+// view types). Eligible when rows carry a media/preview field.
+export { GalleryView } from "./GalleryView";
+export type { GalleryViewProps, GalleryItem } from "./GalleryView";
+
+// Phase 3.x — TreeView (collapsible parent_id / wbs_path hierarchy; the
+// "tree" view type). `buildTree` assembles a flat adjacency list.
+export { TreeView, buildTree } from "./TreeView";
+export type { TreeViewProps, TreeNode, TreeNodeWithChildren } from "./TreeView";
+
+// Phase 3.x — FormView (single-record field layout; the "form" view type).
+// Read-oriented counterpart of <FormShell>.
+export { FormView } from "./FormView";
+export type { FormViewProps, FormViewField, FormViewSection } from "./FormView";
+
+// Phase 3.x — GanttView. The `gantt` ViewType renders identically to
+// `timeline` until dependency arrows land — GanttView is an alias of
+// TimelineView (see GanttView.tsx for the documented equivalence).
+export { GanttView } from "./GanttView";
+export type { GanttViewProps, GanttLane, GanttItem, GanttZoom } from "./GanttView";
+
 // Phase 3.7 — DataViewSwitcher (canonical collection-page view toggle).
 // Owns the `?view=` URL state and renders only the chips the dataset
 // supports. Use `resolveDataView()` in the server component to read the

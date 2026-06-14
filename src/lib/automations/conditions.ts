@@ -70,6 +70,94 @@ export type ConditionRule = {
   value?: unknown;
 };
 
+// ---------------------------------------------------------------------------
+// Operator registry — single source of truth for the editor UI. Mirrors the
+// action-registry pattern (`registry.ts`): an ordered tuple of every op, a
+// human label map, and a set of the ops that take no operand. The StepCard
+// condition editor renders its operator `<select>` from `CONDITION_OPS` and
+// hides the value input for `NULLARY_OPS`, so adding an op here automatically
+// surfaces it in the UI — no second list to keep in sync.
+// ---------------------------------------------------------------------------
+
+/** Every operator, in the order the editor select should present them. */
+export const CONDITION_OPS = [
+  "eq",
+  "neq",
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+  "contains",
+  "not_contains",
+  "starts_with",
+  "ends_with",
+  "in",
+  "not_in",
+  "is_empty",
+  "is_not_empty",
+  "is_true",
+  "is_false",
+  "is_before",
+  "is_after",
+  "matches",
+] as const satisfies readonly ConditionOp[];
+
+/** Human-facing labels for each operator (rendered in the editor select). */
+export const CONDITION_OP_LABELS: Record<ConditionOp, string> = {
+  eq: "equals",
+  neq: "does not equal",
+  gt: "greater than",
+  gte: "greater than or equal",
+  lt: "less than",
+  lte: "less than or equal",
+  contains: "contains",
+  not_contains: "does not contain",
+  starts_with: "starts with",
+  ends_with: "ends with",
+  in: "is one of",
+  not_in: "is not one of",
+  is_empty: "is empty",
+  is_not_empty: "is not empty",
+  is_true: "is true",
+  is_false: "is false",
+  is_before: "is before (date)",
+  is_after: "is after (date)",
+  matches: "matches regex",
+};
+
+/**
+ * Operators that take no operand — the editor hides the value input for these,
+ * and the runner ignores any stray `value`. Keep in lockstep with the
+ * `case` arms in `evalRule` that read only `fieldVal`.
+ */
+export const NULLARY_OPS: ReadonlySet<ConditionOp> = new Set<ConditionOp>([
+  "is_empty",
+  "is_not_empty",
+  "is_true",
+  "is_false",
+]);
+
+/**
+ * Operators whose operand is a list (`value` must be an array). The editor
+ * renders these as a comma-separated text input and splits on save.
+ */
+export const LIST_OPS: ReadonlySet<ConditionOp> = new Set<ConditionOp>(["in", "not_in"]);
+
+/** Type guard for a runtime string being a known operator. */
+export function isConditionOp(v: unknown): v is ConditionOp {
+  return typeof v === "string" && (CONDITION_OPS as readonly string[]).includes(v);
+}
+
+/** True when the operator requires no `value` operand. */
+export function opIsNullary(op: ConditionOp): boolean {
+  return NULLARY_OPS.has(op);
+}
+
+/** True when the operator's `value` operand must be an array. */
+export function opIsList(op: ConditionOp): boolean {
+  return LIST_OPS.has(op);
+}
+
 export type ConditionGroup = { all: Condition[] } | { any: Condition[] } | ConditionRule;
 
 export type Condition = ConditionGroup;

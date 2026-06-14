@@ -135,6 +135,12 @@ export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
   "resource_collections",
   "resources",
   "compliance_rules",
+  // v5 coverage modules — Goals/OKRs + Sprints (all carry deleted_at).
+  "goals",
+  "key_results",
+  "sprints",
+  "sprint_stories",
+  "burndown_snapshots",
 ]);
 
 async function anyFrom(t: string) {

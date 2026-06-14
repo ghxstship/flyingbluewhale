@@ -4001,6 +4001,57 @@ export type Database = {
           },
         ]
       }
+      burndown_snapshots: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          org_id: string
+          remaining_points: number
+          snapshot_on: string
+          sprint_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id: string
+          remaining_points?: number
+          snapshot_on?: string
+          sprint_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id?: string
+          remaining_points?: number
+          snapshot_on?: string
+          sprint_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "burndown_snapshots_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "burndown_snapshots_sprint_id_fkey"
+            columns: ["sprint_id"]
+            isOneToOne: false
+            referencedRelation: "sprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       calendar_events: {
         Row: {
           calendar_id: string | null
@@ -10838,6 +10889,56 @@ export type Database = {
           },
         ]
       }
+      goals: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          goal_state: Database["public"]["Enums"]["goal_state"]
+          id: string
+          org_id: string
+          owner_id: string | null
+          period: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          goal_state?: Database["public"]["Enums"]["goal_state"]
+          id?: string
+          org_id: string
+          owner_id?: string | null
+          period?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          goal_state?: Database["public"]["Enums"]["goal_state"]
+          id?: string
+          org_id?: string
+          owner_id?: string | null
+          period?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goals_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goods_receipt_lines: {
         Row: {
           asset_id: string | null
@@ -13669,6 +13770,66 @@ export type Database = {
           version?: number
         }
         Relationships: []
+      }
+      key_results: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_value: number
+          deleted_at: string | null
+          goal_id: string
+          id: string
+          kr_state: Database["public"]["Enums"]["kr_state"]
+          org_id: string
+          target_value: number
+          title: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_value?: number
+          deleted_at?: string | null
+          goal_id: string
+          id?: string
+          kr_state?: Database["public"]["Enums"]["kr_state"]
+          org_id: string
+          target_value?: number
+          title: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_value?: number
+          deleted_at?: string | null
+          goal_id?: string
+          id?: string
+          kr_state?: Database["public"]["Enums"]["kr_state"]
+          org_id?: string
+          target_value?: number
+          title?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "key_results_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "key_results_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       kit_lines: {
         Row: {
@@ -26631,6 +26792,123 @@ export type Database = {
         }
         Relationships: []
       }
+      sprint_stories: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          notes: string | null
+          org_id: string
+          points: number
+          sprint_id: string
+          story_state: Database["public"]["Enums"]["story_state"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          points?: number
+          sprint_id: string
+          story_state?: Database["public"]["Enums"]["story_state"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          points?: number
+          sprint_id?: string
+          story_state?: Database["public"]["Enums"]["story_state"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sprint_stories_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sprint_stories_sprint_id_fkey"
+            columns: ["sprint_id"]
+            isOneToOne: false
+            referencedRelation: "sprints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sprints: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          ends_on: string | null
+          goal: string | null
+          id: string
+          name: string
+          org_id: string
+          project_id: string | null
+          sprint_state: Database["public"]["Enums"]["sprint_state"]
+          starts_on: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ends_on?: string | null
+          goal?: string | null
+          id?: string
+          name: string
+          org_id: string
+          project_id?: string | null
+          sprint_state?: Database["public"]["Enums"]["sprint_state"]
+          starts_on?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ends_on?: string | null
+          goal?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          project_id?: string | null
+          sprint_state?: Database["public"]["Enums"]["sprint_state"]
+          starts_on?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sprints_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sprints_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stage_plots: {
         Row: {
           created_at: string
@@ -37419,6 +37697,7 @@ export type Database = {
         | "voided"
         | "returned"
       function_booking_state: "hold" | "tentative" | "confirmed" | "cancelled"
+      goal_state: "draft" | "active" | "achieved" | "missed" | "archived"
       guest_entry_state: "pending" | "arrived" | "denied"
       guide_persona:
         | "artist"
@@ -37481,6 +37760,7 @@ export type Database = {
       job_posting_status: "draft" | "published" | "closed" | "archived"
       job_posting_type: "single" | "tour" | "recurring"
       job_state: "pending" | "running" | "done" | "failed" | "dead"
+      kr_state: "on_track" | "at_risk" | "off_track" | "done"
       lead_stage:
         | "new"
         | "qualified"
@@ -37802,8 +38082,10 @@ export type Database = {
         | "issued"
         | "superseded"
         | "archived"
+      sprint_state: "planned" | "active" | "completed"
       store_cart_state: "open" | "checkout" | "converted" | "abandoned"
       store_product_state: "draft" | "published" | "archived"
+      story_state: "todo" | "in_progress" | "done"
       submission_status:
         | "submitted"
         | "shortlisted"
@@ -38577,6 +38859,7 @@ export const Constants = {
         "returned",
       ],
       function_booking_state: ["hold", "tentative", "confirmed", "cancelled"],
+      goal_state: ["draft", "active", "achieved", "missed", "archived"],
       guest_entry_state: ["pending", "arrived", "denied"],
       guide_persona: [
         "artist",
@@ -38646,6 +38929,7 @@ export const Constants = {
       job_posting_status: ["draft", "published", "closed", "archived"],
       job_posting_type: ["single", "tour", "recurring"],
       job_state: ["pending", "running", "done", "failed", "dead"],
+      kr_state: ["on_track", "at_risk", "off_track", "done"],
       lead_stage: ["new", "qualified", "contacted", "proposal", "won", "lost"],
       legend_resource_kind: [
         "link",
@@ -38998,8 +39282,10 @@ export const Constants = {
         "superseded",
         "archived",
       ],
+      sprint_state: ["planned", "active", "completed"],
       store_cart_state: ["open", "checkout", "converted", "abandoned"],
       store_product_state: ["draft", "published", "archived"],
+      story_state: ["todo", "in_progress", "done"],
       submission_status: [
         "submitted",
         "shortlisted",

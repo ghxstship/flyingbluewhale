@@ -1,5 +1,17 @@
 import { describe, it, expect } from "vitest";
-import { evaluateCondition, type Condition, type ConditionContext } from "../automations/conditions";
+import {
+  evaluateCondition,
+  CONDITION_OPS,
+  CONDITION_OP_LABELS,
+  NULLARY_OPS,
+  LIST_OPS,
+  isConditionOp,
+  opIsNullary,
+  opIsList,
+  type Condition,
+  type ConditionContext,
+  type ConditionOp,
+} from "../automations/conditions";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -338,5 +350,45 @@ describe("evaluateCondition", () => {
 
   it("starts_with returns false when field is not a string", () => {
     expect(evaluateCondition({ field: "trigger.x", op: "starts_with", value: "1" }, ctx({ x: 1234 }))).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Operator registry (editor source-of-truth) — keeps the StepCard condition
+// editor in lockstep with the evaluator's `switch` arms.
+// ---------------------------------------------------------------------------
+
+describe("operator registry", () => {
+  it("CONDITION_OPS has a label for every op and no duplicates", () => {
+    const seen = new Set<ConditionOp>();
+    for (const op of CONDITION_OPS) {
+      expect(CONDITION_OP_LABELS[op]).toBeTruthy();
+      expect(seen.has(op)).toBe(false);
+      seen.add(op);
+    }
+    // Every labeled op is in the tuple too (no orphan labels).
+    for (const op of Object.keys(CONDITION_OP_LABELS) as ConditionOp[]) {
+      expect((CONDITION_OPS as readonly string[]).includes(op)).toBe(true);
+    }
+  });
+
+  it("nullary ops are exactly the operand-free ops", () => {
+    expect([...NULLARY_OPS].sort()).toEqual(["is_empty", "is_false", "is_not_empty", "is_true"]);
+    for (const op of NULLARY_OPS) expect(opIsNullary(op)).toBe(true);
+    expect(opIsNullary("eq")).toBe(false);
+  });
+
+  it("list ops are exactly the array-operand ops", () => {
+    expect([...LIST_OPS].sort()).toEqual(["in", "not_in"]);
+    for (const op of LIST_OPS) expect(opIsList(op)).toBe(true);
+    expect(opIsList("eq")).toBe(false);
+  });
+
+  it("isConditionOp narrows known/unknown strings", () => {
+    expect(isConditionOp("eq")).toBe(true);
+    expect(isConditionOp("matches")).toBe(true);
+    expect(isConditionOp("nope")).toBe(false);
+    expect(isConditionOp(42)).toBe(false);
+    expect(isConditionOp(null)).toBe(false);
   });
 });

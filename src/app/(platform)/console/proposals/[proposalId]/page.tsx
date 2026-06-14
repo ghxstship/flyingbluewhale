@@ -10,8 +10,10 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ProposalConvertButton } from "./ProposalConvertButton";
 import { ProposalStatusControls } from "./ProposalStatusControls";
+import { GenerateDraftButton } from "./GenerateDraftButton";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +39,17 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
     .is("deleted_at", null)
     .maybeSingle();
 
+  // Latest AI-generated draft for this proposal (CV8). RLS scopes to org;
+  // newest-first single row drives the inline preview below.
+  const { data: latestDraft } = await supabase
+    .from("ai_proposal_drafts")
+    .select("id, draft_state, draft_content, created_at")
+    .eq("org_id", session.orgId)
+    .eq("proposal_id", proposal.id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
   return (
     <>
       <ModuleHeader
@@ -59,6 +72,7 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
             >
               {t("console.proposals.detail.editDocument", undefined, "Edit Document")}
             </Link>
+            <GenerateDraftButton proposalId={proposal.id} />
             <ProposalStatusControls id={proposal.id} status={proposal.proposal_state} />
             {proposal.proposal_state === "signed" && !project && <ProposalConvertButton id={proposal.id} />}
             {project && (
@@ -90,6 +104,37 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{proposal.notes}</p>
           </div>
         )}
+        <div className="surface p-5">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="text-base font-semibold">
+              {t("console.proposals.detail.aiDraft", undefined, "AI Draft")}
+            </h3>
+            {latestDraft && <StatusBadge status={latestDraft.draft_state} />}
+          </div>
+          {latestDraft ? (
+            <>
+              <p className="mt-1 text-[11px] text-[var(--p-text-2)]">
+                {t("console.proposals.detail.aiDraftGenerated", undefined, "Generated")}{" "}
+                {timeAgo(latestDraft.created_at)}
+              </p>
+              <p className="mt-3 text-sm whitespace-pre-wrap text-[var(--p-text-1)]">
+                {latestDraft.draft_content}
+              </p>
+            </>
+          ) : (
+            <div className="mt-2">
+              <EmptyState
+                size="compact"
+                title={t("console.proposals.detail.aiDraftEmptyTitle", undefined, "No draft yet")}
+                description={t(
+                  "console.proposals.detail.aiDraftEmptyDescription",
+                  undefined,
+                  "Use Generate Draft to have the assistant write a client-ready proposal from this scope.",
+                )}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

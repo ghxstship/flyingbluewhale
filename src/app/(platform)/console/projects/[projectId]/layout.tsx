@@ -51,6 +51,7 @@ export default async function ProjectLayout({
     },
     { label: t("console.projects.tabs.tracker", undefined, "Tracker"), href: `/console/projects/${projectId}/tracker` },
     { label: t("console.projects.tabs.tasks", undefined, "Tasks"), href: `/console/projects/${projectId}/tasks` },
+    { label: t("console.projects.tabs.sprints", undefined, "Sprints"), href: `/console/projects/${projectId}/sprints` },
     {
       label: t("console.projects.tabs.schedule", undefined, "Schedule"),
       href: `/console/projects/${projectId}/schedule`,

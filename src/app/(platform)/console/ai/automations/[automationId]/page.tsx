@@ -78,7 +78,9 @@ function coerceSteps(raw: Json): AutomationStep[] {
         : obj.input && typeof obj.input === "object" && !Array.isArray(obj.input)
           ? (obj.input as Record<string, unknown>)
           : {};
-    out.push({ id, type, config, condition: obj.condition });
+    // The condition shape is validated/normalized by the ConditionEditor
+    // (`parseCondition` tolerates malformed JSON), so a cast here is safe.
+    out.push({ id, type, config, condition: obj.condition as AutomationStep["condition"] });
   }
   return out;
 }

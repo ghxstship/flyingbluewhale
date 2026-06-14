@@ -7,7 +7,9 @@ import type { ZodTypeAny } from "zod";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { SchemaForm } from "./SchemaForm";
+import { ConditionEditor } from "./ConditionEditor";
 import { zodToFormFields } from "@/lib/automations/zod-form";
+import type { Condition } from "@/lib/automations/conditions";
 
 export type StepCardProps = {
   id: string;
@@ -17,7 +19,10 @@ export type StepCardProps = {
   description?: string;
   schema?: ZodTypeAny;
   config: Record<string, unknown>;
+  /** Per-step "Run when…" gate, persisted into the step JSON. */
+  condition?: Condition | null;
   onChange: (next: Record<string, unknown>) => void;
+  onConditionChange: (next: Condition | null) => void;
   onDelete: () => void;
 };
 
@@ -26,7 +31,19 @@ export type StepCardProps = {
  * schema-driven config form, and a delete button. The drag handle is wired
  * up via `useSortable` from dnd-kit.
  */
-export function StepCard({ id, index, type, label, description, schema, config, onChange, onDelete }: StepCardProps) {
+export function StepCard({
+  id,
+  index,
+  type,
+  label,
+  description,
+  schema,
+  config,
+  condition,
+  onChange,
+  onConditionChange,
+  onDelete,
+}: StepCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const fields = schema ? zodToFormFields(schema) : [];
 
@@ -85,6 +102,11 @@ export function StepCard({ id, index, type, label, description, schema, config, 
           Unknown action type <span className="font-mono">{type}</span>. The runner will fail until it is registered.
         </div>
       )}
+
+      <div className="border-t border-[var(--p-border)] pt-3">
+        <p className="mb-2 text-xs font-semibold text-[var(--p-text-1)]">Condition</p>
+        <ConditionEditor value={condition} onChange={onConditionChange} />
+      </div>
     </div>
   );
 }

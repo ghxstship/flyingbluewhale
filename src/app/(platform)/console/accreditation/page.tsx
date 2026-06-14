@@ -30,6 +30,10 @@ export default async function Page() {
           <Link className="surface hover-lift p-4" href="/console/accreditation/changes">
             <div className="text-sm font-medium">{t("console.accreditation.changes", undefined, "Changes")}</div>
           </Link>
+          <Link className="surface hover-lift p-4 border-l-2 border-l-[var(--c-warning)]" href="/console/accreditation/expiring">
+            <div className="text-sm font-medium">{t("console.accreditation.expiring", undefined, "Expiring Credentials")}</div>
+            <div className="mt-0.5 text-xs text-[var(--p-text-2)]">{t("console.accreditation.expiringBlurb", undefined, "Credentials expiring in the next 30 days")}</div>
+          </Link>
         </div>
       </div>
     </>

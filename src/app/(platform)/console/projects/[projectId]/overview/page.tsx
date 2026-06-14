@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
@@ -8,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { money, fmtDate } from "@/components/detail/DetailShell";
 import { getRequestT } from "@/lib/i18n/request";
+import { AiDigestPanel, AiDigestSkeleton } from "./AiDigestPanel";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
@@ -89,6 +91,9 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
             </div>
           </dl>
         </div>
+        <Suspense fallback={<AiDigestSkeleton />}>
+          <AiDigestPanel projectId={projectId} />
+        </Suspense>
         <div className="grid gap-3 sm:grid-cols-2">
           <Link href={`/console/projects/${projectId}/budget`} className="surface hover-lift p-5">
             <div className="text-[10px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">

@@ -3,6 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -136,6 +137,15 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           { label: project.name, href: `/console/projects/${projectId}` },
           { label: t("console.projects.finance.title", undefined, "P&L") },
         ]}
+        action={
+          <Button
+            href={`/console/projects/${projectId}/finance/settlement`}
+            size="sm"
+            variant="ghost"
+          >
+            {t("console.projects.finance.settlement.ctaLabel", undefined, "Settlement Sheet →")}
+          </Button>
+        }
       />
       <div className="page-content space-y-6">
         <div className="metric-grid-3">

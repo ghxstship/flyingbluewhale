@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -9,6 +10,7 @@ import { formatFeeRange, STATUS_TONE } from "@/lib/marketplace";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { CallControls } from "./CallControls";
+import { TalentMatchPanel, TalentMatchSkeleton } from "./TalentMatchPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +80,19 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           </h2>
           <div className="text-sm whitespace-pre-wrap text-[var(--p-text-1)]">{c.description ?? "—"}</div>
         </section>
+
+        <Suspense fallback={<TalentMatchSkeleton />}>
+          <TalentMatchPanel
+            call={{
+              title: c.title,
+              kind: c.kind,
+              description: c.description,
+              genre_tags: c.genre_tags,
+              trade_categories: c.trade_categories,
+              region: c.region,
+            }}
+          />
+        </Suspense>
 
         <section className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="surface p-5">

@@ -11,6 +11,12 @@ import {
   Hanken_Grotesk,
   Space_Mono,
   Jost,
+  // LEG3ND "legend" type axis (v5) — Airport (Matthew Carter's London Airport
+  // signage face) is LICENSED (Revolver Type) and mounted via @font-face when
+  // obtained; until then the legend type degrades to these fallbacks.
+  // Fira Sans ≈ Airport X (humanist signage body); IBM Plex Mono = data face.
+  Fira_Sans,
+  IBM_Plex_Mono,
 } from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
@@ -51,6 +57,19 @@ const jost = Jost({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
   variable: "--font-jost",
+  display: "swap",
+});
+// LEG3ND "legend" type-axis fallbacks (Airport is licensed/mounted separately).
+const firaSans = Fira_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-fira-sans",
+  display: "swap",
+});
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-ibm-plex-mono",
   display: "swap",
 });
 
@@ -150,7 +169,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       data-theme={ssrTheme}
       data-ui="saas"
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${anton.variable} ${hanken.variable} ${spaceMono.variable} ${jost.variable}`}
+      className={`h-full ${anton.variable} ${hanken.variable} ${spaceMono.variable} ${jost.variable} ${firaSans.variable} ${ibmPlexMono.variable}`}
       suppressHydrationWarning
     >
       <head>

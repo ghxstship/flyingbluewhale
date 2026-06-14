@@ -22,6 +22,10 @@ export const LEGACY_MODE_COOKIE_NAME = "fbw_mode";
 export const MODE_STORAGE_KEY = "chroma.mode";
 export const ACCENT_COOKIE_NAME = "atlvs_accent";
 export const ACCENT_STORAGE_KEY = "atlvs.accent";
+// Type axis (v5) — Monument (default) ↔ LEG3ND airport-signage. Persisted
+// like accent; applied as data-type on <html> (omitted when "monument").
+export const TYPE_COOKIE_NAME = "atlvs_type";
+export const TYPE_STORAGE_KEY = "atlvs.type";
 
 export const themeScript = `
 (function() {
@@ -29,6 +33,7 @@ export const themeScript = `
     var valid = ['atlvs-product'];
     var validModes = ['light','dark','system'];
     var validAccents = ['soft','default','vivid'];
+    var validTypes = ['monument','legend'];
 
     // Theme slug (palette) — single canonical kit skin. Stale cookie values
     // (from purged ghxstship / pre-v3 CHROMA slugs) fall through to the default.
@@ -68,6 +73,16 @@ export const themeScript = `
                : (accentStored && validAccents.indexOf(accentStored) > -1) ? accentStored
                : 'default';
     if (accent !== 'default') document.documentElement.setAttribute('data-accent', accent);
+
+    // Type axis (v5) — monument (default) / legend. Cookie + storage only.
+    var tc = document.cookie.match(/(?:^|;\\s*)${TYPE_COOKIE_NAME}=([^;]+)/);
+    var typeFromCookie = tc ? decodeURIComponent(tc[1]) : null;
+    var typeStored = null;
+    try { typeStored = localStorage.getItem('${TYPE_STORAGE_KEY}'); } catch (_) { /* private mode */ }
+    var typeAxis = (typeFromCookie && validTypes.indexOf(typeFromCookie) > -1) ? typeFromCookie
+                 : (typeStored && validTypes.indexOf(typeStored) > -1) ? typeStored
+                 : 'monument';
+    if (typeAxis !== 'monument') document.documentElement.setAttribute('data-type', typeAxis);
 
     // colorScheme — atlvs-product is light-family; dark mode overrides
     // come from [data-mode="dark"] selectors in the theme CSS.

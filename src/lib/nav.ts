@@ -537,6 +537,31 @@ export const platformNavDomain: NavGroup[] = [
       },
     ],
   },
+  {
+    // KNOWLEDGE — the LEG3ND product (kit v5): The Standard / LMS / Resources /
+    // Catalog / Signage / XMCE engine / Safety. The /console/legend/* subtree
+    // re-skins to Production Orange + the airport-signage type (see
+    // (platform)/console/legend/layout.tsx). Existing modules (knowledge,
+    // courses, accreditation, catalog, safety) are surfaced here as the LEG3ND
+    // lens; signage/engine/resources are net-new LEG3ND routes.
+    label: "Knowledge",
+    items: [],
+    sections: [
+      {
+        label: "LEG3ND",
+        items: [
+          { label: "The Standard", href: "/console/knowledge", icon: "BookOpen" },
+          { label: "Courses", href: "/console/workforce/courses", icon: "GraduationCap" },
+          { label: "Certifications", href: "/console/accreditation", icon: "BadgeCheck" },
+          { label: "Resources", href: "/console/legend/resources", icon: "FolderOpen" },
+          { label: "Catalog", href: "/console/settings/catalog", icon: "Spline" },
+          { label: "Signage", href: "/console/legend/signage", icon: "Map" },
+          { label: "Compliance Engine", href: "/console/legend/engine", icon: "ShieldCheck" },
+          { label: "Safety", href: "/console/safety/incidents", icon: "Siren" },
+        ],
+      },
+    ],
+  },
 ];
 
 /**

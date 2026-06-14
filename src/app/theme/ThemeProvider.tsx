@@ -10,6 +10,8 @@ import {
   MODE_STORAGE_KEY,
   ACCENT_COOKIE_NAME,
   ACCENT_STORAGE_KEY,
+  TYPE_COOKIE_NAME,
+  TYPE_STORAGE_KEY,
 } from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
@@ -27,6 +29,12 @@ function isValidDensity(v: unknown): v is Density {
 const ACCENTS: AccentIntensity[] = ["soft", "default", "vivid"];
 function isValidAccent(v: unknown): v is AccentIntensity {
   return typeof v === "string" && (ACCENTS as string[]).includes(v);
+}
+// Type axis (kit v5) — Monument (default) ↔ LEG3ND airport-signage type.
+export type TypeAxis = "monument" | "legend";
+const TYPE_AXES: TypeAxis[] = ["monument", "legend"];
+function isValidTypeAxis(v: unknown): v is TypeAxis {
+  return typeof v === "string" && (TYPE_AXES as string[]).includes(v);
 }
 
 export interface ThemeContextValue {
@@ -48,6 +56,9 @@ export interface ThemeContextValue {
   /** Kit axis — accent intensity (soft/default/vivid). Persists. */
   accent: AccentIntensity;
   setAccent: (a: AccentIntensity) => void;
+  /** Kit v5 axis — type system (monument/legend). Applied as data-type. Persists. */
+  typeAxis: TypeAxis;
+  setTypeAxis: (t: TypeAxis) => void;
 }
 
 const ThemeContext = React.createContext<ThemeContextValue | null>(null);
@@ -81,6 +92,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [density, setDensityState] = React.useState<Density>("cozy");
   const [mode, setModeState] = React.useState<ColorMode>("system");
   const [accent, setAccentState] = React.useState<AccentIntensity>("default");
+  const [typeAxis, setTypeAxisState] = React.useState<TypeAxis>("monument");
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -134,6 +146,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     })();
     setAccentState(cookieAccent ?? storedAccent ?? "default");
 
+    const cookieType = (() => {
+      const re = new RegExp(`(?:^|;\\s*)${TYPE_COOKIE_NAME}=([^;]+)`);
+      const m = document.cookie.match(re);
+      const v = m ? decodeURIComponent(m[1]!) : null;
+      return isValidTypeAxis(v) ? v : null;
+    })();
+    const storedType = (() => {
+      try {
+        const v = localStorage.getItem(TYPE_STORAGE_KEY);
+        return isValidTypeAxis(v) ? v : null;
+      } catch {
+        return null;
+      }
+    })();
+    setTypeAxisState(cookieType ?? storedType ?? "monument");
+
     setMounted(true);
   }, []);
 
@@ -166,6 +194,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (accent === "default") root.removeAttribute("data-accent");
     else root.setAttribute("data-accent", accent);
   }, [accent, mounted]);
+
+  React.useEffect(() => {
+    if (!mounted) return;
+    const root = document.documentElement;
+    if (typeAxis === "monument") root.removeAttribute("data-type");
+    else root.setAttribute("data-type", typeAxis);
+  }, [typeAxis, mounted]);
 
   React.useEffect(() => {
     if (!mounted || mode !== "system") return;
@@ -247,6 +282,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     writeCookie(ACCENT_COOKIE_NAME, a);
   }, []);
 
+  const setTypeAxis = React.useCallback((t: TypeAxis) => {
+    setTypeAxisState(t);
+    try {
+      localStorage.setItem(TYPE_STORAGE_KEY, t);
+    } catch {
+      /* ignore */
+    }
+    writeCookie(TYPE_COOKIE_NAME, t);
+  }, []);
+
   const value = React.useMemo<ThemeContextValue>(
     () => ({
       theme,
@@ -260,8 +305,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setMode,
       accent,
       setAccent,
+      typeAxis,
+      setTypeAxis,
     }),
-    [theme, isSystemDriven, setTheme, resetToSystem, density, setDensity, mode, setMode, accent, setAccent],
+    [
+      theme,
+      isSystemDriven,
+      setTheme,
+      resetToSystem,
+      density,
+      setDensity,
+      mode,
+      setMode,
+      accent,
+      setAccent,
+      typeAxis,
+      setTypeAxis,
+    ],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

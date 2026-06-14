@@ -34,6 +34,9 @@
   --brand-gvteway: #12b5b5;
   --brand-gvteway-ink: #0b7e7e;
   --brand-gvteway-on: #fff;
+  --brand-legend: #e8500a;
+  --brand-legend-ink: #b8430a;
+  --brand-legend-on: #fff;
 }
 
 /* ============================================================================
@@ -231,6 +234,29 @@
   --p-focus: var(--p-accent);
 }
 
+/* LEG3ND — knowledge · LMS · resources · Production Orange (v5) */
+[data-ui="saas"][data-product="legend"],
+[data-theme="atlvs-product"][data-platform="legend"] {
+  --p-accent: #e8500a;
+  --p-accent-hover: #cf4708;
+  --p-accent-text: #b8430a;
+  --p-accent-weak: rgba(232, 80, 10, 0.12);
+  /* #e8500a is ≈3:1 on the light canvas; the deepened orange is AA for fills + focus. */
+  --p-accent-cta: #b8430a;
+  --p-accent-cta-contrast: #ffffff;
+  --p-focus: var(--p-accent-cta);
+}
+[data-ui="saas"][data-product="legend"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="legend"],
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="legend"] {
+  --p-accent: #ff6a2c;
+  --p-accent-text: #ff8b5c;
+  --p-accent-weak: rgba(232, 80, 10, 0.2);
+  --p-accent-cta: #ff6a2c;
+  --p-accent-cta-contrast: #0e1014;
+  --p-focus: var(--p-accent);
+}
+
 /* ============================================================================
    ACCENT INTENSITY — soft / default / vivid axis.
    --k-acc / --k-acc-text capture the resolved per-product accent so the
@@ -269,6 +295,17 @@
   --k-acc: #2bd6d6;
   --k-acc-text: #3fe0e0;
 }
+[data-ui="saas"][data-product="legend"],
+[data-theme="atlvs-product"][data-platform="legend"] {
+  --k-acc: #e8500a;
+  --k-acc-text: #b8430a;
+}
+[data-ui="saas"][data-product="legend"][data-mode="dark"],
+[data-mode="dark"] [data-ui="saas"][data-product="legend"],
+[data-mode="dark"] [data-theme="atlvs-product"][data-platform="legend"] {
+  --k-acc: #ff6a2c;
+  --k-acc-text: #ff8b5c;
+}
 
 [data-accent="soft"] {
   --p-accent: color-mix(in oklab, var(--k-acc) 74%, var(--p-surface) 26%);
@@ -281,6 +318,30 @@
   --p-accent-hover: color-mix(in oklab, var(--k-acc) 80%, var(--p-text-1) 20%);
   --p-accent-text: var(--k-acc-text);
   --p-accent-weak: color-mix(in oklab, var(--k-acc) 20%, transparent);
+}
+
+/* ============================================================================
+   TYPE AXIS (v5) — data-type swaps the type system kit-wide.
+   Default (no attribute / data-type="monument") keeps MONUMENT from the base
+   block above (Anton / Hanken Grotesk / Space Mono / Jost).
+   data-type="legend" swaps to the LEG3ND airport-signage type:
+     DISPLAY = Airport (Matthew Carter's 1961 London Airport signage face,
+       digital revival by Revolver Type — LICENSED; mount its woff2 via an
+       @font-face block + /fonts when obtained). Large x-height, Title Case
+       (NOT uppercase — the x-height does the work).
+     TEXT/UI = Airport X (small x-height cut). MONO = IBM Plex Mono.
+   Until Airport is licensed/mounted the stack degrades to Fira Sans /
+   Helvetica Neue (loaded fallbacks), which preserve the humanist-signage feel.
+   ========================================================================== */
+[data-ui="saas"][data-type="legend"],
+[data-theme="atlvs-product"][data-type="legend"] {
+  --p-font: "Airport X", "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Arial, sans-serif;
+  --p-heading: "Airport", var(--font-fira-sans), "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --p-heading-weight: 700;
+  --p-heading-stretch: normal;
+  --p-heading-ls: 0;
+  --p-display-case: none; /* signage face is Title Case — the large x-height carries it */
+  --p-mono: var(--font-ibm-plex-mono), "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 }
 
 /* ============================================================================

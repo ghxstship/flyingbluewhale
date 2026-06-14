@@ -5099,6 +5099,173 @@ export type Database = {
           },
         ]
       }
+      compliance_findings: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          detail: string | null
+          entity_ref: string | null
+          finding_state: Database["public"]["Enums"]["compliance_finding_state"]
+          id: string
+          org_id: string
+          rule_id: string
+          run_id: string
+          severity: Database["public"]["Enums"]["compliance_severity"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          detail?: string | null
+          entity_ref?: string | null
+          finding_state?: Database["public"]["Enums"]["compliance_finding_state"]
+          id?: string
+          org_id: string
+          rule_id: string
+          run_id: string
+          severity?: Database["public"]["Enums"]["compliance_severity"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          detail?: string | null
+          entity_ref?: string | null
+          finding_state?: Database["public"]["Enums"]["compliance_finding_state"]
+          id?: string
+          org_id?: string
+          rule_id?: string
+          run_id?: string
+          severity?: Database["public"]["Enums"]["compliance_severity"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_findings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_findings_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_findings_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_rules: {
+        Row: {
+          category: string | null
+          code: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          org_id: string
+          rule_state: Database["public"]["Enums"]["compliance_rule_state"]
+          severity: Database["public"]["Enums"]["compliance_severity"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          code: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          org_id: string
+          rule_state?: Database["public"]["Enums"]["compliance_rule_state"]
+          severity?: Database["public"]["Enums"]["compliance_severity"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          org_id?: string
+          rule_state?: Database["public"]["Enums"]["compliance_rule_state"]
+          severity?: Database["public"]["Enums"]["compliance_severity"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_rules_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      compliance_runs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          finished_at: string | null
+          id: string
+          org_id: string
+          run_state: Database["public"]["Enums"]["compliance_run_state"]
+          scope_kind: string
+          scope_ref: string | null
+          started_at: string | null
+          summary: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          finished_at?: string | null
+          id?: string
+          org_id: string
+          run_state?: Database["public"]["Enums"]["compliance_run_state"]
+          scope_kind?: string
+          scope_ref?: string | null
+          started_at?: string | null
+          summary?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          finished_at?: string | null
+          id?: string
+          org_id?: string
+          run_state?: Database["public"]["Enums"]["compliance_run_state"]
+          scope_kind?: string
+          scope_ref?: string | null
+          started_at?: string | null
+          summary?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_runs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       config_definitions: {
         Row: {
           created_at: string
@@ -22415,6 +22582,50 @@ export type Database = {
           },
         ]
       }
+      resource_collections: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_collections_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       resource_forecast_lines: {
         Row: {
           bench_cost: number | null
@@ -22524,6 +22735,72 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "resource_forecasts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resources: {
+        Row: {
+          collection_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          file_path: string | null
+          id: string
+          kind: Database["public"]["Enums"]["legend_resource_kind"]
+          org_id: string
+          resource_state: Database["public"]["Enums"]["legend_resource_state"]
+          tags: string[]
+          title: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          collection_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          file_path?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["legend_resource_kind"]
+          org_id: string
+          resource_state?: Database["public"]["Enums"]["legend_resource_state"]
+          tags?: string[]
+          title: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          collection_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          file_path?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["legend_resource_kind"]
+          org_id?: string
+          resource_state?: Database["public"]["Enums"]["legend_resource_state"]
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resources_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "resource_collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resources_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -25039,6 +25316,132 @@ export type Database = {
             columns: ["zone_id"]
             isOneToOne: false
             referencedRelation: "venue_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      signage_placements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          location: string
+          notes: string | null
+          org_id: string
+          placement_state: Database["public"]["Enums"]["placement_state"]
+          project_id: string | null
+          quantity: number
+          sign_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          location: string
+          notes?: string | null
+          org_id: string
+          placement_state?: Database["public"]["Enums"]["placement_state"]
+          project_id?: string | null
+          quantity?: number
+          sign_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          location?: string
+          notes?: string | null
+          org_id?: string
+          placement_state?: Database["public"]["Enums"]["placement_state"]
+          project_id?: string | null
+          quantity?: number
+          sign_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signage_placements_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "signage_placements_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "signage_placements_sign_id_fkey"
+            columns: ["sign_id"]
+            isOneToOne: false
+            referencedRelation: "signage_signs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      signage_signs: {
+        Row: {
+          category: Database["public"]["Enums"]["signage_category"]
+          code: string
+          colorway: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          name: string
+          notes: string | null
+          org_id: string
+          pictogram_key: string
+          sign_state: Database["public"]["Enums"]["sign_state"]
+          standard: Database["public"]["Enums"]["signage_standard"]
+          updated_at: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["signage_category"]
+          code: string
+          colorway?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          org_id: string
+          pictogram_key: string
+          sign_state?: Database["public"]["Enums"]["sign_state"]
+          standard?: Database["public"]["Enums"]["signage_standard"]
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["signage_category"]
+          code?: string
+          colorway?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          org_id?: string
+          pictogram_key?: string
+          sign_state?: Database["public"]["Enums"]["sign_state"]
+          standard?: Database["public"]["Enums"]["signage_standard"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signage_signs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -36864,6 +37267,10 @@ export type Database = {
         | "flat_fee"
         | "hourly"
         | "tbd"
+      compliance_finding_state: "open" | "acknowledged" | "resolved" | "waived"
+      compliance_rule_state: "draft" | "active" | "retired"
+      compliance_run_state: "queued" | "running" | "passed" | "failed" | "error"
+      compliance_severity: "info" | "low" | "medium" | "high" | "critical"
       contract_billing_method:
         | "lump_sum"
         | "time_and_materials"
@@ -37081,6 +37488,13 @@ export type Database = {
         | "proposal"
         | "won"
         | "lost"
+      legend_resource_kind:
+        | "link"
+        | "document"
+        | "template"
+        | "video"
+        | "reference"
+      legend_resource_state: "draft" | "published" | "archived"
       lien_waiver_scope: "partial" | "final"
       lien_waiver_state:
         | "drafted"
@@ -37151,6 +37565,7 @@ export type Database = {
         | "rejected"
         | "voided"
       pinboard_item_kind: "image" | "note" | "product_ref" | "swatch"
+      placement_state: "planned" | "installed" | "removed"
       platform_role: "owner" | "admin" | "manager" | "member"
       po_status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled"
       production_phase:
@@ -37302,6 +37717,16 @@ export type Database = {
         | "on_break"
         | "checked_out"
         | "no_show"
+      sign_state: "draft" | "published" | "archived"
+      signage_category:
+        | "prohibition"
+        | "warning"
+        | "mandatory"
+        | "safe_condition"
+        | "fire"
+        | "wayfinding"
+        | "accessibility"
+      signage_standard: "iso7010" | "dot_aiga" | "isa" | "custom"
       siteplan_adjacency_rel:
         | "feeds"
         | "egress_to"
@@ -37984,6 +38409,10 @@ export const Constants = {
         "hourly",
         "tbd",
       ],
+      compliance_finding_state: ["open", "acknowledged", "resolved", "waived"],
+      compliance_rule_state: ["draft", "active", "retired"],
+      compliance_run_state: ["queued", "running", "passed", "failed", "error"],
+      compliance_severity: ["info", "low", "medium", "high", "critical"],
       contract_billing_method: [
         "lump_sum",
         "time_and_materials",
@@ -38218,6 +38647,14 @@ export const Constants = {
       job_posting_type: ["single", "tour", "recurring"],
       job_state: ["pending", "running", "done", "failed", "dead"],
       lead_stage: ["new", "qualified", "contacted", "proposal", "won", "lost"],
+      legend_resource_kind: [
+        "link",
+        "document",
+        "template",
+        "video",
+        "reference",
+      ],
+      legend_resource_state: ["draft", "published", "archived"],
       lien_waiver_scope: ["partial", "final"],
       lien_waiver_state: [
         "drafted",
@@ -38296,6 +38733,7 @@ export const Constants = {
         "voided",
       ],
       pinboard_item_kind: ["image", "note", "product_ref", "swatch"],
+      placement_state: ["planned", "installed", "removed"],
       platform_role: ["owner", "admin", "manager", "member"],
       po_status: ["draft", "sent", "acknowledged", "fulfilled", "cancelled"],
       production_phase: [
@@ -38466,6 +38904,17 @@ export const Constants = {
         "checked_out",
         "no_show",
       ],
+      sign_state: ["draft", "published", "archived"],
+      signage_category: [
+        "prohibition",
+        "warning",
+        "mandatory",
+        "safe_condition",
+        "fire",
+        "wayfinding",
+        "accessibility",
+      ],
+      signage_standard: ["iso7010", "dot_aiga", "isa", "custom"],
       siteplan_adjacency_rel: [
         "feeds",
         "egress_to",

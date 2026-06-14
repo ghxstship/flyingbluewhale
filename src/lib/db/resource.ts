@@ -128,6 +128,13 @@ export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
   "guest_list_entries",
   "discount_codes",
   "promoters",
+  // v5 LEG3ND modules — tables carrying deleted_at (compliance_runs +
+  // compliance_findings are append-only ledgers, excluded).
+  "signage_signs",
+  "signage_placements",
+  "resource_collections",
+  "resources",
+  "compliance_rules",
 ]);
 
 async function anyFrom(t: string) {

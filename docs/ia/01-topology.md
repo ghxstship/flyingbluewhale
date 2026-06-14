@@ -1,7 +1,14 @@
-# Optimized Information Architecture & Site Map
+# Information Architecture & Site Map
 
-**Scope:** Unified IA applicable to either `redsealion/` (FlyteDeck) or `opus-one/` (gvteway).
-**Date:** 2026-04-16
+> **⚠️ SUPERSEDED (kit v4.0, 2026-06-13).** The canonical IA is now the
+> three-app model defined by the attached `design_handoff_atlvs_kit` (SSOT:
+> `src/app/theme/tokens.json#products`): **ATLVS** (Experiential Productions —
+> ERP × CRM × PM superset console), **COMPVSS** (Site & Venue Operations), and
+> **GVTEWAY** (Public Interface & Marketplace). The redsealion/opus-one/FlyteDeck
+> comparative heritage below is retained only as historical rationale — it is no
+> longer the source of truth. The live nav is `src/lib/nav.ts#platformNav`
+> (single canonical shape; the XPMS dual-nav was removed).
+
 **Framework:** Next.js App Router, Supabase, Stripe, Vercel AI SDK
 
 ---

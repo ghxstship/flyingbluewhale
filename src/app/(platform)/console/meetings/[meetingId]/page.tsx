@@ -38,6 +38,9 @@ export default async function Page({ params }: { params: Promise<{ meetingId: st
             <Button href="/console/meetings" variant="ghost" size="sm">
               {t("common.back", undefined, "Back")}
             </Button>
+            <Button href={`/console/meetings/${p.meetingId}/huddle`} variant="ghost" size="sm">
+              {t("console.meetings.detail.huddle", undefined, "Huddle")}
+            </Button>
             <Button href={`/console/meetings/${p.meetingId}/edit`} size="sm">
               {t("common.edit", undefined, "Edit")}
             </Button>

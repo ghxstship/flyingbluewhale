@@ -33,6 +33,13 @@ const schema = z.object({
   // local cookies survive process restarts. Rotating this value revokes
   // every outstanding access token.
   GUIDE_ACCESS_SECRET: z.string().optional(),
+  // Video huddle provider (F6). Both must be set for live media — the
+  // provider adapter (src/lib/video/provider.ts) mints the join token from
+  // these. Unset = the huddle UI shows a "configure a provider" state
+  // instead of a broken join. Provider-agnostic: point URL+KEY at any
+  // token-minting endpoint (Daily, LiveKit, 100ms, etc.).
+  VIDEO_PROVIDER_URL: z.string().url().optional().or(z.literal("")),
+  VIDEO_PROVIDER_KEY: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -56,6 +63,8 @@ export const env = schema.parse({
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
   GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
+  VIDEO_PROVIDER_URL: process.env.VIDEO_PROVIDER_URL,
+  VIDEO_PROVIDER_KEY: process.env.VIDEO_PROVIDER_KEY,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
@@ -64,3 +73,5 @@ export const hasResend = Boolean(env.RESEND_API_KEY);
 export const hasUpstash = Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN);
 export const hasGrowthbook = Boolean(env.NEXT_PUBLIC_GROWTHBOOK_CLIENT_KEY);
 export const isWeatherEnabled = !env.WEATHER_DISABLED;
+// F6 — live video media activates only when both provider creds are set.
+export const hasVideoProvider = Boolean(env.VIDEO_PROVIDER_URL && env.VIDEO_PROVIDER_KEY);

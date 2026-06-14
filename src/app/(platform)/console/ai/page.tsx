@@ -12,6 +12,14 @@ const SECTIONS = [
     bodyFallback:
       "Domain-event triggers, scheduled jobs, webhook fan-out. The runtime dispatcher for everything reactive in the platform.",
   },
+  {
+    href: "/console/ai/corpus",
+    titleKey: "console.ai.sections.corpus.title",
+    titleFallback: "RAG Corpus",
+    bodyKey: "console.ai.sections.corpus.body",
+    bodyFallback:
+      "Index health for the assistant's retrieval corpus. See chunks by source and reindex deliverables, submittals, and RFIs on demand.",
+  },
 ];
 
 export default async function Page() {

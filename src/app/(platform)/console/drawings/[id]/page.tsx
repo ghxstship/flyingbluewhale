@@ -136,9 +136,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )
         }
         action={
-          <Button href="/console/drawings" size="sm" variant="ghost">
-            {t("console.drawings.detail.allSheetSets", undefined, "← All Sheet Sets")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href={`/console/drawings/${sheetSet.id}/edit`} size="sm" variant="secondary">
+              {t("console.drawings.detail.edit", undefined, "Edit")}
+            </Button>
+            <Button href="/console/drawings" size="sm" variant="ghost">
+              {t("console.drawings.detail.allSheetSets", undefined, "← All Sheet Sets")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-6">

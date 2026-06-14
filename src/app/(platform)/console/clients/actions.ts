@@ -45,3 +45,38 @@ export async function createClientAction(_: State, fd: FormData): Promise<State>
   revalidatePath("/console/clients");
   redirect(`/console/clients/${data.id}`);
 }
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk soft-delete clients — the list-table counterpart to the per-row
+ * delete. manager+ only; RLS pins every write to the session org. Rows
+ * already deleted (or cross-org / missing) are skipped and reported, so
+ * the toast tells the operator exactly what landed.
+ */
+export async function bulkDeleteClients(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Delete Clients" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+
+  const { data: updated, error } = await supabase
+    .from("clients")
+    .update({ deleted_at: new Date().toISOString() })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .select("id");
+  if (error) return { error: `Could Not Delete — ${error.message}` };
+
+  const deleted = updated?.length ?? 0;
+  const skipped = parsed.data.length - deleted;
+  revalidatePath("/console/clients");
+  if (skipped > 0) {
+    return { error: `${deleted} Deleted · ${skipped} Skipped (already deleted or not found)` };
+  }
+  return { message: `${deleted} ${deleted === 1 ? "Client" : "Clients"} Deleted` };
+}

@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Vendor } from "@/lib/supabase/types";
+import { bulkDeleteVendors } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,11 @@ export default async function VendorsPage() {
       </>
     );
   const session = await requireSession();
-  const rows = await listOrgScoped("vendors", session.orgId, { orderBy: "name", ascending: true });
+  const allRows = await listOrgScoped("vendors", session.orgId, { orderBy: "name", ascending: true });
+  // `vendors` isn't in SOFT_DELETABLE_TABLES, so listOrgScoped doesn't
+  // auto-filter — hide soft-deleted rows here (the DB has `deleted_at`;
+  // it predates the typed Vendor row, so read it off the loose shape).
+  const rows = allRows.filter((r) => (r as Vendor & { deleted_at?: string | null }).deleted_at == null);
   return (
     <>
       <ModuleHeader
@@ -57,6 +62,14 @@ export default async function VendorsPage() {
               {t("console.procurement.vendors.newVendor", undefined, "+ New Vendor")}
             </Button>
           }
+          bulkActions={[
+            {
+              id: "delete",
+              label: t("console.procurement.vendors.bulk.delete", undefined, "Delete"),
+              variant: "danger",
+              perform: bulkDeleteVendors,
+            },
+          ]}
           columns={[
             {
               key: "name",

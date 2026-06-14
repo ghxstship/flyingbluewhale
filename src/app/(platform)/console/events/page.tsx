@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { EventRow } from "@/lib/supabase/types";
+import { bulkCancelEvents } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +47,14 @@ export default async function EventsPage() {
               {t("console.events.newEvent", undefined, "+ New Event")}
             </Button>
           }
+          bulkActions={[
+            {
+              id: "cancel",
+              label: t("console.events.bulk.cancel", undefined, "Cancel"),
+              variant: "danger",
+              perform: bulkCancelEvents,
+            },
+          ]}
           columns={[
             {
               key: "name",

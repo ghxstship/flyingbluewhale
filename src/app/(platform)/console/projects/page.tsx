@@ -12,6 +12,7 @@ import { toTitle } from "@/lib/format";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { getRequestT } from "@/lib/i18n/request";
 import { ProjectPortfolioGrid, type PortfolioEntry } from "./ProjectPortfolioGrid";
+import { bulkArchiveProjects } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -104,6 +105,14 @@ async function ProjectsBody({ orgId }: { orgId: string }) {
             totalCount={count}
             rowHref={(p) => `/console/projects/${p.id}`}
             emptyLabel={t("console.projects.emptyLabel", undefined, "No Projects")}
+            bulkActions={[
+              {
+                id: "archive",
+                label: t("console.projects.bulk.archive", undefined, "Archive"),
+                variant: "danger",
+                perform: bulkArchiveProjects,
+              },
+            ]}
             columns={[
               {
                 key: "name",

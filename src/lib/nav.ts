@@ -113,7 +113,9 @@ export type IconName =
   | "Coins"
   | "Route"
   // Sales pipeline
-  | "GitBranch";
+  | "GitBranch"
+  // Collaborate (F5 — whiteboards)
+  | "Presentation";
 
 export type NavItem = {
   label: string;
@@ -480,9 +482,11 @@ export const platformNavDomain: NavGroup[] = [
         items: [
           { label: "Events", href: "/console/events", icon: "CalendarDays" },
           { label: "Meetings", href: "/console/meetings", icon: "CalendarDays" },
+          { label: "Meeting Notes", href: "/console/meetings/notes", icon: "FileText" },
           { label: "Announcements", href: "/console/comms/announcements", icon: "Megaphone" },
           { label: "Polls", href: "/console/comms/polls", icon: "BarChart3" },
           { label: "Surveys", href: "/console/comms/surveys", icon: "ClipboardCheck" },
+          { label: "Whiteboards", href: "/console/collaborate/whiteboards", icon: "Presentation" },
           { label: "Transmittals", href: "/console/transmittals", icon: "Send" },
           { label: "Email Inbox", href: "/console/email-inbox", icon: "Inbox" },
           { label: "RFIs", href: "/console/rfis", icon: "MessageCircleQuestion" },
@@ -564,6 +568,17 @@ export const platformNavDomain: NavGroup[] = [
       },
     ],
   },
+  {
+    // COLLABORATE — lightweight workspace surfaces (Airtable-style sheets,
+    // etc.) that don't belong to a heavier domain group.
+    label: "Collaborate",
+    items: [
+      // Block documents (deferred item F4). Single-user editing; multiplayer
+      // is out of scope.
+      { label: "Documents", href: "/console/collaborate/docs", icon: "FileText" },
+      { label: "Sheets", href: "/console/collaborate/sheets", icon: "FileSpreadsheet" },
+    ],
+  },
 ];
 
 /**
@@ -634,6 +649,8 @@ export const settingsNav: NavGroup[] = [
       { label: "Ticketing", href: "/console/settings/integrations/ticketing", minRole: "admin" },
       { label: "Automations", href: "/console/ai/automations", minRole: "manager" },
       { label: "Field Agents", href: "/console/ai/agents", minRole: "manager" },
+      // F2 — RAG corpus indexer. Status of document_chunks by source + manual reindex.
+      { label: "RAG Corpus", href: "/console/ai/corpus", minRole: "manager" },
       { label: "API", href: "/console/settings/api", minRole: "admin" },
       { label: "Webhooks", href: "/console/settings/webhooks", minRole: "admin" },
     ],

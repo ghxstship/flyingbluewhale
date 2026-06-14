@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createProject, updateProject } from "@/lib/db/projects";
+import { createClient } from "@/lib/supabase/server";
 import { formFail } from "@/lib/forms/fail";
 
 const slugify = (s: string) =>
@@ -109,4 +110,42 @@ export async function updateProjectAction(projectId: string, formData: FormData)
   revalidatePath(`/console/projects/${projectId}`);
   revalidatePath("/console/projects");
   return { ok: true };
+}
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk archive projects — the list-table counterpart to the per-project
+ * state control. manager+ only; RLS pins every write to the session org.
+ * Already-archived (or cross-org / missing / soft-deleted) rows are
+ * skipped and reported. Archiving is a state move, not a delete: projects
+ * anchor invoices, events, and crew, so archive keeps the history intact.
+ */
+export async function bulkArchiveProjects(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Archive Projects" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+
+  const { data: updated, error } = await supabase
+    .from("projects")
+    .update({ project_state: "archived" })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .neq("project_state", "archived")
+    .select("id");
+  if (error) return { error: `Could Not Archive — ${error.message}` };
+
+  const archived = updated?.length ?? 0;
+  const skipped = parsed.data.length - archived;
+  revalidatePath("/console/projects");
+  revalidatePath("/console");
+  if (skipped > 0) {
+    return { error: `${archived} Archived · ${skipped} Skipped (already archived or not found)` };
+  }
+  return { message: `${archived} ${archived === 1 ? "Project" : "Projects"} Archived` };
 }

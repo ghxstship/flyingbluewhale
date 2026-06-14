@@ -83,9 +83,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             : `${rfis.length} RFI${rfis.length === 1 ? "" : "s"} · ${submittals.length} submittal${submittals.length === 1 ? "" : "s"}`
         }
         action={
-          <Button href="/console/specs" size="sm" variant="ghost">
-            {t("console.specs.detail.allSections", undefined, "← All Sections")}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button href={`/console/specs/${section.id}/edit`} size="sm" variant="secondary">
+              {t("console.specs.detail.edit", undefined, "Edit")}
+            </Button>
+            <Button href="/console/specs" size="sm" variant="ghost">
+              {t("console.specs.detail.allSections", undefined, "← All Sections")}
+            </Button>
+          </div>
         }
       />
       <div className="page-content space-y-6">

@@ -11,6 +11,7 @@ import { formatMoney } from "@/lib/i18n/format";
 import { timeAgo } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Invoice } from "@/lib/supabase/types";
+import { bulkVoidInvoices } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -103,6 +104,14 @@ async function InvoiceTable({ orgId }: { orgId: string }) {
     <DataTable<Invoice>
       rows={rows}
       rowHref={(r) => `/console/finance/invoices/${r.id}`}
+      bulkActions={[
+        {
+          id: "void",
+          label: t("console.finance.invoices.bulk.void", undefined, "Void"),
+          variant: "danger",
+          perform: bulkVoidInvoices,
+        },
+      ]}
       columns={[
         {
           key: "number",

@@ -9,6 +9,7 @@ import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { Equipment, EquipmentStatus } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
+import { bulkDeleteEquipment } from "./actions";
 
 const STATUS_BG: Record<EquipmentStatus, "success" | "warning" | "info" | "muted" | "error"> = {
   available: "success",
@@ -70,6 +71,14 @@ export default async function EquipmentPage() {
               {t("console.production.equipment.addEquipmentLower", undefined, "+ Add equipment")}
             </Button>
           }
+          bulkActions={[
+            {
+              id: "delete",
+              label: t("console.production.equipment.bulk.delete", undefined, "Delete"),
+              variant: "danger",
+              perform: bulkDeleteEquipment,
+            },
+          ]}
           columns={[
             {
               key: "name",

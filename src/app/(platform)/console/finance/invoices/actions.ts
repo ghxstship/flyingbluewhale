@@ -130,3 +130,41 @@ export async function setInvoiceStatusAction(id: string, status: "draft" | "sent
   revalidatePath("/console/finance/invoices");
   return { ok: true as const };
 }
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk void invoices — the list-table counterpart to
+ * `setInvoiceStatusAction`. manager+ only (matches the billing:write
+ * gate); RLS pins every write to the session org. Paid and
+ * already-voided invoices are skipped and reported — voiding a paid
+ * invoice would silently desync AR aging from collected cash.
+ */
+export async function bulkVoidInvoices(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Void Invoices" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+
+  const { data: updated, error } = await supabase
+    .from("invoices")
+    .update({ invoice_state: "voided" })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .not("invoice_state", "in", "(paid,voided)")
+    .select("id");
+  if (error) return { error: `Could Not Void — ${error.message}` };
+
+  const voided = updated?.length ?? 0;
+  const skipped = parsed.data.length - voided;
+  revalidatePath("/console/finance/invoices");
+  revalidatePath("/console/finance");
+  if (skipped > 0) {
+    return { error: `${voided} Voided · ${skipped} Skipped (paid or already voided)` };
+  }
+  return { message: `${voided} ${voided === 1 ? "Invoice" : "Invoices"} Voided` };
+}

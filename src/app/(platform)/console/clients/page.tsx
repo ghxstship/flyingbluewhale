@@ -11,6 +11,7 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { Client } from "@/lib/supabase/types";
 import type { ViewScope } from "@/lib/views/types";
 import { deleteClientsView, saveClientsView, setDefaultClientsView } from "./view-actions";
+import { bulkDeleteClients } from "./actions";
 
 // MUST match STABLE_TABLE_ID in ./view-actions.ts so the views loaded
 // here line up with the views the save/delete actions write.
@@ -59,6 +60,14 @@ export default async function ClientsPage() {
           onSaveView={saveClientsView}
           onDeleteView={deleteClientsView}
           onSetDefaultView={setDefaultClientsView}
+          bulkActions={[
+            {
+              id: "delete",
+              label: t("console.clients.bulk.delete", undefined, "Delete"),
+              variant: "danger",
+              perform: bulkDeleteClients,
+            },
+          ]}
           columns={[
             {
               key: "name",

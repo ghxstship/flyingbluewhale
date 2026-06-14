@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { dollarsToCents } from "@/lib/format";
@@ -132,4 +132,40 @@ export async function deleteEquipment(id: string): Promise<void> {
   revalidatePath("/console/production/equipment");
   // No redirect — DeleteForm's undo flow navigates client-side after
   // showing the "Deleted" toast with its Undo action (REC-14).
+}
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk soft-delete equipment — the list-table counterpart to
+ * `deleteEquipment`. manager+ only; RLS pins every write to the session
+ * org. Soft-delete via `deleted_at` (equipment is referenced by rentals,
+ * so a hard delete would break referential integrity). Already-deleted /
+ * cross-org / missing rows are skipped and reported.
+ */
+export async function bulkDeleteEquipment(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Delete Equipment" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+
+  const { data: updated, error } = await supabase
+    .from("equipment")
+    .update({ deleted_at: new Date().toISOString() })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .select("id");
+  if (error) return { error: `Could Not Delete — ${error.message}` };
+
+  const deleted = updated?.length ?? 0;
+  const skipped = parsed.data.length - deleted;
+  revalidatePath("/console/production/equipment");
+  if (skipped > 0) {
+    return { error: `${deleted} Deleted · ${skipped} Skipped (already deleted or not found)` };
+  }
+  return { message: `${deleted} ${deleted === 1 ? "Item" : "Items"} Deleted` };
 }

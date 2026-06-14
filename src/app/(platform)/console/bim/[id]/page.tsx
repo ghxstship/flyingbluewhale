@@ -114,6 +114,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 `Download ${m.source_type.toUpperCase()}`,
               )}
             </a>
+            <Button href={`/console/bim/${m.id}/edit`} size="sm" variant="secondary">
+              {t("console.bim.detail.edit", undefined, "Edit")}
+            </Button>
             <Button href="/console/bim" size="sm" variant="ghost">
               {t("console.bim.detail.allModels", undefined, "← All Models")}
             </Button>

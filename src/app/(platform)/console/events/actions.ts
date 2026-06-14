@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { actionFail, formFail } from "@/lib/forms/fail";
@@ -70,4 +70,42 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
   revalidatePath("/console/events");
   revalidatePath("/console/schedule");
   redirect("/console/events");
+}
+
+const BulkIds = z.array(z.string().uuid()).min(1).max(200);
+
+export type BulkResult = { message?: string; error?: string };
+
+/**
+ * Bulk cancel events — the list-table counterpart to per-event state
+ * control. manager+ only; RLS pins every write to the session org. The
+ * `events` table has no `deleted_at` column, so cancellation is a state
+ * move (`event_state = 'cancelled'`), not a delete — it keeps the row in
+ * the schedule history. Already-cancelled / completed / cross-org / missing
+ * rows are skipped and reported.
+ */
+export async function bulkCancelEvents(ids: string[]): Promise<BulkResult> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Cancel Events" };
+  const parsed = BulkIds.safeParse(ids);
+  if (!parsed.success) return { error: "Invalid Selection" };
+  const supabase = await createClient();
+
+  const { data: updated, error } = await supabase
+    .from("events")
+    .update({ event_state: "cancelled" })
+    .in("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .not("event_state", "in", "(cancelled,complete)")
+    .select("id");
+  if (error) return { error: `Could Not Cancel — ${error.message}` };
+
+  const cancelled = updated?.length ?? 0;
+  const skipped = parsed.data.length - cancelled;
+  revalidatePath("/console/events");
+  revalidatePath("/console/schedule");
+  if (skipped > 0) {
+    return { error: `${cancelled} Cancelled · ${skipped} Skipped (already cancelled or completed)` };
+  }
+  return { message: `${cancelled} ${cancelled === 1 ? "Event" : "Events"} Cancelled` };
 }

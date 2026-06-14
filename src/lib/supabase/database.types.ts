@@ -4971,6 +4971,50 @@ export type Database = {
           },
         ]
       }
+      collab_docs: {
+        Row: {
+          content: Json
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          doc_state: Database["public"]["Enums"]["collab_doc_state"]
+          id: string
+          org_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          doc_state?: Database["public"]["Enums"]["collab_doc_state"]
+          id?: string
+          org_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          doc_state?: Database["public"]["Enums"]["collab_doc_state"]
+          id?: string
+          org_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collab_docs_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comment_attachments: {
         Row: {
           comment_id: string
@@ -6248,6 +6292,62 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "conversations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      corpus_sources: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          documents_indexed: number
+          documents_seen: number
+          documents_skipped: number
+          id: string
+          last_error: string | null
+          org_id: string
+          refreshed_at: string | null
+          run_state: Database["public"]["Enums"]["corpus_run_state"]
+          source_kind: string
+          triggered_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          documents_indexed?: number
+          documents_seen?: number
+          documents_skipped?: number
+          id?: string
+          last_error?: string | null
+          org_id: string
+          refreshed_at?: string | null
+          run_state?: Database["public"]["Enums"]["corpus_run_state"]
+          source_kind: string
+          triggered_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          documents_indexed?: number
+          documents_seen?: number
+          documents_skipped?: number
+          id?: string
+          last_error?: string | null
+          org_id?: string
+          refreshed_at?: string | null
+          run_state?: Database["public"]["Enums"]["corpus_run_state"]
+          source_kind?: string
+          triggered_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corpus_sources_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -15275,6 +15375,69 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meeting_notes: {
+        Row: {
+          action_items: Json
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          meeting_id: string | null
+          note_state: Database["public"]["Enums"]["note_state"]
+          org_id: string
+          summarized_at: string | null
+          summary: string | null
+          title: string
+          transcript: string
+          updated_at: string
+        }
+        Insert: {
+          action_items?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          meeting_id?: string | null
+          note_state?: Database["public"]["Enums"]["note_state"]
+          org_id: string
+          summarized_at?: string | null
+          summary?: string | null
+          title: string
+          transcript?: string
+          updated_at?: string
+        }
+        Update: {
+          action_items?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          meeting_id?: string | null
+          note_state?: Database["public"]["Enums"]["note_state"]
+          org_id?: string
+          summarized_at?: string | null
+          summary?: string | null
+          title?: string
+          transcript?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_notes_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "meeting_notes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -25148,6 +25311,57 @@ export type Database = {
           },
         ]
       }
+      sheet_rows: {
+        Row: {
+          cells: Json
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          org_id: string
+          position: number
+          sheet_id: string
+          updated_at: string
+        }
+        Insert: {
+          cells?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id: string
+          position?: number
+          sheet_id: string
+          updated_at?: string
+        }
+        Update: {
+          cells?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id?: string
+          position?: number
+          sheet_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sheet_rows_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sheet_rows_sheet_id_fkey"
+            columns: ["sheet_id"]
+            isOneToOne: false
+            referencedRelation: "sheets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sheet_set_members: {
         Row: {
           added_at: string
@@ -25334,6 +25548,53 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sheets: {
+        Row: {
+          columns: Json
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          name: string
+          org_id: string
+          sheet_state: Database["public"]["Enums"]["sheet_state"]
+          updated_at: string
+        }
+        Insert: {
+          columns?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          org_id: string
+          sheet_state?: Database["public"]["Enums"]["sheet_state"]
+          updated_at?: string
+        }
+        Update: {
+          columns?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          sheet_state?: Database["public"]["Enums"]["sheet_state"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sheets_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -32128,6 +32389,120 @@ export type Database = {
         }
         Relationships: []
       }
+      video_call_participants: {
+        Row: {
+          call_id: string
+          created_at: string
+          deleted_at: string | null
+          id: string
+          joined_at: string | null
+          left_at: string | null
+          org_id: string
+          role: Database["public"]["Enums"]["video_participant_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          call_id: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          joined_at?: string | null
+          left_at?: string | null
+          org_id: string
+          role?: Database["public"]["Enums"]["video_participant_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          call_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          joined_at?: string | null
+          left_at?: string | null
+          org_id?: string
+          role?: Database["public"]["Enums"]["video_participant_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_call_participants_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: false
+            referencedRelation: "video_calls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "video_call_participants_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_calls: {
+        Row: {
+          call_state: Database["public"]["Enums"]["video_call_state"]
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          ended_at: string | null
+          id: string
+          meeting_id: string | null
+          org_id: string
+          room_name: string
+          started_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          call_state?: Database["public"]["Enums"]["video_call_state"]
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ended_at?: string | null
+          id?: string
+          meeting_id?: string | null
+          org_id: string
+          room_name?: string
+          started_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          call_state?: Database["public"]["Enums"]["video_call_state"]
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ended_at?: string | null
+          id?: string
+          meeting_id?: string | null
+          org_id?: string
+          room_name?: string
+          started_at?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_calls_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "video_calls_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       view_configs: {
         Row: {
           config: Json
@@ -32680,6 +33055,53 @@ export type Database = {
           provider?: string
         }
         Relationships: []
+      }
+      whiteboards: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          name: string
+          org_id: string
+          snapshot: Json | null
+          updated_at: string
+          updated_by: string | null
+          whiteboard_state: Database["public"]["Enums"]["whiteboard_state"]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          name: string
+          org_id: string
+          snapshot?: Json | null
+          updated_at?: string
+          updated_by?: string | null
+          whiteboard_state?: Database["public"]["Enums"]["whiteboard_state"]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          org_id?: string
+          snapshot?: Json | null
+          updated_at?: string
+          updated_by?: string | null
+          whiteboard_state?: Database["public"]["Enums"]["whiteboard_state"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whiteboards_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       wip_snapshots: {
         Row: {
@@ -37539,6 +37961,7 @@ export type Database = {
         | "approved"
         | "rejected"
         | "withdrawn"
+      collab_doc_state: "draft" | "published" | "archived"
       compensation_basis:
         | "per_day"
         | "per_show_day"
@@ -37562,6 +37985,12 @@ export type Database = {
         | "renewed"
         | "lapsed"
         | "declined"
+      corpus_run_state:
+        | "queued"
+        | "running"
+        | "succeeded"
+        | "partial"
+        | "failed"
       deal_type:
         | "flat"
         | "door"
@@ -37803,6 +38232,7 @@ export type Database = {
         | "other"
       meeting_state: "scheduled" | "in_progress" | "completed" | "cancelled"
       milestone_visibility: "public" | "partners" | "internal"
+      note_state: "draft" | "summarized" | "archived"
       offer_letter_classification: "w2" | "1099" | "agency" | "intern"
       offer_letter_employer: "ghxstship" | "five_senses" | "joint"
       offer_letter_status:
@@ -37991,6 +38421,7 @@ export type Database = {
         | "published"
         | "superseded"
         | "archived"
+      sheet_state: "active" | "archived"
       shift_attendance:
         | "scheduled"
         | "checked_in"
@@ -38301,6 +38732,8 @@ export type Database = {
         | "occupied"
         | "out_of_service"
       vetting_state: "pending" | "in_progress" | "clear" | "flagged" | "failed"
+      video_call_state: "scheduled" | "live" | "ended"
+      video_participant_role: "host" | "participant"
       view_scope: "private" | "org" | "public"
       view_type:
         | "grid"
@@ -38313,6 +38746,7 @@ export type Database = {
         | "card"
         | "form"
       warranty_state: "active" | "expiring_soon" | "expired" | "voided"
+      whiteboard_state: "active" | "archived"
       workforce_kind: "paid_staff" | "volunteer" | "contractor" | "official"
       xpms_atom_phase:
         | "discovery"
@@ -38684,6 +39118,7 @@ export const Constants = {
         "rejected",
         "withdrawn",
       ],
+      collab_doc_state: ["draft", "published", "archived"],
       compensation_basis: [
         "per_day",
         "per_show_day",
@@ -38710,6 +39145,7 @@ export const Constants = {
         "lapsed",
         "declined",
       ],
+      corpus_run_state: ["queued", "running", "succeeded", "partial", "failed"],
       deal_type: [
         "flat",
         "door",
@@ -38970,6 +39406,7 @@ export const Constants = {
       ],
       meeting_state: ["scheduled", "in_progress", "completed", "cancelled"],
       milestone_visibility: ["public", "partners", "internal"],
+      note_state: ["draft", "summarized", "archived"],
       offer_letter_classification: ["w2", "1099", "agency", "intern"],
       offer_letter_employer: ["ghxstship", "five_senses", "joint"],
       offer_letter_status: [
@@ -39181,6 +39618,7 @@ export const Constants = {
         "superseded",
         "archived",
       ],
+      sheet_state: ["active", "archived"],
       shift_attendance: [
         "scheduled",
         "checked_in",
@@ -39524,6 +39962,8 @@ export const Constants = {
         "out_of_service",
       ],
       vetting_state: ["pending", "in_progress", "clear", "flagged", "failed"],
+      video_call_state: ["scheduled", "live", "ended"],
+      video_participant_role: ["host", "participant"],
       view_scope: ["private", "org", "public"],
       view_type: [
         "grid",
@@ -39537,6 +39977,7 @@ export const Constants = {
         "form",
       ],
       warranty_state: ["active", "expiring_soon", "expired", "voided"],
+      whiteboard_state: ["active", "archived"],
       workforce_kind: ["paid_staff", "volunteer", "contractor", "official"],
       xpms_atom_phase: [
         "discovery",

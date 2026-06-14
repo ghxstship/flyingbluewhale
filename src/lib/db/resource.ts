@@ -141,6 +141,16 @@ export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
   "sprints",
   "sprint_stories",
   "burndown_snapshots",
+  // Deferred-completion wave — meeting notetaker, RAG corpus telemetry,
+  // Collaborate (sheets/docs/whiteboards), video huddle. All carry deleted_at.
+  "meeting_notes",
+  "corpus_sources",
+  "sheets",
+  "sheet_rows",
+  "collab_docs",
+  "whiteboards",
+  "video_calls",
+  "video_call_participants",
 ]);
 
 async function anyFrom(t: string) {

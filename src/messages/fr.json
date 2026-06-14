@@ -3622,7 +3622,7 @@
       "foundations": {
         "meta": {
           "title": "Fondations · ATLVS Technologies — Kit de marque et UI",
-          "description": "Fondations de la marque ATLVS Technologies : marque Waypoint, couleur, typographie (Industrial Wide / Archivo expanded), espacement, rayons, élévation, mouvement et iconographie."
+          "description": "Fondations de la marque ATLVS Technologies : marque Waypoint, couleur, typographie (MONUMENT — Anton + Hanken Grotesk), espacement, rayons, élévation, mouvement et iconographie."
         },
         "nav": {
           "aria": "Sections des fondations",
@@ -3652,7 +3652,7 @@
             "colWordmark": "Spéc du wordmark",
             "colSetting": "Composition",
             "faceLabel": "Police",
-            "faceValue": "— géométrique, lockup du logo uniquement. UI et titres restent en Space Grotesk / Archivo Expanded.",
+            "faceValue": "— géométrique, lockup du logo uniquement. Les titres utilisent Anton ; le corps et l’UI utilisent Hanken Grotesk.",
             "aLabel": "Le A",
             "aBefore": "Un sommet nu —",
             "aBold": "sans barre transversale",
@@ -3730,19 +3730,19 @@
           "eyebrow": "Fondations · Typo",
           "heading": "Typographie",
           "lead": {
-            "industrialWide": "Industrial Wide.",
+            "monument": "Monument.",
             "s1": "Les titres et métriques sont composés en",
-            "archivoExpanded": "Archivo sur son axe de largeur expanded",
+            "anton": "Anton, une display ultra-condensée tout en capitales",
             "s2": "— une grotesque structurelle et assurée qui donne de la présence au produit. Le corps et l'UI restent en",
             "s3": "pour que tables et formulaires restent lisibles ;",
             "s4": "est le vernaculaire des eyebrows et des coordonnées (ID, codes, libellés) ;",
-            "s5": "est l'alternative pour le corps long. Title Case pour les titres et libellés ; casse de phrase pour le corps."
+            "s5": "sert uniquement au lockup du wordmark. Les titres display sont en CAPITALES (Anton est une fonte capitale) ; le corps et les libellés restent en Title / casse de phrase."
           },
           "face": {
-            "archivo": "Titres · stats · 700–900",
-            "grotesk": "Corps · UI · 400–700",
+            "anton": "Display · titres · stats",
+            "hanken": "Corps · UI · 400–800",
             "mono": "Eyebrows · ID · codes",
-            "inter": "Alternative pour le corps long"
+            "jost": "Lockup du wordmark uniquement"
           },
           "specimen": {
             "body": "La taille de lecture par défaut pour les tables, formulaires et textes d'interface.",
@@ -16322,7 +16322,7 @@
         "density": {
           "label": "Densité",
           "compact": "Compacte",
-          "comfortable": "Confortable",
+          "cozy": "Par défaut",
           "spacious": "Spacieuse"
         },
         "locale": {
@@ -18384,8 +18384,8 @@
     "density": {
       "compact": "Compact",
       "compactAria": "Utiliser la densité compacte",
-      "comfortable": "Par défaut",
-      "comfortableAria": "Utiliser la densité confortable",
+      "cozy": "Par défaut",
+      "cozyAria": "Utiliser la densité par défaut",
       "spacious": "Spacieux",
       "spaciousAria": "Utiliser la densité spacieuse",
       "label": "Densité"

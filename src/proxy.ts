@@ -428,7 +428,8 @@ function renderPortalSlugNotFound(slug: string): string {
   // Inter (project body font) with a system fallback chain in case the
   // self-hosted font hasn't preloaded — this response is served before
   // the link-rel-preload header for the woff2 file.
-  const fontStack = "Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif";
+  const fontStack =
+    "'Hanken Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif";
   return [
     "<!doctype html>",
     '<html lang="en">',
@@ -444,7 +445,7 @@ function renderPortalSlugNotFound(slug: string): string {
     `.eyebrow{font-size:11px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:#5b9dff}`,
     `h1{margin:12px 0 0;font-size:28px;font-weight:600;letter-spacing:-.01em;color:#ffffff}`,
     `p{margin:8px 0 0;font-size:14px;line-height:1.6;color:#a0a4ae}`,
-    `code{font-family:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#e7e7ec;background:#161a22;border:1px solid #232936;border-radius:6px;padding:2px 6px}`,
+    `code{font-family:'Space Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#e7e7ec;background:#161a22;border:1px solid #232936;border-radius:6px;padding:2px 6px}`,
     `.actions{margin-top:24px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px}`,
     `a.ps-btn{display:inline-block;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;text-decoration:none;transition:filter .15s ease}`,
     `a.ps-btn:hover{filter:brightness(1.1)}`,

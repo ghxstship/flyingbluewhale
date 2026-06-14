@@ -279,16 +279,18 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
-  it("no dead Bermuda-Triangle / HVRBOR font references survive", () => {
-    // The pre-v3 codebase loaded Anton / Bebas Neue / Share Tech /
-    // Share Tech Mono / DM Sans for the dead Bermuda Triangle stack and
-    // Fraunces / Instrument Serif / DM Serif Display / Bricolage / Geist
-    // / Geist Mono / Cormorant Garamond for the CHROMA BEACON 8-theme
-    // picker. Both were retired with the two-skin lock (453bbd7c) and
-    // the v3 ATLVS kit. Re-importing any of them or referencing the
-    // matching `--font-*` CSS var resurrects dead bytes on every page.
+  it("no dead font references survive (Bermuda-Triangle / CHROMA BEACON / kit-v2)", () => {
+    // Three retired typography stacks must not resurrect dead bytes:
+    //  1. Bermuda Triangle / HVRBOR — Bebas Neue / Share Tech / Share Tech
+    //     Mono / DM Sans (retired with the two-skin lock 453bbd7c).
+    //  2. CHROMA BEACON 8-theme picker — Fraunces / Instrument Serif / DM
+    //     Serif Display / Bricolage / Geist / Geist Mono / Cormorant Garamond.
+    //  3. Kit v2 "Industrial Wide" — Archivo (display) / Space Grotesk (body)
+    //     plus the never-canon Inter / JetBrains Mono — all superseded by the
+    //     v3 "MONUMENT" stack (Anton + Hanken Grotesk + Space Mono + Jost,
+    //     ratified 2026-06-13). NOTE: Anton is now CANONICAL (the MONUMENT
+    //     display face) and is intentionally absent from this list.
     const DEAD_FONTS = [
-      "Anton",
       "Bebas_Neue",
       "Share_Tech",
       "Share_Tech_Mono",
@@ -300,9 +302,12 @@ describe("Design system — component primitive adoption", () => {
       "Geist",
       "Geist_Mono",
       "Cormorant_Garamond",
+      // kit v2 "Industrial Wide" faces — retired by MONUMENT (kit v3).
+      "Archivo",
+      "Space_Grotesk",
+      "JetBrains_Mono",
     ];
     const DEAD_VARS = [
-      "--font-anton",
       "--font-bebas-neue",
       "--font-share-tech",
       "--font-share-tech-mono",
@@ -314,6 +319,11 @@ describe("Design system — component primitive adoption", () => {
       "--font-geist",
       "--font-geist-mono",
       "--font-serif",
+      // kit v2 "Industrial Wide" + never-canon faces — retired by MONUMENT.
+      "--font-archivo",
+      "--font-space-grotesk",
+      "--font-inter",
+      "--font-jetbrains-mono",
     ];
     const importRe = new RegExp(`\\b(${DEAD_FONTS.join("|")})\\b`);
     const varRe = new RegExp(`var\\((${DEAD_VARS.join("|")})\\b`);
@@ -340,7 +350,7 @@ describe("Design system — component primitive adoption", () => {
     }
     expect(
       offenders,
-      `Dead-font references resurrect the Bermuda Triangle / CHROMA BEACON typography purged in commit 34b0b073:\n${offenders.join("\n")}`,
+      `Dead-font references resurrect retired typography (Bermuda Triangle / CHROMA BEACON / kit-v2 Industrial Wide). The canonical stack is MONUMENT — Anton + Hanken Grotesk + Space Mono + Jost:\n${offenders.join("\n")}`,
     ).toEqual([]);
   });
 

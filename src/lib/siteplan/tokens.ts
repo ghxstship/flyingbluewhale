@@ -5,18 +5,18 @@
  * Per-shell accent overrides happen elsewhere; bands always render
  * their canonical band-vocab color regardless of shell theming.
  *
- * Type families realigned to the v3 ATLVS kit (2026-06-03): the dead
- * Bermuda Triangle / HVRBOR stack (Anton/Bebas/Share Tech) is purged
- * everywhere it lived as a free-text font name. Site plans now read
- * in the kit's two-family canon — Space Grotesk for headings and
- * body, Space Mono for data labels and identifiers.
+ * Type families realigned to the v3 ATLVS kit "MONUMENT" (2026-06-13):
+ * Anton drives the display + heading register (sheet titles, section bars),
+ * Hanken Grotesk carries body/narrative, Space Mono carries data labels and
+ * identifiers. The PDF/SVG renderer must register these faces; unregistered
+ * names fall back to the host stack.
  */
 
 /** §7.1 Typography. */
 export const SITEPLAN_FONTS = {
-  display: "Space Grotesk", // sheet title H1, dimension callouts
-  heading: "Space Grotesk", // section bars, zone labels, station tags
-  body: "Space Grotesk", // notes, narrative blocks
+  display: "Anton", // sheet title H1, dimension callouts
+  heading: "Anton", // section bars, zone labels, station tags
+  body: "Hanken Grotesk", // notes, narrative blocks
   mono: "Space Mono", // atom IDs, model numbers, dimensions, schedules
 } as const;
 

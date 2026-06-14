@@ -8,7 +8,7 @@ import type { Json } from "@/lib/supabase/database.types";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
 const Schema = z.object({
-  density: z.enum(["compact", "comfortable", "spacious"]).optional(),
+  density: z.enum(["compact", "cozy", "spacious"]).optional(),
   locale: z.string().min(2).max(8).optional(),
   timezone: z.string().min(1).max(64).optional(),
 });

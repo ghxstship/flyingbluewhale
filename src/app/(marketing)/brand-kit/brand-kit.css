@@ -26,7 +26,7 @@
 
   background: var(--gx-void);
   color: var(--gx-bone);
-  font-family: var(--font-body, var(--font-space-grotesk), system-ui, sans-serif);
+  font-family: var(--font-body, "Hanken Grotesk", system-ui, sans-serif);
   -webkit-font-smoothing: antialiased;
   /* Stretch beyond the (marketing) shell padding so the cosmic void
      reads full-bleed even though the layout's <main> doesn't reset

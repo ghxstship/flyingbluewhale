@@ -3622,7 +3622,7 @@
       "foundations": {
         "meta": {
           "title": "Fundamentos · ATLVS Technologies — Kit de Marca y UI",
-          "description": "Fundamentos de marca de ATLVS Technologies: marca Waypoint, color, tipografía — Industrial Wide / Archivo expandida —, espaciado, radios, elevación, motion e iconografía."
+          "description": "Fundamentos de marca de ATLVS Technologies: marca Waypoint, color, tipografía — MONUMENT, Anton + Hanken Grotesk —, espaciado, radios, elevación, motion e iconografía."
         },
         "nav": {
           "aria": "Secciones de fundamentos",
@@ -3652,7 +3652,7 @@
             "colWordmark": "Spec del wordmark",
             "colSetting": "Composición",
             "faceLabel": "Fuente",
-            "faceValue": "— geométrica, solo para el lockup del logo. UI y encabezados permanecen en Space Grotesk / Archivo Expanded.",
+            "faceValue": "— geométrica, solo para el lockup del logo. Los títulos usan Anton; el cuerpo y la UI usan Hanken Grotesk.",
             "aLabel": "La A",
             "aBefore": "Un pico desnudo —",
             "aBold": "sin travesaño",
@@ -3730,19 +3730,19 @@
           "eyebrow": "Fundamentos · Tipografía",
           "heading": "Tipografía",
           "lead": {
-            "industrialWide": "Industrial Wide.",
+            "monument": "Monument.",
             "s1": "Encabezados y métricas se componen en",
-            "archivoExpanded": "Archivo en su eje de ancho expandido",
+            "anton": "Anton, una tipografía display ultracondensada en altas",
             "s2": "— una grotesca estructural y segura que le da presencia al producto. Cuerpo y UI permanecen en",
             "s3": "para que tablas y formularios se lean limpios;",
             "s4": "es la jerga de eyebrows y coordenadas — IDs, códigos, etiquetas;",
-            "s5": "es la alternativa de cuerpo para textos largos. Title Case para encabezados y etiquetas; sentence case para el cuerpo."
+            "s5": "sirve solo para el lockup del wordmark. Los títulos display van en MAYÚSCULAS (Anton es una tipografía de altas); el cuerpo y las etiquetas mantienen Title / sentence case."
           },
           "face": {
-            "archivo": "Encabezados · stats · 700–900",
-            "grotesk": "Cuerpo · UI · 400–700",
+            "anton": "Display · encabezados · stats",
+            "hanken": "Cuerpo · UI · 400–800",
             "mono": "Eyebrows · IDs · códigos",
-            "inter": "Alternativa de cuerpo para textos largos"
+            "jost": "Solo lockup del wordmark"
           },
           "specimen": {
             "body": "El tamaño de lectura por defecto para tablas, formularios y copy de interfaz.",
@@ -14779,8 +14779,8 @@
     "density": {
       "compact": "Compacta",
       "compactAria": "Usar densidad compacta",
-      "comfortable": "Predeterminada",
-      "comfortableAria": "Usar densidad cómoda",
+      "cozy": "Predeterminada",
+      "cozyAria": "Usar densidad predeterminada",
       "spacious": "Amplia",
       "spaciousAria": "Usar densidad amplia",
       "label": "Densidad"
@@ -16354,7 +16354,7 @@
         "density": {
           "label": "Densidad",
           "compact": "Compacta",
-          "comfortable": "Cómoda",
+          "cozy": "Predeterminada",
           "spacious": "Amplia"
         },
         "locale": {

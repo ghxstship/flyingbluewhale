@@ -31,17 +31,16 @@
   --color-danger: var(--p-danger);
   --color-info: var(--p-info);
 
-  /* font-display points at Archivo so Tailwind `font-display` utility
-     resolves to the kit's Industrial Wide heading face. Per kit canon,
-     Archivo headings are applied with font-stretch:125% + font-weight:800;
-     bare `font-display` gives the font but not the wide register — use
-     the .ps-h / .ps-pagehead / .ps-hero / .hed-* classes (or set the
-     three --p-heading-* axes manually) to get the full kit look. */
-  --font-sans: var(--font-space-grotesk);
+  /* font-display points at Anton so the Tailwind `font-display` utility
+     resolves to the kit's MONUMENT heading face. Anton is an all-caps display
+     face applied with --p-display-case:uppercase; use the .ps-h /
+     .ps-pagehead / .ps-hero / .hed-* classes (or set the --p-heading-* axes
+     + --p-display-case manually) to get the full kit look. */
+  --font-sans: var(--font-hanken-grotesk);
   --font-mono: var(--font-space-mono);
-  --font-display: var(--font-archivo);
-  --font-subdisplay: var(--font-archivo);
-  --font-body: var(--font-space-grotesk);
+  --font-display: var(--font-anton);
+  --font-subdisplay: var(--font-anton);
+  --font-body: var(--font-hanken-grotesk);
   --font-pixel: var(--font-space-mono);
 
   /* Tailwind breakpoints — duplicated as literals inside @media queries
@@ -751,8 +750,8 @@ pre,
 
   /* `.glow-accent` — accent-color glow on hover/focus. Replaces background
      fills as the brand-color affordance — color reads as energy/motion,
-     not as decoration. Sub-brand colors (ATLVS red, GVTEWAY blue, COMPVSS
-     yellow) flow through via --p-accent at the shell scope. */
+     not as decoration. Sub-brand colors (ATLVS pink, GVTEWAY cyan, COMPVSS
+     amber) flow through via --p-accent at the shell scope. */
   .glow-accent {
     transition:
       box-shadow var(--motion-hover) var(--ease-hover),
@@ -1034,16 +1033,15 @@ pre,
   }
 
   /* ───── Marketing typography scale ─────
-   * ATLVS-kit canon — h1/h2/h3 render in --font-display, which on the
-   * SaaS skin resolves to Space Grotesk (via atlvs-product.css `--p-heading`
-   * = `var(--p-font)`), and on the cosmic /ghxstship skin resolves to
-   * Big Shoulders Display. `.hed-*` classes provide the size/weight scale.
+   * ATLVS-kit canon — h1/h2/h3 render in --font-display, which on the single
+   * canonical kit skin resolves to Anton (MONUMENT) via atlvs-product.css
+   * `--p-heading`. `.hed-*` classes provide the size/weight scale. (The
+   * `/ghxstship` parent surface reuses this same skin — no separate face.)
    *
-   * Casing was UPPERCASE on the dead Bermuda Triangle canon; per the v3
-   * kit ratification (tokens.json#saasThemeHouseRules#A, 2026-06-03) the
-   * SaaS skin uses Title Case authored in source — UPPERCASE is cosmic-
-   * only. The `text-transform: uppercase` on `.hed-*` is therefore a
-   * marketing-cosmic affordance that should NOT bleed into product code.
+   * Casing: per the MONUMENT ratification (tokens.json#saasThemeHouseRules,
+   * 2026-06-13) DISPLAY headings are ALL-CAPS — Anton is a caps face, applied
+   * via --p-display-case on .hed-* / .ps-h / .ps-hero / .ps-pagehead. Body,
+   * labels, and buttons stay Title / sentence case authored in source.
    *
    * BEFORE these classes existed, 16+ marketplace pages referenced
    * `hed-2xl` / `eyebrow` in JSX with no CSS definition — they rendered
@@ -1058,19 +1056,20 @@ pre,
    *   .hed-xl   → section h2       — 28 → 40 px
    *   .hed-lg   → card / subhead   — 20 → 24 px
    *   .hed-md   → small h4         — 16 px (mini-eyebrow inside cards) */
-  /* Kit "Industrial Wide" canon (v2) — .hed-* render Archivo at the expanded
-     wdth:125 axis at weight 800. Title Case authored in source. Sizes use
-     clamp() so the heading breathes through the breakpoint without `sm:` /
-     `md:` / `lg:` class clouds at the call site. */
+  /* Kit "MONUMENT" canon (v3) — .hed-* render Anton (single black weight,
+     already condensed, ALL-CAPS via --p-display-case). Sizes use clamp() so
+     the heading breathes through the breakpoint without `sm:` / `md:` / `lg:`
+     class clouds at the call site. */
   .hed-3xl,
   .hed-2xl,
   .hed-xl,
   .hed-lg,
   .hed-md {
     font-family: var(--p-heading, var(--font-body, system-ui, sans-serif));
-    font-stretch: var(--p-heading-stretch, 125%);
-    font-weight: var(--p-heading-weight, 800);
-    letter-spacing: var(--p-heading-ls, -0.015em);
+    font-stretch: var(--p-heading-stretch, normal);
+    font-weight: var(--p-heading-weight, 400);
+    letter-spacing: var(--p-heading-ls, 0.005em);
+    text-transform: var(--p-display-case, uppercase);
     text-wrap: balance;
   }
   .hed-3xl {
@@ -1096,8 +1095,8 @@ pre,
 
   /* `.eyebrow` — canonical mono-uppercase trust label. Replaces the
      ad-hoc `text-xs font-semibold tracking-[0.25em] uppercase` pattern
-     scattered across marketing surfaces. Mono fixes the cap-height
-     wobble in Inter at small sizes and reads as engineered/trust signal
+     scattered across marketing surfaces. Space Mono fixes the cap-height
+     wobble of the body face at small sizes and reads as engineered/trust signal
      (Linear/Vercel/Resend convention, 2026 B2B canon).
      `.eyebrow-accent` is the canonical brand-color modifier;
      `.eyebrow-brand` is a deprecated alias kept until call sites migrate. */

@@ -8,7 +8,8 @@ Project-specific notes for Claude Code agents working on `flyingbluewhale` (the 
 - **Brand mark (visible)**: `A T L V S` — literal spaces in JSX, matches the spaced `G H X S T S H I P` parent-company treatment. Use `aria-label="ATLVS Technologies — home"` so screen readers don't read it letter-by-letter.
 - **Apex domain**: `atlvs.pro` — marketing, auth, `/me`, public proposals/offers. The whole platform lives under this apex; `flyingbluewhale` is a _repo nickname only_ and must not appear in any URL, email, identifier, or copy.
 - **App subdomains**: `app.atlvs.pro` (console) · `gvteway.atlvs.pro` (portal) · `compvss.atlvs.pro` (field PWA). Host-rewrite middleware in `src/proxy.ts` maps each subdomain to its internal route group (`/console`, `/p`, `/m`).
-- **Sub-products**: ATLVS (red, the console), GVTEWAY (blue, the portal), COMPVSS (yellow, the field PWA) — sub-brand names + colors stay; do not rename or recolor these.
+- **Sub-products**: ATLVS (pink `#FF2E88`, the console), GVTEWAY (cyan `#12B5B5`, the portal), COMPVSS (amber `#E9A23B`, the field PWA) — sub-brand names + colors stay; do not rename or recolor these.
+- **Typography (MONUMENT, ratified 2026-06-13)**: display/headings/metrics = **Anton** (single black weight, no width axis, rendered ALL-CAPS via `--p-display-case`); body/UI = **Hanken Grotesk**; eyebrows/IDs/mono = **Space Mono**; wordmark lockup only = **Jost**. Supersedes the v2 "Industrial Wide" (Archivo + Space Grotesk) stack — those faces, plus Inter/JetBrains Mono, are retired and guarded by `src/app/design-system.test.ts`. SSOT lives in `src/app/theme/themes/atlvs-product.css` (the `--p-*` namespace); the design handoff is `design_handoff_atlvs_kit` (kit v3).
 - **Voice canon**: see `feedback_marketing_voice.md` in memory — definitive, luxury self-confidence with hacker irreverence. Never compare to competitors.
 
 ## Overview
@@ -22,13 +23,13 @@ Six route groups, three of them are full shells with distinct layouts:
 - `(marketing)` — public, SEO, unauthenticated.
 - `(auth)` — login, signup, invites. Posts to `/auth/resolve` which redirects based on persona.
 - `(personal)` — `/me`, any authed user.
-- `(platform)` — `/console`, internal operations. Left sidebar driven by `src/lib/nav.ts#platformNav`. `data-platform="atlvs"` (red).
-- `(portal)` — `/p/[slug]/<persona>`. `data-platform="gvteway"` (blue). Slug is the authorization boundary.
-- `(mobile)` — `/m`. `data-platform="compvss"` (yellow). Offline-first PWA.
+- `(platform)` — `/console`, internal operations. Left sidebar driven by `src/lib/nav.ts#platformNav`. `data-platform="atlvs"` (pink).
+- `(portal)` — `/p/[slug]/<persona>`. `data-platform="gvteway"` (cyan). Slug is the authorization boundary.
+- `(mobile)` — `/m`. `data-platform="compvss"` (amber). Offline-first PWA.
 
 ## Design system
 
-- **Fonts:** Inter + JetBrains Mono via `next/font`.
+- **Fonts (MONUMENT):** Anton (display) + Hanken Grotesk (body) + Space Mono (eyebrow/mono) + Jost (wordmark) via `next/font`.
 - **Tokens:** Defined in `src/app/globals.css` under `@theme inline`. Light/dark via `data-theme` on `<html>`. Brand overlay via `data-platform`.
 - **Primitives:** `Button`, `Input`, `Badge`, `Avatar`, `ProgressBar`, `ThemeToggle`, `Card`, `MetricCard`, `EmptyState`, `StatusBadge` in `src/components/ui/`.
 - **Shell helpers:** `ModuleHeader`, `PlatformSidebar`, `PortalRail`, `MobileTabBar`, `AuthCard`, `MarketingHeader`, `PageStub` in `src/components/Shell.tsx`.

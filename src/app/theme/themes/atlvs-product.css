@@ -42,26 +42,32 @@
    ========================================================================== */
 [data-ui="saas"],
 [data-theme="atlvs-product"] {
-  /* Type — "Industrial Wide" (kit v2, 2026-06-07 revision).
-     - Body & UI: Space Grotesk. Tables, forms, inputs stay on the body face
-       for legibility.
-     - Headings & metrics: Archivo at the EXPANDED width axis (wdth:125).
-       Applied via three coordinated tokens so a heading just sets
+  /* Type — "MONUMENT" (kit v3, RATIFIED 2026-06-13, supersedes "Industrial Wide").
+     - Display & metrics: Anton — an ultra-condensed grotesque set ALL-CAPS for
+       poster-scale headlines + tabular metrics. Single black weight, no width
+       axis (Anton ships already-condensed, so --p-heading-stretch is normal).
+       Applied via four coordinated tokens so a heading just sets
        `font-family: var(--p-heading); font-stretch: var(--p-heading-stretch);
-       font-weight: var(--p-heading-weight); letter-spacing: var(--p-heading-ls);`.
+       font-weight: var(--p-heading-weight); letter-spacing: var(--p-heading-ls);
+       text-transform: var(--p-display-case);`.
        The .ps-h / .ps-pagehead / .ps-hero primitives below already bake this in.
+     - Body & UI: Hanken Grotesk. Tables, forms, inputs stay on the body face
+       for legibility; authored in Title / sentence case.
      - Eyebrow / IDs / coordinates: Space Mono.
-     - Wordmark: Jost (crossbar-less A). Reserved for the brand lockup. */
+     - Wordmark: Jost (crossbar-less A). Reserved for the brand lockup.
+     CASING: display headings are UPPERCASE (Anton is a caps face) via
+     --p-display-case; body, labels, buttons stay Title / sentence case. */
   --p-font:
-    var(--font-space-grotesk), "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    var(--font-hanken-grotesk), "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
     sans-serif;
-  --p-heading: var(--font-archivo), "Archivo", var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
-  --p-heading-stretch: 125%;
-  --p-heading-weight: 800;
-  --p-heading-ls: -0.015em;
+  --p-heading: var(--font-anton), "Anton", "Arial Narrow", var(--font-hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
+  --p-heading-stretch: normal;
+  --p-heading-weight: 400;
+  --p-heading-ls: 0.005em;
+  --p-display-case: uppercase;
   --p-mono: var(--font-space-mono), "Space Mono", ui-monospace, "SF Mono", monospace;
   --p-eyebrow: var(--p-mono);
-  --p-wordmark: var(--font-jost), "Jost", var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --p-wordmark: var(--font-jost), "Jost", var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif;
   --p-casing: none;
 
   /* Radii — productivity-tool friendly. */
@@ -278,11 +284,12 @@
 }
 
 /* ============================================================================
-   DENSITY — compact tightens row + control padding. Cozy = default.
-   The codebase's three-tier density (compact/comfortable/spacious) maps:
-     compact     → kit compact (smaller --k-*)
-     comfortable → kit cozy    (default --k-*, no attribute)
-     spacious    → handled by existing .ps-input / .data-table compounds
+   DENSITY — kit axis: cozy (default) | compact (tighter row + control padding).
+     cozy     → kit default (--k-* defaults above, no attribute)
+     compact  → kit compact (smaller --k-*)
+   `spacious` is a documented CODEBASE EXTENSION (not in the v3 kit) retained
+   for tablet / accessibility; flagged for Claude Design to fold into the kit.
+   Its loosened --k-* live in globals.css under [data-density="spacious"].
    ========================================================================== */
 [data-density="compact"] {
   --k-ctl-py: 6px;
@@ -305,11 +312,11 @@
 [data-ui="saas"],
 [data-theme="atlvs-product"] {
   /* Font shortcuts — Tailwind utility classes (font-sans / font-mono / etc.)
-     resolve through these. */
-  --font-sans: var(--font-space-grotesk);
-  --font-body: var(--font-space-grotesk);
-  --font-display: var(--font-space-grotesk);
-  --font-subdisplay: var(--font-space-grotesk);
+     resolve through these. MONUMENT: display = Anton, body = Hanken Grotesk. */
+  --font-sans: var(--font-hanken-grotesk);
+  --font-body: var(--font-hanken-grotesk);
+  --font-display: var(--font-anton);
+  --font-subdisplay: var(--font-anton);
   --font-pixel: var(--font-space-mono);
   --font-mono: var(--font-space-mono);
 
@@ -358,9 +365,10 @@
   border-color: var(--p-accent-cta);
 }
 
-/* SaaS headings — "Industrial Wide" canon. Archivo at the expanded width
-   axis (wdth:125) at weight 800, slightly tightened letter-spacing. Title
-   Case in source; UPPERCASE is retired. */
+/* SaaS headings — MONUMENT canon (kit v3). Anton, single black weight, no
+   width axis, a hair of tracking. Display headings render ALL-CAPS via
+   --p-display-case (Anton is a caps face) — authored case in source is
+   irrelevant. */
 [data-ui="saas"] h1,
 [data-ui="saas"] h2,
 [data-ui="saas"] h3,
@@ -369,7 +377,7 @@
 [data-theme="atlvs-product"] h2,
 [data-theme="atlvs-product"] h3,
 [data-theme="atlvs-product"] h4 {
-  text-transform: none;
+  text-transform: var(--p-display-case, uppercase);
   font-family: var(--p-heading);
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
@@ -1217,7 +1225,7 @@
   color: var(--p-text-2);
   font-weight: 500;
 }
-/* A4 · Metrics — Archivo expanded with tabular figures. Numbers lock into
+/* A4 · Metrics — Anton (MONUMENT) with tabular figures. Numbers lock into
    columns; dashboards and reports get the kit's full structural register. */
 [data-ui="saas"] .ps-stat .v,
 [data-theme="atlvs-product"] .ps-stat .v {
@@ -1429,23 +1437,25 @@
   align-items: center;
 }
 /* ============================================================================
-   TYPOGRAPHY TREATMENTS — "Industrial Wide" (kit v2)
+   TYPOGRAPHY TREATMENTS — "MONUMENT" (kit v3)
    --------------------------------------------------------------------------
    Three sanctioned header treatments. Don't mix more than one per view.
-     .ps-h        — base display heading (Archivo expanded). Set size with font-size.
+     .ps-h        — base display heading (Anton, ALL-CAPS). Set size with font-size.
      .ps-pagehead — A2 · everyday header: accent left-bar + live mono kicker + title.
      .ps-hero     — A3 · hero title; wrap a word in .pop to take the product accent.
-   .ps-stat .v (already above) is A4 · metrics — Archivo expanded + tabular-nums.
+   .ps-stat .v (already above) is A4 · metrics — Anton + tabular-nums.
+   All display treatments render ALL-CAPS via --p-display-case (Anton is a caps face).
    ========================================================================== */
 
 /* Base display heading — wrap arbitrary text in <span class="ps-h"> or apply
-   to an explicit h-element to inherit the kit's Industrial Wide register. */
+   to an explicit h-element to inherit the kit's MONUMENT register. */
 [data-ui="saas"] .ps-h,
 [data-theme="atlvs-product"] .ps-h {
   font-family: var(--p-heading);
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
   letter-spacing: var(--p-heading-ls);
+  text-transform: var(--p-display-case, uppercase);
   line-height: 1.04;
   color: var(--p-text-1);
   margin: 0;
@@ -1492,6 +1502,7 @@
   color: var(--p-text-1);
   margin: 0;
   font-size: 30px;
+  text-transform: var(--p-display-case, uppercase);
   border-left: 5px solid var(--p-accent);
   padding-left: 15px;
 }
@@ -1526,6 +1537,7 @@
   font-stretch: var(--p-heading-stretch);
   font-weight: var(--p-heading-weight);
   letter-spacing: var(--p-heading-ls);
+  text-transform: var(--p-display-case, uppercase);
   line-height: 1;
   color: var(--p-text-1);
   margin: 0;
@@ -1567,7 +1579,7 @@
    ========================================================================== */
 .wordmark {
   display: inline-block;
-  font-family: var(--p-wordmark, "Jost", "Space Grotesk", sans-serif);
+  font-family: var(--p-wordmark, "Jost", "Hanken Grotesk", sans-serif);
   font-weight: var(--wm-w, 400);
   color: var(--p-text-1);
   line-height: 1;

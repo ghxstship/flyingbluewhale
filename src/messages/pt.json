@@ -3622,7 +3622,7 @@
       "foundations": {
         "meta": {
           "title": "Fundamentos · ATLVS Technologies — Kit de Marca e UI",
-          "description": "Fundamentos da marca ATLVS Technologies: marca Waypoint, cor, tipografia (Industrial Wide / Archivo expandida), espaçamento, raios, elevação, movimento e iconografia."
+          "description": "Fundamentos da marca ATLVS Technologies: marca Waypoint, cor, tipografia (MONUMENT — Anton + Hanken Grotesk), espaçamento, raios, elevação, movimento e iconografia."
         },
         "nav": {
           "aria": "Seções de fundamentos",
@@ -3652,7 +3652,7 @@
             "colWordmark": "Especificação do wordmark",
             "colSetting": "Composição",
             "faceLabel": "Fonte",
-            "faceValue": "— geométrica, apenas no lockup do logo. UI e títulos permanecem em Space Grotesk / Archivo Expanded.",
+            "faceValue": "— geométrica, apenas no lockup do logo. Os títulos usam Anton; o corpo e a UI usam Hanken Grotesk.",
             "aLabel": "O A",
             "aBefore": "Um pico nu —",
             "aBold": "sem barra transversal",
@@ -3730,19 +3730,19 @@
           "eyebrow": "Fundamentos · Tipografia",
           "heading": "Tipografia",
           "lead": {
-            "industrialWide": "Industrial Wide.",
+            "monument": "Monument.",
             "s1": "Títulos e métricas são compostos em",
-            "archivoExpanded": "Archivo no eixo de largura expandido",
+            "anton": "Anton, uma display ultracondensada em caixa alta",
             "s2": "— uma grotesca confiante e estrutural que dá presença ao produto. Corpo e UI permanecem em",
             "s3": "para que tabelas e formulários leiam limpos;",
             "s4": "é o vernáculo de eyebrows e coordenadas (IDs, códigos, rótulos);",
-            "s5": "é a alternativa para corpo de texto longo. Title Case em títulos e rótulos; sentence case no corpo."
+            "s5": "serve apenas ao lockup do wordmark. Títulos display ficam em CAIXA ALTA (Anton é uma fonte de caixa alta); corpo e rótulos mantêm Title / sentence case."
           },
           "face": {
-            "archivo": "Títulos · estatísticas · 700–900",
-            "grotesk": "Corpo · UI · 400–700",
+            "anton": "Display · títulos · estatísticas",
+            "hanken": "Corpo · UI · 400–800",
             "mono": "Eyebrows · IDs · códigos",
-            "inter": "Alternativa para corpo de texto longo"
+            "jost": "Apenas lockup do wordmark"
           },
           "specimen": {
             "body": "O tamanho de leitura padrão para tabelas, formulários e textos de interface.",
@@ -16322,7 +16322,7 @@
         "density": {
           "label": "Densidade",
           "compact": "Compacta",
-          "comfortable": "Confortável",
+          "cozy": "Padrão",
           "spacious": "Espaçada"
         },
         "locale": {
@@ -18384,8 +18384,8 @@
     "density": {
       "compact": "Compacta",
       "compactAria": "Usar densidade compacta",
-      "comfortable": "Padrão",
-      "comfortableAria": "Usar densidade confortável",
+      "cozy": "Padrão",
+      "cozyAria": "Usar densidade padrão",
       "spacious": "Espaçosa",
       "spaciousAria": "Usar densidade espaçosa",
       "label": "Densidade"

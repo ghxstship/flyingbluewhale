@@ -4,9 +4,9 @@ import { useThemeIfAvailable } from "@/app/theme/ThemeProvider";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
- * Shell-wide density radio group — drives `data-density` on <html>. Three
- * modes per IA spec §5.4: compact (power-user tables), comfortable
- * (default), spacious (tablet / accessibility).
+ * Shell-wide density radio group — drives `data-density` on <html>. Kit v3
+ * axis: compact (power-user tables) and cozy (default). `spacious` (tablet /
+ * accessibility) is a documented codebase extension flagged for Claude Design.
  *
  * Paired with <ThemeToggle> in the platform glass nav and on the Settings
  * > Appearance page. Vocabulary matches Stripe Dashboard + Attio.
@@ -24,9 +24,9 @@ export function DensityToggle() {
       aria: t("ui.density.compactAria", undefined, "Use compact density"),
     },
     {
-      key: "comfortable" as const,
-      label: t("ui.density.comfortable", undefined, "Default"),
-      aria: t("ui.density.comfortableAria", undefined, "Use comfortable density"),
+      key: "cozy" as const,
+      label: t("ui.density.cozy", undefined, "Default"),
+      aria: t("ui.density.cozyAria", undefined, "Use cozy density"),
     },
     {
       key: "spacious" as const,

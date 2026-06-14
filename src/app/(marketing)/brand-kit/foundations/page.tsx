@@ -8,8 +8,8 @@
  *
  * i18n: prose chrome (headings, leads, notes, do/don't, captions, table
  * labels) routes through the t() catalog. Token identifiers (--p-bg),
- * brand proper nouns (ATLVS, GHXSTSHIP, Jost, Archivo, Space Grotesk,
- * Phosphor, Waypoint), hex/spec values, and the typography specimen
+ * brand proper nouns (ATLVS, GHXSTSHIP, Jost, Anton, Hanken Grotesk,
+ * Space Mono, Phosphor, Waypoint), hex/spec values, and the typography specimen
  * samples stay literal — they are not translatable content.
  */
 import type { Metadata } from "next";
@@ -49,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t(
       "marketing.brandKit.foundations.meta.description",
       undefined,
-      "ATLVS Technologies brand foundations: Waypoint mark, color, typography (Industrial Wide / Archivo expanded), spacing, radii, elevation, motion, and iconography.",
+      "ATLVS Technologies brand foundations: Waypoint mark, color, typography (MONUMENT — Anton + Hanken Grotesk), spacing, radii, elevation, motion, and iconography.",
     ),
     alternates: { canonical: "/brand-kit/foundations" },
   };
@@ -147,7 +147,7 @@ export default async function FoundationsPage() {
                   {t(
                     "marketing.brandKit.foundations.logo.spec.faceValue",
                     undefined,
-                    "— geometric, logo lockup only. UI & headings stay Space Grotesk / Archivo Expanded.",
+                    "— geometric, logo lockup only. Headings use Anton; body & UI use Hanken Grotesk.",
                   )}
                 </td>
               </tr>
@@ -594,33 +594,29 @@ export default async function FoundationsPage() {
           <p className="eb">{t("marketing.brandKit.foundations.type.eyebrow", undefined, "Foundations · Type")}</p>
           <h2>{t("marketing.brandKit.foundations.type.heading", undefined, "Typography")}</h2>
           <p className="lead">
-            <b>{t("marketing.brandKit.foundations.type.lead.industrialWide", undefined, "Industrial Wide.")}</b>{" "}
+            <b>{t("marketing.brandKit.foundations.type.lead.monument", undefined, "Monument.")}</b>{" "}
             {t("marketing.brandKit.foundations.type.lead.s1", undefined, "Headings and metrics are set in")}{" "}
             <b>
-              {t(
-                "marketing.brandKit.foundations.type.lead.archivoExpanded",
-                undefined,
-                "Archivo at its expanded width axis",
-              )}
+              {t("marketing.brandKit.foundations.type.lead.anton", undefined, "Anton, an ultra-condensed all-caps display face")}
             </b>{" "}
             {t(
               "marketing.brandKit.foundations.type.lead.s2",
               undefined,
-              "— a confident, structural grotesque that gives the product presence. Body and UI stay",
+              "— a single black weight that gives the product poster-scale presence. Body and UI stay",
             )}{" "}
-            <b>Space Grotesk</b>{" "}
+            <b>Hanken Grotesk</b>{" "}
             {t("marketing.brandKit.foundations.type.lead.s3", undefined, "so tables and forms read clean;")}{" "}
             <b>Space Mono</b>{" "}
             {t(
               "marketing.brandKit.foundations.type.lead.s4",
               undefined,
-              "is the eyebrow and coordinate vernacular (IDs, codes, labels);",
+              "is the eyebrow and coordinate vernacular (IDs, codes, labels); and",
             )}{" "}
-            <b>Inter</b>{" "}
+            <b>Jost</b>{" "}
             {t(
               "marketing.brandKit.foundations.type.lead.s5",
               undefined,
-              "is the long-form body alternate. Title Case for headings and labels; sentence case for body.",
+              "is the constructed wordmark lockup only. Display headings are ALL-CAPS (Anton is a caps face); body and labels stay Title / sentence case.",
             )}
           </p>
 
@@ -630,19 +626,21 @@ export default async function FoundationsPage() {
                 <div
                   style={{
                     fontFamily: "var(--p-heading)",
-                    fontStretch: "125%",
-                    fontWeight: 800,
-                    fontSize: 30,
+                    fontStretch: "normal",
+                    fontWeight: 400,
+                    fontSize: 34,
+                    letterSpacing: "0.005em",
+                    textTransform: "uppercase",
                     color: "var(--p-text-1)",
                   }}
                 >
                   Aa
                 </div>
                 <div className="kf-tok" style={{ marginTop: 8 }}>
-                  Archivo Expanded
+                  Anton
                 </div>
                 <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
-                  {t("marketing.brandKit.foundations.type.face.archivo", undefined, "Headings · stats · 700–900")}
+                  {t("marketing.brandKit.foundations.type.face.anton", undefined, "Display · headings · stats")}
                 </div>
               </div>
             </div>
@@ -650,10 +648,10 @@ export default async function FoundationsPage() {
               <div className="bb">
                 <div style={{ fontSize: 30, fontWeight: 700, color: "var(--p-text-1)" }}>Aa</div>
                 <div className="kf-tok" style={{ marginTop: 8 }}>
-                  Space Grotesk
+                  Hanken Grotesk
                 </div>
                 <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
-                  {t("marketing.brandKit.foundations.type.face.grotesk", undefined, "Body · UI · 400–700")}
+                  {t("marketing.brandKit.foundations.type.face.hanken", undefined, "Body · UI · 400–800")}
                 </div>
               </div>
             </div>
@@ -679,12 +677,14 @@ export default async function FoundationsPage() {
             </div>
             <div className="kf-board">
               <div className="bb">
-                <div style={{ fontSize: 30, fontWeight: 600, color: "var(--p-text-1)", fontFamily: "Inter" }}>Aa</div>
+                <div style={{ fontSize: 30, fontWeight: 500, color: "var(--p-text-1)", fontFamily: "var(--p-wordmark)" }}>
+                  Aa
+                </div>
                 <div className="kf-tok" style={{ marginTop: 8 }}>
-                  Inter
+                  Jost
                 </div>
                 <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
-                  {t("marketing.brandKit.foundations.type.face.inter", undefined, "Long-form body alternate")}
+                  {t("marketing.brandKit.foundations.type.face.jost", undefined, "Wordmark lockup only")}
                 </div>
               </div>
             </div>
@@ -693,16 +693,16 @@ export default async function FoundationsPage() {
           <div className="kf-board">
             <div className="bb">
               {[
-                { lbl: "Display · 40", text: "Mission Control", size: 40, wide: true, weight: 800, ls: "-0.015em" },
-                { lbl: "H1 · 30", text: "Production Timeline", size: 30, wide: true, weight: 800, ls: "-0.015em" },
-                { lbl: "H2 · 22", text: "Active Projects", size: 22, wide: true, weight: 800, ls: "-0.015em" },
+                { lbl: "Display · 44", text: "Mission Control", size: 44, wide: true, weight: 400, ls: "0.005em" },
+                { lbl: "H1 · 34", text: "Production Timeline", size: 34, wide: true, weight: 400, ls: "0.005em" },
+                { lbl: "H2 · 26", text: "Active Projects", size: 26, wide: true, weight: 400, ls: "0.005em" },
                 {
-                  lbl: "H3 · 18",
+                  lbl: "H3 · 20",
                   text: "Salvage City Supper Club",
-                  size: 18,
+                  size: 20,
                   wide: true,
-                  weight: 700,
-                  ls: "-0.01em",
+                  weight: 400,
+                  ls: "0.005em",
                 },
                 {
                   lbl: "Body · 14",
@@ -738,9 +738,10 @@ export default async function FoundationsPage() {
                     style={{
                       fontSize: spec.size,
                       fontFamily: spec.wide ? "var(--p-heading)" : undefined,
-                      fontStretch: spec.wide ? "125%" : undefined,
+                      fontStretch: spec.wide ? "normal" : undefined,
                       fontWeight: spec.weight,
                       letterSpacing: spec.ls,
+                      textTransform: spec.wide ? "uppercase" : undefined,
                       color: spec.muted ? "var(--p-text-2)" : "var(--p-text-1)",
                     }}
                   >

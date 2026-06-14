@@ -213,7 +213,7 @@ function renderHtml(a: HtmlArgs): string {
 
   return `<!doctype html>
 <html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1a1a1a;line-height:1.55;max-width:640px;margin:0 auto;padding:24px">
-  <div style="text-transform:uppercase;letter-spacing:0.18em;font-size:11px;color:#888;font-family:'JetBrains Mono',monospace">${escapeHtml(a.employerName)}</div>
+  <div style="text-transform:uppercase;letter-spacing:0.18em;font-size:11px;color:#888;font-family:'Space Mono','Courier New',monospace">${escapeHtml(a.employerName)}</div>
   <h1 style="font-size:22px;margin:8px 0 4px 0">YOU&rsquo;RE ON THE MANIFEST!</h1>
   <div style="color:#888;font-size:14px;margin-bottom:24px">${escapeHtml(a.project)}</div>
 
@@ -233,7 +233,7 @@ function renderHtml(a: HtmlArgs): string {
     <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.18em;color:#888;margin-bottom:8px">Sign In Two Clicks</div>
     <div style="margin-bottom:10px"><a href="${a.url}" style="color:#3b6cff;text-decoration:none;font-weight:600">${a.url}</a></div>
     <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.18em;color:#888;margin-bottom:6px">Access code</div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:0.4em;background:#fff;border:1px solid #e6e6e0;border-radius:6px;padding:8px 14px;display:inline-block">${a.code}</div>
+    <div style="font-family:'Space Mono','Courier New',monospace;font-size:22px;letter-spacing:0.4em;background:#fff;border:1px solid #e6e6e0;border-radius:6px;padding:8px 14px;display:inline-block">${a.code}</div>
     <p style="margin:14px 0 0;font-size:12px;color:#666">Type your full legal name to accept &mdash; or decline with a brief reason. Signature, IP, and timestamp recorded as the audit trail.</p>
   </div>
 

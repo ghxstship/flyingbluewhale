@@ -316,7 +316,7 @@ export function PlatformSidebar({
                 name + product subtitle, mirrors ui_kits/atlvs/
                 dashboard.html .brandrow. Tile uses --p-accent (the
                 per-product overlay sets this), skull is white-inverted
-                via CSS filter, name is Space Grotesk 700 with -0.01em
+                via CSS filter, name is Hanken Grotesk 700 with -0.01em
                 tracking, subtitle is Space Mono uppercase 8px in
                 tertiary text. */}
             <div className="flex min-w-0 items-center gap-2">

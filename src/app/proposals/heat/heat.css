@@ -19,7 +19,7 @@
 
   background: var(--heat-paper);
   color: var(--heat-ink);
-  font-family: var(--font-body, "Inter", system-ui);
+  font-family: var(--font-body, "Hanken Grotesk", system-ui);
   min-height: 100vh;
 }
 
@@ -27,7 +27,7 @@
 .heat-doc h2,
 .heat-doc h3,
 .heat-doc .heat-display {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-weight: 400;
   letter-spacing: -0.01em;
   text-transform: uppercase;
@@ -55,7 +55,7 @@
 }
 
 .heat-doc .heat-mono {
-  font-family: var(--font-mono, "Share Tech Mono", monospace);
+  font-family: var(--font-mono, "Space Mono", monospace);
   font-feature-settings: "tnum";
 }
 
@@ -87,7 +87,7 @@
 }
 
 .heat-nav-brand {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 20px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -395,7 +395,7 @@
 }
 
 .heat-tier-num {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 44px;
   color: var(--heat-red);
   line-height: 1;
@@ -405,7 +405,7 @@
 }
 
 .heat-tier-name {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 32px;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -435,7 +435,7 @@
 
 .heat-tier-price strong {
   display: block;
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 26px;
   color: var(--heat-red);
   font-weight: 400;
@@ -578,7 +578,7 @@
   gap: 16px;
 }
 .heat-phase-num {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 32px;
   color: var(--heat-red);
   font-style: italic;
@@ -586,7 +586,7 @@
   transform: skewX(-6deg);
 }
 .heat-phase-name {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 24px;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -692,7 +692,7 @@
   color: var(--heat-paper);
 }
 .heat-investment tfoot td {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 26px;
   background: var(--heat-red);
   color: var(--heat-paper);
@@ -736,7 +736,7 @@
   color: var(--heat-black);
 }
 .heat-engagement-pct {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 72px;
   line-height: 1;
   color: inherit;
@@ -792,7 +792,11 @@
   border-radius: 4px;
 }
 .heat-sig-typed {
-  font-family: "Cormorant Garamond", "Times New Roman", serif;
+  /* Typed-signature affordance (not brand typography). The v3 MONUMENT kit
+     ships no script/signature face — FLAGGED for Claude Design. Neutral serif
+     stack until a kit signature spec lands; the retired "Cormorant Garamond"
+     name is removed. */
+  font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-size: 36px;
   color: var(--heat-ink);
@@ -1007,7 +1011,7 @@
   flex-wrap: wrap;
 }
 .heat-retainer-price strong {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: 56px;
   font-weight: 400;
   font-style: italic;
@@ -1225,7 +1229,7 @@
   color: var(--heat-yellow);
 }
 .heat-premium-banner-title {
-  font-family: var(--font-display, "Space Grotesk", system-ui);
+  font-family: var(--font-display, "Anton", "Arial Narrow", system-ui);
   font-size: clamp(28px, 4vw, 44px);
   letter-spacing: -0.01em;
   text-transform: uppercase;

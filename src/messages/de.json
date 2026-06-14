@@ -3622,7 +3622,7 @@
       "foundations": {
         "meta": {
           "title": "Foundations · ATLVS Technologies — Brand & UI Kit",
-          "description": "ATLVS-Technologies-Markenfundamente: Waypoint-Mark, Farbe, Typografie — Industrial Wide / Archivo expanded —, Spacing, Radien, Elevation, Motion und Ikonografie."
+          "description": "ATLVS-Technologies-Markenfundamente: Waypoint-Mark, Farbe, Typografie — MONUMENT, Anton + Hanken Grotesk —, Spacing, Radien, Elevation, Motion und Ikonografie."
         },
         "nav": {
           "aria": "Foundations-Abschnitte",
@@ -3652,7 +3652,7 @@
             "colWordmark": "Wortmarken-Spezifikation",
             "colSetting": "Satz",
             "faceLabel": "Schrift",
-            "faceValue": "— geometrisch, nur im Logo-Lockup. UI & Headlines bleiben Space Grotesk / Archivo Expanded.",
+            "faceValue": "— geometrisch, nur im Logo-Lockup. Headlines nutzen Anton; Body & UI nutzen Hanken Grotesk.",
             "aLabel": "Das A",
             "aBefore": "Ein blanker Gipfel —",
             "aBold": "kein Querbalken",
@@ -3730,19 +3730,19 @@
           "eyebrow": "Foundations · Type",
           "heading": "Typografie",
           "lead": {
-            "industrialWide": "Industrial Wide.",
+            "monument": "Monument.",
             "s1": "Headlines und Metriken sind gesetzt in",
-            "archivoExpanded": "Archivo auf der expanded-Breitenachse",
+            "anton": "Anton, eine ultrakondensierte Versal-Display-Schrift",
             "s2": "— eine selbstbewusste, strukturelle Grotesk, die dem Produkt Präsenz gibt. Body und UI bleiben",
             "s3": "damit Tabellen und Formulare sauber lesen;",
             "s4": "ist die Eyebrow- und Koordinaten-Vernakularsprache — IDs, Codes, Labels;",
-            "s5": "ist die Langform-Body-Alternative. Title Case für Headlines und Labels; Satzschreibung für Body."
+            "s5": "dient ausschließlich dem Wortmarken-Lockup. Display-Headlines sind GROSSBUCHSTABEN (Anton ist eine Versalschrift); Body und Labels bleiben Title-/Satzschreibung."
           },
           "face": {
-            "archivo": "Headlines · Stats · 700–900",
-            "grotesk": "Body · UI · 400–700",
+            "anton": "Display · Headlines · Stats",
+            "hanken": "Body · UI · 400–800",
             "mono": "Eyebrows · IDs · Codes",
-            "inter": "Langform-Body-Alternative"
+            "jost": "Nur Wortmarken-Lockup"
           },
           "specimen": {
             "body": "Die Standard-Lesegröße für Tabellen, Formulare und Interface-Texte.",
@@ -18262,7 +18262,7 @@
         "density": {
           "label": "Dichte",
           "compact": "Kompakt",
-          "comfortable": "Komfortabel",
+          "cozy": "Standard",
           "spacious": "Großzügig"
         },
         "locale": {
@@ -18384,8 +18384,8 @@
     "density": {
       "compact": "Kompakt",
       "compactAria": "Kompakte Dichte verwenden",
-      "comfortable": "Standard",
-      "comfortableAria": "Komfortable Dichte verwenden",
+      "cozy": "Standard",
+      "cozyAria": "Standarddichte verwenden",
       "spacious": "Großzügig",
       "spaciousAria": "Großzügige Dichte verwenden",
       "label": "Dichte"

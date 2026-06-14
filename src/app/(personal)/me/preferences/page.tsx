@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 type Prefs = {
   theme: "light" | "dark" | "system";
-  density: "comfortable" | "compact" | "spacious";
+  density: "cozy" | "compact" | "spacious";
   locale: string;
   timezone: string;
   consent: { essential?: boolean; analytics?: boolean; marketing?: boolean };
@@ -21,7 +21,7 @@ type Prefs = {
 
 const DEFAULTS: Prefs = {
   theme: "system",
-  density: "comfortable",
+  density: "cozy",
   locale: "en",
   timezone: "UTC",
   consent: { essential: true, analytics: false, marketing: false },
@@ -122,7 +122,7 @@ export default async function Page() {
                 {t("me.preferences.appearance.density", undefined, "Density")}
               </label>
               <div className="mt-1.5 grid grid-cols-3 gap-1.5">
-                {(["compact", "comfortable", "spacious"] as const).map((d) => (
+                {(["compact", "cozy", "spacious"] as const).map((d) => (
                   <label
                     key={d}
                     className="surface hover-lift flex cursor-pointer items-center gap-2 px-3 py-2 text-sm"

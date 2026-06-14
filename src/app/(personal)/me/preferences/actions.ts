@@ -23,7 +23,7 @@ const Schema = z.object({
   //
   // light/dark is the orthogonal `data-mode` attribute, not stored here.
   theme: z.enum(["ghxstship", "atlvs-product", "system"]),
-  density: z.enum(["compact", "comfortable", "spacious"]),
+  density: z.enum(["compact", "cozy", "spacious"]),
   locale: z.string().regex(BCP47, "Use a BCP-47 tag like 'en' or 'fr-CA'"),
   timezone: z.string().min(1).max(64),
   analytics: z.string().optional(), // "on" if checkbox checked

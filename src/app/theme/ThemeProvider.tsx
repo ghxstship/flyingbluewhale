@@ -13,10 +13,14 @@ import {
 } from "./theme-script";
 
 export type ColorMode = "light" | "dark" | "system";
-export type Density = "compact" | "comfortable" | "spacious";
+// Density — kit v3 axis: `cozy` (default) | `compact`. `spacious` is a
+// documented codebase extension (tablet / accessibility), flagged for Claude
+// Design. The pre-MONUMENT default label "comfortable" was renamed to the
+// kit's "cozy"; legacy stored values fall back to "cozy" (identical default).
+export type Density = "compact" | "cozy" | "spacious";
 export type AccentIntensity = "soft" | "default" | "vivid";
 
-const DENSITIES: Density[] = ["compact", "comfortable", "spacious"];
+const DENSITIES: Density[] = ["compact", "cozy", "spacious"];
 function isValidDensity(v: unknown): v is Density {
   return typeof v === "string" && (DENSITIES as string[]).includes(v);
 }
@@ -74,7 +78,7 @@ function systemDefault(): ThemeSlug {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = React.useState<ThemeSlug>("atlvs-product");
   const [isSystemDriven, setSystemDriven] = React.useState(true);
-  const [density, setDensityState] = React.useState<Density>("comfortable");
+  const [density, setDensityState] = React.useState<Density>("cozy");
   const [mode, setModeState] = React.useState<ColorMode>("system");
   const [accent, setAccentState] = React.useState<AccentIntensity>("default");
   const [mounted, setMounted] = React.useState(false);
@@ -93,7 +97,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setSystemDriven(!stored);
 
     const storedDensity = localStorage.getItem("chroma.density");
-    setDensityState(isValidDensity(storedDensity) ? storedDensity : "comfortable");
+    setDensityState(isValidDensity(storedDensity) ? storedDensity : "cozy");
 
     const cookieMode = (() => {
       const tryRead = (key: string) => {
@@ -144,7 +148,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     if (!mounted) return;
     const root = document.documentElement;
-    if (density === "comfortable") root.removeAttribute("data-density");
+    if (density === "cozy") root.removeAttribute("data-density");
     else root.setAttribute("data-density", density);
   }, [density, mounted]);
 

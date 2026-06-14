@@ -10,7 +10,7 @@
 .lk-root {
   background: var(--p-bg, #f7f8fa);
   color: var(--p-text-1, #181b23);
-  font-family: var(--p-font, var(--font-inter, "Inter", system-ui, sans-serif));
+  font-family: var(--p-font, "Hanken Grotesk", system-ui, sans-serif);
   min-height: 100svh;
 }
 

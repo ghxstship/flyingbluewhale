@@ -1,16 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import {
-  Inter,
-  JetBrains_Mono,
-  Space_Grotesk,
-  // ATLVS kit typography ("Industrial Wide", 2026-06-07 revision).
-  // Archivo at the wdth:125 expanded axis drives headings + metrics; Space
-  // Grotesk drives body + UI; Space Mono drives eyebrows / IDs / coordinates;
-  // Jost is reserved for the spaced crossbar-less wordmark. Big Shoulders +
-  // Silkscreen (the retired cosmic display faces) are no longer loaded.
+  // ATLVS kit typography — "MONUMENT" (RATIFIED 2026-06-13, supersedes
+  // "Industrial Wide"). Anton — an ultra-condensed all-caps display face —
+  // drives headings + metrics; Hanken Grotesk drives body + UI; Space Mono
+  // drives eyebrows / IDs / coordinates; Jost is reserved for the spaced
+  // crossbar-less wordmark. The retired faces (Archivo, Space Grotesk, Inter,
+  // JetBrains Mono — and the cosmic Big Shoulders / Silkscreen) are no longer
+  // loaded; `design-system.test.ts` guards against their return.
+  Anton,
+  Hanken_Grotesk,
   Space_Mono,
   Jost,
-  Archivo,
 } from "next/font/google";
 import { cookies } from "next/headers";
 import { Toaster } from "sonner";
@@ -33,10 +33,13 @@ import { SITE } from "@/lib/seo";
 import "./globals.css";
 import "./theme/index.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: "swap" });
-const spaceGrot = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
-
+// Anton — MONUMENT display face. Single black weight, already condensed
+// (no width axis). Drives every heading + metric via --p-heading; rendered
+// ALL-CAPS by --p-display-case in the kit theme.
+const anton = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
+// Hanken Grotesk — MONUMENT body/UI face. Variable weight covers 400–800 for
+// labels, tables, and forms. Resolves --p-font / --font-body.
+const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken-grotesk", display: "swap" });
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -48,18 +51,6 @@ const jost = Jost({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
   variable: "--font-jost",
-  display: "swap",
-});
-// Archivo — kit canon heading face ("Industrial Wide"). Loaded as a variable
-// font with the wdth axis so consumers can request the expanded register via
-// `font-stretch: 125%`. weight=variable + axes=['wdth'] lets us slide both
-// axes from CSS — heading rules pull weight 800 + stretch 125% to land on the
-// kit's heavy expanded register. The body/UI face stays Space Grotesk.
-const archivo = Archivo({
-  subsets: ["latin"],
-  weight: "variable",
-  axes: ["wdth"],
-  variable: "--font-archivo",
   display: "swap",
 });
 
@@ -159,7 +150,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       data-theme={ssrTheme}
       data-ui="saas"
       style={{ colorScheme: ssrColorScheme }}
-      className={`h-full ${inter.variable} ${mono.variable} ${spaceGrot.variable} ${spaceMono.variable} ${jost.variable} ${archivo.variable}`}
+      className={`h-full ${anton.variable} ${hanken.variable} ${spaceMono.variable} ${jost.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -217,8 +208,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               title: "font-medium",
               description: "text-[var(--p-text-2)]",
               // Audit T7 fix: text-white was a raw value bypassing tokens.
-              // --p-accent-contrast is set per-platform overlay (white on
-              // pink/cyan/blue/red, black on yellow under bermuda-triangle).
+              // --p-accent-contrast is set per-product overlay (white on
+              // ATLVS pink + GVTEWAY cyan, near-ink on COMPVSS amber).
               actionButton: "bg-[var(--p-accent)] text-[var(--p-accent-contrast,white)]",
               cancelButton: "bg-[var(--p-surface-2)]",
             },

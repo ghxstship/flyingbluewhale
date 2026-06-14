@@ -51,11 +51,13 @@ export default async function PersonalSettings() {
               <label className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("me.settings.workspace.density.label", undefined, "Density")}
               </label>
-              <select name="density" defaultValue={prefs.density ?? "comfortable"} className="ps-input mt-1.5 w-full">
+              <select
+                name="density"
+                defaultValue={prefs.density === "compact" || prefs.density === "spacious" ? prefs.density : "cozy"}
+                className="ps-input mt-1.5 w-full"
+              >
                 <option value="compact">{t("me.settings.workspace.density.compact", undefined, "Compact")}</option>
-                <option value="comfortable">
-                  {t("me.settings.workspace.density.comfortable", undefined, "Comfortable")}
-                </option>
+                <option value="cozy">{t("me.settings.workspace.density.cozy", undefined, "Default")}</option>
                 <option value="spacious">{t("me.settings.workspace.density.spacious", undefined, "Spacious")}</option>
               </select>
             </div>

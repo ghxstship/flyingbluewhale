@@ -1401,7 +1401,7 @@ function Footer() {
           <div
             style={{
               fontSize: 18,
-              fontFamily: "var(--font-display, var(--font-space-grotesk))",
+              fontFamily: "var(--font-display, 'Anton', 'Arial Narrow', sans-serif)",
               letterSpacing: "0.05em",
             }}
           >

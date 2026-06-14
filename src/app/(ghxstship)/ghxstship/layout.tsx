@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 /**
  * GHXSTSHIP parent-company marketing surface. Adopts the canonical ATLVS
- * kit skin (Space Grotesk, neutral light/dark surfaces, brass accent via
- * compvss data-product) for visual continuity with the product platform.
+ * kit skin (MONUMENT type — Anton/Hanken Grotesk, neutral light/dark surfaces,
+ * brass accent via compvss data-product) for visual continuity with the platform.
  * The pre-kit cosmic `ghxstship` skin (Big Shoulders, void ink ground,
  * halftone dots) was retired in the kit-only refactor.
  */

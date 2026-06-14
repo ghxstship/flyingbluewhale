@@ -3622,7 +3622,7 @@
       "foundations": {
         "meta": {
           "title": "ファンデーション · ATLVS Technologies — ブランド & UI キット",
-          "description": "ATLVS Technologies のブランドファンデーション: Waypoint マーク、カラー、タイポグラフィ — Industrial Wide / Archivo expanded、スペーシング、角丸、エレベーション、モーション、アイコノグラフィ。"
+          "description": "ATLVS Technologies のブランドファンデーション: Waypoint マーク、カラー、タイポグラフィ — MONUMENT（Anton + Hanken Grotesk）、スペーシング、角丸、エレベーション、モーション、アイコノグラフィ。"
         },
         "nav": {
           "aria": "ファンデーションのセクション",
@@ -3652,7 +3652,7 @@
             "colWordmark": "ワードマーク仕様",
             "colSetting": "組み方",
             "faceLabel": "書体",
-            "faceValue": "— ジオメトリック、ロゴのロックアップ専用。UI と見出しは Space Grotesk / Archivo Expanded のまま。",
+            "faceValue": "— ジオメトリック、ロゴのロックアップ専用。見出しは Anton、本文と UI は Hanken Grotesk。",
             "aLabel": "A について",
             "aBefore": "むき出しの頂点 —",
             "aBold": "横棒なし",
@@ -3730,19 +3730,19 @@
           "eyebrow": "ファンデーション · タイプ",
           "heading": "タイポグラフィ",
           "lead": {
-            "industrialWide": "Industrial Wide。",
+            "monument": "Monument。",
             "s1": "見出しとメトリクスは",
-            "archivoExpanded": "Archivo の expanded 幅軸",
+            "anton": "Anton — 超コンデンス・オールキャップスのディスプレイ書体",
             "s2": "で組みます — プロダクトに存在感を与える、自信に満ちた構造的グロテスクです。本文と UI は",
             "s3": "のままにし、テーブルとフォームをクリーンに読ませます。",
             "s4": "はアイブロウと座標の語彙です — ID、コード、ラベル。",
-            "s5": "は長文本文の代替書体です。見出しとラベルはタイトルケース、本文はセンテンスケース。"
+            "s5": "はワードマークのロックアップ専用です。ディスプレイ見出しはすべて大文字（Anton は大文字書体）、本文とラベルはタイトル／センテンスケースのまま。"
           },
           "face": {
-            "archivo": "見出し · 統計 · 700–900",
-            "grotesk": "本文 · UI · 400–700",
+            "anton": "ディスプレイ · 見出し · 統計",
+            "hanken": "本文 · UI · 400–800",
             "mono": "アイブロウ · ID · コード",
-            "inter": "長文本文の代替"
+            "jost": "ワードマーク・ロックアップ専用"
           },
           "specimen": {
             "body": "テーブル、フォーム、インターフェースコピーのデフォルト読み取りサイズ。",
@@ -16322,7 +16322,7 @@
         "density": {
           "label": "密度",
           "compact": "コンパクト",
-          "comfortable": "標準",
+          "cozy": "標準",
           "spacious": "ゆったり"
         },
         "locale": {
@@ -18384,8 +18384,8 @@
     "density": {
       "compact": "コンパクト",
       "compactAria": "コンパクト表示に切り替える",
-      "comfortable": "標準",
-      "comfortableAria": "標準表示に切り替える",
+      "cozy": "標準",
+      "cozyAria": "標準表示に切り替える",
       "spacious": "ゆったり",
       "spaciousAria": "ゆったり表示に切り替える",
       "label": "表示密度"

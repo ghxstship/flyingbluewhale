@@ -61,7 +61,7 @@ Every selector matches BOTH `[data-ui="saas"]` (kit canon) AND `[data-theme="atl
 
 ## Wordmark
 
-The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES" />` from `src/components/brand/Wordmark.tsx`) is the only legitimate consumer of `var(--p-wordmark)`. Reserved for the brand lockup; all other display + body type uses Space Grotesk via `--p-heading`/`--p-font`.
+The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES" />` from `src/components/brand/Wordmark.tsx`) is the only legitimate consumer of `var(--p-wordmark)`. Reserved for the brand lockup; per MONUMENT (kit v3), display type uses Anton via `--p-heading` and body/UI type uses Hanken Grotesk via `--p-font`.
 
 ## Contrast — WCAG 1.4.3
 

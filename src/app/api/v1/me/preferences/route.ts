@@ -16,7 +16,7 @@ const PatchSchema = z.object({
   // light/dark is the orthogonal `data-mode` attribute on <html>, not
   // stored here.
   theme: z.enum(["ghxstship", "atlvs-product", "system"]).optional(),
-  density: z.enum(["compact", "comfortable", "spacious"]).optional(),
+  density: z.enum(["compact", "cozy", "spacious"]).optional(),
   locale: z.string().min(2).max(8).optional(),
   timezone: z.string().min(1).max(64).optional(),
   consent: z.record(z.string(), z.boolean()).optional(),

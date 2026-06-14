@@ -54,7 +54,7 @@ export function wrapEmailHtml(bodyHtml: string, opts: { accent?: EmailWrapAccent
   const subline = opts.brand?.producerName ? "" : "Technologies";
   return `<!doctype html>
 <html><head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;background:#F7F8FA;font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;color:#181B23">
+<body style="margin:0;padding:0;background:#F7F8FA;font-family:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;color:#181B23">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7F8FA;padding:32px 16px">
     <tr><td align="center">
       <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#FFFFFF;border:1px solid #E4E7EC;border-radius:12px;overflow:hidden">
@@ -207,7 +207,7 @@ export async function sendProposalShareEmail({
   const bodyHtml =
     tpl?.bodyHtml ||
     `<p style="margin:0;color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Proposal</p>
-       <h1 style="font-family:'Space Grotesk','Helvetica Neue',Arial,sans-serif;font-size:30px;font-weight:700;margin:12px 0 8px;letter-spacing:-0.01em;color:#181B23">${proposalTitle}</h1>
+       <h1 style="font-family:'Anton','Arial Narrow','Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:400;margin:12px 0 8px;letter-spacing:0.005em;text-transform:uppercase;color:#181B23">${proposalTitle}</h1>
        <p style="color:#181b23;font-size:14px;margin:0 0 20px">${sender} shared a proposal with you.</p>
        <p style="margin:0 0 20px"><a href="${url}" style="display:inline-block;background:${accent};color:${onAccent};padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Open proposal</a></p>
        <p style="color:#8c95a3;font-size:12px;margin:0;font-family:'Space Mono','Courier New',monospace">If the button doesn't work, copy this URL:<br/><code style="word-break:break-all">${url}</code></p>`;

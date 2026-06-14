@@ -3622,7 +3622,7 @@
       "foundations": {
         "meta": {
           "title": "Foundations · ATLVS Technologies — Brand & UI Kit",
-          "description": "ATLVS Technologies brand foundations: Waypoint mark, color, typography (Industrial Wide / Archivo expanded), spacing, radii, elevation, motion, and iconography."
+          "description": "ATLVS Technologies brand foundations: Waypoint mark, color, typography (MONUMENT — Anton + Hanken Grotesk), spacing, radii, elevation, motion, and iconography."
         },
         "nav": {
           "aria": "Foundations sections",
@@ -3652,7 +3652,7 @@
             "colWordmark": "Wordmark spec",
             "colSetting": "Setting",
             "faceLabel": "Face",
-            "faceValue": "— geometric, logo lockup only. UI & headings stay Space Grotesk / Archivo Expanded.",
+            "faceValue": "— geometric, logo lockup only. Headings use Anton; body & UI use Hanken Grotesk.",
             "aLabel": "The A",
             "aBefore": "A bare peak —",
             "aBold": "no crossbar",
@@ -3730,19 +3730,19 @@
           "eyebrow": "Foundations · Type",
           "heading": "Typography",
           "lead": {
-            "industrialWide": "Industrial Wide.",
+            "monument": "Monument.",
             "s1": "Headings and metrics are set in",
-            "archivoExpanded": "Archivo at its expanded width axis",
-            "s2": "— a confident, structural grotesque that gives the product presence. Body and UI stay",
+            "anton": "Anton, an ultra-condensed all-caps display face",
+            "s2": "— a single black weight that gives the product poster-scale presence. Body and UI stay",
             "s3": "so tables and forms read clean;",
-            "s4": "is the eyebrow and coordinate vernacular (IDs, codes, labels);",
-            "s5": "is the long-form body alternate. Title Case for headings and labels; sentence case for body."
+            "s4": "is the eyebrow and coordinate vernacular (IDs, codes, labels); and",
+            "s5": "is the constructed wordmark lockup only. Display headings are ALL-CAPS (Anton is a caps face); body and labels stay Title / sentence case."
           },
           "face": {
-            "archivo": "Headings · stats · 700–900",
-            "grotesk": "Body · UI · 400–700",
+            "anton": "Display · headings · stats",
+            "hanken": "Body · UI · 400–800",
             "mono": "Eyebrows · IDs · codes",
-            "inter": "Long-form body alternate"
+            "jost": "Wordmark lockup only"
           },
           "specimen": {
             "body": "The default reading size for tables, forms, and interface copy.",
@@ -5883,7 +5883,7 @@
         "density": {
           "label": "Density",
           "compact": "Compact",
-          "comfortable": "Comfortable",
+          "cozy": "Default",
           "spacious": "Spacious"
         },
         "locale": {
@@ -18382,8 +18382,8 @@
     "density": {
       "compact": "Compact",
       "compactAria": "Use compact density",
-      "comfortable": "Default",
-      "comfortableAria": "Use comfortable density",
+      "cozy": "Default",
+      "cozyAria": "Use cozy density",
       "spacious": "Spacious",
       "spaciousAria": "Use spacious density",
       "label": "Density"

@@ -4,7 +4,7 @@ import { MobileNavDrawer } from "@/components/MobileNavDrawer";
 import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
-import { getPlatformNav, type NavMode } from "@/lib/nav";
+import { platformNav } from "@/lib/nav";
 import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -14,19 +14,15 @@ export default async function PlatformLayout({ children }: { children: React.Rea
   const session = await requireSession();
   const tenant = await resolveTenant();
   const { t } = await getRequestT();
-  // ADR-0006: resolve sidebar shape from per-user pref. Default "domain";
-  // power users opting into the XPMS-numeric spine flip to "xpms" via
-  // /me/preferences. Read non-blocking — fall through to default if the
-  // pref row hasn't materialized yet (new users / first signin).
+  // Read last_portal_slug (app-switcher orientation) non-blocking — fall
+  // through if the pref row hasn't materialized yet (new users / first signin).
   const supabase = await createClient();
   const { data: prefRow } = await supabase
     .from("user_preferences")
     .select("ui_state")
     .eq("user_id", session.userId)
     .maybeSingle();
-  const uiState = (prefRow?.ui_state as { nav_mode?: NavMode; last_portal_slug?: string } | null) ?? null;
-  const navMode: NavMode = uiState?.nav_mode === "xpms" ? "xpms" : "domain";
-  const platformNav = getPlatformNav(navMode);
+  const uiState = (prefRow?.ui_state as { last_portal_slug?: string } | null) ?? null;
   // ADR-0007 — pre-fetch saved dashboards for the chrome top-bar menu.
   // Hard-cap at 8 so the popover stays scannable; "All Dashboards" footer
   // always links to /console/dashboards for the full list.

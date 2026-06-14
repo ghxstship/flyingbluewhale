@@ -122,11 +122,10 @@ const FOOTER_NAV: Array<{ headingKey: string; items: Array<{ labelKey: string; h
 
 export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
   const { t } = await getRequestT();
-  // Two-skin lock: the ATLVS marketing site uses the same neutral SaaS
+  // Single-skin lock: the ATLVS marketing site uses the same neutral SaaS
   // skin as the console — visual consistency with the actual products
-  // (Inter, soft elevation, neutral surfaces, per-product accent). The
-  // cosmic GHXSTSHIP brand voice lives only at /ghxstship (the parent
-  // company surface, locked in (ghxstship)/ghxstship/layout.tsx).
+  // (Hanken Grotesk body, Anton display, soft elevation, neutral surfaces,
+  // per-product accent). There is no separate cosmic marketing skin.
   return (
     <div data-ui="saas" data-theme="atlvs-product" data-product="atlvs" data-platform="atlvs" className="page-shell">
       <MarketingHeader />

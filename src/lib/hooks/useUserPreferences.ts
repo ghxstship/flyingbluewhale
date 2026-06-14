@@ -18,9 +18,6 @@ export type UserPreferences = {
    *  default sidebar shape is "all groups collapsed; show only pinned items
    *  and the active-route group's contents". User toggles surface here. */
   sidebar_expanded_groups?: string[];
-  /** ADR-0006: console sidebar mode. "domain" = 7-group domain-noun
-   *  (operator default); "xpms" = ADR-0004 XPMS-numeric spine. */
-  nav_mode?: "domain" | "xpms";
   /** ADR-0009: persisted mobile role. Drives the tab bar + role home
    *  on COMPVSS once the dedicated persona-routing PR lands. */
   mobile_role?: "performer" | "crew" | "driver" | "medic" | "guard" | "admin";

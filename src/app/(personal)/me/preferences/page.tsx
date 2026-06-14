@@ -1,7 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
-import { NavModeToggle } from "@/components/preferences/NavModeToggle";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -61,10 +60,6 @@ export default async function Page() {
     timezone: data?.timezone ?? DEFAULTS.timezone,
     consent: (data?.consent as Prefs["consent"]) ?? DEFAULTS.consent,
   };
-  // ADR-0006 nav-mode pref lives in ui_state JSONB alongside other UI
-  // state (sidebar_pinned, palette_recents, etc.). Default to "domain".
-  const uiState = (data?.ui_state as { nav_mode?: "domain" | "xpms" } | null) ?? null;
-  const navMode: "domain" | "xpms" = uiState?.nav_mode === "xpms" ? "xpms" : "domain";
 
   return (
     <>
@@ -78,12 +73,6 @@ export default async function Page() {
         ]}
       />
       <div className="page-content max-w-2xl space-y-6">
-        {/* ADR-0006: nav-mode lives outside the FormShell since it writes
-            to ui_state via PATCH /api/v1/me/preferences directly (no
-            server-action round-trip). Mounted above the appearance form
-            so the operator can flip the sidebar shape before touching
-            theme/density. */}
-        <NavModeToggle initial={navMode} />
         <FormShell
           action={savePreferencesAction}
           cancelHref="/me"

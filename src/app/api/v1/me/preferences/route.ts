@@ -6,16 +6,13 @@ import type { Json } from "@/lib/supabase/database.types";
 
 const PatchSchema = z.object({
   // Theme slugs — mirrors src/app/theme/themes.config.ts#ThemeSlug + the
-  // "system" sentinel. The v3 GHXSTSHIP brand sweep purged the pre-v3
-  // CHROMA exploration themes (bermuda-triangle, glass, brutal, bento,
-  // kinetic, copilot, cyber, soft, earthy). The
-  // user_preferences_theme_check Postgres CHECK will be widened in a
-  // separate migration; until that ships the DB still ACCEPTS the dead
-  // slugs but no app surface can write them.
+  // "system" sentinel. The platform ships exactly one skin (`atlvs-product`);
+  // the retired cosmic `ghxstship` skin and pre-v3 CHROMA themes are gone.
+  // Stored rows carrying a dead slug fall back to the default on read.
   //
   // light/dark is the orthogonal `data-mode` attribute on <html>, not
   // stored here.
-  theme: z.enum(["ghxstship", "atlvs-product", "system"]).optional(),
+  theme: z.enum(["atlvs-product", "system"]).optional(),
   density: z.enum(["compact", "cozy", "spacious"]).optional(),
   locale: z.string().min(2).max(8).optional(),
   timezone: z.string().min(1).max(64).optional(),
@@ -27,9 +24,6 @@ const PatchSchema = z.object({
   sidebar_width: z.number().int().min(56).max(480).optional(),
   sidebar_pinned: z.array(z.string()).max(30).optional(),
   sidebar_collapsed: z.boolean().optional(),
-  // ADR-0006: console sidebar shape. "domain" = 7-group domain-noun nav
-  // (operator default); "xpms" = ADR-0004 XPMS-numeric spine (power user).
-  nav_mode: z.enum(["domain", "xpms"]).optional(),
   // ADR-0009: persisted mobile role for persona-routed COMPVSS.
   mobile_role: z.enum(["performer", "crew", "driver", "medic", "guard", "admin"]).optional(),
   // ADR-0007: last-visited portal slug for the app switcher's GVTEWAY entry.
@@ -41,7 +35,6 @@ const UI_STATE_KEYS = [
   "sidebar_width",
   "sidebar_pinned",
   "sidebar_collapsed",
-  "nav_mode",
   "mobile_role",
   "last_portal_slug",
 ] as const;

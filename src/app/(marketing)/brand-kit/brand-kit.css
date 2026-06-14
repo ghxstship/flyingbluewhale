@@ -2,10 +2,8 @@
  * /brand-kit page styles — port of the inline <style> block from
  * project/index.html in the design handoff bundle.
  *
- * All paint flows through the --gx-* GHXSTSHIP palette declared in
- * src/app/theme/themes/ghxstship.css (and aliased to safe defaults
- * below so the kit page still reads on themes that don't define
- * the cosmic world).
+ * All paint flows through the self-contained --gx-* palette defined
+ * directly below (no external theme dependency).
  */
 
 .bk-root {

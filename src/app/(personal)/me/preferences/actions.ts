@@ -14,15 +14,13 @@ const BCP47 = /^[a-z]{2,3}(-[A-Z][a-z]{3})?(-[A-Z]{2}|-[0-9]{3})?$/;
 
 const Schema = z.object({
   // Mirrors src/app/theme/themes.config.ts#ThemeSlug + "system" sentinel.
-  // Kit-only refactor: the canonical platform ships exactly one skin —
-  // `atlvs-product` (the design_handoff_atlvs_kit). The pre-kit cosmic
-  // `ghxstship` skin and the pre-v3 CHROMA exploration set were retired.
-  // The "ghxstship" literal stays in the enum so stored rows from the
-  // pre-kit deploy don't fail validation on the next save; new writes
-  // should target "atlvs-product" or "system".
+  // The canonical platform ships exactly one skin — `atlvs-product` (the
+  // design_handoff_atlvs_kit). The retired cosmic `ghxstship` skin and the
+  // pre-v3 CHROMA set are gone; stored rows carrying a dead slug fall back to
+  // the default on read.
   //
   // light/dark is the orthogonal `data-mode` attribute, not stored here.
-  theme: z.enum(["ghxstship", "atlvs-product", "system"]),
+  theme: z.enum(["atlvs-product", "system"]),
   density: z.enum(["compact", "cozy", "spacious"]),
   locale: z.string().regex(BCP47, "Use a BCP-47 tag like 'en' or 'fr-CA'"),
   timezone: z.string().min(1).max(64),

@@ -19,9 +19,8 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 /**
  * Marketing header — three grouped dropdowns + two direct links + a
  * primary CTA, plus a utility cluster (locale / light-dark) on the
- * right. The legacy 8-theme design picker was retired with the v3
- * ATLVS-kit lock — the platform now ships a two-skin canon (cosmic
- * GHXSTSHIP for /ghxstship, ATLVS product for everything else) and the
+ * right. The legacy 8-theme design picker was retired with the ATLVS-kit
+ * lock — the platform now ships a single ATLVS product skin and the
  * mode toggle is the only visible appearance affordance.
  */
 

@@ -1,13 +1,10 @@
 /**
- * /brand-kit — GHXSTSHIP "Venture Beyond" brand kit landing page.
+ * /brand-kit — ATLVS Technologies brand kit landing page.
  *
- * Port of project/index.html from the Claude Design handoff bundle
- * (KVxwO8Y-L8U53KxCtGaAdw). Renders the full directory of brand
- * surfaces — marketing site, product UI, documents, foundations —
- * as a click-through tile grid. Tokens come from the ghxstship
- * theme (src/app/theme/themes/ghxstship.css) so the page paints
- * in-canon on the default theme and lights up correctly on the
- * Bermuda-light / other CHROMA worlds too.
+ * Renders the full directory of brand surfaces — marketing site, product
+ * UI, documents, foundations — as a click-through tile grid. Paint flows
+ * through the self-contained --gx-* palette in brand-kit.css (no external
+ * theme dependency).
  */
 import type { Metadata } from "next";
 import Link from "next/link";

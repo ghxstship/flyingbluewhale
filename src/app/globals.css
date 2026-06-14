@@ -1035,8 +1035,7 @@ pre,
   /* ───── Marketing typography scale ─────
    * ATLVS-kit canon — h1/h2/h3 render in --font-display, which on the single
    * canonical kit skin resolves to Anton (MONUMENT) via atlvs-product.css
-   * `--p-heading`. `.hed-*` classes provide the size/weight scale. (The
-   * `/ghxstship` parent surface reuses this same skin — no separate face.)
+   * `--p-heading`. `.hed-*` classes provide the size/weight scale.
    *
    * Casing: per the MONUMENT ratification (tokens.json#saasThemeHouseRules,
    * 2026-06-13) DISPLAY headings are ALL-CAPS — Anton is a caps face, applied

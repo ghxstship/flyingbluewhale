@@ -1,8 +1,7 @@
 // Marketing home — ATLVS ecosystem (ATLVS · COMPVSS · GVTEWAY).
-// SaaS skin (Inter, neutral surfaces, soft elevation) inherited from
-// (marketing)/layout.tsx data-theme="atlvs-product". Copy leads with the
-// platform — production-ops vernacular, no voyage metaphor. The cosmic
-// GHXSTSHIP voice lives only on /ghxstship (parent company surface).
+// SaaS skin (Hanken Grotesk body, Anton display, neutral surfaces, soft
+// elevation) inherited from (marketing)/layout.tsx data-theme="atlvs-product".
+// Copy leads with the platform — production-ops vernacular, no voyage metaphor.
 
 import Link from "next/link";
 import type { Metadata } from "next";

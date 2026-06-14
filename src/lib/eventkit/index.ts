@@ -3,7 +3,7 @@
  *
  * The framework is own-brand XPMS/ATLVS IP. It binds to existing canon and
  * introduces NO new budget/department/tier/phase/discipline vocabulary:
- *   • Departments / Tiers  → src/lib/ghxstship/{classes,tiers}.ts
+ *   • Departments / Tiers  → src/lib/eventkit/taxonomy.ts
  *   • Budget axes          → migration 0070 enums (budget_discipline/tier/xyz/line_type)
  *   • 8-gate phase         → migration 0070 budgets.xpms_phase CHECK + this file
  *   • URID registry        → public.xpms_registry (DEPT.TEAM.SECTION)
@@ -12,8 +12,7 @@
  * Pattern mirrors src/lib/marketplace.ts + src/lib/connecteam.ts:
  * enum tuples `as const` → derived string-literal types → small helpers.
  */
-import { CLASSES } from "@/lib/ghxstship/classes";
-import { TIERS } from "@/lib/ghxstship/tiers";
+import { CLASSES, TIERS } from "./taxonomy";
 
 // ── Kit scale (the configure-to-order selector) ────────────────────────────
 export const KIT_SCALES = ["S", "M", "L", "XL"] as const;

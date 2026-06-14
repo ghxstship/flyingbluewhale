@@ -1,4 +1,4 @@
-// Marketing home — ATLVS ecosystem (ATLVS · COMPVSS · GVTEWAY).
+// Marketing home — ATLVS ecosystem (ATLVS · COMPVSS · GVTEWAY · LEG3ND).
 // SaaS skin (Hanken Grotesk body, Anton display, neutral surfaces, soft
 // elevation) inherited from (marketing)/layout.tsx data-theme="atlvs-product".
 // Copy leads with the platform — production-ops vernacular, no voyage metaphor.
@@ -185,6 +185,16 @@ export default async function Home() {
       color: "#2563EB",
       textColor: "#1D4ED8",
     },
+    {
+      slug: "legend",
+      title: "LEG3ND",
+      audience: t("marketing.pages.home.products.legend.audience"),
+      tag: t("marketing.pages.home.products.legend.tag"),
+      body: t("marketing.pages.home.products.legend.body"),
+      href: "/solutions/legend",
+      color: "#E8500A",
+      textColor: "#C2410C",
+    },
   ];
 
   const EDGES = [
@@ -349,7 +359,9 @@ export default async function Home() {
                 <strong className="text-[var(--p-text-1)]">COMPVSS</strong>{" "}
                 {t("marketing.pages.home.hero.subtitleCompvss")}{" "}
                 <strong className="text-[var(--p-text-1)]">GVTEWAY</strong>{" "}
-                {t("marketing.pages.home.hero.subtitleGvteway")}
+                {t("marketing.pages.home.hero.subtitleGvteway")}{" "}
+                <strong className="text-[var(--p-text-1)]">LEG3ND</strong>{" "}
+                {t("marketing.pages.home.hero.subtitleLegend")}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
@@ -410,7 +422,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* THE THREE APPS */}
+      {/* THE FOUR APPS */}
       <section id="apps" className="px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <p className="text-xs font-semibold tracking-[0.18em] text-[var(--p-accent-text)] uppercase">
@@ -420,9 +432,10 @@ export default async function Home() {
             {t("marketing.pages.home.threeApps.title")}
           </h2>
           <p className="mt-4 max-w-3xl text-lg text-[var(--p-text-2)]">{t("marketing.pages.home.threeApps.body")}</p>
-          {/* lg+ for 3-up — at 768px a third-width card is narrower than the
-              Wordmark letter-row's min-content (~228px) and overflows. */}
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+          {/* lg+ for the app grid — at 768px a sub-third-width card is narrower
+              than the Wordmark letter-row's min-content (~228px) and overflows.
+              2-up at lg, 4-up at xl keeps every card above that floor. */}
+          <div className="mt-10 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
             {PRODUCTS.map((p) => (
               <Link
                 key={p.slug}

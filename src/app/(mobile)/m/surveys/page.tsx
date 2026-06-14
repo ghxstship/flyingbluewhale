@@ -62,30 +62,38 @@ export default async function MobileSurveysPage() {
         ) : (
           list.map((s) => {
             const done = responded.has(s.id);
+            const body = (
+              <>
+                <div className="flex items-center justify-between">
+                  {done ? (
+                    <Badge variant="success">{t("m.surveys.badge.submitted", undefined, "Submitted")}</Badge>
+                  ) : (
+                    <Badge variant="info">{t("m.surveys.badge.open", undefined, "Open")}</Badge>
+                  )}
+                  {s.anonymous && (
+                    <Badge variant="muted">{t("m.surveys.badge.anonymous", undefined, "Anonymous")}</Badge>
+                  )}
+                </div>
+                <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
+                {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
+                {s.closes_at && (
+                  <p className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
+                    {t("m.surveys.closesAt", { date: fmt.date(s.closes_at) }, `closes ${fmt.date(s.closes_at)}`)}
+                  </p>
+                )}
+              </>
+            );
             return (
               <li key={s.id}>
-                <Link
-                  href={done ? "#" : `/m/surveys/${s.id}`}
-                  className={`surface block p-4 ${done ? "opacity-60" : ""}`}
-                >
-                  <div className="flex items-center justify-between">
-                    {done ? (
-                      <Badge variant="success">{t("m.surveys.badge.submitted", undefined, "Submitted")}</Badge>
-                    ) : (
-                      <Badge variant="info">{t("m.surveys.badge.open", undefined, "Open")}</Badge>
-                    )}
-                    {s.anonymous && (
-                      <Badge variant="muted">{t("m.surveys.badge.anonymous", undefined, "Anonymous")}</Badge>
-                    )}
-                  </div>
-                  <h2 className="mt-2 text-sm font-semibold">{s.title}</h2>
-                  {s.description && <p className="mt-1 text-xs text-[var(--p-text-2)]">{s.description}</p>}
-                  {s.closes_at && (
-                    <p className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
-                      {t("m.surveys.closesAt", { date: fmt.date(s.closes_at) }, `closes ${fmt.date(s.closes_at)}`)}
-                    </p>
-                  )}
-                </Link>
+                {/* Submitted surveys are terminal — render a static card, not a
+                    dead href="#" link (no results view exists yet). */}
+                {done ? (
+                  <div className="surface block p-4 opacity-60">{body}</div>
+                ) : (
+                  <Link href={`/m/surveys/${s.id}`} className="surface block p-4">
+                    {body}
+                  </Link>
+                )}
               </li>
             );
           })

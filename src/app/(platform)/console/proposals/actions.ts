@@ -6,8 +6,6 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { dollarsToCents } from "@/lib/format";
-import { moneyDollarsString } from "@/lib/zod/money";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
 const slugify = (s: string) =>
@@ -25,9 +23,8 @@ const Schema = z
     // Optional template seed — when provided, copies blocks + theme
     // from the referenced proposal_templates row into the new proposal.
     template_id: z.string().uuid().optional().or(z.literal("")),
-    // Sea Trial R3 FINDING-019: amount optional but must be a valid
-    // non-negative dollar amount when supplied.
-    amount: moneyDollarsString({ allowEmpty: true }),
+    // Canonical money entry: <MoneyInput> submits integer cents directly.
+    amount_cents: z.coerce.number().int().nonnegative().optional(),
     expires_at: z.string().date().optional().or(z.literal("")),
     notes: z.string().max(4000).optional(),
   })
@@ -115,7 +112,7 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
       title: parsed.data.title,
       client_id: clientId,
       project_id: projectId,
-      amount_cents: parsed.data.amount ? dollarsToCents(parsed.data.amount) : null,
+      amount_cents: parsed.data.amount_cents ?? null,
       expires_at: parsed.data.expires_at || null,
       notes: parsed.data.notes || null,
       created_by: session.userId,

@@ -2,6 +2,7 @@
 
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createProposalAction } from "../actions";
 
@@ -69,13 +70,7 @@ export function NewProposalForm({
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Input
-          label={t("console.proposals.new.amount", undefined, "Amount — USD")}
-          name="amount"
-          type="number"
-          inputMode="decimal"
-          step="0.01"
-        />
+        <MoneyInput label={t("console.proposals.new.amount", undefined, "Amount")} name="amount_cents" />
         <Input label={t("console.proposals.new.expires", undefined, "Expires")} name="expires_at" type="date" />
       </div>
       <div>

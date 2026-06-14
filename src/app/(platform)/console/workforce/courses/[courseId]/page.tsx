@@ -124,6 +124,9 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
                 </Button>
               </form>
             )}
+            <Button href={`/console/workforce/courses/${c.id}/edit`} size="sm" variant="secondary">
+              {t("common.edit", undefined, "Edit")}
+            </Button>
             <DeleteForm
               action={deleteCourse.bind(null, c.id)}
               confirm={t(

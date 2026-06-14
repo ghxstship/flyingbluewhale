@@ -35,6 +35,9 @@ export default async function ClientDetail({ params }: { params: Promise<{ clien
             <Button href={`/console/proposals/new?clientId=${client.id}`} size="sm">
               {t("console.clients.detail.newProposal", undefined, "+ New Proposal")}
             </Button>
+            <Button href={`/console/finance/invoices/new?clientId=${client.id}`} size="sm" variant="secondary">
+              {t("console.clients.detail.newInvoice", undefined, "+ New Invoice")}
+            </Button>
             <Button href={`/console/clients/${clientId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>

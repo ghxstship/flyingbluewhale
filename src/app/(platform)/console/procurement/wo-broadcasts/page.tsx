@@ -17,7 +17,7 @@ type Row = {
   id: string;
   code: string;
   title: string;
-  status: string;
+  broadcast_state: string;
   budget_cents: number | null;
   needed_by: string | null;
   awarded_to: { name: string | null } | null;
@@ -49,8 +49,8 @@ export default async function Page() {
     .order("created_at", { ascending: false })
     .limit(200);
   const rows = (data ?? []) as unknown as Row[];
-  const open = rows.filter((r) => r.status === "open").length;
-  const awarded = rows.filter((r) => r.status === "awarded").length;
+  const open = rows.filter((r) => r.broadcast_state === "open").length;
+  const awarded = rows.filter((r) => r.broadcast_state === "awarded").length;
 
   return (
     <>
@@ -141,8 +141,8 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.procurement.woBroadcasts.columns.status", undefined, "Status"),
-              render: (r) => <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>,
-              accessor: (r) => r.status ?? null,
+              render: (r) => <Badge variant={toneFor(r.broadcast_state)}>{toTitle(r.broadcast_state)}</Badge>,
+              accessor: (r) => r.broadcast_state ?? null,
               filterable: true,
               groupable: true,
             },

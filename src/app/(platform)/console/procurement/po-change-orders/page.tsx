@@ -17,7 +17,7 @@ type Row = {
   id: string;
   number: number;
   title: string;
-  status: string;
+  change_order_state: string;
   amount_cents: number;
   schedule_impact_days: number;
   proposed_at: string;
@@ -55,8 +55,10 @@ export default async function Page() {
     .limit(200);
 
   const rows = (data ?? []) as unknown as Row[];
-  const pending = rows.filter((r) => ["proposed", "submitted", "in_review"].includes(r.status));
-  const totalApproved = rows.filter((r) => r.status === "approved").reduce((s, r) => s + r.amount_cents, 0);
+  const pending = rows.filter((r) => ["proposed", "submitted", "in_review"].includes(r.change_order_state));
+  const totalApproved = rows
+    .filter((r) => r.change_order_state === "approved")
+    .reduce((s, r) => s + r.amount_cents, 0);
   const totalPending = pending.reduce((s, r) => s + r.amount_cents, 0);
 
   return (
@@ -143,10 +145,10 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.procurement.poChangeOrders.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={toneFor(r.status)}>{toTitle(r.status)}</Badge>,
+              render: (r) => <Badge variant={toneFor(r.change_order_state)}>{toTitle(r.change_order_state)}</Badge>,
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.change_order_state ?? null,
             },
           ]}
         />

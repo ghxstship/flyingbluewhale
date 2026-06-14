@@ -67,23 +67,32 @@ export default async function Page() {
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
-          <MetricCard
-            label={t("console.marketplace.metrics.livePostings", undefined, "Live Postings")}
-            value={fmt.number(publishedPostings)}
-            accent
-          />
-          <MetricCard
-            label={t("console.marketplace.metrics.openCalls", undefined, "Open Calls")}
-            value={fmt.number(publishedCalls)}
-          />
-          <MetricCard
-            label={t("console.marketplace.metrics.activeOffers", undefined, "Active Offers")}
-            value={fmt.number(liveOffers)}
-          />
-          <MetricCard
-            label={t("console.marketplace.metrics.newApplicants", undefined, "New Applicants")}
-            value={fmt.number(newApplicants)}
-          />
+          {/* Metric cards double as nav into their sub-module. */}
+          <Link href="/console/marketplace/postings" className="hover-lift focus-ring block rounded-[var(--p-r)]">
+            <MetricCard
+              label={t("console.marketplace.metrics.livePostings", undefined, "Live Postings")}
+              value={fmt.number(publishedPostings)}
+              accent
+            />
+          </Link>
+          <Link href="/console/marketplace/calls" className="hover-lift focus-ring block rounded-[var(--p-r)]">
+            <MetricCard
+              label={t("console.marketplace.metrics.openCalls", undefined, "Open Calls")}
+              value={fmt.number(publishedCalls)}
+            />
+          </Link>
+          <Link href="/console/marketplace/offers" className="hover-lift focus-ring block rounded-[var(--p-r)]">
+            <MetricCard
+              label={t("console.marketplace.metrics.activeOffers", undefined, "Active Offers")}
+              value={fmt.number(liveOffers)}
+            />
+          </Link>
+          <Link href="/console/marketplace/postings" className="hover-lift focus-ring block rounded-[var(--p-r)]">
+            <MetricCard
+              label={t("console.marketplace.metrics.newApplicants", undefined, "New Applicants")}
+              value={fmt.number(newApplicants)}
+            />
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">

@@ -7,8 +7,13 @@ import { NewInvoiceForm } from "./NewInvoiceForm";
 
 export const dynamic = "force-dynamic";
 
-export default async function NewInvoicePage() {
+export default async function NewInvoicePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ clientId?: string }>;
+}) {
   const { t } = await getRequestT();
+  const { clientId: defaultClientId } = await searchParams;
   let clients: { id: string; name: string }[] = [];
   let projects: { id: string; name: string }[] = [];
   if (hasSupabase) {
@@ -27,7 +32,7 @@ export default async function NewInvoicePage() {
         title={t("console.finance.invoices.new.title", undefined, "New Invoice")}
       />
       <div className="page-content max-w-2xl">
-        <NewInvoiceForm clients={clients} projects={projects} />
+        <NewInvoiceForm clients={clients} projects={projects} defaultClientId={defaultClientId} />
       </div>
     </>
   );

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { MoneyInput } from "@/components/ui/MoneyInput";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -57,11 +58,10 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
             defaultValue={row.source ?? ""}
             maxLength={120}
           />
-          <Input
-            label={t("console.leads.edit.fields.estimatedValueCents", undefined, "Estimated Value — Cents")}
+          <MoneyInput
+            label={t("console.leads.edit.fields.estimatedValue", undefined, "Estimated Value")}
             name="estimated_value_cents"
-            type="number"
-            defaultValue={row.estimated_value_cents != null ? String(row.estimated_value_cents) : ""}
+            defaultCents={row.estimated_value_cents ?? null}
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">

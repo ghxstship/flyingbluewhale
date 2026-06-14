@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 type Row = {
   id: string;
-  status: string;
+  prequalification_state: string;
   score: number | null;
   expires_at: string | null;
   vendor: { name: string | null } | null;
@@ -51,8 +51,10 @@ export default async function Page() {
     .limit(200);
 
   const rows = (data ?? []) as unknown as Row[];
-  const approved = rows.filter((r) => r.status === "approved" || r.status === "approved_conditional").length;
-  const open = rows.filter((r) => ["invited", "in_progress", "submitted"].includes(r.status)).length;
+  const approved = rows.filter(
+    (r) => r.prequalification_state === "approved" || r.prequalification_state === "approved_conditional",
+  ).length;
+  const open = rows.filter((r) => ["invited", "in_progress", "submitted"].includes(r.prequalification_state)).length;
   const expiringSoon = rows.filter(
     (r) => r.expires_at && new Date(r.expires_at) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
   ).length;
@@ -140,10 +142,14 @@ export default async function Page() {
             {
               key: "status",
               header: t("console.procurement.prequalification.col.status", undefined, "Status"),
-              render: (r) => <Badge variant={STATUS_TONE[r.status] ?? "muted"}>{toTitle(r.status)}</Badge>,
+              render: (r) => (
+                <Badge variant={STATUS_TONE[r.prequalification_state] ?? "muted"}>
+                  {toTitle(r.prequalification_state)}
+                </Badge>
+              ),
               filterable: true,
               groupable: true,
-              accessor: (r) => r.status ?? null,
+              accessor: (r) => r.prequalification_state ?? null,
             },
           ]}
         />

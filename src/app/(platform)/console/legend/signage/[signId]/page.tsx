@@ -62,6 +62,9 @@ export default async function SignDetail({ params }: { params: Promise<{ signId:
         action={
           <div className="flex items-center gap-2">
             <StatusBadge status={sign.sign_state} />
+            <Button href={`/console/legend/signage/${signId}/edit`} size="sm" variant="secondary">
+              Edit
+            </Button>
             <Button href={`/console/legend/signage/${signId}/placements/new`} size="sm">
               + New Placement
             </Button>

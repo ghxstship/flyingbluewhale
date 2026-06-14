@@ -54,6 +54,33 @@ export async function createSignAction(_: State, fd: FormData): Promise<State> {
   redirect(`/console/legend/signage/${(data as { id: string }).id}`);
 }
 
+export async function updateSignAction(id: string, _: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can edit signs" };
+  const parsed = SignSchema.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return formFail(parsed.error, fd);
+  const db = (await createClient()) as unknown as LooseSupabase;
+  const { error } = await db
+    .from("signage_signs")
+    .update({
+      code: parsed.data.code,
+      name: parsed.data.name,
+      standard: parsed.data.standard,
+      category: parsed.data.category,
+      pictogram_key: parsed.data.pictogram_key,
+      colorway: parsed.data.colorway || null,
+      sign_state: parsed.data.sign_state,
+      notes: parsed.data.notes || null,
+    })
+    .eq("id", id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
+  if (error) return actionFail(error.message, fd);
+  revalidatePath("/console/legend/signage");
+  revalidatePath(`/console/legend/signage/${id}`);
+  redirect(`/console/legend/signage/${id}`);
+}
+
 export async function deleteSign(id: string): Promise<void> {
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;

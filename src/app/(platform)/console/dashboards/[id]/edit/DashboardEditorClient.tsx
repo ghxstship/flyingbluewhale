@@ -10,16 +10,18 @@ const DEBOUNCE_MS = 500;
 
 /**
  * Client wrapper for the dashboard editor — owns the debounced save loop
- * + the latest-known layout. Server data resolution (chart rows, saved
- * view embeds) doesn't run here; the editor renders widgets in their
- * "ps-skel" shape since the canvas is the focus, not the live data.
+ * + the latest-known layout. The parent server page resolves real chart
+ * rows + saved-view embeds and passes them in as `data`, so widget previews
+ * render live org data instead of empty fixtures.
  */
 export function DashboardEditorClient({
   dashboardId,
   initialLayout,
+  data,
 }: {
   dashboardId: string;
   initialLayout: DashboardLayout;
+  data: DashboardWidgetData;
 }): React.ReactElement {
   const [layout, setLayout] = React.useState<DashboardLayout>(initialLayout);
   const [status, setStatus] = React.useState<"idle" | "saving" | "saved" | "error">("idle");
@@ -57,11 +59,6 @@ export function DashboardEditorClient({
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
-
-  // No server-resolved data in editor — chart rows + saved-view rows are
-  // best-effort empty so the layout renders without round-tripping to the
-  // DB on every drag.
-  const data: DashboardWidgetData = React.useMemo(() => ({ charts: {}, savedViews: {} }), []);
 
   return (
     <div className="space-y-3">

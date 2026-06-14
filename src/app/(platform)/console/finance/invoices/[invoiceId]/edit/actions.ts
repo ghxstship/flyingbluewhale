@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
@@ -27,8 +27,45 @@ export type State = {
   values?: Record<string, string>;
 } | null;
 
+/** A single parsed line-item row, position-indexed by its form ordinal. */
+type ParsedLineItem = {
+  id: string;
+  description: string;
+  quantity: number;
+  unit_price_cents: number;
+  position: number;
+};
+
+/**
+ * Pull the repeating `li_*_N` fields out of the form. The editor emits a
+ * `li_count` plus, per visible row N, `li_id_N` / `li_description_N` /
+ * `li_quantity_N` / `li_unit_price_cents_N`. Blank-description rows are
+ * dropped silently so a stray empty row never persists. Position is the
+ * compacted ordinal (0-based) of the surviving rows.
+ */
+function parseLineItems(fd: FormData): ParsedLineItem[] {
+  const count = Number(fd.get("li_count") ?? 0);
+  if (!Number.isFinite(count) || count <= 0) return [];
+  const out: ParsedLineItem[] = [];
+  for (let i = 0; i < count; i++) {
+    const description = String(fd.get(`li_description_${i}`) ?? "").trim();
+    if (!description) continue;
+    const qtyRaw = Number(fd.get(`li_quantity_${i}`));
+    const priceRaw = Number(fd.get(`li_unit_price_cents_${i}`));
+    out.push({
+      id: String(fd.get(`li_id_${i}`) ?? "").trim(),
+      description: description.slice(0, 500),
+      quantity: Number.isFinite(qtyRaw) && qtyRaw >= 0 ? qtyRaw : 1,
+      unit_price_cents: Number.isFinite(priceRaw) && priceRaw >= 0 ? Math.round(priceRaw) : 0,
+      position: out.length,
+    });
+  }
+  return out;
+}
+
 export async function updateInvoice(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  if (!isManagerPlus(session)) return { error: "Only manager+ can edit invoices" };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   // Sea Trial FINDING-022: optimistic concurrency.
@@ -45,6 +82,38 @@ export async function updateInvoice(id: string, _: State, fd: FormData): Promise
   if (!result.ok) {
     return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Invoice not found." };
   }
+
+  // Reconcile invoice_line_items against the editor's submitted rows. RLS
+  // scopes every statement to the caller's org via the parent invoice. We
+  // (1) delete rows whose id is no longer present, then (2) upsert the
+  // survivors keyed by (invoice_id, position) so positions stay dense and
+  // re-orderable without orphaning ids.
+  const supabase = await createClient();
+  const items = parseLineItems(fd);
+  const keptIds = items.map((it) => it.id).filter(Boolean);
+
+  let delete_ = supabase.from("invoice_line_items").delete().eq("invoice_id", id);
+  if (keptIds.length > 0) {
+    delete_ = delete_.not("id", "in", `(${keptIds.join(",")})`);
+  }
+  const { error: delErr } = await delete_;
+  if (delErr) return { error: `Could not update line items: ${delErr.message}` };
+
+  if (items.length > 0) {
+    const rows = items.map((it) => ({
+      ...(it.id ? { id: it.id } : {}),
+      invoice_id: id,
+      description: it.description,
+      quantity: it.quantity,
+      unit_price_cents: it.unit_price_cents,
+      position: it.position,
+      currency: parsed.data.currency,
+    }));
+    const { error: upErr } = await supabase.from("invoice_line_items").upsert(rows);
+    if (upErr) return { error: `Could not save line items: ${upErr.message}` };
+  }
+
+  revalidatePath(`/console/finance/invoices/${id}/line-items`);
   revalidatePath(`/console/finance/invoices/${id}`);
   revalidatePath("/console/finance/invoices");
   redirect(`/console/finance/invoices/${id}`);

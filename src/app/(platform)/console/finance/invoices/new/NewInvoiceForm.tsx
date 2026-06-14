@@ -9,9 +9,11 @@ import { createInvoiceAction } from "../actions";
 export function NewInvoiceForm({
   clients,
   projects,
+  defaultClientId,
 }: {
   clients: { id: string; name: string }[];
   projects: { id: string; name: string }[];
+  defaultClientId?: string;
 }) {
   const t = useT();
   return (
@@ -32,7 +34,7 @@ export function NewInvoiceForm({
           <label className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.invoices.new.client", undefined, "Client")}
           </label>
-          <select name="client_id" className="ps-input mt-1.5 w-full">
+          <select name="client_id" defaultValue={defaultClientId ?? ""} className="ps-input mt-1.5 w-full">
             <option value="">{t("console.finance.invoices.new.noClient", undefined, "— No client —")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>

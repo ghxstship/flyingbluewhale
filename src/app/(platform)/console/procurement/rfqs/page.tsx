@@ -13,6 +13,10 @@ import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
+// RFQs are a PROJECTION of `requisitions` in the submitted/approved states
+// (awaiting vendor quotes) — there is no separate `rfqs` table. The row shape
+// is therefore a requisition; `requisition_state` is the lifecycle column and
+// rowHref points back into /procurement/requisitions/[id].
 type RfqRow = {
   id: string;
   title: string;

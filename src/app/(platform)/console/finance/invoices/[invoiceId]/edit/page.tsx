@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/Input";
 import { MoneyInput } from "@/components/ui/MoneyInput";
 import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
+import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
 import { updateInvoice, type State } from "./actions";
+import { InvoiceLineItemsEditor, type LineItemRow } from "./InvoiceLineItemsEditor";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +24,18 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
   const session = await requireSession();
   const row = await getOrgScoped("invoices", session.orgId, p.invoiceId);
   if (!row) notFound();
+  const supabase = await createClient();
+  const { data: lineItemsData } = await supabase
+    .from("invoice_line_items")
+    .select("id,description,quantity,unit_price_cents")
+    .eq("invoice_id", p.invoiceId)
+    .order("position", { ascending: true });
+  const lineItems: LineItemRow[] = (lineItemsData ?? []).map((r) => ({
+    id: r.id,
+    description: r.description,
+    quantity: Number(r.quantity),
+    unit_price_cents: Number(r.unit_price_cents),
+  }));
   const { t } = await getRequestT();
   const action = updateInvoice.bind(null, p.invoiceId) as unknown as (state: State, fd: FormData) => Promise<State>;
   return (
@@ -98,6 +112,7 @@ export default async function Page({ params }: { params: Promise<{ invoiceId: st
               "Status transitions are managed from the detail page.",
             )}
           </p>
+          <InvoiceLineItemsEditor initial={lineItems} />
         </FormShell>
       </div>
     </>

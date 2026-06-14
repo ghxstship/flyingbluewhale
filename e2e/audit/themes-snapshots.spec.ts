@@ -1,8 +1,8 @@
 /**
  * Visual regression snapshots (audit m4).
  *
- * Narrow scope — Chromium only, 4 flagship routes × 2 themes × 2
- * breakpoints = 16 baselines. A full cross-browser/theme baseline tree
+ * Narrow scope — Chromium only, 4 flagship routes × 1 theme × 2
+ * breakpoints = 8 baselines. A full cross-browser/theme baseline tree
  * would add ~1,500 PNGs to the repo; Playwright's `toHaveScreenshot()`
  * tolerates pixel diffs so we only need coverage on the high-signal
  * combos. The full PNG-per-cell artifact trail still lives in
@@ -14,8 +14,11 @@
  */
 import { expect, test, type Page } from "playwright/test";
 
-// Canonical two-skin set — see THEME_SLUGS in src/app/theme/themes.config.ts.
-const SNAPSHOT_THEMES = ["ghxstship", "atlvs-product"] as const;
+// Canonical single-skin set — see THEME_SLUGS in src/app/theme/themes.config.ts.
+// The v3 GHXSTSHIP brand sweep + kit migration retired the `ghxstship` slug;
+// `atlvs-product` is the only surviving theme (dark via the orthogonal
+// data-mode axis, per-product accents via data-platform overlays).
+const SNAPSHOT_THEMES = ["atlvs-product"] as const;
 const SNAPSHOT_BREAKPOINTS = [
   { name: "mobile-s", width: 375, height: 667 },
   { name: "desktop", width: 1280, height: 800 },

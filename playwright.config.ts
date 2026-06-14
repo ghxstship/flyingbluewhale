@@ -9,6 +9,12 @@ const E2E_PROD = process.env.E2E_PROD === "1" || !!process.env.CI;
 
 export default defineConfig({
   testDir: "./e2e",
+  // The visual-regression audit (e2e/audit/**) has its own dedicated config
+  // (playwright.audit.config.ts) with config-specific snapshot baselines and a
+  // multi-browser matrix. Running those PNG-diff specs under the functional
+  // config double-counts them and compares against baselines captured by the
+  // other config — keep the functional suite functional.
+  testIgnore: /\/audit\//,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

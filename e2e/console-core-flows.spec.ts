@@ -67,7 +67,10 @@ test.describe("console core — Finance invoice receivables lifecycle", () => {
     await page.goto("/console/finance/invoices/new");
     const title = `E2E Invoice ${stamp()}`;
     await fillByName(page, "title", title);
-    await fillByName(page, "amount", "12345");
+    // Amount is a <MoneyInput>: a visible decimal field (placeholder "0.00")
+    // that writes integer cents to a hidden input[name="amount_cents"]. Fill
+    // the visible field with dollars — "123.45" → 12345 cents.
+    await page.getByPlaceholder("0.00").fill("123.45");
     await submitForm(page);
     // on the detail page now
     await expect(page.locator("h1")).toContainText(title, { timeout: 15000 });

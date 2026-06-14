@@ -13,11 +13,14 @@ import { expect, test } from "playwright/test";
 import { dismissConsent, fixtureEmail, loginAs, TEST_PASSWORD } from "./helpers/auth";
 
 test.describe("admin view gates (P1-A)", () => {
+  // The settings shell gates non-admins at the LAYOUT (src/app/(platform)/
+  // console/settings/layout.tsx → <AccessDenied>) before the page's own copy,
+  // so the canonical denial string is "You Don't Have Access".
   test("member is denied the billing settings view", async ({ page }) => {
     await dismissConsent(page);
     await loginAs(page, "member");
     await page.goto("/console/settings/billing");
-    await expect(page.getByText("Admin Access Required")).toBeVisible();
+    await expect(page.getByText("You Don't Have Access")).toBeVisible();
     // No billing data leaks into the denial view.
     await expect(page.locator("body")).not.toContainText(/Stripe|Invoice History|Current Plan/i);
   });
@@ -26,7 +29,7 @@ test.describe("admin view gates (P1-A)", () => {
     await dismissConsent(page);
     await loginAs(page, "member");
     await page.goto("/console/settings/api");
-    await expect(page.getByText("Admin Access Required")).toBeVisible();
+    await expect(page.getByText("You Don't Have Access")).toBeVisible();
     await expect(page.locator('input[name="name"]')).toHaveCount(0);
   });
 
@@ -34,7 +37,7 @@ test.describe("admin view gates (P1-A)", () => {
     await dismissConsent(page);
     await loginAs(page, "admin");
     await page.goto("/console/settings/billing");
-    await expect(page.getByText("Admin Access Required")).toHaveCount(0);
+    await expect(page.getByText("You Don't Have Access")).toHaveCount(0);
   });
 });
 

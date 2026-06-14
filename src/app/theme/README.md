@@ -5,7 +5,7 @@ One canonical kit skin (`atlvs-product`). Mode (light/dark), density (compact/co
 ## Contract
 
 - **Slug is immutable:** `atlvs-product` (the design_handoff_atlvs_kit). Used verbatim in `data-theme`, `localStorage` key `chroma.theme`, cookie `chroma_theme`.
-- **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (pink), `compvss` (amber), `gvteway` (cyan).
+- **Per-product accent** reads `data-product` (kit canon) OR `data-platform` (codebase): `atlvs` (pink), `compvss` (amber), `gvteway` (blue, v5.1).
 - **Mode** (`light`/`dark`/`system`) lives on `data-mode`, set by `theme-script.ts` before first paint.
 - **Density** (`compact`/`comfortable`/`spacious`) lives on `data-density`; `comfortable` is the default and strips the attribute.
 - **Accent intensity** (`soft`/`default`/`vivid`) lives on `data-accent`; `default` is implicit and strips the attribute.
@@ -72,7 +72,7 @@ The Jost crossbar-less wordmark (`<Wordmark word="ATLVS" subtitle="TECHNOLOGIES"
 | `--p-text-3` on `--p-surface`             | `#656d7a` on `#ffffff` → 5.2:1 (AA)   | `#9098a4` on `#1a1d24` → 5.1:1 (AA)            |
 | white on `--p-accent-cta` (atlvs light)   | white on `#c91463` → 5.6:1 (AA)       | atlvs dark uses ink on `#ff4d9b` → 6.1:1 (AA)  |
 | white on `--p-accent-cta` (compvss light) | white on `#8a5a0f` → 5.9:1 (AA)       | compvss dark uses ink on `#f0b255` → kit canon |
-| white on `--p-accent-cta` (gvteway light) | white on `#0a7373` → 5.7:1 (AA)       | gvteway dark uses ink on `#2bd6d6` → kit canon |
+| white on `--p-accent-cta` (gvteway light) | white on `#2563eb` → 5.2:1 (AA)       | gvteway dark uses ink on `#5e8bf2` → kit canon |
 
 The bright display accents (`--p-accent`) deliberately fail AA as text — they're for fills, focus halos, and large display text where 3:1 suffices. Use `--p-accent-text` (deepened in light mode) for any small-text usage; or `--p-accent-cta` paired with `--p-accent-cta-contrast` for filled CTAs.
 

@@ -31,8 +31,8 @@
   --brand-compvss: #e9a23b;
   --brand-compvss-ink: #9a6512;
   --brand-compvss-on: #1b1305;
-  --brand-gvteway: #12b5b5;
-  --brand-gvteway-ink: #0b7e7e;
+  --brand-gvteway: #2563eb;
+  --brand-gvteway-ink: #1d4ed8;
   --brand-gvteway-on: #fff;
   --brand-legend: #e8500a;
   --brand-legend-ink: #b8430a;
@@ -58,8 +58,12 @@
        for legibility; authored in Title / sentence case.
      - Eyebrow / IDs / coordinates: Space Mono.
      - Wordmark: Jost (crossbar-less A). Reserved for the brand lockup.
-     CASING: display headings are UPPERCASE (Anton is a caps face) via
-     --p-display-case; body, labels, buttons stay Title / sentence case. */
+     CASING (kit v5.1 — role-based, token-driven): author content in sentence
+     case and apply case via the --p-case-* tokens. Default = sentence-case UI
+     (buttons/labels/titles), UPPERCASE+tracking for eyebrows/mono-labels/
+     table-headers, display heads in the typeface's native case (Anton
+     UPPERCASE via --p-display-case / Airport Title under data-type="legend").
+     Title Case is reserved for explicit XPMS governance scopes. */
   --p-font:
     var(--font-hanken-grotesk), "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
     sans-serif;
@@ -68,6 +72,13 @@
   --p-heading-weight: 400;
   --p-heading-ls: 0.005em;
   --p-display-case: uppercase;
+  /* Role-based casing tokens (v5.1). Components read these via text-transform
+     so casing is theme-controlled, never hardcoded. */
+  --p-case-eyebrow: uppercase; /* overlines / eyebrows / mono labels */
+  --p-case-label: none; /* form & UI labels — sentence case */
+  --p-case-button: none; /* buttons — sentence case */
+  --p-case-tablehead: uppercase; /* table headers */
+  --p-case-body: none; /* body — as authored (sentence) */
   --p-mono: var(--font-space-mono), "Space Mono", ui-monospace, "SF Mono", monospace;
   --p-eyebrow: var(--p-mono);
   --p-wordmark: var(--font-jost), "Jost", var(--font-hanken-grotesk), "Hanken Grotesk", sans-serif;
@@ -210,26 +221,26 @@
   --p-focus: var(--p-accent);
 }
 
-/* GVTEWAY — guest · client · cyan */
+/* GVTEWAY — guest · client · blue (kit v5.1: recolored cyan→#2563EB) */
 [data-ui="saas"][data-product="gvteway"],
 [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --p-accent: #12b5b5;
-  --p-accent-hover: #0e9e9e;
-  --p-accent-text: #0b7e7e;
-  --p-accent-weak: rgba(33, 212, 212, 0.14);
-  --p-accent-cta: #0a7373;
+  --p-accent: #2563eb;
+  --p-accent-hover: #1f57d6;
+  --p-accent-text: #1d4ed8;
+  --p-accent-weak: rgba(37, 99, 235, 0.13);
+  /* v5.1 — blue #2563eb carries white at 5.17:1 (AA), so the CTA uses the
+     accent directly (the cyan-era deepened-teal hack is retired). */
+  --p-accent-cta: #2563eb;
   --p-accent-cta-contrast: #ffffff;
-  /* AX-3 — cyan accent #12b5b5 is ≈2.5:1 on the light canvas; the CTA
-     teal is AA. Dark-mode override below restores the brighter value. */
-  --p-focus: var(--p-accent-cta);
+  --p-focus: var(--p-accent);
 }
 [data-ui="saas"][data-product="gvteway"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --p-accent: #2bd6d6;
-  --p-accent-text: #3fe0e0;
-  --p-accent-weak: rgba(33, 212, 212, 0.18);
-  --p-accent-cta: #2bd6d6;
+  --p-accent: #5e8bf2;
+  --p-accent-text: #88aaf6;
+  --p-accent-weak: rgba(37, 99, 235, 0.22);
+  --p-accent-cta: #5e8bf2;
   --p-accent-cta-contrast: #0e1014;
   --p-focus: var(--p-accent);
 }
@@ -286,14 +297,14 @@
 }
 [data-ui="saas"][data-product="gvteway"],
 [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --k-acc: #12b5b5;
-  --k-acc-text: #0b7e7e;
+  --k-acc: #2563eb;
+  --k-acc-text: #1d4ed8;
 }
 [data-ui="saas"][data-product="gvteway"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="gvteway"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
-  --k-acc: #2bd6d6;
-  --k-acc-text: #3fe0e0;
+  --k-acc: #5e8bf2;
+  --k-acc-text: #88aaf6;
 }
 [data-ui="saas"][data-product="legend"],
 [data-theme="atlvs-product"][data-platform="legend"] {
@@ -485,6 +496,8 @@
   color: var(--p-accent-cta-contrast, var(--p-accent-contrast));
   border: 0;
   cursor: pointer;
+  /* v5.1 — casing is role-token-controlled (sentence case by default). */
+  text-transform: var(--p-case-button, none);
   transition: filter 0.15s ease;
   white-space: nowrap;
 }
@@ -956,7 +969,7 @@
   font-family: var(--p-eyebrow);
   font-size: 11px;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-transform: var(--p-case-eyebrow, uppercase);
   color: var(--p-text-3);
 }
 [data-ui="saas"] .ps-mono,
@@ -1101,7 +1114,7 @@
   font-family: var(--p-mono);
   font-size: 10px;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
+  text-transform: var(--p-case-eyebrow, uppercase);
   color: var(--p-text-3);
   padding: 6px 10px 4px;
 }
@@ -1133,7 +1146,7 @@
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: var(--p-case-tablehead, uppercase);
   color: var(--p-text-3);
   padding: 11px var(--k-row-px);
   border-bottom: 1px solid var(--p-border);

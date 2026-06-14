@@ -26,7 +26,7 @@ export type Aggregation = "sum" | "avg" | "min" | "max" | "count" | "count_disti
  * Tone — semantic color slot. Maps to existing canonical CSS tokens
  * (`--p-info`, `--p-warning`, `--p-danger`, `--p-success`,
  * `--p-accent`, `--p-text-2`) inside `<ChartView>`. Keeps chart
- * colors theme-aware and brand-overlay-aware (ATLVS pink, GVTEWAY cyan,
+ * colors theme-aware and brand-overlay-aware (ATLVS pink, GVTEWAY blue,
  * COMPVSS amber rotate `accent` automatically).
  */
 export type Tone = "info" | "warn" | "error" | "success" | "neutral" | "accent";

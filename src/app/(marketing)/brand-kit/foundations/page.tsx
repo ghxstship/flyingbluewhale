@@ -265,7 +265,7 @@ export default async function FoundationsPage() {
                   },
                   {
                     tile: "var(--brand-gvteway)",
-                    title: "GVTEWAY · cyan",
+                    title: "GVTEWAY · blue",
                     role: t("marketing.brandKit.foundations.appIcons.roleGvteway", undefined, "Guest / Client"),
                   },
                   {
@@ -532,12 +532,12 @@ export default async function FoundationsPage() {
               {
                 name: "GVTEWAY",
                 role: t("marketing.brandKit.foundations.appIcons.roleGvteway", undefined, "Guest / Client"),
-                hex: "#12B5B5",
+                hex: "#2563EB",
                 accentBg: "var(--brand-gvteway)",
                 accentOn: "var(--brand-gvteway-on)",
                 weakBg: "color-mix(in oklab,var(--brand-gvteway) 14%,var(--p-surface))",
                 inkText: "var(--brand-gvteway-ink)",
-                accentText: "accent-text #0B7E7E (light) · #3FE0E0 (dark)",
+                accentText: "accent-text #1D4ED8 (light) · #88AAF6 (dark)",
               },
             ].map((p) => (
               <div key={p.name} className="kf-idrow">

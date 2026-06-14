@@ -30,7 +30,7 @@ describe("wrapEmailHtml", () => {
     expect(compvss).not.toContain("#FF2E88");
 
     const gvteway = wrapEmailHtml("<p>hi</p>", { accent: "gvteway" });
-    expect(gvteway).toContain("#12B5B5");
+    expect(gvteway).toContain("#2563EB");
     expect(gvteway).toContain("/brand/atlvs-icon-gvteway.svg");
   });
 

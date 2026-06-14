@@ -51,7 +51,7 @@ const PRODUCT_ICONS: ProductIcon[] = [
     label: "COMPVSS · amber",
     caption: "Crew / Vendor / Talent",
   },
-  { slug: "gvteway", src: "/brand/atlvs-icon-gvteway.svg", label: "GVTEWAY · cyan", caption: "Guest / Client" },
+  { slug: "gvteway", src: "/brand/atlvs-icon-gvteway.svg", label: "GVTEWAY · blue", caption: "Guest / Client" },
   { slug: "ink", src: "/brand/atlvs-icon-ink.svg", label: "Ink", caption: "Neutral / Suite" },
 ];
 

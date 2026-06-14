@@ -354,6 +354,53 @@ describe("Design system — component primitive adoption", () => {
     ).toEqual([]);
   });
 
+  it("kit v5.1 — GVTEWAY accent is blue #2563EB, no retired cyan hexes survive in src/", () => {
+    // v5.1 recolored GVTEWAY cyan → blue across every SSOT (product-theme.css,
+    // tokens.json, kit-components.css, kit.css). These retired cyan hexes must
+    // not resurface anywhere in src/ source/style files — a single survivor
+    // re-strands one of the 24 theme combinations on the old brand color.
+    const DEAD_CYAN = ["#12b5b5", "#0b7e7e", "#2bd6d6", "#3fe0e0", "#0e9e9e"];
+    const deadRe = new RegExp(`(${DEAD_CYAN.join("|")})`, "i");
+    const ALLOW = new Set<string>([
+      // The design-system test itself enumerates the dead hexes.
+      "src/app/design-system.test.ts",
+    ]);
+    const scan = walk(SRC_DIR).filter((f) => /\.(tsx?|css)$/.test(f));
+    const offenders: string[] = [];
+    for (const file of scan) {
+      const rel = relative(REPO_ROOT, file);
+      if (ALLOW.has(rel)) continue;
+      const txt = readFileSync(file, "utf8");
+      const lines = txt.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (deadRe.test(lines[i]!)) offenders.push(`${rel}:${i + 1}: ${lines[i]!.trim().slice(0, 120)}`);
+      }
+    }
+    expect(
+      offenders,
+      `Retired GVTEWAY cyan hexes survive — v5.1 recolored to blue #2563EB / #1D4ED8:\n${offenders.join("\n")}`,
+    ).toEqual([]);
+
+    // Positive assertion: the token SSOT defines the v5.1 blue ramp.
+    const theme = readFileSync(join(REPO_ROOT, "src/app/theme/themes/atlvs-product.css"), "utf8");
+    expect(theme, "GVTEWAY light accent must be #2563eb").toMatch(/--p-accent:\s*#2563eb/i);
+    expect(theme, "GVTEWAY accent-text must be #1d4ed8").toMatch(/#1d4ed8/i);
+  });
+
+  it("kit v5.1 — role-based --p-case-* casing tokens are defined + wired", () => {
+    // v5.1 made casing token-controlled. The base block must define the role
+    // tokens, and the consuming primitives must read them (never hardcode).
+    const theme = readFileSync(join(REPO_ROOT, "src/app/theme/themes/atlvs-product.css"), "utf8");
+    for (const tok of ["--p-case-eyebrow", "--p-case-label", "--p-case-button", "--p-case-tablehead", "--p-case-body"]) {
+      expect(theme, `Missing v5.1 casing token ${tok}`).toContain(tok);
+    }
+    // .ps-btn must read the button casing token (sentence case by default).
+    expect(theme, ".ps-btn must consume var(--p-case-button)").toMatch(/text-transform:\s*var\(--p-case-button/);
+    // table headers + eyebrows must consume their casing tokens.
+    expect(theme, "table headers must consume var(--p-case-tablehead)").toMatch(/text-transform:\s*var\(--p-case-tablehead/);
+    expect(theme, "eyebrows must consume var(--p-case-eyebrow)").toMatch(/text-transform:\s*var\(--p-case-eyebrow/);
+  });
+
   it("mobile responsiveness — platform sidebar carries the `hidden md:flex/block` toggle", () => {
     // PlatformSidebar (240px) and PortalRail (224px) must hide at
     // viewports below `md` (768px); the topbar MobileNavDrawer replaces

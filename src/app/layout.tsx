@@ -228,7 +228,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               description: "text-[var(--p-text-2)]",
               // Audit T7 fix: text-white was a raw value bypassing tokens.
               // --p-accent-contrast is set per-product overlay (white on
-              // ATLVS pink + GVTEWAY cyan, near-ink on COMPVSS amber).
+              // ATLVS pink + GVTEWAY blue, near-ink on COMPVSS amber).
               actionButton: "bg-[var(--p-accent)] text-[var(--p-accent-contrast,white)]",
               cancelButton: "bg-[var(--p-surface-2)]",
             },

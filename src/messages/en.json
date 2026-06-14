@@ -4040,7 +4040,8 @@
       "pageSubtitle": "Enter the six-digit code from your authenticator app to continue."
     },
     "notFound": {
-      "title": "Auth path not found."
+      "title": "Auth path not found.",
+      "body": "That sign-in link is no longer valid or never existed. Pick a route below."
     },
     "onboarding": {
       "title": "Name your workspace",

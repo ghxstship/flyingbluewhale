@@ -1,6 +1,7 @@
 // Static page — pre-render at build, no streaming Suspense on client nav.
 
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import { Check, X, Minus } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -610,8 +611,8 @@ export default async function PricingPage() {
             </thead>
             <tbody>
               {comparison.map((cat) => (
-                <>
-                  <tr key={cat.category} className="bg-[var(--p-surface-2)]">
+                <Fragment key={cat.category}>
+                  <tr className="bg-[var(--p-surface-2)]">
                     <td
                       colSpan={5}
                       className="py-2 ps-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--p-text-2)] uppercase"
@@ -636,7 +637,7 @@ export default async function PricingPage() {
                       </td>
                     </tr>
                   ))}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

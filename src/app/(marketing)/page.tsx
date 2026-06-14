@@ -182,8 +182,8 @@ export default async function Home() {
       tag: t("marketing.pages.home.products.gvteway.tag"),
       body: t("marketing.pages.home.products.gvteway.body"),
       href: "/solutions/gvteway",
-      color: "#12B5B5",
-      textColor: "#0B7E7E",
+      color: "#2563EB",
+      textColor: "#1D4ED8",
     },
   ];
 

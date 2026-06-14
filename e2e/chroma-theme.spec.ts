@@ -94,6 +94,21 @@ test.describe("theme system", () => {
     });
   }
 
+  test("GVTEWAY product overlay resolves the v5.1 blue accent (#2563eb, not cyan)", async ({ page }) => {
+    await dismissConsent(page);
+    await page.goto("/");
+    // The per-product overlay is scoped to
+    // [data-theme="atlvs-product"][data-platform="gvteway"]; activate it on
+    // <html> (already data-theme="atlvs-product") and read the resolved token.
+    const { light, retiredCyanGone } = await page.evaluate(() => {
+      document.documentElement.setAttribute("data-platform", "gvteway");
+      const v = getComputedStyle(document.documentElement).getPropertyValue("--p-accent").trim().toLowerCase();
+      return { light: v, retiredCyanGone: v !== "#12b5b5" };
+    });
+    expect(light).toBe("#2563eb");
+    expect(retiredCyanGone).toBe(true);
+  });
+
   test("keyboard nav: arrow keys move focus between mode cards; Enter selects", async ({ page }) => {
     await dismissConsent(page);
     await loginAs(page, "owner");

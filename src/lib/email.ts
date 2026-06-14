@@ -34,7 +34,7 @@ export type EmailWrapAccent = "atlvs" | "compvss" | "gvteway";
 const ACCENT_TILE: Record<EmailWrapAccent, { fill: string; contrast: string; icon: string }> = {
   atlvs: { fill: "#FF2E88", contrast: "#FFFFFF", icon: "/brand/atlvs-icon-atlvs.svg" },
   compvss: { fill: "#E9A23B", contrast: "#1B1305", icon: "/brand/atlvs-icon-compvss.svg" },
-  gvteway: { fill: "#12B5B5", contrast: "#FFFFFF", icon: "/brand/atlvs-icon-gvteway.svg" },
+  gvteway: { fill: "#2563EB", contrast: "#FFFFFF", icon: "/brand/atlvs-icon-gvteway.svg" },
 };
 
 /**

@@ -40,9 +40,9 @@ export async function PortalRail({
   const headerTitle = title ?? (group ? t(navGroupKey(group), undefined, group.label) : "");
   return (
     <aside className="hidden w-56 shrink-0 flex-col border-e border-[var(--p-border)] bg-[var(--p-surface)] p-3 md:flex">
-      {/* Canonical SaaS brand row — cyan-tiled Waypoint app-icon + spaced
-          wordmark per ui_kits/atlvs/dashboard.html .brandrow. Per v4
-          logo-kit canon, the GVTEWAY app icon is the Waypoint on cyan. */}
+      {/* Canonical SaaS brand row — blue-tiled Waypoint app-icon + spaced
+          wordmark per ui_kits/atlvs/dashboard.html .brandrow. Per v5.1
+          logo-kit canon, the GVTEWAY app icon is the Waypoint on blue. */}
       <div className="mb-3 flex items-center gap-2">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

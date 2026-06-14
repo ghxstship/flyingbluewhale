@@ -504,8 +504,9 @@ pre,
    * for the most common cases. */
   /* AX-3 — rings consume --p-focus (per platform × mode, defined in
      theme/themes/atlvs-product.css) instead of raw --p-accent: the COMPVSS
-     and GVTEWAY light accents fail WCAG 1.4.11 (≈2.2:1 / ≈2.5:1) so those
-     overlays point --p-focus at their AA-grade --p-accent-cta values. */
+     amber light accent fails WCAG 1.4.11 (≈2.2:1) so it points --p-focus at
+     its AA-grade --p-accent-cta. (GVTEWAY's v5.1 blue #2563EB passes at
+     5.2:1, so it focuses on --p-accent directly.) */
   .focus-ring {
     outline: none;
   }
@@ -750,7 +751,7 @@ pre,
 
   /* `.glow-accent` — accent-color glow on hover/focus. Replaces background
      fills as the brand-color affordance — color reads as energy/motion,
-     not as decoration. Sub-brand colors (ATLVS pink, GVTEWAY cyan, COMPVSS
+     not as decoration. Sub-brand colors (ATLVS pink, GVTEWAY blue, COMPVSS
      amber) flow through via --p-accent at the shell scope. */
   .glow-accent {
     transition:

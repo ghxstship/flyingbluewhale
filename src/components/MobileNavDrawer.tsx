@@ -24,7 +24,7 @@ import { Wordmark } from "@/components/brand/Wordmark";
  *
  * Per CLAUDE.md: every paint resolves from token vars; primitives use
  * the legacy --org-* alias contract so the per-product accent (ATLVS
- * pink / COMPVSS amber / GVTEWAY cyan) shows through automatically.
+ * pink / COMPVSS amber / GVTEWAY blue) shows through automatically.
  */
 export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
   const t = useT();

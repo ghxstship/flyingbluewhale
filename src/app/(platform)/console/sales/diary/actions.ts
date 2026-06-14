@@ -10,6 +10,8 @@ import {
   BOOKING_STATES,
   SPACE_STATES,
   canTransitionBooking,
+  findConflicts,
+  isBlockingBooking,
   type BookingState,
 } from "@/lib/function_diary";
 
@@ -48,6 +50,29 @@ export async function createBookingAction(_: State, fd: FormData): Promise<State
   const parsed = BookingSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
+  const candidate = {
+    starts_at: new Date(parsed.data.starts_at).toISOString(),
+    ends_at: new Date(parsed.data.ends_at).toISOString(),
+  };
+  // Double-booking hard-block: a blocking booking (hold/tentative/confirmed)
+  // may not overlap another blocking booking in the same space.
+  if (isBlockingBooking(parsed.data.booking_state)) {
+    const { data: existing } = await supabase
+      .from("function_bookings")
+      .select("starts_at, ends_at, booking_state")
+      .eq("org_id", session.orgId)
+      .eq("space_id", parsed.data.space_id)
+      .neq("booking_state", "cancelled")
+      .is("deleted_at", null);
+    const blocking = (existing ?? []).filter((b) => isBlockingBooking(b.booking_state as BookingState));
+    const conflicts = findConflicts(candidate, blocking);
+    if (conflicts.length > 0) {
+      return actionFail(
+        `That space already has ${conflicts.length} overlapping booking${conflicts.length > 1 ? "s" : ""} in that window. Adjust the time or pick another space.`,
+        fd,
+      );
+    }
+  }
   const { data, error } = await supabase
     .from("function_bookings")
     .insert({

@@ -29,8 +29,8 @@ export function NewPromoterForm() {
           hint="Basis points (1500 = 15%)."
         />
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">State</label>
-          <select name="promoter_state" defaultValue="active" className="ps-input mt-1.5 w-full">
+          <label htmlFor="promoter_state" className="text-xs font-medium text-[var(--p-text-2)]">State</label>
+          <select id="promoter_state" name="promoter_state" defaultValue="active" className="ps-input mt-1.5 w-full">
             {PROMOTER_STATES.map((s) => (
               <option key={s} value={s}>
                 {PROMOTER_STATE_LABELS[s]}
@@ -40,8 +40,8 @@ export function NewPromoterForm() {
         </div>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
-        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
+        <textarea id="notes" name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

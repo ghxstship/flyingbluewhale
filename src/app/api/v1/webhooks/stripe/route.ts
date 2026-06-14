@@ -110,7 +110,42 @@ export async function POST(req: Request) {
         }
         break;
       }
-      case "checkout.session.completed":
+      case "checkout.session.completed": {
+        // GVTEWAY store checkout — convert the cart + decrement inventory.
+        // Idempotent: the conditional cart_state flip only succeeds once, so
+        // Stripe redeliveries never double-decrement.
+        const obj = event.data.object as { metadata?: Record<string, string> };
+        const cartId = obj?.metadata?.store_cart_id;
+        if (cartId && supabase) {
+          const { data: converted } = await supabase
+            .from("store_carts")
+            .update({ cart_state: "converted" })
+            .eq("id", cartId)
+            .neq("cart_state", "converted")
+            .select("id")
+            .maybeSingle();
+          if (converted) {
+            const { data: items } = await supabase
+              .from("store_cart_items")
+              .select("product_id, quantity")
+              .eq("cart_id", cartId);
+            for (const it of items ?? []) {
+              const { data: prod } = await supabase
+                .from("store_products")
+                .select("inventory_qty")
+                .eq("id", it.product_id)
+                .maybeSingle();
+              if (prod) {
+                await supabase
+                  .from("store_products")
+                  .update({ inventory_qty: Math.max(0, (prod.inventory_qty ?? 0) - (it.quantity ?? 0)) })
+                  .eq("id", it.product_id);
+              }
+            }
+          }
+        }
+        break;
+      }
       case "invoice.payment_succeeded":
       case "account.updated":
       case "payout.paid":

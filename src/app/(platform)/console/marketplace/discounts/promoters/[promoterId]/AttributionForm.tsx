@@ -25,8 +25,8 @@ export function AttributionForm({ promoterId }: { promoterId: string }) {
         hint="Gross transaction amount in cents. Commission is captured at the promoter's current rate."
       />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
-        <textarea name="notes" rows={2} className="ps-input mt-1.5 w-full" />
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
+        <textarea id="notes" name="notes" rows={2} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

@@ -17,8 +17,8 @@ export function NewDiscountForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">Kind</label>
-          <select name="kind" defaultValue="percent" className="ps-input mt-1.5 w-full">
+          <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">Kind</label>
+          <select id="kind" name="kind" defaultValue="percent" className="ps-input mt-1.5 w-full">
             {DISCOUNT_KINDS.map((k) => (
               <option key={k} value={k}>
                 {DISCOUNT_KIND_LABELS[k]}
@@ -45,8 +45,8 @@ export function NewDiscountForm() {
           hint="Leave blank for unlimited."
         />
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">State</label>
-          <select name="discount_state" defaultValue="active" className="ps-input mt-1.5 w-full">
+          <label htmlFor="discount_state" className="text-xs font-medium text-[var(--p-text-2)]">State</label>
+          <select id="discount_state" name="discount_state" defaultValue="active" className="ps-input mt-1.5 w-full">
             {DISCOUNT_STATES.map((s) => (
               <option key={s} value={s}>
                 {DISCOUNT_STATE_LABELS[s]}
@@ -62,8 +62,8 @@ export function NewDiscountForm() {
       </div>
 
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
-        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
+        <textarea id="notes" name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

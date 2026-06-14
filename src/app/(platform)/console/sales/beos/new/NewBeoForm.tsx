@@ -13,8 +13,8 @@ export function NewBeoForm({ clients, projects }: { clients: Option[]; projects:
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">Client</label>
-          <select name="client_id" className="ps-input mt-1.5 w-full" defaultValue="">
+          <label htmlFor="client_id" className="text-xs font-medium text-[var(--p-text-2)]">Client</label>
+          <select id="client_id" name="client_id" className="ps-input mt-1.5 w-full" defaultValue="">
             <option value="">— None —</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -24,8 +24,8 @@ export function NewBeoForm({ clients, projects }: { clients: Option[]; projects:
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">Project</label>
-          <select name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
+          <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">Project</label>
+          <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
             <option value="">— None —</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -54,8 +54,8 @@ export function NewBeoForm({ clients, projects }: { clients: Option[]; projects:
       </div>
 
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
-        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">Notes</label>
+        <textarea id="notes" name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

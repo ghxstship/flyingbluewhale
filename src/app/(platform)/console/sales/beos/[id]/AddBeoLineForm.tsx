@@ -11,8 +11,8 @@ export function AddBeoLineForm({ beoId }: { beoId: string }) {
       <input type="hidden" name="beo_id" value={beoId} />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">Section</label>
-          <select name="section" className="ps-input mt-1.5 w-full" defaultValue="food_beverage">
+          <label htmlFor="section" className="text-xs font-medium text-[var(--p-text-2)]">Section</label>
+          <select id="section" name="section" className="ps-input mt-1.5 w-full" defaultValue="food_beverage">
             {BEO_LINE_SECTIONS.map((s) => (
               <option key={s} value={s}>
                 {BEO_LINE_SECTION_LABELS[s]}

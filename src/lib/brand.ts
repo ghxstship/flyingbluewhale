@@ -4,10 +4,11 @@
  * Dual-brand setup:
  *   - GHXSTSHIP is the parent company (the "Spaceport" marketing
  *     site, ghxstship.tours — coming later).
- *   - ATLVS Technologies is the Tech vertical legal entity that
- *     owns the proprietary software: ATLVS (production/resource mgmt
- *     console, nebula/pink), COMPVSS (workforce/crew mobile PWA,
- *     brass/yellow), and GVTEWAY (ticketing/fan portal, plasma/cyan).
+ *   - ATLVS Technologies is the Tech vertical legal entity that owns the
+ *     proprietary software (v4 kit roles): ATLVS — Experiential Productions
+ *     (ERP×CRM×PM superset console, nebula/pink); COMPVSS — Site & Venue
+ *     Operations (field/venue ops, brass/amber); GVTEWAY — Public Interface
+ *     & Marketplace (tickets/stores/jobs/RFPs portal, plasma/cyan).
  *
  * This file describes the ATLVS Technologies brand that ships on
  * atlvs.pro today. The umbrella `parent` block carries the GHXSTSHIP
@@ -130,9 +131,11 @@ export const BRAND = {
       name: "ATLVS",
       mark: "A T L V S",
       color: "nebula",
-      /** Sidebar subtitle per the ATLVS product kit reference HTMLs
-       *  (ui_kits/atlvs/dashboard.html: "Production Management"). */
-      subtitle: "Production Management",
+      /** Sidebar subtitle = the v4 kit product role (tokens.json#products).
+       *  ATLVS is the superset console: Experiential Productions — ERP × CRM
+       *  × PM (Sales/CRM + all executive Construction/Project/Venue/Asset &
+       *  Logistics management). */
+      subtitle: "Experiential Productions",
       audience: "Producers · Internal",
       /** Kit v3 logo asset paths. The product mark is the 8-point
        *  Waypoint star; the GHXSTSHIP skull is parent-company only.
@@ -147,7 +150,7 @@ export const BRAND = {
       name: "GVTEWAY",
       mark: "G V T E W A Y",
       color: "plasma",
-      subtitle: "Tickets & Fans",
+      subtitle: "Public Interface & Marketplace",
       audience: "Guests · Clients",
       iconWhite: "/brand/atlvs-mark-white.svg",
       iconInk: "/brand/atlvs-mark.svg",
@@ -157,7 +160,7 @@ export const BRAND = {
       name: "COMPVSS",
       mark: "C O M P V S S",
       color: "brass",
-      subtitle: "Workforce & Crew",
+      subtitle: "Site & Venue Operations",
       audience: "Crew · Vendors · Talent",
       iconWhite: "/brand/atlvs-mark-white.svg",
       iconInk: "/brand/atlvs-mark.svg",

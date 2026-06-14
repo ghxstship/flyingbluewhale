@@ -337,6 +337,8 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
           { label: "Marketing", href: "/console/marketing", icon: "Megaphone" },
           { label: "Campaigns", href: "/console/campaigns", icon: "Star" },
+          { label: "Function Diary", href: "/console/sales/diary", icon: "CalendarDays" },
+          { label: "BEOs", href: "/console/sales/beos", icon: "ClipboardList" },
         ],
       },
       {
@@ -352,6 +354,8 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Talent Roster", href: "/console/marketplace/talent", icon: "Music" },
           { label: "Offers", href: "/console/marketplace/offers", icon: "Gavel" },
           { label: "Inquiries", href: "/console/marketplace/inquiries", icon: "Inbox" },
+          { label: "Box Office", href: "/console/marketplace/box-office", icon: "Ticket" },
+          { label: "Discounts", href: "/console/marketplace/discounts", icon: "Receipt" },
         ],
       },
       {
@@ -466,6 +470,7 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Annotations", href: "/console/annotations", icon: "AlertTriangle" },
           { label: "Forms", href: "/console/forms", icon: "ClipboardList" },
           { label: "Guides", href: "/console/guides", icon: "Atlas" },
+          { label: "Reservations", href: "/console/operations/reservations", icon: "ConciergeBell" },
         ],
       },
       {

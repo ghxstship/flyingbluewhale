@@ -47,6 +47,11 @@ export default async function Page() {
       title: t("marketing.pages.marketplace.sections.vendors.title"),
       blurb: t("marketing.pages.marketplace.sections.vendors.blurb"),
     },
+    {
+      href: "/marketplace/store",
+      title: t("marketing.pages.marketplace.sections.store.title"),
+      blurb: t("marketing.pages.marketplace.sections.store.blurb"),
+    },
   ];
 
   return (

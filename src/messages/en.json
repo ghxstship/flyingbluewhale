@@ -1553,7 +1553,8 @@
           "vendors": {
             "title": "Vendors",
             "blurb": "Production vendors with current insurance, W-9, and prequalification."
-          }
+          },
+            "store": {"title": "Store", "blurb": "Shop official merch, gear, and event goods from producers across the platform."}
         },
         "operators": {
           "title": "For Operators",

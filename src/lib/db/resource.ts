@@ -114,6 +114,20 @@ export const SOFT_DELETABLE_TABLES: ReadonlySet<string> = new Set([
   "vendors",
   "warranties",
   "webhook_endpoints",
+  // v4 net-new modules (kit v4 IA) — tables carrying deleted_at. Excludes
+  // append-only/child tables without deleted_at (beo_line_items, store_carts,
+  // store_cart_items, promoter_attributions).
+  "function_spaces",
+  "function_bookings",
+  "beos",
+  "venue_tables",
+  "reservations",
+  "store_products",
+  "store_product_variants",
+  "guest_lists",
+  "guest_list_entries",
+  "discount_codes",
+  "promoters",
 ]);
 
 async function anyFrom(t: string) {

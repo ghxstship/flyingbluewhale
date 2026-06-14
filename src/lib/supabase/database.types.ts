@@ -3371,6 +3371,166 @@ export type Database = {
           },
         ]
       }
+      beo_line_items: {
+        Row: {
+          beo_id: string
+          created_at: string
+          description: string | null
+          id: string
+          line_total_cents: number | null
+          name: string
+          org_id: string
+          quantity: number
+          section: Database["public"]["Enums"]["beo_line_section"]
+          sort_order: number
+          unit_price_cents: number
+          updated_at: string
+        }
+        Insert: {
+          beo_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          line_total_cents?: number | null
+          name: string
+          org_id: string
+          quantity?: number
+          section?: Database["public"]["Enums"]["beo_line_section"]
+          sort_order?: number
+          unit_price_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          beo_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          line_total_cents?: number | null
+          name?: string
+          org_id?: string
+          quantity?: number
+          section?: Database["public"]["Enums"]["beo_line_section"]
+          sort_order?: number
+          unit_price_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beo_line_items_beo_id_fkey"
+            columns: ["beo_id"]
+            isOneToOne: false
+            referencedRelation: "beos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beo_line_items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      beos: {
+        Row: {
+          beo_number: string | null
+          beo_state: Database["public"]["Enums"]["beo_state"]
+          client_id: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          end_time: string | null
+          event_date: string | null
+          event_name: string
+          headcount: number
+          id: string
+          notes: string | null
+          org_id: string
+          project_id: string | null
+          revision: number
+          sent_at: string | null
+          signed_at: string | null
+          space: string | null
+          start_time: string | null
+          updated_at: string
+        }
+        Insert: {
+          beo_number?: string | null
+          beo_state?: Database["public"]["Enums"]["beo_state"]
+          client_id?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          end_time?: string | null
+          event_date?: string | null
+          event_name: string
+          headcount?: number
+          id?: string
+          notes?: string | null
+          org_id: string
+          project_id?: string | null
+          revision?: number
+          sent_at?: string | null
+          signed_at?: string | null
+          space?: string | null
+          start_time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          beo_number?: string | null
+          beo_state?: Database["public"]["Enums"]["beo_state"]
+          client_id?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          end_time?: string | null
+          event_date?: string | null
+          event_name?: string
+          headcount?: number
+          id?: string
+          notes?: string | null
+          org_id?: string
+          project_id?: string | null
+          revision?: number
+          sent_at?: string | null
+          signed_at?: string | null
+          space?: string | null
+          start_time?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "beos_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beos_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "beos_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bim_model_links: {
         Row: {
           created_at: string
@@ -8223,6 +8383,68 @@ export type Database = {
         }
         Relationships: []
       }
+      discount_codes: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          discount_state: Database["public"]["Enums"]["discount_state"]
+          ends_at: string | null
+          id: string
+          kind: Database["public"]["Enums"]["discount_kind"]
+          max_redemptions: number | null
+          notes: string | null
+          org_id: string
+          redeemed_count: number
+          starts_at: string | null
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          discount_state?: Database["public"]["Enums"]["discount_state"]
+          ends_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["discount_kind"]
+          max_redemptions?: number | null
+          notes?: string | null
+          org_id: string
+          redeemed_count?: number
+          starts_at?: string | null
+          updated_at?: string
+          value: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          discount_state?: Database["public"]["Enums"]["discount_state"]
+          ends_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["discount_kind"]
+          max_redemptions?: number | null
+          notes?: string | null
+          org_id?: string
+          redeemed_count?: number
+          starts_at?: string | null
+          updated_at?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discount_codes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dispatch_runs: {
         Row: {
           actual_arrive: string | null
@@ -10229,6 +10451,142 @@ export type Database = {
           },
         ]
       }
+      function_bookings: {
+        Row: {
+          booking_state: Database["public"]["Enums"]["function_booking_state"]
+          client_id: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          ends_at: string
+          headcount: number | null
+          id: string
+          notes: string | null
+          org_id: string
+          project_id: string | null
+          space_id: string
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          booking_state?: Database["public"]["Enums"]["function_booking_state"]
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ends_at: string
+          headcount?: number | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          project_id?: string | null
+          space_id: string
+          starts_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          booking_state?: Database["public"]["Enums"]["function_booking_state"]
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          ends_at?: string
+          headcount?: number | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          project_id?: string | null
+          space_id?: string
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "function_bookings_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "function_bookings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "function_bookings_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "function_bookings_space_id_fkey"
+            columns: ["space_id"]
+            isOneToOne: false
+            referencedRelation: "function_spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      function_spaces: {
+        Row: {
+          capacity: number | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          name: string
+          notes: string | null
+          org_id: string
+          sort_order: number
+          space_state: string
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          org_id: string
+          sort_order?: number
+          space_state?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          org_id?: string
+          sort_order?: number
+          space_state?: string
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "function_spaces_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       geo_resolutions: {
         Row: {
           id: string
@@ -10562,6 +10920,120 @@ export type Database = {
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guest_list_entries: {
+        Row: {
+          checked_in_at: string | null
+          checked_in_by: string | null
+          created_at: string
+          deleted_at: string | null
+          entry_state: Database["public"]["Enums"]["guest_entry_state"]
+          guest_list_id: string
+          guest_name: string
+          id: string
+          notes: string | null
+          org_id: string
+          plus_ones: number
+          scan_code: string | null
+          updated_at: string
+        }
+        Insert: {
+          checked_in_at?: string | null
+          checked_in_by?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          entry_state?: Database["public"]["Enums"]["guest_entry_state"]
+          guest_list_id: string
+          guest_name: string
+          id?: string
+          notes?: string | null
+          org_id: string
+          plus_ones?: number
+          scan_code?: string | null
+          updated_at?: string
+        }
+        Update: {
+          checked_in_at?: string | null
+          checked_in_by?: string | null
+          created_at?: string
+          deleted_at?: string | null
+          entry_state?: Database["public"]["Enums"]["guest_entry_state"]
+          guest_list_id?: string
+          guest_name?: string
+          id?: string
+          notes?: string | null
+          org_id?: string
+          plus_ones?: number
+          scan_code?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_list_entries_guest_list_id_fkey"
+            columns: ["guest_list_id"]
+            isOneToOne: false
+            referencedRelation: "guest_lists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_list_entries_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guest_lists: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          event_id: string | null
+          id: string
+          name: string
+          notes: string | null
+          org_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          event_id?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          org_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          event_id?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          org_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_lists_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guest_lists_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -11907,6 +12379,7 @@ export type Database = {
           invite_state: string
           invited_by: string
           org_id: string
+          persona: string | null
           project_id: string | null
           project_role: Database["public"]["Enums"]["project_role"] | null
           role: Database["public"]["Enums"]["platform_role"]
@@ -11922,6 +12395,7 @@ export type Database = {
           invite_state?: string
           invited_by: string
           org_id: string
+          persona?: string | null
           project_id?: string | null
           project_role?: Database["public"]["Enums"]["project_role"] | null
           role?: Database["public"]["Enums"]["platform_role"]
@@ -11937,6 +12411,7 @@ export type Database = {
           invite_state?: string
           invited_by?: string
           org_id?: string
+          persona?: string | null
           project_id?: string | null
           project_role?: Database["public"]["Enums"]["project_role"] | null
           role?: Database["public"]["Enums"]["platform_role"]
@@ -19431,6 +19906,126 @@ export type Database = {
           },
         ]
       }
+      promoter_attributions: {
+        Row: {
+          amount_cents: number
+          commission_cents: number
+          created_at: string
+          created_by: string | null
+          discount_code_id: string | null
+          id: string
+          notes: string | null
+          occurred_at: string
+          org_id: string
+          promoter_id: string
+          transaction_ref: string
+          updated_at: string
+        }
+        Insert: {
+          amount_cents: number
+          commission_cents?: number
+          created_at?: string
+          created_by?: string | null
+          discount_code_id?: string | null
+          id?: string
+          notes?: string | null
+          occurred_at?: string
+          org_id: string
+          promoter_id: string
+          transaction_ref: string
+          updated_at?: string
+        }
+        Update: {
+          amount_cents?: number
+          commission_cents?: number
+          created_at?: string
+          created_by?: string | null
+          discount_code_id?: string | null
+          id?: string
+          notes?: string | null
+          occurred_at?: string
+          org_id?: string
+          promoter_id?: string
+          transaction_ref?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promoter_attributions_discount_code_id_fkey"
+            columns: ["discount_code_id"]
+            isOneToOne: false
+            referencedRelation: "discount_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promoter_attributions_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promoter_attributions_promoter_id_fkey"
+            columns: ["promoter_id"]
+            isOneToOne: false
+            referencedRelation: "promoters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      promoters: {
+        Row: {
+          commission_bps: number
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          org_id: string
+          promoter_state: Database["public"]["Enums"]["promoter_state"]
+          ref_code: string | null
+          updated_at: string
+        }
+        Insert: {
+          commission_bps?: number
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          org_id: string
+          promoter_state?: Database["public"]["Enums"]["promoter_state"]
+          ref_code?: string | null
+          updated_at?: string
+        }
+        Update: {
+          commission_bps?: number
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          org_id?: string
+          promoter_state?: Database["public"]["Enums"]["promoter_state"]
+          ref_code?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promoters_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       proposal_activity: {
         Row: {
           actor_id: string | null
@@ -21750,6 +22345,72 @@ export type Database = {
             columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reservations: {
+        Row: {
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          guest_name: string
+          id: string
+          notes: string | null
+          org_id: string
+          party_size: number
+          reservation_state: Database["public"]["Enums"]["reservation_state"]
+          reserved_for: string
+          table_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          guest_name: string
+          id?: string
+          notes?: string | null
+          org_id: string
+          party_size?: number
+          reservation_state?: Database["public"]["Enums"]["reservation_state"]
+          reserved_for: string
+          table_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          guest_name?: string
+          id?: string
+          notes?: string | null
+          org_id?: string
+          party_size?: number
+          reservation_state?: Database["public"]["Enums"]["reservation_state"]
+          reserved_for?: string
+          table_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: false
+            referencedRelation: "venue_tables"
             referencedColumns: ["id"]
           },
         ]
@@ -25623,6 +26284,237 @@ export type Database = {
           width_ft?: number | null
         }
         Relationships: []
+      }
+      store_cart_items: {
+        Row: {
+          cart_id: string
+          created_at: string
+          id: string
+          org_id: string
+          product_id: string
+          quantity: number
+          unit_price_cents: number
+          updated_at: string
+          variant_id: string | null
+        }
+        Insert: {
+          cart_id: string
+          created_at?: string
+          id?: string
+          org_id: string
+          product_id: string
+          quantity?: number
+          unit_price_cents: number
+          updated_at?: string
+          variant_id?: string | null
+        }
+        Update: {
+          cart_id?: string
+          created_at?: string
+          id?: string
+          org_id?: string
+          product_id?: string
+          quantity?: number
+          unit_price_cents?: number
+          updated_at?: string
+          variant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_cart_items_cart_id_fkey"
+            columns: ["cart_id"]
+            isOneToOne: false
+            referencedRelation: "store_carts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_cart_items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_cart_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "store_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_cart_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "store_product_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_carts: {
+        Row: {
+          cart_state: Database["public"]["Enums"]["store_cart_state"]
+          checkout_session_id: string | null
+          created_at: string
+          currency: string
+          id: string
+          org_id: string
+          session_token: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          cart_state?: Database["public"]["Enums"]["store_cart_state"]
+          checkout_session_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          org_id: string
+          session_token?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          cart_state?: Database["public"]["Enums"]["store_cart_state"]
+          checkout_session_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          org_id?: string
+          session_token?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_carts_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_product_variants: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          id: string
+          inventory_qty: number
+          org_id: string
+          price_cents: number | null
+          product_id: string
+          sku: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          inventory_qty?: number
+          org_id: string
+          price_cents?: number | null
+          product_id: string
+          sku?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          id?: string
+          inventory_qty?: number
+          org_id?: string
+          price_cents?: number | null
+          product_id?: string
+          sku?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_product_variants_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "store_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_products: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          currency: string
+          deleted_at: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          inventory_qty: number
+          org_id: string
+          price_cents: number
+          product_state: Database["public"]["Enums"]["store_product_state"]
+          published_at: string | null
+          sku: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          inventory_qty?: number
+          org_id: string
+          price_cents?: number
+          product_state?: Database["public"]["Enums"]["store_product_state"]
+          published_at?: string | null
+          sku?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          inventory_qty?: number
+          org_id?: string
+          price_cents?: number
+          product_state?: Database["public"]["Enums"]["store_product_state"]
+          published_at?: string | null
+          sku?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_products_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       stripe_events: {
         Row: {
@@ -29514,6 +30406,73 @@ export type Database = {
           },
         ]
       }
+      vendor_onboarding_items: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          doc_url: string | null
+          id: string
+          item_state: string
+          label: string
+          notes: string | null
+          org_id: string
+          required: boolean
+          sort_order: number
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          doc_url?: string | null
+          id?: string
+          item_state?: string
+          label: string
+          notes?: string | null
+          org_id: string
+          required?: boolean
+          sort_order?: number
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          doc_url?: string | null
+          id?: string
+          item_state?: string
+          label?: string
+          notes?: string | null
+          org_id?: string
+          required?: boolean
+          sort_order?: number
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_onboarding_items_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_onboarding_items_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "public_vendor_directory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_onboarding_items_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vendor_prequalification_answers: {
         Row: {
           answer: string | null
@@ -30271,6 +31230,62 @@ export type Database = {
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      venue_tables: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          notes: string | null
+          org_id: string
+          seats: number
+          table_no: string
+          table_state: Database["public"]["Enums"]["venue_table_state"]
+          updated_at: string
+          x: number
+          y: number
+          zone: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes?: string | null
+          org_id: string
+          seats?: number
+          table_no: string
+          table_state?: Database["public"]["Enums"]["venue_table_state"]
+          updated_at?: string
+          x?: number
+          y?: number
+          zone?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          notes?: string | null
+          org_id?: string
+          seats?: number
+          table_no?: string
+          table_state?: Database["public"]["Enums"]["venue_table_state"]
+          updated_at?: string
+          x?: number
+          y?: number
+          zone?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_tables_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
         ]
@@ -35765,6 +36780,14 @@ export type Database = {
         | "failed"
         | "cancelled"
       availability_kind: "hold" | "confirm" | "block"
+      beo_line_section:
+        | "food_beverage"
+        | "av"
+        | "staffing"
+        | "rentals"
+        | "labor"
+        | "other"
+      beo_state: "draft" | "sent" | "signed" | "revised" | "void"
       bim_link_type:
         | "rfi"
         | "submittal"
@@ -35878,6 +36901,8 @@ export type Database = {
         | "comms_plan"
         | "signage_grid"
         | "custom"
+      discount_kind: "percent" | "fixed"
+      discount_state: "active" | "paused" | "expired"
       dispatch_fleet: "t1" | "t2" | "t3" | "media" | "workforce" | "spectator"
       drawing_markup_kind:
         | "rectangle"
@@ -35986,6 +37011,8 @@ export type Database = {
         | "expired"
         | "voided"
         | "returned"
+      function_booking_state: "hold" | "tentative" | "confirmed" | "cancelled"
+      guest_entry_state: "pending" | "arrived" | "denied"
       guide_persona:
         | "artist"
         | "vendor"
@@ -36138,6 +37165,7 @@ export type Database = {
         | "ARCHIVED"
       project_role: "lead" | "editor" | "contributor" | "viewer" | "vendor"
       project_state: "draft" | "active" | "paused" | "archived" | "complete"
+      promoter_state: "active" | "paused" | "archived"
       proposal_phase_state:
         | "locked"
         | "active"
@@ -36175,6 +37203,12 @@ export type Database = {
         | "editor"
         | "full"
       req_status: "draft" | "submitted" | "approved" | "rejected" | "converted"
+      reservation_state:
+        | "booked"
+        | "seated"
+        | "completed"
+        | "no_show"
+        | "cancelled"
       resource_forecast_horizon:
         | "thirty_day"
         | "ninety_day"
@@ -36343,6 +37377,8 @@ export type Database = {
         | "issued"
         | "superseded"
         | "archived"
+      store_cart_state: "open" | "checkout" | "converted" | "abandoned"
+      store_product_state: "draft" | "published" | "archived"
       submission_status:
         | "submitted"
         | "shortlisted"
@@ -36552,6 +37588,11 @@ export type Database = {
         | "mpc"
         | "village"
         | "support"
+      venue_table_state:
+        | "available"
+        | "reserved"
+        | "occupied"
+        | "out_of_service"
       vetting_state: "pending" | "in_progress" | "clear" | "flagged" | "failed"
       view_scope: "private" | "org" | "public"
       view_type:
@@ -36849,6 +37890,15 @@ export const Constants = {
         "cancelled",
       ],
       availability_kind: ["hold", "confirm", "block"],
+      beo_line_section: [
+        "food_beverage",
+        "av",
+        "staffing",
+        "rentals",
+        "labor",
+        "other",
+      ],
+      beo_state: ["draft", "sent", "signed", "revised", "void"],
       bim_link_type: [
         "rfi",
         "submittal",
@@ -36975,6 +38025,8 @@ export const Constants = {
         "signage_grid",
         "custom",
       ],
+      discount_kind: ["percent", "fixed"],
+      discount_state: ["active", "paused", "expired"],
       dispatch_fleet: ["t1", "t2", "t3", "media", "workforce", "spectator"],
       drawing_markup_kind: [
         "rectangle",
@@ -37095,6 +38147,8 @@ export const Constants = {
         "voided",
         "returned",
       ],
+      function_booking_state: ["hold", "tentative", "confirmed", "cancelled"],
+      guest_entry_state: ["pending", "arrived", "denied"],
       guide_persona: [
         "artist",
         "vendor",
@@ -37257,6 +38311,7 @@ export const Constants = {
       ],
       project_role: ["lead", "editor", "contributor", "viewer", "vendor"],
       project_state: ["draft", "active", "paused", "archived", "complete"],
+      promoter_state: ["active", "paused", "archived"],
       proposal_phase_state: [
         "locked",
         "active",
@@ -37299,6 +38354,13 @@ export const Constants = {
         "full",
       ],
       req_status: ["draft", "submitted", "approved", "rejected", "converted"],
+      reservation_state: [
+        "booked",
+        "seated",
+        "completed",
+        "no_show",
+        "cancelled",
+      ],
       resource_forecast_horizon: [
         "thirty_day",
         "ninety_day",
@@ -37487,6 +38549,8 @@ export const Constants = {
         "superseded",
         "archived",
       ],
+      store_cart_state: ["open", "checkout", "converted", "abandoned"],
+      store_product_state: ["draft", "published", "archived"],
       submission_status: [
         "submitted",
         "shortlisted",
@@ -37717,6 +38781,12 @@ export const Constants = {
         "mpc",
         "village",
         "support",
+      ],
+      venue_table_state: [
+        "available",
+        "reserved",
+        "occupied",
+        "out_of_service",
       ],
       vetting_state: ["pending", "in_progress", "clear", "flagged", "failed"],
       view_scope: ["private", "org", "public"],

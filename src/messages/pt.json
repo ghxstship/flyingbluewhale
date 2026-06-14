@@ -1646,7 +1646,8 @@
           "vendors": {
             "title": "Fornecedores",
             "blurb": "Fornecedores de produção com seguro atual, W-9 e prequalification."
-          }
+          },
+            "store": {"title": "Loja", "blurb": "Compre merch oficial, equipamentos e produtos de evento de produtores de toda a plataforma."}
         },
         "operators": {
           "title": "Para Operadores",

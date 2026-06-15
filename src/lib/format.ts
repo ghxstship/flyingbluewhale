@@ -21,7 +21,8 @@ export function countLabel(n: number, singular: string, plural?: string): string
   return `${n} ${word}`;
 }
 
-export function slugify(s: string, max = 48) {
+export function slugify(s: string | null | undefined, max = 48) {
+  if (!s) return "";
   return s
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")

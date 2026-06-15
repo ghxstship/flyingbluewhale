@@ -76,13 +76,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     taken_by: string | null;
   };
   const photos = (photosData ?? []) as PhotoRow[];
-  const service = createServiceClient();
-  const signedPhotos = await Promise.all(
-    photos.map(async (p) => {
-      const { data: signed } = await service.storage.from("procore-parity").createSignedUrl(p.file_path, 600);
-      return { ...p, signed_url: signed?.signedUrl ?? null };
-    }),
-  );
+  // Signed-URL minting needs the storage admin (service) client. Degrade
+  // gracefully: if storage/config is unavailable, render the log without
+  // download links rather than failing the entire detail page.
+  let signedPhotos: Array<PhotoRow & { signed_url: string | null }> = photos.map((p) => ({
+    ...p,
+    signed_url: null,
+  }));
+  try {
+    const service = createServiceClient();
+    signedPhotos = await Promise.all(
+      photos.map(async (p) => {
+        const { data: signed } = await service.storage.from("procore-parity").createSignedUrl(p.file_path, 600);
+        return { ...p, signed_url: signed?.signedUrl ?? null };
+      }),
+    );
+  } catch {
+    // storage/config unavailable — links omitted, page still renders.
+  }
   const photosEditable = log.log_state !== "approved";
 
   const totalHeadcount = (manpower ?? []).reduce((s, m) => s + (m.headcount ?? 0), 0);

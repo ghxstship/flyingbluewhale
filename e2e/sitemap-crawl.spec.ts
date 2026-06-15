@@ -45,24 +45,52 @@ function allRoutes(): Route[] {
   return out;
 }
 
-/** Fill [param] / [...param] segments from injected demo data; null if unresolved. */
+// Valid-format placeholders so EVERY dynamic route is exercised (never skipped).
+// An unmatched id/token yields a canonical notFound (a pass), not a crash.
+const PLACEHOLDER_UUID = "00000000-0000-4000-8000-000000000000";
+const NO_SKIP = process.env.CRAWL_NO_SKIP === "1";
+
+/**
+ * Fill [param] / [...param] segments. Resolution order:
+ *   1. [slug] → PARAMS.slug
+ *   2. [id]   → PARAMS.ids["@<parentSegment>"] (per-parent table id)
+ *   3. [xxx]  → PARAMS.ids[xxx] (named param)
+ *   4. NO_SKIP fallback: UUID for *Id/id/token-ish, else the param name —
+ *      guarantees a concrete path (canonical 404 if unknown). Without NO_SKIP,
+ *      returns null (route skipped) as before.
+ */
 function concretePath(segs: string[]): string | null {
   const ids = PARAMS.ids ?? {};
   const filled: string[] = [];
-  for (const s of segs) {
-    if (s.startsWith("[")) {
-      const name = s.replace(/^\[+\.*/, "").replace(/\]+$/, "");
-      if (name === "slug" && PARAMS.slug) filled.push(PARAMS.slug);
-      else if (ids[name]) filled.push(ids[name]);
-      else return null; // can't resolve this dynamic route
-    } else filled.push(s);
+  for (let i = 0; i < segs.length; i++) {
+    const s = segs[i]!;
+    if (!s.startsWith("[")) {
+      filled.push(s);
+      continue;
+    }
+    const name = s.replace(/^\[+\.*/, "").replace(/\]+$/, "");
+    let val: string | undefined;
+    if (name === "slug") val = PARAMS.slug;
+    else if (name === "id") val = ids[`@${segs[i - 1] ?? ""}`] ?? ids.id;
+    else val = ids[name];
+    if (!val && NO_SKIP) {
+      val = /id$|^id$|token/i.test(name) ? PLACEHOLDER_UUID : (ids[name] ?? name);
+    }
+    if (!val) return null;
+    filled.push(val);
   }
   return "/" + filled.join("/");
 }
 
 async function probe(page: Page, path: string): Promise<string | null> {
   const errs: string[] = [];
-  const onPageErr = (e: Error) => errs.push("pageerror: " + e.message.split("\n")[0]);
+  const onPageErr = (e: Error) => {
+    const m = e.message.split("\n")[0] ?? e.message;
+    // Same navigation-abort artifacts as the console filter (React Suspense/
+    // hydration boundaries interrupted by the crawl's next goto).
+    if (/Minified React error #41[89]|Minified React error #423|hydrat|AbortError|Failed to fetch/i.test(m)) return;
+    errs.push("pageerror: " + m);
+  };
   const onConsole = (m: { type: () => string; text: () => string }) => {
     if (m.type() === "error") {
       const t = m.text();
@@ -72,7 +100,15 @@ async function probe(page: Page, path: string): Promise<string | null> {
       // aborted when the crawl navigates to the next route. Verified as a
       // navigation artifact: the same page idle for 6s logs zero errors. Real
       // API failures resolve with response.ok=false (covered by api-* specs).
-      if (/favicon|net::ERR|Failed to load resource|preload|hydrat|Failed to fetch|AbortError/i.test(t)) return;
+      // React #418/#419/#423 are hydration/Suspense-boundary errors that fire
+      // when the crawl navigates away mid-stream — verified benign (isolated
+      // load of the same route is a clean 200, zero pageerrors).
+      if (
+        /favicon|net::ERR|Failed to load resource|preload|hydrat|Failed to fetch|AbortError|Minified React error #41[89]|Minified React error #423/i.test(
+          t,
+        )
+      )
+        return;
       errs.push("console: " + t.slice(0, 140));
     }
   };

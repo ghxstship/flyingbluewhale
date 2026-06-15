@@ -86,6 +86,7 @@ export type IconName =
   | "Ticket"
   | "Receipt"
   | "FileSpreadsheet"
+  | "FileStack"
   | "CreditCard"
   | "PiggyBank"
   | "Wallet"
@@ -207,6 +208,7 @@ export const platformNavDomain: NavGroup[] = [
         label: "Authoring",
         items: [
           { label: "Proposals", href: "/console/proposals", icon: "FileText" },
+          { label: "Documents", href: "/console/documents", icon: "FileStack" },
           { label: "Proposal Templates", href: "/console/proposals/templates", icon: "Files" },
           { label: "Project Templates", href: "/console/templates", icon: "Files" },
         ],

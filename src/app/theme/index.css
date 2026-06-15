@@ -14,6 +14,9 @@
 
 @import "./primitives.css";
 @import "./themes/atlvs-product.css";
+/* v6 Documents system — token-driven document FORMAT layer (loaded after the
+   product tokens, per the kit contract). SSOT for all 27 doc types. */
+@import "./kit-documents.css";
 
 /*
  * Default theme when no [data-theme] attribute is present (SSR cold-start

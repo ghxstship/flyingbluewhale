@@ -1,0 +1,147 @@
+/* ============================================================================
+   ATLVS TECHNOLOGIES — kit-documents.css  (v6.0 / format layer v5.5)
+   Ported verbatim from the v6 kit (design_handoff_atlvs_kit) — the SSOT for
+   document FORMAT. Token-driven primitives for ALL documents (proposal,
+   invoice, call sheet, certificate, … all 27 doc types), normalized across the
+   four apps. Reads ONLY --p-* / --brand-* / --ob-* / --cl-* tokens (no
+   literals). Each doc is BOTH the on-screen view and the print/PDF artifact
+   (@media print strips chrome + neutralizes the merge highlight).
+
+   Codebase adaptations vs the kit file: the Jost wordmark uses our next/font
+   var (--p-wordmark) instead of an @import, and --ob-logo points at the
+   public asset path. Structure + class contract are otherwise verbatim.
+   ============================================================================ */
+
+/* wordmark lockup (Jost, spaced caps) */
+.doc-wm{font-family:var(--p-wordmark);font-weight:500;letter-spacing:.24em;white-space:nowrap}
+
+/* ============================================================================
+   BRANDING / WHITE-LABEL LAYER — three modes via data-brand on .doc:
+     · data-brand="atlvs"  full ATLVS ecosystem branding (default)
+     · data-brand="co"     org brand leads + "Powered by ATLVS" attribution
+     · data-brand="white"  full white-label — org brand only, zero ATLVS marks
+   Issuing ORG overrides --ob-* (name/accent/logo); CLIENT overrides --cl-*.
+   ============================================================================ */
+.doc{
+  --ob-name:"ATLVS";
+  --ob-accent:var(--p-accent);
+  --ob-accent-text:var(--p-accent-text);
+  --ob-logo:url(/brand/atlvs-mark-white.svg);
+  --cl-name:"";
+  --cl-logo:none;
+  --doc-attrib:"ATLVS Technologies";
+}
+.doc[data-brand="co"],.doc[data-brand="white"]{
+  --p-accent:var(--ob-accent);
+  --p-accent-text:var(--ob-accent-text);
+  --p-accent-weak:color-mix(in oklab,var(--ob-accent) 14%,transparent);
+}
+.doc[data-brand="co"]{ --doc-attrib:"Powered by ATLVS"; }
+.doc[data-brand="white"]{ --doc-attrib:""; }
+
+.doc-masthead{display:flex;align-items:center;gap:11px}
+.doc-mark{width:30px;height:30px;border-radius:7px;flex:none;background-color:var(--ob-accent);background-image:var(--ob-logo);background-size:19px;background-position:center;background-repeat:no-repeat}
+.doc-brandname{font-family:var(--p-wordmark);font-weight:500;letter-spacing:.24em;white-space:nowrap;font-size:15px}
+.doc-brandname::after{content:var(--ob-name)}
+.doc-clientmark{display:none;align-items:center;gap:9px;font-family:var(--p-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+.doc-clientmark::before{content:"×";opacity:.5}
+.doc-clientmark::after{content:var(--cl-name)}
+.doc[data-client="on"] .doc-clientmark{display:inline-flex}
+.doc-attrib::before{content:"\00b7  "}
+.doc-attrib::after{content:var(--doc-attrib)}
+.doc[data-brand="white"] .doc-attrib{display:none}
+
+/* ---- page shell ---------------------------------------------------------- */
+.doc-stage{background:var(--p-bg);min-height:100vh;padding:28px 18px 90px;font-family:var(--p-font);color:var(--p-text-1)}
+.doc-note{max-width:var(--doc-w,860px);margin:0 auto 14px;font-family:var(--p-mono);font-size:11px;letter-spacing:.05em;color:var(--p-text-3);text-align:center}
+.doc-note b{color:var(--p-accent-text)}
+.doc{max-width:var(--doc-w,860px);margin:0 auto;background:var(--p-surface);border:1px solid var(--p-border);box-shadow:var(--p-elev-3);overflow:hidden;border-radius:var(--p-r-lg)}
+.doc--letter{--doc-w:816px}
+.doc--wide{--doc-w:1040px}
+
+/* ---- cover / masthead ---------------------------------------------------- */
+.doc-cover{background:var(--p-text-1);color:var(--p-bg);padding:48px 52px;position:relative;overflow:hidden}
+.doc-cover--accent{background:var(--p-accent);color:var(--p-accent-contrast)}
+.doc-cover .brandrow{display:flex;align-items:center;gap:11px;margin-bottom:40px}
+.doc-cover .brandrow .mk{width:30px;height:30px;border-radius:7px;background:var(--p-accent);display:grid;place-items:center;flex:none}
+.doc-cover .brandrow .mk img{width:19px;height:19px}
+.doc-cover--accent .brandrow .mk{background:var(--p-accent-contrast)}
+.doc-cover .wm{font-family:var(--p-font);font-weight:600;letter-spacing:.04em}
+.doc-cover .doctype{font-family:var(--p-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;opacity:.75;margin:0 0 12px}
+.doc-cover h1{font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);letter-spacing:var(--p-heading-ls);text-transform:var(--p-display-case);font-size:48px;line-height:.96;margin:0 0 10px}
+.doc-cover .sub{font-size:15px;opacity:.82;margin:0 0 28px;max-width:480px;line-height:1.5}
+.doc-cover .stamp{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;border-top:1.5px solid color-mix(in oklab,currentColor 30%,transparent);padding-top:16px}
+.doc-cover .stamp>*{min-width:0}
+.doc-cover .stamp .k{font-family:var(--p-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.6}
+.doc-cover .stamp .v{font-weight:600;font-size:14px;margin-top:3px;overflow-wrap:anywhere}
+.doc-cover .stamp .v.mono{font-family:var(--p-mono);color:inherit}
+
+/* ---- letterhead ---------------------------------------------------------- */
+.doc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:34px 52px;border-bottom:2px solid var(--p-text-1)}
+.doc-head .brandrow{display:flex;align-items:center;gap:10px}
+.doc-head .brandrow .mk{width:30px;height:30px;border-radius:7px;background:var(--p-accent);display:grid;place-items:center;flex:none}
+.doc-head .brandrow .mk img{width:19px;height:19px}
+.doc-head .doctype{font-family:var(--p-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--p-accent-text);text-align:right}
+.doc-head .docno{font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);font-size:26px;color:var(--p-text-1);text-align:right;text-transform:var(--p-display-case)}
+
+/* ---- sections ------------------------------------------------------------ */
+.doc-sec{padding:34px 52px;border-bottom:1px solid var(--p-border)}
+.doc-sec:last-child{border-bottom:0}
+.doc-sec--ink{background:var(--p-text-1);color:var(--p-bg)}
+.doc-eb{font-family:var(--p-mono);font-size:11px;letter-spacing:.18em;text-transform:var(--p-case-eyebrow);color:var(--p-accent-text);margin:0 0 11px}
+.doc-sec--ink .doc-eb{color:var(--p-accent)}
+.doc-sec h2{font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);letter-spacing:var(--p-heading-ls);text-transform:var(--p-display-case);font-size:28px;color:var(--p-text-1);margin:0 0 13px}
+.doc-sec--ink h2{color:var(--p-bg)}
+.doc-sec p{font-size:14.5px;line-height:1.65;color:var(--p-text-2);margin:0 0 11px}
+.doc-sec p strong{color:var(--p-text-1)}
+.doc-sec--ink p{color:color-mix(in oklab,var(--p-bg) 80%,transparent)}
+.doc-sec--ink p strong{color:var(--p-bg)}
+
+/* ---- phased / numbered list ---------------------------------------------- */
+.doc-phase{display:grid;grid-template-columns:46px 1fr;gap:15px;padding:13px 0;border-bottom:1px solid var(--p-border)}
+.doc-phase:last-child{border-bottom:0}
+.doc-phase>*{min-width:0}
+.doc-phase .n{font-family:var(--p-mono);font-weight:700;font-size:13px;color:var(--p-accent-text)}
+.doc-phase h4{font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);font-size:17px;text-transform:var(--p-display-case);color:var(--p-text-1);margin:0 0 4px}
+.doc-phase p{font-size:13px;line-height:1.5;margin:0}
+
+/* ---- document table ------------------------------------------------------ */
+.doc-table{width:100%;border-collapse:collapse;margin-top:6px}
+.doc-table th{font-family:var(--p-mono);font-size:10px;letter-spacing:.09em;text-transform:var(--p-case-tablehead);color:var(--p-text-3);text-align:left;padding:9px 10px;border-bottom:2px solid var(--p-text-1)}
+.doc-table th.r,.doc-table td.r{text-align:right}
+.doc-table td{padding:11px 10px;border-bottom:1px solid var(--p-border);font-size:14px;color:var(--p-text-2)}
+.doc-table td b{color:var(--p-text-1)}
+.doc-table tr.sub td{font-weight:600;color:var(--p-text-1)}
+.doc-table tr.total td{border-top:2px solid var(--p-text-1);border-bottom:0;font-family:var(--p-heading);font-weight:var(--p-heading-weight);font-stretch:var(--p-heading-stretch);font-size:18px;color:var(--p-text-1);text-transform:var(--p-display-case)}
+.doc-table tr.total td.r{color:var(--p-accent-text)}
+
+/* ---- key/value grid ------------------------------------------------------ */
+.doc-kv{display:grid;grid-template-columns:repeat(var(--cols,2),1fr);gap:0 26px}
+.doc-kv>*{min-width:0}
+.doc-kv .row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--p-border);font-size:13.5px}
+.doc-kv .k{color:var(--p-text-3)}
+.doc-kv .v{color:var(--p-text-1);font-weight:500;text-align:right;overflow-wrap:anywhere}
+
+/* ---- signature block ----------------------------------------------------- */
+.doc-sign{background:var(--p-surface-2);padding:34px 52px}
+.doc-sign .row{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:18px}
+.doc-sign .row>*{min-width:0}
+.doc-sigline{border-top:2px solid var(--p-text-1);padding-top:8px;font-family:var(--p-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--p-text-3)}
+
+/* ---- merge field (the data-contract surface) ----------------------------- */
+.mf{color:var(--p-accent-text);font-weight:600;background:var(--p-accent-weak);border-radius:3px;padding:0 3px;box-decoration-break:clone}
+.mf--plain{background:none;color:inherit;font-weight:inherit;padding:0}
+.doc[data-mf="off"] .mf{background:none;color:inherit;font-weight:inherit;padding:0}
+
+/* ---- footer -------------------------------------------------------------- */
+.doc-foot{padding:18px 52px;font-family:var(--p-mono);font-size:10px;letter-spacing:.05em;color:var(--p-text-3);text-align:center}
+
+/* ---- print: the same file becomes the print-ready artifact --------------- */
+@media print{
+  @page{margin:0}
+  .doc-stage{background:#fff;padding:0}
+  .doc-note,.doc-toolbar{display:none !important}
+  .doc{max-width:none;margin:0;border:0;border-radius:0;box-shadow:none}
+  .mf{background:none !important;color:inherit !important;font-weight:inherit !important;padding:0 !important}
+  .doc-sec,.doc-cover,.doc-sign{break-inside:avoid}
+}

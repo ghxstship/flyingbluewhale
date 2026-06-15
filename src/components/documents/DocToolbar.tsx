@@ -1,0 +1,85 @@
+"use client";
+
+import { useState } from "react";
+import { DocRenderer, type DocTemplate, type DocBrand, type OrgBrand, type ClientBrand } from "./DocEngine";
+
+/**
+ * Client toolbar wrapping a <DocRenderer>. Controls the three live document
+ * affordances the v6 kit exposes: print/PDF export (window.print → @media print
+ * in kit-documents.css), the merge-field highlight toggle, and the white-label
+ * brand mode (atlvs · co · white). The document itself stays server-renderable;
+ * only these viewer controls are client state.
+ */
+export function DocToolbar({
+  template,
+  org,
+  client,
+}: {
+  template: DocTemplate;
+  org?: OrgBrand;
+  client?: ClientBrand;
+}) {
+  const [brand, setBrand] = useState<DocBrand>("atlvs");
+  const [showMergeFields, setShowMergeFields] = useState(true);
+
+  const BRANDS: { id: DocBrand; label: string }[] = [
+    { id: "atlvs", label: "ATLVS" },
+    { id: "co", label: "Co-brand" },
+    { id: "white", label: "White-label" },
+  ];
+
+  return (
+    <>
+      <div className="doc-toolbar mx-auto mb-4 flex max-w-[860px] flex-wrap items-center gap-3 print:hidden">
+        <div className="inline-flex overflow-hidden rounded-md border border-[var(--p-border)]">
+          {BRANDS.map((b) => (
+            <button
+              key={b.id}
+              type="button"
+              onClick={() => setBrand(b.id)}
+              aria-pressed={brand === b.id}
+              className={`px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
+                brand === b.id
+                  ? "bg-[var(--p-accent)] text-[var(--p-accent-contrast)]"
+                  : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)]"
+              }`}
+            >
+              {b.label}
+            </button>
+          ))}
+        </div>
+
+        <label className="inline-flex cursor-pointer items-center gap-2 text-xs text-[var(--p-text-2)]">
+          <input
+            type="checkbox"
+            checked={showMergeFields}
+            onChange={(e) => setShowMergeFields(e.target.checked)}
+          />
+          Highlight merge fields
+        </label>
+
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="press-scale ml-auto rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-semibold tracking-wide hover:bg-[var(--p-surface-2)]"
+        >
+          Print / PDF
+        </button>
+      </div>
+
+      <DocRenderer
+        template={template}
+        brand={brand}
+        org={org}
+        client={client}
+        showMergeFields={showMergeFields}
+        note={
+          <>
+            Live preview — <b>{template.title}</b>. Toggle brand mode and merge-field highlighting
+            above; Print / PDF renders the same file as the print artifact.
+          </>
+        }
+      />
+    </>
+  );
+}

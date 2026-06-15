@@ -59,7 +59,13 @@ export async function PortalPrivacyPanel({
     | "media"
     | "vip"
     | "volunteer"
-    | "hospitality";
+    | "hospitality"
+    // Executive personas — DSAR/privacy is a universal data-subject right,
+    // and this panel is auth.uid()-scoped (persona is label-only), so the
+    // co-pro / producer / board counterparts get the same self-service.
+    | "promoter"
+    | "producer"
+    | "stakeholder";
   slug: string;
 }) {
   const { t } = await getRequestT();

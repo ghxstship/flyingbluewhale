@@ -78,7 +78,7 @@ export default async function Page() {
   const { data } = await supabase
     .from("itil_changes")
     .select(
-      "id, code, title, type, risk, impact, change_state, planned_start, planned_end, requested:requested_by(name, email), assigned:assigned_to(name, email)",
+      "id, code, title, type, risk, impact, status:change_state, planned_start, planned_end, requested:requested_by(name, email), assigned:assigned_to(name, email)",
     )
     .eq("org_id", session.orgId)
     .order("planned_start", { ascending: false, nullsFirst: false })

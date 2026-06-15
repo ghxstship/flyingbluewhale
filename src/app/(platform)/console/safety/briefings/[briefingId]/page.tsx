@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: Promise<{ briefingId: s
   const { data } = await supabase
     .from("safety_briefings")
     .select(
-      "id, topic, briefing_state, scheduled_for, conducted_at, notes, briefer:briefer_id(name, email), project:project_id(id, name)",
+      "id, topic, status:briefing_state, scheduled_for, conducted_at, notes, briefer:briefer_id(name, email), project:project_id(id, name)",
     )
     .eq("id", briefingId)
     .eq("org_id", session.orgId)

@@ -27,7 +27,7 @@ type PORow = {
   number: string;
   title: string;
   amount_cents: number;
-  requisition_state: string;
+  po_state: string;
   vendor: { name: string | null } | null;
 };
 
@@ -169,7 +169,7 @@ export default async function Page() {
                         {formatMoney(p.amount_cents)}
                       </div>
                     </div>
-                    <Badge variant={toneFor(p.requisition_state)}>{toTitle(p.requisition_state)}</Badge>
+                    <Badge variant={toneFor(p.po_state)}>{toTitle(p.po_state)}</Badge>
                   </Link>
                 </li>
               ))}

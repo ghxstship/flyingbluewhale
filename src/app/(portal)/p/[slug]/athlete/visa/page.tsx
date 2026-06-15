@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { data } = await supabase
     .from("visa_cases")
     .select(
-      "id, person_name, nationality, passport_no, case_state, letter_path, delegation:delegation_id(name), updated_at",
+      "id, person_name, nationality, passport_no, status:case_state, letter_path, delegation:delegation_id(name), updated_at",
     )
     .eq("org_id", session.orgId)
     .order("updated_at", { ascending: false });

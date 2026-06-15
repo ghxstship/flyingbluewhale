@@ -44,7 +44,7 @@ export default async function MobileDriverPage() {
   const { data } = await supabase
     .from("dispatch_runs")
     .select(
-      "id, fleet, vehicle_ref, run_state, scheduled_depart, scheduled_arrive, actual_depart, actual_arrive, " +
+      "id, fleet, vehicle_ref, status:run_state, scheduled_depart, scheduled_arrive, actual_depart, actual_arrive, " +
         "origin:origin_venue_id(name), destination:destination_venue_id(name)",
     )
     .eq("org_id", session.orgId)

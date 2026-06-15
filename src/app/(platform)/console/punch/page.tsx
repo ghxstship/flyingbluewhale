@@ -74,7 +74,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
   let itemQuery = supabase
     .from("punch_items")
     .select(
-      "id, code, title, item_state, priority, due_at, closed_at, show_ready_gate, project:project_id(name), assignee:assignee_id(name, email)",
+      "id, code, title, status:item_state, priority, due_at, closed_at, show_ready_gate, project:project_id(name), assignee:assignee_id(name, email)",
     )
     .eq("org_id", session.orgId);
   if (listFilter) itemQuery = itemQuery.eq("punch_list_id", listFilter);

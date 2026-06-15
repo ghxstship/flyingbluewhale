@@ -34,7 +34,11 @@ export function slugify(s: string, max = 48) {
  * `In Review` / `Briefed` / `Talent Call`. Use anywhere a column, badge,
  * or chip is showing a raw enum value to a user.
  */
-export function toTitle(s: string): string {
+export function toTitle(s: string | null | undefined): string {
+  // Null-safe: a display formatter must never throw on a missing value
+  // (e.g. a not-yet-populated enum column). Returns "" rather than crashing
+  // the page render.
+  if (!s) return "";
   return s.replace(/_/g, " ").replace(/\b(\w)/g, (m) => m.toUpperCase());
 }
 

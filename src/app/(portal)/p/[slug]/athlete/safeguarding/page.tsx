@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const fmtIntl = await getRequestFormatters();
   const { data } = await supabase
     .from("safeguarding_reports")
-    .select("id, report_state, narrative, subject_ref, created_at, updated_at")
+    .select("id, status:report_state, narrative, subject_ref, created_at, updated_at")
     .eq("org_id", session.orgId)
     .eq("reporter_id", session.userId)
     .order("created_at", { ascending: false });

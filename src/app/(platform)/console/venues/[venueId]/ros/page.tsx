@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
   const { data: cueData } = await supabase
     .from("cues")
     .select(
-      "id, scheduled_at, lane, label, description, cue_state, duration_seconds, event:event_id(id, name, location_id)",
+      "id, scheduled_at, lane, label, description, status:cue_state, duration_seconds, event:event_id(id, name, location_id)",
     )
     .eq("org_id", session.orgId)
     .order("scheduled_at", { ascending: true })

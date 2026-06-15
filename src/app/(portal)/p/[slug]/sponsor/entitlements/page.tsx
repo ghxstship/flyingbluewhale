@@ -57,7 +57,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   // by due_by so things at risk surface first.
   const { data } = await supabase
     .from("sponsor_entitlements")
-    .select("id, title, quantity, delivered, entitlement_state, due_by, evidence_path")
+    .select("id, title, quantity, delivered, status:entitlement_state, due_by, evidence_path")
     .eq("org_id", session.orgId)
     .order("due_by", { ascending: true, nullsFirst: false });
 

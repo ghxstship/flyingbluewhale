@@ -56,7 +56,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
 
   const { data: rfqData } = await supabase
     .from("rfqs")
-    .select("id, title, rfq_state, due_at, awarded_to_vendor_id")
+    .select("id, title, status:rfq_state, due_at, awarded_to_vendor_id")
     .eq("id", rfqId)
     .eq("org_id", session.orgId)
     .maybeSingle();

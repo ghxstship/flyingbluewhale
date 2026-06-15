@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { data } = await supabase
     .from("service_requests")
     .select(
-      "id, category, description, severity, request_state, opened_at, resolved_at, sla_response_breached, sla_resolution_breached",
+      "id, category, description, severity, status:request_state, opened_at, resolved_at, sla_response_breached, sla_resolution_breached",
     )
     .eq("org_id", session.orgId)
     .eq("requester_id", session.userId)

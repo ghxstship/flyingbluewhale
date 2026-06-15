@@ -74,7 +74,7 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const { data: prequalData } = await supabase
     .from("vendor_prequalifications")
     .select(
-      "id, prequalification_state, score, submitted_at, approved_at, expires_at, notes, questionnaire_id, questionnaire:questionnaire_id(name, description), vendor:vendor_id(name)",
+      "id, status:prequalification_state, score, submitted_at, approved_at, expires_at, notes, questionnaire_id, questionnaire:questionnaire_id(name, description), vendor:vendor_id(name)",
     )
     .eq("id", prequalId)
     .eq("vendor_id", vendorId)

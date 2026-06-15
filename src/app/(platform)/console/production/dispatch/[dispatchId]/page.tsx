@@ -75,7 +75,7 @@ export default async function Page({ params }: { params: Promise<{ dispatchId: s
   const { data } = await supabase
     .from("dispatch_runs")
     .select(
-      "id, fleet, vehicle_ref, run_state, scheduled_depart, scheduled_arrive, actual_depart, actual_arrive, manifest, " +
+      "id, fleet, vehicle_ref, status:run_state, scheduled_depart, scheduled_arrive, actual_depart, actual_arrive, manifest, " +
         "origin:origin_venue_id(name), destination:destination_venue_id(name), driver:driver_id(name, email)",
     )
     .eq("id", dispatchId)

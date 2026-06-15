@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
     supabase.from("venues").select("id, name").eq("id", venueId).eq("org_id", session.orgId).maybeSingle(),
     supabase
       .from("venue_design_specs")
-      .select("id, title, discipline, revision, spec_state, notes, file_path, bom_requisition_id, updated_at")
+      .select("id, title, discipline, revision, status:spec_state, notes, file_path, bom_requisition_id, updated_at")
       .eq("venue_id", venueId)
       .eq("org_id", session.orgId)
       .order("updated_at", { ascending: false }),

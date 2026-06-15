@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const fmt = await getRequestFormatters();
   const { data } = await supabase
     .from("delegation_entries")
-    .select("id, participant_name, discipline, event, entry_state, delegation:delegation_id(name, code)")
+    .select("id, participant_name, discipline, event, status:entry_state, delegation:delegation_id(name, code)")
     .eq("org_id", session.orgId)
     .order("participant_name", { ascending: true });
 

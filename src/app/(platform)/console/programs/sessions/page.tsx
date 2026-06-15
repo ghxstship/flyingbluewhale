@@ -54,7 +54,7 @@ export default async function Page() {
   const since = new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString();
   const { data } = await supabase
     .from("events")
-    .select("id, name, starts_at, ends_at, event_state, project:project_id(name)")
+    .select("id, name, starts_at, ends_at, status:event_state, project:project_id(name)")
     .eq("org_id", session.orgId)
     .gte("starts_at", since)
     .order("starts_at", { ascending: true })

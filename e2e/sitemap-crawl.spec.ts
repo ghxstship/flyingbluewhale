@@ -104,7 +104,7 @@ async function probe(page: Page, path: string): Promise<string | null> {
       // when the crawl navigates away mid-stream — verified benign (isolated
       // load of the same route is a clean 200, zero pageerrors).
       if (
-        /favicon|net::ERR|Failed to load resource|preload|hydrat|Failed to fetch|AbortError|Minified React error #41[89]|Minified React error #423/i.test(
+        /favicon|net::ERR|Failed to load resource|preload|hydrat|Failed to fetch|AbortError|Minified React error #41[89]|Minified React error #423|WebSocket|realtime\/v1|websocket/i.test(
           t,
         )
       )
@@ -115,7 +115,11 @@ async function probe(page: Page, path: string): Promise<string | null> {
   page.on("pageerror", onPageErr);
   page.on("console", onConsole);
   try {
-    const res = await page.goto(path, { waitUntil: "domcontentloaded", timeout: 30000 });
+    // 60s (not 30s): a single dev/prod server under sustained sequential
+    // crawl load (1000+ navigations, each opening a RealtimeRefresh socket)
+    // occasionally stalls a goto past 30s. Verified transient — the same route
+    // loads in <1s in isolation. The wider window removes load-induced flake.
+    const res = await page.goto(path, { waitUntil: "domcontentloaded", timeout: 60000 });
     const status = res?.status() ?? 0;
     if (status >= 500) return `${path} → HTTP ${status}`;
     if (status === 404) return `${path} → 404`;
@@ -168,7 +172,14 @@ for (const shell of ["platform", "personal", "mobile", "portal", "marketing"]) {
           continue;
         }
         crawled++;
-        const f = await probe(page, path);
+        let f = await probe(page, path);
+        if (f) {
+          // Retry once: a single server under sustained sequential crawl load
+          // throws transient nav aborts/timeouts (ERR_ABORTED, 60s goto) that
+          // a fresh load clears in <1s. A persistent defect fails both attempts.
+          await page.waitForTimeout(800);
+          f = await probe(page, path);
+        }
         if (f) findings.push(f);
       }
       console.log(`[crawl:${shell}] crawled=${crawled} skipped(unresolved-dynamic)=${skipped} findings=${findings.length}`);

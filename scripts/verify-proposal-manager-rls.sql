@@ -1,7 +1,7 @@
 -- D1 live verification — "forced manager" RLS impersonation probe.
 --
 -- Proves that after 20260612180000_proposal_rls_manager_grant.sql +
--- 20260613170000_convert_seed_rls_manager_grant.sql a real manager
+-- 20260613182535_convert_seed_rls_manager_grant.sql a real manager
 -- (membership role='manager', persona='manager' — a persona NOT in the policy
 -- band, i.e. NOT relying on the demo org's persona='owner' masking) can
 -- INSERT, under RLS, every row the
@@ -113,7 +113,7 @@ begin
 
   -- The convert-seed probes (4d–4f) mirror what convertProposalToProjectAction
   -- + seedFromBlocks() insert AFTER the project exists. Each guards the second
-  -- migration (20260613170000_convert_seed_rls_manager_grant.sql); on the
+  -- migration (20260613182535_convert_seed_rls_manager_grant.sql); on the
   -- UNFIXED schema they FAIL silently in the app (the seeds soft-fail), leaving
   -- a half-converted project. They only run if the project insert succeeded.
   if ok_proj then

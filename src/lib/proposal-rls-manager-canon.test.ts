@@ -29,7 +29,7 @@ const MIGRATIONS_DIR = join(process.cwd(), "supabase/migrations");
 // six are the hard-blocking surfaces of the proposal create/convert path
 // (20260612180000_proposal_rls_manager_grant.sql); the last five are the
 // convert-SEED downstream tables that convertProposalToProjectAction writes
-// after the project exists (20260613170000_convert_seed_rls_manager_grant.sql)
+// after the project exists (20260613182535_convert_seed_rls_manager_grant.sql)
 // — without them a manager gets a project but SILENTLY no deposit/balance
 // invoices and no seeded deliverables/budgets, because those seeds soft-fail.
 // A missing grant here returns "new row violates row-level security policy"

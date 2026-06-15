@@ -72,6 +72,12 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
             >
               {t("console.proposals.detail.editDocument", undefined, "Edit Document")}
             </Link>
+            <Link
+              href={`/console/documents/proposal?recordId=${proposal.id}`}
+              className={buttonVariants({ variant: "ghost", size: "sm" })}
+            >
+              {t("console.proposals.detail.openAsDocument", undefined, "Document")}
+            </Link>
             <GenerateDraftButton proposalId={proposal.id} />
             <ProposalStatusControls id={proposal.id} status={proposal.proposal_state} />
             {proposal.proposal_state === "signed" && !project && <ProposalConvertButton id={proposal.id} />}

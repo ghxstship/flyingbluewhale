@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { DOC_TEMPLATES_BY_APP } from "@/lib/documents/registry";
+import { supportsRecordBinding } from "@/lib/documents/resolvers";
 import { Badge } from "@/components/ui/Badge";
 
 /**
@@ -55,7 +56,16 @@ export default function DocumentsHubPage() {
                     href={`/console/documents/${tpl.id}`}
                     className="surface-raised hover-lift press-scale flex flex-col gap-1 rounded-lg border border-[var(--p-border)] p-4"
                   >
-                    <span className="font-semibold tracking-tight">{tpl.title}</span>
+                    <span className="flex items-center gap-2 font-semibold tracking-tight">
+                      {tpl.title}
+                      {supportsRecordBinding(tpl.id) && (
+                        <span
+                          className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--p-accent)]"
+                          title="Binds live records via ?recordId"
+                          aria-label="Supports live record binding"
+                        />
+                      )}
+                    </span>
                     <span className="font-mono text-[11px] tracking-wide text-[var(--p-text-3)] uppercase">
                       {tpl.schema}
                     </span>

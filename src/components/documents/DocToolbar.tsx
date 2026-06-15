@@ -14,13 +14,19 @@ export function DocToolbar({
   template,
   org,
   client,
+  data,
 }: {
   template: DocTemplate;
   org?: OrgBrand;
   client?: ClientBrand;
+  /** Bound record data, keyed by the template's merge-field paths. */
+  data?: Record<string, unknown>;
 }) {
-  const [brand, setBrand] = useState<DocBrand>("atlvs");
-  const [showMergeFields, setShowMergeFields] = useState(true);
+  const bound = data != null;
+  const [brand, setBrand] = useState<DocBrand>(bound && (org?.name || client?.name) ? "co" : "atlvs");
+  // Real records render clean (no highlight); the sample showcase highlights
+  // the merge contract by default.
+  const [showMergeFields, setShowMergeFields] = useState(!bound);
 
   const BRANDS: { id: DocBrand; label: string }[] = [
     { id: "atlvs", label: "ATLVS" },
@@ -73,11 +79,19 @@ export function DocToolbar({
         org={org}
         client={client}
         showMergeFields={showMergeFields}
+        data={data}
         note={
-          <>
-            Live preview — <b>{template.title}</b>. Toggle brand mode and merge-field highlighting
-            above; Print / PDF renders the same file as the print artifact.
-          </>
+          bound ? (
+            <>
+              Bound to a live record — <b>{template.title}</b>. Empty fields fall back to sample
+              copy. Print / PDF renders the same file as the print artifact.
+            </>
+          ) : (
+            <>
+              Sample preview — <b>{template.title}</b>. Toggle brand mode and merge-field highlighting
+              above; Print / PDF renders the same file as the print artifact.
+            </>
+          )
         }
       />
     </>

@@ -42,6 +42,9 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
         action={
           <div className="flex items-center gap-2">
             <InvoiceStatusControls id={invoice.id} status={invoice.invoice_state} />
+            <Button href={`/console/documents/invoice?recordId=${invoiceId}`} size="sm" variant="secondary">
+              {t("console.finance.invoices.openAsDocument", undefined, "Document")}
+            </Button>
             <Button href={`/console/finance/invoices/${invoiceId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>

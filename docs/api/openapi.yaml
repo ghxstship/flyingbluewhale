@@ -707,3 +707,9 @@ paths:
     post: { summary: DocuSign Connect webhook receiver. HMAC-verified; advances contract envelope state on signer/completion events. }
   /api/v1/webhooks/ses-inbound:
     post: { summary: AWS SES inbound-email webhook. Shared-secret header auth; routes messages to the matching project email inbox. }
+
+  /api/v1/documents:
+    get: { summary: "List every generatable document type (id, app, OpenAPI schema name, record-binding support). Discovery entry point for the documents system. Scope: documents:read." }
+  /api/v1/documents/{docType}:
+    get: { summary: "Machine-readable data contract for one document type — JSON Schema, sample data object, and merge-field paths. Scope: documents:read." }
+    post: { summary: "Generate a document. Body { data } (external — any doc type) or { recordId } (internal — record-bound types). Returns rendered .doc HTML + resolved data; no mutation. Scope: documents:write." }

@@ -42,6 +42,17 @@ Six route groups, three of them are full shells with distinct layouts:
 - **Shell helpers:** `ModuleHeader`, `PlatformSidebar`, `PortalRail`, `MobileTabBar`, `AuthCard`, `MarketingHeader`, `PageStub` in `src/components/Shell.tsx`.
 - **Utilities:** `.surface`, `.surface-raised`, `.surface-inset`, `.elevation-{1..4}`, `.hover-lift`, `.press-scale`, `.metric-grid`, `.data-table`, `.nav-item`, `.glass-nav`, `.skeleton`.
 
+## Documents system (v6)
+
+The 27 v6 document types (format layer `src/app/theme/kit-documents.css`) are fully wired end-to-end:
+
+- **Templates:** `src/lib/documents/registry.ts` — 27 `DocTemplate` descriptors over the shared engine `src/components/documents/DocEngine.tsx`. Every merge field carries a `data-path` (dotted JSON pointer).
+- **Contract (auto-derived):** `src/lib/documents/contract.ts` derives, per template, the merge-field `paths`, a nested `sample` object, and a JSON Schema — straight from the registry, so the contract can never drift from what a template renders. Namespaces mixing line-item indices with summary fields (e.g. `invest.0.amount` + `invest.subtotal`) are supported.
+- **Data binding:** `<DocRenderer data={...}>` resolves each field from the data object at `path`, falling back to the template sample. `src/lib/documents/render-html.ts` is the no-React string renderer (route handlers can't use `react-dom/server`) emitting the identical `.doc`/`.mf` markup.
+- **Record-backing (100%):** `src/lib/documents/resolvers.ts` maps a real org-scoped record → the doc data object for **all 27** types. Most bind existing tables (proposal→proposals, invoice→invoices, agreement/vendoragreement→contracts, ticket→assignments, etc.); six got dedicated tables in migration `20260615215535_document_backing_tables` (`change_orders`, `show_recaps`, `run_of_shows`, `rams_assessments`, `sops`, `emergency_response_plans` — LDP `*_state` enums, RLS, demo seed). Those six read via the loose client until the next `database.types.ts` regen folds them in.
+- **API (OpenAPI-described, internal + 3rd-party):** `GET /api/v1/documents` (list + record-binding flags), `GET /api/v1/documents/{docType}` (JSON Schema + sample + paths), `POST /api/v1/documents/{docType}` (`{ data }` external or `{ recordId }` internal → rendered `.doc` HTML). Gated by `documents:read`/`documents:write` PAT scopes; documented in `docs/api/openapi.yaml` (drift-guarded).
+- **Console:** `/console/documents` hub + `/console/documents/[docType]` preview/print (`?recordId=` binds a live record). Detail pages link out via "Document" (proposals, invoices). Guards: `src/lib/documents/contract.test.ts`, `render-html.test.ts`, `e2e/documents-v6.spec.ts`, `e2e/documents-api.spec.ts`.
+
 ## Backend (Supabase)
 
 - **Project:** `flyingbluewhale` (`xrovijzjbyssajhtwvas`). URL + anon key in `.env.local`.

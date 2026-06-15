@@ -11,6 +11,7 @@
  * brand vars inline, so one override reskins the whole document.
  */
 import type { CSSProperties, ReactNode } from "react";
+import { getPath } from "@/lib/documents/contract";
 
 // ── data-contract: an inline value is plain text OR a merge field ──────────
 export type Inline = string | { path: string; value: string; plain?: boolean };
@@ -25,17 +26,24 @@ export function MergeField({ path, value, plain }: { path: string; value: string
   );
 }
 
-function renderInline(v: Inline, key?: number): ReactNode {
+/**
+ * Resolve a merge field to its rendered string. With no bound data this is the
+ * identity on the template's embedded sample value; with bound data it returns
+ * the data object's value at `path` (falling back to the sample when absent or
+ * empty). One function threaded through the whole render tree keeps the
+ * sample-vs-real distinction in exactly one place.
+ */
+export type Resolve = (path: string, fallback: string) => string;
+const sampleResolve: Resolve = (_path, fallback) => fallback;
+
+function renderInline(v: Inline, resolve: Resolve, key?: number): ReactNode {
   if (typeof v === "string") return v;
-  return <MergeField key={key} path={v.path} value={v.value} plain={v.plain} />;
+  return <MergeField key={key} path={v.path} value={resolve(v.path, v.value)} plain={v.plain} />;
 }
 // render a run: a bare inline, or a sequence stitched together in document order
-function renderRun(run: Run): ReactNode {
-  if (Array.isArray(run)) return run.map((v, i) => <span key={i}>{renderInline(v, i)}</span>);
-  return renderInline(run);
-}
-function renderInlines(vs: Inline[]): ReactNode {
-  return vs.map((v, i) => <span key={i}>{renderInline(v, i)} </span>);
+function renderRun(run: Run, resolve: Resolve): ReactNode {
+  if (Array.isArray(run)) return run.map((v, i) => <span key={i}>{renderInline(v, resolve, i)}</span>);
+  return renderInline(run, resolve);
 }
 
 // ── brand model ────────────────────────────────────────────────────────────
@@ -76,7 +84,7 @@ export type DocTableSpec = {
   rows: { cells: Run[]; variant?: "sub" | "total" }[];
 };
 
-function DocTable({ spec }: { spec: DocTableSpec }) {
+function DocTable({ spec, resolve }: { spec: DocTableSpec; resolve: Resolve }) {
   return (
     <table className="doc-table">
       <thead>
@@ -93,7 +101,7 @@ function DocTable({ spec }: { spec: DocTableSpec }) {
           <tr key={i} className={r.variant}>
             {r.cells.map((cell, j) => (
               <td key={j} className={spec.cols[j]?.align === "r" ? "r" : undefined}>
-                {renderRun(cell)}
+                {renderRun(cell, resolve)}
               </td>
             ))}
           </tr>
@@ -103,7 +111,7 @@ function DocTable({ spec }: { spec: DocTableSpec }) {
   );
 }
 
-function Block({ block }: { block: DocBlock }) {
+function Block({ block, resolve }: { block: DocBlock; resolve: Resolve }) {
   switch (block.kind) {
     case "cover":
       return (
@@ -117,14 +125,14 @@ function Block({ block }: { block: DocBlock }) {
             <span className="doc-clientmark" />
           </div>
           <p className="doctype">{block.doctype}</p>
-          <h1>{renderRun(block.title)}</h1>
-          {block.sub && <p className="sub">{renderRun(block.sub)}</p>}
+          <h1>{renderRun(block.title, resolve)}</h1>
+          {block.sub && <p className="sub">{renderRun(block.sub, resolve)}</p>}
           {block.stamps && block.stamps.length > 0 && (
             <div className="stamp">
               {block.stamps.map((s, i) => (
                 <div key={i}>
                   <div className="k">{s.k}</div>
-                  <div className={s.mono ? "v mono" : "v"}>{renderRun(s.v)}</div>
+                  <div className={s.mono ? "v mono" : "v"}>{renderRun(s.v, resolve)}</div>
                 </div>
               ))}
             </div>
@@ -143,7 +151,7 @@ function Block({ block }: { block: DocBlock }) {
           </div>
           <div>
             <div className="doctype">{block.doctype}</div>
-            <div className="docno">{renderRun(block.docno)}</div>
+            <div className="docno">{renderRun(block.docno, resolve)}</div>
           </div>
         </div>
       );
@@ -151,25 +159,25 @@ function Block({ block }: { block: DocBlock }) {
       return (
         <div className={block.ink ? "doc-sec doc-sec--ink" : "doc-sec"}>
           {block.eyebrow && <p className="doc-eb">{block.eyebrow}</p>}
-          {block.heading && <h2>{renderRun(block.heading)}</h2>}
-          {block.paras?.map((p, i) => <p key={i}>{renderRun(p)}</p>)}
+          {block.heading && <h2>{renderRun(block.heading, resolve)}</h2>}
+          {block.paras?.map((p, i) => <p key={i}>{renderRun(p, resolve)}</p>)}
           {block.kv && (
             <div className="doc-kv" style={block.kv.cols ? ({ "--cols": String(block.kv.cols) } as CSSProperties) : undefined}>
               {block.kv.rows.map((r, i) => (
                 <div key={i} className="row">
                   <span className="k">{r.k}</span>
-                  <span className="v">{renderRun(r.v)}</span>
+                  <span className="v">{renderRun(r.v, resolve)}</span>
                 </div>
               ))}
             </div>
           )}
-          {block.table && <DocTable spec={block.table} />}
+          {block.table && <DocTable spec={block.table} resolve={resolve} />}
           {block.phase?.map((p, i) => (
             <div key={i} className="doc-phase">
               <div className="n">{p.n}</div>
               <div>
                 <h4>{p.title}</h4>
-                <p>{renderRun(p.body)}</p>
+                <p>{renderRun(p.body, resolve)}</p>
               </div>
             </div>
           ))}
@@ -190,7 +198,7 @@ function Block({ block }: { block: DocBlock }) {
     case "foot":
       return (
         <div className="doc-foot">
-          {renderRun(block.text)} <span className="doc-attrib" />
+          {renderRun(block.text, resolve)} <span className="doc-attrib" />
         </div>
       );
   }
@@ -213,6 +221,7 @@ export function DocRenderer({
   client,
   showMergeFields = true,
   note,
+  data,
 }: {
   template: DocTemplate;
   brand?: DocBrand;
@@ -220,8 +229,23 @@ export function DocRenderer({
   client?: ClientBrand;
   showMergeFields?: boolean;
   note?: ReactNode;
+  /**
+   * Optional bound data object keyed by the merge-field `data-path`s. When
+   * present, each field renders its value at `path` (falling back to the
+   * template sample if absent/empty); when omitted the template renders its
+   * sample values (showcase mode).
+   */
+  data?: Record<string, unknown>;
 }) {
   const product = template.app === "legend" ? "legend" : template.app;
+  const resolve: Resolve = data
+    ? (path, fallback) => {
+        const v = getPath(data, path);
+        if (v == null) return fallback;
+        const s = typeof v === "string" ? v : String(v);
+        return s.length > 0 ? s : fallback;
+      }
+    : sampleResolve;
   return (
     <div className="doc-stage" data-ui="saas" data-product={product} data-type={template.app === "legend" ? "legend" : "monument"}>
       {note && <div className="doc-note">{note}</div>}
@@ -234,11 +258,9 @@ export function DocRenderer({
         style={brandVars(org, client)}
       >
         {template.blocks.map((b, i) => (
-          <Block key={i} block={b} />
+          <Block key={i} block={b} resolve={resolve} />
         ))}
       </div>
     </div>
   );
 }
-
-export { renderInlines };

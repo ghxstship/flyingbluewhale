@@ -3004,11 +3004,11 @@
       },
       "2": {
        "q": "Can other orgs see my data?",
-       "a": "No. RLS lives at the database — walled in Postgres, not bolted on at the app layer. A credential in one org can't read or touch another. Enforced in the data, not by trust."
+       "a": "No. RLS lives at the database — walled in Postgres, not bolted on at the app layer. A credential in one org cannot read or touch anything in another. Enforced in the data itself."
       },
       "3": {
        "q": "White-labeled portal?",
-       "a": "Standard. Your mark, your colors, your email, your custom domain on every persona. The brand on the portal is yours, end to end."
+       "a": "Down to the festival. Your mark, your colors, your email, your custom domain on every persona. The brand stays yours."
       }
      }
     },
@@ -3032,13 +3032,13 @@
     "hero": {
      "eyebrow": "Status",
      "title": "All Systems Operational.",
-     "body": "Real-time platform health across ATLVS, GVTEWAY, COMPVSS, LEG3ND, and the marketing surface. Subscribe for incident alerts by email or webhook.",
+     "body": "Real-time platform health across ATLVS, GVTEWAY, COMPVSS, LEG3ND, and the marketing surface. Subscribe for incident alerts via email or webhook.",
      "badge": "All systems operational · last 30 days"
     },
     "services": {
-     "atlvs": "Production operations console (app.atlvs.pro)",
-     "gvteway": "Public portals + marketplace (gvteway.atlvs.pro)",
-     "compvss": "Offline-first field PWA (compvss.atlvs.pro)",
+     "atlvs": "Production operations workspace (app.atlvs.pro)",
+     "gvteway": "Stakeholder portals (gvteway.atlvs.pro)",
+     "compvss": "Offline-first PWA (compvss.atlvs.pro)",
      "marketing": "atlvs.pro + auth flows",
      "webhooks": "Outbound + inbound webhook delivery",
      "ai": "Anthropic Claude integration",
@@ -3052,7 +3052,7 @@
     "comingSoon": {
      "eyebrow": "Coming Soon",
      "title": "Live Status Page.",
-     "body": "The board above shows current state. Soon: 90-day uptime per service, incident history with post-mortems, subscribe-by-email and webhook alerts. Targeting Q4 launch on",
+     "body": "The board above shows current state. Soon: 90-day uptime per service, incident history with post-mortems, subscribe-by-email and webhook for alerts. Targeting Q4 launch on",
      "cta": "Get notified at launch"
     },
     "cta": {
@@ -3126,7 +3126,7 @@
     "hero": {
      "eyebrow": "Templates",
      "title": "Production Artifacts, Ready To Run.",
-     "body": "ROS, advancing checklists, riders, call sheets, safety briefs, vendor onboarding — the artifacts every production team rebuilds from scratch on every show. Pre-built, opinionated, open in ATLVS in seconds."
+     "body": "ROS, advancing checklists, riders, call sheets, safety briefs, vendor onboarding — the artifacts every production team rebuilds from scratch on every show. Pre-built, opinionated, opened in ATLVS in seconds."
     },
     "card": {
      "cta": "Open this template"
@@ -3150,7 +3150,7 @@
     "hero": {
      "eyebrow": "Free Tools",
      "title": "Production Calculators.",
-     "body": "The math production teams redo every Monday morning, done for you. Free, no signup, no email gate."
+     "body": "The math production teams redo every Monday morning, automated. Free, no signup, no email gate."
     },
     "items": {
      "perDiem": {

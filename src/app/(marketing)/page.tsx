@@ -10,6 +10,7 @@ import { JsonLd } from "@/components/marketing/JsonLd";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
 import { Wordmark } from "@/components/brand/Wordmark";
+import { XPMS_PHASES } from "@/lib/xpms";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
@@ -106,48 +107,25 @@ export default async function Home() {
     },
   ];
 
-  const PHASES: Array<{ n: string; name: string; sub: string }> = [
-    {
-      n: "01",
-      name: t("marketing.pages.home.lifecycle.phases.discovery.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.discovery.sub"),
-    },
-    {
-      n: "02",
-      name: t("marketing.pages.home.lifecycle.phases.rd.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.rd.sub"),
-    },
-    {
-      n: "03",
-      name: t("marketing.pages.home.lifecycle.phases.design.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.design.sub"),
-    },
-    {
-      n: "04",
-      name: t("marketing.pages.home.lifecycle.phases.compliance.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.compliance.sub"),
-    },
-    {
-      n: "05",
-      name: t("marketing.pages.home.lifecycle.phases.build.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.build.sub"),
-    },
-    {
-      n: "06",
-      name: t("marketing.pages.home.lifecycle.phases.operations.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.operations.sub"),
-    },
-    {
-      n: "07",
-      name: t("marketing.pages.home.lifecycle.phases.activation.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.activation.sub"),
-    },
-    {
-      n: "08",
-      name: t("marketing.pages.home.lifecycle.phases.strike.name"),
-      sub: t("marketing.pages.home.lifecycle.phases.strike.sub"),
-    },
-  ];
+  // Canonical XPMS production lifecycle (8-gate) — single source of truth is
+  // XPMS_PHASES (src/lib/xpms). Names + descriptions are aligned to the
+  // Discovery → Design → Advance → Procurement → Build → Install → Operate →
+  // Close arc so this marketing copy can never drift from the protocol.
+  const PHASE_SUBS: Record<string, string> = {
+    Discovery: "Brief approved, go decision made.",
+    Design: "Design package approved, scope locked.",
+    Advance: "Contracts & POs issued, budget baselined.",
+    Procurement: "Deposits paid, long-leads committed.",
+    Build: "Fabrication & construction complete, QC passed.",
+    Install: "Installed, commissioned, punch list closed.",
+    Operate: "Show live; operating acceptance.",
+    Close: "Reconciled, final cost report filed.",
+  };
+  const PHASES: Array<{ n: string; name: string; sub: string }> = XPMS_PHASES.map((p) => ({
+    n: String(p.num).padStart(2, "0"),
+    name: p.label,
+    sub: PHASE_SUBS[p.label] ?? "",
+  }));
 
   // `color` is the bright brand fill (decorative accent bars / large display).
   // `textColor` is the per-product AA-deepened text variant (matches the

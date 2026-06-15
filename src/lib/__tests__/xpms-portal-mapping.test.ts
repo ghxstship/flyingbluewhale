@@ -119,13 +119,13 @@ describe("XPMS portal mapping (ADR-0004)", () => {
     expect(XPMS_ATOM_PHASES).toHaveLength(8);
     expect(XPMS_ATOM_PHASES.map((p) => p.id)).toEqual([
       "discovery",
-      "concept",
-      "development",
+      "design",
       "advance",
+      "procurement",
       "build",
-      "show",
-      "strike",
-      "wrap",
+      "install",
+      "operate",
+      "close",
     ]);
   });
 });

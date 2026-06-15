@@ -53,29 +53,26 @@ export async function createFabAction(_: State, fd: FormData): Promise<State> {
 
 const StatusEnum = z.enum([
   "DISCOVERY",
-  "CONCEPT",
-  "ENGINEERING",
-  "PRE_PRO",
-  "FAB",
-  "LOGISTICS",
+  "DESIGN",
+  "ADVANCE",
+  "PROCUREMENT",
+  "BUILD",
   "INSTALL",
-  "STRIKE",
-  "ARCHIVED",
+  "OPERATE",
+  "CLOSE",
 ]);
 
-// Workflow status FSM (separate from production_phase, the design→install
-// macro arc). The matrix mirrors the comment below: complete is terminal.
+// production_phase FSM — canonical XPMS production lifecycle. Sequential
+// forward arc; a single-step regression is permitted (logged with reason).
 const FAB_STATUS_TRANSITIONS: Record<z.infer<typeof StatusEnum>, readonly z.infer<typeof StatusEnum>[]> = {
-  // Sequential XPMS production arc; ARCHIVED is reachable from any phase.
-  DISCOVERY: ["CONCEPT", "ARCHIVED"],
-  CONCEPT: ["ENGINEERING", "ARCHIVED"],
-  ENGINEERING: ["PRE_PRO", "ARCHIVED"],
-  PRE_PRO: ["FAB", "ARCHIVED"],
-  FAB: ["LOGISTICS", "ARCHIVED"],
-  LOGISTICS: ["INSTALL", "ARCHIVED"],
-  INSTALL: ["STRIKE", "ARCHIVED"],
-  STRIKE: ["ARCHIVED"],
-  ARCHIVED: [],
+  DISCOVERY: ["DESIGN"],
+  DESIGN: ["ADVANCE", "DISCOVERY"],
+  ADVANCE: ["PROCUREMENT", "DESIGN"],
+  PROCUREMENT: ["BUILD", "ADVANCE"],
+  BUILD: ["INSTALL", "PROCUREMENT"],
+  INSTALL: ["OPERATE", "BUILD"],
+  OPERATE: ["CLOSE", "INSTALL"],
+  CLOSE: [],
 };
 
 /**

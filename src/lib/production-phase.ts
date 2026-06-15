@@ -4,7 +4,8 @@
  * Schema: fabrication_orders.production_phase typed column + production_phase_transitions
  * append-only log (added 2026-05-09).
  *
- * Lifecycle: DISCOVERY -> CONCEPT -> ENGINEERING -> PRE_PRO -> FAB -> LOGISTICS -> INSTALL -> STRIKE -> ARCHIVED
+ * Lifecycle (canonical XPMS production lifecycle, aligned with xpms_phase):
+ *   DISCOVERY -> DESIGN -> ADVANCE -> PROCUREMENT -> BUILD -> INSTALL -> OPERATE -> CLOSE
  *
  * production_phase is the LDP-canonical lifecycle column (the legacy bare
  * `status` twin was dropped in the 2026-06-09 LDP rename migration).
@@ -15,14 +16,13 @@ import { createClient } from "@/lib/supabase/server";
 
 export const PRODUCTION_PHASES = [
   "DISCOVERY",
-  "CONCEPT",
-  "ENGINEERING",
-  "PRE_PRO",
-  "FAB",
-  "LOGISTICS",
+  "DESIGN",
+  "ADVANCE",
+  "PROCUREMENT",
+  "BUILD",
   "INSTALL",
-  "STRIKE",
-  "ARCHIVED",
+  "OPERATE",
+  "CLOSE",
 ] as const;
 export type ProductionPhase = (typeof PRODUCTION_PHASES)[number];
 
@@ -59,15 +59,14 @@ export type ProductionPhaseTransition = {
  * logged; not a defect, a feature").
  */
 export const PRODUCTION_PHASE_GRAPH: Record<ProductionPhase, readonly ProductionPhase[]> = {
-  DISCOVERY: ["CONCEPT", "ARCHIVED"],
-  CONCEPT: ["ENGINEERING", "DISCOVERY", "ARCHIVED"],
-  ENGINEERING: ["PRE_PRO", "CONCEPT", "ARCHIVED"],
-  PRE_PRO: ["FAB", "ENGINEERING", "ARCHIVED"],
-  FAB: ["LOGISTICS", "PRE_PRO", "ARCHIVED"],
-  LOGISTICS: ["INSTALL", "FAB", "ARCHIVED"],
-  INSTALL: ["STRIKE", "LOGISTICS", "ARCHIVED"],
-  STRIKE: ["ARCHIVED"],
-  ARCHIVED: [],
+  DISCOVERY: ["DESIGN"],
+  DESIGN: ["ADVANCE", "DISCOVERY"],
+  ADVANCE: ["PROCUREMENT", "DESIGN"],
+  PROCUREMENT: ["BUILD", "ADVANCE"],
+  BUILD: ["INSTALL", "PROCUREMENT"],
+  INSTALL: ["OPERATE", "BUILD"],
+  OPERATE: ["CLOSE", "INSTALL"],
+  CLOSE: [],
 };
 
 export function canTransition(from: ProductionPhase, to: ProductionPhase): boolean {

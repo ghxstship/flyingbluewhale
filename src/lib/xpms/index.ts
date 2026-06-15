@@ -141,18 +141,27 @@ export const XPMS_PHASES: { id: XpmsPhase; num: number; label: string; platform:
  * atom carries one of these. Kept distinct from the v08 project macro-phase
  * (`XPMS_PHASES`) per migration 20260605170000.
  */
-export type XpmsAtomPhase = "discovery" | "concept" | "development" | "advance" | "build" | "show" | "strike" | "wrap";
+export type XpmsAtomPhase =
+  | "discovery"
+  | "design"
+  | "advance"
+  | "procurement"
+  | "build"
+  | "install"
+  | "operate"
+  | "close";
 
-/** Whitepaper §9 — Eight Production Phases (atom-level axis). */
+/** Eight Production Phases (atom-level axis) — canonical XPMS lifecycle,
+ *  aligned with the project macro-phase (XPMS_PHASES). */
 export const XPMS_ATOM_PHASES: { id: XpmsAtomPhase; num: number; label: string; platform: string }[] = [
   { id: "discovery", num: 1, label: "Discovery", platform: "ATLVS" },
-  { id: "concept", num: 2, label: "Concept", platform: "ATLVS" },
-  { id: "development", num: 3, label: "Development", platform: "ATLVS" },
-  { id: "advance", num: 4, label: "Advance", platform: "ATLVS · COMPVSS" },
+  { id: "design", num: 2, label: "Design", platform: "ATLVS" },
+  { id: "advance", num: 3, label: "Advance", platform: "ATLVS · COMPVSS" },
+  { id: "procurement", num: 4, label: "Procurement", platform: "ATLVS" },
   { id: "build", num: 5, label: "Build", platform: "COMPVSS" },
-  { id: "show", num: 6, label: "Show", platform: "COMPVSS · GVTEWAY" },
-  { id: "strike", num: 7, label: "Strike", platform: "COMPVSS" },
-  { id: "wrap", num: 8, label: "Wrap", platform: "ATLVS" },
+  { id: "install", num: 6, label: "Install", platform: "COMPVSS" },
+  { id: "operate", num: 7, label: "Operate", platform: "COMPVSS · GVTEWAY" },
+  { id: "close", num: 8, label: "Close", platform: "ATLVS" },
 ];
 
 /** Whitepaper §8 — build the canonical APS identifier string. */

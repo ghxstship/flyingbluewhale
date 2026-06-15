@@ -38280,14 +38280,13 @@ export type Database = {
       po_status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled"
       production_phase:
         | "DISCOVERY"
-        | "CONCEPT"
-        | "ENGINEERING"
-        | "PRE_PRO"
-        | "FAB"
-        | "LOGISTICS"
+        | "DESIGN"
+        | "ADVANCE"
+        | "PROCUREMENT"
+        | "BUILD"
         | "INSTALL"
-        | "STRIKE"
-        | "ARCHIVED"
+        | "OPERATE"
+        | "CLOSE"
       project_role: "lead" | "editor" | "contributor" | "viewer" | "vendor"
       project_state: "draft" | "active" | "paused" | "archived" | "complete"
       promoter_state: "active" | "paused" | "archived"
@@ -38750,13 +38749,13 @@ export type Database = {
       workforce_kind: "paid_staff" | "volunteer" | "contractor" | "official"
       xpms_atom_phase:
         | "discovery"
-        | "concept"
-        | "development"
+        | "design"
         | "advance"
+        | "procurement"
         | "build"
-        | "show"
-        | "strike"
-        | "wrap"
+        | "install"
+        | "operate"
+        | "close"
       xpms_edge_kind:
         | "assignment"
         | "authorship"
@@ -39459,14 +39458,13 @@ export const Constants = {
       po_status: ["draft", "sent", "acknowledged", "fulfilled", "cancelled"],
       production_phase: [
         "DISCOVERY",
-        "CONCEPT",
-        "ENGINEERING",
-        "PRE_PRO",
-        "FAB",
-        "LOGISTICS",
+        "DESIGN",
+        "ADVANCE",
+        "PROCUREMENT",
+        "BUILD",
         "INSTALL",
-        "STRIKE",
-        "ARCHIVED",
+        "OPERATE",
+        "CLOSE",
       ],
       project_role: ["lead", "editor", "contributor", "viewer", "vendor"],
       project_state: ["draft", "active", "paused", "archived", "complete"],
@@ -39981,13 +39979,13 @@ export const Constants = {
       workforce_kind: ["paid_staff", "volunteer", "contractor", "official"],
       xpms_atom_phase: [
         "discovery",
-        "concept",
-        "development",
+        "design",
         "advance",
+        "procurement",
         "build",
-        "show",
-        "strike",
-        "wrap",
+        "install",
+        "operate",
+        "close",
       ],
       xpms_edge_kind: [
         "assignment",

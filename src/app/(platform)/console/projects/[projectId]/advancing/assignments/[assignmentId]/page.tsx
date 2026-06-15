@@ -28,6 +28,7 @@ import {
   getAssignment,
   type FulfillmentState,
 } from "@/lib/db/assignments";
+import { WalletPassButton } from "./WalletPassButton";
 
 export const dynamic = "force-dynamic";
 
@@ -209,6 +210,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         }
         action={
           <div className="flex items-center gap-2">
+            <WalletPassButton assignmentId={a.id} />
             <Link
               href={`/console/projects/${projectId}/advancing/assignments`}
               className="ps-btn ps-btn--ghost ps-btn--sm"

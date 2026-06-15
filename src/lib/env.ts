@@ -40,6 +40,16 @@ const schema = z.object({
   // token-minting endpoint (Daily, LiveKit, 100ms, etc.).
   VIDEO_PROVIDER_URL: z.string().url().optional().or(z.literal("")),
   VIDEO_PROVIDER_KEY: z.string().optional(),
+  // Apple Wallet pass signing. Set all three to enable server-side .pkpass
+  // signing; without them the endpoint returns the pass.json for external signing.
+  APPLE_PASS_CERT_BASE64: z.string().optional(),
+  APPLE_PASS_KEY_BASE64: z.string().optional(),
+  APPLE_TEAM_IDENTIFIER: z.string().optional(),
+  APPLE_PASS_TYPE_IDENTIFIER: z.string().optional(),
+  APPLE_PASS_PASSWORD: z.string().optional(),
+  // Google Wallet pass signing.
+  GOOGLE_WALLET_ISSUER_ID: z.string().optional(),
+  GOOGLE_WALLET_SERVICE_ACCOUNT_KEY_JSON: z.string().optional(),
 });
 
 export const env = schema.parse({
@@ -65,6 +75,13 @@ export const env = schema.parse({
   GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
   VIDEO_PROVIDER_URL: process.env.VIDEO_PROVIDER_URL,
   VIDEO_PROVIDER_KEY: process.env.VIDEO_PROVIDER_KEY,
+  APPLE_PASS_CERT_BASE64: process.env.APPLE_PASS_CERT_BASE64,
+  APPLE_PASS_KEY_BASE64: process.env.APPLE_PASS_KEY_BASE64,
+  APPLE_TEAM_IDENTIFIER: process.env.APPLE_TEAM_IDENTIFIER,
+  APPLE_PASS_TYPE_IDENTIFIER: process.env.APPLE_PASS_TYPE_IDENTIFIER,
+  APPLE_PASS_PASSWORD: process.env.APPLE_PASS_PASSWORD,
+  GOOGLE_WALLET_ISSUER_ID: process.env.GOOGLE_WALLET_ISSUER_ID,
+  GOOGLE_WALLET_SERVICE_ACCOUNT_KEY_JSON: process.env.GOOGLE_WALLET_SERVICE_ACCOUNT_KEY_JSON,
 });
 
 export const hasSupabase = Boolean(env.NEXT_PUBLIC_SUPABASE_URL && env.NEXT_PUBLIC_SUPABASE_ANON_KEY);

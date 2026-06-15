@@ -1,6 +1,7 @@
 import { PlatformSidebar } from "@/components/Shell";
 import { CommandPalette } from "@/components/CommandPalette";
 import { MobileNavDrawer } from "@/components/MobileNavDrawer";
+import { AIAssistantPanel } from "@/components/ui/AIAssistantPanel";
 import { WorkspaceChrome, resolveSwitcherEntries } from "@/components/workspace-chrome/WorkspaceChrome";
 import { requireSession } from "@/lib/auth";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
@@ -101,6 +102,10 @@ export default async function PlatformLayout({ children }: { children: React.Rea
           </main>
         </div>
         <CommandPalette scope="platform" />
+        {/* Floating AI assistant — Momentus Ask Mo / Connecteam AI Agent pattern.
+            Mounted here so it persists across every /console page without
+            a full remount on navigation. */}
+        <AIAssistantPanel />
       </div>
     </TenantShell>
   );

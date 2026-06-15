@@ -177,6 +177,72 @@ export async function setCompletionBadge(fd: FormData): Promise<void> {
   revalidatePath(`/console/workforce/courses/${parsed.data.courseId}`);
 }
 
+// Compliance auto-assignment — Docebo "auto-assign on role change" pattern
+// (2025-2026). Finds all org members that don't yet have an active assignment
+// for this course and bulk-assigns them. If `required_for_role` is set on the
+// course, only members matching that role are targeted; otherwise the action
+// assigns to all members (general-compliance use case). Returns the count of
+// new rows inserted so the UI can surface a success message.
+export async function autoAssignComplianceCourses(
+  courseId: string,
+): Promise<{ assigned: number; error?: string }> {
+  const session = await requireSession();
+  if (!isManagerPlus(session)) return { assigned: 0, error: "Manager access required" };
+  if (!(await guardCourse(courseId, session.orgId))) return { assigned: 0, error: "Course not found" };
+  const supabase = await createClient();
+
+  const { data: course } = await supabase
+    .from("courses")
+    .select("required_for_role")
+    .eq("id", courseId)
+    .eq("org_id", session.orgId)
+    .maybeSingle();
+  if (!course) return { assigned: 0, error: "Course not found" };
+
+  // Pull all active memberships for the org.
+  const { data: memberships } = await supabase
+    .from("memberships")
+    .select("user_id, role")
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null);
+  if (!memberships?.length) return { assigned: 0 };
+
+  // Filter to matching role if the course targets a specific role.
+  const targetRole = (course as { required_for_role?: string | null }).required_for_role;
+  const eligible = targetRole
+    ? memberships.filter((m) => {
+        const r = (m as { role?: string }).role ?? "";
+        return r === targetRole || r.includes(targetRole);
+      })
+    : memberships;
+
+  if (!eligible.length) return { assigned: 0 };
+
+  // Exclude already-assigned members (idempotent re-runs are safe).
+  const { data: existing } = await supabase
+    .from("course_assignments")
+    .select("assignee_id")
+    .eq("course_id", courseId);
+  const alreadyAssigned = new Set((existing ?? []).map((e) => e.assignee_id));
+
+  const toInsert = eligible
+    .filter((m) => !alreadyAssigned.has(m.user_id))
+    .map((m) => ({
+      org_id: session.orgId,
+      course_id: courseId,
+      assignee_id: m.user_id,
+      assigned_by: session.userId,
+    }));
+
+  if (!toInsert.length) return { assigned: 0 };
+
+  const { error } = await supabase.from("course_assignments").insert(toInsert);
+  if (error) return { assigned: 0, error: error.message };
+
+  revalidatePath(`/console/workforce/courses/${courseId}`);
+  return { assigned: toInsert.length };
+}
+
 export async function deleteCourse(courseId: string): Promise<void> {
   const session = await requireSession();
   if (!isManagerPlus(session)) return;

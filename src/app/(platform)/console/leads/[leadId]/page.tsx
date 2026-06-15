@@ -10,6 +10,7 @@ import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo } from "@/lib/format";
 import { LeadStageMover } from "./LeadStageMover";
+import { LeadScoreButton } from "./LeadScoreButton";
 import { deleteLead } from "./edit/actions";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +31,7 @@ export default async function LeadDetail({ params }: { params: Promise<{ leadId:
         subtitle={lead.email ?? t("console.leads.detail.noEmail", undefined, "No email")}
         action={
           <div className="flex items-center gap-2">
+            <LeadScoreButton leadId={lead.id} />
             <LeadStageMover leadId={lead.id} stage={lead.stage} />
             <Button href={`/console/leads/${leadId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { addLesson, addQuizQuestion, publishCourse, assignCourse, setCompletionBadge, deleteCourse } from "./actions";
 import { DeleteForm } from "@/components/DeleteForm";
+import { ComplianceAutoAssignButton } from "./ComplianceAutoAssignButton";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
 
   const { data: course } = await supabase
     .from("courses")
-    .select("id, title, summary, publish_state, duration_minutes, completion_badge_id")
+    .select("id, title, summary, publish_state, duration_minutes, completion_badge_id, required_for_role")
     .eq("id", courseId)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -42,6 +43,7 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
     publish_state: string;
     duration_minutes: number | null;
     completion_badge_id: string | null;
+    required_for_role: string | null;
   };
 
   const { data: badges } = await supabase
@@ -116,6 +118,10 @@ export default async function Page({ params }: { params: Promise<{ courseId: str
         }
         action={
           <div className="flex items-center gap-2">
+            <ComplianceAutoAssignButton
+              courseId={c.id}
+              requiredForRole={c.required_for_role}
+            />
             {c.publish_state === "draft" && (
               <form action={publishCourse}>
                 <input type="hidden" name="courseId" value={c.id} />

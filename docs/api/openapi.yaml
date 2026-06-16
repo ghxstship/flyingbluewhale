@@ -713,3 +713,14 @@ paths:
   /api/v1/documents/{docType}:
     get: { summary: "Machine-readable data contract for one document type — JSON Schema, sample data object, and merge-field paths. Scope: documents:read." }
     post: { summary: "Generate a document. Body { data } (external — any doc type) or { recordId } (internal — record-bound types). Returns rendered .doc HTML + resolved data; no mutation. Scope: documents:write." }
+
+  /api/v1/metrics:
+    get: { summary: "Canonical metric catalog (kit v6.3) — 77 KPI definitions across the 4 apps + whether each is computed live. Scope: reports:read." }
+  /api/v1/metrics/{metricId}:
+    get: { summary: "One metric definition + its value computed live from the caller's org data (null when source data is absent). Scope: reports:read." }
+  /api/v1/reports:
+    get: { summary: "The 43-report library (definitions) — each binds metric ids from the registry. Scope: reports:read." }
+  /api/v1/reports/{reportId}:
+    get: { summary: "A report definition + its metric values resolved live from org data. Scope: reports:read." }
+  /api/v1/reports/{reportId}/snapshot:
+    get: { summary: "Immutable point-in-time snapshot of a report (definition + resolved metric values + capturedAt). No mutation. Scope: reports:read." }

@@ -1,0 +1,1939 @@
+{
+  "version": "6.3",
+  "note": "Canonical metric/KPI + report registry — single source of truth for the Reports & Analytics engine, the report templates (report-*.html), dashboard widgets, and OpenAPI /metrics + /reports endpoints. A metric definition is the contract: report templates bind <span class=\"mf\" data-path=\"metric.<id>.value\"> and dashboards read the same ids. Mirrors schemas.json conventions.",
+  "metricSchema": {
+    "id": "snake_case unique key",
+    "app": "ATLVS | COMPVSS | GVTEWAY | LEG3ND | ALL",
+    "label": "human label",
+    "unit": "% | $ | count | days | hrs | x | score | rate",
+    "format": "pct | currency | int | float | days | ratio | score",
+    "grain": "the entity one value rolls up to (project, event, shift, listing, learner, org, period)",
+    "direction": "up = higher is better | down = lower is better | flat = neutral",
+    "target": "benchmark / goal value (null if none)",
+    "confidence": "QUOTED | PUBLISHED | BENCHMARKED | MODELED | N/A (XPMS ladder)",
+    "formula": "plain-language calculation",
+    "sources": "originating app surfaces/records"
+  },
+  "metrics": {
+    "on_time_delivery": {
+      "app": "ATLVS",
+      "label": "On-Time Delivery",
+      "unit": "%",
+      "format": "pct",
+      "grain": "project",
+      "direction": "up",
+      "target": 95,
+      "confidence": "PUBLISHED",
+      "formula": "milestones met by target date / total milestones",
+      "sources": [
+        "schedule",
+        "milestones"
+      ]
+    },
+    "milestone_completion": {
+      "app": "ATLVS",
+      "label": "Milestone Completion",
+      "unit": "%",
+      "format": "pct",
+      "grain": "project",
+      "direction": "up",
+      "target": 100,
+      "confidence": "PUBLISHED",
+      "formula": "completed milestones / planned milestones to date",
+      "sources": [
+        "schedule"
+      ]
+    },
+    "schedule_variance": {
+      "app": "ATLVS",
+      "label": "Schedule Variance",
+      "unit": "days",
+      "format": "days",
+      "grain": "project",
+      "direction": "down",
+      "target": 0,
+      "confidence": "PUBLISHED",
+      "formula": "actual finish − baseline finish (per phase, summed)",
+      "sources": [
+        "schedule"
+      ]
+    },
+    "budget_variance": {
+      "app": "ATLVS",
+      "label": "Budget Variance",
+      "unit": "%",
+      "format": "pct",
+      "grain": "project",
+      "direction": "down",
+      "target": 0,
+      "confidence": "PUBLISHED",
+      "formula": "(actual + committed − budget) / budget",
+      "sources": [
+        "budget"
+      ]
+    },
+    "gross_margin": {
+      "app": "ATLVS",
+      "label": "Gross Margin",
+      "unit": "%",
+      "format": "pct",
+      "grain": "project",
+      "direction": "up",
+      "target": 32,
+      "confidence": "PUBLISHED",
+      "formula": "(revenue − direct cost) / revenue",
+      "sources": [
+        "budget",
+        "invoice"
+      ]
+    },
+    "cost_to_complete": {
+      "app": "ATLVS",
+      "label": "Cost to Complete",
+      "unit": "$",
+      "format": "currency",
+      "grain": "project",
+      "direction": "down",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "EAC − actuals to date",
+      "sources": [
+        "budget"
+      ]
+    },
+    "burn_rate": {
+      "app": "ATLVS",
+      "label": "Budget Burn",
+      "unit": "%",
+      "format": "pct",
+      "grain": "project",
+      "direction": "flat",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "actual spend / total budget",
+      "sources": [
+        "budget"
+      ]
+    },
+    "change_order_value": {
+      "app": "ATLVS",
+      "label": "Change Order Value",
+      "unit": "$",
+      "format": "currency",
+      "grain": "project",
+      "direction": "flat",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "sum of approved change-order net deltas",
+      "sources": [
+        "changeOrder"
+      ]
+    },
+    "resource_utilization": {
+      "app": "ATLVS",
+      "label": "Resource Utilization",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 80,
+      "confidence": "BENCHMARKED",
+      "formula": "assigned hours / available hours",
+      "sources": [
+        "schedule",
+        "roster"
+      ]
+    },
+    "billable_utilization": {
+      "app": "ATLVS",
+      "label": "Billable Utilization",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 70,
+      "confidence": "BENCHMARKED",
+      "formula": "billable hours / total hours",
+      "sources": [
+        "timesheet",
+        "invoice"
+      ]
+    },
+    "pipeline_value": {
+      "app": "ATLVS",
+      "label": "Pipeline Value",
+      "unit": "$",
+      "format": "currency",
+      "grain": "org",
+      "direction": "up",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "sum of open opportunity value × stage probability",
+      "sources": [
+        "sales"
+      ]
+    },
+    "active_projects": {
+      "app": "ATLVS",
+      "label": "Active Projects",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "flat",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "projects in Build/Install/Operate phases",
+      "sources": [
+        "projects"
+      ]
+    },
+    "at_risk_projects": {
+      "app": "ATLVS",
+      "label": "At-Risk Projects",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "down",
+      "target": 0,
+      "confidence": "MODELED",
+      "formula": "projects with health index < 60",
+      "sources": [
+        "projects"
+      ]
+    },
+    "forecast_accuracy": {
+      "app": "ATLVS",
+      "label": "Forecast Accuracy",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 90,
+      "confidence": "MODELED",
+      "formula": "1 − |forecast − actual| / actual",
+      "sources": [
+        "budget",
+        "invoice"
+      ]
+    },
+    "project_health": {
+      "app": "ATLVS",
+      "label": "Project Health Index",
+      "unit": "score",
+      "format": "score",
+      "grain": "project",
+      "direction": "up",
+      "target": 70,
+      "confidence": "MODELED",
+      "formula": "weighted 0–100 index of schedule, budget, scope & risk",
+      "sources": [
+        "projects",
+        "schedule",
+        "budget"
+      ]
+    },
+    "labor_fill_rate": {
+      "app": "COMPVSS",
+      "label": "Shift Fill Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 98,
+      "confidence": "PUBLISHED",
+      "formula": "filled positions / required positions",
+      "sources": [
+        "staffing",
+        "roster"
+      ]
+    },
+    "overtime_pct": {
+      "app": "COMPVSS",
+      "label": "Overtime %",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "down",
+      "target": 8,
+      "confidence": "PUBLISHED",
+      "formula": "OT hours / total hours",
+      "sources": [
+        "timesheet"
+      ]
+    },
+    "labor_cost_per_head": {
+      "app": "COMPVSS",
+      "label": "Labor Cost / Head",
+      "unit": "$",
+      "format": "currency",
+      "grain": "event",
+      "direction": "down",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "total labor cost / headcount",
+      "sources": [
+        "timesheet",
+        "staffing"
+      ]
+    },
+    "no_show_rate_crew": {
+      "app": "COMPVSS",
+      "label": "Crew No-Show Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "down",
+      "target": 2,
+      "confidence": "PUBLISHED",
+      "formula": "no-shows / scheduled crew",
+      "sources": [
+        "roster",
+        "timesheet"
+      ]
+    },
+    "cert_compliance": {
+      "app": "COMPVSS",
+      "label": "Certification Compliance",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 100,
+      "confidence": "PUBLISHED",
+      "formula": "crew with valid required certs / crew deployed",
+      "sources": [
+        "roster",
+        "certificate"
+      ]
+    },
+    "incident_rate": {
+      "app": "COMPVSS",
+      "label": "Incident Rate (TRIR)",
+      "unit": "rate",
+      "format": "float",
+      "grain": "org",
+      "direction": "down",
+      "target": 1,
+      "confidence": "PUBLISHED",
+      "formula": "recordable incidents × 200,000 / hours worked",
+      "sources": [
+        "incident",
+        "timesheet"
+      ]
+    },
+    "near_miss_count": {
+      "app": "COMPVSS",
+      "label": "Near Misses",
+      "unit": "count",
+      "format": "int",
+      "grain": "event",
+      "direction": "flat",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "logged near-miss observations",
+      "sources": [
+        "incident"
+      ]
+    },
+    "checkpoint_completion": {
+      "app": "COMPVSS",
+      "label": "Checkpoint Completion",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 100,
+      "confidence": "PUBLISHED",
+      "formula": "completed inspection checks / scheduled checks",
+      "sources": [
+        "inspection"
+      ]
+    },
+    "ros_adherence": {
+      "app": "COMPVSS",
+      "label": "Run-of-Show Adherence",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 95,
+      "confidence": "MODELED",
+      "formula": "cues hit on time / total cues",
+      "sources": [
+        "runOfShow"
+      ]
+    },
+    "asset_utilization": {
+      "app": "COMPVSS",
+      "label": "Asset Utilization",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 75,
+      "confidence": "PUBLISHED",
+      "formula": "days out on rental / available days",
+      "sources": [
+        "rentals",
+        "pullSheet"
+      ]
+    },
+    "fleet_roi": {
+      "app": "COMPVSS",
+      "label": "Fleet ROI",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "rental revenue / depreciated book value",
+      "sources": [
+        "rentals"
+      ]
+    },
+    "equipment_downtime": {
+      "app": "COMPVSS",
+      "label": "Equipment Downtime",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "down",
+      "target": 5,
+      "confidence": "PUBLISHED",
+      "formula": "days in maintenance / available days",
+      "sources": [
+        "rentals",
+        "inspection"
+      ]
+    },
+    "sub_rental_spend": {
+      "app": "COMPVSS",
+      "label": "Sub-Rental Spend",
+      "unit": "$",
+      "format": "currency",
+      "grain": "event",
+      "direction": "down",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "sum of sub-hire cost",
+      "sources": [
+        "rentals",
+        "purchaseOrder"
+      ]
+    },
+    "gmv": {
+      "app": "GVTEWAY",
+      "label": "GMV",
+      "unit": "$",
+      "format": "currency",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "gross merchandise value across tickets + commerce + marketplace",
+      "sources": [
+        "order"
+      ]
+    },
+    "tickets_sold": {
+      "app": "GVTEWAY",
+      "label": "Tickets Sold",
+      "unit": "count",
+      "format": "int",
+      "grain": "event",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "issued ticket count",
+      "sources": [
+        "ticket",
+        "order"
+      ]
+    },
+    "sell_through": {
+      "app": "GVTEWAY",
+      "label": "Sell-Through",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 90,
+      "confidence": "PUBLISHED",
+      "formula": "tickets sold / allocation",
+      "sources": [
+        "ticket"
+      ]
+    },
+    "capacity_utilization": {
+      "app": "GVTEWAY",
+      "label": "Capacity Utilization",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 92,
+      "confidence": "PUBLISHED",
+      "formula": "attendees / venue capacity",
+      "sources": [
+        "ticket",
+        "guestList"
+      ]
+    },
+    "aov": {
+      "app": "GVTEWAY",
+      "label": "Avg Order Value",
+      "unit": "$",
+      "format": "currency",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "revenue / orders",
+      "sources": [
+        "order"
+      ]
+    },
+    "conversion_rate": {
+      "app": "GVTEWAY",
+      "label": "Conversion Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "up",
+      "target": 4.5,
+      "confidence": "PUBLISHED",
+      "formula": "purchases / sessions",
+      "sources": [
+        "analytics",
+        "order"
+      ]
+    },
+    "check_in_rate": {
+      "app": "GVTEWAY",
+      "label": "Check-In Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 95,
+      "confidence": "PUBLISHED",
+      "formula": "scanned admits / valid tickets",
+      "sources": [
+        "ticket",
+        "guestList"
+      ]
+    },
+    "no_show_rate": {
+      "app": "GVTEWAY",
+      "label": "No-Show Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "down",
+      "target": 8,
+      "confidence": "PUBLISHED",
+      "formula": "unscanned valid tickets / valid tickets",
+      "sources": [
+        "ticket"
+      ]
+    },
+    "take_rate": {
+      "app": "GVTEWAY",
+      "label": "Marketplace Take Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "up",
+      "target": 12,
+      "confidence": "PUBLISHED",
+      "formula": "platform fees / marketplace GMV",
+      "sources": [
+        "order",
+        "vendorAgreement"
+      ]
+    },
+    "active_listings": {
+      "app": "GVTEWAY",
+      "label": "Active Listings",
+      "unit": "count",
+      "format": "int",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "published marketplace listings",
+      "sources": [
+        "marketplace"
+      ]
+    },
+    "vendor_gmv": {
+      "app": "GVTEWAY",
+      "label": "Vendor GMV",
+      "unit": "$",
+      "format": "currency",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "GMV attributable to third-party vendors",
+      "sources": [
+        "order"
+      ]
+    },
+    "refund_rate": {
+      "app": "GVTEWAY",
+      "label": "Refund Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "down",
+      "target": 3,
+      "confidence": "PUBLISHED",
+      "formula": "refunded value / GMV",
+      "sources": [
+        "order"
+      ]
+    },
+    "cart_abandonment": {
+      "app": "GVTEWAY",
+      "label": "Cart Abandonment",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "down",
+      "target": 60,
+      "confidence": "PUBLISHED",
+      "formula": "abandoned carts / carts created",
+      "sources": [
+        "analytics"
+      ]
+    },
+    "cac": {
+      "app": "GVTEWAY",
+      "label": "Customer Acq. Cost",
+      "unit": "$",
+      "format": "currency",
+      "grain": "period",
+      "direction": "down",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "marketing spend / new customers",
+      "sources": [
+        "marketing"
+      ]
+    },
+    "roas": {
+      "app": "GVTEWAY",
+      "label": "ROAS",
+      "unit": "x",
+      "format": "ratio",
+      "grain": "period",
+      "direction": "up",
+      "target": 4,
+      "confidence": "PUBLISHED",
+      "formula": "attributed revenue / ad spend",
+      "sources": [
+        "marketing",
+        "order"
+      ]
+    },
+    "ltv": {
+      "app": "GVTEWAY",
+      "label": "Customer LTV",
+      "unit": "$",
+      "format": "currency",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "avg margin per customer × expected lifetime",
+      "sources": [
+        "order"
+      ]
+    },
+    "repeat_rate": {
+      "app": "GVTEWAY",
+      "label": "Repeat Purchase Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "up",
+      "target": 30,
+      "confidence": "PUBLISHED",
+      "formula": "customers with 2+ orders / customers",
+      "sources": [
+        "order"
+      ]
+    },
+    "nps": {
+      "app": "GVTEWAY",
+      "label": "NPS",
+      "unit": "score",
+      "format": "score",
+      "grain": "period",
+      "direction": "up",
+      "target": 50,
+      "confidence": "PUBLISHED",
+      "formula": "% promoters − % detractors",
+      "sources": [
+        "survey"
+      ]
+    },
+    "course_completion": {
+      "app": "LEG3ND",
+      "label": "Course Completion",
+      "unit": "%",
+      "format": "pct",
+      "grain": "learner",
+      "direction": "up",
+      "target": 85,
+      "confidence": "PUBLISHED",
+      "formula": "completed enrollments / total enrollments",
+      "sources": [
+        "transcript",
+        "syllabus"
+      ]
+    },
+    "pass_rate": {
+      "app": "LEG3ND",
+      "label": "Pass Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "learner",
+      "direction": "up",
+      "target": 80,
+      "confidence": "PUBLISHED",
+      "formula": "passing scores / attempts",
+      "sources": [
+        "transcript"
+      ]
+    },
+    "ceus_awarded": {
+      "app": "LEG3ND",
+      "label": "CEUs Awarded",
+      "unit": "count",
+      "format": "float",
+      "grain": "org",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "sum of CEUs from completed certifications",
+      "sources": [
+        "certificate",
+        "transcript"
+      ]
+    },
+    "active_certs": {
+      "app": "LEG3ND",
+      "label": "Active Certifications",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "credentials not expired",
+      "sources": [
+        "certificate"
+      ]
+    },
+    "expiring_certs": {
+      "app": "LEG3ND",
+      "label": "Expiring (30d)",
+      "unit": "count",
+      "format": "int",
+      "grain": "org",
+      "direction": "down",
+      "target": 0,
+      "confidence": "PUBLISHED",
+      "formula": "credentials expiring within 30 days",
+      "sources": [
+        "certificate"
+      ]
+    },
+    "compliance_rate": {
+      "app": "LEG3ND",
+      "label": "Training Compliance",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 100,
+      "confidence": "PUBLISHED",
+      "formula": "learners current on required training / total",
+      "sources": [
+        "transcript",
+        "certificate"
+      ]
+    },
+    "enrollment": {
+      "app": "LEG3ND",
+      "label": "Enrollments",
+      "unit": "count",
+      "format": "int",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "course enrollments in period",
+      "sources": [
+        "syllabus"
+      ]
+    },
+    "avg_quiz_score": {
+      "app": "LEG3ND",
+      "label": "Avg Assessment Score",
+      "unit": "%",
+      "format": "pct",
+      "grain": "learner",
+      "direction": "up",
+      "target": 80,
+      "confidence": "PUBLISHED",
+      "formula": "mean of graded assessment scores",
+      "sources": [
+        "transcript"
+      ]
+    },
+    "time_to_complete": {
+      "app": "LEG3ND",
+      "label": "Time to Complete",
+      "unit": "days",
+      "format": "days",
+      "grain": "learner",
+      "direction": "down",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "avg days from enroll to completion",
+      "sources": [
+        "transcript"
+      ]
+    },
+    "learner_engagement": {
+      "app": "LEG3ND",
+      "label": "Learner Engagement",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "up",
+      "target": 70,
+      "confidence": "MODELED",
+      "formula": "active learners / enrolled learners",
+      "sources": [
+        "syllabus"
+      ]
+    },
+    "backlog_value": {
+      "app": "ATLVS",
+      "label": "Contracted Backlog",
+      "unit": "$",
+      "format": "currency",
+      "grain": "org",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "signed contract value not yet recognized",
+      "sources": [
+        "sales",
+        "budget"
+      ]
+    },
+    "dso": {
+      "app": "ATLVS",
+      "label": "Days Sales Outstanding",
+      "unit": "days",
+      "format": "days",
+      "grain": "org",
+      "direction": "down",
+      "target": 45,
+      "confidence": "PUBLISHED",
+      "formula": "avg AR / revenue × period days",
+      "sources": [
+        "invoice"
+      ]
+    },
+    "ar_overdue": {
+      "app": "ATLVS",
+      "label": "AR Overdue",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "down",
+      "target": 5,
+      "confidence": "PUBLISHED",
+      "formula": "overdue receivables / total AR",
+      "sources": [
+        "invoice"
+      ]
+    },
+    "win_rate": {
+      "app": "ATLVS",
+      "label": "Proposal Win Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 35,
+      "confidence": "PUBLISHED",
+      "formula": "won opportunities / closed opportunities",
+      "sources": [
+        "sales",
+        "proposal"
+      ]
+    },
+    "vendor_otd": {
+      "app": "ATLVS",
+      "label": "Vendor On-Time Delivery",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 95,
+      "confidence": "PUBLISHED",
+      "formula": "PO lines received by promise date / total",
+      "sources": [
+        "purchaseOrder"
+      ]
+    },
+    "risk_exposure": {
+      "app": "ATLVS",
+      "label": "Open Risk Exposure",
+      "unit": "$",
+      "format": "currency",
+      "grain": "project",
+      "direction": "down",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "sum of open risk value × probability",
+      "sources": [
+        "projects"
+      ]
+    },
+    "maintenance_compliance": {
+      "app": "COMPVSS",
+      "label": "PM Compliance",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 95,
+      "confidence": "PUBLISHED",
+      "formula": "preventive-maintenance tasks done on time / scheduled",
+      "sources": [
+        "inspection",
+        "rentals"
+      ]
+    },
+    "inventory_accuracy": {
+      "app": "COMPVSS",
+      "label": "Inventory Accuracy",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 98,
+      "confidence": "PUBLISHED",
+      "formula": "cycle-count matches / counted items",
+      "sources": [
+        "rentals",
+        "pullSheet"
+      ]
+    },
+    "turnaround_time": {
+      "app": "COMPVSS",
+      "label": "Load In/Out Time",
+      "unit": "hrs",
+      "format": "float",
+      "grain": "event",
+      "direction": "down",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "hours from dock to show-ready (and strike)",
+      "sources": [
+        "runOfShow",
+        "staffing"
+      ]
+    },
+    "waste_diversion": {
+      "app": "COMPVSS",
+      "label": "Waste Diversion",
+      "unit": "%",
+      "format": "pct",
+      "grain": "event",
+      "direction": "up",
+      "target": 75,
+      "confidence": "PUBLISHED",
+      "formula": "recycled+composted / total waste",
+      "sources": [
+        "inspection"
+      ]
+    },
+    "energy_intensity": {
+      "app": "COMPVSS",
+      "label": "Energy Intensity",
+      "unit": "kWh",
+      "format": "float",
+      "grain": "event",
+      "direction": "down",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "kWh per attendee",
+      "sources": [
+        "inspection"
+      ]
+    },
+    "per_cap_spend": {
+      "app": "GVTEWAY",
+      "label": "Per-Cap Spend",
+      "unit": "$",
+      "format": "currency",
+      "grain": "event",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "on-site revenue / attendees",
+      "sources": [
+        "order",
+        "ticket"
+      ]
+    },
+    "chargeback_rate": {
+      "app": "GVTEWAY",
+      "label": "Chargeback Rate",
+      "unit": "%",
+      "format": "pct",
+      "grain": "period",
+      "direction": "down",
+      "target": 1,
+      "confidence": "PUBLISHED",
+      "formula": "chargebacks / transactions",
+      "sources": [
+        "order"
+      ]
+    },
+    "sponsorship_revenue": {
+      "app": "GVTEWAY",
+      "label": "Sponsorship Revenue",
+      "unit": "$",
+      "format": "currency",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "recognized sponsorship + activation fees",
+      "sources": [
+        "order",
+        "vendorAgreement"
+      ]
+    },
+    "activation_roi": {
+      "app": "GVTEWAY",
+      "label": "Activation ROI",
+      "unit": "x",
+      "format": "ratio",
+      "grain": "event",
+      "direction": "up",
+      "target": 3,
+      "confidence": "MODELED",
+      "formula": "activation-driven value / activation cost",
+      "sources": [
+        "order",
+        "marketing"
+      ]
+    },
+    "time_to_hire": {
+      "app": "GVTEWAY",
+      "label": "Time to Hire",
+      "unit": "days",
+      "format": "days",
+      "grain": "period",
+      "direction": "down",
+      "target": 30,
+      "confidence": "PUBLISHED",
+      "formula": "avg days from req open to accepted offer",
+      "sources": [
+        "jobPost",
+        "application"
+      ]
+    },
+    "application_rate": {
+      "app": "GVTEWAY",
+      "label": "Applications / Post",
+      "unit": "count",
+      "format": "float",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "applications / active job posts",
+      "sources": [
+        "jobPost",
+        "application"
+      ]
+    },
+    "content_usage": {
+      "app": "LEG3ND",
+      "label": "Knowledge Base Usage",
+      "unit": "count",
+      "format": "int",
+      "grain": "period",
+      "direction": "up",
+      "target": null,
+      "confidence": "PUBLISHED",
+      "formula": "article + resource views in period",
+      "sources": [
+        "knowledgeBase"
+      ]
+    },
+    "catalog_adoption": {
+      "app": "LEG3ND",
+      "label": "Catalog Adoption",
+      "unit": "%",
+      "format": "pct",
+      "grain": "org",
+      "direction": "up",
+      "target": 60,
+      "confidence": "BENCHMARKED",
+      "formula": "catalog atoms referenced / available",
+      "sources": [
+        "catalog"
+      ]
+    },
+    "instructor_rating": {
+      "app": "LEG3ND",
+      "label": "Instructor Rating",
+      "unit": "score",
+      "format": "score",
+      "grain": "period",
+      "direction": "up",
+      "target": 4.5,
+      "confidence": "PUBLISHED",
+      "formula": "mean post-course instructor rating (1–5)",
+      "sources": [
+        "survey",
+        "syllabus"
+      ]
+    },
+    "onboarding_ramp": {
+      "app": "LEG3ND",
+      "label": "Onboarding Ramp",
+      "unit": "days",
+      "format": "days",
+      "grain": "learner",
+      "direction": "down",
+      "target": null,
+      "confidence": "MODELED",
+      "formula": "avg days new hire → role-ready certification",
+      "sources": [
+        "transcript",
+        "certificate"
+      ]
+    }
+  },
+  "reports": {
+    "executive": {
+      "app": "ALL",
+      "title": "Executive KPI Scorecard",
+      "doc": "report-executive.html",
+      "cadence": "monthly",
+      "print": "Wide",
+      "kind": "scorecard",
+      "metrics": [
+        "pipeline_value",
+        "active_projects",
+        "gross_margin",
+        "gmv",
+        "labor_fill_rate",
+        "cert_compliance",
+        "compliance_rate",
+        "nps"
+      ],
+      "status": "template"
+    },
+    "project": {
+      "app": "ATLVS",
+      "title": "Project Performance Report",
+      "doc": "report-project.html",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "performance",
+      "metrics": [
+        "on_time_delivery",
+        "milestone_completion",
+        "schedule_variance",
+        "budget_variance",
+        "burn_rate",
+        "resource_utilization"
+      ],
+      "status": "template"
+    },
+    "financial": {
+      "app": "ATLVS",
+      "title": "Financial / P&L Report",
+      "doc": "report-financial.html",
+      "cadence": "monthly",
+      "print": "Wide",
+      "kind": "financial",
+      "metrics": [
+        "gross_margin",
+        "budget_variance",
+        "burn_rate",
+        "cost_to_complete",
+        "change_order_value",
+        "forecast_accuracy",
+        "billable_utilization"
+      ],
+      "status": "template"
+    },
+    "portfolio": {
+      "app": "ATLVS",
+      "title": "Portfolio Health",
+      "cadence": "weekly",
+      "print": "Wide",
+      "kind": "scorecard",
+      "metrics": [
+        "project_health",
+        "at_risk_projects",
+        "active_projects",
+        "on_time_delivery",
+        "gross_margin"
+      ],
+      "status": "preconfigured"
+    },
+    "resource": {
+      "app": "ATLVS",
+      "title": "Resource Utilization & Capacity",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "utilization",
+      "metrics": [
+        "resource_utilization",
+        "billable_utilization",
+        "active_projects"
+      ],
+      "status": "preconfigured"
+    },
+    "procurement": {
+      "app": "ATLVS",
+      "title": "Procurement & PO Status",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "vendor_otd",
+        "change_order_value",
+        "cost_to_complete"
+      ],
+      "status": "preconfigured"
+    },
+    "vendor": {
+      "app": "ATLVS",
+      "title": "Vendor Performance",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "scorecard",
+      "metrics": [
+        "vendor_otd",
+        "sub_rental_spend"
+      ],
+      "status": "preconfigured"
+    },
+    "pipeline": {
+      "app": "ATLVS",
+      "title": "CRM Pipeline & Forecast",
+      "cadence": "weekly",
+      "print": "Wide",
+      "kind": "revenue",
+      "metrics": [
+        "pipeline_value",
+        "win_rate",
+        "forecast_accuracy",
+        "backlog_value"
+      ],
+      "status": "preconfigured"
+    },
+    "winloss": {
+      "app": "ATLVS",
+      "title": "Proposal Win/Loss",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "funnel",
+      "metrics": [
+        "win_rate",
+        "pipeline_value"
+      ],
+      "status": "preconfigured"
+    },
+    "backlog": {
+      "app": "ATLVS",
+      "title": "Backlog & Revenue Forecast",
+      "cadence": "monthly",
+      "print": "Wide",
+      "kind": "financial",
+      "metrics": [
+        "backlog_value",
+        "forecast_accuracy",
+        "pipeline_value"
+      ],
+      "status": "preconfigured"
+    },
+    "cashflow": {
+      "app": "ATLVS",
+      "title": "Cash Flow & AR Aging",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "financial",
+      "metrics": [
+        "dso",
+        "ar_overdue",
+        "backlog_value"
+      ],
+      "status": "preconfigured"
+    },
+    "risk": {
+      "app": "ATLVS",
+      "title": "Risk & Issues Register",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "risk_exposure",
+        "at_risk_projects",
+        "schedule_variance"
+      ],
+      "status": "preconfigured"
+    },
+    "closeout": {
+      "app": "ATLVS",
+      "title": "Production Closeout / Post-Mortem",
+      "cadence": "per-project",
+      "print": "Wide",
+      "kind": "performance",
+      "metrics": [
+        "budget_variance",
+        "on_time_delivery",
+        "gross_margin",
+        "project_health"
+      ],
+      "status": "preconfigured"
+    },
+    "operations": {
+      "app": "COMPVSS",
+      "title": "Event Operations & Safety Report",
+      "doc": "report-operations.html",
+      "cadence": "per-event",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "ros_adherence",
+        "checkpoint_completion",
+        "incident_rate",
+        "near_miss_count",
+        "no_show_rate_crew",
+        "asset_utilization"
+      ],
+      "status": "template"
+    },
+    "workforce": {
+      "app": "COMPVSS",
+      "title": "Workforce & Labor Analytics",
+      "doc": "report-workforce.html",
+      "cadence": "weekly",
+      "print": "Wide",
+      "kind": "workforce",
+      "metrics": [
+        "labor_fill_rate",
+        "overtime_pct",
+        "labor_cost_per_head",
+        "no_show_rate_crew",
+        "cert_compliance"
+      ],
+      "status": "template"
+    },
+    "safety": {
+      "app": "COMPVSS",
+      "title": "EHS / Safety Report",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "incident_rate",
+        "near_miss_count",
+        "checkpoint_completion"
+      ],
+      "status": "preconfigured"
+    },
+    "asset": {
+      "app": "COMPVSS",
+      "title": "Asset & Rental Utilization",
+      "cadence": "monthly",
+      "print": "Wide",
+      "kind": "utilization",
+      "metrics": [
+        "asset_utilization",
+        "fleet_roi",
+        "equipment_downtime",
+        "sub_rental_spend"
+      ],
+      "status": "preconfigured"
+    },
+    "maintenance": {
+      "app": "COMPVSS",
+      "title": "Equipment Maintenance & Downtime",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "maintenance_compliance",
+        "equipment_downtime"
+      ],
+      "status": "preconfigured"
+    },
+    "inventory": {
+      "app": "COMPVSS",
+      "title": "Inventory & Warehouse",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "inventory_accuracy",
+        "asset_utilization"
+      ],
+      "status": "preconfigured"
+    },
+    "logistics": {
+      "app": "COMPVSS",
+      "title": "Load-in/out & Logistics",
+      "cadence": "per-event",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "turnaround_time",
+        "checkpoint_completion"
+      ],
+      "status": "preconfigured"
+    },
+    "attendance": {
+      "app": "COMPVSS",
+      "title": "Time & Attendance",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "workforce",
+      "metrics": [
+        "no_show_rate_crew",
+        "overtime_pct",
+        "labor_fill_rate"
+      ],
+      "status": "preconfigured"
+    },
+    "crewcerts": {
+      "app": "COMPVSS",
+      "title": "Crew Certification Compliance",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "compliance",
+      "metrics": [
+        "cert_compliance"
+      ],
+      "status": "preconfigured"
+    },
+    "sustainability": {
+      "app": "COMPVSS",
+      "title": "Sustainability & Green Ops",
+      "cadence": "per-event",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "waste_diversion",
+        "energy_intensity"
+      ],
+      "status": "preconfigured"
+    },
+    "sales": {
+      "app": "GVTEWAY",
+      "title": "Sales, Revenue & Ticketing Report",
+      "doc": "report-sales.html",
+      "cadence": "weekly",
+      "print": "Wide",
+      "kind": "revenue",
+      "metrics": [
+        "gmv",
+        "tickets_sold",
+        "sell_through",
+        "capacity_utilization",
+        "aov",
+        "check_in_rate",
+        "take_rate",
+        "refund_rate"
+      ],
+      "status": "template"
+    },
+    "marketing": {
+      "app": "GVTEWAY",
+      "title": "Marketing & Funnel Report",
+      "doc": "report-marketing.html",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "funnel",
+      "metrics": [
+        "conversion_rate",
+        "cart_abandonment",
+        "cac",
+        "roas",
+        "ltv",
+        "repeat_rate",
+        "nps"
+      ],
+      "status": "template"
+    },
+    "boxoffice": {
+      "app": "GVTEWAY",
+      "title": "Box Office Settlement",
+      "cadence": "per-event",
+      "print": "Letter",
+      "kind": "revenue",
+      "metrics": [
+        "tickets_sold",
+        "gmv",
+        "refund_rate",
+        "check_in_rate"
+      ],
+      "status": "preconfigured"
+    },
+    "attendance_g": {
+      "app": "GVTEWAY",
+      "title": "Attendance & Check-in",
+      "cadence": "per-event",
+      "print": "Letter",
+      "kind": "operations",
+      "metrics": [
+        "check_in_rate",
+        "no_show_rate",
+        "capacity_utilization"
+      ],
+      "status": "preconfigured"
+    },
+    "commerce": {
+      "app": "GVTEWAY",
+      "title": "E-commerce & Merch",
+      "cadence": "weekly",
+      "print": "Letter",
+      "kind": "revenue",
+      "metrics": [
+        "gmv",
+        "aov",
+        "conversion_rate",
+        "per_cap_spend"
+      ],
+      "status": "preconfigured"
+    },
+    "marketplace": {
+      "app": "GVTEWAY",
+      "title": "Marketplace Performance",
+      "cadence": "monthly",
+      "print": "Wide",
+      "kind": "revenue",
+      "metrics": [
+        "take_rate",
+        "vendor_gmv",
+        "active_listings",
+        "gmv"
+      ],
+      "status": "preconfigured"
+    },
+    "audience": {
+      "app": "GVTEWAY",
+      "title": "Audience & CRM Insights",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "funnel",
+      "metrics": [
+        "ltv",
+        "repeat_rate",
+        "cac",
+        "nps"
+      ],
+      "status": "preconfigured"
+    },
+    "guestxp": {
+      "app": "GVTEWAY",
+      "title": "Guest Experience (NPS/CSAT)",
+      "cadence": "per-event",
+      "print": "Letter",
+      "kind": "scorecard",
+      "metrics": [
+        "nps",
+        "per_cap_spend"
+      ],
+      "status": "preconfigured"
+    },
+    "payments": {
+      "app": "GVTEWAY",
+      "title": "Refunds & Chargebacks",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "financial",
+      "metrics": [
+        "refund_rate",
+        "chargeback_rate"
+      ],
+      "status": "preconfigured"
+    },
+    "sponsorship": {
+      "app": "GVTEWAY",
+      "title": "Sponsorship & Activation ROI",
+      "cadence": "per-event",
+      "print": "Wide",
+      "kind": "revenue",
+      "metrics": [
+        "sponsorship_revenue",
+        "activation_roi"
+      ],
+      "status": "preconfigured"
+    },
+    "jobs": {
+      "app": "GVTEWAY",
+      "title": "Job Board & Recruiting",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "funnel",
+      "metrics": [
+        "application_rate",
+        "time_to_hire",
+        "conversion_rate"
+      ],
+      "status": "preconfigured"
+    },
+    "training": {
+      "app": "LEG3ND",
+      "title": "Training & Compliance Report",
+      "doc": "report-training.html",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "compliance",
+      "metrics": [
+        "course_completion",
+        "pass_rate",
+        "compliance_rate",
+        "active_certs",
+        "expiring_certs",
+        "ceus_awarded",
+        "avg_quiz_score"
+      ],
+      "status": "template"
+    },
+    "certification": {
+      "app": "LEG3ND",
+      "title": "Certification Compliance & Expiry",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "compliance",
+      "metrics": [
+        "compliance_rate",
+        "active_certs",
+        "expiring_certs"
+      ],
+      "status": "preconfigured"
+    },
+    "course": {
+      "app": "LEG3ND",
+      "title": "Course Performance",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "performance",
+      "metrics": [
+        "course_completion",
+        "pass_rate",
+        "avg_quiz_score"
+      ],
+      "status": "preconfigured"
+    },
+    "assessment": {
+      "app": "LEG3ND",
+      "title": "Assessment & Exam Analytics",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "performance",
+      "metrics": [
+        "pass_rate",
+        "avg_quiz_score"
+      ],
+      "status": "preconfigured"
+    },
+    "engagement": {
+      "app": "LEG3ND",
+      "title": "Learner Engagement",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "funnel",
+      "metrics": [
+        "learner_engagement",
+        "enrollment",
+        "course_completion"
+      ],
+      "status": "preconfigured"
+    },
+    "content": {
+      "app": "LEG3ND",
+      "title": "Knowledge Base & Content Usage",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "utilization",
+      "metrics": [
+        "content_usage",
+        "catalog_adoption"
+      ],
+      "status": "preconfigured"
+    },
+    "instructor": {
+      "app": "LEG3ND",
+      "title": "Instructor & Content Effectiveness",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "scorecard",
+      "metrics": [
+        "instructor_rating",
+        "pass_rate",
+        "course_completion"
+      ],
+      "status": "preconfigured"
+    },
+    "onboarding": {
+      "app": "LEG3ND",
+      "title": "Onboarding Ramp",
+      "cadence": "monthly",
+      "print": "Letter",
+      "kind": "performance",
+      "metrics": [
+        "onboarding_ramp",
+        "time_to_complete",
+        "compliance_rate"
+      ],
+      "status": "preconfigured"
+    },
+    "ceu": {
+      "app": "LEG3ND",
+      "title": "CEU / Accreditation Ledger",
+      "cadence": "quarterly",
+      "print": "Letter",
+      "kind": "compliance",
+      "metrics": [
+        "ceus_awarded",
+        "active_certs"
+      ],
+      "status": "preconfigured"
+    }
+  },
+  "reportEnvelope": {
+    "note": "Every generated report is an instance of this envelope (the OpenAPI Report schema). Headline figures bind to metric.<id>.value|display|delta; contextual fields bind to the envelope paths below. Tables/charts bind to series[] rather than individual metrics.",
+    "fields": {
+      "report.id": "report definition id (executive|project|financial|operations|workforce|sales|marketing|training)",
+      "report.title": "report title",
+      "report.version": "snapshot version integer (append-only)",
+      "generatedAt": "ISO-8601 snapshot timestamp",
+      "period": "reporting period label",
+      "scope": "entity the report covers (org|project|event|period)",
+      "brand": "atlvs|co|white branding mode",
+      "project.id": "bound project id (project/financial reports)",
+      "event.name": "bound event name (event reports)",
+      "event.date": "bound event date",
+      "revenue": "period revenue (financial envelope context field)",
+      "metrics[]": "array of resolved Metric objects (see openapi.components.Metric)",
+      "series[]": "array of Series {key,label,points[]} backing charts/tables",
+      "insights[]": "array of Insight {severity,title,body} cards"
+    }
+  },
+  "openapi": {
+    "note": "metrics.json projects 1:1 to these OpenAPI 3.1 components; the same definitions back the listed paths and are read by report templates (.mf data-path) AND dashboard widgets, so a KPI is defined once and cannot disagree across surfaces.",
+    "components": {
+      "Metric": {
+        "type": "object",
+        "required": [
+          "id",
+          "value",
+          "confidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "app": {
+            "type": "string",
+            "enum": [
+              "ATLVS",
+              "COMPVSS",
+              "GVTEWAY",
+              "LEG3ND",
+              "ALL"
+            ]
+          },
+          "value": {
+            "type": "number"
+          },
+          "display": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "delta": {
+            "type": "number"
+          },
+          "deltaDir": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "flat"
+            ]
+          },
+          "target": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "grain": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "flat"
+            ]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "QUOTED",
+              "PUBLISHED",
+              "BENCHMARKED",
+              "MODELED",
+              "N/A"
+            ]
+          },
+          "period": {
+            "type": "string"
+          }
+        }
+      },
+      "Series": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "points": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "Insight": {
+        "type": "object",
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": [
+              "info",
+              "warn",
+              "critical"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "required": [
+          "id",
+          "period",
+          "metrics"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer"
+          },
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "period": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string",
+            "enum": [
+              "atlvs",
+              "co",
+              "white"
+            ]
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Metric"
+            }
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Series"
+            }
+          },
+          "insights": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Insight"
+            }
+          }
+        }
+      }
+    },
+    "paths": {
+      "GET /metrics": "list metric definitions (filter by app)",
+      "GET /metrics/{id}": "resolve one metric to a Metric object for a period/scope",
+      "GET /reports/{report}": "resolve a report definition to a Report object",
+      "POST /reports/{report}/snapshot": "freeze an immutable, versioned Report snapshot (append-only)"
+    }
+  },
+  "xpms": {
+    "protocol": "XPMS 2.0",
+    "note": "Metrics inherit the XPMS confidence ladder: each metric carries a confidence grade and MODELED values are labeled in report UIs. Reports are append-only snapshots (a generated report is immutable; re-runs create new versions). Metric ids are stable URID-adjacent keys; the /metrics + /reports OpenAPI endpoints project the same definitions used by report templates and dashboard widgets.",
+    "confidenceLadder": [
+      "QUOTED",
+      "PUBLISHED",
+      "BENCHMARKED",
+      "MODELED",
+      "N/A"
+    ],
+    "governance": "append-only (report snapshots immutable + versioned)"
+  }
+}

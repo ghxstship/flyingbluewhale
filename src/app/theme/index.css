@@ -15,8 +15,11 @@
 @import "./primitives.css";
 @import "./themes/atlvs-product.css";
 /* v6 Documents system — token-driven document FORMAT layer (loaded after the
-   product tokens, per the kit contract). SSOT for all 27 doc types. */
+   product tokens, per the kit contract). SSOT for all 29 doc types. */
 @import "./kit-documents.css";
+/* v6.3 Reports & Analytics viz layer — pairs with kit-documents.css (a report
+   is a brand-aware, contract-bound print/digital artifact). Loaded after it. */
+@import "./kit-reports.css";
 
 /*
  * Default theme when no [data-theme] attribute is present (SSR cold-start

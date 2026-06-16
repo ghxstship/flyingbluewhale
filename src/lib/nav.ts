@@ -185,6 +185,7 @@ export const platformNavDomain: NavGroup[] = [
     label: "Dashboard",
     items: [
       { label: "Overview", href: "/console", icon: "LayoutDashboard" },
+      { label: "Reports", href: "/console/reports", icon: "ChartBar" },
       { label: "Goals", href: "/console/goals", icon: "Crosshair" },
       { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox" },
       { label: "Threads", href: "/console/inbox", icon: "MessageSquare" },

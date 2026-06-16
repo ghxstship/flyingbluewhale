@@ -1,6 +1,5 @@
 import "server-only";
 import type { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { OrgBrand, ClientBrand } from "@/components/documents/DocEngine";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
 
@@ -32,10 +31,6 @@ const date = (d: string | null | undefined) => (d ? formatDate(d) : undefined);
 
 /** A resolver returns the bound data object, or null when the record is absent. */
 export type DocResolver = (db: DB, orgId: string, recordId: string) => Promise<DocData | null>;
-
-// Loose view for tables added after the last database.types.ts regen
-// (migration 20260615215535). RLS + org scoping still apply.
-const L = (db: DB): LooseSupabase => db as unknown as LooseSupabase;
 
 const resolvers: Record<string, DocResolver> = {
   // ── ATLVS ────────────────────────────────────────────────────────────────
@@ -461,11 +456,10 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   // ── new-table bound (migration 20260615215535) ──────────────────────────
-  // These six tables postdate the last database.types.ts regen; the loose
-  // client expresses them until the next types regeneration folds them in.
-  // RLS + org_id scoping still apply.
+  // Dedicated backing tables; jsonb sub-item columns (lines/cues/hazards/steps)
+  // are narrowed at runtime since they're Json in the generated types.
   async changeorder(db, orgId, id) {
-    const { data: co } = await L(db)
+    const { data: co } = await db
       .from("change_orders")
       .select("number, summary, total_delta_cents, currency, lines")
       .eq("id", id)
@@ -483,7 +477,7 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   async recap(db, orgId, id) {
-    const { data: r } = await L(db)
+    const { data: r } = await db
       .from("show_recaps")
       .select("event_name, headline, attendance, summary, event_date, site_name")
       .eq("id", id)
@@ -498,7 +492,7 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   async runofshow(db, orgId, id) {
-    const { data: ros } = await L(db)
+    const { data: ros } = await db
       .from("run_of_shows")
       .select("name, cues")
       .eq("id", id)
@@ -509,7 +503,7 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   async rams(db, orgId, id) {
-    const { data: r } = await L(db)
+    const { data: r } = await db
       .from("rams_assessments")
       .select("title, scope, rev, assessor, assessed_on, hazards, method")
       .eq("id", id)
@@ -530,25 +524,25 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   async sop(db, orgId, id) {
-    const { data: s } = await L(db)
+    const { data: s } = await db
       .from("sops")
       .select("code, title, steps")
       .eq("id", id)
       .eq("org_id", orgId)
       .maybeSingle();
     if (!s) return null;
-    const steps = Array.isArray(s.steps) ? s.steps : [];
+    const steps = (Array.isArray(s.steps) ? s.steps : []) as { body?: string; title?: string }[];
     return {
       sop: {
         id: s.code,
         title: s.title,
-        ...Object.fromEntries(steps.map((st: { body?: string }, i: number) => [String(i), st?.body])),
+        ...Object.fromEntries(steps.map((st, i) => [String(i), st?.body])),
       },
     };
   },
 
   async erp(db, orgId, id) {
-    const { data: e } = await L(db)
+    const { data: e } = await db
       .from("emergency_response_plans")
       .select("event_name, scope, rev, approver, approved_on, evac, ic_contact, hospital")
       .eq("id", id)
@@ -559,6 +553,80 @@ const resolvers: Record<string, DocResolver> = {
       event: { name: e.event_name },
       erp: { scope: e.scope, rev: e.rev, approver: e.approver, date: date(e.approved_on), evac: e.evac, ic: e.ic_contact },
       site: { hospital: e.hospital },
+    };
+  },
+
+  // ── kit v6.2 doc types ──────────────────────────────────────────────────
+  async itinerary(db, orgId, id) {
+    // Bound to a travel assignment (catalog_kind='travel') + its detail leg.
+    const { data: a } = await db
+      .from("assignments")
+      .select("id, project_id, party_kind, party_user_id, party_crew_id, party_external_id")
+      .eq("id", id)
+      .eq("org_id", orgId)
+      .eq("catalog_kind", "travel")
+      .maybeSingle();
+    if (!a) return null;
+    const [{ data: det }, traveler, { data: project }] = await Promise.all([
+      db
+        .from("travel_assignment_details")
+        .select("from_location, to_location, carrier, confirmation_code")
+        .eq("assignment_id", id)
+        .maybeSingle(),
+      ticketHolderName(db, a),
+      a.project_id ? db.from("projects").select("name").eq("id", a.project_id).maybeSingle() : noRow(),
+    ]);
+    const outbound = det
+      ? [det.from_location, det.to_location].filter(Boolean).join(" → ") + (det.carrier ? ` · ${det.carrier}` : "")
+      : undefined;
+    return {
+      traveler: { name: traveler },
+      event: { name: project?.name },
+      itinerary: { conf: det?.confirmation_code },
+      leg: { outbound: outbound || undefined },
+    };
+  },
+
+  async staffing(db, orgId, projectId) {
+    // A staffing plan is a project's positions (its offer letters → crew).
+    const { data: project } = await db
+      .from("projects")
+      .select("name, created_by")
+      .eq("id", projectId)
+      .eq("org_id", orgId)
+      .maybeSingle();
+    if (!project) return null;
+    const [{ data: offers }, { data: coordinator }] = await Promise.all([
+      db
+        .from("offer_letters")
+        .select("classification, letter_state, crew_member_id, created_at")
+        .eq("org_id", orgId)
+        .eq("project_id", projectId)
+        .order("created_at", { ascending: true }),
+      project.created_by ? db.from("users").select("name").eq("id", project.created_by).maybeSingle() : noRow(),
+    ]);
+    const rows = offers ?? [];
+    const crewIds = rows.map((o) => o.crew_member_id).filter(Boolean) as string[];
+    const { data: crew } = crewIds.length
+      ? await db.from("crew_members").select("id, name").in("id", crewIds)
+      : { data: [] as { id: string; name: string }[] };
+    const crewById = new Map((crew ?? []).map((c) => [c.id, c.name]));
+    const filled = rows.filter((o) => o.letter_state === "accepted").length;
+    return {
+      project: { id: shortId(projectId) },
+      event: { name: project.name },
+      coordinator: coordinator?.name,
+      staffing: {
+        total: String(rows.length),
+        filled: `${filled} / ${rows.length}`,
+        summary: `${filled} filled`,
+        ...Object.fromEntries(
+          rows.map((o, i) => [
+            String(i),
+            { position: o.classification, assigned: crewById.get(o.crew_member_id ?? ""), state: o.letter_state },
+          ]),
+        ),
+      },
     };
   },
 };

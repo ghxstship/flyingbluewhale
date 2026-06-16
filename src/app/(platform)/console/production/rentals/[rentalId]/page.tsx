@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDateTime, money } from "@/components/detail/DetailShell";
+import { DownloadLink } from "@/components/DownloadLink";
 import { getRequestT } from "@/lib/i18n/request";
 import { endRentalNow, deleteRental } from "../actions";
 
@@ -70,6 +71,9 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
                 </button>
               </form>
             )}
+            <DownloadLink href={`/api/v1/rentals/${row.id}/pull-sheet`}>
+              {t("console.production.rentals.detail.pullSheet", undefined, "Pull Sheet")}
+            </DownloadLink>
             <a href={`/console/production/rentals/${row.id}/edit`} className="ps-btn ps-btn--ghost ps-btn--sm">
               {t("common.edit", undefined, "Edit")}
             </a>

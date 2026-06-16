@@ -1,5 +1,5 @@
 /**
- * V6 Documents registry — all 27 document types from the v6 kit, expressed as
+ * V6 Documents registry — all 29 document types from the v6.2 kit, expressed as
  * token-driven template descriptors over the shared DocEngine. Each template
  * is BOTH the on-screen view and the print/PDF artifact, carries the
  * `data-path` merge contract, and supports the 3 white-label brand modes.
@@ -466,6 +466,71 @@ export const DOC_TEMPLATES: DocTemplate[] = [
         ],
       },
       { kind: "foot", text: "SOP" },
+    ],
+  },
+  {
+    id: "itinerary",
+    title: "Travel Itinerary",
+    app: "compvss",
+    schema: "itinerary",
+    blocks: [
+      { kind: "head", doctype: "Itinerary", docno: mf("traveler.name", "Dana Lin") },
+      {
+        kind: "section",
+        kv: {
+          cols: 3,
+          rows: [
+            { k: "Traveler", v: mf("traveler.name", "Dana Lin") },
+            { k: "Event", v: mf("event.name", "EDC Orlando") },
+            { k: "Confirmation", v: mf("itinerary.conf", "EDC-DL") },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "Itinerary",
+        phase: [
+          { n: "1", title: "Outbound", body: mf("leg.outbound", "MIA → MCO · AA 1142") },
+          { n: "2", title: "Ground", body: mf("leg.ground", "Crew shuttle · MCO → hotel") },
+          { n: "3", title: "Lodging", body: mf("leg.hotel", "Rosen Plaza · rm 412") },
+          { n: "4", title: "Per diem", body: ["$", mf("perDiem.rate", "65"), "/day · $", mf("perDiem.total", "260"), " total"] },
+          { n: "5", title: "Return", body: mf("leg.return", "MCO → MIA · AA 1190") },
+        ],
+      },
+      { kind: "foot", text: ["Itinerary · ", mf("traveler.name", "Dana Lin"), " · ", mf("event.name", "EDC Orlando")] },
+    ],
+  },
+  {
+    id: "staffing",
+    title: "Staffing Plan",
+    app: "compvss",
+    schema: "staffing",
+    size: "wide",
+    blocks: [
+      { kind: "head", doctype: "Staffing Plan", docno: mf("project.id", "RRR-052") },
+      {
+        kind: "section",
+        kv: {
+          cols: 3,
+          rows: [
+            { k: "Project", v: mf("event.name", "Salvage City") },
+            { k: "Filled", v: mf("staffing.filled", "38 / 44") },
+            { k: "Coordinator", v: mf("coordinator", "M. Adeyemi") },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        table: {
+          cols: [{ label: "Position" }, { label: "Qty", align: "r" }, { label: "Required cert" }, { label: "Assigned" }, { label: "State" }],
+          rows: [
+            { cells: [mf("staffing.0.position", "Rigger L1"), "2", "ETCP", mf("staffing.0.assigned", "D. Lin, +1"), mf("staffing.0.state", "Accepted")] },
+            { cells: [mf("staffing.1.position", "LD / Elec"), "1", "ESTA", mf("staffing.1.assigned", "R. Vega"), mf("staffing.1.state", "Offered")] },
+            { cells: ["Total positions", mf("staffing.total", "44"), "", "", mf("staffing.summary", "38 filled")], variant: "total" },
+          ],
+        },
+      },
+      { kind: "foot", text: ["Staffing plan · ", mf("event.name", "Salvage City"), " · ", mf("project.id", "RRR-052")] },
     ],
   },
   // ── GVTEWAY ────────────────────────────────────────────────────────────────

@@ -17,13 +17,13 @@ test.describe("documents generation API", () => {
     await loginAs(page, "owner");
   });
 
-  test("GET /api/v1/documents lists all 27 doc types, every one record-bound", async ({ page }) => {
+  test("GET /api/v1/documents lists all 29 doc types, every one record-bound", async ({ page }) => {
     const resp = await page.request.get("/api/v1/documents");
     expect(resp.status()).toBe(200);
     const body = await resp.json();
     expect(body.ok).toBe(true);
     expect(Array.isArray(body.data.documents)).toBe(true);
-    expect(body.data.documents).toHaveLength(27);
+    expect(body.data.documents).toHaveLength(29);
     const invoice = body.data.documents.find((d: { id: string }) => d.id === "invoice");
     expect(invoice).toMatchObject({ id: "invoice", app: "atlvs", recordBinding: true });
     // 100% record-backed: every doc type supports internal ?recordId binding.

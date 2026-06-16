@@ -4550,6 +4550,72 @@ export type Database = {
           },
         ]
       }
+      change_orders: {
+        Row: {
+          change_order_state: Database["public"]["Enums"]["change_order_state"]
+          created_at: string
+          created_by: string | null
+          currency: string
+          deleted_at: string | null
+          id: string
+          lines: Json
+          notes: string | null
+          number: string
+          org_id: string
+          project_id: string | null
+          summary: string | null
+          total_delta_cents: number
+          updated_at: string
+        }
+        Insert: {
+          change_order_state?: Database["public"]["Enums"]["change_order_state"]
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          id?: string
+          lines?: Json
+          notes?: string | null
+          number: string
+          org_id: string
+          project_id?: string | null
+          summary?: string | null
+          total_delta_cents?: number
+          updated_at?: string
+        }
+        Update: {
+          change_order_state?: Database["public"]["Enums"]["change_order_state"]
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          deleted_at?: string | null
+          id?: string
+          lines?: Json
+          notes?: string | null
+          number?: string
+          org_id?: string
+          project_id?: string | null
+          summary?: string | null
+          total_delta_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "change_orders_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "change_orders_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       channel_memberships: {
         Row: {
           channel_id: string
@@ -9246,6 +9312,78 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      emergency_response_plans: {
+        Row: {
+          approved_on: string | null
+          approver: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          erp_state: Database["public"]["Enums"]["erp_state"]
+          evac: string | null
+          event_name: string
+          hospital: string | null
+          ic_contact: string | null
+          id: string
+          org_id: string
+          project_id: string | null
+          rev: string | null
+          scope: string | null
+          updated_at: string
+        }
+        Insert: {
+          approved_on?: string | null
+          approver?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          erp_state?: Database["public"]["Enums"]["erp_state"]
+          evac?: string | null
+          event_name: string
+          hospital?: string | null
+          ic_contact?: string | null
+          id?: string
+          org_id: string
+          project_id?: string | null
+          rev?: string | null
+          scope?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approved_on?: string | null
+          approver?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          erp_state?: Database["public"]["Enums"]["erp_state"]
+          evac?: string | null
+          event_name?: string
+          hospital?: string | null
+          ic_contact?: string | null
+          id?: string
+          org_id?: string
+          project_id?: string | null
+          rev?: string | null
+          scope?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emergency_response_plans_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "emergency_response_plans_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       environmental_events: {
         Row: {
@@ -21933,6 +22071,75 @@ export type Database = {
           },
         ]
       }
+      rams_assessments: {
+        Row: {
+          assessed_on: string | null
+          assessor: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          hazards: Json
+          id: string
+          method: string | null
+          org_id: string
+          project_id: string | null
+          rams_state: Database["public"]["Enums"]["rams_state"]
+          rev: string | null
+          scope: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assessed_on?: string | null
+          assessor?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          hazards?: Json
+          id?: string
+          method?: string | null
+          org_id: string
+          project_id?: string | null
+          rams_state?: Database["public"]["Enums"]["rams_state"]
+          rev?: string | null
+          scope?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assessed_on?: string | null
+          assessor?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          hazards?: Json
+          id?: string
+          method?: string | null
+          org_id?: string
+          project_id?: string | null
+          rams_state?: Database["public"]["Enums"]["rams_state"]
+          rev?: string | null
+          scope?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rams_assessments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rams_assessments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rate_card_items: {
         Row: {
           active: boolean
@@ -24088,6 +24295,73 @@ export type Database = {
           },
         ]
       }
+      run_of_shows: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          cues: Json
+          deleted_at: string | null
+          event_id: string | null
+          id: string
+          name: string
+          notes: string | null
+          org_id: string
+          project_id: string | null
+          run_of_show_state: Database["public"]["Enums"]["run_of_show_state"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          cues?: Json
+          deleted_at?: string | null
+          event_id?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          org_id: string
+          project_id?: string | null
+          run_of_show_state?: Database["public"]["Enums"]["run_of_show_state"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          cues?: Json
+          deleted_at?: string | null
+          event_id?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          org_id?: string
+          project_id?: string | null
+          run_of_show_state?: Database["public"]["Enums"]["run_of_show_state"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "run_of_shows_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "run_of_shows_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "run_of_shows_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       safeguarding_reports: {
         Row: {
           assigned_to: string | null
@@ -25742,6 +26016,82 @@ export type Database = {
           },
         ]
       }
+      show_recaps: {
+        Row: {
+          attendance: number | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          event_date: string | null
+          event_id: string | null
+          event_name: string
+          headline: string | null
+          id: string
+          org_id: string
+          project_id: string | null
+          recap_state: Database["public"]["Enums"]["recap_state"]
+          site_name: string | null
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          attendance?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          event_date?: string | null
+          event_id?: string | null
+          event_name: string
+          headline?: string | null
+          id?: string
+          org_id: string
+          project_id?: string | null
+          recap_state?: Database["public"]["Enums"]["recap_state"]
+          site_name?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attendance?: number | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          event_date?: string | null
+          event_id?: string | null
+          event_name?: string
+          headline?: string | null
+          id?: string
+          org_id?: string
+          project_id?: string | null
+          recap_state?: Database["public"]["Enums"]["recap_state"]
+          site_name?: string | null
+          summary?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "show_recaps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "show_recaps_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "show_recaps_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       signage_placements: {
         Row: {
           created_at: string
@@ -26839,6 +27189,56 @@ export type Database = {
             foreignKeyName: "slack_workspaces_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: true
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sops: {
+        Row: {
+          code: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          id: string
+          org_id: string
+          purpose: string | null
+          sop_state: Database["public"]["Enums"]["sop_state"]
+          steps: Json
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id: string
+          purpose?: string | null
+          sop_state?: Database["public"]["Enums"]["sop_state"]
+          steps?: Json
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          id?: string
+          org_id?: string
+          purpose?: string | null
+          sop_state?: Database["public"]["Enums"]["sop_state"]
+          steps?: Json
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sops_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
             referencedRelation: "orgs"
             referencedColumns: ["id"]
           },
@@ -38086,6 +38486,7 @@ export type Database = {
         | "in_use"
         | "maintenance"
         | "retired"
+      erp_state: "draft" | "approved" | "archived"
       estimate_state:
         | "draft"
         | "in_review"
@@ -38304,6 +38705,7 @@ export type Database = {
         | "expired"
         | "signed"
       raid_kind: "risk" | "assumption" | "issue" | "dependency"
+      rams_state: "draft" | "submitted" | "approved" | "archived"
       reality_capture_source:
         | "openspace"
         | "dronedeploy"
@@ -38319,6 +38721,7 @@ export type Database = {
         | "ready"
         | "failed"
         | "archived"
+      recap_state: "draft" | "published" | "archived"
       record_role:
         | "viewer"
         | "commenter"
@@ -38385,6 +38788,7 @@ export type Database = {
       risk_severity: "low" | "moderate" | "high" | "critical"
       risk_status: "open" | "mitigating" | "accepted" | "closed"
       roster_state: "draft" | "published" | "locked"
+      run_of_show_state: "draft" | "locked" | "archived"
       saved_search_kind:
         | "rfq"
         | "gig"
@@ -38500,6 +38904,7 @@ export type Database = {
         | "comms_rf"
         | "comms_intercom"
         | "compressed_air"
+      sop_state: "draft" | "published" | "archived"
       spec_format:
         | "masterformat_2026"
         | "masterformat_1995"
@@ -39250,6 +39655,7 @@ export const Constants = {
         "maintenance",
         "retired",
       ],
+      erp_state: ["draft", "approved", "archived"],
       estimate_state: [
         "draft",
         "in_review",
@@ -39485,6 +39891,7 @@ export const Constants = {
         "signed",
       ],
       raid_kind: ["risk", "assumption", "issue", "dependency"],
+      rams_state: ["draft", "submitted", "approved", "archived"],
       reality_capture_source: [
         "openspace",
         "dronedeploy",
@@ -39502,6 +39909,7 @@ export const Constants = {
         "failed",
         "archived",
       ],
+      recap_state: ["draft", "published", "archived"],
       record_role: [
         "viewer",
         "commenter",
@@ -39577,6 +39985,7 @@ export const Constants = {
       risk_severity: ["low", "moderate", "high", "critical"],
       risk_status: ["open", "mitigating", "accepted", "closed"],
       roster_state: ["draft", "published", "locked"],
+      run_of_show_state: ["draft", "locked", "archived"],
       saved_search_kind: [
         "rfq",
         "gig",
@@ -39704,6 +40113,7 @@ export const Constants = {
         "comms_intercom",
         "compressed_air",
       ],
+      sop_state: ["draft", "published", "archived"],
       spec_format: [
         "masterformat_2026",
         "masterformat_1995",

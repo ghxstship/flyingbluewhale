@@ -8,9 +8,9 @@ import { DOC_TEMPLATES } from "./registry";
 import { contractOf, getPath, setPath, mergeFields, sample } from "./contract";
 
 describe("document contract", () => {
-  it("registry has all 27 doc types with unique ids", () => {
-    expect(DOC_TEMPLATES).toHaveLength(27);
-    expect(new Set(DOC_TEMPLATES.map((t) => t.id)).size).toBe(27);
+  it("registry has all 29 doc types with unique ids", () => {
+    expect(DOC_TEMPLATES).toHaveLength(29);
+    expect(new Set(DOC_TEMPLATES.map((t) => t.id)).size).toBe(29);
   });
 
   it("every template derives a non-empty contract whose paths resolve in its sample", () => {

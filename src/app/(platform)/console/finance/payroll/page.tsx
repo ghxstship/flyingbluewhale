@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
+import { DownloadLink } from "@/components/DownloadLink";
 import { DataTable } from "@/components/DataTable";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -127,12 +128,11 @@ export default async function Page() {
           {t(
             "console.finance.payroll.compliance",
             undefined,
-            "Davis-Bacon (WH-347), CA DIR, NY PWA, WA L&I supported via agency_report_type. PDF generator + state XML exporters are separate tickets; schema, RLS, and admin view are live.",
+            "Davis-Bacon (WH-347), CA DIR, NY PWA, WA L&I supported via agency_report_type. Certified-payroll PDF + state-filing XML export per run (right-hand Export column).",
           )}
         </div>
         <DataTable<Row>
           rows={rows}
-          rowHref={(r) => `/api/v1/payroll-runs/${r.id}/pdf`}
           emptyLabel={t("console.finance.payroll.emptyLabel", undefined, "No payroll runs yet")}
           emptyDescription={t(
             "console.finance.payroll.emptyDescription",
@@ -200,6 +200,20 @@ export default async function Page() {
               accessor: (r) => r.run_state,
               filterable: true,
               groupable: true,
+            },
+            {
+              key: "export",
+              header: t("console.finance.payroll.columns.export", undefined, "Export"),
+              render: (r) => (
+                <span className="flex items-center gap-1.5">
+                  <DownloadLink href={`/api/v1/payroll-runs/${r.id}/pdf`}>
+                    {t("console.finance.payroll.exportPdf", undefined, "PDF")}
+                  </DownloadLink>
+                  <DownloadLink href={`/api/v1/payroll-runs/${r.id}/state-xml`}>
+                    {t("console.finance.payroll.exportXml", undefined, "XML")}
+                  </DownloadLink>
+                </span>
+              ),
             },
           ]}
         />

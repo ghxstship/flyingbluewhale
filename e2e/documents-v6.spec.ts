@@ -1,6 +1,6 @@
 /**
  * V6 Documents system clickthrough — the document library hub plus every one of
- * the 27 doc templates. Each route must render the on-screen `.doc` artifact
+ * the 29 doc templates. Each route must render the on-screen `.doc` artifact
  * (proving the DocEngine + kit-documents.css format layer resolve), and an
  * unknown doc id must 404. Drives the same templates the kit ships as built
  * reference docs.

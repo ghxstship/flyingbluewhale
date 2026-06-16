@@ -184,15 +184,19 @@ describe("ADR-0005 super-persona collapse", () => {
       expect(group.sections).toHaveLength(p === "vendor" ? 3 : 2);
       const [workspace, ...personaSections] = group.sections!;
       expect(workspace?.label).toBe("Workspace");
-      // Workspace section is the shared 6 — same across every persona.
-      expect(workspace?.items).toHaveLength(6);
+      // Workspace section is the shared set — same across every persona.
+      // Calendar (project events) + Accreditation (badge self-service) lifted
+      // here from orphaned persona-less routes during the IA-alignment pass.
+      expect(workspace?.items).toHaveLength(8);
       expect(workspace?.items.map((i) => i.label)).toEqual([
         "Overview",
         "Guide",
+        "Calendar",
         "Updates",
         "Inbox",
         "Tasks",
         "Messages",
+        "Accreditation",
       ]);
       for (const section of personaSections) {
         expect(section.items.length).toBeGreaterThan(0);

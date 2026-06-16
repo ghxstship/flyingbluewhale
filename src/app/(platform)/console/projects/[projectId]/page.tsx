@@ -16,6 +16,7 @@ import { formatMoney, formatDate } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { ProjectStatusToggle } from "./ProjectStatusToggle";
 import { deleteProject } from "./edit/actions";
+import { ProjectReportsMenu } from "@/components/projects/ProjectReportsMenu";
 import { urlFor } from "@/lib/urls";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +50,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
               <PresenceSlot session={session} projectId={project.id} />
             </Suspense>
             <ProjectStatusToggle projectId={project.id} projectState={project.project_state} />
+            <ProjectReportsMenu projectId={project.id} />
             <Button href={`/console/projects/${projectId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>

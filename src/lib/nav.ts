@@ -880,6 +880,13 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
   const inbox: NavItem = { label: "Inbox", href: `/p/${slug}/inbox` };
   const tasks: NavItem = { label: "Tasks", href: `/p/${slug}/tasks` };
   const messages: NavItem = { label: "Messages", href: `/p/${slug}/messages` };
+  // Shared project-events calendar (read-only <CalendarView>), distinct from
+  // the persona-scoped workforce-shift schedules (<ScheduleSurface>). Lives at
+  // the slug root so every persona sees the show calendar.
+  const calendar: NavItem = { label: "Calendar", href: `/p/${slug}/schedule` };
+  // Accreditation self-service (badge/credential applications). Portal-wide
+  // surface above the persona slug; RLS gates what each viewer can request.
+  const accreditation: NavItem = { label: "Accreditation", href: `/p/${slug}/apply` };
   // ADR-0005: workspace items (the shared 6) lift into their own section
   // so the persona-specific section stays inside Miller's band. Every
   // persona rail used to start with these 6, eating the operator's
@@ -887,7 +894,7 @@ export function portalNav(slug: string, persona: PortalPersona): NavGroup {
   const overview: NavItem = { label: "Overview", href: base };
   const workspaceSection: NavSection = {
     label: "Workspace",
-    items: [overview, guide, updates, inbox, tasks, messages],
+    items: [overview, guide, calendar, updates, inbox, tasks, messages, accreditation],
   };
   // Only persona-specific items here — the shared 6 (Overview, Guide,
   // Updates, Inbox, Tasks, Messages) live in `workspaceSection` above

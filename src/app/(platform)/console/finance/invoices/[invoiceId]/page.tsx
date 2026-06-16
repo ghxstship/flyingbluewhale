@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
+import { DownloadLink } from "@/components/DownloadLink";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
@@ -45,6 +46,9 @@ export default async function InvoiceDetail({ params }: { params: Promise<{ invo
             <Button href={`/console/documents/invoice?recordId=${invoiceId}`} size="sm" variant="secondary">
               {t("console.finance.invoices.openAsDocument", undefined, "Document")}
             </Button>
+            <DownloadLink href={`/api/v1/invoices/${invoiceId}/pdf`}>
+              {t("console.finance.invoices.downloadPdf", undefined, "PDF")}
+            </DownloadLink>
             <Button href={`/console/finance/invoices/${invoiceId}/edit`} size="sm" variant="secondary">
               {t("common.edit", undefined, "Edit")}
             </Button>

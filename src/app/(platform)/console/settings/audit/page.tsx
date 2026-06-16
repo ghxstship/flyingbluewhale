@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
+import { DownloadLink } from "@/components/DownloadLink";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -50,6 +51,11 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           { from: showingFrom, to: showingTo, total: page.totalCount },
           `Audit Log · ${showingFrom}–${showingTo} of ${page.totalCount}`,
         )}
+        action={
+          <DownloadLink href="/api/v1/compliance/audit-export">
+            {t("console.settings.audit.export", undefined, "Export")}
+          </DownloadLink>
+        }
       />
       <div className="page-content max-w-6xl space-y-3">
         <AuditLogViewer rows={rows} />

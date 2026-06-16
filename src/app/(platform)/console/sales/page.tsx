@@ -103,8 +103,8 @@ export default async function Page() {
             {t("console.sales.hub.sections.revenue", undefined, "Revenue")}
           </h2>
           <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <Link className="surface hover-lift p-4" href="/console/commercial/tickets">
-              <div className="text-sm font-medium">{t("console.sales.hub.cards.tickets", undefined, "Tickets")}</div>
+            <Link className="surface hover-lift p-4" href="/console/marketplace/box-office">
+              <div className="text-sm font-medium">{t("console.sales.hub.cards.tickets", undefined, "Box Office")}</div>
             </Link>
             <Link className="surface hover-lift p-4" href="/console/insights">
               <div className="text-sm font-medium">

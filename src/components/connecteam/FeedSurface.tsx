@@ -31,6 +31,8 @@ type Row = {
   audience: string;
   pinned: boolean;
   published_at: string | null;
+  media_url: string | null;
+  media_kind: "video" | "image" | null;
 };
 
 export async function FeedSurface({
@@ -64,7 +66,7 @@ export async function FeedSurface({
   const [{ data: announcements }, { data: reads }] = await Promise.all([
     supabase
       .from("announcements")
-      .select("id, title, body, audience, pinned, published_at")
+      .select("id, title, body, audience, pinned, published_at, media_url, media_kind")
       .eq("org_id", session.orgId)
       .eq("publish_state", "published")
       .is("deleted_at", null)
@@ -120,6 +122,27 @@ export async function FeedSurface({
                     {a.published_at ? fmt.date(a.published_at) : ""}
                   </span>
                 </div>
+                {a.media_url && a.media_kind === "video" && (
+                  <video
+                    src={a.media_url}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="mt-3 w-full rounded-md"
+                    style={{ maxHeight: "320px", objectFit: "cover" }}
+                    aria-label={`${a.title} — video`}
+                  />
+                )}
+                {a.media_url && a.media_kind === "image" && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={a.media_url}
+                    alt={a.title}
+                    className="mt-3 w-full rounded-md object-cover"
+                    style={{ maxHeight: "320px" }}
+                    loading="lazy"
+                  />
+                )}
                 <h2 className="mt-2 text-sm font-semibold">{a.title}</h2>
                 <p className="mt-1 text-xs whitespace-pre-wrap text-[var(--p-text-2)]">{a.body}</p>
                 {!read && (

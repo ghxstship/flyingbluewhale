@@ -118,6 +118,7 @@ export type AssignmentListRow = {
   deadline: string | null;
   issued_at: string | null;
   fulfilled_at: string | null;
+  bundle_id: string | null;
   version: number;
   updated_at: string;
 };
@@ -132,11 +133,75 @@ export type AssignmentDetailRow = AssignmentListRow & {
 };
 
 // ──────────────────────────────────────────────────────────────
+// Assignment Bundles — experience-layered packages (Tixr parity)
+// ──────────────────────────────────────────────────────────────
+
+export type AssignmentBundleRow = {
+  id: string;
+  org_id: string;
+  project_id: string;
+  name: string;
+  description: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function listProjectBundles(
+  orgId: string,
+  projectId: string,
+): Promise<AssignmentBundleRow[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("assignment_bundles")
+    .select("id, org_id, project_id, name, description, created_by, created_at, updated_at")
+    .eq("org_id", orgId)
+    .eq("project_id", projectId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as unknown as AssignmentBundleRow[];
+}
+
+export async function getBundle(orgId: string, bundleId: string): Promise<AssignmentBundleRow | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("assignment_bundles")
+    .select("id, org_id, project_id, name, description, created_by, created_at, updated_at")
+    .eq("id", bundleId)
+    .eq("org_id", orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (error) throw error;
+  return (data ?? null) as unknown as AssignmentBundleRow | null;
+}
+
+export async function createBundle(
+  orgId: string,
+  payload: { project_id: string; name: string; description?: string; created_by?: string },
+): Promise<AssignmentBundleRow> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("assignment_bundles")
+    .insert({
+      org_id: orgId,
+      project_id: payload.project_id,
+      name: payload.name,
+      description: payload.description ?? null,
+      created_by: payload.created_by ?? null,
+    } as never)
+    .select("id, org_id, project_id, name, description, created_by, created_at, updated_at")
+    .single();
+  if (error) throw error;
+  return data as unknown as AssignmentBundleRow;
+}
+
+// ──────────────────────────────────────────────────────────────
 // Read helpers
 // ──────────────────────────────────────────────────────────────
 
 const LIST_SELECT =
-  "id, project_id, catalog_item_id, catalog_kind, party_kind, party_user_id, party_crew_id, party_external_id, fulfillment_state, title, deadline, issued_at, fulfilled_at, version, updated_at";
+  "id, project_id, catalog_item_id, catalog_kind, party_kind, party_user_id, party_crew_id, party_external_id, fulfillment_state, title, deadline, issued_at, fulfilled_at, bundle_id, version, updated_at";
 
 const DETAIL_SELECT = LIST_SELECT + ", org_id, notes, data, atom_id, created_at, created_by";
 

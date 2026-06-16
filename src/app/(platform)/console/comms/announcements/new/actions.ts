@@ -16,6 +16,8 @@ const Schema = z.object({
   team_id: z.string().uuid().optional().or(z.literal("")),
   pinned: z.string().optional(),
   publish_now: z.string().optional(),
+  media_kind: z.enum(["video", "image"]).optional().or(z.literal("")),
+  media_url: z.string().url().max(2000).optional().or(z.literal("")),
 });
 
 export type State = {
@@ -58,6 +60,9 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
     if (!team) return { error: "Team not found in your organization" };
   }
 
+  const mediaKind = parsed.data.media_kind || null;
+  const mediaUrl  = parsed.data.media_url  || null;
+
   const { data, error } = await supabase
     .from("announcements")
     .insert({
@@ -71,6 +76,8 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
       pinned: parsed.data.pinned === "on",
       publish_state: publish ? "published" : "draft",
       published_at: publish ? new Date().toISOString() : null,
+      media_kind: mediaKind,
+      media_url: mediaUrl,
     } as never)
     .select("id")
     .single();

@@ -48,6 +48,10 @@ export type AnnouncementAudience = (typeof ANNOUNCEMENT_AUDIENCES)[number];
 export const PUBLISH_STATES = ["draft", "published", "archived"] as const;
 export type PublishState = (typeof PUBLISH_STATES)[number];
 
+/** Media kinds for "Heads Up" video/image announcements (SafetyCulture parity). */
+export const HEADS_UP_MEDIA_KINDS = ["video", "image"] as const;
+export type HeadsUpMediaKind = (typeof HEADS_UP_MEDIA_KINDS)[number];
+
 // ============================================================
 // Chat
 // ============================================================

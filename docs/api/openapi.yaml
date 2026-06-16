@@ -713,3 +713,16 @@ paths:
   /api/v1/documents/{docType}:
     get: { summary: "Machine-readable data contract for one document type — JSON Schema, sample data object, and merge-field paths. Scope: documents:read." }
     post: { summary: "Generate a document. Body { data } (external — any doc type) or { recordId } (internal — record-bound types). Returns rendered .doc HTML + resolved data; no mutation. Scope: documents:write." }
+
+  /api/v1/assignments/bundles:
+    get:
+      summary: "List assignment bundles for a project. Query: projectId (uuid, required). Returns { bundles[] }. Experience-layered advancing packages (Tixr parity)."
+    post:
+      summary: "Create an assignment bundle. Body: { project_id, name, description? }. Returns the created bundle row."
+  /api/v1/assignments/bundles/{bundleId}:
+    get:
+      summary: "Fetch a single assignment bundle by ID."
+    patch:
+      summary: "Rename or redescribe a bundle. Body: { name?, description? }."
+    delete:
+      summary: "Soft-delete a bundle. Member assignments retain their rows with bundle_id SET NULL."

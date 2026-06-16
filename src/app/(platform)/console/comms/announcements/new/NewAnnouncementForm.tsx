@@ -107,6 +107,37 @@ export function NewAnnouncementForm({
         </p>
       </fieldset>
 
+      <fieldset className="space-y-3 rounded-md border border-[var(--p-border)] p-3">
+        <legend className="px-1 text-[10px] font-semibold tracking-wide text-[var(--p-text-2)] uppercase">
+          {t("console.comms.announcements.new.headsUp", undefined, "Heads Up Media (optional)")}
+        </legend>
+        <p className="text-[11px] text-[var(--p-text-2)]">
+          {t(
+            "console.comms.announcements.new.headsUpHint",
+            undefined,
+            "Attach a short video (≤60s) or image to make this announcement stand out as a Story-style Heads Up in the feed.",
+          )}
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <label className="flex flex-col gap-1.5">
+            <span className="text-xs font-medium text-[var(--p-text-2)]">
+              {t("console.comms.announcements.new.mediaKind", undefined, "Media Type")}
+            </span>
+            <select name="media_kind" className="ps-input focus-ring w-full" defaultValue="">
+              <option value="">{t("console.comms.announcements.new.mediaKind.none", undefined, "None — text only")}</option>
+              <option value="video">{t("console.comms.announcements.new.mediaKind.video", undefined, "Video (mp4 / webm)")}</option>
+              <option value="image">{t("console.comms.announcements.new.mediaKind.image", undefined, "Image (jpg / png / webp)")}</option>
+            </select>
+          </label>
+          <Input
+            label={t("console.comms.announcements.new.mediaUrl", undefined, "Storage URL")}
+            name="media_url"
+            type="url"
+            placeholder="https://…"
+          />
+        </div>
+      </fieldset>
+
       <label className="flex items-center gap-2 text-xs">
         <input type="checkbox" name="pinned" />{" "}
         {t("console.comms.announcements.new.pinToTop", undefined, "Pin To Top Of Feed")}

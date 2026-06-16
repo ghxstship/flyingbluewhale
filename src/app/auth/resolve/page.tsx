@@ -1,22 +1,37 @@
-import { NextResponse } from "next/server";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { getSession, resolveShell } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { shellFromResolved, urlFor } from "@/lib/urls";
 
-async function route(req: Request) {
-  const url = new URL(req.url);
+/**
+ * Post-login gateway. MUST be a PAGE, not a route handler: it is reached via a
+ * server-action `redirect()` (login) which drives a client-side router
+ * navigation, and the App Router does not cleanly settle on a redirect-only
+ * *route handler* reached that way — it loops on /auth/resolve. A page's
+ * server-side `redirect()` is followed natively by the router (verified: a
+ * hard GET to the old route handler followed its 307 fine; the soft nav did
+ * not). Logic is otherwise identical to the former route.ts.
+ *
+ * Always redirects (never renders) — `return null` is unreachable.
+ */
+export const dynamic = "force-dynamic";
+
+export default async function AuthResolvePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string; org?: string; slug?: string }>;
+}) {
+  const sp = await searchParams;
   let session = await getSession();
-  if (!session) return NextResponse.redirect(urlFor("auth", "/login"));
+  if (!session) redirect(urlFor("auth", "/login"));
 
   // No real org membership (signup didn't create one, OAuth-only, or stale
   // demo-fallback that no longer applies). Three paths, in priority order:
-  //   ① Auto-claim any pending invite addressed to this user's email. Most
-  //     forgiving entry-point handler — a user who hit /signup directly from
-  //     an invite email still gets dropped into the right org.
-  //   ② If signup carried an orgName — either via `?org=NAME` on the
-  //     confirm-redirect or via user_metadata.pending_org_name on a later
-  //     password login — silently bootstrap their workspace.
+  //   ① Auto-claim any pending invite addressed to this user's email.
+  //   ② If signup carried an orgName (?org= or user_metadata.pending_org_name),
+  //     silently bootstrap their workspace.
   //   ③ Otherwise, funnel to /onboarding/org so they can name a workspace.
   if (!session.orgId || session.persona === "guest") {
     const supabase = await createClient();
@@ -43,7 +58,7 @@ async function route(req: Request) {
     }
 
     // ② If still no org, try the org-name path.
-    const queryOrg = (url.searchParams.get("org") ?? "").trim();
+    const queryOrg = (sp.org ?? "").trim();
     let pending = !session || !session.orgId || session.persona === "guest" ? queryOrg : "";
     if (pending === "" && (!session || !session.orgId || session.persona === "guest")) {
       const { data: userData } = await supabase.auth.getUser();
@@ -59,9 +74,7 @@ async function route(req: Request) {
       )("create_org_with_owner", { p_name: pending, p_slug: "" });
       if (error) {
         // Don't strand the user — log and fall through to /onboarding/org
-        // where they'll get the form prefilled. The most common cause is
-        // a pre-existing soft-deleted org with the same slug surfacing a
-        // unique violation that the function's collision loop didn't catch.
+        // where they'll get the form prefilled.
         console.warn("auth.resolve: silent org bootstrap failed", {
           user: session?.userId,
           name: pending,
@@ -75,45 +88,36 @@ async function route(req: Request) {
       }
     }
     if (!session || !session.orgId || session.persona === "guest") {
-      const next = pending ? `/onboarding/org?name=${encodeURIComponent(pending)}` : "/onboarding/org";
-      return NextResponse.redirect(urlFor("auth", next));
+      const onboarding = pending ? `/onboarding/org?name=${encodeURIComponent(pending)}` : "/onboarding/org";
+      redirect(urlFor("auth", onboarding));
     }
   }
 
-  // H2-07 — log the login as a first-class audit event. /auth/resolve is
-  // the canonical post-login gateway so every successful session passes
-  // through here exactly once per device/browser session.
+  // H2-07 — log the login as a first-class audit event. /auth/resolve is the
+  // canonical post-login gateway so every successful session passes through
+  // here exactly once per device/browser session.
+  const requestId = (await headers()).get("x-request-id");
   await emitAudit({
     actorId: session.userId,
     orgId: session.orgId,
     actorEmail: session.email,
     action: "auth.login",
     metadata: { shell: resolveShell(session.persona), persona: session.persona },
-    requestId: req.headers.get("x-request-id"),
+    requestId,
   });
 
   const resolved = resolveShell(session.persona);
   const shell = shellFromResolved(resolved);
-  // Personal shell has no SHELL_PATH_PREFIX (it lives on the apex), so
-  // `urlFor("personal")` would return the base URL with no /me path and
-  // the redirect would land on / (marketing root). Force the path here.
-  // Portal needs the slug appended; everything else (console, mobile)
-  // uses its natural shell prefix correctly.
-  //
-  // Validate the slug as a flat token (project slugs are
-  // ^[a-z0-9-]+$). Without this, an attacker could pass
-  // `?slug=foo%2F..%2Fbar` and have urlFor() emit a multi-segment
-  // path. Browsers normalize `..` away, but we don't want to redirect
-  // anyone to anything other than `/p/<slug>`.
-  const rawSlug = url.searchParams.get("slug") ?? "select";
+
+  // Validate the slug as a flat token (project slugs are ^[a-z0-9-]+$). Without
+  // this, `?slug=foo%2F..%2Fbar` could emit a multi-segment path.
+  const rawSlug = sp.slug ?? "select";
   const slug = /^[a-z0-9-]{1,64}$/i.test(rawSlug) ? rawSlug : "select";
 
-  // Deep-link restore: a validated internal `?next=` path wins over the
-  // persona default. Internal-path-only guard (no `//`, no scheme) and
-  // the prefix is mapped to its shell so subdomain mode emits the right
-  // host. A user landing on a shell they can't access is handled by that
-  // shell's own session/RLS guards.
-  const rawNext = url.searchParams.get("next") ?? "";
+  // Deep-link restore: a validated internal `?next=` path wins over the persona
+  // default. Internal-path-only guard (no `//`, no scheme); the prefix is mapped
+  // to its shell so subdomain mode emits the right host.
+  const rawNext = sp.next ?? "";
   if (rawNext.startsWith("/") && !rawNext.startsWith("//") && !rawNext.includes("\\") && rawNext.length <= 512) {
     const nextTarget = rawNext.startsWith("/console")
       ? urlFor("platform", rawNext.slice("/console".length) || "/")
@@ -122,14 +126,11 @@ async function route(req: Request) {
         : rawNext === "/m" || rawNext.startsWith("/m/")
           ? urlFor("mobile", rawNext.slice("/m".length) || "/")
           : urlFor("marketing", rawNext);
-    return NextResponse.redirect(nextTarget);
+    redirect(nextTarget);
   }
 
   const target =
     resolved === "/p" ? urlFor("portal", `/${slug}`) : resolved === "/me" ? urlFor("personal", "/me") : urlFor(shell);
 
-  return NextResponse.redirect(target);
+  redirect(target);
 }
-
-export const GET = route;
-export const POST = route;

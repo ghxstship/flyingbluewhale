@@ -122,7 +122,12 @@ export function AuditLogViewer({ rows }: { rows: AuditLog[] }) {
                       onClick={() => setOpen(isOpen ? null : r.id)}
                     >
                       <td className="text-center text-[var(--p-text-2)]">{diffable ? (isOpen ? "▾" : "▸") : ""}</td>
-                      <td className="font-mono text-xs">{timeAgo(r.at)}</td>
+                      {/* Relative time is computed from Date.now() → unavoidably
+                          differs between SSR and hydration; suppress the warning
+                          (React keeps the client value). */}
+                      <td className="font-mono text-xs" suppressHydrationWarning>
+                        {timeAgo(r.at)}
+                      </td>
                       <td>
                         <Badge variant="muted">
                           <span className="font-mono">{r.action}</span>

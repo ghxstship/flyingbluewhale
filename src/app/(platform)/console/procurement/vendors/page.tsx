@@ -26,7 +26,10 @@ export default async function VendorsPage() {
       </>
     );
   const session = await requireSession();
-  const allRows = await listOrgScoped("vendors", session.orgId, { orderBy: "name", ascending: true });
+  // Newest-first (the listOrgScoped default): a name-asc sort + the 100-row cap
+  // buries a just-created vendor past the loaded set. The DataTable is still
+  // client-sortable by name, so alphabetical browsing is one click away.
+  const allRows = await listOrgScoped("vendors", session.orgId);
   // `vendors` isn't in SOFT_DELETABLE_TABLES, so listOrgScoped doesn't
   // auto-filter — hide soft-deleted rows here (the DB has `deleted_at`;
   // it predates the typed Vendor row, so read it off the loose shape).

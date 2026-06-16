@@ -53,7 +53,9 @@ export default async function Page() {
     .select("id, tier, starts_at, ends_at, label, auto_release_on, venue_id, talent_profile_id")
     .eq("kind", "hold")
     .eq("user_id", session.userId)
-    .order("starts_at", { ascending: true })
+    // Newest-placed first so a just-created hold is always within the capped
+    // set and at the top (a starts_at sort can bury it behind older holds).
+    .order("created_at", { ascending: false })
     .limit(500);
 
   const rows = (data ?? []) as HoldRow[];

@@ -32,7 +32,9 @@ export default async function TasksPage({ searchParams }: { searchParams: Promis
   const session = await requireSession();
   const sp = await searchParams;
   const view = VALID_VIEWS.has(sp.view ?? "") ? (sp.view as "list" | "kanban") : "list";
-  const rows = await listOrgScoped("tasks", session.orgId, { orderBy: "due_at", ascending: true });
+  // Newest-first: a just-created task (often with no due date) must surface at
+  // the top, not be buried last by a due_at sort (NULLS LAST) past the row cap.
+  const rows = await listOrgScoped("tasks", session.orgId, { orderBy: "created_at", ascending: false });
   const open = rows.filter((r) => r.task_state !== "done").length;
   return (
     <>

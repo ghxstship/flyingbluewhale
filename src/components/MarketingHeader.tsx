@@ -15,6 +15,12 @@ import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { LocaleSwitcher } from "@/components/marketing/LocaleSwitcher";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import {
+  marketingHeaderGroups,
+  marketingHeaderPrimaryLinks,
+  marketingAuthLinks,
+  type MarketingNavGroup,
+} from "@/lib/nav";
 
 /**
  * Marketing header — three grouped dropdowns + two direct links + a
@@ -24,84 +30,12 @@ import { useT } from "@/lib/i18n/LocaleProvider";
  * mode toggle is the only visible appearance affordance.
  */
 
-// Static data carries i18n keys (`labelKey`, `descriptionKey`) instead of
-// raw strings. `t()` resolves them at render with the English catalog as
-// fallback, so untranslated locales degrade to English rather than dot-paths.
-type NavLink = { labelKey: string; href: string; descriptionKey?: string };
-type NavGroup = { labelKey: string; items: NavLink[] };
+// Nav data is the single source of truth in `src/lib/nav.ts` (reconciled by
+// `scripts/generate-sitemap.mjs`). Labels are i18n catalog keys resolved with
+// `t()` at render, so untranslated locales degrade to English, not dot-paths.
+const [PRODUCT, INDUSTRIES, RESOURCES] = marketingHeaderGroups;
 
-const PRODUCT: NavGroup = {
-  labelKey: "marketing.header.product.label",
-  items: [
-    {
-      labelKey: "marketing.header.product.features.label",
-      href: "/features",
-      descriptionKey: "marketing.header.product.features.description",
-    },
-    {
-      labelKey: "marketing.header.product.solutions.label",
-      href: "/solutions",
-      descriptionKey: "marketing.header.product.solutions.description",
-    },
-    {
-      labelKey: "marketing.header.product.atlvs.label",
-      href: "/solutions/atlvs",
-      descriptionKey: "marketing.header.product.atlvs.description",
-    },
-    {
-      labelKey: "marketing.header.product.compvss.label",
-      href: "/solutions/compvss",
-      descriptionKey: "marketing.header.product.compvss.description",
-    },
-    {
-      labelKey: "marketing.header.product.gvteway.label",
-      href: "/solutions/gvteway",
-      descriptionKey: "marketing.header.product.gvteway.description",
-    },
-  ],
-};
-
-const INDUSTRIES: NavGroup = {
-  labelKey: "marketing.header.industries.label",
-  items: [
-    { labelKey: "marketing.industries.live-events", href: "/solutions/live-events" },
-    { labelKey: "marketing.industries.concerts", href: "/solutions/concerts" },
-    { labelKey: "marketing.industries.festivals-tours", href: "/solutions/festivals-tours" },
-    { labelKey: "marketing.industries.immersive-experiences", href: "/solutions/immersive-experiences" },
-    { labelKey: "marketing.industries.brand-activations", href: "/solutions/brand-activations" },
-    { labelKey: "marketing.industries.corporate-events", href: "/solutions/corporate-events" },
-    { labelKey: "marketing.industries.theatrical-performances", href: "/solutions/theatrical-performances" },
-    { labelKey: "marketing.industries.broadcast-tv-film", href: "/solutions/broadcast-tv-film" },
-  ],
-};
-
-const RESOURCES: NavGroup = {
-  labelKey: "marketing.header.resources.label",
-  items: [
-    {
-      labelKey: "marketing.header.resources.blog.label",
-      href: "/blog",
-      descriptionKey: "marketing.header.resources.blog.description",
-    },
-    {
-      labelKey: "marketing.header.resources.guides.label",
-      href: "/guides",
-      descriptionKey: "marketing.header.resources.guides.description",
-    },
-    {
-      labelKey: "marketing.header.resources.docs.label",
-      href: "/docs",
-      descriptionKey: "marketing.header.resources.docs.description",
-    },
-    {
-      labelKey: "marketing.header.resources.changelog.label",
-      href: "/changelog",
-      descriptionKey: "marketing.header.resources.changelog.description",
-    },
-  ],
-};
-
-function NavDropdown({ group }: { group: NavGroup }) {
+function NavDropdown({ group }: { group: MarketingNavGroup }) {
   const t = useT();
   const groupLabel = t(group.labelKey);
   return (
@@ -168,15 +102,11 @@ export function MarketingHeader() {
         <nav className="hidden items-center gap-1 xl:flex" aria-label={t("marketing.header.primaryAriaLabel")}>
           <NavDropdown group={PRODUCT} />
           <NavDropdown group={INDUSTRIES} />
-          <Link href="/marketplace" className="nav-item">
-            {t("marketing.header.marketplace")}
-          </Link>
-          <Link href="/pricing" className="nav-item">
-            {t("nav.pricing")}
-          </Link>
-          <Link href="/community" className="nav-item">
-            {t("nav.community")}
-          </Link>
+          {marketingHeaderPrimaryLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="nav-item">
+              {t(link.labelKey)}
+            </Link>
+          ))}
           <NavDropdown group={RESOURCES} />
         </nav>
 
@@ -187,16 +117,16 @@ export function MarketingHeader() {
           <ThemeToggle />
           <div aria-hidden="true" className="mx-1 h-5 w-px bg-[var(--p-border)]" />
           <Link
-            href="/login"
+            href={marketingAuthLinks.login.href}
             className="text-sm font-medium whitespace-nowrap text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
           >
-            {t("marketing.header.login")}
+            {t(marketingAuthLinks.login.labelKey)}
           </Link>
           <Link
-            href="/signup"
+            href={marketingAuthLinks.signup.href}
             className="rounded-md bg-[var(--p-accent-cta)] px-4 py-2 text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
           >
-            {t("common.startFree")}
+            {t(marketingAuthLinks.signup.labelKey)}
           </Link>
         </div>
 
@@ -228,15 +158,16 @@ export function MarketingHeader() {
             <MobileNavSection group={PRODUCT} onClick={() => setMobileOpen(false)} />
             <MobileNavSection group={INDUSTRIES} onClick={() => setMobileOpen(false)} />
             <nav className="flex flex-col gap-1" aria-label={t("marketing.header.mobilePrimaryAriaLabel")}>
-              <Link href="/marketplace" className="nav-item text-base" onClick={() => setMobileOpen(false)}>
-                {t("marketing.header.marketplace")}
-              </Link>
-              <Link href="/pricing" className="nav-item text-base" onClick={() => setMobileOpen(false)}>
-                {t("nav.pricing")}
-              </Link>
-              <Link href="/community" className="nav-item text-base" onClick={() => setMobileOpen(false)}>
-                {t("nav.community")}
-              </Link>
+              {marketingHeaderPrimaryLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="nav-item text-base"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {t(link.labelKey)}
+                </Link>
+              ))}
             </nav>
             <MobileNavSection group={RESOURCES} onClick={() => setMobileOpen(false)} />
             <div className="flex flex-col gap-2 border-t border-[var(--p-border)] pt-4">
@@ -255,18 +186,18 @@ export function MarketingHeader() {
             </div>
             <div className="flex flex-col gap-2 border-t border-[var(--p-border)] pt-4">
               <Link
-                href="/login"
+                href={marketingAuthLinks.login.href}
                 className="ps-btn ps-btn--ghost ps-btn--sm w-full justify-center"
                 onClick={() => setMobileOpen(false)}
               >
-                {t("marketing.header.login")}
+                {t(marketingAuthLinks.login.labelKey)}
               </Link>
               <Link
-                href="/signup"
+                href={marketingAuthLinks.signup.href}
                 className="w-full justify-center rounded-md bg-[var(--p-accent-cta)] px-4 py-2 text-center text-sm font-semibold text-[var(--p-accent-cta-contrast)] transition-[filter] hover:brightness-95"
                 onClick={() => setMobileOpen(false)}
               >
-                {t("common.startFree")}
+                {t(marketingAuthLinks.signup.labelKey)}
               </Link>
             </div>
           </div>
@@ -276,7 +207,7 @@ export function MarketingHeader() {
   );
 }
 
-function MobileNavSection({ group, onClick }: { group: NavGroup; onClick: () => void }) {
+function MobileNavSection({ group, onClick }: { group: MarketingNavGroup; onClick: () => void }) {
   const t = useT();
   const groupLabel = t(group.labelKey);
   return (

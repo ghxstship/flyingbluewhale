@@ -1,7 +1,15 @@
 # Route Inventory
 
-Generated from `scripts/routes.txt`. Every line produces one `page.tsx`.
-Re-run `bash scripts/generate-stubs.sh` to materialize new routes after edits; existing files are not overwritten.
+> **⚠️ SUPERSEDED (2026-06-17).** The single source of truth for the route
+> surface is now **[`SITEMAP.md`](./SITEMAP.md)** — generated from the live
+> filesystem reconciled against `src/lib/nav.ts` (`npm run gen:sitemap`). It
+> covers all 1,084 page routes + API handlers and flags nav orphans. The
+> route-group→prefix table below is retained as a quick reference; everything
+> else (route lists) lives in `SITEMAP.md`. Reconciliation plan:
+> [`SITEMAP_RECONCILIATION.md`](./SITEMAP_RECONCILIATION.md).
+
+Routes are materialized from `scripts/routes.txt` via
+`bash scripts/generate-stubs.sh` (idempotent; existing files are not overwritten).
 
 ## Route groups → URL prefixes
 

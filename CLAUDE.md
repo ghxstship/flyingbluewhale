@@ -83,7 +83,8 @@ The cross-app reporting engine. Mirrors the documents system (registry → engin
 - **External portal prefix:** `/p/[slug]/...` (internal route). Don't add external features to `/console/*`.
 - **Cross-shell URLs:** Always use `urlFor(shell, path)` from `@/lib/urls` — never hardcode `https://...atlvs.pro` and never concat `NEXT_PUBLIC_APP_URL` with `/console`/`/p`/`/m`. The helper is the single switch between subdomain mode and path-prefix fallback (preview deploys). Examples: `urlFor("platform", "/projects/abc")`, `urlFor("portal", "/mmw26/guide")`, `urlFor("auth", "/login")`.
 - **API:** All endpoints under `/api/v1/*`. Use `apiOk`, `apiCreated`, `apiError`, `parseJson` from `@/lib/api`. Guard with `withAuth` from `@/lib/auth`. Zod-validate all inputs at the boundary.
-- **Nav:** When adding a platform module, also add it to `src/lib/nav.ts#platformNav`.
+- **Nav:** `src/lib/nav.ts` is the SSOT for **every** shell's navigation — the platform rails (`platformNav`), portal (`portalNav`), mobile (`mobileTabs`/`mobileSurfaces`/`ROLE_TABS`), **and** the self-nav shells (`marketingHeaderGroups`/`marketingFooterGroups` drive `MarketingHeader`/the marketing footer; `personalNavGroups` drives the `/me` tabs). When adding a route, wire it into the right nav export — or, if it's intentionally not navigable (token/auth/locale/redirect), add it to `EXEMPT` in `scripts/generate-sitemap.mjs` with a reason.
+- **Sitemap SSOT:** `docs/ia/SITEMAP.md` is the generated route-surface SSOT (`npm run gen:sitemap`; `gen:sitemap:check` is the drift gate). It reconciles the filesystem against `nav.ts` and must show **0 orphans / 0 dangling / 0 dead priority refs** — guarded by `src/lib/ia/sitemap.test.ts` (runs in pre-push). Plan/history: `docs/ia/SITEMAP_RECONCILIATION.md`.
 - **Stubs:** New routes are added via `scripts/routes.txt` + `bash scripts/generate-stubs.sh`. The generator is idempotent.
 
 ## Integrations

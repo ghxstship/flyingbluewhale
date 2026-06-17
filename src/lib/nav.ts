@@ -185,8 +185,10 @@ export const platformNavDomain: NavGroup[] = [
     label: "Dashboard",
     items: [
       { label: "Overview", href: "/console", icon: "LayoutDashboard" },
+      { label: "Dashboards", href: "/console/dashboards", icon: "BarChart3" },
       { label: "Reports", href: "/console/reports", icon: "ChartBar" },
       { label: "Goals", href: "/console/goals", icon: "Crosshair" },
+      { label: "Assistant", href: "/console/assistant", icon: "Bot" },
       { label: "Notifications", href: "/me/notifications/inbox", icon: "Inbox" },
       { label: "Threads", href: "/console/inbox", icon: "MessageSquare" },
     ],
@@ -338,6 +340,7 @@ export const platformNavDomain: NavGroup[] = [
         label: "Pipeline & Partners",
         items: [
           { label: "Sales", href: "/console/sales", icon: "TrendingUp" },
+          { label: "Pipeline", href: "/console/pipeline", icon: "GitBranch" },
           { label: "Leads", href: "/console/leads", icon: "UserPlus" },
           { label: "Clients", href: "/console/clients", icon: "Handshake" },
           { label: "Sponsors", href: "/console/commercial/sponsors", icon: "Award" },
@@ -567,6 +570,25 @@ export const platformNavDomain: NavGroup[] = [
           { label: "Signage", href: "/console/legend/signage", icon: "Map" },
           { label: "Compliance Engine", href: "/console/legend/engine", icon: "ShieldCheck" },
           { label: "Safety", href: "/console/safety/incidents", icon: "Siren" },
+        ],
+      },
+      {
+        // The XPMS 2.0 protocol — the master taxonomy (atoms / classes /
+        // codebook / tiers) from which learning, training, and development
+        // derive. It's the knowledge-base substrate, so it lives in the
+        // LEG3ND lens. Paths stay under /console/xpms (NOT /console/legend/*)
+        // so the operational WBS admin isn't re-skinned by the legend
+        // airport-signage layout.
+        label: "The Protocol (XPMS)",
+        items: [
+          { label: "Overview", href: "/console/xpms", icon: "Network" },
+          { label: "Atoms", href: "/console/xpms/atoms", icon: "Spline" },
+          { label: "Classes", href: "/console/xpms/classes", icon: "Layers" },
+          { label: "Codebook", href: "/console/xpms/codebook", icon: "BookOpen" },
+          { label: "Phases", href: "/console/xpms/phases", icon: "GitBranch" },
+          { label: "Tiers", href: "/console/xpms/tiers", icon: "ListOrdered" },
+          { label: "Provenance", href: "/console/xpms/provenance", icon: "ScrollText" },
+          { label: "Variance", href: "/console/xpms/variance", icon: "ChartBar" },
         ],
       },
     ],
@@ -1151,6 +1173,20 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Onboarding", href: "/m/onboarding" },
   { label: "Advancing", href: "/m/advances" },
   { label: "Tracker", href: "/m/tracker" },
+  // Surfaces previously missing from the drawer (sitemap reconciliation
+  // 2026-06-17). "Calendar" is the read-only events calendar (distinct from
+  // "Shift", the workforce roster). "My Incidents" is the filer's own queue
+  // (distinct from "Incident" → /m/incidents, the org queue). Adding Guide +
+  // My Incidents here also resolves the ROLE_PRIORITY_HREFS refs that were
+  // silently dropped because the surface wasn't registered.
+  { label: "Calendar", href: "/m/schedule" },
+  { label: "Tasks", href: "/m/tasks" },
+  { label: "Guide", href: "/m/guide" },
+  { label: "My Incidents", href: "/m/incident" },
+  { label: "Inventory Scan", href: "/m/inventory/scan" },
+  // Personal notification inbox (distinct from "Alerts" → /m/alerts, the org
+  // broadcast feed). Previously reachable only from a home-screen card.
+  { label: "Notifications", href: "/m/notifications" },
 ];
 
 /**
@@ -1342,3 +1378,242 @@ export function mobileSurfacesForRole(role: MobileRole | undefined, phase?: stri
   const tail = mobileSurfaces.filter((i) => !seen.has(i.href));
   return [...head, ...tail];
 }
+
+// ───────────────────────────────────────────────────────────────────────
+// Self-navigating shells — marketing + personal (/me).
+//
+// These shells navigate via their own chrome (MarketingHeader, the marketing
+// layout footer, the personal layout tabs) rather than the platform rails.
+// The link DATA lives HERE so it is a single source of truth the sitemap
+// generator can reconcile; the components import and render it. Labels stay
+// as i18n catalog keys (`labelKey`), resolved with `t()` at render — moving
+// the data does not change a single rendered string.
+// ───────────────────────────────────────────────────────────────────────
+
+/** i18n-keyed nav item (marketing). `descriptionKey` drives dropdown blurbs. */
+export type MarketingNavItem = { labelKey: string; href: string; descriptionKey?: string };
+export type MarketingNavGroup = { labelKey: string; items: MarketingNavItem[] };
+
+/** Marketing header — the three dropdown groups (Product / Industries / Resources). */
+export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, MarketingNavGroup] = [
+  {
+    labelKey: "marketing.header.product.label",
+    items: [
+      {
+        labelKey: "marketing.header.product.features.label",
+        href: "/features",
+        descriptionKey: "marketing.header.product.features.description",
+      },
+      {
+        labelKey: "marketing.header.product.solutions.label",
+        href: "/solutions",
+        descriptionKey: "marketing.header.product.solutions.description",
+      },
+      {
+        labelKey: "marketing.header.product.atlvs.label",
+        href: "/solutions/atlvs",
+        descriptionKey: "marketing.header.product.atlvs.description",
+      },
+      {
+        labelKey: "marketing.header.product.compvss.label",
+        href: "/solutions/compvss",
+        descriptionKey: "marketing.header.product.compvss.description",
+      },
+      {
+        labelKey: "marketing.header.product.gvteway.label",
+        href: "/solutions/gvteway",
+        descriptionKey: "marketing.header.product.gvteway.description",
+      },
+    ],
+  },
+  {
+    labelKey: "marketing.header.industries.label",
+    items: [
+      { labelKey: "marketing.industries.live-events", href: "/solutions/live-events" },
+      { labelKey: "marketing.industries.concerts", href: "/solutions/concerts" },
+      { labelKey: "marketing.industries.festivals-tours", href: "/solutions/festivals-tours" },
+      { labelKey: "marketing.industries.immersive-experiences", href: "/solutions/immersive-experiences" },
+      { labelKey: "marketing.industries.brand-activations", href: "/solutions/brand-activations" },
+      { labelKey: "marketing.industries.corporate-events", href: "/solutions/corporate-events" },
+      { labelKey: "marketing.industries.theatrical-performances", href: "/solutions/theatrical-performances" },
+      { labelKey: "marketing.industries.broadcast-tv-film", href: "/solutions/broadcast-tv-film" },
+    ],
+  },
+  {
+    labelKey: "marketing.header.resources.label",
+    items: [
+      {
+        labelKey: "marketing.header.resources.blog.label",
+        href: "/blog",
+        descriptionKey: "marketing.header.resources.blog.description",
+      },
+      {
+        labelKey: "marketing.header.resources.guides.label",
+        href: "/guides",
+        descriptionKey: "marketing.header.resources.guides.description",
+      },
+      {
+        labelKey: "marketing.header.resources.docs.label",
+        href: "/docs",
+        descriptionKey: "marketing.header.resources.docs.description",
+      },
+      {
+        labelKey: "marketing.header.resources.changelog.label",
+        href: "/changelog",
+        descriptionKey: "marketing.header.resources.changelog.description",
+      },
+    ],
+  },
+];
+
+/** Marketing header — direct (non-dropdown) primary links. */
+export const marketingHeaderPrimaryLinks: MarketingNavItem[] = [
+  { labelKey: "marketing.header.marketplace", href: "/marketplace" },
+  { labelKey: "nav.pricing", href: "/pricing" },
+  { labelKey: "nav.community", href: "/community" },
+];
+
+/** Marketing header — auth links (rendered with CTA styling in the component). */
+export const marketingAuthLinks = {
+  login: { labelKey: "marketing.header.login", href: "/login" },
+  signup: { labelKey: "common.startFree", href: "/signup" },
+} as const;
+
+/** Marketing footer — seven grouped columns. */
+export const marketingFooterGroups: MarketingNavGroup[] = [
+  {
+    labelKey: "marketing.layout.footer.product.heading",
+    items: [
+      { labelKey: "marketing.layout.footer.product.solutions", href: "/solutions" },
+      { labelKey: "marketing.layout.footer.product.atlvs", href: "/solutions/atlvs" },
+      { labelKey: "marketing.layout.footer.product.gvteway", href: "/solutions/gvteway" },
+      { labelKey: "marketing.layout.footer.product.compvss", href: "/solutions/compvss" },
+      { labelKey: "marketing.layout.footer.product.features", href: "/features" },
+      { labelKey: "marketing.layout.footer.product.ai", href: "/ai" },
+      { labelKey: "marketing.layout.footer.product.integrations", href: "/integrations" },
+      { labelKey: "marketing.layout.footer.product.pricing", href: "/pricing" },
+      { labelKey: "marketing.layout.footer.product.changelog", href: "/changelog" },
+      { labelKey: "marketing.layout.footer.product.roadmap", href: "/roadmap" },
+    ],
+  },
+  {
+    labelKey: "marketing.layout.footer.builtFor.heading",
+    items: [
+      { labelKey: "marketing.layout.footer.builtFor.tourManagers", href: "/teams/tour-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.productionManagers", href: "/teams/production-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.stageManagers", href: "/teams/stage-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.festivalDirectors", href: "/teams/festival-directors" },
+      { labelKey: "marketing.layout.footer.builtFor.siteManagers", href: "/teams/site-managers" },
+      { labelKey: "marketing.layout.footer.builtFor.techDirectors", href: "/teams/technical-directors" },
+      { labelKey: "marketing.layout.footer.builtFor.talentBuyers", href: "/teams/talent-buyers" },
+      { labelKey: "marketing.layout.footer.builtFor.ehsLeads", href: "/teams/hse-leads" },
+    ],
+  },
+  {
+    labelKey: "marketing.layout.footer.industries.heading",
+    items: [
+      { labelKey: "marketing.layout.footer.industries.liveEvents", href: "/solutions/live-events" },
+      { labelKey: "marketing.layout.footer.industries.concerts", href: "/solutions/concerts" },
+      { labelKey: "marketing.layout.footer.industries.festivalsTours", href: "/solutions/festivals-tours" },
+      { labelKey: "marketing.layout.footer.industries.immersive", href: "/solutions/immersive-experiences" },
+      { labelKey: "marketing.layout.footer.industries.brandActivations", href: "/solutions/brand-activations" },
+      { labelKey: "marketing.layout.footer.industries.corporate", href: "/solutions/corporate-events" },
+      { labelKey: "marketing.layout.footer.industries.theatrical", href: "/solutions/theatrical-performances" },
+      { labelKey: "marketing.layout.footer.industries.broadcast", href: "/solutions/broadcast-tv-film" },
+    ],
+  },
+  {
+    labelKey: "marketing.layout.footer.resources.heading",
+    items: [
+      { labelKey: "marketing.layout.footer.resources.docs", href: "/docs" },
+      { labelKey: "marketing.layout.footer.resources.guides", href: "/guides" },
+      { labelKey: "marketing.layout.footer.resources.glossary", href: "/glossary" },
+      { labelKey: "marketing.layout.footer.resources.templates", href: "/templates" },
+      { labelKey: "marketing.layout.footer.resources.tools", href: "/tools" },
+      { labelKey: "marketing.layout.footer.resources.blog", href: "/blog" },
+      { labelKey: "marketing.layout.footer.resources.community", href: "/community" },
+      { labelKey: "marketing.layout.footer.resources.help", href: "/help" },
+    ],
+  },
+  {
+    labelKey: "marketing.layout.footer.compare.heading",
+    items: [
+      { labelKey: "marketing.layout.footer.compare.cvent", href: "/compare/cvent" },
+      { labelKey: "marketing.layout.footer.compare.procore", href: "/compare/procore" },
+      { labelKey: "marketing.layout.footer.compare.eventbrite", href: "/compare/eventbrite" },
+      { labelKey: "marketing.layout.footer.compare.masterTour", href: "/compare/master-tour" },
+      { labelKey: "marketing.layout.footer.compare.monday", href: "/compare/monday" },
+      { labelKey: "marketing.layout.footer.compare.notion", href: "/compare/notion" },
+      { labelKey: "marketing.layout.footer.compare.airtable", href: "/compare/airtable" },
+      { labelKey: "marketing.layout.footer.compare.asana", href: "/compare/asana" },
+      { labelKey: "marketing.layout.footer.compare.docusign", href: "/compare/docusign" },
+      { labelKey: "marketing.layout.footer.compare.salesforce", href: "/compare/salesforce" },
+      { labelKey: "marketing.layout.footer.compare.allAlternatives", href: "/alternatives" },
+    ],
+  },
+  {
+    labelKey: "marketing.layout.footer.studio.heading",
+    items: [
+      { labelKey: "marketing.layout.footer.studio.about", href: "/about" },
+      { labelKey: "marketing.layout.footer.studio.contact", href: "/contact" },
+      { labelKey: "marketing.layout.footer.studio.careers", href: "/careers" },
+      { labelKey: "marketing.layout.footer.studio.customers", href: "/customers" },
+      { labelKey: "marketing.layout.footer.studio.press", href: "/press" },
+      { labelKey: "marketing.layout.footer.studio.partners", href: "/partners" },
+      { labelKey: "marketing.layout.footer.studio.status", href: "/status" },
+    ],
+  },
+  {
+    labelKey: "marketing.layout.footer.legal.heading",
+    items: [
+      { labelKey: "marketing.layout.footer.legal.terms", href: "/legal/terms" },
+      { labelKey: "marketing.layout.footer.legal.privacy", href: "/legal/privacy" },
+      { labelKey: "marketing.layout.footer.legal.dpa", href: "/legal/dpa" },
+      { labelKey: "marketing.layout.footer.legal.sla", href: "/legal/sla" },
+    ],
+  },
+];
+
+/** Personal (/me) nav — carries an English `fallback` for the `t(key, _, fallback)` pattern. */
+export type PersonalNavItem = { labelKey: string; href: string; fallback: string };
+export type PersonalNavGroup = { labelKey: string; fallback: string; items: PersonalNavItem[] };
+
+/** Personal layout tabs — three grouped sections (Account / Activity / Marketplace). */
+export const personalNavGroups: PersonalNavGroup[] = [
+  {
+    labelKey: "me.layout.groups.account",
+    fallback: "Account",
+    items: [
+      { labelKey: "me.layout.tabs.profile", href: "/me/profile", fallback: "Profile" },
+      { labelKey: "me.layout.tabs.preferences", href: "/me/preferences", fallback: "Preferences" },
+      { labelKey: "me.layout.tabs.settings", href: "/me/settings", fallback: "Settings" },
+      { labelKey: "me.layout.tabs.privacy", href: "/me/privacy", fallback: "Privacy" },
+      { labelKey: "me.layout.tabs.security", href: "/me/security", fallback: "Security" },
+      { labelKey: "me.layout.tabs.organizations", href: "/me/organizations", fallback: "Organizations" },
+    ],
+  },
+  {
+    labelKey: "me.layout.groups.activity",
+    fallback: "Activity",
+    items: [
+      { labelKey: "me.layout.tabs.dashboard", href: "/me", fallback: "Dashboard" },
+      { labelKey: "me.layout.tabs.notifications", href: "/me/notifications", fallback: "Notifications" },
+      { labelKey: "me.layout.tabs.tickets", href: "/me/tickets", fallback: "Tickets" },
+      { labelKey: "me.layout.tabs.reviews", href: "/me/reviews", fallback: "Reviews" },
+    ],
+  },
+  {
+    labelKey: "me.layout.groups.marketplace",
+    fallback: "Marketplace",
+    items: [
+      { labelKey: "me.layout.tabs.talent", href: "/me/talent", fallback: "Talent" },
+      { labelKey: "me.layout.tabs.applications", href: "/me/applications", fallback: "Applications" },
+      { labelKey: "me.layout.tabs.submissions", href: "/me/submissions", fallback: "Submissions" },
+      { labelKey: "me.layout.tabs.inquiries", href: "/me/inquiries", fallback: "Inquiries" },
+      { labelKey: "me.layout.tabs.offers", href: "/me/offers", fallback: "Offers" },
+      { labelKey: "me.layout.tabs.availability", href: "/me/availability", fallback: "Availability" },
+      { labelKey: "me.layout.tabs.savedSearches", href: "/me/saved-searches", fallback: "Saved Searches" },
+      { labelKey: "me.layout.tabs.crew", href: "/me/crew", fallback: "Crew" },
+    ],
+  },
+];

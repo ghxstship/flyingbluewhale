@@ -9,6 +9,8 @@
     "typecheck": "tsc --noEmit",
     "gen:theme": "node scripts/gen-theme-tokens.mjs --write",
     "gen:theme:check": "node scripts/gen-theme-tokens.mjs --check",
+    "gen:sitemap": "node scripts/generate-sitemap.mjs",
+    "gen:sitemap:check": "node scripts/generate-sitemap.mjs --check",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",

@@ -4,6 +4,7 @@ import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { requireSession } from "@/lib/auth";
 import { getRequestT } from "@/lib/i18n/request";
+import { personalNavGroups } from "@/lib/nav";
 
 export default async function PersonalLayout({ children }: { children: React.ReactNode }) {
   // Outer auth guard — matches (platform) and (mobile) shell convention.
@@ -17,41 +18,12 @@ export default async function PersonalLayout({ children }: { children: React.Rea
   // Activity = events happening to me. Marketplace = discovery + participation.
   // Same horizontal tab pattern; just rendered in 3 visually-separated
   // sections so users stop scanning a 17-leaf flat list. URLs unchanged.
-  const tabGroups = [
-    {
-      label: t("me.layout.groups.account", undefined, "Account"),
-      tabs: [
-        { label: t("me.layout.tabs.profile", undefined, "Profile"), href: "/me/profile" },
-        { label: t("me.layout.tabs.preferences", undefined, "Preferences"), href: "/me/preferences" },
-        { label: t("me.layout.tabs.settings", undefined, "Settings"), href: "/me/settings" },
-        { label: t("me.layout.tabs.privacy", undefined, "Privacy"), href: "/me/privacy" },
-        { label: t("me.layout.tabs.security", undefined, "Security"), href: "/me/security" },
-        { label: t("me.layout.tabs.organizations", undefined, "Organizations"), href: "/me/organizations" },
-      ],
-    },
-    {
-      label: t("me.layout.groups.activity", undefined, "Activity"),
-      tabs: [
-        { label: t("me.layout.tabs.dashboard", undefined, "Dashboard"), href: "/me" },
-        { label: t("me.layout.tabs.notifications", undefined, "Notifications"), href: "/me/notifications" },
-        { label: t("me.layout.tabs.tickets", undefined, "Tickets"), href: "/me/tickets" },
-        { label: t("me.layout.tabs.reviews", undefined, "Reviews"), href: "/me/reviews" },
-      ],
-    },
-    {
-      label: t("me.layout.groups.marketplace", undefined, "Marketplace"),
-      tabs: [
-        { label: t("me.layout.tabs.talent", undefined, "Talent"), href: "/me/talent" },
-        { label: t("me.layout.tabs.applications", undefined, "Applications"), href: "/me/applications" },
-        { label: t("me.layout.tabs.submissions", undefined, "Submissions"), href: "/me/submissions" },
-        { label: t("me.layout.tabs.inquiries", undefined, "Inquiries"), href: "/me/inquiries" },
-        { label: t("me.layout.tabs.offers", undefined, "Offers"), href: "/me/offers" },
-        { label: t("me.layout.tabs.availability", undefined, "Availability"), href: "/me/availability" },
-        { label: t("me.layout.tabs.savedSearches", undefined, "Saved Searches"), href: "/me/saved-searches" },
-        { label: t("me.layout.tabs.crew", undefined, "Crew"), href: "/me/crew" },
-      ],
-    },
-  ];
+  // Data SSOT: `personalNavGroups` in src/lib/nav.ts (reconciled by the
+  // sitemap generator). Labels resolve via t(key, _, English fallback).
+  const tabGroups = personalNavGroups.map((g) => ({
+    label: t(g.labelKey, undefined, g.fallback),
+    tabs: g.items.map((i) => ({ label: t(i.labelKey, undefined, i.fallback), href: i.href })),
+  }));
   const brandName = tenant.branding.productName ?? tenant.orgName ?? "ATLVS";
   const brandAria = tenant.branding.productName ?? tenant.orgName ?? "ATLVS Technologies";
   const isDefaultBrand = !tenant.branding.productName && !tenant.orgName;

@@ -48,7 +48,7 @@ export default async function PortalSlugLayout({
   return (
     <div data-portal-slug={slug} data-theme="atlvs-product" data-platform="gvteway" style={style}>
       {data?.branding && Object.keys(branding).length > 0 && (
-        <a className="sr-only" href={`/p/${slug}/overview`}>
+        <a className="sr-only" href={`/p/${slug}`}>
           {t("p.shared.layout.srPortalLink", { name: data.name ?? slug }, `${data.name ?? slug} portal`)}
         </a>
       )}

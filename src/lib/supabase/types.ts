@@ -1,3 +1,9 @@
+// `import type` only — erased at compile, so referencing this `server-only`
+// FSM module here does not pull it into any (client) bundle. Keeps the
+// production-phase tuple (DISCOVERY→CLOSE) the single source of truth for the
+// fabrication_orders.production_phase column shape.
+import type { ProductionPhase } from "@/lib/production-phase";
+
 // Org-level role (billing/governance). One per (org, user).
 export type PlatformRole = "owner" | "admin" | "manager" | "member";
 export const PLATFORM_ROLES = ["owner", "admin", "manager", "member"] as const;
@@ -105,7 +111,6 @@ export type ReqStatus = "draft" | "submitted" | "approved" | "rejected" | "conve
 export type EquipmentStatus = "available" | "reserved" | "in_use" | "maintenance" | "retired";
 export type TaskStatus = "todo" | "in_progress" | "blocked" | "review" | "done";
 export type EventStatus = "draft" | "scheduled" | "live" | "complete" | "cancelled";
-export type FabricationStatus = "open" | "in_progress" | "blocked" | "complete";
 export type AnnotationKind = "flag" | "note" | "comment" | "tag";
 export type AnnotationSeverity = "info" | "warning" | "critical";
 export type AnnotationStatus = "open" | "acknowledged" | "resolved" | "dismissed";
@@ -532,7 +537,7 @@ export type FabricationOrder = {
   title: string;
   description: string | null;
   due_at: string | null;
-  production_phase: FabricationStatus;
+  production_phase: ProductionPhase;
   created_at: string;
   updated_at: string;
 };

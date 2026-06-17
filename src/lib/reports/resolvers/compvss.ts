@@ -1,5 +1,6 @@
 import type { MetricResolver, ResolverMap } from "./types";
 import { countWhere } from "./types";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
  * COMPVSS KPI resolvers (kit v6.3 Reports engine).
@@ -20,14 +21,15 @@ import { countWhere } from "./types";
 /** OSHA TRIR scaling factor: recordable cases × 200,000 / hours worked. */
 const OSHA_HOURS_BASE = 200_000;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyDB = any;
+// Dynamic table names → sanctioned LooseSupabase escape hatch (RLS stays the
+// authz boundary), same contract as `countWhere`. No raw `any`.
+type AnyDB = LooseSupabase;
 
 /** labor_fill_rate (pct) — filled shift seats / total scheduled shift seats. */
 const labor_fill_rate: MetricResolver = async (ctx) => {
   const total = await countWhere(ctx, "shifts", {});
   if (!total) return null;
-  const filledTotal = await (ctx.db as AnyDB)
+  const filledTotal = await (ctx.db as unknown as AnyDB)
     .from("shifts")
     .select("workforce_member_id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -49,7 +51,7 @@ const overtime_pct: MetricResolver = async () => null;
  * worked party. `timesheets.total_amount_minor` is cents.
  */
 const labor_cost_per_head: MetricResolver = async (ctx) => {
-  const { data, error } = await (ctx.db as AnyDB)
+  const { data, error } = await (ctx.db as unknown as AnyDB)
     .from("timesheets")
     .select("party_id,total_amount_minor")
     .eq("org_id", ctx.orgId);
@@ -81,7 +83,7 @@ const cert_compliance: MetricResolver = async (ctx) => {
   const total = await countWhere(ctx, "credentials", {});
   if (!total) return null;
   const today = new Date().toISOString().slice(0, 10);
-  const expired = await (ctx.db as AnyDB)
+  const expired = await (ctx.db as unknown as AnyDB)
     .from("credentials")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -99,7 +101,7 @@ const cert_compliance: MetricResolver = async (ctx) => {
 const incident_rate: MetricResolver = async (ctx) => {
   const recordable = await countWhere(ctx, "incidents", { osha_recordable: true });
   if (recordable === null) return null;
-  const { data, error } = await (ctx.db as AnyDB)
+  const { data, error } = await (ctx.db as unknown as AnyDB)
     .from("timesheets")
     .select("total_minutes")
     .eq("org_id", ctx.orgId);
@@ -121,7 +123,7 @@ const near_miss_count: MetricResolver = (ctx) => countWhere(ctx, "incidents", { 
 const checkpoint_completion: MetricResolver = async (ctx) => {
   const total = await countWhere(ctx, "inspection_items", {});
   if (!total) return null;
-  const answered = await (ctx.db as AnyDB)
+  const answered = await (ctx.db as unknown as AnyDB)
     .from("inspection_items")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -149,7 +151,7 @@ const ros_adherence: MetricResolver = async (ctx) => {
  * roll-up is the utilization signal.
  */
 const asset_utilization: MetricResolver = async (ctx) => {
-  const fleet = await (ctx.db as AnyDB)
+  const fleet = await (ctx.db as unknown as AnyDB)
     .from("equipment")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -158,7 +160,7 @@ const asset_utilization: MetricResolver = async (ctx) => {
   if (fleet.error) return null;
   const total = fleet.count ?? 0;
   if (!total) return null;
-  const deployed = await (ctx.db as AnyDB)
+  const deployed = await (ctx.db as unknown as AnyDB)
     .from("equipment")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -179,7 +181,7 @@ const fleet_roi: MetricResolver = async () => null;
  * equipment (the share of the fleet out of service right now).
  */
 const equipment_downtime: MetricResolver = async (ctx) => {
-  const fleet = await (ctx.db as AnyDB)
+  const fleet = await (ctx.db as unknown as AnyDB)
     .from("equipment")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)
@@ -188,7 +190,7 @@ const equipment_downtime: MetricResolver = async (ctx) => {
   if (fleet.error) return null;
   const total = fleet.count ?? 0;
   if (!total) return null;
-  const down = await (ctx.db as AnyDB)
+  const down = await (ctx.db as unknown as AnyDB)
     .from("equipment")
     .select("id", { count: "exact", head: true })
     .eq("org_id", ctx.orgId)

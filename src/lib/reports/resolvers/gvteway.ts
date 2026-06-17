@@ -1,6 +1,7 @@
 import "server-only";
 import type { MetricResolver, ResolverMap } from "./types";
 import { countWhere } from "./types";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
  * GVTEWAY (Public Interface & Marketplace) metric resolvers — kit v6.3 Reports
@@ -24,10 +25,9 @@ import { countWhere } from "./types";
  * Units: currency → dollars (minor/100); pct → 0–100; ratio/float → raw; int.
  */
 
-type Db = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  from: (t: string) => any;
-};
+// Dynamic table names → sanctioned LooseSupabase escape hatch (RLS stays the
+// authz boundary), same contract as `countWhere`. No raw `any`.
+type Db = LooseSupabase;
 
 /** Sum of converted-cart line value (qty * unit_price_cents), in cents. */
 async function convertedGmvCents(db: Db, orgId: string): Promise<number | null> {
@@ -67,15 +67,15 @@ async function orderCount(db: Db, orgId: string): Promise<number | null> {
 
 /** GMV — gross merchandise value of converted carts, in dollars. */
 const gmv: MetricResolver = async ({ db, orgId }) => {
-  const cents = await convertedGmvCents(db, orgId);
+  const cents = await convertedGmvCents(db as unknown as Db, orgId);
   return cents === null ? null : cents / 100;
 };
 
 /** Average order value — GMV / order count, in dollars. */
 const aov: MetricResolver = async ({ db, orgId }) => {
-  const cents = await convertedGmvCents(db, orgId);
+  const cents = await convertedGmvCents(db as unknown as Db, orgId);
   if (cents === null) return null;
-  const orders = await orderCount(db, orgId);
+  const orders = await orderCount(db as unknown as Db, orgId);
   if (orders === null || orders === 0) return null;
   return cents / 100 / orders;
 };
@@ -186,7 +186,7 @@ const no_show_rate: MetricResolver = async (ctx) => {
 
 /** Per-cap spend — GMV / tickets sold, in dollars per attendee. */
 const per_cap_spend: MetricResolver = async (ctx) => {
-  const cents = await convertedGmvCents(ctx.db, ctx.orgId);
+  const cents = await convertedGmvCents(ctx.db as unknown as Db, ctx.orgId);
   if (cents === null) return null;
   const tickets = await countWhere(ctx, "assignments", { catalog_kind: "ticket", deleted_at: null });
   if (tickets === null || tickets === 0) return null;

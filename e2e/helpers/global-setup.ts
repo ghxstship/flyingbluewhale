@@ -67,7 +67,6 @@ export default async function globalSetup(config: FullConfig) {
     }
 
     await ctx.close();
-    // eslint-disable-next-line no-console
     console.log(`[global-setup] pre-warm done in ${Math.round((Date.now() - start) / 1000)}s`);
   } catch {
     /* never block the suite on pre-warm */

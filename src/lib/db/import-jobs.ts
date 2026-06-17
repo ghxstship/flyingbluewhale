@@ -39,9 +39,16 @@ export async function listImportJobs(opts: { orgId: string; limit?: number } = {
   return ((data ?? []) as Record<string, unknown>[]).map(rowToImportJob);
 }
 
-export async function getImportJob(opts: { id: string }): Promise<ImportJob | null> {
+export async function getImportJob(opts: { id: string; orgId: string }): Promise<ImportJob | null> {
   const supabase = await createClient();
-  const { data } = await supabase.from("import_jobs").select("*").eq("id", opts.id).maybeSingle();
+  // org_id pin on top of RLS — defense-in-depth, and required because the
+  // sibling create/update path runs under the service-role client (RLS off).
+  const { data } = await supabase
+    .from("import_jobs")
+    .select("*")
+    .eq("id", opts.id)
+    .eq("org_id", opts.orgId)
+    .maybeSingle();
   return data ? rowToImportJob(data as Record<string, unknown>) : null;
 }
 
@@ -73,6 +80,7 @@ export async function createImportJob(opts: {
 
 export async function updateImportJob(opts: {
   id: string;
+  orgId: string;
   state?: ImportJobState;
   rowsTotal?: number;
   rowsSucceeded?: number;
@@ -92,5 +100,7 @@ export async function updateImportJob(opts: {
   if (opts.summary !== undefined) patch.summary = opts.summary;
   if (opts.startedAt !== undefined) patch.started_at = opts.startedAt;
   if (opts.finishedAt !== undefined) patch.finished_at = opts.finishedAt;
-  await admin.from("import_jobs").update(patch).eq("id", opts.id);
+  // org_id pin: the service-role client bypasses RLS, so a wrong/stale id must
+  // never be able to write across tenants — scope the UPDATE to the owner org.
+  await admin.from("import_jobs").update(patch).eq("id", opts.id).eq("org_id", opts.orgId);
 }

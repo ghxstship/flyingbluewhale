@@ -1,5 +1,6 @@
 import type { MetricResolver, ResolverMap } from "./types";
 import { countWhere } from "./types";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /**
  * ATLVS KPI resolvers (kit v6.3 Reports engine). Every query is org-scoped via
@@ -10,8 +11,10 @@ import { countWhere } from "./types";
  */
 
 // ---------------------------------------------------------------------------
-// Small org-scoped query helpers (the typed client's table union is wide, so we
-// route through the same `any`-cast escape hatch `countWhere` uses).
+// Small org-scoped query helpers. Dynamic table names → the typed client's
+// `from()` collapses to `never`, so we route through the sanctioned
+// `LooseSupabase` escape hatch (RLS stays the authz boundary), same as
+// `countWhere`.
 // ---------------------------------------------------------------------------
 
 type Row = Record<string, unknown>;
@@ -23,8 +26,7 @@ async function rows(
   columns: string,
   filters: { eq?: Record<string, string | number | boolean>; isNull?: string[]; notNull?: string[] } = {},
 ): Promise<Row[] | null> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let q: any = (ctx.db as any).from(table).select(columns).eq("org_id", ctx.orgId);
+  let q = (ctx.db as LooseSupabase).from(table).select(columns).eq("org_id", ctx.orgId);
   for (const [k, v] of Object.entries(filters.eq ?? {})) q = q.eq(k, v);
   for (const k of filters.isNull ?? []) q = q.is(k, null);
   for (const k of filters.notNull ?? []) q = q.not(k, "is", null);

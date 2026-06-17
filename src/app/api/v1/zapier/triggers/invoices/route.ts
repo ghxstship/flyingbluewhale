@@ -1,5 +1,5 @@
 import { apiError, apiOk } from "@/lib/api";
-import { withAuth } from "@/lib/auth";
+import { withAuth, assertScope } from "@/lib/auth";
 import { toZapierInvoice } from "@/lib/integrations/zapier/payloads";
 import { createClient } from "@/lib/supabase/server";
 
@@ -13,6 +13,8 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   return withAuth(async (session) => {
+    const denied = assertScope(session, "invoices:read");
+    if (denied) return denied;
     if (!session.orgId) return apiError("forbidden", "User is not in an organization");
     const supabase = await createClient();
     const { data, error } = await supabase

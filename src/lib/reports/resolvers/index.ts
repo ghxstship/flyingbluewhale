@@ -37,7 +37,11 @@ export async function resolveMetrics(orgId: string, ids: string[]): Promise<Metr
       }
       try {
         out[id] = { value: await fn(ctx) };
-      } catch {
+      } catch (err) {
+        // Isolate per-metric failures (never fail the whole report) but log
+        // them — a silent null is indistinguishable from honestly-absent data,
+        // which would hide a genuinely broken resolver from observability.
+        console.error(`[reports] metric "${id}" resolver threw:`, err);
         out[id] = { value: null };
       }
     }),

@@ -124,7 +124,10 @@ export async function getActivityForTarget(opts: GetActivityForTargetOptions): P
 
   const { data, error } = await query;
   if (error) {
-    // RLS denial / no rows / column mismatch — return empty so the page renders.
+    // RLS denial / no rows / column mismatch — return empty so the page renders,
+    // but log so a real query failure isn't silently indistinguishable from an
+    // empty timeline.
+    console.error("[activity] getActivityForTarget query failed:", error);
     return [];
   }
   const rows = (data ?? []) as unknown as AuditRowWithUser[];
@@ -164,7 +167,10 @@ export async function getActivityForRecord(opts: GetActivityForRecordOptions): P
   }
 
   const { data, error } = await query;
-  if (error) return [];
+  if (error) {
+    console.error("[activity] getActivityForRecord query failed:", error);
+    return [];
+  }
   const rows = (data ?? []) as unknown as AuditRowWithUser[];
   return rows.map(rowToActivity);
 }

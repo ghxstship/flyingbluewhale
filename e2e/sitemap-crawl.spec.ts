@@ -144,12 +144,18 @@ const SHELL_PERSONA: Record<string, string | null> = {
   mobile: "crew",
   portal: "owner", // owner has full org access; [slug] supplied via CRAWL_PARAMS
   marketing: null, // anonymous
-  auth: null,
+  auth: null, // anonymous — login/signup/invite/verify/reset onboarding surfaces
+  root: null, // anonymous — apex roots + token landings (offer/proposal/msa/share)
 };
 
 const ROUTES = allRoutes();
 
-for (const shell of ["platform", "personal", "mobile", "portal", "marketing"]) {
+// Every shell the walker produces is crawled — including `auth` (the onboarding
+// funnel: login, signup, accept-invite, verify-email, magic-link) and `root`
+// (apex pages + public token landings). Anonymous-gated routes that require a
+// session resolve to a login redirect (a pass); token routes with no live token
+// resolve to a canonical notFound (a pass). Nothing is left uncovered.
+for (const shell of ["platform", "personal", "mobile", "portal", "marketing", "auth", "root"]) {
   const persona = SHELL_PERSONA[shell];
   const routes = ROUTES.filter((r) => r.shell === shell);
 

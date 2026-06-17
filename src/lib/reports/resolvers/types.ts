@@ -1,4 +1,5 @@
 import type { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 /** Typed Supabase server client (folded the v6.2 doc tables in at the last regen). */
 export type DB = Awaited<ReturnType<typeof createClient>>;
@@ -21,8 +22,14 @@ export async function countWhere(
   table: string,
   filters: Record<string, string | number | boolean | null> = {},
 ): Promise<number | null> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let q: any = (ctx.db as any).from(table).select("*", { count: "exact", head: true }).eq("org_id", ctx.orgId);
+  // Dynamic table name → the typed client's `from()` collapses to `never`.
+  // LooseSupabase is the centralized escape hatch for exactly this (RLS stays
+  // the authz boundary). `.select()` returns the loose builder, so `q` infers
+  // as the chainable builder without an explicit `any`.
+  let q = (ctx.db as unknown as LooseSupabase)
+    .from(table)
+    .select("*", { count: "exact", head: true })
+    .eq("org_id", ctx.orgId);
   for (const [k, v] of Object.entries(filters)) q = v === null ? q.is(k, null) : q.eq(k, v);
   const { count, error } = await q;
   if (error) return null;

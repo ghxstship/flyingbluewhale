@@ -2,6 +2,11 @@ import "server-only";
 import type { createClient } from "@/lib/supabase/server";
 import type { OrgBrand, ClientBrand } from "@/components/documents/DocEngine";
 import { formatMoney, formatDate } from "@/lib/i18n/format";
+import { partitionBlocks } from "@/lib/proposals/validate";
+import { proposalDataFromBlocks } from "./proposal-binding";
+import { offerLetterData } from "./offer-binding";
+import type { OfferLetterResolved } from "@/lib/offer-letters/types";
+import { loadInvoiceArtifact } from "./sources/invoice";
 
 /**
  * Internal data resolvers — map a real org-scoped record to the merge-field
@@ -17,7 +22,7 @@ import { formatMoney, formatDate } from "@/lib/i18n/format";
  * engine's resolve() handles that), so a partially-bound document is still
  * complete and correct — never broken.
  *
- * The EXTERNAL generation path (POST arbitrary data to the API) covers all 27
+ * The EXTERNAL generation path (POST arbitrary data to the API) covers all 29
  * doc types unconditionally; record-binding is the internal convenience for
  * the doc types that map onto a backing table.
  */
@@ -37,7 +42,7 @@ const resolvers: Record<string, DocResolver> = {
   async proposal(db, orgId, id) {
     const { data: p } = await db
       .from("proposals")
-      .select("title, amount_cents, currency, doc_number, sent_at, created_at, client_id, project_id")
+      .select("title, amount_cents, currency, deposit_percent, doc_number, sent_at, created_at, blocks, client_id, project_id")
       .eq("id", id)
       .eq("org_id", orgId)
       .maybeSingle();
@@ -46,33 +51,33 @@ const resolvers: Record<string, DocResolver> = {
       p.client_id ? db.from("clients").select("name").eq("id", p.client_id).maybeSingle() : noRow(),
       db.from("orgs").select("name").eq("id", orgId).maybeSingle(),
     ]);
+    // Map the rich builder document (proposals.blocks, System B) into the kit
+    // template's merge fields, then layer identity/total defaults underneath —
+    // block-derived values win where present, sample copy fills the rest.
+    const { valid: blocks } = partitionBlocks(p.blocks);
+    const bound = proposalDataFromBlocks(blocks, {
+      currency: p.currency,
+      depositPercent: p.deposit_percent,
+      amountCents: p.amount_cents,
+    });
     const total = money(p.amount_cents, p.currency);
     return {
-      project: { title: p.title, id: p.doc_number },
+      ...bound,
+      project: { title: p.title, id: p.doc_number, ...(bound.project as Record<string, unknown> | undefined) },
       client: { name: client?.name },
       owner: { org: org?.name },
       issuedAt: date(p.sent_at ?? p.created_at),
-      invest: { subtotal: total, total },
+      invest: { total, ...(bound.invest as Record<string, unknown> | undefined) },
     };
   },
 
   async invoice(db, orgId, id) {
-    const { data: inv } = await db
-      .from("invoices")
-      .select("number, amount_cents, currency, issued_at, due_at, client_id")
-      .eq("id", id)
-      .eq("org_id", orgId)
-      .maybeSingle();
-    if (!inv) return null;
-    const [{ data: lines }, { data: client }, { data: org }] = await Promise.all([
-      db
-        .from("invoice_line_items")
-        .select("description, quantity, unit_price_cents, position")
-        .eq("invoice_id", id)
-        .order("position", { ascending: true }),
-      inv.client_id ? db.from("clients").select("name, contact_email").eq("id", inv.client_id).maybeSingle() : noRow(),
-      db.from("orgs").select("support_email").eq("id", orgId).maybeSingle(),
-    ]);
+    // Shared loader is the single source of truth for invoice → artifact (the
+    // react-pdf route reads the same rows); this resolver shapes them as the
+    // kit document's merge fields.
+    const loaded = await loadInvoiceArtifact(db, orgId, id);
+    if (!loaded) return null;
+    const { invoice: inv, lineItems, client, org } = loaded;
     const cur = inv.currency;
     return {
       invoice: {
@@ -81,7 +86,7 @@ const resolvers: Record<string, DocResolver> = {
         dueAt: date(inv.due_at),
         subtotal: money(inv.amount_cents, cur),
         balance: money(inv.amount_cents, cur),
-        lines: (lines ?? []).map((l) => ({
+        lines: lineItems.map((l) => ({
           desc: l.description,
           rate: money(l.unit_price_cents, cur),
           amount: money(Number(l.unit_price_cents) * Number(l.quantity), cur),
@@ -158,20 +163,20 @@ const resolvers: Record<string, DocResolver> = {
   },
 
   async offerletter(db, orgId, id) {
+    // Bind from the resolved view (all SSOT joins applied) so role,
+    // classification, comp, engagement-window, and inclusions render from the
+    // real record — not the template sample. The offer-binding bridge is the
+    // single mapper shared with the rich LetterDocument's source data.
     const { data: ol } = await db
-      .from("offer_letters")
-      .select("id, onsite_start_date, crew_member_id")
+      .from("offer_letters_resolved")
+      .select("*")
       .eq("id", id)
       .eq("org_id", orgId)
+      // View rows are generated all-nullable + Json — shape to the app contract.
+      .returns<OfferLetterResolved[]>()
       .maybeSingle();
     if (!ol) return null;
-    const { data: crew } = ol.crew_member_id
-      ? await db.from("crew_members").select("name").eq("id", ol.crew_member_id).maybeSingle()
-      : { data: null };
-    return {
-      offer: { id: shortId(ol.id), startAt: date(ol.onsite_start_date) },
-      candidate: { name: crew?.name },
-    };
+    return offerLetterData(ol);
   },
 
   // ── COMPVSS ────────────────────────────────────────────────────────────────

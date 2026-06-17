@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { clampRateBps } from "@/lib/rates";
 
 const Schema = z.object({
   agency_artist_id: z.string().uuid(),
@@ -26,9 +27,7 @@ export async function updateAgencyArtistAction(_: State, fd: FormData): Promise<
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
-  const bps = parsed.data.commission_bps
-    ? Math.min(5000, Math.max(0, Math.round(Number(parsed.data.commission_bps))))
-    : null;
+  const bps = parsed.data.commission_bps ? clampRateBps(parsed.data.commission_bps) : null;
   const { error } = await supabase
     .from("agency_artists")
     .update({

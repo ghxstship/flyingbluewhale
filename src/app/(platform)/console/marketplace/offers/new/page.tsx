@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
+import { DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_DEFAULT } from "@/lib/payment-terms";
 import { createOfferAction } from "./actions";
 
 export default async function Page() {
@@ -114,7 +115,7 @@ export default async function Page() {
               label={t("console.marketplace.offers.new.depositPct", undefined, "Deposit %")}
               name="deposit_pct"
               type="number"
-              defaultValue="60"
+              defaultValue={DEPOSIT_PCT_DEFAULT}
               min={0}
               max={100}
             />
@@ -123,7 +124,7 @@ export default async function Page() {
             <label className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.offers.new.balanceTermsLabel", undefined, "Balance Terms")}
             </label>
-            <select name="balance_terms" className="ps-input mt-1.5 w-full" defaultValue="load_in">
+            <select name="balance_terms" className="ps-input mt-1.5 w-full" defaultValue={BALANCE_TERMS_DEFAULT}>
               <option value="load_in">
                 {t("console.marketplace.offers.new.balanceTerms.loadIn", undefined, "On Load-In")}
               </option>

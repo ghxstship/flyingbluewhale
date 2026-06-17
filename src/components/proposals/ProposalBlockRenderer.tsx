@@ -1,3 +1,15 @@
+/**
+ * ProposalBlockRenderer — the **interactive engagement surface** for a proposal
+ * (the public `/proposals/[token]` signing viewer), NOT a document artifact.
+ *
+ * Per ADR-0011, the canonical proposal *document artifact* is the kit
+ * DocEngine (`/api/v1/documents/proposal`, bridged via
+ * `src/lib/documents/proposal-binding.ts`). This component intentionally stays
+ * separate because it carries behaviors the static `.doc` does not — in-page
+ * signature capture, scroll-spy nav, expandable legal panels, and the full
+ * 23-block union. It must NOT grow a second export/PDF path: there is exactly
+ * one document-artifact renderer, and it is the kit engine.
+ */
 import Link from "next/link";
 import type { ProposalBlock, Money } from "@/lib/proposals/types";
 import type { BrandContext } from "@/lib/branding";

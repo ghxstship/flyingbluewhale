@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
-import { DownloadLink } from "@/components/DownloadLink";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { buttonVariants } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
@@ -79,9 +78,6 @@ export default async function ProposalDetail({ params }: { params: Promise<{ pro
             >
               {t("console.proposals.detail.openAsDocument", undefined, "Document")}
             </Link>
-            <DownloadLink href={`/api/v1/proposals/${proposal.id}/pdf`}>
-              {t("console.proposals.detail.downloadPdf", undefined, "PDF")}
-            </DownloadLink>
             <GenerateDraftButton proposalId={proposal.id} />
             <ProposalStatusControls id={proposal.id} status={proposal.proposal_state} />
             {proposal.proposal_state === "signed" && !project && <ProposalConvertButton id={proposal.id} />}

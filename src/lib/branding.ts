@@ -12,6 +12,7 @@
  * untrusted input; `resolveBrandContext()` produces the flat context every
  * surface (proposal viewer, invoice PDF, email chrome) consumes.
  */
+import { PRODUCT_ACCENTS } from "@/lib/brand";
 
 export type Branding = {
   accentColor?: string; // CSS hex
@@ -95,9 +96,9 @@ export type BrandContext = {
   joint: BrandJoint;
 };
 
-/** Platform fallback (mirrors src/lib/brand.ts ATLVS palette; duplicated here to keep this file client-safe). */
+/** Platform fallback — accent sourced from the canonical PRODUCT_ACCENTS owner. */
 export const BRAND_FALLBACK = {
-  accent: "#FF2E88",
+  accent: PRODUCT_ACCENTS.atlvs,
   accentFg: "#FFFFFF",
   secondary: "#6D4A2A",
 } as const;

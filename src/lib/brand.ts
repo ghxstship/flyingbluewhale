@@ -117,10 +117,11 @@ export const BRAND = {
   /**
    * Sub-products under the ATLVS umbrella.
    *
-   * Color palette is canonical (per project/tokens.json):
-   *   - ATLVS  = nebula magenta (#FF2E88) — internal, producer & exec facing
+   * Color palette is canonical (per project/tokens.json — see PRODUCT_ACCENTS):
+   *   - ATLVS   = nebula magenta (#FF2E88) — internal, producer & exec facing
    *   - COMPVSS = brass doubloon (#E9A23B) — crew, vendor & talent facing
-   *   - GVTEWAY = plasma teal     (#21D4D4) — guest & client facing
+   *   - GVTEWAY = signal blue    (#2563EB) — guest & client facing
+   *   - LEG3ND  = production orange (#E8500A) — knowledge / LMS surface
    *
    * The legacy `color` strings carry the GHXSTSHIP signal name (nebula /
    * brass / plasma) so call sites that build `data-platform` attributes or
@@ -168,6 +169,25 @@ export const BRAND = {
     },
   },
 } as const;
+
+/**
+ * Sub-product accent hexes — the TS mirror of `tokens.json` `products.*.accent`
+ * (the design SSOT). For runtime consumers that CANNOT read the `--p-accent`
+ * CSS variable: OG/ImageResponse generation, HTML email, invite emails, and
+ * data-driven marketing/brand-kit surfaces that enumerate the products.
+ *
+ * CSS surfaces must keep using `--p-accent`; this is the literal-only escape
+ * hatch and the single owner for these four hexes. Keep in lockstep with
+ * `src/app/theme/tokens.json`.
+ */
+export const PRODUCT_ACCENTS = {
+  atlvs: "#FF2E88",
+  compvss: "#E9A23B",
+  gvteway: "#2563EB",
+  legend: "#E8500A",
+} as const;
+
+export type ProductAccentKey = keyof typeof PRODUCT_ACCENTS;
 
 /** Convenience: the full trademark line used in footers + i18n. */
 export const TRADEMARK_LINE = `${BRAND.products.console.name}, ${BRAND.products.portal.name}, and ${BRAND.products.mobile.name} are trademarks of ${BRAND.legalName}, a ${BRAND.parent.mark} company.`;

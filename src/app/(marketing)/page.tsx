@@ -9,6 +9,7 @@ import { FAQSection } from "@/components/marketing/FAQ";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { buildMetadata, organizationSchema, softwareApplicationSchema, websiteSchema, SITE } from "@/lib/seo";
 import { getRequestT } from "@/lib/i18n/request";
+import { PRODUCT_ACCENTS } from "@/lib/brand";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { XPMS_PHASES } from "@/lib/xpms";
 
@@ -140,7 +141,7 @@ export default async function Home() {
       tag: t("marketing.pages.home.products.atlvs.tag"),
       body: t("marketing.pages.home.products.atlvs.body"),
       href: "/solutions/atlvs",
-      color: "#FF2E88",
+      color: PRODUCT_ACCENTS.atlvs,
       textColor: "#D11668",
     },
     {
@@ -150,7 +151,7 @@ export default async function Home() {
       tag: t("marketing.pages.home.products.compvss.tag"),
       body: t("marketing.pages.home.products.compvss.body"),
       href: "/solutions/compvss",
-      color: "#E9A23B",
+      color: PRODUCT_ACCENTS.compvss,
       textColor: "#8A5A0F",
     },
     {
@@ -160,7 +161,7 @@ export default async function Home() {
       tag: t("marketing.pages.home.products.gvteway.tag"),
       body: t("marketing.pages.home.products.gvteway.body"),
       href: "/solutions/gvteway",
-      color: "#2563EB",
+      color: PRODUCT_ACCENTS.gvteway,
       textColor: "#1D4ED8",
     },
     {
@@ -170,7 +171,7 @@ export default async function Home() {
       tag: t("marketing.pages.home.products.legend.tag"),
       body: t("marketing.pages.home.products.legend.body"),
       href: "/solutions/legend",
-      color: "#E8500A",
+      color: PRODUCT_ACCENTS.legend,
       textColor: "#C2410C",
     },
   ];

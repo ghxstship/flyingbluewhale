@@ -25,6 +25,15 @@ export function formatDollars(cents: number): string {
   });
 }
 
+/** The (compensation-only) slice of a resolved letter that drives the comp
+ *  summary line. Widened from `OfferLetterResolved` so callers that only carry
+ *  these four fields (e.g. the kit document binding bridge) can reuse the
+ *  Nevada-IC-compliant framing without assembling a full resolved letter. */
+export type CompensationFields = Pick<
+  OfferLetterResolved,
+  "compensation_basis" | "effective_compensation_cents" | "rate_name" | "rate_unit_price_cents"
+>;
+
 /**
  * Compensation summary line — Nevada IC compliant framing.
  *
@@ -33,7 +42,7 @@ export function formatDollars(cents: number): string {
  * in §5, not as wages. No overtime, no minimum-call, no per-diem-labeled-
  * as-such; pre-approved travel/lodging is reimbursed against receipts.
  */
-export function formatCompensation(letter: OfferLetterResolved): string {
+export function formatCompensation(letter: CompensationFields): string {
   if (letter.compensation_basis === "tbd" || letter.effective_compensation_cents === 0) {
     return letter.rate_name ? `TBD — rate card: ${letter.rate_name}` : "To be confirmed prior to signature";
   }

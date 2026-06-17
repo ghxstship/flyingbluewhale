@@ -111,6 +111,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <LetterShareCard letterId={raw.id} accessCode={raw.access_code} publicUrl={publicUrl} status={raw.status} />
 
         <div className="flex flex-wrap items-center gap-3 text-xs">
+          <Link
+            href={`/console/documents/offerletter?recordId=${raw.id}`}
+            className="rounded border border-[var(--border-default)] px-3 py-1.5 hover:border-[var(--p-accent)] hover:text-[var(--p-accent)]"
+          >
+            {t("console.people.offerLetters.detail.openAsDocument", undefined, "Document")}
+          </Link>
           <a
             href={printUrl}
             target="_blank"

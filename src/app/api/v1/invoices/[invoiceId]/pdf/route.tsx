@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { resolvePdfBrand } from "@/lib/pdf/branding";
 import { compileAndStore } from "@/lib/pdf/render";
 import { InvoicePdf } from "@/lib/pdf/invoice";
+import { loadInvoiceArtifact } from "@/lib/documents/sources/invoice";
 import { getRequestT } from "@/lib/i18n/request";
 import { log } from "@/lib/log";
 import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
@@ -42,36 +43,16 @@ export async function GET(req: Request, ctx: { params: Promise<{ invoiceId: stri
 
   const supabase = await createClient();
 
-  // Single joined read — RLS on invoices enforces the org boundary.
-  const { data: invoice, error } = await supabase
-    .from("invoices")
-    .select(
-      "id, org_id, project_id, client_id, number, title, currency, amount_cents, invoice_state, issued_at, due_at, paid_at, stripe_payment_intent, notes",
-    )
-    .eq("id", parsed.data.invoiceId)
-    .eq("org_id", session.orgId)
-    .maybeSingle();
-  if (error) return apiError("internal", error.message);
-  if (!invoice) return apiError("not_found", "Invoice not found");
-
-  const [{ data: lineItems }, { data: org }, { data: client }, { data: project }] = await Promise.all([
-    supabase
-      .from("invoice_line_items")
-      .select("description, quantity, unit_price_cents, position")
-      .eq("invoice_id", parsed.data.invoiceId)
-      .order("position", { ascending: true }),
-    supabase.from("orgs").select("name, name_override, logo_url, branding").eq("id", session.orgId).maybeSingle(),
-    invoice.client_id
-      ? supabase.from("clients").select("name, branding, logo_url").eq("id", invoice.client_id).maybeSingle()
-      : Promise.resolve({ data: null }),
-    invoice.project_id
-      ? supabase.from("projects").select("branding").eq("id", invoice.project_id).maybeSingle()
-      : Promise.resolve({ data: null }),
-  ]);
+  // Shared loader — the same fetch the kit documents resolver uses, so the PDF
+  // and the `/api/v1/documents/invoice` HTML artifact can't drift. RLS on
+  // invoices enforces the org boundary.
+  const loaded = await loadInvoiceArtifact(supabase, session.orgId, parsed.data.invoiceId);
+  if (!loaded) return apiError("not_found", "Invoice not found");
+  const { invoice, lineItems, org, client, project } = loaded;
 
   if (!org) return apiError("internal", "Missing organization row");
 
-  const brand = resolvePdfBrand({ org, client: client ?? null, project: project ?? null });
+  const brand = resolvePdfBrand({ org, client, project });
   const { t } = await getRequestT();
 
   try {
@@ -83,7 +64,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ invoiceId: stri
           invoice={{
             number: invoice.number,
             title: invoice.title ?? null,
-            currency: invoice.currency,
+            currency: invoice.currency ?? "USD",
             amount_cents: Number(invoice.amount_cents),
             issued_at: invoice.issued_at ?? null,
             due_at: invoice.due_at ?? null,

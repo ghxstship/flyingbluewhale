@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { writeInbox } from "@/lib/inbox";
 import { log } from "@/lib/log";
+import { DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_DEFAULT } from "@/lib/payment-terms";
 
 const Schema = z.object({
   talent_profile_id: z.string().uuid(),
@@ -20,8 +21,8 @@ const Schema = z.object({
     .string()
     .regex(/^[A-Z]{3}$/)
     .default("USD"),
-  deposit_pct: z.string().default("60"),
-  balance_terms: z.string().default("load_in"),
+  deposit_pct: z.string().default(String(DEPOSIT_PCT_DEFAULT)),
+  balance_terms: z.string().default(BALANCE_TERMS_DEFAULT),
 });
 
 export type State = {

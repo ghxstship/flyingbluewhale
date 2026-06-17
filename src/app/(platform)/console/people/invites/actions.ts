@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { sendEmail } from "@/lib/email";
 import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
+import { PRODUCT_ACCENTS } from "@/lib/brand";
 import { PLATFORM_ROLES, PROJECT_ROLES } from "@/lib/supabase/types";
 import { PORTAL_PERSONAS } from "@/lib/nav";
 import type { FormState } from "@/components/FormShell";
@@ -100,7 +101,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
         <p style="color:#5b6472;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:'Space Mono','Courier New',monospace">Invitation</p>
         <h1 style="font-family:'Anton','Arial Narrow','Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:400;margin:12px 0 8px;letter-spacing:0.005em;text-transform:uppercase">You've been invited</h1>
         <p style="color:#181b23;font-size:14px">${session.email} invited you to join their workspace as ${parsed.data.role}.</p>
-        <p><a href="${acceptUrl}" style="display:inline-block;background:#FF2E88;color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Accept invitation</a></p>
+        <p><a href="${acceptUrl}" style="display:inline-block;background:${PRODUCT_ACCENTS.atlvs};color:#ffffff;padding:12px 24px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600">Accept invitation</a></p>
         <p style="color:#8c95a3;font-size:12px;margin-top:24px;font-family:'Space Mono','Courier New',monospace">Link expires in 7 days. If the button doesn't work:<br/><code>${acceptUrl}</code></p>
       </div>`,
   });

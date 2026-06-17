@@ -1,7 +1,7 @@
 import "server-only";
 import { env, hasResend } from "./env";
 import { httpFetch } from "./http";
-import { BRAND } from "./brand";
+import { BRAND, PRODUCT_ACCENTS } from "./brand";
 import { SITE } from "./seo";
 
 /**
@@ -32,9 +32,9 @@ function brandAssetUrl(path: string): string {
 export type EmailWrapAccent = "atlvs" | "compvss" | "gvteway";
 
 const ACCENT_TILE: Record<EmailWrapAccent, { fill: string; contrast: string; icon: string }> = {
-  atlvs: { fill: "#FF2E88", contrast: "#FFFFFF", icon: "/brand/atlvs-icon-atlvs.svg" },
-  compvss: { fill: "#E9A23B", contrast: "#1B1305", icon: "/brand/atlvs-icon-compvss.svg" },
-  gvteway: { fill: "#2563EB", contrast: "#FFFFFF", icon: "/brand/atlvs-icon-gvteway.svg" },
+  atlvs: { fill: PRODUCT_ACCENTS.atlvs, contrast: "#FFFFFF", icon: "/brand/atlvs-icon-atlvs.svg" },
+  compvss: { fill: PRODUCT_ACCENTS.compvss, contrast: "#1B1305", icon: "/brand/atlvs-icon-compvss.svg" },
+  gvteway: { fill: PRODUCT_ACCENTS.gvteway, contrast: "#FFFFFF", icon: "/brand/atlvs-icon-gvteway.svg" },
 };
 
 /**

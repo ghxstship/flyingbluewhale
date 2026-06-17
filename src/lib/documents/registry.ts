@@ -25,8 +25,8 @@ export const DOC_TEMPLATES: DocTemplate[] = [
       {
         kind: "cover",
         doctype: "Proposal & Statement of Work",
-        title: mf("project.title", "Miami Music Week — Mainstage"),
-        sub: mf("project.objective", "Full-scope experiential production for a 12,000-cap activation."),
+        title: mf("project.title", "Nike × Men's World Cup 2026 — Base Camp Fabrication"),
+        sub: mf("project.objective", "Full fabricated + printed scope across the recovery, strength, mental-performance, coaching, and medical activation sites."),
         stamps: [
           { k: "Client", v: mf("client.name", "Acme Live") },
           { k: "Issued", v: mf("issuedAt", "2026-06-15"), mono: true },
@@ -35,34 +35,118 @@ export const DOC_TEMPLATES: DocTemplate[] = [
       },
       {
         kind: "section",
-        eyebrow: "01 · The Project",
+        eyebrow: "01 · Project Overview",
         heading: "The brief, charted.",
         paras: [
           [mf("client.name", "Acme Live"), " engaged ", mf("owner.org", "ATLVS"), " to deliver a ", mf("project.type", "festival mainstage"), " at ", mf("project.venue", "Bayfront Park"), "."],
+          [mf("project.objective", "Full fabricated + printed scope across the recovery, strength, mental-performance, coaching, and medical activation sites.")],
+          mf("narrative.0", "Our approach pairs in-house fabrication with on-site production services so a single team owns the work from shop drawing to strike."),
+          mf("narrative.1", "Every environment is engineered for repeat deployment — built to travel, brand-accurate, and serviceable between activations."),
         ],
       },
       {
         kind: "section",
-        eyebrow: "04 · Operations Manning",
-        heading: "Project staffing.",
+        eyebrow: "02 · Scope of Work",
+        heading: "Every wall, fixture, and graphic.",
         table: {
-          cols: [{ label: "Role" }, { label: "Discipline" }, { label: "Headcount", align: "r" }, { label: "Basis", align: "r" }],
+          cols: [{ label: "Category" }, { label: "Scope item" }, { label: "Investment", align: "r" }],
           rows: [
-            { cells: [mf("manning.0.role", "Production Manager"), "Production", "1", "Flat"] },
-            { cells: [mf("manning.1.role", "AV Lead"), "Audio/Visual", mf("manning.avl", "6"), "Day rate"] },
+            { cells: [mf("scope.0.category", "Fabrication & Print"), mf("scope.0.label", "Environmental structure & millwork"), mf("scope.0.amount", "$25,500")] },
+            { cells: [mf("scope.1.category", "Production Services"), mf("scope.1.label", "Install & strike labor"), mf("scope.1.amount", "$35,500")] },
           ],
         },
       },
       {
         kind: "section",
-        eyebrow: "05 · Investment",
+        eyebrow: "03 · Activation Sites",
+        heading: "Where it lives.",
+        table: {
+          cols: [{ label: "Site" }, { label: "Environment build" }],
+          rows: [
+            { cells: [mf("sites.0.name", "Recovery & Strength"), mf("sites.0.brief", "Speedrail framework, illuminated milk plexi, color-changing rails")] },
+            { cells: [mf("sites.1.name", "Nike Mind"), mf("sites.1.brief", "Backlit perforated vent panels, dimensional logo, graphic inserts")] },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "04 · Production Lifecycle",
+        heading: "Discovery through strike.",
+        table: {
+          cols: [{ label: "Phase" }, { label: "Focus" }, { label: "Gate" }],
+          rows: [
+            { cells: [mf("phases.0.name", "Discovery & Brief"), mf("phases.0.focus", "Creative brief & references"), mf("phases.0.gate", "Approved")] },
+            { cells: [mf("phases.1.name", "Engineering & Development"), mf("phases.1.focus", "CAD, shop drawings, sampling"), mf("phases.1.gate", "In review")] },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "05 · Workback Schedule",
+        heading: "Critical path.",
+        table: {
+          cols: [{ label: "Milestone" }, { label: "Phase" }, { label: "Date", align: "r" }],
+          rows: [
+            { cells: [mf("schedule.0.milestone", "Shop drawings approved"), mf("schedule.0.phase", "Design & Engineering"), mf("schedule.0.date", "2026-05-08")] },
+            { cells: [mf("schedule.1.milestone", "Venue access · load-in"), mf("schedule.1.phase", "Install"), mf("schedule.1.date", "2026-05-26")] },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "06 · Investment Summary",
         heading: "Investment summary.",
         table: {
-          cols: [{ label: "Phase / Workstream" }, { label: "Discipline" }, { label: "Investment", align: "r" }],
+          cols: [{ label: "Workstream" }, { label: "" }, { label: "Investment", align: "r" }],
           rows: [
-            { cells: [mf("invest.0.phase", "Design"), "Creative", mf("invest.0.amount", "$48,000")] },
-            { cells: ["Subtotal", "", mf("invest.subtotal", "$312,000")], variant: "sub" },
-            { cells: ["Total", "", mf("invest.total", "$340,080")], variant: "total" },
+            { cells: [mf("invest.0.phase", "Fabrication & Print"), "", mf("invest.0.amount", "$105,000")] },
+            { cells: [mf("invest.1.phase", "Production Services"), "", mf("invest.1.amount", "$70,000")] },
+            { cells: ["Total project investment", "", mf("invest.total", "$175,000")], variant: "total" },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "07 · Engagement & Payment",
+        heading: "Terms of engagement.",
+        kv: {
+          rows: [
+            { k: "Deposit", v: [mf("payment.depositPct", "60%"), " · ", mf("payment.depositAmount", "$105,000"), " on signature"] },
+            { k: "Balance", v: [mf("payment.balancePct", "40%"), " · ", mf("payment.balanceAmount", "$70,000"), " before load-in"] },
+            { k: "Method", v: mf("payment.method", "ACH / wire") },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "08 · Change Orders",
+        heading: "Optional scope.",
+        table: {
+          cols: [{ label: "Optional scope" }, { label: "Detail" }, { label: "Pricing", align: "r" }],
+          rows: [
+            { cells: [mf("changes.0.name", "Tier 2 material upgrade"), mf("changes.0.detail", "Premium finishes & hardware"), mf("changes.0.price", "On approval")] },
+            { cells: [mf("changes.1.name", "Asset recovery & storage"), mf("changes.1.detail", "Long-term hold between activations"), mf("changes.1.price", "$4,500/yr")] },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "09 · Exclusions",
+        heading: "Out of scope.",
+        paras: [
+          mf("exclusions.0", "Equipment. AV, lighting, and rigging hardware are rental or venue-provided."),
+          mf("exclusions.1", "Travel & lodging. Crew travel is billed at cost via change order."),
+        ],
+      },
+      {
+        kind: "section",
+        eyebrow: "10 · Terms & Conditions",
+        heading: "Agreement.",
+        table: {
+          cols: [{ label: "Clause" }, { label: "Terms" }],
+          rows: [
+            { cells: [mf("terms.0.title", "Acceptance"), mf("terms.0.body", "Written approval of this SOW constitutes authorization to proceed.")] },
+            { cells: [mf("terms.1.title", "Payment"), mf("terms.1.body", "60% deposit on signature; 40% balance before load-in. ACH/wire only.")] },
           ],
         },
       },
@@ -224,10 +308,70 @@ export const DOC_TEMPLATES: DocTemplate[] = [
       { kind: "head", doctype: "Offer Letter", docno: mf("offer.id", "OL-771") },
       {
         kind: "section",
+        eyebrow: "Engagement",
         heading: "Offer of engagement.",
         paras: [
           ["Dear ", mf("candidate.name", "Dana Lin"), ","],
-          ["We are pleased to offer you the role of ", mf("offer.role", "Lighting Designer"), " at a rate of ", mf("offer.rate", "$650/day"), ", starting ", mf("offer.startAt", "2026-08-04"), "."],
+          ["On behalf of ", mf("offer.employer", "ATLVS Technologies"), ", we are pleased to offer you the role of ", mf("offer.role", "Lighting Designer"), " on ", mf("offer.project", "Miami Music Week"), ". Full engagement terms are set out below — countersign at the bottom to make it official."],
+        ],
+      },
+      {
+        kind: "section",
+        eyebrow: "01 · Engagement Summary",
+        heading: "Role & assignment.",
+        kv: {
+          rows: [
+            { k: "Role", v: mf("offer.role", "Lighting Designer") },
+            { k: "Department", v: mf("offer.department", "Lighting") },
+            { k: "Classification", v: mf("offer.classification", "1099 Independent Contractor") },
+            { k: "Reports to", v: mf("offer.reportsTo", "M. Soto · Production Manager") },
+            { k: "Work location", v: mf("offer.workLocation", "Bayfront Park · Miami · FL") },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "02 · Engagement Window",
+        heading: "Dates.",
+        table: {
+          cols: [{ label: "Milestone" }, { label: "Date", align: "r" }],
+          rows: [
+            { cells: ["Travel in", mf("dates.travelIn", "August 2, 2026")] },
+            { cells: ["On-site start", mf("dates.onsiteStart", "August 4, 2026")] },
+            { cells: ["On-site end", mf("dates.onsiteEnd", "August 9, 2026")] },
+            { cells: ["Travel out", mf("dates.travelOut", "August 10, 2026")] },
+            { cells: ["Projected service days", mf("offer.days", "6")], variant: "total" },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "03 · Compensation",
+        heading: "Compensation & reimbursement.",
+        kv: {
+          rows: [
+            { k: "Basis", v: mf("comp.basis", "Per Day") },
+            { k: "Compensation", v: mf("comp.amount", "$650 per documented service-day deliverable") },
+            { k: "Travel + lodging", v: mf("comp.reimbursement", "Pre-approved travel and lodging reimbursed against documented receipts") },
+            { k: "Payment schedule", v: mf("comp.paymentSchedule", "Net 30 on accepted deliverables") },
+          ],
+        },
+      },
+      {
+        kind: "section",
+        eyebrow: "04 · Inclusions",
+        heading: "What's included.",
+        paras: [
+          mf("inclusions.0", "Crew meals on call days"),
+          mf("inclusions.1", "Travel provided / arranged"),
+        ],
+      },
+      {
+        kind: "section",
+        eyebrow: "05 · Acceptance",
+        heading: "Countersign to accept.",
+        paras: [
+          ["This offer is extended by ", mf("signer.name", "Julian Clarkson"), ", ", mf("signer.title", "Producer & Operations Director"), ". Type your full legal name below to formalize acceptance; your typed signature, IP address, and timestamp are captured as the audit trail."],
         ],
       },
       { kind: "sign", rows: [{ label: "Candidate — signature / date" }, { label: "ATLVS — signature / date" }] },

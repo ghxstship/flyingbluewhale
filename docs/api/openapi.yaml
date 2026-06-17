@@ -524,8 +524,6 @@ paths:
   /api/v1/import/crew-members:
     post: { summary: Bulk-import a CSV of crew into the caller's org, deduped by email or (name, phone). }
 
-  /api/v1/proposals/{proposalId}/pdf:
-    get: { summary: Compile a proposal (cover + scope + pricing + signatures) into a branded PDF. }
   /api/v1/projects/{projectId}/call-sheet:
     get: { summary: Daily call sheet PDF — events + crew + venue + weather. `?variant=full|labor`. }
   /api/v1/projects/{projectId}/expense-report:

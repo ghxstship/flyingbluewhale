@@ -2,6 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
 import { getRequestT } from "@/lib/i18n/request";
+import { DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { createTalentAction } from "./actions";
 
 export default async function Page() {
@@ -74,7 +75,7 @@ export default async function Page() {
               label={t("console.marketplace.talent.new.depositPct", undefined, "Deposit %")}
               name="deposit_pct"
               type="number"
-              defaultValue="60"
+              defaultValue={DEPOSIT_PCT_DEFAULT}
               min={0}
               max={100}
             />

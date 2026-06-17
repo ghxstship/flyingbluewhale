@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { clampRateBps } from "@/lib/rates";
 
 const Schema = z.object({
   marketplace_enabled: z.string().optional(),
@@ -28,7 +29,7 @@ export async function updateMarketplaceSettingsAction(_: State, fd: FormData): P
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
-  const bps = Math.min(5000, Math.max(0, Math.round(Number(parsed.data.marketplace_take_rate_bps))));
+  const bps = clampRateBps(parsed.data.marketplace_take_rate_bps);
 
   const { data, error } = await supabase
     .from("orgs")

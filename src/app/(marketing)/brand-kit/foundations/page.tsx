@@ -36,6 +36,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Wordmark } from "@/components/brand/Wordmark";
 import { getRequestT } from "@/lib/i18n/request";
+import { PRODUCT_ACCENTS } from "@/lib/brand";
 import "./foundations.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -512,7 +513,7 @@ export default async function FoundationsPage() {
               {
                 name: "ATLVS",
                 role: t("marketing.brandKit.foundations.appIcons.roleAtlvs", undefined, "Producer / Internal"),
-                hex: "#FF2E88",
+                hex: PRODUCT_ACCENTS.atlvs,
                 accentBg: "var(--brand-atlvs)",
                 accentOn: "var(--brand-atlvs-on)",
                 weakBg: "color-mix(in oklab,var(--brand-atlvs) 12%,var(--p-surface))",
@@ -522,7 +523,7 @@ export default async function FoundationsPage() {
               {
                 name: "COMPVSS",
                 role: t("marketing.brandKit.foundations.appIcons.roleCompvss", undefined, "Crew / Vendor / Talent"),
-                hex: "#E9A23B",
+                hex: PRODUCT_ACCENTS.compvss,
                 accentBg: "var(--brand-compvss)",
                 accentOn: "var(--brand-compvss-on)",
                 weakBg: "color-mix(in oklab,var(--brand-compvss) 14%,var(--p-surface))",
@@ -532,7 +533,7 @@ export default async function FoundationsPage() {
               {
                 name: "GVTEWAY",
                 role: t("marketing.brandKit.foundations.appIcons.roleGvteway", undefined, "Guest / Client"),
-                hex: "#2563EB",
+                hex: PRODUCT_ACCENTS.gvteway,
                 accentBg: "var(--brand-gvteway)",
                 accentOn: "var(--brand-gvteway-on)",
                 weakBg: "color-mix(in oklab,var(--brand-gvteway) 14%,var(--p-surface))",

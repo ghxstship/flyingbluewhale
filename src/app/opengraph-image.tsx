@@ -15,7 +15,7 @@
  * any nested route segment — Next.js picks the closest one to the URL.
  */
 import { ImageResponse } from "next/og";
-import { BRAND } from "@/lib/brand";
+import { BRAND, PRODUCT_ACCENTS } from "@/lib/brand";
 
 // Route segment config — Next.js requires these exports.
 // Runtime defaults to Node here (not edge) because Turbopack dev mode
@@ -28,7 +28,7 @@ export const contentType = "image/png";
 
 // Canonical SaaS palette — atlvs-product theme tokens, inlined here
 // because ImageResponse runs at the edge and can't resolve CSS vars.
-const PINK = "#FF2E88";
+const PINK = PRODUCT_ACCENTS.atlvs;
 const INK = "#181B23";
 const INK_2 = "#5B6472";
 const CANVAS = "#F7F8FA";

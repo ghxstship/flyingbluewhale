@@ -1,4 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
+import { Button } from "@/components/ui/Button";
 import { DataTable } from "@/components/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
@@ -87,6 +88,15 @@ export default async function TimesheetsPage() {
         eyebrow={t("console.finance.timesheets.eyebrow", undefined, "Finance")}
         title={t("console.finance.timesheets.title", undefined, "Timesheets")}
         subtitle={`${rows.length} ${t("console.finance.timesheets.total", undefined, "Total")} · ${pending} ${t("console.finance.timesheets.awaitingReview", undefined, "Awaiting review")}`}
+        action={
+          <Button
+            href={`/api/v1/time-entries/audit?from=${new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()}`}
+            size="sm"
+            variant="ghost"
+          >
+            {t("console.finance.timesheets.exportAuditLog", undefined, "Export Audit Log")}
+          </Button>
+        }
       />
       <div className="page-content space-y-3">
         <DataTable<Row>

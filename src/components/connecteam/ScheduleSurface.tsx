@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
+import { ShiftConfirmControls } from "./ShiftConfirmControls";
 
 /**
  * Shared schedule surface (ADR-0008 Move 1).
@@ -22,6 +23,7 @@ type ShiftRow = {
   starts_at: string;
   ends_at: string;
   attendance: "scheduled" | "checked_in" | "on_break" | "checked_out" | "no_show" | string;
+  confirmation_state: "pending" | "confirmed" | "declined";
   role: string | null;
   break_minutes: number;
   meal_credit: boolean;
@@ -80,7 +82,7 @@ export async function ScheduleSurface({
     const { data } = await supabase
       .from("shifts")
       .select(
-        "id, starts_at, ends_at, attendance, role, break_minutes, meal_credit, checked_in_at, checked_out_at, venue:venue_id(name)",
+        "id, starts_at, ends_at, attendance, confirmation_state, role, break_minutes, meal_credit, checked_in_at, checked_out_at, venue:venue_id(name)",
       )
       .eq("org_id", session.orgId)
       .eq("workforce_member_id", wfm.id)
@@ -170,13 +172,19 @@ export async function ScheduleSurface({
           </h2>
           <ul className="mt-3 space-y-2">
             {upcoming.map((s) => (
-              <li key={s.id} className="surface flex items-center justify-between p-3">
+              <li key={s.id} className="surface flex items-center justify-between gap-3 p-3">
                 <div className="text-sm">
                   <div className="font-medium">
                     {s.venue?.name ?? t("m.shift.unassignedVenue", undefined, "Unassigned venue")}
                   </div>
                   <div className="font-mono text-xs text-[var(--p-text-2)]">
                     {fmtDate(s.starts_at)} · {fmtTime(s.starts_at)} – {fmtTime(s.ends_at)}
+                  </div>
+                  <div className="mt-2">
+                    <ShiftConfirmControls
+                      shiftId={s.id}
+                      confirmationState={s.confirmation_state ?? "pending"}
+                    />
                   </div>
                 </div>
                 <Badge variant="muted">{toTitle(s.attendance)}</Badge>

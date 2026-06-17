@@ -41,6 +41,12 @@ async function handler(req: Request) {
     form.set("success_url", urlFor("platform", `/finance/invoices/${invoice.id}?paid=1`));
     form.set("cancel_url", urlFor("platform", `/finance/invoices/${invoice.id}?cancelled=1`));
     form.set("metadata[invoice_id]", invoice.id);
+    // Offer card + BNPL options (Klarna, Afterpay) to match Eventbrite's
+    // "Buy Now Pay Later" feature — increases conversion on large invoices.
+    // Stripe surfaces only the methods that are valid for the currency/region.
+    form.set("payment_method_types[0]", "card");
+    form.set("payment_method_types[1]", "klarna");
+    form.set("payment_method_types[2]", "afterpay_clearpay");
 
     const res = await httpFetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",

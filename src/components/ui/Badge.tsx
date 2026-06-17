@@ -29,17 +29,23 @@ export type BadgeVariant =
 
 export type BadgeShape = "default" | "dot" | "count";
 
-const VARIANT: Record<BadgeVariant, string> = {
-  default: "badge-default",
-  success: "badge-success",
-  warning: "badge-warning",
-  error: "badge-error",
-  info: "badge-info",
-  brand: "badge-brand",
-  "brand-soft": "badge-brand-soft",
-  muted: "badge-muted",
-  cyan: "badge-info",
-  purple: "badge-brand",
+/**
+ * Canonical kit primitive — `.ps-badge--{ok,warn,danger,info,neutral,accent}`
+ * (defined in theme/themes/atlvs-product.css). The retired `.badge-*`
+ * vocabulary was stripped in the kit migration; this map is the rebind
+ * (parity item 5 / audit A-1). Each modifier paints from a `--p-*` token.
+ */
+const PS_MOD: Record<BadgeVariant, string> = {
+  default: "ps-badge--neutral",
+  success: "ps-badge--ok",
+  warning: "ps-badge--warn",
+  error: "ps-badge--danger",
+  info: "ps-badge--info",
+  brand: "ps-badge--accent",
+  "brand-soft": "ps-badge--accent",
+  muted: "ps-badge--neutral",
+  cyan: "ps-badge--info",
+  purple: "ps-badge--accent",
 };
 
 // Every dot resolves to a token var — never a Tailwind palette literal.
@@ -92,17 +98,19 @@ export function Badge({
     );
   }
   if (shape === "count") {
+    // Color-only: the modifier classes set background+color standalone, so the
+    // count keeps its own compact layout instead of the .ps-badge pill padding.
     return (
       <span
         aria-label={ariaLabel}
-        className={`inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-semibold tabular-nums ${VARIANT[variant]} ${className}`}
+        className={`inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 text-[10px] font-semibold tabular-nums ${PS_MOD[variant]} ${className}`}
       >
         {children}
       </span>
     );
   }
   return (
-    <span className={`badge inline-flex items-center gap-1 ${VARIANT[variant]} ${className}`}>
+    <span className={`ps-badge ${PS_MOD[variant]} ${className}`}>
       {icon && <span className="inline-flex shrink-0">{icon}</span>}
       {children}
       {onDismiss && (

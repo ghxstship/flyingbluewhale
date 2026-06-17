@@ -2,16 +2,19 @@ import type { ReactNode, ButtonHTMLAttributes } from "react";
 import Link from "next/link";
 import { Spinner } from "./Spinner";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "cta" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg" | "icon";
 
 // Map this React API onto the kit's .ps-btn classes
-// (design_handoff_atlvs_kit/components.html). Primary = filled accent;
-// secondary/ghost = bordered/transparent ghost; danger = filled red;
-// icon = the kit's square icon button. The "soft" variant is intentionally
-// not exposed in this React API yet — add it only if a consumer needs it.
+// (design_handoff_atlvs_kit/components.html). Primary = filled accent-cta;
+// cta = the deliberate hero CTA (same AA-safe --p-accent-cta fill, exposed as
+// an explicit intent — parity item 7 / audit A-4); secondary/ghost =
+// bordered/transparent ghost; danger = filled red; icon = the kit's square
+// icon button. The "soft" variant is intentionally not exposed in this React
+// API yet — add it only if a consumer needs it.
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
   primary: "ps-btn",
+  cta: "ps-btn ps-btn--cta",
   secondary: "ps-btn ps-btn--ghost",
   ghost: "ps-btn ps-btn--ghost",
   danger: "ps-btn ps-btn--danger",

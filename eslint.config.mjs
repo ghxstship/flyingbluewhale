@@ -262,6 +262,9 @@ const config = [
       ".claude/**",
       "public/service-worker.js",
       "src/lib/supabase/database.types.ts",
+      // Ambient declaration files — type-only, not lintable as source.
+      "**/*.d.ts",
+      "**/*.d.mts",
     ],
   },
 ];

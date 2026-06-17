@@ -3,6 +3,14 @@
 import * as React from "react";
 import { Sparkline } from "@/components/charts/Sparkline";
 
+/**
+ * Interactive dashboard KPI card (app chrome — `.surface`). Distinct by design
+ * from the `.rpt`/`KpiTile` primitive in components/reports/ReportEngine.tsx,
+ * which is a print/PDF artifact tile rendered INSIDE a `.doc--report` document
+ * (parity item 10 — verified: two surfaces, one token vocabulary; both paint
+ * only from `--p-*`, so they stay in lockstep on a token change). Do not merge
+ * the app-chrome card into the document layer.
+ */
 export function MetricCard({
   label,
   value,

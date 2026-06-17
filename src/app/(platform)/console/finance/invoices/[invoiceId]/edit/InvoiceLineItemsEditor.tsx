@@ -71,7 +71,7 @@ export function InvoiceLineItemsEditor({ initial }: { initial: LineItemRow[] }) 
       {rows.map((row, i) => (
         <div
           key={row._key}
-          className="surface-inset flex flex-col gap-3 rounded-[var(--radius-md)] p-3 sm:flex-row sm:items-end"
+          className="surface-inset flex flex-col gap-3 rounded-[var(--p-r)] p-3 sm:flex-row sm:items-end"
         >
           <input type="hidden" name={`li_id_${i}`} value={row.id} />
           <div className="flex-1">

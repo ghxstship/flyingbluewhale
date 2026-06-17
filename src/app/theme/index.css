@@ -22,45 +22,30 @@
 @import "./kit-reports.css";
 
 /*
- * Default theme when no [data-theme] attribute is present (SSR cold-start
- * fallback). Mirrors `atlvs-product` (light family) so the first paint
- * matches the canonical kit surface — no flash to a different palette.
+ * SSR cold-start fallback — used only when no [data-theme] / [data-ui]
+ * attribute has hit <html> yet. Defines the canonical ATLVS light surface in
+ * the ONE token vocabulary (--p-*); the retired parallel namespace
+ * (--bg / --surface / --accent / --org-* / --radius-* / --text-muted) was
+ * deleted in the v6.4 alignment (audit T-3) — --p-* is the only token set.
+ * Mirrors the unconditional :root cold-start in globals.css so the
+ * un-attributed flash matches the canonical kit surface.
  */
 :root:not([data-theme]) {
-  --bg: #f7f8fa;
-  --surface: #ffffff;
-  --surface-2: #f1f3f6;
-  --surface-inset: #f1f3f6;
-  --surface-raised: #ffffff;
-  --border: #e4e7ec;
-  --border-color: #e4e7ec;
-  --text: #181b23;
-  --text-color: #181b23;
-  --text-muted: #5b6472;
-  --text-subtle: #656d7a;
-  --accent: #ff2e88;
-  --accent-solid: #ff2e88;
-  --accent-contrast: #ffffff;
-  --background: #f7f8fa;
-  --foreground: #181b23;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #f1f3f6;
-  --org-primary: #ff2e88;
-  --org-secondary: #e61e76;
-  --org-accent: #c91463;
-  --org-on-primary: #ffffff;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --border-width: 1px;
-  --border-width-chrome: 1px;
-  --shadow-elev: 0 1px 2px rgba(16, 20, 30, 0.06);
-  --shadow-elev-hover: 0 2px 4px rgba(16, 20, 30, 0.06), 0 6px 16px rgba(16, 20, 30, 0.08);
-  --shadow-elev-soft: 0 1px 2px rgba(16, 20, 30, 0.05);
-  --font-display: var(--font-anton), "Anton", "Arial Narrow", system-ui, sans-serif;
-  --font-subdisplay: var(--font-anton), "Anton", "Arial Narrow", system-ui, sans-serif;
-  --font-body: var(--font-hanken-grotesk), "Hanken Grotesk", system-ui, sans-serif;
-  --font-pixel: var(--font-space-mono), "Space Mono", ui-monospace, monospace;
-  --font-mono: var(--font-space-mono), "Space Mono", ui-monospace, monospace;
+  --p-bg: #f7f8fa;
+  --p-surface: #ffffff;
+  --p-surface-2: #f1f3f6;
+  --p-border: #e4e7ec;
+  --p-border-2: #d3d8e0;
+  --p-text-1: #181b23;
+  --p-text-2: #5b6472;
+  --p-text-3: #656d7a;
+  --p-accent: #ff2e88;
+  --p-accent-hover: #e61e76;
+  --p-accent-text: #c91463;
+  --p-accent-weak: rgba(255, 46, 136, 0.12);
+  --p-accent-cta: #c91463;
+  --p-accent-cta-contrast: #ffffff;
+  --p-accent-contrast: #ffffff;
+  --p-focus: #ff2e88;
   color-scheme: light;
 }

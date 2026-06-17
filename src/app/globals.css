@@ -110,7 +110,7 @@
 body {
   background: var(--p-bg);
   color: var(--p-text-1);
-  /* Body copy follows the active CHROMA theme's `--font-body`. Audit DS-T3:
+  /* Body copy follows the kit's `--font-body` (Hanken Grotesk). Audit DS-T3:
      fallback chain dropped the legacy `Inter` literal and now ends in
      system-ui — themes that don't declare a body font get the OS sans rather
      than the prior Inter-as-secret-default behavior. */
@@ -263,13 +263,13 @@ pre,
     background: var(--progress-fill, var(--p-accent));
   }
   .progress-root[data-severity="warn"] .progress-indicator {
-    --progress-fill: #d97706;
+    --progress-fill: var(--p-warning);
   }
   .progress-root[data-severity="critical"] .progress-indicator {
     --progress-fill: var(--p-danger);
   }
   .progress-root[data-severity="success"] .progress-indicator {
-    --progress-fill: #059669;
+    --progress-fill: var(--p-success);
   }
   .progress-root[data-indeterminate] .progress-indicator {
     transform: none !important;
@@ -384,8 +384,7 @@ pre,
   }
   /* Sheet/drawer slide animations — enter uses --ease-out (decelerate
      into place), exit uses --ease-in (accelerate away). Timing reads
-     the per-theme --motion-normal so brutal stays at 120ms snap and
-     soft slows to 360ms drift. */
+     --motion-normal so the cadence retunes from one token. */
   .animate-slide-in-from-right {
     animation: slide-in-right var(--motion-normal) var(--ease-out) both;
   }
@@ -533,16 +532,11 @@ pre,
   }
 
   /* ───── Elevation ─────
-   * Five-tier progression. Each tier consumes its own token so the scale
-   * stays meaningful — small chips don't get the same brutal offset as
-   * full cards. Audit DS-S1 fix: previously elevation-1 / elevation-2 both
-   * mapped to --p-elev-1 and elevation-3 / elevation-4 / elevation-float
-   * all mapped to --p-elev-2, collapsing the scale to two values.
-   *
-   * Bermuda Triangle assigns concrete progressive brutal values
-   * (2/4/8/12px). Other CHROMA themes inherit a sensible fallback chain
-   * defined in primitives.css so cyber's neon glow, soft's spring shadow,
-   * and earthy's muted lift still render coherently. */
+   * Matches the kit's 3-step shadow scale (--p-elev-1/2/3) plus a flat tier.
+   * `elevation-0` = flat (no shadow); `-1`/`-2`/`-3` = the three real tokens
+   * (resting → hover → popover/modal). `elevation-4` and `elevation-float`
+   * are retained as back-compat aliases of `-3` — there is no 4th distinct
+   * shadow (audit MO-3: the API is the 3-step kit scale, not five tiers). */
   .elevation-0 {
     box-shadow: none;
   }
@@ -555,6 +549,7 @@ pre,
   .elevation-3 {
     box-shadow: var(--p-elev-3);
   }
+  /* Back-compat aliases of -3 (no distinct token — see scale note above). */
   .elevation-4 {
     box-shadow: var(--p-elev-3);
   }
@@ -579,10 +574,9 @@ pre,
     background: color-mix(in oklab, var(--p-bg) 82%, transparent);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    /* Chrome rule, not structural — was --p-border-width (3px in Bermuda
-       Triangle) which read as a heavy enclosure rather than a separator.
-       Audit DS-B1 normalizes top-bar / sidebar / table-row separators to
-       the chrome tier (1px). */
+    /* Chrome rule, not structural — top-bar / sidebar / table-row separators
+       normalize to the chrome tier (1px) rather than a heavy enclosure
+       (audit DS-B1). */
     border-bottom: var(--p-border-width) solid var(--p-border);
   }
 
@@ -604,12 +598,9 @@ pre,
   /* ───── Interactive states ───── */
 
   /* `.hover-lift` — the canonical interactive-card motion. 162+ usages.
-     Reads the active theme's hover personality tokens (--motion-hover,
-     --ease-hover, --hover-lift-y, --hover-scale, --press-scale) so each
-     theme expresses its own vocabulary without consumers changing.
-     Brutal themes set --hover-lift-y to 0 so the element holds position
-     and only the shadow shifts; soft/kinetic dial in spring easing and
-     a slight scale to feel pillowy. */
+     Reads the hover personality tokens (--motion-hover, --ease-hover,
+     --hover-lift-y, --hover-scale, --press-scale) so the lift can be
+     retuned from one place without consumers changing. */
   .hover-lift {
     transition:
       transform var(--motion-hover) var(--ease-hover),
@@ -617,11 +608,9 @@ pre,
   }
   .hover-lift:hover {
     transform: translateY(var(--hover-lift-y)) scale(var(--hover-scale));
-    /* Tier-2 (4px in BT) as the canonical hover lift — was --p-elev-2
-       (12px brutal) which thumped on every card and undermined the rule that
-       the heavy brutal moment is reserved for Dialog + the hero CTA. Themes
-       that want a heavier card hover override `--p-elev-2` directly. */
-    box-shadow: var(--p-elev-2, var(--p-elev-2));
+    /* Tier-2 as the canonical hover lift; the heavier elevation is reserved
+       for Dialog + the hero CTA. Override `--p-elev-2` for a heavier hover. */
+    box-shadow: var(--p-elev-2);
   }
   .hover-lift:active {
     transform: translateY(0) scale(var(--press-scale));
@@ -629,8 +618,8 @@ pre,
 
   /* `.hover-lift-strong` — opt-in heavier lift for the rare moments that
      should thump (hero CTA card, "talk to the studio" anchor, pricing
-     highlight tier). Restores the 12px brutal end of the scale without
-     forcing every consumer of `.hover-lift` onto it. */
+     highlight tier). The heavy end of the elevation scale without forcing
+     every consumer of `.hover-lift` onto it. */
   .hover-lift-strong {
     transition:
       transform var(--motion-hover) var(--ease-hover),
@@ -653,8 +642,7 @@ pre,
 
   /* `.cta-nudge` — the canonical CTA arrow/icon nudge. Apply to the icon
      element inside a `group` so the parent's :hover triggers the slide.
-     Reads --motion-fast / --ease-out so brutal themes can dial it down to
-     a snappier 2px shift while soft themes can stretch the slide. */
+     Reads --motion-fast / --ease-out so the slide can be retuned globally. */
   .cta-nudge {
     transition: transform var(--motion-fast) var(--ease-out);
   }
@@ -665,11 +653,10 @@ pre,
 
   /* ───── Surfaces ───── */
 
-  /* Surface primitives — all three read the active theme's radius + border
- * width + shadow. Previously hardcoded 0.75rem radius / 1px border / a
- * static rgba shadow, which meant brutal's sharp corners, brutal's 3px
- * border, and cyber's neon glow NEVER rendered on any surface primitive.
- * `data-mode="dark"` override removed: themes own their shadows. */
+  /* Surface primitives — all three read the kit's radius + border-width +
+ * shadow tokens (--p-r*, --p-border-width, --p-elev-*) rather than hardcoded
+ * values, so a token change retunes every surface. Dark mode leans on
+ * borders over shadow (per the kit elevation note). */
   /* Surfaces are CONTENT BLOCKS — bg + spacing + heading carry hierarchy,
      not an ink frame. Bordered enclosure is reserved for Dialog (via
      .surface-raised below). The previous 3px ink frame on every section
@@ -703,13 +690,12 @@ pre,
   /* `.surface-terminal` — engineered/CLI surface variant. Mono type,
      subtle scanline gradient, recessed bg. Used for activity feeds,
      audit log previews, AI streaming output, command-palette demos.
-     Differentiates the system from generic SaaS chrome without breaking
-     the brutal core elsewhere.
+     Differentiates the system from generic SaaS chrome.
 
      Bg uses --p-surface (the canonical "recessed below page bg" token
-     that every theme defines with real contrast) — not --p-surface-2,
-     which is a thin color-mix that collapses to invisible on cyber's dark
-     near-black palette. Scanline alpha is 6% so the texture reads as
+     defined with real contrast in both modes) — not --p-surface-2, which is
+     a thin color-mix that can collapse to invisible on a near-black dark
+     palette. Scanline alpha is 6% so the texture reads as
      "engineered" without becoming a moiré pattern. */
   .surface-terminal {
     background:
@@ -855,7 +841,7 @@ pre,
   .metric-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
+    gap: var(--k-gap, 1rem);
   }
   @media (min-width: 1024px) /* --breakpoint-lg */ {
     .metric-grid {
@@ -865,7 +851,7 @@ pre,
   .metric-grid-3 {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1rem;
+    gap: var(--k-gap, 1rem);
   }
   @media (min-width: 640px) /* --breakpoint-sm */ {
     .metric-grid-3 {
@@ -875,7 +861,7 @@ pre,
   .metric-grid-5 {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
+    gap: var(--k-gap, 1rem);
   }
   @media (min-width: 640px) /* --breakpoint-sm */ {
     .metric-grid-5 {

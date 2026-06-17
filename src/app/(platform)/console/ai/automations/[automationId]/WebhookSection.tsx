@@ -77,9 +77,9 @@ export function WebhookSection({
         </form>
       </div>
 
-      {state?.error && <p className="mt-2 text-xs text-[var(--accent-error)]">{state.error}</p>}
+      {state?.error && <p className="mt-2 text-xs text-[var(--p-danger)]">{state.error}</p>}
       {state?.ok && (
-        <p className="mt-2 text-xs text-[var(--accent-success)]">
+        <p className="mt-2 text-xs text-[var(--p-success)]">
           {t(
             "console.ai.automations.webhook.rotatedSuccess",
             undefined,

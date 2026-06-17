@@ -22,22 +22,28 @@
  */
 
 /* ============================================================================
-   :root brand-identity tokens (mode-agnostic, for multi-product displays)
+   :root brand-identity tokens (mode-agnostic, for multi-product displays).
+   GENERATED from tokens.json#color.brand — edit tokens.json, then run
+   `npm run gen:theme`. Do not hand-edit between the @gen markers; CI
+   (src/lib/theme/gen-theme.test.ts) fails the build if the region is stale.
    ========================================================================== */
+/* @gen:brand:start */
+/* Brand-identity tokens (mode-agnostic, for multi-product displays). */
 :root {
   --brand-atlvs: #ff2e88;
   --brand-atlvs-ink: #c91463;
-  --brand-atlvs-on: #fff;
+  --brand-atlvs-on: #ffffff;
   --brand-compvss: #e9a23b;
   --brand-compvss-ink: #9a6512;
   --brand-compvss-on: #1b1305;
   --brand-gvteway: #2563eb;
   --brand-gvteway-ink: #1d4ed8;
-  --brand-gvteway-on: #fff;
+  --brand-gvteway-on: #ffffff;
   --brand-legend: #e8500a;
   --brand-legend-ink: #b8430a;
-  --brand-legend-on: #fff;
+  --brand-legend-on: #ffffff;
 }
+/* @gen:brand:end */
 
 /* ============================================================================
    BASE TYPE + RADII + SPACE + ELEVATION + MOTION
@@ -131,7 +137,15 @@
   color: var(--p-text-1);
 }
 
-/* ----------- LIGHT (default) -------------------------------------------- */
+/* ============================================================================
+   COLOR TOKENS — GENERATED from tokens.json (surfaces, per-product accent, and
+   the --k-acc/--k-acc-text intensity sources). Edit tokens.json, then run
+   `npm run gen:theme`. Do not hand-edit between the @gen markers; CI fails on
+   drift. The [data-accent] color-mix formulas + everything below stay hand-
+   authored (not color-token-derived).
+   ========================================================================== */
+/* @gen:tokens:start */
+/* ---------- Surfaces (light default + dark) ---------- */
 [data-ui="saas"],
 [data-ui="saas"][data-mode="light"],
 [data-theme="atlvs-product"],
@@ -143,17 +157,12 @@
   --p-border-2: #d3d8e0;
   --p-text-1: #181b23;
   --p-text-2: #5b6472;
-  /* WCAG 1.4.3 — deepened from kit #8c95a3 (3.0:1) to 4.5:1+ */
   --p-text-3: #656d7a;
   --p-accent-contrast: #ffffff;
-  /* AX-3 — focus-ring color. Defaults to the accent (ATLVS pink passes
-     WCAG 1.4.11 3:1 on both canvases); the COMPVSS/GVTEWAY overlays below
-     repoint it at their AA-grade --p-accent-cta values. */
   --p-focus: var(--p-accent);
   color-scheme: light;
 }
 
-/* ----------- DARK -------------------------------------------------------- */
 [data-ui="saas"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"],
 [data-mode="dark"] [data-theme="atlvs-product"] {
@@ -164,49 +173,44 @@
   --p-border-2: #3a404c;
   --p-text-1: #f2f4f8;
   --p-text-2: #a6aebc;
-  /* WCAG — lightened from kit #6e7682 (3.7:1) */
   --p-text-3: #9098a4;
   --p-accent-contrast: #0e1014;
   --p-focus: var(--p-accent);
   color-scheme: dark;
 }
 
-/* ============================================================================
-   PER-PRODUCT ACCENT — reads data-product (kit) OR data-platform (codebase).
-   ========================================================================== */
-
-/* ATLVS — internal · producer · pink */
+/* ---------- Per-product accent (reads data-product OR data-platform) ---------- */
+/* ATLVS */
 [data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff2e88;
   --p-accent-hover: #e61e76;
   --p-accent-text: #c91463;
-  --p-accent-weak: rgba(255, 46, 136, 0.12);
+  --p-accent-weak: rgba(255,46,136,.12);
   --p-accent-cta: #c91463;
   --p-accent-cta-contrast: #ffffff;
+  --p-focus: var(--p-accent);
 }
 [data-ui="saas"][data-product="atlvs"][data-mode="dark"],
 [data-mode="dark"] [data-ui="saas"][data-product="atlvs"],
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="atlvs"] {
   --p-accent: #ff4d9b;
   --p-accent-text: #ff6fae;
-  --p-accent-weak: rgba(255, 46, 136, 0.18);
+  --p-accent-weak: rgba(255,46,136,.18);
   --p-accent-cta: #ff4d9b;
   --p-accent-cta-contrast: #0e1014;
+  --p-focus: var(--p-accent);
 }
-
-/* COMPVSS — crew · vendor · talent · amber */
+/* COMPVSS */
 [data-ui="saas"][data-product="compvss"],
 [data-theme="atlvs-product"][data-platform="compvss"] {
   --p-accent: #e9a23b;
   --p-accent-hover: #d08d27;
   --p-accent-text: #9a6512;
-  --p-accent-weak: rgba(233, 162, 59, 0.14);
+  --p-accent-weak: rgba(233,162,59,.14);
   --p-accent-contrast: #1b1305;
   --p-accent-cta: #8a5a0f;
   --p-accent-cta-contrast: #ffffff;
-  /* AX-3 — amber accent #e9a23b is ≈2.2:1 on the light canvas; the CTA
-     amber is AA. Dark-mode override below restores the brighter value. */
   --p-focus: var(--p-accent-cta);
 }
 [data-ui="saas"][data-product="compvss"][data-mode="dark"],
@@ -214,22 +218,19 @@
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="compvss"] {
   --p-accent: #f0b255;
   --p-accent-text: #f0b255;
-  --p-accent-weak: rgba(233, 162, 59, 0.2);
+  --p-accent-weak: rgba(233,162,59,.2);
   --p-accent-contrast: #1b1305;
   --p-accent-cta: #f0b255;
   --p-accent-cta-contrast: #1b1305;
   --p-focus: var(--p-accent);
 }
-
-/* GVTEWAY — guest · client · blue (kit v5.1: recolored cyan→#2563EB) */
+/* GVTEWAY */
 [data-ui="saas"][data-product="gvteway"],
 [data-theme="atlvs-product"][data-platform="gvteway"] {
   --p-accent: #2563eb;
   --p-accent-hover: #1f57d6;
   --p-accent-text: #1d4ed8;
-  --p-accent-weak: rgba(37, 99, 235, 0.13);
-  /* v5.1 — blue #2563eb carries white at 5.17:1 (AA), so the CTA uses the
-     accent directly (the cyan-era deepened-teal hack is retired). */
+  --p-accent-weak: rgba(37,99,235,.13);
   --p-accent-cta: #2563eb;
   --p-accent-cta-contrast: #ffffff;
   --p-focus: var(--p-accent);
@@ -239,20 +240,18 @@
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="gvteway"] {
   --p-accent: #5e8bf2;
   --p-accent-text: #88aaf6;
-  --p-accent-weak: rgba(37, 99, 235, 0.22);
+  --p-accent-weak: rgba(37,99,235,.22);
   --p-accent-cta: #5e8bf2;
   --p-accent-cta-contrast: #0e1014;
   --p-focus: var(--p-accent);
 }
-
-/* LEG3ND — knowledge · LMS · resources · Production Orange (v5) */
+/* LEGEND */
 [data-ui="saas"][data-product="legend"],
 [data-theme="atlvs-product"][data-platform="legend"] {
   --p-accent: #e8500a;
   --p-accent-hover: #cf4708;
   --p-accent-text: #b8430a;
-  --p-accent-weak: rgba(232, 80, 10, 0.12);
-  /* #e8500a is ≈3:1 on the light canvas; the deepened orange is AA for fills + focus. */
+  --p-accent-weak: rgba(232,80,10,.12);
   --p-accent-cta: #b8430a;
   --p-accent-cta-contrast: #ffffff;
   --p-focus: var(--p-accent-cta);
@@ -262,17 +261,13 @@
 [data-mode="dark"] [data-theme="atlvs-product"][data-platform="legend"] {
   --p-accent: #ff6a2c;
   --p-accent-text: #ff8b5c;
-  --p-accent-weak: rgba(232, 80, 10, 0.2);
+  --p-accent-weak: rgba(232,80,10,.2);
   --p-accent-cta: #ff6a2c;
   --p-accent-cta-contrast: #0e1014;
   --p-focus: var(--p-accent);
 }
 
-/* ============================================================================
-   ACCENT INTENSITY — soft / default / vivid axis.
-   --k-acc / --k-acc-text capture the resolved per-product accent so the
-   intensity selectors can color-mix without a self-referential cycle.
-   ========================================================================== */
+/* ---------- Accent-intensity sources (--k-acc / --k-acc-text mirror the resolved accent) ---------- */
 [data-ui="saas"][data-product="atlvs"],
 [data-theme="atlvs-product"][data-platform="atlvs"] {
   --k-acc: #ff2e88;
@@ -317,6 +312,7 @@
   --k-acc: #ff6a2c;
   --k-acc-text: #ff8b5c;
 }
+/* @gen:tokens:end */
 
 [data-accent="soft"] {
   --p-accent: color-mix(in oklab, var(--k-acc) 74%, var(--p-surface) 26%);
@@ -356,12 +352,15 @@
 }
 
 /* ============================================================================
-   DENSITY — kit axis: cozy (default) | compact (tighter row + control padding).
+   DENSITY — canonical axis (v6.4): compact | cozy (default) | spacious.
+     compact  → tighter --k-* (power-user tables)
      cozy     → kit default (--k-* defaults above, no attribute)
-     compact  → kit compact (smaller --k-*)
-   `spacious` is a documented CODEBASE EXTENSION (not in the v3 kit) retained
-   for tablet / accessibility; flagged for Claude Design to fold into the kit.
-   Its loosened --k-* live in globals.css under [data-density="spacious"].
+     spacious → loosened --k-* (tablet / accessibility / touch)
+   Each tier overrides the SAME --k-* token scale, so every primitive that
+   reads --k-ctl-* / --k-row-* / --k-card-pad / --k-gap (buttons, table rows,
+   cards, KPI/metric grids) retunes together — a density switch visibly
+   changes a whole page, not just inputs/tables (audit O-2). The per-element
+   .ps-input / .ps-table / .nav-item overrides in globals.css layer on top.
    ========================================================================== */
 [data-density="compact"] {
   --k-ctl-py: 6px;
@@ -373,6 +372,17 @@
   --k-card-pad: 13px;
   --k-gap: 10px;
   --k-stack: 8px;
+}
+[data-density="spacious"] {
+  --k-ctl-py: 12px;
+  --k-ctl-px: 18px;
+  --k-ctl-fs: 15px;
+  --k-row-py: 18px;
+  --k-row-px: 20px;
+  --k-cell-fs: 15px;
+  --k-card-pad: 24px;
+  --k-gap: 20px;
+  --k-stack: 16px;
 }
 
 /* ============================================================================
@@ -602,7 +612,10 @@
 [data-ui="saas"] select.ps-input,
 [data-theme="atlvs-product"] select.ps-input {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' stroke='%238C95A3' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  /* Chevron stroke uses the accessible tertiary gray #656d7a (AA, matches
+     --p-text-3); SVG data URIs can't read CSS vars, so the hex is kept in
+     lockstep with the token by hand. Was the retired failing 3.0:1 gray. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' stroke='%23656D7A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 11px center;
   padding-right: 30px;
@@ -881,6 +894,14 @@
   background: var(--p-surface-2);
   color: var(--p-text-2);
   border: 1px solid var(--p-border);
+}
+/* Brand-tinted badge — same accent paint as the bare .ps-badge base, exposed
+   as an explicit modifier so the React <Badge variant="brand"|"brand-soft">
+   binds to a concrete class (parity item 5). */
+[data-ui="saas"] .ps-badge--accent,
+[data-theme="atlvs-product"] .ps-badge--accent {
+  background: var(--p-accent-weak);
+  color: var(--p-accent-text);
 }
 [data-ui="saas"] .ps-dot,
 [data-theme="atlvs-product"] .ps-dot {
@@ -1642,7 +1663,10 @@
 
 [data-ui="saas"] *:focus-visible,
 [data-theme="atlvs-product"] *:focus-visible {
-  outline: 2px solid var(--p-accent);
+  /* AX-3 — ring routes through --p-focus (per product × mode), not the raw
+     accent: COMPVSS amber / LEG3ND orange are <3:1 on light, so those
+     products repoint --p-focus at their AA-grade --p-accent-cta. */
+  outline: 2px solid var(--p-focus, var(--p-accent));
   outline-offset: 2px;
   border-radius: var(--p-r-sm);
 }

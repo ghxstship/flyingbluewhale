@@ -28,7 +28,7 @@ Page inventory for the admin, AI, knowledge, and LEG3ND segments of the `(platfo
 - `/console/settings/audit` — Audit log viewer, cursor-paginated (100/page). **CRUD/interactive:** read-only viewer; export via `/api/v1/compliance/audit-export` download link.
 - `/console/settings/integrations` — Connector catalog (Stripe/Slack/Google/ClickUp/etc.) with env-detected status. **CRUD/interactive:** install (`installConnector`), uninstall (`uninstallConnector`).
 - `/console/settings/integrations/marketplace` — Discoverable integrations grid (known + coming-soon). **CRUD/interactive:** install state surfaced; connect buttons route to install flow.
-- `/console/settings/integrations/accounting` — Accounting connection status (connected/expired/revoked) + last sync. **CRUD/interactive:** connect/manage buttons; status read-only.
+- `/console/settings/integrations/accounting` (+ `/new`, `/[id]`) — Accounting connection status (connected/expired/revoked) + last sync. **CRUD/interactive:** add connection (`/new` FormShell), detail/manage (`/[id]`), connect/manage buttons.
 - `/console/settings/integrations/ticketing` (+ `/new`, `/[connectionId]`) — External ticketing-provider sync connections. **CRUD/interactive:** create connection (`createTicketingConnectionAction`), deactivate (`deactivateTicketingConnectionAction`), record sales snapshot (`recordSalesSnapshotAction`).
 - `/console/settings/integrations/submissions` (+ `/[id]`) — Partner integration submissions with certification-tier workflow (submitted→reviewing→verified→certified/rejected). **CRUD/interactive:** DataTable; transition tier (`transitionTier`).
 
@@ -90,8 +90,13 @@ Page inventory for the admin, AI, knowledge, and LEG3ND segments of the `(platfo
 
 ## Documents
 
-- `/console/documents` — Documents hub; the 27 v6 templates grouped by owning app, rendered via the shared DocEngine (token-driven, print-ready, `data-path` merge contract). **CRUD/interactive:** read-only index (template navigation).
+- `/console/documents` — Documents hub; the 29 v6.2 templates grouped by owning app, rendered via the shared DocEngine (token-driven, print-ready, `data-path` merge contract). **CRUD/interactive:** read-only index (template navigation).
 - `/console/documents/[docType]` — Per-document preview/print route; renders a template, optionally binding a live org-scoped record via `?recordId=<uuid>` (`resolveDocData` / `supportsRecordBinding`); brand-aware (`resolveDocBrand`); print/PDF via `@media print`. **CRUD/interactive:** preview + browser print/PDF; record-binding via query param (no inline writes).
+
+## Reports & Analytics (kit v6.3)
+
+- `/console/reports` — Reports & Analytics hub; the **43-report library** grouped by the four apps, each report bound to the canonical **77-metric registry** (`metrics.json`) and rendered live from org data via the shared ReportEngine. **CRUD/interactive:** read-only index (report navigation); turnkey-template dot marks the 8 `status:"template"` reports.
+- `/console/reports/[reportId]` — Parametric report viewer; metrics resolved live (`resolveMetrics`), org/client white-label brand applied (`resolveDocBrand`), KPI tiles with delta pills / sparklines / bullet-vs-target. Rendered markup *is* the print/PDF artifact. **CRUD/interactive:** brand toggle (atlvs/co/white) + Print/PDF (`ReportToolbar`); reports are computed, never stored.
 
 ## Insights
 
@@ -111,4 +116,4 @@ Page inventory for the admin, AI, knowledge, and LEG3ND segments of the `(platfo
 
 ## Envelopes
 
-- `/console/envelopes` — E-Sign envelopes across providers (DocuSign/Adobe Sign/HelloSign/PandaDoc/manual) targeting proposals/offer letters/MSAs/contracts, with signer-count rollups + envelope state. **CRUD/interactive:** DataTable + MetricCards; read-only list (signing/sending handled by provider/target flows).
+- `/console/envelopes` (+ `/new`, `/[id]`) — E-Sign envelopes across providers (DocuSign/Adobe Sign/HelloSign/PandaDoc/manual) targeting proposals/offer letters/MSAs/contracts, with signer-count rollups + envelope state. **CRUD/interactive:** DataTable + MetricCards; create envelope (`/new` FormShell), detail/track (`/[id]`).

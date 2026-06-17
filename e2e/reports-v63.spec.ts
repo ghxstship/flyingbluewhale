@@ -37,6 +37,16 @@ test.describe("v6.3 reports — console", () => {
     await expect(page.getByText("Back to Workspace")).toBeVisible();
     await expect(page.locator(".doc--report")).toHaveCount(0);
   });
+
+  test("white-label brand mode strips ATLVS attribution (parity with documents)", async ({ page }) => {
+    await page.goto("/console/reports/executive");
+    const doc = page.locator('.doc--report[data-doc="report:executive"]');
+    await expect(doc).toBeVisible();
+    await page.getByRole("button", { name: "White-label" }).click();
+    await expect(doc).toHaveAttribute("data-brand", "white");
+    await page.getByRole("button", { name: "ATLVS", exact: true }).click();
+    await expect(doc).toHaveAttribute("data-brand", "atlvs");
+  });
 });
 
 test.describe("v6.3 reports — API", () => {

@@ -236,7 +236,15 @@ export async function getOrgScoped<T extends TableName>(
     q = q.is("deleted_at", null);
   }
   const { data, error } = await q.maybeSingle();
-  if (error) throw error;
+  if (error) {
+    // A malformed id (e.g. a non-UUID landing on a uuid `id` column) makes
+    // PostgREST raise 22P02 "invalid input syntax". Such an id can never match
+    // a real row, so the correct semantic is "not found" → the caller's
+    // notFound(), not a 500/error-boundary. Hardens every detail page that
+    // resolves an id from the URL against bad/stale links.
+    if (error.code === "22P02") return null;
+    throw error;
+  }
   return (data ?? null) as PublicTables[T]["Row"] | null;
 }
 

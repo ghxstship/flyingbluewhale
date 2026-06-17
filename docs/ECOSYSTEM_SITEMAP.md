@@ -2,19 +2,20 @@
 
 Complete page inventory across the **4-app ecosystem**, every route listed in its native home with its features, functionality, and interactive/CRUD elements. Generated from source (`src/app/**/page.tsx` + sibling `actions.ts`) — evidence-based, not aspirational.
 
-> **1,070 page routes** across 6 route groups. Design kit **v6.2** · documents system **29 types**.
+> **1,084 page routes** across 6 route groups + **130 API route handlers**. Design kit **v6.3** · documents system **29 types** · reports & analytics engine **77 metrics / 43 reports**.
 
 ## The four apps + shared shells
 
 | App | Shell · URL | Route group | Pages | Role |
 |---|---|---|---|---|
-| **ATLVS** (pink) | `/console` | `(platform)` | 719 | Experiential Productions: ERP × CRM × PM — the operator console |
-| **LEG3ND** (orange) | `/console/legend/*` | `(platform)` | (subset of 719) | Knowledge · LMS · Resources (XPMS 2.0) |
+| **ATLVS** (pink) | `/console` | `(platform)` | 732 | Experiential Productions: ERP × CRM × PM — the operator console |
+| **LEG3ND** (orange) | `/console/legend/*` | `(platform)` | (subset of 732) | Knowledge · LMS · Resources (XPMS 2.0) |
 | **GVTEWAY** (blue) | `/p/[slug]/*` | `(portal)` | 141 | Public interface & stakeholder portal (15 personas) |
 | **COMPVSS** (amber) | `/m/*` | `(mobile)` | 75 | Site & venue field operations (offline-first PWA) |
 | _Marketing_ | `/` | `(marketing)` | 86 | Public SEO site + public marketplace |
 | _Auth_ | `/login …` | `(auth)` | 13 | Login, signup, SSO, magic-link, reset |
 | _Personal_ | `/me/*` | `(personal)` | 25 | Any authed user — profile, settings, marketplace engagement |
+| _Root_ | `/`, `/sitemap.xml`, `/api-docs` … | `root` | 12 | Cross-shell roots, sitemap, OpenAPI docs |
 
 ## Contents
 
@@ -32,12 +33,14 @@ Complete page inventory across the **4-app ecosystem**, every route listed in it
 
 Each bullet: `` `/route` — purpose. **CRUD/interactive:** <elements>``. "read-only" = display/list with no mutation affordance on that page. Dynamic `[id]`/`/new`/`/edit` children are listed under their parent.
 
-## Known link gaps (surfaced during inventory — pre-existing, flagged for follow-up)
+## Known link gaps
 
-- `/console/contracts` — list `rowHref` targets `/console/contracts/[id]` and links `/new`, but no detail/create `page.tsx` exists under that segment.
-- `/console/email-inbox` — index `rowHref` targets `/console/email-inbox/[id]`, no detail `page.tsx` exists.
+None. The two gaps flagged at first inventory have been remediated full-stack:
 
-(These are isolated broken row-links, not part of the v6.2 upgrade; the documents system + v6.2 elements are fully wired.)
+- `/console/contracts` — now has `[contractId]` detail, `[contractId]/edit`, and `/new` pages.
+- `/console/email-inbox` — now has `[id]` detail page.
+
+Every `rowHref`/link target in the console resolves to a real `page.tsx`. Verified by the always-on `e2e/nav-routes` no-404 guard and the opt-in full-sitemap crawl (`CRAWL=1`, see `e2e/sitemap-crawl.spec.ts`).
 
 ---
 
@@ -948,8 +951,13 @@ Page inventory for the admin, AI, knowledge, and LEG3ND segments of the `(platfo
 
 ## Documents
 
-- `/console/documents` — Documents hub; the 27 v6 templates grouped by owning app, rendered via the shared DocEngine (token-driven, print-ready, `data-path` merge contract). **CRUD/interactive:** read-only index (template navigation).
+- `/console/documents` — Documents hub; the 29 v6.2 templates grouped by owning app, rendered via the shared DocEngine (token-driven, print-ready, `data-path` merge contract). **CRUD/interactive:** read-only index (template navigation).
 - `/console/documents/[docType]` — Per-document preview/print route; renders a template, optionally binding a live org-scoped record via `?recordId=<uuid>` (`resolveDocData` / `supportsRecordBinding`); brand-aware (`resolveDocBrand`); print/PDF via `@media print`. **CRUD/interactive:** preview + browser print/PDF; record-binding via query param (no inline writes).
+
+## Reports & Analytics (kit v6.3)
+
+- `/console/reports` — Reports & Analytics hub; the **43-report library** grouped by the four apps (ATLVS · COMPVSS · GVTEWAY · LEG3ND), each report bound to the canonical **77-metric registry** (`metrics.json`) and rendered live from org data via the shared ReportEngine. **CRUD/interactive:** read-only index (report navigation); turnkey-template dot marks the 8 `status:"template"` reports; shows `{kind} · {cadence} · {n} KPIs` per card.
+- `/console/reports/[reportId]` — Parametric report viewer; metrics resolved live from the caller's org (`resolveMetrics`), org/client white-label brand applied (`resolveDocBrand`), KPI tiles with delta pills / sparklines / bullet-vs-target. The rendered markup *is* the print/PDF artifact. **CRUD/interactive:** brand toggle (atlvs/co/white) + Print/PDF (`ReportToolbar`); no inline writes (reports are computed, never stored).
 
 ## Insights
 

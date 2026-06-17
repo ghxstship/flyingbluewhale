@@ -7,7 +7,6 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
 import { setFabStatus, deleteFab } from "../actions";
-import type { FabricationStatus } from "@/lib/supabase/types";
 import {
   getFabricationOrder,
   listProductionPhaseTransitions,
@@ -17,25 +16,6 @@ import {
 import { ProductionPhaseControls } from "./ProductionPhaseControls";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
-
-const NEXT: Record<FabricationStatus, { to: FabricationStatus; labelKey: string; labelFallback: string }[]> = {
-  open: [
-    { to: "in_progress", labelKey: "console.production.fabrication.detail.actions.start", labelFallback: "Start" },
-    { to: "blocked", labelKey: "console.production.fabrication.detail.actions.block", labelFallback: "Block" },
-  ],
-  in_progress: [
-    {
-      to: "complete",
-      labelKey: "console.production.fabrication.detail.actions.markComplete",
-      labelFallback: "Mark Complete",
-    },
-    { to: "blocked", labelKey: "console.production.fabrication.detail.actions.block", labelFallback: "Block" },
-  ],
-  blocked: [
-    { to: "in_progress", labelKey: "console.production.fabrication.detail.actions.unblock", labelFallback: "Unblock" },
-  ],
-  complete: [],
-};
 
 export default async function Page({ params }: { params: Promise<{ orderId: string }> }) {
   const { orderId } = await params;
@@ -65,7 +45,10 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
     );
   }
 
-  const transitions = NEXT[row.production_phase as FabricationStatus];
+  // Quick-advance buttons read the canonical production-phase graph
+  // (DISCOVERY→CLOSE, LDP §2) — the same graph setFabStatus validates against.
+  // `?? []` keeps an unrecognized/legacy phase value from crashing the header.
+  const transitions = PRODUCTION_PHASE_GRAPH[row.production_phase as ProductionPhase] ?? [];
 
   return (
     <>
@@ -83,19 +66,15 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
         ]}
         action={
           <div className="flex items-center gap-1">
-            {transitions.map((b) => (
-              <form key={b.to} action={setFabStatus} className="inline">
+            {transitions.map((to) => (
+              <form key={to} action={setFabStatus} className="inline">
                 <input type="hidden" name="id" value={row.id} />
-                <input type="hidden" name="production_phase" value={b.to} />
+                <input type="hidden" name="production_phase" value={to} />
                 <button
                   type="submit"
-                  className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
-                    b.to === "blocked"
-                      ? "text-[var(--p-warning)] hover:bg-[color:var(--p-warning)]/10"
-                      : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
-                  }`}
+                  className="rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium text-[var(--p-text-2)] transition-colors hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
                 >
-                  {t(b.labelKey, undefined, b.labelFallback)}
+                  → {toTitle(to)}
                 </button>
               </form>
             ))}

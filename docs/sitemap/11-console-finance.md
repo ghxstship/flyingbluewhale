@@ -111,7 +111,7 @@ Page inventory for the `/console` platform shell, scoped to the `finance`, `subs
 
 ## Contracts
 
-- `/console/contracts` — Contracts register. **CRUD/interactive:** DataTable (filter, rowHref to `/console/contracts/[id]`), MetricCards, link to `/console/contracts/new`. _(Note: the referenced `/new` and `/[id]` detail routes have no `page.tsx` under this segment — only the list page exists here.)_
+- `/console/contracts` (+ `/new`, `/[contractId]`, `/[contractId]/edit`) — Contracts register. **CRUD/interactive:** DataTable (filter, rowHref to detail), MetricCards; create (`/new` FormShell), detail view, edit (FormShell update). _(Detail/create/edit pages now exist full-stack — the prior gap is closed.)_
 
 ## Submittals
 

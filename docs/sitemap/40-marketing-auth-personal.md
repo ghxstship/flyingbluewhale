@@ -113,6 +113,7 @@ All auth screens render under the `(auth)` shell (`AuthShell`/`AuthCard`). Most 
 - `/sso/[provider]` — SSO entrypoint; initiates OAuth handshake for google/github/azure/apple/linkedin_oidc (404s on unsupported). **CRUD/interactive:** `signInWithOAuth` redirect (no form).
 - `/mfa/challenge` — Two-factor verification step (TOTP) after password; redirects to enroll if no verified factor. **CRUD/interactive:** `MfaChallengeForm` + actions (`challenge`/`verify`/`enroll`).
 - `/onboarding/org` — Post-auth org creation for users without a real org. **CRUD/interactive:** `OnboardingOrgForm` (server action creates org; reads `?name`).
+- `/auth/resolve` — Post-login persona router (a **page**, not a route handler — a redirect-only handler loops the client router). Resolves the signed-in user's persona/`?next=` and redirects into the correct shell (`/console`, `/p/[slug]`, `/m`, `/me`). **CRUD/interactive:** no UI (server-side resolve → redirect).
 
 # Personal (/me)
 
